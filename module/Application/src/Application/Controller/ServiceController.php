@@ -2,16 +2,29 @@
 
 namespace Application\Controller;
 
-use Debug\Util;
+use Application\Entity\Db\Service;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\ElementPedagogique;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\PeriodeAwareTrait;
 
 /**
  * Description of ServiceController
@@ -22,19 +35,19 @@ use Application\Entity\Service\Recherche;
  */
 class ServiceController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\ServiceAwareTrait,
-        \Application\Service\Traits\VolumeHoraireAwareTrait,
-        \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
-        \Application\Service\Traits\TypeInterventionAwareTrait,
-        \Application\Service\Traits\IntervenantAwareTrait,
-        \Application\Service\Traits\ServiceReferentielAwareTrait,
-        \Application\Service\Traits\EtatVolumeHoraireAwareTrait,
-        \Application\Service\Traits\ValidationAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait,
-        \Application\Service\Traits\EtapeAwareTrait,
-        \Application\Service\Traits\PeriodeAwareTrait;
+    use ContextAwareTrait;
+    use ServiceAwareTrait;
+    use VolumeHoraireAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use TypeInterventionAwareTrait;
+    use IntervenantAwareTrait;
+    use ServiceReferentielAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
+    use ValidationAwareTrait;
+    use StructureAwareTrait;
+    use EtapeAwareTrait;
+    use PeriodeAwareTrait;
 
 
 
@@ -46,8 +59,11 @@ class ServiceController extends AbstractActionController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Service',
-            'Application\Entity\Db\VolumeHoraire',
+            Service::class,
+            VolumeHoraire::class,
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            ElementPedagogique::class
         ]);
     }
 

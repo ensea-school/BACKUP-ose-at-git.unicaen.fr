@@ -1,7 +1,15 @@
 <?php
 /* @var $disciplines \Application\Entity\Db\Discipline[] */
+/* @var $libellesCodesCorresp string[] */
 
 $canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DISCIPLINE_EDITION);
+
+function truncCodesCorresp($value){
+    if (strlen($value) > 20) $value = '<span title="'.str_replace(',', ', ', $value).'">'.substr($value, 0, 19) . '...</span>';
+    return str_replace(',', ', ', $value);
+}
+
+
 ?>
 
 <h1>Gestion des disciplines</h1>
@@ -11,6 +19,10 @@ $canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DISCI
             <th>Code</th>
             <th>Libellé court</th>
             <th>Libellé long</th>
+            <?php if (isset($libellesCodesCorresp[1])) echo '<th>'.$libellesCodesCorresp[1].'</th>' ?>
+            <?php if (isset($libellesCodesCorresp[2])) echo '<th>'.$libellesCodesCorresp[2].'</th>' ?>
+            <?php if (isset($libellesCodesCorresp[3])) echo '<th>'.$libellesCodesCorresp[3].'</th>' ?>
+            <?php if (isset($libellesCodesCorresp[4])) echo '<th>'.$libellesCodesCorresp[4].'</th>' ?>
             <th>Src/Actions</th>
         </tr>
     </htead>
@@ -20,6 +32,10 @@ $canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DISCI
             <td style="text-align: center"><?php echo $discipline->getSourceCode(); ?></td>
             <td><?php echo $discipline->getLibelleCourt(); ?></td>
             <td><?php echo $discipline->getLibelleLong(); ?></td>
+            <?php if (isset($libellesCodesCorresp[1])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp1()).'</td>' ?>
+            <?php if (isset($libellesCodesCorresp[2])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp2()).'</td>' ?>
+            <?php if (isset($libellesCodesCorresp[3])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp3()).'</td>' ?>
+            <?php if (isset($libellesCodesCorresp[4])) echo '<td>'.truncCodesCorresp($discipline->getCodesCorresp4()).'</td>' ?>
             <td style="text-align: center">
             <?php if ($discipline->getSource()->isOse() && $canEdit): ?>
                 <a class="ajax-modal" data-event="discipline-edition" href="<?php echo $this->url('discipline/saisir', ['discipline' => $discipline->getId()])?>" title="Modifier la discipline"><span class="glyphicon glyphicon-edit"></span></a>

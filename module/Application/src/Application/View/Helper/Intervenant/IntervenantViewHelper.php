@@ -84,11 +84,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
             ],
         ];
 
-        /* @deprecated en attendant la fusion des types d'intervenants... */
-        if (!$entity->estPermanent()) {
-            $vars['identite']['Situation familiale'] = $entity->getSituationFamiliale() ?: "(Inconnue)";
-        }
-
         $html = '';
         foreach ($vars as $bloc => $vvs) {
             $html .= "<dl class=\"intervenant intervenant-$bloc dl-horizontal\">\n";

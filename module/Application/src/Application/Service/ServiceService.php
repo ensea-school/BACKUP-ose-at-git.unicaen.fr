@@ -22,6 +22,7 @@ use Application\Form\Service\RechercheHydrator;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
@@ -44,6 +45,7 @@ class ServiceService extends AbstractEntityService
     use EtatVolumeHoraireAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use VolumeHoraireAwareTrait;
+    use TypeIntervenantAwareTrait;
 
     /**
      *
@@ -67,7 +69,7 @@ class ServiceService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Service';
+        return ServiceEntity::class;
     }
 
 
@@ -418,8 +420,9 @@ class ServiceService extends AbstractEntityService
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 
-        $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
+        $filter = "(($iAlias.type = :typeIntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);
+        $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
 
         return $qb;
     }
@@ -442,7 +445,8 @@ class ServiceService extends AbstractEntityService
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
         $serviceIntervenant->finderByStructure($structure, $qb);
-        $qb->andWhere($iAlias . ' INSTANCE OF Application\Entity\Db\IntervenantPermanent');
+        $qb->andWhere("$iAlias.type = :typeIntervenantPermanent");
+        $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
 
         return $qb;
     }

@@ -19,7 +19,7 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface
+class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface
 {
     use HistoriqueAwareTrait;
     use GradeAwareTrait;
@@ -995,18 +995,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
 
     /**
-     * Get adresse princ
-     *
-     * @return \Application\Entity\Db\AdresseIntervenant
-     */
-    public function getAdressePrinc()
-    {
-        return $this->adressePrinc;
-    }
-
-
-
-    /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
@@ -1579,7 +1567,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
 
     /**
-     * Retourne l'adresse principale éventuelle.
+     * Retourne l'adresse principale.
      *
      * NB: si aucune adresse principale n'est trouvée, la 1ère adresse non principale trouvée est retournée.
      *
@@ -1592,14 +1580,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         if (!count($adresses)) {
             return null;
         }
-
-        foreach ($adresses as $a) {
-            /* @var $a AdresseIntervenant */
-            if ($a->getPrincipale()) {
-                return $a;
-            }
-        }
-
         $adresse = $adresses->first();
 
         return $adresse ?: null;

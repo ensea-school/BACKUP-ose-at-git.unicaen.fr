@@ -52,11 +52,6 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     protected $paysLibelle;
 
     /**
-     * @var boolean
-     */
-    protected $principale;
-
-    /**
      * @var string
      */
     protected $sourceCode;
@@ -308,34 +303,6 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     public function getPaysLibelle()
     {
         return $this->paysLibelle;
-    }
-
-
-
-    /**
-     * Set principale
-     *
-     * @param boolean $principale
-     *
-     * @return AdresseIntervenant
-     */
-    public function setPrincipale($principale)
-    {
-        $this->principale = $principale;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get principale
-     *
-     * @return boolean
-     */
-    public function getPrincipale()
-    {
-        return $this->principale;
     }
 
 

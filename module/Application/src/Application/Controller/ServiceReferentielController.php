@@ -94,7 +94,7 @@ class ServiceReferentielController extends AbstractActionController
         $intervenant           = $this->context()->intervenantFromRoute();
         $viewModel             = new \Zend\View\Model\ViewModel();
 
-        if ($intervenant->estPermanent()) {
+        if ($intervenant && $intervenant->estPermanent()) {
             $serviceRefProto = $this->getServiceServiceReferentiel()->newEntity()
                 ->setIntervenant($intervenant)
                 ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
@@ -136,7 +136,7 @@ class ServiceReferentielController extends AbstractActionController
             $services = [];
         }
 
-        $renderReferentiel = $intervenant->estPermanent();
+        $renderReferentiel = $intervenant && $intervenant->estPermanent();
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
 

@@ -73,9 +73,6 @@ class Parametres extends AbstractService {
      */
     public function get($param)
     {
-        if (! $this->getCache($param)){
-            throw new LogicException('Le paramètre "'.$param.'" est invalide.');
-        }
         return $this->getCache($param);
     }
 

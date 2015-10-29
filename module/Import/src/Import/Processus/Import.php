@@ -244,8 +244,6 @@ class Import implements ServiceLocatorAwareInterface
         $this->execMaj( 'INTERVENANT', 'SOURCE_CODE', $sourceCode, $action ?: self::A_INSERT );
         $id = $this->getQueryGenerator()->getIdFromSourceCode( 'INTERVENANT', $sourceCode, $this->getServiceContext()->getAnnee()->getId() );
         if (! empty($id)){
-            $this->execMaj( 'INTERVENANT_PERMANENT', 'SOURCE_CODE', $id, $action ?: self::A_ALL );
-            $this->execMaj( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $id, $action ?: self::A_ALL );
             $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $id, $action ?: self::A_ALL );
             $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $id, $action ?: self::A_ALL );
         }
@@ -265,24 +263,16 @@ class Import implements ServiceLocatorAwareInterface
         $q1 = new Query('INTERVENANT');
         $q1->setSourceCode($intervenant->getSourceCode());
 
-        $q2 = new Query('INTERVENANT_PERMANENT');
-        $q2->setSourceCode($intervenant->getSourceCode());
+        $q2 = new Query('ADRESSE_INTERVENANT');
+        $q2->addColValue('INTERVENANT_ID', $intervenant->getId() );
 
-        $q3 = new Query('INTERVENANT_EXTERIEUR');
-        $q3->setSourceCode($intervenant->getSourceCode());
-
-        $q4 = new Query('ADRESSE_INTERVENANT');
-        $q4->addColValue('INTERVENANT_ID', $intervenant->getId() );
-
-        $q5 = new Query('AFFECTATION_RECHERCHE');
-        $q5->addColValue('INTERVENANT_ID', $intervenant->getId() );
+        $q3 = new Query('AFFECTATION_RECHERCHE');
+        $q3->addColValue('INTERVENANT_ID', $intervenant->getId() );
 
         $diff = array_merge(
             $differentiel->make($q1)->fetchAll(),
             $differentiel->make($q2)->fetchAll(),
-            $differentiel->make($q3)->fetchAll(),
-            $differentiel->make($q4)->fetchAll(),
-            $differentiel->make($q5)->fetchAll()
+            $differentiel->make($q3)->fetchAll()
         );
 
         return $diff;

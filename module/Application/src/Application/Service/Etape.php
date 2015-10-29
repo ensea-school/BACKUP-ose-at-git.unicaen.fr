@@ -108,9 +108,10 @@ class Etape extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $or = $qb->expr()->orX();
-        $or->add($qb->expr()->exists("SELECT eptmp FROM Application\Entity\Db\ElementPedagogique eptmp WHERE eptmp.etape = $alias"));
-        $or->add($qb->expr()->exists("SELECT cptmp FROM Application\Entity\Db\CheminPedagogique  cptmp WHERE cptmp.etape = $alias"));
+        $or->add($qb->expr()->exists("SELECT eptmp FROM Application\Entity\Db\ElementPedagogique eptmp WHERE eptmp.etape = $alias AND eptmp.annee = :eptmpAnnee"));
+        $or->add($qb->expr()->exists("SELECT cptmp FROM Application\Entity\Db\CheminPedagogique  cptmp JOIN cptmp.elementPedagogique eptmp2 WHERE cptmp.etape = $alias AND eptmp2.annee = :eptmpAnnee"));
         $qb->andWhere($or);
+        $qb->setParameter('eptmpAnnee', $this->getServiceContext()->getAnnee());
 
         return $qb;
     }
@@ -182,130 +183,6 @@ class Etape extends AbstractEntityService
         return $qb;
     }
 
-
-
-    /**
-     * Détermine si on peut ajouter une étape ou non
-     *
-     * @return boolean
-     *
-     * public function canAdd($runEx = false)
-     * {
-     * $localContext = $this->getServiceLocalContext();
-     *
-     * $role         = $this->getServiceContext()->getSelectedIdentityRole();
-     * /* @var $role \Application\Acl\DbRole *
-     *
-     * //if ($role instanceof \Application\Acl\AdministrateurRole) return true;
-     *
-     * if (!$localContext->getStructure()) {
-     * throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
-     * }
-     * if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
-     * || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
-     * return true;
-     * }
-     *
-     * $this->cannotDoThat(
-     * "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier de formation"
-     * . "pour la structure '{$localContext->getStructure()}'", $runEx);
-     *
-     * return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter ou modifier une formation', $runEx);
-     * }
-     *
-     * /**
-     * Détermine si l'étape peut être éditée ou non
-     *
-     * @param int|\Application\Entity\Db\Etape $etape
-     *
-     * @return boolean
-     *
-     * public function canSave($etape, $runEx = false)
-     * {
-     * if (! $this->canAdd($runEx)) {
-     * return false;
-     * }
-     *
-     * if (!$etape instanceof EtapeEntity) {
-     * $etape = $this->get($etape);
-     * }
-     *
-     * if ($etape->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE){
-     * $errStr = 'Cette formation n\'est pas modifiable dans OSE car elle provient du logiciel '.$etape->getSource();
-     * $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans '.$etape->getSource().'.';
-     *
-     * return $this->cannotDoThat($errStr, $runEx);
-     * }
-     *
-     * return true;
-     * }
-     *
-     * /**
-     * Détermine si l'étape peut être supprimée ou non
-     *
-     * @param \Application\Entity\Db\Etape     $etape
-     * @param boolean                          $runEx
-     *
-     * @return boolean
-     *
-     * public function canDelete(EtapeEntity $etape, $runEx=false)
-     * {
-     * return $this->canSave($etape,$runEx);
-     * }*
-     *
-     * public function canEditModulateurs($etape, $runEx = false)
-     * {
-     * if (!$etape instanceof EtapeEntity) {
-     * $etape = $this->get($etape);
-     * }
-     *
-     * $ir = $this->getServiceContext()->getSelectedIdentityRole();
-     * if ($ir instanceof \Application\Acl\ComposanteRole) {
-     * if ($etape->getStructure() != $ir->getStructure()) {
-     * return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
-     * }
-     * } elseif ($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user') {
-     * return $this->cannotDoThat('Vous n\'êtes pas autorisé à éditer de modulateurs', $runEx);
-     * } elseif ($ir instanceof \Application\Acl\IntervenantRole) {
-     * return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité d\'ajouter de modulateur', $runEx);
-     * }
-     *
-     * $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
-     * /* @var $stm \Application\Service\TypeModulateur *
-     * if (0 === $stm->count($stm->finderByEtape($etape))) {
-     * return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
-     * }
-     *
-     * return true;
-     * }
-     *
-     *
-     *
-     * public function canEditCentresCouts($etape, $runEx = false)
-     * {
-     * if (!$etape instanceof EtapeEntity) {
-     * $etape = $this->get($etape);
-     * }
-     *
-     * $ir = $this->getServiceContext()->getSelectedIdentityRole();
-     * if ($ir instanceof \Application\Acl\ComposanteRole) {
-     * if ($etape->getStructure() != $ir->getStructure()) {
-     * return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour paramétrer les centres de coûts de cette structure', $runEx);
-     * }
-     * } elseif ($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user') {
-     * return $this->cannotDoThat('Vous n\'êtes pas autorisé à paramétrer les centres de coûts', $runEx);
-     * } elseif ($ir instanceof \Application\Acl\IntervenantRole) {
-     * return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité de paramétrer les centres de coûts', $runEx);
-     * }
-     *
-     * //        $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
-     * //        /* @var $stm \Application\Service\TypeModulateur *
-     * //        if (0 === $stm->count( $stm->finderByEtape($etape) ) ){
-     * //            return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
-     * //        }
-     *
-     * return true;
-     * }*/
 
 
     /**

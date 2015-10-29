@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Acl\IntervenantRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Listener\DossierListener;
 use Application\Entity\Db\TypeValidation;

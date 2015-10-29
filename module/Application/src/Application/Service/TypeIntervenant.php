@@ -20,7 +20,7 @@ class TypeIntervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeIntervenant';
+        return TypeIntervenantEntity::class;
     }
 
     /**
@@ -55,7 +55,7 @@ class TypeIntervenant extends AbstractEntityService
     /**
      *
      * @param string $code
-     * @return \Application\Entity\Db\TypeValidation
+     * @return TypeIntervenantEntity
      */
     public function getByCode( $code )
     {

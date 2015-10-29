@@ -2,14 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <!-- NB: héritage ajouté à la main sur l'entité -->
-    <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" inheritance-type="JOINED"
-            repository-class="Application\Entity\Db\Repository\IntervenantRepository">
-        <discriminator-column name="TYPE_ID" type="integer"/>
-        <discriminator-map>
-            <discriminator-mapping value="1" class="Application\Entity\Db\IntervenantPermanent"/>
-            <discriminator-mapping value="2" class="Application\Entity\Db\IntervenantExterieur"/>
-        </discriminator-map>
+    <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" repository-class="Application\Entity\Db\Repository\IntervenantRepository">
         <indexes>
             <index name="IDX_FED386B4C2443469" columns="TYPE_ID"/>
             <index name="IDX_FED386B48C579EB7" columns="CIVILITE_ID"/>
@@ -41,8 +34,7 @@
         <field name="numeroInseeProvisoire" type="boolean" column="NUMERO_INSEE_PROVISOIRE" nullable="true"/>
         <field name="paysNaissanceCodeInsee" type="string" column="PAYS_NAISSANCE_CODE_INSEE" length="3" nullable="false"/>
         <field name="paysNaissanceLibelle" type="string" column="PAYS_NAISSANCE_LIBELLE" length="30" nullable="false"/>
-        <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3"
-               nullable="false"/>
+        <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
         <field name="paysNationaliteLibelle" type="string" column="PAYS_NATIONALITE_LIBELLE" length="30" nullable="false"/>
         <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
@@ -108,13 +100,15 @@
                 <join-column name="TYPE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
+        <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
+            <join-columns>
+                <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
         <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant"/>
         <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant"/>
-        <one-to-one field="adressePrinc" target-entity="Application\Entity\Db\AdresseIntervenantPrinc"
-                    mapped-by="intervenant"/>
         <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant"/>
-        <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService"
-                     mapped-by="intervenant"/>
+        <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService" mapped-by="intervenant"/>
         <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel"
                      mapped-by="intervenant">
             <cascade>
@@ -124,34 +118,21 @@
         <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
         <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant"/>
         <one-to-one field="utilisateur" target-entity="Application\Entity\Db\Utilisateur" mapped-by="intervenant"/>
-        <one-to-one field="formuleIntervenant" target-entity="Application\Entity\Db\FormuleIntervenant"
-                    mapped-by="intervenant"/>
+        <one-to-one field="formuleIntervenant" target-entity="Application\Entity\Db\FormuleIntervenant" mapped-by="intervenant"/>
         <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
-        <one-to-many field="wfIntervenantEtape" target-entity="Application\Entity\Db\WfIntervenantEtape"
-                     mapped-by="intervenant"/>
-        <one-to-one field="vIndicDiffDossier" target-entity="Application\Entity\Db\VIndicDiffDossier"
-                    mapped-by="intervenant"/>
-        <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier"
-                     mapped-by="intervenant"/>
-        <one-to-many field="miseEnPaiementIntervenantStructure"
-                     target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
-        <one-to-many field="vIndicAttenteDemandeMep" target-entity="Application\Entity\Db\VIndicAttenteDemandeMep"
-                     mapped-by="intervenant"/>
+        <one-to-many field="wfIntervenantEtape" target-entity="Application\Entity\Db\WfIntervenantEtape" mapped-by="intervenant"/>
+        <one-to-one field="vIndicDiffDossier" target-entity="Application\Entity\Db\VIndicDiffDossier" mapped-by="intervenant"/>
+        <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier" mapped-by="intervenant"/>
+        <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
+        <one-to-many field="vIndicAttenteDemandeMep" target-entity="Application\Entity\Db\VIndicAttenteDemandeMep" mapped-by="intervenant"/>
         <one-to-many field="vIndicAttenteMep" target-entity="Application\Entity\Db\VIndicAttenteMep" mapped-by="intervenant"/>
-        <one-to-many field="vIndicDepassHcHorsRemuFc" target-entity="Application\Entity\Db\VIndicDepassHcHorsRemuFc"
-                     mapped-by="intervenant"/>
+        <one-to-many field="vIndicDepassHcHorsRemuFc" target-entity="Application\Entity\Db\VIndicDepassHcHorsRemuFc" mapped-by="intervenant"/>
         <one-to-many field="vIndicDepassRef" target-entity="Application\Entity\Db\VIndicDepassRef" mapped-by="intervenant"/>
-        <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu"
-                     mapped-by="intervenant">
+        <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant">
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
-        <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
-            <join-columns>
-                <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
-            </join-columns>
-        </many-to-one>
         <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant"/>
     </entity>
 </doctrine-mapping>

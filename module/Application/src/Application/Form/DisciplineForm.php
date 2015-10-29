@@ -2,6 +2,7 @@
 
 namespace Application\Form;
 
+use Application\Service\Traits\ParametresAwareTrait;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -15,6 +16,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class DisciplineForm extends Form implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use ParametresAwareTrait;
 
 
 
@@ -46,6 +48,19 @@ class DisciplineForm extends Form implements ServiceLocatorAwareInterface
                 'label' => 'Libellé court',
             ],
         ]);
+
+        for( $i = 1; $i <= 4; $i++ ){
+            $lcc = $this->getServiceParametres()->get('discipline_codes_corresp_'.$i.'_libelle');
+            if ($lcc){
+                $this->add([
+                    'type'    => 'Text',
+                    'name'    => 'codes-corresp-'.$i,
+                    'options' => [
+                        'label' => $lcc,
+                    ],
+                ]);
+            }
+        }
 
         $this->add([
             'name' => 'id',
@@ -82,6 +97,18 @@ class DisciplineForm extends Form implements ServiceLocatorAwareInterface
             'libelle-court' => [
                 'required' => true,
             ],
+            'codes-corresp-1' => [
+                'required' => false,
+            ],
+            'codes-corresp-2' => [
+                'required' => false,
+            ],
+            'codes-corresp-3' => [
+                'required' => false,
+            ],
+            'codes-corresp-4' => [
+                'required' => false,
+            ],
         ];
     }
 }
@@ -104,7 +131,10 @@ class DisciplineFormHydrator implements HydratorInterface
         $object->setSourceCode($data['source-code']);
         $object->setLibelleLong($data['libelle-long']);
         $object->setLibelleCourt($data['libelle-court']);
-
+        if (isset($data['codes-corresp-1'])) $object->setCodesCorresp1($data['codes-corresp-1']);
+        if (isset($data['codes-corresp-2'])) $object->setCodesCorresp2($data['codes-corresp-2']);
+        if (isset($data['codes-corresp-3'])) $object->setCodesCorresp3($data['codes-corresp-3']);
+        if (isset($data['codes-corresp-4'])) $object->setCodesCorresp4($data['codes-corresp-4']);
         return $object;
     }
 
@@ -118,10 +148,14 @@ class DisciplineFormHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'            => $object->getId(),
-            'source-code'   => $object->getSourceCode(),
-            'libelle-long'  => $object->getLibelleLong(),
-            'libelle-court' => $object->getLibelleCourt(),
+            'id'                => $object->getId(),
+            'source-code'       => $object->getSourceCode(),
+            'libelle-long'      => $object->getLibelleLong(),
+            'libelle-court'     => $object->getLibelleCourt(),
+            'codes-corresp-1'   => $object->getCodesCorresp1(),
+            'codes-corresp-2'   => $object->getCodesCorresp2(),
+            'codes-corresp-3'   => $object->getCodesCorresp3(),
+            'codes-corresp-4'   => $object->getCodesCorresp4(),
         ];
 
         return $data;

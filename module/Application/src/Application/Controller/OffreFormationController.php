@@ -44,12 +44,10 @@ class OffreFormationController extends AbstractActionController
             'Application\Entity\Db\ElementPedagogique',
             'Application\Entity\Db\TypeFormation',
             'Application\Entity\Db\GroupeTypeFormation',
-            //'Application\Entity\Db\Structure',
             'Application\Entity\Db\TypeModulateur',
         ]);
         $this->em()->getFilters()->enable('annee')->init([
             'Application\Entity\Db\ElementPedagogique',
-            'Application\Entity\Db\Etape',
         ]);
     }
 

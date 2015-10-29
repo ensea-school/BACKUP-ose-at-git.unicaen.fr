@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\Discipline;
 use Application\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
+use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Doctrine\ORM\EntityManager;
@@ -22,6 +23,7 @@ class DisciplineController extends AbstractActionController
     use DisciplineServiceAwareTrait;
     use SourceAwareTrait;
     use DisciplineFormAwareTrait;
+    use ParametresAwareTrait;
 
 
 
@@ -35,7 +37,15 @@ class DisciplineController extends AbstractActionController
 
         $disciplines = $this->getServiceDiscipline()->getList($qb);
 
-        return compact('disciplines');
+        $libellesCodesCorresp = [];
+        for( $i=1;$i<=4;$i++){
+            $lcc = $this->getServiceParametres()->get('discipline_codes_corresp_'.$i.'_libelle');
+            if ($lcc){
+                $libellesCodesCorresp[$i] = $lcc;
+            }
+        }
+
+        return compact('disciplines','libellesCodesCorresp');
     }
 
 

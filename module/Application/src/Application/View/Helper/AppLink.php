@@ -1,7 +1,9 @@
 <?php
 namespace Application\View\Helper;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
+use UnicaenApp\Util;
 use Zend\I18n\View\Helper\AbstractTranslatorHelper;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\RouteStackInterface;
@@ -50,7 +52,7 @@ class AppLink extends AbstractTranslatorHelper
     /**
      * Liste des années disponibles
      *
-     * @var array
+     * @var Annee[]
      */
     protected $annees;
 
@@ -90,7 +92,7 @@ class AppLink extends AbstractTranslatorHelper
         $select->setAttribute('id', 'annee');
         $select->setAttribute('data-url', $this->router->assemble(array(), array('name' => $this->homeRouteName)));
         $select->setAttribute('onchange', 'changementAnnee(this.value);');
-        $select->setValueOptions( $this->getAnnees() );
+        $select->setValueOptions( Util::collectionAsOptions($this->getAnnees()) );
         $select->setValue($this->getAnnee()->getId());
 
         $appAnnee = '<span class="annee">'.$this->getView()->formSelect($select).'</span>';
@@ -190,7 +192,7 @@ class AppLink extends AbstractTranslatorHelper
 
     /**
      *
-     * @return array
+     * @return Annee[]
      */
     function getAnnees()
     {
@@ -199,10 +201,10 @@ class AppLink extends AbstractTranslatorHelper
 
     /**
      *
-     * @param array $annees
+     * @param Annee[] $annees
      * @return self
      */
-    function setAnnees(array $annees)
+    function setAnnees($annees)
     {
         $this->annees = $annees;
         return $this;

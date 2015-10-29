@@ -7,5 +7,6 @@
     <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
     <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="9" nullable="false"/>
+    <field name="active" type="boolean" column="ACTIVE" nullable="false"/>
   </entity>
 </doctrine-mapping>

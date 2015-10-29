@@ -27,11 +27,18 @@ class Annee
      */
     protected $id;
 
+    /**
+     * @var boolean
+     */
+    protected $active;
+
+
 
     /**
      * Set dateDebut
      *
      * @param \DateTime $dateDebut
+     *
      * @return Annee
      */
     public function setDateDebut($dateDebut)
@@ -41,20 +48,25 @@ class Annee
         return $this;
     }
 
+
+
     /**
      * Get dateDebut
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateDebut()
     {
         return $this->dateDebut;
     }
 
+
+
     /**
      * Set dateFin
      *
      * @param \DateTime $dateFin
+     *
      * @return Annee
      */
     public function setDateFin($dateFin)
@@ -64,20 +76,25 @@ class Annee
         return $this;
     }
 
+
+
     /**
      * Get dateFin
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateFin()
     {
         return $this->dateFin;
     }
 
+
+
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return Annee
      */
     public function setLibelle($libelle)
@@ -87,38 +104,64 @@ class Annee
         return $this;
     }
 
+
+
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-	/**************************************************************************************************
-	 * 										Début ajout
-	 **************************************************************************************************/
+
 
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return $this->getLibelle();
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+
+
+    /**
+     * @param boolean $active
+     *
+     * @return Annee
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
     }
 
 
@@ -134,7 +177,7 @@ class Annee
     function __debugInfo()
     {
         return [
-            'libelle' => $this->libelle
+            'libelle' => $this->libelle,
         ];
     }
 

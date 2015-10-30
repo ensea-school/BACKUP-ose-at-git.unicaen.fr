@@ -6,8 +6,9 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Interfaces\ServiceAwareInterface;
-use Application\Traits\ServiceAwareTrait;
+use Application\Entity\Db\Interfaces\ServiceAwareInterface;
+use Application\Entity\Db\Traits\ServiceAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -16,10 +17,10 @@ use Application\Traits\ServiceAwareTrait;
  */
 class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ServiceAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        ServiceAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use ServiceAwareTrait;
+    use ContextAwareTrait;
+
 
     /**
      * @var Liste

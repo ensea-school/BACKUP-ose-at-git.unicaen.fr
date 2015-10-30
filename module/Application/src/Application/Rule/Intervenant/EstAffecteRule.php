@@ -3,8 +3,8 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
  * Règle métier déterminant si un intervenant est affecté à une structure de niveau 2 précise ou à l'une de ses sous-structures.
@@ -29,7 +29,7 @@ class EstAffecteRule extends AbstractRule
     public function execute()
     {
         if ($this->getIntervenant()->getStructure() !== $this->getStructure()
-                && $this->getIntervenant()->getStructure()->getParenteNiv2() !== $this->getStructure()->getParenteNiv2()) {
+                && $this->getIntervenant()->getStructure() !== $this->getStructure()) {
             $this->message(self::MESSAGE_AFFECTATION, $this->getStructure());
             return false;
         }

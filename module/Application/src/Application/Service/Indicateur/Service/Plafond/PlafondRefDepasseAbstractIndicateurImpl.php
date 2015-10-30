@@ -4,9 +4,9 @@ namespace Application\Service\Indicateur\Service\Plafond;
 
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\VIndicDepassRef;
-use Application\Interfaces\TypeVolumeHoraireAwareInterface;
+use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Util;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;

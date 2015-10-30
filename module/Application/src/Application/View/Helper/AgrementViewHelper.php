@@ -3,7 +3,7 @@
 namespace Application\View\Helper;
 
 use Application\Entity\Db\Agrement as Entity;
-use Application\Traits\AgrementAwareTrait;
+use Application\Entity\Db\Traits\AgrementAwareTrait;
 use Common\Constants;
 use Zend\View\Helper\AbstractHtmlElement;
 

@@ -2,8 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Traits\StructureAwareTrait;
-use Application\Traits\TypeContratAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\TypeContratAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**

@@ -135,7 +135,7 @@ class Etape extends AbstractEntityService
 
         $this->join($structureService, $qb, 'structure');
 
-        $qb->andWhere("$structureAlias.structureNiv2 = :structureNiv2")->setParameter('structureNiv2', $structure->getParenteNiv2());
+        $qb->andWhere("$structureAlias = :structure")->setParameter('structure', $structure);
 
         return $qb;
     }

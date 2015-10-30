@@ -5,8 +5,8 @@ namespace Application\Rule\Intervenant;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Service\TypeVolumeHoraire as TypeVolumeHoraireService;
 use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
  * Classe mère abstraite des règles métier déterminant si un intervenant peut faire l'objet d'une création de contrat initial ou d'avenant.

@@ -240,7 +240,7 @@ class AgrementController extends AbstractActionController implements WorkflowInt
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structure = $this->intervenant->getStructure()->getParenteNiv2();
+            $structure = $this->intervenant->getStructure();
         }
         else {
             throw new LogicException("Type d'agrément inattendu!");

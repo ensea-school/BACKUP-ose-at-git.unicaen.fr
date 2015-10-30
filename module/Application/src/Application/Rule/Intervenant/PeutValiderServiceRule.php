@@ -12,8 +12,8 @@ use Application\Entity\Db\TypeValidation;
  */
 class PeutValiderServiceRule extends AbstractRule
 {
-    use \Application\Traits\IntervenantAwareTrait;
-    use \Application\Traits\TypeValidationAwareTrait;
+    use \Application\Entity\Db\Traits\IntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\TypeValidationAwareTrait;
     
     /**
      * 

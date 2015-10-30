@@ -4,7 +4,7 @@ namespace Application\View\Helper\ServiceReferentiel;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\FonctionReferentiel;
-use Application\Traits\FonctionReferentielAwareTrait;
+use Application\Entity\Db\Traits\FonctionReferentielAwareTrait;
 
 /**
  * Description of FonctionReferentielViewHelper

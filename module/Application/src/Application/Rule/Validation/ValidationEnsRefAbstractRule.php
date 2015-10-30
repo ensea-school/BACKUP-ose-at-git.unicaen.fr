@@ -2,7 +2,6 @@
 
 namespace Application\Rule\Validation;;
 
-use Application\Acl\AdministrateurRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -11,8 +10,8 @@ use Application\Rule\Paiement\MiseEnPaiementExisteRule;
 use Application\Service\Workflow\WorkflowIntervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Common\Exception\LogicException;
 
 /**

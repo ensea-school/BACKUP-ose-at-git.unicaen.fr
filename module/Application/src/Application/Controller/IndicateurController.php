@@ -244,12 +244,6 @@ class IndicateurController extends AbstractActionController
     private function getStructure()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        
-//        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
-//            return $role->getStructure();
-//        }
-//        
-//        return null;
         return $role->getStructure();
     }
     

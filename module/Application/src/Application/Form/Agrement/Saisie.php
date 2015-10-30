@@ -15,8 +15,8 @@ use UnicaenApp\Hydrator\Strategy\DateStrategy;
  */
 class Saisie extends Form implements InputFilterProviderInterface
 {
-    use \Application\Traits\IntervenantAwareTrait;
-    use \Application\Traits\TypeAgrementAwareTrait;
+    use \Application\Entity\Db\Traits\IntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\TypeAgrementAwareTrait;
 
     public function init()
     {

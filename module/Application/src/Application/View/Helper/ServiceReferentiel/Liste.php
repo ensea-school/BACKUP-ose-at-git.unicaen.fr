@@ -10,8 +10,8 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Interfaces\TypeVolumeHoraireAwareInterface;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
 /**

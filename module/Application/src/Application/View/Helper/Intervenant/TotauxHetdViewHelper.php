@@ -4,8 +4,8 @@ namespace Application\View\Helper\Intervenant;
 
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\FormuleResultat;
-use Application\Interfaces\FormuleResultatAwareInterface;
-use Application\Traits\FormuleResultatAwareTrait;
+use Application\Entity\Db\Interfaces\FormuleResultatAwareInterface;
+use Application\Entity\Db\Traits\FormuleResultatAwareTrait;
 
 /**
  * Description of TotauxHetdViewHelper

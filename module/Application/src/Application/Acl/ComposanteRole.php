@@ -2,10 +2,10 @@
 
 namespace Application\Acl;
 
-use Application\Interfaces\StructureAwareInterface;
-use Application\Traits\StructureAwareTrait;
-use Application\Interfaces\PersonnelAwareInterface;
-use Application\Traits\PersonnelAwareTrait;
+use Application\Entity\Db\Interfaces\StructureAwareInterface;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Interfaces\PersonnelAwareInterface;
+use Application\Entity\Db\Traits\PersonnelAwareTrait;
 
 /**
  * Rôle père de tous les rôles "composante".

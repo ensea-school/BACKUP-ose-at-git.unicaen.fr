@@ -15,7 +15,7 @@ use Zend\Validator\NotEmpty;
  */
 class ServiceValidation extends Form implements InputFilterProviderInterface
 {
-    use \Application\Traits\IntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\IntervenantAwareTrait;
 
     public function init()
     {

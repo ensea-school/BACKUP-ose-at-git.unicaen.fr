@@ -50,54 +50,6 @@ class ElementPedagogique extends AbstractEntityService
 
 
     /**
-     * Retourne le chercheur des structures distinctes.
-     *
-     * @param array                      $filters
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     *
-    public function finder(array $filters = [], QueryBuilder $qb = null, $alias = null)
-    {
-        if (null === $qb) {
-            $qb = $this->getEntityManager()->createQueryBuilder();
-        }
-
-        $qb
-            ->select('ep, e, tf, gtf, p')
-            ->from('Application\Entity\Db\ElementPedagogique', 'ep')
-            ->leftJoin('ep.periode', 'p')
-            ->innerJoin('ep.etape', 'e')
-            ->innerJoin('e.typeFormation', 'tf')
-            ->innerJoin('tf.groupe', 'gtf')
-            ->innerJoin('ep.structure', 's')
-            ->orderBy('gtf.ordre, e.niveau, e.sourceCode, ep.libelle');
-
-        if (isset($filters['structure'])) {
-            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
-        }
-
-        if (isset($filters['niveau']) && $filters['niveau']) {
-            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
-                $filters['niveau'] = $filters['niveau']->getId();
-            }
-            $qb->andWhere('CONCAT(gtf.libelleCourt, CONCAT( \'-\', e.niveau )) = :niveau')->setParameter('niveau', $filters['niveau']);
-        }
-
-        if (isset($filters['etape'])) {
-            if (!$filters['etape'] instanceof \Application\Entity\Db\Etape) {
-                throw new \Common\Exception\LogicException("La formation spécifiée dans le contexte n'est pas du type attendu.");
-            }
-            $qb->andWhere('ep.etape = :etape')->setParameter('etape', $filters['etape']);
-        }
-
-        return $qb;
-    }*/
-
-
-
-
-    /**
      * Recherche textuelle d'element pédagogique.
      *
      * @param array $filters
@@ -266,71 +218,6 @@ where rang = 1
 
         return $result;
     }
-
-
-
-    /**
-     * Détermine si on peut ajouter une étape ou non
-     *
-     * @return boolean
-     *
-    public function canAdd($runEx = false)
-    {
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext *
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if ($role instanceof \Application\Acl\AdministrateurRole) return true;
-
-        if (!$localContext->getStructure()) {
-            throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
-        }
-        if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
-            || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())
-        ) {
-            return true;
-        }
-
-        $this->cannotDoThat(
-            "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier un enseignement"
-            . "pour la structure '{$localContext->getStructure()}'", $runEx);
-
-        $this->cannotDoThat(
-            "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier un enseignement"
-            . "pour la structure '{$localContext->getStructure()}'", $runEx);
-
-        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un enseignement', $runEx);
-    }
-
-
-
-    /**
-     * Détermine si l'élément peut être modifié ou non
-     *
-     * @param int|\Application\Entity\Db\ElementPedagogique $element
-     *
-     * @return boolean
-     *
-    public function canSave($element, $runEx = false)
-    {
-        if (!$this->canAdd($runEx)) {
-            return false;
-        }
-
-        if (!$element instanceof ElementPedagogiqueEntity) {
-            $element = $this->get($element);
-        }
-
-        if ($element->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE) {
-            $errStr = 'Cet enseignement n\'est pas modifiable dans OSE car elle provient du logiciel ' . $element->getSource();
-            $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans ' . $element->getSource() . '.';
-
-            return $this->cannotDoThat($errStr, $runEx);
-        }
-
-        return true;
-    }*/
 
 
 

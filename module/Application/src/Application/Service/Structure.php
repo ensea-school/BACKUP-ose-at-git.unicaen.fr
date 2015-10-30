@@ -147,7 +147,7 @@ class Structure extends AbstractEntityService
 
         //$f = new Func('OSE_DIVERS.STRUCTURE_DANS_STRUCTURE', array("$alias.id", ":structure_cible"));
 
-        $qb->andWhere( $alias.'.structureNiv2 = :structure_cible')->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
+        $qb->andWhere( $alias.' = :structure_cible')->setParameter('structure_cible', $structure);
 
         return $qb;
     }

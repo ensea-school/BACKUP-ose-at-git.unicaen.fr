@@ -6,7 +6,7 @@ use Zend\Form\Element\Csrf;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
-use Application\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 
 /**
  * Formulaire de validation du référentiel d'un intervenant.

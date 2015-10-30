@@ -3,9 +3,9 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Rule\AbstractRule;
-use Application\Interfaces\IntervenantAwareInterface;
+use Application\Entity\Db\Interfaces\IntervenantAwareInterface;
 use Application\Service\Intervenant as IntervenantService;
-use Application\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**

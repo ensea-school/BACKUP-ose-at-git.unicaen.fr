@@ -27,13 +27,13 @@ class AgrementIntervenantNavigationPagesProvider extends AgrementNavigationPages
         }
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+        if ($role && $role->getIntervenant()){
             return $role->getIntervenant();
         }
 
         return null;
     }
-    
+
     /**
      * @return NecessiteAgrementRule
      */

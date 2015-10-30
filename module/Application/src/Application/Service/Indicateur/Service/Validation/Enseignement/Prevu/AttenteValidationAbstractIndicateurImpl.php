@@ -4,8 +4,8 @@ namespace Application\Service\Indicateur\Service\Validation\Enseignement\Prevu;
 
 use Application\Entity\Db\WfEtape;
 use Application\Service\Indicateur\Service\Validation\Enseignement\AttenteValidationAbstractIndicateurImpl as BaseAttenteValidationAbstractIndicateurImpl;
-use Application\Traits\TypeIntervenantAwareTrait;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
  * 

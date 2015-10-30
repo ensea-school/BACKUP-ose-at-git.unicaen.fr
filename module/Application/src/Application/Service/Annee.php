@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Annee as AnneeEntity;
 
@@ -12,6 +13,7 @@ use Application\Entity\Db\Annee as AnneeEntity;
  */
 class Annee extends AbstractEntityService
 {
+    use SessionContainerTrait;
 
     /**
      * retourne la classe des entités
@@ -75,6 +77,27 @@ class Annee extends AbstractEntityService
     public function getSuivante(AnneeEntity $annee)
     {
         return $this->get($annee->getId() + 1);
+    }
+
+
+
+    /**
+     * Retourne la liste des ID des années sélectionnables
+     */
+    public function getChoixAnnees()
+    {
+        $session = $this->getSessionContainer();
+        $sql = 'SELECT id, libelle FROM annee WHERE active = 1 ORDER BY id';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $session->choixAnnees = [];
+        foreach( $result as $annee ){
+            extract( array_change_key_case($annee,CASE_LOWER));
+            $session->choixAnnees[$id] = $libelle;
+        }
+
+        return $session->choixAnnees;
     }
 
 

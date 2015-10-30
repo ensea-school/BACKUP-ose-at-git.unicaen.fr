@@ -12,7 +12,7 @@ use Application\Entity\Db\Contrat;
  */
 class PeutValiderContratRule extends \Application\Rule\AbstractRule
 {
-    use \Application\Traits\IntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\IntervenantAwareTrait;
 
     const MESSAGE_DEJA_VALIDE = 'messageDejaValide';
 

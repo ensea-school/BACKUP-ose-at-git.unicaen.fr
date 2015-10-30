@@ -3,7 +3,7 @@
 namespace Application\View\Helper;
 
 use Application\Entity\Db\Validation;
-use Application\Traits\ValidationAwareTrait;
+use Application\Entity\Db\Traits\ValidationAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 
 /**

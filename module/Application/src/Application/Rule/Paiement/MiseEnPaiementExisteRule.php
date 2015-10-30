@@ -3,7 +3,7 @@
 namespace Application\Rule\Paiement;
 
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
-use Application\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Common\Exception\LogicException;
 
 /**

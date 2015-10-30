@@ -3,10 +3,8 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Acl\Role;
-use Application\Acl\AdministrateurRole;
-use Application\Acl\IntervenantRole;
 use Application\Entity\Db\TypeAgrement;
-use Application\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use Common\Exception\LogicException;
 use Doctrine\ORM\QueryBuilder;
 

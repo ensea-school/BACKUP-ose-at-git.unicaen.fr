@@ -8,7 +8,6 @@
       <index name="IDX_2BC329057E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_2BC3290563F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_2BC32905E9B3446E" columns="SOURCE_ID"/>
-      <index name="IDX_2BC329053C7479AE" columns="STRUCTURE_NIV2_ID"/>
       <index name="IDX_2BC32905C2443469" columns="TYPE_ID"/>
     </indexes>
     <unique-constraints>
@@ -28,11 +27,6 @@
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="structureNiv2" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_NIV2_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="type" target-entity="Application\Entity\Db\TypeStructure">

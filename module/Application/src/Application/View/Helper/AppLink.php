@@ -52,7 +52,7 @@ class AppLink extends AbstractTranslatorHelper
     /**
      * Liste des années disponibles
      *
-     * @var Annee[]
+     * @var array[]
      */
     protected $annees;
 
@@ -92,7 +92,7 @@ class AppLink extends AbstractTranslatorHelper
         $select->setAttribute('id', 'annee');
         $select->setAttribute('data-url', $this->router->assemble(array(), array('name' => $this->homeRouteName)));
         $select->setAttribute('onchange', 'changementAnnee(this.value);');
-        $select->setValueOptions( Util::collectionAsOptions($this->getAnnees()) );
+        $select->setValueOptions($this->getAnnees());
         $select->setValue($this->getAnnee()->getId());
 
         $appAnnee = '<span class="annee">'.$this->getView()->formSelect($select).'</span>';
@@ -192,7 +192,7 @@ class AppLink extends AbstractTranslatorHelper
 
     /**
      *
-     * @return Annee[]
+     * @return array[]
      */
     function getAnnees()
     {
@@ -201,7 +201,7 @@ class AppLink extends AbstractTranslatorHelper
 
     /**
      *
-     * @param Annee[] $annees
+     * @param array[] $annees
      * @return self
      */
     function setAnnees($annees)

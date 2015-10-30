@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\StatutIntervenant as StatutIntervenantService;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**

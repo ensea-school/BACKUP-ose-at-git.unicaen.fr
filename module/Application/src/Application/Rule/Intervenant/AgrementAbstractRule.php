@@ -2,14 +2,14 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Interfaces\TypeAgrementAwareInterface;
+use Application\Entity\Db\Interfaces\TypeAgrementAwareInterface;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Structure;
 use Application\Service\Agrement as AgrementService;
 use Application\Service\TypeAgrementStatut;
 use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
-use Application\Traits\TypeAgrementAwareTrait;
+use Application\Entity\Db\Traits\TypeAgrementAwareTrait;
 use Doctrine\ORM\EntityManager;
 
 /**

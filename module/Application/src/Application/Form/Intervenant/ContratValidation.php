@@ -15,7 +15,7 @@ use Zend\Validator\NotEmpty;
  */
 class ContratValidation extends Form implements InputFilterProviderInterface
 {
-    use \Application\Traits\ContratAwareTrait;
+    use \Application\Entity\Db\Traits\ContratAwareTrait;
 
     public function init()
     {

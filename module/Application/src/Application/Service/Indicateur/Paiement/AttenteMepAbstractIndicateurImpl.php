@@ -16,7 +16,7 @@ use Zend\Filter\Callback;
  */
 abstract class AttenteMepAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    use \Application\Traits\TypeIntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
     
     protected $singularTitlePattern = "%s %s  peut   faire l'objet d'une mise en paiement";
     protected $pluralTitlePattern   = "%s %s peuvent faire l'objet d'une mise en paiement";

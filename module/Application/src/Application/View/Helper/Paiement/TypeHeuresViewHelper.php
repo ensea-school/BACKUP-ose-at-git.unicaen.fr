@@ -4,7 +4,7 @@ namespace Application\View\Helper\Paiement;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\TypeHeures;
-use Application\Traits\TypeHeuresAwareTrait;
+use Application\Entity\Db\Traits\TypeHeuresAwareTrait;
 
 /**
  * Description of ElementPedagogique

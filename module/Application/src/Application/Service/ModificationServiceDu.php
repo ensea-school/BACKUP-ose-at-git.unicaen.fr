@@ -50,8 +50,8 @@ class ModificationServiceDu extends AbstractEntityService
         $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getannee(), $qb );
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
-            $this->finderByIntervenant($role->getIntervenant());
+        if ($intervenant = $role->getIntervenant()){
+            $this->finderByIntervenant($intervenant);
         }
 
         return $qb;

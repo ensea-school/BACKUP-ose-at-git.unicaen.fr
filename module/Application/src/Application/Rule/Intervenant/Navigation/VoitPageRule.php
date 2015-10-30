@@ -13,7 +13,7 @@ use Application\Service\Workflow\AbstractWorkflow;
  */
 class VoitPageRule extends AbstractRule
 {
-    use \Application\Traits\IntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\IntervenantAwareTrait;
     
     /**
      * @var array

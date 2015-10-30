@@ -4,7 +4,7 @@ namespace Application\View\Helper\Intervenant;
 
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
-use Application\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 
 /**
  * Description of Intervenant
@@ -72,7 +72,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             'metier'      => [
                 "Type d'intervenant"                => $entity->getType(),
                 "Statut de l'intervenant"           => $entity->getStatut(),
-                "N° {$entity->getSourceToString()}" => $entity->getSourceCode(),
+                "N° {$entity->getSource()}"         => $entity->getSourceCode(),
                 "Affectation principale"            => $entity->getStructure() ?: "(Inconnue)",
                 "Affectation recherche"             => count($aff = $entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)",
                 "Discipline"                        => $entity->getDiscipline() ?: "(Inconnue)",

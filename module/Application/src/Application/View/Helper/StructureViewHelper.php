@@ -4,8 +4,8 @@ namespace Application\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Structure;
-use Application\Interfaces\StructureAwareInterface;
-use Application\Traits\StructureAwareTrait;
+use Application\Entity\Db\Interfaces\StructureAwareInterface;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
  * Description of Structure

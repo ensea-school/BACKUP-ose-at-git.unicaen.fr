@@ -4,8 +4,8 @@ namespace Application\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Etablissement;
-use Application\Interfaces\EtablissementAwareInterface;
-use Application\Traits\EtablissementAwareTrait;
+use Application\Entity\Db\Interfaces\EtablissementAwareInterface;
+use Application\Entity\Db\Traits\EtablissementAwareTrait;
 
 /**
  * Description of Etablissement

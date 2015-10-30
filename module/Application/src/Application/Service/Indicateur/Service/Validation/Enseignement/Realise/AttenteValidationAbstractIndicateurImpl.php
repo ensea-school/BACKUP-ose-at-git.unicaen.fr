@@ -6,8 +6,8 @@ use Application\Service\Indicateur\Service\Validation\Enseignement\AttenteValida
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
-use Application\Traits\TypeIntervenantAwareTrait;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
  * 

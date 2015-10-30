@@ -3,17 +3,18 @@
 namespace Application\Service\Workflow;
 
 use Application\Acl\ComposanteRole;
-use Application\Interfaces\TypeAgrementAwareInterface;
+use Application\Entity\Db\Interfaces\TypeAgrementAwareInterface;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
+use Application\Service\Traits\TypeAgrementAwareTrait;
 use Application\Service\WfIntervenantEtape as WfIntervenantEtapeService;
 use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\Workflow\Step\Step;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\StructureAwareTrait;
-use Application\Traits\RoleAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\RoleAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
@@ -26,6 +27,7 @@ class Workflow extends AbstractWorkflow
     use IntervenantAwareTrait;
     use StructureAwareTrait;
     use RoleAwareTrait;
+    use TypeAgrementAwareTrait;
 
     const DONNEES_PERSO_SAISIE           = 'DONNEES_PERSO_SAISIE';
     const DONNEES_PERSO_VALIDATION       = 'DONNEES_PERSO_VALIDATION';
@@ -245,14 +247,5 @@ class Workflow extends AbstractWorkflow
     private function getServiceWfIntervenantEtape()
     {
         return $this->getServiceLocator()->get('WfIntervenantEtapeService');
-    }
-
-    /**
-     *
-     * @return TypeAgrementService
-     */
-    private function getServiceTypeAgrement()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
     }
 }

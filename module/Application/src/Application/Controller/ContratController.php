@@ -4,8 +4,17 @@ namespace Application\Controller;
 
 use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeContrat;
+use Application\Entity\Db\Validation;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Service\Traits\ContratAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 use Common\Constants;
+use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -20,15 +29,19 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 /**
  * Description of ContratController
  *
- * @method Application\Controller\Plugin\Context context()
- * @method Application\Controller\Plugin\Upload\UploadPlugin uploader()
+ * @method \Application\Controller\Plugin\Context context()
+ * @method UploaderPlugin uploader()
  * @method \Doctrine\ORM\EntityManager em()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use ContextAwareTrait;
+    use ContratAwareTrait;
+    use ServiceServiceAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
 
     /**
      * @var Contrat
@@ -43,11 +56,11 @@ class ContratController extends AbstractActionController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Contrat',
-            'Application\Entity\Db\TypeContrat',
-            'Application\Entity\Db\Service',
-            'Application\Entity\Db\VolumeHoraire',
-            'Application\Entity\Db\Validation',
+            Contrat::class,
+            TypeContrat::class,
+            Service::class,
+            VolumeHoraire::class,
+            Validation::class,
         ]);
     }
 
@@ -60,12 +73,8 @@ class ContratController extends AbstractActionController
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if ($role instanceof IntervenantRole) {
-            $intervenant = $role->getIntervenant();
-        }
-        else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        }
+        $intervenant = $role->getIntervenant() ?: $this->context()->mandatory()->intervenantFromRoute();
+
         /* @var $intervenant Intervenant */
         if ($intervenant->estPermanent()) {
             throw new \Common\Exception\MessageException("Les intervenants permanents n'ont pas de contrat.");
@@ -728,44 +737,9 @@ class ContratController extends AbstractActionController
     {
         if (null === $this->structure) {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
-//            if (!$role instanceof \Application\Interfaces\StructureAwareInterface) {
-//                throw new LogicException("Rôle courant inattendu.");
-//            }
             $this->structure = $role->getStructure();
         }
 
         return $this->structure;
-    }
-
-    /**
-     * @return \Application\Service\Contrat
-     */
-    private function getServiceContrat()
-    {
-        return $this->getServiceLocator()->get('ApplicationContrat');
-    }
-
-    /**
-     * @return \Application\Service\ServiceService
-     */
-    private function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    private function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    private function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationEtatVolumeHoraire');
     }
 }

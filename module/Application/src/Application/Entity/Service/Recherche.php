@@ -2,13 +2,13 @@
 
 namespace Application\Entity\Service;
 
-use Application\Interfaces\TypeIntervenantAwareInterface;       use Application\Traits\TypeIntervenantAwareTrait;
-use Application\Interfaces\IntervenantAwareInterface;           use Application\Traits\IntervenantAwareTrait;
-use Application\Interfaces\NiveauEtapeAwareInterface;           use Application\Traits\NiveauEtapeAwareTrait;
-use Application\Interfaces\EtapeAwareInterface;                 use Application\Traits\EtapeAwareTrait;
-use Application\Interfaces\ElementPedagogiqueAwareInterface;    use Application\Traits\ElementPedagogiqueAwareTrait;
-use Application\Interfaces\TypeVolumeHoraireAwareInterface;     use Application\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Interfaces\EtatVolumeHoraireAwareInterface;     use Application\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Entity\Db\Interfaces\TypeIntervenantAwareInterface;       use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Application\Entity\Db\Interfaces\IntervenantAwareInterface;           use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Interfaces\NiveauEtapeAwareInterface;                     use Application\Traits\NiveauEtapeAwareTrait;
+use Application\Entity\Db\Interfaces\EtapeAwareInterface;                 use Application\Entity\Db\Traits\EtapeAwareTrait;
+use Application\Entity\Db\Interfaces\ElementPedagogiqueAwareInterface;    use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;     use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Interfaces\EtatVolumeHoraireAwareInterface;     use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Structure;
 
 /**

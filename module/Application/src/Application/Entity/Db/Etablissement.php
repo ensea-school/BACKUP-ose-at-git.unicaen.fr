@@ -208,17 +208,4 @@ class Etablissement implements HistoriqueAwareInterface
         return (string)$this->getLibelle();
     }
 
-
-
-    /**
-     * Get source id
-     *
-     * @return integer
-     * @see \Application\Entity\Db\Source
-     */
-    public function getSourceToString()
-    {
-        return $this->getSource()->getLibelle();
-    }
-
 }

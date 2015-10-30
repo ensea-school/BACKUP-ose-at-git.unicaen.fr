@@ -4,7 +4,7 @@ namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\Etape as Entity;
 use Application\Entity\Db\Privilege;
-use Application\Traits\EtapeAwareTrait;
+use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
 use Application\Util;
 use Zend\View\Helper\AbstractHtmlElement;

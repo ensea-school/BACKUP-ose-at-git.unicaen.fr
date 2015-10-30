@@ -12,9 +12,9 @@ use Application\Entity\Db\Role as DbRole;
  */
 class Role extends NamedRole
 {
-    use \Application\Traits\StructureAwareTrait,
-        \Application\Traits\PersonnelAwareTrait,
-        \Application\Traits\IntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\StructureAwareTrait,
+        \Application\Entity\Db\Traits\PersonnelAwareTrait,
+        \Application\Entity\Db\Traits\IntervenantAwareTrait;
 
     const ROLE_ID = 'role';
 

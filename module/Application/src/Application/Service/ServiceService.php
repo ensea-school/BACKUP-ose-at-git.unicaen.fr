@@ -96,8 +96,8 @@ class ServiceService extends AbstractEntityService
         $entity = parent::newEntity();
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface) {
-            $entity->setIntervenant($role->getIntervenant());
+        if ($intervenant = $role->getIntervenant()) {
+            $entity->setIntervenant($intervenant);
         }
 
         return $entity;
@@ -254,8 +254,8 @@ class ServiceService extends AbstractEntityService
             if (!$entity->getEtablissement()) {
                 $entity->setEtablissement($this->getServiceContext()->getEtablissement());
             }
-            if (!$entity->getIntervenant() && $role instanceof \Application\Interfaces\IntervenantAwareInterface) {
-                $entity->setIntervenant($role->getIntervenant());
+            if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
+                $entity->setIntervenant($intervenant);
             }
             if (!$this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')) {
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
@@ -470,8 +470,8 @@ class ServiceService extends AbstractEntityService
         $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
         $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
-        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()) { // Si c'est un intervenant
-            $this->finderByIntervenant($role->getIntervenant(), $qb, $alias);
+        if ($intervenant = $role->getIntervenant()) { // Si c'est un intervenant
+            $this->finderByIntervenant($intervenant, $qb, $alias);
         }
 
         return $qb;

@@ -15,9 +15,9 @@ use Application\Entity\Db\MiseEnPaiement;
 class MiseEnPaiementRecherche
 {
 
-    use \Application\Traits\StructureAwareTrait,
-        \Application\Traits\PeriodeAwareTrait,
-        \Application\Traits\TypeIntervenantAwareTrait;
+    use \Application\Entity\Db\Traits\StructureAwareTrait;
+    use \Application\Entity\Db\Traits\PeriodeAwareTrait;
+    use \Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
 
     /**
      * etat

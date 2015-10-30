@@ -6,8 +6,8 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Interfaces\ServiceReferentielAwareInterface;
-use Application\Traits\ServiceReferentielAwareTrait;
+use Application\Entity\Db\Interfaces\ServiceReferentielAwareInterface;
+use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
 use Application\View\Helper\VolumeHoraireReferentiel\Liste as ListeHelper;
 
 /**

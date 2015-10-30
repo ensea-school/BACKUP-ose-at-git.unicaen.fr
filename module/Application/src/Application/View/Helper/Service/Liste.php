@@ -12,8 +12,8 @@ use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\TypeIntervention;
-use Application\Interfaces\TypeVolumeHoraireAwareInterface;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
 /**

@@ -3,8 +3,8 @@
 namespace Application\Service\Workflow\Step;
 
 use Application\Acl\IntervenantRole;
-use Application\Interfaces\TypeAgrementAwareInterface;
-use Application\Traits\TypeAgrementAwareTrait;
+use Application\Entity\Db\Interfaces\TypeAgrementAwareInterface;
+use Application\Entity\Db\Traits\TypeAgrementAwareTrait;
 use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeAgrement;
 

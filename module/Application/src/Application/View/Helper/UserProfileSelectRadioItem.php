@@ -2,8 +2,7 @@
 namespace Application\View\Helper;
 
 use UnicaenAuth\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
-use UnicaenAuth\View\Helper\UserProfileSelect;
-use Application\Entity\Db\Structure as StructureEntity;
+
 
 /**
  * Aide de vue dessinant un item de sélection d'un profil utilisateur.
@@ -15,7 +14,7 @@ use Application\Entity\Db\Structure as StructureEntity;
 class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
 {
     use \Application\Service\Traits\StructureAwareTrait,
-        \Application\Traits\StructureAwareTrait
+        \Application\Entity\Db\Traits\StructureAwareTrait
     ;
 
     /**

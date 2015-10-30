@@ -1516,19 +1516,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
-     * Get source id
-     *
-     * @return integer
-     * @see \Application\Entity\Db\Source
-     */
-    public function getSourceToString()
-    {
-        return $this->getSource()->getLibelle();
-    }
-
-
-
-    /**
      * Retourne la représentation littérale de cet objet.
      *
      * @return string

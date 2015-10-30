@@ -2,7 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Structure;
 use Common\Exception\LogicException;
 
@@ -97,7 +97,7 @@ class PeutSaisirReferentielRule extends AbstractIntervenantRule
         if ($this->getStructure()) {
             $qb
                     ->join("i.structure", "saff")
-                    ->join("saff.structureNiv2", "saff2")
+                    ->join("saff", "saff2")
                     ->andWhere("saff2 = " . $this->getStructure()->getId());
         }
 

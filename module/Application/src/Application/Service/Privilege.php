@@ -15,6 +15,11 @@ class Privilege extends AbstractEntityService implements PrivilegeProviderInterf
 {
     use \Application\Traits\SessionContainerTrait;
 
+    /**
+     * @var array
+     */
+    protected $privilegesRoles;
+
 
     /**
      * retourne la classe des entités
@@ -55,22 +60,20 @@ class Privilege extends AbstractEntityService implements PrivilegeProviderInterf
      */
     public function getPrivilegesRoles()
     {
-//        $session = $this->getSessionContainer();
+        if (null === $this->privilegesRoles){
+            $this->privilegesRoles = [];
+            $sql = 'SELECT * FROM v_privileges_roles';
+            $prl =  $this->getEntityManager()->getConnection()->query($sql)->fetchAll();
+            foreach( $prl as $pr ){
+                extract( array_change_key_case($pr,CASE_LOWER) );
 
-//        if (! isset($session->privilegesRoles)){
-            $privileges = $this->getList();
-            /* @var $privileges \Application\Entity\Db\Privilege[] */
-
-            $pr = [];
-            foreach( $privileges as $privilege ){
-                $roles = $privilege->getRoleCodes();
-                if (! empty($roles)){
-                    $pr[$privilege->getFullCode()] = $roles;
+                if (! array_key_exists($privilege,$this->privilegesRoles)){
+                    $this->privilegesRoles[$privilege] = [];
                 }
-            }return $pr;
-//            $session->privilegesRoles = $pr;
-//        }
-//        return $session->privilegesRoles;
+                $this->privilegesRoles[$privilege][] = $role;
+            }
+        }
+        return $this->privilegesRoles;
     }
 
     public function getResources()

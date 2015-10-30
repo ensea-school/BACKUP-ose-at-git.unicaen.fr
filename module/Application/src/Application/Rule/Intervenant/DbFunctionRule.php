@@ -2,8 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
  * Règle métier déterminant si un intervenant a reçu un type d'agrément donné.

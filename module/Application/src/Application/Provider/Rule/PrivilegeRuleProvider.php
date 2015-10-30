@@ -15,44 +15,47 @@ class PrivilegeRuleProvider implements ProviderInterface
 {
     use \Zend\ServiceManager\ServiceLocatorAwareTrait,
         \Application\Provider\Privilege\PrivilegeProviderAwareTrait,
-        \Application\Traits\SessionContainerTrait
-    ;
+        \Application\Traits\SessionContainerTrait;
+
 
 
     /**
      * @param array $config
      */
-    public function __construct( array $config, ServiceLocatorInterface $serviceLocator )
+    public function __construct(array $config, ServiceLocatorInterface $serviceLocator)
     {
         $this->setServiceLocator($serviceLocator);
 
         $session = $this->getSessionContainer();
-//        if (! isset($session->rules)){
+
+        //if (! isset($session->rules)){
             $session->rules = $this->makeRules($config);
-//        }
+        //}
     }
 
-    public function makeRules( array $config )
+
+
+    public function makeRules(array $config)
     {
         $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
 
-        foreach( $config as $grant => $rules ){
-            foreach( $rules as $index => $rule ){
-                if (is_array($rule)){
+        foreach ($config as $grant => $rules) {
+            foreach ($rules as $index => $rule) {
+                if (is_array($rule)) {
                     $privileges = (array)$rule['privileges'];
                     $ressources = $rule['resources'];
-                    $assertion = isset($rule['assertion']) ? $rule['assertion'] : null;
-                    $bjyRoles = [];
-                    foreach( $pr as $privilege => $roles ){
-                        if (in_array($privilege, $privileges)){
-                            $bjyRoles = array_unique( array_merge($bjyRoles, $roles) );
+                    $assertion  = isset($rule['assertion']) ? $rule['assertion'] : null;
+                    $bjyRoles   = [];
+                    foreach ($pr as $privilege => $roles) {
+                        if (in_array($privilege, $privileges)) {
+                            $bjyRoles = array_unique(array_merge($bjyRoles, $roles));
                         }
                     }
 
                     $bjyRule = [
                         $bjyRoles,
                         $ressources,
-                        $privileges
+                        $privileges,
                     ];
                     if ($assertion) $bjyRule[3] = $assertion;
 
@@ -61,15 +64,18 @@ class PrivilegeRuleProvider implements ProviderInterface
             }
         }
         $rules = $config;
-        if (! isset($rules['allow'])) $rules['allow'] = [];
-        foreach( $pr as $privilege => $roles ){
+        if (!isset($rules['allow'])) $rules['allow'] = [];
+        foreach ($pr as $privilege => $roles) {
             $rules['allow'][] = [
                 $roles,
-                'privilege/'.$privilege
+                'privilege/' . $privilege,
             ];
         }
+
         return $rules;
     }
+
+
 
     /**
      * {@inheritDoc}

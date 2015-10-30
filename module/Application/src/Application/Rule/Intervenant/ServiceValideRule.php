@@ -6,8 +6,8 @@ use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\TypeValidation;
 use Application\Service\TypeValidation as TypeValidationService;
 use Application\Service\VolumeHoraire as VolumeHoraireService;
-use Application\Traits\StructureAwareTrait;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 

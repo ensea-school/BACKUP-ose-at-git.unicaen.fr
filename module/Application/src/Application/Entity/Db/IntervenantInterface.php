@@ -77,14 +77,6 @@ interface IntervenantInterface
     public function getAffectationsToString();
 
     /**
-     * Get source id
-     *
-     * @return integer 
-     * @see \Application\Entity\Db\Source
-     */
-    public function getSourceToString();
-
-    /**
      * Get sourceCode
      *
      * @return string 

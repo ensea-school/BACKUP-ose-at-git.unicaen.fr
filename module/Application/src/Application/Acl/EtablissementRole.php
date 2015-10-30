@@ -2,9 +2,8 @@
 
 namespace Application\Acl;
 
-use UnicaenAuth\Acl\NamedRole;
-use Application\Interfaces\PersonnelAwareInterface;
-use Application\Traits\PersonnelAwareTrait;
+use Application\Entity\Db\Interfaces\PersonnelAwareInterface;
+use Application\Entity\Db\Traits\PersonnelAwareTrait;
 
 /**
  * Rôle père de tous les rôles "composante".

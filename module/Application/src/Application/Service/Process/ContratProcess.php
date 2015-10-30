@@ -7,7 +7,7 @@ use Application\Entity\Db\TypeValidation;
 use Application\Rule\Intervenant\PeutCreerAvenantRule;
 use Application\Rule\Intervenant\PeutCreerContratInitialRule;
 use Application\Service\AbstractService;
-use Application\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\Contrat;
 
@@ -329,9 +329,6 @@ class ContratProcess extends AbstractService
     {
         if (null === $this->structure) {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
-//            if (!$role instanceof \Application\Interfaces\StructureAwareInterface) {
-//                throw new LogicException("Rôle courant inattendu.");
-//            }
             $this->structure = $role->getStructure();
         }
 

@@ -215,7 +215,7 @@ class PaiementController extends AbstractActionController
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $options = [];
-        if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()) {
+        if ($role->getStructure()) {
             $options['composante'] = $role->getStructure();
         }
 

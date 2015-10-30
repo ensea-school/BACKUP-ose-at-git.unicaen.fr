@@ -18,9 +18,9 @@ use Zend\Filter\Callback;
  */
 class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait,
-        \Application\Service\Traits\TypeVolumeHoraireAwareTrait
-    ;
+    use \Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+    use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+
     
     protected $singularTitlePattern = "%s intervenant  a   saisi des enseignements dont l'étape, l'élément pédagogique ou la période a disparu";
     protected $pluralTitlePattern   = "%s intervenants ont saisi des enseignements dont l'étape, l'élément pédagogique ou la période a disparu";

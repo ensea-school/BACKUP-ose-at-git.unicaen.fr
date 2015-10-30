@@ -4,14 +4,12 @@ namespace Application\Service\Indicateur\Service\Validation\Referentiel\Realise;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
-use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\VIndicAttenteValidRefAutre;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
-use Application\Traits\TypeIntervenantAwareTrait;
-use Application\Traits\TypeVolumeHoraireAwareTrait;
-use Doctrine\ORM\Query\Expr\Join;
+use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Filter\Callback;
 

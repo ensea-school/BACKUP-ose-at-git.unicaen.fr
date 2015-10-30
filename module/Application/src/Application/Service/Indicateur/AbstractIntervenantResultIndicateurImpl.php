@@ -6,7 +6,6 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
-use Common\Filter\IntervenantEmailFormatter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\ORMException;
 use Traversable;

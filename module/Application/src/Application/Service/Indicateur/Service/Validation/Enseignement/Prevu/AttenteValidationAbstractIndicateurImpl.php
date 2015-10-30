@@ -16,10 +16,10 @@ abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValida
 {
     use TypeVolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
-    
+
     /**
      * Retourne le type de volume horaire utile à cet indicateur.
-     * 
+     *
      * @return TypeVolumeHoraireEntity
      */
     public function getTypeVolumeHoraire()
@@ -27,7 +27,7 @@ abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValida
         if (null === $this->typeVolumeHoraire) {
             $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
         }
-        
+
         return $this->typeVolumeHoraire;
     }
     

@@ -21,6 +21,7 @@ use Zend\Filter\Callback;
 abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements TypeVolumeHoraireAwareInterface
 {
     use TypeVolumeHoraireAwareTrait;
+    use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
     
     protected $singularTitlePattern = "%s intervenant a    un total HC hors rémunération FC D713-60 <em>%s Saisi</em> qui dépasse le plafond correspondant à son statut";
     protected $pluralTitlePattern   = "%s intervenants ont un total HC hors rémunération FC D713-60 <em>%s Saisi</em> qui dépasse le plafond correspondant à leur statut";

@@ -149,11 +149,5 @@ abstract class AttenteMepAbstractIndicateurImpl extends AbstractIntervenantResul
         
         return $this->resultItemFormatter;
     }
-    
-    /**
-     * Retourne le type d'intervenant utile à cet indicateur.
-     * 
-     * @return TypeIntervenantEntity
-     */
-    abstract public function getTypeIntervenant();
+
 }

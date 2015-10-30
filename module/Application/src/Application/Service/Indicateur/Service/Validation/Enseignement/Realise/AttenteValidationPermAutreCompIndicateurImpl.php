@@ -146,9 +146,10 @@ class AttenteValidationPermAutreCompIndicateurImpl extends AbstractIntervenantRe
      */
     public function getTypeIntervenant()
     {
-        if (null === $this->typeIntervenant) {
-            $this->typeIntervenant =
-                $this->getServiceLocator()->get('ApplicationTypeIntervenant')->getByCode(TypeIntervenantEntity::CODE_PERMANENT);
+        if (! $this->typeIntervenant) {
+            $sTi = $this->getServiceLocator()->get('ApplicationTypeIntervenant');
+            /* @var $sTi \Application\Service\TypeIntervenant */
+            $this->setTypeIntervenant( $sTi->getPermanent() );
         }
 
         return $this->typeIntervenant;

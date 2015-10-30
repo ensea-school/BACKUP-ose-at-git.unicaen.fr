@@ -17,17 +17,16 @@ class PermAffectMemeIntervAutreIndicateurImpl extends IntervAffectMemeIntervAutr
 {
     protected $singularTitlePattern = "%s permanent  affecté  dans ma structure (%s) a   des enseignements <em>%ss Validés</em> dans une autre structure";
     protected $pluralTitlePattern   = "%s permanents affectés dans ma structure (%s) ont des enseignements <em>%ss Validés</em> dans une autre structure";
-    
-    /**
-     * @return TypeVolumeHoraire
-     */
+
     public function getTypeVolumeHoraire()
     {
-        if (null === $this->typeVolumeHoraire) {
-            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+        if (!parent::getTypeVolumeHoraire()) {
+            $sTvh = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
+            /* @var $sTvh \Application\Service\TypeVolumeHoraire */
+            $this->setTypeVolumeHoraire($sTvh->getPrevu());
         }
-        
-        return $this->typeVolumeHoraire;
+
+        return parent::getTypeVolumeHoraire();
     }
     
     /**

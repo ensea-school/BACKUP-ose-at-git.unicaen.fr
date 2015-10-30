@@ -21,6 +21,7 @@ use Zend\Filter\Callback;
 abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements TypeVolumeHoraireAwareInterface
 {
     use TypeVolumeHoraireAwareTrait;
+    use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
     
     protected $singularTitlePattern = "%s intervenant a    un total Référentiel <em>%s</em> qui dépasse le plafond correspondant à son statut";
     protected $pluralTitlePattern   = "%s intervenants ont un total Référentiel <em>%s</em> qui dépasse le plafond correspondant à leur statut";

@@ -2,7 +2,6 @@
 
 namespace Application\Service\Indicateur\Service\Plafond;
 
-use Application\Service\Indicateur\Service\Plafond\PlafondRefDepasseAbstractIndicateurImpl;
 
 /**
  * 
@@ -13,11 +12,13 @@ class PlafondRefPrevuDepasseIndicateurImpl extends PlafondRefDepasseAbstractIndi
 {
     public function getTypeVolumeHoraire()
     {
-        if (null === $this->typeVolumeHoraire) {
-            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+        if (!parent::getTypeVolumeHoraire()) {
+            $sTvh = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
+            /* @var $sTvh \Application\Service\TypeVolumeHoraire */
+            $this->setTypeVolumeHoraire($sTvh->getPrevu());
         }
-        
-        return $this->typeVolumeHoraire;
+
+        return parent::getTypeVolumeHoraire();
     }
     
     /**

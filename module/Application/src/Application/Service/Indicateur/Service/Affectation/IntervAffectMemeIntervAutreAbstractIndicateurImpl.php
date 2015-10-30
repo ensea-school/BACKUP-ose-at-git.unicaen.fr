@@ -17,6 +17,7 @@ use Doctrine\ORM\QueryBuilder;
 abstract class IntervAffectMemeIntervAutreAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     use TypeVolumeHoraireAwareTrait;
+    use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
     
     protected $singularTitlePattern = "%s intervenant  '%s' affecté  dans ma structure (%s) a   des enseignements <em>%ss Validés</em> dans une autre structure";
     protected $pluralTitlePattern   = "%s intervenants '%s' affectés dans ma structure (%s) ont des enseignements <em>%ss Validés</em> dans une autre structure";

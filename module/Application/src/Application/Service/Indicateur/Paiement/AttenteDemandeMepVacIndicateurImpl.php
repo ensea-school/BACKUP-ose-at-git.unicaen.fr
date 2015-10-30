@@ -18,11 +18,12 @@ class AttenteDemandeMepVacIndicateurImpl extends AttenteDemandeMepAbstractIndica
      */
     public function getTypeIntervenant()
     {
-        if (null === $this->typeIntervenant) {
-            $this->typeIntervenant = 
-                    $this->getServiceLocator()->get('ApplicationTypeIntervenant')->getByCode(TypeIntervenantEntity::CODE_EXTERIEUR);
+        if (! parent::getTypeIntervenant()) {
+            $sTi = $this->getServiceLocator()->get('ApplicationTypeIntervenant');
+            /* @var $sTi \Application\Service\TypeIntervenant */
+            $this->setTypeIntervenant( $sTi->getExterieur() );
         }
-        
-        return $this->typeIntervenant;
+
+        return parent::getTypeIntervenant();
     }
 }

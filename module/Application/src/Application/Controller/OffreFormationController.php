@@ -4,6 +4,9 @@ namespace Application\Controller;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
+use Application\Entity\Db\GroupeTypeFormation;
+use Application\Entity\Db\TypeFormation;
+use Application\Entity\Db\TypeModulateur;
 use Application\Entity\NiveauEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
@@ -11,7 +14,11 @@ use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
+use UnicaenApp\Form\Element\SearchAndSelect;
+use UnicaenApp\View\Model\CsvModel;
+use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
 
 
 /**
@@ -31,7 +38,7 @@ class OffreFormationController extends AbstractActionController
     use NiveauEtapeAwareTrait;
 
     /**
-     * @var \Zend\Session\Container
+     * @var Container
      */
     protected $sessionContainer;
 
@@ -41,13 +48,13 @@ class OffreFormationController extends AbstractActionController
     {
         /* Mise en place des filtres */
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ElementPedagogique',
-            'Application\Entity\Db\TypeFormation',
-            'Application\Entity\Db\GroupeTypeFormation',
-            'Application\Entity\Db\TypeModulateur',
+            ElementPedagogique::class,
+            TypeFormation::class,
+            GroupeTypeFormation::class,
+            TypeModulateur::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            'Application\Entity\Db\ElementPedagogique',
+            ElementPedagogique::class,
         ]);
     }
 
@@ -76,13 +83,15 @@ class OffreFormationController extends AbstractActionController
                 partial e.{id,libelle,sourceCode,niveau},
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre},
-                partial ep.{id,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
+                partial ep.{id,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
+                partial eff.{id,fi,fa,fc}
             FROM
               Application\Entity\Db\Etape e
               JOIN e.structure s
               JOIN e.typeFormation tf
               JOIN  tf.groupe gtf
               LEFT JOIN e.elementPedagogique ep
+              LEFT JOIN ep.effectifs eff
             WHERE
               s = :structure
             ORDER BY
@@ -126,10 +135,6 @@ class OffreFormationController extends AbstractActionController
 
 
 
-    /**
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function indexAction()
     {
         $this->initFilters();
@@ -150,12 +155,12 @@ class OffreFormationController extends AbstractActionController
         if ($structure) $params['structure'] = $structure->getId();
         if ($niveau) $params['niveau'] = $niveau->getId();
         if ($etape) $params['etape'] = $etape->getId();
-        $ep = new \UnicaenApp\Form\Element\SearchAndSelect('element');
+        $ep = new SearchAndSelect('element');
         $ep
             ->setAutocompleteSource($this->url()->fromRoute('of/element/search', [], ['query' => $params]))
             ->setLabel("Recherche :")
             ->setAttributes(['title' => "Saisissez 2 lettres au moins"]);
-        $form = new \Zend\Form\Form('search');
+        $form = new Form('search');
         $form->setAttributes(['class' => 'element-rech']);
         $form->add($ep);
 
@@ -180,10 +185,6 @@ class OffreFormationController extends AbstractActionController
 
 
 
-    /**
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function exportAction()
     {
         $this->initFilters();
@@ -191,9 +192,9 @@ class OffreFormationController extends AbstractActionController
         list($structure, $niveau, $etape) = $this->getParams();
 
         $elements = $this->getNeep($structure, $niveau, $etape)[2];
-        /* @var $elements \Application\Entity\Db\ElementPedagogique[] */
+        /* @var $elements ElementPedagogique[] */
 
-        $csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $csvModel = new CsvModel();
         $csvModel->setHeader([
             'Code formation',
             'Libellé formation',
@@ -212,8 +213,8 @@ class OffreFormationController extends AbstractActionController
             'Effectifs FC',
         ]);
         foreach ($elements as $element) {
-            $etape = $element->getEtape();
-            $effectifs = $element->getEffectifs();
+            $etape      = $element->getEtape();
+            $effectifs  = $element->getEffectifs();
             $discipline = $element->getDiscipline();
             $csvModel->addLine([
                 $etape->getSourceCode(),

@@ -5,6 +5,10 @@ namespace Application\Controller;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Form\Service\Traits\RechercheFormAwareTrait;
+use Application\Form\Service\Traits\SaisieAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
+use UnicaenApp\View\Model\CsvModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Exception\MessageException;
@@ -48,6 +52,9 @@ class ServiceController extends AbstractActionController
     use StructureAwareTrait;
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
+    use LocalContextAwareTrait;
+    use SaisieAwareTrait;
+    use RechercheFormAwareTrait;
 
 
 
@@ -304,7 +311,6 @@ class ServiceController extends AbstractActionController
     public function exportAction()
     {
         $intervenant = $this->context()->intervenantFromRoute();
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (!$this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')) {
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -330,12 +336,12 @@ class ServiceController extends AbstractActionController
         $params = [
             'ignored-columns' => ['intervenant-type-code'],
         ];
-        if ($role instanceof \Application\Acl\ComposanteRole) {
-            $params['composante'] = $role->getStructure();
+        if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
+            $params['composante'] = $structure;
         }
         $data = $this->getServiceService()->getTableauBord($recherche, $params);
 
-        $csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $csvModel = new CsvModel();
         $csvModel->setHeader($data['head']);
         $csvModel->addLines($data['data']);
         $csvModel->setFilename('service.csv');
@@ -355,15 +361,12 @@ class ServiceController extends AbstractActionController
         $intervenant   = $this->context()->intervenantFromRoute();
         $canAddService = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
         $annee         = $this->getServiceContext()->getAnnee();
-        $role          = $this->getServiceContext()->getSelectedIdentityRole();
         $action        = $this->getRequest()->getQuery('action', null);
         $tri           = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
         if ($intervenant) {
-            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-            /* @var $localContext \Application\Service\LocalContext */
-            $localContext->setIntervenant($intervenant);
+            $this->getServiceLocalContext()->setIntervenant($intervenant);
         }
 
         if (!$intervenant) {
@@ -389,8 +392,8 @@ class ServiceController extends AbstractActionController
                 'isoler-non-payes' => false,
                 'regroupement'     => 'intervenant',
             ];
-            if ($role instanceof \Application\Acl\ComposanteRole) {
-                $params['composante'] = $role->getStructure();
+            if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
+                $params['composante'] = $structure;
             }
             $resumeServices = $this->getServiceService()->getTableauBord($recherche, $params);
         } else {
@@ -406,7 +409,7 @@ class ServiceController extends AbstractActionController
 
     public function resumeRefreshAction()
     {
-        $filter = $this->getFormRecherche()->hydrateFromSession();
+        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
 
         return compact('filter');
     }
@@ -417,7 +420,7 @@ class ServiceController extends AbstractActionController
     {
         $errors        = [];
         $service       = $this->getServiceService();
-        $rechercheForm = $this->getFormRecherche();
+        $rechercheForm = $this->getFormServiceRecherche();
         $entity        = $service->loadRecherche();
         $rechercheForm->bind($entity);
 
@@ -477,7 +480,7 @@ class ServiceController extends AbstractActionController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service       = $this->getServiceService();
-        $form          = $this->getFormSaisie();
+        $form          = $this->getFormServiceSaisie();
         $element       = $this->context()->elementPedagogiqueFromPost('element');
         $etablissement = $this->context()->etablissementFromPost();
 
@@ -595,13 +598,10 @@ class ServiceController extends AbstractActionController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceService();
-        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $form   = $this->getFormSaisie();
+        $form   = $this->getFormServiceSaisie();
         $errors = [];
 
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
-        $intervenant = $localContext->getIntervenant();
+        $intervenant = $this->getServiceLocalContext()->getIntervenant();
 
         if ($id) {
             $entity = $service->get($id);
@@ -662,37 +662,5 @@ class ServiceController extends AbstractActionController
         }
 
         return $this->typeVolumeHoraire;
-    }
-
-
-
-    /**
-     *
-     * @return \Application\Form\Service\Saisie
-     */
-    protected function getFormSaisie()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceSaisie');
-    }
-
-
-
-    /**
-     * @return \Application\Form\Service\Recherche
-     */
-    protected function getFormRecherche()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRechercheForm');
-    }
-
-
-
-    /**
-     *
-     * @return \Application\Assertion\ServiceAssertion
-     */
-    public function getAssertionService()
-    {
-        return $this->getServiceLocator()->get('ServiceAssertion');
     }
 }

@@ -2,6 +2,11 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Entity\Db\DomaineFonctionnel;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeFormation;
+use Application\Form\OffreFormation\Traits\EtapeSaisieAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
@@ -22,15 +27,22 @@ class EtapeController extends AbstractActionController
     use ElementPedagogiqueAwareTrait;
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;
+    use EtapeSaisieAwareTrait;
 
 
 
     protected function saisirAction()
     {
-        $etape   = $this->getEvent()->getParam('etape');
-        $title   = $etape ? "Modification d'une formation" : "Création d'une nouvelle formation";
-        $form    = $this->getFormSaisie();
-        $errors  = [];
+        $this->em()->getFilters()->enable('historique')->init([
+            TypeFormation::class,
+            DomaineFonctionnel::class,
+            Structure::class,
+        ]);
+
+        $etape  = $this->getEvent()->getParam('etape');
+        $title  = $etape ? "Modification d'une formation" : "Création d'une nouvelle formation";
+        $form   = $this->getFormOffreFormationEtapeSaisie();
+        $errors = [];
 
         if ($etape) {
             $form->bind($etape);
@@ -65,9 +77,9 @@ class EtapeController extends AbstractActionController
         if (!($etape = $this->getEvent()->getParam('etape'))) {
             throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
-        $title   = "Suppression de formation";
-        $form    = new \Application\Form\Supprimer('suppr');
-        $errors  = [];
+        $title  = "Suppression de formation";
+        $form   = new \Application\Form\Supprimer('suppr');
+        $errors = [];
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         if ($this->getRequest()->isPost()) {
@@ -87,10 +99,10 @@ class EtapeController extends AbstractActionController
     public function voirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ElementPedagogique',
+            ElementPedagogique::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            'Application\Entity\Db\ElementPedagogique',
+            ElementPedagogique::class,
         ]);
         $etape        = $this->getEvent()->getParam('etape');
         $title        = 'Formation';
@@ -98,17 +110,4 @@ class EtapeController extends AbstractActionController
 
         return compact('etape', 'title', 'serviceEtape');
     }
-
-
-
-    /**
-     * Retourne le formulaire d'ajout/modif d'Etape.
-     *
-     * @return \Application\Form\OffreFormation\EtapeSaisie
-     */
-    protected function getFormSaisie()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('EtapeSaisie');
-    }
-
 }

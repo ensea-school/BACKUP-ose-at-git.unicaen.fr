@@ -76,7 +76,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Affectation principale"            => $entity->getStructure() ?: "(Inconnue)",
                 "Affectation recherche"             => count($aff = $entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)",
                 "Discipline"                        => $entity->getDiscipline() ?: "(Inconnue)",
-                "Corps & grade"                     => $entity->getGrade() ? $entity->getGrade()->toStringWithCorps() : "Aucun"
+                "Grade"                             => $entity->getGrade() ?: "(Aucun ou inconnu)",
             ],
             'divers'      => [
                 "Id"              => $entity->getId(),

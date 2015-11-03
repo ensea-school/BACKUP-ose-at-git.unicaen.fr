@@ -63,6 +63,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
             "Code {$entity->getSource()->getLibelle()}"                => $entity->getSourceCode(),
             "Libellé"                                                  => $entity->getLibelle(),
             "Structure"                                                => $entity->getStructure(),
+            "Discipline"                                               => $entity->getDiscipline(),
             "Période d'enseignement"                                   => $entity->getPeriode(),
             "<span title=\"Formation ouverte à distance\">FOAD</span>" => (bool)$entity->getTauxFoad() ? "Oui" : "Non",
             "Régime(s) d'inscription"                                  => $entity->getRegimesInscription(true),
@@ -75,7 +76,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
             $vars["Formation"] = $entity->getEtape();
         }
 
-        $html = "<dl class=\"etape dl-horizontal\">\n";
+        $html = "<dl class=\"element dl-horizontal\">\n";
         foreach ($vars as $key => $value) {
             $html .= "\t<dt>$key :</dt><dd>$value</dd>\n";
         }

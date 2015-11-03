@@ -26,8 +26,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     use SourceAwareTrait;
     use EtapeAwareTrait;
 
-
-
     /**
      * @var string
      */
@@ -131,6 +129,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
      * @var \Doctrine\Common\Collections\Collection
      */
     private $centreCoutEp;
+
+    /**
+     * @var \Application\Entity\Db\Effectifs
+     */
+    private $effectifs;
 
 
 
@@ -682,6 +685,34 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         }
 
         return $slice;
+    }
+
+
+
+    /**
+     * Set effectifs
+     *
+     * @param \Application\Entity\Db\Effectifs $effectifs
+     *
+     * @return ElementPedagogique
+     */
+    public function setEffectifs(\Application\Entity\Db\Effectifs $effectifs = null)
+    {
+        $this->effectifs = $effectifs;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get effectifs
+     *
+     * @return \Application\Entity\Db\Effectifs
+     */
+    public function getEffectifs()
+    {
+        return $this->effectifs;
     }
 
 

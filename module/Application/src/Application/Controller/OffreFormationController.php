@@ -200,25 +200,37 @@ class OffreFormationController extends AbstractActionController
             'Niveau',
             'Code enseignement',
             'Libellé enseignement',
+            'Code discipline',
+            'Libellé discipline',
             'Période',
             'FOAD',
             'Taux FI',
             'Taux FA',
             'Taux FC',
+            'Effectifs FI',
+            'Effectifs FA',
+            'Effectifs FC',
         ]);
         foreach ($elements as $element) {
             $etape = $element->getEtape();
+            $effectifs = $element->getEffectifs();
+            $discipline = $element->getDiscipline();
             $csvModel->addLine([
                 $etape->getSourceCode(),
                 $etape->getLibelle(),
                 $etape->getNiveauToString(),
                 $element->getSourceCode(),
                 $element->getLibelle(),
+                $discipline ? $discipline->getSourceCode() : null,
+                $discipline ? $discipline->getLibelleLong() : null,
                 $element->getPeriode(),
                 $element->getTauxFoad(),
                 $element->getTauxFi(),
                 $element->getTauxFa(),
-                $element->getTauxFc()
+                $element->getTauxFc(),
+                $effectifs ? $effectifs->getFi() : null,
+                $effectifs ? $effectifs->getFa() : null,
+                $effectifs ? $effectifs->getFc() : null,
             ]);
         }
         $csvModel->setFilename('offre-de-formation.csv');

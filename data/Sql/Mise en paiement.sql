@@ -7,7 +7,8 @@ SELECT
   th.id th_id, th.libelle_court type_heures,
   ep.source_code,
   mep.heures,
-  to_char(mep.histo_creation, 'DD/MM/YYYY HH:MI:SS'),
+  mep.DATE_MISE_EN_PAIEMENT,
+  to_char(mep.histo_creation, 'DD/MM/YYYY HH:MI:SS') mep_histo_creation,
   mep.histo_createur_id,
   mep.histo_modification,
   mep.histo_destructeur_id
@@ -26,7 +27,7 @@ WHERE
   --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  i.source_code = '76643'
+  i.source_code = '74315'
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;
@@ -38,22 +39,16 @@ WHERE
 
 --update mise_en_paiement set histo_destruction = sysdate, histo_destructeur_id = 4 where id = 20499;
 
---update mise_en_paiement set periode_paiement_id = 8, date_mise_en_paiement = to_date( '31/05/2015', 'DD/MM/YYYY') WHERE
---id in (2397,2402,2409,2429,2430)
---;
+update mise_en_paiement set periode_paiement_id = 20, date_mise_en_paiement = to_date( '31/12/2015', 'DD/MM/YYYY') WHERE
+id in (
+
+22561,
+22560
+
+);
 
 
-18126,
-18125,
-18124,
-18123,
-18122,
-18121,
-18120,
-18119,
-18118,
-18117,
-12891
+
 
 
 

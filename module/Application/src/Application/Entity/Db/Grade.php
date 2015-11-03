@@ -164,18 +164,6 @@ class Grade implements HistoriqueAwareInterface
 
 
     /**
-     * Retourne le grade précédé se son corps
-     *
-     * @return string
-     */
-    public function toStringWithCorps()
-    {
-        return $this->corps . ' - ' . $this;
-    }
-
-
-
-    /**
      * Retourne la représentation littérale de cet objet.
      *
      * @return string

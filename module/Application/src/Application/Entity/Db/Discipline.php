@@ -282,7 +282,7 @@ class Discipline implements HistoriqueAwareInterface
 
     public function __toString()
     {
-        return $this->getLibelleLong();
+        return $this->getSourceCode().' '.$this->getLibelleLong();
     }
 
 }

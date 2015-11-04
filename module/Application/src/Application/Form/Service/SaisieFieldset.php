@@ -24,8 +24,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         \Application\Service\Traits\LocalContextAwareTrait,
         \Application\Service\Traits\EtapeAwareTrait,
         \Application\Service\Traits\NiveauEtapeAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait
-    ;
+        \Application\Service\Traits\StructureAwareTrait;
 
     /**
      * etablissement par défaut
@@ -41,6 +40,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         parent::__construct('service', $options);
     }
 
+
+
     public function init()
     {
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
@@ -49,7 +50,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $this->etablissement = $this->getServiceContext()->getEtablissement();
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'))
-              ->setAllowedObjectBindingClass('Application\Entity\Db\Service');
+            ->setAllowedObjectBindingClass('Application\Entity\Db\Service');
 
         $this->add([
             'name' => 'id',
@@ -58,140 +59,143 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
         $identityRole = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if (! $identityRole instanceof IntervenantRole){
+        if (!$identityRole instanceof IntervenantRole) {
             $intervenant = new SearchAndSelect('intervenant');
-            $intervenant ->setRequired(true)
-                         ->setSelectionRequired(true)
-                         ->setAutocompleteSource(
-                            $url('recherche', ['action' => 'intervenantFind'])
-                         )
-                         ->setLabel("Intervenant :")
-                         ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
+            $intervenant->setRequired(true)
+                ->setSelectionRequired(true)
+                ->setAutocompleteSource(
+                    $url('recherche', ['action' => 'intervenantFind'])
+                )
+                ->setLabel("Intervenant :")
+                ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
             $this->add($intervenant);
         }
 
-        if (!($identityRole instanceof IntervenantRole && !$identityRole->getIntervenant()->estPermanent())){
+        if (!($identityRole instanceof IntervenantRole && !$identityRole->getIntervenant()->estPermanent())) {
             $this->add([
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',
                 'options'    => [
-                    'label'  => "Enseignement effectué :",
+                    'label'         => "Enseignement effectué :",
                     'value_options' => [
                         'service-interne' => 'en interne',
-                        'service-externe' => 'hors '.$this->etablissement,
+                        'service-externe' => 'hors ' . $this->etablissement,
                     ],
                 ],
                 'attributes' => [
-                    'value' => 'service-interne'
-                ]
+                    'value' => 'service-interne',
+                ],
             ]);
         }
 
         $fs = $this->getServiceLocator()->get('FormElementPedagogiqueRechercheFieldset');
         $fs->setName('element-pedagogique');
-        $this->add( $fs );
+        $this->add($fs);
 
         $etablissement = new SearchAndSelect('etablissement');
-        $etablissement ->setRequired(true)
-                       ->setSelectionRequired(true)
-                       ->setAutocompleteSource(
-                           $url('etablissement/recherche')
-                       )
-                       ->setLabel("Établissement :")
-                       ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);
+        $etablissement->setRequired(true)
+            ->setSelectionRequired(true)
+            ->setAutocompleteSource(
+                $url('etablissement/recherche')
+            )
+            ->setLabel("Établissement :")
+            ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);
         $this->add($etablissement);
+
+        return $this;
     }
+
+
 
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
+        $fs = $this->get('element-pedagogique');
+        /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        if ($this->has('intervenant') && $this->getServiceLocalContext()->getIntervenant()){
+        if ($this->has('intervenant') && $this->getServiceLocalContext()->getIntervenant()) {
             $this->get('intervenant')->setValue([
-                'id' => $this->getServiceLocalContext()->getIntervenant()->getSourceCode(),
-                'label' => (string)$this->getServiceLocalContext()->getIntervenant()
+                'id'    => $this->getServiceLocalContext()->getIntervenant()->getSourceCode(),
+                'label' => (string)$this->getServiceLocalContext()->getIntervenant(),
             ]);
         }
 
-        if (! $role instanceof IntervenantRole){
-            if ($this->getServiceLocalContext()->getStructure()){
-                $structure = $this->getServiceLocalContext()->getStructure();
-                $valueOptions = [$structure->getId() => (string) $structure];
-                $fs->get('structure')->setValue($structure->getId());
-
-            }
-            if ($this->getServiceLocalContext()->getNiveau()){
-                $fs->get('niveau')->setValue( $this->getServiceLocalContext()->getNiveau()->getId() );
-            }
-            if ($this->getServiceLocalContext()->getEtape()){
-                $fs->get('etape')->setValue( $this->getServiceLocalContext()->getEtape()->getId() );
-            }
+        if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure() ?: $this->getServiceLocalContext()->getStructure()) {
+            $fs->get('structure')->setValue($structure->getId());
         }
-        if ($this->getServiceLocalContext()->getElementPedagogique()){
-            $fs->get('element')->setValue( [
-                'id' => $this->getServiceLocalContext()->getElementPedagogique()->getId(),
-                'label' => (string)$this->getServiceLocalContext()->getElementPedagogique()
+
+        if ($niveau = $this->getServiceLocalContext()->getNiveau()) {
+            $fs->get('niveau')->setValue($niveau->getId());
+        }
+
+        if ($etape = $this->getServiceLocalContext()->getEtape()) {
+            $fs->get('etape')->setValue($etape->getId());
+        }
+
+        if ($element = $this->getServiceLocalContext()->getElementPedagogique()) {
+            $fs->get('element')->setValue([
+                'id'    => $element->getId(),
+                'label' => (string)$element,
             ]);
         }
-        if ($this->has('interne-externe')){
+
+        if ($this->has('interne-externe')) {
             $this->get('interne-externe')->setValue('service-interne');
         }
 
-        // la structure de responsabilité du gestionnaire écrase celle du contexte local
-        if ($role instanceof ComposanteRole) { // Si c'est un membre d'une composante
-            $structure = $role->getStructure();
-            $valueOptions = [$structure->getId() => (string) $structure];
-            //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());
-            $fs->get('structure')->setValue($structure->getId());
-        }
+        return $this;
     }
+
+
 
     public function saveToContext()
     {
         /* Met à jour le contexte local en fonction des besoins... */
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
+        $fs = $this->get('element-pedagogique');
+        /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-
-        if (! $role instanceof IntervenantRole){
-            if ( $structureId = $fs->get('structure')->getValue() ){
-                $this->getServiceLocalContext()->setStructure( $this->getServiceStructure()->get( $structureId ) );
-            }else{
-                $this->getServiceLocalContext()->setStructure( null );
-            }
-            if ( $niveauId = $fs->get('niveau')->getValue() ){
-                $this->getServiceLocalContext()->setNiveau( $this->getServiceNiveauEtape()->get( $niveauId ) );
-            }else{
-                $this->getServiceLocalContext()->setNiveau( null );
-            }
-            if ( $etapeId = $fs->get('etape')->getValue() ){
-                $this->getServiceLocalContext()->setEtape( $this->getServiceEtape()->get( $etapeId ) );
-            }else{
-                $this->getServiceLocalContext()->setEtape( null );
-            }
+        if ($structureId = $fs->get('structure')->getValue()) {
+            $this->getServiceLocalContext()->setStructure($this->getServiceStructure()->get($structureId));
+        } else {
+            $this->getServiceLocalContext()->setStructure(null);
         }
+
+        if ($niveauId = $fs->get('niveau')->getValue()) {
+            $this->getServiceLocalContext()->setNiveau($this->getServiceNiveauEtape()->get($niveauId));
+        } else {
+            $this->getServiceLocalContext()->setNiveau(null);
+        }
+
+        if ($etapeId = $fs->get('etape')->getValue()) {
+            $this->getServiceLocalContext()->setEtape($this->getServiceEtape()->get($etapeId));
+        } else {
+            $this->getServiceLocalContext()->setEtape(null);
+        }
+
+        return $this;
     }
+
+
 
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
-
+     *
      * @return array
      */
-    public function getInputFilterSpecification(){
+    public function getInputFilterSpecification()
+    {
         return [
-            'interne-externe' => [
-                'required' => false
+            'interne-externe'     => [
+                'required' => false,
             ],
-            'etablissement' => [
-                'required' => false
+            'etablissement'       => [
+                'required' => false,
             ],
             'element-pedagogique' => [
-                'required' => false
+                'required' => false,
             ],
         ];
     }

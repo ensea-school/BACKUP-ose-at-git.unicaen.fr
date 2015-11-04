@@ -3,7 +3,6 @@
 namespace Application\Rule\Intervenant;
 
 use Doctrine\ORM\QueryBuilder;
-use PDO;
 
 /**
  * Règle métier déterminant les intervenants nécessitant l'établissement d'un contrat/avenant.

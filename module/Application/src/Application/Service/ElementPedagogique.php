@@ -65,9 +65,7 @@ class ElementPedagogique extends AbstractEntityService
      */
     public function getSearchResultByTerm(array $filters = [])
     {
-        $filterAnnee = $this->getEntityManager()->getFilters()->getFilter('annee');
-        /* @var $filterAnnee \Common\ORM\Filter\AnneeFilter */
-        $annee = $filterAnnee->getAnnee(); // l'année est fonction du filtre et non du contexte!!
+        $annee = $this->getServiceContext()->getAnnee();
 
         if ($annee) {
             $af = ' ep.annee_id = ' . $annee->getId() . ' AND';

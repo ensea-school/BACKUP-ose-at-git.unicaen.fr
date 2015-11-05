@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
-use UnicaenCode\Util;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 

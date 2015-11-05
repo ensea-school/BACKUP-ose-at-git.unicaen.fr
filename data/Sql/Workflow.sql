@@ -7,7 +7,7 @@ from wf_intervenant_etape ie
 join intervenant i on i.id = ie.intervenant_id
 join wf_etape e on e.id = ie.etape_id
 left join structure s on s.id = ie.structure_id
-where i.source_code = '44003' --and ie.structure_id is  null
+where i.source_code = '87944' --and ie.structure_id is  null
 order by e.ordre;
 
 

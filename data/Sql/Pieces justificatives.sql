@@ -25,7 +25,7 @@ from
 where
   
   
-  AND i.source_code = 20259;
+  i.source_code = 87944;
   
 SELECT * FROM intervenant WHERE source_code = '20259';
   

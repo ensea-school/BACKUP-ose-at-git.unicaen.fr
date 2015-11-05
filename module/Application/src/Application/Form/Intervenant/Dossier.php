@@ -36,6 +36,8 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
                 ->setServiceLocator($this->getServiceLocator())
                 ->init();
 
+        $this->setAttribute('id','dossier');
+
         $this->add($this->dossierFieldset);
 
         /**

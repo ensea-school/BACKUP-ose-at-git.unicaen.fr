@@ -370,3 +370,7 @@ div#navbar pre {
 .etape-modulateurs th.element-pedagogique, .etape-modulateurs td.element-pedagogique {
     width: 50%;
 }
+
+form#dossier .form-control[disabled], form#dossier .form-control[readonly], form#dossier fieldset[disabled] .form-control {
+    cursor: text;
+}

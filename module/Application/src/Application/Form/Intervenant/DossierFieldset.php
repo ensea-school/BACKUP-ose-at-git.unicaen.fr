@@ -5,8 +5,6 @@ namespace Application\Form\Intervenant;
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Pays as PaysEntity;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
-use Application\Service\Departement as DepartementService;
-use Application\Service\Pays as PaysService;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DepartementAwareTrait;
 use Application\Service\Traits\PaysAwareTrait;

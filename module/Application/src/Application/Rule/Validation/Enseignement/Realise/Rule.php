@@ -33,7 +33,7 @@ class Rule extends ValidationEnsRefAbstractRule
          * Le réalisé hors UCBN d'un permanent est validé par sa structure d'affectation
          * (hors UCBN <=> structure d'intervention = null).
          */
-        if ($this->intervenant->estPermanent() && $this->structureRole === $this->intervenant->getStructure()) {
+        if ($this->getIntervenant()->estPermanent() && $this->structureRole === $this->getIntervenant()->getStructure()) {
             $this->structuresIntervention[Service::HORS_ETABLISSEMENT] = null;
         }
         

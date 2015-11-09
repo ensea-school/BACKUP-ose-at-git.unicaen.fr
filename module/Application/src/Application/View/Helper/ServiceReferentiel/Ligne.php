@@ -2,6 +2,8 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -20,6 +22,8 @@ class Ligne extends AbstractHtmlElement
 {
     use ServiceLocatorAwareTrait;
     use ServiceReferentielAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
 
     /**
      * @var Liste
@@ -37,13 +41,13 @@ class Ligne extends AbstractHtmlElement
      * Helper entry point.
      *
      * @param Liste $liste
-     * @param Service $service
+     * @param ServiceReferentiel $service
      * @return self
      */
     final public function __invoke( Liste $liste, ServiceReferentiel $service )
     {
         $this->setListe($liste);
-        $this->setService( $service );
+        $this->setServiceReferentiel( $service );
         return $this;
     }
 
@@ -65,7 +69,7 @@ class Ligne extends AbstractHtmlElement
         $url = $this->getView()->url(
                 'referentiel/rafraichir-ligne',
                 [
-                    'serviceReferentiel' => $this->getService()->getId(),
+                    'serviceReferentiel' => $this->getServiceReferentiel()->getId(),
                 ],
                 [
                     'query' => [
@@ -85,26 +89,26 @@ class Ligne extends AbstractHtmlElement
     public function render( $details=false )
     {
         $liste = $this->getListe();
-        $service = $this->getService();
+        $service = $this->getServiceReferentiel();
 
         $out = '';
         if ($liste->getColumnVisibility('intervenant')){
-            $out .= '<td>'.$this->renderIntervenant($this->getService()->getIntervenant()).'</td>';
+            $out .= '<td>'.$this->renderIntervenant($service->getIntervenant()).'</td>';
         }
         if ($liste->getColumnVisibility('structure')){
             $out .= '<td>'.$this->renderStructure($service->getStructure())."</td>\n";
         }
         if ($liste->getColumnVisibility('fonction')){
-            $out .= '<td>'.$this->renderFonction($this->getService()->getFonction())."</td>\n";
+            $out .= '<td>'.$this->renderFonction($service->getFonction())."</td>\n";
         }
         if ($liste->getColumnVisibility('commentaires')){
-            $out .= '<td>'.$this->renderCommentaires($this->getService()->getCommentaires())."</td>\n";
+            $out .= '<td>'.$this->renderCommentaires($service->getCommentaires())."</td>\n";
         }
         if ($liste->getColumnVisibility('heures')){
-            $out .= '<td style="text-align:right">'.$this->renderHeures($this->getService())."</td>\n";
+            $out .= '<td style="text-align:right">'.$this->renderHeures($service)."</td>\n";
         }
         if ($liste->getColumnVisibility('annee')){
-            $out .= '<td>'.$this->renderAnnee( $this->getService()->getIntervenant()->getAnnee() )."</td>\n";
+            $out .= '<td>'.$this->renderAnnee( $service->getIntervenant()->getAnnee() )."</td>\n";
         }
 
         $out .= '<td class="actions">';
@@ -199,14 +203,14 @@ class Ligne extends AbstractHtmlElement
 
     protected function renderModifier()
     {
-        $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+        $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
         return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="'.$url.'" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-pencil"></span></a>';
     }
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('referentiel/default', ['action' => 'suppression', 'id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-trash"></span></a>';
+        $url = $this->getView()->url('referentiel/default', ['action' => 'suppression', 'id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+        return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getServiceReferentiel()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-trash"></span></a>';
     }
 
     protected function toQuery($param)
@@ -269,21 +273,4 @@ class Ligne extends AbstractHtmlElement
         return $this;
     }
 
-    /**
-     *
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     *
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
 }

@@ -40,7 +40,7 @@ class ClotureRealiseRule extends ValidationEnsRefAbstractRule
         if ($this->isInContexteRealise()) {
             
             // Validation par la composante d'affectation de l'intervenant.
-            $this->structureValidation = $this->intervenant->getStructure();
+            $this->structureValidation = $this->getIntervenant()->getStructure();
         }
         
         $this->addMessage(

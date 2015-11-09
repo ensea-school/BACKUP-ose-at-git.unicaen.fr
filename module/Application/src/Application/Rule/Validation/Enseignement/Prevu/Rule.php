@@ -25,7 +25,7 @@ class Rule extends ValidationEnsRefAbstractRule
         /**
          * Intervenant permanent : peu importe la structure d'intervention.
          */
-        if ($this->intervenant->estPermanent()) {
+        if ($this->getIntervenant()->estPermanent()) {
             $this->structuresIntervention = null;
         }
         /**
@@ -56,8 +56,8 @@ class Rule extends ValidationEnsRefAbstractRule
         /**
          * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
          */
-        if ($this->intervenant->estPermanent()) {
-            $this->structureValidation = $this->intervenant->getStructure();
+        if ($this->getIntervenant()->estPermanent()) {
+            $this->structureValidation = $this->getIntervenant()->getStructure();
         }
         /**
          * Intervenant vacataire : validation par chaque composante d'intervention des enseignements la concernant.

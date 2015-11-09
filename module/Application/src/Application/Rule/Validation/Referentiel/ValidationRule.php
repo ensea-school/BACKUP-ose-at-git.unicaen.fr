@@ -32,7 +32,7 @@ class ValidationRule extends ValidationEnsRefAbstractRule
 
         $this->delegate
             ->setRole($this->role)
-            ->setIntervenant($this->intervenant);
+            ->setIntervenant($this->getIntervenant());
 
         return $this->delegate;
     }

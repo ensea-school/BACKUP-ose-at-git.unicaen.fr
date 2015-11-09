@@ -26,7 +26,7 @@ class Rule extends ValidationEnsRefAbstractRule
         /**
          * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
          */
-        if ($this->intervenant->estPermanent()) {
+        if ($this->getIntervenant()->estPermanent()) {
             $this->structuresIntervention = null; // toutes structures
         }
         /**
@@ -55,9 +55,9 @@ class Rule extends ValidationEnsRefAbstractRule
         /**
          * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
          */
-        if ($this->intervenant->estPermanent()) {
-            if ($this->structureRole !== $this->intervenant->getStructure()) {
-                $this->structureValidation = $this->intervenant->getStructure();
+        if ($this->getIntervenant()->estPermanent()) {
+            if ($this->structureRole !== $this->getIntervenant()->getStructure()) {
+                $this->structureValidation = $this->getIntervenant()->getStructure();
             }
             else {
                 $this->structureValidation = $this->structureRole;
@@ -112,8 +112,8 @@ class Rule extends ValidationEnsRefAbstractRule
              * Intervenant vacataire : validation par chaque structure du référentiel.
              */
             $flag =
-                     $this->intervenant->estPermanent() && $this->structureRole === $this->intervenant->getStructure() ||
-                    !$this->intervenant->estPermanent() && $this->structureRole === $this->structureValidation;
+                     $this->getIntervenant()->estPermanent() && $this->structureRole === $this->getIntervenant()->getStructure() ||
+                    !$this->getIntervenant()->estPermanent() && $this->structureRole === $this->structureValidation;
 
             return $flag;
         }

@@ -36,7 +36,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
     {
         parent::execute();
         
-        if (! $this->intervenant) {
+        if (! $this->getIntervenant()) {
             throw new LogicException("Un intervenant doit être spécifié.");
         }
         if (! $this->typeVolumeHoraire) {
@@ -66,7 +66,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
          * Rôle Intervenant.
          */
         if ($this->role instanceof IntervenantRole) {
-            $this->structureRole = $this->intervenant->getStructure();
+            $this->structureRole = $this->getIntervenant()->getStructure();
         }
         else {
             $this->structureRole = $this->role->getStructure();
@@ -139,7 +139,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
             return true;
         }
         // On ne s'intéresse ici qu'aux permanents.
-        if (! $this->intervenant->estPermanent()) {
+        if (! $this->getIntervenant()->estPermanent()) {
             return true;
         }
         
@@ -168,7 +168,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
     private function getRuleMiseEnPaiementExiste()
     {
         $rule = $this->getServiceLocator()->get('MiseEnPaiementExisteRule'); /* @var $rule MiseEnPaiementExisteRule */
-        $rule->setIntervenant($this->intervenant)->setIsDemande();
+        $rule->setIntervenant($this->getIntervenant())->setIsDemande();
         
         return $rule;
         
@@ -234,7 +234,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
     protected function getWorkflow()
     {
         $wf = $this->getWorkflowIntervenant()
-                ->setIntervenant($this->intervenant)
+                ->setIntervenant($this->getIntervenant())
                 ->setRole($this->role);
         
         return $wf;

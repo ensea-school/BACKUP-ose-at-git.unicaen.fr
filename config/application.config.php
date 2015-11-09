@@ -4,31 +4,33 @@ $env = getenv('APPLICATION_ENV') ?: 'production';
 
 $modules = [
     'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
-    'UnicaenApp', //'AssetManager',
+    'UnicaenApp',
     'UnicaenAuth',
     'Common',
     'Application',
     'Import',
 ];
 
+$moduleListenerOptions = [
+    'config_glob_paths'    => [
+        'config/autoload/{,*.}{global,local}.php',
+    ],
+    'module_paths' => [
+        './module',
+        './vendor',
+    ],
+];
+
 if ( 'development' == $env ) {
     $modules[] = 'ZendDeveloperTools';
     $modules[] = 'UnicaenCode';
+}else{
+    $moduleListenerOptions['config_cache_enabled']      = true;
+    $moduleListenerOptions['module_map_cache_enabled']  = true;
+    $moduleListenerOptions['cache_dir'] = 'data/cache/';
 }
 
 return [
     'modules' => $modules,
-    'module_listener_options' => [
-        'config_glob_paths'    => [
-            'config/autoload/{,*.}{global,local}.php',
-        ],
-        'module_paths' => [
-            './module',
-            './vendor',
-        ],
-
-//        'config_cache_enabled'     => true,
-//        'module_map_cache_enabled' => true,
-//        'cache_dir'                => 'data/cache/',
-    ],
+    'module_listener_options' => $moduleListenerOptions,
 ];

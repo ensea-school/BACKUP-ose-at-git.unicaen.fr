@@ -14,15 +14,5 @@
     <field name="password" type="string" column="PASSWORD" length="128" nullable="false"/>
     <field name="state" type="integer" column="STATE" nullable="false"/>
     <field name="username" type="string" column="USERNAME" length="255" nullable="false"/>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
-      <join-columns>
-        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
-      <join-columns>
-        <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
   </entity>
 </doctrine-mapping>

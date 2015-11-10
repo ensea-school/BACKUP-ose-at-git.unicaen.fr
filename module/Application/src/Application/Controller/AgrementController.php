@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Form\Agrement\Saisie;
 use Application\Rule\Intervenant\AgrementFourniRule;
@@ -32,7 +31,6 @@ use Application\Service\Traits\ContextAwareTrait;
  * @method EntityManager em()
  * @method Context              context()
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class AgrementController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
@@ -78,6 +76,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
      */
     private $formSaisie;
 
+
+
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
@@ -86,10 +86,12 @@ class AgrementController extends AbstractActionController implements WorkflowInt
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Agrement',
-            'Application\Entity\Db\TypeAgrement',
+            Agrement::class,
+            TypeAgrement::class,
         ]);
     }
+
+
 
     /**
      * Page vide invitant à sélectionner un type d'agrément dans le menu.
@@ -103,6 +105,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
 
         return ['title' => $this->title];
     }
+
+
 
     /**
      * Liste des agréments d'un type donné, concernant un intervenant.
@@ -119,24 +123,23 @@ class AgrementController extends AbstractActionController implements WorkflowInt
         $this->title        = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
         $messages           = [];
 
-        $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $agrementFourniRule AgrementFourniRule */
+        $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule');
+        /* @var $agrementFourniRule AgrementFourniRule */
         $agrementFourniRule
-                ->setIntervenant($this->intervenant)
-                ->setTypeAgrement($this->typeAgrement);
+            ->setIntervenant($this->intervenant)
+            ->setTypeAgrement($this->typeAgrement);
 
         /**
          * Il y a un Conseil Restreint par structure d'enseignement
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
             $structures = $agrementFourniRule->getStructuresEnseignement();
-        }
-        /**
+        } /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structures = [ null ];
-        }
-        else {
+            $structures = [null];
+        } else {
             throw new LogicException("Type d'agrément inattendu!");
         }
 
@@ -149,7 +152,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
             $agrement  = array_shift($agrements);
             if (!$agrement) {
                 // instanciation d'un support de création d'agrément (utilisé pour les ACL/assertion)
-                $agrement = $this->getNewEntity()->setStructure($s); /* @var $agrement Agrement */
+                $agrement = $this->getNewEntity()->setStructure($s);
+                /* @var $agrement Agrement */
             }
             $data[] = ['structure' => $s, 'agrement' => $agrement];
         }
@@ -171,6 +175,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
         return $this->view;
     }
 
+
+
     /**
      * Détails d'un agrément.
      *
@@ -178,16 +184,12 @@ class AgrementController extends AbstractActionController implements WorkflowInt
      */
     public function voirAction()
     {
-        $this->agrement     = $this->context()->mandatory()->agrementFromRoute();
-        $this->typeAgrement = $this->agrement->getType();
+        $agrement = $this->getEvent()->getParam('agrement');
 
-        $this->view = new ViewModel([
-            'agrement'    => $this->agrement,
-        ]);
-        $this->view->setTemplate('application/agrement/voir');
-
-        return $this->view;
+        return compact('agrement');
     }
+
+
 
     /**
      * Détails d'un agrément recherché par l'intervenant, le type et la structure.
@@ -196,18 +198,34 @@ class AgrementController extends AbstractActionController implements WorkflowInt
      */
     public function voirStrAction()
     {
-        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
-        $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
-        $structure          = $this->context()->structureFromRoute();
-        $this->agrement     = $this->getAgrementForStructure($structure);
+        $intervenant  = $this->getEvent()->getParam('intervenant');
+        $typeAgrement = $this->getEvent()->getParam('typeAgrement');
+        $structure    = $this->getEvent()->getParam('structure');
+
+        if (!$structure && !$typeAgrement->isConseilAcademique()) {
+            throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $typeAgrement));
+        }
+
+        $this->initFilters();
+
+        $sAgrement = $this->getServiceAgrement();
+
+        $qb = $sAgrement->finderByType($typeAgrement);
+        if ($structure) {
+            $sAgrement->finderByStructure($structure, $qb);
+        }
+        $sAgrement->finderByIntervenant($intervenant, $qb);
+        $agrement = $qb->getQuery()->getOneOrNullResult();
 
         $this->view = new ViewModel([
-            'agrement'    => $this->agrement,
+            'agrement' => $agrement,
         ]);
         $this->view->setTemplate('application/agrement/voir');
 
         return $this->view;
     }
+
+
 
     /**
      * Saisie d'un nouvel agrément.
@@ -235,23 +253,22 @@ class AgrementController extends AbstractActionController implements WorkflowInt
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
             $structure = $this->role->getStructure();
-        }
-        /**
+        } /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
             $structure = $this->intervenant->getStructure();
-        }
-        else {
+        } else {
             throw new LogicException("Type d'agrément inattendu!");
         }
 
         // aucun agrément ne doit déjà exister
-        $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $agrementFourniRule AgrementFourniRule */
+        $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule');
+        /* @var $agrementFourniRule AgrementFourniRule */
         $agrementFourniRule
-                ->setIntervenant($this->intervenant)
-                ->setTypeAgrement($this->typeAgrement)
-                ->execute();
+            ->setIntervenant($this->intervenant)
+            ->setTypeAgrement($this->typeAgrement)
+            ->execute();
         if (count($agrementFourniRule->getAgrementsFournis($structure))) {
             throw new MessageException(sprintf("L'agrément &laquo; %s &raquo; a déjà été ajouté.", $this->typeAgrement));
         }
@@ -262,6 +279,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
 
         return $this->view;
     }
+
+
 
     /**
      * Modification d'un agrément existant.
@@ -283,6 +302,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
         return $this->view;
     }
 
+
+
     /**
      * Code commun à l'ajout et modif d'agrement.
      */
@@ -297,7 +318,7 @@ class AgrementController extends AbstractActionController implements WorkflowInt
             $data = $this->getRequest()->getPost();
             $this->formSaisie->setData($data);
             if ($this->formSaisie->isValid()) {
-                $this->getS()->save($this->agrement);
+                $this->getServiceAgrement()->save($this->agrement);
             }
         }
 
@@ -309,6 +330,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
         ]);
         $this->view->setTemplate('application/agrement/edit');
     }
+
+
 
     /**
      * Saisie d'un nouvel agrément pour plusieurs intervenants à la fois.
@@ -326,14 +349,12 @@ class AgrementController extends AbstractActionController implements WorkflowInt
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
             $structure = $this->role->getStructure();
-        }
-        /**
+        } /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
             $structure = null;
-        }
-        else {
+        } else {
             throw new LogicException("Type d'agrément inattendu!");
         }
 
@@ -344,23 +365,24 @@ class AgrementController extends AbstractActionController implements WorkflowInt
          * ce sont ceux qui sont à l'étape adéquate dans le WF.
          */
         $serviceIntervenant = $this->getServiceIntervenant();
-        $qb = $serviceIntervenant->initQuery()[0]; /* @var $qb QueryBuilder */
+        $qb                 = $serviceIntervenant->initQuery()[0];
+        /* @var $qb QueryBuilder */
         $qb
-                ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
-                ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
-                ->setParameter('codeEtape', $this->typeAgrement->getCode());
+            ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
+            ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
+            ->setParameter('codeEtape', $this->typeAgrement->getCode());
         if ($structure) {
             $qb
-                    ->andWhere("p.structure = :structure")
-                    ->setParameter('structure', $structure);
+                ->andWhere("p.structure = :structure")
+                ->setParameter('structure', $structure);
         }
         $intervenants = $serviceIntervenant->getList($qb);
 
         if ($intervenants) {
             $this->agrement   = $this->getNewEntity()->setStructure($structure);
             $this->formSaisie = $this->getFormSaisie()
-                    ->setIntervenants($intervenants)
-                    ->bind($this->agrement);
+                ->setIntervenants($intervenants)
+                ->bind($this->agrement);
 
             if ($this->getRequest()->isPost()) {
                 $data = $this->getRequest()->getPost();
@@ -378,9 +400,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
             }
 
             $messages[] = sprintf("Intervenants en attente d'agrément par %s.", $this->typeAgrement->toString(true));
-        }
-        else {
-            $this->formSaisie = null;
+        } else {
+            $this->formSaisie    = null;
             $messages['warning'] = sprintf("Aucun intervenant n'est en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
 
@@ -396,6 +417,8 @@ class AgrementController extends AbstractActionController implements WorkflowInt
         return $this->view;
     }
 
+
+
     /**
      * Indique si le type d'agrément courant est requis ou non.
      *
@@ -403,39 +426,17 @@ class AgrementController extends AbstractActionController implements WorkflowInt
      */
     private function isTypeAgrementAttendu()
     {
-        $necessiteAgrementRule = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrementRule NecessiteAgrementRule */
+        $necessiteAgrementRule = $this->getServiceLocator()->get('NecessiteAgrementRule');
+        /* @var $necessiteAgrementRule NecessiteAgrementRule */
         $estAttendu = $necessiteAgrementRule
-                ->setIntervenant($this->intervenant)
-                ->setTypeAgrement($this->typeAgrement)
-                ->execute();
+            ->setIntervenant($this->intervenant)
+            ->setTypeAgrement($this->typeAgrement)
+            ->execute();
 
         return $estAttendu;
     }
 
-    /**
-     * Recherche d'un agrément par l'intervenant, le type et la structure.
-     *
-     * @param Structure|null $structure
-     * @return Agrement
-     */
-    private function getAgrementForStructure(Structure $structure = null)
-    {
-        if (!$structure && !$this->typeAgrement->isConseilAcademique()) {
-            throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $this->typeAgrement));
-        }
 
-        $this->initFilters();
-
-        $service = $this->getServiceAgrement();
-
-        $qb = $service->finderByType($this->typeAgrement);
-        if ($structure) {
-            $service->finderByStructure($structure, $qb);
-        }
-        $service->finderByIntervenant($this->intervenant, $qb);
-
-        return $qb->getQuery()->getOneOrNullResult();
-    }
 
     /**
      * Instanciation d'un nouvel Agrement initialisé.
@@ -444,12 +445,16 @@ class AgrementController extends AbstractActionController implements WorkflowInt
      */
     private function getNewEntity()
     {
-        $agrement = $this->getServiceAgrement()->newEntity(); /* @var $agrement Agrement */
+        $agrement = $this->getServiceAgrement()->newEntity();
+        /* @var $agrement Agrement */
         $agrement
-                ->setType($this->typeAgrement)
-                ->setIntervenant($this->intervenant);
+            ->setType($this->typeAgrement)
+            ->setIntervenant($this->intervenant);
+
         return $agrement;
     }
+
+
 
     /**
      * Retourne le formulaire d'édition d'un agrément.

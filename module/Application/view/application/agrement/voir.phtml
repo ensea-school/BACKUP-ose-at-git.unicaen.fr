@@ -1,15 +1,17 @@
 <?php
-$params = ['agrement' => $this->agrement->getId()];
+/* @var $agrement \Application\Entity\Db\Agrement */
+
+$params = ['agrement' => $agrement ? $agrement->getId() : null];
 ?>
 
 <p class="pull-right">
-    <?php if ($this->isAllowed($this->agrement, 'create')): ?>
+    <?php if ($this->isAllowed($agrement, 'create')): ?>
         <a href="<?php echo $this->url('intervenant/agrement/ajouter', $params, [], true) ?>"
            class="ajax-modal btn btn-sm btn-primary"
            data-event="event-update-agrement"
            data-target="td.agrement">Saisir l'agrément</a>
    <?php endif; ?>
-   <?php if ($this->isAllowed($this->agrement, 'update')): ?>
+   <?php if ($this->isAllowed($agrement, 'update')): ?>
         <a href="<?php echo $this->url('intervenant/agrement/modifier', $params, [], true) ?>"
            class="ajax-modal btn btn-sm btn-default"
            data-event="event-update-agrement"
@@ -17,8 +19,8 @@ $params = ['agrement' => $this->agrement->getId()];
     <?php endif; ?>
 </p>
 
-<?php if ($this->agrement && $this->agrement->getId()): ?>
-    <?php echo $this->agrement($this->agrement) ?>
+<?php if ($this->agrement && $agrement->getId()): ?>
+    <?php echo $this->agrement($agrement) ?>
 <?php else: ?>
     <p>Aucun</p>
 <?php endif; ?>

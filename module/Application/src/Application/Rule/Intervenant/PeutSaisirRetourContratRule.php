@@ -12,7 +12,6 @@ use Application\Entity\Db\Contrat;
  */
 class PeutSaisirRetourContratRule extends \Application\Rule\AbstractRule
 {
-    use \Application\Service\Initializer\ContratServiceAwareTrait;
     use \Application\Entity\Db\Traits\IntervenantAwareTrait;
 
     const MESSAGE_NON_VALIDE = 'messageNonValide';

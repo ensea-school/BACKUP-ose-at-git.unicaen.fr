@@ -98,7 +98,7 @@ class EntityCollection extends ArrayCollection
             $this->entityClass = get_class($element);
         }
 
-        $result = is_subclass_of( $element, $this->entityClass );
+        $result = is_a( $element, $this->entityClass );
 
         if (! $result && $throwsException){
             throw new Exception\LogicException('L\'entité ne correspond pas au type ('.$this->entityClass.') de classe acceptée par la liste');

@@ -63,7 +63,7 @@ class MiseEnPaiementRecherche
     {
         if (null === $this->intervenants){
             $this->intervenants = new EntityCollection;
-            $this->intervenants->initEntityClass( 'Application\Entity\Db\Intervenant' );
+            $this->intervenants->initEntityClass( Intervenant::class );
         }
         return $this->intervenants;
     }

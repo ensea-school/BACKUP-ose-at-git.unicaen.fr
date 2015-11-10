@@ -4,7 +4,6 @@ namespace Application\Service\Indicateur\Agrement;
 
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\WfEtape;
-use Application\Service\Indicateur\Agrement\AttenteAgrementAbstractIndicateurImpl;
 
 /**
  * 

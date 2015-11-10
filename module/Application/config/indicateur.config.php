@@ -130,8 +130,7 @@ return [
     ],
     'service_manager' => [
         'invokables'   => [
-            'applicationIndicateur'                    => 'Application\\Service\\Indicateur',
-            'IndicateurService'                        => 'Application\\Service\\Indicateur',
+            'applicationIndicateur'                    => 'Application\\Service\\IndicateurService',
             'NotificationIndicateurService'            => 'Application\\Service\\NotificationIndicateur',
             'AttenteAgrementCR'                        => 'Application\\Service\\Indicateur\\Agrement\\AttenteAgrementCRIndicateurImpl',
             'AttenteAgrementCA'                        => 'Application\\Service\\Indicateur\\Agrement\\AttenteAgrementCAIndicateurImpl',

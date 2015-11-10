@@ -25,7 +25,7 @@ use Zend\View\Model\ViewModel;
  */
 class IndicateurController extends AbstractActionController
 {
-    use \Application\Service\Traits\IndicateurAwareTrait;
+    use \Application\Service\Traits\IndicateurServiceAwareTrait;
     use \Application\Service\Traits\IntervenantAwareTrait;
     use \Application\Service\Traits\ContextAwareTrait;
 

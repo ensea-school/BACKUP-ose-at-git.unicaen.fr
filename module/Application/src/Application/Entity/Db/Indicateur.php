@@ -13,55 +13,62 @@ class Indicateur
      * @var integer
      */
     private $id;
-    
+
     /**
      * @var integer
      */
     private $numero;
-    
+
     /**
      * @var string
      */
     private $code;
-    
+
     /**
      * @var boolean
      */
     private $enabled;
-    
+
     /**
      * @var string
      */
     private $type;
-    
+
     /**
      * @var integer
      */
     private $ordre;
-    
+
+
+
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return "Indicateur N°" . $this->getNumero();
     }
-            
+
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Set id interne
      *
      * @param string $numero
+     *
      * @return Indicateur
      */
     public function setNumero($numero)
@@ -70,6 +77,8 @@ class Indicateur
 
         return $this;
     }
+
+
 
     /**
      * Get id interne
@@ -81,33 +90,25 @@ class Indicateur
         return $this->numero;
     }
 
-    /**
-     * Set code
-     *
-     * @param string $code
-     * @return Indicateur
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
 
-        return $this;
-    }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
         return $this->code;
     }
 
+
+
     /**
      * Set enabled
      *
      * @param boolean $enabled
+     *
      * @return Indicateur
      */
     public function setEnabled($enabled)
@@ -117,20 +118,25 @@ class Indicateur
         return $this;
     }
 
+
+
     /**
      * Get enabled
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
-    
+
+
+
     /**
      * Set type
      *
      * @param string $type
+     *
      * @return Indicateur
      */
     public function setType($type)
@@ -140,20 +146,25 @@ class Indicateur
         return $this;
     }
 
+
+
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
         return $this->type;
     }
 
+
+
     /**
      * Set ordre
      *
      * @param integer $ordre
+     *
      * @return Indicateur
      */
     public function setOrdre($ordre)
@@ -163,10 +174,12 @@ class Indicateur
         return $this;
     }
 
+
+
     /**
      * Get ordre
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrdre()
     {

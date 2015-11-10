@@ -10,7 +10,7 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Application\Service\Traits\ContextAwareTrait;
-use Application\Service\Traits\IndicateurAwareTrait;
+use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
 use Common\Filter\IntervenantEmailFormatter;
@@ -46,7 +46,7 @@ use Zend\View\Renderer\PhpRenderer;
 class NotificationController extends AbstractActionController
 {
     use ContextAwareTrait;
-    use IndicateurAwareTrait;
+    use IndicateurServiceAwareTrait;
     
     /**
      * Visualisation de tous les abonnements aux indicateurs.

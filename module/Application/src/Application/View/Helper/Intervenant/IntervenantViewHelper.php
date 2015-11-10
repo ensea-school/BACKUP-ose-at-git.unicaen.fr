@@ -80,7 +80,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             ],
             'divers'      => [
                 "Id"              => $entity->getId(),
-                "Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
+                //"Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
             ],
         ];
 

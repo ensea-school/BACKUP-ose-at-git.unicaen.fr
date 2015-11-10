@@ -87,16 +87,17 @@ class Annee extends AbstractEntityService
     public function getChoixAnnees()
     {
         $session = $this->getSessionContainer();
-        $sql = 'SELECT id, libelle FROM annee WHERE active = 1 ORDER BY id';
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if (! $session->choixAnnees) {
+            $sql    = 'SELECT id, libelle FROM annee WHERE active = 1 ORDER BY id';
+            $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql);
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $session->choixAnnees = [];
-        foreach( $result as $annee ){
-            extract( array_change_key_case($annee,CASE_LOWER));
-            $session->choixAnnees[$id] = $libelle;
+            $session->choixAnnees = [];
+            foreach ($result as $annee) {
+                extract(array_change_key_case($annee, CASE_LOWER));
+                $session->choixAnnees[$id] = $libelle;
+            }
         }
-
         return $session->choixAnnees;
     }
 

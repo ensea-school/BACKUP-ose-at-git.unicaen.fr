@@ -241,11 +241,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     protected $agrement;
 
     /**
-     * @var Utilisateur
-     */
-    protected $utilisateur;
-
-    /**
      * @var boolean
      */
     protected $premierRecrutement;
@@ -266,12 +261,12 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     private $formuleResultat;
 
     /**
-     * @var FormuleIntervenant
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleIntervenant;
 
     /**
-     * @var \Application\Entity\Db\VIndicDiffDossier
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $vIndicDiffDossier;
 
@@ -338,6 +333,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         $this->vIndicAttenteMep                   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vIndicDiffDossier                  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -1453,18 +1449,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
-     * Get utilisateur
-     *
-     * @return Utilisateur
-     */
-    public function getUtilisateur()
-    {
-        return $this->utilisateur;
-    }
-
-
-
-    /**
      * Indique si cet intervenant est permanent.
      *
      * @return bool
@@ -1649,7 +1633,10 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      */
     public function getVIndicDiffDossier()
     {
-        return $this->vIndicDiffDossier;
+        if (!count($this->vIndicDiffDossier)) {
+            return null;
+        }
+        return $this->vIndicDiffDossier->first();
     }
 
 
@@ -1784,13 +1771,16 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
-     * Get utilisateur
+     * Get FormuleIntervenant
      *
-     * @return Utilisateur
+     * @return FormuleIntervenant
      */
     public function getFormuleIntervenant()
     {
-        return $this->formuleIntervenant;
+        if (!count($this->formuleIntervenant)) {
+            return null;
+        }
+        return $this->formuleIntervenant->first();
     }
 
 

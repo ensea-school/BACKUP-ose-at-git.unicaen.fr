@@ -218,9 +218,6 @@ class IndicateurService extends AbstractEntityService
 
         $list = parent::getList($qb, $alias);
         /* @var $list IndicateurEntity[] */
-        foreach ($list as $indic) {
-            $indic->setServiceIndicateur($this); // on transmet le service pour qu'il puise délivrer des infos...
-        }
 
         return $list;
     }

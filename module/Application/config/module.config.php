@@ -241,18 +241,18 @@ $main = [
             __DIR__ . '/../view',
         ],
     ],
-    'public_files'       => [
-        'js'  => [
-            'js/datepicker-fr.js',
-            'js/service.js',
-            'js/service-referentiel.js',
-            'js/paiement.js',
-            'js/offre-formation.js',
-            'bootstrap-select/js/bootstrap-select.min.js',
+    'public_files' => [
+        'inline_scripts'  => [
+            10 => 'js/datepicker-fr.js',
+            11 => 'js/service.js',
+            12 => 'js/service-referentiel.js',
+            13 => 'js/paiement.js',
+            14 => 'js/offre-formation.js',
+            15 => 'bootstrap-select/js/bootstrap-select.min.js',
         ],
-        'css' => [
-            'bootstrap-select/css/bootstrap-select.min.css',
-            'css/cartridge.css',
+        'stylesheets' => [
+            10 => 'bootstrap-select/css/bootstrap-select.min.css',
+            11 => 'css/cartridge.css',
         ],
     ],
 ];

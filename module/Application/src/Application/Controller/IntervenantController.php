@@ -134,17 +134,12 @@ class IntervenantController extends AbstractActionController implements Workflow
 
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
+        } else {
+            $intervenant = $this->getEvent()->getParam('intervenant');
         }
-        else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        }
-
-        $import = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->intervenantGetDifferentiel($intervenant);
-        $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'changements', 'short', 'page', 'role'));
+        $view->setVariables(compact('intervenant', 'role'));
 
         return $view;
     }

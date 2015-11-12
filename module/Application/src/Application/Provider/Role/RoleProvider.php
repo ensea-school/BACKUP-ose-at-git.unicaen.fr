@@ -93,7 +93,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
         $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
         /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
-        $utilisateur = $serviceAuthUserContext->getDbUser();
+
 
         if ($ldapUser = $serviceAuthUserContext->getLdapUser()) {
             $numeroPersonnel = (integer)$ldapUser->getSupannEmpId();
@@ -109,8 +109,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         // chargement des rôles métiers
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->from("Application\Entity\Db\Role", "r")
-            ->select("r, a, s")
+            ->select("r, a, s, p")
             ->distinct()
+            ->join("r.perimetre", "p")
             ->leftJoin("r.affectation", "a", \Doctrine\ORM\Query\Expr\Join::WITH, '1=compriseEntre(a.histoCreation,a.histoDestruction) AND a.personnel = :personnel')
             ->leftJoin("a.structure", "s")
             ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
@@ -148,7 +149,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /* FIN de deprecated */
 
             $role = new $roleClass($roleId, $parent, $dbRole->getLibelle());
+            /* @var $role Role */
             $role->setPersonnel($personnel);
+            $role->setPerimetre($dbRole->getPerimetre());
 
             // Si le rôle est de périmètre établissement, alors il se peut que l'on veuille zoomer sur une composante en particulier...
             if ($this->structureSelectionnee && $dbRole->getPerimetre()->isEtablissement()) {

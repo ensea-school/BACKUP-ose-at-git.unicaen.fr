@@ -111,11 +111,11 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
     {
         $role = $e->getApplication()->getServiceManager()->get('ApplicationContext')->getSelectedIdentityRole();
         $routeMatch = $e->getRouteMatch();
-        if ($role instanceof Acl\IntervenantRole) {
-            if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $role->getIntervenant()->getSourceCode()) {
-                $routeMatch->setParam($name, $role->getIntervenant()->getSourceCode());
+        if ($intervenant = $role->getIntervenant()) {
+            if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $intervenant->getSourceCode()) {
+                $routeMatch->setParam($name, $intervenant->getSourceCode());
             }
-            $routeMatch->setParam('intervenant', $role->getIntervenant()->getSourceCode());
+            $routeMatch->setParam('intervenant', $intervenant->getSourceCode());
         }
     }
 

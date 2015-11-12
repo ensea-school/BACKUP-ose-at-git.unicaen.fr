@@ -1,8 +1,10 @@
 <?php
 namespace Application\View\Helper;
 
+use Application\Traits\SessionContainerTrait;
 use UnicaenAuth\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
-
+use Application\Service\Traits\StructureAwareTrait as StructureServiceAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
  * Aide de vue dessinant un item de sélection d'un profil utilisateur.
@@ -13,9 +15,10 @@ use UnicaenAuth\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
  */
 class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
 {
-    use \Application\Service\Traits\StructureAwareTrait,
-        \Application\Entity\Db\Traits\StructureAwareTrait
-    ;
+    use StructureServiceAwareTrait;
+    use StructureAwareTrait;
+    use SessionContainerTrait;
+
 
     /**
      * Retourne le code HTML généré par cette aide de vue.
@@ -26,13 +29,15 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     {
         $html = parent::render();
 
-        if ($this->role instanceof \Application\Acl\AdministrateurRole) {
+        $perimetre = $this->role->getPerimetre();
+
+        if ($perimetre && $perimetre->isEtablissement()) {
             $selectClass = 'user-profile-select-input-structure';
 
             $select = new \Zend\Form\Element\Select('structure');
             $select
                     ->setEmptyOption("(Aucune)")
-                    ->setValueOptions(array_map(function($v) { return (string) $v; }, $this->getStructures()))
+                    ->setValueOptions($this->getStructures())
                     ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
                     ->setAttribute('class', $selectClass)
                     ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
@@ -67,7 +72,9 @@ EOS;
     {
         $radio = parent::createRadio();
 
-        if ($this->role instanceof \Application\Acl\AdministrateurRole) {
+        $perimetre = $this->role->getPerimetre();
+
+        if ($perimetre && $perimetre->isEtablissement()) {
             $id = $this->role->getRoleId();
             $radio->setValueOptions([$id => $this->role->getRoleName()]);
         }
@@ -82,7 +89,16 @@ EOS;
      */
     private function getStructures()
     {
-        $qb = $this->getServiceStructure()->finderByEnseignement();
-        return $this->getServiceStructure()->getList($qb);
+        $session = $this->getSessionContainer();
+        if (! isset($session->structures)){
+            $qb = $this->getServiceStructure()->finderByEnseignement();
+            $s = $this->getServiceStructure()->getList($qb);
+            $session->structures = [];
+            foreach( $s as $structure ){
+                $session->structures[$structure->getId()] = (string)$structure;
+            }
+        }
+
+        return $session->structures;
     }
 }

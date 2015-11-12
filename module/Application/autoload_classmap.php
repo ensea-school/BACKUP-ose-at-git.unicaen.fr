@@ -778,7 +778,6 @@ return array(
     'Application\View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper'                                                => __DIR__ . '/src/Application/View/Helper/OffreFormation/EtapeCentreCoutFormViewHelper.php',
     'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset'                                             => __DIR__ . '/src/Application/View/Helper/OffreFormation/ElementModulateursSaisieFieldset.php',
     'Application\View\Helper\EtablissementViewHelper'                                                                     => __DIR__ . '/src/Application/View/Helper/EtablissementViewHelper.php',
-    'Application\View\Helper\IsAllowedCRUD'                                                                               => __DIR__ . '/src/Application/View/Helper/IsAllowedCRUD.php',
     'Application\View\Helper\Workflow'                                                                                    => __DIR__ . '/src/Application/View/Helper/Workflow.php',
     'Application\View\Helper\VolumeHoraire\Liste'                                                                         => __DIR__ . '/src/Application/View/Helper/VolumeHoraire/Liste.php',
     'Application\View\Helper\AgrementViewHelper'                                                                          => __DIR__ . '/src/Application/View/Helper/AgrementViewHelper.php',

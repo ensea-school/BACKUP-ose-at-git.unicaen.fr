@@ -17,7 +17,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger();
         <?php
         if ($role){
 
-            if ($role->isPerimetreIntervenant()){
+            if ($role->getIntervenant()){
 
                 $intervenant = $role->getIntervenant();
                 if ($intervenant->getStatut()->getNonAutorise()){
@@ -38,7 +38,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger();
 
                 }
 
-            }elseif ($role->isPerimetreComposante()) {
+            }elseif ($role->getStructure()) {
 
                 $url   = $this->url('service/resume');
                 $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");

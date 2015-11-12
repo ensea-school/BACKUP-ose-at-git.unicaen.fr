@@ -3,81 +3,24 @@
 namespace Application\Acl;
 
 use UnicaenAuth\Acl\NamedRole;
-use Application\Entity\Db\Role as DbRole;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\PersonnelAwareTrait;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\PerimetreAwareTrait;
 
 /**
- * Rôle père de tous les rôles "administrateur".
+ * Rôle
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Role extends NamedRole
 {
-    use \Application\Entity\Db\Traits\StructureAwareTrait,
-        \Application\Entity\Db\Traits\PersonnelAwareTrait,
-        \Application\Entity\Db\Traits\IntervenantAwareTrait;
+    use StructureAwareTrait;
+    use PersonnelAwareTrait;
+    use IntervenantAwareTrait;
+    use PerimetreAwareTrait;
 
     const ROLE_ID = 'role';
-
-    /**
-     * Rôle en BDD
-     *
-     * @var DbRole
-     */
-    protected $dbRole;
-
-
-
-    /**
-     * Détermine si le périmètre du rôle courant est de niveau intervenant
-     *
-     * @return bool
-     */
-    public function isPerimetreIntervenant()
-    {
-        return $this->getIntervenant() ? true : false;
-    }
-
-
-
-    /**
-     * Détermine si le périmètre du rôle courant est de niveau composante
-     *
-     * @return bool
-     */
-    public function isPerimetreComposante()
-    {
-        return $this->getStructure() ? true : false;
-    }
-
-
-
-    /**
-     * Détermine si le périmètre du rôle courant est de niveau établissement
-     *
-     * @return bool
-     */
-    public function isPerimetreEtablissement()
-    {
-        return !$this->getStructure() && !$this->getIntervenant();
-    }
-
-
-
-    /**
-     * Détermine si le rôle courant possède un privilège ou non
-     *
-     * @param $privilege
-     *
-     * @return bool
-     */
-    public function hasPrivilege($privilege)
-    {
-        if ($this->dbRole) {
-            return $this->dbRole->hasPrivilege($privilege);
-        } else {
-            return false;
-        }
-    }
 
 
 

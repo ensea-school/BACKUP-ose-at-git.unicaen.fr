@@ -226,7 +226,6 @@ return [
     'view_helpers'    => [
         'invokables' => [
             'agrement'      => 'Application\View\Helper\AgrementViewHelper',
-            'isAllowedCRUD' => 'Application\View\Helper\IsAllowedCRUD',
         ],
     ],
     'form_elements'   => [

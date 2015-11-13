@@ -87,7 +87,7 @@ class IndicateurService extends AbstractEntityService
 
 
 
-    public function getQueryBuilder($indicateur, StructureEntity $structure = null)
+    private function getQueryBuilder($indicateur, StructureEntity $structure = null)
     {
         $qb = $this->getBaseQueryBuilder($indicateur, $structure);
 
@@ -124,6 +124,19 @@ class IndicateurService extends AbstractEntityService
      */
     public function getCount($indicateur, StructureEntity $structure = null)
     {
+        /* COMPATIBILITE ANCIEN SYSTEME */
+        if (! $indicateur instanceof IndicateurEntity){
+            $indic = $this->getByNumero($indicateur);
+            $numero = $indicateur;
+        }else{
+            $indic = $indicateur;
+            $numero = $indicateur->getNumero();
+        }
+        if (! class_exists('Application\Entity\Db\Indicateur\Indicateur'.$numero)){
+            return $this->getIndicateurImpl($indic,$structure)->getResultCount();
+        }
+        /* FIN COMPATIBILITE ANCIEN SYSTEME */
+
         $qb = $this->getBaseQueryBuilder($indicateur, $structure);
         $qb->addSelect('COUNT(intervenant) result');
 
@@ -135,7 +148,7 @@ class IndicateurService extends AbstractEntityService
     /**
      * @param integer|IndicateurEntity $indicateur Indicateur concerné
      *
-     * @return array
+     * @return IndicateurEntity\AbstractIndicateur[]
      */
     public function getResult($indicateur, StructureEntity $structure = null)
     {
@@ -152,7 +165,6 @@ class IndicateurService extends AbstractEntityService
         }
 
         return $result;
-
     }
 
 
@@ -167,7 +179,9 @@ class IndicateurService extends AbstractEntityService
     {
         if (null == $numero) return null;
 
-        return $this->getRepo()->findOneBy(['numero' => $numero]);
+        $indicateur = $this->getRepo()->findOneBy(['numero' => $numero]);
+        $indicateur->setServiceIndicateur($this);
+        return $indicateur;
     }
 
 
@@ -182,7 +196,9 @@ class IndicateurService extends AbstractEntityService
     {
         if (null == $code) return null;
 
-        return $this->getRepo()->findOneBy(['code' => $code]);
+        $indicateur = $this->getRepo()->findOneBy(['code' => $code]);
+        $indicateur->setServiceIndicateur($this);
+        return $indicateur;
     }
 
 
@@ -218,6 +234,10 @@ class IndicateurService extends AbstractEntityService
 
         $list = parent::getList($qb, $alias);
         /* @var $list IndicateurEntity[] */
+
+        foreach( $list as $indicateur ){
+            $indicateur->setServiceIndicateur($this);
+        }
 
         return $list;
     }

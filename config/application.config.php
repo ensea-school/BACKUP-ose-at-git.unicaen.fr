@@ -22,7 +22,7 @@ $moduleListenerOptions = [
 ];
 
 if ( 'development' == $env ) {
-    //$modules[] = 'ZendDeveloperTools';
+    $modules[] = 'ZendDeveloperTools';
     $modules[] = 'UnicaenCode';
 }else{
     $moduleListenerOptions['config_cache_enabled']      = true;

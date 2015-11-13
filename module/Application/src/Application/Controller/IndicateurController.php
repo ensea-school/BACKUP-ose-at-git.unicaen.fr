@@ -73,24 +73,36 @@ class IndicateurController extends AbstractActionController
     public function resultAction()
     {
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
-        $indicateur = $this->context()->mandatory()->indicateurFromRoute();
-        $structure  = $this->context()->structureFromRoute();
-        
-        if (! $role instanceof \Application\Acl\AdministrateurRole) {
-            $structure = null;
-        }
-        
-        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure ?: $this->getStructure());
+        $indicateur = $this->getEvent()->getParam('indicateur');
+        $structure  = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+
+        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure);
         
         $viewModel = new ViewModel();
         $viewModel->setVariables([
             'indicateur'     => $indicateur,
             'indicateurImpl' => $indicateurImpl,
         ]);
-        
+
         return $viewModel;
     }
-    
+
+    /**
+     * Affichage du résultat complet renvoyé par un indicateur.
+     *
+     * @return ViewModel
+     */
+    public function detailsAction()
+    {
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
+        $indicateur = $this->getEvent()->getParam('indicateur');
+        /* @var $indicateur Indicateur */
+        $indicateur->setServiceIndicateur($this->getServiceIndicateur());
+        $structure  = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+
+        return compact('indicateur');
+    }
+
     /**
      * Affichage d'un item du résultat renvoyé par l'indicateur "DonneesPersoDiffImport".
      * 

@@ -1,4 +1,10 @@
-<?php $this->headTitle()->append($title = "Indicateurs") ?>
+<?php 
+
+/* @var $indicateurs array  */
+
+$this->headTitle()->append($title = "Indicateurs");
+
+?>
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
@@ -9,6 +15,7 @@
 
 <?php
 echo $this->partial('application/indicateur/partial/list', [
+    'indicateurs'      => $indicateurs,
     'indicateursImpl'  => $this->indicateursImpl,
     'abonnements'      => $this->abonnements,
     'abonnementsInfos' => $this->abonnementsInfos,

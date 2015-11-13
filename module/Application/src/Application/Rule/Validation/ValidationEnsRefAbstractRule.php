@@ -186,6 +186,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
      */
     protected function isAllowedByWorkflow($privilege) 
     {
+        if (!$this->getWorkflow()->containsStep($this->getWorkflowStepKey())){ return true; }
         $step = $this->getWorkflow()->getStep($this->getWorkflowStepKey());
         
         /**

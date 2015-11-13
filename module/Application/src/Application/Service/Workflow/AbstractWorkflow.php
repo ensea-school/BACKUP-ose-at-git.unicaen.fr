@@ -271,7 +271,7 @@ abstract class AbstractWorkflow extends AbstractService
      * @param Step|string $step Etape ou clé de l'étape recherchée
      * @return bool
      */
-    protected function containsStep($step)
+    public function containsStep($step)
     {
         if (is_string($key = $step)) {
             return isset($this->getSteps()[$key]);

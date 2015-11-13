@@ -10,7 +10,6 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Service\Traits\TypeAgrementAwareTrait;
 use Application\Service\WfIntervenantEtape as WfIntervenantEtapeService;
-use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\Workflow\Step\Step;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;

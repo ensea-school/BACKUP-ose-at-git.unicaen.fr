@@ -74,6 +74,7 @@ class IndicateurController extends AbstractActionController
     {
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $indicateur = $this->getEvent()->getParam('indicateur');
+        $indicateur->setServiceIndicateur($this->getServiceIndicateur());
         $structure  = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
         $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure);
@@ -96,6 +97,7 @@ class IndicateurController extends AbstractActionController
     {
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $indicateur = $this->getEvent()->getParam('indicateur');
+        $indicateur->setServiceIndicateur($this->getServiceIndicateur());
         /* @var $indicateur Indicateur */
         $indicateur->setServiceIndicateur($this->getServiceIndicateur());
         $structure  = $role->getStructure() ?: $this->getEvent()->getParam('structure');
@@ -232,6 +234,7 @@ class IndicateurController extends AbstractActionController
         $abonnements = $abonnementsInfos = $indicateurs = [];
         foreach ($qb->getQuery()->getResult() as $notificationIndicateur) {
             $indicateur = $notificationIndicateur->getIndicateur();
+            $indicateur->setServiceIndicateur($this->getServiceIndicateur());
             $indicateurs[$indicateur->getId()] = $indicateur;
             $abonnements[$indicateur->getId()] = $notificationIndicateur;
             $abonnementsInfos[$indicateur->getId()] = $notificationIndicateur->getExtraInfos();

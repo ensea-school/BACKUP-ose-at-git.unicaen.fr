@@ -1,12 +1,15 @@
 <?php
 
 namespace Application\Entity\Db;
+use Application\Service\Traits\IndicateurServiceAwareTrait;
 
 /**
  * Indicateur
  */
 class Indicateur
 {
+    use IndicateurServiceAwareTrait;
+
     const CODE_DONNEES_PERSO_MODIF = 'DonneesPersoModif';
 
     /**
@@ -38,6 +41,7 @@ class Indicateur
      * @var integer
      */
     private $ordre;
+
 
 
 
@@ -184,5 +188,25 @@ class Indicateur
     public function getOrdre()
     {
         return $this->ordre;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->getServiceIndicateur()->getCount($this);
+    }
+
+
+
+    /**
+     * @return Indicateur\AbstractIndicateur[]
+     */
+    public function getResult()
+    {
+        return $this->getServiceIndicateur()->getResult($this);
     }
 }

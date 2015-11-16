@@ -34,6 +34,19 @@ return [
                             ],
                         ],
                     ],
+                    'details' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route' => '/:indicateur[/structure/:structure]',
+                            'constraints' => [
+                                'indicateur' => '[0-9]*',
+                                'structure'  => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'details',
+                            ],
+                        ],
+                    ],
                     'abonner' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -109,7 +122,7 @@ return [
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => [
                         'index',
-                        'result',
+                        'result','details',
                         'abonner',
                         'abonnements',
                         'result-item-donnees-perso-diff-import',
@@ -124,8 +137,6 @@ return [
     'controllers' => [
         'invokables' => [
             'Application\Controller\Indicateur' => 'Application\Controller\IndicateurController',
-        ],
-        'initializers' => [
         ],
     ],
     'service_manager' => [
@@ -166,20 +177,6 @@ return [
             'AttenteValidationRefRealisePermAutreComp' => 'Application\\Service\\Indicateur\\Service\\Validation\\Referentiel\\Realise\\AttenteValidationPermAutreCompIndicateurImpl',
             'EnsHisto'                                 => 'Application\\Service\\Indicateur\\Service\\EnsHistoIndicateurImpl',
             'EnsRealisePermSaisieNonCloturee'          => 'Application\\Service\\Indicateur\\Service\\EnsRealisePermSaisieNonClotureeIndicateurImpl',
-        ],
-        'factories'    => [
-        ],
-        'initializers' => [
-        ],
-    ],
-    'view_helpers' => [
-        'invokables' => [
-        ],
-        'initializers' => [
-        ],
-    ],
-    'form_elements' => [
-        'invokables' => [
         ],
     ],
 ];

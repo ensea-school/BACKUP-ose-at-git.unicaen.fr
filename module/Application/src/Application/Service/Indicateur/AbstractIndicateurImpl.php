@@ -68,7 +68,11 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
      * @var int
      */
     protected $resultCount;
-        
+
+
+
+
+
     /**
      * 
      * @param bool $appendStructure

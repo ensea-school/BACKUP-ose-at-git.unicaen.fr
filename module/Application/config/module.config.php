@@ -248,7 +248,8 @@ $main = [
             12 => 'js/service-referentiel.js',
             13 => 'js/paiement.js',
             14 => 'js/offre-formation.js',
-            15 => 'bootstrap-select/js/bootstrap-select.min.js',
+            15 => 'js/droits.js',
+            50 => 'bootstrap-select/js/bootstrap-select.min.js',
         ],
         'stylesheets' => [
             10 => 'bootstrap-select/css/bootstrap-select.min.css',

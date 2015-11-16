@@ -55,7 +55,7 @@ $id = uniqid();
 </tbody>
 </table>
 <script type="text/javascript">
-
-    DroitsTbl.get("<?php echo $id ?>").init();
-
+    $(function(){
+        DroitsTbl.get("<?php echo $id ?>").init();
+    });
 </script>

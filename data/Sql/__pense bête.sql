@@ -1,0 +1,1 @@
+select q'[o'connor]' from dual;

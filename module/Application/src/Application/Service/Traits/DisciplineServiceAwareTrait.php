@@ -2,45 +2,45 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Indicateur;
+use Application\Service\DisciplineService;
 use Application\Module;
 use RuntimeException;
 
 /**
- * Description of IndicateurAwareTrait
+ * Description of DisciplineServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait IndicateurAwareTrait
+trait DisciplineServiceAwareTrait
 {
     /**
-     * @var Indicateur
+     * @var DisciplineService
      */
-    private $serviceIndicateur;
+    private $serviceDiscipline;
 
 
 
 
 
     /**
-     * @param Indicateur $serviceIndicateur
+     * @param DisciplineService $serviceDiscipline
      * @return self
      */
-    public function setServiceIndicateur( Indicateur $serviceIndicateur )
+    public function setServiceDiscipline( DisciplineService $serviceDiscipline )
     {
-        $this->serviceIndicateur = $serviceIndicateur;
+        $this->serviceDiscipline = $serviceDiscipline;
         return $this;
     }
 
 
 
     /**
-     * @return Indicateur
+     * @return DisciplineService
      * @throws RuntimeException
      */
-    public function getServiceIndicateur()
+    public function getServiceDiscipline()
     {
-        if (empty($this->serviceIndicateur)){
+        if (empty($this->serviceDiscipline)){
         $serviceLocator = Module::$serviceLocator;
         if (! $serviceLocator) {
             if (!method_exists($this, 'getServiceLocator')) {
@@ -52,8 +52,8 @@ trait IndicateurAwareTrait
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
         }
-        $this->serviceIndicateur = $serviceLocator->get('applicationIndicateur');
+        $this->serviceDiscipline = $serviceLocator->get('ApplicationDiscipline');
         }
-        return $this->serviceIndicateur;
+        return $this->serviceDiscipline;
     }
 }

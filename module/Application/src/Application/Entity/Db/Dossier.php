@@ -559,6 +559,7 @@ class Dossier implements HistoriqueAwareInterface
     public function fromIntervenant(Intervenant $intervenant)
     {
         $this
+                ->setIntervenant($intervenant)
                 ->setNomUsuel($intervenant->getNomUsuel())
                 ->setNomPatronymique($intervenant->getNomPatronymique())
                 ->setPrenom($intervenant->getPrenom())

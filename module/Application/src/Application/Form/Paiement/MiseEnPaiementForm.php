@@ -45,7 +45,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
     public function init()
     {
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
+        /* @var $url \Zend\View\Helper\Url */
 
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -75,7 +75,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
             ],
         ]);
 
-        $defaultDateMiseEnPaiement = $defaultPeriode->getDatePaiement( $annee );
+        $defaultDateMiseEnPaiement = $defaultPeriode ? $defaultPeriode->getDatePaiement( $annee ) : null;
         $this->add([
             'type' => 'UnicaenApp\Form\Element\Date',
             'name' => 'date-mise-en-paiement',
@@ -86,7 +86,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
             'attributes' => [
                 'step'  => '1',
                 'disabled' => 'true',
-                'value' =>  $defaultDateMiseEnPaiement->format('d/m/Y')
+                'value' =>  $defaultPeriode ? $defaultDateMiseEnPaiement->format('d/m/Y') : null,
             ]
         ]);
 

@@ -1,5 +1,5 @@
 SELECT
-  t1.*,
+  --t1.*,
   CASE
   WHEN etr_id IS NULL THEN
     '
@@ -69,9 +69,9 @@ SELECT
   ep.fa,ep.taux_fa,
   ep.fc,ep.taux_fc,
   -- NOUVEAUX TAUX FI FA FC
-  100 /100 n_taux_fi,
+  90 /100 n_taux_fi,
   0 /100 n_taux_fa,
-  0 /100 n_taux_fc
+  10 /100 n_taux_fc
   -- FIN DES NOUVEAUX TAUX FI FA FC
 FROM
   element_pedagogique ep
@@ -83,7 +83,7 @@ WHERE
   -- FILTRES
   1 = ose_divers.comprise_entre( ep.histo_creation,ep.histo_destruction )
   --AND s.code <> 'OSE'
-  AND e.source_code like 'DU2DG%201'
+  AND e.source_code = 'MSST13_213'
   AND ep.annee_id = 2015
   -- FIN DES FILTRES
 ) t1
@@ -134,36 +134,8 @@ SELECT * FROM ELEMENT_PEDAGOGIQUE WHERE source_code like '%DUUE%';
 
 
 select source_code from etape where source_code in (
-'C2I2E', -- à trouver
-'DU1DG_201',
-'DU1DG_202',
-'DU1DG_203',
-'DU2DG_201',
-'M1DOC1_201',
-'M1EE01_201',
-'M1EPS1_201',
-'M1HIG1_201',
-'M1LMO1_201',
-'M1LVE1_201',
-'M1MAT1_201',
-'M1PCH1_201',
-'M1SES1_201',
-'M1SVT1_201',
-'M1S2I1_202',
-
-'M2DOC2_211',
-'M2EE02_211',
-'M2EPS2_211',
-'M2HIG2_211',
-'M2INGM_211',
-'M2LMO2_211',
-'M2MAT2_211',
-'M2PCH2_211',
-'M2PD02_211',
-'M2PD02_212',
-'M2PD02_213',
-'M2SES2_211',
-'M2SVT2_211'
-
-) order by source_code
+'MSST01_201',
+'MSST11_211',
+'MSST13_213'
+) order by source_code;
      

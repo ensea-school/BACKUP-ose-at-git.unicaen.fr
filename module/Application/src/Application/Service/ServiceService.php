@@ -1048,7 +1048,11 @@ class ServiceService extends AbstractEntityService
                 'date-cloture-service-realise'  => empty($d['DATE_CLOTURE_REALISE']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_CLOTURE_REALISE'], 0, 10)),
             ];
 
-            if ($ds['heures-service-statutaire'] > 0 && $ds['heures-service-statutaire']+$ds['heures-service-du-modifie'] == 0){
+            if (
+                $ds['heures-service-statutaire'] > 0
+                && $ds['heures-service-statutaire']+$ds['heures-service-du-modifie'] == 0
+                && empty($ds['etape-code'])
+            ){
                 $ds['__total__'] ++; // pour que le cas spécifique des décharges totales soit pris en compte
             }
 

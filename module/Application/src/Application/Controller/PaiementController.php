@@ -2,6 +2,22 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Service;
+use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\Validation;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\VolumeHoraireReferentiel;
+use Application\Form\Paiement\Traits\MiseEnPaiementFormAwareTrait;
+use Application\Form\Paiement\Traits\MiseEnPaiementRechercheFormAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\MiseEnPaiementAwareTrait;
+use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\PersonnelAwareTrait;
+use Application\Service\Traits\ServiceAPayerAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
@@ -15,15 +31,17 @@ use Application\Entity\Db\Privilege;
  */
 class PaiementController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\IntervenantAwareTrait,
-        \Application\Service\Traits\ServiceAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait,
-        \Application\Service\Traits\PersonnelAwareTrait,
-        \Application\Service\Traits\PeriodeAwareTrait,
-        \Application\Service\Traits\MiseEnPaiementAwareTrait,
-        \Application\Service\Traits\ServiceAPayerAwareTrait,
-        \Application\Service\Traits\TypeIntervenantAwareTrait;
+    use ContextAwareTrait;
+    use IntervenantAwareTrait;
+    use ServiceAwareTrait;
+    use StructureAwareTrait;
+    use PersonnelAwareTrait;
+    use PeriodeAwareTrait;
+    use MiseEnPaiementAwareTrait;
+    use ServiceAPayerAwareTrait;
+    use TypeIntervenantAwareTrait;
+    use MiseEnPaiementFormAwareTrait;
+    use MiseEnPaiementRechercheFormAwareTrait;
 
 
 
@@ -35,12 +53,12 @@ class PaiementController extends AbstractActionController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\MiseEnPaiement',
-            'Application\Entity\Db\Service',
-            'Application\Entity\Db\VolumeHoraire',
-            'Application\Entity\Db\ServiceReferentiel',
-            'Application\Entity\Db\VolumeHoraireReferentiel',
-            'Application\Entity\Db\Validation',
+            MiseEnPaiement::class,
+            Service::class,
+            VolumeHoraire::class,
+            ServiceReferentiel::class,
+            VolumeHoraireReferentiel::class,
+            Validation::class,
         ]);
     }
 
@@ -94,7 +112,7 @@ class PaiementController extends AbstractActionController
 
         $etat = $this->params()->fromRoute('etat');
 
-        $rechercheForm = $this->getFormMiseEnPaiementRecherche();
+        $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $recherche     = new MiseEnPaiementRecherche;
         $recherche->setEtat($etat); // données à mettre en paiement uniquement
         $rechercheForm->bind($recherche);
@@ -324,23 +342,26 @@ class PaiementController extends AbstractActionController
     {
         $this->initFilters();
         $title        = 'Mise en paiement';
-        $structure    = $this->context()->mandatory()->structureFromRoute();
+        $structure    = $this->getEvent()->getParam('structure');
         $intervenants = $this->params('intervenants');
 
-        $form    = $this->getFormMiseEnPaiement();
+        $form    = $this->getFormPaiementMiseEnPaiement();
         $errors  = [];
         $request = $this->getRequest();
         if ($request->isPost() && $this->isAllowed('privilege/' . Privilege::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT)) {
             $form->setData($request->getPost());
             $form->isValid();
 
-            $periode = $form->get('periode')->getValue();
-            //$dateMiseEnPaiement = $form->get('date-mise-en-paiement')->getValue();
-
-            $periode = $this->getServicePeriode()->get($periode);
+            $periodeId = $form->get('periode')->getValue();
+            $periode = $this->getServicePeriode()->get($periodeId);
             /* @var $periode \Application\Entity\Db\Periode */
-            $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // date forcée car plus de saisie possible!
-            //$dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiement);
+
+            $dateMiseEnPaiementValue = $form->get('date-mise-en-paiement')->getValue();
+            if ($dateMiseEnPaiementValue) {
+                $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiementValue);
+            }else{
+                $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // à défaut
+            }
 
             $intervenants = $this->getServiceIntervenant()->get(explode(',', $intervenants));
             try {
@@ -351,25 +372,5 @@ class PaiementController extends AbstractActionController
         }
 
         return compact('form', 'title', 'errors');
-    }
-
-
-
-    /**
-     * @return \Application\Form\Paiement\MiseEnPaiementForm
-     */
-    protected function getFormMiseEnPaiement()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('PaiementMiseEnPaiementForm');
-    }
-
-
-
-    /**
-     * @return \Application\Form\Paiement\MiseEnPaiementRechercheForm
-     */
-    protected function getFormMiseEnPaiementRecherche()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('PaiementMiseEnPaiementRechercheForm');
     }
 }

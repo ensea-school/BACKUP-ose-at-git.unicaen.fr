@@ -116,7 +116,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            'Application\Guard\PrivilegeController' => [
+            Guard\PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['demandeMiseEnPaiement'],
@@ -152,12 +152,12 @@ return [
             ],
         ],
         'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
+            \BjyAuthorize\Provider\Resource\Config::class => [
                 'MiseEnPaiement' => [],
             ],
         ],
         'rule_providers'     => [
-            'Application\Provider\Rule\PrivilegeRuleProvider' => [
+            Provider\Rule\PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => Privilege::MISE_EN_PAIEMENT_DEMANDE,
@@ -170,31 +170,31 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationServiceAPayer'                      => 'Application\Service\ServiceAPayer',
-            'ApplicationMiseEnPaiement'                     => 'Application\Service\MiseEnPaiement',
-            'ApplicationMiseEnPaiementIntervenantStructure' => 'Application\Service\MiseEnPaiementIntervenantStructure',
-            'ApplicationTypeHeures'                         => 'Application\Service\TypeHeures',
-            'ApplicationCentreCout'                         => 'Application\Service\CentreCout',
-            'ApplicationCentreCoutEp'                       => 'Application\Service\CentreCoutEp',
-            'MiseEnPaiementAssertion'                       => 'Application\Assertion\MiseEnPaiementAssertion',
-            'MiseEnPaiementExisteRule'                      => 'Application\Rule\Paiement\MiseEnPaiementExisteRule',
+            'ApplicationServiceAPayer'                      => Service\ServiceAPayer::class,
+            'ApplicationMiseEnPaiement'                     => Service\MiseEnPaiement::class,
+            'ApplicationMiseEnPaiementIntervenantStructure' => Service\MiseEnPaiementIntervenantStructure::class,
+            'ApplicationTypeHeures'                         => Service\TypeHeures::class,
+            'ApplicationCentreCout'                         => Service\CentreCout::class,
+            'ApplicationCentreCoutEp'                       => Service\CentreCoutEp::class,
+            'MiseEnPaiementAssertion'                       => Assertion\MiseEnPaiementAssertion::class,
+            'MiseEnPaiementExisteRule'                      => Rule\Paiement\MiseEnPaiementExisteRule::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
-            'DemandeMiseEnPaiement' => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
-            'TypeHeures'            => 'Application\View\Helper\Paiement\TypeHeuresViewHelper',
+            'DemandeMiseEnPaiement' => View\Helper\Paiement\DemandeMiseEnPaiementViewHelper::class,
+            'TypeHeures'            => View\Helper\Paiement\TypeHeuresViewHelper::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'PaiementMiseEnPaiementForm'          => 'Application\Form\Paiement\MiseEnPaiementForm',
-            'PaiementMiseEnPaiementRechercheForm' => 'Application\Form\Paiement\MiseEnPaiementRechercheForm',
+            'PaiementMiseEnPaiementForm'          => Form\Paiement\MiseEnPaiementForm::class,
+            'PaiementMiseEnPaiementRechercheForm' => Form\Paiement\MiseEnPaiementRechercheForm::class,
         ],
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\Paiement' => 'Application\Controller\PaiementController',
+            'Application\Controller\Paiement' => Controller\PaiementController::class,
         ],
     ],
 ];

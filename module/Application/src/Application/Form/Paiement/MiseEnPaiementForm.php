@@ -2,9 +2,9 @@
 
 namespace Application\Form\Paiement;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Zend\Form\Form;
-use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -16,28 +16,11 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
     use PeriodeAwareTrait;
 
-    /**
-     *
-     * @var string
-     */
-    private $id;
 
-    /**
-     * Retourne un identifiant unique de formulaire.
-     * Une fois ce dernier initialisé, il ne change plus pour l'instance en cours
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        if (null === $this->id) $this->id = uniqid();
-        return $this->id;
-    }
 
     /**
      *
@@ -49,50 +32,52 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
 
         $annee = $this->getServiceContext()->getAnnee();
 
-        $periodes = $this->getServicePeriode()->getList( $this->getServicePeriode()->finderByPaiement(true) );
+        $periodes            = $this->getServicePeriode()->getList($this->getServicePeriode()->finderByPaiement(true));
         $datesMiseEnPaiement = [];
-        foreach( $periodes as $periode ){
-            $datesMiseEnPaiement[$periode->getId()] = $periode->getDatePaiement( $annee )->format('d/m/Y');
+        foreach ($periodes as $periode) {
+            $datesMiseEnPaiement[$periode->getId()] = $periode->getDatePaiement($annee)->format('d/m/Y');
         }
 
 
-        $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'paiement-mise-en-paiement-form')
-                ->setAttribute('id', $this->getId())
-                ->setAttribute('data-dates-mise-en-paiement', json_encode($datesMiseEnPaiement));
+        $this->setAttribute('method', 'post')
+            ->setAttribute('class', 'paiement-mise-en-paiement-form')
+            ->setAttribute('data-dates-mise-en-paiement', json_encode($datesMiseEnPaiement))
+            ->setAttribute('data-periode-paiement-tardif-id', $this->getServicePeriode()->getPaiementTardif()->getId());
 
-        
+
         $defaultPeriode = $this->getServicePeriode()->getPeriodePaiement();
         $this->add([
-            'type' => 'Select',
-            'name' => 'periode',
-            'options' => [
-                'label' => 'Période',
-                'value_options' => \UnicaenApp\Util::collectionAsOptions($periodes,false,function($p) use ($annee) { return $p->getLibelleAnnuel($annee); }),
+            'type'       => 'Select',
+            'name'       => 'periode',
+            'options'    => [
+                'label'         => 'Période',
+                'value_options' => \UnicaenApp\Util::collectionAsOptions($periodes, false, function ($p) use ($annee) {
+                    return $p->getLibelleAnnuel($annee);
+                }),
             ],
             'attributes' => [
                 'value' => $defaultPeriode ? $defaultPeriode->getId() : null,
             ],
         ]);
 
-        $defaultDateMiseEnPaiement = $defaultPeriode ? $defaultPeriode->getDatePaiement( $annee ) : null;
+        $defaultDateMiseEnPaiement = $defaultPeriode ? $defaultPeriode->getDatePaiement($annee) : null;
         $this->add([
-            'type' => 'UnicaenApp\Form\Element\Date',
-            'name' => 'date-mise-en-paiement',
-            'options' => [
-                'label'     => 'Date de mise en paiement',
-                'format'    => 'd/m/Y'
+            'type'       => 'UnicaenApp\Form\Element\Date',
+            'name'       => 'date-mise-en-paiement',
+            'options'    => [
+                'label'  => 'Date de mise en paiement',
+                'format' => 'd/m/Y',
             ],
             'attributes' => [
-                'step'  => '1',
+                'step'     => '1',
                 'disabled' => 'true',
-                'value' =>  $defaultPeriode ? $defaultDateMiseEnPaiement->format('d/m/Y') : null,
-            ]
+                'value'    => $defaultPeriode ? $defaultDateMiseEnPaiement->format('d/m/Y') : null,
+            ],
         ]);
 
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => 'Effectuer la mise en paiement',
                 'class' => 'btn btn-primary',
@@ -101,6 +86,8 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
 
         $this->setAttribute('action', $url(null, [], [], true));
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -111,11 +98,11 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
     public function getInputFilterSpecification()
     {
         return [
-            'periode' => [
-                'required'  => true
+            'periode'               => [
+                'required' => true,
             ],
             'date-mise-en-paiement' => [
-                'required'  => false
+                'required' => false,
             ],
         ];
     }

@@ -780,44 +780,45 @@ $(function ()
 
 
 
-function PaiementMiseEnPaiementForm(id)
-{
-    this.id = id;
-    this.element = $(".paiement-mise-en-paiement-form#" + this.id);
 
-    this.onPeriodeChange = function ()
+
+$.widget("ose.paiementMiseEnPaiementForm", {
+
+    onPeriodeChange: function ()
     {
         var periodeId = this.getPeriodeElement().val();
         var dates = this.element.data('dates-mise-en-paiement');
+        var periodePaiementTardifId = this.element.data('periode-paiement-tardif-id');
+        var dateMiseEnPaiementElement = this.getDateMiseEnPaiementElement();
 
-        this.getDateMiseEnPaiementElement().val(dates[periodeId]);
-    }
+        if (periodeId == periodePaiementTardifId){
+            dateMiseEnPaiementElement.prop('disabled', false);
+            dateMiseEnPaiementElement.datepicker(); // pour le rafraichissement!!
+        }else{
+            dateMiseEnPaiementElement.prop('disabled', true);
+        }
 
-    this.init = function ()
+        dateMiseEnPaiementElement.val(dates[periodeId]);
+    },
+
+    _create: function ()
     {
         var that = this;
         this.getPeriodeElement().change(function () { that.onPeriodeChange() });
-    }
+    },
 
-    this.getPeriodeElement = function ()
+    getPeriodeElement: function ()
     {
         return this.element.find('[name="periode"]');
-    }
+    },
 
-    this.getDateMiseEnPaiementElement = function ()
+    getDateMiseEnPaiementElement: function ()
     {
         return this.element.find('[name="date-mise-en-paiement"]');
     }
-}
+});
 
-/**
- *
- * @param {string} id
- * @returns {PaiementMiseEnPaiementForm}
- */
-PaiementMiseEnPaiementForm.get = function (id)
+$(function ()
 {
-    if (null == PaiementMiseEnPaiementForm.instances) PaiementMiseEnPaiementForm.instances = new Array();
-    if (null == PaiementMiseEnPaiementForm.instances[id]) PaiementMiseEnPaiementForm.instances[id] = new PaiementMiseEnPaiementForm(id);
-    return PaiementMiseEnPaiementForm.instances[id];
-}
+    WidgetInitializer.add('paiement-mise-en-paiement-form', 'paiementMiseEnPaiementForm');
+});

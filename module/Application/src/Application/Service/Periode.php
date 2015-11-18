@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Periode as PeriodeEntity;
 
 use Doctrine\ORM\QueryBuilder;
 
@@ -17,10 +18,9 @@ class Periode extends AbstractEntityService
     /**
      * Périodes d'enseignement
      *
-     * @var \Application\Entity\Db\Periode[]
+     * @var PeriodeEntity[]
      */
     protected $enseignement;
-
 
 
 
@@ -32,52 +32,64 @@ class Periode extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Periode';
+        return PeriodeEntity::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'per';
     }
+
+
 
     /**
      *
      * @param \DateTime $date
+     *
      * @return PeriodeEntity
      */
-    public function getPeriodePaiement( \DateTime $date=null )
+    public function getPeriodePaiement(\DateTime $date = null)
     {
         $anneeDateDebut = $this->getServiceContext()->getAnnee()->getDateDebut();
-        $aY = (int)$anneeDateDebut->format('Y');
-        $aM = (int)$anneeDateDebut->format('n');
+        $aY             = (int)$anneeDateDebut->format('Y');
+        $aM             = (int)$anneeDateDebut->format('n');
 
         if (empty($date)) $date = new \DateTime;
         $dY = (int)$date->format('Y');
         $dM = (int)$date->format('n');
 
-        $ecartMoisPaiement = ($dY-$aY)*12 + $dM - $aM;
+        $ecartMoisPaiement = ($dY - $aY) * 12 + $dM - $aM;
 
         return $this->getRepo()->findOneBy(['paiement' => true, 'ecartMoisPaiement' => $ecartMoisPaiement]);
     }
+
+
 
     /**
      * Retourne la liste des périodes d'enseignement
      *
      * @param QueryBuilder|null $queryBuilder
+     *
      * @return QueryBuilder
      */
-    public function finderByEnseignement( QueryBuilder $qb=null, $alias=null )
+    public function finderByEnseignement(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.enseignement = 1");
+
         return $qb;
     }
 
-    public function finderByMiseEnPaiement(StructureEntity $structure=null, QueryBuilder $qb=null, $alias=null)
+
+
+    public function finderByMiseEnPaiement(StructureEntity $structure = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
         /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
@@ -88,64 +100,86 @@ class Periode extends AbstractEntityService
         $serviceIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
         /* @var $serviceIntervenant Intervenant */
 
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $this               ->join( $serviceMIS             , $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
-        $serviceMIS         ->join( $serviceMiseEnPaiement  , $qb, 'miseEnPaiement'                                    );
-        $serviceMIS         ->join( $serviceIntervenant     , $qb, 'intervenant', false );
+        $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
+        $serviceMIS->join($serviceMiseEnPaiement, $qb, 'miseEnPaiement');
+        $serviceMIS->join($serviceIntervenant, $qb, 'intervenant', false);
 
-        if ($structure){
-            $serviceMIS->finderByStructure( $structure, $qb );
+        if ($structure) {
+            $serviceMIS->finderByStructure($structure, $qb);
         }
 
-        $serviceIntervenant->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
+        $serviceIntervenant->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
         return $qb;
     }
 
-    /**
-     * Retourne la liste des périodes
-     *
-     * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\Periode[]
-     */
-    public function getList( QueryBuilder $qb=null, $alias=null )
-    {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->orderBy("$alias.ordre");
-        return parent::getList($qb, $alias);
-    }
+
 
     /**
-     * Retourne la liste dezs périodes d'enseignement
      *
-     * @return \Application\Entity\Db\Periode[]
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb->orderBy("$alias.ordre");
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Retourne la liste des périodes d'enseignement
+     *
+     * @return PeriodeEntity[]
      */
     public function getEnseignement()
     {
-        if (! $this->enseignement){
-            $this->enseignement = $this->getList( $this->finderByEnseignement() );
+        if (!$this->enseignement) {
+            $this->enseignement = $this->getList($this->finderByEnseignement());
         }
+
         return $this->enseignement;
     }
+
+
 
     /**
      * Retourne le semestre 1
      *
-     * @return \Application\Entity\Db\Periode
+     * @return PeriodeEntity
      */
     public function getSemestre1()
     {
         return $this->getRepo()->findOneBy(['code' => PeriodeEntity::SEMESTRE_1]);
     }
 
+
+
     /**
      * Retourne le semestre 2
      *
-     * @return \Application\Entity\Db\Periode
+     * @return PeriodeEntity
      */
     public function getSemestre2()
     {
         return $this->getRepo()->findOneBy(['code' => PeriodeEntity::SEMESTRE_2]);
+    }
+
+
+
+    /**
+     * Retourne le paiement tardif
+     *
+     * @return PeriodeEntity
+     */
+    public function getPaiementTardif()
+    {
+        return $this->getRepo()->findOneBy(['code' => PeriodeEntity::PAIEMENT_TARDIF]);
     }
 }

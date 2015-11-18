@@ -14,6 +14,7 @@ class Periode implements HistoriqueAwareInterface
     use HistoriqueAwareTrait;
     const SEMESTRE_1 = 'S1';
     const SEMESTRE_2 = 'S2';
+    const PAIEMENT_TARDIF = 'PTD';
 
     /**
      * @var integer
@@ -218,8 +219,12 @@ class Periode implements HistoriqueAwareInterface
      */
     public function getLibelleAnnuel(Annee $annee)
     {
-        $datePaiement = $this->getDatePaiement($annee);
-        return $this->getLibelleLong().' '.$datePaiement->format('Y');
+        if ($this->getCode() === self::PAIEMENT_TARDIF){
+            return $this->getLibelleLong();
+        }else{
+            $datePaiement = $this->getDatePaiement($annee);
+            return $this->getLibelleLong().' '.$datePaiement->format('Y');
+        }
     }
 
 

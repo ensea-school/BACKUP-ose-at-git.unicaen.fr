@@ -211,11 +211,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     protected $IBAN;
 
     /**
-     * @var \Application\Entity\Db\TypeIntervenant
-     */
-    protected $type;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $service;
@@ -1132,34 +1127,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     {
         return $this->IBAN;
     }
-
-
-
-    /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\TypeIntervenant $type
-     *
-     * @return Intervenant
-     *
-    public function setType(\Application\Entity\Db\TypeIntervenant $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\TypeIntervenant
-     *
-    public function getType()
-    {
-        return $this->type;
-    }*/
 
 
 

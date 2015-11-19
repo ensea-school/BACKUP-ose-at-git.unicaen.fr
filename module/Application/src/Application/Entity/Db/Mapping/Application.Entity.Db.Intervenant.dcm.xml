@@ -96,11 +96,6 @@
                 <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <!--<many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenant">
-            <join-columns>
-                <join-column name="TYPE_ID" referenced-column-name="ID"/>
-            </join-columns>
-        </many-to-one>-->
         <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
             <join-columns>
                 <join-column name="DOSSIER_ID" referenced-column-name="ID"/>

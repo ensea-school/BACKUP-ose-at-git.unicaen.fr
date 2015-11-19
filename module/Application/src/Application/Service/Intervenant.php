@@ -6,6 +6,8 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\TypeIntervenant;
+use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
@@ -17,6 +19,10 @@ use Import\Processus\Import;
  */
 class Intervenant extends AbstractEntityService
 {
+    use StatutIntervenantAwareTrait;
+
+
+
     /**
      * Recherche par :
      * - id source exact (numéro Harpege ou autre),
@@ -72,7 +78,7 @@ class Intervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Intervenant';
+        return IntervenantEntity::class;
     }
 
 
@@ -252,18 +258,42 @@ class Intervenant extends AbstractEntityService
     /**
      * Recherche d'intervenant par le "source code" et l'année.
      *
-     * @param string      $sourceCode Code de l'intervenant dans la source de données (ex: numéro Harpege)
-     * @param AnneeEntity $annee      Année concernée
+     * @param string            $sourceCode Code de l'intervenant dans la source de données (ex: numéro Harpege)
+     * @param AnneeEntity       $annee      Année concernée
+     * @param QueryBuilder|null $queryBuilder
+     * @param string|null       $alias
      *
      * @return QueryBuilder
      */
-    public function finderBySourceCodeAndAnnee($sourceCode, AnneeEntity $annee, QueryBuilder $qb = null)
+    public function finderBySourceCodeAndAnnee($sourceCode, AnneeEntity $annee, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb
             ->andWhere("$alias.sourceCode = :code AND $alias.annee = :annee")
             ->setParameter('code', $sourceCode)
             ->setParameter('annee', $annee);
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Filtre par le type d'intervenant
+     *
+     * @param TypeIntervenant   $typeIntervenant Type de l'intervenant
+     * @param QueryBuilder|null $queryBuilder
+     * @param string|null       $alias
+     *
+     * @return QueryBuilder
+     */
+    public function finderByType(TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        $sStatut = $this->getServiceStatutIntervenant();
+
+        $this->join($sStatut, $qb, 'statut', false, $alias);
+        $sStatut->finderByTypeIntervenant($typeIntervenant, $qb);
 
         return $qb;
     }

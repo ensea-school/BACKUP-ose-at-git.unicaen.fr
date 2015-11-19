@@ -24,7 +24,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
 <style>
     th { background-color: #eee }
 </style>
-<h1 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h1>
+<h1 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getStatut()->getTypeIntervenant() ?></small></h1>
 <?php echo $this->form()->openTag($form->prepare()); ?>
 <div class="row">
     <div class="col-sm-4"><?php echo $this->formControlGroup($form->get('type-volume-horaire')); ?></div>

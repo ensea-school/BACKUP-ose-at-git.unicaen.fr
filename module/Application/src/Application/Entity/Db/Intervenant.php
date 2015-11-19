@@ -1141,7 +1141,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      * @param \Application\Entity\Db\TypeIntervenant $type
      *
      * @return Intervenant
-     */
+     *
     public function setType(\Application\Entity\Db\TypeIntervenant $type = null)
     {
         $this->type = $type;
@@ -1155,11 +1155,11 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      * Get type
      *
      * @return \Application\Entity\Db\TypeIntervenant
-     */
+     *
     public function getType()
     {
         return $this->type;
-    }
+    }*/
 
 
 

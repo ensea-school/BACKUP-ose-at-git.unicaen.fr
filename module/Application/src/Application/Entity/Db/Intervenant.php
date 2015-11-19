@@ -312,6 +312,11 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      */
     protected $contrat;
 
+    /**
+     * @var float
+     */
+    protected $montantIndemniteFc;
+
 
 
     /**
@@ -1468,8 +1473,8 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function estUneFemme()
     {
         $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
-        return Civilite::SEXE_F === $civilite->getSexe();
 
+        return Civilite::SEXE_F === $civilite->getSexe();
         //return Civilite::SEXE_F === $this->getCivilite()->getSexe();
     }
 
@@ -1636,6 +1641,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         if (!count($this->vIndicDiffDossier)) {
             return null;
         }
+
         return $this->vIndicDiffDossier->first();
     }
 
@@ -1780,6 +1786,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         if (!count($this->formuleIntervenant)) {
             return null;
         }
+
         return $this->formuleIntervenant->first();
     }
 
@@ -2000,6 +2007,30 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         $contrats = $this->getContrat()->filter($filter);
 
         return $contrats;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getMontantIndemniteFc()
+    {
+        return $this->montantIndemniteFc;
+    }
+
+
+
+    /**
+     * @param float $montantIndemniteFc
+     *
+     * @return Intervenant
+     */
+    public function setMontantIndemniteFc($montantIndemniteFc)
+    {
+        $this->montantIndemniteFc = $montantIndemniteFc;
+
+        return $this;
     }
 
 

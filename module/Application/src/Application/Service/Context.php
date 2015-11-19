@@ -2,11 +2,11 @@
 
 namespace Application\Service;
 
-use \Application\Acl\Role;
+use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee         as AnneeEntity;
 use Application\Entity\Db\Structure     as StructureEntity;
-use \DateTime;
+use DateTime;
 use Zend\Session\Container;
 
 /**
@@ -307,7 +307,7 @@ class Context extends AbstractService
     }
     
     /**
-     * Détermine si l'application était opérationnel l'année spécifiée.
+     * Détermine si l'application était opérationnelle l'année spécifiée.
      * 
      * On considère que s'il existe des intervenants pour l'année spécifiée, alors
      * l'application était opérationnelle.

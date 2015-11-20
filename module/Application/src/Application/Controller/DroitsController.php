@@ -190,6 +190,7 @@ class DroitsController extends AbstractActionController
         $serviceAffectations->join( $this->getServicePersonnel(), $qb, 'personnel', true);
         $serviceAffectations->join( $this->getServiceSource(), $qb, 'source', true);
         $serviceAffectations->leftJoin( $this->getServiceStructure(), $qb, 'structure', true);
+        $serviceAffectations->finderByHistorique($qb);
 
         /* @var $qb \Doctrine\ORM\QueryBuilder */
 

@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Acl\Role;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -49,7 +50,7 @@ class IndexController extends AbstractActionController
             $this->getServiceContext()->setAnnee($annee);
 
             $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($role->getIntervenant()) {
+            if ($role instanceof Role && $role->getIntervenant()) {
                 $intervenant = $this->getServiceIntervenant()->getBySourceCode($role->getIntervenant()->getSourceCode());
                 $this->getServiceUserContext()->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
             }

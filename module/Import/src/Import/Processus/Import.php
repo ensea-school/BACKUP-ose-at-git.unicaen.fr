@@ -3,8 +3,6 @@
 namespace Import\Processus;
 
 use Import\Entity\Differentiel\Query;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\Personnel;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\SectionCnu;
 use Application\Entity\Db\Corps;
@@ -13,6 +11,8 @@ use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\Etape;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 
 
 /**
@@ -22,9 +22,10 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 class Import implements ServiceLocatorAwareInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
+
+
 
     /**
      * Mise à jour de l'existant uniquement
@@ -92,34 +93,6 @@ class Import implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Retourne les lignes de différentiel correspondantes à la structure
-     *
-     * @param Structure $structure
-     * @return Ligne[]|array()
-     */
-    public function structureGetDifferentiel( Structure $structure )
-    {
-        $differentiel = $this->getDifferentiel();
-
-        $q1 = new Query('STRUCTURE');
-        $q1->setSourceCode($structure->getSourceCode());
-
-        $q2 = new Query('ADRESSE_STRUCTURE');
-        $q2->addColValue( 'STRUCTURE_ID', $structure->getId() );
-
-        $q3 = new Query('ROLE');
-        $q3->addColValue( 'STRUCTURE_ID', $structure->getId() );
-
-        $diff = array_merge(
-            $differentiel->make($q1)->fetchAll(),
-            $differentiel->make($q2)->fetchAll(),
-            $differentiel->make($q3)->fetchAll()
-        );
-
-        return $diff;
-    }
-
-    /**
      * Import d'un, plusieurs ou tous les personnels
      *
      * @param string|array|null $sourceCode  Identifiant source du personnel
@@ -130,22 +103,6 @@ class Import implements ServiceLocatorAwareInterface
     {
         $this->execMaj( 'PERSONNEL', 'SOURCE_CODE', $sourceCode, $action );
         return $this;
-    }
-
-
-    /**
-     * Retourne les lignes de différentiel correspondantes au personnel
-     *
-     * @param Personnel $personnel
-     * @return Ligne[]|array()
-     */
-    public function personnelGetDifferentiel( Personnel $personnel )
-    {
-        $q = new Query('personnel');
-        $q->setSourceCode($personnel->getSourceCode());
-        $diff = $this->getDifferentiel()->make($q)->fetchAll();
-
-        return $diff;
     }
 
     /**
@@ -177,34 +134,6 @@ class Import implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Import d'un, plusieurs ou toutes les sections CNU
-     *
-     * @param string|array|null $sourceCode  Identifiant source de la section CNU
-     * @param string            $action      Action
-     * @retun self
-     */
-    public function sectionCnu( $sourceCode=null, $action=self::A_ALL )
-    {
-        $this->execMaj( 'SECTION_CNU', 'SOURCE_CODE', $sourceCode, $action );
-        return $this;
-    }
-
-    /**
-     * Retourne les lignes de différentiel correspondantes à la section CNU
-     *
-     * @param SectionCnu $sectionCnu
-     * @return Ligne[]|array()
-     */
-    public function sectionCnuGetDifferentiel( SectionCnu $sectionCnu )
-    {
-        $q = new Query('sectionCnu');
-        $q->setSourceCode($sectionCnu->getSourceCode());
-        $diff = $this->getDifferentiel()->make($q)->fetchAll();
-
-        return $diff;
-    }
-
-    /**
      * Import d'un, plusieurs ou tous les corps
      *
      * @param string|array|null $sourceCode  Identifiant source du corps
@@ -215,21 +144,6 @@ class Import implements ServiceLocatorAwareInterface
     {
         $this->execMaj( 'CORPS', 'SOURCE_CODE', $sourceCode, $action );
         return $this;
-    }
-
-    /**
-     * Retourne les lignes de différentiel correspondantes au corps
-     *
-     * @param Corps $corps
-     * @return Ligne[]|array()
-     */
-    public function corpsGetDifferentiel( Corps $corps )
-    {
-        $q = new Query('corps');
-        $q->setSourceCode($corps->getSourceCode());
-        $diff = $this->getDifferentiel()->make($q)->fetchAll();
-
-        return $diff;
     }
 
     /**

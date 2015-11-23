@@ -16,7 +16,7 @@
     <tbody class="table-hover">
     <?php foreach($intervenants as $sourceCode => $intervenant): ?>
     <tr>
-        <td><a href="<?php echo $this->url('intervenant/fiche', ['intervenant' => $sourceCode]); ?>">
+        <td><a href="<?php echo $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>
         <td><?php echo $intervenant['civilite'] ?></td>

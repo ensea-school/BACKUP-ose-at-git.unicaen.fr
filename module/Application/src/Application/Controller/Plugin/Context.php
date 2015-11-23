@@ -2,10 +2,10 @@
 
 namespace Application\Controller\Plugin;
 
+use Application\Service\Traits\IntervenantAwareTrait;
 use Zend\Mvc\Controller\Plugin\Params;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\Session\Container;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 
@@ -15,7 +15,6 @@ use Common\Exception\RuntimeException;
  * @method mixed *FromRoute($name = null, $default = null) Description
  * @method mixed *FromQuery($name = null, $default = null) Description
  * @method mixed *FromPost($name = null, $default = null) Description
- * @method mixed *FromSession($name = null, $default = null) Description
  * @method mixed *FromSources($name = null, $default = null, array $sources = null) Description
  * @method mixed *FromQueryPost($name = null, $default = null) Description
  *
@@ -25,16 +24,12 @@ use Common\Exception\RuntimeException;
 class Context extends Params implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use IntervenantAwareTrait;
 
     /**
      * @var bool
      */
     protected $mandatory = false;
-
-    /**
-     * @var Container
-     */
-    protected $sessionContainer;
 
     /**
      *
@@ -72,8 +67,6 @@ class Context extends Params implements ServiceLocatorAwareInterface
             case ($method = 'FromQuery') === substr($name, $length = -9):
                 break;
             case ($method = 'FromPost') === substr($name, $length = -8):
-                break;
-            case ($method = 'FromSession') === substr($name, $length = -11):
                 break;
             case ($method = 'FromSources') === substr($name, $length = -11):
                 break;
@@ -159,10 +152,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
         if (is_scalar($sourceCodes)) {
             $sourceCode = (string)(int) $sourceCodes;
             if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
-                $this->getProcessusImport()->intervenant($sourceCode); // Import
-                if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
-                    throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
-                }
+                throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
             }
 
             return $intervenant;
@@ -185,7 +175,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
      */
     public function fromSources($name, $default=null, array $sources=[])
     {
-        $defaultSources = ['context', 'route', 'query', 'post', 'session' ];
+        $defaultSources = ['context', 'route', 'query', 'post' ];
         if (empty($sources)) $sources = $defaultSources;
 
         foreach( $sources as $source ){
@@ -198,46 +188,4 @@ class Context extends Params implements ServiceLocatorAwareInterface
         return $default;
     }
 
-    /**
-     * Return a single session parameter.
-     *
-     * @param  string $name Parameter name to retrieve.
-     * @param  mixed $default Default value to use when the requested parameter is not set.
-     * @return mixed
-     */
-    public function fromSession($name, $default = null)
-    {
-        if (!isset($this->getSessionContainer()->$name)) {
-            return $default;
-        }
-
-        return $this->getSessionContainer()->$name;
-    }
-
-    /**
-     * @return Container
-     */
-    protected function getSessionContainer()
-    {
-        if (null === $this->sessionContainer) {
-            $this->sessionContainer = new Container(get_class($this->getController()));
-        }
-        return $this->sessionContainer;
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return \Import\Processus\Import
-     */
-    protected function getProcessusImport()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport');
-    }
 }

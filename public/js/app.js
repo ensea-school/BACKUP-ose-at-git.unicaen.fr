@@ -130,14 +130,17 @@ $.widget("ose.intervenantRecherche", {
     {
         var that = this;
 
-        this.element.find( "#critere" ).autocomplete({
+        this.getElementCritere().autocomplete({
             source: function( event, ui ) {
                 that.rechercher(event.term);
                 return {};
             }
         });
+
+        this.getElementCritere().focus();
     },
 
+    getElementCritere: function(){ return this.element.find( "#critere" ); },
     getElementRecherche : function () { return this.element.find('.recherche'); },
 });
 

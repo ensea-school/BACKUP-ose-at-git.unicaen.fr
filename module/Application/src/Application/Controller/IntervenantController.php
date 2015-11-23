@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Exception\DbException;
+use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Traits\SessionContainerTrait;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -28,6 +30,7 @@ class IntervenantController extends AbstractActionController implements Workflow
     use TypeHeuresAwareTrait;
     use HeuresCompFormAwareTrait;
     use SessionContainerTrait;
+    use EditionFormAwareTrait;
 
 
 
@@ -91,6 +94,16 @@ class IntervenantController extends AbstractActionController implements Workflow
 
 
 
+    public function ficheAction()
+    {
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+
+        return compact('intervenant', 'role');
+    }
+
+
+
     public function apercevoirAction()
     {
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
@@ -98,6 +111,45 @@ class IntervenantController extends AbstractActionController implements Workflow
         $title       = "Aperçu d'un intervenant";
 
         return compact('intervenant', 'title');
+    }
+
+
+
+    public function saisirAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+        ]);
+
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $title       = "Saisie d'un intervenant";
+        $form        = $this->getFormIntervenantEdition();
+        $errors = [];
+
+        if ($intervenant) {
+            $form->bind($intervenant);
+        } else {
+            $intervenant = $this->getServiceIntervenant()->newEntity();
+            $form->setObject($intervenant);
+        }
+
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                try {
+                    $this->getServiceIntervenant()->save($intervenant);
+                    $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID
+                } catch (\Exception $e) {
+                    $e        = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }
+        }
+
+        return compact('intervenant', 'form', 'errors', 'title');
     }
 
 

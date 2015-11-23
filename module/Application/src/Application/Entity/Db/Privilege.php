@@ -25,6 +25,7 @@ class Privilege
     const INTERVENANT_RECHERCHE             = 'intervenant-recherche';
     const INTERVENANT_FICHE                 = 'intervenant-fiche';
     const INTERVENANT_CALCUL_HETD           = 'intervenant-calcul-hetd';
+    const INTERVENANT_EDITION               = 'intervenant-edition';
     const MISE_EN_PAIEMENT_VISUALISATION    = 'mise-en-paiement-visualisation';
     const MISE_EN_PAIEMENT_DEMANDE          = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EXPORT_CSV       = 'mise-en-paiement-export-csv';
@@ -43,6 +44,7 @@ class Privilege
     const ODF_VISUALISATION                 = 'odf-visualisation';
     const ODF_ELEMENT_VISUALISATION         = 'odf-element-visualisation';
     const ODF_ETAPE_VISUALISATION           = 'odf-etape-visualisation';
+
 
 
 

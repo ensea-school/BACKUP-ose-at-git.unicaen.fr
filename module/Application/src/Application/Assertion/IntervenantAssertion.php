@@ -2,7 +2,6 @@
 
 namespace Application\Assertion;
 
-use Application\Entity\Db\Intervenant;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -31,36 +30,7 @@ class IntervenantAssertion extends AbstractAssertion
     {
         parent::assert($acl, $role, $resource, $privilege);
 
-        $privilege = $this->normalizedPrivilege($privilege, $resource);
-
-        if ('total-heures-comp' == $privilege){
-            $resource = $this->getMvcEvent()->getParam('intervenant');
-            return $this->assertIntervenantTotalHeuresComp($this->getSelectedIdentityRole(), $resource);
-        }
-
         return true;
     }
 
-    /**
-     *
-     * @param RoleInterface $role
-     * @param Intervenant $resource
-     * @return boolean
-     */
-    protected function assertIntervenantTotalHeuresComp(RoleInterface $role = null, Intervenant $resource = null)
-    {
-        /*********************************************************
-         *                      Rôle intervenant
-         *********************************************************/
-        if ($role instanceof \Application\Acl\IntervenantRole){
-            if ($role->getIntervenant() <> $resource){
-                return false;
-            }
-        }
-
-        /*********************************************************
-         *                      Tous les autres
-         *********************************************************/
-        return true;
-    }
 }

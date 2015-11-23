@@ -355,6 +355,11 @@ ul.privileges-form li label {
     color: white;
 }
 
+.inconnu {
+    font-style: italic;
+    color: gray;
+}
+
 div#navbar pre {
     display: none;
 }

@@ -1,9 +1,34 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Fiche") ?>
+<?php
 
-<h1 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getStatut()->getTypeIntervenant() ?></small></h1>
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+/* @var $role \Application\Acl\Role */
 
-<?php echo $this->intervenant($intervenant) ?>
+$this->headTitle()->append($intervenant->getNomUsuel())->append("Fiche");
 
-<hr />
+?>
 
-<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', compact('intervenant','role'));
+    <h1 class="page-header"><?php echo $intervenant ?>
+        <small><?php echo $intervenant->getStatut()->getTypeIntervenant() ?></small>
+    </h1>
+
+<?php
+
+$tabs = [
+    [
+        'id'            => 'fiche',
+        'label'         => '<span class="glyphicon glyphicon-eye-open"></span> Fiche',
+        'content'       => $this->partial('application/intervenant/fiche.phtml', compact('intervenant', 'role')),
+        'url'           => $this->url('intervenant/fiche', ['intervenant' => $intervenant->getSourceCode()]),
+        'force-refresh' => true,
+    ],
+];
+
+if ($this->isAllowed('privilege/' . \Application\Entity\Db\Privilege::INTERVENANT_EDITION)) {
+    $tabs[] = [
+        'id'    => 'edition',
+        'label' => '<span class="glyphicon glyphicon-pencil"></span> Édition',
+        'url'   => $this->url('intervenant/saisir', ['intervenant' => $intervenant->getSourceCode()]),
+    ];
+}
+
+echo $this->tabajax($tabs);

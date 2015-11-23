@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\Intervenant;
 
+use Application\Util;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -59,27 +60,28 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "NOM prénom"         => $entity,
                 "Civilité"           => $entity->getCiviliteToString(),
                 "Date de naissance"  => $entity->getDateNaissanceToString(),
-                "Ville de naissance" => $entity->getVilleNaissanceLibelle() ?: "(Inconnue)",
+                "Ville de naissance" => $entity->getVilleNaissanceLibelle() ?: '<span class="inconnu">(Inconnue)</span>',
                 "Pays de naissance"  => $entity->getPaysNaissanceLibelle(),
                 "N° INSEE"           => $entity->getNumeroInsee(),
             ],
             'coordonnees' => [
-                "Email"            => $entity->getEmail() ?: "(Inconnu)",
-                "Téléphone mobile" => $entity->getTelMobile() ?: "(Inconnu)",
-                "Téléphone pro"    => $entity->getTelPro() ?: "(Inconnu)",
+                "Email"            => $entity->getEmail() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Téléphone mobile" => $entity->getTelMobile() ?: '<span class="inconnu">(Inconnu)</span>',
+                "Téléphone pro"    => $entity->getTelPro() ?: '<span class="inconnu">(Inconnu)</span>',
                 "Adresse"          => nl2br($entity->getAdressePrincipale()),
             ],
             'metier'      => [
-                "Type d'intervenant"                => $entity->getStatut()->getTypeIntervenant(),
-                "Statut de l'intervenant"           => $entity->getStatut(),
-                "N° {$entity->getSource()}"         => $entity->getSourceCode(),
-                "Affectation principale"            => $entity->getStructure() ?: "(Inconnue)",
-                "Affectation recherche"             => count($aff = $entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)",
-                "Discipline"                        => $entity->getDiscipline() ?: "(Inconnue)",
-                "Grade"                             => $entity->getGrade() ?: "(Aucun ou inconnu)",
+                "Type d'intervenant"        => $entity->getStatut()->getTypeIntervenant(),
+                "Statut de l'intervenant"   => $entity->getStatut(),
+                "N° {$entity->getSource()}" => $entity->getSourceCode(),
+                "Affectation principale"    => $entity->getStructure() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Affectation recherche"     => count($aff = $entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : '<span class="inconnu">(Inconnue)</span>',
+                "Discipline"                => $entity->getDiscipline() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Grade"                     => $entity->getGrade() ?: '<span class="inconnu">(Aucun ou inconnu)</span>',
+                "Montant de l'indemnité FC" => $entity->getMontantIndemniteFc() !== null ? \UnicaenApp\Util::formattedEuros($entity->getMontantIndemniteFc()) : '<span class="inconnu">(Inconnue)</span>',
             ],
             'divers'      => [
-                "Id"              => $entity->getId(),
+                "Id" => $entity->getId(),
                 //"Id de connexion" => ($u = $entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)",
             ],
         ];

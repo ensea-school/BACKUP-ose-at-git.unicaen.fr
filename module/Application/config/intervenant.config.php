@@ -5,7 +5,7 @@ namespace Application;
 use Application\Entity\Db\Privilege;
 
 return [
-    'router'          => [
+    'router'     => [
         'routes' => [
             'intervenant' => [
                 'type'          => 'Literal',
@@ -35,22 +35,22 @@ return [
                     'rechercher'                     => [
                         'type'    => 'Literal',
                         'options' => [
-                            'route'       => '/rechercher',
-                            'defaults'    => [
+                            'route'    => '/rechercher',
+                            'defaults' => [
                                 'action' => 'rechercher',
                             ],
                         ],
                     ],
-                    'recherche' => [
+                    'recherche'                      => [
                         'type'    => 'Literal',
                         'options' => [
-                            'route'       => '/recherche',
-                            'defaults'    => [
+                            'route'    => '/recherche',
+                            'defaults' => [
                                 'action' => 'recherche',
                             ],
                         ],
                     ],
-                    'fiche'                          => [
+                    'voir'                          => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:intervenant',
@@ -62,12 +62,35 @@ return [
                             ],
                         ],
                     ],
+                    'fiche'                          => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:intervenant/fiche',
+                            'constraints' => [
+                                'intervenant' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'fiche',
+                            ],
+                        ],
+                    ],
+                    'saisir' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:intervenant/saisir',
+                            'constraints' => [
+                                'intervenant' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisir',
+                            ],
+                        ],
+                    ],
                     'voir-heures-comp'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/voir-heures-comp/:intervenant',
                             'constraints' => [
-                                'action'      => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
@@ -80,7 +103,6 @@ return [
                         'options' => [
                             'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
                             'constraints' => [
-                                'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant'       => '[0-9]*',
                                 'typeVolumeHoraire' => '[0-9]*',
                                 'etatVolumeHoraire' => '[0-9]*',
@@ -297,7 +319,7 @@ return [
             ],
         ],
     ],
-    'navigation'      => [
+    'navigation' => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -305,7 +327,7 @@ return [
                         'label'    => 'Intervenant',
                         'title'    => "Intervenant",
                         'route'    => 'intervenant',
-                        'resource' => 'controller/Application\Controller\Intervenant:index',
+                        'resource' => Guard\PrivilegeController::getResourceId('Application\Controller\Intervenant','index'),
                         'pages'    => [
                             'rechercher'                     => [
                                 'label'        => " Rechercher",
@@ -316,17 +338,17 @@ return [
                                 ],
                                 'icon'         => "glyphicon glyphicon-search",
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Intervenant:rechercher',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Intervenant','rechercher'),
                             ],
-                            'fiche'                          => [
+                            'voir'                          => [
                                 'label'        => "Fiche individuelle",
                                 'title'        => "Consultation de la fiche de l'intervenant {id}",
-                                'route'        => 'intervenant/fiche',
+                                'route'        => 'intervenant/voir',
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Intervenant:voir',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Intervenant','voir'),
                             ],
                             'voir-heures-comp'               => [
                                 'label'        => "Calcul HETD",
@@ -337,7 +359,7 @@ return [
                                 ],
                                 'action'       => 'voir-heures-comp',
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Intervenant:voir-heures-comp',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Intervenant','voir-heures-comp'),
                             ],
                             'modification-service-du'        => [
                                 'label'        => "Modification de service dû",
@@ -347,7 +369,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\ModificationServiceDu:saisir',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu','saisir'),
                             ],
                             'dossier'                        => [
                                 'label'        => "Données personnelles",
@@ -357,7 +379,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Dossier:modifier',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Dossier','modifier'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'service'                        => [
@@ -368,7 +390,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Service:index',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Service','index'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'pieces-jointes-saisie'          => [
@@ -385,7 +407,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Validation:dossier',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Validation','dossier'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-service-prevu'       => [
@@ -396,7 +418,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Validation:service',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Validation','service'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-prevu'   => [
@@ -407,7 +429,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Validation:referentiel',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Validation','referentiel'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'agrement'                       => [
@@ -421,7 +443,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Contrat:index',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Contrat','index'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'services-realises'              => [
@@ -432,7 +454,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Service:index',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Service','index'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-service-realise'     => [
@@ -443,7 +465,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Validation:service',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Validation','service'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-realise' => [
@@ -454,7 +476,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Validation:referentiel',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Validation','referentiel'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'demande-mise-en-paiement'       => [
@@ -465,7 +487,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => 'controller/Application\Controller\Paiement:demandemiseenpaiement',
+                                'resource'     => Guard\PrivilegeController::getResourceId('Application\Controller\Paiement','demandeMiseEnPaiement'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                         ],
@@ -475,143 +497,138 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-        'guards'             => [
-            Guard\PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['rechercher'],
-                    'privileges' => [
-                        Privilege::INTERVENANT_RECHERCHE,
-                    ],
+    'guards'             => [
+        Guard\PrivilegeController::class => [
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['rechercher'],
+                'privileges' => [
+                    Privilege::INTERVENANT_RECHERCHE,
                 ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['index', 'voir'],
-                    'privileges' => [
-                        Privilege::INTERVENANT_FICHE,
-                    ],
+            ],
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['index', 'voir', 'fiche'],
+                'privileges' => [
+                    Privilege::INTERVENANT_FICHE,
                 ],
+            ],
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['saisir'],
+                'privileges' => [
+                    Privilege::INTERVENANT_EDITION,
+                ],
+            ],
+            [
+                'controller' => 'Application\Controller\ModificationServiceDu',
+                'action'     => ['saisir'],
+                'privileges' => [
+                    Privilege::MODIF_SERVICE_DU_VISUALISATION,
+                ],
+                'assertion'  => 'ModificationServiceDuAssertion',
+            ],
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['voir-heures-comp'],
+                'privileges' => [
+                    Privilege::INTERVENANT_CALCUL_HETD,
+                ],
+            ],
+        ],
+        'BjyAuthorize\Guard\Controller'  => [
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['formule-totaux-hetd'],
+                'roles'      => $R_ALL,
+            ],
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['apercevoir',],
+                'roles'      => ['user'],
+            ],
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['feuille-de-route'],
+                'roles'      => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
+            ],
+            [
+                'controller' => 'Application\Controller\Intervenant',
+                'action'     => ['choisir', 'rechercher', 'recherche'],
+                'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
+            ],
+            [
+                'controller' => 'Application\Controller\Dossier',
+                'action'     => ['voir', 'modifier'],
+                'roles'      => [R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR],
+            ],
+        ],
+    ],
+    'resource_providers' => [
+        'BjyAuthorize\Provider\Resource\Config' => [
+            'Intervenant' => [],
+        ],
+    ],
+    'rule_providers'     => [
+        Provider\Rule\PrivilegeRuleProvider::class => [
+            'allow' => [
                 [
-                    'controller' => 'Application\Controller\ModificationServiceDu',
-                    'action'     => ['saisir'],
-                    'privileges' => [
-                        Privilege::MODIF_SERVICE_DU_VISUALISATION,
-                    ],
+                    'privileges' => Privilege::MODIF_SERVICE_DU_EDITION,
+                    'resources'  => 'Intervenant',
                     'assertion'  => 'ModificationServiceDuAssertion',
                 ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['voir-heures-comp'],
-                    'privileges' => [
-                        Privilege::INTERVENANT_CALCUL_HETD,
-                    ],
-                ],
-            ],
-            'BjyAuthorize\Guard\Controller'         => [
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['formule-totaux-hetd'],
-                    'roles'      => $R_ALL,
-                    'assertion'  => 'IntervenantAssertion',
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['apercevoir',],
-                    'roles'      => ['user'],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['feuille-de-route'],
-                    'roles'      => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['choisir', 'rechercher', 'recherche'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-                [
-                    'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['voir', 'modifier'],
-                    'roles'      => [R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-            ],
-        ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'Intervenant' => [],
-            ],
-        ],
-        'rule_providers'     => [
-            Provider\Rule\PrivilegeRuleProvider::class => [
-                'allow' => [
-                    [
-                        'privileges' => Privilege::MODIF_SERVICE_DU_EDITION,
-                        'resources'  => 'Intervenant',
-                        'assertion'  => 'ModificationServiceDuAssertion',
-                    ],
-                ],
-            ],
-            'BjyAuthorize\Provider\Rule\Config'        => [
-                'allow' => [
-                    [
-                        $R_ALL,
-                        'Intervenant',
-                        ['total-heures-comp'],
-                        'IntervenantAssertion',
-                    ],
-
-                ],
             ],
         ],
     ],
+],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
-            'Application\Controller\Dossier'               => Controller\DossierController::class,
-            'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
-        ],
-        'aliases'    => [
-            'IntervenantController' => 'Application\Controller\Intervenant',
-        ],
+    'invokables' => [
+        'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
+        'Application\Controller\Dossier'               => Controller\DossierController::class,
+        'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
     ],
+    'aliases'    => [
+        'IntervenantController' => 'Application\Controller\Intervenant',
+    ],
+],
     'service_manager' => [
-        'invokables' => [
-            'ApplicationIntervenant'                => Service\Intervenant::class,
-            'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
-            'ApplicationCivilite'                   => Service\Civilite::class,
-            'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
-            'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
-            'ApplicationDossier'                    => Service\Dossier::class,
-            'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
-            'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
-            'PeutSaisirDossierRule'                 => Rule\Intervenant\PeutSaisirDossierRule::class,
-            'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
-            'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
-            'PossedeDossierRule'                    => Rule\Intervenant\PossedeDossierRule::class,
-            'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
-            'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
-            'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
-            'NecessiteAgrementRule'                 => Rule\Intervenant\NecessiteAgrementRule::class,
-            'AgrementFourniRule'                    => Rule\Intervenant\AgrementFourniRule::class,
-            'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
-        ],
+    'invokables' => [
+        'ApplicationIntervenant'                => Service\Intervenant::class,
+        'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
+        'ApplicationCivilite'                   => Service\Civilite::class,
+        'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
+        'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
+        'ApplicationDossier'                    => Service\Dossier::class,
+        'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
+        'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
+        'PeutSaisirDossierRule'                 => Rule\Intervenant\PeutSaisirDossierRule::class,
+        'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
+        'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
+        'PossedeDossierRule'                    => Rule\Intervenant\PossedeDossierRule::class,
+        'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
+        'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
+        'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
+        'NecessiteAgrementRule'                 => Rule\Intervenant\NecessiteAgrementRule::class,
+        'AgrementFourniRule'                    => Rule\Intervenant\AgrementFourniRule::class,
+        'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
     ],
+],
     'view_helpers'    => [
-        'invokables'   => [
-            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
-            'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
-        ],
-        'initializers' => [
-        ],
+    'invokables'   => [
+        'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
+        'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
     ],
+    'initializers' => [
+    ],
+],
     'form_elements'   => [
-        'invokables' => [
-            'intervenantForm'                               => Form\Intervenant\IntervenantForm::class,
-            'IntervenantDossier'                            => Form\Intervenant\Dossier::class,
-            'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
-            'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
-            'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,
-            'IntervenantMotifModificationServiceDuFieldset' => Form\Intervenant\MotifModificationServiceDuFieldset::class,
-        ],
+    'invokables' => [
+        'IntervenantEditionForm'                        => Form\Intervenant\EditionForm::class,
+        'IntervenantDossier'                            => Form\Intervenant\Dossier::class,
+        'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
+        'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
+        'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,
+        'IntervenantMotifModificationServiceDuFieldset' => Form\Intervenant\MotifModificationServiceDuFieldset::class,
     ],
+],
 ];

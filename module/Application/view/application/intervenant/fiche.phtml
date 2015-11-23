@@ -1,0 +1,9 @@
+<?php
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+/* @var $role Application\Acl\Role */
+
+?>
+
+<?php echo $this->intervenant($intervenant); ?>
+<hr />
+<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', compact('intervenant','role'));

@@ -72,7 +72,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             /**
              * @todo attention : plusieurs intervenants pourront remonter si on peut leur donner plusieurs statuts par an!!
              */
-            $intervenant = $this->getServiceIntervenant()->importer($utilisateurCode);
+            $intervenant = $this->getServiceIntervenant()->getBySourceCode($utilisateurCode);
             $personnel = $this->getServicePersonnel()->getBySourceCode($utilisateurCode);
 
             /**

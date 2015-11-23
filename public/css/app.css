@@ -374,3 +374,11 @@ div#navbar pre {
 form#dossier .form-control[disabled], form#dossier .form-control[readonly], form#dossier fieldset[disabled] .form-control {
     cursor: text;
 }
+
+
+
+
+
+.intervenant-recherche .critere{
+    padding-bottom: 1em;
+}

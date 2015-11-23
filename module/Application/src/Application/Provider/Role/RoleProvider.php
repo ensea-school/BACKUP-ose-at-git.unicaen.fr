@@ -97,7 +97,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
         if ($ldapUser = $serviceAuthUserContext->getLdapUser()) {
             $numeroPersonnel = (integer)$ldapUser->getSupannEmpId();
-            $intervenant     = $this->getServiceIntervenant()->importer($numeroPersonnel);
+            $intervenant     = $this->getServiceIntervenant()->getBySourceCode($numeroPersonnel);
             $personnel       = $this->getServicePersonnel()->getBySourceCode($numeroPersonnel);
         } else {
             $intervenant = null;

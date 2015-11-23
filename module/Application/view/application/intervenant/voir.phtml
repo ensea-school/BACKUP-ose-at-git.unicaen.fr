@@ -6,4 +6,4 @@
 
 <hr />
 
-<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', ['intervenant' => $intervenant, 'role' => $role]);
+<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', compact('intervenant','role'));

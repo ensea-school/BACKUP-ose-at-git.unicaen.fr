@@ -19,7 +19,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'default'                        => [
+                    /*'default'                        => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:intervenant]',
@@ -31,16 +31,22 @@ return [
                                 'action' => 'index',
                             ],
                         ],
-                    ],
+                    ],*/
                     'rechercher'                     => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'options' => [
-                            'route'       => '/rechercher[/:intervenant]',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
+                            'route'       => '/rechercher',
                             'defaults'    => [
                                 'action' => 'rechercher',
+                            ],
+                        ],
+                    ],
+                    'recherche' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'       => '/recherche',
+                            'defaults'    => [
+                                'action' => 'recherche',
                             ],
                         ],
                     ],
@@ -470,7 +476,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            'Application\Guard\PrivilegeController' => [
+            Guard\PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['rechercher'],
@@ -505,7 +511,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
-                    'roles'      => $R_ALL, /** @todo à sécuriser à l'aide d'une assertion pour éviter qu'un intervenant ne puisse voir les HETD des autres */
+                    'roles'      => $R_ALL,
                     'assertion'  => 'IntervenantAssertion',
                 ],
                 [
@@ -520,7 +526,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['choisir', 'rechercher', 'search'],
+                    'action'     => ['choisir', 'rechercher', 'recherche'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
                 ],
                 [
@@ -536,7 +542,7 @@ return [
             ],
         ],
         'rule_providers'     => [
-            'Application\Provider\Rule\PrivilegeRuleProvider' => [
+            Provider\Rule\PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => Privilege::MODIF_SERVICE_DU_EDITION,
@@ -545,7 +551,7 @@ return [
                     ],
                 ],
             ],
-            'BjyAuthorize\Provider\Rule\Config'               => [
+            'BjyAuthorize\Provider\Rule\Config'        => [
                 'allow' => [
                     [
                         $R_ALL,
@@ -560,9 +566,9 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
-            'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
-            'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
+            'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
+            'Application\Controller\Dossier'               => Controller\DossierController::class,
+            'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
         ],
         'aliases'    => [
             'IntervenantController' => 'Application\Controller\Intervenant',
@@ -570,41 +576,42 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationIntervenant'                => 'Application\\Service\\Intervenant',
-            'ApplicationMotifModificationServiceDu' => 'Application\\Service\\MotifModificationServiceDu',
-            'ApplicationCivilite'                   => 'Application\\Service\\Civilite',
-            'ApplicationStatutIntervenant'          => 'Application\\Service\\StatutIntervenant',
-            'ApplicationTypeIntervenant'            => 'Application\\Service\\TypeIntervenant',
-            'ApplicationDossier'                    => 'Application\\Service\\Dossier',
-            'IntervenantAssertion'                  => 'Application\\Assertion\\IntervenantAssertion',
-            'ModificationServiceDuAssertion'        => 'Application\\Assertion\\ModificationServiceDuAssertion',
-            'PeutSaisirDossierRule'                 => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
-            'PeutSaisirServiceRule'                 => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
-            'PeutSaisirReferentielRule'             => 'Application\Rule\Intervenant\PeutSaisirReferentielRule',
-            'PossedeDossierRule'                    => 'Application\Rule\Intervenant\PossedeDossierRule',
-            'ServiceValideRule'                     => 'Application\Rule\Intervenant\ServiceValideRule',
-            'PeutValiderServiceRule'                => 'Application\Rule\Intervenant\PeutValiderServiceRule',
-            'ReferentielValideRule'                 => 'Application\Rule\Intervenant\ReferentielValideRule',
-            'NecessiteAgrementRule'                 => 'Application\Rule\Intervenant\NecessiteAgrementRule',
-            'AgrementFourniRule'                    => 'Application\Rule\Intervenant\AgrementFourniRule',
-            'EstAffecteRule'                        => 'Application\Rule\Intervenant\EstAffecteRule',
+            'ApplicationIntervenant'                => Service\Intervenant::class,
+            'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
+            'ApplicationCivilite'                   => Service\Civilite::class,
+            'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
+            'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
+            'ApplicationDossier'                    => Service\Dossier::class,
+            'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
+            'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
+            'PeutSaisirDossierRule'                 => Rule\Intervenant\PeutSaisirDossierRule::class,
+            'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
+            'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
+            'PossedeDossierRule'                    => Rule\Intervenant\PossedeDossierRule::class,
+            'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
+            'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
+            'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
+            'NecessiteAgrementRule'                 => Rule\Intervenant\NecessiteAgrementRule::class,
+            'AgrementFourniRule'                    => Rule\Intervenant\AgrementFourniRule::class,
+            'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
         ],
     ],
     'view_helpers'    => [
         'invokables'   => [
-            'formuleTotauxHetd' => 'Application\View\Helper\Intervenant\TotauxHetdViewHelper',
-            'Intervenant'       => 'Application\View\Helper\Intervenant\IntervenantViewHelper',
+            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
+            'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
         ],
         'initializers' => [
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'IntervenantDossier'                            => 'Application\Form\Intervenant\Dossier',
-            'IntervenantHeuresCompForm'                     => 'Application\Form\Intervenant\HeuresCompForm',
-            'IntervenantModificationServiceDuForm'          => 'Application\Form\Intervenant\ModificationServiceDuForm',
-            'IntervenantModificationServiceDuFieldset'      => 'Application\Form\Intervenant\ModificationServiceDuFieldset',
-            'IntervenantMotifModificationServiceDuFieldset' => 'Application\Form\Intervenant\MotifModificationServiceDuFieldset',
+            'intervenantForm'                               => Form\Intervenant\IntervenantForm::class,
+            'IntervenantDossier'                            => Form\Intervenant\Dossier::class,
+            'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
+            'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
+            'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,
+            'IntervenantMotifModificationServiceDuFieldset' => Form\Intervenant\MotifModificationServiceDuFieldset::class,
         ],
     ],
 ];

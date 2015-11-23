@@ -102,6 +102,47 @@ function changementAnnee(annee)
     );
 }
 
+/**
+ *
+ * @constructor
+ */
+$.widget("ose.intervenantRecherche", {
+
+    rechercher: function( critere )
+    {
+        var that = this;
 
 
+        if (critere.length > 1) {
+            if (that.getElementRecherche().find('.loading').length == 0){
+                that.getElementRecherche().prepend('<div class="loading"></div>');
+            }
+            that.getElementRecherche().refresh({critere: critere}, function( response, status, xhr ){
+                if ( status == "error" ) {
+                    var msg = "Sorry but there was an error: ";
+                    that.getElementRecherche().html( msg + xhr.status + " " + xhr.statusText + xhr.responseText );
+                }
+            });
+        }
+    },
+
+    _create: function ()
+    {
+        var that = this;
+
+        this.element.find( "#critere" ).autocomplete({
+            source: function( event, ui ) {
+                that.rechercher(event.term);
+                return {};
+            }
+        });
+    },
+
+    getElementRecherche : function () { return this.element.find('.recherche'); },
+});
+
+$(function ()
+{
+    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche');
+});
 

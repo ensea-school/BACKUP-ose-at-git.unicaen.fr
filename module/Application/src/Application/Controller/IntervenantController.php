@@ -2,11 +2,16 @@
 
 namespace Application\Controller;
 
+use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
+use Application\Traits\SessionContainerTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\TypeHeuresAwareTrait;
 
 /**
  * Description of IntervenantController
@@ -14,170 +19,109 @@ use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
  * @method \Doctrine\ORM\EntityManager                em()
  * @method \Application\Controller\Plugin\Context     context()
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class IntervenantController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use WorkflowIntervenantAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\IntervenantAwareTrait,
-        \Application\Service\Traits\TypeHeuresAwareTrait
-    ;
+    use WorkflowIntervenantAwareTrait;
+    use ContextAwareTrait;
+    use IntervenantAwareTrait;
+    use TypeHeuresAwareTrait;
+    use HeuresCompFormAwareTrait;
+    use SessionContainerTrait;
 
-    /**
-     * @var Intervenant
-     */
-    private $intervenant;
 
-    /**
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
+
+
+
     public function indexAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if ($role instanceof \Application\Acl\IntervenantRole) {
+        if ($intervenant = $role->getIntervenant()) {
             // redirection selon le workflow
-            $intervenant = $role->getIntervenant();
             $wf  = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
             $url = $wf->getCurrentStepUrl();
             if (!$url) {
                 $url = $wf->getStepUrl($wf->getLastStep());
             }
+
             return $this->redirect()->toUrl($url);
         }
 
         return $this->redirect()->toRoute('intervenant/rechercher');
     }
 
+
+
     public function rechercherAction()
     {
-        $view = $this->choisirAction();
-
-        if ($this->intervenant) {
-            $this->addIntervenantChoisiRecent($this->intervenant);
-            return $this->redirect()->toRoute('intervenant/fiche', ['intervenant' => $this->intervenant->getSourceCode()]);
-        }
-
-        $view->setTemplate('application/intervenant/choisir');
-
-        return $view;
+        $recents = $this->getIntervenantsRecents();
+        return compact('recents');
     }
 
-    /**
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function choisirAction()
+
+
+    public function rechercheAction()
     {
-        $intervenant = $this->context()->intervenantFromQuery();
+        $this->em()->getFilters()->enable('historique')->init([
+            Intervenant::class,
+        ]);
 
-        $url    = $this->url()->fromRoute('recherche', ['action' => 'intervenantFind']);
-        $interv = new \UnicaenApp\Form\Element\SearchAndSelect('interv');
-        $interv->setAutocompleteSource($url)
-                ->setRequired(true)
-                ->setSelectionRequired(true)
-                ->setLabel("Recherchez l'intervenant concerné :")
-                ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-        if ($intervenant) {
-            $f = new \Common\Filter\IntervenantTrouveFormatter();
-            $interv->setValue($f->filter($intervenant));
-        }
-        $form = new \Zend\Form\Form('search');
-        $form->setAttributes([
-            'action' => $this->getRequest()->getRequestUri(),
-            'class'  => 'intervenant-rech']);
-        $form->add($interv);
+        $critere      = $this->params()->fromPost('critere');
+        $intervenants = $this->getServiceIntervenant()->recherche($critere, 21);
 
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $sourceCode = $form->get('interv')->getValueId();
-                $this->getRequest()->getQuery()->set('sourceCode', $sourceCode);
-                $this->intervenant = $this->importerAction()->getVariable('intervenant');
-                if (($redirect = $this->params()->fromQuery('redirect'))) {
-                    $redirect = str_replace('__sourceCode__', $sourceCode, $redirect);
-                    return $this->redirect()->toUrl($redirect);
-                }
-            }
-        }
-
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('application/intervenant/choisir')
-                ->setVariables([
-                    'form'    => $form,
-                    'title'   => "Rechercher un intervenant",
-                    'recents' => $this->getIntervenantsChoisisRecents()]);
-
-        return $viewModel;
+        return compact('intervenants');
     }
 
-    public function importerAction()
-    {
-        if (!($sourceCode = $this->params()->fromQuery('sourceCode', $this->params()->fromPost('sourceCode')))) {
-            throw new LogicException("Aucun code source d'intervenant spécifié.");
-        }
 
-        $intervenant = $this->getServiceIntervenant()->importer($sourceCode);
-
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(['intervenant' => $intervenant]);
-        return $view;
-    }
 
     public function voirAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $role->getIntervenant();
-        } else {
-            $intervenant = $this->getEvent()->getParam('intervenant');
+        if (! $intervenant){
+            throw new \LogicException('Intervenant introuvable');
         }
 
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'role'));
+        $this->addIntervenantRecent($intervenant);
 
-        return $view;
+        return compact('intervenant', 'role');
     }
+
+
 
     public function apercevoirAction()
     {
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $title       = "Aperçu d'un intervenant";
 
-        $import = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->intervenantGetDifferentiel($intervenant);
-        $title = "Aperçu d'un intervenant";
-        $short = $this->params()->fromQuery('short', false);
-
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'changements', 'title', 'short'));
-        return $view;
+        return compact('intervenant', 'title');
     }
+
+
 
     public function voirHeuresCompAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Service',
-            'Application\Entity\Db\VolumeHoraire'
+            \Application\Entity\Db\Service::class,
+            \Application\Entity\Db\VolumeHoraire::class,
         ]);
 
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $form = $this->getFormHeuresComp();
+        $form = $this->getFormIntervenantHeuresComp();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
         /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
-        if (! isset($typeVolumeHoraire)){
+        if (!isset($typeVolumeHoraire)) {
             throw new LogicException('Type de volume horaire erroné');
         }
 
         $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
         /* @var $etatVolumeHoraire \Application\Entity\Db\EtatVolumeHoraire */
-        if (! isset($etatVolumeHoraire)){
+        if (!isset($etatVolumeHoraire)) {
             throw new LogicException('Etat de volume horaire erroné');
         }
 
@@ -202,134 +146,148 @@ class IntervenantController extends AbstractActionController implements Workflow
         ];
 
         $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel();
-        foreach( $referentiels as $referentiel ){
+        foreach ($referentiels as $referentiel) {
             /* @var $referentiel \Application\Entity\Db\FormuleServiceReferentiel */
 
-            if (! isset($data['referentiel'][$referentiel->getStructure()->getId()])){
+            if (!isset($data['referentiel'][$referentiel->getStructure()->getId()])) {
                 $data['referentiel'][$referentiel->getStructure()->getId()] = [
-                    'structure' => $referentiel->getStructure(),
-                    'heures'    => 0,
-                    'hetd'      => 0,
-                    'hetd-compl'=> 0,
+                    'structure'  => $referentiel->getStructure(),
+                    'heures'     => 0,
+                    'hetd'       => 0,
+                    'hetd-compl' => 0,
                 ];
             }
-            $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures( $typeVolumeHoraire, $etatVolumeHoraire );
+            $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures($typeVolumeHoraire, $etatVolumeHoraire);
             $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr ?$frr->getHeuresServiceReferentiel() : 0;
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr ? $frr->getHeuresServiceReferentiel() : 0;
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
         }
 
         $services = $intervenant->getFormuleIntervenant()->getFormuleService();
-        foreach( $services as $service ){
+        foreach ($services as $service) {
             $dsId = $service->getId();
-            $ds = [];
+            $ds   = [];
 
             /* @var $service \Application\Entity\Db\FormuleService */
             $typesIntervention = [];
-            $totalHeures = 0;
+            $totalHeures       = 0;
 
             $fvhs = $service->getFormuleVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire);
-            foreach( $fvhs as $fvh ){ /* @var $fvh \Application\Entity\Db\FormuleVolumeHoraire */
+            foreach ($fvhs as $fvh) {
+                /* @var $fvh \Application\Entity\Db\FormuleVolumeHoraire */
                 $totalHeures += $fvh->getHeures();
-                if (! isset($typesIntervention[$fvh->getTypeIntervention()->getId()])) $typesIntervention[$fvh->getTypeIntervention()->getId()] = [
-                    'type-intervention' => $fvh->getTypeIntervention(),
-                    'heures'            => 0,
-                    'hetd'              => 0,
-                ];
+                if (!isset($typesIntervention[$fvh->getTypeIntervention()->getId()])) {
+                    $typesIntervention[$fvh->getTypeIntervention()->getId()] = [
+                        'type-intervention' => $fvh->getTypeIntervention(),
+                        'heures'            => 0,
+                        'hetd'              => 0,
+                    ];
+                }
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
                 $hetd = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getTotal();
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd'] += $hetd;
             }
 
-            if ($totalHeures > 0){
-                $frs = $service->getService()->getUniqueFormuleResultatService( $typeVolumeHoraire, $etatVolumeHoraire );
-                if (1.0 !== $service->getPonderationServiceCompl()){
+            if ($totalHeures > 0) {
+                $frs = $service->getService()->getUniqueFormuleResultatService($typeVolumeHoraire, $etatVolumeHoraire);
+                if (1.0 !== $service->getPonderationServiceCompl()) {
                     $data['has-ponderation-service-compl'] = true;
                 }
                 $ds = [
-                    'element-etablissement'         => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique() : $service->getService()->getEtablissement(),
-                    'taux'                          => [],
-                    'structure'                     => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique()->getStructure() : $service->getService()->getIntervenant()->getStructure(),
-                    'ponderation-service-compl'     => $service->getPonderationServiceCompl(),
-                    'heures'                        => [],
-                    'hetd'                          => [
+                    'element-etablissement'     => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique() : $service->getService()->getEtablissement(),
+                    'taux'                      => [],
+                    'structure'                 => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique()->getStructure() : $service->getService()->getIntervenant()->getStructure(),
+                    'ponderation-service-compl' => $service->getPonderationServiceCompl(),
+                    'heures'                    => [],
+                    'hetd'                      => [
                         'total' => 0,
-                    ]
+                    ],
                 ];
 
-                foreach( $typesHeures as $typeHeures ){
+                foreach ($typesHeures as $typeHeures) {
                     /* @var $typeHeures \Application\Entity\Db\TypeHeures */
                     // taux
-                    try{
+                    try {
                         $h = $service->getTaux($typeHeures);
                     } catch (\Exception $ex) {
                         $h = 0.0;
                     }
-                    if ($h > 0){
-                        $ds['taux'][$typeHeures->getId()] = $h;
+                    if ($h > 0) {
+                        $ds['taux'][$typeHeures->getId()]      = $h;
                         $data['th-taux'][$typeHeures->getId()] = $typeHeures;
                     }
 
                     // HETD service
-                    try{
+                    try {
                         $h = $frs->getHeuresService($typeHeures);
                     } catch (\Exception $ex) {
                         $h = 0.0;
                     }
-                    if ($h > 0){
+                    if ($h > 0) {
                         $ds['hetd']['service'][$typeHeures->getId()] = $h;
-                        $data['th-service'][$typeHeures->getId()] = $typeHeures;
+                        $data['th-service'][$typeHeures->getId()]    = $typeHeures;
                     }
 
                     // HETD compl
-                    try{
+                    try {
                         $h = $frs->getHeuresCompl($typeHeures);
                     } catch (\Exception $ex) {
                         $h = 0.0;
                     }
-                    if ($h > 0){
+                    if ($h > 0) {
                         $ds['hetd']['compl'][$typeHeures->getId()] = $h;
-                        $data['th-compl'][$typeHeures->getId()] = $typeHeures;
+                        $data['th-compl'][$typeHeures->getId()]    = $typeHeures;
                     }
                 }
 
-                foreach( $typesIntervention as $ti ){
-                    if ( $ti['heures'] > 0 ){
+                foreach ($typesIntervention as $ti) {
+                    if ($ti['heures'] > 0) {
                         $data['types-intervention'][$ti['type-intervention']->getId()] = $ti['type-intervention'];
-                        $ds['heures'][$ti['type-intervention']->getId()] = $ti['heures'];
-                        $ds['hetd'][$ti['type-intervention']->getId()] = $ti['hetd'];
+                        $ds['heures'][$ti['type-intervention']->getId()]               = $ti['heures'];
+                        $ds['hetd'][$ti['type-intervention']->getId()]                 = $ti['hetd'];
                     }
                 }
                 $data['services'][$dsId] = $ds;
             }
         }
 
-        usort($data['types-intervention'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
-        usort($data['th-taux'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
-        usort($data['th-service'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
-        usort($data['th-compl'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
+        usort($data['types-intervention'], function ($ti1, $ti2) {
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        });
+        usort($data['th-taux'], function ($ti1, $ti2) {
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        });
+        usort($data['th-service'], function ($ti1, $ti2) {
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        });
+        usort($data['th-compl'], function ($ti1, $ti2) {
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        });
+
         return compact('form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
     }
 
+
+
     public function formuleTotauxHetdAction()
     {
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant Intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+
         return compact('formuleResultat');
     }
+
+
 
     public function feuilleDeRouteAction()
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $role->getIntervenant();
-        }
-        else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        }
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
 
         if ($intervenant->estPermanent()) {
             throw new \Common\Exception\MessageException("Pas encore implémenté pour un permanent");
@@ -337,80 +295,79 @@ class IntervenantController extends AbstractActionController implements Workflow
 
         $title = sprintf("Feuille de route <small>%s</small>", $intervenant);
 
-        $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
+        $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
+        /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
         $wf->init();
-
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'title', 'wf', 'role'));
 
         if ($wf->getCurrentStep()) {
 //            var_dump($wf->getStepUrl($wf->getCurrentStep()));
         }
 
-        return $view;
+        return compact('intervenant', 'title', 'wf', 'role');
     }
 
-    private $intervenantsChoisisRecentsSessionContainer;
 
-    /**
-     * @return \Zend\Session\Container
-     */
-    protected function getIntervenantsChoisisRecentsSessionContainer()
-    {
-        if (null === $this->intervenantsChoisisRecentsSessionContainer) {
-            $container = new \Zend\Session\Container(get_class() . '_IntervenantsChoisisRecents');
-            $container->setExpirationSeconds(3*60*60); // 3 heures
-            $this->intervenantsChoisisRecentsSessionContainer = $container;
-        }
-        return $this->intervenantsChoisisRecentsSessionContainer;
-    }
 
     /**
      *
-     * @param bool $clear
      * @return array
      */
-    protected function getIntervenantsChoisisRecents($clear = false)
+    protected function getIntervenantsRecents()
     {
-        $container = $this->getIntervenantsChoisisRecentsSessionContainer();
-        if ($clear) {
-            unset($container->intervenants);
+        $container = $this->getSessionContainer();
+
+        if (isset($container->recents)) {
+            return $container->recents;
+        } else {
+            return [];
         }
-        if (!isset($container->intervenants)) {
-            $container->intervenants = [];
-        }
-        return $container->intervenants;
     }
+
+
 
     /**
      *
      * @param \Application\Entity\Db\Intervenant $intervenant
+     *
      * @return \Application\Controller\IntervenantController
      */
-    protected function addIntervenantChoisiRecent(Intervenant $intervenant)
+    protected function addIntervenantRecent(Intervenant $intervenant)
     {
-        $container    = $this->getIntervenantsChoisisRecentsSessionContainer();
-        $intervenants = (array) $container->intervenants;
-
-        if (!array_key_exists($intervenant->getId(), $intervenants)) {
-            $intervenants["" . $intervenant] = [
-                'id'         => $intervenant->getId(),
-                'sourceCode' => $intervenant->getSourceCode(),
-                'nom'        => "" . $intervenant,
-            ];
-            ksort($intervenants);
+        $container = $this->getSessionContainer();
+        if (!isset($container->recents)) {
+            $container->recents = [];
         }
-        $container->intervenants = $intervenants;
+
+        if (count($container->recents) > 4 && !isset($container->recents[$intervenant->getSourceCode()])) {
+            $prem = (int)date('U');
+            foreach ($container->recents as $i) {
+                $horo = $i['__horo_ajout__'];
+                if ($horo) {
+                    if ($prem >= $horo) $prem = $horo;
+                }
+            }
+            foreach ($container->recents as $index => $i) {
+                $horo = $i['__horo_ajout__'];
+                if ($horo == $prem) {
+                    unset($container->recents[$index]);
+                }
+            }
+        }
+
+        $container->recents[$intervenant->getSourceCode()] = [
+            'civilite'         => $intervenant->getCivilite()->getLibelleLong(),
+            'nom'              => $intervenant->getNomUsuel(),
+            'prenom'           => $intervenant->getPrenom(),
+            'date-naissance'   => $intervenant->getDateNaissance(),
+            'structure'        => $intervenant->getStructure()->getLibelleCourt(),
+            'numero-personnel' => $intervenant->getSourceCode(),
+            '__horo_ajout__'   => (int)date('U'),
+        ];
+
+        uasort($container->recents, function ($a, $b) {
+            return $a['nom'] . ' ' . $a['prenom'] > $b['nom'] . ' ' . $b['prenom'];
+        });
 
         return $this;
-    }
-
-    /**
-     *
-     * @return \Application\Form\Intervenant\HeuresCompForm
-     */
-    protected function getFormHeuresComp()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantHeuresCompForm');
     }
 }

@@ -16,7 +16,8 @@ from
   LEFT JOIN structure s ON s.id = a.structure_id AND s.histo_destruction IS NULL
 WHERE
   a.histo_destruction IS NULL
-  AND s.source_code IN ('12')
+  AND p.id = 219
+  --AND s.source_code IN ('12')
   --AND src.code = 'OSE'
 ORDER BY
   structure, nom, source, role;

@@ -4,10 +4,10 @@ namespace Application\Service;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
-use Application\Entity\Db\Annee         as AnneeEntity;
-use Application\Entity\Db\Structure     as StructureEntity;
+use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Traits\SessionContainerTrait;
 use DateTime;
-use Zend\Session\Container;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -21,7 +21,7 @@ class Context extends AbstractService
     use Traits\IntervenantAwareTrait;
     use Traits\ParametresAwareTrait;
     use Traits\StructureAwareTrait;
-
+    use SessionContainerTrait;
 
     /**
      * selectedIdentityRole
@@ -67,12 +67,6 @@ class Context extends AbstractService
      */
     protected $parametres;
 
-    /**
-     * @var Container
-     */
-    protected $sessionContainer;
-
-
 
 
 
@@ -88,19 +82,14 @@ class Context extends AbstractService
 
             if ($authUserContext->getIdentity()) {
                 $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
-                if (
-                    $this->selectedIdentityRole instanceof \Application\Acl\IntervenantRole
-                    && ! $this->selectedIdentityRole->getIntervenant()
-                ){
-                    // import automatique
-                    $iSourceCode = (int)$authUserContext->getLdapUser()->getSupannEmpId();
-                    $intervenant = $this->getServiceIntervenant()->importer($iSourceCode);
-                    $this->selectedIdentityRole->setIntervenant( $intervenant ); // injection à la volée de l'intervenant
-                }
+                if (! $this->selectedIdentityRole instanceof Role) $this->selectedIdentityRole = new Role();
             }
         }
+
         return $this->selectedIdentityRole;
     }
+
+
 
     /**
      *
@@ -108,57 +97,68 @@ class Context extends AbstractService
      */
     public function getEtablissement()
     {
-        if (! $this->etablissement){
+        if (!$this->etablissement) {
             $sc = $this->getSessionContainer();
-            if (! $sc->offsetExists('etablissement')){
+            if (!$sc->offsetExists('etablissement')) {
                 $sc->etablissement = (int)$this->getServiceParametres()->etablissement;
             }
-            $this->etablissement = $this->getServiceEtablissement()->get( $sc->etablissement);
+            $this->etablissement = $this->getServiceEtablissement()->get($sc->etablissement);
         }
+
         return $this->etablissement;
     }
+
+
 
     /**
      *
      * @param EntityEtablissement $etablissement
-     * @param boolean $updateParametres
+     * @param boolean             $updateParametres
+     *
      * @return self
      */
-    public function setEtablissement( EntityEtablissement $etablissement, $updateParametres=false )
+    public function setEtablissement(EntityEtablissement $etablissement, $updateParametres = false)
     {
-        $this->etablissement = $etablissement;
+        $this->etablissement                        = $etablissement;
         $this->getSessionContainer()->etablissement = $etablissement->getId();
-        if ($updateParametres){
+        if ($updateParametres) {
             $this->getServiceParametres()->etablissement = (string)$etablissement->getId();
         }
+
         return $this;
     }
 
+
+
     /**
-     * Retourne l'année courante. 
+     * Retourne l'année courante.
      * C'est à dire :
-     * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ; 
+     * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ;
      * - ou sinon celle spécifiée dans les paramètres de l'appli.
      *
      * @return AnneeEntity
      */
     public function getAnnee()
     {
-        if (! $this->annee){
+        if (!$this->annee) {
             $sc = $this->getSessionContainer();
-            if (! $sc->offsetExists('annee')){
+            if (!$sc->offsetExists('annee')) {
                 $sc->annee = (int)$this->getServiceParametres()->annee;
             }
 
-            $this->annee = $this->getServiceAnnee()->get( $sc->annee);
+            $this->annee = $this->getServiceAnnee()->get($sc->annee);
         }
+
         return $this->annee;
     }
+
+
 
     /**
      * Retourne l'année N - x, N étant l'année courante.
      *
      * @param int $x Entier supérieur ou égal à zéro
+     *
      * @return AnneeEntity
      */
     public function getAnneeNmoins($x)
@@ -166,17 +166,22 @@ class Context extends AbstractService
         return $this->getServiceAnnee()->getNmoins($this->getAnnee(), $x);
     }
 
+
+
     /**
      *
      * @return AnneeEntity
      */
     public function getAnneePrecedente()
     {
-        if (! $this->anneePrecedente){
-            $this->anneePrecedente = $this->getServiceAnnee()->getPrecedente( $this->getAnnee() );
+        if (!$this->anneePrecedente) {
+            $this->anneePrecedente = $this->getServiceAnnee()->getPrecedente($this->getAnnee());
         }
+
         return $this->anneePrecedente;
     }
+
+
 
     /**
      *
@@ -184,30 +189,37 @@ class Context extends AbstractService
      */
     public function getAnneeSuivante()
     {
-        if (! $this->anneeSuivante){
-            $this->anneeSuivante = $this->getServiceAnnee()->getSuivante( $this->getAnnee() );
+        if (!$this->anneeSuivante) {
+            $this->anneeSuivante = $this->getServiceAnnee()->getSuivante($this->getAnnee());
         }
+
         return $this->anneeSuivante;
     }
+
+
 
     /**
      *
      * @param AnneeEntity $annee
-     * @param boolean $updateParametres
+     * @param boolean     $updateParametres
+     *
      * @return self
      */
-    public function setAnnee( AnneeEntity $annee, $updateParametres=false )
+    public function setAnnee(AnneeEntity $annee, $updateParametres = false)
     {
-        $this->annee = $annee;
+        $this->annee                        = $annee;
         $this->getSessionContainer()->annee = $annee->getId();
-        if ($updateParametres){
+        if ($updateParametres) {
             $this->getServiceParametres()->annee = (string)$annee->getId();
         }
         /* Rafraîchit les années précédentes et suivantes par la même occasion!! */
         $this->getAnneePrecedente();
         $this->getAnneeSuivante();
+
         return $this;
     }
+
+
 
     /**
      *
@@ -216,122 +228,132 @@ class Context extends AbstractService
     function getDateObservation()
     {
         $sc = $this->getSessionContainer();
-        if (! $sc->offsetExists('dateObservation')){
+        if (!$sc->offsetExists('dateObservation')) {
             $sc->dateObservation = null;
         }
+
         return $sc->dateObservation;
     }
+
+
 
     /**
      *
      * @param DateTime $dateObservation
+     *
      * @return self
      */
-    public function setDateObservation( DateTime $dateObservation )
+    public function setDateObservation(DateTime $dateObservation)
     {
         $sc->dateObservation = $dateObservation;
+
         return $this;
     }
 
+
+
     /**
-     * 
+     *
      * @return DateTime
      */
     function getDateFinSaisiePermanents()
     {
         $sc = $this->getSessionContainer();
-        if (! $sc->offsetExists('dateFinSaisiePermanents')){
+        if (!$sc->offsetExists('dateFinSaisiePermanents')) {
             $sc->dateFinSaisiePermanents = DateTime::createFromFormat(
-                                                'd/m/Y',
-                                                $this->getServiceParametres()->date_fin_saisie_permanents
-                                           );
+                'd/m/Y',
+                $this->getServiceParametres()->date_fin_saisie_permanents
+            );
         }
+
         return $sc->dateFinSaisiePermanents;
     }
+
+
 
     /**
      *
      * @param DateTime $dateFinSaisiePermanents
+     *
      * @return self
      */
-    public function setDateFinSaisiePermanents( DateTime $dateFinSaisiePermanents, $updateParametres=false )
+    public function setDateFinSaisiePermanents(DateTime $dateFinSaisiePermanents, $updateParametres = false)
     {
         $sc->dateFinSaisiePermanents = $dateFinSaisiePermanents;
-        if ($updateParametres){
+        if ($updateParametres) {
             $this->getServiceParametres()->date_fin_saisie_permanents = $sc->dateFinSaisiePermanents->format('d/m/Y');
         }
+
         return $this;
     }
+
+
 
     /**
      *
      * @return StructureEntity
      */
-    public function getStructure($initializing=false)
+    public function getStructure($initializing = false)
     {
-        if (! $this->structure){
+        if (!$this->structure) {
             $sc = $this->getSessionContainer();
-            if (! $sc->offsetExists('structure')){
-                if ($initializing){
+            if (!$sc->offsetExists('structure')) {
+                if ($initializing) {
                     $sc->structure = null;
-                }else{
+                } else {
                     $role = $this->getSelectedIdentityRole();
-                    if ($role && $role->getStructure()){
+                    if ($role && $role->getStructure()) {
                         $sc->structure = $role->getStructure()->getId();
-                    }else{
+                    } else {
                         $sc->structure = null;
                     }
                 }
             }
-            $this->structure = $this->getServiceStructure()->get( $sc->structure);
+            $this->structure = $this->getServiceStructure()->get($sc->structure);
         }
+
         return $this->structure;
     }
+
+
 
     /**
      *
      * @param StructureEntity $structure
-     * @param boolean $updateParametres
+     * @param boolean         $updateParametres
+     *
      * @return self
      */
-    public function setStructure( $structure )
+    public function setStructure($structure)
     {
-        if ($structure instanceof StructureEntity){
-            $this->structure = $structure;
+        if ($structure instanceof StructureEntity) {
+            $this->structure                        = $structure;
             $this->getSessionContainer()->structure = $structure->getId();
-        }else{
-            $this->structure = null;
+        } else {
+            $this->structure                        = null;
             $this->getSessionContainer()->structure = null;
         }
+
         return $this;
     }
-    
+
+
+
     /**
      * Détermine si l'application était opérationnelle l'année spécifiée.
-     * 
+     *
      * On considère que s'il existe des intervenants pour l'année spécifiée, alors
      * l'application était opérationnelle.
-     * 
+     *
      * @param AnneeEntity $annee
+     *
      * @return boolean
      */
     public function applicationExists(AnneeEntity $annee)
     {
         $qb    = $this->getServiceIntervenant()->finderByAnnee($annee);
-        $found = (int) $qb->select("COUNT(int)")->getQuery()->getSingleScalarResult();
-        
-        return (bool) $found;
-    }
+        $found = (int)$qb->select("COUNT(int)")->getQuery()->getSingleScalarResult();
 
-    /**
-     * @return Container
-     */
-    protected function getSessionContainer()
-    {
-        if (null === $this->sessionContainer) {
-            $this->sessionContainer = new Container(__CLASS__);
-        }
-        return $this->sessionContainer;
+        return (bool)$found;
     }
-
 }

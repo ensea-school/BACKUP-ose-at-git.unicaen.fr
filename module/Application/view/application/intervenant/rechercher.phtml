@@ -1,38 +1,25 @@
-<div class="jumbotron">
-    <h1>Rechercher un intervenant</h1>
-</div>
+<?php
+    /* @var $recents []  */
+?>
+<h1>Rechercher un intervenant</h1>
 
-<?php $form->prepare(); ?>
-
-<div class="row">
-    <div class="col-md-4">
-        <?php echo $this->form()->openTag($form) ?>
-        <?php echo $this->formControlGroup($form->get('interv')); ?>
-        <input class="btn btn-primary" type="submit" value="Consulter" name="submit">
-        <?php echo $this->form()->closeTag() ?>
+<div style="padding:1em">
+<div class="intervenant-recherche">
+    <div class="critere">
+        Saisissez le nom suivi éventuellement du prénom (2 lettres au moins) :
+        <input id="critere" class="form-control input" type="text"  />
     </div>
-    <div class="col-md-8 intervenant-voir">
-        <?php if (false !== $intervenant): ?>
-            <?php echo $intervenant ? $this->intervenant($intervenant) : "Intervenant introuvable dans OSE." ?>
-        <?php endif ?>
-        <?php if ($intervenant): ?>
-            <?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId()) ?>
-        <?php endif ?>
+    <div class="recherche" data-url="<?php echo $this->url('intervenant/recherche') ?>">
+
     </div>
 </div>
 
-<script>
-    var url = '<?php echo $this->url('intervenant/default', ['action' => 'voir']) ?>';
-    $("body").on("submit", "form.intervenant-rech", function(event) {
-        var form = $(event.target);
-        var id = $("input.sas", form).val();
-        $.post(url, { 'id': id }, function(data) {
-            $("div.intervenant-voir").html(data);
-        });
-        event.preventDefault();
-    });
+<?php
 
-    $(function() {
-        $(":input").tooltip();
-    });
-</script>
+if (! empty($recents)){
+    echo '<h3>Fiches récemment consultées :</h3>';
+    echo $this->partial('liste', ['intervenants' => $recents]);
+}
+
+?>
+</div>

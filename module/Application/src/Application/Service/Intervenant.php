@@ -11,6 +11,7 @@ use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
+use UnicaenApp\Util;
 
 /**
  * Description of Intervenant
@@ -20,6 +21,64 @@ use Import\Processus\Import;
 class Intervenant extends AbstractEntityService
 {
     use StatutIntervenantAwareTrait;
+
+
+
+    /**
+     * @param string  $critere
+     * @param integer $limit
+     *
+     * @return array
+     */
+    public function recherche($critere, $limit = 50)
+    {
+        if (strlen($critere) < 2) return [];
+
+        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
+
+        $critere  = Util::reduce($critere);
+        $criteres = explode('_', $critere);
+
+        $sql     = 'SELECT * FROM V_INTERVENANT_RECHERCHE WHERE rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
+        $sqlCri  = '';
+        $criCode = 0;
+
+        foreach ($criteres as $c) {
+            $cc = (int)$c;
+            if (0 === $cc) {
+                if ($sqlCri != '') $sqlCri .= ' AND ';
+                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
+            } else {
+                $criCode = $cc;
+            }
+        }
+        $orc = '';
+        if ($sqlCri != '') {
+            $orc[] = '(' . $sqlCri . ')';
+        }
+        if ($criCode) {
+            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
+        }
+        $orc = implode(' OR ', $orc);
+        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
+//        sqlDump($sql);
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        $intervenants = [];
+        while ($r = $stmt->fetch()) {
+            $intervenants[$r['SOURCE_CODE']] = [
+                'civilite'         => $r['CIVILITE'],
+                'nom'              => $r['NOM_USUEL'],
+                'prenom'           => $r['PRENOM'],
+                'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
+                'structure'        => $r['STRUCTURE'],
+                'numero-personnel' => $r['SOURCE_CODE'],
+            ];
+        }
+
+        return $intervenants;
+    }
 
 
 
@@ -98,7 +157,18 @@ class Intervenant extends AbstractEntityService
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
+        $findParams = ['sourceCode' => $sourceCode, 'annee' => $annee->getId()];
+        $repo       = $this->getRepo();
+
+        $result = $repo->findOneBy($findParams);
+        if (!$result) {
+            $import = $this->getServiceLocator()->get('importProcessusImport');
+            /* @var $import Import */
+            $import->intervenant($sourceCode);
+            $result = $repo->findOneBy($findParams); // on retente
+        }
+
+        return $result;
     }
 
 
@@ -226,10 +296,8 @@ class Intervenant extends AbstractEntityService
         /* @var $import Import */
         $import->intervenant($sourceCode);
 
-        $repo = $this->getEntityManager()->getRepository($this->getEntityClass());
-
-        if (!($intervenant = $repo->findOneBySourceCode($sourceCode))) {
-            throw new RuntimeException("Vous n'êtes pas autorisé à vous connecter à OSE avec ce compte. Vous vous prions de vous rapprocher de votre composante pour en obtenir un valide.");
+        if (!($intervenant = $this->getRepo()->findOneBySourceCode($sourceCode))) {
+            //    throw new RuntimeException("Vous n'êtes pas autorisé à vous connecter à OSE avec ce compte. Vous vous prions de vous rapprocher de votre composante pour en obtenir un valide.");
         }
 
         return $intervenant;

@@ -8,6 +8,7 @@ use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Form;
+use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Util;
@@ -18,7 +19,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
  */
-class AffectationForm extends Form\Form implements ServiceLocatorAwareInterface
+class AffectationForm extends Form\Form implements ServiceLocatorAwareInterface, InputFilterProviderInterface
 {
     use ServiceLocatorAwareTrait;
     use StructureAwareTrait;

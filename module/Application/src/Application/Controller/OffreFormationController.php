@@ -208,9 +208,9 @@ class OffreFormationController extends AbstractActionController
             'Taux FI',
             'Taux FA',
             'Taux FC',
-            'Effectifs FI',
-            'Effectifs FA',
-            'Effectifs FC',
+            'Effectifs FI actuels',
+            'Effectifs FA actuels',
+            'Effectifs FC actuels',
         ]);
         foreach ($elements as $element) {
             $etape      = $element->getEtape();

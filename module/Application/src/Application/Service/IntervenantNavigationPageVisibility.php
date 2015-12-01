@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Acl\Role;
 use Application\Rule\Intervenant\Navigation\VoitPageRule;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -20,8 +21,7 @@ class IntervenantNavigationPageVisibility extends AbstractService implements Wor
     {
         $role  = $this->getServiceContext()->getSelectedIdentityRole();
         
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $role->getIntervenant();
+        if ($role instanceof Role && $intervenant = $role->getIntervenant()) {
             $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
             
             return $this->isPageVisible($intervenant, $page, $wf, $intervenant->getAnnee());

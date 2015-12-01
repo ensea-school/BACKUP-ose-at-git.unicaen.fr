@@ -72,9 +72,9 @@ class PieceJointeController extends AbstractActionController implements Workflow
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\PieceJointe',
-            'Application\Entity\Db\TypePieceJointe',
-            'Application\Entity\Db\Fichier',
+            \Application\Entity\Db\PieceJointe::class,
+            \Application\Entity\Db\TypePieceJointe::class,
+            \Application\Entity\Db\Fichier::class,
         ]);
     }
 

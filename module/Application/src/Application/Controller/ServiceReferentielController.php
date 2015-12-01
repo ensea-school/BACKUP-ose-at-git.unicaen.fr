@@ -37,10 +37,9 @@ class ServiceReferentielController extends AbstractActionController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ServiceReferentiel',
-            'Application\Entity\Db\FonctionReferentiel',
-            'Application\Entity\Db\Structure',
-            'Application\Entity\Db\VolumeHoraireReferentiel',
+            \Application\Entity\Db\ServiceReferentiel::class,
+            \Application\Entity\Db\FonctionReferentiel::class,
+            \Application\Entity\Db\VolumeHoraireReferentiel::class,
         ]);
     }
 
@@ -154,6 +153,9 @@ class ServiceReferentielController extends AbstractActionController
     public function saisieAction()
     {
         $this->initFilters();
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\Structure::class,
+        ]);
         $id                = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
         if (empty($typeVolumeHoraire)) {

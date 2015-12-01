@@ -497,90 +497,90 @@ return [
         ],
     ],
     'bjyauthorize'    => [
-    'guards'             => [
-        Guard\PrivilegeController::class => [
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['rechercher'],
-                'privileges' => [
-                    Privilege::INTERVENANT_RECHERCHE,
-                ],
-            ],
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['index', 'voir', 'fiche'],
-                'privileges' => [
-                    Privilege::INTERVENANT_FICHE,
-                ],
-            ],
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['saisir'],
-                'privileges' => [
-                    Privilege::INTERVENANT_EDITION,
-                ],
-            ],
-            [
-                'controller' => 'Application\Controller\ModificationServiceDu',
-                'action'     => ['saisir'],
-                'privileges' => [
-                    Privilege::MODIF_SERVICE_DU_VISUALISATION,
-                ],
-                'assertion'  => 'ModificationServiceDuAssertion',
-            ],
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['voir-heures-comp'],
-                'privileges' => [
-                    Privilege::INTERVENANT_CALCUL_HETD,
-                ],
-            ],
-        ],
-        'BjyAuthorize\Guard\Controller'  => [
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['formule-totaux-hetd'],
-                'roles'      => $R_ALL,
-            ],
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['apercevoir',],
-                'roles'      => ['user'],
-            ],
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['feuille-de-route'],
-                'roles'      => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
-            ],
-            [
-                'controller' => 'Application\Controller\Intervenant',
-                'action'     => ['choisir', 'rechercher', 'recherche'],
-                'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-            ],
-            [
-                'controller' => 'Application\Controller\Dossier',
-                'action'     => ['voir', 'modifier'],
-                'roles'      => [R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR],
-            ],
-        ],
-    ],
-    'resource_providers' => [
-        'BjyAuthorize\Provider\Resource\Config' => [
-            'Intervenant' => [],
-        ],
-    ],
-    'rule_providers'     => [
-        Provider\Rule\PrivilegeRuleProvider::class => [
-            'allow' => [
+        'guards'             => [
+            Guard\PrivilegeController::class => [
                 [
-                    'privileges' => Privilege::MODIF_SERVICE_DU_EDITION,
-                    'resources'  => 'Intervenant',
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['rechercher'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_RECHERCHE,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['index', 'voir', 'fiche'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_FICHE,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['saisir'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_EDITION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\ModificationServiceDu',
+                    'action'     => ['saisir'],
+                    'privileges' => [
+                        Privilege::MODIF_SERVICE_DU_VISUALISATION,
+                    ],
                     'assertion'  => 'ModificationServiceDuAssertion',
                 ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['voir-heures-comp'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_CALCUL_HETD,
+                    ],
+                ],
+            ],
+            'BjyAuthorize\Guard\Controller'  => [
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['formule-totaux-hetd'],
+                    'roles'      => $R_ALL,
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['apercevoir',],
+                    'roles'      => ['user'],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['feuille-de-route'],
+                    'roles'      => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['choisir', 'rechercher', 'recherche'],
+                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
+                ],
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['voir', 'modifier'],
+                    'roles'      => [R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR],
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'Intervenant' => [],
+            ],
+        ],
+        'rule_providers'     => [
+            Provider\Rule\PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'privileges' => Privilege::MODIF_SERVICE_DU_EDITION,
+                        'resources'  => 'Intervenant',
+                        'assertion'  => 'ModificationServiceDuAssertion',
+                    ],
+                ],
             ],
         ],
     ],
-],
     'controllers'     => [
     'invokables' => [
         'Application\Controller\Intervenant'           => Controller\IntervenantController::class,

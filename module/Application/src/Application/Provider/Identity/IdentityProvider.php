@@ -57,6 +57,10 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             $session->utilisateurCode = $utilisateurCode;
         }
 
+        if ($serviceAuthUserContext->getNextSelectedIdentityRole()){
+            $mustRefresh = true; // on rafraichit si un rôle prochain est forcé!!
+        }
+
         if (! isset($session->roles) || $mustRefresh) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->setServiceLocator($this->getServiceLocator());

@@ -217,7 +217,7 @@ return [
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => ['saisir', 'supprimer'],
-                    'privileges' => Privilege::ODF_ELEMENT_VISUALISATION,
+                    'privileges' => Privilege::ODF_ELEMENT_EDITION,
                 ],
                 /* Modulateurs */
                 [

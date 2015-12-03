@@ -23,7 +23,7 @@ class EditionForm extends Form
         $this->add([
             'name'       => 'montant-indemnite-fc',
             'options'    => [
-                'label' => "Montant de l'indemnité de formation continue (€) :",
+                'label' => "Montant annuel de la rémunération FC D714-60 (€) :",
             ],
             'attributes' => [
                 'value'   => '0',

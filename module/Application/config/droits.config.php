@@ -165,7 +165,7 @@ return [
     ],
     'bjyauthorize' => [
         'guards' => [
-            'Application\Guard\PrivilegeController' => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['index'],
@@ -216,19 +216,19 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Droits' => 'Application\Controller\DroitsController',
+            'Application\Controller\Droits' => Controller\DroitsController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPerimetre' => 'Application\\Service\\Perimetre',
+            'ApplicationPerimetre' => Service\Perimetre::class,
         ],
     ],
     'form_elements' => [
         'invokables' => [
-            'DroitsRoleForm'       => 'Application\Form\Droits\RoleForm',
-            'DroitsPrivilegesForm' => 'Application\Form\Droits\PrivilegesForm',
-            'DroitsAffectationForm'=> 'Application\Form\Droits\AffectationForm',
+            'DroitsRoleForm'       => Form\Droits\RoleForm::class,
+            'DroitsPrivilegesForm' => Form\Droits\PrivilegesForm::class,
+            'DroitsAffectationForm'=> Form\Droits\AffectationForm::class,
         ],
     ],
     'public_files' => [

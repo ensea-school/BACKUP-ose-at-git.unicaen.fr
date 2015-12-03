@@ -3,10 +3,17 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Affectation;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Db\Role;
+use Application\Service\Traits\AffectationAwareTrait;
+use Application\Service\Traits\PersonnelAwareTrait;
+use Application\Service\Traits\RoleAwareTrait;
+use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
+use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Db\StatutIntervenant;
-use Application\Entity\Db\Privilege;
+use UnicaenAuth\Entity\Db\Privilege;
 use Application\Exception\DbException;
 
 /**
@@ -19,14 +26,13 @@ use Application\Exception\DbException;
  */
 class DroitsController extends AbstractActionController
 {
-    use \Application\Service\Traits\RoleAwareTrait,
-        \Application\Service\Traits\StatutIntervenantAwareTrait,
-        \Application\Service\Traits\PrivilegeAwareTrait,
-        \Application\Service\Traits\AffectationAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait,
-        \Application\Service\Traits\PersonnelAwareTrait,
-        \Application\Service\Traits\SourceAwareTrait
-    ;
+    use RoleAwareTrait;
+    use StatutIntervenantAwareTrait;
+    use PrivilegeServiceAwareTrait;
+    use AffectationAwareTrait;
+    use StructureAwareTrait;
+    use PersonnelAwareTrait;
+    use SourceAwareTrait;
 
     /**
      *
@@ -127,7 +133,7 @@ class DroitsController extends AbstractActionController
     {
         $role      = $this->context()->roleFromPost();
         $statut    = $this->context()->statutIntervenantFromPost('statut');
-        $privilege = $this->context()->mandatory()->privilegeFromPost();
+        $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
 
         switch($action){

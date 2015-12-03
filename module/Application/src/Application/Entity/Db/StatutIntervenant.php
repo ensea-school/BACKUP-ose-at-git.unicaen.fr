@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenAuth\Entity\Db\Privilege;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
@@ -728,11 +729,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     /**
      * Add privilege
      *
-     * @param \Application\Entity\Db\Privilege $privilege
+     * @param Privilege $privilege
      *
      * @return StatutIntervenant
      */
-    public function addPrivilege(\Application\Entity\Db\Privilege $privilege)
+    public function addPrivilege(Privilege $privilege)
     {
         $this->privilege[] = $privilege;
 
@@ -744,9 +745,9 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     /**
      * Remove privilege
      *
-     * @param \Application\Entity\Db\Privilege $privilege
+     * @param Privilege $privilege
      */
-    public function removePrivilege(\Application\Entity\Db\Privilege $privilege)
+    public function removePrivilege(Privilege $privilege)
     {
         $this->privilege->removeElement($privilege);
     }

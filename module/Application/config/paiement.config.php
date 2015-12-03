@@ -3,6 +3,8 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -116,7 +118,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            Guard\PrivilegeController::class => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['demandeMiseEnPaiement'],
@@ -157,7 +159,7 @@ return [
             ],
         ],
         'rule_providers'     => [
-            Provider\Rule\PrivilegeRuleProvider::class => [
+            PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,

@@ -3,6 +3,8 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -172,7 +174,7 @@ return [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
-                        'resource' => \UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
+                        'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
                     ],
                 ],
             ],
@@ -180,7 +182,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            'Application\Guard\PrivilegeController' => [
+            PrivilegeController::class => [
                 /* Global */
                 [
                     'controller' => 'Application\Controller\OffreFormation',
@@ -237,7 +239,7 @@ return [
             ],
         ],
         'rule_providers'     => [
-            'Application\Provider\Rule\PrivilegeRuleProvider' => [
+            PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => Privileges::ODF_ELEMENT_EDITION,

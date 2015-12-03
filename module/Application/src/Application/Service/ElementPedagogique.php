@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\PrivilegeEntity;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CheminPedagogiqueAwareTrait;
 use Application\Service\Traits\ElementModulateurAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
@@ -247,7 +247,7 @@ where rang = 1
      */
     public function save($entity)
     {
-        if (! $this->getAuthorize()->isAllowed($entity,PrivilegeEntity::ODF_ELEMENT_EDITION)){
+        if (! $this->getAuthorize()->isAllowed($entity,Privileges::ODF_ELEMENT_EDITION)){
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
         }
 
@@ -279,7 +279,7 @@ where rang = 1
      */
     public function delete($entity, $softDelete = true)
     {
-        if (! $this->getAuthorize()->isAllowed($entity,PrivilegeEntity::ODF_ELEMENT_EDITION)){
+        if (! $this->getAuthorize()->isAllowed($entity,Privileges::ODF_ELEMENT_EDITION)){
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
         }
 

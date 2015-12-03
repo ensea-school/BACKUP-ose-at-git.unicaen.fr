@@ -10,7 +10,7 @@ const R_INTERVENANT           = Acl\IntervenantRole::ROLE_ID;
 const R_INTERVENANT_EXTERIEUR = Acl\IntervenantExterieurRole::ROLE_ID;
 
 
-$R_ALL             = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
+$R_ALL = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
 
 $main = [
     'doctrine'           => [
@@ -48,10 +48,7 @@ $main = [
         ],
     ],
     'zfcuser'            => [
-        // telling ZfcUser to use our own class
-        'user_entity_class' => 'Application\Entity\Db\Utilisateur',
-        //        // telling ZfcUserDoctrineORM to skip the entities it defines
-        //        'enable_default_entities' => false,
+        'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
     'router'             => [
         'routes' => [
@@ -65,10 +62,6 @@ $main = [
                     ],
                 ],
             ],
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
             'application'      => [
                 'type'          => 'Literal',
                 'options'       => [
@@ -80,21 +73,6 @@ $main = [
                     ],
                 ],
                 'may_terminate' => true,
-                /*'child_routes' => [
-                    'default' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => [
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ],
-                            'defaults' => [
-                                'controller' => 'Index',
-                            ],
-                        ],
-                    ],
-                ],*/
             ],
             'changement-annee' => [
                 'type'    => 'Segment',
@@ -131,39 +109,26 @@ $main = [
             ],
         ],
     ],
-    'unicaen-auth'       => [
-        /**
-         * Fournisseurs d'identité.
-         */
-        /*'identity_providers' => [
-//            200 => 'UnicaenAuth\Provider\Identity\Db',
-//            100 => 'UnicaenAuth\Provider\Identity\Ldap',
-            50 => 'ApplicationIdentityProvider',
-        ],*/
-    ],
     'bjyauthorize'       => [
         'identity_provider' => 'ApplicationIdentityProvider',
 
         'role_providers'     => [
             'ApplicationRoleProvider' => [
-                'Application\\Acl\\Role',
+                Acl\Role::class,
 
-                'Application\\Acl\\AdministrateurRole',
+                Acl\AdministrateurRole::class,
 
-                'Application\\Acl\\ComposanteRole',
+                Acl\ComposanteRole::class,
 
-                'Application\\Acl\\DrhRole',
-                'Application\\Acl\\EtablissementRole',
-                'Application\\Acl\\IntervenantRole',
-                'Application\\Acl\\IntervenantExterieurRole',
-                'Application\\Acl\\IntervenantPermanentRole',
+                Acl\DrhRole::class,
+                Acl\EtablissementRole::class,
+                Acl\IntervenantRole::class,
+                Acl\IntervenantExterieurRole::class,
+                Acl\IntervenantPermanentRole::class,
             ],
         ],
-        'resource_providers' => [
-            'ApplicationPrivilege' => [],
-        ],
         'rule_providers'     => [
-            'Application\Provider\Rule\PrivilegeRuleProvider' => [],
+//            'Application\Provider\Rule\PrivilegeRuleProvider' => [],
         ],
         'guards'             => [
             'BjyAuthorize\Guard\Controller' => [
@@ -177,40 +142,40 @@ $main = [
     ],
     'service_manager'    => [
         'invokables'         => [
-            'ApplicationAnnee'                    => 'Application\\Service\\Annee',
-            'ApplicationContext'                  => 'Application\\Service\\Context',
-            'ApplicationLocalContext'             => 'Application\\Service\\LocalContext',
-            'ApplicationParametres'               => 'Application\\Service\\Parametres',
-            'ApplicationUtilisateur'              => 'Application\\Service\\Utilisateur',
-            'ApplicationTypeIntervention'         => 'Application\\Service\\TypeIntervention',
-            'ApplicationSource'                   => 'Application\\Service\\Source',
-            'ApplicationAffectation'              => 'Application\\Service\\Affectation',
-            'ApplicationRole'                     => 'Application\\Service\\Role',
-            'ApplicationPrivilege'                => 'Application\\Service\\Privilege',
-            'ApplicationPays'                     => 'Application\\Service\\Pays',
-            'ApplicationDepartement'              => 'Application\\Service\\Departement',
-            'IntervenantNavigationPageVisibility' => 'Application\\Service\\IntervenantNavigationPageVisibility',
-            'TestAssertion'                       => 'Application\\Assertion\\TestAssertion',
+            'ApplicationAnnee'                    => Service\Annee::class,
+            'ApplicationContext'                  => Service\Context::class,
+            'ApplicationLocalContext'             => Service\LocalContext::class,
+            'ApplicationParametres'               => Service\Parametres::class,
+            'ApplicationUtilisateur'              => Service\Utilisateur::class,
+            'ApplicationTypeIntervention'         => Service\TypeIntervention::class,
+            'ApplicationSource'                   => Service\Source::class,
+            'ApplicationAffectation'              => Service\Affectation::class,
+            'ApplicationRole'                     => Service\Role::class,
+            'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class,
+            'ApplicationPays'                     => Service\Pays::class,
+            'ApplicationDepartement'              => Service\Departement::class,
+            'IntervenantNavigationPageVisibility' => Service\IntervenantNavigationPageVisibility::class,
+            'TestAssertion'                       => Assertion\TestAssertion::class,
         ],
         'aliases'            => [
-            'PrivilegeProvider' => 'ApplicationPrivilege',
+            'PrivilegeProvider' => 'UnicaenAuth\Service\Privilege',
         ],
         'factories'          => [
-            'navigation'                     => 'Application\Service\NavigationFactoryFactory',
-            'ApplicationRoleProvider'        => 'Application\Provider\Role\RoleProviderFactory',
-            'ApplicationIdentityProvider'    => 'Application\Provider\Identity\IdentityProviderFactory',
+            'navigation'                  => Service\NavigationFactoryFactory::class,
+            'ApplicationRoleProvider'     => Provider\Role\RoleProviderFactory::class,
+            'ApplicationIdentityProvider' => Provider\Identity\IdentityProviderFactory::class,
         ],
         'abstract_factories' => [
         ],
     ],
     'view_helpers'       => [
         'factories'  => [
-            'userProfileSelectRadioItem' => 'Application\View\Helper\UserProfileSelectRadioItemFactory',
-            'appLink'                    => 'Application\View\Helper\AppLinkFactory',
+            'userProfileSelectRadioItem' => View\Helper\UserProfileSelectRadioItemFactory::class,
+            'appLink'                    => View\Helper\AppLinkFactory::class,
         ],
         'invokables' => [
-            'validation' => 'Application\View\Helper\ValidationViewHelper',
-            'utilisateur'  => 'Application\View\Helper\UtilisateurViewHelper',
+            'validation'  => View\Helper\ValidationViewHelper::class,
+            'utilisateur' => View\Helper\UtilisateurViewHelper::class,
         ],
     ],
     'translator'         => [
@@ -224,17 +189,14 @@ $main = [
     ],
     'controllers'        => [
         'invokables' => [
-            'Application\Controller\Index'       => 'Application\Controller\IndexController',
-            'UnicaenAuth\Controller\Utilisateur' => 'Application\Controller\UtilisateurController',
+            'Application\Controller\Index'       => Controller\IndexController::class,
+            'UnicaenAuth\Controller\Utilisateur' => Controller\UtilisateurController::class,
         ],
     ],
     'controller_plugins' => [
         'invokables' => [
-            'em'      => 'Application\Controller\Plugin\Em',
-            'context' => 'Application\Controller\Plugin\Context',
-        ],
-        'factories'  => [
-//            'mail'    => 'Application\Controller\Plugin\MailWithLogPluginFactory',
+            'em'      => Controller\Plugin\Em::class,
+            'context' => Controller\Plugin\Context::class,
         ],
     ],
     'view_manager'       => [
@@ -242,8 +204,8 @@ $main = [
             __DIR__ . '/../view',
         ],
     ],
-    'public_files' => [
-        'inline_scripts'  => [
+    'public_files'       => [
+        'inline_scripts' => [
             10 => 'js/datepicker-fr.js',
             11 => 'js/service.js',
             12 => 'js/service-referentiel.js',
@@ -252,7 +214,7 @@ $main = [
             15 => 'js/droits.js',
             50 => 'bootstrap-select/js/bootstrap-select.min.js',
         ],
-        'stylesheets' => [
+        'stylesheets'    => [
             10 => 'bootstrap-select/css/bootstrap-select.min.css',
             11 => 'css/cartridge.css',
         ],

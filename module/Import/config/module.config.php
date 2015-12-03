@@ -69,7 +69,7 @@ return [
 
     'bjyauthorize'    => [
         'guards' => [
-            'Application\Guard\PrivilegeController' => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Import\Controller\Import',
                     'action'     => ['index'],

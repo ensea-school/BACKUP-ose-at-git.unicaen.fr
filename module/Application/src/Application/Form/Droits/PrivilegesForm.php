@@ -3,7 +3,7 @@
 namespace Application\Form\Gestion;
 
 use Zend\Form;
-use Application\Entity\Db\Privilege;
+use UnicaenAuth\Entity\Db\Privilege;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\Role;

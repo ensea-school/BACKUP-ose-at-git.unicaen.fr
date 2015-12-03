@@ -98,7 +98,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards' => [
-            Guard\PrivilegeController::class => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['index'],

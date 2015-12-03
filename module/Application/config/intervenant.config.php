@@ -4,6 +4,7 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'     => [
@@ -499,7 +500,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            Guard\PrivilegeController::class => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['rechercher'],
@@ -571,7 +572,7 @@ return [
             ],
         ],
         'rule_providers'     => [
-            Provider\Rule\PrivilegeRuleProvider::class => [
+            PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
                         'privileges' => Privileges::MODIF_SERVICE_DU_EDITION,

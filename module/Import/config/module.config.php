@@ -2,7 +2,8 @@
 
 namespace Import;
 
-use Application\Entity\Db\Privilege;
+use UnicaenAuth\Guard\PrivilegeController;
+use Application\Provider\Privilege\Privileges;
 
 return [
     'controllers'     => [
@@ -36,12 +37,12 @@ return [
                         'label'    => 'Import',
                         'order'    => 1,
                         'route'    => 'import',
-                        'resource' => 'controller/Import\Controller\Import:index',
+                        'resource' => PrivilegeController::getResourceId('Import\Controller\Import','index'),
                         'pages'    => [
                             'admin'    => [
                                 'label'    => "Tableau de bord principal",
                                 'route'    => 'import',
-                                'resource' => 'controller/Import\Controller\Import:showimporttbl',
+                                'resource' => PrivilegeController::getResourceId('Import\Controller\Import','showimporttbl'),
                                 'params'   => [
                                     'action' => 'showImportTbl',
                                 ],
@@ -53,7 +54,7 @@ return [
                             'showDiff' => [
                                 'label'    => "Écarts entre OSE et ses sources",
                                 'route'    => 'import',
-                                'resource' => 'controller/Import\Controller\Import:showdiff',
+                                'resource' => PrivilegeController::getResourceId('Import\Controller\Import','showdiff'),
                                 'params'   => [
                                     'action' => 'showDiff',
                                 ],
@@ -72,27 +73,27 @@ return [
                 [
                     'controller' => 'Import\Controller\Import',
                     'action'     => ['index'],
-                    'privileges' => [Privilege::IMPORT_ECARTS, Privilege::IMPORT_MAJ, Privilege::IMPORT_TBL, Privilege::IMPORT_VUES_PROCEDURES],
+                    'privileges' => [Privileges::IMPORT_ECARTS, Privileges::IMPORT_MAJ, Privileges::IMPORT_TBL, Privileges::IMPORT_VUES_PROCEDURES],
                 ],
                 [
                     'controller' => 'Import\Controller\Import',
                     'action'     => ['showDiff'],
-                    'privileges' => [Privilege::IMPORT_ECARTS],
+                    'privileges' => [Privileges::IMPORT_ECARTS],
                 ],
                 [
                     'controller' => 'Import\Controller\Import',
                     'action'     => ['showImportTbl'],
-                    'privileges' => [Privilege::IMPORT_TBL],
+                    'privileges' => [Privileges::IMPORT_TBL],
                 ],
                 [
                     'controller' => 'Import\Controller\Import',
                     'action'     => ['update', 'updateTables'],
-                    'privileges' => [Privilege::IMPORT_MAJ],
+                    'privileges' => [Privileges::IMPORT_MAJ],
                 ],
                 [
                     'controller' => 'Import\Controller\Import',
                     'action'     => ['updateViewsAndPackages'],
-                    'privileges' => [Privilege::IMPORT_VUES_PROCEDURES],
+                    'privileges' => [Privileges::IMPORT_VUES_PROCEDURES],
                 ],
             ],
         ],
@@ -100,11 +101,11 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'importServiceSchema'         => 'Import\\Service\\Schema',
-            'importServiceQueryGenerator' => 'Import\\Service\\QueryGenerator',
-            'importServiceIntervenant'    => 'Import\\Service\\Intervenant',
-            'importServiceDifferentiel'   => 'Import\\Service\\Differentiel',
-            'importProcessusImport'       => 'Import\\Processus\\Import',
+            'importServiceSchema'         => Service\Schema::class,
+            'importServiceQueryGenerator' => Service\QueryGenerator::class,
+            'importServiceIntervenant'    => Service\Intervenant::class,
+            'importServiceDifferentiel'   => Service\Differentiel::class,
+            'importProcessusImport'       => Processus\Import::class,
         ],
         'factories'  => [
 
@@ -113,8 +114,8 @@ return [
 
     'view_helpers'    => [
         'invokables' => [
-            'differentielListe' => 'Import\View\Helper\DifferentielListe',
-            'differentielLigne' => 'Import\View\Helper\DifferentielLigne\DifferentielLigne',
+            'differentielListe' => View\Helper\DifferentielListe::class,
+            'differentielLigne' => View\Helper\DifferentielLigne\DifferentielLigne::class,
         ],
     ],
 

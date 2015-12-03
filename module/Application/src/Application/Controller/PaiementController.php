@@ -9,6 +9,7 @@ use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Form\Paiement\Traits\MiseEnPaiementFormAwareTrait;
 use Application\Form\Paiement\Traits\MiseEnPaiementRechercheFormAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
@@ -23,7 +24,6 @@ use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
-use Application\Entity\Db\Privilege;
 
 /**
  * @method \Application\Controller\Plugin\Context     context()
@@ -173,9 +173,9 @@ class PaiementController extends AbstractActionController
             $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement($recherche);
         }
 
-        if ($this->params()->fromPost('exporter-pdf') !== null && $this->isAllowed('privilege/' . Privilege::MISE_EN_PAIEMENT_EXPORT_PDF)) {
+        if ($this->params()->fromPost('exporter-pdf') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF))) {
             $this->etatPaiementPdf($typeIntervenant, $etat, $structure, $periode, $etatPaiement);
-        } elseif ($this->params()->fromPost('exporter-csv-etat') !== null && $this->isAllowed('privilege/' . Privilege::MISE_EN_PAIEMENT_EXPORT_CSV)) {
+        } elseif ($this->params()->fromPost('exporter-csv-etat') !== null && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV))) {
             return $this->etatPaiementCsv($recherche);
         } else {
             return compact('rechercheForm', 'etatPaiement', 'etat', 'noData');
@@ -348,7 +348,7 @@ class PaiementController extends AbstractActionController
         $form    = $this->getFormPaiementMiseEnPaiement();
         $errors  = [];
         $request = $this->getRequest();
-        if ($request->isPost() && $this->isAllowed('privilege/' . Privilege::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT)) {
+        if ($request->isPost() && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT))) {
             $form->setData($request->getPost());
             $form->isValid();
 

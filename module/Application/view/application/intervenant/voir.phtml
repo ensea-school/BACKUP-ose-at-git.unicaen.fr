@@ -1,5 +1,7 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $role \Application\Acl\Role */
 
@@ -23,7 +25,7 @@ $tabs = [
     ],
 ];
 
-if ($this->isAllowed('privilege/' . \Application\Entity\Db\Privilege::INTERVENANT_EDITION)) {
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))) {
     $tabs[] = [
         'id'    => 'edition',
         'label' => '<span class="glyphicon glyphicon-pencil"></span> Édition',

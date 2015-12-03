@@ -14,7 +14,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class FichierAssertion extends AbstractAssertion implements /*FichierServiceAwareInterface,*/ WorkflowIntervenantAwareInterface
+class FichierAssertion extends OldAbstractAssertion implements /*FichierServiceAwareInterface,*/ WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
     

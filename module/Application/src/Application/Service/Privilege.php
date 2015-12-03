@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Provider\Privilege\PrivilegeProviderInterface;
+use Application\Provider\Privilege\Privileges;
 use \BjyAuthorize\Provider\Resource\ProviderInterface as ResourceProviderInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -13,7 +14,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Privilege extends AbstractEntityService implements PrivilegeProviderInterface, ResourceProviderInterface
 {
-    use \Application\Traits\SessionContainerTrait;
 
     /**
      * @var array
@@ -29,7 +29,7 @@ class Privilege extends AbstractEntityService implements PrivilegeProviderInterf
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Privilege';
+        return \Application\Entity\Db\Privilege::class;
     }
 
     /**
@@ -81,7 +81,7 @@ class Privilege extends AbstractEntityService implements PrivilegeProviderInterf
         $resources = [];
         $privileges = array_keys( $this->getPrivilegesRoles() );
         foreach( $privileges as $privilege ){
-            $resources[] = 'privilege/'.$privilege;
+            $resources[] = Privileges::getResourceId($privilege);
         }
         return $resources;
     }

@@ -135,13 +135,15 @@ $main = [
         /**
          * Fournisseurs d'identité.
          */
-        'identity_providers' => [
+        /*'identity_providers' => [
 //            200 => 'UnicaenAuth\Provider\Identity\Db',
 //            100 => 'UnicaenAuth\Provider\Identity\Ldap',
             50 => 'ApplicationIdentityProvider',
-        ],
+        ],*/
     ],
     'bjyauthorize'       => [
+        'identity_provider' => 'ApplicationIdentityProvider',
+
         'role_providers'     => [
             'ApplicationRoleProvider' => [
                 'Application\\Acl\\Role',
@@ -197,7 +199,6 @@ $main = [
             'navigation'                     => 'Application\Service\NavigationFactoryFactory',
             'ApplicationRoleProvider'        => 'Application\Provider\Role\RoleProviderFactory',
             'ApplicationIdentityProvider'    => 'Application\Provider\Identity\IdentityProviderFactory',
-            'BjyAuthorize\Service\Authorize' => 'Application\Service\AuthorizeFactory', // surcharge!!!
         ],
         'abstract_factories' => [
         ],

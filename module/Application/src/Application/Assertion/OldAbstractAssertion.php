@@ -16,7 +16,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAwareInterface
+abstract class OldAbstractAssertion implements AssertionInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ContextAwareTrait;

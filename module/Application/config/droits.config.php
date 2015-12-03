@@ -2,7 +2,8 @@
 
 namespace Application;
 
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'router' => [
@@ -131,27 +132,27 @@ return [
                                 'label'    => "Droits d'accès",
                                 'title'    => "Gestion des droits d'accès",
                                 'route'    => 'droits',
-                                'resource' => 'controller/Application\Controller\Droits:index',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','index'),
                                 'pages' => [
                                     'roles' => [
                                         'label'  => "Rôles",
                                         'title'  => "Gestion des rôles",
                                         'route'  => 'droits/roles',
-                                        'resource' => 'controller/Application\Controller\Droits:roles',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','roles'),
                                         'withtarget' => true,
                                     ],
                                     'privileges' => [
                                         'label'  => "Privilèges",
                                         'title'  => "Gestion des privilèges",
                                         'route'  => 'droits/privileges',
-                                        'resource' => 'controller/Application\Controller\Droits:privileges',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','privileges'),
                                         'withtarget' => true,
                                     ],
                                     'affectations' => [
                                         'label'  => "Affectations",
                                         'title'  => "Gestion des affectations",
                                         'route'  => 'droits/affectations',
-                                        'resource' => 'controller/Application\Controller\Droits:affectations',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','affectations'),
                                         'withtarget' => true,
                                     ],
                                 ],
@@ -169,46 +170,46 @@ return [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privilege::DROIT_ROLE_VISUALISATION,
-                        Privilege::DROIT_PRIVILEGE_VISUALISATION,
-                        Privilege::DROIT_AFFECTATION_VISUALISATION
+                        Privileges::DROIT_ROLE_VISUALISATION,
+                        Privileges::DROIT_PRIVILEGE_VISUALISATION,
+                        Privileges::DROIT_AFFECTATION_VISUALISATION
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['roles'],
                     'privileges' => [
-                        Privilege::DROIT_ROLE_VISUALISATION,
+                        Privileges::DROIT_ROLE_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['privileges'],
                     'privileges' => [
-                        Privilege::DROIT_PRIVILEGE_VISUALISATION,
+                        Privileges::DROIT_PRIVILEGE_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['affectations'],
                     'privileges' => [
-                        Privilege::DROIT_AFFECTATION_VISUALISATION,
+                        Privileges::DROIT_AFFECTATION_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['role-edition', 'role-suppression'],
-                    'privileges' => [Privilege::DROIT_ROLE_EDITION]
+                    'privileges' => [Privileges::DROIT_ROLE_EDITION]
                 ],
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['privileges-modifier'],
-                    'privileges' => [Privilege::DROIT_PRIVILEGE_EDITION]
+                    'privileges' => [Privileges::DROIT_PRIVILEGE_EDITION]
                 ],
                 [
                     'controller' => 'Application\Controller\Droits',
                     'action'     => ['affectation-edition', 'affectation-suppression'],
-                    'privileges' => [Privilege::DROIT_AFFECTATION_EDITION]
+                    'privileges' => [Privileges::DROIT_AFFECTATION_EDITION]
                 ],
             ],
         ],

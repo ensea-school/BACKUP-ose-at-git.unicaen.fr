@@ -3,7 +3,7 @@
 namespace Application\Assertion;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
 use Zend\Permissions\Acl\Acl;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -15,7 +15,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ModificationServiceDuAssertion extends AbstractAssertion
+class ModificationServiceDuAssertion extends OldAbstractAssertion
 {
 
     protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $entity = null, $privilege = null)
@@ -24,9 +24,9 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
         if ($entity instanceof Intervenant){
             switch ($privilege){
-                case Privilege::MODIF_SERVICE_DU_EDITION:
+                case Privileges::MODIF_SERVICE_DU_EDITION:
                     return $this->assertIntervenant($entity);
-                case Privilege::MODIF_SERVICE_DU_VISUALISATION:
+                case Privileges::MODIF_SERVICE_DU_VISUALISATION:
                     return $this->assertIntervenant($entity);
             }
         }
@@ -47,6 +47,6 @@ class ModificationServiceDuAssertion extends AbstractAssertion
 
     protected function assertIntervenant( Intervenant $intervenant )
     {
-        return $intervenant->getStatut()->hasPrivilege(Privilege::MODIF_SERVICE_DU_ASSOCIATION);
+        return $intervenant->getStatut()->hasPrivilege(Privileges::MODIF_SERVICE_DU_ASSOCIATION);
     }
 }

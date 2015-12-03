@@ -12,7 +12,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TestAssertion extends AbstractAssertion
+class TestAssertion extends OldAbstractAssertion
 {
     /**
      * @var Service

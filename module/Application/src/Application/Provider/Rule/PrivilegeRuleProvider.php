@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Rule;
 
+use Application\Provider\Privilege\Privileges;
 use BjyAuthorize\Provider\Rule\ProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -68,7 +69,7 @@ class PrivilegeRuleProvider implements ProviderInterface
         foreach ($pr as $privilege => $roles) {
             $rules['allow'][] = [
                 $roles,
-                'privilege/' . $privilege,
+                Privileges::getResourceId($privilege),
             ];
         }
 

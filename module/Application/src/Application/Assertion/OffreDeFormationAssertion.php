@@ -2,17 +2,16 @@
 
 namespace Application\Assertion;
 
+use Application\Provider\Privilege\Privileges;
 use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\ElementModulateur;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Source;
 use Application\Entity\Db\Structure;
-use Zend\Permissions\Acl\Acl;
+use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
-use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Application\Entity\Db\Privilege;
 
 
 /**
@@ -22,47 +21,57 @@ use Application\Entity\Db\Privilege;
  */
 class OffreDeFormationAssertion extends AbstractAssertion
 {
-    protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $entity = null, $privilege = null)
+    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
     {
+        $role = $this->getRole();
+        // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
-        if (!$this->acl->isAllowed($role, 'privilege/' . $privilege)) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if (!$this->getAcl()->isAllowed($role, Privileges::getResourceId($privilege))) return false;
 
-        if ($entity instanceof ElementPedagogique) {
-            switch ($privilege) {
-                case Privilege::ODF_ELEMENT_EDITION:
-                    return $this->assertElementPedagogiqueSaisie($role, $entity);
-                case Privilege::ODF_CENTRES_COUT_EDITION:
-                    return $this->assertElementPedagogiqueSaisieCentresCouts($role, $entity);
-                case Privilege::ODF_MODULATEURS_EDITION:
-                    return $this->assertElementPedagogiqueSaisieModulateurs($role, $entity);
-            }
-        } elseif ($entity instanceof Etape) {
-            switch ($privilege) {
-                case Privilege::ODF_ETAPE_EDITION:
-                    return $this->assertEtapeSaisie($role, $entity);
-                case Privilege::ODF_CENTRES_COUT_EDITION:
-                    return $this->assertEtapeSaisieCentresCouts($role, $entity);
-                case Privilege::ODF_MODULATEURS_EDITION:
-                    return $this->assertEtapeSaisieModulateurs($role, $entity);
-            }
-        } elseif ($entity instanceof Structure) {
-            switch ($privilege) {
-                case Privilege::ODF_ETAPE_EDITION:
-                case Privilege::ODF_ELEMENT_EDITION:
-                case Privilege::ODF_CENTRES_COUT_EDITION:
-                case Privilege::ODF_MODULATEURS_EDITION:
-                    return $this->assertStructureSaisie($role, $entity);
-            }
-        } elseif ($entity instanceof CentreCoutEp) {
-            switch ($privilege) {
-                case Privilege::ODF_CENTRES_COUT_EDITION:
-                    return $this->assertCentreCoutEpSaisieCentresCouts($role, $entity);
-            }
-        } elseif ($entity instanceof ElementModulateur) {
-            switch ($privilege) {
-                case Privilege::ODF_MODULATEURS_EDITION:
-                    return $this->assertElementModulateurSaisieModulateurs($role, $entity);
-            }
+        // Si c'est bon alors on affine...
+        switch(true){
+            case $entity instanceof ElementPedagogique:
+                switch ($privilege) {
+                    case Privileges::ODF_ELEMENT_EDITION:
+                        return $this->assertElementPedagogiqueSaisie($role,$entity);
+                    case Privileges::ODF_CENTRES_COUT_EDITION:
+                        return $this->assertElementPedagogiqueSaisieCentresCouts($role, $entity);
+                    case Privileges::ODF_MODULATEURS_EDITION:
+                        return $this->assertElementPedagogiqueSaisieModulateurs($role, $entity);
+                }
+                break;
+            case $entity instanceof Etape:
+                switch ($privilege) {
+                    case Privileges::ODF_ETAPE_EDITION:
+                        return $this->assertEtapeSaisie($role, $entity);
+                    case Privileges::ODF_CENTRES_COUT_EDITION:
+                        return $this->assertEtapeSaisieCentresCouts($role, $entity);
+                    case Privileges::ODF_MODULATEURS_EDITION:
+                        return $this->assertEtapeSaisieModulateurs($role, $entity);
+                }
+                break;
+            case $entity instanceof Structure:
+                switch ($privilege) {
+                    case Privileges::ODF_ETAPE_EDITION:
+                    case Privileges::ODF_ELEMENT_EDITION:
+                    case Privileges::ODF_CENTRES_COUT_EDITION:
+                    case Privileges::ODF_MODULATEURS_EDITION:
+                        return $this->assertStructureSaisie($role, $entity);
+                }
+                break;
+            case $entity instanceof CentreCoutEp:
+                switch ($privilege) {
+                    case Privileges::ODF_CENTRES_COUT_EDITION:
+                        return $this->assertCentreCoutEpSaisieCentresCouts($role, $entity);
+                }
+                break;
+            case $entity instanceof ElementModulateur:
+                switch ($privilege) {
+                    case Privileges::ODF_MODULATEURS_EDITION:
+                        return $this->assertElementModulateurSaisieModulateurs($role, $entity);
+                }
+                break;
         }
 
         return true;

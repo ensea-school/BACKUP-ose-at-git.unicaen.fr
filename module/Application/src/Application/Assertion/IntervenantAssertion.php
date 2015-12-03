@@ -11,7 +11,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class IntervenantAssertion extends AbstractAssertion
+class IntervenantAssertion extends OldAbstractAssertion
 {
     /**
      * Returns true if and only if the assertion conditions are met

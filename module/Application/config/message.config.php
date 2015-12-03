@@ -50,12 +50,12 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'MessageService' => 'Application\Service\Message\MessageServiceFactory',
+            'MessageService' => Service\Message\MessageServiceFactory::class,
         ],
     ],
     'view_helpers' => [
         'factories' => [
-            'message' => 'Application\Service\Message\View\Helper\MessageHelperFactory',
+            'message' => Service\Message\View\Helper\MessageHelperFactory::class,
         ],
     ],
 ];

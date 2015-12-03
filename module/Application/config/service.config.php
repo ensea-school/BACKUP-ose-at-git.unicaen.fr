@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use UnicaenAuth\Guard\PrivilegeController;
+
 return [
     'router' => [
         'routes' => [
@@ -243,7 +245,7 @@ return [
                         'label'    => 'Enseignements',
                         'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
-                        'resource' => 'controller/Application\Controller\Service:resume',
+                        'resource' => PrivilegeController::getResourceId('Application\Controller\Service','resume'),
                         'pages' => [
 //                            'consultation' => array(
 //                                'label'  => "Consultation",

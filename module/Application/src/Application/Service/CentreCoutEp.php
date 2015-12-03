@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\CentreCoutEp as CentreCoutEpEntity;
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\SourceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 
@@ -23,7 +23,7 @@ class CentreCoutEp extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\CentreCoutEp';
+        return CentreCoutEpEntity::class;
     }
 
     /**
@@ -61,7 +61,7 @@ class CentreCoutEp extends AbstractEntityService
      */
     public function save($entity)
     {
-        if (! $this->getAuthorize()->isAllowed($entity,Privilege::ODF_CENTRES_COUT_EDITION)){
+        if (! $this->getAuthorize()->isAllowed($entity,Privileges::ODF_CENTRES_COUT_EDITION)){
             throw new UnAuthorizedException('Vous n\'avez pas les droits requis pour associer/dissocier un centre de coûts de cet enseignement');
         }
 

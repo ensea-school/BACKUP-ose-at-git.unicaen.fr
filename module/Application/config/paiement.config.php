@@ -2,7 +2,7 @@
 
 namespace Application;
 
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
 
 return [
     'router'          => [
@@ -88,25 +88,25 @@ return [
                                 'label'    => "Mises en paiement",
                                 'title'    => "Mises en paiement",
                                 'route'    => 'paiement/etat-demande-paiement',
-                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
                             ],
                             'etat-paiement'         => [
                                 'label'    => "État de paiement",
                                 'title'    => "État de paiement",
                                 'route'    => 'paiement/etat-paiement',
-                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
                             ],
                             'mises-en-paiement-csv' => [
                                 'label'    => "Mises en paiement (CSV)",
                                 'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                                 'route'    => 'paiement/mises-en-paiement-csv',
-                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
+                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV),
                             ],
                             'extraction-winpaie'    => [
                                 'label'    => "Extraction Winpaie",
                                 'title'    => "Export des données de paiement au format Winpaie",
                                 'route'    => 'paiement/extraction-winpaie',
-                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE,
+                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
                             ],
                         ],
                     ],
@@ -121,7 +121,7 @@ return [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['demandeMiseEnPaiement'],
                     'privileges' => [
-                        Privilege::MISE_EN_PAIEMENT_DEMANDE,
+                        Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     ],
                     'assertion'  => 'MiseEnPaiementAssertion',
                 ],
@@ -129,25 +129,25 @@ return [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['etatPaiement'],
                     'privileges' => [
-                        Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['miseEnPaiement'],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_VISUALISATION],
+                    'privileges' => [Privileges::MISE_EN_PAIEMENT_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['misesEnPaiementCsv'],
                     'privileges' => [
-                        Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
+                        Privileges::MISE_EN_PAIEMENT_EXPORT_CSV,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['extractionWinpaie'],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE],
+                    'privileges' => [Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE],
                 ],
             ],
         ],
@@ -160,7 +160,7 @@ return [
             Provider\Rule\PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
-                        'privileges' => Privilege::MISE_EN_PAIEMENT_DEMANDE,
+                        'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                         'resources'  => 'MiseEnPaiement',
                         'assertion'  => 'MiseEnPaiementAssertion',
                     ],

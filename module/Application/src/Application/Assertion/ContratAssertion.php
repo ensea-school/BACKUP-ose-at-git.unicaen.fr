@@ -17,7 +17,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantAwareInterface
+class ContratAssertion extends OldAbstractAssertion implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
  

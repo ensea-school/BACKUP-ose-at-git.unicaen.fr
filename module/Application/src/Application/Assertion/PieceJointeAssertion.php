@@ -16,7 +16,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PieceJointeAssertion extends AbstractAssertion implements WorkflowIntervenantAwareInterface
+class PieceJointeAssertion extends OldAbstractAssertion implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
     

@@ -54,35 +54,31 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Workflow' => 'Application\Controller\WorkflowController',
+            'Application\Controller\Workflow' => Controller\WorkflowController::class,
         ],
         'initializers' => [
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
+            Service\Workflow\WorkflowIntervenantAwareInitializer::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'WfEtapeService'            => 'Application\\Service\\WfEtape',
-            'WfIntervenantEtapeService' => 'Application\\Service\\WfIntervenantEtape',
-            'WorkflowIntervenant'       => 'Application\\Service\\Workflow\\WorkflowIntervenant',
-            'DbFunctionRule'            => 'Application\Rule\Intervenant\DbFunctionRule',
+            'WfEtapeService'            => Service\WfEtape::class,
+            'WfIntervenantEtapeService' => Service\WfIntervenantEtape::class,
+            'WorkflowIntervenant'       => Service\Workflow\WorkflowIntervenant::class,
+            'DbFunctionRule'            => Rule\Intervenant\DbFunctionRule::class,
         ],
         'factories' => [
         ],
         'initializers' => [
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
+            Service\Workflow\WorkflowIntervenantAwareInitializer::class,
         ],
     ],
     'view_helpers' => [
         'invokables' => [
-            'Workflow' => 'Application\View\Helper\Workflow',
+            'Workflow' => View\Helper\Workflow::class,
         ],
         'initializers' => [
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
-        ],
-    ],
-    'form_elements' => [
-        'invokables' => [
+            Service\Workflow\WorkflowIntervenantAwareInitializer::class,
         ],
     ],
 ];

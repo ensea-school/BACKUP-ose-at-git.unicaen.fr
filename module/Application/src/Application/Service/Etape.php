@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Provider\Privilege\Privileges;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 
@@ -210,7 +211,7 @@ class Etape extends AbstractEntityService
      */
     public function save($entity)
     {
-        if (!$this->getAuthorize()->isAllowed($entity, \Application\Entity\Db\Privilege::ODF_ETAPE_EDITION)) {
+        if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
         }
 
@@ -221,7 +222,7 @@ class Etape extends AbstractEntityService
 
     public function saveModulateurs(EtapeEntity $etape)
     {
-        if (!$this->getAuthorize()->isAllowed($etape, \Application\Entity\Db\Privilege::ODF_MODULATEURS_EDITION)) {
+        if (!$this->getAuthorize()->isAllowed($etape, Privileges::ODF_MODULATEURS_EDITION)) {
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
         }
 
@@ -251,7 +252,7 @@ class Etape extends AbstractEntityService
      */
     public function delete($entity, $softDelete = true)
     {
-        if (!$this->getAuthorize()->isAllowed($entity, \Application\Entity\Db\Privilege::ODF_ETAPE_EDITION)) {
+        if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cette formation.');
         }
 

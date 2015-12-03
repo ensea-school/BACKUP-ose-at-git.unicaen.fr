@@ -1,10 +1,10 @@
 <?php
 
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
 
-$canViewRoles           = $this->isAllowed( 'privilege/'.Privilege::DROIT_ROLE_VISUALISATION);
-$canViewPrivileges      = $this->isAllowed( 'privilege/'.Privilege::DROIT_PRIVILEGE_VISUALISATION);
-$canViewAffectations    = $this->isAllowed( 'privilege/'.Privilege::DROIT_AFFECTATION_VISUALISATION);
+$canViewRoles           = $this->isAllowed( Privileges::getResourceId(Privileges::DROIT_ROLE_VISUALISATION) );
+$canViewPrivileges      = $this->isAllowed( Privileges::getResourceId(Privileges::DROIT_PRIVILEGE_VISUALISATION) );
+$canViewAffectations    = $this->isAllowed( Privileges::getResourceId(Privileges::DROIT_AFFECTATION_VISUALISATION) );
 
 ?>
 <h1 class="page-header">Gestion des droits d'accès</h1>

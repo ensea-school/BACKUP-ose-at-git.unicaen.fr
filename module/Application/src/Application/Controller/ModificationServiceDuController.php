@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Provider\Privilege\Privileges;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 
@@ -28,7 +29,7 @@ class ModificationServiceDuController extends AbstractActionController
         ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $canEdit     = $this->isAllowed( $intervenant, \Application\Entity\Db\Privilege::MODIF_SERVICE_DU_EDITION );
+        $canEdit     = $this->isAllowed( $intervenant, Privileges::MODIF_SERVICE_DU_EDITION );
 
         // NB: patch pour permettre de vider toutes les modifs de service dû
         if ($canEdit && $this->getRequest()->isPost()) {

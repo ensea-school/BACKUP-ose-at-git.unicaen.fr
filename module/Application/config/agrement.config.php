@@ -6,6 +6,7 @@ use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Controller\AgrementController;
+use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'router'          => [
@@ -136,7 +137,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'    => true,
-                                'resource'      => 'controller/Application\Controller\Agrement:index',
+                                'resource'      => PrivilegeController::getResourceId('Application\Controller\Agrement','index'),
                                 'visible'       => 'IntervenantNavigationPageVisibility',
                                 'pagesProvider' => [
                                     'type'         => 'AgrementIntervenantNavigationPagesProvider',
@@ -145,7 +146,7 @@ return [
                                         'intervenant',
                                     ],
                                     'withtarget'   => true,
-                                    'resource'     => 'controller/Application\Controller\Agrement:lister',
+                                    'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement','lister'),
                                     'visible'      => 'IntervenantNavigationPageVisibility',
                                 ],
                             ],
@@ -157,12 +158,12 @@ return [
                                 'label'         => "Agréments par lot",
                                 'title'         => "Gestion des agréments par lot",
                                 'route'         => 'gestion/agrement',
-                                'resource'      => 'controller/Application\Controller\Agrement:index',
+                                'resource'      => PrivilegeController::getResourceId('Application\Controller\Agrement','index'),
                                 'pagesProvider' => [
                                     'type'       => 'AgrementNavigationPagesProvider',
                                     'route'      => 'gestion/agrement/ajouter-lot',
                                     'withtarget' => true,
-                                    'resource'   => 'controller/Application\Controller\Agrement:' . AgrementController::ACTION_AJOUTER_LOT,
+                                    'resource'   => PrivilegeController::getResourceId('Application\Controller\Agrement',AgrementController::ACTION_AJOUTER_LOT),
                                     'privilege'  => AgrementController::ACTION_AJOUTER_LOT,
                                     // NB: le code du type d'agrément sera concaténé au 'privilege' par le AgrementNavigationPagesProvider
                                 ],

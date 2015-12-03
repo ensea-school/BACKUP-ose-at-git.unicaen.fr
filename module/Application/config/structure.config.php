@@ -109,19 +109,19 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Structure'   => 'Application\Controller\StructureController',
+            'Application\Controller\Structure'   => Controller\StructureController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPersonnel'       => 'Application\\Service\\Personnel',
-            'ApplicationStructure'       => 'Application\\Service\\Structure',
-            'ApplicationTypeStructure'   => 'Application\\Service\\TypeStructure',
+            'ApplicationPersonnel'       => Service\Personnel::class,
+            'ApplicationStructure'       => Service\Structure::class,
+            'ApplicationTypeStructure'   => Service\TypeStructure::class,
         ]
     ],
     'view_helpers' => [
         'invokables' => [
-            'structure'         => 'Application\View\Helper\StructureViewHelper',
+            'structure'         => View\Helper\StructureViewHelper::class,
         ],
     ],
 ];

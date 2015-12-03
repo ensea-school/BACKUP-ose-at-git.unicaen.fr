@@ -1,5 +1,7 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /* @var $affectations Application\Entity\Db\Affectation[] */
 /* @var $tri string */
 
@@ -10,7 +12,7 @@ $head = [
     'source'    => 'Src/Actions',
 ];
 
-$canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DROIT_AFFECTATION_EDITION);
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_AFFECTATION_EDITION));
 $ajoutUrl = $this->url( 'droits/affectations/edition' );
 
 ?>

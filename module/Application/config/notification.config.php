@@ -132,27 +132,7 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Notification' => 'Application\Controller\NotificationController',
-        ],
-        'initializers' => [
-        ],
-    ],
-    'service_manager' => [
-        'invokables' => [
-        ],
-        'factories' => [
-        ],
-        'initializers' => [
-        ],
-    ],
-    'view_helpers' => [
-        'invokables' => [
-        ],
-        'initializers' => [
-        ],
-    ],
-    'form_elements' => [
-        'invokables' => [
+            'Application\Controller\Notification' => Controller\NotificationController::class,
         ],
     ],
 ];

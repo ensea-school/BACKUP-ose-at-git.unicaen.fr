@@ -12,7 +12,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ValidationAssertionProxy extends AbstractAssertion
+class ValidationAssertionProxy extends OldAbstractAssertion
 {
     /**
      * Returns true if and only if the assertion conditions are met
@@ -41,7 +41,7 @@ class ValidationAssertionProxy extends AbstractAssertion
     }
     
     /**
-     * @return AbstractAssertion
+     * @return OldAbstractAssertion
      */
     protected function getDelegate()
     {

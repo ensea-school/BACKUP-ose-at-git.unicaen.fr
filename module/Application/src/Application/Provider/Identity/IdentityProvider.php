@@ -10,6 +10,7 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
+use UnicaenAuth\Service\Traits\RoleServiceAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
@@ -102,6 +103,12 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
 
             $session->roles = $roles;
         }
+
+        $rs = [];
+        foreach( $session->roles as $roleId ){
+
+        }
+
         return $session->roles;
     }
 }

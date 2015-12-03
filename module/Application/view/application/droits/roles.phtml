@@ -1,9 +1,11 @@
 <h1 class="page-header">Gestion des rôles</h1>
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /* @var $roles Application\Entity\Db\Role[] */
 
-$canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DROIT_ROLE_EDITION);
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_ROLE_EDITION));
 $ajoutUrl = $this->url( 'droits/roles/edition' );
 
 ?>

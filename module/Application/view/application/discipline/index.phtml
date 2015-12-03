@@ -1,8 +1,11 @@
 <?php
+
+use Application\Provider\Privilege\Privileges;
+
 /* @var $disciplines \Application\Entity\Db\Discipline[] */
 /* @var $libellesCodesCorresp string[] */
 
-$canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DISCIPLINE_EDITION);
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DISCIPLINE_EDITION));
 
 function truncCodesCorresp($value){
     if (strlen($value) > 20) $value = '<span title="'.str_replace(',', ', ', $value).'">'.substr($value, 0, 19) . '...</span>';

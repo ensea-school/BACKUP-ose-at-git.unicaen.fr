@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Application\Provider\Privilege\Privileges;
 
 /**
  * Privilege
@@ -288,6 +289,6 @@ class Privilege
 
     public function getResourceId()
     {
-        return sprintf('privilege/%s', $this->getFullCode());
+        Privileges::getResourceId($this->getFullCode());
     }
 }

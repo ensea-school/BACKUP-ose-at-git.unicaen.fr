@@ -2,12 +2,7 @@
 
 namespace Application;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantRole;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Privilege;
-use UnicaenApp\Util;
+use Application\Provider\Privilege\Privileges;
 
 return [
     'router'          => [
@@ -177,7 +172,7 @@ return [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
-                        'resource' => Util::actionToResource('Application\Controller\OffreFormation', 'index'),
+                        'resource' => \UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
                     ],
                 ],
             ],
@@ -190,46 +185,46 @@ return [
                 [
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => ['index','search-structures', 'search-niveaux'],
-                    'privileges' => Privilege::ODF_VISUALISATION,
+                    'privileges' => Privileges::ODF_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => ['export'],
-                    'privileges' => Privilege::ODF_EXPORT_CSV,
+                    'privileges' => Privileges::ODF_EXPORT_CSV,
                 ],
                 /* Etapes */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => ['voir', 'search'],
-                    'privileges' => Privilege::ODF_ETAPE_VISUALISATION,
+                    'privileges' => Privileges::ODF_ETAPE_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => ['saisir', 'supprimer'],
-                    'privileges' => Privilege::ODF_ETAPE_EDITION,
+                    'privileges' => Privileges::ODF_ETAPE_EDITION,
                 ],
                 /* Éléments pédagogiques */
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => ['voir', 'search', 'getPeriode'], // getPeriode est utilisé pour la saisie de service!!!
-                    'privileges' => Privilege::ODF_ELEMENT_VISUALISATION,
+                    'privileges' => Privileges::ODF_ELEMENT_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => ['saisir', 'supprimer'],
-                    'privileges' => Privilege::ODF_ELEMENT_EDITION,
+                    'privileges' => Privileges::ODF_ELEMENT_EDITION,
                 ],
                 /* Modulateurs */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Modulateur',
                     'action'     => ['saisir'],
-                    'privileges' => Privilege::ODF_MODULATEURS_EDITION,
+                    'privileges' => Privileges::ODF_MODULATEURS_EDITION,
                 ],
                 /* Centres de coûts */
                 [
                     'controller' => 'Application\Controller\OffreFormation\EtapeCentreCout',
                     'action'     => ['saisir'],
-                    'privileges' => Privilege::ODF_CENTRES_COUT_EDITION,
+                    'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
                 ],
             ],
         ],
@@ -245,22 +240,22 @@ return [
             'Application\Provider\Rule\PrivilegeRuleProvider' => [
                 'allow' => [
                     [
-                        'privileges' => Privilege::ODF_ELEMENT_EDITION,
+                        'privileges' => Privileges::ODF_ELEMENT_EDITION,
                         'resources'  => ['ElementPedagogique', 'Structure'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
-                        'privileges' => Privilege::ODF_ETAPE_EDITION,
+                        'privileges' => Privileges::ODF_ETAPE_EDITION,
                         'resources'  => ['Etape', 'Structure'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
-                        'privileges' => Privilege::ODF_CENTRES_COUT_EDITION,
+                        'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
-                        'privileges' => Privilege::ODF_MODULATEURS_EDITION,
+                        'privileges' => Privileges::ODF_MODULATEURS_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'ElementModulateur'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
@@ -270,52 +265,52 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\OffreFormation'                    => 'Application\Controller\OffreFormationController',
-            'Application\Controller\OffreFormation\Etape'              => 'Application\Controller\OffreFormation\EtapeController',
-            'Application\Controller\OffreFormation\Modulateur'         => 'Application\Controller\OffreFormation\ModulateurController',
-            'Application\Controller\OffreFormation\ElementPedagogique' => 'Application\Controller\OffreFormation\ElementPedagogiqueController',
-            'Application\Controller\OffreFormation\EtapeCentreCout'    => 'Application\Controller\OffreFormation\EtapeCentreCoutController',
+            'Application\Controller\OffreFormation'                    => Controller\OffreFormationController::class,
+            'Application\Controller\OffreFormation\Etape'              => Controller\OffreFormation\EtapeController::class,
+            'Application\Controller\OffreFormation\Modulateur'         => Controller\OffreFormation\ModulateurController::class,
+            'Application\Controller\OffreFormation\ElementPedagogique' => Controller\OffreFormation\ElementPedagogiqueController::class,
+            'Application\Controller\OffreFormation\EtapeCentreCout'    => Controller\OffreFormation\EtapeCentreCoutController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationElementPedagogique'           => 'Application\Service\ElementPedagogique',
-            'ApplicationCheminPedagogique'            => 'Application\Service\CheminPedagogique',
-            'ApplicationEtape'                        => 'Application\Service\Etape',
-            'ApplicationTypeFormation'                => 'Application\Service\TypeFormation',
-            'ApplicationGroupeTypeFormation'          => 'Application\Service\GroupeTypeFormation',
-            'ApplicationNiveauEtape'                  => 'Application\Service\NiveauEtape',
-            'ApplicationNiveauFormation'              => 'Application\Service\NiveauFormation',
-            'ApplicationModulateur'                   => 'Application\Service\Modulateur',
-            'ApplicationElementModulateur'            => 'Application\Service\ElementModulateur',
-            'ApplicationTypeModulateur'               => 'Application\Service\TypeModulateur',
-            'ApplicationDomaineFonctionnel'           => 'Application\Service\DomaineFonctionnel',
-            'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator',
-            'ElementModulateursFormHydrator'          => 'Application\Form\OffreFormation\ElementModulateursHydrator',
-            'EtapeModulateursFormHydrator'            => 'Application\Form\OffreFormation\EtapeModulateursHydrator',
-            'AssertionOffreDeFormation'               => 'Application\Assertion\OffreDeFormationAssertion',
+            'ApplicationElementPedagogique'           => Service\ElementPedagogique::class,
+            'ApplicationCheminPedagogique'            => Service\CheminPedagogique::class,
+            'ApplicationEtape'                        => Service\Etape::class,
+            'ApplicationTypeFormation'                => Service\TypeFormation::class,
+            'ApplicationGroupeTypeFormation'          => Service\GroupeTypeFormation::class,
+            'ApplicationNiveauEtape'                  => Service\NiveauEtape::class,
+            'ApplicationNiveauFormation'              => Service\NiveauFormation::class,
+            'ApplicationModulateur'                   => Service\Modulateur::class,
+            'ApplicationElementModulateur'            => Service\ElementModulateur::class,
+            'ApplicationTypeModulateur'               => Service\TypeModulateur::class,
+            'ApplicationDomaineFonctionnel'           => Service\DomaineFonctionnel::class,
+            'FormElementPedagogiqueRechercheHydrator' => Form\OffreFormation\ElementPedagogiqueRechercheHydrator::class,
+            'ElementModulateursFormHydrator'          => Form\OffreFormation\ElementModulateursHydrator::class,
+            'EtapeModulateursFormHydrator'            => Form\OffreFormation\EtapeModulateursHydrator::class,
+            'AssertionOffreDeFormation'               => Assertion\OffreDeFormationAssertion::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset',
-            'EtapeSaisie'                             => 'Application\Form\OffreFormation\EtapeSaisie',
-            'ElementPedagogiqueSaisie'                => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
-            'EtapeModulateursSaisie'                  => 'Application\Form\OffreFormation\EtapeModulateursSaisie',
-            'ElementModulateursFieldset'              => 'Application\Form\OffreFormation\ElementModulateursFieldset',
-            'EtapeCentreCoutForm'                     => 'Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm',
-            'ElementCentreCoutFieldset'               => 'Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset',
+            'FormElementPedagogiqueRechercheFieldset' => Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class,
+            'EtapeSaisie'                             => Form\OffreFormation\EtapeSaisie::class,
+            'ElementPedagogiqueSaisie'                => Form\OffreFormation\ElementPedagogiqueSaisie::class,
+            'EtapeModulateursSaisie'                  => Form\OffreFormation\EtapeModulateursSaisie::class,
+            'ElementModulateursFieldset'              => Form\OffreFormation\ElementModulateursFieldset::class,
+            'EtapeCentreCoutForm'                     => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
+            'ElementCentreCoutFieldset'               => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
-            'EtapeModulateursSaisieForm'          => 'Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm',
-            'ElementModulateursSaisieFieldset'    => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
-            'ElementPedagogique'                  => 'Application\View\Helper\OffreFormation\ElementPedagogiqueViewHelper',
-            'Etape'                               => 'Application\View\Helper\OffreFormation\EtapeViewHelper',
-            'EtapeCentreCoutForm'                 => 'Application\View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper',
-            'ElementCentreCoutFieldset'           => 'Application\View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper',
-            'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
+            'EtapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
+            'ElementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
+            'ElementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
+            'Etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
+            'EtapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
+            'ElementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
+            'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
     ],
 

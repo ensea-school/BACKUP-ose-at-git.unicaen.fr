@@ -1,3 +1,8 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+?>
 <h3><?php echo $etape ?>
     <small><?php echo $etape->getSourceCode() ?></small>
 </h3>
@@ -14,7 +19,7 @@ $tabs = [
     ],
 ];
 
-if ($this->isAllowed($etape,\Application\Entity\Db\Privilege::ODF_CENTRES_COUT_EDITION)){
+if ($this->isAllowed($etape,Privileges::ODF_CENTRES_COUT_EDITION)){
     $tabs[] = [
         'id'    => 'centres-couts',
         'label' => '<span class="glyphicon glyphicon-euro"></span> Centres de coûts',
@@ -22,7 +27,7 @@ if ($this->isAllowed($etape,\Application\Entity\Db\Privilege::ODF_CENTRES_COUT_E
     ];
 }
 
-if ($this->isAllowed($etape,\Application\Entity\Db\Privilege::ODF_MODULATEURS_EDITION)){
+if ($this->isAllowed($etape,Privileges::ODF_MODULATEURS_EDITION)){
     $tabs[] = [
         'id'    => 'modulateurs',
         'label' => '<span class="glyphicon glyphicon-list-alt"></span> Modulateurs',

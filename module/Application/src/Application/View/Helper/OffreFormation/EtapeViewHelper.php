@@ -3,8 +3,8 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\Etape as Entity;
-use Application\Entity\Db\Privilege;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
 use Application\Util;
 use Zend\View\Helper\AbstractHtmlElement;
@@ -98,7 +98,7 @@ class EtapeViewHelper extends AbstractHtmlElement
         $html = $this->renderDescription();
 
         $buttons = '';
-        if ($this->getView()->isAllowed($entity, Privilege::ODF_ETAPE_EDITION)) {
+        if ($this->getView()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
         }
@@ -134,7 +134,7 @@ class EtapeViewHelper extends AbstractHtmlElement
         }
 
         $tag = 'a';
-        if (! $this->getView()->isAllowed('privilege/'.Privilege::ODF_ETAPE_VISUALISATION)) $tag = 'span';
+        if (! $this->getView()->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION))) $tag = 'span';
 
         return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }

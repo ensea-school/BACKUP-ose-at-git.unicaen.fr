@@ -1,3 +1,8 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+?>
 <h1>Écarts entre l'application et ses sources</h1>
 
 <?php foreach( $data as $table => $lignes ):
@@ -11,7 +16,7 @@
 <div>Toutes les lignes n'ont pas été affichées, leur nombre dépassant 100</div>
 <?php endif; ?>
 
-<?php if ($this->isAllowed('privilege/'.Application\Entity\Db\Privilege::IMPORT_MAJ)): ?>
+<?php if ($this->isAllowed(Privileges::getResourceId(Privileges::IMPORT_MAJ))): ?>
 <div>
 <?php if (in_array($table, $mviews)): ?>
     <a class="import-update-mv" href="javascript:void(0)" data-table="<?php echo $table ?>">

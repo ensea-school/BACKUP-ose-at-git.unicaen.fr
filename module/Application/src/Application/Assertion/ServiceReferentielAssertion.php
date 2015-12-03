@@ -21,7 +21,7 @@ use DateTime;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentielAssertion extends AbstractAssertion
+class ServiceReferentielAssertion extends OldAbstractAssertion
 {
     use \Application\Service\Traits\ValidationAwareTrait;
     

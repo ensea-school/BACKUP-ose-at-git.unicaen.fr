@@ -32,7 +32,7 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Recherche'   => 'Application\Controller\RechercheController',
+            'Application\Controller\Recherche'   => Controller\RechercheController::class,
         ],
     ],
 ];

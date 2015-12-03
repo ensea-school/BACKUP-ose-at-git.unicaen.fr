@@ -3,8 +3,8 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique as Entity;
-use Application\Entity\Db\Privilege;
 use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Util;
 
@@ -103,7 +103,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
         $html = $this->renderDescription();
 
 
-        if ($this->getView()->isAllowed($entity,Privilege::ODF_ELEMENT_EDITION)){
+        if ($this->getView()->isAllowed($entity,Privileges::ODF_ELEMENT_EDITION)){
             $buttons = '';
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/modifier', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/supprimer', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
@@ -136,7 +136,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
         }
 
         $tag = 'a';
-        if (! $this->getView()->isAllowed('privilege/'.Privilege::ODF_ELEMENT_VISUALISATION)) $tag = 'span';
+        if (! $this->getView()->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_VISUALISATION))) $tag = 'span';
 
         return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }

@@ -127,33 +127,33 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\VolumeHoraire'            => 'Application\Controller\VolumeHoraireController',
-            'Application\Controller\VolumeHoraireReferentiel' => 'Application\Controller\VolumeHoraireReferentielController',
+            'Application\Controller\VolumeHoraire'            => Controller\VolumeHoraireController::class,
+            'Application\Controller\VolumeHoraireReferentiel' => Controller\VolumeHoraireReferentielController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationVolumeHoraire'                  => 'Application\\Service\\VolumeHoraire',
-            'ApplicationVolumeHoraireReferentiel'       => 'Application\\Service\\VolumeHoraireReferentiel',
-            'ApplicationTypeVolumeHoraire'              => 'Application\\Service\\TypeVolumeHoraire',
-            'ApplicationEtatVolumeHoraire'              => 'Application\\Service\\EtatVolumeHoraire',
-            'FormVolumeHoraireSaisieMultipleHydrator'   => 'Application\Form\VolumeHoraire\SaisieMultipleHydrator',
+            'ApplicationVolumeHoraire'                  => Service\VolumeHoraire::class,
+            'ApplicationVolumeHoraireReferentiel'       => Service\VolumeHoraireReferentiel::class,
+            'ApplicationTypeVolumeHoraire'              => Service\TypeVolumeHoraire::class,
+            'ApplicationEtatVolumeHoraire'              => Service\EtatVolumeHoraire::class,
+            'FormVolumeHoraireSaisieMultipleHydrator'   => Form\VolumeHoraire\SaisieMultipleHydrator::class,
         ]
     ],
     'view_helpers' => [
         'invokables' => [
-            'volumeHoraireDl'                           => 'Application\View\Helper\VolumeHoraire\Dl',
-            'volumeHoraireListe'                        => 'Application\View\Helper\VolumeHoraire\Liste',
-            'volumeHoraireReferentielDl'                => 'Application\View\Helper\VolumeHoraireReferentiel\Dl',
-            'volumeHoraireReferentielListe'             => 'Application\View\Helper\VolumeHoraireReferentiel\Liste',
+            'volumeHoraireDl'                           => View\Helper\VolumeHoraire\Dl::class,
+            'volumeHoraireListe'                        => View\Helper\VolumeHoraire\Liste::class,
+            'volumeHoraireReferentielDl'                => View\Helper\VolumeHoraireReferentiel\Dl::class,
+            'volumeHoraireReferentielListe'             => View\Helper\VolumeHoraireReferentiel\Liste::class,
         ],
     ],
     'form_elements' => [
         'invokables' => [
-            'VolumeHoraireSaisie'                            => 'Application\Form\VolumeHoraire\Saisie',
-            'VolumeHoraireSaisieMultipleFieldset'            => 'Application\Form\VolumeHoraire\SaisieMultipleFieldset', // Nécessite plusieurs instances
-            'VolumeHoraireReferentielSaisie'                 => 'Application\Form\VolumeHoraireReferentiel\Saisie',
-            'VolumeHoraireReferentielSaisieMultipleFieldset' => 'Application\Form\VolumeHoraireReferentiel\SaisieMultipleFieldset', // Nécessite plusieurs instances
+            'VolumeHoraireSaisie'                            => Form\VolumeHoraire\Saisie::class,
+            'VolumeHoraireSaisieMultipleFieldset'            => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
+            'VolumeHoraireReferentielSaisie'                 => Form\VolumeHoraireReferentiel\Saisie::class,
+            'VolumeHoraireReferentielSaisieMultipleFieldset' => Form\VolumeHoraireReferentiel\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
         ],
     ],
 ];

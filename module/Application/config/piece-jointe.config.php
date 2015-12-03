@@ -9,6 +9,7 @@ use Application\Assertion\FichierAssertion;
 use Application\Acl\ComposanteRole;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\IntervenantExterieurRole;
+use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'router' => [
@@ -195,7 +196,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\PieceJointe:index',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\PieceJointe','index'),
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ],
                             'pieces-jointes-validation' => [
@@ -206,7 +207,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\PieceJointe:index',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\PieceJointe','index'),
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ],
                         ],

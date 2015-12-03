@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Identity;
 
+use BjyAuthorize\Service\Authorize;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -24,6 +25,11 @@ class IdentityProviderFactory implements FactoryInterface
         
         $identityProvider = new IdentityProvider;
         $identityProvider->setEntityManager($em);
+
+        $bs = $serviceLocator->get('BjyAuthorize\Service\Authorize');
+        /* @var $bs Authorize */
+        $roles = $bs->getAcl()->getRoles();
+
         return $identityProvider;
     }
 }

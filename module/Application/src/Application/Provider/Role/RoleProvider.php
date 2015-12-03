@@ -19,7 +19,7 @@ use Application\Service\Traits\IntervenantAwareTrait;
  * Fournisseur des rôles utilisateurs de l'application :
  * - ceux définis dans la configuration du fournisseur
  *
- *  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ *
  */
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {

@@ -1,12 +1,14 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /* @var $role Application\Entity\Db\Role */
 /* @var $statut Application\Entity\Db\StatutIntervenant */
 /* @var $privilege Application\Entity\Db\Privilege */
 
 $object = empty($role) ? $statut : $role;
 
-$canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DROIT_PRIVILEGE_EDITION);
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_PRIVILEGE_EDITION));
 
 if ($object->getPrivilege()->contains($privilege)):
 ?>

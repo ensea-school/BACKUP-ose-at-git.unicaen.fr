@@ -4,7 +4,7 @@ namespace Application\Assertion;
 
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\MiseEnPaiement;
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
 use Zend\Permissions\Acl\Acl;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -16,7 +16,7 @@ use Doctrine\ORM\Query\Expr\Join;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MiseEnPaiementAssertion extends AbstractAssertion
+class MiseEnPaiementAssertion extends OldAbstractAssertion
 {
     use \Application\Service\Traits\TypeValidationAwareTrait;
     use \Application\Service\Traits\ValidationAwareTrait;
@@ -32,12 +32,12 @@ class MiseEnPaiementAssertion extends AbstractAssertion
 
         if ($entity instanceof MiseEnPaiement){
             switch ($privilege){
-                case Privilege::MISE_EN_PAIEMENT_DEMANDE:
+                case Privileges::MISE_EN_PAIEMENT_DEMANDE:
                     return $this->assertMiseEnPaiementDemande($role, $entity);
             }
         }else if ($entity instanceof ServiceAPayerInterface){
             switch ($privilege){
-                case Privilege::MISE_EN_PAIEMENT_DEMANDE:
+                case Privileges::MISE_EN_PAIEMENT_DEMANDE:
                     return $this->assertServiceAPayerDemande( $role, $entity );
             }
         }

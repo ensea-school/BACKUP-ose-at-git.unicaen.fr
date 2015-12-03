@@ -2,7 +2,8 @@
 
 namespace Application;
 
-use Application\Entity\Db\Privilege;
+use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'router'          => [
@@ -81,13 +82,13 @@ return [
                     'gestion' => [
                         'label'    => "Gestion",
                         'route'    => 'gestion',
-                        'resource' => 'controller/Application\Controller\Gestion:index',
+                        'resource' => PrivilegeController::getResourceId('Application\Controller\Gestion','index'),
                         'pages' => [
                             'discipline' => [
                                 'label'    => "Disciplines",
                                 'title'    => "Gestion des disciplines",
                                 'route'    => 'discipline',
-                                'resource' => 'privilege/'.Privilege::DISCIPLINE_GESTION
+                                'resource' => Privileges::getResourceId(Privileges::DISCIPLINE_GESTION),
                             ],
                         ],
                     ],
@@ -103,32 +104,32 @@ return [
                     'action'     => ['index'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
                     'privileges' => [
-                        Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE,
-                        Privilege::MISE_EN_PAIEMENT_VISUALISATION,
-                        Privilege::DROIT_ROLE_VISUALISATION,
-                        Privilege::DROIT_PRIVILEGE_VISUALISATION,
-                        Privilege::DROIT_AFFECTATION_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privileges::DROIT_ROLE_VISUALISATION,
+                        Privileges::DROIT_PRIVILEGE_VISUALISATION,
+                        Privileges::DROIT_AFFECTATION_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Discipline',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privilege::DISCIPLINE_GESTION,
+                        Privileges::DISCIPLINE_GESTION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Discipline',
                     'action'     => ['voir'],
                     'privileges' => [
-                        Privilege::DISCIPLINE_VISUALISATION,
+                        Privileges::DISCIPLINE_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Discipline',
                     'action'     => ['saisir','supprimer'],
                     'privileges' => [
-                        Privilege::DISCIPLINE_EDITION,
+                        Privileges::DISCIPLINE_EDITION,
                     ],
                 ],
             ],

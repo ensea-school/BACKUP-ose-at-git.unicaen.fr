@@ -1,6 +1,7 @@
 <?php
 
 use Application\Entity\Db\MiseEnPaiement;
+use Application\Provider\Privilege\Privileges;
 
 /* @var $rechercheForm \Application\Form\Paiement\MiseEnPaiementRechercheForm */
 /* @var $etatPaiement array */
@@ -58,10 +59,10 @@ $this->headTitle()->append($title);
 
         echo $this->formRow($rechercheForm->get('suite')).' ';
         echo $this->formRow($rechercheForm->get('afficher')).' ';
-        if ($this->isAllowed('privilege/'.Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_EXPORT_CSV))
+        if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV)))
             echo $this->formRow($rechercheForm->get('exporter-csv-etat')).' ';
 
-        if ($this->isAllowed('privilege/'.Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_EXPORT_PDF))
+        if ($this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PDF)))
             echo $this->formRow($rechercheForm->get('exporter-pdf')).' ';
 
 
@@ -75,7 +76,7 @@ $this->headTitle()->append($title);
 
 if (! empty($etatPaiement)){
     echo $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => true]);
-    if( $etat === MiseEnPaiement::A_METTRE_EN_PAIEMENT && $this->isAllowed('privilege/'.Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT)){
+    if( $etat === MiseEnPaiement::A_METTRE_EN_PAIEMENT && $this->isAllowed(Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT))){
         $url = $this->url('paiement/mise-en-paiement', [
             'structure' => $rechercheForm->get('structure')->getValue(),
             'intervenants'=> implode( ',', $rechercheForm->get('intervenants')->getValue() )

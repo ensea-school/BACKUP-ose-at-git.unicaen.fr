@@ -1,5 +1,7 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /* @var $structure \Application\Entity\Db\Structure */
 /* @var $niveau \Application\Entity\NiveauEtape */
 /* @var $etape \Application\Entity\Db\Etape */
@@ -76,8 +78,8 @@ $this->headTitle()->append("Offre de formation");
 /* Lien d'export de l'OF au format CSV */
 $this->placeholder('export-of-link')->captureStart();
 
-$canExport = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::ODF_EXPORT_CSV);
-$canViewEtape = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::ODF_ETAPE_VISUALISATION);
+$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV));
+$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
 
 if ($canExport && count($elements)) {
     $params      = [
@@ -185,7 +187,7 @@ $this->placeholder('export-of-link')->captureEnd();
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php if ($this->isAllowed($structure,\Application\Entity\Db\Privilege::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure,Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...
@@ -235,7 +237,7 @@ $this->placeholder('export-of-link')->captureEnd();
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
                     Enseignements <?php echo $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
-                    <?php if ($this->isAllowed($structure,\Application\Entity\Db\Privilege::ODF_ELEMENT_EDITION)) echo $this->elementPedagogique()->renderAjouterLink(
+                    <?php if ($this->isAllowed($structure,Privileges::ODF_ELEMENT_EDITION)) echo $this->elementPedagogique()->renderAjouterLink(
                             '<span class="glyphicon glyphicon-plus"></span>',
                             ['class' => 'btn-xs', 'style' => 'float:right']); ?>
 

@@ -250,19 +250,19 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Contrat' => 'Application\Controller\ContratController',
+            'Application\Controller\Contrat' => Controller\ContratController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationContrat'          => 'Application\\Service\\Contrat',
-            'ApplicationTypeContrat'      => 'Application\\Service\\TypeContrat',
-            'ApplicationContratProcess'   => 'Application\\Service\\Process\\ContratProcess',
-            'NecessiteContratRule'        => 'Application\Rule\Intervenant\NecessiteContratRule',
-            'PossedeContratRule'          => 'Application\Rule\Intervenant\PossedeContratRule',
-            'PeutCreerContratInitialRule' => 'Application\Rule\Intervenant\PeutCreerContratInitialRule',
-            'PeutCreerAvenantRule'        => 'Application\Rule\Intervenant\PeutCreerAvenantRule',
-            'ContratAssertion'            => 'Application\\Assertion\\ContratAssertion',
+            'ApplicationContrat'          => Service\Contrat::class,
+            'ApplicationTypeContrat'      => Service\TypeContrat::class,
+            'ApplicationContratProcess'   => Service\Process\ContratProcess::class,
+            'NecessiteContratRule'        => Rule\Intervenant\NecessiteContratRule::class,
+            'PossedeContratRule'          => Rule\Intervenant\PossedeContratRule::class,
+            'PeutCreerContratInitialRule' => Rule\Intervenant\PeutCreerContratInitialRule::class,
+            'PeutCreerAvenantRule'        => Rule\Intervenant\PeutCreerAvenantRule::class,
+            'ContratAssertion'            => Assertion\ContratAssertion::class,
         ],
     ],
     'view_helpers' => [

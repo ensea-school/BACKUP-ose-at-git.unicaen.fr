@@ -67,17 +67,17 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Etablissement'   => 'Application\Controller\EtablissementController',
+            'Application\Controller\Etablissement'   => Controller\EtablissementController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationEtablissement'       => 'Application\\Service\\Etablissement',
+            'ApplicationEtablissement'       => Service\Etablissement::class,
         ]
     ],
     'view_helpers' => [
         'invokables' => [
-            'etablissement'     => 'Application\View\Helper\EtablissementViewHelper',
+            'etablissement'     => View\Helper\EtablissementViewHelper::class,
         ],
     ],
 ];

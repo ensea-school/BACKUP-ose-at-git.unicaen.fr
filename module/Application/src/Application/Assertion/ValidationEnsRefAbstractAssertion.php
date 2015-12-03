@@ -12,7 +12,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class ValidationEnsRefAbstractAssertion extends AbstractAssertion
+abstract class ValidationEnsRefAbstractAssertion extends OldAbstractAssertion
 {
     /**
      * @var ValidationEntity 

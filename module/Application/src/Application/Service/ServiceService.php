@@ -7,11 +7,9 @@ use Application\Entity\Db\Etablissement as EtablissementEntity;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
-use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
@@ -223,15 +221,16 @@ class ServiceService extends AbstractEntityService
             'etablissement'      => $etablissement,
         ]);
 
-        if (count($result) > 1){
-            foreach( $result as $sr ){
-                /* @var $sr \Application\Entity\Db\Service  */
+        if (count($result) > 1) {
+            foreach ($result as $sr) {
+                /* @var $sr \Application\Entity\Db\Service */
                 if ($sr->estNonHistorise()) return $sr;
             }
+
             return $result[0]; // sinon retourne le premier trouvé...
-        }elseif(isset($result[0])){
+        } elseif (isset($result[0])) {
             return $result[0];
-        }else{
+        } else {
             return null;
         }
     }
@@ -243,9 +242,10 @@ class ServiceService extends AbstractEntityService
      *
      * @param ServiceEntity $entity
      *
-     * @throws \Common\Exception\RuntimeException
+     * @throws Exception
+     * @return ServiceEntity
      */
-    public function save($entity)
+    public function save($entity, $plafondControl=true)
     {
         $this->getEntityManager()->getConnection()->beginTransaction();
         try {
@@ -279,11 +279,12 @@ class ServiceService extends AbstractEntityService
             $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
             /* @var $serviceVolumeHoraire VolumeHoraire */
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
+                /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire  */
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     $serviceVolumeHoraire->delete($volumeHoraire);
                 } else {
-                    $serviceVolumeHoraire->save($volumeHoraire);
+                    $serviceVolumeHoraire->save($volumeHoraire, false); // pas de contrôle de plafond sur le VH ! ! !
                 }
             }
             $this->getEntityManager()->getConnection()->commit();
@@ -291,7 +292,9 @@ class ServiceService extends AbstractEntityService
             $this->getEntityManager()->getConnection()->rollBack();
             throw $e;
         }
-
+        if ($plafondControl){
+            $this->controlePlafondFcMaj($entity->getIntervenant(), $entity->getTypeVolumeHoraire());
+        }
         return $result;
     }
 
@@ -483,7 +486,7 @@ class ServiceService extends AbstractEntityService
      * Retourne la liste des services selon l'étape donnée
      *
      * @param TypeIntervenantEntity $typeIntervenant
-     * @param QueryBuilder|null $queryBuilder
+     * @param QueryBuilder|null     $queryBuilder
      *
      * @return QueryBuilder
      */
@@ -764,7 +767,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function getPrevusFromPrevusData( IntervenantEntity $intervenant )
+    public function getPrevusFromPrevusData(IntervenantEntity $intervenant)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
@@ -805,7 +808,7 @@ class ServiceService extends AbstractEntityService
                 $this->getServiceContext()->getAnnee()
             ) : null;
 
-            if ($newElement && ! $newElement->estNonHistorise()){
+            if ($newElement && !$newElement->estNonHistorise()) {
                 $newElement = null; // s'il n'est pas actif alors on ne reporte pas
             }
 
@@ -826,7 +829,7 @@ class ServiceService extends AbstractEntityService
                 $periodes          = $vhl->getPeriodes();
                 $typesIntervention = $vhl->getTypesIntervention();
                 foreach ($periodes as $periode) {
-                    /* @var $periode Periode */
+                    /* @var $periode \Application\Entity\Db\Periode */
                     if (empty($newPeriode) || $periode === $newPeriode) { // pas de mauvaise période!!!
                         foreach ($typesIntervention as $typeIntervention) {
                             /* @var $typeIntervention TypeIntervention */
@@ -857,6 +860,7 @@ class ServiceService extends AbstractEntityService
                 }
             }
         }
+
         return $old;
     }
 
@@ -996,22 +1000,22 @@ class ServiceService extends AbstractEntityService
                 $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'] . '_' . $d['PERIODE_ID'] : $d['ID'];
             }
             $ds = [
-                '__total__'                     => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
-                'annee-libelle'                 => (string)$annee,
+                '__total__'     => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
+                'annee-libelle' => (string)$annee,
 
-                'intervenant-code'              => $d['INTERVENANT_CODE'],
-                'intervenant-nom'               => $d['INTERVENANT_NOM'],
-                'intervenant-date-naissance'    => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
-                'intervenant-statut-libelle'    => $d['INTERVENANT_STATUT_LIBELLE'],
-                'intervenant-type-code'         => $d['INTERVENANT_TYPE_CODE'],
-                'intervenant-type-libelle'      => $d['INTERVENANT_TYPE_LIBELLE'],
-                'intervenant-grade-code'        => $d['INTERVENANT_GRADE_CODE'],
-                'intervenant-grade-libelle'     => $d['INTERVENANT_GRADE_LIBELLE'],
-                'intervenant-discipline-code'   => $d['INTERVENANT_DISCIPLINE_CODE'],
-                'intervenant-discipline-libelle'=> $d['INTERVENANT_DISCIPLINE_LIBELLE'],
-                'heures-service-statutaire'     => (float)$d['SERVICE_STATUTAIRE'],
-                'heures-service-du-modifie'     => (float)$d['SERVICE_DU_MODIFIE'],
-                'service-structure-aff-libelle' => $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
+                'intervenant-code'               => $d['INTERVENANT_CODE'],
+                'intervenant-nom'                => $d['INTERVENANT_NOM'],
+                'intervenant-date-naissance'     => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
+                'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
+                'intervenant-type-code'          => $d['INTERVENANT_TYPE_CODE'],
+                'intervenant-type-libelle'       => $d['INTERVENANT_TYPE_LIBELLE'],
+                'intervenant-grade-code'         => $d['INTERVENANT_GRADE_CODE'],
+                'intervenant-grade-libelle'      => $d['INTERVENANT_GRADE_LIBELLE'],
+                'intervenant-discipline-code'    => $d['INTERVENANT_DISCIPLINE_CODE'],
+                'intervenant-discipline-libelle' => $d['INTERVENANT_DISCIPLINE_LIBELLE'],
+                'heures-service-statutaire'      => (float)$d['SERVICE_STATUTAIRE'],
+                'heures-service-du-modifie'      => (float)$d['SERVICE_DU_MODIFIE'],
+                'service-structure-aff-libelle'  => $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
 
                 'service-structure-ens-libelle' => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
                 'groupe-type-formation-libelle' => $d['GROUPE_TYPE_FORMATION_LIBELLE'],
@@ -1030,30 +1034,30 @@ class ServiceService extends AbstractEntityService
                 'element-ponderation-compl'     => $d['ELEMENT_PONDERATION_COMPL'] === null ? null : (float)$d['ELEMENT_PONDERATION_COMPL'],
                 'element-source-libelle'        => $d['ELEMENT_SOURCE_LIBELLE'],
 
-                'periode-libelle'               => $d['PERIODE_LIBELLE'],
-                'heures-non-payees'             => (float)$d['HEURES_NON_PAYEES'],
+                'periode-libelle'              => $d['PERIODE_LIBELLE'],
+                'heures-non-payees'            => (float)$d['HEURES_NON_PAYEES'],
                 // types d'intervention traités en aval
-                'heures-ref'                    => (float)$d['HEURES_REF'],
-                'service-fi'                    => (float)$d['SERVICE_FI'],
-                'service-fa'                    => (float)$d['SERVICE_FA'],
-                'service-fc'                    => (float)$d['SERVICE_FC'],
-                'service-referentiel'           => (float)$d['SERVICE_REFERENTIEL'],
-                'heures-compl-fi'               => (float)$d['HEURES_COMPL_FI'],
-                'heures-compl-fa'               => (float)$d['HEURES_COMPL_FA'],
-                'heures-compl-fc'               => (float)$d['HEURES_COMPL_FC'],
-                'heures-compl-fc-majorees'      => (float)$d['HEURES_COMPL_FC_MAJOREES'],
-                'heures-compl-referentiel'      => (float)$d['HEURES_COMPL_REFERENTIEL'],
-                'total'                         => (float)$d['TOTAL'],
-                'solde'                         => (float)$d['SOLDE'],
-                'date-cloture-service-realise'  => empty($d['DATE_CLOTURE_REALISE']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_CLOTURE_REALISE'], 0, 10)),
+                'heures-ref'                   => (float)$d['HEURES_REF'],
+                'service-fi'                   => (float)$d['SERVICE_FI'],
+                'service-fa'                   => (float)$d['SERVICE_FA'],
+                'service-fc'                   => (float)$d['SERVICE_FC'],
+                'service-referentiel'          => (float)$d['SERVICE_REFERENTIEL'],
+                'heures-compl-fi'              => (float)$d['HEURES_COMPL_FI'],
+                'heures-compl-fa'              => (float)$d['HEURES_COMPL_FA'],
+                'heures-compl-fc'              => (float)$d['HEURES_COMPL_FC'],
+                'heures-compl-fc-majorees'     => (float)$d['HEURES_COMPL_FC_MAJOREES'],
+                'heures-compl-referentiel'     => (float)$d['HEURES_COMPL_REFERENTIEL'],
+                'total'                        => (float)$d['TOTAL'],
+                'solde'                        => (float)$d['SOLDE'],
+                'date-cloture-service-realise' => empty($d['DATE_CLOTURE_REALISE']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_CLOTURE_REALISE'], 0, 10)),
             ];
 
             if (
                 $ds['heures-service-statutaire'] > 0
-                && $ds['heures-service-statutaire']+$ds['heures-service-du-modifie'] == 0
+                && $ds['heures-service-statutaire'] + $ds['heures-service-du-modifie'] == 0
                 && empty($ds['etape-code'])
-            ){
-                $ds['__total__'] ++; // pour que le cas spécifique des décharges totales soit pris en compte
+            ) {
+                $ds['__total__']++; // pour que le cas spécifique des décharges totales soit pris en compte
             }
 
             if ($d['TYPE_INTERVENTION_ID'] != null) {
@@ -1098,21 +1102,21 @@ class ServiceService extends AbstractEntityService
 
         // tri et préparation des entêtes
         $head = [
-            'annee-libelle'                 => 'Année universitaire',
+            'annee-libelle' => 'Année universitaire',
 
-            'intervenant-code'              => 'Code intervenant',
-            'intervenant-nom'               => 'Intervenant',
-            'intervenant-date-naissance'    => 'Date de naissance',
-            'intervenant-statut-libelle'    => 'Statut intervenant',
-            'intervenant-type-code'         => 'Type d\'intervenant (Code)',
-            'intervenant-type-libelle'      => 'Type d\'intervenant',
-            'intervenant-grade-code'        => 'Grade (Code)',
-            'intervenant-grade-libelle'     => 'Grade',
-            'intervenant-discipline-code'   => 'Discipline intervenant (Code)',
-            'intervenant-discipline-libelle'=> 'Discipline intervenant',
-            'heures-service-statutaire'     => 'Service statutaire',
-            'heures-service-du-modifie'     => 'Modification de service du',
-            'service-structure-aff-libelle' => 'Structure d\'affectation',
+            'intervenant-code'               => 'Code intervenant',
+            'intervenant-nom'                => 'Intervenant',
+            'intervenant-date-naissance'     => 'Date de naissance',
+            'intervenant-statut-libelle'     => 'Statut intervenant',
+            'intervenant-type-code'          => 'Type d\'intervenant (Code)',
+            'intervenant-type-libelle'       => 'Type d\'intervenant',
+            'intervenant-grade-code'         => 'Grade (Code)',
+            'intervenant-grade-libelle'      => 'Grade',
+            'intervenant-discipline-code'    => 'Discipline intervenant (Code)',
+            'intervenant-discipline-libelle' => 'Discipline intervenant',
+            'heures-service-statutaire'      => 'Service statutaire',
+            'heures-service-du-modifie'      => 'Modification de service du',
+            'service-structure-aff-libelle'  => 'Structure d\'affectation',
 
             'service-structure-ens-libelle' => 'Structure d\'enseignement',
             'groupe-type-formation-libelle' => 'Groupe de type de formation',
@@ -1345,6 +1349,26 @@ class ServiceService extends AbstractEntityService
     }
 
 
+
+    /**
+     * Contrôle du plafond des heures FC (D714-60) après saisie.
+     *
+     * @param IntervenantEntity       $intervenant
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     *
+     * @return $this
+     */
+    public function controlePlafondFcMaj( IntervenantEntity $intervenant, TypeVolumeHoraireEntity $typeVolumeHoraire )
+    {
+        $intervenantId = (int)$intervenant->getId();
+        $tvhId = (int)$typeVolumeHoraire->getId();
+
+        $sql = "BEGIN ose_service.controle_plafond_fc_maj($intervenantId,$tvhId); END;";
+        $this->getEntityManager()->getConnection()->exec($sql);
+        return $this;
+    }
+
+    
 
     /**
      *

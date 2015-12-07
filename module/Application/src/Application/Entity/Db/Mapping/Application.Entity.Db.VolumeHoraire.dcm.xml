@@ -17,6 +17,7 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="temPlafondFcMaj" type="integer" column="TEM_PLAFOND_FC_MAJ" nullable="false" />
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>

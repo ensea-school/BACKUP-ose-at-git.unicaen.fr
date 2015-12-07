@@ -16,7 +16,7 @@ $settings = [
      * Allows users to register through the website.
      * Accepted values: boolean true or false
      */
-    'enable_registration'        => false,
+    'enable_registration' => false,
 
     'enable_privileges' => true,
 

@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\FormuleResultatService;
-use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
@@ -58,8 +56,8 @@ class ServiceAPayer extends AbstractService
 
         /* Tri */
         usort($frsList, function ($a, $b) {
-            /* @var $a FormuleResultatService */
-            /* @var $b FormuleResultatService */
+            /* @var $a \Application\Entity\Db\FormuleResultatService */
+            /* @var $b \Application\Entity\Db\FormuleResultatService */
             $aTriStr = $a->getStructure()->getLibelleCourt();
             if ($element = $a->getService()->getElementPedagogique()) {
                 $aTriStr .= ' ' . $element->getEtape()->getLibelle();
@@ -80,8 +78,8 @@ class ServiceAPayer extends AbstractService
         });
 
         usort($frsrList, function ($a, $b) {
-            /* @var $a FormuleResultatServiceReferentiel */
-            /* @var $b FormuleResultatServiceReferentiel */
+            /* @var $a \Application\Entity\Db\FormuleResultatServiceReferentiel */
+            /* @var $b \Application\Entity\Db\FormuleResultatServiceReferentiel */
             $aTriStr = $a->getStructure()->getLibelleCourt();
             $aTriStr .= ' ' . $a->getServiceReferentiel()->getFonction()->getLibelleCourt();
 

@@ -5,6 +5,7 @@
 /* @var $saved boolean */
 /* @var $dateDerniereModif DateTime */
 /* @var $dernierModificateur \Application\Entity\Db\Utilisateur */
+/* @var $changeIndex integer  */
 
 $title = 'Demande de mise en paiement';
 if ($intervenant){
@@ -19,7 +20,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 <h1 class="page-header"><?php echo $title; ?></h1>
 
 <?php
-$html = $this->demandeMiseEnPaiement( $servicesAPayer )->render();
+$html = $this->demandeMiseEnPaiement( $servicesAPayer, $changeIndex )->render();
 
 /**
  * NB: l'appel $this->messageCollector() doit être fait après $this->demandeMiseEnPaiement() car

@@ -19,6 +19,7 @@ use Application\Service\Traits\ServiceAPayerAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
@@ -42,6 +43,7 @@ class PaiementController extends AbstractActionController
     use TypeIntervenantAwareTrait;
     use MiseEnPaiementFormAwareTrait;
     use MiseEnPaiementRechercheFormAwareTrait;
+    use SessionContainerTrait;
 
 
 
@@ -71,16 +73,50 @@ class PaiementController extends AbstractActionController
 
 
 
+    /**
+     * @return int
+     */
+    protected function getChangeIndex()
+    {
+        $session = $this->getSessionContainer();
+        if (! isset($session->cgtIndex)) $session->cgtIndex = 0;
+        $result = $session->cgtIndex;
+        $session->cgtIndex ++;
+        return $result;
+    }
+
+
+    protected function isChangeIndexSaved( $changeIndex ){
+        $session = $this->getSessionContainer();
+        if (! isset($session->cht)) $session->cht = [];
+        return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
+    }
+
+
+    protected function setChangeIndexSaved( $changeIndex ){
+        $session = $this->getSessionContainer();
+        if (! isset($session->cht)) $session->cht = [];
+        $session->cht[$changeIndex] = true;
+
+        return $this;
+    }
+
+
     public function demandeMiseEnPaiementAction()
     {
+        // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
+        $postChangeIndex = (int)$this->params()->fromPost('change-index');
+        $changeIndex = $this->getChangeIndex();
+
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $saved = false;
-        if ($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost() && ! $this->isChangeIndexSaved($postChangeIndex)) {
             $changements = $this->params()->fromPost('changements', '{}');
             $changements = Json::decode($changements, Json::TYPE_ARRAY);
             $this->getServiceMiseEnPaiement()->saveChangements($changements);
+            $this->setChangeIndexSaved($postChangeIndex);
             $saved = true;
         }
         $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
@@ -101,7 +137,7 @@ class PaiementController extends AbstractActionController
             }
         }
 
-        return compact('intervenant', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur');
+        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur');
     }
 
 

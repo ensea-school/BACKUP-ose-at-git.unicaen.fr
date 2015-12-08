@@ -52,6 +52,11 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
      */
     protected $domainesFonctionnels;
 
+    /**
+     * @var integer
+     */
+    protected $changeIndex;
+
 
 
     /**
@@ -60,9 +65,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
      * @param ServiceAPayerInterface[] $servicesAPayer
      * @return self
      */
-    final public function __invoke( array $servicesAPayer )
+    final public function __invoke( array $servicesAPayer, $changeIndex = null )
     {
         $this->setServicesAPayer($servicesAPayer);
+        $this->changeIndex = $changeIndex;
         return $this;
     }
 
@@ -87,6 +93,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         if (null === $this->form){
             $this->form = new \Zend\Form\Form;
             $this->form->add( new \Zend\Form\Element\Hidden('changements') );
+            $this->form->add( new \Zend\Form\Element\Hidden('change-index') );
             $this->form->add([
                 'name' => 'submit',
                 'type'  => 'Submit',
@@ -96,6 +103,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 ],
             ]);
 
+            $this->form->get('change-index')->setValue($this->changeIndex);
             $this->form->setAttribute('action', $this->getView()->url(null, [], [], true));
         }
         return $this->form;
@@ -123,6 +131,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             $out .= '<div>';
             $out .= $this->getView()->form()->openTag($this->getForm());
             $out .= $this->getView()->formHidden($this->getForm()->get('changements'));
+            $out .= $this->getView()->formHidden($this->getForm()->get('change-index'));
             $out .= $this->getView()->formRow($this->getForm()->get('submit'));
             $out .= $this->getView()->form()->closeTag();
             $out .= '</div>';

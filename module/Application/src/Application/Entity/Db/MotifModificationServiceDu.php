@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -11,19 +12,10 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-
-
     /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
+     * @var integer
      */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-
-
+    protected $id;
 
     /**
      * @var string
@@ -36,9 +28,21 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
     protected $libelle;
 
     /**
-     * @var integer
+     * @var boolean
      */
-    protected $id;
+    protected $decharge;
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
 
 
@@ -99,13 +103,36 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
 
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return boolean
      */
-    public function getId()
+    public function getDecharge()
     {
-        return $this->id;
+        return $this->decharge;
     }
 
+
+
+    /**
+     * @param boolean $decharge
+     *
+     * @return MotifModificationServiceDu
+     */
+    public function setDecharge($decharge)
+    {
+        $this->decharge = $decharge;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 }

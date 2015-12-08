@@ -4,19 +4,19 @@
 <table class="table table-bordered table-condensed">
     <thead>
     <tr>
-        <th>&nbsp;</th>
-        <th>Civilité</th>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Structure</th>
-        <th>Date de naissance</th>
-        <th>N° personnel</th>
+        <th style="width:1%">&nbsp;</th>
+        <th style="width:10%">Civilité</th>
+        <th style="width:18%">Nom</th>
+        <th style="width:18%">Prénom</th>
+        <th style="width:18%">Structure</th>
+        <th style="width:18%">Date de naissance</th>
+        <th style="width:10%">N° personnel</th>
     </tr>
     </thead>
     <tbody class="table-hover">
     <?php foreach($intervenants as $sourceCode => $intervenant): ?>
     <tr>
-        <td><a href="<?php echo $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
+        <td style="white-space: nowrap"><a href="<?php echo $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>
         <td><?php echo $intervenant['civilite'] ?></td>

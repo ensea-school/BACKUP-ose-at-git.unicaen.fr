@@ -2,8 +2,13 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\ModificationServiceDu;
+use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Doctrine\DBAL\DBALException;
 use Zend\Mvc\Controller\AbstractActionController;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
 use Common\Exception\RuntimeException;
 
 /**
@@ -16,16 +21,15 @@ use Common\Exception\RuntimeException;
  */
 class ModificationServiceDuController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
-    use \Application\Service\Traits\IntervenantAwareTrait;
+    use ContextAwareTrait;
+    use IntervenantAwareTrait;
+    use ModificationServiceDuFormAwareTrait;
 
-    /**
-     *
-     */
+
     public function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ModificationServiceDu',
+            ModificationServiceDu::class,
         ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
@@ -44,8 +48,7 @@ class ModificationServiceDuController extends AbstractActionController
             }
         }
 
-        $form = $this->getServiceLocator()->get('form_element_manager')->get('IntervenantModificationServiceDuForm');
-        /* @var $form \Application\Form\Intervenant\ModificationServiceDuForm */
+        $form = $this->getFormIntervenantModificationServiceDu();
         $fs = $form->getFieldsets()['fs'];
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->bind($intervenant);
@@ -71,7 +74,7 @@ class ModificationServiceDuController extends AbstractActionController
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);
                 }
-                catch (\Doctrine\DBAL\DBALException $exc) {
+                catch (DBALException $exc) {
                     $exception = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
                     $variables['exception'] = $exception;
                 }

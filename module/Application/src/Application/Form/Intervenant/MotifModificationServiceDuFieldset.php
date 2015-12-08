@@ -16,8 +16,8 @@ use Application\Entity\Db\MotifModificationService;
  */
 class MotifModificationServiceDuFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\MotifModificationServiceDuAwareTrait;
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use \Application\Service\Traits\MotifModificationServiceDuAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -53,7 +53,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements ServiceLoca
                 'label'         => "Nombre d'heures",
             ],
             'attributes' => [
-                'value'         => "0",
+                'value'         => 0,
                 'title'         => "Nombre d'heures",
                 'class'         => 'modification-service-du modification-service-du-heures'
             ],
@@ -127,17 +127,6 @@ class MotifModificationServiceDuFieldset extends Fieldset implements ServiceLoca
                     new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
                 'validators' => [
-//                    array(
-//                        'name' => 'Zend\Validator\NotEmpty',
-//                        'options' => array(
-//                            'string',
-//                            'integer',
-//                            'zero',
-//                            'messages' => array(
-//                                \Zend\Validator\NotEmpty::IS_EMPTY => "Un nombre d'heures non nul est requis",
-//                            ),
-//                        ),
-//                    ),
                     [
                         'name' => 'Zend\Validator\GreaterThan',
                         'options' => [
@@ -151,10 +140,6 @@ class MotifModificationServiceDuFieldset extends Fieldset implements ServiceLoca
                 ],
             ],
         ];
-
-//        if (($validator = $this->getValidatorHeures())) {
-//            $specs['heures']['validators'][] = $validator;
-//        }
 
         return $specs;
     }
@@ -173,7 +158,7 @@ class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator
         $array = parent::extract($object);
         
         $array['heures'] = floatval($object->getHeures());
-        
+        $array['motif'] = $object->getMotif() ? $object->getMotif()->getId() : null;
         return $array;
     }
 

@@ -41,13 +41,7 @@ function Url(route, data)
 
 Url.getBase = function ()
 {
-    sc = document.getElementsByTagName("script");
-    for (idx = 0; idx < sc.length; idx++) {
-        s = sc.item(idx);
-        if (s.src && s.src.match(/js\/app\.js(\?.*)/)) {
-            return s.src.replace(/()js\/app\.js(\?.*)/, '$1');
-        }
-    }
+    return $('.navbar-header .navbar-brand').attr('href');
 }
 
 Util = {

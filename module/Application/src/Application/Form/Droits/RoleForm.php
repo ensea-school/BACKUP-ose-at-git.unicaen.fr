@@ -16,8 +16,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\PerimetreAwareTrait
-    ;
+        \Application\Service\Traits\PerimetreAwareTrait;
+
 
 
     public function init()
@@ -26,46 +26,59 @@ class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
         $hydrator->setServicePerimetre($this->getServicePerimetre());
         $this->setHydrator($hydrator);
 
-        $this->add( [
-            'type' => 'Text',
-            'name' => 'code',
+        $this->add([
+            'type'    => 'Text',
+            'name'    => 'code',
             'options' => [
                 'label' => 'Code',
             ],
-        ] );
+        ]);
 
-        $this->add( [
-            'type' => 'Text',
-            'name' => 'libelle',
+        $this->add([
+            'type'    => 'Text',
+            'name'    => 'libelle',
             'options' => [
                 'label' => 'Libellé',
             ],
-        ] );
+        ]);
 
-        $this->add( [
-            'type' => 'Select',
-            'name' => 'perimetre',
+        $this->add([
+            'type'    => 'Select',
+            'name'    => 'perimetre',
             'options' => [
-                'label' => 'Périmètre',
-                'value_options' => Util::collectionAsOptions($this->getServicePerimetre()->getList())
+                'label'         => 'Périmètre',
+                'value_options' => Util::collectionAsOptions($this->getServicePerimetre()->getList()),
             ],
 
-        ] );
+        ]);
 
-        $this->add( [
+        $this->add([
+            'name'       => 'peut-changer-structure',
+            'options'    => [
+                'label' => 'Peut changer de structure',
+            ],
+            'attributes' => [
+                'title' => "Détermine si l'utilisateur peut changer de structure",
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
             'name' => 'id',
-            'type' => 'Hidden'
-        ] );
+            'type' => 'Hidden',
+        ]);
 
         $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [
-                'value'  => 'Enregistrer',
-                'class'  => 'btn btn-primary',
+                'value' => 'Enregistrer',
+                'class' => 'btn btn-primary',
             ],
         ]);
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -76,13 +89,16 @@ class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
     public function getInputFilterSpecification()
     {
         return [
-            'code' => [
+            'code'                   => [
                 'required' => true,
             ],
-            'libelle' => [
+            'libelle'                => [
                 'required' => true,
             ],
-            'perimetre' => [
+            'perimetre'              => [
+                'required' => true,
+            ],
+            'peut-changer-structure' => [
                 'required' => true,
             ],
         ];
@@ -90,34 +106,46 @@ class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
 }
 
 
+
+
+
 class RoleFormHydrator implements HydratorInterface
 {
     use \Application\Service\Traits\PerimetreAwareTrait;
 
+
+
     /**
-     * @param  array $data
+     * @param  array                       $data
      * @param  \Application\Entity\Db\Role $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        $object->setCode     ( $data['code'] );
-        $object->setLibelle  ( $data['libelle'] );
-        $object->setPerimetre( $this->getServicePerimetre()->get($data['perimetre']) );
+        $object->setCode($data['code']);
+        $object->setLibelle($data['libelle']);
+        $object->setPerimetre($this->getServicePerimetre()->get($data['perimetre']));
+        $object->setPeutChangerStructure($data['peut-changer-structure']);
+
         return $object;
     }
 
+
+
     /**
      * @param  \Application\Entity\Db\Role $object
+     *
      * @return array
      */
     public function extract($object)
     {
         $data = [
-            'id'        => $object->getId(),
-            'code'      => $object->getCode(),
-            'libelle'   => $object->getLibelle(),
-            'perimetre' => $object->getPerimetre() ? $object->getPerimetre()->getId() : null,
+            'id'                     => $object->getId(),
+            'code'                   => $object->getCode(),
+            'libelle'                => $object->getLibelle(),
+            'perimetre'              => $object->getPerimetre() ? $object->getPerimetre()->getId() : null,
+            'peut-changer-structure' => $object->getPeutChangerStructure(),
         ];
 
         return $data;

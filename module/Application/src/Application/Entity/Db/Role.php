@@ -37,6 +37,10 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      */
     protected $perimetre;
 
+    /**
+     * @var boolean
+     */
+    protected $peutChangerStructure;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -48,15 +52,19 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      */
     private $privilege;
 
+
+
     /**
      *
      */
     public function __construct()
     {
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->privilege = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privilege   = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
+
+
     /**
      * Returns the string identifier of the Role
      *
@@ -66,10 +74,12 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->getCode();
     }
-    
+
+
+
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
@@ -77,10 +87,13 @@ class Role implements HistoriqueAwareInterface, RoleInterface
         return $this->getLibelle();
     }
 
+
+
     /**
      * Set code
      *
      * @param string $code
+     *
      * @return self
      */
     public function setCode($code)
@@ -90,20 +103,25 @@ class Role implements HistoriqueAwareInterface, RoleInterface
         return $this;
     }
 
+
+
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
         return $this->code;
     }
 
+
+
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return self
      */
     public function setLibelle($libelle)
@@ -113,20 +131,25 @@ class Role implements HistoriqueAwareInterface, RoleInterface
         return $this;
     }
 
+
+
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
+
+
     /**
      * Set perimetre
      *
      * @param Perimetre $perimetre
+     *
      * @return self
      */
     public function setPerimetre($perimetre)
@@ -135,6 +158,8 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get perimetre
@@ -146,20 +171,49 @@ class Role implements HistoriqueAwareInterface, RoleInterface
         return $this->perimetre;
     }
 
+
+
+    /**
+     * @return boolean
+     */
+    public function getPeutChangerStructure()
+    {
+        return $this->peutChangerStructure;
+    }
+
+
+
+    /**
+     * @param boolean $peutChangerStructure
+     *
+     * @return Role
+     */
+    public function setPeutChangerStructure($peutChangerStructure)
+    {
+        $this->peutChangerStructure = $peutChangerStructure;
+
+        return $this;
+    }
+
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Add affectation
      *
      * @param \Application\Entity\Db\Affectation $affectation
+     *
      * @return self
      */
     public function addAffectation(\Application\Entity\Db\Affectation $affectation)
@@ -168,6 +222,8 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove affectation
@@ -179,20 +235,25 @@ class Role implements HistoriqueAwareInterface, RoleInterface
         $this->affectation->removeElement($affectation);
     }
 
+
+
     /**
      * Get affectation
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAffectation()
     {
         return $this->affectation;
     }
 
+
+
     /**
      * Add privilege
      *
      * @param Privilege $privilege
+     *
      * @return self
      */
     public function addPrivilege(Privilege $privilege)
@@ -201,6 +262,8 @@ class Role implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove privilege
@@ -211,6 +274,8 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     {
         $this->privilege->removeElement($privilege);
     }
+
+
 
     /**
      * Get privilege
@@ -229,16 +294,17 @@ class Role implements HistoriqueAwareInterface, RoleInterface
      *
      * @return boolean
      */
-    public function hasPrivilege( $privilege )
+    public function hasPrivilege($privilege)
     {
-        if ($privilege instanceof Privilege){
+        if ($privilege instanceof Privilege) {
             return $this->getPrivilege()->contains($privilege);
-        }else{
+        } else {
             $privileges = $this->getPrivilege();
             /* @var $privileges Privilege[] */
-            foreach( $privileges as $priv ){
+            foreach ($privileges as $priv) {
                 if ($priv->getFullCode() === $privilege) return true;
             }
+
             return false;
         }
     }

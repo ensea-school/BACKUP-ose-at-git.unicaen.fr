@@ -20,6 +20,8 @@ class Role extends NamedRole
     use IntervenantAwareTrait;
     use PerimetreAwareTrait;
 
+    protected $peutChangerStructure;
+
     const ROLE_ID = 'role';
 
 
@@ -27,6 +29,30 @@ class Role extends NamedRole
     public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Rôle inconnu', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getPeutChangerStructure()
+    {
+        return $this->peutChangerStructure;
+    }
+
+
+
+    /**
+     * @param mixed $peutChangerStructure
+     *
+     * @return Role
+     */
+    public function setPeutChangerStructure($peutChangerStructure)
+    {
+        $this->peutChangerStructure = $peutChangerStructure;
+
+        return $this;
     }
 
 }

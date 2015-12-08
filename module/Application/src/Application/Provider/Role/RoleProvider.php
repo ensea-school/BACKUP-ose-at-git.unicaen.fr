@@ -144,6 +144,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /* FIN de deprecated */
 
             $role = new $roleClass($roleId, $parent, $dbRole->getLibelle());
+            if ($dbRole->getPeutChangerStructure()){
+                $role->setPeutChangerStructure(true);
+            }
             /* @var $role Role */
             $role->setPersonnel($personnel);
             $role->setPerimetre($dbRole->getPerimetre());

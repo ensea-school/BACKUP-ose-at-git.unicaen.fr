@@ -2,7 +2,11 @@
 
 namespace Application\Controller;
 
+use Application\Acl\Role;
 use UnicaenAuth\Controller\UtilisateurController as BaseController;
+
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
 
 /**
  * 
@@ -11,9 +15,9 @@ use UnicaenAuth\Controller\UtilisateurController as BaseController;
  */
 class UtilisateurController extends BaseController
 {
-    use \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait
-    ;
+    use ContextAwareTrait;
+    use StructureAwareTrait;
+
     
     /**
      * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
@@ -24,9 +28,10 @@ class UtilisateurController extends BaseController
         parent::selectionnerProfilAction($addFlashMessage = false);
         
         $role        = $this->getAuthUserContextService()->getSelectedIdentityRole();
-        $structureId = $this->getRequest()->getPost('structure');
+        /* @var $role Role */
+        $structureId = $this->getRequest()->getPost('structure-'.$role->getRoleId());
         
-        if ($role instanceof \Application\Acl\AdministrateurRole) {
+        if ($role->getPerimetre()->isEtablissement()) {
             $structure = null;
             if ($structureId) {
                 $structure = $this->getServiceStructure()->get($structureId);

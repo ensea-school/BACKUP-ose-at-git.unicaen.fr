@@ -169,30 +169,5 @@ class AgrementAssertion extends OldAbstractAssertion implements WorkflowInterven
         
         return $wf;
     }
-    
-    /**
-     * @return NecessiteAgrementRule
-     */
-    private function getRuleNecessiteAgrement()
-    {
-        $rule = $this->getServiceAgrement()->getRuleNecessiteAgrement();
-        $rule
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setTypeAgrement($this->resource->getType());
-        
-        return $rule;
-    }
-    
-    /**
-     * @return AgrementFourniRule
-     */
-    private function getRuleAgrementFourni()
-    {
-        $rule = $this->getServiceAgrement()->getRuleAgrementFourni();
-        $rule
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setTypeAgrement($this->resource->getType());
-        
-        return $rule;
-    }
+
 }

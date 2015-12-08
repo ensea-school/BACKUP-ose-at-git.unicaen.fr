@@ -8,10 +8,18 @@ join intervenant i on i.id = ie.intervenant_id
 join wf_etape e on e.id = ie.etape_id
 left join structure s on s.id = ie.structure_id
 where 
-  i.source_code = '19010' 
+  i.source_code = '2298' 
   --and ie.structure_id is  null
   AND i.annee_id = 2015
 order by e.ordre;
+
+
+SELECT
+  *
+FROM
+  wf_etape
+  JOIN 
+
 
 
 /**
@@ -40,8 +48,8 @@ values (
  */
 
 begin    
-    --ose_workflow.update_intervenant_etapes(7992);
-    ose_workflow.update_all_intervenants_etapes;
+    ose_workflow.update_intervenant_etapes(35465);
+    --ose_workflow.update_all_intervenants_etapes;
 end;
 /
 

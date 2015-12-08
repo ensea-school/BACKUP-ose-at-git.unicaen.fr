@@ -542,7 +542,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
-                    'roles'      => $R_ALL,
+                    'roles'      => [R_ADMINISTRATEUR, R_COMPOSANTE, R_ETABLISSEMENT, R_INTERVENANT],
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',

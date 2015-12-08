@@ -4,7 +4,6 @@ namespace Application;
 
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
-use Application\Acl\DrhRole;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
@@ -129,7 +128,7 @@ return [
                         'result-item-donnees-perso-modif',
                         'purger-indicateur-donnees-perso-modif'
                     ],
-                    'roles'      => ['user', ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'roles'      => ['user', ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
             ],
         ],

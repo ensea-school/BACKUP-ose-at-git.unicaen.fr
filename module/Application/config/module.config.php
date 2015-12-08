@@ -4,30 +4,27 @@ namespace Application;
 
 const R_ADMINISTRATEUR        = Acl\AdministrateurRole::ROLE_ID;
 const R_COMPOSANTE            = Acl\ComposanteRole::ROLE_ID;
-const R_DRH                   = Acl\DrhRole::ROLE_ID;
 const R_ETABLISSEMENT         = Acl\EtablissementRole::ROLE_ID;
 const R_INTERVENANT           = Acl\IntervenantRole::ROLE_ID;
 const R_INTERVENANT_EXTERIEUR = Acl\IntervenantExterieurRole::ROLE_ID;
 
 
-$R_ALL = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
-
 $main = [
     'doctrine'           => [
         'connection'   => [
             'orm_default' => [
-                'driverClass' => 'Doctrine\DBAL\Driver\OCI8\Driver',
+                'driverClass' => \Doctrine\DBAL\Driver\OCI8\Driver::class,
             ],
         ],
         'driver'       => [
             'orm_default_driver' => [
-                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+                'class' => \Doctrine\ORM\Mapping\Driver\XmlDriver::class,
                 'paths' => [
                     __DIR__ . '/../src/Application/Entity/Db/Mapping',
                 ],
             ],
             'orm_default'        => [
-                'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
+                'class'   => \Doctrine\ORM\Mapping\Driver\DriverChain::class,
                 'drivers' => [
                     'Application\Entity\Db' => 'orm_default_driver',
                 ],
@@ -36,7 +33,7 @@ $main = [
         'eventmanager' => [
             'orm_default' => [
                 'subscribers' => [
-                    'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
+                    \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
                     'UnicaenApp\HistoriqueListener',
                 ],
             ],
@@ -53,7 +50,7 @@ $main = [
     'router'             => [
         'routes' => [
             'home'             => [
-                'type'    => 'Zend\Mvc\Router\Http\Literal',
+                'type'    => 'Literal',
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
@@ -112,7 +109,7 @@ $main = [
     'bjyauthorize'       => [
         'identity_provider' => 'ApplicationIdentityProvider',
 
-        'role_providers'     => [
+        'role_providers' => [
             'ApplicationRoleProvider' => [
                 Acl\Role::class,
 
@@ -120,18 +117,14 @@ $main = [
 
                 Acl\ComposanteRole::class,
 
-                Acl\DrhRole::class,
                 Acl\EtablissementRole::class,
                 Acl\IntervenantRole::class,
                 Acl\IntervenantExterieurRole::class,
                 Acl\IntervenantPermanentRole::class,
             ],
         ],
-        'rule_providers'     => [
-//            'Application\Provider\Rule\PrivilegeRuleProvider' => [],
-        ],
-        'guards'             => [
-            'BjyAuthorize\Guard\Controller' => [
+        'guards'         => [
+            \BjyAuthorize\Guard\Controller::class => [
                 [
                     'controller' => 'Application\Controller\Index',
                     'action'     => ['changement-annee'],
@@ -151,14 +144,10 @@ $main = [
             'ApplicationSource'                   => Service\Source::class,
             'ApplicationAffectation'              => Service\Affectation::class,
             'ApplicationRole'                     => Service\Role::class,
-            'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class,
             'ApplicationPays'                     => Service\Pays::class,
             'ApplicationDepartement'              => Service\Departement::class,
             'IntervenantNavigationPageVisibility' => Service\IntervenantNavigationPageVisibility::class,
-            'TestAssertion'                       => Assertion\TestAssertion::class,
-        ],
-        'aliases'            => [
-            'PrivilegeProvider' => 'UnicaenAuth\Service\Privilege',
+            'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class,
         ],
         'factories'          => [
             'navigation'                  => Service\NavigationFactoryFactory::class,

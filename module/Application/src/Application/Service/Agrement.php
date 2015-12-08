@@ -23,7 +23,7 @@ class Agrement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Agrement';
+        return AgrementEntity::class;
     }
 
     /**

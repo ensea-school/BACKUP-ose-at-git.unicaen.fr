@@ -4,7 +4,6 @@ namespace Application\Assertion;
 
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
-use Application\Acl\DrhRole;
 use Application\Acl\EtablissementRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Intervenant;
@@ -184,15 +183,6 @@ class ServiceAssertion extends OldAbstractAssertion
         if ($this->role instanceof EtablissementRole) {
             if ('read' == $this->privilege) {
                 return true; // les superviseurs voient tout
-            }
-        }
-
-        /*********************************************************
-         *                      Rôle DRH
-         *********************************************************/
-        if ($this->role instanceof DrhRole) {
-            if ('read' == $this->privilege) {
-                return true; // ils voient tout à la DRH
             }
         }
 

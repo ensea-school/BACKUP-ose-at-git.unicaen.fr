@@ -211,7 +211,7 @@ return [
     ],
     'controllers'     => [
         'invokables'   => [
-            'Application\Controller\Agrement' => 'Application\Controller\AgrementController',
+            'Application\Controller\Agrement' => Controller\AgrementController::class,
         ],
     ],
     'service_manager' => [
@@ -226,12 +226,12 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'agrement'      => 'Application\View\Helper\AgrementViewHelper',
+            'agrement'      => View\Helper\AgrementViewHelper::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'AgrementSaisieForm' => 'Application\Form\Agrement\Saisie',
+            'AgrementSaisieForm' => Form\Agrement\Saisie::class,
         ],
     ],
 ];

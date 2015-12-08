@@ -80,8 +80,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $roles[$r->getRoleId()] = $r;
         $r                      = new \Application\Acl\ComposanteRole();
         $roles[$r->getRoleId()] = $r;
-        $r                      = new \Application\Acl\DrhRole();
-        $roles[$r->getRoleId()] = $r;
         $r                      = new \Application\Acl\EtablissementRole();
         $roles[$r->getRoleId()] = $r;
         $r                      = new \Application\Acl\IntervenantRole();
@@ -121,30 +119,27 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /* @var $dbRole \Application\Entity\Db\Role */
             $roleId = $dbRole->getRoleId();
 
-            $roleClass = 'Application\Acl\Role';
+            $roleClass = \Application\Acl\Role::class;
             $parent    = 'user';
             /** @deprecated */
             if ($roleId == 'gestionnaire-composante') {
-                $roleClass = 'Application\Acl\GestionnaireComposanteRole';
+                $roleClass = \Application\Acl\GestionnaireComposanteRole::class;
                 $parent    = 'composante';
             }
             if ($roleId == 'directeur-composante') {
-                $roleClass = 'Application\Acl\DirecteurComposanteRole';
+                $roleClass = \Application\Acl\DirecteurComposanteRole::class;
                 $parent    = 'composante';
             }
             if ($roleId == 'administrateur') {
-                $roleClass = 'Application\Acl\AdministrateurRole';
+                $roleClass = \Application\Acl\AdministrateurRole::class;
             }
             if ($roleId == 'responsable-composante') {
-                $roleClass = 'Application\Acl\ResponsableComposanteRole';
+                $roleClass = \Application\Acl\ResponsableComposanteRole::class;
                 $parent    = 'composante';
             }
             if ($roleId == 'superviseur-etablissement') {
-                $roleClass = 'Application\Acl\EtablissementRole';
+                $roleClass = \Application\Acl\EtablissementRole::class;
                 $parent    = 'etablissement';
-            }
-            if ($roleId == 'gestionnaire-drh') {
-                $roleClass = 'Application\Acl\DrhRole';
             }
             /* FIN de deprecated */
 
@@ -206,10 +201,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 /** @deprecated */
                 if ($statut->getTypeIntervenant()->getCode() === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT) {
                     $parent    = \Application\Acl\IntervenantPermanentRole::ROLE_ID;
-                    $roleClass = 'Application\Acl\IntervenantPermanentRole';
+                    $roleClass = \Application\Acl\IntervenantPermanentRole::class;
                 } else {
                     $parent    = \Application\Acl\IntervenantExterieurRole::ROLE_ID;
-                    $roleClass = 'Application\Acl\IntervenantExterieurRole';
+                    $roleClass = \Application\Acl\IntervenantExterieurRole::class;
                 }
                 $si[] = [
                     'statut-id'  => $statut->getId(),

@@ -5,7 +5,9 @@ select
   tas.premier_recrutement
 from
   type_agrement ta
-  LEFT JOIN Type_Agrement_Statut tas ON tas.type_agrement_id = ta.id
+  LEFT JOIN Type_Agrement_Statut tas ON 
+                                        tas.type_agrement_id = ta.id
+                                    AND 1 = ose_divers.comprise_entre( tas.histo_creation, tas.histo_destruction )
   LEFT JOIN statut_intervenant si ON si.id = tas.statut_intervenant_id
 ORDER BY
   ta_code, si_libelle, premier_recrutement

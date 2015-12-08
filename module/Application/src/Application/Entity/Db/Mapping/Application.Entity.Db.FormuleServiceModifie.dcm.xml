@@ -8,5 +8,6 @@
       </join-columns>
     </many-to-one>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="heuresDecharge" type="float" column="HEURES_DECHARGE" precision="126" scale="0" nullable="false"/>
   </entity>
 </doctrine-mapping>

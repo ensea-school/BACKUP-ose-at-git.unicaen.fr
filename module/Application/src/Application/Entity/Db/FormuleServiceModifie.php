@@ -13,6 +13,11 @@ class FormuleServiceModifie
     private $heures;
 
     /**
+     * @var float
+     */
+    private $heuresDecharge;
+
+    /**
      * @var integer
      */
     private $id;
@@ -30,6 +35,16 @@ class FormuleServiceModifie
     public function getHeures()
     {
         return $this->heures;
+    }
+
+    /**
+     * Get heuresDecharge
+     *
+     * @return float
+     */
+    public function getHeuresDecharge()
+    {
+        return $this->heuresDecharge;
     }
 
     /**

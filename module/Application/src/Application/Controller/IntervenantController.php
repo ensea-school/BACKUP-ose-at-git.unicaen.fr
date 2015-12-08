@@ -188,6 +188,7 @@ class IntervenantController extends AbstractActionController implements Workflow
             'structure-affectation'         => $intervenant->getStructure(),
             'heures-service-statutaire'     => $intervenant->getStatut()->getServiceStatutaire(),
             'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie()->getHeures(),
+            'heures-decharge'               => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie()->getHeuresDecharge(),
             'services'                      => [],
             'referentiel'                   => [],
             'types-intervention'            => [],

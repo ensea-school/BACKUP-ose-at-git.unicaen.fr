@@ -227,7 +227,6 @@ return [
     'form_elements' => [
         'invokables' => [
             'DroitsRoleForm'       => Form\Droits\RoleForm::class,
-            'DroitsPrivilegesForm' => Form\Droits\PrivilegesForm::class,
             'DroitsAffectationForm'=> Form\Droits\AffectationForm::class,
         ],
     ],

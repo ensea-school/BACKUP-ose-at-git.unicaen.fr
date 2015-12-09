@@ -65,7 +65,6 @@ class DroitsController extends AbstractActionController
             $title = 'Édition du rôle';
             $form->bind($role);
         }
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -247,7 +246,6 @@ class DroitsController extends AbstractActionController
             $title = 'Édition de l\'affectation';
             $form->bind($affectation);
         }
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -351,12 +349,4 @@ class DroitsController extends AbstractActionController
         return $this->getServiceLocator()->get('FormElementManager')->get('DroitsAffectationForm');
     }
 
-    /**
-     *
-     * @return \Application\Form\Gestion\PrivilegesForm
-     */
-    public function getFormPrivileges()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('DroitsPrivilegesForm');
-    }
 }

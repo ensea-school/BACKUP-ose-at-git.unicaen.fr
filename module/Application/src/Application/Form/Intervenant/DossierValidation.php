@@ -2,9 +2,8 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Validator\Identical;
 use Application\Entity\Db\Validation;
@@ -14,7 +13,7 @@ use Application\Entity\Db\Validation;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierValidation extends Form implements InputFilterProviderInterface
+class DossierValidation extends AbstractForm
 {
     public function init()
     {

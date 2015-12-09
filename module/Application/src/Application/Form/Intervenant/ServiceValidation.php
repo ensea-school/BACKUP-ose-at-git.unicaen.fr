@@ -2,9 +2,8 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Validator\NotEmpty;
 
@@ -13,7 +12,7 @@ use Zend\Validator\NotEmpty;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ServiceValidation extends Form implements InputFilterProviderInterface
+class ServiceValidation extends AbstractForm
 {
     use \Application\Entity\Db\Traits\IntervenantAwareTrait;
 

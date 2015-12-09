@@ -5,6 +5,7 @@ namespace Application\Form\Intervenant;
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Pays as PaysEntity;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
+use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DepartementAwareTrait;
 use Application\Service\Traits\PaysAwareTrait;
@@ -17,10 +18,6 @@ use Common\Constants;
 use Common\Exception\LogicException;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineORMModule\Form\Element\EntitySelect;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Validator\Date as DateValidator;
 
 /**
@@ -28,9 +25,8 @@ use Zend\Validator\Date as DateValidator;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
+class DossierFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use StatutIntervenantAwareTrait;
     use PaysAwareTrait;

@@ -3,14 +3,12 @@
 namespace Application\Form\Droits;
 
 use Application\Entity\Db\Role;
+use Application\Form\AbstractForm;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -19,9 +17,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
  */
-class AffectationForm extends Form\Form implements ServiceLocatorAwareInterface, InputFilterProviderInterface
+class AffectationForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use StructureAwareTrait;
     use PersonnelAwareTrait;
     use RoleAwareTrait;
@@ -29,9 +26,7 @@ class AffectationForm extends Form\Form implements ServiceLocatorAwareInterface,
 
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url \Zend\View\Helper\Url */
-
+        $this->setAttribute('action',$this->getCurrentUrl());
         $hydrator = new AffectationFormHydrator;
         $this->setHydrator($hydrator);
         $hydrator->setServicePersonnel  ($this->getServicePersonnel());
@@ -59,7 +54,7 @@ class AffectationForm extends Form\Form implements ServiceLocatorAwareInterface,
         $personnel ->setRequired(true)
             ->setSelectionRequired(true)
             ->setAutocompleteSource(
-                $url('recherche', ['action' => 'personnelFind'])
+                $this->getUrl('recherche', ['action' => 'personnelFind'])
             )
             ->setLabel("Personnel")
             ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);

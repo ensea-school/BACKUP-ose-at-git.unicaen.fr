@@ -2,20 +2,21 @@
 
 namespace Application\Form\Intervenant;
 
-use Zend\Form\Form;
+use Application\Form\AbstractForm;
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\Form\Element\Select;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 
 /**
  * Description of HeuresCompForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class HeuresCompForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class HeuresCompForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
 
     /**
      *
@@ -56,22 +57,6 @@ class HeuresCompForm extends Form implements InputFilterProviderInterface, Servi
     public function getInputFilterSpecification()
     {
         return [];
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 
 }

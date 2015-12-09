@@ -1,6 +1,7 @@
 <?php
 namespace Application\Form\VolumeHoraireReferentiel;
 
+use Application\Service\Traits\TypeInterventionAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
@@ -18,6 +19,7 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
 
     use ServiceLocatorAwareTrait;
     use EntityManagerAwaretrait;
+    use TypeInterventionAwareTrait;
 
     /**
      *
@@ -29,7 +31,7 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
             return $service->getElementPedagogique()->getTypeIntervention();
         }else{
             return $this->getServiceTypeIntervention()->getTypesIntervention();
-    }
+        }
     }
 
     /**
@@ -79,11 +81,4 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
         return $data;
     }
 
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->get('applicationTypeIntervention');
-}
 }

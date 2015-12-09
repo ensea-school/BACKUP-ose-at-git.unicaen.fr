@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\WfEtape;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -16,9 +17,12 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
+    use TypeVolumeHoraireAwareTrait;
+
     protected $singularTitlePattern = "%s vacataire a reçu l'agrément du Conseil Académique et n'a pas encore de contrat/avenant";
     protected $pluralTitlePattern   = "%s vacataires ont reçu l'agrément du Conseil Académique et n'ont pas encore de contrat/avenant";
-    
+
+
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
      * 
@@ -77,7 +81,7 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
                 ->andWhere("ep.structure = :structure")
-                ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                ->setParameter('tvh', $this->getServiceTypeVolumeHoraire()->getPrevu())
                 ->andWhere("1 = pasHistorise(s)")
                 ->andWhere("1 = pasHistorise(ep)")
                 ->andWhere("1 = pasHistorise(vh)");

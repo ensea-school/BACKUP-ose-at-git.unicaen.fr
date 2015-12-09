@@ -3,16 +3,13 @@
 namespace Application\Form\OffreFormation\EtapeCentreCout;
 
 use Application\Entity\Db\CentreCout;
+use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CentreCoutAwareTrait;
 use Application\Service\Traits\CentreCoutEpAwareTrait;
-use Zend\Form\Fieldset;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\TypeHeures;
 use Common\Exception\RuntimeException;
 use Zend\Form\Element\Select;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\CentreCoutEp;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -21,9 +18,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  * d'un élément pédagogique.
  *
  */
-class ElementCentreCoutFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class ElementCentreCoutFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait;
     use CentreCoutAwareTrait;
     use CentreCoutEpAwareTrait;
 
@@ -50,7 +46,7 @@ class ElementCentreCoutFieldset extends Fieldset implements InputFilterProviderI
         $hydrator->setServiceCentreCout($this->getServiceCentreCout());
         $hydrator->setServiceCentreCoutEp($this->getServiceCentreCoutEp());
         $this->setHydrator($hydrator);
-        $this->setAllowedObjectBindingClass('Application\Entity\Db\ElementPedagogique');
+        $this->setAllowedObjectBindingClass(ElementPedagogique::class);
     }
 
 

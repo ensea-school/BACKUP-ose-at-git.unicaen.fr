@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -20,6 +22,8 @@ class VolumeHoraire extends AbstractEntityService
 {
     use TypeVolumeHoraireAwareTrait;
     use ServiceServiceAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
 
 
 
@@ -119,11 +123,8 @@ class VolumeHoraire extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $serviceService = $this->getServiceLocator()->get('applicationService');
-        /* @var $serviceService ServiceService */
-
-        $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $element ElementPedagogique */
+        $serviceService = $this->getServiceService();
+        $serviceElement = $this->getServiceElementPedagogique();
 
         $this->join($serviceService, $qb, 'service');
         $serviceService->leftJoin($serviceElement, $qb, 'elementPedagogique');
@@ -171,8 +172,7 @@ class VolumeHoraire extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
-            $sEtatVolumeHoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-            /* @var $sEtatVolumeHoraire EtatVolumeHoraire */
+            $sEtatVolumeHoraire = $this->getServiceEtatVolumeHoraire();
 
             $this->join($sEtatVolumeHoraire, $qb, 'etatVolumeHoraire');
 
@@ -196,8 +196,7 @@ class VolumeHoraire extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
-            $sEtatVolumeHoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-            /* @var $sEtatVolumeHoraire EtatVolumeHoraire */
+            $sEtatVolumeHoraire = $this->getServiceEtatVolumeHoraire();
 
             $this->join($sEtatVolumeHoraire, $qb, 'etatVolumeHoraire');
 

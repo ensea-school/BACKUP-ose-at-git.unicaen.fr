@@ -3,11 +3,8 @@
 namespace Application\Form\ServiceReferentiel;
 
 use Application\Entity\Db\Service;
-use Zend\Form\Form;
+use Application\Form\AbstractForm;
 use Zend\Form\FormInterface;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Form\Element\Hidden;
 
 /**
@@ -15,9 +12,8 @@ use Zend\Form\Element\Hidden;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class Saisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
 
     public function __construct($name = null, $options = [])
     {
@@ -43,9 +39,6 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
 
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url \Zend\View\Helper\Url */
-
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceReferentielSaisieHydrator'));
 
         $saisie = $this->getServiceLocator()->get('ServiceReferentielSaisieFieldset'); /* @var $saisie SaisieFieldset */
@@ -63,7 +56,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             ],
         ]);
 
-        $this->setAttribute('action', $url(null, [], [], true));
+        $this->setAttribute('action', $this->getCurrentUrl());
     }
 
     public function initFromContext()

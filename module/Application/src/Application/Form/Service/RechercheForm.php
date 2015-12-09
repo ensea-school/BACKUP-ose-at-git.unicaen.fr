@@ -2,12 +2,14 @@
 
 namespace Application\Form\Service;
 
-use Zend\Form\Form;
+use Application\Entity\Service\Recherche;
+use Application\Form\AbstractForm;
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\Form\Element\Select;
 use Zend\Form\Element\Hidden;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Form\ElementInterface;
 
@@ -16,9 +18,13 @@ use Zend\Form\ElementInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RechercheForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class RechercheForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
+    use StructureAwareTrait;
+    use TypeIntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
+
 
     /**
      *
@@ -90,13 +96,10 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
      */
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
-
         $hydrator = $this->getServiceLocator()->getServiceLocator()->get('ServiceRechercheFormHydrator');
         /* @var $hydrator RechercheHydrator */
         $this->setHydrator( $hydrator )
-             ->setAllowedObjectBindingClass('Application\Entity\Service\Recherche');
+             ->setAllowedObjectBindingClass(Recherche::class);
 
         $this   ->setAttribute('method', 'get')
                 ->setAttribute('class', 'service-recherche')
@@ -138,7 +141,7 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
 
         $intervenant = new SearchAndSelect('intervenant');
         $intervenant
-                ->setAutocompleteSource($url(
+                ->setAutocompleteSource($this->getUrl(
                     'recherche',
                     ['action' => 'intervenantFind'],
                     ['query' => ['having-services' => 1]]
@@ -174,9 +177,9 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
         $this->add($action);
 
 
-        $this->addActionButton('submit-resume' , 'Afficher (résumé)' , $url('service/resume'), true );
-        $this->addActionButton('submit-details', 'Afficher (détails)', $url('service/default', ['action' => 'index']));
-        $this->addActionButton('submit-export' , 'Exporter (CSV)'    , $url('service/export'));
+        $this->addActionButton('submit-resume' , 'Afficher (résumé)' , $this->getUrl('service/resume'), true );
+        $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service/default', ['action' => 'index']));
+        $this->addActionButton('submit-export' , 'Exporter (CSV)'    , $this->getUrl('service/export'));
     }
 
     /**
@@ -202,37 +205,4 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
             ],
         ];
     }
-
-    /**
-     * @return \Application\Service\Structure
-     */
-    protected function getServiceStructure()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationStructure');
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervenant
-     */
-    protected function getServiceTypeIntervenant()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervenant');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
-
 }

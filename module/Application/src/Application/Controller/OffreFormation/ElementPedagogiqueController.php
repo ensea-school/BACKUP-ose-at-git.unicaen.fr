@@ -48,8 +48,6 @@ class ElementPedagogiqueController extends AbstractActionController
             $form->setObject($element);
         }
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());

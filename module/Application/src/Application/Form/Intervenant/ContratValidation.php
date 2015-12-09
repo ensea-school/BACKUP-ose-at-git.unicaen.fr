@@ -2,9 +2,9 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Entity\Db\Traits\ContratAwareTrait;
+use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Validator\NotEmpty;
 
@@ -13,12 +13,13 @@ use Zend\Validator\NotEmpty;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratValidation extends Form implements InputFilterProviderInterface
+class ContratValidation extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\ContratAwareTrait;
+    use ContratAwareTrait;
 
     public function init()
     {
+        $this->setAttribute('action',$this->getCurrentUrl());
         $this->setHydrator(new ClassMethods(false));
         $this->setAttribute('method', 'POST');
 

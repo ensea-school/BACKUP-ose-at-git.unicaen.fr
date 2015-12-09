@@ -71,7 +71,6 @@ class DisciplineController extends AbstractActionController
             $title = 'Édition de la discipine';
             $form->bind($discipline);
         }
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
         if ($request->isPost()) {

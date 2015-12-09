@@ -2,10 +2,9 @@
 
 namespace Application\Form\VolumeHoraire;
 
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Entity\VolumeHoraireListe;
+use Application\Form\AbstractFieldset;
+use Application\Service\Traits\TypeInterventionAwareTrait;
 use Zend\Form\Element\Hidden;
 
 /**
@@ -15,9 +14,9 @@ use Zend\Form\Element\Hidden;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class SaisieMultipleFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait;
+    use TypeInterventionAwareTrait;
 
     /**
      *
@@ -36,7 +35,7 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'volume-horaire-multiple')
                 ->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormVolumeHoraireSaisieMultipleHydrator'))
-                ->setAllowedObjectBindingClass('Application\Entity\VolumeHoraireListe')
+                ->setAllowedObjectBindingClass(VolumeHoraireListe::class)
         ;
 
         foreach( $this->getTypesInterventions() as $typeIntervention ){
@@ -82,11 +81,4 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
         return $filters;
     }
 
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
-    }
 }

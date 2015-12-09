@@ -2,22 +2,21 @@
 
 namespace Application\Form\VolumeHoraire;
 
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Form\AbstractForm;
+use Application\Service\Traits\MotifNonPaiementAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
 use Zend\Form\Element\Hidden;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  * Description of Saisie
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class Saisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+    use ContextAwareTrait;
+    use MotifNonPaiementAwareTrait;
+    use ServiceAwareTrait;
 
     /**
      *
@@ -62,8 +61,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
                 'type' => 'Select'
             ]);
 
-            $motifsNonPaiement = $this->getServiceLocator()->getServiceLocator()->get('ApplicationMotifNonPaiement')
-                    ->getList();
+            $motifsNonPaiement = $this->getServiceMotifNonPaiement()->getList();
             foreach( $motifsNonPaiement as $id => $motifNonPaiement ){
                 $motifsNonPaiement[$id] = (string)$motifNonPaiement;
             }
@@ -109,7 +107,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
         //$data['heures'] = str_replace('.',',',$object->getHeures());
         $data['heures'] = $object->getHeures();
 
-        if (! $this->getServiceLocator()->getServiceLocator()->get('applicationService')->canHaveMotifNonPaiement($object->getService())){
+        if (! $this->getServiceService()->canHaveMotifNonPaiement($object->getService())){
             $this->remove('motif-non-paiement');
         }else{
             $data['motif-non-paiement'] = $object->getMotifNonPaiement() ? $object->getMotifNonPaiement()->getId() : 0;

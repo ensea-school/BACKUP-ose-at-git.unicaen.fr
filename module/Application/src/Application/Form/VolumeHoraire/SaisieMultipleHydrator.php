@@ -1,6 +1,7 @@
 <?php
 namespace Application\Form\VolumeHoraire;
 
+use Application\Service\Traits\TypeInterventionAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
@@ -18,72 +19,76 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
 
     use ServiceLocatorAwareTrait;
     use EntityManagerAwaretrait;
+    use TypeInterventionAwareTrait;
+
+
 
     /**
      *
      * @return \Application\Service\TypeIntervention[]
      */
-    public function getTypesInterventions( Service $service )
+    public function getTypesInterventions(Service $service)
     {
-        if ($service->getElementPedagogique()){
+        if ($service->getElementPedagogique()) {
             return $service->getElementPedagogique()->getTypeIntervention();
-        }else{
+        } else {
             return $this->getServiceTypeIntervention()->getTypesIntervention();
+        }
     }
-    }
+
+
 
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
+     * @param  array                                  $data
      * @param  \Application\Entity\VolumeHoraireListe $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $typeVolumeHoraire = $this->getEntityManager()->find('Application\Entity\Db\TypeVolumeHoraire', (int)$data['type-volume-horaire']);
-        $periode = $this->getEntityManager()->find('Application\Entity\Db\Periode', (int)$data['periode']);
+        $periode           = $this->getEntityManager()->find('Application\Entity\Db\Periode', (int)$data['periode']);
 
         $object->setTypeVolumeHoraire($typeVolumeHoraire);
         $object->setPeriode($periode);
-        foreach( $this->getTypesInterventions($object->getService()) as $typeIntervention ){
+        foreach ($this->getTypesInterventions($object->getService()) as $typeIntervention) {
             $object->setTypeIntervention($typeIntervention);
-            if (isset($data[$typeIntervention->getCode()])){
+            if (isset($data[$typeIntervention->getCode()])) {
                 $heures = (float)$data[$typeIntervention->getCode()];
-            }else{
+            } else {
                 $heures = 0;
             }
             $object->setHeures($heures, false);
         }
+
         return $object;
     }
+
+
 
     /**
      * Extract values from an object
      *
      * @param  \Application\Entity\VolumeHoraireListe $object
+     *
      * @return array
      */
     public function extract($object)
     {
-        $vhl = $object->getChild();
+        $vhl  = $object->getChild();
         $data = [
             'type-volume-horaire' => $object->getTypeVolumeHoraire() ? $object->getTypeVolumeHoraire()->getId() : null,
-            'service' => $object->getService() ? $object->getService()->getId() : null,
-            'periode' => $object->getPeriode() ? $object->getPeriode()->getId() : null,
+            'service'             => $object->getService() ? $object->getService()->getId() : null,
+            'periode'             => $object->getPeriode() ? $object->getPeriode()->getId() : null,
         ];
-        foreach( $this->getTypesInterventions( $object->getService() ) as $typeIntervention ){
+        foreach ($this->getTypesInterventions($object->getService()) as $typeIntervention) {
             $vhl->setTypeIntervention($typeIntervention);
             $data[$typeIntervention->getCode()] = $vhl->getHeures();
         }
+
         return $data;
     }
 
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->get('applicationTypeIntervention');
-}
 }

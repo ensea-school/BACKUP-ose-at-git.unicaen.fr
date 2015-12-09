@@ -2,14 +2,11 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Form\AbstractForm;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -17,9 +14,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class ElementPedagogiqueSaisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use LocalContextAwareTrait;
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
@@ -41,6 +37,7 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
         $this->setHydrator($hydrator);
 
         $this->setAttribute('class', 'element-pedagogique-saisie');
+        $this->setAttribute('action',$this->getCurrentUrl());
 
         $this->add([
             'name'       => 'etape',

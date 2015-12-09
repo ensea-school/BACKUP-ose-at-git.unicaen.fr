@@ -18,8 +18,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class Dossier extends Form implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        StatutIntervenantAwareTrait;
+    use ServiceLocatorAwareTrait;
+    use StatutIntervenantAwareTrait;
 
     protected $dossierFieldset;
 

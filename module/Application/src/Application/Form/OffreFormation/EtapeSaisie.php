@@ -2,15 +2,12 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -18,9 +15,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class EtapeSaisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use LocalContextAwareTrait;
     use StructureAwareTrait;

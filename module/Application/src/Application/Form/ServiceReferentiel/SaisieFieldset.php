@@ -3,29 +3,25 @@
 namespace Application\Form\ServiceReferentiel;
 
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\FonctionReferentielAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Filter\PregReplace;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Validator\Callback;
 use Zend\Validator\LessThan;
 use Zend\Validator\NotEmpty;
-use Zend\View\Helper\Url;
+
 
 /**
  * Description of SaisieFieldset
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class SaisieFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use LocalContextAwareTrait;
     use StructureAwareTrait;
@@ -42,8 +38,6 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Url */
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceReferentielSaisieFieldsetHydrator'))
             ->setAllowedObjectBindingClass(ServiceReferentiel::class);
@@ -58,7 +52,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $intervenant->setRequired(true)
                 ->setSelectionRequired(true)
                 ->setAutocompleteSource(
-                    $url('recherche', ['action' => 'intervenantFind'])
+                    $this->getUrl('recherche', ['action' => 'intervenantFind'])
                 )
                 ->setLabel("Intervenant :")
                 ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);

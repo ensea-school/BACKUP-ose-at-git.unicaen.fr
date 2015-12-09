@@ -2,6 +2,10 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\MiseEnPaiementAwareTrait;
+use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
 use Application\Entity\Db\Structure as EntityStructure;
@@ -15,6 +19,10 @@ use Application\Entity\Db\Structure as EntityStructure;
 class Structure extends AbstractEntityService
 {
     use Traits\AffectationAwareTrait;
+    use ServiceAwareTrait;
+    use IntervenantAwareTrait;
+    use MiseEnPaiementAwareTrait;
+    use MiseEnPaiementIntervenantStructureAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -24,7 +32,7 @@ class Structure extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Structure';
+        return EntityStructure::class;
     }
 
     /**
@@ -200,14 +208,10 @@ class Structure extends AbstractEntityService
 
     public function finderByMiseEnPaiement(QueryBuilder $qb=null, $alias=null)
     {
-        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
-        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
-        $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
-        /* @var $serviceMiseEnPaiement MiseEnPaiement */
-
-        $serviceIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
-        /* @var $serviceIntervenant Intervenant */
+        $serviceMiseEnPaiement = $this->getServiceMiseEnPaiement();
+        $serviceIntervenant = $this->getServiceIntervenant();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
@@ -227,7 +231,7 @@ class Structure extends AbstractEntityService
      */
     public function getListStructuresEnseignIntervenant(IntervenantEntity $intervenant)
     {
-        $serviceService = $this->getServiceLocator()->get('ApplicationService');
+        $serviceService = $this->getServiceService();
 
         $qb = $this->finderByEnseignement();
         $this->join($serviceService, $qb, 'service');

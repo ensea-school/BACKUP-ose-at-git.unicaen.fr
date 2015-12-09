@@ -2,11 +2,9 @@
 
 namespace Application\Form\Service;
 
+use Application\Form\AbstractForm;
 use Common\Exception\InvalidArgumentException;
-use Zend\Form\Form;
 use Application\Entity\Db\Etablissement;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Form\Element\Hidden;
 
 
@@ -15,9 +13,8 @@ use Zend\Form\Element\Hidden;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface, ServiceLocatorAwareInterface
+class Saisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
 
     /**
      * etablissement par défaut
@@ -66,8 +63,6 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
 
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieHydrator'));
 
@@ -97,7 +92,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             ],
         ]);
 
-        $this->setAttribute('action', $url(null, [], [], true));
+        $this->setAttribute('action', $this->getCurrentUrl());
     }
 
     public function initFromContext()

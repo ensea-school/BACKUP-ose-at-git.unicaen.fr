@@ -3,6 +3,7 @@
 namespace Application\Service\Indicateur\Service\Validation\Referentiel\Prevu;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 
 /**
  * 
@@ -11,6 +12,8 @@ use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
  */
 class AttenteValidationPermIndicateurImpl extends AttenteValidationAbstractIndicateurImpl
 {
+    use TypeIntervenantAwareTrait;
+
     /**
      * Retourne le type d'intervenant utile à cet indicateur.
      * 
@@ -19,9 +22,7 @@ class AttenteValidationPermIndicateurImpl extends AttenteValidationAbstractIndic
     public function getTypeIntervenant()
     {
         if (! parent::getTypeIntervenant()) {
-            $sTi = $this->getServiceLocator()->get('ApplicationTypeIntervenant');
-            /* @var $sTi \Application\Service\TypeIntervenant */
-            $this->setTypeIntervenant( $sTi->getPermanent() );
+            $this->setTypeIntervenant( $this->getServiceTypeIntervenant()->getPermanent() );
         }
 
         return parent::getTypeIntervenant();

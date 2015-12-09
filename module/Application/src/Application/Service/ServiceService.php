@@ -18,7 +18,9 @@ use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
@@ -38,6 +40,7 @@ use Zend\Session\Container as SessionContainer;
 class ServiceService extends AbstractEntityService
 {
     use ElementPedagogiqueAwareTrait;
+    use EtapeAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
     use TypeInterventionAwareTrait;
@@ -46,6 +49,7 @@ class ServiceService extends AbstractEntityService
     use VolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
     use PeriodeAwareTrait;
+    use LocalContextAwareTrait;
 
     /**
      *
@@ -147,19 +151,14 @@ class ServiceService extends AbstractEntityService
         }
 
         if (!$this->recherche->getTypeVolumeHoraire()) {
-            $serviceTypeVolumehoraire = $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
-            /* @var $serviceTypeVolumehoraire TypeVolumeHoraire */
-            $this->recherche->setTypeVolumeHoraire($serviceTypeVolumehoraire->getPrevu());
+            $this->recherche->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
         }
 
         if (!$this->recherche->getEtatVolumeHoraire()) {
-            $serviceEtatVolumehoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-            /* @var $serviceEtatVolumehoraire EtatVolumeHoraire */
-            $this->recherche->setEtatVolumeHoraire($serviceEtatVolumehoraire->getSaisi());
+            $this->recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
         }
 
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
+        $localContext = $this->getServiceLocalContext();
 
         $this->recherche->setIntervenant($localContext->getIntervenant());
         $this->recherche->setStructureEns($localContext->getStructure());
@@ -188,8 +187,7 @@ class ServiceService extends AbstractEntityService
         $session       = $this->getRechercheSessionContainer();
         $session->data = $data;
 
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
+        $localContext = $this->getServiceLocalContext();
 
         $localContext->setIntervenant($recherche->getIntervenant());
         $localContext->setStructure($recherche->getStructureEns());
@@ -278,8 +276,7 @@ class ServiceService extends AbstractEntityService
             }
 
             /* Sauvegarde automatique des volumes horaires associés */
-            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
-            /* @var $serviceVolumeHoraire VolumeHoraire */
+            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
                 /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire  */
                 if ($result !== $entity) $volumeHoraire->setService($result);
@@ -312,8 +309,7 @@ class ServiceService extends AbstractEntityService
      */
     public function finderByEtape(EtapeEntity $etape, QueryBuilder $qb = null, $alias = null)
     {
-        $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $serviceElement Element */
+        $serviceElement = $this->getServiceElementPedagogique();
 
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
@@ -336,10 +332,8 @@ class ServiceService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($niveauEtape && $niveauEtape->getId() !== '-') {
-            $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique');
-            /* @var $serviceElement Element */
-            $serviceEtape = $this->getServiceLocator()->get('applicationEtape');
-            /* @var $serviceEtape   Etape */
+            $serviceElement = $this->getServiceElementPedagogique();
+            $serviceEtape = $this->getServiceEtape();
 
             $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
             $serviceElement->join($serviceEtape, $qb, 'etape');
@@ -363,8 +357,7 @@ class ServiceService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
-            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
-            /* @var $serviceVolumeHoraire VolumeHoraire */
+            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
 
             $this->join($serviceVolumeHoraire, $qb, 'volumeHoraire');
             $serviceVolumeHoraire->finderByTypeVolumeHoraire($typeVolumeHoraire, $qb);
@@ -387,8 +380,7 @@ class ServiceService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
-            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
-            /* @var $serviceVolumeHoraire VolumeHoraire */
+            $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
 
             $this->join($serviceVolumeHoraire, $qb, 'volumeHoraire');
             $serviceVolumeHoraire->finderByEtatVolumeHoraire($etatVolumeHoraire, $qb);

@@ -4,6 +4,7 @@ namespace Application\Service\Indicateur\Service\Validation\Referentiel\Realise;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -13,6 +14,8 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class AttenteValidationPermIndicateurImpl extends AttenteValidationAbstractIndicateurImpl
 {
+    use TypeIntervenantAwareTrait;
+
     protected $singularTitlePattern = "%s %s a   clôturé la saisie de ses   services réalisés et est  en attente de validation de son  référentiel <em>%s</em>";
     protected $pluralTitlePattern   = "%s %s ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leur référentiel <em>%s</em>";
     
@@ -49,9 +52,7 @@ class AttenteValidationPermIndicateurImpl extends AttenteValidationAbstractIndic
     public function getTypeIntervenant()
     {
         if (! parent::getTypeIntervenant()) {
-            $sTi = $this->getServiceLocator()->get('ApplicationTypeIntervenant');
-            /* @var $sTi \Application\Service\TypeIntervenant */
-            $this->setTypeIntervenant( $sTi->getPermanent() );
+            $this->setTypeIntervenant( $this->getServiceTypeIntervenant()->getPermanent() );
         }
 
         return parent::getTypeIntervenant();

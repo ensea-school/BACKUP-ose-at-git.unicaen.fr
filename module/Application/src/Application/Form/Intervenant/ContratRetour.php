@@ -2,9 +2,10 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Entity\Db\Traits\ContratAwareTrait;
+use Application\Form\AbstractForm;
+use UnicaenApp\Hydrator\Strategy\DateStrategy;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
 /**
@@ -12,9 +13,9 @@ use Zend\Stdlib\Hydrator\ClassMethods;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratRetour extends Form implements InputFilterProviderInterface
+class ContratRetour extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\ContratAwareTrait;
+    use ContratAwareTrait;
 
     public function init()
     {
@@ -43,7 +44,7 @@ class ContratRetour extends Form implements InputFilterProviderInterface
             ],
         ]);
 
-        $this->getHydrator()->addStrategy('dateRetourSigne', new \UnicaenApp\Hydrator\Strategy\DateStrategy($this->get('dateRetourSigne')));
+        $this->getHydrator()->addStrategy('dateRetourSigne', new DateStrategy($this->get('dateRetourSigne')));
 
         return $this;
     }

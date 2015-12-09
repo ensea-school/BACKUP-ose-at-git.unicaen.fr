@@ -2,22 +2,18 @@
 
 namespace Application\Form\VolumeHoraireReferentiel;
 
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Form\AbstractForm;
 use Zend\Form\Element\Hidden;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  * Description of Saisie
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class Saisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+   use ContextAwareTrait;
 
     /**
      *
@@ -26,9 +22,6 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
     {
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'volume-horaire')
-//                ->setHydrator(new ClassMethods(false))
-//                ->setInputFilter(new InputFilter())
-//                ->setPreferFormInputFilter(false)
          ;
 
         $this->add([
@@ -45,8 +38,6 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             ],
             'type'       => 'Text',
         ]);
-
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->add( new Hidden('service-referentiel') );
         $this->add( new Hidden('type-volume-horaire') );

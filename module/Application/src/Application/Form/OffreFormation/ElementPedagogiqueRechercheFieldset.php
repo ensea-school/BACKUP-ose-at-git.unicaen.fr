@@ -5,25 +5,21 @@ namespace Application\Form\OffreFormation;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
+use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
 use Application\Traits\SessionContainerTrait;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of ElementPedagogiqueRechercheFieldset
  *
  */
-class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait;
     use EtapeAwareTrait;
     use StructureAwareTrait;
     use ElementPedagogiqueAwareTrait;
@@ -55,9 +51,6 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
 
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url \Zend\View\Helper\Url */
-
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'))
             ->setAllowedObjectBindingClass(ElementPedagogique::class);
 
@@ -156,7 +149,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             'type'       => 'UnicaenApp\Form\Element\SearchAndSelect',
         ]);
 
-        $this->get('element')->setAutoCompleteSource($url('of/element/search'));
+        $this->get('element')->setAutoCompleteSource($this->getUrl('of/element/search'));
     }
 
 

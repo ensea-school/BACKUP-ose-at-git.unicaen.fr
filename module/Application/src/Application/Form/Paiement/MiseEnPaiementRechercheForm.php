@@ -2,10 +2,14 @@
 
 namespace Application\Form\Paiement;
 
+use Application\Entity\Paiement\MiseEnPaiementRecherche;
+use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextAwareTrait;
-use Zend\Form\Form;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -14,10 +18,9 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class MiseEnPaiementRechercheForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\TypeIntervenantAwareTrait;
+    use TypeIntervenantAwareTrait;
     use ContextAwareTrait;
 
     /**
@@ -47,7 +50,7 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
         $hydrator->setServiceLocator($this->getServiceLocator()->getServiceLocator());
 
         $this->setHydrator( $hydrator )
-             ->setAllowedObjectBindingClass('Application\Entity\Paiement\MiseEnPaiementRecherche');
+             ->setAllowedObjectBindingClass(MiseEnPaiementRecherche::class);
 
         $this->setAttribute('method', 'post')
              ->setAttribute('class', 'paiement-mise-en-paiement-recherche-form')
@@ -197,11 +200,11 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
  */
 class MiseEnPaiementRechercheFormHydrator implements HydratorInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\IntervenantAwareTrait,
-        \Application\Service\Traits\PeriodeAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait,
-        \Application\Service\Traits\TypeIntervenantAwareTrait;
+    use ServiceLocatorAwareTrait;
+    use IntervenantAwareTrait;
+    use PeriodeAwareTrait;
+    use StructureAwareTrait;
+    use TypeIntervenantAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

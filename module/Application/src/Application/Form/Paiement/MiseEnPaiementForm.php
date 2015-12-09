@@ -2,21 +2,18 @@
 
 namespace Application\Form\Paiement;
 
+use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 
 /**
  * Description of MiseEnPaiementForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class MiseEnPaiementForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use PeriodeAwareTrait;
 
@@ -27,9 +24,6 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
      */
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url \Zend\View\Helper\Url */
-
         $annee = $this->getServiceContext()->getAnnee();
 
         $periodes            = $this->getServicePeriode()->getList($this->getServicePeriode()->finderByPaiement(true));
@@ -84,7 +78,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
             ],
         ]);
 
-        $this->setAttribute('action', $url(null, [], [], true));
+        $this->setAttribute('action', $this->getCurrentUrl());
     }
 
 

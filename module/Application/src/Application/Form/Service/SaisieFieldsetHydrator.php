@@ -3,6 +3,11 @@ namespace Application\Form\Service;
 
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\EtablissementAwareTrait;
 
 /**
  *
@@ -12,12 +17,12 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareInterface
 {
 
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\IntervenantAwareTrait,
-        \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\EtablissementAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
+    use IntervenantAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use EtablissementAwareTrait;
+
 
     /**
      * Hydrate $object with the provided $data.

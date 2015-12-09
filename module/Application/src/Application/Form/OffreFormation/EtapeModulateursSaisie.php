@@ -2,13 +2,8 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeModulateurAwareTrait;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\Form\Element\Select;
-use Zend\Form\FormInterface;
 use Application\Entity\Db\Etape;
 
 /**
@@ -16,9 +11,8 @@ use Application\Entity\Db\Etape;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeModulateursSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class EtapeModulateursSaisie extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use TypeModulateurAwareTrait;
 
     /**
@@ -40,10 +34,7 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
         $this->setHydrator($hydrator);
 
         $this->setAttribute('class', 'etape-modulateurs');
-
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
-        $this->setAttribute('action', $url(null, [], [], true));
+        $this->setAttribute('action', $this->getCurrentUrl());
      }
 
     /**

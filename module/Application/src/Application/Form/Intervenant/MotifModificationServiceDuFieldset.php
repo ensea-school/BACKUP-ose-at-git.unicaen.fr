@@ -2,10 +2,8 @@
 
 namespace Application\Form\Intervenant;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\Form\Fieldset;
+use Application\Form\AbstractFieldset;
 use Zend\Validator\LessThan;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Application\Entity\Db\ModificationServiceDu;
 use Application\Entity\Db\MotifModificationService;
 
@@ -14,9 +12,8 @@ use Application\Entity\Db\MotifModificationService;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class MotifModificationServiceDuFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
+class MotifModificationServiceDuFieldset extends AbstractFieldset
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
     use \Application\Service\Traits\MotifModificationServiceDuAwareTrait;
 
     /**

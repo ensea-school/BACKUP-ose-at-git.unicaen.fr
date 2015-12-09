@@ -353,8 +353,6 @@ class ContratController extends AbstractActionController
 
         $this->initFilters();
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-
         // recherche s'il existe déjà un contrat validé (qqsoit la composante), auquel cas le projet de contrat
         // sera requalifié en avenant
         $requalifier = false;

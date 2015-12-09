@@ -6,13 +6,10 @@ use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\TypeHeures;
+use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset;
 use Application\Service\Traits\CentreCoutAwareTrait;
 use Common\Exception\RuntimeException;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Form\Element\Select;
 
@@ -22,9 +19,8 @@ use Zend\Form\Element\Select;
  * pour chaque type d'heures éligible.
  *
  */
-class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class EtapeCentreCoutForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use CentreCoutAwareTrait;
 
     /**
@@ -56,7 +52,7 @@ class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, 
         $this->setAttribute('class', 'etape-centre-cout');
         $hydrator = new EtapeCentreCoutFormHydrator;
         $this->setHydrator($hydrator);
-        $this->setAllowedObjectBindingClass('Application\Entity\Db\Etape');
+        $this->setAllowedObjectBindingClass(Etape::class);
     }
 
 

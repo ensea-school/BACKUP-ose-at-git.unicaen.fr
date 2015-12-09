@@ -5,6 +5,13 @@ namespace Application\Controller;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Intervenant;
 use Application\Exception\DbException;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TypeValidationAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use UnicaenApp\Util;
 use Common\Exception\RuntimeException;
@@ -30,8 +37,13 @@ use Zend\View\Model\ViewModel;
  */
 class ValidationController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait;
+    use ContextAwareTrait;
+    use StructureAwareTrait;
+    use ValidationAwareTrait;
+    use ServiceAwareTrait;
+    use ServiceReferentielAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use TypeValidationAwareTrait;
 
     /**
      * @var \Application\Entity\Db\Service[]
@@ -377,7 +389,7 @@ class ValidationController extends AbstractActionController
     public function referentielAction()
     {
         $this->isReferentiel    = true;
-        $serviceReferentiel     = $this->getServiceReferentiel();
+        $serviceReferentiel     = $this->getServiceServiceReferentiel();
         $serviceValidation      = $this->getServiceValidation();
         $role                   = $this->getServiceContext()->getSelectedIdentityRole();
         $typeVolumeHoraire      = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
@@ -517,7 +529,7 @@ class ValidationController extends AbstractActionController
     {
         $this->initFilters();
 
-        $serviceReferentiel = $this->getServiceReferentiel();
+        $serviceReferentiel = $this->getServiceServiceReferentiel();
         $serviceValidation  = $this->getServiceValidation();
 
         $this->referentiels = [];
@@ -737,43 +749,4 @@ class ValidationController extends AbstractActionController
         return $this->typeVolumeHoraire;
     }
 
-    /**
-     * @return \Application\Service\Validation
-     */
-    private function getServiceValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationValidation');
-    }
-
-    /**
-     * @return \Application\Service\ServiceService
-     */
-    private function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
-    }
-
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    private function getServiceReferentiel()
-    {
-        return $this->getServiceLocator()->get('ApplicationServiceReferentiel');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    private function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\TypeValidation
-     */
-    private function getServiceTypeValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    }
 }

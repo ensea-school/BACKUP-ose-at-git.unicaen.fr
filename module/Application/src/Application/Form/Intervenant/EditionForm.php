@@ -3,7 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
-use Zend\Form\Form;
+use Application\Form\AbstractForm;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -11,7 +11,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EditionForm extends Form
+class EditionForm extends AbstractForm
 {
 
     public function init()

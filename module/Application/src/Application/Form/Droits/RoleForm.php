@@ -2,9 +2,9 @@
 
 namespace Application\Form\Droits;
 
+use Application\Form\AbstractForm;
+use Application\Service\Traits\PerimetreAwareTrait;
 use Zend\Form;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -13,10 +13,9 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
  */
-class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
+class RoleForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\PerimetreAwareTrait;
+    use PerimetreAwareTrait;
 
 
 
@@ -25,7 +24,7 @@ class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
         $hydrator = new RoleFormHydrator;
         $hydrator->setServicePerimetre($this->getServicePerimetre());
         $this->setHydrator($hydrator);
-
+        $this->setAttribute('action',$this->getCurrentUrl());
         $this->add([
             'type'    => 'Text',
             'name'    => 'code',
@@ -111,7 +110,7 @@ class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
 
 class RoleFormHydrator implements HydratorInterface
 {
-    use \Application\Service\Traits\PerimetreAwareTrait;
+    use PerimetreAwareTrait;
 
 
 

@@ -2,14 +2,17 @@
 
 namespace Application\Form\Service;
 
-use Zend\Form\Fieldset;
+use Application\Entity\Db\Service;
+use Application\Form\AbstractFieldset;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\NiveauEtapeAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantRole;
-use Zend\InputFilter\InputFilterProviderInterface;
+
+
 
 
 /**
@@ -17,14 +20,13 @@ use Zend\InputFilter\InputFilterProviderInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class SaisieFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\LocalContextAwareTrait,
-        \Application\Service\Traits\EtapeAwareTrait,
-        \Application\Service\Traits\NiveauEtapeAwareTrait,
-        \Application\Service\Traits\StructureAwareTrait;
+    use ContextAwareTrait;
+    use LocalContextAwareTrait;
+    use EtapeAwareTrait;
+    use NiveauEtapeAwareTrait;
+    use StructureAwareTrait;
 
     /**
      * etablissement par défaut
@@ -44,13 +46,10 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
     public function init()
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url \Zend\View\Helper\Url */
-
         $this->etablissement = $this->getServiceContext()->getEtablissement();
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'))
-            ->setAllowedObjectBindingClass('Application\Entity\Db\Service');
+            ->setAllowedObjectBindingClass(Service::class);
 
         $this->add([
             'name' => 'id',
@@ -59,19 +58,19 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
         $identityRole = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if (!$identityRole instanceof IntervenantRole) {
+        if (!$identityRole->getIntervenant()) {
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant->setRequired(true)
                 ->setSelectionRequired(true)
                 ->setAutocompleteSource(
-                    $url('recherche', ['action' => 'intervenantFind'])
+                    $this->getUrl('recherche', ['action' => 'intervenantFind'])
                 )
                 ->setLabel("Intervenant :")
                 ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
             $this->add($intervenant);
         }
 
-        if (!($identityRole instanceof IntervenantRole && !$identityRole->getIntervenant()->estPermanent())) {
+        if (!($identityRole->getIntervenant() && !$identityRole->getIntervenant()->estPermanent())) {
             $this->add([
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',
@@ -96,7 +95,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $etablissement->setRequired(true)
             ->setSelectionRequired(true)
             ->setAutocompleteSource(
-                $url('etablissement/recherche')
+                $this->getUrl('etablissement/recherche')
             )
             ->setLabel("Établissement :")
             ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);

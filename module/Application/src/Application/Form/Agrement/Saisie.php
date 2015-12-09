@@ -2,9 +2,8 @@
 
 namespace Application\Form\Agrement;
 
+use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 
@@ -13,7 +12,7 @@ use UnicaenApp\Hydrator\Strategy\DateStrategy;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form implements InputFilterProviderInterface
+class Saisie extends AbstractForm
 {
     use \Application\Entity\Db\Traits\IntervenantAwareTrait;
     use \Application\Entity\Db\Traits\TypeAgrementAwareTrait;

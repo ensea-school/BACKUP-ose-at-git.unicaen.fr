@@ -2,10 +2,9 @@
 
 namespace Application\Form\OffreFormation;
 
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use Application\Form\AbstractFieldset;
+use Application\Service\Traits\TypeModulateurAwareTrait;
 use Zend\Form\Element\Select;
 use Application\Entity\Db\ElementPedagogique;
 
@@ -14,16 +13,10 @@ use Application\Entity\Db\ElementPedagogique;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementModulateursFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
+class ElementModulateursFieldset extends AbstractFieldset
 {
-    use ServiceLocatorAwareTrait;
-
-    /**
-     * element pédagogique associé
-     *
-     * @var ElementPedagogique
-     */
-    protected $elementPedagogique;
+    use ElementPedagogiqueAwareTrait;
+    use TypeModulateurAwareTrait;
 
     /**
      * nombre de modulateurs total
@@ -41,16 +34,7 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
 
 
 
-    public function getElementPedagogique()
-    {
-        return $this->elementPedagogique;
-    }
 
-    public function setElementPedagogique(ElementPedagogique $elementPedagogique)
-    {
-        $this->elementPedagogique = $elementPedagogique;
-        return $this;
-    }
 
     /**
      * Retourne le nombre total de modulateurs que l'on peut renseigner
@@ -80,7 +64,7 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
         if (! $element){
             throw new \Common\Exception\RuntimeException('Elément pédagogique non spécifié');
         }
-        $serviceTypeModulateur = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeModulateur');
+        $serviceTypeModulateur = $this->getServiceTypeModulateur();
         return $serviceTypeModulateur->getList( $serviceTypeModulateur->finderByElementPedagogique($element) );
     }
 
@@ -88,7 +72,7 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
     {
         $hydrator = $this->getServiceLocator()->getServiceLocator()->get('ElementModulateursFormHydrator');
         $this->setHydrator($hydrator);
-        $this->setAllowedObjectBindingClass('Application\Entity\Db\ElementPedagogique');
+        $this->setAllowedObjectBindingClass(ElementPedagogique::class);
     }
 
     public function build()

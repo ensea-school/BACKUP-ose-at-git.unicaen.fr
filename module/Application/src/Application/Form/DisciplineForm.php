@@ -3,9 +3,6 @@
 namespace Application\Form;
 
 use Application\Service\Traits\ParametresAwareTrait;
-use Zend\Form\Form;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -13,15 +10,15 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
  */
-class DisciplineForm extends Form implements ServiceLocatorAwareInterface
+class DisciplineForm extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use ParametresAwareTrait;
 
 
 
     public function init()
     {
+        $this->setAttribute('action',$this->getCurrentUrl());
         $hydrator = new DisciplineFormHydrator;
         $this->setHydrator($hydrator);
 

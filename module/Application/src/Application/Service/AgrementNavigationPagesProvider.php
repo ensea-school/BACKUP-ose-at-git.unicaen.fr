@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
+use Application\Service\Traits\TypeAgrementAwareTrait;
 
 /**
  *
@@ -11,6 +12,8 @@ use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
  */
 class AgrementNavigationPagesProvider extends AbstractService
 {
+    use TypeAgrementAwareTrait;
+
     public function __invoke(array &$page, array $params = [])
     {
         $pages = [];
@@ -61,8 +64,6 @@ class AgrementNavigationPagesProvider extends AbstractService
      */
     public function getTypesAgrements()
     {
-        $service = $this->getServiceLocator()->get('ApplicationTypeAgrement'); /* @var $service \Application\Service\TypeAgrement */
-
-        return $service->getList();
+        return $this->getServiceTypeAgrement()->getList();
     }
 }

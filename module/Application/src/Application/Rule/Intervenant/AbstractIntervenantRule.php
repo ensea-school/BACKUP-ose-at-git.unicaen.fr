@@ -4,7 +4,6 @@ namespace Application\Rule\Intervenant;
 
 use Application\Rule\AbstractRule;
 use Application\Entity\Db\Interfaces\IntervenantAwareInterface;
-use Application\Service\Intervenant as IntervenantService;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
@@ -16,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 abstract class AbstractIntervenantRule extends AbstractRule implements IntervenantAwareInterface
 {
     use IntervenantAwareTrait;
+    use \Application\Service\Traits\IntervenantAwareTrait;
     
     /**
      * Reformatte en extrayant chaque 'id' pour l'utiliser comme clé. 
@@ -65,12 +65,5 @@ abstract class AbstractIntervenantRule extends AbstractRule implements Intervena
      * @return QueryBuilder
      */
     abstract public function getQueryBuilder();
-    
-    /**
-     * @return IntervenantService
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
-    }
+
 }

@@ -18,10 +18,10 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  */
 class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        EntityManagerAwareTrait,
-        Traits\ContextAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use EntityManagerAwareTrait;
+    use Traits\ContextAwareTrait;
+
 
 
     /**

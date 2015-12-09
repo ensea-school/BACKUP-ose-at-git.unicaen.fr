@@ -19,6 +19,7 @@ use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
@@ -44,6 +45,7 @@ class ServiceService extends AbstractEntityService
     use TypeVolumeHoraireAwareTrait;
     use VolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
+    use PeriodeAwareTrait;
 
     /**
      *
@@ -735,9 +737,10 @@ class ServiceService extends AbstractEntityService
      * @param IntervenantEntity $intervenant
      *
      */
-    public function setPrevusFromPrevus(IntervenantEntity $intervenant)
+    public function setPrevusFromPrevus(IntervenantEntity $intervenant, $plafondControl=true)
     {
         $old = $this->getPrevusFromPrevusData($intervenant);
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
         // Enregistrement des services trouvés dans la nouvelle année
         foreach ($old as $o) {
@@ -761,7 +764,10 @@ class ServiceService extends AbstractEntityService
             }
             $service->setHistoDestructeur(null); // restauration du service si besoin!!
             $service->setHistoDestruction(null);
-            $this->save($service);
+            $this->save($service, false);
+        }
+        if ($plafondControl){
+            $this->controlePlafondFcMaj($intervenant, $typeVolumeHoraire);
         }
     }
 
@@ -866,7 +872,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function setRealisesFromPrevus(ServiceEntity $service)
+    public function setRealisesFromPrevus(ServiceEntity $service, $plafondControl=true)
     {
         $prevus = $service
             ->getVolumeHoraireListe()->getChild()
@@ -891,7 +897,7 @@ class ServiceService extends AbstractEntityService
                 $realises->setHeures($prevus->getHeures());
             }
         }
-        $this->save($service);
+        $this->save($service, $plafondControl);
     }
 
 
@@ -1237,11 +1243,8 @@ class ServiceService extends AbstractEntityService
     {
         $p = $this->getPeriode($service);
         if (null === $p) {
-            $periodeService = $this->getServiceLocator()->get('applicationPeriode');
-            /* @var $periodeService Periode */
-
             // Pas de période donc toutes les périodes sont autorisées
-            return $periodeService->getEnseignement();
+            return $this->getServicePeriode()->getEnseignement();
         } else {
             return [$p->getId() => $p];
         }

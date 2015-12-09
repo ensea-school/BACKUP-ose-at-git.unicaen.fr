@@ -169,10 +169,8 @@ class ServiceController extends AbstractActionController
 
             $recherche = $this->getServiceService()->loadRecherche();
         } else {
-            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-            /* @var $localContext \Application\Service\LocalContext */
 
-            $localContext->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+            $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action    = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getTypeVolumeHoraire());

@@ -1,82 +1,69 @@
 <?php
-namespace Application\Entity\Service;
+namespace Application\Hydrator\Service;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etape;
+use Application\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Service\Traits\NiveauEtapeAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Stdlib\Hydrator\HydratorInterface;
+
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RechercheHydrator implements HydratorInterface, ServiceLocatorAwareInterface
+class RechercheHydrator implements HydratorInterface, EntityManagerAwareInterface, ServiceLocatorAwareInterface
 {
-
     use ServiceLocatorAwareTrait;
+    use EntityManagerAwareTrait;
+    use NiveauEtapeAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
      *
      * @param  array $data
-     * @param  object $object
+     * @param  Recherche $object
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        /* @var $object Recherche */
-
-        $sTypeIntervenant = $this->getServiceLocator()->get('applicationTypeIntervenant');
-        /* @var $sTypeIntervenant \Application\Service\TypeIntervenant */
-
-        $sIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
-        /* @var $sIntervenant \Application\Service\Intervenant */
-
-        $sStructure = $this->getServiceLocator()->get('applicationStructure');
-        /* @var $sStructure \Application\Service\Structure */
-
-        $sNiveauEtape = $this->getServiceLocator()->get('applicationNiveauEtape');
-        /* @var $sNiveauEtape \Application\Service\NiveauEtape */
-
-        $sEtape = $this->getServiceLocator()->get('applicationEtape');
-        /* @var $sEtape \Application\Service\Etape */
-
-        $sElementPedagogique = $this->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $sElementPedagogique \Application\Service\ElementPedagogique */
-
-        $sTypeVolumeHoraire = $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
-        /* @var $sTypeVolumeHoraire \Application\Service\TypeVolumeHoraire */
-
-        $sEtatVolumeHoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-        /* @var $sEtatVolumeHoraire \Application\Service\EtatVolumeHoraire */
-
+        $em = $this->getEntityManager();
 
         $id = isset($data['type-intervenant']) ? (int)$data['type-intervenant'] : null;
-        $object->setTypeIntervenant( $sTypeIntervenant->get( $id ) );
+        $object->setTypeIntervenant( $id ? $em->find(TypeIntervenant::class, $id) : null );
 
         $id = isset($data['structure-aff']) ? (int)$data['structure-aff'] : null;
-        $object->setStructureAff( $sStructure->get( $id ) );
+        $object->setStructureAff( $id ? $em->find(Structure::class, $id ) : null );
 
         $id = isset($data['intervenant']) ? $data['intervenant'] : null;
-        $object->setIntervenant( $sIntervenant->get( $id ) );
+        $object->setIntervenant( $id ? $em->find(Intervenant::class, $id ) : null );
 
         $id = isset($data['structure-ens']) ? (int)$data['structure-ens'] : null;
-        $object->setStructureEns( $sStructure->get( $id ) );
+        $object->setStructureEns( $id ? $em->find(Structure::class, $id ) : null );
 
         $id = isset($data['niveau-etape']) ? $data['niveau-etape'] : null;
-        $object->setNiveauEtape( $sNiveauEtape->get( $id ) );
+        $object->setNiveauEtape( $this->getServiceNiveauEtape()->get( $id ) );
 
         $id = isset($data['etape']) ? (int)$data['etape'] : null;
-        $object->setEtape( $sEtape->get( $id ) );
+        $object->setEtape( $id ? $em->find(Etape::class, $id ) : null );
 
         $id = isset($data['element-pedagogique']) ? (int)$data['element-pedagogique'] : null;
-        $object->setElementPedagogique( $sElementPedagogique->get( $id ) );
+        $object->setElementPedagogique( $id ? $em->find(ElementPedagogique::class, $id ) : null );
 
         $id = isset($data['type-volume-horaire']) ? (int)$data['type-volume-horaire'] : null;
-        $object->setTypeVolumeHoraire( $sTypeVolumeHoraire->get( $id ) );
+        $object->setTypeVolumeHoraire( $id ? $em->find(TypeVolumeHoraire::class, $id ) : null );
 
         $id = isset($data['etat-volume-horaire']) ? (int)$data['etat-volume-horaire'] : null;
-        $object->setEtatVolumeHoraire( $sEtatVolumeHoraire->get( $id ) );
+        $object->setEtatVolumeHoraire( $id ? $em->find(EtatVolumeHoraire::class, $id ) : null );
 
         return $object;
     }

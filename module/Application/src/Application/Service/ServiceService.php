@@ -17,6 +17,7 @@ use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
+use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -50,6 +51,7 @@ class ServiceService extends AbstractEntityService
     use TypeIntervenantAwareTrait;
     use PeriodeAwareTrait;
     use LocalContextAwareTrait;
+    use RechercheHydratorAwareTrait;
 
     /**
      *
@@ -125,17 +127,6 @@ class ServiceService extends AbstractEntityService
 
 
     /**
-     *
-     * @return RechercheHydrator
-     */
-    protected function getRechercheHydrator()
-    {
-        return $this->getServiceLocator()->get('ServiceRechercheHydrator');
-    }
-
-
-
-    /**
      * Les paramètres de recherche sont également remplis à l'aide du contexte local
      *
      * @return Recherche
@@ -146,7 +137,7 @@ class ServiceService extends AbstractEntityService
             $this->recherche = new Recherche;
             $session         = $this->getRechercheSessionContainer();
             if ($session->offsetExists('data')) {
-                $this->getRechercheHydrator()->hydrate($session->data, $this->recherche);
+                $this->getHydratorServiceRecherche()->hydrate($session->data, $this->recherche);
             }
         }
 
@@ -183,7 +174,7 @@ class ServiceService extends AbstractEntityService
         if ($recherche !== $this->recherche) {
             $this->recherche = $recherche;
         }
-        $data          = $this->getRechercheHydrator()->extract($recherche);
+        $data          = $this->getHydratorServiceRecherche()->extract($recherche);
         $session       = $this->getRechercheSessionContainer();
         $session->data = $data;
 
@@ -245,7 +236,7 @@ class ServiceService extends AbstractEntityService
      * @throws Exception
      * @return ServiceEntity
      */
-    public function save($entity, $plafondControl=true)
+    public function save($entity, $plafondControl = true)
     {
         $tvhs = [];
 
@@ -280,8 +271,8 @@ class ServiceService extends AbstractEntityService
             /* Sauvegarde automatique des volumes horaires associés */
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
-                /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire  */
-                if ($volumeHoraire->getTemPlafondFcMaj() !== 1){
+                /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire */
+                if ($volumeHoraire->getTemPlafondFcMaj() !== 1) {
                     $tvhs[] = $volumeHoraire->getTypeVolumeHoraire();
                 }
                 if ($result !== $entity) $volumeHoraire->setService($result);
@@ -296,11 +287,12 @@ class ServiceService extends AbstractEntityService
             $this->getEntityManager()->getConnection()->rollBack();
             throw $e;
         }
-        if ($plafondControl){
-            foreach( $tvhs as $typeVolumeHoraire ){
+        if ($plafondControl) {
+            foreach ($tvhs as $typeVolumeHoraire) {
                 $this->controlePlafondFcMaj($entity->getIntervenant(), $typeVolumeHoraire);
             }
         }
+
         return $result;
     }
 
@@ -340,7 +332,7 @@ class ServiceService extends AbstractEntityService
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($niveauEtape && $niveauEtape->getId() !== '-') {
             $serviceElement = $this->getServiceElementPedagogique();
-            $serviceEtape = $this->getServiceEtape();
+            $serviceEtape   = $this->getServiceEtape();
 
             $this->leftJoin($serviceElement, $qb, 'elementPedagogique');
             $serviceElement->join($serviceEtape, $qb, 'etape');
@@ -736,9 +728,9 @@ class ServiceService extends AbstractEntityService
      * @param IntervenantEntity $intervenant
      *
      */
-    public function setPrevusFromPrevus(IntervenantEntity $intervenant, $plafondControl=true)
+    public function setPrevusFromPrevus(IntervenantEntity $intervenant, $plafondControl = true)
     {
-        $old = $this->getPrevusFromPrevusData($intervenant);
+        $old               = $this->getPrevusFromPrevusData($intervenant);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
         // Enregistrement des services trouvés dans la nouvelle année
@@ -765,7 +757,7 @@ class ServiceService extends AbstractEntityService
             $service->setHistoDestruction(null);
             $this->save($service, false);
         }
-        if ($plafondControl){
+        if ($plafondControl) {
             $this->controlePlafondFcMaj($intervenant, $typeVolumeHoraire);
         }
     }
@@ -871,7 +863,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function setRealisesFromPrevus(ServiceEntity $service, $plafondControl=true)
+    public function setRealisesFromPrevus(ServiceEntity $service, $plafondControl = true)
     {
         $prevus = $service
             ->getVolumeHoraireListe()->getChild()
@@ -1360,17 +1352,18 @@ class ServiceService extends AbstractEntityService
      *
      * @return $this
      */
-    public function controlePlafondFcMaj( IntervenantEntity $intervenant, TypeVolumeHoraireEntity $typeVolumeHoraire )
+    public function controlePlafondFcMaj(IntervenantEntity $intervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
     {
         $intervenantId = (int)$intervenant->getId();
-        $tvhId = (int)$typeVolumeHoraire->getId();
+        $tvhId         = (int)$typeVolumeHoraire->getId();
 
         $sql = "BEGIN ose_service.controle_plafond_fc_maj($intervenantId,$tvhId); END;";
         $this->getEntityManager()->getConnection()->exec($sql);
+
         return $this;
     }
 
-    
+
 
     /**
      *

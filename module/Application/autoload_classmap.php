@@ -318,7 +318,6 @@ return array(
     'Application\Entity\Db\VolumeHoraire'                                                                                 => __DIR__ . '/src/Application/Entity/Db/VolumeHoraire.php',
     'Application\Entity\Db\FormuleResultatTypesHeuresTrait'                                                               => __DIR__ . '/src/Application/Entity/Db/FormuleResultatTypesHeuresTrait.php',
     'Application\Entity\Db\Listener\DossierListener'                                                                      => __DIR__ . '/src/Application/Entity/Db/Listener/DossierListener.php',
-    'Application\Entity\Service\RechercheHydrator'                                                                        => __DIR__ . '/src/Application/Entity/Service/RechercheHydrator.php',
     'Application\Entity\Service\Recherche'                                                                                => __DIR__ . '/src/Application/Entity/Service/Recherche.php',
     'Application\Entity\VolumeHoraireListe'                                                                               => __DIR__ . '/src/Application/Entity/VolumeHoraireListe.php',
     'Application\Entity\VolumeHoraireReferentielListe'                                                                    => __DIR__ . '/src/Application/Entity/VolumeHoraireReferentielListe.php',

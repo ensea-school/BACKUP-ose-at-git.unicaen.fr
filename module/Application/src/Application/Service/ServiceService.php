@@ -247,6 +247,8 @@ class ServiceService extends AbstractEntityService
      */
     public function save($entity, $plafondControl=true)
     {
+        $tvhs = [];
+
         $this->getEntityManager()->getConnection()->beginTransaction();
         try {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -279,6 +281,9 @@ class ServiceService extends AbstractEntityService
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
                 /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire  */
+                if ($volumeHoraire->getTemPlafondFcMaj() !== 1){
+                    $tvhs[] = $volumeHoraire->getTypeVolumeHoraire();
+                }
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     $serviceVolumeHoraire->delete($volumeHoraire);
@@ -292,7 +297,9 @@ class ServiceService extends AbstractEntityService
             throw $e;
         }
         if ($plafondControl){
-            $this->controlePlafondFcMaj($entity->getIntervenant(), $entity->getTypeVolumeHoraire());
+            foreach( $tvhs as $typeVolumeHoraire ){
+                $this->controlePlafondFcMaj($entity->getIntervenant(), $typeVolumeHoraire);
+            }
         }
         return $result;
     }

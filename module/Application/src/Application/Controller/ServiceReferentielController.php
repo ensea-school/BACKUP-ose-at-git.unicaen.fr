@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
@@ -31,6 +32,7 @@ class ServiceReferentielController extends AbstractActionController
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
     use VolumeHoraireReferentielAwareTrait;
+    use SaisieAwareTrait;
 
 
 
@@ -165,7 +167,7 @@ class ServiceReferentielController extends AbstractActionController
         }
         $service = $this->getServiceServiceReferentiel();
         //$role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $form = $this->getFormSaisie();
+        $form = $this->getFormServiceReferentielSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
         $errors = [];
 
@@ -333,14 +335,4 @@ class ServiceReferentielController extends AbstractActionController
         return $this->typeVolumeHoraire;
     }
 
-
-
-    /**
-     *
-     * @return \Application\Form\ServiceReferentiel\Saisie
-     */
-    protected function getFormSaisie()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceReferentielSaisie');
-    }
 }

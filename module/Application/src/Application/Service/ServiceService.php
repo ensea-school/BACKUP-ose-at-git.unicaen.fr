@@ -27,6 +27,7 @@ use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
@@ -52,6 +53,7 @@ class ServiceService extends AbstractEntityService
     use PeriodeAwareTrait;
     use LocalContextAwareTrait;
     use RechercheHydratorAwareTrait;
+    use ValidationAwareTrait;
 
     /**
      *
@@ -539,7 +541,7 @@ class ServiceService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $type = $this->getServiceLocator()->get('ApplicationValidation')->normalizeTypeValidation($type);
+        $type = $this->getServiceValidation()->normalizeTypeValidation($type);
 
         $qb
             ->join("$alias.volumeHoraire", 'tvvh')

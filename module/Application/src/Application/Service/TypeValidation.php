@@ -20,7 +20,7 @@ class TypeValidation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeValidation';
+        return \Application\Entity\Db\TypeValidation::class;
     }
 
     /**

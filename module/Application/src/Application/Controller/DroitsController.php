@@ -4,12 +4,14 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
+use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Service\Traits\AffectationAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
+use UnicaenAuth\Form\Droits\Traits\RoleFormAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Db\StatutIntervenant;
@@ -33,6 +35,8 @@ class DroitsController extends AbstractActionController
     use StructureAwareTrait;
     use PersonnelAwareTrait;
     use SourceAwareTrait;
+    use RoleFormAwareTrait;
+    use AffectationFormAwareTrait;
 
     /**
      *
@@ -56,7 +60,7 @@ class DroitsController extends AbstractActionController
         $role = $this->context()->roleFromRoute();
         $errors = [];
 
-        $form = $this->getFormRole();
+        $form = $this->getFormDroitsRole();
         if (empty($role)){
             $title = 'Création d\'un nouveau rôle';
             $role = $this->getServiceRole()->newEntity();
@@ -237,7 +241,7 @@ class DroitsController extends AbstractActionController
         /* @var $affectation Affectation */
         $errors = [];
 
-        $form = $this->getFormAffectation();
+        $form = $this->getFormDroitsAffectation();
         if (empty($affectation)){
             $title = 'Création d\'une nouvelle affectation';
             $affectation = $this->getServiceAffectation()->newEntity();
@@ -330,23 +334,6 @@ class DroitsController extends AbstractActionController
         $form->get('role')->setValue( $roleStatutCode ?: '' );
 
         return $form;
-    }
-
-    /**
-     *
-     * @return \Application\Form\Droits\RoleForm
-     */
-    public function getFormRole()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('DroitsRoleForm');
-    }
-
-    /**
-     * @return \Application\Form\Droits\AffectationForm
-     */
-    public function getFormAffectation()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('DroitsAffectationForm');
     }
 
 }

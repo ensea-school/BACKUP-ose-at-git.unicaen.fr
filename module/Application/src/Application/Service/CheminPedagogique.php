@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Service;
+use Application\Service\Traits\SourceAwareTrait;
 
 /**
  * Description of CheminPedagogique
@@ -9,6 +10,8 @@ namespace Application\Service;
  */
 class CheminPedagogique extends AbstractEntityService
 {
+    use SourceAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -17,7 +20,7 @@ class CheminPedagogique extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\CheminPedagogique';
+        return \Application\Entity\Db\CheminPedagogique::class;
     }
 
     /**
@@ -38,7 +41,7 @@ class CheminPedagogique extends AbstractEntityService
     {
         $entity = parent::newEntity();
         // toutes les entités créées ont OSE pour source!!
-        $entity->setSource( $this->getServiceLocator()->get('ApplicationSource')->getOse() );
+        $entity->setSource( $this->getServiceSource()->getOse() );
         $entity->setOrdre(1);
         return $entity;
     }

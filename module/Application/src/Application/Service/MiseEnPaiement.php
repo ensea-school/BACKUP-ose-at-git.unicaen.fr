@@ -7,6 +7,11 @@ use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
+use Application\Service\Traits\CentreCoutAwareTrait;
+use Application\Service\Traits\DomaineFonctionnelAwareTrait;
+use Application\Service\Traits\FormuleResultatServiceReferentielAwareTrait;
+use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
+use Application\Service\Traits\TypeHeuresAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -17,6 +22,11 @@ use Doctrine\ORM\QueryBuilder;
 class MiseEnPaiement extends AbstractEntityService
 {
     use Traits\IntervenantAwareTrait;
+    use MiseEnPaiementIntervenantStructureAwareTrait;
+    use CentreCoutAwareTrait;
+    use DomaineFonctionnelAwareTrait;
+    use TypeHeuresAwareTrait;
+    use FormuleResultatServiceReferentielAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -26,7 +36,7 @@ class MiseEnPaiement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\MiseEnPaiement';
+        return MiseEnPaiementEntity::class;
     }
 
     /**
@@ -61,8 +71,7 @@ class MiseEnPaiement extends AbstractEntityService
 
     public function finderByTypeIntervenant( TypeIntervenantEntity $typeIntervenant=null, QueryBuilder $qb=null, $alias=null )
     {
-        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
-        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
@@ -78,8 +87,7 @@ class MiseEnPaiement extends AbstractEntityService
 
     public function finderByStructure( StructureEntity $structure, QueryBuilder $qb=null, $alias=null )
     {
-        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
-        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
@@ -91,8 +99,7 @@ class MiseEnPaiement extends AbstractEntityService
 
     public function finderByIntervenants( $intervenants, QueryBuilder $qb=null, $alias=null )
     {
-        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
-        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
@@ -468,15 +475,11 @@ class MiseEnPaiement extends AbstractEntityService
         }
 
         if (isset($data['centre-cout-id'])){
-            $serviceCentreCout = $this->getServiceLocator()->get('applicationCentreCout');
-            /* @var $serviceCentreCout CentreCout */
-            $object->setCentreCout( $serviceCentreCout->get( (integer)$data['centre-cout-id'] ) );
+            $object->setCentreCout( $this->getServiceCentreCout()->get( (integer)$data['centre-cout-id'] ) );
         }
 
         if (isset($data['domaine-fonctionnel-id'])){
-            $serviceDomaineFonctionnel = $this->getServiceLocator()->get('applicationDomaineFonctionnel');
-            /* @var $serviceDomaineFonctionnel DomaineFonctionnel */
-            $object->setDomaineFonctionnel( $serviceDomaineFonctionnel->get( (integer)$data['domaine-fonctionnel-id'] ) );
+            $object->setDomaineFonctionnel( $this->getServiceDomaineFonctionnel()->get( (integer)$data['domaine-fonctionnel-id'] ) );
         }
 
         if (isset($data['formule-resultat-service-id'])){
@@ -486,15 +489,11 @@ class MiseEnPaiement extends AbstractEntityService
         }
 
         if (isset($data['formule-resultat-service-referentiel-id'])){
-            $serviceFormuleResultatServiceReferentiel = $this->getServiceLocator()->get('ApplicationFormuleResultatServiceReferentiel');
-            /* @var $serviceFormuleResultatServiceReferentiel FormuleResultatServiceReferentiel */
-            $object->setFormuleResultatServiceReferentiel( $serviceFormuleResultatServiceReferentiel->get( (integer)$data['formule-resultat-service-referentiel-id'] ) );
+            $object->setFormuleResultatServiceReferentiel( $this->getServiceFormuleResultatServiceReferentiel()->get( (integer)$data['formule-resultat-service-referentiel-id'] ) );
         }
 
         if (isset($data['type-heures-id'])){
-            $serviceTypeHeures = $this->getServiceLocator()->get('applicationTypeHeures');
-            /* @var $serviceTypeHeures TypeHeures */
-            $object->setTypeHeures( $serviceTypeHeures->get( (integer)$data['type-heures-id'] ) );
+            $object->setTypeHeures( $this->getServiceTypeHeures()->get( (integer)$data['type-heures-id'] ) );
         }
     }
 

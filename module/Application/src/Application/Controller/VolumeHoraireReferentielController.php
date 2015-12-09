@@ -2,9 +2,13 @@
 
 namespace Application\Controller;
 
+use Application\Form\VolumeHoraireReferentiel\Traits\SaisieAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Application\Exception\DbException;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
+use Application\Service\Traits\ServiceReferentielAwareTrait;
 
 /**
  *
@@ -15,15 +19,16 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireReferentielController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
-    use \Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
-    use \Application\Service\Traits\ServiceReferentielAwareTrait;
+    use ContextAwareTrait;
+    use VolumeHoraireReferentielAwareTrait;
+    use ServiceReferentielAwareTrait;
+    use SaisieAwareTrait;
 
 
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\VolumeHoraireReferentiel'
+            \Application\Entity\Db\VolumeHoraireReferentiel::class
         ]);
         $service = $this->context()->serviceReferentielFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
@@ -38,7 +43,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
     public function saisieAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\VolumeHoraireReferentiel'
+            \Application\Entity\Db\VolumeHoraireReferentiel::class
         ]);
         $service           = $this->context()->serviceReferentielFromRoute(); /* @var $service \Application\Entity\Db\ServiceReferentiel */
         $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
@@ -48,7 +53,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
         $service->setTypeVolumeHoraire( $typeVolumehoraire );
         $volumeHoraireList = $service->getVolumeHoraireReferentielListe();
 
-        $form = $this->getForm();
+        $form = $this->getFormVolumeHoraireReferentielSaisie();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->get('type-volume-horaire')->setValue($typeVolumehoraire->getId());
 
@@ -84,16 +89,6 @@ class VolumeHoraireReferentielController extends AbstractActionController
             return $this->popoverInnerViewModel($viewModel, "Saisie d'heures de référentiel", false);
         }
         return $viewModel;
-    }
-
-    /**
-     * Retourne le formulaire de modif de Volume Horaire.
-     *
-     * @return \Application\Form\VolumeHoraireReferentiel\Saisie
-     */
-    protected function getForm()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireReferentielSaisie');
     }
 
 }

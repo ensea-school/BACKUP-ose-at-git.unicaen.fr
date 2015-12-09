@@ -1,6 +1,7 @@
 <?php
 namespace Application\Form\OffreFormation;
 
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -14,6 +15,7 @@ class EtapeModulateursHydrator implements HydratorInterface, ServiceLocatorAware
 {
 
     use ServiceLocatorAwareTrait;
+    use ElementPedagogiqueAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
@@ -24,13 +26,6 @@ class EtapeModulateursHydrator implements HydratorInterface, ServiceLocatorAware
      */
     public function hydrate(array $data, $object)
     {
-        //$sel = $this->getServiceLocator()->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $sel \Application\Service\ElementPedagogique */
-
-        /*$elements = $etape->getElementPedagogique();
-        foreach( $elements as $element ){
-            $modulateursListe = $sel->getModulateursListe($element);
-        }*/
         return $object;
     }
 
@@ -42,8 +37,7 @@ class EtapeModulateursHydrator implements HydratorInterface, ServiceLocatorAware
      */
     public function extract($object)
     {
-        $sel = $this->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $sel \Application\Service\ElementPedagogique */
+        $sel = $this->getServiceElementPedagogique();
 
         $data = [];
 

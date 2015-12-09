@@ -2,6 +2,10 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\TypeContratAwareTrait;
+use Application\Service\Traits\TypeValidationAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Contrat as ContratEntity;
 use Application\Entity\Db\TypeContrat as TypeContratEntity;
@@ -17,6 +21,10 @@ use Common\Exception\LogicException;
  */
 class Contrat extends AbstractEntityService
 {
+    use ValidationAwareTrait;
+    use TypeValidationAwareTrait;
+    use TypeContratAwareTrait;
+    use VolumeHoraireAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -26,7 +34,7 @@ class Contrat extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Contrat';
+        return ContratEntity::class;
     }
 
     /**
@@ -72,8 +80,7 @@ class Contrat extends AbstractEntityService
         }
         
         // recherche des VH liés au contrat
-        $serviceVH = $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-        $qb = $serviceVH->finderByContrat($contrat);
+        $qb = $this->getServiceVolumeHoraire()->finderByContrat($contrat);
         $vhs = $qb->getQuery()->getResult();
         
         // détachement du contrat et des VH
@@ -95,11 +102,9 @@ class Contrat extends AbstractEntityService
      */
     public function valider(ContratEntity $contrat)
     {
-        $serviceValidation     = $this->getServiceLocator()->get('ApplicationValidation');
-        $serviceTypeValidation = $this->getServiceLocator()->get('ApplicationTypeValidation');
-        $typeValidation        = $serviceTypeValidation->finderByCode(TypeValidationEntity::CODE_CONTRAT)->getQuery()->getSingleResult();
+        $typeValidation        = $this->getServiceTypeValidation()->finderByCode(TypeValidationEntity::CODE_CONTRAT)->getQuery()->getSingleResult();
         
-        $validation = $serviceValidation->newEntity($typeValidation)
+        $validation = $this->getServiceValidation()->newEntity($typeValidation)
                 ->setIntervenant($contrat->getIntervenant())
                 ->setStructure($contrat->getStructure());
         
@@ -120,8 +125,7 @@ class Contrat extends AbstractEntityService
      */
     public function devalider(ContratEntity $contrat)
     {
-        $serviceTypeContrat = $this->getServiceLocator()->get('ApplicationTypeContrat');
-        $typeContrat        = $serviceTypeContrat->finderByCode(TypeContratEntity::CODE_CONTRAT)->getQuery()->getOneOrNullResult();
+        $typeContrat = $this->getServiceTypeContrat()->finderByCode(TypeContratEntity::CODE_CONTRAT)->getQuery()->getOneOrNullResult();
         
         $contrat->setValidation(null)
                 ->setTypeContrat($typeContrat)
@@ -143,8 +147,7 @@ class Contrat extends AbstractEntityService
      */
     public function getNextNumeroAvenant(IntervenantEntity $intervenant, $avenantsValidesSeulement = true)
     {
-        $serviceTypeContrat = $this->getServiceLocator()->get('ApplicationTypeContrat');
-        $typeAvenant        = $serviceTypeContrat->finderByCode(TypeContratEntity::CODE_AVENANT)->getQuery()->getOneOrNullResult();
+        $typeAvenant        = $this->getServiceTypeContrat()->finderByCode(TypeContratEntity::CODE_AVENANT)->getQuery()->getOneOrNullResult();
         
         $qb = $this->finderByIntervenant($intervenant);
         $qb = $this->finderByType($typeAvenant, $qb);
@@ -163,9 +166,8 @@ class Contrat extends AbstractEntityService
      */
     public function requalifier(ContratEntity $contrat)
     {
-        $serviceTypeContrat = $this->getServiceLocator()->get('ApplicationTypeContrat');
-        $typeContrat        = $serviceTypeContrat->finderByCode(TypeContratEntity::CODE_CONTRAT)->getQuery()->getOneOrNullResult();
-        $typeAvenant        = $serviceTypeContrat->finderByCode(TypeContratEntity::CODE_AVENANT)->getQuery()->getOneOrNullResult();
+        $typeContrat        = $this->getServiceTypeContrat()->finderByCode(TypeContratEntity::CODE_CONTRAT)->getQuery()->getOneOrNullResult();
+        $typeAvenant        = $this->getServiceTypeContrat()->finderByCode(TypeContratEntity::CODE_AVENANT)->getQuery()->getOneOrNullResult();
         
         // calcul du numero d'avenant définitif : nombre d'avenants validés + 1
         $avenantsCount = $this->getNextNumeroAvenant($contrat->getIntervenant());
@@ -285,7 +287,7 @@ class Contrat extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $type = $this->getServiceLocator()->get('ApplicationValidation')->normalizeTypeValidation($type);
+        $type = $this->getServiceValidation()->normalizeTypeValidation($type);
         
         $qb
                 ->join("$alias.validation", "v")
@@ -335,7 +337,7 @@ class Contrat extends AbstractEntityService
             return $type;
         }
         
-        $qb = $this->getServiceLocator()->get('ApplicationTypeContrat')->finderByCode($code = $type);
+        $qb = $this->getServiceTypeContrat()->finderByCode($code = $type);
         $type = $qb->getQuery()->getOneOrNullResult();
         if (!$type) {
             throw new RuntimeException("Aucun type de contrat trouvé avec le code '$code'.");

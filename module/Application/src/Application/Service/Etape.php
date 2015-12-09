@@ -3,6 +3,9 @@
 namespace Application\Service;
 
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\GroupeTypeFormationAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TypeFormationAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 
@@ -16,6 +19,9 @@ class Etape extends AbstractEntityService
     use Traits\LocalContextAwareTrait;
     use Traits\SourceAwareTrait;
     use Traits\ElementModulateurAwareTrait;
+    use TypeFormationAwareTrait;
+    use GroupeTypeFormationAwareTrait;
+    use StructureAwareTrait;
 
 
 
@@ -27,7 +33,7 @@ class Etape extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Etape';
+        return EtapeEntity::class;
     }
 
 
@@ -56,11 +62,8 @@ class Etape extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $typeFormationService = $this->getServiceLocator()->get('applicationTypeFormation');
-        $typeFormationAlias   = $typeFormationService->getAlias();
-
-        $groupeTypeFormationService = $this->getServiceLocator()->get('applicationGroupeTypeFormation');
-        $groupeTypeFormationAlias   = $groupeTypeFormationService->getAlias();
+        $typeFormationAlias   = $this->getServiceTypeFormation()->getAlias();
+        $groupeTypeFormationAlias   = $this->getServiceGroupeTypeFormation()->getAlias();
 
         $qb
             ->innerJoin("$alias.typeFormation", $typeFormationAlias)
@@ -130,7 +133,7 @@ class Etape extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $structureService = $this->getServiceLocator()->get('applicationStructure');
+        $structureService = $this->getServiceStructure();
         $structureAlias   = $structureService->getAlias();
 
         $this->join($structureService, $qb, 'structure');

@@ -4,8 +4,11 @@ namespace Application\Controller\OffreFormation;
 
 use Application\Entity\Db\Etape;
 use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
+use Application\Form\OffreFormation\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use Common\Exception\RuntimeException;
 use Zend\Mvc\Controller\AbstractActionController;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  *
@@ -14,8 +17,9 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class EtapeCentreCoutController extends AbstractActionController
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use ContextAwareTrait;
+    use EtapeCentreCoutFormAwareTrait;
 
 
 
@@ -27,17 +31,17 @@ class EtapeCentreCoutController extends AbstractActionController
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ElementPedagogique',
-            'Application\Entity\Db\CentreCout',
-            'Application\Entity\Db\CentreCoutEp'
+            \Application\Entity\Db\ElementPedagogique::class,
+            \Application\Entity\Db\CentreCout::class,
+            \Application\Entity\Db\CentreCoutEp::class
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            'Application\Entity\Db\ElementPedagogique',
+            \Application\Entity\Db\ElementPedagogique::class,
         ]);
 
         $etape = $this->getEvent()->getParam('etape');
         /* @var $etape Etape */
-        $form = $this->getForm();
+        $form = $this->getFormOffreFormationEtapeCentreCoutEtapeCentreCout();
         $errors = [];
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -58,14 +62,4 @@ class EtapeCentreCoutController extends AbstractActionController
         return compact('etape', 'title', 'form', 'errors');
     }
 
-
-
-    /**
-     *
-     * @return EtapeCentreCoutForm
-     */
-    protected function getForm()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('EtapeCentreCoutForm');
-    }
 }

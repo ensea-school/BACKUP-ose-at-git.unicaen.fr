@@ -87,16 +87,9 @@ class EtablissementController extends AbstractActionController
             throw new RuntimeException("Etablissement '$id' spécifié introuvable.");
         }
 
-        $import = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->etablissementGetDifferentiel($etablissement);
         $title = "Détails de l'établissement";
-        $short = $this->params()->fromQuery('short', false);
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setTemplate('application/etablissement/voir')
-                  ->setVariables(compact('etablissement', 'changements', 'title', 'short'));
-
-        return $viewModel;
+        return compact('etablissement', 'title');
     }
 
     public function apercevoirAction()
@@ -108,13 +101,9 @@ class EtablissementController extends AbstractActionController
             throw new RuntimeException("Etablissement '$id' spécifié introuvable.");
         }
 
-        $import = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->etablissementGetDifferentiel($etablissement);
-        $short = $this->params()->fromQuery('short', false);
-
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/etablissement/voir')
-                  ->setVariables(compact('etablissement', 'changements', 'short'));
+                  ->setVariables(compact('etablissement', 'changements'));
 
         return $viewModel;
     }

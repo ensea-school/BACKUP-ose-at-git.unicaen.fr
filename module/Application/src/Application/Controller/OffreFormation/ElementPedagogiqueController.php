@@ -2,8 +2,11 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Exception\DbException;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  * Description of ElementPedagogiqueController
@@ -15,16 +18,17 @@ use Application\Exception\DbException;
  */
 class ElementPedagogiqueController extends AbstractActionController
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use ContextAwareTrait;
+    use ElementPedagogiqueSaisieAwareTrait;
 
 
 
     public function voirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\CheminPedagogique',
-            'Application\Entity\Db\VolumeHoraire',
+            \Application\Entity\Db\CheminPedagogique::class,
+            \Application\Entity\Db\VolumeHoraire::class,
         ]);
         $element = $this->getEvent()->getParam('elementPedagogique');
         $title   = "Enseignement";
@@ -38,7 +42,7 @@ class ElementPedagogiqueController extends AbstractActionController
     {
         $element = $this->getEvent()->getParam('elementPedagogique');
         $title   = $element ? "Modification d'un enseignement" : "Création d'un enseignement";
-        $form    = $this->getFormAjouterModifier();
+        $form    = $this->getFormOffreFormationElementPedagogiqueSaisie();
         $errors  = [];
 
         if ($element) {
@@ -114,7 +118,7 @@ class ElementPedagogiqueController extends AbstractActionController
     public function searchAction()
     {
         $this->em()->getFilters()->enable('annee')->init([
-            'Application\Entity\Db\ElementPedagogique',
+            \Application\Entity\Db\ElementPedagogique::class,
         ]);
 
         $structure = $this->context()->structureFromQuery();
@@ -183,15 +187,4 @@ class ElementPedagogiqueController extends AbstractActionController
         return new \Zend\View\Model\JsonModel($result);
     }
 
-
-
-    /**
-     * Retourne le formulaire d'ajout/modif d'ElementPedagogique.
-     *
-     * @return \Application\Form\OffreFormation\ElementPedagogiqueSaisie
-     */
-    protected function getFormAjouterModifier()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('ElementPedagogiqueSaisie');
-    }
 }

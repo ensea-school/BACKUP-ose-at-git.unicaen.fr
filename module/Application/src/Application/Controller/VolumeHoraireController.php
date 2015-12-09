@@ -2,9 +2,12 @@
 
 namespace Application\Controller;
 
+use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\VolumeHoraireAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
 use Application\Exception\DbException;
 
 /**
@@ -16,14 +19,15 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
-    use \Application\Service\Traits\VolumeHoraireAwareTrait;
-    use \Application\Service\Traits\ServiceAwareTrait;
+    use ContextAwareTrait;
+    use VolumeHoraireAwareTrait;
+    use ServiceAwareTrait;
+    use SaisieAwareTrait;
 
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\VolumeHoraire'
+            \Application\Entity\Db\VolumeHoraire::class
         ]);
         $service = $this->context()->serviceFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
@@ -38,8 +42,8 @@ class VolumeHoraireController extends AbstractActionController
     public function saisieAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\VolumeHoraire',
-            'Application\Entity\Db\MotifNonPaiement'
+            \Application\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\MotifNonPaiement::class
         ]);
 
         $service            = $this->context()->serviceFromRoute();
@@ -67,7 +71,7 @@ class VolumeHoraireController extends AbstractActionController
         $volumeHoraireList = $service->getVolumeHoraireListe($periode, $typeIntervention);
         $volumeHoraireList->setMotifNonPaiement($motifNonPaiement);
 
-        $form = $this->getForm();
+        $form = $this->getFormVolumeHoraireSaisie();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
@@ -102,16 +106,6 @@ class VolumeHoraireController extends AbstractActionController
             return $this->popoverInnerViewModel($viewModel, "Saisie d'heures d'enseignement", false);
         }
         return $viewModel;
-    }
-
-    /**
-     * Retourne le formulaire de modif de Volume Horaire.
-     *
-     * @return \Application\Form\VolumeHoraire\Saisie
-     */
-    protected function getForm()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireSaisie');
     }
 
 }

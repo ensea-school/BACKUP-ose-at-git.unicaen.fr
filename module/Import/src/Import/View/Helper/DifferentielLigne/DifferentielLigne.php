@@ -4,6 +4,7 @@ namespace Import\View\Helper\DifferentielLigne;
 use Zend\View\Helper\AbstractHelper;
 use Import\Entity\Differentiel\Ligne;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de différentiel d'import
@@ -12,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 class DifferentielLigne extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait;
     
     /**
      * @var Ligne

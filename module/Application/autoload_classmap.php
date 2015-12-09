@@ -423,7 +423,6 @@ return array(
     'Application\Service\TypeContrat'                                                                                     => __DIR__ . '/src/Application/Service/TypeContrat.php',
     'Application\Service\TypeAgrement'                                                                                    => __DIR__ . '/src/Application/Service/TypeAgrement.php',
     'Application\Service\ElementPedagogique'                                                                              => __DIR__ . '/src/Application/Service/ElementPedagogique.php',
-    'Application\Service\GlobalContext'                                                                                   => __DIR__ . '/src/Application/Service/GlobalContext.php',
     'Application\Service\MiseEnPaiementIntervenantStructure'                                                              => __DIR__ . '/src/Application/Service/MiseEnPaiementIntervenantStructure.php',
     'Application\Service\Pays'                                                                                            => __DIR__ . '/src/Application/Service/Pays.php',
     'Application\Service\Context'                                                                                         => __DIR__ . '/src/Application/Service/Context.php',

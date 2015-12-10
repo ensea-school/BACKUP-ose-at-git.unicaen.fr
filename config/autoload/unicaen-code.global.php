@@ -5,6 +5,21 @@ if (defined('APPLICATION_PATH')){
         'view-dirs'     => [APPLICATION_PATH . '/code'],
         'template-dirs' => [APPLICATION_PATH . '/code/template'],
         'generator-output-dir' => '/tmp/UnicaenCode',
+        'namespaces'           => [
+            'services'  => [
+                'Application\Service',
+                'Import\Service',
+            ],
+            'forms'     => [
+                'Application\Form',
+            ],
+            'hydrators' => [
+                'Application\Hydrator',
+            ],
+            'entities'  => [
+                'Application\Entity\Db',
+            ],
+        ],
     ];
 }else{
     $settings = [];

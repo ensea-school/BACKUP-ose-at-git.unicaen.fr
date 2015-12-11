@@ -22,7 +22,7 @@ class Personnel extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Personnel';
+        return PersonnelEntity::class;
     }
 
 

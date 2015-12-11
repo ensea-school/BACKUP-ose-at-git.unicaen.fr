@@ -57,7 +57,7 @@ class EtablissementController extends AbstractActionController
     public function rechercheAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Etablissement',
+            \Application\Entity\Db\Etablissement::class,
         ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {

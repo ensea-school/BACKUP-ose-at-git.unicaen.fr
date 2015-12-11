@@ -181,7 +181,7 @@ class ContratController extends AbstractActionController
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
-        $this->em()->clear('Application\Entity\Db\Service'); // indispensable si on requête N fois la même entité avec des critères différents
+        $this->em()->clear(\Application\Entity\Db\Service::class); // indispensable si on requête N fois la même entité avec des critères différents
         $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
                 ->select("s, ep, vh, str, i")
                 ->join("s.volumeHoraire", "vh")

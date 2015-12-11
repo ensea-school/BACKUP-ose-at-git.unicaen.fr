@@ -98,13 +98,13 @@ class ValidationController extends AbstractActionController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Validation',
-            'Application\Entity\Db\TypeValidation',
-            'Application\Entity\Db\Dossier',
-            'Application\Entity\Db\Service',
-            'Application\Entity\Db\VolumeHoraire',
-            'Application\Entity\Db\ServiceReferentiel',
-            'Application\Entity\Db\VolumeHoraireReferentiel',
+            \Application\Entity\Db\Validation::class,
+            \Application\Entity\Db\TypeValidation::class,
+            \Application\Entity\Db\Dossier::class,
+            \Application\Entity\Db\Service::class,
+            \Application\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\ServiceReferentiel::class,
+            \Application\Entity\Db\VolumeHoraireReferentiel::class,
         ]);
     }
 
@@ -227,7 +227,7 @@ class ValidationController extends AbstractActionController
 
         $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structuresEns, $structureValidation);
 
-        $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !
+        $this->em()->clear(\Application\Entity\Db\Service::class); // INDISPENSABLE entre 2 requêtes sur Service !
 
         // recherche des enseignements de l'intervenant non encore validés
         $servicesNonValides = $serviceService->fetchServicesDisposPourValidation($typeVolumeHoraire, $this->getIntervenant(), $structuresEns);
@@ -359,7 +359,7 @@ class ValidationController extends AbstractActionController
         $validationsServices = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
         foreach ($validationsServices as $validation) { /* @var $validation \Application\Entity\Db\Validation */
 
-            $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes concernant les services !
+            $this->em()->clear(\Application\Entity\Db\Service::class); // INDISPENSABLE entre 2 requêtes concernant les services !
 
             $qb = $serviceService->finderServicesValides(
                     $typeVolumeHoraire,
@@ -419,7 +419,7 @@ class ValidationController extends AbstractActionController
         // collecte des validations et des référentiels associés
         $this->collectValidationsReferentiels($typeValidation, $typeVolumeHoraire, $structureRef, $structureValidation);
 
-        $this->em()->clear('Application\Entity\Db\ServiceReferentiel'); // INDISPENSABLE entre 2 requêtes sur ServiceReferentiel !
+        $this->em()->clear(\Application\Entity\Db\ServiceReferentiel::class); // INDISPENSABLE entre 2 requêtes sur ServiceReferentiel !
 
         // recherche des référentiels de l'intervenant non encore validés
         $qb = $serviceReferentiel->finderReferentielsNonValides($typeVolumeHoraire, $this->getIntervenant(), $structureRef);
@@ -545,7 +545,7 @@ class ValidationController extends AbstractActionController
         $validationsReferentiels = $qb->getQuery()->getResult();
         foreach ($validationsReferentiels as $validation) { /* @var $validation \Application\Entity\Db\Validation */
 
-            $this->em()->clear('Application\Entity\Db\ServiceReferentiel'); // INDISPENSABLE entre 2 requêtes concernant le référentiel !
+            $this->em()->clear(\Application\Entity\Db\ServiceReferentiel::class); // INDISPENSABLE entre 2 requêtes concernant le référentiel !
 
             $qb = $serviceReferentiel->finderReferentielsValides(
                     $typeVolumeHoraire,
@@ -581,8 +581,8 @@ class ValidationController extends AbstractActionController
         }
         
         $entityClass = $this->isReferentiel ? 
-                'Application\Entity\Db\VIndicAttenteValidationServiceRef' :
-                'Application\Entity\Db\VIndicAttenteValidationService';
+                \Application\Entity\Db\VIndicAttenteValidationServiceRef::class :
+                \Application\Entity\Db\VIndicAttenteValidationService::class;
         
         $dqlAttenteValidation = $this->em()->createQueryBuilder()
                 ->select("v.id")

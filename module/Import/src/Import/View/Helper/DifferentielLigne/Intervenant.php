@@ -37,7 +37,7 @@ class Intervenant extends DifferentielLigne
         switch( $column ){
             case 'STRUCTURE_ID':
                 if (! empty($value)){
-                    $structure = $this->ligne->getEntityManager()->find('Application\Entity\Db\Structure', $value);
+                    $structure = $this->ligne->getEntityManager()->find(\Application\Entity\Db\Structure::class, $value);
                 }else{
                     $structure = null;
                 }
@@ -51,7 +51,7 @@ class Intervenant extends DifferentielLigne
                 }else{
                     $oldStatut = 'Aucun';
                 }
-                $statut = $this->ligne->getEntityManager()->find('Application\Entity\Db\StatutIntervenant', $value);
+                $statut = $this->ligne->getEntityManager()->find(\Application\Entity\Db\StatutIntervenant::class, $value);
                 return 'changement de statut ('.$oldStatut.' vers '.$statut.')';
             case 'TYPE_ID':
                 $intervenant = $this->ligne->getEntity();
@@ -60,7 +60,7 @@ class Intervenant extends DifferentielLigne
                 }else{
                     $oldType = 'Aucun';
                 }
-                $type = $this->ligne->getEntityManager()->find('Application\Entity\Db\TypeIntervenant', $value);
+                $type = $this->ligne->getEntityManager()->find(\Application\Entity\Db\TypeIntervenant::class, $value);
                 return $oldType.' devient '.lcfirst( $type );
             default:
                 return parent::getColumnDetails($column, $value);

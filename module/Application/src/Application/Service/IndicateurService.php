@@ -70,7 +70,7 @@ class IndicateurService extends AbstractEntityService
     private function getBaseQueryBuilder($indicateur, $structure = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->from('Application\Entity\Db\Indicateur\Indicateur' . $this->getIndicateurNumero($indicateur), 'indicateur');
+        $qb->from(\Application\Entity\Db\Indicateur\Indicateur::class . $this->getIndicateurNumero($indicateur), 'indicateur');
 
         /* Filtrage par intervenant */
         $qb->join('indicateur.intervenant', 'intervenant');
@@ -132,7 +132,7 @@ class IndicateurService extends AbstractEntityService
             $indic = $indicateur;
             $numero = $indicateur->getNumero();
         }
-        if (! class_exists('Application\Entity\Db\Indicateur\Indicateur'.$numero)){
+        if (! class_exists(\Application\Entity\Db\Indicateur\Indicateur::class.$numero)){
             return $this->getIndicateurImpl($indic,$structure)->getResultCount();
         }
         /* FIN COMPATIBILITE ANCIEN SYSTEME */
@@ -296,7 +296,7 @@ class IndicateurService extends AbstractEntityService
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->update('Application\Entity\Db\IndicModifDossier', 't')
+            ->update(\Application\Entity\Db\IndicModifDossier::class, 't')
             ->set("t.histoDestruction", ":destruction")
             ->set("t.histoDestructeur", ":destructeur")
             ->where("t.intervenant = :intervenant")

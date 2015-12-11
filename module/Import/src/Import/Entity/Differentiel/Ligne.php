@@ -87,7 +87,7 @@ class Ligne
         $this->action = $data['IMPORT_ACTION'];
         unset($data['IMPORT_ACTION']);
 
-        $this->source = $entityManager->find('Application\Entity\Db\Source', (integer)$data['SOURCE_ID']);
+        $this->source = $entityManager->find(\Application\Entity\Db\Source::class, (integer)$data['SOURCE_ID']);
         unset($data['SOURCE_ID']);
 
         $this->sourceCode = $data['SOURCE_CODE'];

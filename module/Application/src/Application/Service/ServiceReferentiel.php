@@ -42,7 +42,7 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\ServiceReferentiel';
+        return ServiceReferentielEntity::class;
     }
 
 

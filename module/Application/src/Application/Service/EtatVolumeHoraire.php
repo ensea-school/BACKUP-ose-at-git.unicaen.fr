@@ -21,7 +21,7 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\EtatVolumeHoraire';
+        return EtatVolumeHoraireEntity::class;
     }
 
     /**

@@ -18,7 +18,7 @@ class FormuleResultatService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\FormuleResultatService';
+        return \Application\Entity\Db\FormuleResultatService::class;
     }
 
     /**

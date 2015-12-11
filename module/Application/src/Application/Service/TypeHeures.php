@@ -22,7 +22,7 @@ class TypeHeures extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeHeures';
+        return TypeHeuresEntity::class;
     }
 
     /**

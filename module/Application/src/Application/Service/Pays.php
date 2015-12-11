@@ -17,7 +17,7 @@ class Pays extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Pays';
+        return \Application\Entity\Db\Pays::class;
     }
 
     /**

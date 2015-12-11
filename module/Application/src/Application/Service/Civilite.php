@@ -21,7 +21,7 @@ class Civilite extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Civilite';
+        return CiviliteEntity::class;
     }
 
     /**

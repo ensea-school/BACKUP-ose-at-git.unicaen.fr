@@ -23,7 +23,7 @@ class Affectation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Affectation';
+        return EntityAffectation::class;
     }
 
     /**

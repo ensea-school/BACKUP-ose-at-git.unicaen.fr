@@ -18,7 +18,7 @@ class FormuleServiceModifie extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\FormuleServiceModifie';
+        return \Application\Entity\Db\FormuleServiceModifie::class;
     }
 
     /**

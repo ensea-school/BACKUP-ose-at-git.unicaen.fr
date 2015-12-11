@@ -27,7 +27,7 @@ class PieceJointe extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\PieceJointe';
+        return PieceJointeEntity::class;
     }
 
     /**

@@ -18,7 +18,7 @@ class Utilisateur extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Utilisateur';
+        return \Application\Entity\Db\Utilisateur::class;
     }
 
     /**

@@ -109,7 +109,7 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
     {
         // recherche des structures d'enseignements de l'intervenant
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); /* @var $em EntityManager */
-        $qb = $em->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("str")
+        $qb = $em->getRepository(\Application\Entity\Db\Structure::class)->createQueryBuilder("str")
                 ->distinct()
                 ->join("str.elementPedagogique", "ep")
                 ->join("ep.service", "s")

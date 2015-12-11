@@ -18,7 +18,7 @@ class FormuleVolumeHoraireReferentiel extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\FormuleVolumeHoraireReferentiel';
+        return \Application\Entity\Db\FormuleVolumeHoraireReferentiel::class;
     }
 
     /**

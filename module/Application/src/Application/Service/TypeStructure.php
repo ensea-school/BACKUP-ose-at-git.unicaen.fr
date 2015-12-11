@@ -20,7 +20,7 @@ class TypeStructure extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeStructure';
+        return \Application\Entity\Db\TypeStructure::class;
     }
 
     /**

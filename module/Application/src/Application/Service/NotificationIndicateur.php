@@ -31,7 +31,7 @@ class NotificationIndicateur extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\NotificationIndicateur';
+        return NotificationIndicateurEntity::class;
     }
 
     /**
@@ -172,7 +172,7 @@ class NotificationIndicateurQueryBuilder extends QueryBuilder
     public function initWithDefault()
     {
         $this
-            ->from('Application\Entity\Db\NotificationIndicateur', $this->rootAlias)
+            ->from(NotificationIndicateurEntity::class, $this->rootAlias)
             ->select("$this->rootAlias, p, i, s")
             ->join("$this->rootAlias.personnel", "p")
             ->join("$this->rootAlias.indicateur", "i", Join::WITH, "i.enabled = 1")

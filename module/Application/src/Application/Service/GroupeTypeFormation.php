@@ -18,7 +18,7 @@ class GroupeTypeFormation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\GroupeTypeFormation';
+        return \Application\Entity\Db\GroupeTypeFormation::class;
     }
 
     /**

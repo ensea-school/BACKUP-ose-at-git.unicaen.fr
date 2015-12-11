@@ -35,7 +35,7 @@ class Validation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Validation';
+        return ValidationEntity::class;
     }
 
     /**
@@ -320,7 +320,7 @@ class Validation extends AbstractEntityService
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("v, tv, str, i, vh, s, ep, strens")
-                ->from('Application\Entity\Db\Validation', 'v')
+                ->from(ValidationEntity::class, 'v')
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // auteur de la validation
                 ->join("v.intervenant", "i")
@@ -381,7 +381,7 @@ class Validation extends AbstractEntityService
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("v, tv, str, i, vh, s, strref")
-                ->from('Application\Entity\Db\Validation', 'v')
+                ->from(ValidationEntity::class, 'v')
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str')
                 ->join("v.intervenant", "i")

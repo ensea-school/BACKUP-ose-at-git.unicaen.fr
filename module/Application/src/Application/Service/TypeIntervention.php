@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeIntervention as Entity;
 
@@ -29,7 +28,7 @@ class TypeIntervention extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeIntervention';
+        return Entity::class;
     }
 
     /**

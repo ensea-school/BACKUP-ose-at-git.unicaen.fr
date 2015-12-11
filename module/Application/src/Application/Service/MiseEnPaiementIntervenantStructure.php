@@ -19,7 +19,7 @@ class MiseEnPaiementIntervenantStructure extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\MiseEnPaiementIntervenantStructure';
+        return \Application\Entity\Db\MiseEnPaiementIntervenantStructure::class;
     }
 
     /**

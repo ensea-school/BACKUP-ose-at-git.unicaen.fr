@@ -74,10 +74,10 @@ class DossierController extends AbstractActionController implements WorkflowInte
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Intervenant',
-            'Application\Entity\Db\Validation',
-            'Application\Entity\Db\TypeValidation',
-            'Application\Entity\Db\Dossier',
+            \Application\Entity\Db\Intervenant::class,
+            \Application\Entity\Db\Validation::class,
+            \Application\Entity\Db\TypeValidation::class,
+            \Application\Entity\Db\Dossier::class,
         ]);
     }
 
@@ -125,7 +125,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
         }
         
         // refetch intervenant avec jointure sur dossier (et respect de l'historique)
-        $qb = $this->em()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
+        $qb = $this->em()->getRepository(\Application\Entity\Db\Intervenant::class)->createQueryBuilder("i")
                 ->select("i, d")
                 ->leftJoin("i.dossier", "d")
                 ->andWhere("i = :i")

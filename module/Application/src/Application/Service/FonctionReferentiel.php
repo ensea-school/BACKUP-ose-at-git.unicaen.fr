@@ -18,7 +18,7 @@ class FonctionReferentiel extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\FonctionReferentiel';
+        return \Application\Entity\Db\FonctionReferentiel::class;
     }
 
     /**

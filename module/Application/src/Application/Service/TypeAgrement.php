@@ -21,7 +21,7 @@ class TypeAgrement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeAgrement';
+        return TypeAgrementEntity::class;
     }
 
     /**

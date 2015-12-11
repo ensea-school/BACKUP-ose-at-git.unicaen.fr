@@ -32,7 +32,7 @@ class ElementPedagogique extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\ElementPedagogique';
+        return ElementPedagogiqueEntity::class;
     }
 
 

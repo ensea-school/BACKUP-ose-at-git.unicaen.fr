@@ -23,7 +23,7 @@ class Etablissement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Etablissement';
+        return \Application\Entity\Db\Etablissement::class;
     }
 
     /**

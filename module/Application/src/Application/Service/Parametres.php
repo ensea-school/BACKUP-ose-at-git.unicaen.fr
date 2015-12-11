@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Parametre as ParametreEntity;
 use Common\Exception\LogicException;
 
 /**
@@ -22,7 +23,7 @@ class Parametres extends AbstractService {
     protected function getCache($param)
     {
         if (! $this->cache){
-            $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
+            $repository = $this->getEntityManager()->getRepository(ParametreEntity::class);
             /* @var $repository \Doctrine\ORM\EntityRepository */
             $list = $repository->findAll();
 
@@ -55,7 +56,7 @@ class Parametres extends AbstractService {
      */
     public function getDescription($param)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
+        $repository = $this->getEntityManager()->getRepository(ParametreEntity::class);
         /* @var $repository \Doctrine\ORM\EntityRepository */
 
         $result = $repository->findBy(['nom' => $param]);
@@ -85,7 +86,7 @@ class Parametres extends AbstractService {
      */
     public function set($param, $value)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
+        $repository = $this->getEntityManager()->getRepository(ParametreEntity::class);
         /* @var $repository \Doctrine\ORM\EntityRepository */
 
         $result = $repository->findBy(['nom' => $param]);

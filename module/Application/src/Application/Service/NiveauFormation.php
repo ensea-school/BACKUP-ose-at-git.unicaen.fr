@@ -20,7 +20,7 @@ class NiveauFormation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\NiveauFormation';
+        return NiveauFormationEntity::class;
     }
 
     /**

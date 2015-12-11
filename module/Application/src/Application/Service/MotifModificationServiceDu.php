@@ -19,7 +19,7 @@ class MotifModificationServiceDu extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\MotifModificationServiceDu';
+        return \Application\Entity\Db\MotifModificationServiceDu::class;
     }
 
     /**

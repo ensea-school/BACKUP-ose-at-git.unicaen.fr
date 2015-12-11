@@ -39,13 +39,13 @@ class FormuleTest extends BaseTestCase {
         $parametres = $this->getServiceManager()->get('applicationParametres');
         $this->etape                = $this->getServiceManager()->get('applicationEtape')->get($params['etape']);
         $this->source               = $this->getServiceManager()->get('applicationSource')->getTest();
-        $this->annee                = $this->getEntityManager()->find('Application\Entity\Db\Annee', $parametres->annee);
-        $this->etablissement        = $this->getEntityManager()->find('Application\Entity\Db\Etablissement', $parametres->etablissement);
+        $this->annee                = $this->getEntityManager()->find(\Application\Entity\Db\Annee::class, $parametres->annee);
+        $this->etablissement        = $this->getEntityManager()->find(\Application\Entity\Db\Etablissement::class, $parametres->etablissement);
         $this->structure            = $this->getServiceManager()->get('applicationStructure')->get($params['structure']);
-        $this->corps                = $this->getEntityManager()->find('Application\Entity\Db\Corps', $params['corps']);
-        $this->civilite             = $this->getEntityManager()->find('Application\Entity\Db\Civilite', $params['civilite']);
-        $this->typeVolumeHoraire    = $this->getEntityManager()->find('Application\Entity\Db\TypeVolumeHoraire', $params['type_volume_horaire']);
-        $this->fonctionReferentiel  = $this->getEntityManager()->find('Application\Entity\Db\FonctionReferentiel', $params['fonction_referentiel']);
+        $this->corps                = $this->getEntityManager()->find(\Application\Entity\Db\Corps::class, $params['corps']);
+        $this->civilite             = $this->getEntityManager()->find(\Application\Entity\Db\Civilite::class, $params['civilite']);
+        $this->typeVolumeHoraire    = $this->getEntityManager()->find(\Application\Entity\Db\TypeVolumeHoraire::class, $params['type_volume_horaire']);
+        $this->fonctionReferentiel  = $this->getEntityManager()->find(\Application\Entity\Db\FonctionReferentiel::class, $params['fonction_referentiel']);
         $this->dateNaissance        = new \DateTime($params['date_naissance']);
         $this->email                = $params['email'];
     }

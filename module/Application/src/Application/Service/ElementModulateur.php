@@ -21,7 +21,7 @@ class ElementModulateur extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\ElementModulateur';
+        return \Application\Entity\Db\ElementModulateur::class;
     }
 
     /**

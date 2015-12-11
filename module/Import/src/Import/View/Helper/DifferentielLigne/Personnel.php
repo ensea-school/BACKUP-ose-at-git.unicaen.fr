@@ -25,7 +25,7 @@ class Personnel extends DifferentielLigne
         switch( $column ){
             case 'STRUCTURE_ID':
                 if (! empty($value)){
-                    $structure = $this->ligne->getEntityManager()->find('Application\Entity\Db\Structure', $value);
+                    $structure = $this->ligne->getEntityManager()->find(\Application\Entity\Db\Structure::class, $value);
                 }else{
                     $structure = null;
                 }

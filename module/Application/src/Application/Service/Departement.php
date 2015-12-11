@@ -17,7 +17,7 @@ class Departement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Departement';
+        return \Application\Entity\Db\Departement::class;
     }
 
     /**

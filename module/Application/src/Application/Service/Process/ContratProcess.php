@@ -299,7 +299,7 @@ class ContratProcess extends AbstractService
 
     private function getTypeContrat()
     {
-        return $this->getEntityManager()->getRepository('Application\Entity\Db\TypeContrat')
+        return $this->getEntityManager()->getRepository(\Application\Entity\Db\TypeContrat::class)
                 ->findOneByCode(TypeContrat::CODE_CONTRAT);
     }
 

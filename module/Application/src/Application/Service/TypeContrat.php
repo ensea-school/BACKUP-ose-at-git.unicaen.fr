@@ -20,7 +20,7 @@ class TypeContrat extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeContrat';
+        return \Application\Entity\Db\TypeContrat::class;
     }
 
     /**

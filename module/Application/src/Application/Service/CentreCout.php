@@ -24,7 +24,7 @@ class CentreCout extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\CentreCout';
+        return CentreCoutEntity::class;
     }
 
     /**

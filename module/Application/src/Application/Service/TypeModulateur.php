@@ -39,7 +39,7 @@ class TypeModulateur extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeModulateur';
+        return TypeModulateurEntity::class;
     }
 
     /**

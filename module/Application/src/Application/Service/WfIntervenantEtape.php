@@ -6,7 +6,6 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\WfEtape as WfEtapeEntity;
 use Application\Entity\Db\WfIntervenantEtape as WfIntervenantEtapeEntity;
-use Application\Service\AbstractEntityService;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
@@ -26,7 +25,7 @@ class WfIntervenantEtape extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\WfIntervenantEtape';
+        return WfIntervenantEtapeEntity::class;
     }
 
     /**

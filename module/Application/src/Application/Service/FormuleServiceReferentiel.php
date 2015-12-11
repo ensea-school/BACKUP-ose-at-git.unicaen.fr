@@ -18,7 +18,7 @@ class FormuleServiceReferentiel extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\FormuleServiceReferentiel';
+        return \Application\Entity\Db\FormuleServiceReferentiel::class;
     }
 
     /**

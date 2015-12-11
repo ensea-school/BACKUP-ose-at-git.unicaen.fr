@@ -20,7 +20,7 @@ class Source extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Source';
+        return SourceEntity::class;
     }
 
     /**

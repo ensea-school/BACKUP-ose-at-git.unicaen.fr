@@ -21,7 +21,7 @@ class TypePieceJointe extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypePieceJointe';
+        return TypePieceJointeEntity::class;
     }
 
     /**

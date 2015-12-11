@@ -365,18 +365,18 @@ class PieceJointeController extends AbstractActionController implements Workflow
 
     public function typePieceJointeStatutAction()
     {
-        $qb                 = $this->em()->getRepository('Application\Entity\Db\TypePieceJointe')->createQueryBuilder("tpj")
+        $qb                 = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointe::class)->createQueryBuilder("tpj")
             ->select("tpj")
             ->orderBy("tpj.ordre");
         $typesPiecesJointes = $qb->getQuery()->getResult();
 
-        $qb                  = $this->em()->getRepository('Application\Entity\Db\StatutIntervenant')->createQueryBuilder("si")
+        $qb                  = $this->em()->getRepository(\Application\Entity\Db\StatutIntervenant::class)->createQueryBuilder("si")
             ->select("si")
             ->andWhere("si.peutChoisirDansDossier = 1")
             ->orderBy("si.ordre");
         $statutsIntervenants = $qb->getQuery()->getResult();
 
-        $qb = $this->em()->getRepository('Application\Entity\Db\TypePieceJointeStatut')->createQueryBuilder("tpjs")
+        $qb = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointeStatut::class)->createQueryBuilder("tpjs")
             ->select("tpjs, tpj, si")
             ->join("tpjs.type", "tpj")
             ->join("tpjs.statut", "si")
@@ -408,7 +408,7 @@ class PieceJointeController extends AbstractActionController implements Workflow
             throw new \Common\Exception\LogicException("Paramètre manquant : premierRecrutement");
         }
 
-        $qb   = $this->em()->getRepository('Application\Entity\Db\TypePieceJointeStatut')->createQueryBuilder("tpjs")
+        $qb   = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointeStatut::class)->createQueryBuilder("tpjs")
             ->select("tpjs, tpj, si")
             ->join("tpjs.type", "tpj", \Doctrine\ORM\Query\Expr\Join::WITH, "tpj = :tpj")
             ->join("tpjs.statut", "si", \Doctrine\ORM\Query\Expr\Join::WITH, "si = :si")

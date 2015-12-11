@@ -21,7 +21,7 @@ class TypePieceJointeStatut extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypePieceJointeStatut';
+        return TypePieceJointeStatutEntity::class;
     }
 
     /**

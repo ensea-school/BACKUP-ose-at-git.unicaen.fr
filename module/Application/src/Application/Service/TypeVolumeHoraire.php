@@ -21,7 +21,7 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeVolumeHoraire';
+        return TypeVolumeHoraireEntity::class;
     }
 
     /**

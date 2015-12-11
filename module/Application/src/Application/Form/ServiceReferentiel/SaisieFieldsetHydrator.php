@@ -27,13 +27,13 @@ class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInt
         $em = $this->getEntityManager();
 
         $intervenant = isset($data['intervenant']['id']) ? (int) $data['intervenant']['id'] : null;
-        $object->setIntervenant($intervenant ? $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($intervenant) : null );
+        $object->setIntervenant($intervenant ? $em->getRepository(\Application\Entity\Db\Intervenant::class)->findOneBySourceCode($intervenant) : null );
 
         $structure = isset($data['structure']) ? (int) $data['structure'] : null;
-        $object->setStructure($structure ? $em->find('Application\Entity\Db\Structure', $structure) : null );
+        $object->setStructure($structure ? $em->find(\Application\Entity\Db\Structure::class, $structure) : null );
 
         $fonction = isset($data['fonction']) ? (int) $data['fonction'] : null;
-        $object->setFonction($fonction ? $em->find('Application\Entity\Db\FonctionReferentiel', $fonction) : null );
+        $object->setFonction($fonction ? $em->find(\Application\Entity\Db\FonctionReferentiel::class, $fonction) : null );
 
         $heures = isset($data['heures']) ? (float) $data['heures'] : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);

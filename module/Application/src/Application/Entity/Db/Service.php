@@ -27,19 +27,24 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     protected $volumeHoraire;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var Intervenant
      */
     protected $intervenant;
 
     /**
-     * @var \Application\Entity\Db\ElementPedagogique
+     * @var ElementPedagogique
      */
     protected $elementPedagogique;
 
     /**
-     * @var \Application\Entity\Db\Etablissement
+     * @var Etablissement
      */
     protected $etablissement;
+
+    /**
+     * @var string
+     */
+    protected $description;
 
     /**
      * Type de volume horaire
@@ -86,7 +91,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Add volumeHoraire
      *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @param VolumeHoraire $volumeHoraire
      *
      * @return Service
      */
@@ -102,7 +107,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Remove volumeHoraire
      *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @param VolumeHoraire $volumeHoraire
      */
     public function removeVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
     {
@@ -114,7 +119,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get volumeHoraire
      *
-     * @param \Application\Entity\Db\Validation $validation
+     * @param Validation $validation
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -155,7 +160,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set intervenant
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param Intervenant $intervenant
      *
      * @return Service
      */
@@ -171,7 +176,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant
+     * @return Intervenant
      */
     public function getIntervenant()
     {
@@ -183,7 +188,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set elementPedagogique
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param ElementPedagogique $elementPedagogique
      *
      * @return Service
      */
@@ -213,7 +218,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get elementPedagogique
      *
-     * @return \Application\Entity\Db\ElementPedagogique
+     * @return ElementPedagogique
      */
     public function getElementPedagogique()
     {
@@ -225,7 +230,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set etablissement
      *
-     * @param \Application\Entity\Db\Etablissement $etablissement
+     * @param Etablissement $etablissement
      *
      * @return Service
      */
@@ -241,11 +246,35 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get etablissement
      *
-     * @return \Application\Entity\Db\Etablissement
+     * @return Etablissement
      */
     public function getEtablissement()
     {
         return $this->etablissement;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+
+
+    /**
+     * @param string $description
+     *
+     * @return Service
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
 

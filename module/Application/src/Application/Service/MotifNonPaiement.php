@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\MotifNonPaiement as Entity;
+use Application\Entity\Db\MotifNonPaiement as MotifNonPaiementEntity;
 
 /**
  * Description of MotifNonPaiement
@@ -21,7 +21,7 @@ class MotifNonPaiement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\MotifNonPaiement';
+        return MotifNonPaiementEntity::class;
     }
 
     /**
@@ -37,7 +37,7 @@ class MotifNonPaiement extends AbstractEntityService
      * Retourne la liste des motifs de non paiement
      *
      * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\Periode[]
+     * @return MotifNonPaiementEntity[]
      */
     public function getList( QueryBuilder $qb=null, $alias=null )
     {

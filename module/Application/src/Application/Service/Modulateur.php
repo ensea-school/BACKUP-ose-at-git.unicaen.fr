@@ -32,7 +32,7 @@ class Modulateur extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Modulateur';
+        return \Application\Entity\Db\Modulateur::class;
     }
 
     /**

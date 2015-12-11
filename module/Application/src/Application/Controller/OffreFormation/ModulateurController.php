@@ -23,10 +23,10 @@ class ModulateurController extends AbstractActionController
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ElementModulateur',
+            \Application\Entity\Db\ElementModulateur::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            'Application\Entity\Db\ElementPedagogique',
+            \Application\Entity\Db\ElementPedagogique::class,
         ]);
 
         $etape = $this->getEvent()->getParam('etape');

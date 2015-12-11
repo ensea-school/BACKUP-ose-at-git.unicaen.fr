@@ -19,7 +19,7 @@ class StatutIntervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\StatutIntervenant';
+        return \Application\Entity\Db\StatutIntervenant::class;
     }
 
     /**

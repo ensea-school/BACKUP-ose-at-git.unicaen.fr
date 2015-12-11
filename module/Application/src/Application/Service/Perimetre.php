@@ -20,7 +20,7 @@ class Perimetre extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Perimetre';
+        return \Application\Entity\Db\Perimetre::class;
     }
 
     /**

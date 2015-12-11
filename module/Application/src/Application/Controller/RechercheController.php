@@ -44,7 +44,7 @@ class RechercheController extends AbstractActionController
     public function intervenantFindAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Intervenant',
+            \Application\Entity\Db\Intervenant::class,
         ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {
@@ -111,7 +111,7 @@ class RechercheController extends AbstractActionController
     public function personnelFindAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Personnel',
+            \Application\Entity\Db\Personnel::class,
         ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {

@@ -18,7 +18,7 @@ class Role extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Role';
+        return \Application\Entity\Db\Role::class;
     }
 
     /**

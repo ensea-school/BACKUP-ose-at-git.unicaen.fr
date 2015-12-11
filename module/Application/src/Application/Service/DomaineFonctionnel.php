@@ -22,7 +22,7 @@ class DomaineFonctionnel extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\DomaineFonctionnel';
+        return DomaineFonctionnelEntity::class;
     }
 
     /**

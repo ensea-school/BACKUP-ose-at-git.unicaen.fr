@@ -104,7 +104,7 @@ class DossierFieldset extends AbstractFieldset
         $civilite->getProxy()
                 ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
                 ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass('Application\Entity\Db\Civilite');
+                ->setTargetClass(\Application\Entity\Db\Civilite::class);
         $this->add($civilite);
 
 
@@ -135,7 +135,7 @@ class DossierFieldset extends AbstractFieldset
         $paysSelect->getProxy()
                 ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
                 ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass('Application\Entity\Db\Pays');
+                ->setTargetClass(\Application\Entity\Db\Pays::class);
         foreach ($paysSelect->getProxy()->getObjects() as $p) {
             $estFrance = PaysEntity::CODE_FRANCE === $p->getSourceCode();
             if ($estFrance) {
@@ -155,7 +155,7 @@ class DossierFieldset extends AbstractFieldset
         $departementSelect->getProxy()
                 ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['sourceCode' => 'ASC']]])
                 ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass('Application\Entity\Db\Departement');
+                ->setTargetClass(\Application\Entity\Db\Departement::class);
         $this->add($departementSelect);
 
         /**
@@ -315,7 +315,7 @@ class DossierFieldset extends AbstractFieldset
                     ],
                 ])
                 ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass('Application\Entity\Db\StatutIntervenant');
+                ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
         $this->add($statut);
 
         return $this;

@@ -58,7 +58,7 @@ class StructureController extends AbstractActionController
     public function rechercheAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\Structure'
+            \Application\Entity\Db\Structure::class
         ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {

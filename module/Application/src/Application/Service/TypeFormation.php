@@ -20,7 +20,7 @@ class TypeFormation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeFormation';
+        return \Application\Entity\Db\TypeFormation::class;
     }
 
     /**

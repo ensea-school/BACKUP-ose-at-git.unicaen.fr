@@ -18,7 +18,7 @@ class FormuleIntervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\FormuleIntervenant';
+        return \Application\Entity\Db\FormuleIntervenant::class;
     }
 
     /**

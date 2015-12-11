@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractEntityService;
 use Application\Entity\Db\WfEtape as WfEtapeEntity;
 
 
@@ -21,7 +20,7 @@ class WfEtape extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\WfEtape';
+        return WfEtapeEntity::class;
     }
 
     /**

@@ -21,7 +21,7 @@ class Dossier extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\Dossier';
+        return DossierEntity::class;
     }
 
     /**

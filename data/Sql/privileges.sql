@@ -33,13 +33,15 @@ UNION SELECT 'contrat' c, 'validation' p, 'Validation' l FROM dual
 UNION SELECT 'contrat' c, 'devalidation' p, 'Dévalidation' l FROM dual
 UNION SELECT 'contrat' c, 'depot-retour-signe' p, 'Dépôt de contrat signé' l FROM dual
 UNION SELECT 'contrat' c, 'saisie-date-retour-signe' p, 'Saisie de date retour' l FROM dual
-UNION SELECT 'enseignement' c, 'cloture' p, 'Clôture' l FROM dual
+UNION SELECT 'enseignement' c, 'association' p, 'Association' l FROM dual
 
 ) t1;
 
+
+/* Liste... */
 select
+  rpad( '/* ' || cp.code || ' */ ', 30 ) || 'update privilege set ordre =  WHERE code = ''' || p.code || ''' AND categorie_id = (SELECT cp.id FROM categorie_privilege cp WHERE cp.code= ''' || cp.code || ''');'
   
-  p.id, cp.code categorie, p.code privilege, p.ordre ordre
 from
   privilege p
   join categorie_privilege cp on cp.id = p.categorie_id
@@ -47,6 +49,9 @@ order by
   cp.code, p.ordre;
   
 select * from categorie_privilege order by ordre;
+
+
+
 
 update categorie_privilege set ordre = 10 WHERE code = 'odf';
 update categorie_privilege set ordre = 20 WHERE code = 'discipline';

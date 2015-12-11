@@ -2,12 +2,9 @@
  Propre à l'affichage des services
  /***************************************************************************************************************************************************/
 
-function ServiceListe(id)
-{
-    this.id = id;
-    this.params = $("#" + this.id).data('params');
+$.widget("ose.serviceListe", {
 
-    this.showHideTypesIntervention = function ()
+    showHideTypesIntervention: function ()
     {
         var that = this;
 
@@ -17,7 +14,7 @@ function ServiceListe(id)
         }
 
         // on détecte les types (par leur code) qui ne doivent plus être masqués et on en profite pour mettre à jour les paramètres
-        $("#" + this.id + " table.service tr.service-ligne td.type-intervention").each(function ()
+        this.element.find("table.service tr.service-ligne td.type-intervention").each(function ()
         {
             var typeInterventionCode = $(this).data('type-intervention-code');
             var visibility = '1' == $(this).data('visibility');
@@ -28,7 +25,7 @@ function ServiceListe(id)
         });
 
         // on applique la visilibité fraichement calculées sur les colonnes
-        $("#" + this.id + " table.service tr.service-ligne td.type-intervention").each(function ()
+        this.element.find("table.service tr.service-ligne td.type-intervention").each(function ()
         {
             var typeInterventionCode = $(this).data('type-intervention-code');
             var visibility = that.params["types-intervention-visibility"][typeInterventionCode];
@@ -45,25 +42,25 @@ function ServiceListe(id)
         for (var i in this.params["types-intervention-visibility"]) {
             if (this.params["types-intervention-visibility"][i]) {
                 count++;
-                $("#" + this.id + " table.service tr th." + i).show(200); // entête
-                $("#" + this.id + " table.service tfoot tr td." + i).show(200); // total
+                this.element.find("table.service tr th." + i).show(200); // entête
+                this.element.find("table.service tfoot tr td." + i).show(200); // total
             } else {
-                $("#" + this.id + " table.service tr th." + i).hide(200); // entête
-                $("#" + this.id + " table.service tfoot tr td." + i).hide(200); // total
+                this.element.find("table.service tr th." + i).hide(200); // entête
+                this.element.find("table.service tfoot tr td." + i).hide(200); // total
             }
         }
-        $("#" + this.id + " table.service #total-general").attr('colspan', count);
+        this.element.find("table.service #total-general").attr('colspan', count);
         if (count == 0) {
-            $("#" + this.id + " table.service tfoot").hide();
+            this.element.find("table.service tfoot").hide();
         } else {
-            $("#" + this.id + " table.service tfoot").show();
+            this.element.find("table.service tfoot").show();
         }
-    }
+    },
 
-    this.showHideDetails = function (serviceId, action)
+    showHideDetails: function (serviceId, action)
     {
-        var tr = $("#" + this.id + " #service-" + serviceId + "-volume-horaire-tr");
-        var button = $("#" + this.id + " #service-" + serviceId + "-ligne td.actions .service-details-button");
+        var tr = this.element.find("#service-" + serviceId + "-volume-horaire-tr");
+        var button = this.element.find("#service-" + serviceId + "-ligne td.actions .service-details-button");
         if (undefined === action) {
             if (tr.css('display') === 'none') {
                 action = 'show';
@@ -78,36 +75,36 @@ function ServiceListe(id)
             button.html('<span class="glyphicon glyphicon-chevron-down"></span>');
             tr.hide(200);
         }
-    }
+    },
 
-    this.showAllDetails = function ()
+    showAllDetails: function ()
     {
-        var thatId = this.id;
-        $("#" + thatId + " .service-ligne").each(function ()
+        var that = this;
+        this.element.find(".service-ligne").each(function ()
         {
             if ($(this).is(':visible')) {
-                ServiceListe.get(thatId).showHideDetails($(this).data('id'), 'show');
+                that.showHideDetails($(this).data('id'), 'show');
             }
         });
-    }
+    },
 
-    this.hideAllDetails = function ()
+    hideAllDetails: function ()
     {
-        var thatId = this.id;
-        $("#" + thatId + " .service-ligne").each(function ()
+        var that = this;
+        this.element.find(".service-ligne").each(function ()
         {
             if ($(this).is(':visible')) {
-                ServiceListe.get(thatId).showHideDetails($(this).data('id'), 'hide');
+                that.showHideDetails($(this).data('id'), 'hide');
             }
         });
-    }
+    },
 
-    this.onAfterChange = function ()
+    onAfterChange: function ()
     {
         var that = this;
 
         this.init2();
-        $("#" + this.id + " tfoot").refresh({params: this.params}, function ()
+        this.element.find("tfoot").refresh({params: this.params}, function ()
         {
             that.showHideTypesIntervention();
         }); // rafraichissement des totaux
@@ -123,17 +120,17 @@ function ServiceListe(id)
         }
         $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
         $("#s-horodatage").refresh();
-    }
+    },
 
-    this.onAfterSaisie = function (serviceId)
+    onAfterSaisie: function (serviceId)
     {
         var that = this;
-        if ($("#" + that.id + " #service-" + serviceId + "-ligne").length) { // simple modification
-            $("#" + that.id + " #service-" + serviceId + "-ligne").refresh({
-                details: $('#service-' + serviceId + '-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
+        if (that.element.find("#service-" + serviceId + "-ligne").length) { // simple modification
+            that.element.find("#service-" + serviceId + "-ligne").refresh({
+                details: that.element.find('#service-' + serviceId + '-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
                 params: that.params
             }, function () { that.onAfterChange(); });
-            $("#" + that.id + " #service-" + serviceId + "-volume-horaire-td div#vhl").refresh();
+            that.element.find("#service-" + serviceId + "-volume-horaire-td div#vhl").refresh();
         } else { // nouveau service
             var url = Url("service/rafraichir-ligne/" + serviceId, {
                 'only-content': 0,
@@ -142,28 +139,28 @@ function ServiceListe(id)
             });
             $.get(url, function (data)
             {
-                $("#" + that.id + " > table > tbody:last").append(data);
+                that.element.find("table:first > tbody:last").append(data);
                 that.onAfterChange();
             });
         }
-    }
+    },
 
-    this.onAfterDelete = function (serviceId)
+    onAfterDelete: function (serviceId)
     {
         if (this.params['in-realise']) { // si on est dans les services réalisés alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
             this.onAfterSaisie(serviceId);
         } else {
-            $("#" + this.id + " #service-" + serviceId + "-volume-horaire-tr").remove();
-            $("#" + this.id + " #service-" + serviceId + "-ligne").remove();
+            this.element.find("#service-" + serviceId + "-volume-horaire-tr").remove();
+            this.element.find("#service-" + serviceId + "-ligne").remove();
             this.onAfterChange();
         }
-    }
+    },
 
-    this.setRealisesFromPrevus = function ()
+    setRealisesFromPrevus: function ()
     {
         var services = '';
         var that = this;
-        $("#" + this.id + " table.service tr.service-ligne").each(function ()
+        this.element.find("table.service tr.service-ligne").each(function ()
         {
             if (services != '') services += ',';
             services += $(this).data('id');
@@ -174,16 +171,16 @@ function ServiceListe(id)
             function (data)
             {
                 if (data != 'OK') {
-                    $("#" + that.id + " #prevu-to-realise-modal").modal('hide');
-                    $("#" + that.id + " #prevu-to-realise-modal").after('<div style="margin-top:.5em">' + data + '</div>');
+                    that.element.find("#prevu-to-realise-modal").modal('hide');
+                    that.element.find("#prevu-to-realise-modal").after('<div style="margin-top:.5em">' + data + '</div>');
                 } else {
                     window.location.reload();
                 }
             }
         );
-    }
+    },
 
-    this.setPrevusFromPrevus = function ()
+    setPrevusFromPrevus: function ()
     {
         var that = this;
         $.get(
@@ -192,43 +189,46 @@ function ServiceListe(id)
             function (data)
             {
                 if (data != 'OK') {
-                    $("#" + that.id + " #prevu-to-prevu-modal").modal('hide');
-                    $("#" + that.id + " #prevu-to-prevu-modal").after('<div style="margin-top:.5em">' + data + '</div>');
+                    that.element.find("#prevu-to-prevu-modal").modal('hide');
+                    that.element.find("#prevu-to-prevu-modal").after('<div style="margin-top:.5em">' + data + '</div>');
                 } else {
                     window.location.reload();
                 }
             }
         );
-    }
+    },
 
-    this.init2 = function ()
+    init2: function ()
     {
-        var thatId = this.id;
-        $("#" + this.id + " .service-details-button").off();
-        $("#" + this.id + " .service-details-button").on('click', function ()
+        var that = this;
+        this.element.find(".service-details-button").off();
+        this.element.find(".service-details-button").on('click', function ()
         {
-            ServiceListe.get(thatId).showHideDetails($(this).parents('.service-ligne').data('id'));
+            that.showHideDetails($(this).parents('.service-ligne').data('id'));
         });
 
-        $("#" + this.id + " table.service tr.service-ligne").each(function ()
+        this.element.find("table.service tr.service-ligne").each(function ()
         {
             var id = $(this).data('id');
-            if ($("#" + thatId + " table.service tr#service-" + id + "-volume-horaire-tr td.heures-not-empty").length ? false : true) {
+            if (that.element.find("table.service tr#service-" + id + "-volume-horaire-tr td.heures-not-empty").length ? false : true) {
                 $(this).hide();
-                $("#" + thatId + " table.service tr#service-" + id + "-volume-horaire-tr").hide();
+                that.element.find("table.service tr#service-" + id + "-volume-horaire-tr").hide();
             } else {
                 $(this).show();
             }
         });
-    }
+    },
 
-    this.init = function ()
+    _create: function()
     {
-        var thatId = this.id;
-        $("#" + this.id + " .service-show-all-details").on('click', function () { ServiceListe.get(thatId).showAllDetails(); });
-        $("#" + this.id + " .service-hide-all-details").on('click', function () { ServiceListe.get(thatId).hideAllDetails(); });
-        $("#" + this.id + " .prevu-to-realise").on('click', function () { ServiceListe.get(thatId).setRealisesFromPrevus(); });
-        this.getElementPrevuToPrevu().on('click', function () { ServiceListe.get(thatId).setPrevusFromPrevus(); });
+        var that = this;
+
+        this.params = this.element.data('params');
+
+        this.element.find(".service-show-all-details").on('click', function () { that.showAllDetails(); });
+        this.element.find(".service-hide-all-details").on('click', function () { that.hideAllDetails(); });
+        this.element.find(".prevu-to-realise").on('click', function () { that.setRealisesFromPrevus(); });
+        this.getElementPrevuToPrevu().on('click', function () { that.setPrevusFromPrevus(); });
         this.init2();
 
         $("body").on("service-modify-message", function (event, data)
@@ -242,7 +242,7 @@ function ServiceListe(id)
                     }
                 }
                 if (serviceId) {
-                    ServiceListe.get(thatId).onAfterSaisie(serviceId);
+                    that.onAfterSaisie(serviceId);
                 }
             }
         });
@@ -259,7 +259,7 @@ function ServiceListe(id)
                     }
                 }
                 if (serviceId) {
-                    ServiceListe.get(thatId).onAfterSaisie(serviceId);
+                    that.onAfterSaisie(serviceId);
                 }
             }
         });
@@ -269,7 +269,7 @@ function ServiceListe(id)
             var thatId = event.a.parents('div.service-liste').attr('id');
             var serviceId = event.a.parents('tr.service-ligne').data('id');
             event.div.modal('hide'); // ferme la fenêtre modale
-            ServiceListe.get(thatId).onAfterDelete(serviceId);
+            that.onAfterDelete(serviceId);
         });
 
         $("body").tooltip({
@@ -283,29 +283,28 @@ function ServiceListe(id)
             var thatId = event.a.parents('div.service-liste').attr('id');
             var serviceId = event.a.data('service');
             event.a.popover('hide');
-            ServiceListe.get(thatId).onAfterSaisie(serviceId);
+            that.onAfterSaisie(serviceId);
         });
-    }
+    },
 
-    this.getElementPrevuToPrevu = function () { return $("#" + this.id + " .prevu-to-prevu") };
-}
 
-ServiceListe.get = function (id)
+    getElementPrevuToPrevu : function (){ return this.element.find(".prevu-to-prevu") }
+});
+
+$(function ()
 {
-    if (null == ServiceListe.instances) ServiceListe.instances = new Array();
-    if (null == ServiceListe.instances[id]) ServiceListe.instances[id] = new ServiceListe(id);
-    return ServiceListe.instances[id];
-}
+    WidgetInitializer.add('service-liste', 'serviceListe');
+});
 
 
 
 
 
-function ServiceForm()
-{
-    this.updating = false;
+$.widget("ose.serviceForm", {
 
-    this.onInterneExterneChange = function ()
+    updating: false,
+
+    onInterneExterneChange: function ()
     {
         if ('service-interne' == this.getInterneExterne()) {
             this.element.find('#element-externe').hide();
@@ -319,9 +318,9 @@ function ServiceForm()
             this.element.find('#element-externe').show();
         }
         this.updateVolumesHoraires();
-    }
+    },
 
-    this.updateVolumesHoraires = function ()
+    updateVolumesHoraires: function ()
     {
         var that = this;
 
@@ -337,9 +336,9 @@ function ServiceForm()
             that.updating = false;
             that.initVolumesHoraires();
         });
-    }
+    },
 
-    this.updateVolumesHorairesSaisie = function ()
+    updateVolumesHorairesSaisie: function ()
     {
         /* Volumes horaires en lecture seule si c'est en cours de mise à jour */
         var readOnly = this.updating;
@@ -356,9 +355,9 @@ function ServiceForm()
 
         this.getElementVolumesHoraires().find('input.form-control').prop('disabled', readOnly);
         this.getElementVolumesHoraires().find('button.prevu-to-realise').prop('disabled', readOnly);
-    }
+    },
 
-    this.prevuToRealise = function (periode)
+    prevuToRealise: function (periode)
     {
         var that = this;
 
@@ -368,9 +367,9 @@ function ServiceForm()
             var value = that.element.find("div.periode#" + periode + " #" + id).data('heures');
             $(this).val(value);
         });
-    }
+    },
 
-    this.init = function ()
+    _create: function ()
     {
         var that = this;
 
@@ -392,9 +391,9 @@ function ServiceForm()
         });
 
         this.initVolumesHoraires();
-    }
+    },
 
-    this.initVolumesHoraires = function ()
+    initVolumesHoraires: function ()
     {
         var that = this;
 
@@ -406,23 +405,28 @@ function ServiceForm()
         });
 
         this.updateVolumesHorairesSaisie();
-    }
+    },
 
-    this.getInterneExterne = function ()
+    getInterneExterne: function ()
     {
         var result = this.element.find('input[name="service\\[interne-externe\\]"]:checked').val();
         return result == undefined ? 'service-interne' : result;
-    }
+    },
 
-    this.getElementInterneExterne = function () { return this.element.find('input[name="service\\[interne-externe\\]"]'); };
-    this.getElementElementPedagogiqueId = function () { return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']"); };
-    this.getElementElementPedagogiqueLabel = function () { return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']"); };
-    this.getElementElementPedagogiqueListe = function () { return this.element.find("select#element-liste"); };
-    this.getElementEtablissementId = function () { return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']"); };
-    this.getElementEtablissementLabel = function () { return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']"); };
-    this.getElementTypeVolumeHoraire = function () { return this.element.find("input[name='type-volume-horaire']"); };
-    this.getElementVolumesHoraires = function () { return this.element.find('div#volumes-horaires'); };
-}
+    getElementInterneExterne: function () { return this.element.find('input[name="service\\[interne-externe\\]"]'); },
+    getElementElementPedagogiqueId: function () { return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']"); },
+    getElementElementPedagogiqueLabel: function () { return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']"); },
+    getElementElementPedagogiqueListe: function () { return this.element.find("select#element-liste"); },
+    getElementEtablissementId: function () { return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']"); },
+    getElementEtablissementLabel: function () { return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']"); },
+    getElementTypeVolumeHoraire: function () { return this.element.find("input[name='type-volume-horaire']"); },
+    getElementVolumesHoraires: function () { return this.element.find('div#volumes-horaires'); }
+});
+
+$(function ()
+{
+    WidgetInitializer.add('service-form', 'serviceForm');
+});
 
 
 

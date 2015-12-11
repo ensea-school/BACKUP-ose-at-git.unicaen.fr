@@ -2,8 +2,10 @@
 
 namespace Application\Form\Service;
 
+use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Service;
 use Application\Form\AbstractFieldset;
+use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
@@ -11,8 +13,12 @@ use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
-
-
+use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\EtablissementAwareTrait;
 
 
 /**
@@ -27,6 +33,7 @@ class SaisieFieldset extends AbstractFieldset
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;
     use StructureAwareTrait;
+    use ElementPedagogiqueRechercheFieldsetAwareTrait;
 
     /**
      * etablissement par défaut
@@ -37,18 +44,16 @@ class SaisieFieldset extends AbstractFieldset
 
 
 
-    public function __construct($name = null, $options = [])
-    {
-        parent::__construct('service', $options);
-    }
-
-
-
     public function init()
     {
         $this->etablissement = $this->getServiceContext()->getEtablissement();
 
-        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'))
+        $hydrator = new SaisieFieldsetHydrator();
+        $hydrator->setServiceLocator($this->getServiceLocator()); // Actuel...
+        //$hydrator->setServiceContext($this->getServiceContext()); // pour plus tard éventuellement...
+
+        $this->setName('service')
+            ->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(Service::class);
 
         $this->add([
@@ -56,9 +61,9 @@ class SaisieFieldset extends AbstractFieldset
             'type' => 'Hidden',
         ]);
 
-        $identityRole = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if (!$identityRole->getIntervenant()) {
+        if (!$role->getIntervenant()) {
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant->setRequired(true)
                 ->setSelectionRequired(true)
@@ -70,7 +75,7 @@ class SaisieFieldset extends AbstractFieldset
             $this->add($intervenant);
         }
 
-        if (!($identityRole->getIntervenant() && !$identityRole->getIntervenant()->estPermanent())) {
+        if (!($role->getIntervenant() && !$role->getIntervenant()->estPermanent())) {
             $this->add([
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',
@@ -87,7 +92,7 @@ class SaisieFieldset extends AbstractFieldset
             ]);
         }
 
-        $fs = $this->getServiceLocator()->get('FormElementPedagogiqueRechercheFieldset');
+        $fs = $this->getFieldsetOffreFormationElementPedagogiqueRecherche();
         $fs->setName('element-pedagogique');
         $this->add($fs);
 
@@ -100,6 +105,14 @@ class SaisieFieldset extends AbstractFieldset
             ->setLabel("Établissement :")
             ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);
         $this->add($etablissement);
+
+        $this->add([
+            'name'    => 'description',
+            'options' => [
+                'label' => 'Description',
+            ],
+            'type'    => 'Text',
+        ]);
 
         return $this;
     }
@@ -178,12 +191,6 @@ class SaisieFieldset extends AbstractFieldset
 
 
 
-    /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
     public function getInputFilterSpecification()
     {
         return [
@@ -196,6 +203,102 @@ class SaisieFieldset extends AbstractFieldset
             'element-pedagogique' => [
                 'required' => false,
             ],
+            'description'         => [
+                'required' => false,
+            ],
         ];
+    }
+}
+
+
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareInterface
+{
+
+    use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
+    use IntervenantAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use EtablissementAwareTrait;
+
+
+
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array   $data
+     * @param  Service $object
+     *
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
+        $object->setIntervenant($intervenant ? $this->getServiceIntervenant()->getBySourceCode($intervenant) : null);
+
+        if (isset($data['element-pedagogique']) && $data['element-pedagogique'] instanceof ElementPedagogique) {
+            $object->setElementPedagogique($data['element-pedagogique']);
+        } else {
+            $elementPedagogique = isset($data['element-pedagogique']['element']['id']) ? $data['element-pedagogique']['element']['id'] : null;
+            $object->setElementPedagogique($elementPedagogique ? $this->getServiceElementPedagogique()->get($elementPedagogique) : null);
+        }
+
+        $etablissement = isset($data['etablissement']['id']) ? (int)$data['etablissement']['id'] : null;
+        $object->setEtablissement($etablissement ? $this->getServiceEtablissement()->get($etablissement) : null);
+
+        $object->setDescription($data['description']);
+
+        return $object;
+    }
+
+
+
+    /**
+     * Extract values from an object
+     *
+     * @param  Service $object
+     *
+     * @return array
+     */
+    public function extract($object)
+    {
+        $data = [
+            'id'                  => $object->getId(),
+            'element-pedagogique' => $object->getElementPedagogique(),
+            'description'         => $object->getDescription(),
+        ];
+
+        if ($object->getIntervenant()) {
+            $data['intervenant'] = [
+                'id'    => $object->getIntervenant()->getSourceCode(),
+                'label' => (string)$object->getIntervenant(),
+            ];
+        } else {
+            $data['intervenant'] = null;
+        }
+
+        if ($object->getEtablissement()) {
+            $data['etablissement'] = [
+                'id'    => $object->getEtablissement()->getId(),
+                'label' => (string)$object->getEtablissement(),
+            ];
+        } else {
+            $data['etablissement'] = null;
+        }
+
+        if ($object->getEtablissement() === $this->getServiceContext()->getEtablissement()) {
+            $data['interne-externe'] = 'service-interne';
+        } else {
+            $data['interne-externe'] = 'service-externe';
+        }
+
+        return $data;
     }
 }

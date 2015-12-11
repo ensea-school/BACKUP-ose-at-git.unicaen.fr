@@ -2,10 +2,16 @@
 
 namespace Application\Form\Service;
 
+use Application\Entity\Db\Periode;
+use Application\Entity\Db\Service;
 use Application\Form\AbstractForm;
+use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
+use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
+use Application\Service\Traits\PeriodeAwareTrait;
 use Common\Exception\InvalidArgumentException;
 use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 
 /**
@@ -15,6 +21,9 @@ use Zend\Form\Element\Hidden;
  */
 class Saisie extends AbstractForm
 {
+    use PeriodeAwareTrait;
+    use SaisieFieldsetAwareTrait;
+    use SaisieMultipleFieldsetAwareTrait;
 
     /**
      * etablissement par défaut
@@ -24,23 +33,18 @@ class Saisie extends AbstractForm
     protected $etablissement;
 
 
+
     /**
      * Retourne la liste des périodes d'enseignement
      *
-     * @return \Application\Entity\Db\Periode[]
+     * @return Periode[]
      */
     public function getPeriodes()
     {
-        $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
-        /* @var $servicePeriode \Application\Service\Periode */
-        $periodes = $servicePeriode->getEnseignement();
-        return $periodes;
+        return $this->getServicePeriode()->getEnseignement();
     }
 
-    public function __construct($name = null, $options = [])
-    {
-        parent::__construct('service', $options);
-    }
+
 
     /**
      * Bind an object to the form
@@ -48,44 +52,45 @@ class Saisie extends AbstractForm
      * Ensures the object is populated with validated values.
      *
      * @param  object $object
-     * @param  int $flags
+     * @param  int    $flags
+     *
      * @return mixed|void
      * @throws InvalidArgumentException
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
-        if ($object instanceof \Application\Entity\Db\Service && $object->getTypeVolumeHoraire() ){
-            $this->get('type-volume-horaire')->setValue( $object->getTypeVolumeHoraire()->getId() );
+        if ($object instanceof Service && $object->getTypeVolumeHoraire()) {
+            $this->get('type-volume-horaire')->setValue($object->getTypeVolumeHoraire()->getId());
         }
+
         return parent::bind($object, $flags);
     }
 
 
+
     public function init()
     {
+        $this->setName('service')
+            ->setAttribute('class', 'service-form');
 
-        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieHydrator'));
-
-        $this->setAttribute('data-bind-class', 'ServiceForm');
+        $hydrator = new SaisieHydrator();
+        $hydrator->setServicePeriode($this->getServicePeriode());
+        $this->setHydrator($hydrator);
 
         // Product Fieldset
-        // Here, we define Product fieldset as base fieldset
-        $saisie = $this->getServiceLocator()->get('ServiceSaisieFieldset');
-//                new SaisieFieldset('saisie');
-        //$saisie->setUseAsBaseFieldset(true);
-        $this->add($saisie);
+        $this->add($this->getFieldsetServiceSaisie());
 
-        foreach( $this->getPeriodes() as $periode ){
-            $pf = $this->getServiceLocator()->get('VolumeHoraireSaisieMultipleFieldset');
+        foreach ($this->getPeriodes() as $periode) {
+            $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
             $pf->setName($periode->getCode());
             $this->add($pf);
         }
 
-        $this->add( new Hidden('type-volume-horaire') );
+        $this->add(new Hidden('type-volume-horaire'));
 
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
@@ -95,23 +100,89 @@ class Saisie extends AbstractForm
         $this->setAttribute('action', $this->getCurrentUrl());
     }
 
+
+
     public function initFromContext()
     {
         $this->get('service')->initFromContext();
     }
+
+
 
     public function saveToContext()
     {
         $this->get('service')->saveToContext();
     }
 
+
+
+    public function getInputFilterSpecification()
+    {
+        return [];
+    }
+}
+
+
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class SaisieHydrator implements HydratorInterface
+{
+    use PeriodeAwareTrait;
+
+
+
     /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     * Retourne la liste des périodes d'enseignement
+     *
+     * @return Periode[]
+     */
+    public function getPeriodes()
+    {
+        $periodes = $this->getServicePeriode()->getEnseignement();
+
+        return $periodes;
+    }
+
+
+
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array   $data
+     * @param  Service $object
+     *
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $object = $data['service'];
+
+        return $object;
+    }
+
+
+
+    /**
+     * Extract values from an object
+     *
+     * @param  Service $object
      *
      * @return array
      */
-    public function getInputFilterSpecification(){
-        return [];
+    public function extract($object)
+    {
+        $data            = [];
+        $data['service'] = $object;
+        foreach ($this->getPeriodes() as $periode) {
+            $data[$periode->getCode()] = $object->getVolumeHoraireListe($periode);
+        }
+
+        return $data;
     }
 }

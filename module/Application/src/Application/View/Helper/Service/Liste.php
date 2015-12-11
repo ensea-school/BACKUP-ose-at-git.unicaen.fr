@@ -216,9 +216,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $out .= '</table>' . "\n";
         $out .= $this->renderShowHide();
         $out .= '</div>' . "\n";
-        $out .= '<script type="text/javascript">';
-        $out .= '$(function() { ServiceListe.get("' . $this->getId() . '").init(); });';
-        $out .= '</script>';
 
         return $out;
     }

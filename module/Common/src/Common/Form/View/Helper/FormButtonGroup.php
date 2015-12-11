@@ -60,7 +60,10 @@ class FormButtonGroup extends FormRadio
             $labelAttributes = [
                 'class' => 'btn btn-default'
             ];
-            if ($selected) $labelAttributes['class'] .= ' active';
+            if ($selected){
+                $labelAttributes['class'] .= ' active';
+                $inputAttributes['checked'] = 'checked';
+            }
 
             if (null !== ($translator = $this->getTranslator())) {
                 $label = $translator->translate(

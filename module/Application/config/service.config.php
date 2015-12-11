@@ -333,8 +333,6 @@ return [
             'ApplicationMotifNonPaiement'                  => Service\MotifNonPaiement::class,
             'ApplicationModificationServiceDu'             => Service\ModificationServiceDu::class,
             'ServiceRechercheFormHydrator'                 => Form\Service\RechercheFormHydrator::class,
-            'FormServiceSaisieFieldsetHydrator'            => Form\Service\SaisieFieldsetHydrator::class,
-            'FormServiceSaisieHydrator'                    => Form\Service\SaisieHydrator::class,
             'FormServiceReferentielSaisieFieldsetHydrator' => Form\ServiceReferentiel\SaisieFieldsetHydrator::class,
             'FormServiceReferentielSaisieHydrator'         => Form\ServiceReferentiel\SaisieHydrator::class,
             'ServiceAssertion'                             => Assertion\ServiceAssertion::class,

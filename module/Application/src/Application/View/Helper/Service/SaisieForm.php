@@ -2,26 +2,35 @@
 
 namespace Application\View\Helper\Service;
 
+use Application\Entity\Db\Periode;
+use Application\Entity\Db\Service;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
-use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use \Application\Service\Traits\ContextAwareTrait;
+use \Application\Service\Traits\ServiceAwareTrait;
+use \Application\Service\Traits\PeriodeAwareTrait;
+use \Application\Service\Traits\TypeInterventionAwareTrait;
+use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use \Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Zend\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of SaisieForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
+class SaisieForm extends AbstractHtmlElement implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\ServiceAwareTrait,
-        \Application\Service\Traits\PeriodeAwareTrait,
-        \Application\Service\Traits\TypeInterventionAwareTrait,
-        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
-        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
+    use ServiceAwareTrait;
+    use PeriodeAwareTrait;
+    use TypeInterventionAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
+
 
     /**
      * @var Saisie
@@ -30,11 +39,11 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @return \Application\Service\Periode[]
+     * @return Periode[]
      */
     public function getPeriodes()
     {
-        $service = $this->form->get('service')->getObject(); /* @var $service \Application\Entity\Db\Service */
+        $service = $this->form->get('service')->getObject(); /* @var $service Service */
         if ($service->getElementPedagogique() && $service->getElementPedagogique()->getPeriode()){
             return [ $service->getElementPedagogique()->getPeriode() ];
         }
@@ -87,7 +96,10 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
             $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
             $res .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
             $res .= '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
-            $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->getView()->formControlGroup($fservice->get('etablissement')).'</div>';
+            $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'
+                .$this->getView()->formControlGroup($fservice->get('etablissement'))
+                .$this->getView()->formControlGroup($fservice->get('description'))
+                .'</div>';
         }else{
             $res .= '<div id="element-interne">'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique'))->render().'</div>';
         }
@@ -117,7 +129,8 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
     public function renderVolumeHoraire($fieldset)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get( $fieldset->get('type-volume-horaire')->getValue() );
-        $inRealise = \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE === $typeVolumeHoraire->getCode();
+        /* @var $typeVolumeHoraire TypeVolumeHoraire */
+        $inRealise = $typeVolumeHoraire->isRealise();
         if ($inRealise){
             $vhl = $fieldset->getObject()->getService()->getVolumeHoraireListe()->getChild();
             /* @var $vhl \Application\Entity\VolumeHoraireListe */

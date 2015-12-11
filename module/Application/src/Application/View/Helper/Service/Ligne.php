@@ -135,12 +135,18 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             if ($liste->getColumnVisibility('structure-ens'))       $colspan++;
             if ($liste->getColumnVisibility('formation'))           $colspan++;
             if ($liste->getColumnVisibility('periode'))             $colspan++;
+            if ($colspan > 0){
+                $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $service->getEtablissement() )."</td>\n";
+            }
+
+            $colspan = 0;
             if ($liste->getColumnVisibility('enseignement'))        $colspan++;
             if ($liste->getColumnVisibility('foad'))                $colspan++;
             if ($liste->getColumnVisibility('regimes-inscription')) $colspan++;
             if ($colspan > 0){
-                $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $service->getEtablissement() )."</td>\n";
+                $out .= '<td colspan="'.$colspan.'">'.$service->getDescription()."</td>\n";
             }
+
         }
         if ($liste->getColumnVisibility('annee')){
             $out .= '<td>'.$this->renderAnnee( $element ? $element->getAnnee() : null )."</td>\n";

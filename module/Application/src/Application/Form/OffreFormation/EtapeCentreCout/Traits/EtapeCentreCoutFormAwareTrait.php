@@ -35,25 +35,28 @@ trait EtapeCentreCoutFormAwareTrait
 
 
     /**
+     * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
+     *
      * @return EtapeCentreCoutForm
      * @throws RuntimeException
      */
     public function getFormOffreFormationEtapeCentreCoutEtapeCentreCout()
     {
-        if (empty($this->formOffreFormationEtapeCentreCoutEtapeCentreCout)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = $serviceLocator->get('FormElementManager')->get('EtapeCentreCoutForm');
+        if (!empty($this->formOffreFormationEtapeCentreCoutEtapeCentreCout)){
+            return $this->formOffreFormationEtapeCentreCoutEtapeCentreCout;
         }
-        return $this->formOffreFormationEtapeCentreCoutEtapeCentreCout;
+
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
+            }
+
+            $serviceLocator = $this->getServiceLocator();
+            if (method_exists($serviceLocator, 'getServiceLocator')) {
+                $serviceLocator = $serviceLocator->getServiceLocator();
+            }
+        }
+        return $serviceLocator->get('FormElementManager')->get('EtapeCentreCoutForm');
     }
 }

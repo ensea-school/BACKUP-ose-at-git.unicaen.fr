@@ -59,8 +59,8 @@
         <join-column name="PARENTE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout" mapped-by="structure" />
     <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="structure" />
-    <one-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout" mapped-by="structure" />
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="structure" />
   </entity>
 </doctrine-mapping>

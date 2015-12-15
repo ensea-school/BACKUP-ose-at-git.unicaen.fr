@@ -231,5 +231,6 @@ return array_merge_recursive(
     include 'notification.config.php',
     include 'paiement.config.php',
     include 'log.config.php',
-    include 'message.config.php'
+    include 'message.config.php',
+    include 'pilotage.config.php'
 );

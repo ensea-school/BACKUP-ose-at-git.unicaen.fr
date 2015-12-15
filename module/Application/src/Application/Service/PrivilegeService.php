@@ -33,7 +33,9 @@ class PrivilegeService extends \UnicaenAuth\Service\PrivilegeService
                 if (! array_key_exists($privilege,$this->privilegesRoles)){
                     $this->privilegesRoles[$privilege] = [];
                 }
-                $this->privilegesRoles[$privilege][] = $role;
+                if ($role){
+                    $this->privilegesRoles[$privilege][] = $role;
+                }
             }
         }
         return $this->privilegesRoles;

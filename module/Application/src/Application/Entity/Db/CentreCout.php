@@ -13,7 +13,6 @@ class CentreCout implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-
     /**
      * @var string
      */
@@ -35,7 +34,7 @@ class CentreCout implements HistoriqueAwareInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $structure;
 
@@ -66,16 +65,21 @@ class CentreCout implements HistoriqueAwareInterface
     private $miseEnPaiement;
 
 
+
     public function __construct()
     {
-        $this->typeHeures       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->miseEnPaiement   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typeHeures     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->structure      = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+
 
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return CentreCout
      */
     public function setLibelle($libelle)
@@ -85,28 +89,35 @@ class CentreCout implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
+
+
     /**
      * Set parent
      *
      * @param CentreCout $parent
+     *
      * @return CentreCout
      */
-    public function setParent( CentreCout $parent = null )
+    public function setParent(CentreCout $parent = null)
     {
         $this->parent = $parent;
 
         return $this;
     }
+
+
 
     /**
      * Get parent
@@ -118,10 +129,13 @@ class CentreCout implements HistoriqueAwareInterface
         return $this->parent;
     }
 
+
+
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return CentreCout
      */
     public function setSourceCode($sourceCode)
@@ -131,53 +145,49 @@ class CentreCout implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
         return $this->sourceCode;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return CentreCout
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
 
-        return $this;
-    }
 
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getStructure()
     {
         return $this->structure;
     }
 
+
+
     /**
      * Set typeRessource
      *
      * @param \Application\Entity\Db\TypeRessource $typeRessource
+     *
      * @return CentreCout
      */
     public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = null)
@@ -187,20 +197,25 @@ class CentreCout implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get typeRessource
      *
-     * @return \Application\Entity\Db\TypeRessource 
+     * @return \Application\Entity\Db\TypeRessource
      */
     public function getTypeRessource()
     {
         return $this->typeRessource;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return CentreCout
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -210,20 +225,25 @@ class CentreCout implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
         return $this->source;
     }
 
+
+
     /**
      * Set activite
      *
      * @param \Application\Entity\Db\CcActivite $activite
+     *
      * @return CentreCout
      */
     public function setActivite(\Application\Entity\Db\CcActivite $activite = null)
@@ -233,15 +253,19 @@ class CentreCout implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get activite
      *
-     * @return \Application\Entity\Db\CcActivite 
+     * @return \Application\Entity\Db\CcActivite
      */
     public function getActivite()
     {
         return $this->activite;
     }
+
+
 
     /**
      * Get typeHeures
@@ -253,30 +277,38 @@ class CentreCout implements HistoriqueAwareInterface
         return $this->typeHeures;
     }
 
+
+
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
-        return $this->getSourceCode().' - '.$this->getLibelle();
+        return $this->getSourceCode() . ' - ' . $this->getLibelle();
     }
+
+
 
     /**
      * détermine si un type d'heures peut être appliqué à ce type de ressource ou non
      *
      * @param \Application\Entity\Db\TypeHeures $typeHeures
+     *
      * @return boolean
      */
-    public function typeHeuresMatches( TypeHeures $typeHeures )
+    public function typeHeuresMatches(TypeHeures $typeHeures)
     {
         return $this->getActivite()->typeHeuresMatches($typeHeures) && $this->getTypeRessource()->typeHeuresMatches($typeHeures);
     }
+
+
 
     /**
      * Add miseEnPaiement
      *
      * @param MiseEnPaiement $miseEnPaiement
+     *
      * @return self
      */
     public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement)
@@ -285,6 +317,8 @@ class CentreCout implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove miseEnPaiement
@@ -295,6 +329,8 @@ class CentreCout implements HistoriqueAwareInterface
     {
         $this->miseEnPaiement->removeElement($miseEnPaiement);
     }
+
+
 
     /**
      * Get miseEnPaiement

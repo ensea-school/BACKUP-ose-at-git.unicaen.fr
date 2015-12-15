@@ -23,11 +23,16 @@
         <join-column name="PARENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
+    <many-to-many field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-table name="V_CENTRE_COUT_STRUCTURE">
+        <join-columns>
+          <join-column name="CENTRE_COUT_ID" referenced-column-name="ID" />
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="STRUCTURE_ID" referenced-column-name="ID" />
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
     <many-to-one field="typeRessource" target-entity="Application\Entity\Db\TypeRessource">
       <join-columns>
         <join-column name="TYPE_RESSOURCE_ID" referenced-column-name="ID"/>
@@ -61,10 +66,10 @@
     <many-to-many field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
         <join-table name="V_CENTRE_COUT_TYPE_HEURES">
             <join-columns>
-                <join-column name="CENTRE_COUT_ID" referenced-column-name="ID" on-delete="NO ACTION"/>
+                <join-column name="CENTRE_COUT_ID" referenced-column-name="ID" />
             </join-columns>
             <inverse-join-columns>
-                <join-column name="TYPE_HEURES_ID" referenced-column-name="ID" on-delete="NO ACTION"/>
+                <join-column name="TYPE_HEURES_ID" referenced-column-name="ID" />
             </inverse-join-columns>
         </join-table>
     </many-to-many>

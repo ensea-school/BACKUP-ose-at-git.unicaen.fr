@@ -1,0 +1,13 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+?>
+<h1>Pilotage</h1>
+
+<?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PILOTAGE_ECARTS_ETATS))): ?>
+<a href="<?php echo $this->url('pilotage/ecarts-etats') ?>">Ecarts états</a>
+<?php endif; ?>
+
+<?php
+

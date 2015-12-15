@@ -33,7 +33,7 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\TypeDotation
+     * @var TypeDotation
      */
     private $type;
 
@@ -111,11 +111,11 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
     /**
      * Set type
      *
-     * @param \Application\Entity\Db\TypeDotation $type
+     * @param TypeDotation $type
      *
      * @return Dotation
      */
-    public function setType(\Application\Entity\Db\TypeDotation $type = null)
+    public function setType(TypeDotation $type = null)
     {
         $this->type = $type;
 
@@ -127,7 +127,7 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
     /**
      * Get type
      *
-     * @return \Application\Entity\Db\TypeDotation
+     * @return TypeDotation
      */
     public function getType()
     {

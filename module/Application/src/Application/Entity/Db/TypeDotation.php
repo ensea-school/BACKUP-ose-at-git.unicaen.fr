@@ -2,7 +2,8 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Application\Entity\Db\Traits\SourceAwareTrait;
+use Application\Entity\Db\Traits\TypeRessourceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -12,6 +13,8 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class TypeDotation implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
+    use SourceAwareTrait;
+    use TypeRessourceAwareTrait;
 
     /**
      * @var string
@@ -28,15 +31,17 @@ class TypeDotation implements HistoriqueAwareInterface
      */
     private $id;
 
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
+
 
     /**
-     * @var \Application\Entity\Db\TypeRessource
+     * Get id
+     *
+     * @return integer
      */
-    private $typeRessource;
+    public function getId()
+    {
+        return $this->id;
+    }
 
 
 
@@ -94,71 +99,4 @@ class TypeDotation implements HistoriqueAwareInterface
         return $this->sourceCode;
     }
 
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return TypeDotation
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-
-
-    /**
-     * Set typeRessource
-     *
-     * @param \Application\Entity\Db\TypeRessource $typeRessource
-     *
-     * @return TypeDotation
-     */
-    public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = null)
-    {
-        $this->typeRessource = $typeRessource;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get typeRessource
-     *
-     * @return \Application\Entity\Db\TypeRessource
-     */
-    public function getTypeRessource()
-    {
-        return $this->typeRessource;
-    }
 }

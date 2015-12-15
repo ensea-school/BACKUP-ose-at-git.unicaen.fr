@@ -3,7 +3,7 @@
 namespace Application\Traits;
 
 /**
- * Description of TypeAgrementAwareTrait
+ * Description of ObligatoireSelonSeuilHeuresAwareTrait
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

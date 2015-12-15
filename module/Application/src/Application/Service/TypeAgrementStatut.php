@@ -24,6 +24,8 @@ class TypeAgrementStatut extends AbstractEntityService
         return TypeAgrementStatutEntity::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -34,45 +36,55 @@ class TypeAgrementStatut extends AbstractEntityService
         return 'tas';
     }
 
+
+
     /**
      * Retourne la liste des enregistrements correspondant aux statut intervenant spécifié.
      *
      * @param StatutIntervenantEntity $statut
-     * @param QueryBuilder|null $queryBuilder
+     * @param QueryBuilder|null       $queryBuilder
+     *
      * @return QueryBuilder
      */
     public function finderByStatutIntervenant(StatutIntervenantEntity $statut, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.statut = :statut")->setParameter('statut', $statut);
+
         return $qb;
     }
+
+
 
     /**
      * Retourne la liste des enregistrements correspondant au témoin de premier recrutement spécifié.
      *
-     * @param bool $premierRecrutement
+     * @param bool              $premierRecrutement
      * @param QueryBuilder|null $queryBuilder
+     *
      * @return QueryBuilder
      */
     public function finderByPremierRecrutement($premierRecrutement, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.premierRecrutement = :flag")->setParameter('flag', $premierRecrutement);
+
         return $qb;
     }
 
+
+
     /**
-     * Retourne la liste des enregistrements.
+     * @param QueryBuilder|null $qb
+     * @param null              $alias
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @param string|null $alias
-     * @return TypeAgrementStatutEntity[]
+     * @return QueryBuilder
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
-        return parent::getList($qb, $alias);
+
+        return $qb;
     }
 }

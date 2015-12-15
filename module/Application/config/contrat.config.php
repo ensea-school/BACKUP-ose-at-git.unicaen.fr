@@ -8,11 +8,11 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Assertion\ContratAssertion;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'contrat' => [
-                'type'    => 'Literal',
-                'options' => [
+                'type'          => 'Literal',
+                'options'       => [
                     'route'    => '/contrat',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
@@ -21,123 +21,123 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    'creer' => [
+                'child_routes'  => [
+                    'creer'               => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:intervenant',
+                            'route'       => '/:intervenant',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'creer-contrat',
                             ],
                         ],
                     ],
-                    'creer-avenant' => [
+                    'creer-avenant'       => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:intervenant',
+                            'route'       => '/:intervenant',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'creer-avenant',
                             ],
                         ],
                     ],
-                    'voir' => [
+                    'voir'                => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:intervenant',
+                            'route'       => '/:intervenant',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'voir',
                             ],
                         ],
                     ],
-                    'supprimer' => [
+                    'supprimer'           => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:contrat/supprimer',
+                            'route'       => '/:contrat/supprimer',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'supprimer',
                             ],
                         ],
                     ],
-                    'valider' => [
+                    'valider'             => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:contrat/valider',
+                            'route'       => '/:contrat/valider',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'valider',
                             ],
                         ],
                     ],
-                    'devalider' => [
+                    'devalider'           => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:contrat/devalider',
+                            'route'       => '/:contrat/devalider',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'devalider',
                             ],
                         ],
                     ],
-                    'saisir-retour' => [
+                    'saisir-retour'       => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:contrat/saisir-retour',
+                            'route'       => '/:contrat/saisir-retour',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'saisir-retour',
                             ],
                         ],
                     ],
-                    'exporter' => [
+                    'exporter'            => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:contrat/exporter',
+                            'route'       => '/:contrat/exporter',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'exporter',
                             ],
                         ],
                     ],
-                    'deposer-fichier' => [
+                    'deposer-fichier'     => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:contrat/deposer-fichier',
+                            'route'       => '/:contrat/deposer-fichier',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'deposer-fichier',
                             ],
                         ],
                     ],
-                    'lister-fichier' => [
+                    'lister-fichier'      => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:contrat/lister-fichier',
+                            'route'       => '/:contrat/lister-fichier',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'lister-fichier',
                             ],
                         ],
@@ -145,24 +145,24 @@ return [
                     'telecharger-fichier' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:contrat/telecharger-fichier[/:fichier/:nomFichier]',
+                            'route'       => '/:contrat/telecharger-fichier[/:fichier/:nomFichier]',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'telecharger-fichier',
                             ],
                         ],
                     ],
-                    'supprimer-fichier' => [
-                        'type' => 'Segment',
+                    'supprimer-fichier'   => [
+                        'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:contrat/supprimer-fichier[/:fichier]',
+                            'route'       => '/:contrat/supprimer-fichier[/:fichier]',
                             'constraints' => [
                                 'contrat' => '[0-9]*',
                                 'fichier' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'supprimer-fichier',
                             ],
                         ],
@@ -171,8 +171,8 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
-        'guards' => [
+    'bjyauthorize'    => [
+        'guards'             => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -197,7 +197,7 @@ return [
                 'Contrat' => [],
             ],
         ],
-        'rule_providers' => [
+        'rule_providers'     => [
             'BjyAuthorize\Provider\Rule\Config' => [
                 'allow' => [
                     [
@@ -224,7 +224,7 @@ return [
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
             'Application\Controller\Contrat' => Controller\ContratController::class,
         ],
@@ -241,12 +241,14 @@ return [
             'ContratAssertion'            => Assertion\ContratAssertion::class,
         ],
     ],
-    'view_helpers' => [
+    'view_helpers'    => [
         'invokables' => [
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'invokables' => [
+            'contratValivation' => Form\Intervenant\ContratValidation::class,
+            'contratRetour'     => Form\Intervenant\ContratRetour::class
         ],
     ],
 ];

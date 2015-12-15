@@ -216,12 +216,12 @@ return [
     ],
     'service_manager' => [
         'invokables'   => [
-            'ApplicationAgrement'                        => 'Application\\Service\\Agrement',
-            'ApplicationTypeAgrement'                    => 'Application\\Service\\TypeAgrement',
-            'ApplicationTypeAgrementStatut'              => 'Application\\Service\\TypeAgrementStatut',
-            'AgrementNavigationPagesProvider'            => 'Application\\Service\\AgrementNavigationPagesProvider',
-            'AgrementIntervenantNavigationPagesProvider' => 'Application\\Service\\AgrementIntervenantNavigationPagesProvider',
-            'AgrementAssertion'                          => 'Application\\Assertion\\AgrementAssertion',
+            'ApplicationAgrement'                        => Service\Agrement::class,
+            'ApplicationTypeAgrement'                    => Service\TypeAgrement::class,
+            'ApplicationTypeAgrementStatut'              => Service\TypeAgrementStatut::class,
+            'AgrementNavigationPagesProvider'            => Service\AgrementNavigationPagesProvider::class,
+            'AgrementIntervenantNavigationPagesProvider' => Service\AgrementIntervenantNavigationPagesProvider::class,
+            'AgrementAssertion'                          => Assertion\AgrementAssertion::class,
         ],
     ],
     'view_helpers'    => [

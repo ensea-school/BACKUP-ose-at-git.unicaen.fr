@@ -10,6 +10,7 @@ use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Service\Traits\CentreCoutAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceReferentielAwareTrait;
+use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -26,6 +27,7 @@ class MiseEnPaiement extends AbstractEntityService
     use CentreCoutAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use TypeHeuresAwareTrait;
+    use FormuleResultatServiceServiceAwareTrait;
     use FormuleResultatServiceReferentielAwareTrait;
 
     /**
@@ -483,9 +485,7 @@ class MiseEnPaiement extends AbstractEntityService
         }
 
         if (isset($data['formule-resultat-service-id'])){
-            $serviceFormuleResultatService = $this->getServiceLocator()->get('ApplicationFormuleResultatService');
-            /* @var $serviceFormuleResultatService FormuleResultatService */
-            $object->setFormuleResultatService( $serviceFormuleResultatService->get( (integer)$data['formule-resultat-service-id'] ) );
+            $object->setFormuleResultatService( $this->getServiceFormuleResultatService()->get( (integer)$data['formule-resultat-service-id'] ) );
         }
 
         if (isset($data['formule-resultat-service-referentiel-id'])){

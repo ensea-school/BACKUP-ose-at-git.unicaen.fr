@@ -12,7 +12,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
-use Application\Traits\SessionContainerTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 
 /**

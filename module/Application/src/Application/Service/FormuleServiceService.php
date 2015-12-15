@@ -3,11 +3,11 @@
 namespace Application\Service;
 
 /**
- * Description of FormuleResultatService
+ * Description of FormuleService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class FormuleResultatService extends AbstractEntityService
+class FormuleServiceService extends AbstractEntityService
 {
 
     /**
@@ -18,7 +18,7 @@ class FormuleResultatService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\FormuleResultatService::class;
+        return \Application\Entity\Db\FormuleService::class;
     }
 
     /**
@@ -27,7 +27,7 @@ class FormuleResultatService extends AbstractEntityService
      * @return string
      */
     public function getAlias(){
-        return 'form_rs';
+        return 'form_s';
     }
 
 }

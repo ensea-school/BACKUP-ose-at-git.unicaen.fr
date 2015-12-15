@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Traits\SessionContainerTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Annee as AnneeEntity;
 

@@ -17,7 +17,7 @@ class ContratValidation extends AbstractForm
 {
     use ContratAwareTrait;
 
-    public function init()
+    public function init2()
     {
         $this->setAttribute('action',$this->getCurrentUrl());
         $this->setHydrator(new ClassMethods(false));

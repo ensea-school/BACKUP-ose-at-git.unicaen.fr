@@ -8,6 +8,8 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
+use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
+use Application\Form\Intervenant\Traits\ContratValidationAwareTrait;
 use Application\Service\Traits\ContratAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
@@ -18,8 +20,6 @@ use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\Form\Intervenant\ContratValidation;
-use Application\Form\Intervenant\ContratRetour;
 use Application\Entity\Db\Contrat;
 use Application\Assertion\ContratAssertion;
 use Application\Assertion\FichierAssertion;
@@ -42,11 +42,15 @@ class ContratController extends AbstractActionController
     use ServiceServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
+    use ContratValidationAwareTrait;
+    use ContratRetourAwareTrait;
 
     /**
      * @var Contrat
      */
     private $contrat;
+
+
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -63,6 +67,8 @@ class ContratController extends AbstractActionController
             Validation::class,
         ]);
     }
+
+
 
     /**
      * Point d'entrée sur les contrats/avenants.
@@ -82,11 +88,12 @@ class ContratController extends AbstractActionController
 
         if ($role instanceof ComposanteRole || $role instanceof \Application\Acl\AdministrateurRole) {
             return $this->creerAction();
-        }
-        else {
+        } else {
             return $this->voirAction();
         }
     }
+
+
 
     /**
      *
@@ -114,6 +121,8 @@ class ContratController extends AbstractActionController
         return $this->getView();
     }
 
+
+
     /**
      * Fetch des (projets de) contrats/avenants de l'intervenant.
      *
@@ -136,10 +145,13 @@ class ContratController extends AbstractActionController
         return $contrats;
     }
 
+
+
     /**
      * Fetch des services concernés par des contrats.
      *
      * @param array $contrats
+     *
      * @return array [ Id Contrat => [ Id Service => Service ] ]
      */
     private function getServicesContrats($contrats)
@@ -147,16 +159,18 @@ class ContratController extends AbstractActionController
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $services          = [];
 
-        foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */
-            $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
-                    ->select("s, ep, vh, ep, str, i")
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("s.elementPedagogique", "ep")
-                    ->join("ep.structure", "str")
-                    ->join("s.intervenant", "i")
-                    ->andWhere("vh.contrat = :contrat")->setParameter("contrat", $contrat);
+        foreach ($contrats as $contrat) {
+            /* @var $contrat \Application\Entity\Db\Contrat */
+            $qb    = $this->getServiceService()->getRepo()->createQueryBuilder("s")
+                ->select("s, ep, vh, ep, str, i")
+                ->join("s.volumeHoraire", "vh")
+                ->join("s.elementPedagogique", "ep")
+                ->join("ep.structure", "str")
+                ->join("s.intervenant", "i")
+                ->andWhere("vh.contrat = :contrat")->setParameter("contrat", $contrat);
             $query = $qb->getQuery();
-            foreach ($query->execute() as $service) { /* @var $service \Application\Entity\Db\Service */
+            foreach ($query->execute() as $service) {
+                /* @var $service \Application\Entity\Db\Service */
                 $this->em()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
 //                if (0 == $service->getVolumeHoraireListe()->getHeures()) {
 //                    continue;
@@ -169,12 +183,15 @@ class ContratController extends AbstractActionController
         return $services;
     }
 
+
+
     /**
      * Fetch des services à récapituler sur un contrat, c'est-à-dire
      * les services du contrat en question + tous les services
      * des contrats/avenants précédemment créés.
      *
      * @param Contrat $contrat Contrat concerné
+     *
      * @return Service[]
      */
     private function getServicesRecapsContrat(Contrat $contrat)
@@ -182,16 +199,16 @@ class ContratController extends AbstractActionController
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
 
         $this->em()->clear(\Application\Entity\Db\Service::class); // indispensable si on requête N fois la même entité avec des critères différents
-        $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
-                ->select("s, ep, vh, str, i")
-                ->join("s.volumeHoraire", "vh")
-                ->join("s.elementPedagogique", "ep")
-                ->join("ep.structure", "str")
-                ->join("s.intervenant", "i")
-                ->join("vh.contrat", "c")
-                ->andWhere("c.histoCreation <= :date")->setParameter("date", $contrat->getHistoModification())
-                ->andWhere("i = :intervenant")->setParameter("intervenant", $contrat->getIntervenant())
-                ->andWhere("str = :structure")->setParameter("structure", $contrat->getStructure());
+        $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s")
+            ->select("s, ep, vh, str, i")
+            ->join("s.volumeHoraire", "vh")
+            ->join("s.elementPedagogique", "ep")
+            ->join("ep.structure", "str")
+            ->join("s.intervenant", "i")
+            ->join("vh.contrat", "c")
+            ->andWhere("c.histoCreation <= :date")->setParameter("date", $contrat->getHistoModification())
+            ->andWhere("i = :intervenant")->setParameter("intervenant", $contrat->getIntervenant())
+            ->andWhere("str = :structure")->setParameter("structure", $contrat->getStructure());
         $services = [];
         foreach ($qb->getQuery()->getResult() as $service) {
             if (0 == $service->getVolumeHoraireListe()->getHeures()) {
@@ -205,7 +222,11 @@ class ContratController extends AbstractActionController
         return $services;
     }
 
+
+
     private $contratProcess;
+
+
 
     /**
      * @return \Application\Service\Process\ContratProcess
@@ -219,6 +240,8 @@ class ContratController extends AbstractActionController
 
         return $this->contratProcess;
     }
+
+
 
     public function creerAction()
     {
@@ -234,25 +257,25 @@ class ContratController extends AbstractActionController
 
         // instanciation d'un contrat fictif transmis à l'assertion
         $contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
-                ->setIntervenant($this->getIntervenant())
-                ->setStructure($this->getStructure());
+            ->setIntervenant($this->getIntervenant())
+            ->setStructure($this->getStructure());
         if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_CREATE)) {
             throw new \Common\Exception\MessageException("La création de contrat/avenant n'est pas encore possible.");
         }
 
         if ($peutCreerContrat) {
             $servicesDispos = $process->getServicesDisposPourContrat();
-            $action = "Créer le projet de contrat";
-        }
-        elseif ($peutCreerAvenant) {
+            $action         = "Créer le projet de contrat";
+        } elseif ($peutCreerAvenant) {
             $servicesDispos = $process->getServicesDisposPourAvenant();
-            $action = "Créer le projet d'avenant";
-            if (($validation = $process->getValidationContratInitial())) { /* @var $validation \Application\Entity\Db\Validation */
+            $action         = "Créer le projet d'avenant";
+            if (($validation = $process->getValidationContratInitial())) {
+                /* @var $validation \Application\Entity\Db\Validation */
                 $messages['info'] = sprintf("Pour information, des enseignements de %s au sein de la composante &laquo; %s &raquo; ont fait l'objet d'un contrat validé le %s par %s.",
-                        $this->getIntervenant(),
-                        $validation->getStructure(),
-                        $validation->getHistoModification()->format(Constants::DATETIME_FORMAT),
-                        $validation->getHistoModificateur());
+                    $this->getIntervenant(),
+                    $validation->getStructure(),
+                    $validation->getHistoModification()->format(Constants::DATETIME_FORMAT),
+                    $validation->getHistoModificateur());
             }
         }
 
@@ -285,6 +308,8 @@ class ContratController extends AbstractActionController
         return $this->getView();
     }
 
+
+
     /**
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
      *
@@ -311,8 +336,7 @@ class ContratController extends AbstractActionController
             try {
                 $this->getServiceContrat()->supprimer($this->contrat);
                 $this->flashMessenger()->addSuccessMessage("Suppression $contratToString effectuée avec succès.");
-            }
-            catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $e = \Application\Exception\DbException::translate($e);
                 $this->confirm()->setMessages([$e->getMessage()]);
             }
@@ -328,6 +352,8 @@ class ContratController extends AbstractActionController
         return $viewModel;
     }
 
+
+
     /**
      * Validation du contrat/avenant par la composante d'intervention.
      *
@@ -340,7 +366,7 @@ class ContratController extends AbstractActionController
         $this->structure   = $role->getStructure();
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
-        $form              = $this->getFormValidationContrat()->setContrat($this->contrat)->init();
+        $form              = $this->getFormIntervenantContratValidation()->setContrat($this->contrat)->init2();
         $contratToString   = $this->contrat->toString(true);
         $title             = "Validation $contratToString <small>$this->intervenant</small>";
         $process           = $this->getProcessContrat();
@@ -358,10 +384,10 @@ class ContratController extends AbstractActionController
         $requalifier = false;
         if ($process->getDeviendraAvenant($this->contrat)) {
             $requalifier = true;
-            $message = "<p><strong>NB :</strong> à l'issue de sa validation, " . lcfirst($this->contrat->toString(true)) .
-                    " deviendra un avenant car un contrat a déjà été validé par une autre composante.</p>" .
-                    "<p><strong>Vous devrez donc impérativement imprimer à nouveau le document !</strong></p>";
-            $messages = ['warning' => $message];
+            $message     = "<p><strong>NB :</strong> à l'issue de sa validation, " . lcfirst($this->contrat->toString(true)) .
+                " deviendra un avenant car un contrat a déjà été validé par une autre composante.</p>" .
+                "<p><strong>Vous devrez donc impérativement imprimer à nouveau le document !</strong></p>";
+            $messages    = ['warning' => $message];
         }
 
         if ($this->getRequest()->isPost()) {
@@ -372,7 +398,7 @@ class ContratController extends AbstractActionController
                 $this->validation = $this->getServiceContrat()->valider($this->contrat);
 
                 $this->flashMessenger()->addSuccessMessage(
-                        "Validation " . lcfirst($this->contrat->toString(true, true)) . " enregistrée avec succès.");
+                    "Validation " . lcfirst($this->contrat->toString(true, true)) . " enregistrée avec succès.");
             }
         }
 
@@ -388,6 +414,8 @@ class ContratController extends AbstractActionController
         return $this->view;
     }
 
+
+
     /**
      * Dévalidation du contrat/avenant par la composante d'intervention.
      *
@@ -402,30 +430,32 @@ class ContratController extends AbstractActionController
         $contratToString   = lcfirst($this->contrat->toString(true, true));
 
         $rule = new \Application\Rule\Intervenant\PeutDevaliderContratRule($this->intervenant, $this->contrat);
-        $rule->setContratService($this->getServiceContrat());
         if (!$rule->execute()) {
             throw new \Common\Exception\MessageException(
-                    "Impossible de supprimer la validation $contratToString.",
-                    null,
-                    new \Exception($rule->getMessage()));
+                "Impossible de supprimer la validation $contratToString.",
+                null,
+                new \Exception($rule->getMessage()));
         }
 
         // suppression de la validation déléguée au contrôleur dédié
-        $controller       = 'Application\Controller\Validation';
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'supprimer';
+        $controller           = 'Application\Controller\Validation';
+        $params               = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action']     = 'supprimer';
         $params['validation'] = $this->validation->getId();
-        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+        $viewModel            = $this->forward()->dispatch($controller, $params);
+        /* @var $viewModel \Zend\View\Model\ViewModel */
 
         if ($this->getRequest()->isPost()) {
             $this->getServiceContrat()->devalider($this->contrat);
 
             $this->flashMessenger()->clearMessages()->addSuccessMessage(
-                    "Validation " . lcfirst($this->contrat->toString(true, true)) . " supprimée avec succès.");
+                "Validation " . lcfirst($this->contrat->toString(true, true)) . " supprimée avec succès.");
         }
 
         return $viewModel;
     }
+
+
 
     /**
      * Saisie de la date de retour du contrat/avenant signé par l'intervenant.
@@ -438,7 +468,7 @@ class ContratController extends AbstractActionController
         $role              = $this->getServiceContext()->getSelectedIdentityRole();
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
-        $form              = $this->getFormRetourContrat()->setContrat($this->contrat)->init();
+        $form              = $this->getFormIntervenantContratRetour()->setContrat($this->contrat)->init2();
         $contratToString   = $this->contrat->toString(true, true);
         $title             = "Retour $contratToString signé <small>$this->intervenant</small>";
         $messages          = [];
@@ -446,13 +476,13 @@ class ContratController extends AbstractActionController
         $rule = new \Application\Rule\Intervenant\PeutSaisirRetourContratRule($this->intervenant, $this->contrat);
         if (!$rule->execute()) {
             throw new \Common\Exception\MessageException(
-                    "Impossible de saisir la date de retour $contratToString.",
-                    null,
-                    new \Exception($rule->getMessage()));
+                "Impossible de saisir la date de retour $contratToString.",
+                null,
+                new \Exception($rule->getMessage()));
         }
 
-        $form   ->bind($this->contrat)
-                ->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->bind($this->contrat)
+            ->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
@@ -461,7 +491,7 @@ class ContratController extends AbstractActionController
                 $this->em()->flush();
 
                 $this->flashMessenger()->addSuccessMessage(
-                        "Saisie du retour $contratToString signé enregistrée avec succès.");
+                    "Saisie du retour $contratToString signé enregistrée avec succès.");
             }
         }
 
@@ -476,6 +506,8 @@ class ContratController extends AbstractActionController
         return $this->view;
     }
 
+
+
     /**
      *
      */
@@ -485,30 +517,29 @@ class ContratController extends AbstractActionController
 
         // fetch le contrat/avenant spécifié
         $serviceContrat = $this->getServiceContrat();
-        $qb = $serviceContrat->getRepo()->createQueryBuilder("c")
-                ->select("c, i, vh")
-                ->join("c.intervenant", "i")
-                ->join("c.structure", "str")
-                ->join("c.volumeHoraire", "vh"/*, \Doctrine\ORM\Query\Expr\Join::WITH, "vh.motifNonPaiement is null"*/)
-                ->andWhere("c = :id")->setParameter('id', $this->params('contrat'))
-                ->orderBy("str.libelleCourt");
+        $qb             = $serviceContrat->getRepo()->createQueryBuilder("c")
+            ->select("c, i, vh")
+            ->join("c.intervenant", "i")
+            ->join("c.structure", "str")
+            ->join("c.volumeHoraire", "vh"/*, \Doctrine\ORM\Query\Expr\Join::WITH, "vh.motifNonPaiement is null"*/)
+            ->andWhere("c = :id")->setParameter('id', $this->params('contrat'))
+            ->orderBy("str.libelleCourt");
 
         try {
             $this->contrat = $qb->getQuery()->getSingleResult();
-        }
-        catch (\Doctrine\ORM\NoResultException $nre) {
+        } catch (\Doctrine\ORM\NoResultException $nre) {
             throw new \Common\Exception\MessageException("Contrat/avenant spécifié introuvable.", null, $nre);
         }
 
         $this->intervenant = $this->contrat->getIntervenant();
 
-        if (! $this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_READ)) {
+        if (!$this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_READ)) {
             throw new UnAuthorizedException("Interdit !");
         }
 
         $estUnAvenant    = $this->contrat->estUnAvenant();
-        $contratToString = (string) $this->contrat;
-        $nomIntervenant  = (string) $this->intervenant;
+        $contratToString = (string)$this->contrat;
+        $nomIntervenant  = (string)$this->intervenant;
         $dateNaissance   = $this->intervenant->getDateNaissanceToString();
         $estATV          = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
         $estUnProjet     = $this->contrat->getValidation() ? false : true;
@@ -521,17 +552,16 @@ class ContratController extends AbstractActionController
             $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
             $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
             $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
-        }
-        else {
+        } else {
             $adresseIntervenant    = $this->intervenant->getAdressePrincipale(true);
             $numeroINSEE           = $this->intervenant->getNumeroInsee() . ' ' . $this->intervenant->getNumeroInseeCle();
             $nomCompletIntervenant = $this->intervenant->getCivilite() . ' ' . $nomIntervenant;
         }
 
         $fileName = sprintf("contrat_%s_%s_%s.pdf",
-                $this->contrat->getStructure()->getSourceCode(),
-                $this->intervenant->getNomUsuel(),
-                $this->intervenant->getSourceCode());
+            $this->contrat->getStructure()->getSourceCode(),
+            $this->intervenant->getNomUsuel(),
+            $this->intervenant->getSourceCode());
 
         $variables = [
             'estUnAvenant'            => $estUnAvenant,
@@ -555,9 +585,9 @@ class ContratController extends AbstractActionController
 
         // Création du pdf, complétion et envoi au navigateur
         $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
-        $exp    ->setHeaderSubtitle($contratToString)
-                ->setMarginBottom(25)
-                ->setMarginTop(25);
+        $exp->setHeaderSubtitle($contratToString)
+            ->setMarginBottom(25)
+            ->setMarginTop(25);
         if ($estUnProjet) {
             $exp->setWatermark("Projet");
         }
@@ -571,6 +601,8 @@ class ContratController extends AbstractActionController
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
 
+
+
     /**
      * @return float
      */
@@ -578,11 +610,13 @@ class ContratController extends AbstractActionController
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
-        
+
         $fr = $this->getIntervenant()->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
     }
+
+
 
     /**
      * Dépôt du contrat signé.
@@ -593,7 +627,7 @@ class ContratController extends AbstractActionController
     {
         $contrat = $this->context()->mandatory()->contratFromRoute();
 
-        $result  = $this->uploader()->upload();
+        $result = $this->uploader()->upload();
 
         if ($result instanceof JsonModel) {
             return $result;
@@ -604,6 +638,8 @@ class ContratController extends AbstractActionController
 
         return $this->redirect()->toRoute('contrat/lister-fichier', [], [], true);
     }
+
+
 
     /**
      * Listing des fichiers déposés pour le contrat.
@@ -618,6 +654,8 @@ class ContratController extends AbstractActionController
             'contrat' => $contrat,
         ];
     }
+
+
 
     /**
      * Téléchargement d'un fichier.
@@ -639,6 +677,8 @@ class ContratController extends AbstractActionController
 
         $this->uploader()->download($fichier);
     }
+
+
 
     /**
      * Suppression d'un fichier déposé.
@@ -668,10 +708,14 @@ class ContratController extends AbstractActionController
         return $this->redirect()->toRoute('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true);
     }
 
+
+
     /**
      * @var ViewModel
      */
     private $view;
+
+
 
     /**
      *
@@ -682,41 +726,18 @@ class ContratController extends AbstractActionController
         if (null === $this->view) {
             $this->view = new ViewModel();
         }
+
         return $this->view;
     }
 
-    private $formValider;
 
-    /**
-     * @return ContratValidation
-     */
-    protected function getFormValidationContrat()
-    {
-        if (null === $this->formValider) {
-            $this->formValider = new ContratValidation();
-        }
-
-        return $this->formValider;
-    }
-
-    private $formRetour;
-
-    /**
-     * @return ContratRetour
-     */
-    protected function getFormRetourContrat()
-    {
-        if (null === $this->formRetour) {
-            $this->formRetour = new ContratRetour();
-        }
-
-        return $this->formRetour;
-    }
 
     /**
      * @var Intervenant
      */
     private $intervenant;
+
+
 
     /**
      * @return Intervenant
@@ -726,15 +747,20 @@ class ContratController extends AbstractActionController
         if (null === $this->intervenant) {
             $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
+
         return $this->intervenant;
     }
 
+
+
     private $structure;
+
+
 
     private function getStructure()
     {
         if (null === $this->structure) {
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
+            $role            = $this->getServiceContext()->getSelectedIdentityRole();
             $this->structure = $role->getStructure();
         }
 

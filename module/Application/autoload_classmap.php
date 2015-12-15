@@ -665,7 +665,6 @@ return array(
     'Application\Service\NiveauEtape'                                                                                     => __DIR__ . '/src/Application/Service/NiveauEtape.php',
     'Application\Traits\RoleAwareTrait'                                                                                   => __DIR__ . '/src/Application/Traits/RoleAwareTrait.php',
     'Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait'                                                            => __DIR__ . '/src/Application/Traits/ObligatoireSelonSeuilHeuresAwareTrait.php',
-    'Application\Traits\SessionContainerTrait'                                                                            => __DIR__ . '/src/Application/Traits/SessionContainerTrait.php',
     'Application\Traits\NiveauEtapeAwareTrait'                                                                            => __DIR__ . '/src/Application/Traits/NiveauEtapeAwareTrait.php',
     'Application\Traits\ServiceAPayerAwareTrait'                                                                          => __DIR__ . '/src/Application/Traits/ServiceAPayerAwareTrait.php',
     'Application\Assertion\ValidationAssertionProxy'                                                                      => __DIR__ . '/src/Application/Assertion/ValidationAssertionProxy.php',

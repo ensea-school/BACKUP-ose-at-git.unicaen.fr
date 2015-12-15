@@ -17,7 +17,7 @@ class ContratRetour extends AbstractForm
 {
     use ContratAwareTrait;
 
-    public function init()
+    public function init2()
     {
         $this->setHydrator(new ClassMethods(false));
         $this->setAttribute('method', 'POST');

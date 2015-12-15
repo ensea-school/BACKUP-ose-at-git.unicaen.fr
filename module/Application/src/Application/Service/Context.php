@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Traits\SessionContainerTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 
 /**

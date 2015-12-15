@@ -11,7 +11,7 @@ use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
-use Application\Traits\SessionContainerTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**

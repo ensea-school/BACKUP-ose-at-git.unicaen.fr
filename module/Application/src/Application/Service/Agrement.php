@@ -36,18 +36,19 @@ class Agrement extends AbstractEntityService
         return 'a';
     }
 
+
+
     /**
-     * Retourne la liste des étapes
+     * @param QueryBuilder|null $qb
+     * @param null              $alias
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @param string|null $alias
-     * @return AgrementEntity[]
+     * @return QueryBuilder
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
-        return parent::getList($qb, $alias);
+        return $qb;
     }
     
     /**

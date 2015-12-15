@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
-use Application\Traits\SessionContainerTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;

@@ -1,7 +1,7 @@
 <?php
 namespace Application\View\Helper;
 
-use Application\Traits\SessionContainerTrait;
+use UnicaenApp\Traits\SessionContainerTrait;
 use UnicaenAuth\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
 use Application\Service\Traits\StructureAwareTrait as StructureServiceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;

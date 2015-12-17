@@ -206,6 +206,7 @@ $main = [
         'stylesheets'    => [
             10 => 'bootstrap-select/css/bootstrap-select.min.css',
             11 => 'css/cartridge.css',
+            12 => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
         ],
     ],
 ];
@@ -232,5 +233,6 @@ return array_merge_recursive(
     include 'paiement.config.php',
     include 'log.config.php',
     include 'message.config.php',
-    include 'pilotage.config.php'
+    include 'pilotage.config.php',
+    include 'budget.config.php'
 );

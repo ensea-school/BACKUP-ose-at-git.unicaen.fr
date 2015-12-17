@@ -85,10 +85,12 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Gestion','index'),
                         'pages' => [
                             'discipline' => [
+                                'border-color' => '#F5E79E',
+                                'icon'     => 'glyphicon glyphicon-list-alt',
                                 'label'    => "Disciplines",
                                 'title'    => "Gestion des disciplines",
                                 'route'    => 'discipline',
-                                'resource' => Privileges::getResourceId(Privileges::DISCIPLINE_GESTION),
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
                             ],
                         ],
                     ],

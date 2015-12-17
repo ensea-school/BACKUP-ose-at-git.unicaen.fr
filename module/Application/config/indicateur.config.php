@@ -104,6 +104,8 @@ return [
                         'pages' => [
                             'indicateurs' => [
                                 'label'    => "Indicateurs",
+                                'icon'     => 'fa fa-line-chart',
+                                'border-color' => '#E5272E',
                                 'title'    => "Indicateurs",
                                 'route'    => 'indicateur',
                                 'resource' => PrivilegeController::getResourceId('Application\Controller\Indicateur','index'),

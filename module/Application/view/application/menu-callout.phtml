@@ -1,0 +1,25 @@
+<?php
+
+/* @var $container Zend\Navigation\Navigation */
+// On récupère le container en-dessous du 'home'
+
+foreach ($container as $page){
+    if ($this->navigation()->accept($page)) {
+        $color = $page->get('border-color') ? 'style="border-left-color:' . $page->get('border-color') . '"' : '';
+        $icon  = $page->get('icon') ? sprintf('<span class="%s"></span>', $page->get('icon')) : '';
+        echo '<div class="callout" ' . $color . '>';
+        echo $icon;
+        echo '<h1>' . $this->navigation()->htmlify($page) . '</h1>';
+
+        if ($page->hasPages()) {
+            echo '<ul>';
+            $children = $page->getPages();
+            foreach ($children as $child) {
+                echo '<li>' . $this->navigation()->htmlify($child) . '</li>';
+            }
+            echo '</ul>';
+        }
+
+        echo '</div>';
+    }
+}

@@ -387,3 +387,38 @@ form#dossier .form-control[disabled], form#dossier .form-control[readonly], form
 .intervenant-recherche .critere{
     padding-bottom: 1em;
 }
+
+
+
+.callout {
+    border-radius: 5px;
+    border: 1px #eee solid;
+    border-left: 6px #9E9E9E solid;
+    padding:1em;
+    margin: .5em;
+    float: left;
+    width: 48%;
+    min-height:8.5em;
+}
+
+.callout h1 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 18pt;
+}
+
+.callout ul {
+    margin-bottom: 0px;
+}
+
+.callout .glyphicon {
+    float:right;
+    font-size: 40pt;
+    color: #ddd;
+}
+
+.callout .fa {
+    float:right;
+    font-size: 40pt;
+    color: #ddd;
+}

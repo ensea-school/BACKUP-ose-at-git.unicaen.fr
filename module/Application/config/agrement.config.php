@@ -157,6 +157,8 @@ return [
                             'agrement' => [
                                 'label'         => "Agréments par lot",
                                 'title'         => "Gestion des agréments par lot",
+                                'icon'          => 'fa fa-tags',
+                                'border-color'  => '#E1AC5A',
                                 'route'         => 'gestion/agrement',
                                 'resource'      => PrivilegeController::getResourceId('Application\Controller\Agrement','index'),
                                 'pagesProvider' => [

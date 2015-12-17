@@ -86,29 +86,39 @@ return [
                 'pages' => [
                     'gestion' => [
                         'pages' => [
-                            'etat-demande-paiement' => [
-                                'label'    => "Mises en paiement",
-                                'title'    => "Mises en paiement",
-                                'route'    => 'paiement/etat-demande-paiement',
+                            'paiement' => [
+                                'label'    => "Paiement",
+                                'title'    => "Paiement",
+                                'route'    => 'paiement',
+                                'icon'     => 'fa fa-credit-card',
+                                'border-color' => '#9F491F',
                                 'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
-                            ],
-                            'etat-paiement'         => [
-                                'label'    => "État de paiement",
-                                'title'    => "État de paiement",
-                                'route'    => 'paiement/etat-paiement',
-                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
-                            ],
-                            'mises-en-paiement-csv' => [
-                                'label'    => "Mises en paiement (CSV)",
-                                'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
-                                'route'    => 'paiement/mises-en-paiement-csv',
-                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV),
-                            ],
-                            'extraction-winpaie'    => [
-                                'label'    => "Extraction Winpaie",
-                                'title'    => "Export des données de paiement au format Winpaie",
-                                'route'    => 'paiement/extraction-winpaie',
-                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
+                                'pages' => [
+                                    'etat-demande-paiement' => [
+                                        'label'    => "Mises en paiement",
+                                        'title'    => "Mises en paiement",
+                                        'route'    => 'paiement/etat-demande-paiement',
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
+                                    ],
+                                    'etat-paiement'         => [
+                                        'label'    => "État de paiement",
+                                        'title'    => "État de paiement",
+                                        'route'    => 'paiement/etat-paiement',
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
+                                    ],
+                                    'mises-en-paiement-csv' => [
+                                        'label'    => "Mises en paiement (CSV)",
+                                        'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
+                                        'route'    => 'paiement/mises-en-paiement-csv',
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_CSV),
+                                    ],
+                                    'extraction-winpaie'    => [
+                                        'label'    => "Extraction Winpaie",
+                                        'title'    => "Export des données de paiement au format Winpaie",
+                                        'route'    => 'paiement/extraction-winpaie',
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE),
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -119,6 +129,13 @@ return [
     'bjyauthorize'    => [
         'guards'             => [
             PrivilegeController::class => [
+                [
+                    'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['index'],
+                    'privileges' => [
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                    ],
+                ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['demandeMiseEnPaiement'],

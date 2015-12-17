@@ -1,13 +1,10 @@
 <?php
 
-use Application\Provider\Privilege\Privileges;
+$this->headTitle()->append("Pilotage");
 
 ?>
-<h1>Pilotage</h1>
-
-<?php if ($this->isAllowed(Privileges::getResourceId(Privileges::PILOTAGE_ECARTS_ETATS))): ?>
-<a href="<?php echo $this->url('pilotage/ecarts-etats') ?>">Ecarts états</a>
-<?php endif; ?>
+    <h1 class="page-header">Pilotage</h1>
 
 <?php
 
+echo $this->navigation('navigation')->menuContextuel()->setPartial('application/menu-dl.phtml');

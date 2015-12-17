@@ -86,5 +86,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const IMPORT_VUES_PROCEDURES                    = 'import-vues-procedures';
     const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
     const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
+    const BUDGET_EDITION                            = 'budget-edition';
+    const BUDGET_VISUALISATION                      = 'budget-visualisation';
 
 }

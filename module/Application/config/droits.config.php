@@ -129,6 +129,8 @@ return [
                     'gestion' => [
                         'pages' => [
                             'droits' => [
+                                'icon'     => 'glyphicon glyphicon-off',
+                                'border-color'    => '#217DD8',
                                 'label'    => "Droits d'accès",
                                 'title'    => "Gestion des droits d'accès",
                                 'route'    => 'droits',
@@ -137,6 +139,7 @@ return [
                                     'roles' => [
                                         'label'  => "Rôles",
                                         'title'  => "Gestion des rôles",
+                                        'description' => 'Permet de visualiser les rôles existants. Permet également de les modifier, d\'en ajouter ou d\'en supprimer si vous avez les droits requis pour cela.',
                                         'route'  => 'droits/roles',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','roles'),
                                         'withtarget' => true,
@@ -144,6 +147,7 @@ return [
                                     'privileges' => [
                                         'label'  => "Privilèges",
                                         'title'  => "Gestion des privilèges",
+                                        'description' => 'Tableau de bord listant, par rôle, les privilèges qui lui sont accordés. Le tableau permet également, si vous en avez le droit, de modifier les privilèges accordés par rôle.',
                                         'route'  => 'droits/privileges',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','privileges'),
                                         'withtarget' => true,
@@ -151,6 +155,7 @@ return [
                                     'affectations' => [
                                         'label'  => "Affectations",
                                         'title'  => "Gestion des affectations",
+                                        'description' => 'Permet de visualiser les affectations existantes et de les modifier le cas échéant. Pour rappel, une affectation est la liaison entre un rôle et un personnel.',
                                         'route'  => 'droits/affectations',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Droits','affectations'),
                                         'withtarget' => true,

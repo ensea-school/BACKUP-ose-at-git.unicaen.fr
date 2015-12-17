@@ -6,28 +6,27 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
-            'pilotage' => [
+            'budget' => [
                 'type'          => 'Literal',
                 'may_terminate' => true,
                 'options'       => [
-                    'route'    => '/pilotage',
+                    'route'    => '/budget',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Pilotage',
+                        'controller'    => 'Budget',
                         'action'        => 'index',
                     ],
                 ],
-                'may_terminate' => true,
                 'child_routes'  => [
-                    'ecarts-etats' => [
+                    'engagement' => [
                         'type'          => 'Literal',
                         'may_terminate' => true,
                         'options'       => [
-                            'route'    => '/ecarts-etats',
+                            'route'    => '/engagement',
                             'defaults' => [
-                                'action' => 'ecartsEtats',
+                                'action' => 'engagement',
                             ],
                         ],
                     ],
@@ -41,20 +40,20 @@ return [
                 'pages' => [
                     'gestion' => [
                         'pages' => [
-                            'pilotage' => [
-                                'label'    => 'Pilotage',
-                                'title'    => 'Pilotage',
-                                'icon'     => 'fa fa-tachometer',
-                                'border-color' => '#00A020',
-                                'route'    => 'pilotage',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage','index'),
+                            'budget' => [
+                                'label'    => 'Budget',
+                                'title'    => 'Budget',
+                                'icon'     => 'fa fa-eur',
+                                'border-color' => '#A22CAE',
+                                'route'    => 'budget',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\Budget','index'),
 
                                 'pages'    => [
-                                    'ecarts-etats' => [
-                                        'label'    => 'Ecarts d\'heures',
-                                        'title'    => 'Ecarts d\'heures',
-                                        'route'    => 'pilotage/ecarts-etats',
-                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage','ecarts-etats'),
+                                    'engagement' => [
+                                        'label'    => 'Engagement budgétaire',
+                                        'title'    => 'Engagement budgétaire',
+                                        'route'    => 'budget/engagement',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Budget','engagement'),
                                     ],
                                 ],
                             ],
@@ -68,17 +67,17 @@ return [
         'guards' => [
             PrivilegeController::class => [
                 [
-                    'controller' => 'Application\Controller\Pilotage',
+                    'controller' => 'Application\Controller\Budget',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privileges::PILOTAGE_VISUALISATION,
+                        Privileges::BUDGET_VISUALISATION,
                     ],
                 ],
                 [
-                    'controller' => 'Application\Controller\Pilotage',
-                    'action'     => ['ecartsEtats'],
+                    'controller' => 'Application\Controller\Budget',
+                    'action'     => ['engagement'],
                     'privileges' => [
-                        Privileges::PILOTAGE_ECARTS_ETATS,
+                        Privileges::BUDGET_VISUALISATION,
                     ],
                 ],
             ],
@@ -86,12 +85,12 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPilotage' => Service\PilotageService::class,
+
         ],
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\Pilotage' => Controller\PilotageController::class,
+            'Application\Controller\Budget' => Controller\BudgetController::class,
         ],
     ],
 ];

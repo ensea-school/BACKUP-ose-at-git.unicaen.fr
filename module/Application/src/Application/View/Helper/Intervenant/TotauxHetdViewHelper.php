@@ -65,7 +65,7 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
 
         <table class="table table-bordered" style="width:auto;">
             <?php if ($fr->getServiceDu() > 0): ?>
-            <tr><th>Service Du</th>
+            <tr><th>Service Dû</th>
                 <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getServiceDu()) ?></td></tr>
             <?php endif; ?>
 

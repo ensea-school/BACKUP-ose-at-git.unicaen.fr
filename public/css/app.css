@@ -399,6 +399,7 @@ form#dossier .form-control[disabled], form#dossier .form-control[readonly], form
     float: left;
     width: 48%;
     min-height:8.5em;
+    min-width: 30em;
 }
 
 .callout h1 {

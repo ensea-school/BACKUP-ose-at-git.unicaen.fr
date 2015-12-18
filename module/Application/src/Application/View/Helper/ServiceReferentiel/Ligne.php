@@ -123,19 +123,14 @@ class Ligne extends AbstractHtmlElement
 
     protected function renderIntervenant($intervenant)
     {
-        $pourl = $this->getView()->url('intervenant/default', ['action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()]);
-        $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
-        return $out;
+        return $this->getView()->intervenant($intervenant)->renderLink();
     }
 
     protected function renderStructure($structure)
     {
         if (! $structure) return '';
 
-        $url = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);
-        $pourl = $this->getView()->url('structure/default', ['action' => 'apercevoir', 'id' => $structure->getId()]);
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
-        return $out;
+        return $this->getView()->structure($structure)->renderLink();
     }
 
     protected function renderFonction($fonction)

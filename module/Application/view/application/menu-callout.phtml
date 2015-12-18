@@ -1,29 +1,38 @@
 <?php
 
-/* @var $container Zend\Navigation\Navigation */
-/* @var $this \Zend\View\Renderer\PhpRenderer */
+use UnicaenApp\View\Helper\TagViewHelper;
 
-// On récupère le container en-dessous du 'home'
+/**
+ * @var $container Zend\Navigation\Navigation
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ */
 
-foreach ($container as $page){
+foreach ($container as $page) {
     if ($this->navigation()->accept($page)) {
-        $color = $page->get('border-color') ? 'style="border-left-color:' . $page->get('border-color') . '"' : '';
-        $icon  = $page->get('icon') ? sprintf('<span class="%s"></span>', $page->get('icon')) : '';
-        $description = $page->get('description') ? 'title="border-left-color:' . $page->get('border-color') . '"' : '';
+        $attrs = [
+            'class' => 'callout',
+        ];
+        if ($borderColor = $page->get('border-color')) {
+            $attrs['style'] = 'border-left-color:' . $borderColor;
+        }
+        if ($description = $page->get('description')) {
+            $attrs['title'] = $description;
+        }
 
-        echo '<div class="callout" ' . $color . '>';
-        echo $icon;
-        echo '<h1>' . $this->navigation()->htmlify($page) . '</h1>';
+        echo $this->tag('div', $attrs);
+        if ($icon = $page->get('icon')) {
+            echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);
+        }
+        echo $this->tag('h1')->html($this->navigation()->htmlify($page));
 
         if ($page->hasPages()) {
             echo '<ul>';
             $children = $page->getPages();
             foreach ($children as $child) {
-                echo '<li>' . $this->navigation()->htmlify($child) . '</li>';
+                echo $this->tag('li')->html($this->navigation()->htmlify($child));
             }
             echo '</ul>';
         }
-
         echo '</div>';
     }
 }

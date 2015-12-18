@@ -1,25 +1,25 @@
 <?php
 
-/* @var $container Zend\Navigation\Navigation */
-// On récupère le container en-dessous du 'home'
+/**
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $container Zend\Navigation\Navigation
+ */
 
 ?>
 <dl>
-<?php
-foreach ($container as $page){
-    if ($this->navigation()->accept($page)) {
-        //$color = $page->get('border-color') ? 'style="border-left-color:' . $page->get('border-color') . '"' : '';
-        //$icon  = $page->get('icon') ? sprintf('<span class="%s"></span>', $page->get('icon')) : '';
-        echo '<dt>'.$this->navigation()->htmlify($page).'</dt>';
-        echo '<dd>'.$page->get('description').'</dd>';
+    <?php
+    foreach ($container as $page) {
+        if ($this->navigation()->accept($page)) {
+            echo $this->tag('dt')->html( $this->navigation()->htmlify($page) );
+            echo $this->tag('dd')->text( $page->get('description') );
+        }
     }
-}
-?>
+    ?>
 </dl>
 <style>
 
-    dt{
-        padding-top:2em;
+    dt {
+        padding-top: 2em;
     }
 
 </style>

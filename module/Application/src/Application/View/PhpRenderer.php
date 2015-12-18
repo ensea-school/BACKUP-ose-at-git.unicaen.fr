@@ -11,6 +11,7 @@ namespace Application\View\Renderer;
  * @method \UnicaenApp\Form\View\Helper\FormAdvancedMultiCheckbox formAdvancedMultiCheckbox(\Zend\Form\ElementInterface $element = null, $labelPosition = null)
  * @method \UnicaenApp\View\Helper\HistoriqueViewHelper historique(\UnicaenApp\Entity\HistoriqueAwareInterface $entity = null)
  * @method \UnicaenApp\View\Helper\TabAjax\TabAjaxViewHelper tabajax($tabs = null)
+ * @method \UnicaenApp\View\Helper\TagViewHelper tag($name = null, array $attributes = [])
  * @method \UnicaenAuth\View\Helper\AppConnection appConnection()
  * @method \Common\View\Helper\CartridgeViewHelper cartridge(array $items, array $options = [])
  * @method \Common\Form\View\Helper\FormButtonGroup formButtonGroup(\Zend\Form\ElementInterface $element = null, $labelPosition = null)

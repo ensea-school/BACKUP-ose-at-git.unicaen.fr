@@ -1,14 +1,13 @@
 <?php
 
-/* @var $this \Application\View\Renderer\PhpRenderer */
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ */
 
 $this->headTitle()->append("Budget");
 
 ?>
     <h1 class="page-header">Budget</h1>
-
 <?php
 
 echo $this->navigation('navigation')->menuContextuel()->setPartial('application/menu-dl.phtml');
-
-$this->serviceLigne()

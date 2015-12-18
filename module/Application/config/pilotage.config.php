@@ -42,19 +42,19 @@ return [
                     'gestion' => [
                         'pages' => [
                             'pilotage' => [
-                                'label'    => 'Pilotage',
-                                'title'    => 'Pilotage',
-                                'icon'     => 'fa fa-tachometer',
+                                'label'        => 'Pilotage',
+                                'title'        => 'Pilotage',
+                                'icon'         => 'fa fa-tachometer',
                                 'border-color' => '#00A020',
-                                'route'    => 'pilotage',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage','index'),
-
-                                'pages'    => [
+                                'route'        => 'pilotage',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
+                                'pages'        => [
                                     'ecarts-etats' => [
-                                        'label'    => 'Ecarts d\'heures',
-                                        'title'    => 'Ecarts d\'heures',
-                                        'route'    => 'pilotage/ecarts-etats',
-                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Pilotage','ecarts-etats'),
+                                        'label'       => 'Ecarts d\'heures',
+                                        'title'       => 'Ecarts d\'heures',
+                                        'description' => 'Export CSV des HETD',
+                                        'route'       => 'pilotage/ecarts-etats',
+                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'ecartsEtats'),
                                     ],
                                 ],
                             ],

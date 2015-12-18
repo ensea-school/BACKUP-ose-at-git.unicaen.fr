@@ -1,12 +1,16 @@
 <?php
 
 /* @var $container Zend\Navigation\Navigation */
+/* @var $this \Zend\View\Renderer\PhpRenderer */
+
 // On récupère le container en-dessous du 'home'
 
 foreach ($container as $page){
     if ($this->navigation()->accept($page)) {
         $color = $page->get('border-color') ? 'style="border-left-color:' . $page->get('border-color') . '"' : '';
         $icon  = $page->get('icon') ? sprintf('<span class="%s"></span>', $page->get('icon')) : '';
+        $description = $page->get('description') ? 'title="border-left-color:' . $page->get('border-color') . '"' : '';
+
         echo '<div class="callout" ' . $color . '>';
         echo $icon;
         echo '<h1>' . $this->navigation()->htmlify($page) . '</h1>';

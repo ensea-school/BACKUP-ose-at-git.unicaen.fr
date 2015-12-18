@@ -1,5 +1,7 @@
 <?php
 
+$this->headTitle()->append("Gestion des disciplines");
+
 use Application\Provider\Privilege\Privileges;
 
 /* @var $disciplines \Application\Entity\Db\Discipline[] */
@@ -14,8 +16,7 @@ function truncCodesCorresp($value){
 
 
 ?>
-
-<h1>Gestion des disciplines</h1>
+<h1 class="page-header">Gestion des disciplines</h1>
 <table class="table table-bordered">
     <htead>
         <tr>

@@ -142,9 +142,7 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'volumeHoraireDl'                           => View\Helper\VolumeHoraire\Dl::class,
             'volumeHoraireListe'                        => View\Helper\VolumeHoraire\Liste::class,
-            'volumeHoraireReferentielDl'                => View\Helper\VolumeHoraireReferentiel\Dl::class,
             'volumeHoraireReferentielListe'             => View\Helper\VolumeHoraireReferentiel\Liste::class,
         ],
     ],

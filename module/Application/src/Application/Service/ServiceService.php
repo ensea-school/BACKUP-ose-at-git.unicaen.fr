@@ -23,6 +23,7 @@ use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
@@ -54,6 +55,7 @@ class ServiceService extends AbstractEntityService
     use LocalContextAwareTrait;
     use RechercheHydratorAwareTrait;
     use ValidationAwareTrait;
+    use StatutIntervenantAwareTrait;
 
     /**
      *
@@ -412,13 +414,16 @@ class ServiceService extends AbstractEntityService
         $serviceStructure          = $this->getServiceStructure();
         $serviceIntervenant        = $this->getServiceIntervenant();
         $serviceElementPedagogique = $this->getServiceElementPedagogique();
+        $serviceStatutIntervenant  = $this->getServiceStatutIntervenant();
         $iAlias                    = $serviceIntervenant->getAlias();
+        $sAlias                    = $serviceStatutIntervenant->getAlias();
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
+        $serviceIntervenant->join( $serviceStatutIntervenant, $qb, 'statut', false);
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 
-        $filter = "(($iAlias.type = :typeIntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
+        $filter = "(($sAlias.typeIntervenant = :typeIntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);
         $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
 
@@ -439,12 +444,10 @@ class ServiceService extends AbstractEntityService
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $serviceIntervenant = $this->getServiceIntervenant();
-        $iAlias             = $serviceIntervenant->getAlias();
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
         $serviceIntervenant->finderByStructure($structure, $qb);
-        $qb->andWhere("$iAlias.type = :typeIntervenantPermanent");
-        $qb->setParameter('typeIntervenantPermanent', $this->getServiceTypeIntervenant()->getPermanent());
+        $serviceIntervenant->finderByType($this->getServiceTypeIntervenant()->getPermanent(), $qb);
 
         return $qb;
     }

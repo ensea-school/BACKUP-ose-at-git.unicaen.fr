@@ -116,14 +116,9 @@ class DossierController extends AbstractActionController implements WorkflowInte
         $validation = null;
 
         $this->initFilters();
-        
-        if ($role instanceof IntervenantRole) {
-            $this->intervenant = $role->getIntervenant();
-        }
-        else {
-            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        }
-        
+
+        $this->intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+
         // refetch intervenant avec jointure sur dossier (et respect de l'historique)
         $qb = $this->em()->getRepository(\Application\Entity\Db\Intervenant::class)->createQueryBuilder("i")
                 ->select("i, d")

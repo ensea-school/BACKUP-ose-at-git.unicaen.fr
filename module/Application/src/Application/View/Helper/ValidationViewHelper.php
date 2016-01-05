@@ -7,7 +7,7 @@ use Application\Entity\Db\Traits\ValidationAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 
 /**
- * Description of ValidationDl
+ * Description of ValidationViewHelper
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */

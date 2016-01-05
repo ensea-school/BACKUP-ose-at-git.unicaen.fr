@@ -31,7 +31,7 @@ class UtilisateurController extends BaseController
         /* @var $role Role */
         $structureId = $this->getRequest()->getPost('structure-'.$role->getRoleId());
         
-        if ($role->getPerimetre()->isEtablissement()) {
+        if ($role->getPerimetre() && $role->getPerimetre()->isEtablissement()) {
             $structure = null;
             if ($structureId) {
                 $structure = $this->getServiceStructure()->get($structureId);

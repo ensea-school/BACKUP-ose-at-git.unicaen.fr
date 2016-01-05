@@ -45,7 +45,7 @@ class MailWithLogPluginFactory implements FactoryInterface
         }
         
         $logger = new Logger();
-        $logger->addWriter(new Stream(APPLICATION_PATH . "/data/mail.log"));
+        $logger->addWriter(new Stream(getcwd() . "/data/mail.log"));
         $plugin->setLogger($logger);
         
         return $plugin;

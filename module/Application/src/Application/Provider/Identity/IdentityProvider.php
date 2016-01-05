@@ -103,11 +103,6 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             $session->roles = $roles;
         }
 
-        $rs = [];
-        foreach( $session->roles as $roleId ){
-
-        }
-
         return $session->roles;
     }
 }

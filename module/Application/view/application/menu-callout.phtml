@@ -29,7 +29,9 @@ foreach ($container as $page) {
             echo '<ul>';
             $children = $page->getPages();
             foreach ($children as $child) {
-                echo $this->tag('li')->html($this->navigation()->htmlify($child));
+                if ($this->navigation()->accept($child)) {
+                    echo $this->tag('li')->html($this->navigation()->htmlify($child));
+                }
             }
             echo '</ul>';
         }

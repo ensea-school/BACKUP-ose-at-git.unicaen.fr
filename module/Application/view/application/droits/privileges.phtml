@@ -1,56 +1,82 @@
 <?php
 
-/* @var $privileges UnicaenAuth\Entity\Db\Privilege[] */
-/* @var $roles Application\Entity\Db\Role[] */
-/* @var $statuts Application\Entity\Db\StatutIntervenant[] */
+/**
+ * @var $this       \Application\View\Renderer\PhpRenderer
+ * @var $privileges UnicaenAuth\Entity\Db\Privilege[]
+ * @var $roles      Application\Entity\Db\Role[]
+ * @var $statuts    Application\Entity\Db\StatutIntervenant[]
+ * @var $filters    array
+ */
 
-$id = uniqid();
+$rolesUrl   = $this->url(null,[],['query' => $filters+['rs'=>'r']],true);
+$statutsUrl = $this->url(null,[],['query' => $filters+['rs'=>'s']],true);
 
 ?>
 <h1 class="page-header">Gestion des privilèges</h1>
 
-<table class="droits-tbl table table-hover table-bordered table-condensed table-extra-condensed table-header-rotated" id="<?php echo $id; ?>">
-<thead>
+<table class="droits-tbl table table-hover table-bordered table-condensed table-extra-condensed table-header-rotated">
+    <thead>
     <tr>
-        <th class="separator"></th>
-    <?php $first = true; foreach( $roles as $role ):?>
-        <th class="rotate-45" title="<?php echo $role; ?>"><div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $role; ?></span></div></th>
-    <?php $first = false; endforeach; ?>
-    <th class="separator rotate-45">&nbsp;</th>
-    <?php $first = true; foreach( $statuts as $statut ):?>
-        <th class="rotate-45" title="<?php echo $statut; ?>"><div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $statut; ?></span></div></th>
-    <?php $first = false; endforeach; ?>
+        <th class="separator"><a href="<?php echo $this->url(null,[],[],true); ?>" class="btn btn-default">Supprimer les filtres</a></th>
+        <?php $first = true;
+        foreach ($roles as $role): ?>
+            <th class="rotate-45" title="<?php echo $role; ?>">
+                <div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $role; ?></span></div>
+            </th>
+            <?php $first = false; endforeach; ?>
+        <?php if (!empty($roles) && !empty($statuts)): ?>
+            <th class="separator rotate-45">&nbsp;</th>
+        <?php endif; ?>
+        <?php $first = true;
+        foreach ($statuts as $statut): ?>
+            <th class="rotate-45" title="<?php echo $statut; ?>">
+                <div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $statut; ?></span></div>
+            </th>
+            <?php $first = false; endforeach; ?>
     </tr>
     <tr>
         <th>Privilèges</th>
-        <th colspan="<?php echo count($roles); ?>">Rôles (personnel)</th>
-        <th style="border:none;">&nbsp;</th>
-        <th colspan="<?php echo count($statuts); ?>">Statuts (intervenants)</th>
+        <?php if (!empty($roles)): ?>
+            <th colspan="<?php echo count($roles); ?>"><a href="<?php echo $rolesUrl ?>">Rôles (personnel)</a></th>
+        <?php endif; ?>
+        <?php if (!empty($roles) && !empty($statuts)): ?>
+            <th style="border:none;">&nbsp;</th>
+        <?php endif; ?>
+        <?php if (!empty($statuts)): ?>
+            <th colspan="<?php echo count($statuts); ?>"><a href="<?php echo $statutsUrl ?>">Statuts (intervenants)</a></th>
+        <?php endif; ?>
         <th style="border:none;min-width:166px">&nbsp;</th>
     </tr>
-</thead>
-<tbody>
-<?php foreach( $privileges as $cat ): ?>
-    <tr>
-        <th class="separator">&nbsp;</th>
-        <th class="separator" colspan="<?php echo 1 + count($roles) + count($statuts); ?>"><?php echo $cat['categorie'] ?></th>
-    </tr>
-    <?php foreach( $cat['privileges'] as $privilege ): ?>
-    <tr>
-        <th class="privilege"><?php echo $privilege ?></th>
-        <?php $statut=null; foreach( $roles as $role ): ?>
-            <td class="modifier" data-role="<?php echo $role->getId() ?>" data-privilege="<?php echo $privilege->getId() ?>">
-            <?php echo $this->partial( '/application/droits/partial/tbl-link', compact('role','statut','privilege')) ?>
-            </td>
+    </thead>
+    <tbody>
+    <?php foreach ($privileges as $cat): ?>
+        <tr>
+            <th class="separator">&nbsp;</th>
+            <th class="separator"
+                colspan="<?php echo 1 + count($roles) + count($statuts); ?>"><a href="<?php echo $cat['categorieLink'] ?>"><?php echo $cat['categorie'] ?></a></th>
+        </tr>
+        <?php foreach ($cat['privileges'] as $privilege): ?>
+            <tr>
+                <th class="privilege"><?php echo $privilege ?></th>
+                <?php $statut = null;
+                foreach ($roles as $role): ?>
+                    <td class="modifier" data-role="<?php echo $role->getId() ?>"
+                        data-privilege="<?php echo $privilege->getId() ?>">
+                        <?php echo $this->partial('/application/droits/partial/tbl-link', compact('role', 'statut', 'privilege')) ?>
+                    </td>
+                <?php endforeach; ?>
+                <?php if (!empty($roles) && !empty($statuts)): ?>
+                    <th class="separator ">&nbsp;</th>
+                <?php endif; ?>
+                <?php $role = null;
+                foreach ($statuts as $statut): ?>
+                    <td class="modifier" data-statut="<?php echo $statut->getId() ?>"
+                        data-privilege="<?php echo $privilege->getId() ?>">
+                        <?php echo $this->partial('/application/droits/partial/tbl-link', compact('role', 'statut', 'privilege')) ?>
+                    </td>
+                <?php endforeach; ?>
+            </tr>
         <?php endforeach; ?>
-        <th class="separator ">&nbsp;</th>
-        <?php $role=null; foreach( $statuts as $statut ): ?>
-            <td class="modifier" data-statut="<?php echo $statut->getId() ?>" data-privilege="<?php echo $privilege->getId() ?>">
-            <?php echo $this->partial( '/application/droits/partial/tbl-link', compact('role','statut','privilege')) ?>
-            </td>
-        <?php endforeach; ?>
-    </tr>
     <?php endforeach; ?>
-<?php endforeach; ?>
-</tbody>
+    </tbody>
 </table>

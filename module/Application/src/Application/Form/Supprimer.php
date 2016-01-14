@@ -4,18 +4,24 @@ namespace Application\Form;
 
 use Zend\Form\Element\Csrf;
 use Zend\Form\Element\Hidden;
-use Zend\Form\Form;
 
 /**
  * Description of Supprimer
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Supprimer extends Form
+class Supprimer extends AbstractForm
 {
-    public function __construct($name = null, $options = [])
+
+    /**
+     * This function is automatically called when creating element with factory. It
+     * allows to perform various operations (add elements...)
+     *
+     * @return void
+     */
+    public function init()
     {
-        parent::__construct($name, $options);
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         /**
          * Csrf
@@ -38,4 +44,18 @@ class Supprimer extends Form
             ],
         ]);
     }
+
+
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        return [];
+    }
+
 }

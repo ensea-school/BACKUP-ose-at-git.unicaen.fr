@@ -3,13 +3,26 @@
 namespace Application\Form;
 
 use Zend\Form\Form;
+use Zend\Http\Request;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 
 abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface, InputFilterProviderInterface
 {
     use ServiceLocatorAwareTrait;
+
+    /**
+     * @var FlashMessenger
+     */
+    private $controllerPluginFlashMessenger;
+
+    /**
+     * @var \Exception
+     */
+    private $exception;
 
 
 
@@ -43,4 +56,62 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
         return $this->getUrl(null, [], [], true);
     }
 
+
+
+    /**
+     * Exécute la sauvegarde d'un formulaire à partir des données Request
+     *
+     * Retourne true si tout s'est bien passé, false sinon.
+     * Le message d'erreur pourra être récupéré via le FlashMessenger ou bien via getLastException() pour la traiter ensuite
+     *
+     * @param         $entity
+     * @param Request $request
+     * @param         $saveFnc
+     *
+     * @return bool
+     */
+    public function bindRequestSave($entity, Request $request, $saveFnc)
+    {
+        $this->exception = null;
+        $this->bind($entity);
+        if ($request->isPost()) {
+            $this->setData($request->getPost());
+            if ($this->isValid()) {
+                try {
+                    $saveFnc($entity);
+                } catch (\Exception $e) {
+                    $this->exception = $e;
+                    $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * @return \Exception
+     */
+    public function getException()
+    {
+        return $this->exception;
+    }
+
+
+
+    /**
+     * @return FlashMessenger
+     */
+    private function getControllerPluginFlashMessenger()
+    {
+        if (!$this->controllerPluginFlashMessenger) {
+            $this->controllerPluginFlashMessenger = $this->getServiceLocator()->getServiceLocator()->get('ControllerPluginManager')->get('flashMessenger');
+        }
+
+        return $this->controllerPluginFlashMessenger;
+    }
 }

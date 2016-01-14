@@ -57,11 +57,10 @@ class Intervenant extends AbstractEntityService
             $orc[] = '(' . $sqlCri . ')';
         }
         if ($criCode) {
-            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
+            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
         }
         $orc = implode(' OR ', $orc);
         $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
-//        sqlDump($sql);
 
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 

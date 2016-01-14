@@ -1,6 +1,8 @@
 <?php
 
 namespace Application\Entity\Db;
+
+use Application\Provider\Privilege\Privileges;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -13,6 +15,9 @@ class TypeAgrement implements HistoriqueAwareInterface
 
     const CODE_CONSEIL_RESTREINT  = 'CONSEIL_RESTREINT';
     const CODE_CONSEIL_ACADEMIQUE = 'CONSEIL_ACADEMIQUE';
+
+    const CONSEIL_RESTREINT_ID  = 1;
+    const CONSEIL_ACADEMIQUE_ID = 2;
 
     static public $codes = [
         self::CODE_CONSEIL_RESTREINT,
@@ -130,6 +135,65 @@ class TypeAgrement implements HistoriqueAwareInterface
         $template = ($avecArticle ? ($deLe ? "du %s" : "le %s") : "%s");
 
         return sprintf($template, $this->getLibelle());
+    }
+
+
+
+    /**
+     * Retourne le privilège de visualisation
+     *
+     * @return string
+     */
+    public function getPrivilegeVisualisation()
+    {
+        switch($this->getCode()){
+            case TypeAgrement::CODE_CONSEIL_ACADEMIQUE:
+                return Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
+
+            case TypeAgrement::CODE_CONSEIL_RESTREINT:
+                return Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION;
+        }
+        throw new \LogicException('Aucun privilège n\'est reconnu pour ce type d\'agrément');
+    }
+
+
+
+    /**
+     * Retourne le privilège d'édition
+     *
+     *
+     * @return string
+     */
+    public function getPrivilegeEdition()
+    {
+        switch($this->getCode()){
+            case TypeAgrement::CODE_CONSEIL_ACADEMIQUE:
+                return Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION;
+
+            case TypeAgrement::CODE_CONSEIL_RESTREINT:
+                return Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION;
+        }
+        throw new \LogicException('Aucun privilège n\'est reconnu pour ce type d\'agrément');
+    }
+
+
+
+    /**
+     * Retourne le privilège de suppression
+     *
+     *
+     * @return string
+     */
+    public function getPrivilegeSuppression()
+    {
+        switch($this->getCode()){
+            case TypeAgrement::CODE_CONSEIL_ACADEMIQUE:
+                return Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION;
+
+            case TypeAgrement::CODE_CONSEIL_RESTREINT:
+                return Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION;
+        }
+        throw new \LogicException('Aucun privilège n\'est reconnu pour ce type d\'agrément');
     }
 
 

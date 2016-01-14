@@ -16,11 +16,21 @@ class AgrementViewHelper extends AbstractHtmlElement
 {
     use AgrementAwareTrait;
 
+    /**
+     * @var boolean
+     */
+    private $short;
+
+    /**
+     * @var boolean
+     */
+    private $box;
+
 
 
     /**
      *
-     * @param Entity $elementPedagogique
+     * @param Entity $agrement
      *
      * @return self
      */
@@ -45,6 +55,24 @@ class AgrementViewHelper extends AbstractHtmlElement
 
 
 
+    public function short()
+    {
+        $this->short = true;
+
+        return $this;
+    }
+
+
+
+    public function box()
+    {
+        $this->box = true;
+
+        return $this;
+    }
+
+
+
     /**
      *
      *
@@ -59,21 +87,31 @@ class AgrementViewHelper extends AbstractHtmlElement
         }
 
         $vars = [
-            "Type d'agrément"                    => $entity->getType(),
-            "Date de la décision"                => $entity->getDateDecision()->format(Constants::DATE_FORMAT),
-            "Date et auteur de l'enregistrement" =>
-                $entity->getHistoModification()->format(Constants::DATETIME_FORMAT)
-                . ' par ' . $this->getView()->utilisateur($entity->getHistoModificateur()),
+            "Type d'agrément" => (string)$entity->getType()
         ];
+
+        if (!$this->short) {
+            $vars["Intervenant"] = (string)$entity->getIntervenant();
+            if ($structure = $entity->getStructure()) {
+                $vars["Structure"] = (string)$structure;
+            }
+        }
+        $vars["Date de la décision"] = $entity->getDateDecision()->format(Constants::DATE_FORMAT);
 
         $html = "<dl class=\"agrement dl-horizontal\">\n";
         foreach ($vars as $key => $value) {
-            $html .= "\t<dt>$key :</dt><dd>$value</dd>\n";
+            $html .= "\t<dt>$key : </dt><dd>$value</dd>\n";
         }
         $html .= "</dl>";
 
         $html .= $this->getView()->historique($entity);
 
+        if ($this->box){
+            $html = '<div class="agrement agrement-box alert alert-success"><span class="glyphicon glyphicon-ok-sign"></span>'.$html.'</div>';
+        }
+
+        $this->short = false; // réinitialisation
+        $this->box = false;
         return $html;
     }
 

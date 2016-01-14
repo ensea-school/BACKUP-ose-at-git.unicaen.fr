@@ -19,7 +19,6 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
     <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
-    <field name="seuilHetd" type="integer" column="SEUIL_HETD" nullable="true"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

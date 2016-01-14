@@ -2,172 +2,199 @@
 
 namespace Application\Assertion;
 
-use Application\Acl\ComposanteRole;
-use Application\Controller\AgrementController;
 use Application\Entity\Db\Agrement;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\TypeAgrement;
-use Application\Rule\Intervenant\AgrementFourniRule;
-use Application\Rule\Intervenant\NecessiteAgrementRule;
-use Application\Service\Traits\AgrementAwareTrait;
-use Application\Service\Workflow\WorkflowIntervenant;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Zend\Permissions\Acl\Acl;
+use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\TblAgrementServiceAwareTrait;
+use Application\Service\Traits\TypeAgrementAwareTrait;
+use UnicaenAuth\Assertion\AbstractAssertion;
+use Application\Acl\Role;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Zend\Permissions\Acl\Role\RoleInterface;
+
 
 /**
- * Description of Agrement
+ * Description of AgrementAssertion
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class AgrementAssertion extends OldAbstractAssertion implements WorkflowIntervenantAwareInterface
+class AgrementAssertion extends AbstractAssertion
 {
-    use AgrementAwareTrait;
-    use WorkflowIntervenantAwareTrait;
-    
-    /**
-     * @var Agrement
-     */
-    protected $agrement;
-    
-    /**
-     * Returns true if and only if the assertion conditions are met
-     *
-     * This method is passed the ACL, Role, Resource, and privilege to which the authorization query applies. If the
-     * $role, $resource, or $privilege parameters are null, it means that the query applies to all Roles, Resources, or
-     * privileges, respectively.
-     *
-     * @param  Acl               $acl
-     * @param  RoleInterface     $role
-     * @param  ResourceInterface $resource
-     * @param  string            $privilege
-     * @return bool
-     */
-    public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
-    {
-        parent::assert($acl, $role, $resource, $privilege);
-        
-        /**
-         * Cas N°1 : la ressource spécifiée est une entité ; un privilège est spécifié.
-         */
-        if ($resource instanceof Agrement) {
-            return $this->assertEntityOld();
-        }
-        
-        /**
-         * Cas N°2 : la ressource spécifiée est une chaîne de caractères du type 'controller/Application\Controller\Agrement:action' ;
-         * un privilège est spécifié (config des pages de navigation) ou pas (config des controller guards BjyAuthorize).
-         */
-        
-        $privilege = $this->normalizedPrivilege($privilege, $resource);
-        
-        $privilegeAjouterLotConseilRestreint  = sprintf("%s/%s", AgrementController::ACTION_AJOUTER_LOT, TypeAgrement::CODE_CONSEIL_RESTREINT);
-        $privilegeAjouterLotConseilAcademique = sprintf("%s/%s", AgrementController::ACTION_AJOUTER_LOT, TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
+    use TypeAgrementAwareTrait;
+    use TblAgrementServiceAwareTrait;
 
-        // l'ajout par lot d'agréments de type "Conseil Académique" n'est autorisé qu'aux admin
-        if ($privilege === $privilegeAjouterLotConseilAcademique) {
-            if ($this->role->getRoleId() !== \Application\Acl\AdministrateurRole::ROLE_ID) {
-                return false;
-            }
-        }
-        // l'ajout par lot d'agréments de type "Conseil Restreint" n'est pas autorisé aux admin pour
-        // l'instant car cela nécessiterait la sélection de la composante concernée
-        elseif ($privilege === $privilegeAjouterLotConseilRestreint) {
-            if ($this->role->getRoleId() === \Application\Acl\AdministrateurRole::ROLE_ID) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    /**
-     * @see AbstractAssertion
-     */
-    protected function normalizedPrivilege($privilege, $resource)
-    {
-        if (is_object($resource)) {
-            return $privilege;
-        }
-        
-        $privilege = parent::normalizedPrivilege($privilege, $resource);
-        
-        // concaténation du type d'agrément concerné
-        if ($privilege && false === strpos($privilege, '/') && $this->getTypeAgrement()) {
-            $privilege .= '/' . $this->getTypeAgrement()->getCode();
-        }
-        
-        return $privilege;
-    }
-    
-    /**
-     * 
-     * @return boolean
-     */
-    protected function assertEntityOld()
-    {
-        if (!parent::assertCRUD()) {
-            return false;
-        }
-        
-        /*********************************************************
-         *                      Rôle Composante
-         *********************************************************/
-        if ($this->role instanceof ComposanteRole) {
-            
-            // saisie de l'agrément Conseil Academique interdit aux gestionnaires de composante
-            if ($this->resource->getType()->isConseilAcademique()) {
-                return false;
-            }
-            
-            // structure de responsabilité de l'utilisateur et structure de l'agrément doivent correspondre
-            if ($this->role->getStructure() !== $this->resource->getStructure()) {
-//            if ($this->resource->getStructure() && $this->role->getStructure()->getId() !== $this->resource->getStructure()->getId()) {
-                return false;
-            }
-        }
-        
-        $agrementStepKey = $this->resource->getType()->getCode();
-        
-        // l'étape Agrement du workflow doit être atteignable
-        if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {
-            return false;
-        }
 
-        /**
-         * Modification, suppression
-         */
-        if (in_array($this->privilege, ['update', 'delete'])) {
-            // l'étape suivante du workflow ne doit pas avoir été franchie
-            $nextStep = $this->getWorkflow()->getNextStep($agrementStepKey);
-            if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
-                return false;
-            }
+
+    /* ---- Routage général ---- */
+    public function __invoke(array $page) // gestion des visibilités de menus
+    {
+        return $this->assertPage($page);
+    }
+
+
+
+    protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
+    {
+        $role = $this->getRole();
+
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+
+        // Si c'est bon alors on affine...
+        switch (true) {
+            case $entity instanceof TblAgrement:
+                switch ($privilege) {
+                    case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
+                    case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
+                    case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
+                    case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
+                        return $this->assertTblAgrementSaisie($role, $entity);
+                }
+                break;
+            case $entity instanceof Agrement:
+                switch ($privilege) {
+                    case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
+                    case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
+                    case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
+                    case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
+                        return $this->assertAgrementSaisie($role, $entity);
+                }
+                break;
+            case $entity instanceof Structure:
+                switch ($privilege) {
+                    case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
+                    case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION:
+                    case Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION:
+                    case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
+                        return $this->assertStructureSaisie($role, $entity);
+                }
+                break;
         }
 
         return true;
     }
-    
-    /**
-     * 
-     * @return TypeAgrement
-     */
-    protected function getTypeAgrement()
+
+
+
+    protected function assertController($controller, $action = null, $privilege = null)
     {
-        return $this->getMvcEvent()->getParam('typeAgrement');
+        $role        = $this->getRole();
+        $intervenant = $this->getMvcEvent()->getParam('intervenant'); /* @var $intervenant Intervenant */
+        $typeAgrement = $this->getMvcEvent()->getParam('typeAgrement'); /* @var $typeAgrement TypeAgrement */
+
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+
+        switch ($action) {
+            case 'lister':
+            case 'voir':
+                if ($typeAgrement) {
+                    $resource = Privileges::getResourceId($typeAgrement->getPrivilegeVisualisation());
+                    if (!$this->isAllowed($resource)) return false;
+                    if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
+                }
+                break;
+
+            case 'ajouter':
+            case 'modifier':
+                if ($typeAgrement) {
+                    $resource = Privileges::getResourceId($typeAgrement->getPrivilegeEdition());
+                    if (!$this->isAllowed($resource)) return false;
+                    if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
+                }
+                break;
+
+            case 'index':
+            case 'saisir-lot':
+                if ($role->getIntervenant()) return false; // un intervenant ne peut pas voir ça...
+                if ($typeAgrement) {
+                    $resource = Privileges::getResourceId($typeAgrement->getPrivilegeVisualisation());
+                    if (!$this->isAllowed($resource)) return false;
+                    if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
+                }
+                break;
+
+            case 'supprimer':
+                if ($typeAgrement) {
+                    $resource = Privileges::getResourceId($typeAgrement->getPrivilegeSuppression());
+                    if (!$this->isAllowed($resource)) return false;
+                    if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
+                }
+                break;
+        }
+
+        return true;
     }
-    
-    /**
-     * @return WorkflowIntervenant
-     */
-    private function getWorkflow()
+
+
+
+    protected function assertPage(array $page)
     {
-        $wf = $this->getWorkflowIntervenant()
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setRole($this->role);
-        
-        return $wf;
+        $role        = $this->getRole();
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        if (isset($page['params']['typeAgrement'])) {
+            $typeAgrement = $this->getServiceTypeAgrement()->get($page['params']['typeAgrement']);
+        } else {
+            $typeAgrement = null;
+        }
+
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+
+        if ($typeAgrement) {
+            $resourceVisualisation = Privileges::getResourceId($typeAgrement->getPrivilegeVisualisation());
+            if (!$this->isAllowed($resourceVisualisation)) return false;
+
+            if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity)
+    {
+        if ($structure = $entity->getStructure()) {
+            return $this->assertStructureSaisie($role, $structure);
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant)
+    {
+        return $this->getServiceTblAgrement()->needIntervenantAgrement($typeAgrement, $intervenant);
+    }
+
+
+
+    protected function assertAgrementSaisie(Role $role, Agrement $entity)
+    {
+        if ($structure = $entity->getStructure()) {
+            return $this->assertStructureSaisie($role, $structure);
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertStructureSaisie(Role $role, Structure $entity)
+    {
+        if ($roleStructure = $role->getStructure()) {
+            if ($roleStructure != $entity) return false; // pas d'édition pour les copains
+        }
+
+        return true;
     }
 
 }

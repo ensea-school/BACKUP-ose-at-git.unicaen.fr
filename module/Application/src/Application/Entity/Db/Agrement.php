@@ -29,17 +29,17 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\TypeAgrement
+     * @var TypeAgrement
      */
     private $type;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var Intervenant
      */
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var Structure
      */
     private $structure;
 

@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @var $this     \Application\View\Renderer\PhpRenderer
+ * @var $form     \Application\Form\Supprimer
+ * @var $agrement \Application\Entity\Db\Agrement
+ */
+
+echo '<h1 class="page-header">Suppression d\'un agrément</h1>';
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+if ($form){
+    echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de cet agrément ?</p>';
+    echo $this->agrement($agrement);
+
+    echo $this->formSupprimer($form);
+}

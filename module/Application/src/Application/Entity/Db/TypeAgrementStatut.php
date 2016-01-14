@@ -18,11 +18,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     private $premierRecrutement;
 
     /**
-     * @var float
-     */
-    private $seuilHetd;
-
-    /**
      * @var integer
      */
     private $id;
@@ -45,25 +40,13 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
      */
     public function __toString()
     {
-        return sprintf("Id=%s, Statut=%s, Type=%s, Oblig=%d, 1erRecrut=%d, Seuil=%s",
+        return sprintf("Id=%s, Statut=%s, Type=%s, Oblig=%d, 1erRecrut=%d",
             $this->getId(),
             sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
             sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
             $this->getObligatoire(),
-            $this->getPremierRecrutement(),
-            $this->getSeuilHeures() ?: "Aucun");
-    }
-
-
-
-    /**
-     * Get seuilHeures
-     *
-     * @return integer
-     */
-    public function getSeuilHeures()
-    {
-        return $this->seuilHetd;
+            $this->getPremierRecrutement()
+        );
     }
 
 
@@ -106,22 +89,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     public function setObligatoire($obligatoire)
     {
         $this->obligatoire = $obligatoire;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Set seuilHetd
-     *
-     * @param integer $seuilHetd
-     *
-     * @return TypeAgrementStatut
-     */
-    public function setSeuilHetd($seuilHetd)
-    {
-        $this->seuilHetd = $seuilHetd;
 
         return $this;
     }

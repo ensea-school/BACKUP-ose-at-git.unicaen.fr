@@ -1,7 +1,14 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $title string
+ * @var $form \Application\Form\Agrement\Saisie
+ */
+
+?>
 <h1 class="page-header"><?php echo $title ?></h1>
-
-<?php //echo $this->messenger(true)->addMessages($messages) ?>
-
+<?php echo $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
 <div class="row">
     <div class="col-sm-5">
         <?php

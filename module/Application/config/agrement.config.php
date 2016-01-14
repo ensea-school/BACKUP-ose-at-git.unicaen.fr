@@ -2,11 +2,10 @@
 
 namespace Application;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantRole;
-use Application\Controller\AgrementController;
+use Application\Entity\Db\TypeAgrement;
+use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -42,12 +41,13 @@ return [
                             'ajouter'  => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/:typeAgrement/ajouter',
+                                    'route'       => '/:typeAgrement/ajouter[/:structure]',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
+                                        'structure' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action' => AgrementController::ACTION_AJOUTER,
+                                        'action' => 'saisir',
                                     ],
                                 ],
                             ],
@@ -59,32 +59,31 @@ return [
                                         'agrement' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action' => AgrementController::ACTION_VOIR,
+                                        'action' => 'voir',
                                     ],
                                 ],
                             ],
-                            'voir-str' => [
+                            'saisir' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/:typeAgrement/voir-str[/:structure]',
-                                    'constraints' => [
-                                        'typeAgrement' => '[0-9]*',
-                                        'structure'    => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => AgrementController::ACTION_VOIR_STR,
-                                    ],
-                                ],
-                            ],
-                            'modifier' => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/modifier/:agrement',
+                                    'route'       => '/saisir/[:agrement]',
                                     'constraints' => [
                                         'agrement' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action' => AgrementController::ACTION_MODIFIER,
+                                        'action' => 'saisir',
+                                    ],
+                                ],
+                            ],
+                            'supprimer' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/supprimer/[:agrement]',
+                                    'constraints' => [
+                                        'agrement' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'supprimer',
                                     ],
                                 ],
                             ],
@@ -105,15 +104,15 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'ajouter-lot' => [
+                            'saisir-lot' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/:typeAgrement/ajouter-lot',
+                                    'route'       => '/:typeAgrement/saisir-lot',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action' => AgrementController::ACTION_AJOUTER_LOT,
+                                        'action' => 'saisir-lot',
                                     ],
                                 ],
                             ],
@@ -129,45 +128,69 @@ return [
                 'pages' => [
                     'intervenant' => [
                         'pages' => [
-                            'agrement' => [
-                                'label'         => "Agrément",
-                                'title'         => "Agrément de l'intervenant",
-                                'route'         => 'intervenant/agrement',
-                                'paramsInject'  => [
+                            'agrement-conseil-restreint'  => [
+                                'label'        => 'Agrément : Conseil restreint',
+                                'title'        => 'Agrément : Conseil restreint',
+                                'route'        => 'intervenant/agrement/liste',
+                                'params'       => [
+                                    'typeAgrement' => TypeAgrement::CONSEIL_RESTREINT_ID,
+                                ],
+                                'paramsInject' => [
                                     'intervenant',
                                 ],
-                                'withtarget'    => true,
-                                'resource'      => PrivilegeController::getResourceId('Application\Controller\Agrement','index'),
-                                'visible'       => 'IntervenantNavigationPageVisibility',
-                                'pagesProvider' => [
-                                    'type'         => 'AgrementIntervenantNavigationPagesProvider',
-                                    'route'        => 'intervenant/agrement/liste',
-                                    'paramsInject' => [
-                                        'intervenant',
-                                    ],
-                                    'withtarget'   => true,
-                                    'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement','lister'),
-                                    'visible'      => 'IntervenantNavigationPageVisibility',
+                                'withtarget'   => true,
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
+                                'visible'      => 'AssertionAgrement',
+                            ],
+                            'agrement-conseil-academique' => [
+                                'label'        => 'Agrément : Conseil académique',
+                                'title'        => 'Agrément : Conseil académique',
+                                'route'        => 'intervenant/agrement/liste',
+                                'params'       => [
+                                    'typeAgrement' => TypeAgrement::CONSEIL_ACADEMIQUE_ID,
                                 ],
+                                'paramsInject' => [
+                                    'intervenant',
+                                ],
+                                'withtarget'   => true,
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
+                                'visible'      => 'AssertionAgrement',
                             ],
                         ],
                     ],
                     'gestion'     => [
                         'pages' => [
                             'agrement' => [
-                                'label'         => "Agréments par lot",
-                                'title'         => "Gestion des agréments par lot",
-                                'icon'          => 'fa fa-tags',
-                                'border-color'  => '#E1AC5A',
-                                'route'         => 'gestion/agrement',
-                                'resource'      => PrivilegeController::getResourceId('Application\Controller\Agrement','index'),
-                                'pagesProvider' => [
-                                    'type'       => 'AgrementNavigationPagesProvider',
-                                    'route'      => 'gestion/agrement/ajouter-lot',
-                                    'withtarget' => true,
-                                    'resource'   => PrivilegeController::getResourceId('Application\Controller\Agrement',AgrementController::ACTION_AJOUTER_LOT),
-                                    'privilege'  => AgrementController::ACTION_AJOUTER_LOT,
-                                    // NB: le code du type d'agrément sera concaténé au 'privilege' par le AgrementNavigationPagesProvider
+                                'label'        => "Agréments par lot",
+                                'title'        => "Gestion des agréments par lot",
+                                'icon'         => 'fa fa-tags',
+                                'border-color' => '#E1AC5A',
+                                'route'        => 'gestion/agrement',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'index'),
+                                'visible'      => 'AssertionAgrement',
+                                'pages'        => [
+                                    'conseil-restreint'  => [
+                                        'label'       => 'Conseil restreint',
+                                        'description' => 'Gestion par lots des agréments du conseil restreint',
+                                        'title'       => 'Conseil restreint',
+                                        'route'       => 'gestion/agrement/saisir-lot',
+                                        'params'      => [
+                                            'typeAgrement' => TypeAgrement::CONSEIL_RESTREINT_ID,
+                                        ],
+                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
+                                        'visible'     => 'AssertionAgrement',
+                                    ],
+                                    'conseil-academique' => [
+                                        'label'       => 'Conseil académique',
+                                        'description' => 'Gestion par lots des agréments du conseil académique',
+                                        'title'       => 'Conseil académique',
+                                        'route'       => 'gestion/agrement/saisir-lot',
+                                        'params'      => [
+                                            'typeAgrement' => TypeAgrement::CONSEIL_ACADEMIQUE_ID,
+                                        ],
+                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
+                                        'visible'     => 'AssertionAgrement',
+                                    ],
                                 ],
                             ],
                         ],
@@ -178,57 +201,78 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            'BjyAuthorize\Guard\Controller' => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Agrement',
                     'action'     => ['index', 'lister', 'voir'],
-                    'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                    'assertion'  => 'AgrementAssertion',
+                    'privileges' => [
+                        Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                        Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                    ],
+                    'assertion'  => 'AssertionAgrement',
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',
-                    'action'     => ['ajouter', 'ajouter-lot', 'modifier', 'supprimer', 'voir-str'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                    'assertion'  => 'AgrementAssertion',
+                    'action'     => ['ajouter', 'saisir-lot', 'saisir'],
+                    'privileges' => [
+                        Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                        Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
+                        Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
+                        Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
+                    ],
+                    'assertion'  => 'AssertionAgrement',
+                ],
+                [
+                    'controller' => 'Application\Controller\Agrement',
+                    'action' => ['supprimer'],
+                    'privileges' => [
+                        Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
+                        Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
+                    ],
+                    'assertion'  => 'AssertionAgrement',
                 ],
             ],
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'Agrement' => [],
+                'Agrement'    => [],
+                'TblAgrement' => [],
             ],
         ],
         'rule_providers'     => [
-            'BjyAuthorize\Provider\Rule\Config' => [
+            PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
-                        [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                        'Agrement',
-                        ['create', 'read', 'delete', 'update'],
-                        'AgrementAssertion',
+                        'privileges' => [
+                            Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
+                            Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
+                            Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
+                            Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION
+                        ],
+                        'resources'  => ['TblAgrement', 'Agrement', 'Structure'],
+                        'assertion'  => 'AssertionAgrement',
                     ],
                 ],
             ],
         ],
     ],
     'controllers'     => [
-        'invokables'   => [
+        'invokables' => [
             'Application\Controller\Agrement' => Controller\AgrementController::class,
         ],
     ],
     'service_manager' => [
-        'invokables'   => [
-            'ApplicationAgrement'                        => Service\Agrement::class,
-            'ApplicationTypeAgrement'                    => Service\TypeAgrement::class,
-            'ApplicationTypeAgrementStatut'              => Service\TypeAgrementStatut::class,
-            'AgrementNavigationPagesProvider'            => Service\AgrementNavigationPagesProvider::class,
-            'AgrementIntervenantNavigationPagesProvider' => Service\AgrementIntervenantNavigationPagesProvider::class,
-            'AgrementAssertion'                          => Assertion\AgrementAssertion::class,
+        'invokables' => [
+            'ApplicationAgrement'           => Service\Agrement::class,
+            'ApplicationTblAgrement'        => Service\TblAgrementService::class,
+            'ApplicationTypeAgrement'       => Service\TypeAgrement::class,
+            'ApplicationTypeAgrementStatut' => Service\TypeAgrementStatut::class,
+            'AssertionAgrement'             => Assertion\AgrementAssertion::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
-            'agrement'      => View\Helper\AgrementViewHelper::class,
+            'agrement' => View\Helper\AgrementViewHelper::class,
         ],
     ],
     'form_elements'   => [

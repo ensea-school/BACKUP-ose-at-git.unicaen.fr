@@ -1,5 +1,15 @@
-<?php $this->headTitle()->append("Agrément") ?>
+<?php
 
-<h1 class="page-header"><?php echo $title ?></h1>
+    /**
+    * @var $this \Application\View\Renderer\PhpRenderer
+    */
 
-Sélectionnez dans le menu de gauche le type d'agrément qui vous intéresse...
+    $title = "Agréments par lots";
+
+    $this->headTitle()->append($title);
+
+?>
+    <h1 class="page-header"><?php echo $title ?></h1>
+<?php
+
+echo $this->navigation('navigation')->menuContextuel()->setPartial('application/menu-dl.phtml');

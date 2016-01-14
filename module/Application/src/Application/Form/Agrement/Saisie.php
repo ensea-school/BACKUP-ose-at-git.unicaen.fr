@@ -14,19 +14,17 @@ use UnicaenApp\Hydrator\Strategy\DateStrategy;
  */
 class Saisie extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\IntervenantAwareTrait;
-    use \Application\Entity\Db\Traits\TypeAgrementAwareTrait;
 
     public function init()
     {
         $this->setHydrator(new ClassMethods(false));
 
-        $this->setAttribute('method', 'POST');
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
-            'name' => 'dateDecision',
-            'type'  => 'UnicaenApp\Form\Element\Date',
-            'options' => [
+            'name'       => 'dateDecision',
+            'type'       => 'UnicaenApp\Form\Element\Date',
+            'options'    => [
                 'label' => "Date de la décision",
             ],
             'attributes' => [
@@ -38,8 +36,8 @@ class Saisie extends AbstractForm
         $this->add(new Csrf('security'));
 
         $this->add([
-            'name' => 'submit',
-            'type'  => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
             ],
@@ -48,28 +46,7 @@ class Saisie extends AbstractForm
         return $this;
     }
 
-    /**
-     *
-     * @param \Application\Entity\Db\Intervenant[] $intervenants
-     * @return self
-     */
-    public function setIntervenants(array $intervenants)
-    {
-        if (!$this->has($name = "intervenants")) {
-            $mcb = new \Zend\Form\Element\MultiCheckbox($name);
-            $this->add($mcb);
-        }
 
-        $options = [];
-        foreach ($intervenants as $intervenant) {
-            $options[$intervenant->getId()] = (string)$intervenant;
-        }
-        $this->get($name)
-                ->setValueOptions($options)
-                ->setValue(array_keys($options));
-
-        return $this;
-    }
 
     /**
      * Should return an array specification compatible with
@@ -81,10 +58,7 @@ class Saisie extends AbstractForm
     {
         return [
             'dateDecision' => [
-                'required'   => true,
-            ],
-            'intervenants' => [
-                'required'   => $this->has('intervenants'),
+                'required' => true,
             ],
         ];
     }

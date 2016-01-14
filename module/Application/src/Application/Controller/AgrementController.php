@@ -5,22 +5,23 @@ namespace Application\Controller;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\TypeAgrement;
 use Application\Form\Agrement\Saisie;
-use Application\Rule\Intervenant\AgrementFourniRule;
-use Application\Rule\Intervenant\NecessiteAgrementRule;
+use Application\Form\Agrement\Traits\SaisieAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AgrementAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Common\Exception\LogicException;
-use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Form\Element\Checkbox;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\View\Model\ViewModel;
 use Application\Service\Traits\ContextAwareTrait;
@@ -29,22 +30,19 @@ use Application\Service\Traits\ContextAwareTrait;
  * Opérations sur les agréments.
  *
  * @method EntityManager em()
- * @method Context              context()
+ * @method Context       context()
  *
  */
-class AgrementController extends AbstractActionController implements WorkflowIntervenantAwareInterface
+class AgrementController extends AbstractController implements WorkflowIntervenantAwareInterface
 {
+    use TblAgrementServiceAwareTrait;
     use WorkflowIntervenantAwareTrait;
     use AgrementAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;
     use ContextAwareTrait;
-
-    const ACTION_VOIR        = "voir";
-    const ACTION_VOIR_STR    = "voir-str";
-    const ACTION_AJOUTER     = "ajouter";
-    const ACTION_AJOUTER_LOT = "ajouter-lot";
-    const ACTION_MODIFIER    = "modifier";
+    use SaisieAwareTrait;
+    use StructureAwareTrait;
 
     /**
      * @var RoleInterface
@@ -94,85 +92,11 @@ class AgrementController extends AbstractActionController implements WorkflowInt
 
 
     /**
-     * Page vide invitant à sélectionner un type d'agrément dans le menu.
-     *
-     * @return array
+     * Page de menu des agréments
      */
     public function indexAction()
     {
-        $this->intervenant = $this->context()->intervenantFromRoute();
-        $this->title       = sprintf("Agréments %s", $this->intervenant ? "<small>{$this->intervenant}</small>" : null);
-
-        return ['title' => $this->title];
-    }
-
-
-
-    /**
-     * Liste des agréments d'un type donné, concernant un intervenant.
-     *
-     * @return ViewModel
-     */
-    public function listerAction()
-    {
-        $this->initFilters();
-
-        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
-        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
-        $this->title        = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
-        $messages           = [];
-
-        $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule');
-        /* @var $agrementFourniRule AgrementFourniRule */
-        $agrementFourniRule
-            ->setIntervenant($this->intervenant)
-            ->setTypeAgrement($this->typeAgrement);
-
-        /**
-         * Il y a un Conseil Restreint par structure d'enseignement
-         */
-        if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-            $structures = $agrementFourniRule->getStructuresEnseignement();
-        } /**
-         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
-         */
-        elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structures = [null];
-        } else {
-            throw new LogicException("Type d'agrément inattendu!");
-        }
-
-        /**
-         * Collecte des agréments pour chaque structure
-         */
-        $data = [];
-        foreach ($structures as $s) {
-            $agrements = $agrementFourniRule->getAgrementsFournis($s);
-            $agrement  = array_shift($agrements);
-            if (!$agrement) {
-                // instanciation d'un support de création d'agrément (utilisé pour les ACL/assertion)
-                $agrement = $this->getNewEntity()->setStructure($s);
-                /* @var $agrement Agrement */
-            }
-            $data[] = ['structure' => $s, 'agrement' => $agrement];
-        }
-
-        if (!$data) {
-            $messages['danger'] = "Aucun enseignement n'a été trouvé.";
-        }
-
-        $this->view = new ViewModel([
-            'typeAgrement' => $this->typeAgrement,
-            'intervenant'  => $this->intervenant,
-            'data'         => $data,
-            'role'         => $this->role,
-            'title'        => $this->title,
-            'messages'     => $messages,
-        ]);
-        $this->view->setTemplate('application/agrement/lister');
-
-        return $this->view;
+        return [];
     }
 
 
@@ -192,281 +116,179 @@ class AgrementController extends AbstractActionController implements WorkflowInt
 
 
     /**
-     * Détails d'un agrément recherché par l'intervenant, le type et la structure.
-     *
-     * @return ViewModel
+     * Liste des agréments d'un type donné, concernant un intervenant.
      */
-    public function voirStrAction()
+    public function listerAction()
     {
-        $intervenant  = $this->getEvent()->getParam('intervenant');
+        $this->initFilters();
+
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
         $typeAgrement = $this->getEvent()->getParam('typeAgrement');
-        $structure    = $this->getEvent()->getParam('structure');
+        /* @var $typeAgrement TypeAgrement */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
 
-        if (!$structure && !$typeAgrement->isConseilAcademique()) {
-            throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $typeAgrement));
-        }
+        $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
+        $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);
 
-        $this->initFilters();
+        $this->getServiceTblAgrement()->leftJoin('applicationAgrement', $qb, 'agrement', true);
 
-        $sAgrement = $this->getServiceAgrement();
+        $tas = $this->getServiceTblAgrement()->getList($qb);
 
-        $qb = $sAgrement->finderByType($typeAgrement);
-        if ($structure) {
-            $sAgrement->finderByStructure($structure, $qb);
-        }
-        $sAgrement->finderByIntervenant($intervenant, $qb);
-        $agrement = $qb->getQuery()->getOneOrNullResult();
+        $needStructure = false;
+        $hasActions    = false;
+        $data          = [];
+        foreach ($tas as $ta) {
 
-        $this->view = new ViewModel([
-            'agrement' => $agrement,
-        ]);
-        $this->view->setTemplate('application/agrement/voir');
+            /* Actions éventuelles */
+            if (($a = $ta->getAgrement()) && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeSuppression())) {
+                $params      = [
+                    'agrement'    => $a->getId(),
+                    'intervenant' => $ta->getIntervenant()->getSourceCode(),
+                ];
+                $actionUrl   = $this->url()->fromRoute('intervenant/agrement/supprimer', $params);
+                $actionLabel = '<span class="glyphicon glyphicon-trash"></span> Retirer l\'agrément';
+            } elseif (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
+                $params = [
+                    'typeAgrement' => $ta->getTypeAgrement()->getId(),
+                    'intervenant'  => $ta->getIntervenant()->getSourceCode(),
+                ];
+                if ($ta->getStructure()) $params['structure'] = $ta->getStructure()->getId();
 
-        return $this->view;
-    }
-
-
-
-    /**
-     * Saisie d'un nouvel agrément.
-     *
-     * @return ViewModel
-     * @throws RuntimeException
-     */
-    public function ajouterAction()
-    {
-        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
-        $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
-
-        // ce type d'agrément est-il attendu ?
-        if (!$this->isTypeAgrementAttendu()) {
-            throw new MessageException(sprintf("Le type d'agrément &laquo; %s &raquo; n'est pas requis.", $this->typeAgrement));
-        }
-
-        $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-
-        $this->initFilters();
-
-        /**
-         * Il y a un Conseil Restreint par structure d'enseignement
-         */
-        if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-            $structure = $this->role->getStructure();
-        } /**
-         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
-         */
-        elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structure = $this->intervenant->getStructure();
-        } else {
-            throw new LogicException("Type d'agrément inattendu!");
-        }
-
-        // aucun agrément ne doit déjà exister
-        $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule');
-        /* @var $agrementFourniRule AgrementFourniRule */
-        $agrementFourniRule
-            ->setIntervenant($this->intervenant)
-            ->setTypeAgrement($this->typeAgrement)
-            ->execute();
-        if (count($agrementFourniRule->getAgrementsFournis($structure))) {
-            throw new MessageException(sprintf("L'agrément &laquo; %s &raquo; a déjà été ajouté.", $this->typeAgrement));
-        }
-
-        $this->agrement = $this->getNewEntity()->setStructure($structure);
-
-        $this->updateCommon();
-
-        return $this->view;
-    }
-
-
-
-    /**
-     * Modification d'un agrément existant.
-     *
-     * @return ViewModel
-     * @throws RuntimeException
-     */
-    public function modifierAction()
-    {
-        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
-        $this->agrement     = $this->context()->mandatory()->agrementFromRoute();
-        $this->typeAgrement = $this->agrement->getType();
-
-        $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-
-        $this->updateCommon();
-
-        return $this->view;
-    }
-
-
-
-    /**
-     * Code commun à l'ajout et modif d'agrement.
-     */
-    private function updateCommon()
-    {
-        $this->title      = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
-        $this->formSaisie = $this->getFormSaisie();
-
-        $this->formSaisie->bind($this->agrement);
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            $this->formSaisie->setData($data);
-            if ($this->formSaisie->isValid()) {
-                $this->getServiceAgrement()->save($this->agrement);
+                $actionUrl   = $this->url()->fromRoute('intervenant/agrement/ajouter', $params);
+                $actionLabel = '<span class="glyphicon glyphicon-ok"></span> Agréer';
+            } else {
+                $actionUrl   = null;
+                $actionLabel = null;
             }
+
+            $data[] = compact('ta', 'actionUrl', 'actionLabel');
+            if (!$hasActions && $actionUrl) $hasActions = true;
+            if ($ta->getStructure()) $needStructure = true;
         }
 
-        $this->view = new ViewModel([
-            'intervenant' => $this->intervenant,
-            'title'       => $this->title,
-            'form'        => $this->formSaisie,
-            'role'        => $this->role,
-        ]);
-        $this->view->setTemplate('application/agrement/edit');
+        return compact('role', 'typeAgrement', 'intervenant', 'data', 'needStructure', 'hasActions');
     }
 
 
 
-    /**
-     * Saisie d'un nouvel agrément pour plusieurs intervenants à la fois.
-     *
-     * @return ViewModel
-     * @throws LogicException
-     */
-    public function ajouterLotAction()
+    public function saisirAction()
     {
-        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
+        $this->initFilters();
 
-        /**
-         * Il y a un Conseil Restreint par structure d'enseignement
-         */
-        if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-            $structure = $this->role->getStructure();
-        } /**
-         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
-         */
-        elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structure = null;
-        } else {
-            throw new LogicException("Type d'agrément inattendu!");
+        /* @var $agrement Agrement */
+        $agrement = $this->getEvent()->getParam('agrement');
+        if (!$agrement) {
+            $agrement = $this->getServiceAgrement()->newEntity();
+            $agrement->setType($this->getEvent()->getParam('typeAgrement'));
+            $agrement->setIntervenant($this->getEvent()->getParam('intervenant'));
+            $agrement->setStructure($this->getEvent()->getParam('structure'));
         }
 
-        $this->title = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $structure);
+        $title = sprintf("Agrément par %s <small>%s</small>", $agrement->getType()->toString(true), $agrement->getIntervenant());
 
-        /**
-         * Recherche des intervenants concernés :
-         * ce sont ceux qui sont à l'étape adéquate dans le WF.
-         */
-        $serviceIntervenant = $this->getServiceIntervenant();
-        $qb                 = $serviceIntervenant->initQuery()[0];
-        /* @var $qb QueryBuilder */
-        $qb
-            ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
-            ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
-            ->setParameter('codeEtape', $this->typeAgrement->getCode());
-        if ($structure) {
-            $qb
-                ->andWhere("p.structure = :structure")
-                ->setParameter('structure', $structure);
-        }
-        $intervenants = $serviceIntervenant->getList($qb);
+        $form = $this->getFormAgrementSaisie();
+        $form->bindRequestSave($agrement, $this->getRequest(), function ($a) {
+            $this->getServiceAgrement()->save($a);
+        });
 
-        if ($intervenants) {
-            $this->agrement   = $this->getNewEntity()->setStructure($structure);
-            $this->formSaisie = $this->getFormSaisie()
-                ->setIntervenants($intervenants)
-                ->bind($this->agrement);
+        return compact('title', 'form');
+    }
 
-            if ($this->getRequest()->isPost()) {
-                $data = $this->getRequest()->getPost();
-                $this->formSaisie->setData($data);
-                if ($this->formSaisie->isValid()) {
-                    foreach ($data['intervenants'] as $id) {
-                        $agrement = clone $this->agrement;
-                        $agrement->setIntervenant($intervenants[$id]);
 
-                        $this->getServiceAgrement()->save($agrement);
+
+    public function saisirLotAction()
+    {
+        $typeAgrement = $this->getEvent()->getParam('typeAgrement');
+        /* @var $typeAgrement TypeAgrement */
+
+        $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $form = $this->getFormAgrementSaisie();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $dateDecision   = $form->get('dateDecision')->normalizeDate($form->get('dateDecision')->getValue());
+                $agreer = $this->params()->fromPost('agreer', []);
+
+                foreach ($agreer as $a => $val) {
+                    if ('1' === $val) {
+                        $ids = explode( '-', $a );
+
+                        $agrement = $this->getServiceAgrement()->newEntity(); /* @var $agrement Agrement */
+                        $agrement->setDateDecision( $dateDecision );
+                        $agrement->setType( $typeAgrement );
+                        if (isset($ids[0])){
+                            $agrement->setIntervenant( $this->getServiceIntervenant()->get($ids[0]));
+                        }
+                        if (isset($ids[1])){
+                            $agrement->setStructure( $this->getServiceStructure()->get($ids[1]));
+                        }
+                        try{
+                            $this->getServiceAgrement()->save($agrement);
+                        }catch(\Exception $e){
+                            $this->flashMessenger()->addErrorMessage($e->getMessage());
+                        }
                     }
-                    $this->flashMessenger()->addSuccessMessage(count($data['intervenants']) . " agrément(s) enregistré(s) avec succès.");
-                    $this->redirect()->toRoute(null, [], [], true);
                 }
             }
-
-            $messages[] = sprintf("Intervenants en attente d'agrément par %s.", $this->typeAgrement->toString(true));
-        } else {
-            $this->formSaisie    = null;
-            $messages['warning'] = sprintf("Aucun intervenant n'est en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
 
-        $this->view = new ViewModel([
-            'intervenants' => $intervenants,
-            'typeAgrement' => $this->typeAgrement,
-            'title'        => $this->title,
-            'form'         => $this->formSaisie,
-            'role'         => $this->role,
-            'messages'     => $messages,
-        ]);
 
-        return $this->view;
-    }
+        $sTblAgrement = $this->getServiceTblAgrement();
 
+        $qb = $sTblAgrement->finderByTypeAgrement($typeAgrement);
+        $qb->andWhere($qb->expr()->isNull($sTblAgrement->getAlias() . '.agrement'));
+        $sTblAgrement->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
+        $tas = $sTblAgrement->getList($qb);
+        /* @var $tas TblAgrement[] */
 
+        $needStructure = false;
+        $needAction = false;
+        $data          = [];
+        foreach ($tas as $ta) {
+            $taStructure = $ta->getStructure() ?: $ta->getIntervenant()->getStructure();
 
-    /**
-     * Indique si le type d'agrément courant est requis ou non.
-     *
-     * @return boolean
-     */
-    private function isTypeAgrementAttendu()
-    {
-        $necessiteAgrementRule = $this->getServiceLocator()->get('NecessiteAgrementRule');
-        /* @var $necessiteAgrementRule NecessiteAgrementRule */
-        $estAttendu = $necessiteAgrementRule
-            ->setIntervenant($this->intervenant)
-            ->setTypeAgrement($this->typeAgrement)
-            ->execute();
+            if (!$role->getStructure() || $role->getStructure() == $taStructure){
+                if (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
+                    $ids = [
+                        $ta->getIntervenant()->getId(),
+                    ];
+                    if ($ta->getStructure()) {
+                        $ids[] = $ta->getStructure()->getId();
+                    }
 
-        return $estAttendu;
-    }
-
-
-
-    /**
-     * Instanciation d'un nouvel Agrement initialisé.
-     *
-     * @return Agrement
-     */
-    private function getNewEntity()
-    {
-        $agrement = $this->getServiceAgrement()->newEntity();
-        /* @var $agrement Agrement */
-        $agrement
-            ->setType($this->typeAgrement)
-            ->setIntervenant($this->intervenant);
-
-        return $agrement;
-    }
-
-
-
-    /**
-     * Retourne le formulaire d'édition d'un agrément.
-     *
-     * @return Saisie
-     */
-    private function getFormSaisie()
-    {
-        if (null === $this->formSaisie) {
-            $this->formSaisie = $this->getServiceLocator()->get('FormElementManager')->get('AgrementSaisieForm');
+                    $checkbox = new Checkbox('agreer[' . implode('-', $ids) . ']');
+                    $checkbox->setValue(45);
+                    $needAction = true;
+                }else{
+                    $checkbox = null;
+                }
+                if ($ta->getStructure()) $needStructure = true;
+                $data[] = compact('ta', 'actionUrl', 'checkbox');
+            }
         }
 
-        return $this->formSaisie;
+
+        return compact('title', 'form', 'typeAgrement', 'data', 'needStructure', 'needAction');
     }
+
+
+
+    public function supprimerAction()
+    {
+        if (!($agrement = $this->getEvent()->getParam('agrement'))) {
+            throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+        }
+
+        $form = $this->makeFormSupprimer(function () use ($agrement) {
+            $this->getServiceAgrement()->delete($agrement);
+        });
+
+        return compact('agrement', 'form');
+    }
+
 }

@@ -163,8 +163,9 @@ $main = [
             'appLink'                    => View\Helper\AppLinkFactory::class,
         ],
         'invokables' => [
-            'validation'  => View\Helper\ValidationViewHelper::class,
-            'utilisateur' => View\Helper\UtilisateurViewHelper::class,
+            'validation'    => View\Helper\ValidationViewHelper::class,
+            'utilisateur'   => View\Helper\UtilisateurViewHelper::class,
+            'formSupprimer' => View\Helper\FormSupprimerViewHelper::class,
         ],
     ],
     'translator'         => [
@@ -207,6 +208,7 @@ $main = [
             10 => 'bootstrap-select/css/bootstrap-select.min.css',
             11 => 'css/cartridge.css',
             12 => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
+            13 => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
         ],
     ],
 ];

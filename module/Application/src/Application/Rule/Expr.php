@@ -2,7 +2,6 @@
 
 namespace Application\Rule;
 
-use Application\Rule\RuleInterface;
 use Common\Exception\LogicException;
 
 /**

@@ -111,7 +111,10 @@ return [
                         Privileges::DROIT_ROLE_VISUALISATION,
                         Privileges::DROIT_PRIVILEGE_VISUALISATION,
                         Privileges::DROIT_AFFECTATION_VISUALISATION,
+                        Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
+                        Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
                     ],
+                    'assertion' => 'AssertionGestion',
                 ],
                 [
                     'controller' => 'Application\Controller\Discipline',
@@ -146,6 +149,7 @@ return [
     'service_manager' => [
         'invokables' => [
             'ApplicationDiscipline' => Service\DisciplineService::class,
+            'AssertionGestion'      => Assertion\GestionAssertion::class,
         ],
     ],
     'form_elements' => [

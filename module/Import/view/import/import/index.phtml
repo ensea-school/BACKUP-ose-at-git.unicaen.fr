@@ -1,44 +1,10 @@
 <?php
 
-use UnicaenAuth\Guard\PrivilegeController;
+$this->headTitle()->append("Import de données");
 
 ?>
-<h1>Import de données</h1>
+<h1 class="page-header">Import de données</h1>
 
-<style>
-    dt{
-        padding-top:2em;
-    }
-</style>
+<?php
 
-<dl>
-    <?php if ($this->isAllowed(PrivilegeController::getResourceId('Import\Controller\Import','showdiff'))): ?>
-    <dt><a href="<?php echo $this->url('import', ['action' => 'showDiff']) ?>">Écarts entre l'application et ses sources</a></dt>
-    <dd>Affiche, table par table, la liste des données différentes entre l'application et ses sources de données</dd>
-    <?php endif; ?>
-
-    <?php if ($this->isAllowed(PrivilegeController::getResourceId('Import\Controller\Import','updatetables'))): ?>
-    <dt><a class="ajax-modal" href="<?php echo $this->url('import', ['action' => 'updateTables']) ?>">
-        Mise à jour des données à partir de leurs sources
-    </a></dt>
-    <dd>Met à jour l'ensemble des données partir de leurs sources respectives.
-    </dd>
-    <?php endif; ?>
-
-    <?php if ($this->isAllowed(PrivilegeController::getResourceId('Import\Controller\Import','showimporttbl'))): ?>
-    <dt><a href="<?php echo $this->url('import', ['action' => 'showImportTbl']) ?>">Tableau de bord principal</a></dt>
-    <dd>Liste, table par table, les colonnes dont les données sont importables ou non, leur caractéristiques et l'état de l'import à leur niveau</dd>
-    <?php endif; ?>
-
-    <?php if ($this->isAllowed(PrivilegeController::getResourceId('Import\Controller\Import','updateviewsandpackages'))): ?>
-    <dt><a class="ajax-modal" href="<?php echo $this->url('import', ['action' => 'updateViewsAndPackages']) ?>">
-        Mise à jour des vues différentielles et des procédures de mise à jour
-    </a></dt>
-    <dd>Réactualise les vues différentielles d'import. Ces dernières servent à déterminer quelles données ont changé,
-        sont apparues ou ont disparues des sources de données.
-        Met également à jour les procédures de mise à jour qui actualisent les données de l'application à partir des informations
-        fournies par les vues différentielles.
-        Cette réactualisation n'est utile que si les vues sources ont été modifiées.
-    </dd>
-    <?php endif; ?>
-</dl>
+echo $this->navigation('navigation')->menuContextuel()->setPartial('application/menu-dl.phtml');

@@ -434,8 +434,11 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation','referentiel'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
-                            'agrement'                       => [
-                                // coquille vide qui réserve l'emplacement du menu "Agréments"
+                            'agrement-conseil-restreint' => [
+                                // coquille vide qui réserve l'emplacement du menu
+                            ],
+                            'agrement-conseil-academique' => [
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'contrat'                        => [
                                 'label'        => "Contrat / avenant",
@@ -503,7 +506,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['rechercher'],
+                    'action'     => ['rechercher','recherche'],
                     'privileges' => [
                         Privileges::INTERVENANT_RECHERCHE,
                     ],
@@ -610,8 +613,6 @@ return [
         'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
         'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
         'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
-        'NecessiteAgrementRule'                 => Rule\Intervenant\NecessiteAgrementRule::class,
-        'AgrementFourniRule'                    => Rule\Intervenant\AgrementFourniRule::class,
         'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
     ],
 ],

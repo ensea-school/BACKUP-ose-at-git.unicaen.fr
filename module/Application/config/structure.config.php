@@ -77,7 +77,6 @@ return [
                                 'title'  => "Voir une structure",
                                 'route'  => 'structure',
                                 'visible' => false,
-                                'withtarget' => true,
                                 'pages' => [],
                             ],
                         ],

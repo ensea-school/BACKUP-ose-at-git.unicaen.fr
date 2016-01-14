@@ -252,7 +252,6 @@ return [
 //                                'title'  => "Consultation des services",
 //                                'route'  => 'service',
 //                                'visible' => true,
-//                                'withtarget' => true,
 //                                'pages' => array(),
 //                            ),
                         ],

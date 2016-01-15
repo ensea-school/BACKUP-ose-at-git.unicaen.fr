@@ -309,23 +309,15 @@ class DroitsController extends AbstractController
 
     public function affectationSuppressionAction()
     {
-        $affectation = $this->context()->mandatory()->affectationFromRoute();
+        $affectation = $this->getEvent()->getParam('affectation');
 
         $title  = "Suppression de l'affectation";
-        $form   = new \Application\Form\Supprimer('suppr');
-        $errors = [];
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
-        if ($this->getRequest()->isPost()) {
-            try {
-                $this->getServiceAffectation()->delete($affectation);
-            } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
-            }
-        }
+        $form = $this->makeFormSupprimer(function()use($affectation){
+            $this->getServiceAffectation()->delete($affectation);
+        });
 
-        return compact('affectation', 'title', 'form', 'errors');
+        return compact('affectation', 'title', 'form');
     }
 
 

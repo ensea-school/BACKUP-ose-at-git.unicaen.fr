@@ -94,19 +94,11 @@ class DisciplineController extends AbstractController
         $discipline = $this->getEvent()->getParam('discipline');
 
         $title  = "Suppression de la discipline";
-        $form   = new \Application\Form\Supprimer('suppr');
-        $errors = [];
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
-        if ($this->getRequest()->isPost()) {
-            try {
-                $this->getServiceDiscipline()->delete($discipline);
-            } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
-            }
-        }
+        $form = $this->makeFormSupprimer(function() use($discipline){
+            $this->getServiceDiscipline()->delete($discipline);
+        });
 
-        return compact('discipline', 'title', 'form', 'errors');
+        return compact('discipline', 'title', 'form');
     }
 }

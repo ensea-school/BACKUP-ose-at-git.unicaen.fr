@@ -2,11 +2,10 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\Etape;
-use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
 use Application\Form\OffreFormation\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use Common\Exception\RuntimeException;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 
@@ -15,7 +14,7 @@ use Application\Service\Traits\ContextAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class EtapeCentreCoutController extends AbstractActionController
+class EtapeCentreCoutController extends AbstractController
 {
     use ElementPedagogiqueAwareTrait;
     use ContextAwareTrait;

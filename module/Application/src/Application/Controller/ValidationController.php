@@ -625,28 +625,12 @@ class ValidationController extends AbstractController
         }
 
         $title     = "Suppression de la validation";
-        $form      = new \Application\Form\Supprimer('suppr');
-        $viewModel = new ViewModel();
+        $form = $this->makeFormSupprimer(function()use($validation){
+            $this->getServiceValidation()->supprimer($validation);
+            $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
+        });
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-
-        if ($this->getRequest()->isPost()) {
-            $errors = [];
-            try {
-                $this->getServiceValidation()->supprimer($validation);
-
-                $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
-            }
-            catch(\Exception $e){
-                $errors[\UnicaenApp\View\Helper\Messenger::ERROR] = $e->getMessage();
-            }
-
-            $viewModel->setVariable('errors', $errors);
-        }
-
-        $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
-
-        return $viewModel;
+        return compact('entity', 'context', 'title', 'form');
     }
 
     /**

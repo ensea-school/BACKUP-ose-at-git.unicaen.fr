@@ -1,19 +1,15 @@
 <?php
 
-/* @var $element \Application\Entity\Db\ElementPedagogique */
-/* @var $title string */
-/* @var $errors array */
-/* @var $form Application\Form\OffreFormation\ElementPedagogiqueSaisie */
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $element \Application\Entity\Db\ElementPedagogique
+ * @var $title string
+ * @var $form Application\Form\OffreFormation\ElementPedagogiqueSaisie
+ */
 
-if (! empty($errors)) {
-    echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
-} else {
+$this->messenger()->addCurrentMessagesFromFlashMessenger();
+if ($form){
     echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de cet enregistrement ?</p>';
     echo $this->elementPedagogique($element)->renderDescription();
-
-    echo $this->form()->openTag($form);
-    echo $this->formHidden($form->get('id'));
-    echo $this->formHidden($form->get('security'));
-    echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
-    echo $this->form()->closeTag();
+    echo $this->formsupprimer($form);
 }

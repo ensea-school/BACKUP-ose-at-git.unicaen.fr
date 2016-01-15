@@ -9,6 +9,7 @@ use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
@@ -543,6 +544,8 @@ class ServiceController extends AbstractController
         $service = $this->getServiceService()->get($id);
         $title   = "Suppression de service";
         $form    = new \Application\Form\Supprimer('suppr');
+        $form->setServiceLocator($this->getServiceLocator()->get('formElementManager'));
+        $form->init();
         $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
         $viewModel = new \Zend\View\Model\ViewModel();
 

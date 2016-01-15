@@ -1,19 +1,15 @@
 <?php
 
-/* @var $errors array */
-/* @var $discipline \Application\Entity\Db\Discipline */
-/* @var $form \Application\Form\Supprimer */
-/* @var $title string */
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $errors array
+ * @var $discipline \Application\Entity\Db\Discipline
+ * @var $form \Application\Form\Supprimer
+ * @var $title string
+ */
 
-if (isset($errors) && $errors) {
-    echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
-}
-else {
+$this->messenger()->addCurrentMessagesFromFlashMessenger();
+if ($form){
     echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de la discipline '.$discipline.' ?</p>';
-
-    echo $this->form()->openTag($form);
-    echo $this->formHidden($form->get('id'));
-    echo $this->formHidden($form->get('security'));
-    echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
-    echo $this->form()->closeTag();
+    echo $this->formSupprimer($form);
 }

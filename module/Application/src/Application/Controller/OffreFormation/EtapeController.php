@@ -2,6 +2,7 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Controller\AbstractController;
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Structure;
@@ -11,17 +12,13 @@ use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Exception\DbException;
 
 /**
  * Description of EtapeController
  *
- * @method \Doctrine\ORM\EntityManager            em()
- * @method \Application\Controller\Plugin\Context context()
- *
  */
-class EtapeController extends AbstractActionController
+class EtapeController extends AbstractController
 {
     use ContextAwareTrait;
     use ElementPedagogiqueAwareTrait;
@@ -78,20 +75,11 @@ class EtapeController extends AbstractActionController
             throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
         $title  = "Suppression de formation";
-        $form   = new \Application\Form\Supprimer('suppr');
-        $errors = [];
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form = $this->makeFormSupprimer(function()use($etape){
+            $this->getServiceEtape()->delete($etape);
+        });
 
-        if ($this->getRequest()->isPost()) {
-            try {
-                $this->getServiceEtape()->delete($etape);
-            } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
-            }
-        }
-
-        return compact('etape', 'title', 'form', 'errors');
+        return compact('etape', 'title', 'form');
     }
 
 

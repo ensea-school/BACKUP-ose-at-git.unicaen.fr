@@ -2,8 +2,8 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Controller\AbstractController;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Exception\DbException;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
@@ -11,12 +11,9 @@ use Application\Service\Traits\ContextAwareTrait;
 /**
  * Description of ElementPedagogiqueController
  *
- * @method \Doctrine\ORM\EntityManager            em()
- * @method \Application\Controller\Plugin\Context context()
- *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ElementPedagogiqueController extends AbstractActionController
+class ElementPedagogiqueController extends AbstractController
 {
     use ElementPedagogiqueAwareTrait;
     use ContextAwareTrait;
@@ -79,22 +76,11 @@ class ElementPedagogiqueController extends AbstractActionController
         }
 
         $title  = "Suppression d'enseignement";
-        $form   = new \Application\Form\Supprimer('suppr');
-        $errors = [];
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-        $deleted = false;
+        $form = $this->makeFormSupprimer(function()use($element){
+            $this->getServiceElementPedagogique()->delete($element);
+        });
 
-        if ($this->getRequest()->isPost()) {
-            try {
-                $this->getServiceElementPedagogique()->delete($element);
-                $deleted = true;
-            } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
-            }
-        }
-
-        return compact('element', 'title', 'form', 'errors', 'deleted');
+        return compact('element', 'title', 'form');
     }
 
 

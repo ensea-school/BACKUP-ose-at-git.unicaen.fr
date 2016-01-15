@@ -4,9 +4,8 @@
  * @var $this \Application\View\Renderer\PhpRenderer
  */
 
-if (isset($errors) && $errors) {
-    echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-} else {
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+if ($form) {
     echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression du rôle ' . $role . ' ?</p>';
     echo $this->formsupprimer($form);
 }

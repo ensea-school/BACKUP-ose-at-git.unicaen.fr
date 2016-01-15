@@ -2,19 +2,16 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Controller\AbstractController;
 use Application\Service\Traits\EtapeAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Exception\DbException;
 
 /**
  * Description of ModulateurController
  *
- * @method \Doctrine\ORM\EntityManager            em()
- * @method \Application\Controller\Plugin\Context context()
- *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ModulateurController extends AbstractActionController
+class ModulateurController extends AbstractController
 {
     use EtapeAwareTrait;
 

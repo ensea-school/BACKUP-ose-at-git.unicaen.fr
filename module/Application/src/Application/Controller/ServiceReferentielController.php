@@ -271,6 +271,8 @@ class ServiceReferentielController extends AbstractController
         $service = $this->getServiceServiceReferentiel()->get($id);
         $title   = "Suppression de référentiel";
         $form    = new \Application\Form\Supprimer('suppr');
+        $form->setServiceLocator($this->getServiceLocator()->get('formElementManager'));
+        $form->init();
         $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
         $viewModel = new \Zend\View\Model\ViewModel();
 

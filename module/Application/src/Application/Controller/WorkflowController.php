@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -15,7 +14,7 @@ use Zend\View\Model\ViewModel;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class WorkflowController extends AbstractActionController implements WorkflowIntervenantAwareInterface
+class WorkflowController extends AbstractController implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait,
         \Application\Service\Traits\ContextAwareTrait

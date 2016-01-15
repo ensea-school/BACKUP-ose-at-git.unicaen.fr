@@ -9,7 +9,6 @@ use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
@@ -33,11 +32,9 @@ use Application\Service\Traits\PeriodeAwareTrait;
 /**
  * Description of ServiceController
  *
- * @method \Doctrine\ORM\EntityManager em()
- *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceController extends AbstractActionController
+class ServiceController extends AbstractController
 {
     use ContextAwareTrait;
     use ServiceAwareTrait;

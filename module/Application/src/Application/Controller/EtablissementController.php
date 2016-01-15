@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Zend\View\Model\JsonModel;
@@ -12,7 +11,7 @@ use Zend\View\Model\JsonModel;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtablissementController extends AbstractActionController
+class EtablissementController extends AbstractController
 {
     use \Application\Service\Traits\ContextAwareTrait;
     use \Application\Service\Traits\EtablissementAwareTrait;

@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblAgrement;
@@ -17,10 +16,6 @@ use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Common\Exception\LogicException;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\Expr\Join;
-use Doctrine\ORM\QueryBuilder;
 use Zend\Form\Element\Checkbox;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\View\Model\ViewModel;
@@ -29,8 +24,6 @@ use Application\Service\Traits\ContextAwareTrait;
 /**
  * Opérations sur les agréments.
  *
- * @method EntityManager em()
- * @method Context       context()
  *
  */
 class AgrementController extends AbstractController implements WorkflowIntervenantAwareInterface

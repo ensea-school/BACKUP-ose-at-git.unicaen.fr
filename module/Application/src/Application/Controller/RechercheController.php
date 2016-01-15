@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -14,7 +13,7 @@ use Zend\View\Model\JsonModel;
  * @method \Application\Controller\Plugin\Recherche intervenant() Description
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class RechercheController extends AbstractActionController
+class RechercheController extends AbstractController
 {
     use ContextAwareTrait;
     use PersonnelAwareTrait;

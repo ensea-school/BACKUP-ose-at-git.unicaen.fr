@@ -20,17 +20,15 @@ use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 
 /**
- * @method \Application\Controller\Plugin\Context     context()
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class PaiementController extends AbstractActionController
+class PaiementController extends AbstractController
 {
     use ContextAwareTrait;
     use IntervenantAwareTrait;

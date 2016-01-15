@@ -17,18 +17,15 @@ use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Form;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 
 
 /**
  * Description of OffreFormationController
  *
- * @method \Doctrine\ORM\EntityManager            em()
- * @method \Application\Controller\Plugin\Context context()
  *
  */
-class OffreFormationController extends AbstractActionController
+class OffreFormationController extends AbstractController
 {
     use ContextAwareTrait;
     use LocalContextAwareTrait;

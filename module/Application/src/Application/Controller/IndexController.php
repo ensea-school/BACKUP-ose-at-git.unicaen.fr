@@ -4,13 +4,12 @@ namespace Application\Controller;
 
 use Application\Acl\Role;
 use Application\Service\Traits\IntervenantAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
  *
  */
-class IndexController extends AbstractActionController
+class IndexController extends AbstractController
 {
     use \Application\Service\Traits\ContextAwareTrait,
         \Application\Service\Traits\AnneeAwareTrait,

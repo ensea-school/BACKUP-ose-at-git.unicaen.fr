@@ -6,7 +6,6 @@ use Application\Entity\Db\ModificationServiceDu;
 use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Doctrine\DBAL\DBALException;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Common\Exception\RuntimeException;
@@ -14,12 +13,9 @@ use Common\Exception\RuntimeException;
 /**
  * Description of IntervenantController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Context     context()
- *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ModificationServiceDuController extends AbstractActionController
+class ModificationServiceDuController extends AbstractController
 {
     use ContextAwareTrait;
     use IntervenantAwareTrait;

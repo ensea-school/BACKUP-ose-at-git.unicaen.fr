@@ -6,7 +6,6 @@ use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -18,11 +17,8 @@ use Application\Service\Traits\TypeHeuresAwareTrait;
 /**
  * Description of IntervenantController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Context     context()
- *
  */
-class IntervenantController extends AbstractActionController implements WorkflowIntervenantAwareInterface
+class IntervenantController extends AbstractController implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
     use ContextAwareTrait;

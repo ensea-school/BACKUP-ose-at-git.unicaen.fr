@@ -7,7 +7,6 @@ use Application\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Doctrine\ORM\EntityManager;
 use Application\Exception\DbException;
 
@@ -15,10 +14,9 @@ use Application\Exception\DbException;
 /**
  * Description of DisciplineController
  *
- * @method EntityManager em()
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class DisciplineController extends AbstractActionController
+class DisciplineController extends AbstractController
 {
     use DisciplineServiceAwareTrait;
     use SourceAwareTrait;

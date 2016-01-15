@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Application\Acl\IntervenantRole;
-use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Listener\DossierListener;
@@ -22,24 +21,20 @@ use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
-use Doctrine\ORM\EntityManager;
 use NumberFormatter;
 use UnicaenApp\Controller\Plugin\MessengerPlugin;
 use UnicaenApp\Util;
 use UnicaenAuth\Service\UserContext;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
  * Description of DossierController
  *
- * @method EntityManager em()
- * @method Context       context()
  * @method MessengerPlugin messenger()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierController extends AbstractActionController implements WorkflowIntervenantAwareInterface
+class DossierController extends AbstractController implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
     use ContextAwareTrait;

@@ -2,28 +2,22 @@
 
 namespace Application\Controller;
 
-use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\VIndicModifDossier;
 use Application\Service\Indicateur as IndicateurService;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
-use Doctrine\ORM\EntityManager;
 use Application\Entity\Db\Indicateur;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 /**
  * Opérations autour des notifications.
  *
- * @method EntityManager em()
- * @method Context              context()
- * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IndicateurController extends AbstractActionController
+class IndicateurController extends AbstractController
 {
     use \Application\Service\Traits\IndicateurServiceAwareTrait;
     use \Application\Service\Traits\IntervenantAwareTrait;

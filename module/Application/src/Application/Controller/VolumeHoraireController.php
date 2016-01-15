@@ -6,18 +6,15 @@ use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Application\Exception\DbException;
 
 /**
  * Description of VolumeHoraireController
  *
- * @method \Doctrine\ORM\EntityManager em() Description
- * @method \Application\Controller\Plugin\Context context()
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class VolumeHoraireController extends AbstractActionController
+class VolumeHoraireController extends AbstractController
 {
     use ContextAwareTrait;
     use VolumeHoraireAwareTrait;

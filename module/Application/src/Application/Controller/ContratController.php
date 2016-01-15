@@ -18,7 +18,6 @@ use Application\Service\Traits\ContextAwareTrait;
 use Common\Constants;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Entity\Db\Contrat;
 use Application\Assertion\ContratAssertion;
@@ -29,13 +28,11 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 /**
  * Description of ContratController
  *
- * @method \Application\Controller\Plugin\Context context()
  * @method UploaderPlugin uploader()
- * @method \Doctrine\ORM\EntityManager em()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratController extends AbstractActionController
+class ContratController extends AbstractController
 {
     use ContextAwareTrait;
     use ContratAwareTrait;

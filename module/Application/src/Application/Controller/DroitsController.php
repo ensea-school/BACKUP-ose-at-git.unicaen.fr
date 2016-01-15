@@ -11,9 +11,8 @@ use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
-use UnicaenAuth\Form\Droits\Traits\RoleFormAwareTrait;
+use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Db\StatutIntervenant;
 use UnicaenAuth\Entity\Db\Privilege;
 use Application\Exception\DbException;
@@ -21,12 +20,10 @@ use Application\Exception\DbException;
 /**
  * Description of DroitsController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Context     context()
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class DroitsController extends AbstractActionController
+class DroitsController extends AbstractController
 {
     use RoleAwareTrait;
     use StatutIntervenantAwareTrait;
@@ -100,20 +97,11 @@ class DroitsController extends AbstractActionController
         $role = $this->context()->mandatory()->roleFromRoute();
 
         $title  = "Suppression du rôle";
-        $form   = new \Application\Form\Supprimer('suppr');
-        $errors = [];
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form   = $this->makeFormSupprimer( function() use ($role){
+            $this->getServiceRole()->delete($role);
+        } );
 
-        if ($this->getRequest()->isPost()) {
-            try {
-                $this->getServiceRole()->delete($role);
-            } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
-            }
-        }
-
-        return compact('role', 'title', 'form', 'errors');
+        return compact('role', 'title', 'form');
     }
 
 

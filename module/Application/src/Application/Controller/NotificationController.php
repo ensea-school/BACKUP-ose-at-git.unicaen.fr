@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Service\Indicateur as IndicateurService;
 use Application\Service\Indicateur\AbstractIndicateurImpl;
@@ -15,7 +14,6 @@ use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
 use Common\Filter\IntervenantEmailFormatter;
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use UnicaenApp\Controller\Plugin\Mail;
 use UnicaenApp\Util;
 use Zend\Console\Request as ConsoleRequest;
@@ -27,7 +25,6 @@ use Zend\Mail\Message as MailMessage;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use Zend\Uri\Http as HttpUri;
 use Zend\View\Model\JsonModel;
@@ -36,14 +33,11 @@ use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Opérations autour des notifications.
- *
- * @method EntityManager em()
- * @method Context              context()
  * @method Mail mail()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class NotificationController extends AbstractActionController
+class NotificationController extends AbstractController
 {
     use ContextAwareTrait;
     use IndicateurServiceAwareTrait;

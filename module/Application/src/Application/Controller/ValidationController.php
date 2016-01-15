@@ -12,7 +12,6 @@ use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeValidationAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use UnicaenApp\Util;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
@@ -30,12 +29,9 @@ use Zend\View\Model\ViewModel;
 /**
  * Description of ValidationController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Context     context()
- *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ValidationController extends AbstractActionController
+class ValidationController extends AbstractController
 {
     use ContextAwareTrait;
     use StructureAwareTrait;

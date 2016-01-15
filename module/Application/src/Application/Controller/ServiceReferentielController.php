@@ -9,7 +9,6 @@ use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Service\Recherche;
@@ -18,12 +17,9 @@ use Application\Service\Traits\ContextAwareTrait;
 /**
  * Description of ServiceReferentielController
  *
- * @method \Doctrine\ORM\EntityManager em()
- * @method \Application\Controller\Plugin\Context context()
- *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentielController extends AbstractActionController
+class ServiceReferentielController extends AbstractController
 {
     use ContextAwareTrait;
     use LocalContextAwareTrait;

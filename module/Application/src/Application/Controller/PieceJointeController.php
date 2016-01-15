@@ -18,7 +18,6 @@ use Common\Exception\MessageException;
 use Common\Exception\PieceJointe\AucuneAFournirException;
 use Common\Exception\PieceJointe\PieceJointeException;
 use Zend\Http\Response;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Application\Service\Traits\ContextAwareTrait;
@@ -26,12 +25,9 @@ use Application\Service\Traits\ContextAwareTrait;
 /**
  * Description of UploadController
  *
- * @method \Doctrine\ORM\EntityManager               em()
- * @method \Application\Controller\Plugin\Context    context()
- *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PieceJointeController extends AbstractActionController implements WorkflowIntervenantAwareInterface
+class PieceJointeController extends AbstractController implements WorkflowIntervenantAwareInterface
 {
     use ContextAwareTrait;
     use WorkflowIntervenantAwareTrait;

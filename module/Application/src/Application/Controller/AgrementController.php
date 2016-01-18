@@ -6,7 +6,6 @@ use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\TypeAgrement;
-use Application\Form\Agrement\Saisie;
 use Application\Form\Agrement\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AgrementAwareTrait;
@@ -17,7 +16,6 @@ use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\Form\Element\Checkbox;
-use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\View\Model\ViewModel;
 use Application\Service\Traits\ContextAwareTrait;
 
@@ -36,36 +34,6 @@ class AgrementController extends AbstractController implements WorkflowIntervena
     use ContextAwareTrait;
     use SaisieAwareTrait;
     use StructureAwareTrait;
-
-    /**
-     * @var RoleInterface
-     */
-    private $role;
-
-    /**
-     * @var Intervenant
-     */
-    private $intervenant;
-
-    /**
-     * @var Agrement
-     */
-    private $agrement;
-
-    /**
-     * @var TypeAgrement
-     */
-    private $typeAgrement;
-
-    /**
-     * @var ViewModel
-     */
-    private $view;
-
-    /**
-     * @var Saisie
-     */
-    private $formSaisie;
 
 
 
@@ -123,6 +91,7 @@ class AgrementController extends AbstractController implements WorkflowIntervena
 
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
         $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);
+        $this->getServiceTblAgrement()->finderByAtteignable(true,$qb);
 
         $this->getServiceTblAgrement()->leftJoin('applicationAgrement', $qb, 'agrement', true);
 
@@ -236,6 +205,7 @@ class AgrementController extends AbstractController implements WorkflowIntervena
         $qb = $sTblAgrement->finderByTypeAgrement($typeAgrement);
         $qb->andWhere($qb->expr()->isNull($sTblAgrement->getAlias() . '.agrement'));
         $sTblAgrement->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
+        $sTblAgrement->finderByAtteignable(true,$qb);
         $tas = $sTblAgrement->getList($qb);
         /* @var $tas TblAgrement[] */
 

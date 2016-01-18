@@ -57,21 +57,32 @@ class TblAgrementService extends AbstractEntityService
      */
     public function needIntervenantAgrement(TypeAgrementEntity $typeAgrement, IntervenantEntity $intervenant, $useCache = true)
     {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
         $taid = $typeAgrement->getId();
         $iid = $intervenant->getId();
-
-        if ($useCache && isset($this->needIntervenantAgrementCache[$taid][$iid])){
-            return $this->needIntervenantAgrementCache[$taid][$iid];
+        if ($role && $structure = $role->getStructure()){
+            $sid = $structure->getId();
+        }else{
+            $sid = 0;
         }
 
-        $qb = null;
-        $qb = $this->finderByIntervenant($intervenant, $qb);
-        $qb = $this->finderByTypeAgrement($typeAgrement, $qb);
+        if ($useCache && isset($this->needIntervenantAgrementCache[$taid][$iid][$sid])){
+            return $this->needIntervenantAgrementCache[$taid][$iid][$sid];
+        }
+
+        $qb = $this->finderByIntervenant($intervenant);
+        $this->finderByTypeAgrement($typeAgrement, $qb);
+        $this->finderByAtteignable(true, $qb); // l'étape doit être atteignable, en attendant mieux...
+
+        if ($structure){
+            $this->finderByStructure($structure, $qb);
+        }
 
         $result = $this->count($qb) > 0;
 
         if ($useCache) {
-            $this->needIntervenantAgrementCache[$taid][$iid] = $result;
+            $this->needIntervenantAgrementCache[$taid][$iid][$sid] = $result;
         }
 
         return $result;

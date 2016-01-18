@@ -5,7 +5,7 @@
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
-
+        <field name="atteignable" type="boolean" column="ATTEIGNABLE" nullable="true"/>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-columns>
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>

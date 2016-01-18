@@ -31,6 +31,11 @@ class TblAgrement implements ResourceInterface
      */
     private $obligatoire;
 
+    /**
+     * @var boolean
+     */
+    private $atteignable;
+
 
 
     /**
@@ -48,7 +53,7 @@ class TblAgrement implements ResourceInterface
     /**
      * @return boolean
      */
-    public function isObligatoire()
+    public function getObligatoire()
     {
         return $this->obligatoire;
     }
@@ -63,6 +68,30 @@ class TblAgrement implements ResourceInterface
     public function setObligatoire($obligatoire)
     {
         $this->obligatoire = $obligatoire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getAtteignable()
+    {
+        return $this->atteignable;
+    }
+
+
+
+    /**
+     * @param boolean $atteignable
+     *
+     * @return TblAgrement
+     */
+    public function setAtteignable($atteignable)
+    {
+        $this->atteignable = $atteignable;
 
         return $this;
     }

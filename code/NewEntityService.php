@@ -23,50 +23,35 @@ $form->add(ElementMaker::text('alias', 'Alias d\'entité'));
 $form->add(ElementMaker::submit('generate', 'Générer le service'));
 $form->setData($controller->getRequest()->getPost());
 
-echo $this->form()->openTag($form->prepare());
-echo $this->formControlGroup($form->get('entity'));
-echo $this->formControlGroup($form->get('alias'));
-echo $this->formRow($form->get('generate'));
-echo $this->form()->closeTag();
-
+Util::displayForm($form);
 
 if ($controller->getRequest()->isPost() && $form->isValid()) {
 
-    $module      = 'Application';
-    $entity      = $form->get('entity')->getValue();
-    $name        = 'application'.$entity;
-    $nsclassname = $module . '\\Service\\' . $entity . 'Service';
-
-    $params = [
-        'module'      => $module,
-        'entity'      => $entity,
-        'alias'       => $form->get('alias')->getValue(),
-        'name'        => $name,
-        'classname'   => Util::baseClassName($nsclassname),
-        'namespace'   => Util::namespaceClass($nsclassname),
-        'wmclassname' => Util::truncatedClassName($module, $nsclassname),
-        'author'      => Util::getAuthor(),
-    ];
-
-    $fileName       = Util::classNameToFileName($nsclassname);
-    $configFileName = 'module.config.php';
+    $module          = 'Application';
+    $entity          = $form->get('entity')->getValue();
+    $alias           = $form->get('alias')->getValue();
+    $name            = 'application' . $entity;
+    $targetFullClass = $module . '\\Service\\' . $entity . 'Service';
 
     $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
+
+    $params           = $sCodeGenerator->generateServiceParams($targetFullClass, $name, $module);
+    $params['entity'] = $entity;
+    $params['alias']  = $alias;
+    $configFileName   = 'module.config.php';
 
     ?>
 
     <h3>Etape 2 : Création des fichiers sources du service</h3>
     <?php
-    $sCodeGenerator->setTemplate('EntityService')->setParams($params)->generateToHtml($fileName)->generateToFile($fileName);
+    $sCodeGenerator->setTemplate('EntityService')->setParams($params)->generateToHtml($params['fileName'])->generateToFile($params['fileName']);
 
-    $p = $sCodeGenerator->generateServiceTraitParams($nsclassname, $name, $module.'\Service');
-    $fileName = $p['fileName'];
-    $sCodeGenerator->setTemplate('ServiceAwareTrait')->setParams($p)->generateToHtml($fileName)->generateToFile($fileName);
+    $p = $sCodeGenerator->generateServiceTraitParams($targetFullClass, $name, $module . '\Service');
+    $sCodeGenerator->setTemplate('ServiceAwareTrait')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);
 
-    $p = $sCodeGenerator->generateServiceInterfaceParams($nsclassname, $name, $module.'\Service');
-    $fileName = $p['fileName'];
-    $sCodeGenerator->setTemplate('ServiceAwareInterface')->setParams($p)->generateToHtml($fileName)->generateToFile($fileName);
+    $p = $sCodeGenerator->generateServiceInterfaceParams($targetFullClass, $name, $module . '\Service');
+    $sCodeGenerator->setTemplate('ServiceAwareInterface')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);
 
     ?>
     <div class="alert alert-info">Les fichiers sont récupérables dans le

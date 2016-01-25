@@ -89,6 +89,14 @@ if ($structureElement) {
             });
         });
     </script>
+    <?php if ($this->isAllowed(\UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
+        <div class="budget-export">
+            <a href="<?php echo $this->url('budget/export', ['structure' => $structure->getId()]) ?>">
+                <span class="glyphicon glyphicon-download"></span>
+                Export des données de paiement au format CSV
+            </a>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php function fdot($view, $typeRessource, $libelle, array $data, $canEdit = true) /* Formatage d'une dotation */

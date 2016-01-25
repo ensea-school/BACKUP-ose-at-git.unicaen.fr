@@ -88,9 +88,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const IMPORT_TBL                                = 'import-tbl';
     const IMPORT_VUES_PROCEDURES                    = 'import-vues-procedures';
     const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
-    const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
     const BUDGET_VISUALISATION                      = 'budget-visualisation';
+    const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
     const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE      = 'budget-edition-engagement-composante';
+    const BUDGET_EXPORT                             = 'budget-export';
     const BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT   = 'budget-edition-engagement-etablissement';
 
 }

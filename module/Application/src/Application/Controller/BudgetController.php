@@ -14,6 +14,7 @@ use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
+use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Element\Select;
 
 
@@ -54,20 +55,22 @@ class BudgetController extends AbstractController
         $prv = $this->getServiceFormuleResultat()->getTotalPrevisionnelValide();
         $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation();
 
-        $typesRessources = $this->getServiceTypeRessource()->getList(); /* @var $typesRessources TypeRessource[] */
+        $typesRessources = $this->getServiceTypeRessource()->getList();
+        /* @var $typesRessources TypeRessource[] */
         $qb = $this->getServiceStructure()->finderByEnseignement();
-        $this->getServiceStructure()->finderByNiveau(2, $qb );
-        $structures = $this->getServiceStructure()->getList( $qb ); /* @var $structures Structure[] */
+        $this->getServiceStructure()->finderByNiveau(2, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+        /* @var $structures Structure[] */
 
         $data = [];
-        foreach( $structures as $sid => $structure ){
+        foreach ($structures as $sid => $structure) {
 
             $hab = isset($tbl[$sid]['total']) ? $tbl[$sid]['total'] : 0;
             $hli = isset($prv[$sid]) ? $prv[$sid] : 0;
 
             $data[$sid]['prev'] = $hab - $hli; // Solde abondé - ce qui a été liquidé (dépensé)
 
-            foreach( $typesRessources as $trid => $typeRessource ){
+            foreach ($typesRessources as $trid => $typeRessource) {
 
                 $hab = isset($tbl[$sid][$trid]) ? $tbl[$sid][$trid] : 0;
                 $hli = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
@@ -76,7 +79,7 @@ class BudgetController extends AbstractController
             }
         }
 
-        return compact( 'annee', 'structures', 'typesRessources', 'data' );
+        return compact('annee', 'structures', 'typesRessources', 'data');
     }
 
 
@@ -98,13 +101,14 @@ class BudgetController extends AbstractController
         if ($structure) {
             $dotations          = $this->getServiceDotation()->getDotations($structure);
             $previsionnelValide = $this->getServiceFormuleResultat()->getTotalPrevisionnelValide($structure);
-            $ld = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
-            foreach( $dotations['typesRessources'] as $dtrId => $dtr ){
-                $typeRessource = $dtr['entity']; /* @var $typeRessource TypeRessource */
+            $ld                 = $this->getServiceMiseEnPaiement()->getTblLiquidation($structure);
+            foreach ($dotations['typesRessources'] as $dtrId => $dtr) {
+                $typeRessource = $dtr['entity'];
+                /* @var $typeRessource TypeRessource */
 
-                $dmep = isset($ld[$dtrId]) ? $ld[$dtrId] : 0;
+                $dmep                = isset($ld[$dtrId]) ? $ld[$dtrId] : 0;
                 $liquidation[$dtrId] = [
-                    'dmep' => $dmep,
+                    'dmep'  => $dmep,
                     'solde' => $dotations['typesRessources'][$dtrId]['total']['heures'] - $dmep,
                 ];
             }
@@ -153,10 +157,10 @@ class BudgetController extends AbstractController
                 ->setTypeRessource($typeRessource);
         }
 
-        if (!$this->isAllowed($dotation1, $typeRessource->getPrivilegeBudgetEdition())){
+        if (!$this->isAllowed($dotation1, $typeRessource->getPrivilegeBudgetEdition())) {
             $this->flashMessenger()->addErrorMessage('Vous n\'êtes pas autorisé(e) à éditer ces informations');
             $form = null;
-        }else{
+        } else {
             $form = $this->getFormBudgetDotationSaisie();
             $form->get('annee1')->setValue($dotation1->getHeures())->setLabel('Dont, au titre de ' . $anneePrec);
             $form->get('annee2')->setValue($dotation2->getHeures())->setLabel('Dont, au titre de ' . $annee);
@@ -165,18 +169,18 @@ class BudgetController extends AbstractController
 
             $form->requestSave($this->getRequest(), function ($data) use ($dotation1, $dotation2) {
                 $h1 = (float)str_replace([',', ' '], ['.', ''], $data['annee1']);
-                if ($dotation1->getId() && 0 == $h1){
+                if ($dotation1->getId() && 0 == $h1) {
                     $this->getServiceDotation()->delete($dotation1);
-                }else{
+                } else {
                     $dotation1->setLibelle($data['libelle']);
                     $dotation1->setHeures($h1);
                     $this->getServiceDotation()->save($dotation1);
                 }
 
                 $h2 = (float)str_replace([',', ' '], ['.', ''], $data['annee2']);
-                if ($dotation2->getId() && 0 == $h2){
+                if ($dotation2->getId() && 0 == $h2) {
                     $this->getServiceDotation()->delete($dotation2);
-                }else{
+                } else {
                     $dotation2->setLibelle($data['libelle']);
                     $dotation2->setHeures($h2);
                     $this->getServiceDotation()->save($dotation2);
@@ -185,6 +189,68 @@ class BudgetController extends AbstractController
         }
 
         return compact('form', 'title', 'structure', 'typeRessource');
+    }
+
+
+
+    public function exportAction()
+    {
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+
+        $data = $this->getServiceMiseEnPaiement()->getTableauBord($structure);
+
+        $csvModel = new CsvModel();
+        $csvModel->setHeader([
+            'annee-libelle' => 'Année universitaire',
+
+            'intervenant-code'               => 'Code intervenant',
+            'intervenant-nom'                => 'Intervenant',
+            'intervenant-date-naissance'     => 'Date de naissance',
+            'intervenant-statut-libelle'     => 'Statut intervenant',
+            'intervenant-type-code'          => 'Type d\'intervenant (Code)',
+            'intervenant-type-libelle'       => 'Type d\'intervenant',
+            'intervenant-grade-code'         => 'Grade (Code)',
+            'intervenant-grade-libelle'      => 'Grade',
+            'intervenant-discipline-code'    => 'Discipline intervenant (Code)',
+            'intervenant-discipline-libelle' => 'Discipline intervenant',
+            'service-structure-aff-libelle'  => 'Structure d\'affectation',
+
+            'service-structure-ens-libelle' => 'Structure d\'enseignement',
+            'groupe-type-formation-libelle' => 'Groupe de type de formation',
+            'type-formation-libelle'        => 'Type de formation',
+            'etape-niveau'                  => 'Niveau',
+            'etape-code'                    => 'Code formation',
+            'etape-etablissement-libelle'   => 'Formation ou établissement',
+            'element-code'                  => 'Code enseignement',
+            'element-fonction-libelle'      => 'Enseignement ou fonction référentielle',
+            'element-discipline-code'       => 'Discipline ens. (Code)',
+            'element-discipline-libelle'    => 'Discipline ens.',
+            'element-taux-fi'               => 'Taux FI',
+            'element-taux-fc'               => 'Taux FC',
+            'element-taux-fa'               => 'Taux FA',
+            'commentaires'                  => 'Commentaires',
+            'element-source-libelle'        => 'Source enseignement',
+
+            'type-ressource-libelle'      => 'Enveloppe',
+            'centre-couts-code'           => 'Centre de coûts ou EOTP (code)',
+            'centre-couts-libelle'        => 'Centre de coûts ou EOTP (libellé)',
+            'domaine-fonctionnel-code'    => 'Domaine fonctionnel (code)',
+            'domaine-fonctionnel-libelle' => 'Domaine fonctionnel (libellé)',
+            'etat'                        => 'État',
+            'periode-libelle'             => 'Période de paiement',
+            'date-mise-en-paiement'       => 'Date de mise en paiement',
+
+            'heures-fi'          => 'FI',
+            'heures-fa'          => 'FA',
+            'heures-fc'          => 'FC',
+            'heures-fc-majorees' => 'Rém. FC D714-60',
+            'heures-referentiel' => 'Référentiel',
+        ]);
+        $csvModel->addLines($data);
+        $csvModel->setFilename('budget_mises_en_paiement.csv');
+
+        return $csvModel;
     }
 
 

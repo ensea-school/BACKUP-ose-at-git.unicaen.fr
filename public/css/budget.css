@@ -56,3 +56,9 @@ table.budget-tbl th {
 table.budget-tbl td.hetd {
     text-align: right;
 }
+
+
+.budget-export {
+    margin-top: .5em;
+    text-align:center;
+}

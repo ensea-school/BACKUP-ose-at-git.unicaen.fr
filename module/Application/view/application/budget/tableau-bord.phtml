@@ -35,3 +35,11 @@ use UnicaenApp\Util;
         </tr>
     <?php endforeach; ?>
 </table>
+<?php if ($this->isAllowed(\UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
+<div class="budget-export">
+    <a href="<?php echo $this->url('budget/export') ?>">
+        <span class="glyphicon glyphicon-download"></span>
+        Export des données de paiement au format CSV
+    </a>
+</div>
+<?php endif; ?>

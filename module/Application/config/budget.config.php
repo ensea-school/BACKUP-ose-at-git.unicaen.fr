@@ -21,12 +21,12 @@ return [
                     ],
                 ],
                 'child_routes'  => [
-                    'tableau-bord' => [
-                        'type' => 'Literal',
+                    'tableau-bord'    => [
+                        'type'          => 'Literal',
                         'may_terminate' => true,
-                        'options' => [
-                            'route'       => '/tableau-bord',
-                            'defaults'    => [
+                        'options'       => [
+                            'route'    => '/tableau-bord',
+                            'defaults' => [
                                 'action' => 'tableau-bord',
                             ],
                         ],
@@ -38,6 +38,19 @@ return [
                             'route'       => '/engagement[/:structure]',
                             'defaults'    => [
                                 'action' => 'engagement',
+                            ],
+                            'constraints' => [
+                                'structure' => '[0-9]*',
+                            ],
+                        ],
+                    ],
+                    'export'          => [
+                        'type'          => 'Segment',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'       => '/export[/:structure]',
+                            'defaults'    => [
+                                'action' => 'export',
                             ],
                             'constraints' => [
                                 'structure' => '[0-9]*',
@@ -86,11 +99,17 @@ return [
                                         'route'    => 'budget/tableau-bord',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'tableau-bord'),
                                     ],
-                                    'engagement' => [
+                                    'engagement'   => [
                                         'label'    => 'Engagement budgétaire',
                                         'title'    => 'Engagement budgétaire',
                                         'route'    => 'budget/engagement',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'engagement'),
+                                    ],
+                                    'export' => [
+                                        'label'    => 'Export (CSV)',
+                                        'title'    => 'Export CSV des données de budget',
+                                        'route'    => 'budget/export',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'export'),
                                     ],
                                 ],
                             ],
@@ -116,13 +135,20 @@ return [
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
                     ],
-                    'assertion' => 'assertionBudget',
+                    'assertion'  => 'assertionBudget',
                 ],
                 [
                     'controller' => 'Application\Controller\Budget',
                     'action'     => ['engagement'],
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Budget',
+                    'action'     => ['export'],
+                    'privileges' => [
+                        Privileges::BUDGET_EXPORT,
                     ],
                 ],
                 [

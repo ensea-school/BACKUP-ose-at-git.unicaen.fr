@@ -452,6 +452,87 @@ class MiseEnPaiement extends AbstractEntityService
 
 
     /**
+     * Retourne les données du TBL des services en fonction des critères de recherche transmis
+     *
+     * @param Recherche $recherche
+     *
+     * @return array
+     */
+    public function getTableauBord(StructureEntity $structure = null)
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $data  = [];
+
+        $params = [
+            'annee' => $annee->getId()
+        ];
+        $sql = 'SELECT * FROM V_TBL_DMEP WHERE annee_id = :annee';
+
+        if ($structure) {
+            $params['structure'] = $structure->getId();
+            $sql .= ' AND structure_id = :structure';
+        }
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+
+        // récupération des données
+        while ($d = $stmt->fetch()) {
+
+            $ds = [
+                'annee-libelle' => (string)$annee,
+
+                'intervenant-code'               => $d['INTERVENANT_CODE'],
+                'intervenant-nom'                => $d['INTERVENANT_NOM'],
+                'intervenant-date-naissance'     => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
+                'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
+                'intervenant-type-code'          => $d['INTERVENANT_TYPE_CODE'],
+                'intervenant-type-libelle'       => $d['INTERVENANT_TYPE_LIBELLE'],
+                'intervenant-grade-code'         => $d['INTERVENANT_GRADE_CODE'],
+                'intervenant-grade-libelle'      => $d['INTERVENANT_GRADE_LIBELLE'],
+                'intervenant-discipline-code'    => $d['INTERVENANT_DISCIPLINE_CODE'],
+                'intervenant-discipline-libelle' => $d['INTERVENANT_DISCIPLINE_LIBELLE'],
+                'service-structure-aff-libelle'  => $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
+
+                'service-structure-ens-libelle' => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
+                'groupe-type-formation-libelle' => $d['GROUPE_TYPE_FORMATION_LIBELLE'],
+                'type-formation-libelle'        => $d['TYPE_FORMATION_LIBELLE'],
+                'etape-niveau'                  => empty($d['ETAPE_NIVEAU']) ? null : (int)$d['ETAPE_NIVEAU'],
+                'etape-code'                    => $d['ETAPE_CODE'],
+                'etape-etablissement-libelle'   => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
+                'element-code'                  => $d['ELEMENT_CODE'],
+                'element-fonction-libelle'      => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
+                'element-discipline-code'       => $d['ELEMENT_DISCIPLINE_CODE'],
+                'element-discipline-libelle'    => $d['ELEMENT_DISCIPLINE_LIBELLE'],
+                'element-taux-fi'               => (float)$d['ELEMENT_TAUX_FI'],
+                'element-taux-fc'               => (float)$d['ELEMENT_TAUX_FC'],
+                'element-taux-fa'               => (float)$d['ELEMENT_TAUX_FA'],
+                'commentaires'                  => $d['COMMENTAIRES'],
+                'element-source-libelle'        => $d['ELEMENT_SOURCE_LIBELLE'],
+
+                'type-ressource-libelle'      => $d['TYPE_RESSOURCE_LIBELLE'],
+                'centre-couts-code'           => $d['CENTRE_COUTS_CODE'],
+                'centre-couts-libelle'        => $d['CENTRE_COUTS_LIBELLE'],
+                'domaine-fonctionnel-code'    => $d['DOMAINE_FONCTIONNEL_CODE'],
+                'domaine-fonctionnel-libelle' => $d['DOMAINE_FONCTIONNEL_LIBELLE'],
+                'etat'                        => $d['ETAT'],
+                'periode-libelle'             => $d['PERIODE_LIBELLE'],
+                'date-mise-en-paiement'       => $d['DATE_MISE_EN_PAIEMENT'] ? new \DateTime($d['DATE_MISE_EN_PAIEMENT']) : null,
+                'heures-fi'                   => (float)$d['HEURES_FI'],
+                'heures-fa'                   => (float)$d['HEURES_FA'],
+                'heures-fc'                   => (float)$d['HEURES_FC'],
+                'heures-fc-majorees'          => (float)$d['HEURES_FC_MAJOREES'],
+                'heures-referentiel'          => (float)$d['HEURES_REFERENTIEL'],
+            ];
+
+            $data[] = $ds;
+        }
+
+        return $data;
+    }
+
+
+
+    /**
      * Retourne le tableau de bord des liquidations.
      * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
      * et pour l'année courante

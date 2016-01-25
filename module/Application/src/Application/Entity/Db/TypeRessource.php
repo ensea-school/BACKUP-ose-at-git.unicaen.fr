@@ -2,14 +2,16 @@
 
 namespace Application\Entity\Db;
 
+use Application\Provider\Privilege\Privileges;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * TypeRessource
  */
-class TypeRessource implements HistoriqueAwareInterface
+class TypeRessource implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -52,6 +54,11 @@ class TypeRessource implements HistoriqueAwareInterface
      * @var integer
      */
     private $id;
+
+    /**
+     * @var boolean
+     */
+    private $etablissement;
 
 
 
@@ -264,6 +271,30 @@ class TypeRessource implements HistoriqueAwareInterface
 
 
     /**
+     * @return boolean
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
+    }
+
+
+
+    /**
+     * @param boolean $etablissement
+     *
+     * @return TypeRessource
+     */
+    public function setEtablissement($etablissement)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+
+
+    /**
      * détermine si un type d'heures peut être appliqué à ce type de ressource ou non
      *
      * @param \Application\Entity\Db\TypeHeures $typeHeures
@@ -288,4 +319,63 @@ class TypeRessource implements HistoriqueAwareInterface
 
         return false;
     }
+
+
+
+    /**
+     * Retourne le privilège d'édition de budget correspondant au type de ressource...
+     *
+     * @return string
+     */
+    public function getPrivilegeBudgetEdition()
+    {
+        if ($this->getEtablissement()){
+            return Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT;
+        }else{
+            return Privileges::BUDGET_EDITION_ENGAGEMENT_COMPOSANTE;
+        }
+    }
+
+
+
+    /**
+     * @since PHP 5.6.0
+     * This method is called by var_dump() when dumping an object to get the properties that should be shown.
+     * If the method isn't defined on an object, then all public, protected and private properties will be shown.
+     *
+     * @return array
+     * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
+     */
+    function __debugInfo()
+    {
+        return [
+            'code' => $this->code,
+        ];
+    }
+
+
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    function __toString()
+    {
+        return $this->getLibelle();
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'TypeRessource';
+    }
+
 }

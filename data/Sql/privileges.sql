@@ -25,15 +25,8 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'contrat' c, 'association' p, 'Association' l FROM dual
-UNION SELECT 'contrat' c, 'visualisation' p, 'Visualisation' l FROM dual
-UNION SELECT 'contrat' c, 'creation' p, 'Création d''un projet' l FROM dual
-UNION SELECT 'contrat' c, 'suppression' p, 'Suppression d''un projet' l FROM dual
-UNION SELECT 'contrat' c, 'validation' p, 'Validation' l FROM dual
-UNION SELECT 'contrat' c, 'devalidation' p, 'Dévalidation' l FROM dual
-UNION SELECT 'contrat' c, 'depot-retour-signe' p, 'Dépôt de contrat signé' l FROM dual
-UNION SELECT 'contrat' c, 'saisie-date-retour-signe' p, 'Saisie de date retour' l FROM dual
-UNION SELECT 'enseignement' c, 'association' p, 'Association' l FROM dual
+      SELECT 'budget' c, 'edition-engagement-etablissement' p, 'Dotation paye état' l FROM dual
+UNION SELECT 'budget' c, 'edition-engagement-composante' p, 'Dotation ressources propres' l FROM dual
 
 ) t1;
 
@@ -72,12 +65,7 @@ update categorie_privilege set ordre = 140 WHERE code = 'droit';
 update categorie_privilege set ordre = 150 WHERE code = 'import';
 
 
-
-
-  
-
-
-
+--delete from privilege where code='edition' AND categorie_id = (select cp.id from categorie_privilege cp where cp.code='budget');
 
 
 --UPDATE CATEGORIE_PRIVILEGE SET CODE = 'droit' WHERE CODE = 'privilege';

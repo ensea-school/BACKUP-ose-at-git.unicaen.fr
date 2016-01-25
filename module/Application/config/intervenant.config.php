@@ -7,7 +7,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
-    'router'     => [
+    'router'          => [
         'routes' => [
             'intervenant' => [
                 'type'          => 'Literal',
@@ -52,7 +52,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir'                          => [
+                    'voir'                           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:intervenant',
@@ -76,7 +76,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisir' => [
+                    'saisir'                         => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:intervenant/saisir',
@@ -321,7 +321,7 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -329,7 +329,7 @@ return [
                         'label'    => 'Intervenant',
                         'title'    => "Intervenant",
                         'route'    => 'intervenant',
-                        'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant','index'),
+                        'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'index'),
                         'pages'    => [
                             'rechercher'                     => [
                                 'label'        => " Rechercher",
@@ -340,9 +340,9 @@ return [
                                 ],
                                 'icon'         => "glyphicon glyphicon-search",
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant','rechercher'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'rechercher'),
                             ],
-                            'voir'                          => [
+                            'voir'                           => [
                                 'label'        => "Fiche individuelle",
                                 'title'        => "Consultation de la fiche de l'intervenant {id}",
                                 'route'        => 'intervenant/voir',
@@ -350,7 +350,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant','voir'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir'),
                             ],
                             'voir-heures-comp'               => [
                                 'label'        => "Calcul HETD",
@@ -361,7 +361,7 @@ return [
                                 ],
                                 'action'       => 'voir-heures-comp',
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant','voir-heures-comp'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir-heures-comp'),
                             ],
                             'modification-service-du'        => [
                                 'label'        => "Modification de service dû",
@@ -371,7 +371,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu','saisir'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'saisir'),
                             ],
                             'dossier'                        => [
                                 'label'        => "Données personnelles",
@@ -381,7 +381,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier','modifier'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'modifier'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'service'                        => [
@@ -392,7 +392,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service','index'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'index'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'pieces-jointes-saisie'          => [
@@ -409,7 +409,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation','dossier'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'dossier'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-service-prevu'       => [
@@ -420,7 +420,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation','service'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'service'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-prevu'   => [
@@ -431,13 +431,13 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation','referentiel'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'referentiel'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
-                            'agrement-conseil-restreint' => [
+                            'agrement-conseil-restreint'     => [
                                 // coquille vide qui réserve l'emplacement du menu
                             ],
-                            'agrement-conseil-academique' => [
+                            'agrement-conseil-academique'    => [
                                 // coquille vide qui réserve l'emplacement du menu
                             ],
                             'contrat'                        => [
@@ -448,7 +448,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat','index'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'services-realises'              => [
@@ -459,7 +459,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service','index'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'index'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-service-realise'     => [
@@ -470,7 +470,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation','service'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'service'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-realise' => [
@@ -481,7 +481,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation','referentiel'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'referentiel'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'demande-mise-en-paiement'       => [
@@ -492,7 +492,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Paiement','demandeMiseEnPaiement'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
                                 'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                         ],
@@ -503,10 +503,10 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            PrivilegeController::class => [
+            PrivilegeController::class      => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['rechercher','recherche'],
+                    'action'     => ['rechercher', 'recherche'],
                     'privileges' => [
                         Privileges::INTERVENANT_RECHERCHE,
                     ],
@@ -541,7 +541,7 @@ return [
                     ],
                 ],
             ],
-            'BjyAuthorize\Guard\Controller'  => [
+            'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
@@ -587,51 +587,51 @@ return [
         ],
     ],
     'controllers'     => [
-    'invokables' => [
-        'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
-        'Application\Controller\Dossier'               => Controller\DossierController::class,
-        'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
+        'invokables' => [
+            'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
+            'Application\Controller\Dossier'               => Controller\DossierController::class,
+            'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
+        ],
+        'aliases'    => [
+            'IntervenantController' => 'Application\Controller\Intervenant',
+        ],
     ],
-    'aliases'    => [
-        'IntervenantController' => 'Application\Controller\Intervenant',
-    ],
-],
     'service_manager' => [
-    'invokables' => [
-        'ApplicationIntervenant'                => Service\Intervenant::class,
-        'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
-        'ApplicationCivilite'                   => Service\Civilite::class,
-        'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
-        'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
-        'ApplicationDossier'                    => Service\Dossier::class,
-        'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
-        'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
-        'PeutSaisirDossierRule'                 => Rule\Intervenant\PeutSaisirDossierRule::class,
-        'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
-        'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
-        'PossedeDossierRule'                    => Rule\Intervenant\PossedeDossierRule::class,
-        'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
-        'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
-        'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
-        'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
+        'invokables' => [
+            'ApplicationIntervenant'                => Service\Intervenant::class,
+            'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
+            'ApplicationCivilite'                   => Service\Civilite::class,
+            'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
+            'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
+            'ApplicationDossier'                    => Service\Dossier::class,
+            'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
+            'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
+            'PeutSaisirDossierRule'                 => Rule\Intervenant\PeutSaisirDossierRule::class,
+            'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
+            'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
+            'PossedeDossierRule'                    => Rule\Intervenant\PossedeDossierRule::class,
+            'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
+            'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
+            'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
+            'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
+        ],
     ],
-],
     'view_helpers'    => [
-    'invokables'   => [
-        'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
-        'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
+        'invokables'   => [
+            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
+            'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
+        ],
+        'initializers' => [
+        ],
     ],
-    'initializers' => [
-    ],
-],
     'form_elements'   => [
-    'invokables' => [
-        'IntervenantEditionForm'                        => Form\Intervenant\EditionForm::class,
-        'IntervenantDossier'                            => Form\Intervenant\Dossier::class,
-        'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
-        'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
-        'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,
-        'IntervenantMotifModificationServiceDuFieldset' => Form\Intervenant\MotifModificationServiceDuFieldset::class,
+        'invokables' => [
+            'IntervenantEditionForm'                        => Form\Intervenant\EditionForm::class,
+            'IntervenantDossier'                            => Form\Intervenant\Dossier::class,
+            'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
+            'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
+            'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,
+            'IntervenantMotifModificationServiceDuFieldset' => Form\Intervenant\MotifModificationServiceDuFieldset::class,
+        ],
     ],
-],
 ];

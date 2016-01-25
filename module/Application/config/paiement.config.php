@@ -173,6 +173,7 @@ return [
         'resource_providers' => [
             \BjyAuthorize\Provider\Resource\Config::class => [
                 'MiseEnPaiement' => [],
+                'TypeRessource' => [],
             ],
         ],
         'rule_providers'     => [

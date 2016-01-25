@@ -16,6 +16,10 @@ class TypeDotation implements HistoriqueAwareInterface
     use SourceAwareTrait;
     use TypeRessourceAwareTrait;
 
+
+    const CODE_DOTATION_INITIALE = 'dotation-initiale';
+
+
     /**
      * @var string
      */
@@ -99,4 +103,10 @@ class TypeDotation implements HistoriqueAwareInterface
         return $this->sourceCode;
     }
 
+
+
+    public function isDotationInitiale()
+    {
+        return $this->getSourceCode() == self::CODE_DOTATION_INITIALE;
+    }
 }

@@ -5,22 +5,20 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\TypeRessourceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Dotation
  */
-class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
+class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;
     use HistoriqueAwareTrait;
-
-    /**
-     * @var \DateTime
-     */
-    private $dateEffet;
+    use TypeRessourceAwareTrait;
 
     /**
      * @var float
@@ -33,38 +31,14 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
     private $id;
 
     /**
-     * @var TypeDotation
+     * @var integer
      */
-    private $type;
-
-
-
+    private $anneeCivile;
 
     /**
-     * Set dateEffet
-     *
-     * @param \DateTime $dateEffet
-     *
-     * @return Dotation
+     * @var string
      */
-    public function setDateEffet($dateEffet)
-    {
-        $this->dateEffet = $dateEffet;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get dateEffet
-     *
-     * @return \DateTime
-     */
-    public function getDateEffet()
-    {
-        return $this->dateEffet;
-    }
+    private $libelle;
 
 
 
@@ -97,6 +71,30 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
 
 
     /**
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+
+
+    /**
+     * @param string $libelle
+     *
+     * @return Dotation
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -109,15 +107,23 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
 
 
     /**
-     * Set type
-     *
-     * @param TypeDotation $type
+     * @return int
+     */
+    public function getAnneeCivile()
+    {
+        return $this->anneeCivile;
+    }
+
+
+
+    /**
+     * @param int $anneeCivile
      *
      * @return Dotation
      */
-    public function setType(TypeDotation $type = null)
+    public function setAnneeCivile($anneeCivile)
     {
-        $this->type = $type;
+        $this->anneeCivile = $anneeCivile;
 
         return $this;
     }
@@ -125,12 +131,13 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
 
 
     /**
-     * Get type
+     * Returns the string identifier of the Resource
      *
-     * @return TypeDotation
+     * @return string
      */
-    public function getType()
+    public function getResourceId()
     {
-        return $this->type;
+        return 'Dotation';
     }
+
 }

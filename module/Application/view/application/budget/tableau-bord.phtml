@@ -1,0 +1,37 @@
+<?php
+
+use UnicaenApp\Util;
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $annee \Application\Entity\Db\Annee
+ * @var $structures \Application\Entity\Db\Structure[]
+ * @var $typesRessources \Application\Entity\Db\TypeRessource[]
+ * @var $data  array
+ */
+
+?>
+<h1 class="page-header">Budget <?php echo $annee ?></h1>
+
+<table class="table table-bordered budget-tbl">
+    <tr>
+        <th rowspan="2">Structure</th>
+        <th rowspan="2">Prévisionnel</th>
+        <th colspan="<?php echo count($typesRessources) ?>">Demandes de mise en paiement</th>
+    </tr>
+    <tr>
+        <?php foreach( $typesRessources as $trid => $typeRessource ): ?>
+            <th><?php echo $typeRessource ?></th>
+        <?php endforeach; ?>
+    </tr>
+    <?php foreach( $structures as $sid => $structure ): ?>
+        <tr>
+            <th><a href="<?php echo $this->url('budget/engagement',['structure'=>$structure->getId()]) ?>" title="Afficher le détail pour la structure"><?php echo $structure ?></a></th>
+            <td class="hetd"><?php echo Util::formattedNumber($data[$sid]['prev']) ?></td>
+
+        <?php foreach( $typesRessources as $trid => $typeRessource ): ?>
+            <td class="hetd"><?php echo Util::formattedNumber($data[$sid]['dmep'][$trid]) ?></td>
+        <?php endforeach; ?>
+        </tr>
+    <?php endforeach; ?>
+</table>

@@ -32,6 +32,7 @@ class Saisie extends AbstractForm
 
         $this->add([
             'name'       => 'heures',
+            'type'       => 'Text',
             'options'    => [
                 'label' => "Nombre d'heures :",
             ],
@@ -42,7 +43,6 @@ class Saisie extends AbstractForm
                 'step'  => 'any',
                 'min'   => 0,
             ],
-            'type'       => 'Text',
         ]);
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();

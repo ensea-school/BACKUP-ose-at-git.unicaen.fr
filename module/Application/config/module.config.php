@@ -209,6 +209,7 @@ $main = [
             11 => 'css/cartridge.css',
             12 => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
             13 => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
+            14 => 'css/budget.css'
         ],
     ],
 ];

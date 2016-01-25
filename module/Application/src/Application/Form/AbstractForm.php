@@ -61,6 +61,8 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
     /**
      * Exécute la sauvegarde d'un formulaire à partir des données Request
      *
+     * Dans $saveFnc, l'entité (dont les données ont été mises à jour) est transmise
+     *
      * Retourne true si tout s'est bien passé, false sinon.
      * Le message d'erreur pourra être récupéré via le FlashMessenger ou bien via getLastException() pour la traiter ensuite
      *
@@ -79,6 +81,41 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
             if ($this->isValid()) {
                 try {
                     $saveFnc($entity);
+                } catch (\Exception $e) {
+                    $this->exception = $e;
+                    $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * Exécute la sauvegarde d'un formulaire à partir des données Request
+     *
+     * Dans $saveFnc, les données du formulaire sont transmises
+     *
+     * Retourne true si tout s'est bien passé, false sinon.
+     * Le message d'erreur pourra être récupéré via le FlashMessenger ou bien via getLastException() pour la traiter ensuite
+     *
+     * @param Request $request
+     * @param         $saveFnc
+     *
+     * @return bool
+     */
+    public function requestSave(Request $request, $saveFnc)
+    {
+        $this->exception = null;
+        if ($request->isPost()) {
+            $this->setData($request->getPost());
+            if ($this->isValid()) {
+                try {
+                    $saveFnc($this->getData());
                 } catch (\Exception $e) {
                     $this->exception = $e;
                     $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());

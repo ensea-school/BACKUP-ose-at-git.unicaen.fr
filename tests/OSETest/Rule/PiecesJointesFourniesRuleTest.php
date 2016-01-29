@@ -80,7 +80,7 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         $this->rule->setIntervenant(new IntervenantExterieur()); // intervenant extérieur sans dossier
         static::assertFalse($this->rule->isRelevant());
         
-        $this->setExpectedException('Common\Exception\LogicException');
+        $this->setExpectedException('LogicException');
         $this->rule->setIntervenant(new IntervenantPermanent()); // intervenant permanent interdit
     }
     

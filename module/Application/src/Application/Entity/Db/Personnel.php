@@ -311,7 +311,7 @@ class Personnel implements HistoriqueAwareInterface
      */
     public function __toString()
     {
-        $f = new \Common\Filter\NomCompletFormatter();
+        $f = new \Application\Filter\NomCompletFormatter();
         
         return $f->filter($this);
     }

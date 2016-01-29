@@ -86,7 +86,7 @@ class NavigationFactory extends DefaultNavigationFactory
      * 
      * @param array $page
      * @return self
-     * @throws \Common\Exception\LogicException
+     * @throws \LogicException
      */
     protected function handlePagesProvider(&$page)
     {
@@ -108,12 +108,12 @@ class NavigationFactory extends DefaultNavigationFactory
             $pagesProviderAttr = $type;
         }
         else {
-            throw new \Common\Exception\LogicException("Format d'attribut 'pagesProvider' incorrect!");
+            throw new \LogicException("Format d'attribut 'pagesProvider' incorrect!");
         }
         
         $pagesProvider = $this->getServiceLocator()->get($pagesProviderAttr);
         if (!is_callable($pagesProvider)) {
-            throw new \Common\Exception\LogicException(
+            throw new \LogicException(
                     "Service spécifié pour l'attribut de page 'pagesProvider' non valide : $pagesProviderAttr.");
         }
         
@@ -132,7 +132,7 @@ class NavigationFactory extends DefaultNavigationFactory
      * @param array $page
      * @param RouteMatch $routeMatch
      * @return boolean
-     * @throws \Common\Exception\LogicException
+     * @throws \LogicException
      */
     protected function handleVisibility(&$page, RouteMatch $routeMatch = null)
     {
@@ -140,7 +140,7 @@ class NavigationFactory extends DefaultNavigationFactory
         if (isset($page['visible']) && is_string($page['visible'])) {
             $visible = $this->getServiceLocator()->get($page['visible']);
             if (!is_callable($visible)) {
-                throw new \Common\Exception\LogicException(
+                throw new \LogicException(
                         "Service spécifié pour l'attribut de page 'visible' non valide : {$page['visible']}.");
             }
             $page['visible'] = $visible($page, $routeMatch);

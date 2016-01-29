@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
-use Common\Constants;
+use Application\Constants;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

@@ -47,6 +47,8 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <?php echo $this->form()->closeTag(); ?>
     <script>
 
+        formSaisieDotationUpdateAnneeCivile();
+
         function formSaisieDotationUpdateAnneeCivile()
         {
             var form = $('#<?php echo $fid ?>'),
@@ -56,11 +58,10 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
                 value;
 
-            value = Util.stringToFloat(annee1.val()) + Util.stringToFloat(annee2.val());
-
-            annee1.val(Util.floatToString(Util.stringToFloat(annee1.val())));
-            annee2.val(Util.floatToString(Util.stringToFloat(annee2.val())));
-            anneeCivile.val(Util.floatToString(value));
+            value = Formatter.stringToFloat(annee1.val()) + Formatter.stringToFloat(annee2.val());
+            annee1.val(Formatter.floatToString(Formatter.stringToFloat(annee1.val())));
+            annee2.val(Formatter.floatToString(Formatter.stringToFloat(annee2.val())));
+            anneeCivile.val(Formatter.floatToString(value));
         }
 
     </script>

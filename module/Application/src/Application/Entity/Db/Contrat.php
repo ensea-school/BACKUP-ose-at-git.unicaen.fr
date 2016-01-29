@@ -120,7 +120,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     {
         if ($this->estUnAvenant()) {
             if (!$this->getContrat()) {
-                throw new \Common\Exception\LogicException("Anomalie rencontrée: l'avenant {$this->getId()} n'est associé à aucun contrat.");
+                throw new \LogicException("Anomalie rencontrée: l'avenant {$this->getId()} n'est associé à aucun contrat.");
             }
 
             return sprintf("%s.%s", $this->getContrat()->getReference(), $this->getNumeroAvenant());

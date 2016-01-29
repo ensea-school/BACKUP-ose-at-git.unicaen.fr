@@ -3,8 +3,8 @@
 namespace Application\Validator;
 
 use Application\Entity\Db\Pays as PaysEntity;
-use Common\Constants;
-use Common\Exception\LogicException;
+use Application\Constants;
+use LogicException;
 use DateTime;
 use Zend\Validator\AbstractValidator;
 

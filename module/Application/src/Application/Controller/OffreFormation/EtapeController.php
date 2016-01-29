@@ -72,7 +72,7 @@ class EtapeController extends AbstractController
     public function supprimerAction()
     {
         if (!($etape = $this->getEvent()->getParam('etape'))) {
-            throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
         $title  = "Suppression de formation";
         $form = $this->makeFormSupprimer(function()use($etape){

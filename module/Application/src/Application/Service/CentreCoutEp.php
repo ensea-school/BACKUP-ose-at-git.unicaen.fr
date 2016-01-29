@@ -56,7 +56,7 @@ class CentreCoutEp extends AbstractEntityService
      * Sauvegarde un centre de coûts
      *
      * @param CentreCoutEpEntity $entity
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      * @return CentreCoutEpEntity
      */
     public function save($entity)

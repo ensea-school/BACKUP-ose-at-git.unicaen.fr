@@ -30,6 +30,22 @@ $main = [
                 ],
             ],
         ],
+        'configuration' => [
+            'orm_default' => [
+                'string_functions' => [
+                    'CONVERT'                             => ORM\Query\Functions\Convert::class,
+                    'CONTAINS'                            => ORM\Query\Functions\Contains::class,
+                    'REPLACE'                             => ORM\Query\Functions\Replace::class,
+                    'OSE_DIVERS_STRUCTURE_DANS_STRUCTURE' => ORM\Query\Functions\OseDivers\StructureDansStructure::class,
+                    'compriseEntre'                       => ORM\Query\Functions\OseDivers\CompriseEntre::class,
+                    'pasHistorise'                        => ORM\Query\Functions\OseDivers\PasHistorise::class,
+                ],
+                'filters'          => [
+                    'historique' => ORM\Filter\HistoriqueFilter::class,
+                    'annee'      => ORM\Filter\AnneeFilter::class,
+                ],
+            ],
+        ],
         'eventmanager' => [
             'orm_default' => [
                 'subscribers' => [
@@ -163,9 +179,11 @@ $main = [
             'appLink'                    => View\Helper\AppLinkFactory::class,
         ],
         'invokables' => [
-            'validation'    => View\Helper\ValidationViewHelper::class,
-            'utilisateur'   => View\Helper\UtilisateurViewHelper::class,
-            'formSupprimer' => View\Helper\FormSupprimerViewHelper::class,
+            'validation'      => View\Helper\ValidationViewHelper::class,
+            'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
+            'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
+            'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
+            'cartridge'       => View\Helper\CartridgeViewHelper::class,
         ],
     ],
     'translator'         => [
@@ -174,6 +192,11 @@ $main = [
                 'type'     => 'gettext',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.mo',
+            ],
+            [
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '/%s/Oracle_Errors.php',
             ],
         ],
     ],
@@ -202,14 +225,19 @@ $main = [
             13 => 'js/paiement.js',
             14 => 'js/offre-formation.js',
             15 => 'js/droits.js',
-            50 => 'bootstrap-select/js/bootstrap-select.min.js',
+            50 => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
         ],
         'stylesheets'    => [
-            10 => 'bootstrap-select/css/bootstrap-select.min.css',
+            10 => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css',
             11 => 'css/cartridge.css',
             12 => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
             13 => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
-            14 => 'css/budget.css'
+            14 => 'css/budget.css',
+            15 => 'css/paiement.css',
+            16 => 'css/agrement.css',
+            17 => 'css/service.css',
+            18 => 'css/acceuil.css',
+            19 => 'css/droits.css',
         ],
     ],
 ];

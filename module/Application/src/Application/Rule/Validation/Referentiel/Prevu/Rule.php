@@ -6,7 +6,7 @@ use Application\Rule\Validation\ValidationEnsRefAbstractRule;
 use Application\Acl\ComposanteRole;
 use Application\Acl\AdministrateurRole;
 use Application\Service\Workflow\Workflow;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Spécificités de la validation du référentiel PREVU.

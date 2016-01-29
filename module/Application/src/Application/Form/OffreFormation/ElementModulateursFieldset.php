@@ -62,7 +62,7 @@ class ElementModulateursFieldset extends AbstractFieldset
     {
         $element = $this->getElementPedagogique();
         if (! $element){
-            throw new \Common\Exception\RuntimeException('Elément pédagogique non spécifié');
+            throw new \RuntimeException('Elément pédagogique non spécifié');
         }
         $serviceTypeModulateur = $this->getServiceTypeModulateur();
         return $serviceTypeModulateur->getList( $serviceTypeModulateur->finderByElementPedagogique($element) );

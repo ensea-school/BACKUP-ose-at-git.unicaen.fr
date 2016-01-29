@@ -37,7 +37,7 @@ class PeutValiderContratRule extends \Application\Rule\AbstractRule
     {
         if (($validation = $this->contrat->getValidation())) {
             $contratToString = $this->contrat->toString(true);
-            $dateValidation  = $validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT);
+            $dateValidation  = $validation->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT);
             $this->message(
                     self::MESSAGE_DEJA_VALIDE,
                     "$contratToString est a déjà été validé le $dateValidation par {$validation->getHistoModificateur()}");

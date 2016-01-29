@@ -90,7 +90,7 @@ class PossedeReferentielRuleTest extends BaseRuleTest
     }
     
     /**
-     * @expectedException Common\Exception\LogicException
+     * @expectedException LogicException
      */
     public function testIntervenantExterieurInterdit()
     {

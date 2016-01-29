@@ -9,8 +9,7 @@ use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Service\AbstractService;
-use Common\Exception\LogicException;
-use Common\Exception\PieceJointe\AucuneAFournirException;
+use LogicException;
 use Application\Service\Traits\TypePieceJointeStatutAwareTrait;
 use Application\Service\Traits\PieceJointeAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
@@ -153,7 +152,6 @@ class PieceJointeProcess extends AbstractService
      *
      * @param Intervenant $intervenant
      * @return \Application\Service\DossierProcess
-     * @throws AucuneAFournirException
      */
     public function setIntervenant(Intervenant $intervenant)
     {
@@ -163,12 +161,6 @@ class PieceJointeProcess extends AbstractService
         $this->typesPieceJointeFournis  = null;
         $this->typesPieceJointeAttendus = null;
         $this->typesPieceJointeStatut   = null;
-
-//        if (!$this->getTypesPieceJointeStatut()) {
-//            throw new AucuneAFournirException(
-//                    "Aucun type de pièce justificative à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "
-//                    . "(dont le statut est '{$this->getStatut()}').");
-//        }
 
         return $this;
     }

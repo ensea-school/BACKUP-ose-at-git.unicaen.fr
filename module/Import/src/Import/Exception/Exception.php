@@ -2,7 +2,7 @@
 
 namespace Import\Exception;
 
-use Common\Exception\RuntimeException;
+use RuntimeException;
 
 /**
  *

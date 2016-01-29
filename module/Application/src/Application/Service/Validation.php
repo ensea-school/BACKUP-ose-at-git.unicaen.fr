@@ -12,7 +12,7 @@ use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Exception\DbException;
 use Application\Rule\Validation\PeutSupprimerValidationRule;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;

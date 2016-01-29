@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Common\Constants;
+use Application\Constants;
 use DateTime;
 
 /**

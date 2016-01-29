@@ -2,6 +2,8 @@
 
 namespace Application\Form\VolumeHoraire;
 
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\MotifNonPaiementAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
@@ -40,8 +42,6 @@ class Saisie extends AbstractForm
                 'value' => "0",
                 'title' => "Nombre d'heures",
                 'class' => 'volume-horaire volume-horaire-heures input-sm',
-                'step'  => 'any',
-                'min'   => 0,
             ],
         ]);
 
@@ -104,8 +104,7 @@ class Saisie extends AbstractForm
 
         $data = $object->filtersToArray();
         $data['service'] = $object->getService()->getId();
-        //$data['heures'] = str_replace('.',',',$object->getHeures());
-        $data['heures'] = $object->getHeures();
+        $data['heures'] = StringFromFloat::run($object->getHeures());
 
         if (! $this->getServiceService()->canHaveMotifNonPaiement($object->getService())){
             $this->remove('motif-non-paiement');
@@ -133,8 +132,7 @@ class Saisie extends AbstractForm
             'heures' => [
                 'required' => true,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
-                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                    ['name' => FloatFromString::class],
                 ],
             ],
         ];

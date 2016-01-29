@@ -1,13 +1,18 @@
 <?php
 
 namespace Application\Service;
-use Application\Entity\Db\TypeRessource as TypeRessourceEntity;
+use Application\Entity\Db\TypeRessource;
 
 
 /**
  * Description of TypeRessourceService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method TypeRessource get($id)
+ * @method TypeRessource[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method TypeRessource newEntity()
+ *
  */
 class TypeRessourceService extends AbstractEntityService
 {
@@ -20,7 +25,7 @@ class TypeRessourceService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return TypeRessourceEntity::class;
+        return TypeRessource::class;
     }
 
 

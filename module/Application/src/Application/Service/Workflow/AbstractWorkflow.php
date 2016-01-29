@@ -4,8 +4,8 @@ namespace Application\Service\Workflow;
 
 use Application\Service\AbstractService;
 use Application\Service\Workflow\Step\Step;
-use Common\Exception\LogicException;
-use Common\Exception\RuntimeException;
+use LogicException;
+use RuntimeException;
 use Zend\Mvc\Application;
 use Zend\Mvc\Controller\Plugin\Url;
 

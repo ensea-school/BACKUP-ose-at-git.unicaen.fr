@@ -82,7 +82,7 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
      * @param  \Application\Entity\Db\Intervenant $object
      * @param  int $flags
      * @return mixed|void
-     * @throws Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {

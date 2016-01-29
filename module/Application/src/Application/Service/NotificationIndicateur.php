@@ -6,7 +6,7 @@ use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Entity\Db\Personnel as PersonnelEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Common\Exception\LogicException;
+use LogicException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;

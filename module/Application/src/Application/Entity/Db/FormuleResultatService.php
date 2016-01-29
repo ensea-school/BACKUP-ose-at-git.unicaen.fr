@@ -46,7 +46,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
         $element = $this->getService()->getElementPedagogique();
         if (! $element){
             if (! $serviceDomaineFonctionnel){
-                throw new \Common\Exception\LogicException('Le service DomaineFonctionnel doit être fourni pour que le domaine fonctionnel par défaut soit identifié');
+                throw new \LogicException('Le service DomaineFonctionnel doit être fourni pour que le domaine fonctionnel par défaut soit identifié');
             }
             return $serviceDomaineFonctionnel->getForServiceExterieur();
         }

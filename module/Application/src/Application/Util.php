@@ -33,4 +33,21 @@ class Util
         return $result;
     }
 
+
+
+    static public function sqlAndIn( $column, array $entities )
+    {
+        if (!empty($entities)){
+            $l = [];
+            foreach( $entities as $e ){
+                if (is_object($e) && method_exists($e, 'getId')){
+                    $l[] = $e->getId();
+                }else{
+                    $l[] = (int)$e;
+                }
+            }
+            return ' AND '.$column.' IN ('.implode(',',$l).')';
+        }
+        return '';
+    }
 }

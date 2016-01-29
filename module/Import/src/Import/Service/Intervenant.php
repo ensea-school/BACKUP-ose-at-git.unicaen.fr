@@ -47,15 +47,13 @@ class Intervenant extends Service {
             $where .= 'AND i.type_id = '.$typeIntervenant->getId()."\n";
         }
 
-        $params['sexeFem'] = \Common\Constants::SEXE_F;
-
         $sql = <<<EOS
         SELECT DISTINCT
             i.source_code,
             c.libelle_court civilite,
             i.nom_usuel,
             i.nom_patronymique,
-            decode(c.sexe, :sexeFem, 1, 0) est_une_femme,
+            decode(c.sexe, 'F', 1, 0) est_une_femme,
             i.prenom,
             i.date_naissance,
             s.libelle_court affectation
@@ -74,14 +72,8 @@ EOS;
         $res = $this->query($sql, $params );
 
         $result = [];
-        $f = new \Common\Filter\IntervenantTrouveFormatter();
+        $f = new \Application\Filter\IntervenantTrouveFormatter();
         foreach( $res as $r ){
-//            $dateNaissance = new DateTime( $r['DATE_NAISSANCE'] );
-//            $result[$r['SOURCE_CODE']] = array(
-//               'id'    => $r['SOURCE_CODE'],
-//               'label' => $r['NOM_USUEL'].' '.$r['PRENOM'],
-//               'extra' => '(n° '.$r['SOURCE_CODE'].', né'.('M.' == $r['CIVILITE'] ? '' : 'e').' le '.$dateNaissance->format('d/m/Y').')',
-//            );
             $result[$r['SOURCE_CODE']] = $f->filter($r);
         }
 

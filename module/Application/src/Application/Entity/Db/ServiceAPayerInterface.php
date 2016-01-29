@@ -55,7 +55,7 @@ interface ServiceAPayerInterface
      *
      * @param TypeHeures $typeHeures
      * @return float
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      */
     public function getHeuresCompl( TypeHeures $typeHeures );
 

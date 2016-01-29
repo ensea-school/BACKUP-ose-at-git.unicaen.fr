@@ -1,8 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
-use Common\Constants;
-use DateTime;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

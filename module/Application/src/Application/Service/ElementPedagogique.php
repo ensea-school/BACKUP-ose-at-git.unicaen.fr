@@ -243,7 +243,7 @@ where rang = 1
      * @param \Application\Entity\Db\ElementPedagogique $entity
      *
      * @return ElementPedagogiqueEntity
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      */
     public function save($entity)
     {

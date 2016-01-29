@@ -4,7 +4,7 @@ namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Structure;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Règle métier déterminant si du référentiel peut être saisi.

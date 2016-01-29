@@ -25,6 +25,8 @@ function DemandeMiseEnPaiement(id)
         serviceElement.find(".breadcrumb").after(out);
     }
 
+
+
     /**
      *
      *
@@ -179,6 +181,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     this.element = element;
     this.params = element.data('params');
     this.validation = true;
+    this.initializing = true;
 
 
 
@@ -249,6 +252,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
         this.params['demandes-mep'][id] = 'removed';
         this.demandeMiseEnPaiement.changeDelete(id);
         this.updateHeuresRestantes();
+        this.onChange();
         return this;
     }
 
@@ -265,8 +269,9 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     this.addMiseEnPaiement = function (id, heures, centreCoutId, domaineFonctionnelId, focus)
     {
         var that = this;
+        var isNew = undefined === id;
 
-        if (undefined === id) {
+        if (isNew) {
             id = 'new-' + this.demandeMiseEnPaiement.miseEnPaiementSequence++;
             this.params['demandes-mep'][id] = {
                 heures: heures,
@@ -275,16 +280,18 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
                 'read-only': false,
                 'validation': null
             };
+        }
 
+        this.element.append(this.renderMiseEnPaiement(id));
+        $('.selectpicker').selectpicker();
+
+        if (isNew) {
             var mepParams = jQuery.extend({}, this.params['mep-defaults']);
             mepParams['heures'] = this.params['demandes-mep'][id]['heures'];
             mepParams['centre-cout-id'] = this.params['demandes-mep'][id]['centre-cout-id'];
             mepParams['domaine-fonctionnel-id'] = this.params['demandes-mep'][id]['domaine-fonctionnel-id'];
             this.demandeMiseEnPaiement.changeInsert(id, mepParams);
         }
-
-        this.element.append(this.renderMiseEnPaiement(id));
-        $('.selectpicker').selectpicker();
 
         /* Connexion des événements */
         var heuresElement = this.element.find(".mise-en-paiement#" + id + " input[name='heures']");
@@ -311,6 +318,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
         /* Finalisation */
         if (focus) heuresElement.focus();
         this.updateHeuresRestantes();
+        this.onChange();
         return this;
     }
 
@@ -378,15 +386,12 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
                 if (Util.json.count(children) > 0) {
                     outC += '<optgroup label="' + this.params['centres-cout'][ccId]['libelle'] + '">';
                     for (var cccId in children) {
-                        var selected = cccId == data['centre-cout-id'] ? ' selected="selected"' : '';
-                        outC += '<option value="' + cccId + '"' + selected + '>' + this.params['centres-cout'][cccId]['libelle'] + '</option>';
+                        outC += this.renderCentreCoutOption( this.params['centres-cout'][cccId], cccId, data['centre-cout-id'] );
                     }
-                    var selected = ccId == data['centre-cout-id'] ? ' selected="selected"' : '';
-                    outC += '<option value="' + ccId + '"' + selected + '>' + this.params['centres-cout'][ccId]['libelle'] + '</option>';
+                    outC += this.renderCentreCoutOption( this.params['centres-cout'][ccId], ccId, data['centre-cout-id'] );
                     outC += '</optgroup>';
                 } else if (this.params['centres-cout'][ccId]['parent'] == null) {
-                    var selected = ccId == data['centre-cout-id'] ? ' selected="selected"' : '';
-                    outC += '<option value="' + ccId + '"' + selected + '>' + this.params['centres-cout'][ccId]['libelle'] + '</option>';
+                    outC += this.renderCentreCoutOption( this.params['centres-cout'][ccId], ccId, data['centre-cout-id'] );
                 }
             }
             outC += '</select>';
@@ -396,6 +401,19 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         return outC;
     }
+
+
+
+    this.renderCentreCoutOption = function (params, value, selVal)
+    {
+        var selected = value == selVal ? ' selected="selected"' : '';
+        var bad = params['bad'] != undefined;
+        var badText = '<span title=\'Centre de coûts supprimé ou incohérent\' class=\'label label-danger\'>' + params['libelle'] + '</span>';
+        var badVal = bad ? 'data-content="' + badText + '"' : '';
+        return '<option value="' + value + '"' + selected + badVal + '>' + params['libelle'] + '</option>';
+    }
+
+
 
     this.renderDomaineFonctionnel = function (data)
     {
@@ -456,6 +474,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     }
 
 
+
     /**
      *
      * @param {Object} element
@@ -463,12 +482,13 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     this.onHeuresChange = function (element)
     {
         var miseEnPaiementId = element.parents('.mise-en-paiement').attr('id');
-        var heures = parseFloat(element.val() == '' ? 0 : element.val().replace(",", "."));
+        var heures = Formatter.stringToFloat(element.val());
 
         this.demandeMiseEnPaiement.changeUpdate(miseEnPaiementId, 'heures', heures);
         if (heures > 0) {
             this.params['demandes-mep'][miseEnPaiementId]['heures'] = heures;
             this.updateHeuresRestantes();
+            this.onChange();
         } else {
             this.removeMiseEnPaiement(miseEnPaiementId);
         }
@@ -485,7 +505,9 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
     {
         var miseEnPaiementId = element.parents('.mise-en-paiement').attr('id');
         var centreCoutId = element.val();
+        this.params['demandes-mep'][miseEnPaiementId]['centre-cout-id'] = centreCoutId;
         this.demandeMiseEnPaiement.changeUpdate(miseEnPaiementId, 'centre-cout-id', centreCoutId);
+        this.onChange();
     }
 
 
@@ -588,7 +610,18 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
             that.onAddHeuresRestantes();
         });
         this.populate();
+        this.initializing = false;
     }
+
+
+
+    this.onChange = function ()
+    {
+        if (!this.initializing) {
+            $('.dmep-budget').dmepBudget('changed');
+        }
+    }
+
 
 
     this.getHeuresTotal = function ()
@@ -780,8 +813,6 @@ $(function ()
 
 
 
-
-
 $.widget("ose.paiementMiseEnPaiementForm", {
 
     onPeriodeChange: function ()
@@ -791,15 +822,17 @@ $.widget("ose.paiementMiseEnPaiementForm", {
         var periodePaiementTardifId = this.element.data('periode-paiement-tardif-id');
         var dateMiseEnPaiementElement = this.getDateMiseEnPaiementElement();
 
-        if (periodeId == periodePaiementTardifId){
+        if (periodeId == periodePaiementTardifId) {
             dateMiseEnPaiementElement.prop('disabled', false);
             dateMiseEnPaiementElement.datepicker(); // pour le rafraichissement!!
-        }else{
+        } else {
             dateMiseEnPaiementElement.prop('disabled', true);
         }
 
         dateMiseEnPaiementElement.val(dates[periodeId]);
     },
+
+
 
     _create: function ()
     {
@@ -807,10 +840,14 @@ $.widget("ose.paiementMiseEnPaiementForm", {
         this.getPeriodeElement().change(function () { that.onPeriodeChange() });
     },
 
+
+
     getPeriodeElement: function ()
     {
         return this.element.find('[name="periode"]');
     },
+
+
 
     getDateMiseEnPaiementElement: function ()
     {
@@ -821,4 +858,161 @@ $.widget("ose.paiementMiseEnPaiementForm", {
 $(function ()
 {
     WidgetInitializer.add('paiement-mise-en-paiement-form', 'paiementMiseEnPaiementForm');
+});
+
+
+
+
+
+$.widget("ose.dmepBudget", {
+
+    oriData: undefined,
+
+    _create: function ()
+    {
+        var that = this;
+
+        this.oriData = this.getData();
+        this.getElementsEnveloppes().each(function ()
+        {
+            that.setDiffValue($(this).data('type-ressource'), $(this).data('structure'), 0);
+        });
+    },
+
+
+
+    changed: function ()
+    {
+        var that = this;
+        var data = this.getDiffData();
+        var depassement = false;
+
+        this.getElementsEnveloppes().each(function ()
+        {
+            var structureId = $(this).data('structure');
+            var typeRessourceId = $(this).data('type-ressource');
+            var value = 0;
+
+            if (data[structureId] !== undefined && data[structureId][typeRessourceId] !== undefined) {
+                value = data[structureId][typeRessourceId];
+            }
+
+            if (!that.setDiffValue(typeRessourceId, structureId, value)) {
+                depassement = true;
+            }
+        });
+
+        if (depassement) {
+            $('.demande-mise-en-paiement .sauvegarde').hide();
+            $('.demande-mise-en-paiement .depassement-budget').show();
+        } else {
+            $('.demande-mise-en-paiement .sauvegarde').show();
+            $('.demande-mise-en-paiement .depassement-budget').hide();
+        }
+    },
+
+
+
+    getDiffData: function ()
+    {
+        var data = this.getData();
+
+        for (structureId in this.oriData) {
+            for (typeRessourceId in this.oriData[structureId]) {
+                if (!data[structureId]) {
+                    data[structureId] = {};
+                }
+                if (!data[structureId][typeRessourceId]) {
+                    data[structureId][typeRessourceId] = 0;
+                }
+                data[structureId][typeRessourceId] -= this.oriData[structureId][typeRessourceId];
+            }
+        }
+        return data;
+    },
+
+
+
+    getData: function ()
+    {
+        var data = {};
+
+        $('.demande-mise-en-paiement .mise-en-paiement').each(function ()
+        {
+            var id = $(this).attr('id');
+            var params = $(this).parents('.mise-en-paiement-liste').data('params');
+            var structureId = params['structure-id'];
+            var centreCoutId = params['demandes-mep'][id]['centre-cout-id'];
+            var typeRessourceId = undefined;
+            var heures = params['demandes-mep'][id]['heures'];
+
+            if (centreCoutId) {
+                typeRessourceId = params['centres-cout'][centreCoutId]['type-ressource-id'];
+
+                if (!data[structureId]) {
+                    data[structureId] = {};
+                }
+                if (!data[structureId][typeRessourceId]) {
+                    data[structureId][typeRessourceId] = 0;
+                }
+                data[structureId][typeRessourceId] += heures;
+            }
+        });
+
+        return data;
+    },
+
+
+
+    setDiffValue: function (typeRessourceId, structureId, value)
+    {
+        var progress = this.getElementEnveloppe(typeRessourceId, structureId);
+        var bar = progress.find('.progressbar');
+        var dotation = progress.data('dotation');
+        var usage = progress.data('usage') + value;
+        var restant = dotation - usage;
+        var percent = 100 - Math.round(usage * 10000 / dotation) / 100;
+
+        if (percent < 0) percent = 0;
+
+        bar.removeClass('progress-bar-success progress-bar-info progress-bar-warning progress-bar-danger active');
+        if (percent < 10) {
+            bar.addClass('progress-bar-danger active');
+        } else if (percent < 25) {
+            bar.addClass('progress-bar-warning');
+        } else if (percent < 50) {
+            bar.addClass('progress-bar-info');
+        } else {
+            bar.addClass('progress-bar-success');
+        }
+        bar.attr('aria-valuenow', percent);
+        bar.attr('style', 'width:' + percent + '%');
+        if (restant >= 0) {
+            bar.html('<span class="restant">' + Formatter.floatToString(restant) + '</span><span class="label">HETD disponibles</span>');
+        } else {
+            bar.html('<span class="restant">' + Formatter.floatToString(restant * -1) + '</span><span class="label">HETD en trop</span>');
+        }
+
+
+        return restant >= 0;
+    },
+
+
+
+    getElementEnveloppe: function (typeRessourceId, structureId)
+    {
+        return this.element.find('.enveloppe[data-type-ressource=' + typeRessourceId + '][data-structure=' + structureId + ']');
+    },
+
+
+
+    getElementsEnveloppes: function ()
+    {
+        return this.element.find('.enveloppe');
+    }
+});
+
+$(function ()
+{
+    WidgetInitializer.add('dmep-budget', 'dmepBudget');
 });

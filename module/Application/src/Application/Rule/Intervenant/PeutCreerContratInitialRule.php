@@ -6,7 +6,7 @@ use Application\Entity\Db\Contrat;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
-use Common\Constants;
+use Application\Constants;
 
 /**
  * Règle métier déterminant si un intervenant peut faire l'objet d'une création de contrat initial.

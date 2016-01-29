@@ -8,7 +8,7 @@ use Application\Rule\Intervenant\PeutCreerAvenantRule;
 use Application\Rule\Intervenant\PeutCreerContratInitialRule;
 use Application\Service\AbstractService;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Application\Entity\Db\Contrat;
 
 /**

@@ -40,7 +40,7 @@ class Affectation extends AbstractEntityService
      * Sauvegarde une entité
      *
      * @param EntityAffectation $entity
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      * @return mixed
      */
     public function save($entity)

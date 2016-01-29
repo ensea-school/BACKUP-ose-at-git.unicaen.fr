@@ -85,7 +85,7 @@ class PeutSaisirReferentielAvecStructureRuleTest extends BaseRuleTest
     }
     
     /**
-     * @expectedException \Common\Exception\LogicException
+     * @expectedException \LogicException
      */
     public function testExceptionSiNiveauStructureIncorrect()
     {
@@ -164,7 +164,7 @@ class PeutSaisirReferentielAvecStructureRuleTest extends BaseRuleTest
     {
         $si = $this->getEntityManager()->getRepository('Application\Entity\Db\StatutIntervenant')->findOneByPeutSaisirReferentiel($peut);
         if (!$si) {
-            throw new \Common\Exception\RuntimeException("Aucun statut intervenant adéquat trouvé.");
+            throw new \RuntimeException("Aucun statut intervenant adéquat trouvé.");
         }
         
         return $si;

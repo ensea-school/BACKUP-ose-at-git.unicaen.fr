@@ -4,7 +4,7 @@ namespace Application\Rule\Intervenant;
 
 use Application\Rule\Expr as BaseExpr;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Expression AND ou OR de règles métiers.

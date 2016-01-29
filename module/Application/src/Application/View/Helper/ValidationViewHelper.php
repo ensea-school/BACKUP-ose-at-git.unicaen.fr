@@ -60,7 +60,7 @@ class ValidationViewHelper extends AbstractHtmlElement
 
         $vars = [
             "Type de validation" => $entity->getTypeValidation(),
-            "Date et auteur"     => $entity->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT)
+            "Date et auteur"     => $entity->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT)
                 . ' par ' . $this->getView()->utilisateur($entity->getHistoModificateur()),
         ];
 

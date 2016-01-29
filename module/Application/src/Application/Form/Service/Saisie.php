@@ -8,7 +8,6 @@ use Application\Form\AbstractForm;
 use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
-use Common\Exception\InvalidArgumentException;
 use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -55,7 +54,6 @@ class Saisie extends AbstractForm
      * @param  int    $flags
      *
      * @return mixed|void
-     * @throws InvalidArgumentException
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {

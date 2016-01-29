@@ -122,7 +122,7 @@ EOS;
     public function ajouterFichiers($files, IntervenantEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
     {
         if (!$files) {
-           throw new \Common\Exception\LogicException("Aucune donnée sur les fichiers spécifiée.");
+           throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
         }
         $instances = [];
 

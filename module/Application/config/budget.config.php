@@ -106,8 +106,8 @@ return [
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'engagement'),
                                     ],
                                     'export' => [
-                                        'label'    => 'Export (CSV)',
-                                        'title'    => 'Export CSV des données de budget',
+                                        'label'    => 'Export des données de paiement (CSV)',
+                                        'title'    => 'Export des données de paiement (CSV)',
                                         'route'    => 'budget/export',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'export'),
                                     ],

@@ -2,7 +2,7 @@
 
 namespace Application\Assertion;
 
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Assertions concernant la validation d'enseignements.

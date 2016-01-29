@@ -114,7 +114,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
             $this->getTypeIntervention(),
             count($this->getValidation()) . " validations",
             $this->getContrat() ? "Contrat " . $this->getContrat()->getId() : "Aucun contrat",
-            $this->getHistoDestructeur() ? "Supprimé" : $this->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT),
+            $this->getHistoDestructeur() ? "Supprimé" : $this->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT),
         ]);
     }
 

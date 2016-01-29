@@ -125,7 +125,7 @@ echo $this->form()->closeTag();
     function getLigneCurrentTotal()
     {
         var total = 0;
-        $.each(getLignes(), function(index, ligne) { total = total + parseFloat($(".modification-service-du-heures", ligne).val()); });
+        $.each(getLignes(), function(index, ligne) { total = total + Formatter.stringToFloat($(".modification-service-du-heures", ligne).val()); });
         return total;
     }
     
@@ -135,7 +135,7 @@ echo $this->form()->closeTag();
         var currentCount = getLigneCurrentCount();
         if (currentCount) {
             var total = getLigneCurrentTotal();
-            msg = currentCount + " modification(s) de service dû (total = " + total + ").";
+            msg = currentCount + " modification(s) de service dû (total = " + Formatter.floatToString(total) + ").";
         }
         $("#modification-service-du-comptage").html(msg);
     }

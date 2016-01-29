@@ -38,7 +38,7 @@ $libelle = "J'ai terminé la saisie de la totalité de mon service réalisé";
 <?php if ($this->isAllowed($this->validation, 'read')): ?>
 
     <button type="button" class="btn-cloturer-saisie btn btn-lg btn-success" disabled="disabled"><?php echo $libelle ?> le
-            <?php echo $this->validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT) ?></button>
+            <?php echo $this->validation->getHistoModification()->format(\Common\Application::DATETIME_FORMAT) ?></button>
 
     <script>
         $(function() {

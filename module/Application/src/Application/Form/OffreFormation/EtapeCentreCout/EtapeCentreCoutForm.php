@@ -9,7 +9,7 @@ use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset;
 use Application\Service\Traits\CentreCoutAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Form\Element\Select;
 

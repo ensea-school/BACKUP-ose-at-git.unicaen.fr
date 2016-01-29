@@ -62,7 +62,7 @@ class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwar
              * (cf. unicaen.js)
              */
 //            throw new UnAuthorizedException($why);
-            throw new \Common\Exception\MessageException($why);
+            throw new \LogicException($why);
         }
         return false;
     }

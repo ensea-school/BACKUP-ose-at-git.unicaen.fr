@@ -6,6 +6,7 @@ use Application\Entity\Db\Dotation;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeRessource;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
+use Application\Util;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -47,7 +48,7 @@ class DotationService extends AbstractEntityService
     /**
      * Retourne, dans un tableau, le nombre d'heures abondées budgétairement par structure et par type de ressource
      */
-    public function getTableauBord()
+    public function getTableauBord( array $structures = [] )
     {
         $sql = "
         SELECT
@@ -59,6 +60,7 @@ class DotationService extends AbstractEntityService
         WHERE
           1 = ose_divers.comprise_entre(d.histo_creation, d.histo_destruction)
           AND d.annee_id = :annee
+          ".Util::sqlAndIn('structure_id', $structures)."
         GROUP BY
           structure_id, type_ressource_id
         ";

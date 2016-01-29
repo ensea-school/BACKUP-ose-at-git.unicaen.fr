@@ -8,7 +8,7 @@ use Application\Service\Traits\CentreCoutAwareTrait;
 use Application\Service\Traits\CentreCoutEpAwareTrait;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\TypeHeures;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Zend\Form\Element\Select;
 use Application\Entity\Db\CentreCoutEp;
 use Zend\Stdlib\Hydrator\HydratorInterface;

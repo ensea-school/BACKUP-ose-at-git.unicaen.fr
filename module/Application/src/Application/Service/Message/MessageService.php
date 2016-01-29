@@ -49,7 +49,7 @@ class MessageFormatter
 
         foreach ($parameters as $name => $value) {
             if ($value instanceof \DateTime) {
-                $normalizedParameters[$name] = $value->format(Constants::DATETIME_FORMAT);
+                $normalizedParameters[$name] = $value->format(\Application\Constants::DATETIME_FORMAT);
             }
         }
 

@@ -104,7 +104,7 @@ $role        = $this->role;
             </td>
             <td class="retour">
                 <?php if (($d = $contrat->getDateRetourSigne())): ?>
-                <p><?php echo $d->format(Common\Constants::DATE_FORMAT) ?></p>
+                <p><?php echo $d->format(Application\Constants::DATE_FORMAT) ?></p>
                 <?php endif ?>
                 <?php //if ($role instanceof Application\Acl\ComposanteRole && $contrat->getValidation()): ?>
                 <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_DATE_RETOUR)): ?>

@@ -6,7 +6,7 @@ use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Service\AbstractService;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Common\Exception\LogicException;
+use LogicException;
 use Traversable;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterInterface;

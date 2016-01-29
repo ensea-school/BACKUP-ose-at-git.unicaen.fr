@@ -235,7 +235,7 @@ abstract class AbstractEntityService extends AbstractService
         if (is_string($service)) {
             $service = $this->getServiceLocator()->get($service);
             if (!$service instanceof AbstractEntityService) {
-                throw new \Common\Exception\LogicException('Le service transmis n\'est pas compatible.');
+                throw new \LogicException('Le service transmis n\'est pas compatible.');
             }
         }
 
@@ -398,7 +398,7 @@ abstract class AbstractEntityService extends AbstractService
         $entityClass = get_class($entity);
         $serviceEntityClass = $this->getEntityClass();
         if ($serviceEntityClass != $entityClass && !is_subclass_of($entity, $serviceEntityClass)) {
-            throw new \Common\Exception\RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
+            throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
         }
         if ($softDelete && $entity instanceof HistoriqueAwareInterface) {
             $entity->setHistoDestruction(new \DateTime);
@@ -417,7 +417,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @param mixed $entity
      *
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      * @return mixed
      */
     public function save($entity)
@@ -425,7 +425,7 @@ abstract class AbstractEntityService extends AbstractService
         $entityClass = get_class($entity);
         $serviceEntityClass = $this->getEntityClass();
         if ($serviceEntityClass != $entityClass && !is_subclass_of($entity, $serviceEntityClass)) {
-            throw new \Common\Exception\RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
+            throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
         }
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush($entity);

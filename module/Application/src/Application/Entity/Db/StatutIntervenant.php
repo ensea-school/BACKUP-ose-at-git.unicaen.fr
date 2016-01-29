@@ -208,6 +208,16 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     private $privilege;
 
+    /**
+     * @var float
+     */
+    private $plafondHcHorsRemuFc;
+
+    /**
+     * @var float
+     */
+    private $plafondHcRemuFc;
+
 
 
     /**
@@ -768,12 +778,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
     /**
      * Détermine si le type de rôle possède un provilège ou non.
-     * Si le privilège transmis est un objet de classe Privilege, alors il est inutile de fournir la ressource, sinon il est obligatoire de la préciser
+     * Si le privilège transmis est un objet de classe Privilege, alors il est inutile de fournir la ressource, sinon il est
+     * obligatoire de la préciser
      *
      * @param Privilege|string $privilege
      *
      * @return boolean
-     * @throws \Common\Exception\LogicException
+     * @throws \LogicException
      */
     public function hasPrivilege($privilege)
     {
@@ -790,6 +801,54 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
 
+    /**
+     * @return float
+     */
+    public function getPlafondHcHorsRemuFc()
+    {
+        return $this->plafondHcHorsRemuFc;
+    }
+
+
+
+    /**
+     * @param float $plafondHcHorsRemuFc
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondHcHorsRemuFc($plafondHcHorsRemuFc)
+    {
+        $this->plafondHcHorsRemuFc = $plafondHcHorsRemuFc;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getPlafondHcRemuFc()
+    {
+        return $this->plafondHcRemuFc;
+    }
+
+
+
+    /**
+     * @param float $plafondHcRemuFc
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondHcRemuFc($plafondHcRemuFc)
+    {
+        $this->plafondHcRemuFc = $plafondHcRemuFc;
+
+        return $this;
+    }
+
+
+    
     public function getRoleId()
     {
         return 'statut/' . $this->getSourceCode();

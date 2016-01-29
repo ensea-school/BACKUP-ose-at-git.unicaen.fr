@@ -75,7 +75,7 @@ abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterfa
      * @param  string $messageString
      * @param  string $messageKey     OPTIONAL
      * @return self Provides a fluent interface
-     * @throws Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setMessage($messageString, $messageKey = null)
     {

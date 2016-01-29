@@ -2,6 +2,8 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 use Application\Form\AbstractFieldset;
 use Zend\Validator\LessThan;
 use Application\Entity\Db\ModificationServiceDu;
@@ -119,9 +121,8 @@ class MotifModificationServiceDuFieldset extends AbstractFieldset
             ],
             'heures'   => [
                 'required' => true,
-                'filters'    => [
-                    ['name' => 'Zend\Filter\StringTrim'],
-                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                'filters'  => [
+                    ['name' => FloatFromString::class],
                 ],
                 'validators' => [
                     [
@@ -154,7 +155,7 @@ class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator
     {
         $array = parent::extract($object);
         
-        $array['heures'] = floatval($object->getHeures());
+        $array['heures'] = StringFromFloat::run($object->getHeures());
         $array['motif'] = $object->getMotif() ? $object->getMotif()->getId() : null;
         return $array;
     }
@@ -170,7 +171,7 @@ class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator
     {
         parent::hydrate($data, $object);
         
-        $object->setHeures(floatval($data['heures']));
+        $object->setHeures($data['heures']);
 
         return $object;
     }

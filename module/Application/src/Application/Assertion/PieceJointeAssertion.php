@@ -6,7 +6,7 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Entity\Db\PieceJointe;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Common\Exception\LogicException;
+use LogicException;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;

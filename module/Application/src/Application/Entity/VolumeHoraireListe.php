@@ -11,8 +11,8 @@ use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Validation;
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
+use RuntimeException;
+use LogicException;
 
 /**
  * Description of VolumeHoraireList

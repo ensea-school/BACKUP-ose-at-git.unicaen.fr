@@ -640,7 +640,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     public function getColumnVisibility($columnName)
     {
         if (!array_key_exists($columnName, $this->columns)) {
-            throw new \Common\Exception\LogicException('La colonne "' . $columnName . '" n\'existe pas.');
+            throw new \LogicException('La colonne "' . $columnName . '" n\'existe pas.');
         }
 
         return $this->columns[$columnName]['visibility'];
@@ -653,12 +653,12 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
      * @param string $columnName
      *
      * @return string
-     * @throws \Common\Exception\LogicException
+     * @throws \LogicException
      */
     public function getColumnHeadText($columnName)
     {
         if (!array_key_exists($columnName, $this->columns)) {
-            throw new \Common\Exception\LogicException('La colonne "' . $columnName . '" n\'existe pas.');
+            throw new \LogicException('La colonne "' . $columnName . '" n\'existe pas.');
         }
 
         return $this->columns[$columnName]['head-text'];

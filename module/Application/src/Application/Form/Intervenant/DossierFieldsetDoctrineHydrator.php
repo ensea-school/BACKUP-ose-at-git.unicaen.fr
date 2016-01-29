@@ -2,7 +2,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Dossier as DossierEntity;
-use Common\Constants;
+use Application\Constants;
 use DateTime;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 

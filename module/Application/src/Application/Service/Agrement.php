@@ -42,7 +42,7 @@ class Agrement extends AbstractEntityService
      *
      * @param AgrementEntity $entity
      *
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      * @return mixed
      */
     public function save($entity)

@@ -4,7 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
-use Common\Exception\LogicException;
+use LogicException;
 use Zend\Form\Element\Csrf;
 use Zend\Form\Form;
 use Zend\Form\FormInterface;

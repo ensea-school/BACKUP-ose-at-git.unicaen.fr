@@ -678,7 +678,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $slice = $this->centreCoutEp->filter($f);
 
         if (count($slice) > 1) {
-            throw new \Common\Exception\LogicException(sprintf(
+            throw new \LogicException(sprintf(
                 "Anomalie dans la base de données : plus d'un centre de coûts trouvé pour l'élément pédagogique %s et le type d'heures %s.",
                 $this,
                 $th));

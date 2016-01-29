@@ -2,7 +2,7 @@
 
 namespace Application\Exception;
 
-use Common\Exception\RuntimeException;
+use RuntimeException;
 
 /**
  *

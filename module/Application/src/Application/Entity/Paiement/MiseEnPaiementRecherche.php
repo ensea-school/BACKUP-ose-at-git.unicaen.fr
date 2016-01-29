@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Paiement;
 
-use Common\EntityCollection;
+use Application\Entity\Collection;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\MiseEnPaiement;
 
@@ -50,7 +50,7 @@ class MiseEnPaiementRecherche
         if ($etat === null || $etat === MiseEnPaiement::A_METTRE_EN_PAIEMENT || $etat === MiseEnPaiement::MIS_EN_PAIEMENT){
             $this->etat = $etat;
         }else{
-            throw new \Common\Exception\LogicException('L\'état de mise en paiement "'.$etat.'" est invalide.');
+            throw new \LogicException('L\'état de mise en paiement "'.$etat.'" est invalide.');
         }
         return $this;
     }
@@ -62,7 +62,7 @@ class MiseEnPaiementRecherche
     public function getIntervenants()
     {
         if (null === $this->intervenants){
-            $this->intervenants = new EntityCollection;
+            $this->intervenants = new Collection;
             $this->intervenants->initEntityClass( Intervenant::class );
         }
         return $this->intervenants;

@@ -99,7 +99,7 @@ class FormuleService
      *
      * @param TypeHeures $typeHeures
      * @return float
-     * @throws \Common\Exception\LogicException
+     * @throws \LogicException
      */
     public function getTaux(TypeHeures $typeHeures)
     {
@@ -108,7 +108,7 @@ class FormuleService
             case TypeHeures::FA: return $this->getTauxFa();
             case TypeHeures::FC: return $this->getTauxFc();
         }
-        throw new \Common\Exception\LogicException('Le type d\'heures transmis n\'est pas correct');
+        throw new \LogicException('Le type d\'heures transmis n\'est pas correct');
     }
 
     /**

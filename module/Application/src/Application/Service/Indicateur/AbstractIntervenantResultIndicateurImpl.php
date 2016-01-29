@@ -4,8 +4,8 @@ namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Common\Exception\LogicException;
-use Common\Exception\RuntimeException;
+use LogicException;
+use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\ORMException;
 use Traversable;

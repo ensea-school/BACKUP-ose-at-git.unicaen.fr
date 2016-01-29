@@ -4,7 +4,7 @@ namespace Application\Service\Workflow\Step;
 
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
-use Common\Exception\LogicException;
+use LogicException;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
@@ -169,7 +169,7 @@ EOS;
             $roleId = ComposanteRole::ROLE_ID;
         }
         if (!isset($this->descriptions[$roleId])) {
-//            throw new \Common\Exception\LogicException("Description not set for role '$roleId'!");
+//            throw new \LogicException("Description not set for role '$roleId'!");
             return "";
         }
         return $this->descriptions[$roleId];

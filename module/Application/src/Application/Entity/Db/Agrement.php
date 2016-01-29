@@ -203,7 +203,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      */
     public function __toString()
     {
-        return $this->getDateDecision()->format(\Common\Constants::DATE_FORMAT);
+        return $this->getDateDecision()->format(\Application\Constants::DATE_FORMAT);
     }
 
 

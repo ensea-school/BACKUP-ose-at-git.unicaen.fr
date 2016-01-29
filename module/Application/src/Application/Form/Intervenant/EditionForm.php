@@ -3,6 +3,8 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -20,6 +22,8 @@ class EditionForm extends AbstractForm
         $hydrator = new IntervenantFormHydrator;
         $this->setHydrator($hydrator);
 
+        $this->setAttribute('action', $this->getCurrentUrl() );
+
         $this->add([
             'name'       => 'montant-indemnite-fc',
             'options'    => [
@@ -28,10 +32,8 @@ class EditionForm extends AbstractForm
             'attributes' => [
                 'value'   => '0',
                 'title'   => "Nombre d'heures",
-                'step'    => 'any',
-                'min'     => 0,
             ],
-            'type'       => 'Number',
+            'type'       => 'Text',
         ]);
 
         $this->add([
@@ -62,6 +64,9 @@ class EditionForm extends AbstractForm
         return [
             'montant-indemnite-fc' => [
                 'required' => false,
+                'filters'  => [
+                    ['name' => FloatFromString::class],
+                ],
             ],
         ];
     }
@@ -98,7 +103,7 @@ class IntervenantFormHydrator implements HydratorInterface
     {
         $data = [
             'id'                   => $object->getId(),
-            'montant-indemnite-fc' => $object->getMontantIndemniteFc(),
+            'montant-indemnite-fc' => StringFromFloat::run($object->getMontantIndemniteFc()),
         ];
 
         return $data;

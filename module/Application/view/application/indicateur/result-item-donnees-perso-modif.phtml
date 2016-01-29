@@ -31,7 +31,7 @@ $urlPostPurge  = $this->url('indicateur/result', ['indicateur' => $this->indicat
             </td>
             <td>
                 <?php echo sprintf("Le %s <br>par %s",
-                    $modif->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT),
+                    $modif->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT),
                     $modif->getHistoModificateur()) ?>
             </td>
         </tr>

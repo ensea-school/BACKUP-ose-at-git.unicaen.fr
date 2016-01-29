@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\WfEtape as WfEtapeEntity;
 use Application\Entity\Db\WfIntervenantEtape as WfIntervenantEtapeEntity;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 

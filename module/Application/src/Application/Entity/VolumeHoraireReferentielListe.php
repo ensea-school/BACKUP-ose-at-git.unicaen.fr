@@ -7,8 +7,8 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\EtatVolumeHoraire;
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
+use RuntimeException;
+use LogicException;
 
 /**
  * 

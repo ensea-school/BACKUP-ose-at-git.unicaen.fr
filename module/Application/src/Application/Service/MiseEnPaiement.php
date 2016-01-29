@@ -13,6 +13,8 @@ use Application\Service\Traits\FormuleResultatServiceReferentielAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
+use Application\Util;
+use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -537,7 +539,8 @@ class MiseEnPaiement extends AbstractEntityService
      * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
      * et pour l'année courante
      *
-     * Format de retour = [(int)TypeRessource->getId() => (float)Heures]
+     * Format de retour : [Structure.id][TypeRessource.id] = (float)Heures
+     *                 ou [TypeRessource.id] = (float)Heures
      *
      * Si la structure n'est pas spécifiée alors on retourne le tableau pour chaque structure.
      *
@@ -546,9 +549,14 @@ class MiseEnPaiement extends AbstractEntityService
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function getTblLiquidation(StructureEntity $structure = null)
+    public function getTblLiquidation($structure = null)
     {
-        if (!$structure) return $this->getTblLiquidationWS();
+        if (empty($structure)) return $this->getTblLiquidationMS();
+        if (is_array($structure)) return $this->getTblLiquidationMS($structure);
+
+        if (! $structure instanceof StructureEntity){
+            throw new RuntimeException('La structure fournie n\'est pas uns entité');
+        }
 
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -582,7 +590,7 @@ class MiseEnPaiement extends AbstractEntityService
 
 
 
-    private function getTblLiquidationWS()
+    private function getTblLiquidationMS( array $structures = [] )
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -596,7 +604,8 @@ class MiseEnPaiement extends AbstractEntityService
         FROM
           V_TBL_DMEP_LIQUIDATION
         WHERE
-          annee_id = :annee";
+          annee_id = :annee
+          ".Util::sqlAndIn('structure_id', $structures);
 
         $params = [
             'annee' => $annee->getId(),

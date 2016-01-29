@@ -159,7 +159,7 @@ trait FormuleResultatTypesHeuresTrait
      *
      * @param TypeHeures $typeHeures
      * @return float
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      */
     public function getHeuresService( TypeHeures $typeHeures )
     {
@@ -169,14 +169,14 @@ trait FormuleResultatTypesHeuresTrait
             case TypeHeures::FC: return $this->getHeuresServiceFc();
             case TypeHeures::REFERENTIEL: return $this->getHeuresServiceReferentiel();
         }
-        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu ou non pris en charge');
+        throw new \RuntimeException('Type d\'heures inconnu ou non pris en charge');
     }
 
     /**
      *
      * @param TypeHeures $typeHeures
      * @return float
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      */
     public function getHeuresCompl( TypeHeures $typeHeures )
     {
@@ -187,7 +187,7 @@ trait FormuleResultatTypesHeuresTrait
             case TypeHeures::FC_MAJOREES: return $this->getHeuresComplFcMajorees();
             case TypeHeures::REFERENTIEL: return $this->getHeuresComplReferentiel();
         }
-        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu ou non pris en charge');
+        throw new \RuntimeException('Type d\'heures inconnu ou non pris en charge');
     }
 
 }

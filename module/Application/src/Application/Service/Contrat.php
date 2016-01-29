@@ -12,7 +12,7 @@ use Application\Entity\Db\TypeContrat as TypeContratEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Fichier as FichierEntity;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Description of Contrat
@@ -202,7 +202,7 @@ class Contrat extends AbstractEntityService
     public function creerFichiers($files, ContratEntity $contrat, $deleteFiles = true)
     {
         if (!$files) {
-           throw new \Common\Exception\LogicException("Aucune donnée sur les fichiers spécifiée.");
+           throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");
         }
         $instances = [];
         

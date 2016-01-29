@@ -46,7 +46,7 @@ class EtapeModulateursSaisie extends AbstractForm
     {
         $etape = $this->getEtape();
         if (! $etape){
-            throw new \Common\Exception\RuntimeException('Etape non spécifiée');
+            throw new \RuntimeException('Etape non spécifiée');
         }
         return $this->getServiceTypeModulateur()->getList( $this->getServiceTypeModulateur()->finderByEtape($etape) );
     }
@@ -83,7 +83,7 @@ class EtapeModulateursSaisie extends AbstractForm
     {
         $etape = $this->getEtape();
         if (! $etape){
-            throw new \Common\Exception\RuntimeException('Etape non spécifiée : construction du formulaire impossible');
+            throw new \RuntimeException('Etape non spécifiée : construction du formulaire impossible');
         }
 
         $elements = $etape->getElementPedagogique();
@@ -132,7 +132,7 @@ class EtapeModulateursSaisie extends AbstractForm
     {
         $etape = $this->getEtape();
         if (! $etape){
-            throw new \Common\Exception\RuntimeException('Etape non spécifiée : construction des filtres du formulaire impossible');
+            throw new \RuntimeException('Etape non spécifiée : construction des filtres du formulaire impossible');
         }
 
         $elements = $etape->getElementPedagogique();

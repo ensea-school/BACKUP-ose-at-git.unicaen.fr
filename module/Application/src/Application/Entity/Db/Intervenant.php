@@ -8,7 +8,7 @@ use Application\Entity\Db\Traits\GradeAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Form\Annotation;
-use Common\Constants;
+use Application\Constants;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 
@@ -1441,8 +1441,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     {
         $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
 
-        return Civilite::SEXE_F === $civilite->getSexe();
-        //return Civilite::SEXE_F === $this->getCivilite()->getSexe();
+        return 'F' === $civilite->getSexe();
     }
 
 
@@ -1490,7 +1489,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      */
     public function getNomComplet($avecCivilite = false, $avecNomPatro = false)
     {
-        $f = new \Common\Filter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
+        $f = new \Application\Filter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
 
         return $f->filter($this);
     }

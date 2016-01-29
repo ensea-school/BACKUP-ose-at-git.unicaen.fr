@@ -7,8 +7,9 @@ use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\TypeIntervenant;
+use Application\Filter\StringFromFloat;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
 use UnicaenApp\Util;
@@ -156,7 +157,7 @@ class Intervenant extends AbstractEntityService
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        $findParams = ['sourceCode' => $sourceCode, 'annee' => $annee->getId()];
+        $findParams = ['sourceCode' => (string)$sourceCode, 'annee' => $annee->getId()];
         $repo       = $this->getRepo();
 
         $result = $repo->findOneBy($findParams);
@@ -318,6 +319,28 @@ class Intervenant extends AbstractEntityService
         $qb->addOrderBy("$alias.nomUsuel, $alias.prenom");
 
         return parent::getList($qb, $alias);
+    }
+
+
+
+    /**
+     * Sauvegarde une entité
+     *
+     * @param IntervenantEntity $entity
+     *
+     * @throws \RuntimeException
+     * @return IntervenantEntity
+     */
+    public function save($entity)
+    {
+        $plafondHcRemuFc = $entity->getStatut()->getPlafondHcRemuFc();
+        if ($entity->getMontantIndemniteFc() > $plafondHcRemuFc){
+            throw new \RuntimeException(
+                'Le montant annuel de la rémunération FC D714-60 dépasse le plafond autorisé qui est de '
+                .StringFromFloat::run($plafondHcRemuFc).' €.'
+            );
+        }
+        return parent::save($entity);
     }
 
 

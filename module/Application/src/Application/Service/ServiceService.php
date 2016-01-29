@@ -1003,6 +1003,7 @@ class ServiceService extends AbstractEntityService
             }
             $ds = [
                 '__total__'     => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
+                'type-etat'     => $d['TYPE_ETAT'],
                 'annee-libelle' => (string)$annee,
 
                 'intervenant-code'               => $d['INTERVENANT_CODE'],
@@ -1104,6 +1105,7 @@ class ServiceService extends AbstractEntityService
 
         // tri et préparation des entêtes
         $head = [
+            'type-etat' => 'Type État',
             'annee-libelle' => 'Année universitaire',
 
             'intervenant-code'               => 'Code intervenant',
@@ -1260,7 +1262,7 @@ class ServiceService extends AbstractEntityService
         $typesIntervention = [];
         foreach ($services as $service) {
             if (!$service instanceof ServiceEntity) {
-                throw new \Common\Exception\LogicException('Seules des entités Service doivent être passées en paramètre');
+                throw new \LogicException('Seules des entités Service doivent être passées en paramètre');
             }
             if ($ep = $service->getElementPedagogique()) {
                 foreach ($ep->getTypeIntervention() as $typeIntervention) {

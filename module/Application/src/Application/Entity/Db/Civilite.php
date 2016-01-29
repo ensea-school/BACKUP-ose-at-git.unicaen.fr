@@ -3,7 +3,7 @@
 namespace Application\Entity\Db;
 
 use Doctrine\ORM\Mapping as ORM;
-use Common\Constants;
+
 
 /**
  * Civilite
@@ -118,9 +118,6 @@ class Civilite
 	/**************************************************************************************************
 	 * 										Début ajout
 	 **************************************************************************************************/
-
-    const SEXE_M = Constants::SEXE_M;
-    const SEXE_F = Constants::SEXE_F;
 
     /**
      * @since PHP 5.6.0

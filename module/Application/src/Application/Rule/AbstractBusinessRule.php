@@ -5,7 +5,7 @@ namespace Application\Rule;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Traits\MessageAwareTrait;;
-use Common\Exception\LogicException;
+use LogicException;
 use Application\Entity\Db\Structure;
 use Application\Acl\Role;
 

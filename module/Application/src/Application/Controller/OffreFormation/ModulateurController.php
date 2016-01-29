@@ -30,7 +30,7 @@ class ModulateurController extends AbstractController
         /* @var $etape \Application\Entity\Db\Etape */
 
         if (!$etape) {
-            throw new \Common\Exception\RuntimeException('La formation n\'a pas été spécifiée ou bien elle est invalide.');
+            throw new \RuntimeException('La formation n\'a pas été spécifiée ou bien elle est invalide.');
         }
 
         $form   = $this->getFormSaisie();

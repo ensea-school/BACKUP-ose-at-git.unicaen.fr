@@ -2,7 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Règle métier déterminant si un intervenant a saisi des données personnelles.

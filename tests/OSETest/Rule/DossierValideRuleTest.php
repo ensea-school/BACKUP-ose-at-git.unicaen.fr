@@ -6,7 +6,7 @@ use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\TypeValidation;
 use Application\Rule\Intervenant\DossierValideRule;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Test fonctionnel de la règle métier.

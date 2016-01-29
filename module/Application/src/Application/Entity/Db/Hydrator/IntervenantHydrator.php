@@ -4,7 +4,7 @@ namespace Application\Entity\Db\Hydrator;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Civilite;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Description of Intervenant

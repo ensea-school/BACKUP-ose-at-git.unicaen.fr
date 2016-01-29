@@ -2,7 +2,7 @@
 
 namespace Application\Rule;
 
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Expression AND ou OR de règles métiers.

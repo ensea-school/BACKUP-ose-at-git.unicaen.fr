@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Parametre as ParametreEntity;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Service Paramètres

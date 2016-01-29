@@ -3,7 +3,7 @@
 namespace Application\Rule\Validation\Enseignement;
 
 use Application\Rule\Validation\ValidationEnsRefAbstractRule;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Tentative de centralisation des "règles métier" concernant la validation des enseignements.
@@ -41,7 +41,7 @@ class ValidationRule extends ValidationEnsRefAbstractRule
      * Fournit selon le type de volume horaire le service auquel on délègue le boulot.
      *
      * @return array|object
-     * @throws \Common\Exception\LogicException
+     * @throws \LogicException
      */
     private function delegateDependingOnContext()
     {

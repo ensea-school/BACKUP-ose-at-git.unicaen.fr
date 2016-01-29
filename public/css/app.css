@@ -59,36 +59,6 @@ div#footer {
     margin-top:2em;
 }
 
-.appname {
-    text-shadow: 0px 1px 2px #fff, 5px 5px 5px #aaa;
-    text-outline: #fff;
-    font-weight: 700;
-    font-size: 60pt;
-    float:left;
-    padding-right: .5em;
-    padding-bottom: 2em;
-}
-
-.jumbotron .lead {
-    margin-left: 190px;
-}
-
-.appname > .c1 {
-    color: #3399ff;
-    /*color:#5cb85c;*/
-}
-
-.appname > .c2 {
-    color: #f4d35e;
-    /*color:#f0ad4e;*/
-
-}
-
-.appname > .c3 {
-    color:orangered;
-    /*olor: #d9534f;*/
-}
-
 /*****/
 
 table {
@@ -102,47 +72,6 @@ table.table-extra-condensed tr td {
 
 table.table-extra-condensed tr th {
     padding: 2px;
-}
-
-table.service, table.service-referentiel {
-    margin-bottom: 0px;
-}
-
-table.service table.volume-horaire, table.service-referentiel table.volume-horaire {
-    margin-bottom: 0px;
-}
-
-table.service div#vhl-prev {
-    margin-bottom: 2px;
-    opacity: .5;
-}
-
-table.service div#vhl-prev table {
-    background-color: #EDEAD2;
-}
-
-table.service td.actions, table.service-referentiel td.actions {
-    white-space: nowrap;
-    text-align: center;
-}
-
-table.service tfoot td.type-intervention {
-    white-space: nowrap;
-}
-
-table.service td.actions a, table.service-referentiel td.actions a {
-    margin-left: 0.2em;
-    margin-right: 0.2em;
-}
-
-div.service-show-hide-buttons {
-    padding-bottom: 3px;
-    padding-top: 3px;
-    text-align: right;
-}
-
-div.service-liste table.service tr.volume-horaire {
-    background-color: #fafafa;
 }
 
 /**
@@ -167,10 +96,6 @@ span.element-rech.periode {
 /**
  * Autre
  */
-
-dl.dl-horizontal.agrement dt {
-    width: 180px;
-}
 
 dl.dl-horizontal.intervenant dt {
     width: 200px;
@@ -277,25 +202,6 @@ div.scr-center div.alert {
     overflow: auto;
 }
 
-form#service div#element-interne div.col-md-5 {
-    clear: both;
-}
-
-form#service div.volume-horaire-saisie-multiple div {
-    float: left;
-    width: 10em;
-    height: 5em;
-}
-
-form#service div.volume-horaire-saisie-multiple div input {
-    width: 7em;
-    display: inline;
-}
-
-form#service div.volume-horaire-saisie-multiple-fin {
-    clear: both;
-}
-
 td .form-group {
     margin-bottom: 0px;
 }
@@ -316,10 +222,6 @@ form#modulateurs-saisie th select {
 
 .bootstrap-select .dropdown-menu li a.opt {
     margin-left: 2em;
-}
-
-.demande-mise-en-paiement .type-heures.not-allowed {
-    opacity: 0.5;
 }
 
 .bootstrap-select button.selectpicker {
@@ -356,88 +258,7 @@ form#modulateurs-saisie th select {
     padding-right: 7px;
 }
 
-ul.privileges-form {
-    list-style-type: none;
-}
 
-ul.privileges-form li {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-}
-
-ul.privileges-form li label {
-    margin-left: 0.5em;
-}
-
-.table-header-rotated th.row-header {
-    width: auto;
-}
-
-.table-header-rotated td {
-    width: 40px;
-    vertical-align: middle;
-    text-align: center;
-}
-
-.table-header-rotated th.rotate-45 {
-    border: none;
-    height: 200px;
-    width: 40px;
-    min-width: 40px;
-    max-width: 40px;
-    position: relative;
-    vertical-align: bottom;
-    padding: 0;
-    line-height: 1;
-    white-space: nowrap;
-}
-
-.table-header-rotated th.rotate-45 > div {
-    position: relative;
-    top: 0px;
-    left: 83px;
-    height: 100%;
-    transform: skew(-40deg, 0deg);
-    overflow: hidden;
-    border-right: 1px solid #ddd;
-}
-
-.table-header-rotated th.rotate-45 > div.first {
-    border-left: 1px solid #ddd;
-}
-
-.table-header-rotated th.rotate-45 span {
-    transform: skew(40deg, 0deg) rotate(310deg);
-    position: absolute;
-    bottom: 40px;
-    left: -30px;
-    display: inline-block;
-    width: 100px;
-    text-align: left;
-}
-
-
-.table-header-rotated .separator {
-    border: none;
-}
-
-.table-header-rotated thead th.separator {
-    border: none;
-    vertical-align: top;
-    padding-left:2em;
-    padding-top:2em;
-}
-
-
-.droits-tbl th.privilege {
-    min-width: 200px;
-    max-width: 200px;
-    width: 200px;
-}
-
-.droits-tbl td span.refuse {
-    opacity: 0.5;
-}
 
 .bg-historique {
     background-color: #d9534f;
@@ -529,15 +350,10 @@ td .alert {
 }
 
 
-.agrement-box dl {
-    float: left;
+.progressbar {
+    box-shadow: 1px 0px 2px gray;
 }
 
-.agrement-box hr {
-    clear:both
-}
-
-.agrement-box span.glyphicon {
-    float: right;
-    font-size:40pt;
+.progressbar.active {
+    animation: 2s linear 0s normal none infinite running progress-bar-stripes;
 }

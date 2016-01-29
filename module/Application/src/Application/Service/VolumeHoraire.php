@@ -74,7 +74,7 @@ class VolumeHoraire extends AbstractEntityService
      *
      * @param VolumeHoraireEntity $entity
      *
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      * @return VolumeHoraireEntity
      */
     public function save($entity, $plafondControl=true)

@@ -72,7 +72,7 @@ class ElementPedagogiqueController extends AbstractController
     {
         $element = $this->getEvent()->getParam('elementPedagogique');
         if (!$element) {
-            throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
         $title  = "Suppression d'enseignement";

@@ -305,7 +305,7 @@ class ServiceReferentiel extends AbstractEntityService
      *
      * @param ServiceReferentielEntity $entity
      *
-     * @throws \Common\Exception\RuntimeException
+     * @throws \RuntimeException
      */
     public function save($entity)
     {

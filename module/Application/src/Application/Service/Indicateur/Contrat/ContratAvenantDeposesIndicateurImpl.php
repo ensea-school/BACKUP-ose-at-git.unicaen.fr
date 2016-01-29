@@ -5,7 +5,7 @@ namespace Application\Service\Indicateur\Contrat;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
-use Common\Constants;
+use Application\Constants;
 use DateTime;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;

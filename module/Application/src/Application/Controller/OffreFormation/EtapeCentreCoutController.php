@@ -5,7 +5,7 @@ namespace Application\Controller\OffreFormation;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\Etape;
 use Application\Form\OffreFormation\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 

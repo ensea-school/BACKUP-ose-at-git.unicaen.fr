@@ -12,7 +12,7 @@ use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
-use Common\Exception\LogicException;
+use LogicException;
 
 /**
  * Tentative de centralisation des "règles métier" concernant la validation des enseignements et du référentiel.

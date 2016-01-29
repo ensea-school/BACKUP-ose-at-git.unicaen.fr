@@ -1,11 +1,15 @@
 <?php
 
-/* @var $intervenant Application\Entity\Db\Intervenant */
-/* @var $serviceaAPayer Application\Entity\Db\ServiceAPayerInterface[] */
-/* @var $saved boolean */
-/* @var $dateDerniereModif DateTime */
-/* @var $dernierModificateur \Application\Entity\Db\Utilisateur */
-/* @var $changeIndex integer  */
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $intervenant Application\Entity\Db\Intervenant
+ * @var $serviceaAPayer Application\Entity\Db\ServiceAPayerInterface[]
+ * @var $saved boolean
+ * @var $dateDerniereModif DateTime
+ * @var $dernierModificateur \Application\Entity\Db\Utilisateur
+ * @var $changeIndex integer
+ * @var $budget array
+ */
 
 $title = 'Demande de mise en paiement';
 if ($intervenant){
@@ -20,7 +24,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 <h1 class="page-header"><?php echo $title; ?></h1>
 
 <?php
-$html = $this->demandeMiseEnPaiement( $servicesAPayer, $changeIndex )->render();
+$html = $this->demandeMiseEnPaiement($servicesAPayer, $changeIndex)->setBudget($budget)->render();
 
 /**
  * NB: l'appel $this->messageCollector() doit être fait après $this->demandeMiseEnPaiement() car

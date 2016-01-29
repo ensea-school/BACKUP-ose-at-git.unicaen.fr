@@ -2,7 +2,7 @@
 
 namespace Application\Validator;
 
-use Common\Exception\LogicException;
+use LogicException;
 use Zend\Validator\AbstractValidator;
 
 class DepartementNaissanceValidator extends AbstractValidator

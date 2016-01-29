@@ -2,11 +2,12 @@
 
 namespace Application\Controller;
 
+use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Application\Exception\DbException;
 
 /**
@@ -73,7 +74,7 @@ class VolumeHoraireController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()){
-            $heures = (float)str_replace(',','.',$request->getPost()['heures']);
+            $heures = StringFromFloat::run($request->getPost()['heures']);
             try{
                 $volumeHoraireList->setHeures($heures, $motifNonPaiement, $ancienMotifNonPaiement);
             }catch(\Exception $e){

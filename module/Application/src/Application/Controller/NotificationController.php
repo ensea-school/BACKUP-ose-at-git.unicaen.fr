@@ -10,9 +10,8 @@ use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
-use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
-use Common\Filter\IntervenantEmailFormatter;
+use RuntimeException;
+use Application\Filter\IntervenantEmailFormatter;
 use DateTime;
 use UnicaenApp\Controller\Plugin\Mail;
 use UnicaenApp\Util;
@@ -277,7 +276,7 @@ EOS;
      * NB: 1 mail pour chaque intervenant.
      * 
      * @return ViewModel
-     * @throws MessageException
+     * @throws \LogicException
      */
     public function indicateurIntervenantsAction()
     {
@@ -303,7 +302,7 @@ EOS;
         $formatter = new IntervenantEmailFormatter();
         $emails    = $formatter->filter($destinataires);
         if (($intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail())) {
-            throw new MessageException(
+            throw new \LogicException(
                 "Aucune adresse mail trouvée pour l'intervenant suivant: " . implode(", ", Util::collectionAsOptions($intervenantsWithNoEmail)));
         }
 

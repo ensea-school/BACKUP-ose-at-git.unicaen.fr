@@ -2,8 +2,8 @@
 
 namespace Application\Controller;
 
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
+use RuntimeException;
+use LogicException;
 use Zend\View\Model\JsonModel;
 
 /**

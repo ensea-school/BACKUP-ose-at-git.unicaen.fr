@@ -15,7 +15,7 @@ use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
-use Common\Constants;
+use Application\Constants;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
 use Zend\View\Model\ViewModel;
@@ -80,7 +80,7 @@ class ContratController extends AbstractController
 
         /* @var $intervenant Intervenant */
         if ($intervenant->estPermanent()) {
-            throw new \Common\Exception\MessageException("Les intervenants permanents n'ont pas de contrat.");
+            throw new \LogicException("Les intervenants permanents n'ont pas de contrat.");
         }
 
         if ($role instanceof ComposanteRole || $role instanceof \Application\Acl\AdministrateurRole) {
@@ -257,7 +257,7 @@ class ContratController extends AbstractController
             ->setIntervenant($this->getIntervenant())
             ->setStructure($this->getStructure());
         if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_CREATE)) {
-            throw new \Common\Exception\MessageException("La création de contrat/avenant n'est pas encore possible.");
+            throw new \LogicException("La création de contrat/avenant n'est pas encore possible.");
         }
 
         if ($peutCreerContrat) {
@@ -311,19 +311,15 @@ class ContratController extends AbstractController
      * Suppression d'un projet de contrat/avenant par la composante d'intervention.
      *
      * @return \Zend\View\Model\ViewModel
-     * @throws Common\Exception\MessageException
+     * @throws \LogicException
      */
     public function supprimerAction()
     {
         $this->contrat   = $this->context()->mandatory()->contratFromRoute();
         $contratToString = lcfirst($this->contrat->toString(true, true));
 
-//        $rule = new \Application\Rule\Intervenant\PeutValiderContratRule($this->intervenant, $this->contrat);
-//        if (!$rule->execute()) {
-//            throw new \Common\Exception\MessageException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
-//        }
         if (!$this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_DELETE)) {
-            throw new \Common\Exception\MessageException("La suppression $contratToString n'est pas possible.");
+            throw new \LogicException("La suppression $contratToString n'est pas possible.");
         }
 
         $result = $this->confirm()->execute();
@@ -355,7 +351,7 @@ class ContratController extends AbstractController
      * Validation du contrat/avenant par la composante d'intervention.
      *
      * @return \Zend\View\Model\ViewModel
-     * @throws Common\Exception\MessageException
+     * @throws \LogicException
      */
     public function validerAction()
     {
@@ -371,7 +367,7 @@ class ContratController extends AbstractController
 
         $rule = new \Application\Rule\Intervenant\PeutValiderContratRule($this->intervenant, $this->contrat);
         if (!$rule->execute()) {
-            throw new \Common\Exception\MessageException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
+            throw new \LogicException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
         }
 
         $this->initFilters();
@@ -417,7 +413,7 @@ class ContratController extends AbstractController
      * Dévalidation du contrat/avenant par la composante d'intervention.
      *
      * @return \Zend\View\Model\ViewModel
-     * @throws Common\Exception\MessageException
+     * @throws \LogicException
      */
     public function devaliderAction()
     {
@@ -428,7 +424,7 @@ class ContratController extends AbstractController
 
         $rule = new \Application\Rule\Intervenant\PeutDevaliderContratRule($this->intervenant, $this->contrat);
         if (!$rule->execute()) {
-            throw new \Common\Exception\MessageException(
+            throw new \LogicException(
                 "Impossible de supprimer la validation $contratToString.",
                 null,
                 new \Exception($rule->getMessage()));
@@ -458,7 +454,7 @@ class ContratController extends AbstractController
      * Saisie de la date de retour du contrat/avenant signé par l'intervenant.
      *
      * @return \Zend\View\Model\ViewModel
-     * @throws Common\Exception\MessageException
+     * @throws \LogicException
      */
     public function saisirRetourAction()
     {
@@ -472,7 +468,7 @@ class ContratController extends AbstractController
 
         $rule = new \Application\Rule\Intervenant\PeutSaisirRetourContratRule($this->intervenant, $this->contrat);
         if (!$rule->execute()) {
-            throw new \Common\Exception\MessageException(
+            throw new \LogicException(
                 "Impossible de saisir la date de retour $contratToString.",
                 null,
                 new \Exception($rule->getMessage()));
@@ -525,7 +521,7 @@ class ContratController extends AbstractController
         try {
             $this->contrat = $qb->getQuery()->getSingleResult();
         } catch (\Doctrine\ORM\NoResultException $nre) {
-            throw new \Common\Exception\MessageException("Contrat/avenant spécifié introuvable.", null, $nre);
+            throw new \LogicException("Contrat/avenant spécifié introuvable.", null, $nre);
         }
 
         $this->intervenant = $this->contrat->getIntervenant();

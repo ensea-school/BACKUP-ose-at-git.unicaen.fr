@@ -3,7 +3,7 @@
 $form->prepare();
 
 echo $this->form()->openTag($form);
-echo $this->formControlGroup( $form->get('heures'), 'Zend\Form\View\Helper\FormNumber' );
+echo $this->formControlGroup( $form->get('heures') );
 if ($form->has('motif-non-paiement')) {
     echo $this->formControlGroup( $form->get('motif-non-paiement') );
 

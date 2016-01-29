@@ -214,7 +214,7 @@ class Ligne extends AbstractHtmlElement
         elseif (false === $param) return 'false';
         elseif( true === $param) return 'true';
         elseif(method_exists($param, 'getId')) return $param->getId();
-        else throw new \Common\Exception\LogicException('Le paramètre n\'est pas du bon type');
+        else throw new \LogicException('Le paramètre n\'est pas du bon type');
     }
 
     /**

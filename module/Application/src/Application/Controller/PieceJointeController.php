@@ -14,9 +14,6 @@ use Application\Service\Traits\PieceJointeAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
-use Common\Exception\MessageException;
-use Common\Exception\PieceJointe\AucuneAFournirException;
-use Common\Exception\PieceJointe\PieceJointeException;
 use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
@@ -79,19 +76,19 @@ class PieceJointeController extends AbstractController implements WorkflowInterv
     /**
      *
      * @return ViewModel
-     * @throws MessageException
+     * @throws \LogicException
      */
     public function indexAction()
     {
         $this->initFilters();
 
         if ($this->getIntervenant()->estPermanent()) {
-            throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
+            throw new \LogicException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
         }
 
         $dossier = $this->getIntervenant()->getDossier();
         if (!$dossier) {
-            throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
+            throw new \LogicException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
         }
 
         $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
@@ -401,7 +398,7 @@ class PieceJointeController extends AbstractController implements WorkflowInterv
         $premierRecrutement = $this->params()->fromRoute("premierRecrutement");
 
         if (null === $premierRecrutement) {
-            throw new \Common\Exception\LogicException("Paramètre manquant : premierRecrutement");
+            throw new \LogicException("Paramètre manquant : premierRecrutement");
         }
 
         $qb   = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointeStatut::class)->createQueryBuilder("tpjs")
@@ -543,16 +540,7 @@ class PieceJointeController extends AbstractController implements WorkflowInterv
         if (null === $this->process) {
             $this->process = $this->getServiceLocator()->get('ApplicationPieceJointeProcess');
         }
-
-        try {
-            $this->process->setIntervenant($this->getIntervenant());
-        } catch (AucuneAFournirException $exc) {
-            throw new MessageException(
-                "L'intervenant {$this->getIntervenant()} n'est pas sensé fournir de pièce justificative.", null, $exc);
-        } catch (PieceJointeException $exc) {
-            throw new MessageException(
-                "Gestion des pièces justificatives impossible pour l'intervenant {$this->getIntervenant()}.", null, $exc);
-        }
+        $this->process->setIntervenant($this->getIntervenant());
 
         return $this->process;
     }

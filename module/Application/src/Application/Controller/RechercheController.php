@@ -67,7 +67,7 @@ class RechercheController extends AbstractController
         if ($typeIntervenant) $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
         $entities  = $qb->getQuery()->execute();
 
-        $f = new \Common\Filter\IntervenantTrouveFormatter();
+        $f = new \Application\Filter\IntervenantTrouveFormatter();
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Intervenant */
             $data = $f->filter($item);
             $data['template'] = $template;

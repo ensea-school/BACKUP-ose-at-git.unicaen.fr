@@ -8,7 +8,7 @@ use Application\Provider\Privilege\Privileges;
 use Doctrine\DBAL\DBALException;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 
 /**
  * Description of IntervenantController

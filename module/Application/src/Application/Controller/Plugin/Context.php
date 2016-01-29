@@ -6,8 +6,8 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Zend\Mvc\Controller\Plugin\Params;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Common\Exception\LogicException;
-use Common\Exception\RuntimeException;
+use LogicException;
+use RuntimeException;
 
 /**
  * Plugin facilitant l'accès au gestionnaire d'entités Doctrine.

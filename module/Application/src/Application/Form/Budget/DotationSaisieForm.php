@@ -27,7 +27,7 @@ class DotationSaisieForm extends AbstractForm
 
         $this->add([
             'name'       => 'annee1',
-            'type'       => 'Number',
+            'type'       => 'Text',
             'options'    => [
                 'label' => "Nombre d'heures :",
             ],
@@ -41,7 +41,7 @@ class DotationSaisieForm extends AbstractForm
 
         $this->add([
             'name'       => 'annee2',
-            'type'       => 'Number',
+            'type'       => 'Text',
             'options'    => [
                 'label' => "Nombre d'heures :",
             ],

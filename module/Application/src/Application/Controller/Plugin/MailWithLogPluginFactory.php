@@ -8,7 +8,7 @@ use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Mail\Transport\Smtp;
 use Zend\Mail\Transport\SmtpOptions;
-use Zend\ServiceManager\Exception\InvalidArgumentException;
+use \InvalidArgumentException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

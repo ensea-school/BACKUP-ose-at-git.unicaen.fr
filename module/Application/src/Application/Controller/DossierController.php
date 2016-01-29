@@ -19,8 +19,7 @@ use Application\Service\Workflow\Workflow;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
-use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use NumberFormatter;
 use UnicaenApp\Controller\Plugin\MessengerPlugin;
 use UnicaenApp\Util;
@@ -79,7 +78,7 @@ class DossierController extends AbstractController implements WorkflowIntervenan
     /**
      *
      * @return ViewModel
-     * @throws MessageException
+     * @throws \LogicException
      */
     public function voirAction()
     {
@@ -90,7 +89,7 @@ class DossierController extends AbstractController implements WorkflowIntervenan
         $view        = new ViewModel();
 
         if (!$dossier) {
-            throw new MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
+            throw new \LogicException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
         }
 
         $view->setVariables(compact('intervenant', 'dossier', 'title', 'short'));

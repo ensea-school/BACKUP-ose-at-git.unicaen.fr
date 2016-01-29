@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\TypeRessource;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
@@ -11,6 +12,7 @@ use Application\Form\Paiement\Traits\MiseEnPaiementFormAwareTrait;
 use Application\Form\Paiement\Traits\MiseEnPaiementRechercheFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
@@ -19,6 +21,7 @@ use Application\Service\Traits\ServiceAPayerAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
@@ -42,6 +45,8 @@ class PaiementController extends AbstractController
     use MiseEnPaiementFormAwareTrait;
     use MiseEnPaiementRechercheFormAwareTrait;
     use SessionContainerTrait;
+    use TypeRessourceServiceAwareTrait;
+    use DotationServiceAwareTrait;
 
 
 
@@ -59,6 +64,7 @@ class PaiementController extends AbstractController
             ServiceReferentiel::class,
             VolumeHoraireReferentiel::class,
             Validation::class,
+            TypeRessource::class,
         ]);
     }
 
@@ -102,6 +108,8 @@ class PaiementController extends AbstractController
 
     public function demandeMiseEnPaiementAction()
     {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
         // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
         $postChangeIndex = (int)$this->params()->fromPost('change-index');
         $changeIndex = $this->getChangeIndex();
@@ -122,7 +130,13 @@ class PaiementController extends AbstractController
         $dateDerniereModif   = null;
         $dernierModificateur = null;
 
+        $typesRessources = $this->getServiceTypeRessource()->getList();
+        $structures = [];
+
         foreach ($servicesAPayer as $sap) {
+            if (null == $role->getStructure() || $sap->getStructure() == $role->getStructure()){
+                $structures[$sap->getStructure()->getId()] = $sap->getStructure();
+            }
             $mepListe = $sap->getMiseEnPaiement();
             foreach ($mepListe as $mep) {
                 /* @var $mep MiseEnPaiement */
@@ -135,7 +149,25 @@ class PaiementController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur');
+        $budget = [
+            'structures'      => $structures,
+            'typesRessources' => $typesRessources
+        ];
+        $dot = $this->getServiceDotation()->getTableauBord($structures);
+        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
+        foreach( $structures as $structure ){
+            $sid = $structure->getId();
+            foreach( $typesRessources as $typeRessource ){
+                $trid = $typeRessource->getId();
+
+                $dotation = isset($dot[$sid][$trid]) ? $dot[$sid][$trid] : 0;
+                $usage    = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
+
+                $budget[$sid][$trid] = compact('dotation','usage');
+            }
+        }
+
+        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget');
     }
 
 

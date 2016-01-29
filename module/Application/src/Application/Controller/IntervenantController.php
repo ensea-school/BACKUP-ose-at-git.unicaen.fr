@@ -6,7 +6,7 @@ use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Common\Exception\LogicException;
+use LogicException;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
@@ -128,8 +128,6 @@ class IntervenantController extends AbstractController implements WorkflowInterv
             $intervenant = $this->getServiceIntervenant()->newEntity();
             $form->setObject($intervenant);
         }
-
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -339,7 +337,7 @@ class IntervenantController extends AbstractController implements WorkflowInterv
         /* @var $intervenant Intervenant */
 
         if ($intervenant->estPermanent()) {
-            throw new \Common\Exception\MessageException("Pas encore implémenté pour un permanent");
+            throw new \LogicException("Pas encore implémenté pour un permanent");
         }
 
         $title = sprintf("Feuille de route <small>%s</small>", $intervenant);

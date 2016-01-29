@@ -244,7 +244,7 @@ class AgrementController extends AbstractController implements WorkflowIntervena
     public function supprimerAction()
     {
         if (!($agrement = $this->getEvent()->getParam('agrement'))) {
-            throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
         $form = $this->makeFormSupprimer(function () use ($agrement) {

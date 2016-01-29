@@ -9,7 +9,6 @@ use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
-use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextAwareTrait;
@@ -188,7 +187,7 @@ class ServiceReferentielController extends AbstractController
             ->setTypeVolumeHoraire($typeVolumeHoraire)
             ->setIntervenant($intervenant);
         if (!$this->isAllowed($assertionEntity, 'create') || !$this->isAllowed($assertionEntity, 'update')) {
-            throw new MessageException("Cette opération n'est pas autorisée.");
+            throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
         $request = $this->getRequest();
@@ -279,7 +278,7 @@ class ServiceReferentielController extends AbstractController
         $intervenant     = $this->getServiceLocalContext()->getIntervenant();
         $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
         if (!$this->isAllowed($assertionEntity, 'delete')) {
-            throw new MessageException("Cette opération n'est pas autorisée.");
+            throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));

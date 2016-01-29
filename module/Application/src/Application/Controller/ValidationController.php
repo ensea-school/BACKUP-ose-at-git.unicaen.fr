@@ -13,9 +13,8 @@ use Application\Service\Traits\TypeValidationAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use UnicaenApp\Util;
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
-use Common\Exception\MessageException;
+use RuntimeException;
+use LogicException;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -192,7 +191,7 @@ class ValidationController extends AbstractController
      * Validation des enseignements prévisionnels par la composante d'affectation de l'intervenant.
      *
      * @return ViewModel
-     * @throws \Common\Exception\MessageException
+     * @throws \LogicException
      *
      * @todo voirServiceAction et modifierServiceAction doivent sans doute pouvoir être fusionnée...
      */
@@ -406,7 +405,7 @@ class ValidationController extends AbstractController
             $rule->execute();
         }
         catch (LogicException $le) {
-            throw new MessageException("Validation du référentiel impossible.", null, $le);
+            throw new \LogicException("Validation du référentiel impossible.", null, $le);
         }
 
         $structureRef        = $rule->getStructuresIntervention();
@@ -621,7 +620,7 @@ class ValidationController extends AbstractController
         $validation = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
 
         if (! $this->isAllowed($validation, 'delete')) {
-            throw new MessageException("Suppression de la validation interdite.");
+            throw new \LogicException("Suppression de la validation interdite.");
         }
 
         $title     = "Suppression de la validation";

@@ -9,9 +9,7 @@ use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -279,7 +277,7 @@ class ServiceController extends AbstractController
         }
 
         if ($validation->getId()) {
-            $dateCloture = $validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT);
+            $dateCloture = $validation->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT);
             $this->messenger()->addMessage("La saisie du service réalisé a été clôturée le $dateCloture.", 'success');
         }
 
@@ -551,7 +549,7 @@ class ServiceController extends AbstractController
 
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
         if (!$this->isAllowed($service, 'delete')) {
-            throw new MessageException("Cette opération n'est pas autorisée.");
+            throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -617,7 +615,7 @@ class ServiceController extends AbstractController
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
         $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
         if (!$this->isAllowed($assertionEntity, 'create') && !$this->isAllowed($assertionEntity, 'update')) {
-            throw new MessageException("Cette opération n'est pas autorisée.");
+            throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
         $request = $this->getRequest();

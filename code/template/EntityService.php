@@ -8,6 +8,11 @@ use Application\Entity\Db\<entity>;
  * Description of <classname>
  *
  * @author <author>
+ *
+ * @method <entity> get($id)
+ * @method <entity>[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method <entity> newEntity()
+ *
  */
 class <classname> extends AbstractEntityService
 {

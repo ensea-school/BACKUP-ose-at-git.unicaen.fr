@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Form\VolumeHoraireReferentiel\Traits\SaisieAwareTrait;
-use Common\Exception\RuntimeException;
+use RuntimeException;
 use Application\Exception\DbException;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;

@@ -184,7 +184,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         $t = $this->getView()->tag();
         /* @var $t TagViewHelper */
 
-        $h .= $t('table', ['class' => 'table table-bordered dmep-budget']);
+        $updadeUrl = $this->getView()->url('budget/get-json');
+
+        $h .= $t('table', ['class' => 'table table-bordered dmep-budget', 'data-update-url' => $updadeUrl]);
         $h .= $t('tr');
         $h .= $t('th')->text('Budget');
         foreach ($typesRessources as $typeRessource) {

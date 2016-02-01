@@ -57,6 +57,19 @@ return [
                             ],
                         ],
                     ],
+                    'get-json'          => [
+                        'type'          => 'Segment',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'       => '/get-json[/:structure]',
+                            'defaults'    => [
+                                'action' => 'get-json',
+                            ],
+                            'constraints' => [
+                                'structure' => '[0-9]*',
+                            ],
+                        ],
+                    ],
                     'saisie-dotation' => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
@@ -149,6 +162,13 @@ return [
                     'action'     => ['export'],
                     'privileges' => [
                         Privileges::BUDGET_EXPORT,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Budget',
+                    'action'     => ['get-json'],
+                    'privileges' => [
+                        Privileges::BUDGET_VISUALISATION,
                     ],
                 ],
                 [

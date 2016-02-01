@@ -10,8 +10,8 @@ alter trigger "OSE"."F_VALIDATION_S" disable;
 alter trigger "OSE"."FORMULE_RES_SERVICE_DEL_CK" disable;
 /
 DECLARE
-  old_source_code NUMERIC := '99322';
-  new_source_code NUMERIC := '26623';
+  old_source_code NUMERIC := '109714';
+  new_source_code NUMERIC := '109501';
 
   old_id NUMERIC;
   new_id NUMERIC;
@@ -24,11 +24,11 @@ DECLARE
   
   ose_id NUMERIC;
 BEGIN
-  select id INTO old_id from intervenant where source_code = old_source_code AND annee_id = 2014;  
-  select id INTO new_id from intervenant where source_code = new_source_code AND annee_id = 2014;
+  select id INTO old_id from intervenant where source_code = old_source_code AND annee_id = 2015;  
+  select id INTO new_id from intervenant where source_code = new_source_code AND annee_id = 2015;
 
-  select id, dossier_id INTO ie_old_id, old_dossier_id from intervenant_exterieur where id = old_id;
-  select id, dossier_id INTO ie_new_id, new_dossier_id from intervenant_exterieur where id = new_id;
+ -- select id, dossier_id INTO ie_old_id, old_dossier_id from intervenant_exterieur where id = old_id;
+ -- select id, dossier_id INTO ie_new_id, new_dossier_id from intervenant_exterieur where id = new_id;
 
   SELECT id INTO ose_id FROM source WHERE code = 'OSE';
   
@@ -38,7 +38,6 @@ BEGIN
   UPDATE agrement SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   
   UPDATE contrat SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  UPDATE emploi SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   
   UPDATE modification_service_du SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   UPDATE service SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
@@ -49,11 +48,11 @@ BEGIN
   UPDATE wf_intervenant_etape SET intervenant_id = new_id WHERE intervenant_id = old_id;
   
   -- traitement du dossier
-  IF old_dossier_id is not null and new_dossier_id is not null THEN
+  /*IF old_dossier_id is not null and new_dossier_id is not null THEN
     UPDATE piece_jointe SET dossier_id = new_dossier_id WHERE dossier_id = old_dossier_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);  
   ELSIF ie_new_id IS NOT NULL AND old_dossier_id IS NOT NULL THEN
-    UPDATE intervenant_exterieur SET dossier_id = new_dossier_id WHERE id = ie_new_id;
-  END IF;
+    UPDATE intervenant SET dossier_id = new_dossier_id WHERE id = ie_new_id;
+  END IF;*/
   
 END;
 /

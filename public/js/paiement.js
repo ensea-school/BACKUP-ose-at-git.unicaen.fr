@@ -877,6 +877,39 @@ $.widget("ose.dmepBudget", {
         {
             that.setDiffValue($(this).data('type-ressource'), $(this).data('structure'), 0);
         });
+
+        setTimeout( function(){ that.update() }, 5000);
+    },
+
+
+
+    update: function()
+    {
+        var that = this;
+        var updateUrl = this.element.data('update-url');
+
+        data = $.getJSON( updateUrl, function(data){
+
+            that.getElementsEnveloppes().each(function ()
+            {
+                var structureId = $(this).data('structure');
+                var typeRessourceId = $(this).data('type-ressource');
+
+                if (data[structureId] !== undefined && data[structureId][typeRessourceId] !== undefined) {
+                    var value = data[structureId][typeRessourceId];
+
+                    $(this).data('dotation', value['dotation']);
+                    $(this).data('usage', value['usage']);
+
+                    that.setDiffValue(typeRessourceId, structureId, 0); // MAJ
+                }
+
+            });
+
+
+        });
+
+        setTimeout( function(){ that.update() }, 5000);
     },
 
 

@@ -15,6 +15,7 @@ BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END;
 
 -- mettre paye-etat à paie-etat et etablissement à 1 dans type_ressource
 
+-- attention aux centres de couts sans unité budgétaire ! ! : à compléter manuellement puis à rendre NOT NULL
 
 BEGIN DBMS_SCHEDULER.enable(name=>'"OSE"."OSE_SRC_SYNC"'); END;
 /

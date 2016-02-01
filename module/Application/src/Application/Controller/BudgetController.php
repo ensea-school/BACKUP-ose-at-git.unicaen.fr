@@ -49,6 +49,9 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+
         $annee = $this->getServiceContext()->getAnnee();
 
         $tbl = $this->getServiceDotation()->getTableauBord();
@@ -59,6 +62,7 @@ class BudgetController extends AbstractController
         /* @var $typesRessources TypeRessource[] */
         $qb = $this->getServiceStructure()->finderByEnseignement();
         $this->getServiceStructure()->finderByNiveau(2, $qb);
+        if ($structure) $this->getServiceStructure()->finderById($structure->getId(), $qb);
         $structures = $this->getServiceStructure()->getList($qb);
         /* @var $structures Structure[] */
 
@@ -80,6 +84,49 @@ class BudgetController extends AbstractController
         }
 
         return compact('annee', 'structures', 'typesRessources', 'data');
+    }
+
+
+
+    public function getJsonAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            Structure::class,
+            TypeRessource::class,
+            Dotation::class,
+        ]);
+
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+
+        $tbl = $this->getServiceDotation()->getTableauBord();
+        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation();
+
+        $typesRessources = $this->getServiceTypeRessource()->getList();
+        /* @var $typesRessources TypeRessource[] */
+        $qb = $this->getServiceStructure()->finderByEnseignement();
+        $this->getServiceStructure()->finderByNiveau(2, $qb);
+        if ($structure) $this->getServiceStructure()->finderById($structure->getId(), $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+        /* @var $structures Structure[] */
+
+        $data = [];
+        foreach ($structures as $sid => $structure) {
+
+            $hab = isset($tbl[$sid]['total']) ? $tbl[$sid]['total'] : 0;
+
+            foreach ($typesRessources as $trid => $typeRessource) {
+
+                $hab = isset($tbl[$sid][$trid]) ? $tbl[$sid][$trid] : 0;
+                $hli = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
+
+                $data[$sid][$trid] = [
+                    'dotation' => $hab,
+                    'usage' => $hli
+                ];
+            }
+        }
+        return new \Zend\View\Model\JsonModel($data);
     }
 
 

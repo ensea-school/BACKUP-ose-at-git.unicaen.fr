@@ -47,14 +47,6 @@ body {
     background-color: #f8f8fa;
 }
 
-body > hr {
-    display: none;
-}
-
-ul.breadcrumb {
-    display: none;
-}
-
 div#footer {
     margin-top:2em;
 }
@@ -294,55 +286,10 @@ form#dossier .form-control[disabled], form#dossier .form-control[readonly], form
 
 
 
-
 .intervenant-recherche .critere{
     padding-bottom: 1em;
 }
 
-
-
-.callout {
-    border-radius: 5px;
-    border: 1px #ddd solid;
-    border-left: 6px #9E9E9E solid;
-    padding:1em;
-    margin: .5em;
-    float: left;
-    width: 48%;
-    min-height:8.5em;
-    min-width: 30em;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.075);
-    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-
-}
-
-.callout:hover {
-    border-color: #ddd;
-    outline: 0px none;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #bbb;
-}
-
-.callout h1 {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    font-size: 18pt;
-}
-
-.callout ul {
-    margin-bottom: 0px;
-}
-
-.callout .glyphicon {
-    float:right;
-    font-size: 40pt;
-    color: #ddd;
-}
-
-.callout .fa {
-    float:right;
-    font-size: 40pt;
-    color: #ddd;
-}
 
 
 td .alert {
@@ -356,4 +303,19 @@ td .alert {
 
 .progressbar.active {
     animation: 2s linear 0s normal none infinite running progress-bar-stripes;
+}
+
+
+.alert.exception {
+    padding-left: 100px;
+}
+
+.alert.exception .glyphicon {
+    float: left;
+    margin-left: -80px;
+    font-size: 60px;
+}
+
+.alert.exception h1 {
+    margin-top: 0px;
 }

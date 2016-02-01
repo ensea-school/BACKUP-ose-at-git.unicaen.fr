@@ -50,7 +50,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
 
     <h3>Etape 2 : Création des fichiers sources du formulaire</h3>
     <?php
-    $sCodeGenerator->setTemplate('Form')->setParams($params)->generateToHtml($params['fileName'])->generateToFile($params['fileName']);
+    $sCodeGenerator->setTemplate('OseForm')->setParams($params)->generateToHtml($params['fileName'])->generateToFile($params['fileName']);
 
     $p = $sCodeGenerator->generateFormTraitParams($targetFullClass, $name, $module . '\Form');
     $sCodeGenerator->setTemplate('FormAwareTrait')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);

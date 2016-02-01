@@ -5,11 +5,11 @@ from
   intervenant i
   JOIN formule_resultat fr ON fr.intervenant_id = i.id
 where
-  source_code IN (select source_code from intervenant where id = 8334)
+  source_code IN (select source_code from intervenant where id = 6860)
   AND i.annee_id = 2014
   AND fr.total > 0)
 WHERE
-  id = 8334
+  id = 6860
   AND premier_recrutement IS NULL
   ;
 
@@ -25,6 +25,3 @@ where
 
 
 select source_code from intervenant where id = 5249;
-
-
-8329   8334

@@ -7,6 +7,7 @@ use UnicaenApp\View\Helper\TagViewHelper;
  * @var $this      \Application\View\Renderer\PhpRenderer
  */
 
+echo $this->tag('div', ['class'=>'callout-menu']);
 foreach ($container as $page) {
     if ($this->navigation()->accept($page)) {
         $attrs = [
@@ -19,6 +20,7 @@ foreach ($container as $page) {
             $attrs['title'] = $description;
         }
 
+        echo $this->tag('div', ['class'=>'callout-container']);
         echo $this->tag('div', $attrs);
         if ($icon = $page->get('icon')) {
             echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);
@@ -36,5 +38,7 @@ foreach ($container as $page) {
             echo '</ul>';
         }
         echo '</div>';
+        echo '</div>';
     }
 }
+echo '</div>';

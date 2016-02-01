@@ -11,12 +11,12 @@ const R_INTERVENANT_EXTERIEUR = Acl\IntervenantExterieurRole::ROLE_ID;
 
 $main = [
     'doctrine'           => [
-        'connection'   => [
+        'connection'    => [
             'orm_default' => [
                 'driverClass' => \Doctrine\DBAL\Driver\OCI8\Driver::class,
             ],
         ],
-        'driver'       => [
+        'driver'        => [
             'orm_default_driver' => [
                 'class' => \Doctrine\ORM\Mapping\Driver\XmlDriver::class,
                 'paths' => [
@@ -46,7 +46,7 @@ $main = [
                 ],
             ],
         ],
-        'eventmanager' => [
+        'eventmanager'  => [
             'orm_default' => [
                 'subscribers' => [
                     \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
@@ -54,7 +54,7 @@ $main = [
                 ],
             ],
         ],
-        'cache'        => [
+        'cache'         => [
             'apc' => [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
@@ -216,6 +216,12 @@ $main = [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
+        'template_map'        => [
+            'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
+            //'error/404'     => __DIR__ . '/../view/error/404.phtml',
+            'error/index'   => __DIR__ . '/../view/error/index.phtml',
+        ],
+        'layout'              => 'layout/layout', // e.g., 'layout/layout'
     ],
     'public_files'       => [
         'inline_scripts' => [
@@ -238,6 +244,7 @@ $main = [
             17 => 'css/service.css',
             18 => 'css/acceuil.css',
             19 => 'css/droits.css',
+            20 => 'css/callout.css',
         ],
     ],
 ];

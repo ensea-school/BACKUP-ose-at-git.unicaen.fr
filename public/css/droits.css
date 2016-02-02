@@ -44,7 +44,7 @@ ul.privileges-form li label {
     border-right: 1px solid #ddd;
 }
 
-.table-header-rotated th.rotate-45 > div.first {
+.table-header-rotated th.rotate-45.first > div {
     border-left: 1px solid #ddd;
 }
 
@@ -63,7 +63,13 @@ ul.privileges-form li label {
     border: none;
 }
 
-.table-header-rotated thead th.separator {
+
+.table-header-rotated .categorie {
+    border: none;
+}
+
+
+.table-header-rotated thead .menu {
     border: none;
     vertical-align: top;
     padding-left:2em;
@@ -77,6 +83,11 @@ ul.privileges-form li label {
     width: 200px;
 }
 
+
 .droits-tbl td span.refuse {
     opacity: 0.5;
+}
+
+.selected {
+    background-color:#FCF8E3;
 }

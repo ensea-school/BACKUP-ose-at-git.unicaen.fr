@@ -8,60 +8,59 @@
  * @var $filters    array
  */
 
-$rolesUrl   = $this->url(null,[],['query' => $filters+['rs'=>'r']],true);
-$statutsUrl = $this->url(null,[],['query' => $filters+['rs'=>'s']],true);
-
 ?>
 <h1 class="page-header">Gestion des privilèges</h1>
-
-<table class="droits-tbl table table-hover table-bordered table-condensed table-extra-condensed table-header-rotated">
+<table class="droits-tbl table table-bordered table-condensed table-extra-condensed table-header-rotated">
     <thead>
     <tr>
-        <th class="separator"><a href="<?php echo $this->url(null,[],[],true); ?>" class="btn btn-default">Supprimer les filtres</a></th>
-        <?php $first = true;
-        foreach ($roles as $role): ?>
-            <th class="rotate-45" title="<?php echo $role; ?>">
-                <div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $role; ?></span></div>
+        <th class="menu"><a class="btn btn-default show-all">Supprimer les
+                filtres</a></th>
+        <?php foreach ($roles as $role): ?>
+            <th class="rotate-45 role" data-role="<?php echo $role->getId() ?>" title="<?php echo $role; ?>">
+                <div><span><a><?php echo $role; ?></a></span></div>
             </th>
-            <?php $first = false; endforeach; ?>
+        <?php endforeach; ?>
         <?php if (!empty($roles) && !empty($statuts)): ?>
             <th class="separator rotate-45">&nbsp;</th>
         <?php endif; ?>
-        <?php $first = true;
-        foreach ($statuts as $statut): ?>
-            <th class="rotate-45" title="<?php echo $statut; ?>">
-                <div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $statut; ?></span></div>
+        <?php foreach ($statuts as $statut): ?>
+            <th class="rotate-45 statut" data-statut="<?php echo $statut->getId() ?>" title="<?php echo $statut; ?>">
+                <div><span><a><?php echo $statut; ?></a></span></div>
             </th>
-            <?php $first = false; endforeach; ?>
+        <?php endforeach; ?>
     </tr>
     <tr>
         <th>Privilèges</th>
         <?php if (!empty($roles)): ?>
-            <th colspan="<?php echo count($roles); ?>"><a href="<?php echo $rolesUrl ?>">Rôles (personnel)</a></th>
+            <th class="roles" colspan="<?php echo count($roles); ?>"><a class="roles">Rôles (personnel)</a></th>
         <?php endif; ?>
         <?php if (!empty($roles) && !empty($statuts)): ?>
-            <th style="border:none;">&nbsp;</th>
+            <th class="separator">&nbsp;</th>
         <?php endif; ?>
         <?php if (!empty($statuts)): ?>
-            <th colspan="<?php echo count($statuts); ?>"><a href="<?php echo $statutsUrl ?>">Statuts (intervenants)</a></th>
+            <th class="statuts" colspan="<?php echo count($statuts); ?>"><a class="statuts">Statuts (intervenants)</a></th>
         <?php endif; ?>
         <th style="border:none;min-width:166px">&nbsp;</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach ($privileges as $cat): ?>
-        <tr>
-            <th class="separator">&nbsp;</th>
-            <th class="separator"
-                colspan="<?php echo 1 + count($roles) + count($statuts); ?>"><a href="<?php echo $cat['categorieLink'] ?>"><?php echo $cat['categorie'] ?></a></th>
+        <tr class="categorie" data-categorie="<?php echo $cat['categorie']->getCode() ?>">
+            <th class="categorie">&nbsp;</th>
+            <th class="categorie" colspan="<?php echo 1 + count($roles) + count($statuts); ?>">
+                <a class="categorie"
+                   data-categorie="<?php echo $cat['categorie']->getCode() ?>"><?php echo $cat['categorie'] ?></a>
+            </th>
         </tr>
         <?php foreach ($cat['privileges'] as $privilege): ?>
-            <tr>
+            <tr class="categorie" data-categorie="<?php echo $cat['categorie']->getCode() ?>">
                 <th class="privilege"><?php echo $privilege ?></th>
                 <?php $statut = null;
                 foreach ($roles as $role): ?>
-                    <td class="modifier" data-role="<?php echo $role->getId() ?>"
-                        data-privilege="<?php echo $privilege->getId() ?>">
+                    <td class="modifier role" data-role="<?php echo $role->getId() ?>"
+                        data-privilege="<?php echo $privilege->getId() ?>"
+                        title="Rôle : <?php echo $role->getLibelle() ?>"
+                    >
                         <?php echo $this->partial('/application/droits/partial/tbl-link', compact('role', 'statut', 'privilege')) ?>
                     </td>
                 <?php endforeach; ?>
@@ -70,8 +69,10 @@ $statutsUrl = $this->url(null,[],['query' => $filters+['rs'=>'s']],true);
                 <?php endif; ?>
                 <?php $role = null;
                 foreach ($statuts as $statut): ?>
-                    <td class="modifier" data-statut="<?php echo $statut->getId() ?>"
-                        data-privilege="<?php echo $privilege->getId() ?>">
+                    <td class="modifier statut" data-statut="<?php echo $statut->getId() ?>"
+                        data-privilege="<?php echo $privilege->getId() ?>"
+                        title="Statut : <?php echo $statut->getLibelle() ?>"
+                    >
                         <?php echo $this->partial('/application/droits/partial/tbl-link', compact('role', 'statut', 'privilege')) ?>
                     </td>
                 <?php endforeach; ?>

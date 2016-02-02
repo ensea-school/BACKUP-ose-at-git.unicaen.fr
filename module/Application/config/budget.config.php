@@ -21,16 +21,6 @@ return [
                     ],
                 ],
                 'child_routes'  => [
-                    'tableau-bord'    => [
-                        'type'          => 'Literal',
-                        'may_terminate' => true,
-                        'options'       => [
-                            'route'    => '/tableau-bord',
-                            'defaults' => [
-                                'action' => 'tableau-bord',
-                            ],
-                        ],
-                    ],
                     'engagement'      => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
@@ -41,6 +31,16 @@ return [
                             ],
                             'constraints' => [
                                 'structure' => '[0-9]*',
+                            ],
+                        ],
+                    ],
+                    'liquidation'     => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/liquidation',
+                            'defaults' => [
+                                'action' => 'liquidation',
                             ],
                         ],
                     ],
@@ -57,7 +57,7 @@ return [
                             ],
                         ],
                     ],
-                    'get-json'          => [
+                    'get-json'        => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
@@ -106,19 +106,19 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Budget', 'index'),
 
                                 'pages' => [
-                                    'tableau-bord' => [
-                                        'label'    => 'Tableau de bord',
-                                        'title'    => 'Tableau de bord',
-                                        'route'    => 'budget/tableau-bord',
-                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'tableau-bord'),
-                                    ],
-                                    'engagement'   => [
-                                        'label'    => 'Engagement budgétaire',
-                                        'title'    => 'Engagement budgétaire',
+                                    'engagement'  => [
+                                        'label'    => 'Engagement',
+                                        'title'    => 'Engagement',
                                         'route'    => 'budget/engagement',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'engagement'),
                                     ],
-                                    'export' => [
+                                    'liquidation' => [
+                                        'label'    => 'Liquidation',
+                                        'title'    => 'Liquidation',
+                                        'route'    => 'budget/liquidation',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'liquidation'),
+                                    ],
+                                    'export'      => [
                                         'label'    => 'Export des données de paiement (CSV)',
                                         'title'    => 'Export des données de paiement (CSV)',
                                         'route'    => 'budget/export',
@@ -144,7 +144,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Budget',
-                    'action'     => ['tableau-bord'],
+                    'action'     => ['liquidation'],
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
                     ],

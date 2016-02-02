@@ -41,7 +41,7 @@ class BudgetController extends AbstractController
 
 
 
-    public function tableauBordAction()
+    public function liquidationAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -139,6 +139,7 @@ class BudgetController extends AbstractController
             Dotation::class,
         ]);
 
+        $annee     = $this->getServiceContext()->getAnnee();
         $role      = $this->getServiceContext()->getSelectedIdentityRole();
         $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
         /* @var $structure Structure */
@@ -165,7 +166,7 @@ class BudgetController extends AbstractController
         }
 
         return compact(
-            'structureElement', 'structure', 'dotations', 'previsionnelValide', 'liquidation'
+            'annee', 'structureElement', 'structure', 'dotations', 'previsionnelValide', 'liquidation'
         );
     }
 

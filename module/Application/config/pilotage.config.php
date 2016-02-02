@@ -50,8 +50,8 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
                                 'pages'        => [
                                     'ecarts-etats' => [
-                                        'label'       => 'Ecarts d\'heures',
-                                        'title'       => 'Ecarts d\'heures',
+                                        'label'       => 'Ecarts d\'heures (CSV)',
+                                        'title'       => 'Ecarts d\'heures (CSV)',
                                         'description' => 'Export CSV des HETD',
                                         'route'       => 'pilotage/ecarts-etats',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'ecartsEtats'),

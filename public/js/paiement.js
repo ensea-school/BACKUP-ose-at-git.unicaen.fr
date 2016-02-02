@@ -1007,16 +1007,14 @@ $.widget("ose.dmepBudget", {
         var usage = progress.data('usage') + value;
         var restant = dotation - usage;
         var percent = 100 - Math.round(usage * 10000 / dotation) / 100;
-
+        if (restant <= 0){
+            percent = 0;
+        }
         if (percent < 0) percent = 0;
 
         bar.removeClass('progress-bar-success progress-bar-info progress-bar-warning progress-bar-danger active');
         if (percent < 10) {
-            bar.addClass('progress-bar-danger active');
-        } else if (percent < 25) {
-            bar.addClass('progress-bar-warning');
-        } else if (percent < 50) {
-            bar.addClass('progress-bar-info');
+            bar.addClass('progress-bar-warning active');
         } else {
             bar.addClass('progress-bar-success');
         }
@@ -1025,7 +1023,7 @@ $.widget("ose.dmepBudget", {
         if (restant >= 0) {
             bar.html('<span class="restant">' + Formatter.floatToString(restant) + '</span><span class="label">HETD disponibles</span>');
         } else {
-            bar.html('<span class="restant">' + Formatter.floatToString(restant * -1) + '</span><span class="label">HETD de déficit</span>');
+            bar.html('<span class="restant deficit">' + Formatter.floatToString(restant * -1) + '</span><span class="label deficit">HETD de déficit</span>');
         }
         if (restant < 0) this.depassement = true;
 

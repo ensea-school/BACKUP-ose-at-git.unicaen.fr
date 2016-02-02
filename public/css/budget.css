@@ -5,6 +5,10 @@
     text-align: right;
 }
 
+.engagement .label {
+    color:#ccc;
+}
+
 .engagement .ha.ha2 {
     border-left:none;
 }
@@ -57,6 +61,9 @@ table.budget-tbl td.hetd {
     text-align: right;
 }
 
+table.budget-tbl .label {
+    color: #ccc;
+}
 
 .budget-export {
     margin-top: .5em;

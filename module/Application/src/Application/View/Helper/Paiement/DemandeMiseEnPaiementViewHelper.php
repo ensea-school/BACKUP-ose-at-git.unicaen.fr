@@ -204,7 +204,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
             foreach ($typesRessources as $typeRessource) {
                 $trid = $typeRessource->getId();
-                if ($this->budget[$sid][$trid]['dotation'] > 0) {
+                if ($this->budget[$sid][$trid]['dotation'] !== 0) {
                     $h .= $t('td')->html(
                         $t('div', [
                             'class'               => 'progress enveloppe',

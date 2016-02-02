@@ -44,6 +44,12 @@ table.dmep-budget .enveloppe .progressbar .label{
 
 }
 
+table.dmep-budget .enveloppe .progressbar .deficit{
+    color:red;
+}
+
+
+
 table.dmep-budget .aucune-dotation {
     color:gray;
     text-align: center;

@@ -11,7 +11,7 @@ use UnicaenApp\Util;
  * @var $liquidation        array
  */
 
-echo '<h1 class="page-header">Engagement budgétaire</h1>';
+echo '<h1 class="page-header">Budget '.$annee.' - Engagement</h1>';
 
 if ($structureElement) {
     echo $this->formControlGroup($structureElement);
@@ -58,23 +58,23 @@ if ($structureElement) {
                 </tr>
                 <tr>
                     <th>Dotation</th>
-                    <td class="hetd"><?php echo Util::formattedNumber($dotations['total']['heures']) ?></td>
+                    <td class="hetd"><?php echo Util::formattedNumber($dotations['total']['heures']) ?><span class="label">HETD</span></td>
                     <?php foreach ($dotations['typesRessources'] as $dtr): ?>
-                        <td class="hetd"><?php echo Util::formattedNumber($dtr['total']['heures']) ?></td>
+                        <td class="hetd"><?php echo Util::formattedNumber($dtr['total']['heures']) ?><span class="label">HETD</span></td>
                     <?php endforeach; ?>
                 </tr>
                 <tr>
                     <th>HETD positionnées</th>
-                    <td class="hetd"><?php echo Util::formattedNumber($previsionnelValide) ?></td>
+                    <td class="hetd"><?php echo Util::formattedNumber($previsionnelValide) ?><span class="label">HETD</span></td>
                     <?php foreach ($dotations['typesRessources'] as $dtr): ?>
-                        <td class="hetd"><?php echo Util::formattedNumber($liquidation[$dtr['entity']->getId()]['dmep']) ?></td>
+                        <td class="hetd"><?php echo Util::formattedNumber($liquidation[$dtr['entity']->getId()]['dmep']) ?><span class="label">HETD</span></td>
                     <?php endforeach; ?>
                 </tr>
                 <tr>
                     <th>Solde</th>
-                    <td class="hetd"><?php echo Util::formattedNumber($dotations['total']['heures'] - $previsionnelValide) ?></td>
+                    <td class="hetd"><?php echo Util::formattedNumber($dotations['total']['heures'] - $previsionnelValide) ?><span class="label">HETD</span></td>
                     <?php foreach ($dotations['typesRessources'] as $dtr): ?>
-                        <td class="hetd"><?php echo Util::formattedNumber($liquidation[$dtr['entity']->getId()]['solde']) ?></td>
+                        <td class="hetd"><?php echo Util::formattedNumber($liquidation[$dtr['entity']->getId()]['solde']) ?><span class="label">HETD</span></td>
                     <?php endforeach; ?>
                 </tr>
             </table>
@@ -132,7 +132,7 @@ if ($structureElement) {
     ?>
 
     <div class="ha ha1 col-md-6" title="<?php echo $titleA1 ?>">
-        <?php echo Util::formattedNumber($data['anneeCivile1']['heures']) ?>
+        <?php echo Util::formattedNumber($data['anneeCivile1']['heures']) ?><span class="label">HETD</span>
         <?php if ($canEdit): ?>
             <a href="<?php echo $dotEditUrl1 ?>" class="ajax-modal" data-event="engagement-maj"
                title="<?php echo $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
@@ -141,7 +141,7 @@ if ($structureElement) {
         <?php endif; ?>
     </div>
     <div class="ha ha2 col-md-6" title="<?php echo $titleA2 ?>">
-        <?php echo Util::formattedNumber($data['anneeCivile2']['heures']) ?>
+        <?php echo Util::formattedNumber($data['anneeCivile2']['heures']) ?><span class="label">HETD</span>
         <?php if ($canEdit): ?>
             <a href="<?php echo $dotEditUrl2 ?>" class="ajax-modal" data-event="engagement-maj"
                title="<?php echo $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
@@ -151,7 +151,7 @@ if ($structureElement) {
     </div>
 
     <div class="ha ha3 col-md-offset-3 col-md-6" title="<?php echo $titleA ?>">
-        <?php echo Util::formattedNumber($data['heures']) ?>
+        <?php echo Util::formattedNumber($data['heures']) ?><span class="label">HETD</span>
     </div>
 
 <?php }

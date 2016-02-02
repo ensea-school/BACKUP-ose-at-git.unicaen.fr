@@ -40,6 +40,7 @@ class PilotageService extends AbstractService
                 'etat'              => $d['ETAT'],
                 'type-heures'       => $d['TYPE_HEURES'],
                 'structure'         => $d['STRUCTURE'],
+                'intervenant-type'  => $d['INTERVENANT_TYPE'],
                 'intervenant-code'  => $d['INTERVENANT_CODE'],
                 'intervenant'       => $d['INTERVENANT'],
                 'hetd'              => (float)$d['HETD_PAYABLES']

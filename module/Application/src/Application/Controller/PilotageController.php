@@ -33,6 +33,7 @@ class PilotageController extends AbstractController
             'État',
             'Type d\'heures',
             'Structure',
+            'Intervenant (type)',
             'Intervenant (code)',
             'Intervenant',
             'HETD payables'

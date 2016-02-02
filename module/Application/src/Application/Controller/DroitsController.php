@@ -6,6 +6,7 @@ use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Service\Traits\AffectationAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
@@ -34,6 +35,7 @@ class DroitsController extends AbstractController
     use SourceAwareTrait;
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
+    use ContextAwareTrait;
 
 
 
@@ -221,7 +223,9 @@ class DroitsController extends AbstractController
 
     public function affectationsAction()
     {
-        $tri = $this->params()->fromQuery('tri', 'structure');
+        $tri = $this->params()->fromQuery('tri');
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $serviceAffectations = $this->getServiceAffectation();
 
@@ -232,6 +236,12 @@ class DroitsController extends AbstractController
         $serviceAffectations->join($this->getServiceSource(), $qb, 'source', true);
         $serviceAffectations->leftJoin($this->getServiceStructure(), $qb, 'structure', true);
         $serviceAffectations->finderByHistorique($qb);
+        if ($structure = $role->getStructure()){
+            $serviceAffectations->finderByStructure($structure, $qb);
+            if (empty($tri)) $tri = 'personnel';
+        }else{
+            if (empty($tri)) $tri = 'structure';
+        }
 
         /* @var $qb \Doctrine\ORM\QueryBuilder */
 
@@ -264,7 +274,7 @@ class DroitsController extends AbstractController
 
         $affectations = $serviceAffectations->getList($qb);
 
-        return compact('affectations', 'tri');
+        return compact('structure', 'affectations', 'tri');
     }
 
 

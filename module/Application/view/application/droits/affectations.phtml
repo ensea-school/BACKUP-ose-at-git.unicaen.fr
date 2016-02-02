@@ -1,9 +1,13 @@
 <?php
 
-use Application\Provider\Privilege\Privileges;
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $affectations Application\Entity\Db\Affectation[]
+ * @var $tri string
+ * @var $structure \Application\Entity\Db\Structure
+ */
 
-/* @var $affectations Application\Entity\Db\Affectation[] */
-/* @var $tri string */
+use Application\Provider\Privilege\Privileges;
 
 $head = [
     'structure' => 'Structure',
@@ -11,6 +15,8 @@ $head = [
     'personnel' => 'Personnel',
     'source'    => 'Src/Actions',
 ];
+
+if ($structure) unset($head['structure']);
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_AFFECTATION_EDITION));
 $ajoutUrl = $this->url( 'droits/affectations/edition' );
@@ -40,6 +46,8 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
     $suppressionUrl = $this->url( 'droits/affectations/suppression', ['affectation' => $affectation->getId()] );
 ?>
     <tr>
+        <?php if (!$structure): ?>
+
         <td><?php 
             $str = (string)$affectation->getStructure();
             if ('' == $str){
@@ -47,6 +55,7 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
             }
             echo $str;
         ?></td>
+        <?php endif; ?>
         <td><?php echo $affectation->getRole() ?></td>
         <td><?php echo $affectation->getPersonnel() ?></td>
         <td style="text-align: center;width:1%;white-space: nowrap"><?php

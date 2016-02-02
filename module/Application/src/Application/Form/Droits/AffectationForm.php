@@ -4,6 +4,7 @@ namespace Application\Form\Droits;
 
 use Application\Entity\Db\Role;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -22,10 +23,13 @@ class AffectationForm extends AbstractForm
     use StructureAwareTrait;
     use PersonnelAwareTrait;
     use RoleAwareTrait;
+    use ContextAwareTrait;
 
 
     public function init()
     {
+        $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
+
         $this->setAttribute('action',$this->getCurrentUrl());
         $hydrator = new AffectationFormHydrator;
         $this->setHydrator($hydrator);
@@ -40,6 +44,9 @@ class AffectationForm extends AbstractForm
             if ($role->getPerimetre()->isComposante()){
                 $rolesMustHaveStructure[] = $role->getId();
             }
+            if ($structure && $role->getPerimetre()->isEtablissement()){
+                unset($roles[$role->getId()]);
+            }
         }
 
         $this->setAttribute('data-roles-must-have-structure', json_encode($rolesMustHaveStructure));
@@ -47,8 +54,10 @@ class AffectationForm extends AbstractForm
 
         $qb = $this->getServiceStructure()->finderByEnseignement();
         $this->getServiceStructure()->finderByNiveau(2, $qb);
+        if ($structure){
+            $this->getServiceStructure()->finderById($structure->getId(), $qb);
+        }
         $structures = $this->getServiceStructure()->getList( $qb );
-
 
         $personnel = new SearchAndSelect('personnel');
         $personnel ->setRequired(true)

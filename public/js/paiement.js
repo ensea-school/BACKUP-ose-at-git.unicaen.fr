@@ -867,6 +867,8 @@ $(function ()
 $.widget("ose.dmepBudget", {
 
     oriData: undefined,
+    depassement: false,
+
 
     _create: function ()
     {
@@ -878,6 +880,8 @@ $.widget("ose.dmepBudget", {
             that.setDiffValue($(this).data('type-ressource'), $(this).data('structure'), 0);
         });
 
+        this.updateBlocageDepassement();
+
         setTimeout( function(){ that.update() }, 5000);
     },
 
@@ -887,6 +891,7 @@ $.widget("ose.dmepBudget", {
     {
         var that = this;
         var updateUrl = this.element.data('update-url');
+        var diffData = this.getDiffData();
 
         data = $.getJSON( updateUrl, function(data){
 
@@ -897,16 +902,20 @@ $.widget("ose.dmepBudget", {
 
                 if (data[structureId] !== undefined && data[structureId][typeRessourceId] !== undefined) {
                     var value = data[structureId][typeRessourceId];
+                    var diffVal = 0;
+                    if (diffData[structureId] !== undefined && diffData[structureId][typeRessourceId] !== undefined){
+                        diffVal = diffData[structureId][typeRessourceId];
+                    }
 
                     $(this).data('dotation', value['dotation']);
                     $(this).data('usage', value['usage']);
 
-                    that.setDiffValue(typeRessourceId, structureId, 0); // MAJ
+                    that.setDiffValue(typeRessourceId, structureId, diffVal); // MAJ
                 }
 
             });
 
-
+            that.updateBlocageDepassement();
         });
 
         setTimeout( function(){ that.update() }, 5000);
@@ -918,7 +927,6 @@ $.widget("ose.dmepBudget", {
     {
         var that = this;
         var data = this.getDiffData();
-        var depassement = false;
 
         this.getElementsEnveloppes().each(function ()
         {
@@ -935,13 +943,7 @@ $.widget("ose.dmepBudget", {
             }
         });
 
-        if (depassement) {
-            $('.demande-mise-en-paiement .sauvegarde').hide();
-            $('.demande-mise-en-paiement .depassement-budget').show();
-        } else {
-            $('.demande-mise-en-paiement .sauvegarde').show();
-            $('.demande-mise-en-paiement .depassement-budget').hide();
-        }
+        this.updateBlocageDepassement();
     },
 
 
@@ -1023,11 +1025,25 @@ $.widget("ose.dmepBudget", {
         if (restant >= 0) {
             bar.html('<span class="restant">' + Formatter.floatToString(restant) + '</span><span class="label">HETD disponibles</span>');
         } else {
-            bar.html('<span class="restant">' + Formatter.floatToString(restant * -1) + '</span><span class="label">HETD en trop</span>');
+            bar.html('<span class="restant">' + Formatter.floatToString(restant * -1) + '</span><span class="label">HETD de déficit</span>');
         }
-
+        if (restant < 0) this.depassement = true;
 
         return restant >= 0;
+    },
+
+
+
+    updateBlocageDepassement: function()
+    {
+        if (this.depassement) {
+            $('.demande-mise-en-paiement .sauvegarde').hide();
+            $('.demande-mise-en-paiement .depassement-budget').show();
+        } else {
+            $('.demande-mise-en-paiement .sauvegarde').show();
+            $('.demande-mise-en-paiement .depassement-budget').hide();
+        }
+        this.depassement = false;
     },
 
 

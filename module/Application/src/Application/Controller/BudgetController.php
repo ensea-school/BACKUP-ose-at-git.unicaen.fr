@@ -41,7 +41,7 @@ class BudgetController extends AbstractController
 
 
 
-    public function liquidationAction()
+    public function tableauDeBordAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -131,7 +131,7 @@ class BudgetController extends AbstractController
 
 
 
-    public function engagementAction()
+    public function engagementsLiquidationAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,
@@ -323,7 +323,7 @@ class BudgetController extends AbstractController
                 $structureElement->setEmptyOption('Veuillez sélectionner une composante s\'il vous plaît...');
             }
             $structureElement->setAttributes([
-                'onchange' => 'window.location.href="' . $this->url()->fromRoute('budget/engagement') . '/"+this.value',
+                'onchange' => 'window.location.href="' . $this->url()->fromRoute('budget/engagements-liquidation') . '/"+this.value',
             ]);
 
             $serviceStructure = $this->getServiceStructure();

@@ -11,7 +11,7 @@ use UnicaenApp\Util;
  */
 
 ?>
-<h1 class="page-header">Budget <?php echo $annee ?> - Liquidation</h1>
+<h1 class="page-header">Budget <?php echo $annee ?> - Tableau de bord</h1>
 
 <table class="table table-bordered budget-tbl">
     <tr>
@@ -26,7 +26,7 @@ use UnicaenApp\Util;
     </tr>
     <?php foreach( $structures as $sid => $structure ): ?>
         <tr>
-            <th><a href="<?php echo $this->url('budget/engagement',['structure'=>$structure->getId()]) ?>" title="Afficher le détail pour la structure"><?php echo $structure ?></a></th>
+            <th><a href="<?php echo $this->url('budget/engagements-liquidation',['structure'=>$structure->getId()]) ?>" title="Afficher le détail pour la structure"><?php echo $structure ?></a></th>
             <td class="hetd"><?php echo Util::formattedNumber($data[$sid]['prev']) ?> <span class="label">HETD</span></td>
 
         <?php foreach( $typesRessources as $trid => $typeRessource ): ?>

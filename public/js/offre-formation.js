@@ -58,7 +58,7 @@ function ElementPedagogiqueRecherche(id)
 
     this.filterSelect = function (select, values)
     {
-        var ul = select.next().find('ul');
+        var ul = select.prev().find('ul');
         select.find('option').each(function ()
         {
 

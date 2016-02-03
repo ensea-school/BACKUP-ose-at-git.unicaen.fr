@@ -169,6 +169,7 @@ return [
                     'action'     => ['get-json'],
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_DEMANDE
                     ],
                 ],
                 [

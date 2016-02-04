@@ -27,19 +27,12 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: 200;
 }
 
-a.navbar-brand h1 {
-    font-weight: 500;
-}
 
 div#contenu-principal {
     box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.25);
     background-color:white;
     padding-top:1em;
     padding-bottom:1em;
-}
-
-div#navbar {
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 body {
@@ -225,19 +218,33 @@ form#modulateurs-saisie th select {
     padding-left: 10px;
 }
 
-/* Possibilité de changer l'année depuis la barre de menu du haut */
-.navbar-brand h1 span {
+
+
+
+
+
+#navbar {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#navbar pre {
+    position: relative !important;
+}
+
+#navbar .navbar-brand h1 {
+    font-weight: 500;
+}
+
+#navbar .navbar-brand h1 span {
     font-size: 12pt;
 }
 
-.navbar-right {
-    margin-right:0px;
+#navbar .container .navbar-header {
+    margin-left: -15px;
 }
 
-#navbar .container .navbar-header {
-
-    vertical-align: middle;
-    min-width: 175px;
+#navbar .container .navbar-collapse {
+    margin-right: -15px;
 }
 
 #navbar .container .navbar-header select {
@@ -245,10 +252,32 @@ form#modulateurs-saisie th select {
     height: 26px;
 }
 
-.navbar-nav li a {
+#navbar .navbar-nav li a {
     padding-left: 7px;
     padding-right: 7px;
 }
+
+#navbar .navbar-collapse.collapse .navbar-right {
+    float: none !important;
+    text-align: right;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    height: 50px;
+    line-height: 50px;
+    height: 50px;
+    white-space: nowrap;
+}
+
+#navbar .navbar-collapse.collapse.in .navbar-right {
+    text-align:left;
+    height: auto;
+    max-height: 900px;
+    white-space: normal;
+    line-height: 2em;
+}
+
+
 
 
 
@@ -260,11 +289,6 @@ form#modulateurs-saisie th select {
 .inconnu {
     font-style: italic;
     color: gray;
-}
-
-div#navbar pre {
-    /*display: none;*/
-    position: relative !important;
 }
 
 .etape-centre-cout {

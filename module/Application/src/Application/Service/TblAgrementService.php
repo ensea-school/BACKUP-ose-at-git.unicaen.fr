@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -51,17 +52,17 @@ class TblAgrementService extends AbstractEntityService
      *
      * @param TypeAgrementEntity $typeAgrement
      * @param IntervenantEntity  $intervenant
+     * @param StructureEntity    $structure
      * @param boolean            $useCache
      *
      * @return bool
      */
-    public function needIntervenantAgrement(TypeAgrementEntity $typeAgrement, IntervenantEntity $intervenant, $useCache = true)
+    public function needIntervenantAgrement(TypeAgrementEntity $typeAgrement, IntervenantEntity $intervenant, StructureEntity $structure=null, $useCache = true)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $taid = $typeAgrement->getId();
         $iid = $intervenant->getId();
-        if ($role && $structure = $role->getStructure()){
+        if ($structure){
             $sid = $structure->getId();
         }else{
             $sid = 0;
@@ -74,9 +75,9 @@ class TblAgrementService extends AbstractEntityService
         $qb = $this->finderByIntervenant($intervenant);
         $this->finderByTypeAgrement($typeAgrement, $qb);
         $this->finderByAtteignable(true, $qb); // l'étape doit être atteignable, en attendant mieux...
-
         if ($structure){
-            $this->finderByStructure($structure, $qb);
+            $qb->andWhere('('.$this->getAlias().'.structure = :structure OR '.$this->getAlias().'.structure IS NULL)');
+            $qb->setParameter('structure', $structure);
         }
 
         $result = $this->count($qb) > 0;

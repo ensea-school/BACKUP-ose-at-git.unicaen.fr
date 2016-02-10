@@ -561,7 +561,7 @@ class ContratController extends AbstractController
             'estUnProjet'             => $estUnProjet,
             'contratIniModif'         => $contratIniModif,
             'etablissement'           => "L'université de Caen",
-            'etablissementRepresente' => ", représentée par son Président, Pierre SINEUX",
+            'etablissementRepresente' => ", représentée par son Administrateur provisoire, Marc LEVALOIS",
             'nomIntervenant'          => $nomIntervenant,
             'f'                       => $this->intervenant->estUneFemme(),
             'dateNaissance'           => $dateNaissance,

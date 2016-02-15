@@ -1,3 +1,29 @@
+-- etapes du workflow pour lesquelles une vue TBL doit être créée
+select 
+  * 
+from
+  wf_etape
+where
+  annee_id = 2015
+  AND code NOT IN (
+    'DEBUT',
+    'DONNEES_PERSO_SAISIE',
+    'DONNEES_PERSO_VALIDATION',
+    
+    'PJ_SAISIE',
+    'PJ_VALIDATION',
+    
+    'CONSEIL_RESTREINT',
+    'CONSEIL_ACADEMIQUE',
+    
+    'DEMANDE_MEP',
+    'SAISIE_MEP',
+    
+    'FIN'
+  )
+order by ordre;
+
+
 /**
  * Consultation de la Feuille de route d'un intervenant.
  */
@@ -14,32 +40,6 @@ where
 order by e.ordre;
 
 
-SELECT
-  *
-FROM
-  wf_etape
-  JOIN 
-
-
-
-/**
- * Création d'une nouvelle étape.
- */
-
-Insert into WF_ETAPE (ID, CODE, LIBELLE, ORDRE, STEP_CLASS, PERTIN_FUNC, FRANCH_FUNC, VISIBLE, STRUCTURE_DEPENDANT, STRUCTURES_IDS_FUNC) 
-values (
-    WF_ETAPE_id_seq.nextval, 
-    'CLOTURE_REALISE', 
-    'Clôture de la saisie des enseignements réalisés', 
-    115,
-    'Application\Service\Workflow\Step\ClotureRealiseStep', 
-    'ose_workflow.peut_cloturer_realise', 
-    'ose_workflow.realise_cloture', 
-    '1', 
-    '0', 
-    null--'ose_workflow.fetch_struct_ensref_realis_ids'
-);
-
 
 
 
@@ -51,7 +51,7 @@ begin
   DBMS_OUTPUT.ENABLE;
 
   --  ose_workflow.update_intervenant_etapes(517);
-    ose_workflow.update_all_intervenants_etapes(2014);
+    ose_workflow.update_all_intervenants_etapes(2015);
 end;
 /
 

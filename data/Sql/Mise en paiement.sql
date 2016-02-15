@@ -27,7 +27,7 @@ WHERE
   --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  i.source_code = '74315'
+  i.source_code = '108252'
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;
@@ -39,11 +39,21 @@ WHERE
 
 --update mise_en_paiement set histo_destruction = sysdate, histo_destructeur_id = 4 where id = 20499;
 
-update mise_en_paiement set periode_paiement_id = 20, date_mise_en_paiement = to_date( '31/12/2015', 'DD/MM/YYYY') WHERE
+update mise_en_paiement set periode_paiement_id = 5, date_mise_en_paiement = to_date( '29/02/2016', 'DD/MM/YYYY') WHERE
 id in (
 
-22561,
-22560
+24800,
+24801,
+24825,
+24826,
+24828,
+24858,
+24859,
+24985,
+24829,
+24830,
+24495,
+24831
 
 );
 

@@ -102,7 +102,9 @@ class OffreFormationController extends AbstractController
                 $n                    = NiveauEtape::getInstanceFromEtape($object);
                 $niveaux[$n->getId()] = $n;
                 if (!$niveau || $niveau->getId() == $n->getId()) {
-                    $etapes[] = $object;
+                    if ($object->estNonHistorise()){
+                        $etapes[] = $object;
+                    }
                     if (!$etape || $etape === $object) {
                         foreach ($object->getElementPedagogique() as $ep) {
                             $elements[$ep->getId()] = $ep;

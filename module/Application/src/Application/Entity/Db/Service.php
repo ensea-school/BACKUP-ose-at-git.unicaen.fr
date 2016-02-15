@@ -63,6 +63,11 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     private $formuleResultatService;
 
+    /**
+     * @var bool
+     */
+    private $changed = false;
+
 
 
     /**
@@ -166,7 +171,10 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
-        $this->intervenant = $intervenant;
+        if ($this->intervenant !== $intervenant){
+            $this->intervenant = $intervenant;
+            $this->changed = true;
+        }
 
         return $this;
     }
@@ -194,7 +202,10 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
-        $this->elementPedagogique = $elementPedagogique;
+        if ($this->elementPedagogique !== $elementPedagogique){
+            $this->elementPedagogique = $elementPedagogique;
+            $this->changed = true;
+        }
 
         if ($elementPedagogique) {
             $vhl               = $this->getVolumeHoraireListe()->get();
@@ -236,7 +247,10 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
     {
-        $this->etablissement = $etablissement;
+        if ($this->etablissement !== $etablissement){
+            $this->etablissement = $etablissement;
+            $this->changed = true;
+        }
 
         return $this;
     }
@@ -272,7 +286,10 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        if ($this->description !== $description){
+            $this->description = $description;
+            $this->changed = true;
+        }
 
         return $this;
     }
@@ -361,6 +378,30 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function getResourceId()
     {
         return 'Service';
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function hasChanged()
+    {
+        return $this->changed;
+    }
+
+
+
+    /**
+     * @param boolean $changed
+     *
+     * @return Service
+     */
+    public function setChanged($changed)
+    {
+        $this->changed = $changed;
+
+        return $this;
     }
 
 }

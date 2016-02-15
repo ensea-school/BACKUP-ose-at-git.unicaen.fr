@@ -269,7 +269,12 @@ class ServiceService extends AbstractEntityService
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
             } else {
-                $result = parent::save($entity);
+                if ($entity->hasChanged()){
+                    $result = parent::save($entity);
+                    $entity->setChanged(false);
+                }else{
+                    $result = $entity;
+                }
             }
 
             /* Sauvegarde automatique des volumes horaires associés */

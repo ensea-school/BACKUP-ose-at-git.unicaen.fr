@@ -419,7 +419,7 @@ class ServiceService extends AbstractEntityService
         $sAlias                    = $serviceStatutIntervenant->getAlias();
 
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
-        $serviceIntervenant->join( $serviceStatutIntervenant, $qb, 'statut', false);
+        $serviceIntervenant->join($serviceStatutIntervenant, $qb, 'statut', false);
         $this->leftJoin($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
         $serviceElementPedagogique->leftJoin($serviceStructure, $qb, 'structure', false, null, 's_ens');
 
@@ -975,18 +975,20 @@ class ServiceService extends AbstractEntityService
         switch ($options['tri']) {
             case 'intervenant':
                 $orderBy = 'INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE';
-                break;
+            break;
             case 'hetd':
                 $orderBy = 'SOLDE, INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE';
-                break;
+            break;
             default:
                 $orderBy = 'INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE';
-                break;
+            break;
         }
 
         $sql  = 'SELECT * FROM V_TBL_SERVICE WHERE ' . implode(' AND ', $conditions) . ' '
             . 'ORDER BY ' . $orderBy;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        $dateExtraction = new \DateTime();
 
         // récupération des données
         while ($d = $stmt->fetch()) {
@@ -1004,6 +1006,7 @@ class ServiceService extends AbstractEntityService
             $ds = [
                 '__total__'     => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
                 'type-etat'     => $d['TYPE_ETAT'],
+                'date'          => $dateExtraction,
                 'annee-libelle' => (string)$annee,
 
                 'intervenant-code'               => $d['INTERVENANT_CODE'],
@@ -1105,7 +1108,8 @@ class ServiceService extends AbstractEntityService
 
         // tri et préparation des entêtes
         $head = [
-            'type-etat' => 'Type État',
+            'type-etat'     => 'Type État',
+            'date'          => 'Date d\'extraction',
             'annee-libelle' => 'Année universitaire',
 
             'intervenant-code'               => 'Code intervenant',

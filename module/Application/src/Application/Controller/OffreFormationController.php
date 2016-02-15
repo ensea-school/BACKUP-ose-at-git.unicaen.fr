@@ -77,7 +77,7 @@ class OffreFormationController extends AbstractController
         $elements = [];
 
         $query = $this->em()->createQuery('SELECT
-                partial e.{id,libelle,sourceCode,niveau},
+                partial e.{id,libelle,sourceCode,niveau,histoDestruction},
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre},
                 partial ep.{id,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
@@ -102,7 +102,7 @@ class OffreFormationController extends AbstractController
                 $n                    = NiveauEtape::getInstanceFromEtape($object);
                 $niveaux[$n->getId()] = $n;
                 if (!$niveau || $niveau->getId() == $n->getId()) {
-                    if ($object->estNonHistorise()){
+                    if ($object->estNonHistorise() || $object->getElementPedagogique()->count() > 0){
                         $etapes[] = $object;
                     }
                     if (!$etape || $etape === $object) {

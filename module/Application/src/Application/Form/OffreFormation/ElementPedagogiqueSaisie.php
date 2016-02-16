@@ -2,6 +2,8 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
@@ -89,7 +91,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $this->add([
             'name'       => 'taux-fc',
             'options'    => [
-                'label' => 'Taux FC',
+                'label' => 'FC (%)',
             ],
             'attributes' => [
                 'title' => "Taux de formation continue",
@@ -104,7 +106,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $this->add([
             'name'       => 'taux-fi',
             'options'    => [
-                'label' => 'Taux FI',
+                'label' => 'FI (%)',
             ],
             'attributes' => [
                 'title' => "Taux de formation initiale",
@@ -119,7 +121,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $this->add([
             'name'       => 'taux-fa',
             'options'    => [
-                'label' => 'Taux FA',
+                'label' => 'FA (%)',
             ],
             'attributes' => [
                 'title' => "Taux de formation en apprentissage",
@@ -196,22 +198,19 @@ class ElementPedagogiqueSaisie extends AbstractForm
             'taux-fc'     => [
                 'required' => true,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
-                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                    ['name' => FloatFromString::class],
                 ],
             ],
             'taux-fi'     => [
                 'required' => true,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
-                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                    ['name' => FloatFromString::class],
                 ],
             ],
             'taux-fa'     => [
                 'required' => true,
                 'filters'  => [
-                    ['name' => 'Zend\Filter\StringTrim'],
-                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                    ['name' => FloatFromString::class],
                 ],
             ],
             'source-code' => [
@@ -265,12 +264,12 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
         $object->setEtape($this->getServiceEtape()->get($data['etape']));
         $object->setPeriode($this->getServicePeriode()->get($data['periode']));
         $object->setTauxFoad((float)$data['taux-foad']);
-        $object->setTauxFc((float)$data['taux-fc']);
-        $object->setTauxFi((float)$data['taux-fi']);
-        $object->setTauxFa((float)$data['taux-fa']);
-        $object->setFc((float)$data['taux-fc'] > 0);
-        $object->setFi((float)$data['taux-fi'] > 0);
-        $object->setFa((float)$data['taux-fa'] > 0);
+        $object->setTauxFc(FloatFromString::run($data['taux-fc']) / 100);
+        $object->setTauxFi(FloatFromString::run($data['taux-fi']) / 100);
+        $object->setTauxFa(FloatFromString::run($data['taux-fa']) / 100);
+        $object->setFc(FloatFromString::run($data['taux-fc']) > 0);
+        $object->setFi(FloatFromString::run($data['taux-fi']) > 0);
+        $object->setFa(FloatFromString::run($data['taux-fa']) > 0);
         $object->setStructure($this->getServiceStructure()->get($data['structure']));
 
         return $object;
@@ -295,9 +294,9 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
             'periode'     => ($p = $object->getPeriode()) ? $p->getId() : null,
             'taux-foad'   => $object->getTauxFoad(),
             'structure'   => ($s = $object->getStructure()) ? $s->getId() : null,
-            'taux-fc'     => $object->getTauxFc(),
-            'taux-fi'     => $object->getTauxFi(),
-            'taux-fa'     => $object->getTauxFa(),
+            'taux-fc'     => StringFromFloat::run($object->getTauxFc() * 100),
+            'taux-fi'     => StringFromFloat::run($object->getTauxFi() * 100),
+            'taux-fa'     => StringFromFloat::run($object->getTauxFa() * 100),
         ];
 
         return $data;

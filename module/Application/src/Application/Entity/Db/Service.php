@@ -286,7 +286,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setDescription($description)
     {
-        if ($this->description !== $description){
+        if ($this->description != $description){
             $this->description = $description;
             $this->changed = true;
         }

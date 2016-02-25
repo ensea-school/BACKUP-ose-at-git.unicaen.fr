@@ -104,7 +104,7 @@ class Saisie extends AbstractForm
 
         $data = $object->filtersToArray();
         $data['service'] = $object->getService()->getId();
-        $data['heures'] = StringFromFloat::run($object->getHeures());
+        $data['heures'] = StringFromFloat::run($object->getHeures(), false);
 
         if (! $this->getServiceService()->canHaveMotifNonPaiement($object->getService())){
             $this->remove('motif-non-paiement');

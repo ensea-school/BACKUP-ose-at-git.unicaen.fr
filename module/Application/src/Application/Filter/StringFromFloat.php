@@ -11,19 +11,23 @@ class StringFromFloat extends AbstractFilter
 
 
 
-    public function filter($value)
+    public function filter($value, $show0Digits=true)
     {
-        return Util::formattedFloat($value);
+        $res = Util::formattedFloat($value);
+        if (! $show0Digits){
+            $res = str_replace( ',00', '', $res );
+        }
+        return $res;
     }
 
 
 
-    public static function run( $value )
+    public static function run( $value, $show0Digits=true )
     {
         if (!self::$instance){
             self::$instance = new self;
         }
 
-        return self::$instance->filter($value);
+        return self::$instance->filter($value, $show0Digits);
     }
 }

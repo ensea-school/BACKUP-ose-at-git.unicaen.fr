@@ -3,6 +3,7 @@
 namespace Application\Form\VolumeHoraire;
 
 use Application\Entity\VolumeHoraireListe;
+use Application\Filter\FloatFromString;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Zend\Form\Element\Hidden;
@@ -73,8 +74,7 @@ class SaisieMultipleFieldset extends AbstractFieldset
             $filters[$typeIntervention->getCode()] = [
                 'required' => false,
                 'filters'    => [
-                    ['name' => 'Zend\Filter\StringTrim'],
-                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                    ['name' => FloatFromString::class],
                 ],
             ];
         }

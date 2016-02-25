@@ -164,7 +164,7 @@ class SaisieForm extends AbstractHtmlElement implements ServiceLocatorAwareInter
                 $res .= '</span>';
             }
             $res .= '<br />';
-            $res .= $this->getView()->formNumber( $element);
+            $res .= $this->getView()->formText( $element);
             $res .= '</div>';
         }
         if ($inRealise){

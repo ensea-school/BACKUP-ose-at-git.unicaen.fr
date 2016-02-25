@@ -105,17 +105,20 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         /* Rôles du personnel */
 
         // chargement des rôles métiers
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->from("Application\Entity\Db\Role", "r")
-            ->select("r, a, s, p")
-            ->distinct()
-            ->join("r.perimetre", "p")
-            ->leftJoin("r.affectation", "a", \Doctrine\ORM\Query\Expr\Join::WITH, '1=compriseEntre(a.histoCreation,a.histoDestruction) AND a.personnel = :personnel')
-            ->leftJoin("a.structure", "s")
-            ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
-            ->setParameter(':personnel', $personnel);
+        $query = $this->getEntityManager()->createQuery(
+        'SELECT DISTINCT
+            r, a, s, p
+        FROM
+            Application\Entity\Db\Role r
+            JOIN r.perimetre p
+            LEFT JOIN r.affectation a WITH 1=compriseEntre(a.histoCreation,a.histoDestruction) AND a.personnel = :personnel
+            LEFT JOIN a.structure s
+        WHERE
+            1=compriseEntre(r.histoCreation,r.histoDestruction)'
+        )->setParameter(':personnel', $personnel);
 
-        foreach ($qb->getQuery()->getResult() as $dbRole) {
+        $result = $query->getResult();
+        foreach ($result as $dbRole) {
             /* @var $dbRole \Application\Entity\Db\Role */
             $roleId = $dbRole->getRoleId();
 

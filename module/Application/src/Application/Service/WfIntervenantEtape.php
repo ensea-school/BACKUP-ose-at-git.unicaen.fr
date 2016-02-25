@@ -75,8 +75,7 @@ class WfIntervenantEtape extends AbstractEntityService
         $qb = $this->finderByIntervenant($intervenant); /* @var $qb QueryBuilder */
         
         $qb
-                ->join("ie.etape", "e", Join::WITH, "e.visible = 1 AND e.annee = :annee")
-                ->setParameter('annee', $intervenant->getAnnee());
+                ->join("ie.etape", "e", Join::WITH, "e.visible = 1");
         
         if (null === $structure) {
             $qb->andWhere("ie.structure is null"); // i.e. "peu importe la structure"

@@ -74,11 +74,6 @@ class WfEtape
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $etapePrecedente;
@@ -317,29 +312,6 @@ class WfEtape
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return Service
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

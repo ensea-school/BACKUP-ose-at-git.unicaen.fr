@@ -468,7 +468,7 @@ class MiseEnPaiement extends AbstractEntityService
         $params = [
             'annee' => $annee->getId()
         ];
-        $sql = 'SELECT * FROM V_TBL_DMEP WHERE annee_id = :annee';
+        $sql = 'SELECT * FROM V_EXPORT_DMEP WHERE annee_id = :annee';
 
         if ($structure) {
             $params['structure'] = $structure->getId();

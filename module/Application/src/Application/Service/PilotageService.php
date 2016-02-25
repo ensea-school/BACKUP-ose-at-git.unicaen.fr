@@ -12,7 +12,7 @@ class PilotageService extends AbstractService
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $sql = "SELECT * FROM V_TBL_PILOTAGE_ECARTS_ETATS";
+        $sql = "SELECT * FROM V_EXPORT_PILOTAGE_ECARTS_ETATS";
 
         $filters = [
             'annee_id' => (int)$this->getServiceContext()->getAnnee()->getId(),

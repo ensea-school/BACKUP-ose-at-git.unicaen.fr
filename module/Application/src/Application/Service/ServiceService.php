@@ -989,7 +989,7 @@ class ServiceService extends AbstractEntityService
             break;
         }
 
-        $sql  = 'SELECT * FROM V_TBL_SERVICE WHERE ' . implode(' AND ', $conditions) . ' '
+        $sql  = 'SELECT * FROM V_EXPORT_SERVICE WHERE ' . implode(' AND ', $conditions) . ' '
             . 'ORDER BY ' . $orderBy;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 

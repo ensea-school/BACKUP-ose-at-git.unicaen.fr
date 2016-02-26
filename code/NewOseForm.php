@@ -25,6 +25,12 @@ $form->add(ElementMaker::text(
 $form->add(ElementMaker::checkbox(
     'useHydrator', 'Implémenter un hydrateur spécifique'
 ));
+$form->add(ElementMaker::checkbox(
+    'generateTrait', 'Générer un trait', true
+));
+$form->add(ElementMaker::checkbox(
+    'generateInterface', 'Générer une interface', false
+));
 $form->add(ElementMaker::submit('generate', 'Générer le formulaire'));
 $form->setData($controller->getRequest()->getPost());
 
@@ -32,38 +38,39 @@ Util::displayForm($form);
 
 if ($controller->getRequest()->isPost() && $form->isValid()) {
 
-    $module            = $form->get('module')->getValue();
-    $useHydrator       = $form->get('useHydrator')->getValue();
-    $classname         = $form->get('classname')->getValue();
-    $name              = str_replace('\\', '', $classname);
-    $targetFullClass   = $module . '\\Form\\' . $classname . 'Form';
+    $type      = 'Form';
+    $classname = $form->get('classname')->getValue();
 
     $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
-    $params = $sCodeGenerator->generateFormParams($targetFullClass, 'Form', $name, $module, $useHydrator);
-
-    $params['useSubForm'] = false !== strpos($classname,'\\');
-    $configFileName       = 'module.config.php';
+    $params = $sCodeGenerator->generateFormParams([
+        'type'              => $type,
+        'classname'         => $form->get('module')->getValue() . '\\Form\\' . $classname . $type,
+        'name'              => ($type == 'Fieldset' ? 'fieldset' : '') . str_replace('\\', '', $classname),
+        'useHydrator'       => $form->get('useHydrator')->getValue(),
+        'useServiceLocator' => false,
+        'generateTrait'     => $form->get('generateTrait')->getValue(),
+        'generateInterface' => $form->get('generateInterface')->getValue(),
+    ], [
+        'Class' => [
+            'template'   => 'OseForm',
+            'useSubForm' => false !== strpos($classname, '\\'),
+        ],
+    ]);
 
     ?>
 
     <h3>Etape 2 : Création des fichiers sources du formulaire</h3>
     <?php
-    $sCodeGenerator->setTemplate('OseForm')->setParams($params)->generateToHtml($params['fileName'])->generateToFile($params['fileName']);
-
-    $p = $sCodeGenerator->generateFormTraitParams($targetFullClass, $name, $module . '\Form');
-    $sCodeGenerator->setTemplate('FormAwareTrait')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);
-
-    $p = $sCodeGenerator->generateFormInterfaceParams($targetFullClass, $name, $module . '\Form');
-    $sCodeGenerator->setTemplate('FormAwareInterface')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);
+    $sCodeGenerator->generateFiles($params);
 
     ?>
     <div class="alert alert-info">Les fichiers sont récupérables dans le
         dossier <?php echo $sCodeGenerator->getOutputDir() ?></div>
 
     <h3>Etape 3 : Déclaration dans le fichier de configuration</h3>
-    <?php $sCodeGenerator->setTemplate('FormConfig')->setParams($params)->generateToHtml($configFileName); ?>
+    <?php $sCodeGenerator->generateFile($params['Config'], false); ?>
     <div class="alert alert-warning">
         Vous devez vous-même placer ces informations dans le fichier de configuration de votre
         module.

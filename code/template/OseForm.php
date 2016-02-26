@@ -24,6 +24,7 @@ class <classname> extends AbstractForm
         $hydrator = new <classname>Hydrator;
         $this->setHydrator($hydrator);
         <endif useHydrator>
+
         $this->setAttribute('action',$this->getCurrentUrl());
 
         /* Ajoutez vos éléments de formulaire ici */

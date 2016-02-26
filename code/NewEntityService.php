@@ -27,38 +27,40 @@ Util::displayForm($form);
 
 if ($controller->getRequest()->isPost() && $form->isValid()) {
 
-    $module          = 'Application';
-    $entity          = $form->get('entity')->getValue();
-    $alias           = $form->get('alias')->getValue();
-    $name            = 'application' . $entity;
-    $targetFullClass = $module . '\\Service\\' . $entity . 'Service';
+    $entity = $form->get('entity')->getValue();
 
     $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
-    $params           = $sCodeGenerator->generateServiceParams($targetFullClass, $name, $module);
-    $params['entity'] = $entity;
-    $params['alias']  = $alias;
-    $configFileName   = 'module.config.php';
+    $params = $sCodeGenerator->generateServiceParams($fullClassname, $name, false);
+
+    unset($params['Interface']);
+
+    $params = $sCodeGenerator->generateServiceParams([
+        'classname'         => 'Application\\Service\\' . $entity . 'Service',
+        'name'              => 'application' . $entity,
+        'useServiceLocator' => false,
+        'generateTrait'     => true,
+        'generateInterface' => false,
+    ], [
+        'Class' => [
+            'template' => 'EntityService',
+            'entity'   => $entity,
+            'alias'    => $form->get('alias')->getValue(),
+        ],
+    ]);
 
     ?>
 
     <h3>Etape 2 : Création des fichiers sources du service</h3>
     <?php
-    $sCodeGenerator->setTemplate('EntityService')->setParams($params)->generateToHtml($params['fileName'])->generateToFile($params['fileName']);
-
-    $p = $sCodeGenerator->generateServiceTraitParams($targetFullClass, $name, $module . '\Service');
-    $sCodeGenerator->setTemplate('ServiceAwareTrait')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);
-
-    $p = $sCodeGenerator->generateServiceInterfaceParams($targetFullClass, $name, $module . '\Service');
-    $sCodeGenerator->setTemplate('ServiceAwareInterface')->setParams($p)->generateToHtml($p['fileName'])->generateToFile($p['fileName']);
-
+    $sCodeGenerator->generateServiceFiles($params);
     ?>
     <div class="alert alert-info">Les fichiers sont récupérables dans le
         dossier <?php echo $sCodeGenerator->getOutputDir() ?></div>
 
     <h3>Etape 3 : Déclaration dans le fichier de configuration</h3>
-    <?php $sCodeGenerator->setTemplate('ServiceConfig')->setParams($params)->generateToHtml($configFileName); ?>
+    <?php $sCodeGenerator->generateFile($params['Config'], false); ?>
     <div class="alert alert-warning">
         Vous devez vous-même placer ces informations dans le fichier de configuration de votre
         module.

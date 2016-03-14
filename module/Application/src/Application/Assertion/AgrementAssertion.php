@@ -7,7 +7,9 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\TypeAgrement;
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Resource\WorkflowResource;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\TypeAgrementAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
@@ -54,7 +56,7 @@ class AgrementAssertion extends AbstractAssertion
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
                         return $this->assertTblAgrementSaisie($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof Agrement:
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
@@ -63,7 +65,7 @@ class AgrementAssertion extends AbstractAssertion
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
                         return $this->assertAgrementSaisie($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof Structure:
                 switch ($privilege) {
                     case Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION:
@@ -72,7 +74,7 @@ class AgrementAssertion extends AbstractAssertion
                     case Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION:
                         return $this->assertStructureSaisie($role, $entity);
                 }
-                break;
+            break;
         }
 
         return true;
@@ -83,8 +85,10 @@ class AgrementAssertion extends AbstractAssertion
     protected function assertController($controller, $action = null, $privilege = null)
     {
         $role        = $this->getRole();
-        $intervenant = $this->getMvcEvent()->getParam('intervenant'); /* @var $intervenant Intervenant */
-        $typeAgrement = $this->getMvcEvent()->getParam('typeAgrement'); /* @var $typeAgrement TypeAgrement */
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        $typeAgrement = $this->getMvcEvent()->getParam('typeAgrement');
+        /* @var $typeAgrement TypeAgrement */
 
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
@@ -99,7 +103,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-                break;
+            break;
 
             case 'ajouter':
             case 'modifier':
@@ -108,7 +112,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-                break;
+            break;
 
             case 'index':
             case 'saisir-lot':
@@ -118,7 +122,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-                break;
+            break;
 
             case 'supprimer':
                 if ($typeAgrement) {
@@ -126,7 +130,7 @@ class AgrementAssertion extends AbstractAssertion
                     if (!$this->isAllowed($resource)) return false;
                     if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
                 }
-                break;
+            break;
         }
 
         return true;
@@ -136,23 +140,20 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertPage(array $page)
     {
-        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
-        if (isset($page['params']['typeAgrement'])) {
-            $typeAgrement = $this->getServiceTypeAgrement()->get($page['params']['typeAgrement']);
-        } else {
-            $typeAgrement = null;
+
+        $wfEtape = null;
+        $privilege = null;
+        if (false !== strpos($page['route'], 'conseil-restreint')) {
+            $wfEtape   = WfEtape::CODE_CONSEIL_RESTREINT;
+            $privilege = Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION;
+        } elseif (false !== strpos($page['route'], 'conseil-academique')) {
+            $wfEtape   = WfEtape::CODE_CONSEIL_ACADEMIQUE;
+            $privilege = Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
         }
 
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-
-        if ($typeAgrement) {
-            $resourceVisualisation = Privileges::getResourceId($typeAgrement->getPrivilegeVisualisation());
-            if (!$this->isAllowed($resourceVisualisation)) return false;
-
-            if ($intervenant && !$this->assertTypeAgrementVisualisation($typeAgrement, $intervenant)) return false;
-        }
+        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+        if ($wfEtape && $intervenant && !$this->isAllowed(WorkflowResource::create($wfEtape, $intervenant))) return false;
 
         return true;
     }
@@ -161,6 +162,11 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertTblAgrementSaisie(Role $role, TblAgrement $entity)
     {
+        /* Si c'est pour agréer et que le workflow l'interdit alors non! */
+        if (!$entity->getAgrement() && !$this->isAllowed($entity->getResourceWorkflow())) {
+            return false;
+        }
+
         if ($structure = $entity->getStructure()) {
             return $this->assertStructureSaisie($role, $structure);
         }
@@ -172,13 +178,17 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertTypeAgrementVisualisation(TypeAgrement $typeAgrement, Intervenant $intervenant)
     {
-        return $this->getServiceTblAgrement()->needIntervenantAgrement($typeAgrement, $intervenant);
+        return $this->isAllowed(WorkflowResource::create($typeAgrement->getCode(), $intervenant));
     }
 
 
 
     protected function assertAgrementSaisie(Role $role, Agrement $entity)
     {
+        if (!$this->isAllowed($entity->getResourceWorkflow())) {
+            return false;
+        }
+
         if ($structure = $entity->getStructure()) {
             return $this->assertStructureSaisie($role, $structure);
         }

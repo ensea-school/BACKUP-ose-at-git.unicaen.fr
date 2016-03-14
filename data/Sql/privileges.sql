@@ -25,15 +25,15 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'budget' c, 'edition-engagement-etablissement' p, 'Dotation paye état' l FROM dual
-UNION SELECT 'budget' c, 'edition-engagement-composante' p, 'Dotation ressources propres' l FROM dual
+      SELECT 'piece-justificative' c, 'gestion-visualisation' p, 'Gestion des pièces justificatives (visualisation)' l FROM dual
+UNION SELECT 'piece-justificative' c, 'gestion-edition' p, 'Gestion des pièces justificatives (édition)' l FROM dual
 
 ) t1;
 
 
 /* Liste... */
 select
-  rpad( '/* ' || cp.code || ' */ ', 30 ) || 'update privilege set ordre =  WHERE code = ''' || p.code || ''' AND categorie_id = (SELECT cp.id FROM categorie_privilege cp WHERE cp.code= ''' || cp.code || ''');'
+  cp.code, p.code
   
 from
   privilege p
@@ -65,7 +65,10 @@ update categorie_privilege set ordre = 140 WHERE code = 'droit';
 update categorie_privilege set ordre = 150 WHERE code = 'import';
 
 
---delete from privilege where code='edition' AND categorie_id = (select cp.id from categorie_privilege cp where cp.code='budget');
+delete from privilege where code='association' 
+AND categorie_id = (select cp.id from categorie_privilege cp where cp.code='referentiel');
+delete from privilege where code='association' 
+AND categorie_id = (select cp.id from categorie_privilege cp where cp.code='dossier');
 
 
 --UPDATE CATEGORIE_PRIVILEGE SET CODE = 'droit' WHERE CODE = 'privilege';

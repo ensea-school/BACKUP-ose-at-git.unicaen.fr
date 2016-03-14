@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Resource\WorkflowResource;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -216,5 +217,17 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     public function getResourceId()
     {
         return 'Agrement';
+    }
+
+
+
+    /**
+     * @return WorkflowResource
+     */
+    public function getResourceWorkflow()
+    {
+        $etape = $this->getType()->getCode();
+
+        return WorkflowResource::create($etape, $this->getIntervenant(), $this->getStructure());
     }
 }

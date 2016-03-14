@@ -8,7 +8,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router'          => [
         'routes' => [
-            'gestion' => [
+            'gestion'    => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/gestion',
@@ -19,6 +19,17 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
+                'child_routes'  => [
+                    'divers' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/divers',
+                            'defaults' => [
+                                'action' => 'divers',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'discipline' => [
                 'type'          => 'Literal',
@@ -26,8 +37,8 @@ return [
                     'route'    => '/discipline',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'Discipline',
-                        'action'     => 'index',
+                        'controller'    => 'Discipline',
+                        'action'        => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -82,15 +93,15 @@ return [
                     'gestion' => [
                         'label'    => "Gestion",
                         'route'    => 'gestion',
-                        'resource' => PrivilegeController::getResourceId('Application\Controller\Gestion','index'),
-                        'pages' => [
+                        'resource' => PrivilegeController::getResourceId('Application\Controller\Gestion', 'index'),
+                        'pages'    => [
                             'discipline' => [
                                 'border-color' => '#F5E79E',
-                                'icon'     => 'glyphicon glyphicon-list-alt',
-                                'label'    => "Disciplines",
-                                'title'    => "Gestion des disciplines",
-                                'route'    => 'discipline',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
+                                'icon'         => 'glyphicon glyphicon-list-alt',
+                                'label'        => "Disciplines",
+                                'title'        => "Gestion des disciplines",
+                                'route'        => 'discipline',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
                             ],
                         ],
                     ],
@@ -117,7 +128,7 @@ return [
                         Privileges::BUDGET_VISUALISATION,
                         Privileges::DISCIPLINE_GESTION,
                     ],
-                    'assertion' => 'AssertionGestion',
+                    'assertion'  => 'AssertionGestion',
                 ],
                 [
                     'controller' => 'Application\Controller\Discipline',
@@ -135,7 +146,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Discipline',
-                    'action'     => ['saisir','supprimer'],
+                    'action'     => ['saisir', 'supprimer'],
                     'privileges' => [
                         Privileges::DISCIPLINE_EDITION,
                     ],
@@ -155,9 +166,9 @@ return [
             'AssertionGestion'      => Assertion\GestionAssertion::class,
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'invokables' => [
-            'DisciplineForm'       => Form\DisciplineForm::class,
+            'DisciplineForm' => Form\DisciplineForm::class,
         ],
     ],
 ];

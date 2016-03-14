@@ -40,6 +40,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const PIECE_JUSTIFICATIVE_EDITION               = 'piece-justificative-edition';
     const PIECE_JUSTIFICATIVE_VALIDATION            = 'piece-justificative-validation';
     const PIECE_JUSTIFICATIVE_DEVALIDATION          = 'piece-justificative-devalidation';
+    const PIECE_JUSTIFICATIVE_GESTION_EDITION       = 'piece-justificative-gestion-edition';
+    const PIECE_JUSTIFICATIVE_GESTION_VISUALISATION = 'piece-justificative-gestion-visualisation';
     const ENSEIGNEMENT_ASSOCIATION                  = 'enseignement-association';
     const ENSEIGNEMENT_VISUALISATION                = 'enseignement-visualisation';
     const ENSEIGNEMENT_EDITION                      = 'enseignement-edition';
@@ -62,7 +64,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const AGREMENT_CONSEIL_RESTREINT_EDITION        = 'agrement-conseil-restreint-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION   = 'agrement-conseil-academique-suppression';
     const AGREMENT_CONSEIL_RESTREINT_SUPPRESSION    = 'agrement-conseil-restreint-suppression';
-    const CONTRAT_ASSOCIATION                       = 'contrat-association';
     const CONTRAT_VISUALISATION                     = 'contrat-visualisation';
     const CONTRAT_CREATION                          = 'contrat-creation';
     const CONTRAT_SUPPRESSION                       = 'contrat-suppression';

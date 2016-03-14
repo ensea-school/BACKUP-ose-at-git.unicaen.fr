@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Acl\ComposanteRole;
+use Application\Assertion\ContratAssertionOld;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeContrat;
@@ -20,7 +21,6 @@ use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
 use Zend\View\Model\ViewModel;
 use Application\Entity\Db\Contrat;
-use Application\Assertion\ContratAssertion;
 use Application\Assertion\FichierAssertion;
 use Zend\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
@@ -256,7 +256,7 @@ class ContratController extends AbstractController
         $contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
             ->setIntervenant($this->getIntervenant())
             ->setStructure($this->getStructure());
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_CREATE)) {
+        if (!$this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_CREATE)) {
             throw new \LogicException("La création de contrat/avenant n'est pas encore possible.");
         }
 
@@ -318,7 +318,7 @@ class ContratController extends AbstractController
         $this->contrat   = $this->context()->mandatory()->contratFromRoute();
         $contratToString = lcfirst($this->contrat->toString(true, true));
 
-        if (!$this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_DELETE)) {
+        if (!$this->isAllowed($this->contrat, ContratAssertionOld::PRIVILEGE_DELETE)) {
             throw new \LogicException("La suppression $contratToString n'est pas possible.");
         }
 
@@ -526,7 +526,7 @@ class ContratController extends AbstractController
 
         $this->intervenant = $this->contrat->getIntervenant();
 
-        if (!$this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_READ)) {
+        if (!$this->isAllowed($this->contrat, ContratAssertionOld::PRIVILEGE_READ)) {
             throw new UnAuthorizedException("Interdit !");
         }
 
@@ -660,7 +660,7 @@ class ContratController extends AbstractController
         $contrat = $this->context()->mandatory()->contratFromRoute();
         $fichier = $this->context()->fichierFromRoute();
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_READ)) {
+        if (!$this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_READ)) {
             throw new UnAuthorizedException("Interdit!");
         }
 

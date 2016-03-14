@@ -14,6 +14,13 @@ class TypeVolumeHoraire extends AbstractEntityService
 {
 
     /**
+     * @var TypeVolumeHoraireEntity[]
+     */
+    private $cache;
+
+
+
+    /**
      * retourne la classe des entités
      *
      * @return string
@@ -24,14 +31,19 @@ class TypeVolumeHoraire extends AbstractEntityService
         return TypeVolumeHoraireEntity::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'typevh';
     }
+
+
 
     /**
      * Retourne le type de volume horaire "Prévu"
@@ -40,8 +52,10 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getPrevu()
     {
-        return $this->getRepo()->findOneBy(['code' => TypeVolumeHoraireEntity::CODE_PREVU]);
+        return $this->getByCode(TypeVolumeHoraireEntity::CODE_PREVU);
     }
+
+
 
     /**
      * Retourne le type de volume horaire "Réalisé"
@@ -50,40 +64,38 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getRealise()
     {
-        return $this->getRepo()->findOneBy(['code' => TypeVolumeHoraireEntity::CODE_REALISE]);
+        return $this->getByCode(TypeVolumeHoraireEntity::CODE_REALISE);
     }
 
-    /**
-     * Retourne le type de volume horaire "Payé"
-     *
-     * @return TypeVolumeHoraireEntity
-     */
-    public function getPaye()
-    {
-        return $this->getRepo()->findOneBy(['code' => TypeVolumeHoraireEntity::CODE_PAYE]);
-    }
+
 
     /**
      *
      * @param string $code
+     *
      * @return TypeVolumeHoraireEntity
      */
-    public function getByCode( $code )
+    public function getByCode($code)
     {
-        if (null == $code) return null;
-        return $this->getRepo()->findOneBy(['code' => $code]);
+        if (!isset($this->cache[$code])) {
+            $this->cache[$code] = $this->getRepo()->findOneBy(['code' => $code]);
+        }
+
+        return $this->cache[$code];
     }
 
+
+
     /**
-     * Retourne la liste des types de volumes horaires
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\TypeVolumeHoraire[]
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");
+
         return parent::getList($qb, $alias);
     }
 

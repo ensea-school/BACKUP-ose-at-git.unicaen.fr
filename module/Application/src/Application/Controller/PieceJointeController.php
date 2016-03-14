@@ -461,6 +461,13 @@ class PieceJointeController extends AbstractController implements WorkflowInterv
 
 
 
+    public function configurationAction()
+    {
+        return [];
+    }
+
+
+
     /**
      * @var Intervenant
      */

@@ -39,11 +39,11 @@ $tid = uniqid('agrements-lot-');
         <?php foreach ($data as $d): extract($d); ?>
             <tr>
                 <?php if ($needStructure): ?>
-                    <td class="structure"><?php echo $ta->getStructure() ?></td>
+                    <td class="structure"><?php echo $wie->getStructure() ?></td>
                 <?php endif; ?>
                 <td class="intervenant">
                     <?php
-                    echo $this->intervenant($ta->getIntervenant())->renderLink();
+                    echo $this->intervenant($wie->getIntervenant())->renderLink();
                     ?>
                 </td>
                 <?php if ($needAction): ?>

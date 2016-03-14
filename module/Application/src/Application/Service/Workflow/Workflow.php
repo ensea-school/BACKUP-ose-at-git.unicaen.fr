@@ -121,8 +121,6 @@ class Workflow extends AbstractWorkflow
         // Fetch de la progression de l'intervenant, pour la structure courante éventuelle
         $ies = $service->findIntervenantEtape($this->getIntervenant()/*, $this->getStructure()*/);
         if (!count($ies)) {
-            // création de la progression si besoin
-            $service->createIntervenantEtapes($this->getIntervenant());
             $ies = $service->findIntervenantEtape($this->getIntervenant());
         }
 

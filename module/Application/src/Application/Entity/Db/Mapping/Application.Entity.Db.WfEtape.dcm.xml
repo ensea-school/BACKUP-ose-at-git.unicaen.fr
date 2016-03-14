@@ -5,35 +5,9 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="code" type="string" column="CODE" length="64" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="256" nullable="false"/>
-    <field name="pertinFunc" type="string" column="PERTIN_FUNC" length="256" nullable="true"/>
-    <field name="franchFunc" type="string" column="FRANCH_FUNC" length="256" nullable="true"/>
-<!--    <field name="pertinRuleClass" type="string" column="PERTIN_RULE_CLASS" length="256" nullable="false"/>
-    <field name="franchRuleClass" type="string" column="FRANCH_RULE_CLASS" length="256" nullable="false"/>-->
-    <field name="stepClass" type="string" column="STEP_CLASS" length="256" nullable="false"/>
-    <field name="structureDependant" type="boolean" column="STRUCTURE_DEPENDANT" nullable="false"/>
-    <field name="visible" type="boolean" column="VISIBLE" nullable="false"/>
-
-    <many-to-many field="etapeSuivante" target-entity="Application\Entity\Db\WfEtape">
-        <join-table name="WF_ETAPE_TO_ETAPE">
-            <join-columns>
-                <join-column name="DEPART_ETAPE_ID" referenced-column-name="ID"/>
-            </join-columns>
-            <inverse-join-columns>
-                <join-column name="ARRIVEE_ETAPE_ID" referenced-column-name="ID"/>
-            </inverse-join-columns>
-        </join-table>
-    </many-to-many>
-    
-    <many-to-many field="etapePrecedente" target-entity="Application\Entity\Db\WfEtape">
-        <join-table name="WF_ETAPE_TO_ETAPE">
-            <join-columns>
-                <join-column name="ARRIVEE_ETAPE_ID" referenced-column-name="ID"/>
-            </join-columns>
-            <inverse-join-columns>
-                <join-column name="DEPART_ETAPE_ID" referenced-column-name="ID"/>
-            </inverse-join-columns>
-        </join-table>
-    </many-to-many>
+    <field name="libelleIntervenant" type="string" column="LIBELLE_INTERVENANT" length="256" nullable="false"/>
+    <field name="libelleAutres" type="string" column="LIBELLE_AUTRES" length="256" nullable="false"/>
+    <field name="ordre" type="integer" column="ORDRE" nullable="false" />
+    <field name="route" type="string" column="ROUTE" length="256" nullable="false"/>
   </entity>
 </doctrine-mapping>

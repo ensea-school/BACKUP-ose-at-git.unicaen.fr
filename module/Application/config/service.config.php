@@ -2,7 +2,10 @@
 
 namespace Application;
 
+use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Guard\PrivilegeRoute;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -267,6 +270,7 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['index', 'export', 'saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie', 'horodatage'],
                     'roles'      => ['user'],
+                    'assertion'  => 'assertionService',
                 ], [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['resume', 'resume-refresh', 'recherche'],
@@ -287,6 +291,15 @@ return [
             ],
         ],
         'rule_providers'     => [
+            PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'privileges' => Privileges::ENSEIGNEMENT_VISUALISATION,
+                        'resources'  => 'Service',
+                        'assertion'  => 'assertionService',
+                    ],
+                ],
+            ],
             'BjyAuthorize\Provider\Rule\Config' => [
                 'allow' => [
                     [
@@ -334,7 +347,8 @@ return [
             'ServiceRechercheFormHydrator'                 => Form\Service\RechercheFormHydrator::class,
             'FormServiceReferentielSaisieFieldsetHydrator' => Form\ServiceReferentiel\SaisieFieldsetHydrator::class,
             'FormServiceReferentielSaisieHydrator'         => Form\ServiceReferentiel\SaisieHydrator::class,
-            'ServiceAssertion'                             => Assertion\ServiceAssertion::class,
+            'ServiceAssertion'                             => Assertion\ServiceAssertionOld::class,
+            'assertionService'                             => Assertion\ServiceAssertion::class,
             'ServiceReferentielAssertion'                  => Assertion\ServiceReferentielAssertion::class,
         ],
     ],

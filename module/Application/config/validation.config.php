@@ -5,7 +5,6 @@ namespace Application;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantExterieurRole;
 
 use Application\Entity\Db\Validation;
 
@@ -105,11 +104,6 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => ['dossier'],
-                    'roles'      => [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                ],
-                [
-                    'controller' => 'Application\Controller\Validation',
                     'action'     => ['service', 'referentiel'],
                     'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
@@ -127,7 +121,6 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO => [],
                 Validation::RESOURCE_ID_CLOTURE_REALISE          => [],
                 Validation::RESOURCE_ID_VALIDATION_ENSEIGNEMENT  => [],
                 Validation::RESOURCE_ID_VALIDATION_REFERENTIEL   => [],
@@ -143,29 +136,12 @@ return [
                             AdministrateurRole::ROLE_ID,
                         ],
                         [
-                            Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO,
                             Validation::RESOURCE_ID_CLOTURE_REALISE,
                             Validation::RESOURCE_ID_VALIDATION_ENSEIGNEMENT,
                             Validation::RESOURCE_ID_VALIDATION_REFERENTIEL,
                         ],
                         [
                             OldAbstractAssertion::PRIVILEGE_READ,
-                        ],
-                        'ValidationAssertion',
-                    ],
-
-                    // ------------- Validation DONNEES PERSO -------------
-                    [
-                        [
-                            ComposanteRole::ROLE_ID,
-                            AdministrateurRole::ROLE_ID,
-                        ],
-                        [
-                            Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO,
-                        ],
-                        [
-                            OldAbstractAssertion::PRIVILEGE_CREATE,
-                            OldAbstractAssertion::PRIVILEGE_DELETE,
                         ],
                         'ValidationAssertion',
                     ],
@@ -219,7 +195,6 @@ return [
             'ValidationReferentielRule'      => Rule\Validation\Referentiel\ValidationRule::class,
             'ClotureRealiseRule'             => Rule\Validation\ClotureRealiseRule::class,
             'ValidationAssertion'            => Assertion\ValidationAssertionProxy::class,
-            'ValidationDossierAssertion'     => Assertion\ValidationDossierAssertion::class,
             'ValidationServiceAssertion'     => Assertion\ValidationServiceAssertion::class,
             'ValidationReferentielAssertion' => Assertion\ValidationReferentielAssertion::class,
             'ClotureRealiseAssertion'        => Assertion\ClotureRealiseAssertion::class,
@@ -229,16 +204,6 @@ return [
             'ValidationEnseignementRealiseRule' => Rule\Validation\Enseignement\Realise\RuleFactory::class,
             'ValidationReferentielPrevuRule'    => Rule\Validation\Referentiel\Prevu\RuleFactory::class,
             'ValidationReferentielRealiseRule'  => Rule\Validation\Referentiel\Realise\RuleFactory::class,
-        ],
-        'initializers' => [
-        ],
-    ],
-    'view_helpers'    => [
-        'invokables' => [
-        ],
-    ],
-    'form_elements'   => [
-        'invokables' => [
         ],
     ],
 ];

@@ -21,4 +21,10 @@ class GestionController extends AbstractController
         return [];
     }
 
+
+
+    public function diversAction()
+    {
+        return [];
+    }
 }

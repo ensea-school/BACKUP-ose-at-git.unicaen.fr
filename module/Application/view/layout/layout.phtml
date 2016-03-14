@@ -27,7 +27,7 @@
     <![endif]-->
 </head>
 
-<body class="<?php echo getenv('APPLICATION_ENV') ?: 'development' ?>">
+<body class="<?php echo getenv('APPLICATION_ENV') ?: 'development' ?>" data-base-url="<?php echo $this->url('home') ?>">
 <!--[if lt IE 7]>
 <p class="chromeframe">Vous utilisez un navigateur internet hors d'âge. Veuillez le mettre à jour, svp.</p>
 <![endif]-->

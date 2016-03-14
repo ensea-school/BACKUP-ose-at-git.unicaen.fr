@@ -12,6 +12,12 @@ use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
  */
 class EtatVolumeHoraire extends AbstractEntityService
 {
+    /**
+     * @var EtatVolumeHoraireEntity[]
+     */
+    private $cache;
+
+
 
     /**
      * retourne la classe des entités
@@ -24,14 +30,30 @@ class EtatVolumeHoraire extends AbstractEntityService
         return EtatVolumeHoraireEntity::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'etatvh';
     }
+
+
+
+    public function getByCode($code)
+    {
+        if (!isset($this->cache[$code])) {
+            $this->cache[$code] = $this->getRepo()->findOneBy(['code' => $code]);
+        }
+
+        return $this->cache[$code];
+    }
+
+
 
     /**
      * Retourne l'état "Saisi"
@@ -40,8 +62,10 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getSaisi()
     {
-        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_SAISI]);
+        return $this->getByCode(EtatVolumeHoraireEntity::CODE_SAISI);
     }
+
+
 
     /**
      * Retourne l'état "Validé"
@@ -50,8 +74,10 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getValide()
     {
-        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_VALIDE]);
+        return $this->getByCode(EtatVolumeHoraireEntity::CODE_VALIDE);
     }
+
+
 
     /**
      * Retourne l'état "Contrat édité"
@@ -60,8 +86,10 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getContratEdite()
     {
-        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_CONTRAT_EDITE]);
+        return $this->getByCode(EtatVolumeHoraireEntity::CODE_CONTRAT_EDITE);
     }
+
+
 
     /**
      * Retourne l'état "Contrat signé"
@@ -70,19 +98,23 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getContratSigne()
     {
-        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_CONTRAT_SIGNE]);
+        return $this->getByCode(EtatVolumeHoraireEntity::CODE_CONTRAT_SIGNE);
     }
+
+
 
     /**
      * Retourne la liste des états de volumes horaires
      *
      * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\EtatVolumeHoraire[]
+     *
+     * @return \Application\Entity\Db\EtatVolumeHoraire[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");
+
         return parent::getList($qb, $alias);
     }
 

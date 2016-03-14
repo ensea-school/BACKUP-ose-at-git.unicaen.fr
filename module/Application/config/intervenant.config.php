@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -21,19 +22,6 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    /*'default'                        => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:action[/:intervenant]',
-                            'constraints' => [
-                                'action'      => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
-                            ],
-                        ],
-                    ],*/
                     'rechercher'                     => [
                         'type'    => 'Literal',
                         'options' => [
@@ -139,19 +127,6 @@ return [
                             ],
                         ],
                     ],
-                    'saisir-dossier'                 => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/saisir-dossier',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'controller' => 'Dossier',
-                                'action'     => 'modifier',
-                            ],
-                        ],
-                    ],
                     'services'                       => [
                         'type'    => 'Segment',
                         'options' => [
@@ -232,19 +207,6 @@ return [
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Paiement',
                                 'action'     => 'demandeMiseEnPaiement',
-                            ],
-                        ],
-                    ],
-                    'validation-dossier'             => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/validation/dossier',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'controller' => 'Validation',
-                                'action'     => 'dossier',
                             ],
                         ],
                     ],
@@ -374,15 +336,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'saisir'),
                             ],
                             'dossier'                        => [
-                                'label'        => "Données personnelles",
-                                'title'        => "Saisir les données personnelles d'un intervenant vacataire",
-                                'route'        => 'intervenant/saisir-dossier',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'modifier'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'service'                        => [
                                 'label'        => "Enseignements prévisionnels",
@@ -391,26 +345,15 @@ return [
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
+                                'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'index'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                'visible'      => 'assertionService',
                             ],
                             'pieces-jointes-saisie'          => [
                                 // coquille vide qui réserve l'emplacement du menu
                             ],
-                            'pieces-jointes-validation'      => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
                             'validation-dossier'             => [
-                                'label'        => "Validation des données personnelles",
-                                'title'        => "Validation des données personnelles de l'intervenant",
-                                'route'        => 'intervenant/validation-dossier',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'dossier'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'validation-service-prevu'       => [
                                 'label'        => "Validation des enseignements prévisionnels",
@@ -449,7 +392,6 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'services-realises'              => [
                                 'label'        => "Enseignements réalisés",
@@ -458,9 +400,9 @@ return [
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
+                                'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'index'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                'visible'      => 'assertionService',
                             ],
                             'validation-service-realise'     => [
                                 'label'        => "Validation des enseignements réalisés",
@@ -540,37 +482,15 @@ return [
                         Privileges::INTERVENANT_CALCUL_HETD,
                     ],
                 ],
-            ],
-            'BjyAuthorize\Guard\Controller' => [
-                [
+                [ /// @todo à protéger d'avantage...
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
-                    'roles'      => [R_ADMINISTRATEUR, R_COMPOSANTE, R_ETABLISSEMENT, R_INTERVENANT],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['apercevoir',],
                     'roles'      => ['user'],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['feuille-de-route'],
-                    'roles'      => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['choisir', 'rechercher', 'recherche'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-                [
-                    'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['voir', 'modifier'],
-                    'roles'      => [R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR],
                 ],
             ],
         ],
         'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
+            \BjyAuthorize\Provider\Resource\Config::class => [
                 'Intervenant' => [],
             ],
         ],
@@ -589,11 +509,7 @@ return [
     'controllers'     => [
         'invokables' => [
             'Application\Controller\Intervenant'           => Controller\IntervenantController::class,
-            'Application\Controller\Dossier'               => Controller\DossierController::class,
             'Application\Controller\ModificationServiceDu' => Controller\ModificationServiceDuController::class,
-        ],
-        'aliases'    => [
-            'IntervenantController' => 'Application\Controller\Intervenant',
         ],
     ],
     'service_manager' => [
@@ -603,13 +519,10 @@ return [
             'ApplicationCivilite'                   => Service\Civilite::class,
             'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
             'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
-            'ApplicationDossier'                    => Service\Dossier::class,
             'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
             'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
-            'PeutSaisirDossierRule'                 => Rule\Intervenant\PeutSaisirDossierRule::class,
             'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
             'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
-            'PossedeDossierRule'                    => Rule\Intervenant\PossedeDossierRule::class,
             'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
             'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
             'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
@@ -621,13 +534,10 @@ return [
             'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
             'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
         ],
-        'initializers' => [
-        ],
     ],
     'form_elements'   => [
         'invokables' => [
             'IntervenantEditionForm'                        => Form\Intervenant\EditionForm::class,
-            'IntervenantDossier'                            => Form\Intervenant\Dossier::class,
             'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
             'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
             'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,

@@ -21,7 +21,7 @@ use Application\Rule\Paiement\MiseEnPaiementExisteRule;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceAssertion extends OldAbstractAssertion
+class ServiceAssertionOld extends OldAbstractAssertion
 {
     use \Application\Service\Traits\ValidationAwareTrait;
     use \Application\Service\Traits\MiseEnPaiementAwareTrait;

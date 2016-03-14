@@ -2,12 +2,14 @@
 
 namespace Application;
 
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'workflow' => [
-                'type'    => 'Literal',
-                'options' => [
+                'type'          => 'Literal',
+                'options'       => [
                     'route'    => '/workflow',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
@@ -15,15 +17,15 @@ return [
                     ],
                 ],
                 'may_terminate' => false,
-                'child_routes' => [
+                'child_routes'  => [
                     'nav-next' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:intervenant',
+                            'route'       => '/:intervenant',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'nav-next',
                             ],
                         ],
@@ -32,7 +34,7 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -41,8 +43,8 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
-        'guards' => [
+    'bjyauthorize'    => [
+        'guards'             => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Workflow',
@@ -51,9 +53,25 @@ return [
                 ],
             ],
         ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'WorkflowResource' => [],
+                'WorkflowEtape'    => [],
+            ],
+        ],
+        'rule_providers'     => [
+            PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'resources' => ['WorkflowResource', 'WorkflowEtape'],
+                        'assertion'  => 'assertionWorkflow',
+                    ],
+                ],
+            ],
+        ],
     ],
-    'controllers' => [
-        'invokables' => [
+    'controllers'     => [
+        'invokables'   => [
             'Application\Controller\Workflow' => Controller\WorkflowController::class,
         ],
         'initializers' => [
@@ -61,21 +79,24 @@ return [
         ],
     ],
     'service_manager' => [
-        'invokables' => [
+        'invokables'   => [
             'WfEtapeService'            => Service\WfEtape::class,
             'WfIntervenantEtapeService' => Service\WfIntervenantEtape::class,
             'WorkflowIntervenant'       => Service\Workflow\WorkflowIntervenant::class,
+            'workflow'                  => Service\WorkflowService::class,
             'DbFunctionRule'            => Rule\Intervenant\DbFunctionRule::class,
+            'assertionWorkflow'         => Assertion\WorkflowAssertion::class,
         ],
-        'factories' => [
+        'factories'    => [
         ],
         'initializers' => [
             Service\Workflow\WorkflowIntervenantAwareInitializer::class,
         ],
     ],
-    'view_helpers' => [
-        'invokables' => [
-            'Workflow' => View\Helper\Workflow::class,
+    'view_helpers'    => [
+        'invokables'   => [
+            'Workflow'       => View\Helper\Workflow::class,
+            'feuilleDeRoute' => View\Helper\Intervenant\FeuilleDeRouteViewHelper::class,
         ],
         'initializers' => [
             Service\Workflow\WorkflowIntervenantAwareInitializer::class,

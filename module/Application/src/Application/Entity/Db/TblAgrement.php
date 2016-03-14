@@ -7,6 +7,7 @@ use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeAgrementAwareTrait;
+use Application\Resource\WorkflowResource;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 
@@ -30,11 +31,6 @@ class TblAgrement implements ResourceInterface
      * @var boolean
      */
     private $obligatoire;
-
-    /**
-     * @var boolean
-     */
-    private $atteignable;
 
 
 
@@ -75,30 +71,6 @@ class TblAgrement implements ResourceInterface
 
 
     /**
-     * @return boolean
-     */
-    public function getAtteignable()
-    {
-        return $this->atteignable;
-    }
-
-
-
-    /**
-     * @param boolean $atteignable
-     *
-     * @return TblAgrement
-     */
-    public function setAtteignable($atteignable)
-    {
-        $this->atteignable = $atteignable;
-
-        return $this;
-    }
-
-
-
-    /**
      * Returns the string identifier of the Resource
      *
      * @return string
@@ -106,5 +78,17 @@ class TblAgrement implements ResourceInterface
     public function getResourceId()
     {
         return 'TblAgrement';
+    }
+
+
+
+    /**
+     * @return WorkflowResource
+     */
+    public function getResourceWorkflow()
+    {
+        $etape = $this->getTypeAgrement()->getCode();
+
+        return WorkflowResource::create($etape, $this->getIntervenant(), $this->getStructure());
     }
 }

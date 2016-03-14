@@ -111,11 +111,11 @@ namespace Application\View\Renderer;
  * @method \UnicaenApp\View\Helper\HistoriqueViewHelper historique(\UnicaenApp\Entity\HistoriqueAwareInterface $entity = null)
  * @method \UnicaenApp\View\Helper\TabAjax\TabAjaxViewHelper tabajax($tabs = null)
  * @method \UnicaenApp\View\Helper\TagViewHelper tag($name = null, array $attributes = [])
- * @method \Application\View\Helper\CartridgeViewHelper cartridge(array $items, array $options = [])
- * @method \Application\View\Helper\FormButtonGroup formbuttongroup(\Zend\Form\ElementInterface $element = null, $labelPosition = null)
  * @method \Application\View\Helper\ValidationViewHelper validation(\Application\Entity\Db\Validation $validation = null)
  * @method string utilisateur(\Application\Entity\Db\Utilisateur $utilisateur, $title = null, $subject = null, $body = null)
  * @method \Application\View\Helper\FormSupprimerViewHelper formsupprimer($form)
+ * @method \Application\View\Helper\FormButtonGroupViewHelper formbuttongroup(\Zend\Form\ElementInterface $element = null, $labelPosition = null)
+ * @method \Application\View\Helper\CartridgeViewHelper cartridge(array $items, array $options = [])
  * @method \Application\View\Helper\Intervenant\TotauxHetdViewHelper formuletotauxhetd(\Application\Entity\Db\FormuleResultat $formuleResultat)
  * @method \Application\View\Helper\Intervenant\IntervenantViewHelper intervenant(\Application\Entity\Db\Intervenant $intervenant = null)
  * @method \Application\View\Helper\StructureViewHelper structure(\Application\Entity\Db\Structure $structure = null)
@@ -135,6 +135,7 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche fieldsetelementpedagogiquerecherche(\Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset $fieldset = null)
  * @method \Application\View\Helper\AgrementViewHelper agrement(\Application\Entity\Db\Agrement $agrement = null)
  * @method \Application\View\Helper\Workflow workflow(\Application\Entity\Db\Intervenant $intervenant, \Zend\Permissions\Acl\Role\RoleInterface $role)
+ * @method \Application\View\Helper\Intervenant\FeuilleDeRouteViewHelper feuillederoute(\Application\Entity\Db\Intervenant $intervenant = null)
  * @method \Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper demandemiseenpaiement(array $servicesAPayer, $changeIndex = null)
  * @method \Application\View\Helper\Paiement\TypeHeuresViewHelper typeheures(\Application\Entity\Db\TypeHeures $typeHeures = null)
  * @method \Import\View\Helper\DifferentielListe differentielliste($lignes)
@@ -143,7 +144,5 @@ namespace Application\View\Renderer;
  * @author UnicaenCode
  */
 class PhpRenderer extends \Zend\View\Renderer\PhpRenderer {
-
-
 
 }

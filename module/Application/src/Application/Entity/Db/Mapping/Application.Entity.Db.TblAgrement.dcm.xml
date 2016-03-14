@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Application\Entity\Db\TblAgrement" table="V_TBL_AGREMENT">
+    <entity name="Application\Entity\Db\TblAgrement" table="TBL_AGREMENT">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
-        <field name="atteignable" type="boolean" column="ATTEIGNABLE" nullable="true"/>
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-columns>
                 <join-column name="ANNEE_ID" referenced-column-name="ID"/>

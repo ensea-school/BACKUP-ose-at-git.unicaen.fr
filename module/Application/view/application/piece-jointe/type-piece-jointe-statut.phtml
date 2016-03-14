@@ -1,16 +1,25 @@
-<?php 
+<?php
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\StatutIntervenant;
+use Application\Provider\Privilege\Privileges;
+
 ?>
 
 <style>
-    .vertical { 
+    .vertical {
         transform: rotate(-90deg);
         transform-origin: 0.5em 1em;
         float: left;
     }
-    table.tpjs thead th, table.tpjs tbody td { max-width: 50px; overflow: hidden; }
-    table.tpjs thead th.statut { height: 120px; }
+
+    table.tpjs thead th, table.tpjs tbody td {
+        max-width: 50px;
+        overflow: hidden;
+    }
+
+    table.tpjs thead th.statut {
+        height: 120px;
+    }
 </style>
 
 <?php $this->headTitle()->append($title = "Pièces justificatives attendues par statut d'intervenant") ?>
@@ -19,102 +28,112 @@ use Application\Entity\Db\StatutIntervenant;
 
 <?php
 $typesPiecesJointesStatuts = $this->typesPiecesJointesStatuts;
-$isset = function($tpj, $premierRecrut, $statut) use ($typesPiecesJointesStatuts) {
+$isset                     = function ($tpj, $premierRecrut, $statut) use ($typesPiecesJointesStatuts) {
     return isset($typesPiecesJointesStatuts[$tpj->getId()][$premierRecrut][$statut->getId()]) ?
         $typesPiecesJointesStatuts[$tpj->getId()][$premierRecrut][$statut->getId()] :
         null;
 };
-$that = $this;
-$url = function($tpj, $si, $premierRecrutement) use ($that) { return $that->url(
-    'piece-jointe/modifier-type-piece-jointe-statut', 
-    ['typePieceJointe' => $tpj->getId(), 'statutIntervenant' => $si->getId(), 'premierRecrutement' => $premierRecrutement], 
-    [], 
-    true);
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
+
+$that         = $this;
+$url          = function ($tpj, $si, $premierRecrutement) use ($that) {
+    return $that->url(
+        'piece-jointe/modifier-type-piece-jointe-statut',
+        ['typePieceJointe' => $tpj->getId(), 'statutIntervenant' => $si->getId(), 'premierRecrutement' => $premierRecrutement],
+        [],
+        true);
 };
-$tpjsToString = function($tpjs) {
-    if (! $tpjs->getObligatoire()) {
+$tpjsToString = function ($tpjs) {
+    if (!$tpjs->getObligatoire()) {
         return 'Fac';
     }
+
     return $tpjs->getObligatoire() ? $tpjs->getSeuilHeures() ? ">{$tpjs->getSeuilHeures()}h" : "Obl" : '-';
 };
 ?>
 
 <table class="tpjs table table-bordered table-condensed table-hover">
-    
+
     <thead>
-        <tr>
-            <th></th>
-            <th colspan="<?php echo count($this->statutsIntervenants) ?>">Premier recrutement</th>
-            <th></th>
-            <th colspan="<?php echo count($this->statutsIntervenants) ?>">Deuxième recrutement</th>
-        </tr>
-        <tr>
-            <th></th>
-            
-            <!-- Premier recrutement -->
-            <?php foreach($this->statutsIntervenants as $si): /* @var $si StatutIntervenant */ ?>
+    <tr>
+        <th></th>
+        <th colspan="<?php echo count($this->statutsIntervenants) ?>">Premier recrutement</th>
+        <th></th>
+        <th colspan="<?php echo count($this->statutsIntervenants) ?>">Deuxième recrutement</th>
+    </tr>
+    <tr>
+        <th></th>
+
+        <!-- Premier recrutement -->
+        <?php foreach ($this->statutsIntervenants as $si): /* @var $si StatutIntervenant */ ?>
             <th class="statut">
                 <abbr class="vertical" title="<?php echo $si->getLibelle() ?>"><?php echo $si->getSourceCode() ?></abbr>
             </th>
-            <?php endforeach ?>
-            
-            <th></th>
-            
-            <!-- Deuxième recrutement -->
-            <?php foreach($this->statutsIntervenants as $si): /* @var $si StatutIntervenant */ ?>
+        <?php endforeach ?>
+
+        <th></th>
+
+        <!-- Deuxième recrutement -->
+        <?php foreach ($this->statutsIntervenants as $si): /* @var $si StatutIntervenant */ ?>
             <th class="statut">
                 <abbr class="vertical" title="<?php echo $si->getLibelle() ?>"><?php echo $si->getSourceCode() ?></abbr>
             </th>
-            <?php endforeach ?>
-        </tr>
+        <?php endforeach ?>
+    </tr>
     </thead>
-    
+
     <tbody>
-    <?php foreach($this->typesPiecesJointes as $tpj): /* @var $tpj TypePieceJointe */ ?>
+    <?php foreach ($this->typesPiecesJointes as $tpj): /* @var $tpj TypePieceJointe */ ?>
         <tr>
             <th><?php echo $tpj ?></th>
-            
+
             <!-- Premier recrutement -->
-            <?php foreach($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
-            <td>
-                <a class="ajax-popover btn btn-xs btn-link" href="<?php echo $url($tpj, $si, 1) ?>" data-event="event-update-tpjs">
-                    <?php if (($tpjs = $isset($tpj, 1, $si))): ?>
-                    <span title="<?php echo $tpjs ?>">
+            <?php foreach ($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
+                <td>
+                    <?php if ($canEdit): ?>
+                    <a class="ajax-popover btn btn-xs btn-link" href="<?php echo $url($tpj, $si, 1) ?>"
+                       data-event="event-update-tpjs"><?php endif; ?>
+                        <?php if (($tpjs = $isset($tpj, 1, $si))): ?>
+                            <span title="<?php echo $tpjs ?>">
                         <?php echo $tpjsToString($tpjs) ?>
                     </span>
-                    <?php else: ?>
-                    -
-                    <?php endif ?>
-                </a>
-            </td>
+                        <?php else: ?>
+                            -
+                        <?php endif ?>
+                        <?php if ($canEdit): ?></a><?php endif; ?>
+                </td>
             <?php endforeach ?>
-            
+
             <td></td>
-            
+
             <!-- Deuxième recrutement -->
-            <?php foreach($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
-            <td>
-                <a class="ajax-popover btn btn-xs btn-link" href="<?php echo $url($tpj, $si, 0) ?>" data-event="event-update-tpjs">
-                    <?php if (($tpjs = $isset($tpj, 0, $si))): ?>
-                    <span title="<?php echo $tpjs ?>">
+            <?php foreach ($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
+                <td>
+                    <?php if ($canEdit): ?><a class="ajax-popover btn btn-xs btn-link" href="<?php echo $url($tpj, $si, 0) ?>"
+                                              data-event="event-update-tpjs"><?php endif; ?>
+                        <?php if (($tpjs = $isset($tpj, 0, $si))): ?>
+                            <span title="<?php echo $tpjs ?>">
                         <?php echo $tpjsToString($tpjs) ?>
                     </span>
-                    <?php else: ?>
-                    -
-                    <?php endif ?>
-                </a>
-            </td>
+                        <?php else: ?>
+                            -
+                        <?php endif ?>
+                        <?php if ($canEdit): ?></a><?php endif; ?>
+                </td>
             <?php endforeach ?>
         </tr>
     <?php endforeach ?>
     </tbody>
-    
+
 </table>
 
 <script>
-    $(function() {
-        
-        $("body").on("event-update-tpjs", function(event, data) {
+    $(function ()
+    {
+
+        $("body").on("event-update-tpjs", function (event, data)
+        {
 //            console.log(event, data);
             window.location.reload();
         });

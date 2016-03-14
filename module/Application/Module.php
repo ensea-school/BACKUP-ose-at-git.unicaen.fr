@@ -9,6 +9,8 @@
 
 namespace Application;
 
+use Application\Service\Context;
+use Doctrine\ORM\EntityManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -67,6 +69,9 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             if ('intervenant' === $name) {
                 $value = $sm->get($smPrefix . ucfirst($name))->getBySourceCode($value);
                 $e->setParam($name, $value);
+            }elseif('typeAgrementCode' === $name){
+                $value = $sm->get('applicationTypeAgrement')->getByCode($value);
+                $e->setParam('typeAgrement', $value);
             } elseif ($sm->has($smPrefix . $name)) { // Si un service est associé à l'entité
                 $service = $sm->get($smPrefix . ucfirst($name));
                 if ($service instanceof Service\AbstractEntityService) {

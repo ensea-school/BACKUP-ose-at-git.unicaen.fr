@@ -1,57 +1,82 @@
--- etapes du workflow pour lesquelles une vue TBL doit être créée
-select 
-  * 
-from
-  wf_etape
-where
-  annee_id = 2015
-  AND code NOT IN (
-    'DEBUT',
-    'DONNEES_PERSO_SAISIE',
-    'DONNEES_PERSO_VALIDATION',
-    
-    'PJ_SAISIE',
-    'PJ_VALIDATION',
-    
-    'CONSEIL_RESTREINT',
-    'CONSEIL_ACADEMIQUE',
-    
-    'DEMANDE_MEP',
-    'SAISIE_MEP',
-    
-    'FIN'
-  )
-order by ordre;
+DECLARE
+  intervenant_id NUMERIC DEFAULT 548;
+BEGIN
+  DBMS_OUTPUT.ENABLE(1000000); 
+  ose_test.debug_enabled := true;
 
+--ose_pj.update_intervenant(intervenant_id);
+--OSE_FORMULE.CALCULER(intervenant_id);
+OSE_WORKFLOW.CALCULER(intervenant_id);
+--OSE_WORKFLOW.CALCULER_TOUT;
 
-/**
- * Consultation de la Feuille de route d'un intervenant.
- */
-
-select i.id, i.source_code, i.nom_usuel, e.ordre, e.code, e.libelle, ie.atteignable, ie.franchie, ie.courante, s.libelle_court
-from wf_intervenant_etape ie 
-join intervenant i on i.id = ie.intervenant_id
-join wf_etape e on e.id = ie.etape_id
-left join structure s on s.id = ie.structure_id
-where 
-  i.id = 517
-  --and ie.structure_id is  null
-  
-order by e.ordre;
-
-
-
-
-
-/**
- * Regénération de la Feuille de route d'un intervenant.
- */
-
-begin    
-  DBMS_OUTPUT.ENABLE;
-
-  --  ose_workflow.update_intervenant_etapes(517);
-    ose_workflow.update_all_intervenants_etapes(2015);
-end;
+END;
 /
+
+
+
+
+
+
+BEGIN
+
+DELETE FROM TBL_AGREMENT;
+DELETE FROM TBL_CLOTURE_REALISE;
+DELETE FROM TBL_CONTRAT;
+DELETE FROM TBL_DOSSIER;
+DELETE FROM TBL_PAIEMENT;
+DELETE FROM TBL_PIECE_JOINTE;
+DELETE FROM TBL_PIECE_JOINTE_DEMANDE;
+DELETE FROM TBL_PIECE_JOINTE_FOURNIE;
+DELETE FROM TBL_SERVICE;
+DELETE FROM TBL_SERVICE_REFERENTIEL;
+DELETE FROM TBL_SERVICE_SAISIE;
+DELETE FROM WF_INTERVENANT_ETAPE;
+
+END;
+/
+
+      SELECT COUNT(*) LIGNES, 'TBL_AGREMENT'             TBL FROM TBL_AGREMENT
+UNION SELECT COUNT(*) LIGNES, 'TBL_CLOTURE_REALISE'      TBL FROM TBL_CLOTURE_REALISE
+UNION SELECT COUNT(*) LIGNES, 'TBL_CONTRAT'              TBL FROM TBL_CONTRAT
+UNION SELECT COUNT(*) LIGNES, 'TBL_DOSSIER'              TBL FROM TBL_DOSSIER
+UNION SELECT COUNT(*) LIGNES, 'TBL_PAIEMENT'             TBL FROM TBL_PAIEMENT
+UNION SELECT COUNT(*) LIGNES, 'TBL_PIECE_JOINTE'         TBL FROM TBL_PIECE_JOINTE
+UNION SELECT COUNT(*) LIGNES, 'TBL_PIECE_JOINTE_DEMANDE' TBL FROM TBL_PIECE_JOINTE_DEMANDE
+UNION SELECT COUNT(*) LIGNES, 'TBL_PIECE_JOINTE_FOURNIE' TBL FROM TBL_PIECE_JOINTE_FOURNIE
+UNION SELECT COUNT(*) LIGNES, 'TBL_SERVICE'              TBL FROM TBL_SERVICE
+UNION SELECT COUNT(*) LIGNES, 'TBL_SERVICE_REFERENTIEL'  TBL FROM TBL_SERVICE_REFERENTIEL
+UNION SELECT COUNT(*) LIGNES, 'TBL_SERVICE_SAISIE'       TBL FROM TBL_SERVICE_SAISIE
+UNION SELECT COUNT(*) LIGNES, 'WF_INTERVENANT_ETAPE'     TBL FROM WF_INTERVENANT_ETAPE
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 

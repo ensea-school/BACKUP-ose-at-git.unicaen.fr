@@ -48,6 +48,7 @@ class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwar
 
     /**
      * Si on ne peut pas faire quelque chose, alors soit on lève une exception soit on renvoie false
+     * @deprecated à virer because assertions...
      *
      * @param string $why               Explication de l'interdiction
      * @param boolean $runEx            Détermine si les exceptions doivent être lancées ou s'il suffit de retourner FALSE

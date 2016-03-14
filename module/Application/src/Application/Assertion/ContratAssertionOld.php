@@ -5,9 +5,8 @@ namespace Application\Assertion;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Contrat;
-use Application\Service\Workflow\WorkflowIntervenant;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
+use Application\Entity\Db\WfEtape;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -17,10 +16,10 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratAssertion extends OldAbstractAssertion implements WorkflowIntervenantAwareInterface
+class ContratAssertionOld extends OldAbstractAssertion
 {
-    use WorkflowIntervenantAwareTrait;
- 
+    use WorkflowServiceAwareTrait;
+
     const PRIVILEGE_EXPORTER    = 'exporter';
     const PRIVILEGE_VALIDER     = 'valider';
     const PRIVILEGE_DEVALIDER   = 'devalider';
@@ -124,33 +123,22 @@ class ContratAssertion extends OldAbstractAssertion implements WorkflowIntervena
             if ($this->role->getStructure() !== $this->resource->getStructure()) {
                 return false;
             }
-            
-            $contratStepKey = WorkflowIntervenant::CONTRAT;
-            
+
+            $wfOk = $this->getServiceWorkflow()->getEtape(
+                WfEtape::CODE_CONTRAT,
+                $this->resource->getIntervenant(),
+                $this->resource->getStructure()
+            )->isAtteignable();
+
+
             // l'étape Contrat du workflow doit être atteignable
-            if (!$this->getWorkflow()->isStepReachable($contratStepKey)) {
+            if (!$wfOk) {
                 return false;
             }
-            
-//            // l'étape suivante du workflow ne doit pas avoir été franchie
-//            $nextStep = $this->getWorkflow()->getNextStep($contratStepKey);
-//            if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
-//                return false;
-//            }
+
         }
         
         return true;
     }
-    
-    /**
-     * @return WorkflowIntervenant
-     */
-    private function getWorkflow()
-    {
-        $wf = $this->getWorkflowIntervenant()
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setRole($this->role);
-        
-        return $wf;
-    }
+
 }

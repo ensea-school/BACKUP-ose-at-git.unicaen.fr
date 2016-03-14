@@ -6,6 +6,7 @@ use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblAgrement;
 use Application\Entity\Db\TypeAgrement;
+use Application\Entity\Db\WfIntervenantEtape;
 use Application\Form\Agrement\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AgrementAwareTrait;
@@ -39,7 +40,8 @@ class AgrementController extends AbstractController implements WorkflowIntervena
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
      * (services sur des enseignements fermés, etc.)
      */
     protected function initFilters()
@@ -91,11 +93,11 @@ class AgrementController extends AbstractController implements WorkflowIntervena
 
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
         $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);
-        $this->getServiceTblAgrement()->finderByAtteignable(true,$qb);
 
         $this->getServiceTblAgrement()->leftJoin('applicationAgrement', $qb, 'agrement', true);
 
         $tas = $this->getServiceTblAgrement()->getList($qb);
+        /* @var $tas TblAgrement[] */
 
         $needStructure = false;
         $hasActions    = false;
@@ -104,6 +106,7 @@ class AgrementController extends AbstractController implements WorkflowIntervena
 
             /* Actions éventuelles */
             if (($a = $ta->getAgrement()) && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeSuppression())) {
+
                 $params      = [
                     'agrement'    => $a->getId(),
                     'intervenant' => $ta->getIntervenant()->getSourceCode(),
@@ -165,7 +168,7 @@ class AgrementController extends AbstractController implements WorkflowIntervena
         /* @var $typeAgrement TypeAgrement */
 
         $title = sprintf("Agrément par %s", $typeAgrement->toString(true));
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
 
         $form = $this->getFormAgrementSaisie();
 
@@ -173,25 +176,26 @@ class AgrementController extends AbstractController implements WorkflowIntervena
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $dateDecision   = $form->get('dateDecision')->normalizeDate($form->get('dateDecision')->getValue());
-                $agreer = $this->params()->fromPost('agreer', []);
+                $dateDecision = $form->get('dateDecision')->normalizeDate($form->get('dateDecision')->getValue());
+                $agreer       = $this->params()->fromPost('agreer', []);
 
                 foreach ($agreer as $a => $val) {
                     if ('1' === $val) {
-                        $ids = explode( '-', $a );
+                        $ids = explode('-', $a);
 
-                        $agrement = $this->getServiceAgrement()->newEntity(); /* @var $agrement Agrement */
-                        $agrement->setDateDecision( $dateDecision );
-                        $agrement->setType( $typeAgrement );
-                        if (isset($ids[0])){
-                            $agrement->setIntervenant( $this->getServiceIntervenant()->get($ids[0]));
+                        $agrement = $this->getServiceAgrement()->newEntity();
+                        /* @var $agrement Agrement */
+                        $agrement->setDateDecision($dateDecision);
+                        $agrement->setType($typeAgrement);
+                        if (isset($ids[0])) {
+                            $agrement->setIntervenant($this->getServiceIntervenant()->get($ids[0]));
                         }
-                        if (isset($ids[1])){
-                            $agrement->setStructure( $this->getServiceStructure()->get($ids[1]));
+                        if (isset($ids[1])) {
+                            $agrement->setStructure($this->getServiceStructure()->get($ids[1]));
                         }
-                        try{
+                        try {
                             $this->getServiceAgrement()->save($agrement);
-                        }catch(\Exception $e){
+                        } catch (\Exception $e) {
                             $this->flashMessenger()->addErrorMessage($e->getMessage());
                         }
                     }
@@ -199,40 +203,57 @@ class AgrementController extends AbstractController implements WorkflowIntervena
             }
         }
 
+        $dql = "
+        SELECT
+          wie, i, s
+        FROM
+          " . WfIntervenantEtape::class . " wie
+          JOIN wie.intervenant i
+          JOIN wie.etape we
+          LEFT JOIN wie.structure s
+        WHERE
+          i.annee = :annee
+          AND we.code = :typeAgrement
+          AND wie.atteignable = true
+          AND wie.realisation = 0
+          " . ($role->getStructure() ? 'AND (wie.structure = :structure OR (wie.structure IS NULL AND i.structure = :structure))' : '') . "
+        ORDER BY
+          s.libelleCourt, i.nomUsuel, i.prenom
+        ";
 
-        $sTblAgrement = $this->getServiceTblAgrement();
+        $query = $this->em()->createQuery($dql);
+        $query->setParameter('annee', $this->getServiceContext()->getAnnee());
+        $query->setParameter('typeAgrement', $typeAgrement->getCode());
+        if ($role->getStructure()) {
+            $query->setParameter('structure', $role->getStructure());
+        }
 
-        $qb = $sTblAgrement->finderByTypeAgrement($typeAgrement);
-        $qb->andWhere($qb->expr()->isNull($sTblAgrement->getAlias() . '.agrement'));
-        $sTblAgrement->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
-        $sTblAgrement->finderByAtteignable(true,$qb);
-        $tas = $sTblAgrement->getList($qb);
-        /* @var $tas TblAgrement[] */
+        $res = $query->getResult();
+
+        /* @var $res WfIntervenantEtape[] */
 
         $needStructure = false;
-        $needAction = false;
+        $needAction    = false;
         $data          = [];
-        foreach ($tas as $ta) {
-            $taStructure = $ta->getStructure() ?: $ta->getIntervenant()->getStructure();
+        $canEdit       = $this->isAllowed(Privileges::getResourceId($typeAgrement->getPrivilegeEdition()));
+        foreach ($res as $wie) {
 
-            if (!$role->getStructure() || $role->getStructure() == $taStructure){
-                if (!$ta->getAgrement() && $this->isAllowed($ta, $ta->getTypeAgrement()->getPrivilegeEdition())) {
-                    $ids = [
-                        $ta->getIntervenant()->getId(),
-                    ];
-                    if ($ta->getStructure()) {
-                        $ids[] = $ta->getStructure()->getId();
-                    }
-
-                    $checkbox = new Checkbox('agreer[' . implode('-', $ids) . ']');
-                    $checkbox->setValue(45);
-                    $needAction = true;
-                }else{
-                    $checkbox = null;
+            if ($canEdit) {
+                $ids = [
+                    $wie->getIntervenant()->getId(),
+                ];
+                if ($wie->getStructure()) {
+                    $ids[] = $wie->getStructure()->getId();
                 }
-                if ($ta->getStructure()) $needStructure = true;
-                $data[] = compact('ta', 'actionUrl', 'checkbox');
+
+                $checkbox = new Checkbox('agreer[' . implode('-', $ids) . ']');
+                $checkbox->setValue(45);
+                $needAction = true;
+            } else {
+                $checkbox = null;
             }
+            if ($wie->getStructure()) $needStructure = true;
+            $data[] = compact('wie', 'actionUrl', 'checkbox');
         }
 
 

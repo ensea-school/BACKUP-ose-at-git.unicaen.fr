@@ -5,7 +5,6 @@ namespace Application;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantExterieurRole;
-use Application\Assertion\ContratAssertion;
 
 return [
     'router'          => [
@@ -181,6 +180,7 @@ return [
                         'deposer-fichier', 'supprimer-fichier',
                     ],
                     'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'assertion'  => 'assertionContrat',
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -189,6 +189,7 @@ return [
                         'telecharger-fichier', 'lister-fichier',
                     ],
                     'roles'      => [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'assertion'  => 'assertionContrat',
                 ],
             ],
         ],
@@ -203,21 +204,21 @@ return [
                     [
                         [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                         'Contrat',
-                        [ContratAssertion::PRIVILEGE_READ],
+                        [Assertion\ContratAssertionOld::PRIVILEGE_READ],
                         'ContratAssertion',
                     ],
                     [
                         [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                         'Contrat',
                         [
-                            ContratAssertion::PRIVILEGE_CREATE,
-                            ContratAssertion::PRIVILEGE_DELETE,
-                            ContratAssertion::PRIVILEGE_UPDATE,
-                            ContratAssertion::PRIVILEGE_EXPORTER,
-                            ContratAssertion::PRIVILEGE_VALIDER,
-                            ContratAssertion::PRIVILEGE_DEVALIDER,
-                            ContratAssertion::PRIVILEGE_DATE_RETOUR,
-                            ContratAssertion::PRIVILEGE_DEPOSER],
+                            Assertion\ContratAssertionOld::PRIVILEGE_CREATE,
+                            Assertion\ContratAssertionOld::PRIVILEGE_DELETE,
+                            Assertion\ContratAssertionOld::PRIVILEGE_UPDATE,
+                            Assertion\ContratAssertionOld::PRIVILEGE_EXPORTER,
+                            Assertion\ContratAssertionOld::PRIVILEGE_VALIDER,
+                            Assertion\ContratAssertionOld::PRIVILEGE_DEVALIDER,
+                            Assertion\ContratAssertionOld::PRIVILEGE_DATE_RETOUR,
+                            Assertion\ContratAssertionOld::PRIVILEGE_DEPOSER],
                         'ContratAssertion',
                     ],
                 ],
@@ -238,7 +239,8 @@ return [
             'PossedeContratRule'          => Rule\Intervenant\PossedeContratRule::class,
             'PeutCreerContratInitialRule' => Rule\Intervenant\PeutCreerContratInitialRule::class,
             'PeutCreerAvenantRule'        => Rule\Intervenant\PeutCreerAvenantRule::class,
-            'ContratAssertion'            => Assertion\ContratAssertion::class,
+            'ContratAssertion'            => Assertion\ContratAssertionOld::class,
+            'assertionContrat'            => Assertion\ContratAssertion::class,
         ],
     ],
     'view_helpers'    => [

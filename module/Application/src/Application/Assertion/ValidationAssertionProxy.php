@@ -46,8 +46,6 @@ class ValidationAssertionProxy extends OldAbstractAssertion
     protected function getDelegate()
     {
         switch ($this->resource->getTypeValidation()->getCode()) {
-            case TypeValidationEntity::CODE_DONNEES_PERSO:
-                return $this->getServiceLocator()->get('ValidationDossierAssertion');
             case TypeValidationEntity::CODE_CLOTURE_REALISE:
                 return $this->getServiceLocator()->get('ClotureRealiseAssertion');
             case TypeValidationEntity::CODE_ENSEIGNEMENT:

@@ -100,17 +100,6 @@ class IntervenantController extends AbstractController implements WorkflowInterv
 
 
 
-    public function apercevoirAction()
-    {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $title       = "Aperçu d'un intervenant";
-
-        return compact('intervenant', 'title');
-    }
-
-
-
     public function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -325,32 +314,6 @@ class IntervenantController extends AbstractController implements WorkflowInterv
         $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
-    }
-
-
-
-    public function feuilleDeRouteAction()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        if ($intervenant->estPermanent()) {
-            throw new \LogicException("Pas encore implémenté pour un permanent");
-        }
-
-        $title = sprintf("Feuille de route <small>%s</small>", $intervenant);
-
-        $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
-        /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
-        $wf->init();
-
-        if ($wf->getCurrentStep()) {
-//            var_dump($wf->getStepUrl($wf->getCurrentStep()));
-        }
-
-        return compact('intervenant', 'title', 'wf', 'role');
     }
 
 

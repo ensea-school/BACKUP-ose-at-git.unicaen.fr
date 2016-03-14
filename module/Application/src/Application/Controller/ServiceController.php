@@ -5,9 +5,13 @@ namespace Application\Controller;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\WfEtape;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\View\Model\ViewModel;
 use Application\Exception\DbException;
@@ -51,6 +55,7 @@ class ServiceController extends AbstractController
     use LocalContextAwareTrait;
     use SaisieAwareTrait;
     use RechercheFormAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -151,6 +156,13 @@ class ServiceController extends AbstractController
             ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
 
         $canAddService = $this->isAllowed($serviceProto, 'create');
+
+
+        if (!$this->isAllowed($serviceProto, Privileges::ENSEIGNEMENT_VISUALISATION)){
+            $eStr = 'L\'accès au service '. lcfirst($this->getTypeVolumeHoraire()->getLibelle()) .' est interdit.';
+            throw new UnAuthorizedException($eStr);
+        }
+
 
 //        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
 //            throw new \BjyAuthorize\Exception\UnAuthorizedException();

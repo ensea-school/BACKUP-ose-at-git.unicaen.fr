@@ -1,10 +1,10 @@
 <?php
 /* @var  $this \Application\View\Renderer\PhpRenderer */
 /* @var $intervenant \Application\Entity\Db\Intervenant */
-/* @var $role Application\Acl\Role */
 
+echo $this->intervenant($intervenant);
 ?>
-
-<?php echo $this->intervenant($intervenant); ?>
-<hr />
-<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', compact('intervenant','role'));
+    <hr/>
+    <h2>Feuille de route</h2>
+<?php
+echo $this->feuilleDeRoute($intervenant);

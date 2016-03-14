@@ -13,12 +13,10 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
 
     const CODE_PREVU   = 'PREVU';
     const CODE_REALISE = 'REALISE';
-    const CODE_PAYE    = 'PAYE';
 
     static public $codes = [
         self::CODE_PREVU,
-        self::CODE_REALISE,
-        self::CODE_PAYE,
+        self::CODE_REALISE
     ];
 
     /**
@@ -63,18 +61,6 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
     public function isRealise()
     {
         return self::CODE_REALISE === $this->getCode();
-    }
-
-
-
-    /**
-     * Retourne <code>true</code> si le code de ce type de volume horaire est PAYE.
-     *
-     * @return boolean
-     */
-    public function isPaye()
-    {
-        return self::CODE_PAYE === $this->getCode();
     }
 
 

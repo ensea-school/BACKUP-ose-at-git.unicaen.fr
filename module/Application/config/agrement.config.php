@@ -26,15 +26,23 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'liste'    => [
+                            'conseil-academique'    => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/:typeAgrement',
-                                    'constraints' => [
-                                        'typeAgrement' => '[0-9]*',
-                                    ],
+                                    'route'       => '/conseil-academique',
                                     'defaults'    => [
                                         'action' => 'lister',
+                                        'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
+                                    ],
+                                ],
+                            ],
+                            'conseil-restreint'    => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/conseil-restreint',
+                                    'defaults'    => [
+                                        'action' => 'lister',
+                                        'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
                                     ],
                                 ],
                             ],
@@ -104,15 +112,23 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'saisir-lot' => [
+                            'conseil-academique'    => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/:typeAgrement/saisir-lot',
-                                    'constraints' => [
-                                        'typeAgrement' => '[0-9]*',
-                                    ],
+                                    'route'       => '/conseil-academique',
                                     'defaults'    => [
                                         'action' => 'saisir-lot',
+                                        'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
+                                    ],
+                                ],
+                            ],
+                            'conseil-restreint'    => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/conseil-restreint',
+                                    'defaults'    => [
+                                        'action' => 'saisir-lot',
+                                        'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
                                     ],
                                 ],
                             ],
@@ -131,10 +147,7 @@ return [
                             'agrement-conseil-restreint'  => [
                                 'label'        => 'Agrément : Conseil restreint',
                                 'title'        => 'Agrément : Conseil restreint',
-                                'route'        => 'intervenant/agrement/liste',
-                                'params'       => [
-                                    'typeAgrement' => TypeAgrement::CONSEIL_RESTREINT_ID,
-                                ],
+                                'route'        => 'intervenant/agrement/conseil-restreint',
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
@@ -145,10 +158,7 @@ return [
                             'agrement-conseil-academique' => [
                                 'label'        => 'Agrément : Conseil académique',
                                 'title'        => 'Agrément : Conseil académique',
-                                'route'        => 'intervenant/agrement/liste',
-                                'params'       => [
-                                    'typeAgrement' => TypeAgrement::CONSEIL_ACADEMIQUE_ID,
-                                ],
+                                'route'        => 'intervenant/agrement/conseil-academique',
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
@@ -173,10 +183,7 @@ return [
                                         'label'       => 'Conseil restreint',
                                         'description' => 'Gestion par lots des agréments du conseil restreint',
                                         'title'       => 'Conseil restreint',
-                                        'route'       => 'gestion/agrement/saisir-lot',
-                                        'params'      => [
-                                            'typeAgrement' => TypeAgrement::CONSEIL_RESTREINT_ID,
-                                        ],
+                                        'route'       => 'gestion/agrement/conseil-restreint',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
                                         'visible'     => 'AssertionAgrement',
                                     ],
@@ -184,10 +191,7 @@ return [
                                         'label'       => 'Conseil académique',
                                         'description' => 'Gestion par lots des agréments du conseil académique',
                                         'title'       => 'Conseil académique',
-                                        'route'       => 'gestion/agrement/saisir-lot',
-                                        'params'      => [
-                                            'typeAgrement' => TypeAgrement::CONSEIL_ACADEMIQUE_ID,
-                                        ],
+                                        'route'       => 'gestion/agrement/conseil-academique',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
                                         'visible'     => 'AssertionAgrement',
                                     ],

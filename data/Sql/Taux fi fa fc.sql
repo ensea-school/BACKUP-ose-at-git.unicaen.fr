@@ -69,9 +69,9 @@ SELECT
   ep.fa,ep.taux_fa,
   ep.fc,ep.taux_fc,
   -- NOUVEAUX TAUX FI FA FC
-  90 /100 n_taux_fi,
+  0 /100 n_taux_fi,
   0 /100 n_taux_fa,
-  10 /100 n_taux_fc
+  100 /100 n_taux_fc
   -- FIN DES NOUVEAUX TAUX FI FA FC
 FROM
   element_pedagogique ep
@@ -83,7 +83,7 @@ WHERE
   -- FILTRES
   1 = ose_divers.comprise_entre( ep.histo_creation,ep.histo_destruction )
   --AND s.code <> 'OSE'
-  AND e.source_code = 'MSST13_213'
+  AND e.source_code = 'DUPLCI_211'
   AND ep.annee_id = 2015
   -- FIN DES FILTRES
 ) t1
@@ -134,8 +134,14 @@ SELECT * FROM ELEMENT_PEDAGOGIQUE WHERE source_code like '%DUUE%';
 
 
 select source_code from etape where source_code in (
-'MSST01_201',
-'MSST11_211',
-'MSST13_213'
+'ORTH01_201',
+'ORTH02_201',
+'ORTH03_201',
+'DUPLCI_211'
 ) order by source_code;
      
+select * from etape where source_code like 
+
+'%DUPLCI%'
+
+order by source_code;

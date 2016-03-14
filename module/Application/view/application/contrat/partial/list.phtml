@@ -1,5 +1,5 @@
 <?php
-use Application\Assertion\ContratAssertion;
+use Application\Assertion\ContratAssertionOld;
 
 $contrats    = $this->contrats;
 $intervenant = $this->intervenant; /* @var $intervenant \Application\Entity\Db\Intervenant */
@@ -41,7 +41,7 @@ $role        = $this->role;
                     <strong><?php echo $contrat ?></strong> créé par
                     <?php echo $this->utilisateur($contrat->getHistoModificateur()) ?>
 
-                    <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_EXPORTER)): ?>
+                    <?php if ($this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_EXPORTER)): ?>
                     <span class="pull-right">
                         <a href="<?php echo $urlExport ?>"
                            title="Exporter le contrat/avenant au format PDF"><span class="glyphicon glyphicon-export"></span> Exporter en PDF</a>
@@ -49,7 +49,7 @@ $role        = $this->role;
                     <?php endif; ?>
                 </p>
                 <p>
-                    <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_DELETE)): ?>
+                    <?php if ($this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_DELETE)): ?>
                         <a href="<?php echo $urlSuppression ?>" class="btn btn-danger ajax-modal"
                            data-event="event-contrat-suppr">Supprimer <?php echo $contrat->toString(true) ?></a>
                     <?php endif; ?>
@@ -57,12 +57,12 @@ $role        = $this->role;
                     <?php if (($validation = $contrat->getValidation())): ?>
                         <?php echo $this->messenger()->setMessage((string)$this->validation($validation), 'success') ?>
 
-                        <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_DEVALIDER)): ?>
+                        <?php if ($this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_DEVALIDER)): ?>
                             <a href="<?php echo $urlDevalidation ?>" class="btn btn-primary ajax-modal"
                                data-event="event-validation-suppr">Supprimer la validation <?php echo $contrat->toString(true, true) ?></a>
                         <?php endif; ?>
                     <?php else: ?>
-                        <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_VALIDER)): ?>
+                        <?php if ($this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_VALIDER)): ?>
                             <a href="<?php echo $urlValidation ?>" class="btn btn-primary ajax-modal"
                                data-event="event-contrat-validation">Valider <?php echo $contrat->toString(true) ?></a>
                         <?php endif; ?>
@@ -93,7 +93,7 @@ $role        = $this->role;
                             </div>
                             <!-- formulaire de dépôt -->
                             <div class="col-md-6">
-                                <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_DEPOSER)): ?>
+                                <?php if ($this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_DEPOSER)): ?>
                                 <?php echo $uploader->renderForm() ?>
                                 <?php endif; ?>
                             </div>
@@ -107,7 +107,7 @@ $role        = $this->role;
                 <p><?php echo $d->format(Application\Constants::DATE_FORMAT) ?></p>
                 <?php endif ?>
                 <?php //if ($role instanceof Application\Acl\ComposanteRole && $contrat->getValidation()): ?>
-                <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_DATE_RETOUR)): ?>
+                <?php if ($this->isAllowed($contrat, ContratAssertionOld::PRIVILEGE_DATE_RETOUR)): ?>
                     <a href="<?php echo $urlSaisieRetour ?>" class="btn btn-primary ajax-modal"
                        data-event="event-saisie-retour-suppr"
                        title="Cliquez pour saisir la date de retour <?php echo $contrat->toString(true, true) ?> signé">Saisir</a>

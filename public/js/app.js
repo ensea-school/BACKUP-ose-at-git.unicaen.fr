@@ -41,7 +41,7 @@ function Url(route, data)
 
 Url.getBase = function ()
 {
-    return $('.navbar-header .navbar-brand').attr('href');
+    return $('body').data('base-url');
 }
 
 Util = {

@@ -179,7 +179,6 @@ $main = [
             'appLink'                    => View\Helper\AppLinkFactory::class,
         ],
         'invokables' => [
-            'validation'      => View\Helper\ValidationViewHelper::class,
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
             'formSupprimer'   => View\Helper\FormSupprimerViewHelper::class,
             'formButtonGroup' => View\Helper\FormButtonGroupViewHelper::class,
@@ -252,7 +251,7 @@ $main = [
 return array_merge_recursive(
     $main,
     include 'intervenant.config.php',
-    include 'piece-jointe.config.php',
+    include 'dossier-pieces.config.php',
     include 'structure.config.php',
     include 'etablissement.config.php',
     include 'recherche.config.php',

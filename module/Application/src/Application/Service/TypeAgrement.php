@@ -37,6 +37,24 @@ class TypeAgrement extends AbstractEntityService
 
 
     /**
+     * Retourne une entité à partir de son code
+     * Retourne null si le code est null
+     *
+     * @param string $code
+     * @return TypeAgrementEntity
+     */
+    public function getByCode($code)
+    {
+        if ($code){
+            return $this->getRepo()->findOneBy(['code' => $code]);
+        }else{
+            return null;
+        }
+    }
+
+
+
+    /**
      * @param QueryBuilder|null $qb
      * @param null              $alias
      *

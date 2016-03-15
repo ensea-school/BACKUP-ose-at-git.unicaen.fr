@@ -52,7 +52,7 @@ trait WfEtapeAwareTrait
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
         }
-        $this->serviceWfEtape = $serviceLocator->get('WfEtapeService');
+        $this->serviceWfEtape = $serviceLocator->get('applicationWfEtape');
         }
         return $this->serviceWfEtape;
     }

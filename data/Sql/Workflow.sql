@@ -4,6 +4,7 @@ BEGIN
   DBMS_OUTPUT.ENABLE(1000000); 
   ose_test.debug_enabled := true;
 
+
 --ose_pj.update_intervenant(intervenant_id);
 --OSE_FORMULE.CALCULER(intervenant_id);
 OSE_WORKFLOW.CALCULER(intervenant_id);
@@ -30,7 +31,7 @@ DELETE FROM TBL_PIECE_JOINTE_FOURNIE;
 DELETE FROM TBL_SERVICE;
 DELETE FROM TBL_SERVICE_REFERENTIEL;
 DELETE FROM TBL_SERVICE_SAISIE;
-DELETE FROM WF_INTERVENANT_ETAPE;
+DELETE FROM TBL_WORKFLOW;
 
 END;
 /
@@ -46,34 +47,79 @@ UNION SELECT COUNT(*) LIGNES, 'TBL_PIECE_JOINTE_FOURNIE' TBL FROM TBL_PIECE_JOIN
 UNION SELECT COUNT(*) LIGNES, 'TBL_SERVICE'              TBL FROM TBL_SERVICE
 UNION SELECT COUNT(*) LIGNES, 'TBL_SERVICE_REFERENTIEL'  TBL FROM TBL_SERVICE_REFERENTIEL
 UNION SELECT COUNT(*) LIGNES, 'TBL_SERVICE_SAISIE'       TBL FROM TBL_SERVICE_SAISIE
-UNION SELECT COUNT(*) LIGNES, 'WF_INTERVENANT_ETAPE'     TBL FROM WF_INTERVENANT_ETAPE
+UNION SELECT COUNT(*) LIGNES, 'TBL_WORKFLOW'             TBL FROM TBL_WORKFLOW
 ;
 
 
 
 
+delete from WF_ETAPE_DEP;
 
 
 
 
-
-
-
-
-
-
-
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'PJ_SAISIE'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_SAISIE'), -- etape précédente
+  0,-- locale
+  1,-- complete
+  0,-- partielle
+  1 -- integrale
+);
   
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'PJ_VALIDATION'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'PJ_SAISIE'), -- etape précédente
+  0,-- locale
+  1,-- complete
+  0,-- partielle
+  1 -- integrale
+);  
   
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_VALIDATION'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_SAISIE'), -- etape précédente
+  0,-- locale
+  1,-- complete
+  0,-- partielle
+  1 -- integrale
+); 
   
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'PJ_VALIDATION'), -- etape précédente
+  1,-- locale
+  1,-- complete
+  0,-- partielle
+  1 -- integrale
+);   
   
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_VALIDATION'), -- etape précédente
+  0,-- locale
+  1,-- complete
+  0,-- partielle
+  1 -- integrale
+);   
   
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE'), -- etape précédente
+  1,-- locale
+  0,-- complete
+  1,-- partielle
+  1 -- integrale
+);  
   
-  
-  
-  
-  
-  
+INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID, LOCALE, COMPLETE, PARTIELLE, INTEGRALE ) VALUES (
+  (SELECT id FROM wf_etape WHERE code = 'REFERENTIEL_VALIDATION'), -- etape suivante
+  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE'), -- etape précédente
+  1,-- locale
+  0,-- complete
+  1,-- partielle
+  1 -- integrale
+);  
   
   
   

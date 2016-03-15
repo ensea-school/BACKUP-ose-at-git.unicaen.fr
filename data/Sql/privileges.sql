@@ -6,8 +6,8 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'contrat',
-  'Contrats de travail/Avenants'
+  'workflow',
+  'Gestion du Workflow'
 );
 
 INSERT INTO PRIVILEGE (
@@ -25,8 +25,8 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'piece-justificative' c, 'gestion-visualisation' p, 'Gestion des pièces justificatives (visualisation)' l FROM dual
-UNION SELECT 'piece-justificative' c, 'gestion-edition' p, 'Gestion des pièces justificatives (édition)' l FROM dual
+      SELECT 'workflow' c, 'dependances-visualisation' p, 'Dépendances (visualisation)' l FROM dual
+UNION SELECT 'workflow' c, 'dependances-edition' p, 'Dépendances (édition)' l FROM dual
 
 ) t1;
 

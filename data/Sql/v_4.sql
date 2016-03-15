@@ -19,7 +19,45 @@ DELETE FROM wf_etape where annee_id <> 2015;
 -- suppr des étapes de début et de fin
 
 
+INSERT INTO WF_TYPE_DEP (
+  ID,
+  CODE,
+  LIBELLE
+) VALUES (
+  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
+  'locale-partielle',
+  'Les étapes dépendantes à la structure près doivent être au moins partiellement franchies'
+);
+  
+INSERT INTO WF_TYPE_DEP (
+  ID,
+  CODE,
+  LIBELLE
+) VALUES (
+  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
+  'locale-complete',
+  'Les étapes dépendantes à la structure près doivent être intégralement franchies'
+);
 
+INSERT INTO WF_TYPE_DEP (
+  ID,
+  CODE,
+  LIBELLE
+) VALUES (
+  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
+  'globale-partielle',
+  'Toutes les étapes dépendantes doivent être au moins partiellement franchies'
+);
+
+INSERT INTO WF_TYPE_DEP (
+  ID,
+  CODE,
+  LIBELLE
+) VALUES (
+  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
+  'globale-complete',
+  'Toutes les étapes dépendantes doivent être intégralement franchies'
+);
 
 
 -- insert des dépendances

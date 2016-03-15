@@ -147,6 +147,20 @@ class WorkflowService extends AbstractService
 
 
     /**
+     * @return $this
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function calculerTout()
+    {
+        $sql = "BEGIN OSE_WORKFLOW.CALCULER_TOUT; END;";
+        $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        return $this;
+    }
+
+
+
+    /**
      * @param $data WorkflowEtape[]
      */
     protected function calculEtats($data)

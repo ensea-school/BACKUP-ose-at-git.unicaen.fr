@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\WfEtape as WfEtapeEntity;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -43,4 +44,20 @@ class WfEtape extends AbstractEntityService
     {
         return $this->finderByCode($code)->getQuery()->getOneOrNullResult();
     }
+
+
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->orderBy($alias.'.ordre');
+
+        return $qb;
+    }
+
 }

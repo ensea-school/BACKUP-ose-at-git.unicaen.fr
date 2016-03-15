@@ -2,6 +2,11 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\WfEtapeDep;
+use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\View\Model\ViewModel;
@@ -16,10 +21,19 @@ use Zend\View\Model\ViewModel;
  */
 class WorkflowController extends AbstractController implements WorkflowIntervenantAwareInterface
 {
-    use WorkflowIntervenantAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
-    
+    use WorkflowIntervenantAwareTrait;
+    use ContextAwareTrait;
+    use WfEtapeDepServiceAwareTrait;
+    use DependanceFormAwareTrait;
+    use WorkflowServiceAwareTrait;
+
+
+
+    public function indexAction()
+    {
+        return [];
+    }
+
     /**
      * Dessine le bouton pointant vers l'étape située après l'étape dont la route est spécifiée.
      * 
@@ -46,5 +60,89 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
             'route'       => $route,
             'prepend'     => $prepend,
         ]);
+    }
+
+
+
+    public function dependancesAction()
+    {
+        $dql = '
+        SELECT
+          wed, es, ep
+        FROM
+          Application\Entity\Db\WfEtapeDep wed
+          JOIN wed.etapeSuiv es
+          JOIN wed.etapePrec ep
+        ORDER BY
+          es.ordre, ep.ordre
+        ';
+
+        $query = $this->em()->createQuery($dql);
+
+        $d = $query->getResult();
+        /* @var $d WfEtapeDep[] */
+        $deps = [];
+        foreach( $d as $dep ){
+            $deps[$dep->getEtapeSuiv()->getId()][$dep->getEtapePrec()->getId()] = $dep;
+        }
+
+        return compact('deps');
+    }
+
+
+
+    public function saisieDepAction()
+    {
+        $wfEtapeDep = $this->getEvent()->getParam('wfEtapeDep');
+        /* @var $wfEtapeDep WfEtapeDep */
+
+        if (!$wfEtapeDep) {
+            $wfEtapeDep = $this->getServiceWfEtapeDep()->newEntity();
+        }
+
+        $title = "Saisie d'une dépendance";
+
+        $form = $this->getFormWorkflowDependance();
+        $form->bindRequestSave($wfEtapeDep, $this->getRequest(), function ($wfEtapeDep) {
+            $this->getServiceWfEtapeDep()->save($wfEtapeDep);
+        });
+
+        return compact('title', 'form');
+
+    }
+
+
+
+    public function suppressionDepAction()
+    {
+        if (!($wfEtapeDep = $this->getEvent()->getParam('wfEtapeDep'))) {
+            throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+        }
+
+        $form = $this->makeFormSupprimer(function () use ($wfEtapeDep) {
+            $this->getServiceWfEtapeDep()->delete($wfEtapeDep);
+        });
+
+        return compact('wfEtapeDep', 'form');
+    }
+
+
+
+    public function calculerToutAction()
+    {
+        $action = $this->params()->fromQuery('action') === '1';
+        $title = 'Calcul du workflow...';
+        $error = null;
+
+        if ($action){
+            try{
+                $this->getServiceWorkflow()->calculerTout();
+            }catch(\Exception $e){
+                $error = $e->getMessage();
+            }
+
+        }
+
+        return compact('action', 'title', 'error');
     }
 }

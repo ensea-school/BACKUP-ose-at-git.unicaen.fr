@@ -32,10 +32,6 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
     $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
-    $params = $sCodeGenerator->generateServiceParams($fullClassname, $name, false);
-
-    unset($params['Interface']);
-
     $params = $sCodeGenerator->generateServiceParams([
         'classname'         => 'Application\\Service\\' . $entity . 'Service',
         'name'              => 'application' . $entity,
@@ -54,7 +50,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
 
     <h3>Etape 2 : Création des fichiers sources du service</h3>
     <?php
-    $sCodeGenerator->generateServiceFiles($params);
+    $sCodeGenerator->generateFiles($params);
     ?>
     <div class="alert alert-info">Les fichiers sont récupérables dans le
         dossier <?php echo $sCodeGenerator->getOutputDir() ?></div>

@@ -10,8 +10,8 @@ alter trigger "OSE"."F_VALIDATION_S" disable;
 alter trigger "OSE"."FORMULE_RES_SERVICE_DEL_CK" disable;
 /
 DECLARE
-  old_source_code NUMERIC := '109714';
-  new_source_code NUMERIC := '109501';
+  old_source_code NUMERIC := '112292';
+  new_source_code NUMERIC := '40926';
 
   old_id NUMERIC;
   new_id NUMERIC;
@@ -32,8 +32,8 @@ BEGIN
 
   SELECT id INTO ose_id FROM source WHERE code = 'OSE';
   
-  UPDATE adresse_intervenant SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  UPDATE affectation_recherche SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
+  --UPDATE adresse_intervenant SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
+  --UPDATE affectation_recherche SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
 
   UPDATE agrement SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   

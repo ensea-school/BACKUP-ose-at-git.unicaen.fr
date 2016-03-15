@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Application\Acl\Role;
-
 /**
  * WfEtape
  */
@@ -104,11 +102,11 @@ class WfEtape
 
 
     /**
-     * @param Role $role
+     * @param \Application\Acl\Role $role
      *
      * @return string
      */
-    public function getLibelle(Role $role)
+    public function getLibelle(\Application\Acl\Role $role)
     {
         if ($role->getIntervenant()) {
             return $this->getLibelleIntervenant();

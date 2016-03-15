@@ -31,7 +31,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MODIF_SERVICE_DU_ASSOCIATION              = 'modif-service-du-association';
     const MODIF_SERVICE_DU_VISUALISATION            = 'modif-service-du-visualisation';
     const MODIF_SERVICE_DU_EDITION                  = 'modif-service-du-edition';
-    const DOSSIER_ASSOCIATION                       = 'dossier-association';
     const DOSSIER_VISUALISATION                     = 'dossier-visualisation';
     const DOSSIER_EDITION                           = 'dossier-edition';
     const DOSSIER_VALIDATION                        = 'dossier-validation';
@@ -42,7 +41,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const PIECE_JUSTIFICATIVE_DEVALIDATION          = 'piece-justificative-devalidation';
     const PIECE_JUSTIFICATIVE_GESTION_EDITION       = 'piece-justificative-gestion-edition';
     const PIECE_JUSTIFICATIVE_GESTION_VISUALISATION = 'piece-justificative-gestion-visualisation';
-    const ENSEIGNEMENT_ASSOCIATION                  = 'enseignement-association';
     const ENSEIGNEMENT_VISUALISATION                = 'enseignement-visualisation';
     const ENSEIGNEMENT_EDITION                      = 'enseignement-edition';
     const ENSEIGNEMENT_EXTERIEUR                    = 'enseignement-exterieur';
@@ -50,10 +48,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const ENSEIGNEMENT_DEVALIDATION                 = 'enseignement-devalidation';
     const ENSEIGNEMENT_CLOTURE                      = 'enseignement-cloture';
     const ENSEIGNEMENT_EXPORT_CSV                   = 'enseignement-export-csv';
-    const MOTIF_NON_PAIEMENT_ASSOCIATION            = 'motif-non-paiement-association';
     const MOTIF_NON_PAIEMENT_VISUALISATION          = 'motif-non-paiement-visualisation';
     const MOTIF_NON_PAIEMENT_EDITION                = 'motif-non-paiement-edition';
-    const REFERENTIEL_ASSOCIATION                   = 'referentiel-association';
     const REFERENTIEL_VISUALISATION                 = 'referentiel-visualisation';
     const REFERENTIEL_EDITION                       = 'referentiel-edition';
     const REFERENTIEL_VALIDATION                    = 'referentiel-validation';
@@ -88,7 +84,9 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const IMPORT_MAJ                                = 'import-maj';
     const IMPORT_TBL                                = 'import-tbl';
     const IMPORT_VUES_PROCEDURES                    = 'import-vues-procedures';
+    const WORKFLOW_DEPENDANCES_EDITION              = 'workflow-dependances-edition';
     const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
+    const WORKFLOW_DEPENDANCES_VISUALISATION        = 'workflow-dependances-visualisation';
     const BUDGET_VISUALISATION                      = 'budget-visualisation';
     const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
     const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE      = 'budget-edition-engagement-composante';

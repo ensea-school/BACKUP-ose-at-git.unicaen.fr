@@ -1,0 +1,85 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $deps \Application\Entity\Db\WfEtapeDep[][]
+ */
+
+$ok = '<span class="glyphicon glyphicon-ok text-success"></span>';
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_EDITION));
+
+?>
+<h1 class="page-header">Workflow : gestion des dépendances</h1>
+<style>
+
+    .dependances {
+        width:60em;
+        margin-left: 5em;
+    }
+
+    .dependances .attrib {
+        text-align:center;
+        width:5em;
+    }
+
+</style>
+
+<div class="alert alert-info" role="alert">
+    <h3>Légende</h3>
+    <ul>
+        <li><b>Locale</b> : La dépendance ne joue que si une des étapes n'a pas de composante ou bien si les composantes des étapes sont identiques ;</li>
+        <li><b>Partielle</b> : L'étape n'est atteignable que si ses dépendances ont été partiellement franchies ;</li>
+        <li><b>Complète</b> : L'étape n'est atteignable que si ses dépendances sont franchies à 100% ;</li>
+        <li><b>Intégrale</b> : Toutes les règles de dépendances doivent être satisfaites. A défaut, une seule dépendance respectant les critères suffit à rendre l'étape courante atteignable.</li>
+    </ul>
+
+</div>
+
+<?php foreach( $deps as $dep ): $etapeSuiv = current($dep)->getEtapeSuiv(); ?>
+    <h2><?php echo $etapeSuiv->getLibelleAutres() ?></h2>
+    <table class="table table-bordered dependances">
+    <tr>
+        <th>Etape</th>
+        <th>Locale</th>
+        <th>Partielle</th>
+        <th>Complète</th>
+        <th>Intégrale</th>
+    </tr>
+    <?php foreach( $dep as $d ): ?>
+    <tr>
+        <td>
+            <?php if ($canEdit): ?>
+                <a href="<?php echo $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>" class="ajax-modal" data-event="dependances-saisie"><span class="glyphicon glyphicon-edit"></span></a>
+                <a href="<?php echo $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>" class="ajax-modal" data-event="dependances-suppression"><span class="glyphicon glyphicon-trash"></span></a>
+            <?php endif; ?>
+            <?php echo $d->getEtapePrec()->getLibelleAutres() ?>
+        </td>
+        <td class="attrib"><?php echo $d->getLocale() ? $ok : '' ?></td>
+        <td class="attrib"><?php echo $d->getPartielle() ? $ok : '' ?></td>
+        <td class="attrib"><?php echo $d->getComplete() ? $ok : '' ?></td>
+        <td class="attrib"><?php echo $d->getIntegrale() ? $ok : '' ?></td>
+    </tr>
+    <?php endforeach; ?>
+    </table>
+
+
+<?php endforeach; ?>
+
+<?php if ($canEdit): ?>
+    <a href="<?php echo $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal" data-event="dependances-saisie"><span class="glyphicon glyphicon-plus"></span> Ajouter une dépendance</a>
+    <a href="<?php echo $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span class="fa fa-cogs"></span> Recalculer le Workflow</a>
+<?php endif; ?>
+<script type="text/javascript">
+    $(function() {
+        $("body").on("dependances-saisie", function(event, data) {
+            window.location.reload();
+        });
+
+        $("body").on("dependances-suppression", function(event, data) {
+            window.location.reload();
+        });
+    });
+</script>

@@ -4,6 +4,7 @@ namespace Application\View\Helper\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Util;
@@ -56,7 +57,6 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
     public function render()
     {
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($this->getIntervenant());
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $res = '';
         $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
@@ -70,62 +70,138 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         foreach ($feuilleDeRoute as $etape){
             $index++;
 
-            $attrs = ['class' => 'list-group-item'];
-            if (!$etape->isAtteignable() && $isAfterCourante){
-                $attrs['class'] .= ' after-courante';
-            }
+            $res .= $this->renderEtape( $etape, $index, $isAfterCourante );
+
             if ($etape->isCourante()){
-                $attrs['class'] .= ' list-group-item-warning';
                 $isAfterCourante = true;
             }
+        }
+        $res .= $tag('ul')->close();
+        $res .= $tag('div')->close();
+        $res .= $tag('div')->close();
+
+        return $res;
+    }
+
+
+
+    public function renderEtape( WorkflowEtape $etape, $index, $isAfterCourante )
+    {
+        $res = '';
+        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+
+        $attrs = ['class' => 'list-group-item'];
+        if (!$etape->isAtteignable() && $isAfterCourante){
+            $attrs['class'] .= ' after-courante';
+        }
+
+        if ($etape->isCourante()){
+            $attrs['class'] .= ' list-group-item-warning';
+        }
+
+        $res .= $tag('li', $attrs);
+        $res .= $tag('span', ['class' => 'label label-primary'])->text($index);
+
+        $res .= $this->renderEtapeLink($etape);
+
+        if (count($etape->getEtapes()) > 1){
+            $collapseId = 'collapse-' . $this->getIntervenant()->getId() . '-' . $etape->getEtape()->getId();
+
+            $detailsLink = $tag('a', ['data-toggle' => 'collapse', 'href' => '#' . $collapseId]);
+            $detailsRes = $this->renderDetails( $etape, $collapseId );
+        }else{
+            $detailsLink = null;
+            $detailsRes = '';
+        }
+
+        $res .= $this->renderEtapeIndicateur($etape->getFranchie(), $detailsLink);
+        $res .= $detailsRes;
+
+        $res .= $tag('li')->close();
+
+        return $res;
+    }
+
+
+
+    public function renderEtapeLink( WorkflowEtape $etape )
+    {
+        $res = '';
+        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        if ($etape->getUrl() && $etape->isAtteignable()){
+            $res .= $tag('a', [
+                'title' => 'Cliquez sur ce lien pour accéder à la page correspondant à cette étape',
+                'href'  => $etape->getUrl(),
+            ])->text( $etape->getEtape()->getLibelle($role) );
+        }else{
+            $res .= $etape->getEtape()->getLibelle($role);
+        }
+
+        return $res;
+    }
+
+
+
+    public function renderEtapeIndicateur( $franchissement, $detailsLink=null )
+    {
+        $res = '';
+        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+
+        switch(true){
+            case $franchissement == 1:
+                $attrs = [
+                    'title' => 'Fait',
+                    'class' => 'text-success pull-right'
+                ];
+                $content = $tag('span', ['class' => 'text-success glyphicon glyphicon-ok']);
+            break;
+            case $franchissement == 0:
+                $attrs = [
+                    'title' => 'À faire',
+                    'class' => 'text-danger pull-right'
+                ];
+                $content = $tag('span', ['class' => 'text-danger glyphicon glyphicon-remove']);
+            break;
+            default:
+                $attrs = [
+                    'title' => 'En cours',
+                    'class' => 'text-warning pull-right'
+                ];
+                $content = Util::formattedPourcentage($franchissement, true);
+        }
+
+        if ($detailsLink instanceof TagViewHelper){
+            $content = $detailsLink->html($content);
+            $attrs['title'] .= ' (cliquez pour afficher le détail par composante)';
+        }
+
+        //$res .= $tag('span', $attrs)->html($content);
+        $res .= $tag('span', $attrs)->html($content);
+
+        return $res;
+    }
+
+
+
+    public function renderDetails( WorkflowEtape $etape, $collapseId )
+    {
+        $res = '';
+        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+
+        $res .= $tag('div', ['class' => 'row collapse', 'id' => $collapseId]);
+        $res .= $tag('div', ['class' => 'col-md-4 col-md-offset-8']);
+        $res .= $tag('ul', ['class' => 'list-group']);
+        foreach ($etape->getEtapes() as $sEtape) {
+            $attrs = ['class' => 'list-group-item'];
+            if (!$sEtape->getAtteignable()){
+                $attrs['class'] .= ' after-courante';
+            }
             $res .= $tag('li', $attrs);
-            $res .= $tag('span', ['class' => 'label label-primary'])->text($index);
+            $res .= $tag('span')->text($sEtape->getStructure());
 
-            if ($etape->getUrl() && $etape->isAtteignable()){
-                $res .= $tag('a', [
-                    'title' => 'Cliquez sur ce lien pour accéder à la page correspondant à cette étape',
-                    'href'  => $etape->getUrl(),
-                ])->text( $etape->getEtape()->getLibelle($role) );
-            }else{
-                $res .= $etape->getEtape()->getLibelle($role);
-            }
-            if ($etape->getFranchie() == 1){
-                $res .= $tag('span', ['title' => 'Fait', 'class' => 'glyphicon glyphicon-ok text-success pull-right'])->text('');
-            }elseif($etape->getFranchie() > 0 && count($etape->getEtapes()) > 1) {
-                $collapseId = 'collapse-' . $this->getIntervenant()->getId() . '-' . $etape->getEtape()->getId();
-                $res .= $tag('span', ['title' => 'En cours (cliquez pour afficher le détail par composante)', 'class' => 'text-warning pull-right'])->html(
-                    $tag('a', ['data-toggle' => 'collapse', 'href' => '#' . $collapseId])->text(
-                        Util::formattedPourcentage($etape->getFranchie(), true)
-                    )
-                );
-                $res .= $tag('div', ['class' => 'row collapse', 'id' => $collapseId]);
-                $res .= $tag('div', ['class' => 'col-md-4 col-md-offset-8']);
-                $res .= $tag('ul', ['class' => 'list-group']);
-                foreach ($etape->getEtapes() as $sEtape) {
-                    $res .= $tag('li', ['class' => 'list-group-item']);
-                    $res .= $tag('span')->text($sEtape->getStructure());
-                    if ($sEtape->getFranchie() == 1) {
-                        $res .= $tag('span', ['title' => 'Fait', 'class' => 'glyphicon glyphicon-ok text-success pull-right'])->text('');
-                    } elseif($sEtape->getFranchie() == 0) {
-                        $res .= $tag('span', ['title' => 'À faire', 'class' => 'glyphicon glyphicon-remove text-danger pull-right'])->text('');
-                    } else {
-                        $res .= $tag('span', ['title' => 'En cours', 'class' => 'text-warning pull-right'])->html(
-                            Util::formattedPourcentage($sEtape->getFranchie(), true)
-                        );
-                    }
-
-                    $res .= $tag('li')->close();
-                }
-                $res .= $tag('ul')->close();
-                $res .= $tag('div')->close();
-                $res .= $tag('div')->close();
-            }elseif($etape->getFranchie() > 0){
-                $res .= $tag('span', ['title' => 'En cours', 'class' => 'text-warning pull-right'])->html(
-                    Util::formattedPourcentage($etape->getFranchie(), true)
-                );
-            }else{
-                $res .= $tag('span', ['title' => 'À faire', 'class' => 'glyphicon glyphicon-remove text-danger pull-right'])->text('');
-            }
+            $res .= $this->renderEtapeIndicateur($sEtape->getFranchie());
 
             $res .= $tag('li')->close();
         }
@@ -135,5 +211,4 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
         return $res;
     }
-
 }

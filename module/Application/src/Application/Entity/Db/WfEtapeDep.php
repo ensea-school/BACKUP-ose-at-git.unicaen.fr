@@ -1,0 +1,200 @@
+<?php
+
+namespace Application\Entity\Db;
+
+/**
+ * WfEtapeDep
+ */
+class WfEtapeDep
+{
+    /**
+     * @var boolean
+     */
+    private $locale;
+
+    /**
+     * @var boolean
+     */
+    private $complete;
+
+    /**
+     * @var boolean
+     */
+    private $partielle;
+
+    /**
+     * @var boolean
+     */
+    private $integrale;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\WfEtape
+     */
+    private $etapeSuiv;
+
+    /**
+     * @var \Application\Entity\Db\WfEtape
+     */
+    private $etapePrec;
+
+
+    /**
+     * Set locale
+     *
+     * @param boolean $locale
+     *
+     * @return WfEtapeDep
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return boolean
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Set complete
+     *
+     * @param boolean $complete
+     *
+     * @return WfEtapeDep
+     */
+    public function setComplete($complete)
+    {
+        $this->complete = $complete;
+
+        return $this;
+    }
+
+    /**
+     * Get complete
+     *
+     * @return boolean
+     */
+    public function getComplete()
+    {
+        return $this->complete;
+    }
+
+    /**
+     * Set partielle
+     *
+     * @param boolean $partielle
+     *
+     * @return WfEtapeDep
+     */
+    public function setPartielle($partielle)
+    {
+        $this->partielle = $partielle;
+
+        return $this;
+    }
+
+    /**
+     * Get partielle
+     *
+     * @return boolean
+     */
+    public function getPartielle()
+    {
+        return $this->partielle;
+    }
+
+    /**
+     * Set integrale
+     *
+     * @param boolean $integrale
+     *
+     * @return WfEtapeDep
+     */
+    public function setIntegrale($integrale)
+    {
+        $this->integrale = $integrale;
+
+        return $this;
+    }
+
+    /**
+     * Get integrale
+     *
+     * @return boolean
+     */
+    public function getIntegrale()
+    {
+        return $this->integrale;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set etapeSuiv
+     *
+     * @param \Application\Entity\Db\WfEtape $etapeSuiv
+     *
+     * @return WfEtapeDep
+     */
+    public function setEtapeSuiv(\Application\Entity\Db\WfEtape $etapeSuiv = null)
+    {
+        $this->etapeSuiv = $etapeSuiv;
+
+        return $this;
+    }
+
+    /**
+     * Get etapeSuiv
+     *
+     * @return \Application\Entity\Db\WfEtape
+     */
+    public function getEtapeSuiv()
+    {
+        return $this->etapeSuiv;
+    }
+
+    /**
+     * Set etapePrec
+     *
+     * @param \Application\Entity\Db\WfEtape $etapePrec
+     *
+     * @return WfEtapeDep
+     */
+    public function setEtapePrec(\Application\Entity\Db\WfEtape $etapePrec = null)
+    {
+        $this->etapePrec = $etapePrec;
+
+        return $this;
+    }
+
+    /**
+     * Get etapePrec
+     *
+     * @return \Application\Entity\Db\WfEtape
+     */
+    public function getEtapePrec()
+    {
+        return $this->etapePrec;
+    }
+}
+

@@ -47,6 +47,19 @@ class TblWorkflow
      */
     private $etape;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $etapeDeps;
+
+
+
+    public function __construct()
+    {
+        $this->etapeDeps = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
 
     /**
      * Set atteignable
@@ -62,6 +75,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get atteignable
      *
@@ -71,6 +86,8 @@ class TblWorkflow
     {
         return $this->atteignable;
     }
+
+
 
     /**
      * Set objectif
@@ -86,6 +103,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get objectif
      *
@@ -95,6 +114,8 @@ class TblWorkflow
     {
         return $this->objectif;
     }
+
+
 
     /**
      * Set realisation
@@ -110,6 +131,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get realisation
      *
@@ -119,6 +142,8 @@ class TblWorkflow
     {
         return $this->realisation;
     }
+
+
 
     /**
      * Set toDelete
@@ -134,6 +159,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get toDelete
      *
@@ -144,6 +171,8 @@ class TblWorkflow
         return $this->toDelete;
     }
 
+
+
     /**
      * Get id
      *
@@ -153,6 +182,8 @@ class TblWorkflow
     {
         return $this->id;
     }
+
+
 
     /**
      * Set structure
@@ -168,6 +199,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get structure
      *
@@ -177,6 +210,8 @@ class TblWorkflow
     {
         return $this->structure;
     }
+
+
 
     /**
      * Set intervenant
@@ -192,6 +227,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get intervenant
      *
@@ -201,6 +238,8 @@ class TblWorkflow
     {
         return $this->intervenant;
     }
+
+
 
     /**
      * Set etape
@@ -216,6 +255,8 @@ class TblWorkflow
         return $this;
     }
 
+
+
     /**
      * Get etape
      *
@@ -224,6 +265,35 @@ class TblWorkflow
     public function getEtape()
     {
         return $this->etape;
+    }
+
+
+
+    /**
+     * Get affectation
+     *
+     * @return WfEtapeDep[]
+     */
+    public function getEtapeDeps()
+    {
+        return $this->etapeDeps;
+    }
+
+
+
+    /**
+     * Get franchie
+     *
+     * @return float
+     */
+    public function getFranchie()
+    {
+        $res = 0;
+        if ($this->objectif > 0){
+            $res = $this->realisation / $this->objectif;
+        }
+        if ($res > 1) $res = 1; // pour éviter tout malentendu au cas où...
+        return $res;
     }
 }
 

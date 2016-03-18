@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\TblWorkflow" table="TBL_WORKFLOW">
-    <indexes>
-      <index name="wf_intervenant_etape_efk_idx" columns="ETAPE_ID"/>
-      <index name="wf_intervenant_etape_sfk_idx" columns="STRUCTURE_ID"/>
-      <index name="wf_intervenant_etape_ifk_idx" columns="INTERVENANT_ID"/>
-    </indexes>
-    <id name="id" type="integer" column="ID">
-      <generator strategy="SEQUENCE"/>
-      <sequence-generator sequence-name="TBL_WORKFLOW_ID_seq" allocation-size="1" initial-value="1"/>
-    </id>
+    <id name="id" type="integer" column="ID" />
     <field name="atteignable" type="boolean" column="ATTEIGNABLE" nullable="false">
       <options>
         <option name="comment">Témoin indiquant si l'étape est atteignable ou non</option>
@@ -46,5 +38,6 @@
         <join-column name="ETAPE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="etapeDeps" target-entity="Application\Entity\Db\WfDepBloquante" mapped-by="tblWorkflow"/>
   </entity>
 </doctrine-mapping>

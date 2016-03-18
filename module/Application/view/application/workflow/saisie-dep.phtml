@@ -1,27 +1,15 @@
 <?php
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $title string
- * @var $form \Application\Form\Workflow\DependanceForm
+ * @var $form  \Application\Form\Workflow\DependanceForm
  */
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
-<?php echo $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
-<div class="row">
-    <div class="col-sm-5">
-        <?php
-        echo $this->form()->openTag($form);
-        echo $this->formControlGroup($form->get('etape-suivante'));
-        echo $this->formControlGroup($form->get('etape-precedante'));
-        echo $this->formControlGroup($form->get('locale'));
-        echo $this->formControlGroup($form->get('partielle'));
-        echo $this->formControlGroup($form->get('complete'));
-        echo $this->formControlGroup($form->get('integrale'));
-        ?>
-        <br />
-        <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
-        <?php echo $this->form()->closeTag(); ?>
-    </div>
-</div>
+    <h1 class="page-header"><?php echo $title ?></h1>
+<?php
+
+echo $this->messenger()->setCurrentMessagesFromFlashMessenger();
+
+echo $this->form($form);

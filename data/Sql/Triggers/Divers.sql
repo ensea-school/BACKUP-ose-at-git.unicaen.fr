@@ -4,7 +4,7 @@ SELECT
   'DROP TRIGGER ' || trigger_name || ';' drop_sql
   --'ALTER TRIGGER ' || trigger_name || ' DISABLE;' disable_sql
   --'ALTER TRIGGER ' || trigger_name || ' ENABLE;' enable_sql
-FROM SYS.ALL_TRIGGERS WHERE owner = 'OSE' AND trigger_name like 'T_AGR_%' ORDER BY trigger_name;
+FROM SYS.ALL_TRIGGERS WHERE owner = 'OSE' AND trigger_name like 'T_PJ_PJ_%' ORDER BY trigger_name;
 
 
 

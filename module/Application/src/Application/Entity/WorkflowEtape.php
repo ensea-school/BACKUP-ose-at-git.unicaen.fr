@@ -3,6 +3,7 @@
 namespace Application\Entity;
 
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\WfEtape;
@@ -102,11 +103,11 @@ class WorkflowEtape implements ResourceInterface
 
 
     /**
-     * @param WfIntervenantEtape $etape
+     * @param TblWorkflow $etape
      *
      * @return WorkflowEtape
      */
-    public function addEtape(WfIntervenantEtape $etape)
+    public function addEtape(TblWorkflow $etape)
     {
         $this->etapes[$etape->getId()] = $etape;
 

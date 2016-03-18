@@ -51,6 +51,11 @@ class WfEtape
      */
     private $route;
 
+    /**
+     * @var string
+     */
+    private $descNonAtteignable;
+
 
 
     /**
@@ -127,6 +132,30 @@ class WfEtape
     public function getRoute()
     {
         return $this->route;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDescNonAtteignable()
+    {
+        return $this->descNonAtteignable;
+    }
+
+
+
+    /**
+     * @param string $descNonAtteignable
+     *
+     * @return WfEtape
+     */
+    public function setDescNonAtteignable($descNonAtteignable)
+    {
+        $this->descNonAtteignable = $descNonAtteignable;
+
+        return $this;
     }
 
 

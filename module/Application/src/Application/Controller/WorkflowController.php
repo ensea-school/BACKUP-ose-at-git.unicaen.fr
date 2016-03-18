@@ -3,8 +3,10 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\WfEtapeDep;
+use Application\Exception\DbException;
 use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\WfEtapeAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -26,6 +28,7 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
     use WfEtapeDepServiceAwareTrait;
     use DependanceFormAwareTrait;
     use WorkflowServiceAwareTrait;
+    use WfEtapeAwareTrait;
 
 
 
@@ -44,7 +47,7 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
         if (!$this->getRequest()->isXmlHttpRequest()) {
             exit;
         }
-        
+
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $this->context()->intervenantFromRoute();
         $route       = $this->context()->routeFromQuery();
@@ -68,6 +71,17 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
     {
         $dql = '
         SELECT
+          we
+        FROM
+          Application\Entity\Db\WfEtape we
+        ORDER BY
+          we.ordre
+        ';
+        $etapes = $this->em()->createQuery($dql)->getResult();
+
+
+        $dql = '
+        SELECT
           wed, es, ep
         FROM
           Application\Entity\Db\WfEtapeDep wed
@@ -86,7 +100,7 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
             $deps[$dep->getEtapeSuiv()->getId()][$dep->getEtapePrec()->getId()] = $dep;
         }
 
-        return compact('deps');
+        return compact('etapes', 'deps');
     }
 
 
@@ -97,14 +111,25 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
         /* @var $wfEtapeDep WfEtapeDep */
 
         if (!$wfEtapeDep) {
+            $etapeSuivanteId = $this->params()->fromQuery('etapeSuivante');
+
             $wfEtapeDep = $this->getServiceWfEtapeDep()->newEntity();
+            if ($etapeSuivanteId){
+                $etapeSuivante = $this->getServiceWfEtape()->get($etapeSuivanteId);
+                $wfEtapeDep->setEtapeSuiv($etapeSuivante);
+            }
+
         }
 
         $title = "Saisie d'une dépendance";
 
         $form = $this->getFormWorkflowDependance();
         $form->bindRequestSave($wfEtapeDep, $this->getRequest(), function ($wfEtapeDep) {
-            $this->getServiceWfEtapeDep()->save($wfEtapeDep);
+            try{
+                $this->getServiceWfEtapeDep()->save($wfEtapeDep);
+            }catch(\Exception $e){
+                throw DbException::translate($e);
+            }
         });
 
         return compact('title', 'form');

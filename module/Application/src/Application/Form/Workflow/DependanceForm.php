@@ -57,9 +57,29 @@ class DependanceForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'active',
+            'options'    => [
+                'label'              => '<abbr title="Définit si la dépendance est prise en compte par le Workflow ou non">Active</abbr>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+                'use_hidden_element' => true,
+                'checked_value'      => 'true',
+                'unchecked_value'    => 'false',
+            ],
+            'attributes' => [
+                'title' => "Définit si la dépendance est prise en compte par le Workflow ou non",
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'       => 'locale',
             'options'    => [
-                'label'              => 'Locale',
+                'label'              => '<abbr title="Le test ne se fait qu\'au sein d\'une même composante ou sur des étapes non attachées à des composantes">Locale</abbr>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
                 'use_hidden_element' => true,
                 'checked_value'      => 'true',
                 'unchecked_value'    => 'false',
@@ -71,43 +91,35 @@ class DependanceForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'partielle',
-            'options'    => [
-                'label'              => 'Partielle',
-                'use_hidden_element' => true,
-                'checked_value'      => 'true',
-                'unchecked_value'    => 'false',
-            ],
-            'attributes' => [
-                'title' => "L'étape n'est atteignable que si ses dépendances ont été partiellement franchies",
-            ],
-            'type'       => 'Checkbox',
-        ]);
-
-        $this->add([
-            'name'       => 'complete',
-            'options'    => [
-                'label'              => 'Complète',
-                'use_hidden_element' => true,
-                'checked_value'      => 'true',
-                'unchecked_value'    => 'false',
-            ],
-            'attributes' => [
-                'title' => "L'étape n'est atteignable que si ses dépendances sont franchies à 100%",
-            ],
-            'type'       => 'Checkbox',
-        ]);
-
-        $this->add([
             'name'       => 'integrale',
             'options'    => [
-                'label'              => 'Intégrale',
+                'label'              => '<abbr title="Franchissement impératif pour toutes les composantes concernées">Intégrale</abbr>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
                 'use_hidden_element' => true,
                 'checked_value'      => 'true',
                 'unchecked_value'    => 'false',
             ],
             'attributes' => [
                 'title' => "Toutes les règles de dépendances doivent être satisfaites. A défaut, une seule dépendance respectant les critères suffit à rendre l'étape courante atteignable",
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'       => 'partielle',
+            'options'    => [
+                'label'              => '<abbr title="L\'étape peut n\'être que partiellement franchie">Partielle</abbr>',
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+                'use_hidden_element' => true,
+                'checked_value'      => 'true',
+                'unchecked_value'    => 'false',
+            ],
+            'attributes' => [
+                'title' => "L'étape n'est atteignable que si ses dépendances ont été partiellement franchies",
             ],
             'type'       => 'Checkbox',
         ]);
@@ -135,10 +147,10 @@ class DependanceForm extends AbstractForm
         return [
             'etape-suivante'   => ['required' => true],
             'etape-precedante' => ['required' => true],
+            'active'           => ['required' => true],
             'locale'           => ['required' => true],
-            'partielle'        => ['required' => true],
-            'complete'         => ['required' => true],
             'integrale'        => ['required' => true],
+            'partielle'        => ['required' => true],
         ];
     }
 
@@ -165,10 +177,10 @@ class DependanceFormHydrator implements HydratorInterface
         /* on peuple l'objet à partir du tableau de données */
         $object->setEtapeSuiv($this->getServiceWfEtape()->get($data['etape-suivante']));
         $object->setEtapePrec($this->getServiceWfEtape()->get($data['etape-precedante']));
+        $object->setActive($data['active'] == 'true');
         $object->setLocale($data['locale'] == 'true');
-        $object->setPartielle($data['partielle'] == 'true');
-        $object->setComplete($data['complete'] == 'true');
         $object->setIntegrale($data['integrale'] == 'true');
+        $object->setPartielle($data['partielle'] == 'true');
 
         return $object;
     }
@@ -185,10 +197,10 @@ class DependanceFormHydrator implements HydratorInterface
         $data = [
             'etape-suivante'   => $object->getEtapeSuiv() ? $object->getEtapeSuiv()->getId() : null,
             'etape-precedante' => $object->getEtapePrec() ? $object->getEtapePrec()->getId() : null,
+            'active'           => $object->getActive() ? 'true' : 'false',
             'locale'           => $object->getLocale() ? 'true' : 'false',
-            'partielle'        => $object->getPartielle() ? 'true' : 'false',
-            'complete'         => $object->getComplete() ? 'true' : 'false',
             'integrale'        => $object->getIntegrale() ? 'true' : 'false',
+            'partielle'        => $object->getPartielle() ? 'true' : 'false',
         ];
 
         return $data;

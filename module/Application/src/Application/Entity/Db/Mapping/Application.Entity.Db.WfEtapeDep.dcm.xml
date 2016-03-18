@@ -4,10 +4,10 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
+    <field name="active" type="boolean" column="ACTIVE" nullable="false"/>
     <field name="locale" type="boolean" column="LOCALE" nullable="false"/>
-    <field name="complete" type="boolean" column="COMPLETE" nullable="false"/>
-    <field name="partielle" type="boolean" column="PARTIELLE" nullable="false"/>
     <field name="integrale" type="boolean" column="INTEGRALE" nullable="false"/>
+    <field name="partielle" type="boolean" column="PARTIELLE" nullable="false"/>
     <many-to-one field="etapeSuiv" target-entity="Application\Entity\Db\WfEtape">
       <join-columns>
         <join-column name="ETAPE_SUIV_ID" referenced-column-name="ID"/>

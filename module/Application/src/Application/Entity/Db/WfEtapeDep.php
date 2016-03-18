@@ -10,22 +10,22 @@ class WfEtapeDep
     /**
      * @var boolean
      */
-    private $locale;
+    private $locale = false;
 
     /**
      * @var boolean
      */
-    private $complete;
+    private $integrale = false;
 
     /**
      * @var boolean
      */
-    private $partielle;
+    private $partielle = false;
 
     /**
      * @var boolean
      */
-    private $integrale;
+    private $active = true;
 
     /**
      * @var integer
@@ -138,6 +138,32 @@ class WfEtapeDep
     {
         return $this->integrale;
     }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+
+
+    /**
+     * @param boolean $active
+     *
+     * @return WfEtapeDep
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+
 
     /**
      * Get id

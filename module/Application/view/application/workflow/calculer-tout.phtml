@@ -21,7 +21,7 @@ $divId = uniqid('di-');
     <?php else: ?>
 
         <div class="alert alert-success" role="alert">
-            Calcul du workflow et de tableaux de bords associés achevé.
+            Calcul du workflow achevé.
         </div>
         
     <?php endif; ?>
@@ -30,7 +30,7 @@ $divId = uniqid('di-');
 
     <div id="<?php echo $divId ?>" data-url="<?php echo $this->url('workflow/calculer-tout', [], ['query' => ['action' => '1']]) ?>">
         <img src="<?php echo $this->basePath().'/images/wait.gif' ?>" alt="Attente..."/>
-        <div>En cours de calcul... Celà peut prendre plusieurs minutes. Merci de patienter.</div>
+        <div>En cours de calcul... Merci de patienter.</div>
     </div>
     <script>
 

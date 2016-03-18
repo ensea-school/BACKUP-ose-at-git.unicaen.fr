@@ -16,69 +16,84 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
 <style>
 
     .dependances {
-        width:60em;
+        width: 60em;
         margin-left: 5em;
     }
 
     .dependances .attrib {
-        text-align:center;
-        width:5em;
+        text-align: center;
+        width: 10em;
+    }
+
+    .dependances tr.inactive {
+        opacity:.3;
+        background-color:#eee;
     }
 
 </style>
 
-<div class="alert alert-info" role="alert">
-    <h3>Légende</h3>
-    <ul>
-        <li><b>Locale</b> : La dépendance ne joue que si une des étapes n'a pas de composante ou bien si les composantes des étapes sont identiques ;</li>
-        <li><b>Partielle</b> : L'étape n'est atteignable que si ses dépendances ont été partiellement franchies ;</li>
-        <li><b>Complète</b> : L'étape n'est atteignable que si ses dépendances sont franchies à 100% ;</li>
-        <li><b>Intégrale</b> : Toutes les règles de dépendances doivent être satisfaites. A défaut, une seule dépendance respectant les critères suffit à rendre l'étape courante atteignable.</li>
-    </ul>
+<?php foreach ($etapes as $etape): ?>
+    <h2><?php echo $etape->getLibelleAutres() ?></h2>
+    <div class="dependances">
+    <?php if (isset($deps[$etape->getId()])): ?>
+        <table class="table table-bordered">
+            <tr>
+                <th>Étape(s) antérieure(s)</th>
+                <th><abbr
+                        title="Le test ne se fait qu'au sein d'une même composante ou sur des étapes non attachées à des composantes">Locale</abbr>
+                </th>
+                <th><abbr title="Franchissement impératif pour toutes les composantes concernées">Intégrale</abbr></th>
+                <th><abbr title="L'étape peut n'être que partiellement franchie">Partielle</abbr></th>
+            </tr>
+            <?php foreach ($deps[$etape->getId()] as $d): ?>
+                <tr<?php if(!$d->getActive()) echo ' class="inactive" title="Dépendance désactivée"' ?>>
+                    <td>
+                        <?php if ($canEdit): ?>
+                            <a href="<?php echo $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>"
+                               class="ajax-modal" data-event="dependances-saisie"><span
+                                    class="glyphicon glyphicon-edit"></span></a>
+                            <a href="<?php echo $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>"
+                               class="ajax-modal" data-event="dependances-suppression"><span
+                                    class="glyphicon glyphicon-trash"></span></a>
+                        <?php endif; ?>
+                        <?php echo $d->getEtapePrec()->getLibelleAutres() ?>
+                    </td>
+                    <td class="attrib"><?php echo $d->getLocale() ? $ok : '' ?></td>
+                    <td class="attrib"><?php echo $d->getIntegrale() ? $ok : '' ?></td>
+                    <td class="attrib"><?php echo $d->getPartielle() ? $ok : '' ?></td>
+                </tr>
 
-</div>
-
-<?php foreach( $deps as $dep ): $etapeSuiv = current($dep)->getEtapeSuiv(); ?>
-    <h2><?php echo $etapeSuiv->getLibelleAutres() ?></h2>
-    <table class="table table-bordered dependances">
-    <tr>
-        <th>Etape</th>
-        <th>Locale</th>
-        <th>Partielle</th>
-        <th>Complète</th>
-        <th>Intégrale</th>
-    </tr>
-    <?php foreach( $dep as $d ): ?>
-    <tr>
-        <td>
-            <?php if ($canEdit): ?>
-                <a href="<?php echo $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>" class="ajax-modal" data-event="dependances-saisie"><span class="glyphicon glyphicon-edit"></span></a>
-                <a href="<?php echo $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>" class="ajax-modal" data-event="dependances-suppression"><span class="glyphicon glyphicon-trash"></span></a>
-            <?php endif; ?>
-            <?php echo $d->getEtapePrec()->getLibelleAutres() ?>
-        </td>
-        <td class="attrib"><?php echo $d->getLocale() ? $ok : '' ?></td>
-        <td class="attrib"><?php echo $d->getPartielle() ? $ok : '' ?></td>
-        <td class="attrib"><?php echo $d->getComplete() ? $ok : '' ?></td>
-        <td class="attrib"><?php echo $d->getIntegrale() ? $ok : '' ?></td>
-    </tr>
-    <?php endforeach; ?>
-    </table>
+            <?php endforeach; ?>
 
 
+        </table>
+    <?php else: ?>
+        <div class="alert alert-warning">Pas de dépendance</div>
+    <?php endif; ?>
+    <?php if ($canEdit): ?>
+        <a href="<?php echo $this->url('workflow/dependances/saisie', [], ['query' => ['etapeSuivante' => $etape->getId()]]) ?>" class="btn btn-primary btn-xs ajax-modal"
+           data-event="dependances-saisie"><span class="glyphicon glyphicon-plus"></span> Ajouter une dépendance</a>
+    <?php endif; ?>
+    </div>
 <?php endforeach; ?>
-
+<br />
+<hr />
 <?php if ($canEdit): ?>
-    <a href="<?php echo $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal" data-event="dependances-saisie"><span class="glyphicon glyphicon-plus"></span> Ajouter une dépendance</a>
-    <a href="<?php echo $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span class="fa fa-cogs"></span> Recalculer le Workflow</a>
+    <a href="<?php echo $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal"
+       data-event="dependances-saisie"><span class="glyphicon glyphicon-plus"></span> Ajouter une dépendance</a>
+    <a href="<?php echo $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span
+            class="fa fa-cogs"></span> Recalculer le Workflow</a>
 <?php endif; ?>
 <script type="text/javascript">
-    $(function() {
-        $("body").on("dependances-saisie", function(event, data) {
+    $(function ()
+    {
+        $("body").on("dependances-saisie", function (event, data)
+        {
             window.location.reload();
         });
 
-        $("body").on("dependances-suppression", function(event, data) {
+        $("body").on("dependances-suppression", function (event, data)
+        {
             window.location.reload();
         });
     });

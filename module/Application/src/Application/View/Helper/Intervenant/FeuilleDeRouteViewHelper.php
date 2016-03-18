@@ -4,6 +4,8 @@ namespace Application\View\Helper\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\WfDepBloquante;
+use Application\Entity\Db\WfEtapeDep;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -93,16 +95,24 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         $attrs = ['class' => 'list-group-item'];
         if (!$etape->isAtteignable() && $isAfterCourante){
             $attrs['class'] .= ' after-courante';
+
+            $naDesc = '';
+            foreach( $etape->getEtapes() as $sEtape) {
+                foreach ($sEtape->getEtapeDeps() as $ed) {
+                    /* @var $ed WfDepBloquante */
+                    $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonAtteignable() . "\n";
+                }
+                break; // affichage une seule fois des msg pour les étapes se déclinant par composante...
+            }
+
+            if ($naDesc){
+                $attrs['title'] = "Non atteignable : \n".$naDesc;
+            }
         }
 
         if ($etape->isCourante()){
             $attrs['class'] .= ' list-group-item-warning';
         }
-
-        $res .= $tag('li', $attrs);
-        $res .= $tag('span', ['class' => 'label label-primary'])->text($index);
-
-        $res .= $this->renderEtapeLink($etape);
 
         if (count($etape->getEtapes()) > 1){
             $collapseId = 'collapse-' . $this->getIntervenant()->getId() . '-' . $etape->getEtape()->getId();
@@ -113,6 +123,11 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
             $detailsLink = null;
             $detailsRes = '';
         }
+
+        $res .= $tag('li', $attrs);
+        $res .= $tag('span', ['class' => 'label label-primary'])->text($index);
+
+        $res .= $this->renderEtapeLink($etape);
 
         $res .= $this->renderEtapeIndicateur($etape->getFranchie(), $detailsLink);
         $res .= $detailsRes;
@@ -195,7 +210,19 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         $res .= $tag('ul', ['class' => 'list-group']);
         foreach ($etape->getEtapes() as $sEtape) {
             $attrs = ['class' => 'list-group-item'];
+
             if (!$sEtape->getAtteignable()){
+                $naDesc = '';
+                foreach( $sEtape->getEtapeDeps() as $ed ){
+                    /* @var $ed WfDepBloquante */
+                    $naDesc .= ' - '.$ed->getWfEtapeDep()->getEtapePrec()->getDescNonAtteignable()."\n";
+                }
+
+                if ($naDesc){
+                    $attrs['title'] = "Non atteignable : \n".$naDesc;
+                }
+
+
                 $attrs['class'] .= ' after-courante';
             }
             $res .= $tag('li', $attrs);

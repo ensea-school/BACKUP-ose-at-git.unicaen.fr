@@ -152,7 +152,7 @@ class WorkflowService extends AbstractService
      */
     public function calculerTout()
     {
-        $sql = "BEGIN OSE_WORKFLOW.CALCULER_TOUT; END;";
+        $sql = "BEGIN OSE_WORKFLOW.CALCULER_TOUT( NULL, FALSE ); END;";
         $this->getEntityManager()->getConnection()->executeQuery($sql);
 
         return $this;
@@ -208,14 +208,14 @@ class WorkflowService extends AbstractService
 
         $dql = "
         SELECT
-          we, wie, str
+          we, tw, str
         FROM
-          Application\Entity\Db\WfIntervenantEtape wie
-          JOIN wie.etape we
-          LEFT JOIN wie.structure str
+          Application\Entity\Db\TblWorkflow tw
+          JOIN tw.etape we
+          LEFT JOIN tw.structure str
         WHERE
-          wie.intervenant = :intervenant
-          " . ($structure ? "AND (wie.structure IS NULL OR wie.structure = :structure)" : '') . "
+          tw.intervenant = :intervenant
+          " . ($structure ? "AND (tw.structure IS NULL OR tw.structure = :structure)" : '') . "
         ORDER BY
           we.ordre, str.libelleCourt
         ";

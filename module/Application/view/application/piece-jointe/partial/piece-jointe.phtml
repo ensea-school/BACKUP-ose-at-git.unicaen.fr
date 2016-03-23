@@ -6,8 +6,12 @@
  * @var $pj \Application\Entity\Db\PieceJointe
  * @var $intervenant \Application\Entity\Db\Intervenant
  * @var $canEdit boolean
+ * @var $canValider boolean
+ * @var $canDevalider boolean
  * @var $obligatoire boolean
  */
+
+$hasValidation = $pj && $pj->getValidation();
 
 $linksModelesDocs = null;
 if (($url = $tpj->getUrlModeleDoc())) {
@@ -36,10 +40,12 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
 >
     <div class="panel-heading">
         <h3>
+            <?php if ((!$hasValidation && $canValider) || ($hasValidation && $canDevalider)): ?>
             <div class="validation-bar pull-right"
                  data-url="<?php echo $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
                 <?php echo $this->partial('application/piece-jointe/validation', compact('pj')) ?>
             </div>
+            <?php endif; ?>
             <?php echo $type ?><br/>
         </h3>
     </div>

@@ -37,26 +37,46 @@ class DossierPiecesAssertion extends AbstractAssertion
                 switch ($action) {
                     case 'voir':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
+
                         return $this->assertDossierEdition($intervenant);
                     break;
                     case 'modifier':
                         if (!$this->assertPriv(Privileges::DOSSIER_EDITION)) return false;
+
                         return $this->assertDossierEdition($intervenant);
                     break;
                 }
             break;
             case 'Application\Controller\PieceJointe':
-                switch($action){
+                switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)) return false;
-                        return $this->assertPieceJointeVisualisation($intervenant);
+
+                        return $this->assertPieceJointeAction($intervenant);
+                    break;
+                    case 'televerser':
+                    case 'supprimer':
+                        if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_EDITION)) return false;
+
+                        return $this->assertPieceJointeAction($intervenant);
+                    break;
+                    case 'valider':
+                        if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)) return false;
+
+                        return $this->assertPieceJointeValidationAction($intervenant);
+                    break;
+                    case 'devalider':
+                        if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)) return false;
+
+                        return $this->assertPieceJointeValidationAction($intervenant);
                     break;
                 }
             break;
             case 'Application\Controller\Validation':
-                switch($action){
+                switch ($action) {
                     case 'dossier':
                         if (!$this->assertPriv(Privileges::DOSSIER_VALIDATION)) return false;
+
                         return $this->assertDossierValidation($intervenant);
                     break;
                 }
@@ -103,11 +123,23 @@ class DossierPiecesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPieceJointeVisualisation(Intervenant $intervenant = null)
+    protected function assertPieceJointeAction(Intervenant $intervenant = null)
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
             return false;
         }
+
+        return true;
+    }
+
+
+
+    protected function assertPieceJointeValidationAction(Intervenant $intervenant = null)
+    {
+        if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_VALIDATION, $intervenant)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -127,7 +159,7 @@ class DossierPiecesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPriv( $privilege )
+    protected function assertPriv($privilege)
     {
         return $this->isAllowed(Privileges::getResourceId($privilege));
     }

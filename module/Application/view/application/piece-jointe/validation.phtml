@@ -16,7 +16,7 @@ $params = [
 ?>
 
     <!-- actions de validation de la pièce jointe entière -->
-<?php if (!$pj->getValidation() && $this->isAllowed($pj, Privileges::PIECE_JUSTIFICATIVE_VALIDATION)): ?>
+<?php if (!$pj->getValidation() && $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION))): ?>
     <a class="valider-pj btn btn-success"
        href="<?php echo $this->url('piece-jointe/intervenant/valider', $params, [], true) ?>"
        title="Valider la pièce justificative '<?php echo $pj->getType() ?>'"
@@ -27,7 +27,7 @@ $params = [
 <?php endif ?>
 
     <!-- actions de dévalidation de la pièce jointe entière -->
-<?php if ($pj->getValidation() && $this->isAllowed($pj, Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)): ?>
+<?php if ($pj->getValidation() && $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION))): ?>
     <a class="devalider-pj btn btn-danger"
        href="<?php echo $this->url('piece-jointe/intervenant/devalider', $params, [], true) ?>"
        title="Dévalider la pièce justificative <?php echo "'".$pj->getType() . "'.\n" . $pj->getValidation() ?>"

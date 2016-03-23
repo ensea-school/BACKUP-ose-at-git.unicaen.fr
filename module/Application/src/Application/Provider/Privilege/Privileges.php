@@ -35,11 +35,13 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DOSSIER_EDITION                           = 'dossier-edition';
     const DOSSIER_VALIDATION                        = 'dossier-validation';
     const DOSSIER_DEVALIDATION                      = 'dossier-devalidation';
+    const DOSSIER_VALIDATION_VISUALISATION          = 'dossier-validation-visualisation';
     const PIECE_JUSTIFICATIVE_VISUALISATION         = 'piece-justificative-visualisation';
     const PIECE_JUSTIFICATIVE_EDITION               = 'piece-justificative-edition';
     const PIECE_JUSTIFICATIVE_VALIDATION            = 'piece-justificative-validation';
     const PIECE_JUSTIFICATIVE_DEVALIDATION          = 'piece-justificative-devalidation';
     const PIECE_JUSTIFICATIVE_GESTION_EDITION       = 'piece-justificative-gestion-edition';
+    const PIECE_JUSTIFICATIVE_TELECHARGEMENT        = 'piece-justificative-telechargement';
     const PIECE_JUSTIFICATIVE_GESTION_VISUALISATION = 'piece-justificative-gestion-visualisation';
     const ENSEIGNEMENT_VISUALISATION                = 'enseignement-visualisation';
     const ENSEIGNEMENT_EDITION                      = 'enseignement-edition';

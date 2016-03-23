@@ -290,19 +290,19 @@ return [
                 [
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => ['voir'],
-                    'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                    'privileges' => Privileges::DOSSIER_VISUALISATION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => ['modifier'],
-                    'privileges' => [Privileges::DOSSIER_EDITION],
+                    'privileges' => Privileges::DOSSIER_EDITION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\Validation',
                     'action'     => ['dossier'],
-                    'privileges' => [Privileges::DOSSIER_VALIDATION],
+                    'privileges' => Privileges::DOSSIER_VALIDATION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
 
@@ -310,55 +310,52 @@ return [
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-statut'],
-                    'privileges' => [
-                        Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
-                        Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
-                    ],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['modifier-type-piece-jointe-statut'],
-                    'privileges' => [
-                        Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
-                    ],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['configuration'],
-                    'privileges' => [
-                        Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
-                        Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
-                    ],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
                 ],
 
                 /* Pièces jointes */
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['index'],
-                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_VISUALISATION],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['infos', 'lister', 'telecharger', 'validation'],
-                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_VISUALISATION],
+                    'action'     => ['infos', 'lister', 'validation'],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['telecharger'],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_TELECHARGEMENT,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['televerser', 'supprimer'],
-                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_EDITION],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_EDITION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['valider'],
-                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_VALIDATION],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['devalider'],
-                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION,
                     'assertion'  => 'assertionDossierPieces',
                 ],
             ],

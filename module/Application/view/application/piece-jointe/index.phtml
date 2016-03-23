@@ -14,7 +14,9 @@ use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append($intervenant->getNomComplet())->append("Pièces justificatives");
 
-$canEdit = $this->isAllowed($intervenant, Privileges::PIECE_JUSTIFICATIVE_EDITION);
+$canEdit        = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
+$canValider     = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
+$canDevalider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
 
 $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getSourceCode()]);
 
@@ -59,7 +61,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
                 } else {
                     $pj = null;
                 }
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'obligatoire'));
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
             }
 
             if ($alertContrat) {
@@ -81,7 +83,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
             $obligatoire = false;
             foreach ($restantes as $tpjId => $pj) { // on liste les pièces fournies mais qui ne sont pas demandées...
                 $tpj = $pj->getType();
-                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'obligatoire'));
+                echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
             }
         }
 

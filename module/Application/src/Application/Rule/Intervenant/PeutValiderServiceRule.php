@@ -26,11 +26,7 @@ class PeutValiderServiceRule extends AbstractRule
         switch ($this->typeValidation->getCode()) {
             case TypeValidation::CODE_DONNEES_PERSO:
 //                $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
-                $peutSaisirDossier = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
-                if (!$peutSaisirDossier->execute()) {
-                    $this->setMessage($peutSaisirDossier->getMessage());
-                    return false;
-                }
+                return true;
                 break;
             case TypeValidation::CODE_ENSEIGNEMENT:
 //                $permetSaisieService = new PeutSaisirServiceRule($this->getIntervenant());

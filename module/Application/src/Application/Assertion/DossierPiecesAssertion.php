@@ -7,6 +7,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -44,6 +45,14 @@ class DossierPiecesAssertion extends AbstractAssertion
                     break;
                 }
             break;
+            case 'Application\Controller\PieceJointe':
+                switch($action){
+                    case 'index':
+                        if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VISUALISATION)) return false;
+                        return $this->assertPieceJointeVisualisation($intervenant);
+                    break;
+                }
+            break;
             case 'Application\Controller\Validation':
                 switch($action){
                     case 'dossier':
@@ -59,9 +68,15 @@ class DossierPiecesAssertion extends AbstractAssertion
 
 
 
-    protected function assertPriv( $privilege )
+    /**
+     * @param ResourceInterface $entity
+     * @param string            $privilege
+     *
+     * @return boolean
+     */
+    protected function assertEntity(ResourceInterface $entity, $privilege = null)
     {
-        return $this->isAllowed(Privileges::getResourceId($privilege));
+        return true;
     }
 
 
@@ -88,15 +103,32 @@ class DossierPiecesAssertion extends AbstractAssertion
 
 
 
+    protected function assertPieceJointeVisualisation(Intervenant $intervenant = null)
+    {
+        if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
     protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
+            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
                 return false;
             }
         }
 
         return true;
+    }
+
+
+
+    protected function assertPriv( $privilege )
+    {
+        return $this->isAllowed(Privileges::getResourceId($privilege));
     }
 }

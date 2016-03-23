@@ -10,22 +10,17 @@ class TblPieceJointe
     /**
      * @var boolean
      */
-    private $demandee = '0';
+    private $demandee = false;
 
     /**
      * @var boolean
      */
-    private $fournie = '0';
+    private $fournie = false;
 
     /**
      * @var boolean
      */
-    private $toDelete = '0';
-
-    /**
-     * @var boolean
-     */
-    private $validee = '0';
+    private $validee = false;
 
     /**
      * @var integer
@@ -43,24 +38,16 @@ class TblPieceJointe
     private $intervenant;
 
     /**
+     * @var float
+     */
+    private $heuresPourSeuil;
+
+    /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
 
 
-    /**
-     * Set demandee
-     *
-     * @param boolean $demandee
-     *
-     * @return TblPieceJointe
-     */
-    public function setDemandee($demandee)
-    {
-        $this->demandee = $demandee;
-
-        return $this;
-    }
 
     /**
      * Get demandee
@@ -72,19 +59,7 @@ class TblPieceJointe
         return $this->demandee;
     }
 
-    /**
-     * Set fournie
-     *
-     * @param boolean $fournie
-     *
-     * @return TblPieceJointe
-     */
-    public function setFournie($fournie)
-    {
-        $this->fournie = $fournie;
 
-        return $this;
-    }
 
     /**
      * Get fournie
@@ -96,43 +71,7 @@ class TblPieceJointe
         return $this->fournie;
     }
 
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblPieceJointe
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
 
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
-
-    /**
-     * Set validee
-     *
-     * @param boolean $validee
-     *
-     * @return TblPieceJointe
-     */
-    public function setValidee($validee)
-    {
-        $this->validee = $validee;
-
-        return $this;
-    }
 
     /**
      * Get validee
@@ -144,6 +83,8 @@ class TblPieceJointe
         return $this->validee;
     }
 
+
+
     /**
      * Get id
      *
@@ -154,19 +95,7 @@ class TblPieceJointe
         return $this->id;
     }
 
-    /**
-     * Set typePieceJointe
-     *
-     * @param \Application\Entity\Db\TypePieceJointe $typePieceJointe
-     *
-     * @return TblPieceJointe
-     */
-    public function setTypePieceJointe(\Application\Entity\Db\TypePieceJointe $typePieceJointe = null)
-    {
-        $this->typePieceJointe = $typePieceJointe;
 
-        return $this;
-    }
 
     /**
      * Get typePieceJointe
@@ -178,19 +107,7 @@ class TblPieceJointe
         return $this->typePieceJointe;
     }
 
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblPieceJointe
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
 
-        return $this;
-    }
 
     /**
      * Get intervenant
@@ -202,19 +119,17 @@ class TblPieceJointe
         return $this->intervenant;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblPieceJointe
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
+
+    /**
+     * @return float
+     */
+    public function getHeuresPourSeuil()
+    {
+        return $this->heuresPourSeuil;
     }
+
+
 
     /**
      * Get annee

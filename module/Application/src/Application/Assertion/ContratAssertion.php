@@ -50,7 +50,8 @@ class ContratAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         if ($intervenant){
-            $wfOk = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $intervenant)->isAtteignable();
+            $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_CONTRAT, $intervenant);
+            $wfOk = $workflowEtape && $workflowEtape->isAtteignable();
             if (!$wfOk) return false;
         }
 

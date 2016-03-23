@@ -1,0 +1,38 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $pj          \Application\Entity\Db\PieceJointe
+ */
+
+if (!$pj) return '';
+
+$params = [
+    'pieceJointe' => $pj->getId(),
+];
+
+?>
+
+    <!-- actions de validation de la pièce jointe entière -->
+<?php if (!$pj->getValidation() && $this->isAllowed($pj, Privileges::PIECE_JUSTIFICATIVE_VALIDATION)): ?>
+    <a class="valider-pj btn btn-success"
+       href="<?php echo $this->url('piece-jointe/intervenant/valider', $params, [], true) ?>"
+       title="Valider la pièce justificative '<?php echo $pj->getType() ?>'"
+       data-loading-text="Patientez..."
+    >
+        <span class="glyphicon glyphicon-thumbs-up"></span> Valider
+    </a>
+<?php endif ?>
+
+    <!-- actions de dévalidation de la pièce jointe entière -->
+<?php if ($pj->getValidation() && $this->isAllowed($pj, Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)): ?>
+    <a class="devalider-pj btn btn-danger"
+       href="<?php echo $this->url('piece-jointe/intervenant/devalider', $params, [], true) ?>"
+       title="Dévalider la pièce justificative <?php echo "'".$pj->getType() . "'.\n" . $pj->getValidation() ?>"
+       data-loading-text="Patientez..."
+    >
+        <span class="glyphicon glyphicon-thumbs-down"></span> Dévalider
+    </a>
+<?php endif ?>

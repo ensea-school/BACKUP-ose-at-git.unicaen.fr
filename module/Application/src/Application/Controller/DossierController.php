@@ -7,6 +7,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Listener\DossierListener;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\WfEtape;
 use Application\Form\Intervenant\Dossier as DossierForm;
 use Application\Form\Intervenant\DossierFieldset;
 use Application\Service\Traits\ContextAwareTrait;
@@ -15,9 +16,8 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Application\Service\Workflow\Workflow;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use RuntimeException;
 use NumberFormatter;
@@ -33,15 +33,16 @@ use Zend\View\Model\ViewModel;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierController extends AbstractController implements WorkflowIntervenantAwareInterface
+class DossierController extends AbstractController
 {
-    use WorkflowIntervenantAwareTrait;
+
     use ContextAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;
     use DossierAwareTrait;
     use ValidationAwareTrait;
     use StatutIntervenantAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
     /**
@@ -70,7 +71,6 @@ class DossierController extends AbstractController implements WorkflowIntervenan
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Intervenant::class,
             \Application\Entity\Db\Validation::class,
-            \Application\Entity\Db\TypeValidation::class,
             \Application\Entity\Db\Dossier::class,
         ]);
     }
@@ -142,8 +142,6 @@ class DossierController extends AbstractController implements WorkflowIntervenan
             $this->readonly = true;
         }
 
-        $service->canAdd($this->intervenant, true);
-        
         if (!($dossier = $this->intervenant->getDossier())) {
             $dossier = $service->newEntity()->fromIntervenant($this->intervenant);
             $this->intervenant->setDossier($dossier);
@@ -158,16 +156,18 @@ class DossierController extends AbstractController implements WorkflowIntervenan
             $this->form->setData($data);
             if ($this->form->isValid()) {
                 $this->getServiceDossier()->enregistrerDossier($dossier, $this->intervenant);
-//                $notified = $this->notify($this->intervenant);
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
 
                 // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
                 // au statut choisi dans le dossier.
-                if ($role instanceof IntervenantRole) {
+                if ($role->getIntervenant()) {
                     $this->getServiceUserContext()->setNextSelectedIdentityRole($dossier->getStatut()->getRoleId());
                 }
 
-                return $this->redirect()->toUrl($this->getModifierRedirectionUrl());
+                $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+                if ($nextEtape && $url=$nextEtape->getUrl()){
+                    return $this->redirect()->toUrl($url);
+                }
             }
         }
         
@@ -212,24 +212,7 @@ class DossierController extends AbstractController implements WorkflowIntervenan
         return $label;
     }
 
-    /**
-     * @return string
-     */
-    private function getModifierRedirectionUrl()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $url  = $this->url()->fromRoute(null, [], [], true);
-        
-        if ($role instanceof IntervenantRole) {
-            $wf       = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
-            $nextStep = $wf->getNextStep($wf->getStepForCurrentRoute());
-            if ($nextStep) {
-                $url = $wf->getStepUrl($nextStep);
-            }
-        }
-        
-        return $url;
-    }
+
 
     protected function notify(Intervenant $intervenant)
     {
@@ -314,14 +297,13 @@ class DossierController extends AbstractController implements WorkflowIntervenan
         
         for ($i = 1; $i <= $x; $i++) {
             $annee       = $this->getServiceContext()->getAnneeNmoins($i);
-            $qb          = $this->getServiceIntervenant()->finderBySourceCodeAndAnnee($sourceCode, $annee);
-            $intervenant = $qb->getQuery()->getOneOrNullResult(); /* @var $intervenant Intervenant */
-            
+            $intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode, $annee);
+
             if ($intervenant && $intervenant->getStatut()->estVacataire() && $intervenant->getStatut()->getPeutSaisirService()) {
                 return $intervenant;
             }
         }
-        
+
         return null;
     }
 }

@@ -108,14 +108,15 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenant(Role $role, Intervenant $intervenant)
+    protected function assertIntervenant(Role $role, Intervenant $intervenant=null)
     {
-        if ($ri = $role->getIntervenant()) {
-            if ($ri != $intervenant) { // un intervenant ne peut pas voir les services d'un autre
-                return false;
+        if ($intervenant) {
+            if ($ri = $role->getIntervenant()) {
+                if ($ri != $intervenant) { // un intervenant ne peut pas voir les services d'un autre
+                    return false;
+                }
             }
         }
-
         return true;
     }
 
@@ -125,7 +126,7 @@ class ServiceAssertion extends AbstractAssertion
     {
         if ($intervenant) {
             $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
-            if (!$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
+            if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
                 return false;
             }
         }

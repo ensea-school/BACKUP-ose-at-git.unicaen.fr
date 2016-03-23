@@ -22,7 +22,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
 
     .dependances .attrib {
         text-align: center;
-        width: 10em;
+        width: 7em;
     }
 
     .dependances tr.inactive {
@@ -44,6 +44,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
                 </th>
                 <th><abbr title="Franchissement impératif pour toutes les composantes concernées">Intégrale</abbr></th>
                 <th><abbr title="L'étape peut n'être que partiellement franchie">Partielle</abbr></th>
+                <th><abbr title="L'étape dépendante doit exister">Obligatoire</abbr></th>
             </tr>
             <?php foreach ($deps[$etape->getId()] as $d): ?>
                 <tr<?php if(!$d->getActive()) echo ' class="inactive" title="Dépendance désactivée"' ?>>
@@ -61,6 +62,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
                     <td class="attrib"><?php echo $d->getLocale() ? $ok : '' ?></td>
                     <td class="attrib"><?php echo $d->getIntegrale() ? $ok : '' ?></td>
                     <td class="attrib"><?php echo $d->getPartielle() ? $ok : '' ?></td>
+                    <td class="attrib"><?php echo $d->getObligatoire() ? $ok : '' ?></td>
                 </tr>
 
             <?php endforeach; ?>

@@ -1,11 +1,11 @@
 <?php
 
 namespace Application\Entity\Db;
- 
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
- 
+
 /**
  * PieceJointe
  */
@@ -25,14 +25,9 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     private $type;
 
     /**
-     * @var \Application\Entity\Db\Dossier
+     * @var \Application\Entity\Db\Intervenant
      */
-    private $dossier;
-    
-    /**
-     * @var boolean
-     */
-    private $obligatoire;
+    private $intervenant;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -44,44 +39,53 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      */
     private $validation;
 
+
+
     /**
-     * 
+     *
      */
     public function __construct()
     {
         $this->fichier = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
+
+
     /**
      * Représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
-        $string = (string) $this->getType();
-        
+        $string = (string)$this->getType();
+
         if ($this->getValidation()) {
             $string .= $this->getValidation();
         }
-        
+
         return $string;
     }
+
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Set type
      *
      * @param \Application\Entity\Db\TypePieceJointe $type
+     *
      * @return PieceJointe
      */
     public function setType(\Application\Entity\Db\TypePieceJointe $type = null)
@@ -91,80 +95,49 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get type
      *
-     * @return \Application\Entity\Db\TypePieceJointe 
+     * @return \Application\Entity\Db\TypePieceJointe
      */
     public function getType()
     {
         return $this->type;
     }
 
+
+
     /**
-     * Set dossier
+     * @return Intervenant
+     */
+    public function getIntervenant()
+    {
+        return $this->intervenant;
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
      *
-     * @param \Application\Entity\Db\Dossier $dossier
      * @return PieceJointe
      */
-    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
+    public function setIntervenant($intervenant)
     {
-        $this->dossier = $dossier;
+        $this->intervenant = $intervenant;
 
         return $this;
     }
 
-    /**
-     * Get dossier
-     *
-     * @return \Application\Entity\Db\Dossier 
-     */
-    public function getDossier()
-    {
-        return $this->dossier;
-    }
 
-    /**
-     * Set obligatoire
-     *
-     * @param boolean $obligatoire
-     * @return self
-     */
-    public function setObligatoire($obligatoire)
-    {
-        $this->obligatoire = $obligatoire;
-
-        return $this;
-    }
-    
-    /**
-     * Get obligatoire
-     *
-     * @return boolean 
-     */
-    public function getObligatoire()
-    {
-        return $this->obligatoire;
-    }
-
-    /**
-     * Get obligatoire
-     *
-     * @return string
-     */
-    public function getObligatoireToString()
-    {
-        if ($this->getObligatoire()) {
-            return "À fournir obligatoirement";
-        }
-        
-        return "Facultatif";
-    }
 
     /**
      * Add fichier
      *
      * @param \Application\Entity\Db\Fichier $fichier
+     *
      * @return TypeFichier
      */
     public function addFichier(\Application\Entity\Db\Fichier $fichier)
@@ -173,6 +146,8 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove fichier
@@ -184,20 +159,25 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
         $this->fichier->removeElement($fichier);
     }
 
+
+
     /**
      * Get fichier
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFichier()
     {
         return $this->fichier;
     }
 
+
+
     /**
      * Set validation
      *
      * @param \Application\Entity\Db\Validation $validation
+     *
      * @return PieceJointe
      */
     public function setValidation(\Application\Entity\Db\Validation $validation = null)
@@ -207,16 +187,20 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation 
+     * @return \Application\Entity\Db\Validation
      */
     public function getValidation()
     {
         return $this->validation;
     }
-    
+
+
+
     /**
      * Returns the string identifier of the Resource
      *
@@ -224,6 +208,6 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getResourceId()
     {
-        return self::RESOURCE_ID;
+        return 'PieceJointe';
     }
 }

@@ -65,7 +65,6 @@ return [
                             'route'       => '/intervenant/:intervenant',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
-                                'type'        => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'index',
@@ -73,103 +72,34 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            // une route 'validation' dédiée à l'étape du WF est indispensable
-                            'validation'  => [
-                                'type'     => 'Segment',
-                                'options'  => [
-                                    'route' => '/validation',
-                                ],
-                                'defaults' => [
-                                    'action' => 'index',
-                                ],
-                            ],
-                            'voir'        => [
+                            'infos'      => [
+                                // afficher les messages
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/voir/:pieceJointe/vue/:vue',
-                                    'constraints' => [
-                                        'pieceJointe' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'voir',
-                                    ],
-                                ],
-                            ],
-                            'voir-type'   => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/voir-type/:typePieceJointe/vue/:vue',
-                                    'constraints' => [
-                                        'typePieceJointe' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'voir-type',
-                                    ],
-                                ],
-                            ],
-                            'lister'      => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/lister/:typePieceJointe',
-                                    'constraints' => [
-                                        'typePieceJointe' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'lister',
-                                    ],
-                                ],
-                            ],
-                            'status'      => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'    => '/status',
+                                    'route'    => '/infos',
                                     'defaults' => [
-                                        'action' => 'status',
+                                        'action' => 'infos',
                                     ],
                                 ],
                             ],
-                            'ajouter'     => [
+                            'validation' => [
+                                // affichage du bouton de validation d'une PJ
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/ajouter/:typePieceJointe',
+                                    'route'       => '/validation/:typePieceJointe',
                                     'constraints' => [
                                         'typePieceJointe' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action' => 'ajouter',
+                                        'action' => 'validation',
                                     ],
                                 ],
                             ],
-                            'supprimer'   => [
+                            'valider'    => [
+                                // valider la PJ
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/supprimer/:pieceJointe[/fichier/:fichier]',
-                                    'constraints' => [
-                                        'pieceJointe' => '[0-9]*',
-                                        'fichier'     => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'supprimer',
-                                    ],
-                                ],
-                            ],
-                            'telecharger' => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/telecharger/:pieceJointe[/fichier/:fichier/:nomFichier]',
-                                    'constraints' => [
-                                        'pieceJointe' => '[0-9]*',
-                                        'fichier'     => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'action' => 'telecharger',
-                                    ],
-                                ],
-                            ],
-                            'valider'     => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/valider/:pieceJointe[/fichier/:fichier]',
+                                    'route'       => '/valider/:pieceJointe',
                                     'constraints' => [
                                         'pieceJointe' => '[0-9]*',
                                         'fichier'     => '[0-9]*',
@@ -179,10 +109,11 @@ return [
                                     ],
                                 ],
                             ],
-                            'devalider'   => [
+                            'devalider'  => [
+                                // dévalider la PJ
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/devalider/:pieceJointe[/fichier/:fichier]',
+                                    'route'       => '/devalider/:pieceJointe',
                                     'constraints' => [
                                         'pieceJointe' => '[0-9]*',
                                         'fichier'     => '[0-9]*',
@@ -192,9 +123,73 @@ return [
                                     ],
                                 ],
                             ],
+                            'fichier'    => [
+                                'type'          => 'Literal',
+                                'options'       => [
+                                    'route' => '/fichier',
+                                ],
+                                'may_terminate' => false,
+                                'child_routes'  => [
+                                    'lister'      => [
+                                        // lister les fichiers d'une PJ
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'       => '/lister/:typePieceJointe',
+                                            'constraints' => [
+                                                'typePieceJointe' => '[0-9]*',
+                                            ],
+                                            'defaults'    => [
+                                                'action' => 'lister',
+                                            ],
+                                        ],
+
+                                    ],
+                                    'televerser'  => [
+                                        // télécharger un fichier
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'       => '/televerser/:typePieceJointe[/:fichier/:nomFichier]',
+                                            'constraints' => [
+                                                'typePieceJointe' => '[0-9]*',
+                                                'fichier'         => '[0-9]*',
+                                            ],
+                                            'defaults'    => [
+                                                'action' => 'televerser',
+                                            ],
+                                        ],
+                                    ],
+                                    'telecharger' => [
+                                        // télécharger un fichier
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'       => '/telecharger/:fichier[/:nomFichier]',
+                                            'constraints' => [
+                                                'fichier' => '[0-9]*',
+                                            ],
+                                            'defaults'    => [
+                                                'action' => 'telecharger',
+                                            ],
+                                        ],
+                                    ],
+                                    'supprimer'   => [
+                                        // supprimer un fichier
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'       => '/supprimer/:pieceJointe/:fichier',
+                                            'constraints' => [
+                                                'pieceJointe' => '[0-9]*',
+                                                'fichier'     => '[0-9]*',
+                                            ],
+                                            'defaults'    => [
+                                                'action' => 'supprimer',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
-                    'configuration' => [
+                    'configuration'                     => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/configuration',
@@ -231,7 +226,7 @@ return [
                 'pages' => [
                     'intervenant' => [
                         'pages' => [
-                            'dossier'                   => [
+                            'dossier'               => [
                                 'label'        => "Données personnelles",
                                 'title'        => "Saisir les données personnelles d'un intervenant vacataire",
                                 'route'        => 'intervenant/saisir-dossier',
@@ -241,7 +236,7 @@ return [
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'modifier'),
                             ],
-                            'pieces-jointes-saisie'     => [
+                            'pieces-jointes-saisie' => [
                                 'label'        => "Pièces justificatives",
                                 'title'        => "Pièces justificatives du dossier de l'intervenant",
                                 'route'        => 'piece-jointe/intervenant',
@@ -251,7 +246,7 @@ return [
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'index'),
                             ],
-                            'validation-dossier'        => [
+                            'validation-dossier'    => [
                                 'label'        => "Validation des données personnelles",
                                 'title'        => "Validation des données personnelles de l'intervenant",
                                 'route'        => 'intervenant/validation-dossier',
@@ -263,22 +258,22 @@ return [
                             ],
                         ],
                     ],
-                    'gestion' => [
+                    'gestion'     => [
                         'pages' => [
-                            'dossier-pj'     => [
+                            'dossier-pj' => [
                                 'border-color' => '#EB4995',
                                 'icon'         => 'glyphicon glyphicon-file',
                                 'label'        => "Dossier et pièces justificatives",
                                 'title'        => "Dossier et pièces justificatives",
                                 'route'        => 'piece-jointe/configuration',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'configuration'),
-                                'pages' => [
-                                    'type-piece-jointe-statut'     => [
-                                        'label'        => "Pièces justificatives attendues par statut d'intervenant",
-                                        'title'        => "Permet de personnaliser les mièces justificatives à demander en fonction du statut des intervenants",
-                                        'route'        => 'piece-jointe/type-piece-jointe-statut',
-                                        'withtarget'   => true,
-                                        'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
+                                'pages'        => [
+                                    'type-piece-jointe-statut' => [
+                                        'label'      => "Pièces justificatives attendues par statut d'intervenant",
+                                        'title'      => "Permet de personnaliser les mièces justificatives à demander en fonction du statut des intervenants",
+                                        'route'      => 'piece-jointe/type-piece-jointe-statut',
+                                        'withtarget' => true,
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'type-piece-jointe-statut'),
                                     ],
                                 ],
                             ],
@@ -290,11 +285,18 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            PrivilegeController::class      => [
+            PrivilegeController::class => [
+                /* Dossier */
                 [
                     'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['voir', 'modifier'],
-                    'privileges' => [Privileges::DOSSIER_VISUALISATION, Privileges::DOSSIER_EDITION],
+                    'action'     => ['voir'],
+                    'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                    'assertion'  => 'assertionDossierPieces',
+                ],
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['modifier'],
+                    'privileges' => [Privileges::DOSSIER_EDITION],
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
@@ -303,6 +305,8 @@ return [
                     'privileges' => [Privileges::DOSSIER_VALIDATION],
                     'assertion'  => 'assertionDossierPieces',
                 ],
+
+                /* Interface de configuration des PJ */
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-statut'],
@@ -326,121 +330,58 @@ return [
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                     ],
                 ],
-            ],
-            'BjyAuthorize\Guard\Controller' => [
+
+                /* Pièces jointes */
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['index', 'ajouter', 'supprimer', 'voir', 'voir-type', 'lister', 'telecharger', 'status'],
-                    'roles'      => [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                    'assertion'  => 'PieceJointeAssertion',
+                    'action'     => ['index'],
+                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_VISUALISATION],
+                    'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['valider', 'devalider'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                    'assertion'  => 'PieceJointeAssertion',
+                    'action'     => ['infos', 'lister', 'telecharger', 'validation'],
+                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_VISUALISATION],
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['televerser', 'supprimer'],
+                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_EDITION],
+                    'assertion'  => 'assertionDossierPieces',
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['valider'],
+                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_VALIDATION],
+                    'assertion'  => 'assertionDossierPieces',
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['devalider'],
+                    'privileges' => [Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION],
+                    'assertion'  => 'assertionDossierPieces',
                 ],
             ],
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
                 Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO => [],
-                PieceJointe::RESOURCE_ID => [],
-                Fichier::RESOURCE_ID     => [],
+                'PieceJointe'                                    => [],
+                Fichier::RESOURCE_ID                             => [],
             ],
         ],
         'rule_providers'     => [
             PrivilegeRuleProvider::class => [
-
-            ],
-            'BjyAuthorize\Provider\Rule\Config' => [
                 'allow' => [
                     [
-                        [
-                            R_INTERVENANT,
-                            R_COMPOSANTE,
-                            R_ADMINISTRATEUR,
+                        'privileges' => [
+                            Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
+                            Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION,
+                            Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
+                            Privileges::PIECE_JUSTIFICATIVE_EDITION,
                         ],
-                        [
-                            Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO,
-                        ],
-                        [
-                            OldAbstractAssertion::PRIVILEGE_READ,
-                        ],
-                        'ValidationAssertion',
-                    ],
-                    // ------------- Validation DONNEES PERSO -------------
-                    [
-                        [
-                            R_COMPOSANTE,
-                            R_ADMINISTRATEUR,
-                        ],
-                        [
-                            Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO,
-                        ],
-                        [
-                            OldAbstractAssertion::PRIVILEGE_CREATE,
-                            OldAbstractAssertion::PRIVILEGE_DELETE,
-                        ],
-                        'ValidationAssertion',
-                    ],
-
-                    [
-                        [
-                            R_INTERVENANT_EXTERIEUR,
-                            R_COMPOSANTE,
-                            R_ADMINISTRATEUR,
-                        ],
-                        PieceJointe::RESOURCE_ID,
-                        [
-                            PieceJointeAssertion::PRIVILEGE_CREATE,
-                            PieceJointeAssertion::PRIVILEGE_READ,
-                            PieceJointeAssertion::PRIVILEGE_DELETE,
-                            PieceJointeAssertion::PRIVILEGE_CREATE_FICHIER,
-                        ],
-                        'PieceJointeAssertion',
-                    ],
-                    [
-                        [
-                            R_COMPOSANTE,
-                            R_ADMINISTRATEUR,
-                        ],
-                        PieceJointe::RESOURCE_ID,
-                        [
-                            PieceJointeAssertion::PRIVILEGE_VALIDER,
-                            PieceJointeAssertion::PRIVILEGE_DEVALIDER,
-                        ],
-                        'PieceJointeAssertion',
-                    ],
-                    /**
-                     * Fichiers déposés
-                     */
-                    [
-                        [
-                            R_INTERVENANT_EXTERIEUR,
-                            R_COMPOSANTE,
-                            R_ADMINISTRATEUR,
-                        ],
-                        Fichier::RESOURCE_ID,
-                        [
-                            FichierAssertion::PRIVILEGE_CREATE,
-                            FichierAssertion::PRIVILEGE_READ,
-                            FichierAssertion::PRIVILEGE_DELETE,
-                            FichierAssertion::PRIVILEGE_TELECHARGER,
-                        ],
-                        'FichierAssertion',
-                    ],
-                    [
-                        [
-                            R_COMPOSANTE,
-                            R_ADMINISTRATEUR,
-                        ],
-                        Fichier::RESOURCE_ID,
-                        [
-                            FichierAssertion::PRIVILEGE_VALIDER,
-                            FichierAssertion::PRIVILEGE_DEVALIDER,
-                        ],
-                        'FichierAssertion',
+                        'resources'  => ['PieceJointe', 'Intervenant'],
+                        'assertion'  => 'assertionDossierPieces',
                     ],
                 ],
             ],
@@ -454,12 +395,10 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationDossier'    => Service\Dossier::class,
-            'PossedeDossierRule'    => Rule\Intervenant\PossedeDossierRule::class,
-            'PeutSaisirDossierRule' => Rule\Intervenant\PeutSaisirDossierRule::class,
-
+            'applicationTblPieceJointe'        => Service\TblPieceJointeService::class,
+            'ApplicationDossier'               => Service\Dossier::class,
+            'PossedeDossierRule'               => Rule\Intervenant\PossedeDossierRule::class,
             'ApplicationPieceJointe'           => Service\PieceJointe::class,
-            'ApplicationPieceJointeProcess'    => Service\Process\PieceJointeProcess::class,
             'ApplicationTypePieceJointe'       => Service\TypePieceJointe::class,
             'ApplicationTypePieceJointeStatut' => Service\TypePieceJointeStatut::class,
             'PeutSaisirPieceJointeRule'        => Rule\Intervenant\PeutSaisirPieceJointeRule::class,

@@ -1,14 +1,14 @@
 DECLARE
-  intervenant_id NUMERIC DEFAULT 35416;
+  intervenant_id NUMERIC DEFAULT 35533;
 BEGIN
   DBMS_OUTPUT.ENABLE(1000000); 
   ose_test.debug_enabled := false;
 
 --ose_pj.update_intervenant(intervenant_id);
 --OSE_FORMULE.CALCULER(intervenant_id);
-OSE_WORKFLOW.CALCULER(intervenant_id);
+--OSE_WORKFLOW.CALCULER(intervenant_id);
 --OSE_WORKFLOW.CALCULER_TOUT(null,true);
-
+Ose_Piece_Jointe_Demande.calculer_tout;
 END;
 /
 

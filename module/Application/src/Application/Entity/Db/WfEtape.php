@@ -21,6 +21,9 @@ class WfEtape
     const CODE_SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
     const CODE_REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
 
+    const CURRENT                             = 'current-etape';
+    const NEXT                                = 'next-etape';
+
     /**
      * @var integer
      */

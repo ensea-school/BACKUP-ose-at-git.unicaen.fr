@@ -1,4 +1,9 @@
-<?php $this->headTitle()->append($this->intervenant->getNomUsuel())->append("Données personnelles") ?>
+<?php
+
+/* @var $this \Application\View\Renderer\PhpRenderer */
+
+$this->headTitle()->append($this->intervenant->getNomUsuel())->append("Données personnelles");
+?>
 
 <h1 class="page-header">Données personnelles <small><?php echo $this->intervenant ?></small></h1>
 
@@ -30,8 +35,9 @@ if ($this->validation) {
  */
 $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_IMPORTANTES);
 $this->messenger()->addMessage($msg, 'warning');
-?>
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
+echo $this->messenger()->addMessagesFromFlashMessenger();
 
-<?php echo $this->partial('application/dossier/partial/form') ?>
+echo $this->partial('application/dossier/partial/form');
+
+echo $this->feuillederoute($intervenant)->renderNextBtn(\Application\Entity\Db\WfEtape::CODE_DONNEES_PERSO_SAISIE);

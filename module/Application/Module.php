@@ -9,8 +9,6 @@
 
 namespace Application;
 
-use Application\Service\Context;
-use Doctrine\ORM\EntityManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;

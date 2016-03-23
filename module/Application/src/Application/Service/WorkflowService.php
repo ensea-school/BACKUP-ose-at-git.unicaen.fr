@@ -26,16 +26,17 @@ class WorkflowService extends AbstractService
 
 
 
-    /**
-     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
-     * @param IntervenantEntity|null                          $intervenant
-     * @param StructureEntity|null                            $structure
-     *
-     * @return WorkflowEtape
-     */
-    public function getEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    protected function prepareEtapeParams($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
     {
         switch(true){
+            case $etape === WfEtape::CURRENT || empty($etape):
+                $etape = $this->getEtapeCourante($intervenant, $structure);
+                $etapeCode = $etape->getEtape()->getCode();
+            break;
+            case $etape === WfEtape::NEXT:
+                $etape = $this->getNextEtape($this->getEtapeCourante($intervenant, $structure), $intervenant, $structure);
+                $etapeCode = $etape->getEtape()->getCode();
+            break;
             case $etape instanceof WfEtape:
                 $etapeCode = $etape->getCode();
             break;
@@ -60,10 +61,84 @@ class WorkflowService extends AbstractService
                 $etapeCode = (string)$etape;
         }
 
+        return [
+            $etapeCode,
+            $intervenant,
+            $structure
+        ];
+    }
+
+
+
+    /**
+     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param IntervenantEntity|null                          $intervenant
+     * @param StructureEntity|null                            $structure
+     *
+     * @return WorkflowEtape
+     */
+    public function getEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    {
+        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
         foreach ($fdr as $etape) {
             if ($etape->getEtape()->getCode() == $etapeCode) {
                 return $etape;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    /**
+     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param IntervenantEntity|null                          $intervenant
+     * @param StructureEntity|null                            $structure
+     *
+     * @return WorkflowEtape
+     */
+    public function getNextEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    {
+        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+
+        $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
+        $isCurrent = false;
+        foreach ($fdr as $etape) {
+            if ($isCurrent){
+                return $etape;
+            }
+            if ($etape->getEtape()->getCode() == $etapeCode) {
+                $isCurrent = true;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    /**
+     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param IntervenantEntity|null                          $intervenant
+     * @param StructureEntity|null                            $structure
+     *
+     * @return WorkflowEtape
+     */
+    public function getNextAccessibleEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    {
+        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+
+        $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
+        $isCurrent = false;
+        foreach ($fdr as $etape) {
+            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl()){
+                return $etape;
+            }
+            if ($etape->getEtape()->getCode() == $etapeCode) {
+                $isCurrent = true;
             }
         }
 
@@ -102,7 +177,7 @@ class WorkflowService extends AbstractService
     {
         if (!$intervenant || !$structure) {
             /* Filtrage en fonction du contexte */
-            $role = $this->getServiceContext()->getSelectedIdentityRole();
+            if (! $role = $this->getServiceContext()->getSelectedIdentityRole()) return null;
             if (!$intervenant && $role->getIntervenant()) {
                 $intervenant = $role->getIntervenant();
             }
@@ -208,11 +283,13 @@ class WorkflowService extends AbstractService
 
         $dql = "
         SELECT
-          we, tw, str
+          we, tw, str, dblo, dep
         FROM
           Application\Entity\Db\TblWorkflow tw
           JOIN tw.etape we
           LEFT JOIN tw.structure str
+          LEFT JOIN tw.etapeDeps dblo
+          LEFT JOIN dblo.wfEtapeDep dep
         WHERE
           tw.intervenant = :intervenant
           " . ($structure ? "AND (tw.structure IS NULL OR tw.structure = :structure)" : '') . "

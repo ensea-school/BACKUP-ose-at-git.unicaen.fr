@@ -7,10 +7,6 @@ namespace Application\Entity\Db;
  */
 class TblPieceJointeDemande
 {
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
 
     /**
      * @var integer
@@ -28,34 +24,17 @@ class TblPieceJointeDemande
     private $intervenant;
 
     /**
+     * @var float
+     */
+    private $heuresPourSeuil;
+    
+    /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
 
-
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblPieceJointeDemande
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
-
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
+    
+ 
 
     /**
      * Get id
@@ -67,19 +46,6 @@ class TblPieceJointeDemande
         return $this->id;
     }
 
-    /**
-     * Set typePieceJointe
-     *
-     * @param \Application\Entity\Db\TypePieceJointe $typePieceJointe
-     *
-     * @return TblPieceJointeDemande
-     */
-    public function setTypePieceJointe(\Application\Entity\Db\TypePieceJointe $typePieceJointe = null)
-    {
-        $this->typePieceJointe = $typePieceJointe;
-
-        return $this;
-    }
 
     /**
      * Get typePieceJointe
@@ -91,19 +57,6 @@ class TblPieceJointeDemande
         return $this->typePieceJointe;
     }
 
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblPieceJointeDemande
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
 
     /**
      * Get intervenant
@@ -115,19 +68,17 @@ class TblPieceJointeDemande
         return $this->intervenant;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblPieceJointeDemande
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
+
+    /**
+     * @return float
+     */
+    public function getHeuresPourSeuil()
+    {
+        return $this->heuresPourSeuil;
     }
+
+    
 
     /**
      * Get annee

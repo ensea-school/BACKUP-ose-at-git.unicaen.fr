@@ -364,7 +364,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'service'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-prevu'   => [
                                 'label'        => "Validation du référentiel prévisionnel",
@@ -375,7 +375,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'referentiel'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'agrement-conseil-restreint'     => [
                                 // coquille vide qui réserve l'emplacement du menu
@@ -413,7 +413,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'service'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-realise' => [
                                 'label'        => "Validation du référentiel réalisé",
@@ -424,7 +424,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'referentiel'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'demande-mise-en-paiement'       => [
                                 'label'        => "Demande de mise en paiement",
@@ -435,7 +435,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
-                                'visible'      => 'IntervenantNavigationPageVisibility',
+                                //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                         ],
                     ],

@@ -162,7 +162,7 @@ $main = [
             'ApplicationRole'                     => Service\Role::class,
             'ApplicationPays'                     => Service\Pays::class,
             'ApplicationDepartement'              => Service\Departement::class,
-            'IntervenantNavigationPageVisibility' => Service\IntervenantNavigationPageVisibility::class,
+            'applicationFichier'                  => Service\FichierService::class,
             'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class,
         ],
         'factories'          => [
@@ -230,6 +230,7 @@ $main = [
             13 => 'js/paiement.js',
             14 => 'js/offre-formation.js',
             15 => 'js/droits.js',
+            16 => 'js/piece-jointe.js',
             50 => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
         ],
         'stylesheets'    => [

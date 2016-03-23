@@ -5,11 +5,10 @@ namespace Application\Controller;
 use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
@@ -18,9 +17,9 @@ use Application\Service\Traits\TypeHeuresAwareTrait;
  * Description of IntervenantController
  *
  */
-class IntervenantController extends AbstractController implements WorkflowIntervenantAwareInterface
+class IntervenantController extends AbstractController
 {
-    use WorkflowIntervenantAwareTrait;
+    use WorkflowServiceAwareTrait;
     use ContextAwareTrait;
     use IntervenantAwareTrait;
     use TypeHeuresAwareTrait;
@@ -37,14 +36,10 @@ class IntervenantController extends AbstractController implements WorkflowInterv
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($intervenant = $role->getIntervenant()) {
-            // redirection selon le workflow
-            $wf  = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
-            $url = $wf->getCurrentStepUrl();
-            if (!$url) {
-                $url = $wf->getStepUrl($wf->getLastStep());
+            $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
+            if ($etapeCourante && $url = $etapeCourante->getUrl()){
+                return $this->redirect()->toUrl($url);
             }
-
-            return $this->redirect()->toUrl($url);
         }
 
         return $this->redirect()->toRoute('intervenant/rechercher');

@@ -1,6 +1,12 @@
 <?php
 
-/* @var $typeVolumeHoraire Application\Entity\Db\TypeVolumeHoraire */
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $typeVolumeHoraire Application\Entity\Db\TypeVolumeHoraire
+ * @var $role \Application\Acl\Role
+ */
+
+use Application\Entity\Db\WfEtape;
 
 $titles = [
   'PREVU'  => 'Enseignements',
@@ -95,14 +101,9 @@ if ($intervenant) $serviceListe->showPrevuToPrevu($intervenant);
     
     <?php echo $this->formuleTotauxHetd; ?>
 
-    <?php if ($role instanceof \Application\Acl\IntervenantRole && $typeVolumeHoraire->getCode() === 'PREVU'): ?>
+    <?php if ($intervenant && $typeVolumeHoraire->getCode() === 'PREVU'): ?>
         <hr />
-        <?php $url = $this->url('workflow/nav-next',
-                ['intervenant' => $role->getIntervenant()->getSourceCode()],
-                ['query' => ['route' => 'intervenant/services', 'prepend' => $prepend = "J'ai terminé ma saisie, "]]) ?>
-        <div id="wf-nav-next" data-url="<?php echo $url ?>">
-            <?php echo $this->workflow($role->getIntervenant(), $role)->navNext($prepend) ?>
-        </div>
+        <?php echo $this->feuillederoute($intervenant)->renderNextBtn(WfEtape::CODE_SERVICE_SAISIE); ?>
     <?php endif; ?>
 
 <?php else:?>

@@ -3,9 +3,10 @@
 namespace Application\View\Helper\Intervenant;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\WfDepBloquante;
-use Application\Entity\Db\WfEtapeDep;
+use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -20,17 +21,20 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface{
+class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+{
     use ServiceLocatorAwareTrait;
     use WorkflowServiceAwareTrait;
     use IntervenantAwareTrait;
     use ContextAwareTrait;
 
+
+
     /**
      *
      * @return self
      */
-    public function __invoke( Intervenant $intervenant=null )
+    public function __invoke(Intervenant $intervenant = null)
     {
         if ($intervenant) $this->setIntervenant($intervenant);
 
@@ -61,24 +65,33 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         $feuilleDeRoute = $this->getServiceWorkflow()->getFeuilleDeRoute($this->getIntervenant());
 
         $res = '';
-        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+        $tag = $this->getView()->tag();
+        /* @var $tag TagViewHelper */
 
         $res .= $tag('div', ['class' => 'feuille-de-route row']);
         $res .= $tag('div', ['class' => 'col-md-9']);
-        $res .= $tag('ul', ['class' => 'list-group']);
-        $index = 0;
-        $isAfterCourante = false;
 
-        foreach ($feuilleDeRoute as $etape){
-            $index++;
+        if (!empty($feuilleDeRoute)) {
+            $res .= $tag('ul', ['class' => 'list-group']);
+            $index           = 0;
+            $isAfterCourante = false;
 
-            $res .= $this->renderEtape( $etape, $index, $isAfterCourante );
+            foreach ($feuilleDeRoute as $etape) {
+                $index++;
 
-            if ($etape->isCourante()){
-                $isAfterCourante = true;
+                $res .= $this->renderEtape($etape, $index, $isAfterCourante);
+
+                if ($etape->isCourante()) {
+                    $isAfterCourante = true;
+                }
             }
+            $res .= $tag('ul')->close();
+        } else {
+            $res .= $tag('div', ['class' => 'alert alert-info'])->html(
+                'La feuille de route ne comporte aucune étape pour ' . $this->getIntervenant()
+            );
         }
-        $res .= $tag('ul')->close();
+
         $res .= $tag('div')->close();
         $res .= $tag('div')->close();
 
@@ -87,47 +100,39 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
 
 
-    public function renderEtape( WorkflowEtape $etape, $index, $isAfterCourante )
+    protected function renderEtape(WorkflowEtape $etape, $index, $isAfterCourante)
     {
         $res = '';
-        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+        $tag = $this->getView()->tag();
+        /* @var $tag TagViewHelper */
 
         $attrs = ['class' => 'list-group-item'];
-        if (!$etape->isAtteignable() && $isAfterCourante){
+        if (!$etape->isAtteignable() && $isAfterCourante) {
             $attrs['class'] .= ' after-courante';
 
-            $naDesc = '';
-            foreach( $etape->getEtapes() as $sEtape) {
-                foreach ($sEtape->getEtapeDeps() as $ed) {
-                    /* @var $ed WfDepBloquante */
-                    $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonAtteignable() . "\n";
-                }
-                break; // affichage une seule fois des msg pour les étapes se déclinant par composante...
-            }
-
-            if ($naDesc){
-                $attrs['title'] = "Non atteignable : \n".$naDesc;
+            if ($naDesc = $this->getWhyNonAtteignable($etape)) {
+                $attrs['title'] = $naDesc;
             }
         }
 
-        if ($etape->isCourante()){
+        if ($etape->isCourante()) {
             $attrs['class'] .= ' list-group-item-warning';
         }
 
-        if (count($etape->getEtapes()) > 1){
+        if (count($etape->getEtapes()) > 1) {
             $collapseId = 'collapse-' . $this->getIntervenant()->getId() . '-' . $etape->getEtape()->getId();
 
             $detailsLink = $tag('a', ['data-toggle' => 'collapse', 'href' => '#' . $collapseId]);
-            $detailsRes = $this->renderDetails( $etape, $collapseId );
-        }else{
+            $detailsRes  = $this->renderDetails($etape, $collapseId);
+        } else {
             $detailsLink = null;
-            $detailsRes = '';
+            $detailsRes  = '';
         }
 
         $res .= $tag('li', $attrs);
         $res .= $tag('span', ['class' => 'label label-primary'])->text($index);
 
-        $res .= $this->renderEtapeLink($etape);
+        $res .= $this->renderEtapeLink($etape, [], true);
 
         $res .= $this->renderEtapeIndicateur($etape->getFranchie(), $detailsLink);
         $res .= $detailsRes;
@@ -139,19 +144,38 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
 
 
-    public function renderEtapeLink( WorkflowEtape $etape )
+    public function renderEtapeLink($etape, array $attributes = [], $forceDisplay = false)
     {
+        if ($etape == null || $etape === WfEtape::CURRENT) {
+            $etape = $this->getServiceWorkflow()->getEtapeCourante($this->getIntervenant());
+        } elseif ($etape === WfEtape::NEXT) {
+            $etape = $this->getServiceWorkflow()->getNextEtape(null, $this->getIntervenant());
+        }
         $res = '';
-        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+        $tag = $this->getView()->tag();
+        /* @var $tag TagViewHelper */
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        if ($etape->getUrl() && $etape->isAtteignable()){
-            $res .= $tag('a', [
-                'title' => 'Cliquez sur ce lien pour accéder à la page correspondant à cette étape',
-                'href'  => $etape->getUrl(),
-            ])->text( $etape->getEtape()->getLibelle($role) );
-        }else{
-            $res .= $etape->getEtape()->getLibelle($role);
+        if ($etape->getUrl() && $etape->isAtteignable()) {
+
+            $resource = \Application\Util::routeToActionResource($etape->getEtape()->getRoute());
+            if ($this->getView()->isAllowed($resource)) {
+                if (!isset($attributes['title'])) {
+                    $attributes['title'] = 'Cliquez sur ce lien pour accéder à la page correspondant à cette étape';
+                }
+                $attributes['href'] = $etape->getUrl();
+                $res .= $tag('a', $attributes)->text($etape->getEtape()->getLibelle($role));
+            } else {
+                $attrs = ['title' => 'Vous n\'avez pas les droits requis pour accéder à cette étape.'];
+                $res .= $tag('span', $attrs)->text($etape->getEtape()->getLibelle($role));
+            }
+        } elseif ($forceDisplay) {
+            $attrs = [];
+            $na    = $this->getWhyNonAtteignable($etape);
+            if ($na) {
+                $attrs['title'] = $na;
+            }
+            $res .= $tag('span', $attrs)->text($etape->getEtape()->getLibelle($role));
         }
 
         return $res;
@@ -159,40 +183,70 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
 
 
-    public function renderEtapeIndicateur( $franchissement, $detailsLink=null )
+    /**
+     * @param $etape
+     * @param $intervenant
+     */
+    public function renderNextBtn($etape)
+    {
+        $nextEtape = $this->getServiceWorkflow()->getNextAccessibleEtape($etape, $this->getIntervenant());
+
+        if ($nextEtape) {
+            return $this->renderEtapeLink($nextEtape, ['class' => 'btn btn-primary']);
+        } else {
+            return '';
+        }
+    }
+
+
+
+    public function renderCurrentBtn()
+    {
+        $etape = $this->getServiceWorkflow()->getEtapeCourante($this->getIntervenant());
+
+        if ($etape) {
+            return $this->renderEtapeLink($etape, ['class' => 'btn btn-primary']);
+        } else {
+            return '';
+        }
+    }
+
+
+
+    protected function renderEtapeIndicateur($franchissement, $detailsLink = null)
     {
         $res = '';
-        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+        $tag = $this->getView()->tag();
+        /* @var $tag TagViewHelper */
 
-        switch(true){
+        switch (true) {
             case $franchissement == 1:
-                $attrs = [
+                $attrs   = [
                     'title' => 'Fait',
-                    'class' => 'text-success pull-right'
+                    'class' => 'text-success pull-right',
                 ];
                 $content = $tag('span', ['class' => 'text-success glyphicon glyphicon-ok']);
             break;
             case $franchissement == 0:
-                $attrs = [
+                $attrs   = [
                     'title' => 'À faire',
-                    'class' => 'text-danger pull-right'
+                    'class' => 'text-danger pull-right',
                 ];
                 $content = $tag('span', ['class' => 'text-danger glyphicon glyphicon-remove']);
             break;
             default:
-                $attrs = [
+                $attrs   = [
                     'title' => 'En cours',
-                    'class' => 'text-warning pull-right'
+                    'class' => 'text-warning pull-right',
                 ];
                 $content = Util::formattedPourcentage($franchissement, true);
         }
 
-        if ($detailsLink instanceof TagViewHelper){
+        if ($detailsLink instanceof TagViewHelper) {
             $content = $detailsLink->html($content);
             $attrs['title'] .= ' (cliquez pour afficher le détail par composante)';
         }
 
-        //$res .= $tag('span', $attrs)->html($content);
         $res .= $tag('span', $attrs)->html($content);
 
         return $res;
@@ -200,10 +254,11 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
 
 
-    public function renderDetails( WorkflowEtape $etape, $collapseId )
+    public function renderDetails(WorkflowEtape $etape, $collapseId)
     {
         $res = '';
-        $tag = $this->getView()->tag(); /* @var $tag TagViewHelper */
+        $tag = $this->getView()->tag();
+        /* @var $tag TagViewHelper */
 
         $res .= $tag('div', ['class' => 'row collapse', 'id' => $collapseId]);
         $res .= $tag('div', ['class' => 'col-md-4 col-md-offset-8']);
@@ -211,18 +266,10 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         foreach ($etape->getEtapes() as $sEtape) {
             $attrs = ['class' => 'list-group-item'];
 
-            if (!$sEtape->getAtteignable()){
-                $naDesc = '';
-                foreach( $sEtape->getEtapeDeps() as $ed ){
-                    /* @var $ed WfDepBloquante */
-                    $naDesc .= ' - '.$ed->getWfEtapeDep()->getEtapePrec()->getDescNonAtteignable()."\n";
+            if (!$sEtape->getAtteignable()) {
+                if ($naDesc = $this->getWhyNonAtteignable($sEtape)) {
+                    $attrs['title'] = $naDesc;
                 }
-
-                if ($naDesc){
-                    $attrs['title'] = "Non atteignable : \n".$naDesc;
-                }
-
-
                 $attrs['class'] .= ' after-courante';
             }
             $res .= $tag('li', $attrs);
@@ -237,5 +284,33 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         $res .= $tag('div')->close();
 
         return $res;
+    }
+
+
+
+    protected function getWhyNonAtteignable($etape)
+    {
+        if ($etape instanceof TblWorkflow) {
+            $etapes = [$etape];
+        } elseif ($etape instanceof WorkflowEtape) {
+            $etapes = $etape->getEtapes();
+        } else {
+            throw new \LogicException('La classe de l\'étape fournie ne peut pas être prise en compte');
+        }
+
+        $naDesc = '';
+        foreach ($etapes as $etp) {
+            foreach ($etp->getEtapeDeps() as $ed) {
+                /* @var $ed WfDepBloquante */
+                $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonAtteignable() . "\n";
+            }
+            break; // pour ne pas répéter!!!
+        }
+
+        if ($naDesc) {
+            $naDesc = "Non atteignable : \n" . $naDesc;
+        }
+
+        return $naDesc;
     }
 }

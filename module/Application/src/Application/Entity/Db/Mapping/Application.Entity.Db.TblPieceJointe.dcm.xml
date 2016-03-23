@@ -15,24 +15,20 @@
     </id>
     <field name="demandee" type="boolean" column="DEMANDEE" nullable="false">
       <options>
-        <option name="default">0</option>
+        <option name="default">false</option>
       </options>
     </field>
     <field name="fournie" type="boolean" column="FOURNIE" nullable="false">
       <options>
-        <option name="default">0</option>
-      </options>
-    </field>
-    <field name="toDelete" type="boolean" column="TO_DELETE" nullable="false">
-      <options>
-        <option name="default">0</option>
+        <option name="default">false</option>
       </options>
     </field>
     <field name="validee" type="boolean" column="VALIDEE" nullable="false">
       <options>
-        <option name="default">0</option>
+        <option name="default">false</option>
       </options>
     </field>
+    <field name="heuresPourSeuil" type="float" column="HEURES_POUR_SEUIL" nullable="false" />
     <many-to-one field="typePieceJointe" target-entity="Application\Entity\Db\TypePieceJointe" fetch="LAZY">
       <join-columns>
         <join-column name="TYPE_PIECE_JOINTE_ID" referenced-column-name="ID"/>

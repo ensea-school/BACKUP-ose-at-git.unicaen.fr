@@ -7,8 +7,8 @@ BEGIN
 --ose_pj.update_intervenant(intervenant_id);
 --OSE_FORMULE.CALCULER(intervenant_id);
 --OSE_WORKFLOW.CALCULER(intervenant_id);
---OSE_WORKFLOW.CALCULER_TOUT(null,true);
-Ose_Piece_Jointe_Demande.calculer_tout;
+OSE_WORKFLOW.CALCULER_TOUT(null,true);
+--OSE_PIECE_JOINTE_FOURNIE.calculer_tout;
 END;
 /
 
@@ -57,5 +57,20 @@ select * from tbl_piece_jointe where intervenant_id = 548;
   
   
   
-  
 
+select 
+  i.id i_id,
+  e.code etape,
+  s.libelle_court structure,
+  w.atteignable,
+  w.objectif,
+  w.realisation
+from 
+  tbl_workflow w
+  join intervenant i on i.id = w.intervenant_id
+  join WF_ETAPE E on e.id = w.etape_id
+  left join structure s on s.id = w.structure_id
+where 
+  intervenant_id = 35533;
+  
+select * from v_workflow_etape_pertinente where intervenant_id = 35533;

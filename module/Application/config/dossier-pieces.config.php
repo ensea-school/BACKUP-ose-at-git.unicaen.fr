@@ -302,7 +302,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Validation',
                     'action'     => ['dossier'],
-                    'privileges' => Privileges::DOSSIER_VALIDATION,
+                    'privileges' => [Privileges::DOSSIER_VALIDATION,Privileges::DOSSIER_DEVALIDATION],
                     'assertion'  => 'assertionDossierPieces',
                 ],
 
@@ -362,9 +362,7 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO => [],
                 'PieceJointe'                                    => [],
-                Fichier::RESOURCE_ID                             => [],
             ],
         ],
         'rule_providers'     => [

@@ -25,7 +25,7 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'dossier' c, 'validation-visualisation' p, 'Validation (visualisation)' l FROM dual
+      SELECT 'piece-justificative' c, 'telechargement' p, 'Téléchargement' l FROM dual
 
 ) t1;
 

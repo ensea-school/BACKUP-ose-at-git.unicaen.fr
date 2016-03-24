@@ -125,23 +125,6 @@ class DependanceForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'obligatoire',
-            'options'    => [
-                'label'              => '<abbr title="L\'étape peut n\'être franchie que si l\'étape qui en dépend a été testée">Obligatoire</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-                'checked_value'      => 'true',
-                'unchecked_value'    => 'false',
-            ],
-            'attributes' => [
-                'title' => "L'étape peut n'être franchie que si l'étape qui en dépend a été testée",
-            ],
-            'type'       => 'Checkbox',
-        ]);
-        
-        $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [
@@ -168,7 +151,6 @@ class DependanceForm extends AbstractForm
             'locale'           => ['required' => true],
             'integrale'        => ['required' => true],
             'partielle'        => ['required' => true],
-            'obligatoire'      => ['required' => true],
         ];
     }
 
@@ -199,7 +181,6 @@ class DependanceFormHydrator implements HydratorInterface
         $object->setLocale($data['locale'] == 'true');
         $object->setIntegrale($data['integrale'] == 'true');
         $object->setPartielle($data['partielle'] == 'true');
-        $object->setObligatoire($data['obligatoire'] == 'true');
 
         return $object;
     }
@@ -220,7 +201,6 @@ class DependanceFormHydrator implements HydratorInterface
             'locale'           => $object->getLocale()      ? 'true' : 'false',
             'integrale'        => $object->getIntegrale()   ? 'true' : 'false',
             'partielle'        => $object->getPartielle()   ? 'true' : 'false',
-            'obligatoire'      => $object->getObligatoire() ? 'true' : 'false',
         ];
 
         return $data;

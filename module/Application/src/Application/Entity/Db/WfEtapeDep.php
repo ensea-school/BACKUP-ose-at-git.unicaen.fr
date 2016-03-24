@@ -25,11 +25,6 @@ class WfEtapeDep
     /**
      * @var boolean
      */
-    private $obligatoire = false;
-
-    /**
-     * @var boolean
-     */
     private $active = true;
 
     /**
@@ -118,30 +113,6 @@ class WfEtapeDep
     public function getPartielle()
     {
         return $this->partielle;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getObligatoire()
-    {
-        return $this->obligatoire;
-    }
-
-
-
-    /**
-     * @param boolean $obligatoire
-     *
-     * @return WfEtapeDep
-     */
-    public function setObligatoire($obligatoire)
-    {
-        $this->obligatoire = $obligatoire;
-
-        return $this;
     }
 
 

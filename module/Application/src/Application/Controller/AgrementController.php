@@ -14,8 +14,6 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\Form\Element\Checkbox;
 use Zend\View\Model\ViewModel;
 use Application\Service\Traits\ContextAwareTrait;
@@ -25,10 +23,9 @@ use Application\Service\Traits\ContextAwareTrait;
  *
  *
  */
-class AgrementController extends AbstractController implements WorkflowIntervenantAwareInterface
+class AgrementController extends AbstractController
 {
     use TblAgrementServiceAwareTrait;
-    use WorkflowIntervenantAwareTrait;
     use AgrementAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;

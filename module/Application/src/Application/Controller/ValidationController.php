@@ -653,28 +653,6 @@ class ValidationController extends AbstractController
     }
 
     /**
-     * @return DossierValidation
-     */
-    protected function getFormDossier(\Application\Entity\Db\Validation $validation)
-    {
-        if (null === $this->formValider) {
-            $this->formValider = new DossierValidation();
-        }
-        
-        $this->formValider->init();
-        
-        if ($validation->getId()) {
-            $this->formValider->get('valide')
-                    ->setValue(true)
-                    ->setLabel("Décochez pour dévalider les données personnelles");
-        }
-        
-        $this->formValider->bind($this->validation);
-        
-        return $this->formValider;
-    }
-
-    /**
      * @return ServiceValidation
      */
     protected function getFormValidationService()

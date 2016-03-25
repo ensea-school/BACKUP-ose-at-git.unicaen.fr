@@ -352,9 +352,6 @@ return [
                             'pieces-jointes-saisie'          => [
                                 // coquille vide qui réserve l'emplacement du menu
                             ],
-                            'validation-dossier'             => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
                             'validation-service-prevu'       => [
                                 'label'        => "Validation des enseignements prévisionnels",
                                 'title'        => "Validation des enseignements prévisionnels de l'intervenant",

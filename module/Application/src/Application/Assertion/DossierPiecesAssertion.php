@@ -35,13 +35,8 @@ class DossierPiecesAssertion extends AbstractAssertion
         switch ($controller) {
             case 'Application\Controller\Dossier':
                 switch ($action) {
-                    case 'voir':
+                    case 'index':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;
-
-                        return $this->assertDossierEdition($intervenant);
-                    break;
-                    case 'modifier':
-                        if (!$this->assertPriv(Privileges::DOSSIER_EDITION)) return false;
 
                         return $this->assertDossierEdition($intervenant);
                     break;
@@ -126,17 +121,6 @@ class DossierPiecesAssertion extends AbstractAssertion
     protected function assertPieceJointeAction(Intervenant $intervenant = null)
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_SAISIE, $intervenant)) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-    protected function assertPieceJointeValidationAction(Intervenant $intervenant = null)
-    {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_PJ_VALIDATION, $intervenant)) {
             return false;
         }
 

@@ -3,11 +3,14 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\StatutIntervenant;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
-use LogicException;
+use Application\Validator\NumeroINSEEValidator;
 use Zend\Form\Element\Csrf;
 use Zend\Form\Form;
-use Zend\Form\FormInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -20,8 +23,16 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use StatutIntervenantAwareTrait;
+    use ContextAwareTrait;
+    use DossierAwareTrait;
+    use ServiceServiceAwareTrait;
 
     protected $dossierFieldset;
+
+    /**
+     * @var boolean
+     */
+    protected $readOnly;
 
 
 
@@ -51,28 +62,66 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
          * Submit
          */
         $this->add([
-            'name'       => 'submit',
+            'name'       => 'enregistrer',
             'type'       => 'Submit',
             'attributes' => [
-                'value' => "Enregistrer",
+                'value' => "J'enregistre",
             ],
         ]);
+
     }
 
 
 
-    /**
-     * Redéfinition pour tester le type d'objet fourni.
-     *
-     * @param $object Intervenant
-     */
-    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
+
+
+
+
+
+    public function personnaliser(Intervenant $intervenant, Intervenant $intervenantAnneePrec = null)
     {
-        if ($object->estPermanent()) {
-            throw new LogicException("Ce formulaire ne peut être bindé qu'à un vacataire.");
+        $dossier         = $intervenant->getDossier();
+        $dossierFieldset = $this->get('dossier');
+        /* @var $dossierFieldset DossierFieldset */
+
+        if ($intervenantAnneePrec) {
+            /**
+             * Si l'intervenant était un vacataire connu l'année précédente, alors
+             * la question "Avez-vous exercé une activité..." est retirée puisque la réponse est forcément OUI.
+             */
+            $dossierFieldset->remove('premierRecrutement');
+        } elseif ($this->getServiceContext()->applicationExists($this->getServiceContext()->getAnneePrecedente())) {
+            /**
+             * Si l'intervenant n'est pas trouvé comme vacataire l'année précédente
+             * malgré que l'application était en service l'année précédente,
+             * alors on ne propose pas le statut "Sans emploi et non étudiant".
+             * En effet, le statut "Sans emploi et non étudiant" n'est pertinent que pour un intervenant
+             * ayant été vacataire l'année précédente (et ayant perdu son activité principale).
+             */
+            $statutSelect = $dossierFieldset->get('statut');
+            /* @var $statut \Application\Form\Intervenant\StatutSelect */
+            $statutSelect->getProxy()->setStatutsToRemove([
+                $this->getServiceStatutIntervenant()->getRepo()->findOneBySourceCode(StatutIntervenant::SS_EMPLOI_NON_ETUD),
+            ]);
         }
 
-        return parent::bind($object, $flags);
+        /**
+         * L'adresse mail perso n'est pas demandée aux BIATSS.
+         */
+        if ($intervenant->getStatut()->estBiatss()) {
+            $dossierFieldset->remove('emailPerso');
+        }
+
+        /**
+         * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.
+         */
+        if ($dossier->getNumeroInsee() && !$dossier->getNumeroInseeEstProvisoire()) {
+            if (NumeroINSEEValidator::hasCodeDepartementEtranger($dossier->getNumeroInsee())) {
+                $dossierFieldset->get('paysNaissance')->setValue(null);
+            }
+        }
+
+        return $this;
     }
 
 
@@ -89,4 +138,72 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
 
         return parent::setData($data);
     }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function isReadOnly()
+    {
+        return $this->readOnly;
+    }
+
+
+
+    /**
+     * @param boolean $readOnly
+     *
+     * @return Dossier
+     */
+    public function setReadOnly($readOnly)
+    {
+        $this->readOnly = $readOnly;
+
+        $roElements = [
+            'statut'                    => 'disabled',
+            'nomUsuel'                  => 'readonly',
+            'nomPatronymique'           => 'readonly',
+            'prenom'                    => 'readonly',
+            'civilite'                  => 'disabled',
+            'dateNaissance'             => 'readonly',
+            'paysNaissance'             => 'disabled',
+            'departementNaissance'      => 'disabled',
+            'villeNaissance'            => 'readonly',
+            'numeroInsee'               => 'readonly',
+            'numeroInseeEstProvisoire'  => 'disabled',
+            'adresse'                   => 'readonly',
+            'email'                     => 'readonly',
+            'emailPerso'                => 'readonly',
+            'telephone'                 => 'readonly',
+            'premierRecrutement'        => 'disabled',
+            'rib/bic'                   => 'readonly',
+            'rib/iban'                  => 'readonly',
+        ];
+
+        foreach( $roElements as $roe => $attr ){
+            $roe = explode('/', $roe);
+            if (2 == count($roe)){
+                list($e, $se) = $roe;
+            }else{
+                $e = $roe[0];
+                $se = null;
+            }
+
+            $element = null;
+            if ($e && $this->dossierFieldset->has($e)){
+                $element = $this->dossierFieldset->get($e);
+                if ($se && $element->has($se)){
+                    $element = $element->get($se);
+                }
+            }
+
+            if ($element){
+                $element->setAttribute($attr, $readOnly);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -34,9 +34,7 @@ $main = [
             'orm_default' => [
                 'string_functions' => [
                     'CONVERT'                             => ORM\Query\Functions\Convert::class,
-                    'CONTAINS'                            => ORM\Query\Functions\Contains::class,
                     'REPLACE'                             => ORM\Query\Functions\Replace::class,
-                    'OSE_DIVERS_STRUCTURE_DANS_STRUCTURE' => ORM\Query\Functions\OseDivers\StructureDansStructure::class,
                     'compriseEntre'                       => ORM\Query\Functions\OseDivers\CompriseEntre::class,
                     'pasHistorise'                        => ORM\Query\Functions\OseDivers\PasHistorise::class,
                 ],
@@ -270,7 +268,6 @@ return array_merge_recursive(
     include 'notification.config.php',
     include 'paiement.config.php',
     include 'log.config.php',
-    include 'message.config.php',
     include 'pilotage.config.php',
     include 'budget.config.php'
 );

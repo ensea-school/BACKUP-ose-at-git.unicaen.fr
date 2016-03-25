@@ -2,6 +2,7 @@ CREATE OR REPLACE TRIGGER T_DOS_INTERVENANT
 AFTER INSERT 
 OR UPDATE OF 
   annee_id,
+  dossier_id,
 	histo_creation,
 	histo_destruction
 OR DELETE ON INTERVENANT

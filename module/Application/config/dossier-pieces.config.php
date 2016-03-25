@@ -2,15 +2,6 @@
 
 namespace Application;
 
-use Application\Assertion\OldAbstractAssertion;
-use Application\Entity\Db\PieceJointe;
-use Application\Assertion\PieceJointeAssertion;
-use Application\Entity\Db\Fichier;
-use Application\Assertion\FichierAssertion;
-use Application\Acl\ComposanteRole;
-use Application\Acl\AdministrateurRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Entity\Db\Validation;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -20,29 +11,37 @@ return [
         'routes' => [
             'intervenant'  => [
                 'child_routes' => [
-                    'saisir-dossier'     => [
+                    'dossier'     => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/saisir-dossier',
+                            'route'       => '/:intervenant/dossier',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'controller' => 'Dossier',
-                                'action'     => 'modifier',
+                                'action'     => 'index',
                             ],
                         ],
-                    ],
-                    'validation-dossier' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/validation/dossier',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
+                        'may_terminate' => true,
+                        'child_routes'  => [
+                            'valider'    => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'       => '/valider',
+                                    'defaults'    => [
+                                        'action' => 'valider',
+                                    ],
+                                ],
                             ],
-                            'defaults'    => [
-                                'controller' => 'Validation',
-                                'action'     => 'dossier',
+                            'devalider'  => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'       => '/devalider',
+                                    'defaults'    => [
+                                        'action' => 'devalider',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -229,12 +228,12 @@ return [
                             'dossier'               => [
                                 'label'        => "Données personnelles",
                                 'title'        => "Saisir les données personnelles d'un intervenant vacataire",
-                                'route'        => 'intervenant/saisir-dossier',
+                                'route'        => 'intervenant/dossier',
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'modifier'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'index'),
                             ],
                             'pieces-jointes-saisie' => [
                                 'label'        => "Pièces justificatives",
@@ -245,16 +244,6 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'index'),
-                            ],
-                            'validation-dossier'    => [
-                                'label'        => "Validation des données personnelles",
-                                'title'        => "Validation des données personnelles de l'intervenant",
-                                'route'        => 'intervenant/validation-dossier',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'dossier'),
                             ],
                         ],
                     ],
@@ -289,22 +278,21 @@ return [
                 /* Dossier */
                 [
                     'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['voir'],
-                    'privileges' => Privileges::DOSSIER_VISUALISATION,
+                    'action'     => ['index'],
+                    'privileges' => [Privileges::DOSSIER_VISUALISATION],
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
                     'controller' => 'Application\Controller\Dossier',
-                    'action'     => ['modifier'],
-                    'privileges' => Privileges::DOSSIER_EDITION,
-                    'assertion'  => 'assertionDossierPieces',
+                    'action'     => ['valider'],
+                    'privileges' => [Privileges::DOSSIER_VALIDATION],
                 ],
                 [
-                    'controller' => 'Application\Controller\Validation',
-                    'action'     => ['dossier'],
-                    'privileges' => [Privileges::DOSSIER_VALIDATION,Privileges::DOSSIER_DEVALIDATION],
-                    'assertion'  => 'assertionDossierPieces',
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['devalider'],
+                    'privileges' => [Privileges::DOSSIER_DEVALIDATION],
                 ],
+
 
                 /* Interface de configuration des PJ */
                 [
@@ -396,8 +384,6 @@ return [
             'ApplicationPieceJointe'           => Service\PieceJointe::class,
             'ApplicationTypePieceJointe'       => Service\TypePieceJointe::class,
             'ApplicationTypePieceJointeStatut' => Service\TypePieceJointeStatut::class,
-            'PeutSaisirPieceJointeRule'        => Rule\Intervenant\PeutSaisirPieceJointeRule::class,
-            'PieceJointeAssertion'             => Assertion\PieceJointeAssertion::class,
             'FichierAssertion'                 => Assertion\FichierAssertion::class,
             'assertionDossierPieces'           => Assertion\DossierPiecesAssertion::class,
         ],

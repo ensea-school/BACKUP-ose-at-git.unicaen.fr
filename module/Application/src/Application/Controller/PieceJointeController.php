@@ -35,7 +35,6 @@ class PieceJointeController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\PieceJointe::class,
-            \Application\Entity\Db\TypePieceJointe::class,
             \Application\Entity\Db\Fichier::class,
             \Application\Entity\Db\Validation::class,
         ]);

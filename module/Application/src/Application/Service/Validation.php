@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantRole;
+use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
@@ -47,22 +47,22 @@ class Validation extends AbstractEntityService
     {
         return 'v';
     }
-    
-    /**
-     * Enregistre une nouvelle validation de données personnelles.
-     * 
-     * NB: tout le travail est déjà fait via un formulaire en fait! 
-     * Cette méthode existe surtout pour déclencher l'événement de workflow.
-     * 
-     * @param ValidationEntity $validation
-     * @return void
-     */
-    public function enregistrerValidationDossier(ValidationEntity $validation)
+
+
+
+    public function validerDossier( Dossier $dossier )
     {
-        $this->getEntityManager()->persist($validation);
-        $this->getEntityManager()->flush();
+        $typeDonneesPerso = $this->getServiceTypeValidation()->getByCode(TypeValidationEntity::CODE_DONNEES_PERSO);
+
+        $validation = $this->newEntity();
+        $validation->setIntervenant($dossier->getIntervenant());
+        $validation->setTypeValidation( $typeDonneesPerso );
+        $validation->setStructure($dossier->getIntervenant()->getStructure());
+        return $this->save($validation);
     }
-    
+
+
+
     /**
      * Enregistre une nouvelle validation de services.
      * 
@@ -428,7 +428,7 @@ class Validation extends AbstractEntityService
         $rule->setTypeValidation($this->normalizeTypeValidation($type));
         if (!$rule->execute()) {
             $message = "";
-            if ($role instanceof IntervenantRole) {
+            if ($role->getIntervenant()) {
                 $message = "Vous ne pouvez pas valider. ";
             }
             elseif ($role instanceof ComposanteRole) {

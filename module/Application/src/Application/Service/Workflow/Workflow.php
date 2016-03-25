@@ -124,8 +124,6 @@ class Workflow extends AbstractWorkflow
             $ies = $service->findIntervenantEtape($this->getIntervenant());
         }
 
-//        $dbFunctionRule = $this->getServiceLocator()->get('DbFunctionRule');
-
         foreach ($ies as $ie) {
             $etape     = $ie->getEtape();
             $isCurrent = $ie->getCourante();

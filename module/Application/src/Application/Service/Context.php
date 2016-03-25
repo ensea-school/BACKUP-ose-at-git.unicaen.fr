@@ -6,6 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 
@@ -351,9 +352,18 @@ class Context extends AbstractService
      */
     public function applicationExists(AnneeEntity $annee)
     {
-        $qb    = $this->getServiceIntervenant()->finderByAnnee($annee);
-        $found = (int)$qb->select("COUNT(int)")->getQuery()->getSingleScalarResult();
+        $sql = "
+        SELECT
+          'OK' ok
+        FROM
+          intervenant i 
+        WHERE
+          i.annee_id = ".((int)$annee->getId())."
+          AND 1 = ose_divers.comprise_entre( i.histo_creation, i.histo_destruction )
+          AND rownum = 1
+        ";
+        $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
 
-        return (bool)$found;
+        return count($res) == 1;
     }
 }

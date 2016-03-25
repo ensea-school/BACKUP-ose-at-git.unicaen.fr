@@ -2,68 +2,41 @@
 
 namespace Application\Controller;
 
-use Application\Acl\IntervenantRole;
+use Application\Constants;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\StatutIntervenant;
-use Application\Entity\Db\Listener\DossierListener;
-use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\WfEtape;
-use Application\Form\Intervenant\Dossier as DossierForm;
-use Application\Form\Intervenant\DossierFieldset;
+use Application\Exception\DbException;
+use Application\Form\Intervenant\DossierValidation;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Application\Service\Workflow\Workflow;
-use Application\Validator\NumeroINSEEValidator;
 use RuntimeException;
 use NumberFormatter;
-use UnicaenApp\Controller\Plugin\MessengerPlugin;
 use UnicaenApp\Util;
 use UnicaenAuth\Service\UserContext;
 use Zend\View\Model\ViewModel;
 
-/**
- * Description of DossierController
- *
- * @method MessengerPlugin messenger()
- *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- */
+
 class DossierController extends AbstractController
 {
-
     use ContextAwareTrait;
-    use IntervenantAwareTrait;
     use ServiceAwareTrait;
     use DossierAwareTrait;
-    use ValidationAwareTrait;
-    use StatutIntervenantAwareTrait;
     use WorkflowServiceAwareTrait;
+    use ValidationAwareTrait;
+    use \Application\Form\Intervenant\Traits\DossierAwareTrait;
 
 
-    /**
-     * @var Intervenant
-     */
-    private $intervenant;
-
-    /**
-     * @var DossierForm
-     */
-    private $form;
-
-    /**
-     * @var bool
-     */
-    private $readonly = false;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
      * (services sur des enseignements fermés, etc.)
+     *
      * @see \Common\ORM\Filter\HistoriqueFilter
      */
     protected function initFilters()
@@ -75,27 +48,7 @@ class DossierController extends AbstractController
         ]);
     }
 
-    /**
-     *
-     * @return ViewModel
-     * @throws \LogicException
-     */
-    public function voirAction()
-    {
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $dossier     = $intervenant->getDossier();
-        $title       = "Données personnelles <small>$intervenant</small>";
-        $short       = $this->params()->fromQuery('short', false);
-        $view        = new ViewModel();
 
-        if (!$dossier) {
-            throw new \LogicException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
-        }
-
-        $view->setVariables(compact('intervenant', 'dossier', 'title', 'short'));
-
-        return $view;
-    }
 
     /**
      * Modification du dossier d'un intervenant.
@@ -103,60 +56,87 @@ class DossierController extends AbstractController
      * @return ViewModel
      * @throws RuntimeException
      */
-    public function modifierAction()
-    {   
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
-        $service    = $this->getServiceDossier();
-        $validation = null;
-
+    public function indexAction()
+    {
         $this->initFilters();
 
-        $this->intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        /* Initialisation */
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $iPrec       = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
+        /* @var $intervenant Intervenant */
+        $validation  = $this->getServiceDossier()->getValidation($intervenant);
+        $form        = $this->getFormIntervenantDossier();
 
-        // refetch intervenant avec jointure sur dossier (et respect de l'historique)
-        $qb = $this->em()->getRepository(\Application\Entity\Db\Intervenant::class)->createQueryBuilder("i")
-                ->select("i, d")
-                ->leftJoin("i.dossier", "d")
-                ->andWhere("i = :i")
-                ->setParameter('i', $this->intervenant);
-        $intervenant = $qb->getQuery()->getOneOrNullResult();
-        
-        if (null === $intervenant) {
-            throw new RuntimeException(sprintf(
-                    "L'intervenant portant le code source '%s' est introuvable dans la table des intervenants extérieurs",
-                    $this->intervenant->getSourceCode()));
-        }
-        
-        $this->intervenant = $intervenant;
-        
-        $serviceValidation = $this->getServiceValidation();
-        $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
-        $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-//        $serviceValidation->finderByHistorique($qb);
-        $validations = $serviceValidation->getList($qb);
-        if (count($validations)) {
-            $validation = current($validations);
+        if (!($dossier = $intervenant->getDossier())) {
+            $dossier = $this->getServiceDossier()->newEntity()->fromIntervenant($intervenant);
+            $intervenant->setDossier($dossier);
         }
 
-        if ($validation) {
-            $this->readonly = true;
+        $privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
+        $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
+        $privDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_DEVALIDATION));
+
+        $canValider   = !$validation && $dossier->getId() && $privValider;
+        $canDevalider = $validation && $privDevalider;
+        $canEdit      = !$validation && $privEdit;
+
+        /* Mise en place du formulaires */
+        $form->personnaliser($intervenant, $iPrec);
+        $form->bind($intervenant);
+        // le formulaire est en lecture seule si les données ont été validées ou si on n'a pas le droit de le modifier!!
+        $form->setReadOnly(!$canEdit);
+
+
+        /* Affichage de messages informatifs*/
+
+        /* Si l'intervenant a effectué des heures avant */
+        if ($iPrec) {
+            $hetd = Util::formattedFloat(
+                $this->getServiceService()->getTotalHetdIntervenant($iPrec),
+                NumberFormatter::DECIMAL,
+                2);
+            $this->flashMessenger()->addInfoMessage(
+                $role->getIntervenant() ?
+                    sprintf("Vous avez effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
+                    : sprintf("L'intervenant a effectué %s HETD en %s.", $hetd, $iPrec->getAnnee())
+            );
         }
 
-        if (!($dossier = $this->intervenant->getDossier())) {
-            $dossier = $service->newEntity()->fromIntervenant($this->intervenant);
-            $this->intervenant->setDossier($dossier);
+        /* Si les données personnelles ont été saisies et/ou validées */
+        if ($dossier->getId() && $validation) {
+            $v = $validation->getHistoCreateur() . " le " . $validation->getHistoCreation()->format(Constants::DATE_FORMAT);
+            if ($role->getIntervenant()) {
+                $this->flashMessenger()->addInfoMessage("Vos données personnelles ont été saisies et validées par $v.");
+            } else {
+                $this->flashMessenger()->addInfoMessage("Les données personnelles de $intervenant ont été saisies et validées par $v.");
+            }
+        } elseif ($dossier->getId()) {
+            if ($role->getIntervenant()) {
+                $this->flashMessenger()->addInfoMessage("Vos données personnelles ont été saisies.");
+            } else {
+                $this->flashMessenger()->addInfoMessage("Les données personnelles de $intervenant ont été saisies.");
+            }
         }
 
-        $this->form = $this->getFormModifier();
-        $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
-        $this->form->bind($this->intervenant);
-        
-        if (!$this->readonly && $this->getRequest()->isPost()) {
+
+
+        /* Action d'enregistrement du dossier */
+        if ($this->params()->fromPost('enregistrer') && $canEdit && $this->getRequest()->isPost()) {
+            if ($validation) {
+                throw new \LogicException('Il est impossible de modifier des données personnelles si elles ont été validées.');
+            }
+
             $data = $this->getRequest()->getPost();
-            $this->form->setData($data);
-            if ($this->form->isValid()) {
-                $this->getServiceDossier()->enregistrerDossier($dossier, $this->intervenant);
-                $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
+            $form->setData($data);
+            if ($form->isValid()) {
+                $lastDossierId = $dossier->getId();
+                try {
+                    $this->getServiceDossier()->enregistrerDossier($dossier, $intervenant);
+                    $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+                }
 
                 // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
                 // au statut choisi dans le dossier.
@@ -164,24 +144,69 @@ class DossierController extends AbstractController
                     $this->getServiceUserContext()->setNextSelectedIdentityRole($dossier->getStatut()->getRoleId());
                 }
 
-                $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
-                if ($nextEtape && $url=$nextEtape->getUrl()){
-                    return $this->redirect()->toUrl($url);
+                if (!$lastDossierId && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé
+                    $nextEtape = $this->getServiceWorkflow()->getNextEtape(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant);
+                    if ($nextEtape && $url = $nextEtape->getUrl()) {
+                        return $this->redirect()->toUrl($url);
+                    }
                 }
             }
         }
-        
-        $view = new ViewModel([
-            'role'        => $role,
-            'intervenant' => $this->intervenant,
-            'dossier'     => $dossier,
-            'form'        => $this->form,
-            'validation'  => $validation,
-            'readonly'    => $this->readonly,
-        ]);
-        
-        return $view;
+
+        return compact('role', 'form', 'validation', 'canValider', 'canDevalider');
     }
+
+
+
+    public function validerAction()
+    {
+        $this->initFilters();
+
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $dossier     = $intervenant->getDossier();
+        try {
+            $this->getServiceValidation()->validerDossier($dossier);
+            $this->flashMessenger()->addSuccessMessage("Validation <strong>enregistrée</strong> avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+        }
+
+        return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
+
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate('application/dossier/index');
+        $viewModel->setVariables($this->indexAction());
+
+        return $viewModel;
+    }
+
+
+
+    public function devaliderAction()
+    {
+        $this->initFilters();
+
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $validation  = $this->getServiceDossier()->getValidation($intervenant);
+        try {
+            $this->getServiceValidation()->delete($validation);
+            $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+        }
+
+        return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
+
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate('application/dossier/index');
+        $viewModel->setVariables($this->indexAction());
+
+        return $viewModel;
+    }
+
+
 
     /**
      * @return UserContext
@@ -191,119 +216,4 @@ class DossierController extends AbstractController
         return $this->getServiceLocator()->get('authUserContext');
     }
 
-    /**
-     * @return string
-     */
-    private function getSubmitButtonLabel()
-    {
-        $label = null;
-// Mis en commentaire tant que le WF n'est pas béton...
-//        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
-//        $role  = $this->getServiceContext()->getSelectedIdentityRole();
-//        $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
-//
-//        if ($role instanceof IntervenantRole) {
-//            $role->getIntervenant();
-//            $label = $step ? ' et ' . lcfirst($step->getLabel($role)) . '...' : null;
-//        }
-
-        $label = "J'enregistre" . $label;
-
-        return $label;
-    }
-
-
-
-    protected function notify(Intervenant $intervenant)
-    {
-        if (DossierListener::$created || DossierListener::$modified) {
-            // envoyer un mail au gestionnaire
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return DossierForm
-     */
-    private function getFormModifier()
-    {
-        $dossier         = $this->intervenant->getDossier();
-        $form            = $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier'); /* @var $form DossierForm */
-        $dossierFieldset = $form->get('dossier'); /* @var $dossierFieldset DossierFieldset */
-        
-        $anneePrecedente            = $this->getServiceContext()->getAnneePrecedente();
-        $vacExistantAnneePrecedente = $this->intervenantVacataireAnneesPrecedentes(1);
-        $appExistaitAnneePrecedente = $this->getServiceContext()->applicationExists($anneePrecedente);
-
-        if ($vacExistantAnneePrecedente) {            
-            /**
-             * Si l'intervenant était un vacataire connu l'année précédente, alors
-             * la question "Avez-vous exercé une activité..." est retirée puisque la réponse est forcément OUI.
-             */
-            $dossierFieldset->remove('premierRecrutement');
-            
-            $hetd = Util::formattedFloat(
-                    $this->getServiceService()->getTotalHetdIntervenant($vacExistantAnneePrecedente), 
-                    NumberFormatter::DECIMAL, 
-                    2);
-            $this->messenger()->addMessage(
-                    sprintf("Vous avez effectué %s HETD en %s.", $hetd, $vacExistantAnneePrecedente->getAnnee()), null, 100);
-        } 
-        elseif ($appExistaitAnneePrecedente) {
-            /**
-             * Si l'intervenant n'est pas trouvé comme vacataire l'année précédente
-             * malgré que l'application était en service l'année précédente,
-             * alors on ne propose pas le statut "Sans emploi et non étudiant".
-             * En effet, le statut "Sans emploi et non étudiant" n'est pertinent que pour un intervenant
-             * ayant été vacataire l'année précédente (et ayant perdu son activité principale).
-             */
-            $statutSelect = $dossierFieldset->get('statut'); /* @var $statut \Application\Form\Intervenant\StatutSelect */
-            $statutSelect->getProxy()->setStatutsToRemove([ 
-                $this->getServiceStatutIntervenant()->getRepo()->findOneBySourceCode(StatutIntervenant::SS_EMPLOI_NON_ETUD)
-            ]);
-        }
-        
-        /**
-         * L'adresse mail perso n'est pas demandée aux BIATSS.
-         */
-        if ($this->intervenant->getStatut()->estBiatss()) {
-            $dossierFieldset->remove('emailPerso');
-        }
-
-        /**
-         * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.
-         */
-        if ($dossier->getNumeroInsee() && ! $dossier->getNumeroInseeEstProvisoire()) {
-            if (NumeroINSEEValidator::hasCodeDepartementEtranger($dossier->getNumeroInsee())) {
-                $dossierFieldset->get('paysNaissance')->setValue(null);
-            }
-        }
-        
-        return $form;
-    }
-
-    /**
-     * Détermine si l'intervenant courant était connu comme vacataire les années précédentes
-     * dans l'application.
-     * 
-     * @param int $x Si x = 3 par exemple, on recherche l'intervenant en N-1, N-2 et N-3.
-     * @return Intervenant Intervenant de l'année précédente
-     */
-    private function intervenantVacataireAnneesPrecedentes($x = 1)
-    {
-        $sourceCode = $this->intervenant->getSourceCode();
-        
-        for ($i = 1; $i <= $x; $i++) {
-            $annee       = $this->getServiceContext()->getAnneeNmoins($i);
-            $intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode, $annee);
-
-            if ($intervenant && $intervenant->getStatut()->estVacataire() && $intervenant->getStatut()->getPeutSaisirService()) {
-                return $intervenant;
-            }
-        }
-
-        return null;
-    }
 }

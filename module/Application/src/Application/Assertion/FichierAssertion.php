@@ -3,8 +3,6 @@
 namespace Application\Assertion;
 
 use Application\Entity\Db\Fichier;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -14,10 +12,9 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class FichierAssertion extends OldAbstractAssertion implements /*FichierServiceAwareInterface,*/ WorkflowIntervenantAwareInterface
+class FichierAssertion extends OldAbstractAssertion
 {
-    use WorkflowIntervenantAwareTrait;
-    
+
     const PRIVILEGE_VALIDER     = 'valider';
     const PRIVILEGE_DEVALIDER   = 'devalider';
     const PRIVILEGE_TELECHARGER = 'telecharger';

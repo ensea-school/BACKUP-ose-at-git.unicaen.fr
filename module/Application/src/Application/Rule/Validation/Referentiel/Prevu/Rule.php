@@ -85,12 +85,6 @@ class Rule extends ValidationEnsRefAbstractRule
      */
     public function isAllowed($privilege)
     {
-        /**
-         * Interrogation du workflow.
-         */
-//        if (!$this->isAllowedByWorkflow($privilege)) {
-//            return false;
-//        }
         
         if (!$this->isAllowedMiseEnPaiement($privilege)) {
             return false;

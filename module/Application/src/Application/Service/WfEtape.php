@@ -24,6 +24,8 @@ class WfEtape extends AbstractEntityService
         return WfEtapeEntity::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -34,10 +36,13 @@ class WfEtape extends AbstractEntityService
         return 'e';
     }
 
+
+
     /**
      * Recherche une étapde par son code.
-     * 
+     *
      * @param string $code
+     *
      * @return WfEtapeEntity
      */
     public function getByCode($code)
@@ -54,8 +59,8 @@ class WfEtape extends AbstractEntityService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->orderBy($alias.'.ordre');
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        $qb->orderBy($alias . '.ordre');
 
         return $qb;
     }

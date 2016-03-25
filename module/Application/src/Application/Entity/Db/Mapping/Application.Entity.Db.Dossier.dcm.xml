@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\Dossier" table="DOSSIER">
-    <entity-listeners>
-        <entity-listener class="Application\Entity\Db\Listener\DossierListener"/>
-    </entity-listeners>
     <indexes>
       <index name="IDX_20D1E2D59860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_20D1E2D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
@@ -64,7 +61,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="dossier" />
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>

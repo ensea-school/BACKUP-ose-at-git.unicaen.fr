@@ -1,55 +1,88 @@
-<?php 
-$this->form->prepare();
-$dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
+<?php
+
+/**
+ * @var $this         \Application\View\Renderer\PhpRenderer
+ * @var $form         \Application\Form\Intervenant\Dossier
+ * @var $canValider   boolean
+ * @var $canDevalider boolean
+ */
+
+$form->prepare();
+$dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
 ?>
 
 <style>
-    div.rib-part { display: inline-block; vertical-align: top; }
-    div.rib-part input { width: auto; }
+    div.rib-part {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    div.rib-part input {
+        width: auto;
+    }
 </style>
 
-<?php echo $this->form()->openTag($this->form) ?> 
+<?php echo $this->form()->openTag($form) ?>
 <div class="row">
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($dossier->get('nomUsuel')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('prenom')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('civilite')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('dateNaissance')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('paysNaissance')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('departementNaissance')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('villeNaissance')->setAttribute('readonly', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomUsuel')); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')); ?>
+        <?php echo $this->formControlGroup($dossier->get('prenom')); ?>
+        <?php echo $this->formControlGroup($dossier->get('civilite')); ?>
+        <?php echo $this->formControlGroup($dossier->get('dateNaissance')); ?>
+        <?php echo $this->formControlGroup($dossier->get('paysNaissance')); ?>
+        <?php echo $this->formControlGroup($dossier->get('departementNaissance')); ?>
+        <?php echo $this->formControlGroup($dossier->get('villeNaissance')); ?>
     </div>
     <div class="col-md-4">
-        <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('readonly', true)); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInsee')); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')); ?>
+        <?php echo $this->formControlGroup($dossier->get('adresse')); ?>
+        <?php echo $this->formControlGroup($dossier->get('email')); ?>
         <?php if ($dossier->has('emailPerso')) {
-            echo $this->formControlGroup($dossier->get('emailPerso')->setAttribute('readonly', $this->readonly)); 
+            echo $this->formControlGroup($dossier->get('emailPerso'));
         } ?>
-        <?php echo $this->formControlGroup($dossier->get('telephone')->setAttribute('readonly', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('telephone')); ?>
     </div>
     <div class="col-md-5">
         <fieldset class="rib">
             <legend><?php echo $dossier->get('rib')->getLabel() ?></legend>
-            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')->setAttribute('readonly', $this->readonly)); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')->setAttribute('readonly', $this->readonly)); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')); ?></div>
             <?php echo $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
         </fieldset>
         <?php if ($dossier->has('premierRecrutement')) {
-            echo $this->formControlGroup($dossier->get('premierRecrutement')->setAttribute('disabled', $this->readonly)); 
+            echo $this->formControlGroup($dossier->get('premierRecrutement'));
         } ?>
         <div class="statut">
-            <?php echo $this->formControlGroup($dossier->get('statut')->setAttribute('disabled', $this->readonly)); ?>
+            <?php echo $this->formControlGroup($dossier->get('statut')); ?>
         </div>
-        
+
         <?php echo $this->formHidden($dossier->get('id')); ?>
 
         <?php echo $this->formHidden($this->form->get('security')); ?>
-        <?php if (!$this->readonly): ?>
-            <hr />
-            <?php echo $this->formSubmit($this->form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+
+        <hr/>
+        <?php if (!$form->isReadOnly()): ?>
+            <?php echo $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
+        <?php endif ?>
+
+        <!-- actions de validation de la pièce jointe entière -->
+        <?php if ($canValider): ?>
+            <a class="valider-dossier btn btn-success"
+               href="<?php echo $this->url('intervenant/dossier/valider', [], [], true) ?>"
+               title="Valider les données personnelles">
+                <span class="glyphicon glyphicon-thumbs-up"></span> Je valide les données
+            </a>
+        <?php endif ?>
+
+        <!-- actions de dévalidation de la pièce jointe entière -->
+        <?php if ($canDevalider): ?>
+            <a class="devalider-pj btn btn-danger"
+               href="<?php echo $this->url('intervenant/dossier/devalider', [], [], true) ?>"
+               title="Dévalider les données personnelles">
+                <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
+            </a>
         <?php endif ?>
     </div>
 </div>
@@ -57,45 +90,42 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
 
 
 <?php
-if ($this->dossier->getId()){
-    echo $this->historique( $this->dossier );
+if (($d = $form->getObject()->getDossier()) && $d->getId()) {
+    echo $this->historique($d);
 }
 ?>
-
-
-
-
-
 
 <script type="text/javascript" src="<?php echo $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>
 
 <script type="text/javascript">
-    $(function() {
-        var readonly = <?php echo $this->readonly ? 'true' : 'false' ?>;
+    $(function ()
+    {
+        var readonly = <?php echo $form->isReadOnly() ? 'true' : 'false' ?>;
 
         managePaysNaissance();
         manageDepartementNaissance();
-        
+
         function managePaysNaissance()
         {
-            var tfDate     = $("input[name='dossier[dateNaissance]']");
+            var tfDate = $("input[name='dossier[dateNaissance]']");
             var selectPays = $("select[name='dossier[paysNaissance]']");
-        
+
             moment.locale('fr');
-            
+
             /**
-             * Fonction chargée de ne faire apparaître dans la liste déroulante 
+             * Fonction chargée de ne faire apparaître dans la liste déroulante
              * que les pays étant valides à la date d'observation spécifiée.
-             * 
+             *
              * @param {object} dateObservation
              * @returns {void}
              */
             function updateSelectPays(dateObservation)
             {
-                $("option.pays", selectPays).each(function() {
-                    var option          = $(this);
-                    var dateDebutValid  = moment(option.data("debut"), "D/M/YYYY", true);
-                    var dateFinValid    = option.data("fin") ? moment(option.data("fin"), "D/M/YYYY", true) : moment();
+                $("option.pays", selectPays).each(function ()
+                {
+                    var option = $(this);
+                    var dateDebutValid = moment(option.data("debut"), "D/M/YYYY", true);
+                    var dateFinValid = option.data("fin") ? moment(option.data("fin"), "D/M/YYYY", true) : moment();
 
                     if (dateObservation.isBetween(dateDebutValid, dateFinValid)) {
                         option.show();
@@ -106,31 +136,33 @@ if ($this->dossier->getId()){
                     }
                 });
             }
-            
+
             // mise à jour de la liste des pays à chaque modif de la date de naissance
-            tfDate.change(function() {
+            tfDate.change(function ()
+            {
                 var dateObservation = moment(tfDate.val(), "D/M/YYYY", true);
-                if (! dateObservation.isValid()) {
+                if (!dateObservation.isValid()) {
                     dateObservation = moment();
                 }
                 updateSelectPays(dateObservation);
             });
-            
+
             // init de la liste : pays valides à la date du jour
             tfDate.change();
         }
-        
+
         function manageDepartementNaissance()
         {
             if (readonly) {
                 return;
             }
-            
+
             var selectPays = $("select[name='dossier[paysNaissance]']");
             var selectDept = $("select[name='dossier[departementNaissance]']");
-            var emptyDept  = $("option[value='']", selectDept);
-            
-            selectPays.change(function() {
+            var emptyDept = $("option[value='']", selectDept);
+
+            selectPays.change(function ()
+            {
                 if ($("option:selected", selectPays).hasClass("france")) {
                     selectDept.removeProp('disabled').parent().show();
                     emptyDept.html("(Sélectionnez un département...)");
@@ -140,7 +172,7 @@ if ($this->dossier->getId()){
                     emptyDept.html("(Aucun)").prop('selected', 'selected');
                 }
             });
-            
+
             selectPays.change();
         }
     });

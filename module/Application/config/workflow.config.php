@@ -66,18 +66,6 @@ return [
                             ],
                         ],
                     ],
-                    'nav-next'      => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'nav-next',
-                            ],
-                        ],
-                    ],
                 ],
             ],
         ],
@@ -113,11 +101,6 @@ return [
     'bjyauthorize'    => [
         'guards'             => [
             PrivilegeController::class => [
-                [
-                    'controller' => 'Application\Controller\Workflow',
-                    'action'     => ['nav-next'],
-                    'roles'      => ['user'],
-                ],
                 [
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => ['index', 'dependances'],
@@ -164,7 +147,6 @@ return [
 
             'WfIntervenantEtapeService' => Service\WfIntervenantEtape::class,
             'WorkflowIntervenant'       => Service\Workflow\WorkflowIntervenant::class,
-            'DbFunctionRule'            => Rule\Intervenant\DbFunctionRule::class,
         ],
         'initializers' => [
             Service\Workflow\WorkflowIntervenantAwareInitializer::class,

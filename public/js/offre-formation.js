@@ -64,7 +64,7 @@ function ElementPedagogiqueRecherche(id)
 
             var li = ul.find("li[data-original-index='" + this.index + "']");
 
-            if (this.index == 0 || $.inArray(this.value, values) !== -1) {
+            if (this.index == 1 || $.inArray(this.value, values) !== -1) {
                 li.show();
             } else {
                 if (select.val() == this.value) {

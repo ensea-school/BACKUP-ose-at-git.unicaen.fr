@@ -1,3 +1,28 @@
+create or replace TRIGGER "OSE"."F_CONTRAT"
+  AFTER DELETE OR UPDATE OF INTERVENANT_ID, HISTO_CREATION, HISTO_DESTRUCTION, STRUCTURE_ID, DATE_RETOUR_SIGNE, VALIDATION_ID ON "OSE"."CONTRAT"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+
+    SELECT DISTINCT
+      s.intervenant_id
+    FROM
+      volume_horaire vh
+      JOIN service s ON s.id = vh.service_id AND 1 = ose_divers.comprise_entre(s.histo_creation, s.histo_destruction)
+    WHERE
+      1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+      AND (vh.contrat_id = :OLD.id OR vh.contrat_id = :NEW.id)
+
+  ) LOOP
+
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
+
+  END LOOP;
+
+END;
+
+/
+
 --------------------------------------------------------
 --  DDL for Trigger F_CONTRAT_S
 --------------------------------------------------------
@@ -5,7 +30,7 @@
 CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT_S" 
 AFTER UPDATE OR DELETE ON contrat
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -28,8 +53,8 @@ BEGIN
       AND (s.element_pedagogique_id = :OLD.element_id OR s.element_pedagogique_id = :NEW.element_id)
       
   ) LOOP
-  
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
     
   END LOOP;
 
@@ -43,7 +68,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR_S" 
 AFTER INSERT OR UPDATE OR DELETE ON element_modulateur
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -60,7 +85,7 @@ CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE"
     WHERE (s.element_pedagogique_id = :NEW.id
     OR s.element_pedagogique_id     = :OLD.id)
     AND 1                           = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction )
-    ) LOOP OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    ) LOOP OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
 END LOOP;
 END;
 /
@@ -70,8 +95,8 @@ END;
 --------------------------------------------------------
 
 CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE_S" AFTER
-  UPDATE OR
-  DELETE ON element_pedagogique BEGIN OSE_FORMULE.CALCULER_SUR_DEMANDE;
+UPDATE OR DELETE ON element_pedagogique BEGIN 
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -80,7 +105,7 @@ END;
 --------------------------------------------------------
 
 CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT" 
-  AFTER UPDATE OF ID, DATE_NAISSANCE, STATUT_ID, STRUCTURE_ID, HISTO_CREATION, HISTO_DESTRUCTION, PREMIER_RECRUTEMENT, ANNEE_ID, DOSSIER_ID ON "OSE"."INTERVENANT"
+  AFTER UPDATE OF ID, DATE_NAISSANCE, STATUT_ID, STRUCTURE_ID, HISTO_CREATION, HISTO_DESTRUCTION, PREMIER_RECRUTEMENT, ANNEE_ID ON "OSE"."INTERVENANT"
   REFERENCING FOR EACH ROW
   BEGIN
 
@@ -95,7 +120,7 @@ CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT"
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
 
   END LOOP;
   
@@ -107,9 +132,9 @@ END;
 --------------------------------------------------------
 
 CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT_S" 
-  AFTER UPDATE ON "OSE"."INTERVENANT"
-  BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+AFTER UPDATE ON "OSE"."INTERVENANT"
+BEGIN
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -123,10 +148,10 @@ FOR EACH ROW
 BEGIN
 
   IF DELETING OR UPDATING THEN
-    OSE_FORMULE.DEMANDE_CALCUL( :OLD.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :OLD.intervenant_id );
   END IF;
   IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.DEMANDE_CALCUL( :NEW.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :NEW.intervenant_id );
   END IF;
 
 END;
@@ -139,7 +164,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU_S" 
 AFTER INSERT OR UPDATE OR DELETE ON modification_service_du
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+    OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -166,7 +191,7 @@ BEGIN
 
   ) LOOP
 
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
 
   END LOOP;
 END;
@@ -179,7 +204,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR_S" 
 AFTER UPDATE OR DELETE ON modulateur
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+    OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -203,7 +228,7 @@ BEGIN
       
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   
   END LOOP;
 
@@ -217,7 +242,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE_S" 
 AFTER UPDATE OR DELETE ON MOTIF_MODIFICATION_SERVICE
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -275,10 +300,10 @@ FOR EACH ROW
 BEGIN
 
   IF DELETING OR UPDATING THEN
-    OSE_FORMULE.DEMANDE_CALCUL( :OLD.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :OLD.intervenant_id );
   END IF;
   IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.DEMANDE_CALCUL( :NEW.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :NEW.intervenant_id );
   END IF;
 END;
 /
@@ -293,10 +318,10 @@ FOR EACH ROW
 BEGIN
 
   IF DELETING OR UPDATING THEN
-    OSE_FORMULE.DEMANDE_CALCUL( :OLD.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :OLD.intervenant_id );
   END IF;
   IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.DEMANDE_CALCUL( :NEW.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :NEW.intervenant_id );
   END IF;
 
 END;
@@ -309,7 +334,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL_S" 
 AFTER INSERT OR UPDATE OR DELETE ON service_referentiel
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -320,7 +345,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_S" 
 AFTER INSERT OR UPDATE OR DELETE ON service
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -345,7 +370,7 @@ BEGIN
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   
   END LOOP;
 END;
@@ -358,7 +383,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_STATUT_INTERVENANT_S" 
 AFTER UPDATE ON statut_intervenant
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -383,7 +408,7 @@ BEGIN
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   
   END LOOP;
 END;
@@ -396,7 +421,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION_S" 
 AFTER UPDATE ON type_intervention
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -422,7 +447,7 @@ BEGIN
 
   ) LOOP
 
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
 
   END LOOP;
 
@@ -439,7 +464,7 @@ BEGIN
 
   ) LOOP
 
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
 
   END LOOP;
 
@@ -453,7 +478,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_S" 
 AFTER UPDATE ON validation
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -478,7 +503,7 @@ BEGIN
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   
   END LOOP;
 END;
@@ -505,7 +530,7 @@ BEGIN
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   
   END LOOP;
 END;
@@ -518,7 +543,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF_S" 
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire_ref
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -529,7 +554,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_S" 
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -557,7 +582,7 @@ BEGIN
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   
   END LOOP;
 END;
@@ -583,7 +608,7 @@ BEGIN
   
   ) LOOP
   
-    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id );
+    OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   END LOOP;
 END;
 /
@@ -595,7 +620,7 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_REF_S" 
 AFTER INSERT OR UPDATE OR DELETE ON volume_horaire_ref
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /
 
@@ -606,6 +631,6 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_S" 
 AFTER INSERT OR UPDATE OR DELETE ON volume_horaire
 BEGIN
-  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+  OSE_EVENT.CALCULER_DEMANDES;
 END;
 /

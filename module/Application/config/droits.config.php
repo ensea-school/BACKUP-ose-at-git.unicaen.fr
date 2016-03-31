@@ -232,9 +232,4 @@ return [
             'DroitsAffectationForm'=> Form\Droits\AffectationForm::class,
         ],
     ],
-    'public_files' => [
-        'js' => [
-            'js/droits.js',
-        ],
-    ]
 ];

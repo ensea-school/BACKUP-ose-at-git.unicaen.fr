@@ -94,8 +94,6 @@ class ValidationController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Validation::class,
-            \Application\Entity\Db\TypeValidation::class,
-            \Application\Entity\Db\Dossier::class,
             \Application\Entity\Db\Service::class,
             \Application\Entity\Db\VolumeHoraire::class,
             \Application\Entity\Db\ServiceReferentiel::class,
@@ -103,89 +101,7 @@ class ValidationController extends AbstractController
         ]);
     }
 
-    /**
-     * Validation ou dévalidation des données personnelles.
 
-     * NB : une seule validation pour toutes les composantes.
-     * 
-     * @return \Zend\Http\Response|ViewModel
-     */
-    public function dossierAction()
-    {
-        $prg = $this->prg();
-        
-        if ($prg instanceof \Zend\Http\Response) {
-            return $prg;
-        }
-        
-        $this->initFilters();
-        
-        $intervenant       = $this->getIntervenant();
-        $dossier           = $intervenant->getDossier();
-        $role              = $this->getServiceContext()->getSelectedIdentityRole();
-        $serviceValidation = $this->getServiceValidation();
-        $typeValidation    = TypeValidation::CODE_DONNEES_PERSO;
-        $this->title       = "Validation des données personnelles <small>$intervenant</small>";
-        
-        // recherche validation existante et instanciation si aucune trouvée
-        $qb = $serviceValidation->finderByType($typeValidation);
-        $serviceValidation->finderByIntervenant($intervenant, $qb);
-        $serviceValidation->finderByHistorique($qb);
-        $this->validation = $qb->getQuery()->getOneOrNullResult();
-        
-        if (! $this->validation) {
-            $this->validation = $serviceValidation->newEntity($typeValidation);
-            $this->validation
-                    ->setIntervenant($intervenant)
-                    ->setStructure($intervenant->getStructure());
-        }
-        
-        $this->formValider = $this->getFormDossier($this->validation);
-
-        $canEdit = $dossier && 
-                ($this->isAllowed($this->validation, 'create') || $this->isAllowed($this->validation, 'delete'));
-        
-        if ($canEdit && is_array($prg)) {
-            $data = $prg;
-            $this->formValider->setData($data);
-            if ($this->formValider->isValid()) {
-                $complet = (bool) $data['valide'];
-                $this->updateValidation($complet);
-
-                return $this->redirect()->refresh();
-            }
-        }
-
-        $this->view = new ViewModel([
-            'intervenant' => $intervenant,
-            'dossier'     => $dossier,
-            'validation'  => $this->validation,
-            'form'        => $this->formValider,
-            'role'        => $role,
-            'canEdit'     => $canEdit,
-            'title'       => $this->title,
-        ]);
-        
-        $this->view->formModifier = $this->getFormDossierModifier();
-        
-        return $this->view;
-        
-    }
-
-    /**
-     * Interrogation du contrôleur Dossier pour obtenir le formulaire de saisie des données personnelles.
-     *
-     * @return \Zend\Form\Form
-     */
-    private function getFormDossierModifier()
-    {
-        $controller       = 'Application\Controller\Dossier';
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'modifier';
-        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel ViewModel */
-
-        return $viewModel->form;
-    }
 
     /**
      * Validation des enseignements prévisionnels par la composante d'affectation de l'intervenant.
@@ -210,7 +126,7 @@ class ValidationController extends AbstractController
         $messages            = [];
 
         $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
-        
+
         // interrogation des règles métiers de validation
         $rule = $this->getServiceLocator()->get('ValidationEnseignementRule') /* @var $rule ValidationEnsRefAbstractRule */
                 ->setIntervenant($this->getIntervenant())
@@ -230,7 +146,7 @@ class ValidationController extends AbstractController
 
         if (!count($servicesNonValides)) {
             $this->validation = current($this->validations);
-            if ($role instanceof IntervenantRole) {
+            if ($role->getIntervenant()) {
                 $message = sprintf(
                     "Tous vos enseignements %s ont été validés.",
                     $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés"
@@ -632,25 +548,6 @@ class ValidationController extends AbstractController
         return compact('entity', 'context', 'title', 'form');
     }
 
-    /**
-     *
-     * @param bool $valide
-     * @return boolean
-     */
-    protected function updateValidation($valide)
-    {
-        if ($valide) {
-            $this->getServiceValidation()->enregistrerValidationDossier($this->validation);
-        }
-        else {
-            $this->getServiceValidation()->supprimer($this->validation);
-        }
-        $this->em()->flush();
-
-        $this->flashMessenger()->addSuccessMessage(sprintf("Validation <strong>%s</strong> avec succès.", $valide ? "enregistrée" : "supprimée"));
-
-        return $this;
-    }
 
     /**
      * @return ServiceValidation

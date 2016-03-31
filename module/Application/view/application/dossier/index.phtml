@@ -32,7 +32,7 @@ if (!$form->getObject()->getId()){
     }
 }
 
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
 
 if ($validation) echo $this->tag('div', ['class' => 'bg-success'])->open();
 echo $this->partial('application/dossier/partial/form', compact('form', 'canValider', 'canDevalider'));

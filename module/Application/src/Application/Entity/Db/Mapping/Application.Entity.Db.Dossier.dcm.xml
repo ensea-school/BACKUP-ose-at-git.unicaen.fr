@@ -61,10 +61,8 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
-      <join-columns>
+    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="dossier">
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
+    </one-to-one>
   </entity>
 </doctrine-mapping>

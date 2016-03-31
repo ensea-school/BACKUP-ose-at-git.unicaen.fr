@@ -150,6 +150,7 @@ class DossierController extends AbstractController
                         return $this->redirect()->toUrl($url);
                     }
                 }
+                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
             }
         }
 

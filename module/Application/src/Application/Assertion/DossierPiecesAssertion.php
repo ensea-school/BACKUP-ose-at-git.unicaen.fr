@@ -2,6 +2,7 @@
 
 namespace Application\Assertion;
 
+use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
@@ -58,12 +59,12 @@ class DossierPiecesAssertion extends AbstractAssertion
                     case 'valider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_VALIDATION)) return false;
 
-                        return $this->assertPieceJointeValidationAction($intervenant);
+                        return $this->assertPieceJointeAction($intervenant);
                     break;
                     case 'devalider':
                         if (!$this->assertPriv(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION)) return false;
 
-                        return $this->assertPieceJointeValidationAction($intervenant);
+                        return $this->assertPieceJointeAction($intervenant);
                     break;
                 }
             break;
@@ -145,6 +146,8 @@ class DossierPiecesAssertion extends AbstractAssertion
 
     protected function assertPriv($privilege)
     {
-        return $this->isAllowed(Privileges::getResourceId($privilege));
+        $role = $this->getRole();
+        if (!$role instanceof Role) return false;
+        return $role->hasPrivilege($privilege);
     }
 }

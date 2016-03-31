@@ -2,11 +2,10 @@
 
 namespace Application;
 
-const R_ADMINISTRATEUR        = Acl\AdministrateurRole::ROLE_ID;
-const R_COMPOSANTE            = Acl\ComposanteRole::ROLE_ID;
-const R_ETABLISSEMENT         = Acl\EtablissementRole::ROLE_ID;
-const R_INTERVENANT           = Acl\IntervenantRole::ROLE_ID;
-const R_INTERVENANT_EXTERIEUR = Acl\IntervenantExterieurRole::ROLE_ID;
+const R_ADMINISTRATEUR = Acl\AdministrateurRole::ROLE_ID;
+const R_COMPOSANTE     = Acl\ComposanteRole::ROLE_ID;
+const R_ETABLISSEMENT  = Acl\EtablissementRole::ROLE_ID;
+const R_INTERVENANT    = Acl\IntervenantRole::ROLE_ID;
 
 
 $main = [
@@ -161,7 +160,7 @@ $main = [
             'ApplicationPays'                     => Service\Pays::class,
             'ApplicationDepartement'              => Service\Departement::class,
             'applicationFichier'                  => Service\FichierService::class,
-            'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class,
+            'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class
         ],
         'factories'          => [
             'navigation'                  => Service\NavigationFactoryFactory::class,
@@ -221,28 +220,34 @@ $main = [
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
     ],
     'public_files'       => [
+        'head_scripts' => [
+            '020_jqueryui' => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.js',
+        ],
         'inline_scripts' => [
-            10 => 'js/datepicker-fr.js',
-            11 => 'js/service.js',
-            12 => 'js/service-referentiel.js',
-            13 => 'js/paiement.js',
-            14 => 'js/offre-formation.js',
-            15 => 'js/droits.js',
-            16 => 'js/piece-jointe.js',
-            50 => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
+            '001_' => 'js/datepicker-fr.js',
+            '111_' => 'js/service.js',
+            '112_' => 'js/service-referentiel.js',
+            '113_' => 'js/paiement.js',
+            '114_' => 'js/offre-formation.js',
+            '115_' => 'js/droits.js',
+            '116_' => 'js/piece-jointe.js',
+            '117_' => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
         ],
         'stylesheets'    => [
-            10 => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css',
-            11 => 'css/cartridge.css',
-            12 => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
-            13 => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
-            14 => 'css/budget.css',
-            15 => 'css/paiement.css',
-            16 => 'css/agrement.css',
-            17 => 'css/service.css',
-            18 => 'css/acceuil.css',
-            19 => 'css/droits.css',
-            20 => 'css/callout.css',
+            '010_jquery-ui'           => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.css',
+            '020_jquery-ui-structure' => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.structure.min.css',
+            '030_jquery-ui-theme'     => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.theme.min.css',
+            '110_' => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css',
+            '111_' => 'css/cartridge.css',
+            '112_' => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
+            '113_' => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
+            '114_' => 'css/budget.css',
+            '115_' => 'css/paiement.css',
+            '116_' => 'css/agrement.css',
+            '117_' => 'css/service.css',
+            '118_' => 'css/acceuil.css',
+            '119_' => 'css/droits.css',
+            '120_' => 'css/callout.css',
         ],
     ],
 ];

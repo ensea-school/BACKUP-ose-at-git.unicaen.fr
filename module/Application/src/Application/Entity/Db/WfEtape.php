@@ -18,11 +18,14 @@ class WfEtape
     const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
     const CODE_CONTRAT                        = 'CONTRAT';
     const CODE_SERVICE_SAISIE_REALISE         = 'SERVICE_SAISIE_REALISE';
+    const CODE_CLOTURE_REALISE                = 'CLOTURE_REALISE';
     const CODE_SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
     const CODE_REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
+    const DEMANDE_MEP                         = 'DEMANDE_MEP';
+    const SAISIE_MEP                          = 'SAISIE_MEP';
 
-    const CURRENT                             = 'current-etape';
-    const NEXT                                = 'next-etape';
+    const CURRENT = 'current-etape';
+    const NEXT    = 'next-etape';
 
     /**
      * @var integer
@@ -55,9 +58,14 @@ class WfEtape
     private $route;
 
     /**
+     * @var boolean
+     */
+    private $obligatoire;
+
+    /**
      * @var string
      */
-    private $descNonAtteignable;
+    private $descNonFranchie;
 
 
 
@@ -140,23 +148,47 @@ class WfEtape
 
 
     /**
-     * @return string
+     * @return boolean
      */
-    public function getDescNonAtteignable()
+    public function getObligatoire()
     {
-        return $this->descNonAtteignable;
+        return $this->obligatoire;
     }
 
 
 
     /**
-     * @param string $descNonAtteignable
+     * @param boolean $obligatoire
      *
      * @return WfEtape
      */
-    public function setDescNonAtteignable($descNonAtteignable)
+    public function setObligatoire($obligatoire)
     {
-        $this->descNonAtteignable = $descNonAtteignable;
+        $this->obligatoire = $obligatoire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDescNonFranchie()
+    {
+        return $this->descNonFranchie;
+    }
+
+
+
+    /**
+     * @param string $descNonFranchie
+     *
+     * @return WfEtape
+     */
+    public function setDescNonFranchie($descNonFranchie)
+    {
+        $this->descNonFranchie = $descNonFranchie;
 
         return $this;
     }

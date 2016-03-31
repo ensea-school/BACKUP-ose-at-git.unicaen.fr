@@ -30,7 +30,7 @@ class BudgetAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch (true) {
             case $entity instanceof Dotation:
@@ -62,7 +62,7 @@ class BudgetAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         if ($controller == 'Application\Controller\Budget' && $action == 'tableau-de-bord'){
             return ! $role->getStructure(); // on n'a accès que si on n'est pas dans une structure spécifique!!

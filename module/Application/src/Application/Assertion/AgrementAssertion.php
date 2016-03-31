@@ -44,7 +44,7 @@ class AgrementAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
         switch (true) {
@@ -93,7 +93,7 @@ class AgrementAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         switch ($action) {
             case 'lister':
@@ -140,6 +140,7 @@ class AgrementAssertion extends AbstractAssertion
 
     protected function assertPage(array $page)
     {
+        $role        = $this->getRole();
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         $wfEtape = null;
@@ -152,7 +153,8 @@ class AgrementAssertion extends AbstractAssertion
             $privilege = Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION;
         }
 
-        if ($privilege && !$this->isAllowed(Privileges::getResourceId($privilege))) return false;
+        if (!$role instanceof Role) return false;
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
         if ($wfEtape && $intervenant && !$this->isAllowed(WorkflowResource::create($wfEtape, $intervenant))) return false;
 
         return true;

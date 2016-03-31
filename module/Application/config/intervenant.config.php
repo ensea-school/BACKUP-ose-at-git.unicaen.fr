@@ -479,6 +479,14 @@ return [
                         Privileges::INTERVENANT_CALCUL_HETD,
                     ],
                 ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['cloturer-saisie'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_CLOTURE,
+                    ],
+                    'assertion' => 'assertionIntervenant',
+                ],
                 [ /// @todo à protéger d'avantage...
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['formule-totaux-hetd'],
@@ -516,7 +524,7 @@ return [
             'ApplicationCivilite'                   => Service\Civilite::class,
             'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
             'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
-            'IntervenantAssertion'                  => Assertion\IntervenantAssertion::class,
+            'assertionIntervenant'                  => Assertion\IntervenantAssertion::class,
             'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
             'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
             'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,

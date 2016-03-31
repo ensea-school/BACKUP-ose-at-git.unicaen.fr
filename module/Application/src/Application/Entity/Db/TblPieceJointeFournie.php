@@ -23,6 +23,11 @@ class TblPieceJointeFournie
     private $validation;
 
     /**
+     * @var \Application\Entity\Db\PieceJointe
+     */
+    private $pieceJointe;
+
+    /**
      * @var \Application\Entity\Db\TypePieceJointe
      */
     private $typePieceJointe;
@@ -43,6 +48,7 @@ class TblPieceJointeFournie
     private $annee;
 
 
+
     /**
      * Set toDelete
      *
@@ -57,6 +63,8 @@ class TblPieceJointeFournie
         return $this;
     }
 
+
+
     /**
      * Get toDelete
      *
@@ -67,6 +75,8 @@ class TblPieceJointeFournie
         return $this->toDelete;
     }
 
+
+
     /**
      * Get id
      *
@@ -76,6 +86,8 @@ class TblPieceJointeFournie
     {
         return $this->id;
     }
+
+
 
     /**
      * Set validation
@@ -91,6 +103,8 @@ class TblPieceJointeFournie
         return $this;
     }
 
+
+
     /**
      * Get validation
      *
@@ -100,6 +114,36 @@ class TblPieceJointeFournie
     {
         return $this->validation;
     }
+
+
+
+    /**
+     * Set pieceJointe
+     *
+     * @param \Application\Entity\Db\PieceJointe $pieceJointe
+     *
+     * @return TblPieceJointeFournie
+     */
+    public function setPieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe = null)
+    {
+        $this->pieceJointe = $pieceJointe;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get pieceJointe
+     *
+     * @return \Application\Entity\Db\PieceJointe
+     */
+    public function getPieceJointe()
+    {
+        return $this->pieceJointe;
+    }
+
+
 
     /**
      * Set typePieceJointe
@@ -115,6 +159,8 @@ class TblPieceJointeFournie
         return $this;
     }
 
+
+
     /**
      * Get typePieceJointe
      *
@@ -124,6 +170,8 @@ class TblPieceJointeFournie
     {
         return $this->typePieceJointe;
     }
+
+
 
     /**
      * Set intervenant
@@ -139,6 +187,8 @@ class TblPieceJointeFournie
         return $this;
     }
 
+
+
     /**
      * Get intervenant
      *
@@ -148,6 +198,8 @@ class TblPieceJointeFournie
     {
         return $this->intervenant;
     }
+
+
 
     /**
      * Set fichier
@@ -163,6 +215,8 @@ class TblPieceJointeFournie
         return $this;
     }
 
+
+
     /**
      * Get fichier
      *
@@ -172,6 +226,8 @@ class TblPieceJointeFournie
     {
         return $this->fichier;
     }
+
+
 
     /**
      * Set annee
@@ -186,6 +242,8 @@ class TblPieceJointeFournie
 
         return $this;
     }
+
+
 
     /**
      * Get annee

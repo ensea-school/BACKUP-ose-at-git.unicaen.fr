@@ -227,7 +227,7 @@ class WorkflowService extends AbstractService
      */
     public function calculerTout()
     {
-        $sql = "BEGIN OSE_WORKFLOW.CALCULER_TOUT( NULL, FALSE ); END;";
+        $sql = "BEGIN OSE_EVENT.CALCULER_TOUT( 'OSE_WORKFLOW' ); END;";
         $this->getEntityManager()->getConnection()->executeQuery($sql);
 
         return $this;

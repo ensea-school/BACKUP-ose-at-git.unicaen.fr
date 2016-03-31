@@ -136,28 +136,11 @@ return [
                             AdministrateurRole::ROLE_ID,
                         ],
                         [
-                            Validation::RESOURCE_ID_CLOTURE_REALISE,
                             Validation::RESOURCE_ID_VALIDATION_ENSEIGNEMENT,
                             Validation::RESOURCE_ID_VALIDATION_REFERENTIEL,
                         ],
                         [
                             OldAbstractAssertion::PRIVILEGE_READ,
-                        ],
-                        'ValidationAssertion',
-                    ],
-
-                    // ------------- Cloture REALISE -------------
-                    [
-                        [
-                            IntervenantRole::ROLE_ID, // <-- Hey!
-                            ComposanteRole::ROLE_ID,
-                            AdministrateurRole::ROLE_ID,
-                        ],
-                        [
-                            Validation::RESOURCE_ID_CLOTURE_REALISE,
-                        ],
-                        [
-                            OldAbstractAssertion::PRIVILEGE_CREATE,
                         ],
                         'ValidationAssertion',
                     ],
@@ -197,7 +180,6 @@ return [
             'ValidationAssertion'            => Assertion\ValidationAssertionProxy::class,
             'ValidationServiceAssertion'     => Assertion\ValidationServiceAssertion::class,
             'ValidationReferentielAssertion' => Assertion\ValidationReferentielAssertion::class,
-            'ClotureRealiseAssertion'        => Assertion\ClotureRealiseAssertion::class,
         ],
         'factories'    => [
             'ValidationEnseignementPrevuRule'   => Rule\Validation\Enseignement\Prevu\RuleFactory::class,

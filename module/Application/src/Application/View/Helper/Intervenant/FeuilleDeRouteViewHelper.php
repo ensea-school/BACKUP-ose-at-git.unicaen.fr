@@ -243,8 +243,9 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         }
 
         if ($detailsLink instanceof TagViewHelper) {
-            $content = $detailsLink->html($content);
+            $content = $detailsLink->html($tag('span', ['class' => 'glyphicon glyphicon-eye-open'])->openClose().' '.$content);
             $attrs['title'] .= ' (cliquez pour afficher le détail par composante)';
+
         }
 
         $res .= $tag('span', $attrs)->html($content);
@@ -297,12 +298,13 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         } else {
             throw new \LogicException('La classe de l\'étape fournie ne peut pas être prise en compte');
         }
-
+        /* @var $etapes TblWorkflow[]  */
         $naDesc = '';
         foreach ($etapes as $etp) {
-            foreach ($etp->getEtapeDeps() as $ed) {
+            $deps = $etp->getEtapeDeps();
+            foreach ($deps as $ed) {
                 /* @var $ed WfDepBloquante */
-                $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonAtteignable() . "\n";
+                $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie() . "\n";
             }
             break; // pour ne pas répéter!!!
         }

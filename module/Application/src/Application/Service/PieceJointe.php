@@ -136,23 +136,25 @@ class PieceJointe extends AbstractEntityService
     {
         $dql = "
         SELECT
-          pj, tpj, v, f        
+          pjf, pj, tpj, v, f        
         FROM
-          Application\Entity\Db\PieceJointe pj
-          JOIN pj.type tpj
-          LEFT JOIN pj.validation v
-          LEFT JOIN pj.fichier f
+          Application\Entity\Db\TblPieceJointeFournie pjf
+          JOIN pjf.pieceJointe pj
+          JOIN pjf.typePieceJointe tpj
+          LEFT JOIN pjf.validation v
+          LEFT JOIN pjf.fichier f
         WHERE
-          pj.intervenant = :intervenant
+          pjf.intervenant = :intervenant
         ";
-        $lpj = $this->getEntityManager()->createQuery($dql)->setParameters([
+        $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant,
         ])->getResult();
 
-        /* @var $lpj \Application\Entity\Db\PieceJointe[] */
+        /* @var $lpjf \Application\Entity\Db\TblPieceJointeFournie[] */
 
         $result = [];
-        foreach ($lpj as $pj) {
+        foreach ($lpjf as $pjf) {
+            $pj = $pjf->getPieceJointe();
             $result[$pj->getType()->getId()] = $pj;
         }
 

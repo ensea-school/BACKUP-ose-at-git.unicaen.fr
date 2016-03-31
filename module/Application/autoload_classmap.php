@@ -623,7 +623,6 @@ return array(
     'Application\Traits\ServiceAPayerAwareTrait'                                                                          => __DIR__ . '/src/Application/Traits/ServiceAPayerAwareTrait.php',
     'Application\Assertion\ValidationAssertionProxy'                                                                      => __DIR__ . '/src/Application/Assertion/ValidationAssertionProxy.php',
     'Application\Assertion\ModificationServiceDuAssertion'                                                                => __DIR__ . '/src/Application/Assertion/ModificationServiceDuAssertion.php',
-    'Application\Assertion\ClotureRealiseAssertion'                                                                       => __DIR__ . '/src/Application/Assertion/ClotureRealiseAssertion.php',
     'Application\Assertion\IntervenantAssertion'                                                                          => __DIR__ . '/src/Application/Assertion/IntervenantAssertion.php',
     'Application\Assertion\ServiceReferentielAssertion'                                                                   => __DIR__ . '/src/Application/Assertion/ServiceReferentielAssertion.php',
     'Application\Assertion\ContratAssertion'                                                                              => __DIR__ . '/src/Application/Assertion/ContratAssertion.php',

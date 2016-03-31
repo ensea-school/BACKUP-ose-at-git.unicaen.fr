@@ -7,6 +7,7 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\PersonnelAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\PerimetreAwareTrait;
+use UnicaenAuth\Entity\Db\Privilege;
 
 /**
  * Rôle
@@ -22,6 +23,13 @@ class Role extends NamedRole
 
     protected $peutChangerStructure;
 
+    /**
+     * @var string[]
+     */
+    protected $privileges = [];
+
+
+
     const ROLE_ID = 'role';
 
 
@@ -29,6 +37,30 @@ class Role extends NamedRole
     public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Rôle inconnu', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
+    }
+
+
+
+    public function initPrivileges( array $privileges )
+    {
+        $this->privileges = $privileges;
+    }
+
+
+
+    public function getPrivileges()
+    {
+        return $this->privileges;
+    }
+
+
+
+    public function hasPrivilege( $privilege )
+    {
+        if ($privilege instanceof Privilege){
+            $privilege = $privilege->getFullCode();
+        }
+        return in_array($privilege, $this->privileges);
     }
 
 

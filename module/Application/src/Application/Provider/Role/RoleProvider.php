@@ -8,6 +8,7 @@ use Application\Service\Traits\PersonnelAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -29,6 +30,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use SessionContainerTrait;
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
+    use PrivilegeProviderAwareTrait;
 
     /**
      * @var array
@@ -44,6 +46,11 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
      * @var StructureEntity
      */
     protected $structureSelectionnee;
+
+    /**
+     * @var array
+     */
+    private $rolesPrivileges;
 
 
 
@@ -69,6 +76,24 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         }
 
         return $this->roles;
+    }
+
+
+
+    protected function getRolesPrivileges()
+    {
+        if (!$this->rolesPrivileges){
+            $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+            foreach( $pr as $priv => $roles ){
+                foreach( $roles as $role ){
+                    if (!isset($this->rolesPrivileges[$role])){
+                        $this->rolesPrivileges[$role] = [];
+                    }
+                    $this->rolesPrivileges[$role][] = $priv;
+                }
+            }
+        }
+        return $this->rolesPrivileges;
     }
 
 
@@ -118,6 +143,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         )->setParameter(':personnel', $personnel);
 
         $result = $query->getResult();
+        $rolesPrivileges = $this->getRolesPrivileges();
         foreach ($result as $dbRole) {
             /* @var $dbRole \Application\Entity\Db\Role */
             $roleId = $dbRole->getRoleId();
@@ -147,6 +173,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /* FIN de deprecated */
 
             $role = new $roleClass($roleId, $parent, $dbRole->getLibelle());
+            if (isset($rolesPrivileges[$roleId])){
+                $role->initPrivileges($rolesPrivileges[$roleId]);
+            }
+
             if ($dbRole->getPeutChangerStructure()){
                 $role->setPeutChangerStructure(true);
             }

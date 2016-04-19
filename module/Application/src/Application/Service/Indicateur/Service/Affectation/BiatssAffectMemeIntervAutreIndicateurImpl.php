@@ -31,7 +31,7 @@ class BiatssAffectMemeIntervAutreIndicateurImpl extends IntervAffectMemeIntervAu
     protected function getStatutIntervenant()
     {
         if (null === $this->statutIntervenant) {
-            $qb                      = $this->getServiceStatutIntervenant()->finderBySourceCode(StatutIntervenant::BIATSS);
+            $qb                      = $this->getServiceStatutIntervenant()->finderBySourceCode('BIATSS');
             $this->statutIntervenant = $qb->getQuery()->getOneOrNullResult();
         }
 

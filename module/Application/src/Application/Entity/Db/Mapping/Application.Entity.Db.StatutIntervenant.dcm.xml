@@ -35,6 +35,8 @@
         <field name="peutChoisirDansDossier" type="boolean" column="PEUT_CHOISIR_DANS_DOSSIER" nullable="false"/>
         <field name="peutSaisirDossier" type="boolean" column="PEUT_SAISIR_DOSSIER" nullable="false"/>
         <field name="peutAvoirContrat" type="boolean" column="PEUT_AVOIR_CONTRAT" nullable="false"/>
+        <field name="peutCloturerSaisie" type="boolean" column="PEUT_CLOTURER_SAISIE" nullable="false"/>
+        <field name="temAtv" type="boolean" column="TEM_ATV" nullable="false"/>
         <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
             <join-columns>
                 <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>

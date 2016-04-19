@@ -69,18 +69,30 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
 
         <!-- actions de validation de la pièce jointe entière -->
         <?php if ($canValider): ?>
-            <a class="valider-dossier btn btn-success"
+            <a class="valider-dossier btn btn-success pop-ajax"
                href="<?php echo $this->url('intervenant/dossier/valider', [], [], true) ?>"
-               title="Valider les données personnelles">
+               title="Valider les données personnelles"
+               data-content="Confirmez-vous cette validation ?"
+               data-confirm="true"
+               data-confirm-button="Je confirme"
+               data-cancel-button="Non"
+               data-submit-reload="true"
+            >
                 <span class="glyphicon glyphicon-thumbs-up"></span> Je valide les données
             </a>
         <?php endif ?>
 
         <!-- actions de dévalidation de la pièce jointe entière -->
         <?php if ($canDevalider): ?>
-            <a class="devalider-pj btn btn-danger"
+            <a class="devalider-pj btn btn-danger pop-ajax"
                href="<?php echo $this->url('intervenant/dossier/devalider', [], [], true) ?>"
-               title="Dévalider les données personnelles">
+               title="Dévalider les données personnelles"
+               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+               data-confirm="true"
+               data-confirm-button="Oui"
+               data-cancel-button="Non"
+               data-submit-reload="true"
+            >
                 <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
             </a>
         <?php endif ?>

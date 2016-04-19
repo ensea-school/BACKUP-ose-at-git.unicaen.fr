@@ -16,6 +16,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use NumberFormatter;
 use UnicaenApp\Util;
+use UnicaenApp\View\Model\MessengerViewModel;
 use UnicaenAuth\Service\UserContext;
 use Zend\View\Model\ViewModel;
 
@@ -173,13 +174,7 @@ class DossierController extends AbstractController
             $this->flashMessenger()->addErrorMessage(DbException::translate($e));
         }
 
-        return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
-
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('application/dossier/index');
-        $viewModel->setVariables($this->indexAction());
-
-        return $viewModel;
+        return new MessengerViewModel;
     }
 
 
@@ -198,13 +193,7 @@ class DossierController extends AbstractController
             $this->flashMessenger()->addErrorMessage(DbException::translate($e));
         }
 
-        return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
-
-        $viewModel = new ViewModel();
-        $viewModel->setTemplate('application/dossier/index');
-        $viewModel->setVariables($this->indexAction());
-
-        return $viewModel;
+        return new MessengerViewModel;
     }
 
 

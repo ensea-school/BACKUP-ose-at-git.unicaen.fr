@@ -272,7 +272,7 @@ class TblWorkflow
     /**
      * Get affectation
      *
-     * @return WfEtapeDep[]
+     * @return WfDepBloquante[]
      */
     public function getEtapeDeps()
     {

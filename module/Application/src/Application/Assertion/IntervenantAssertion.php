@@ -5,7 +5,9 @@ namespace Application\Assertion;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Role;
 use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AbstractAssertion;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 
 /**
@@ -15,12 +17,33 @@ use UnicaenAuth\Assertion\AbstractAssertion;
  */
 class IntervenantAssertion extends AbstractAssertion
 {
-
-    /* ---- Routage général ---- */
-    public function __invoke(array $page) // gestion des visibilités de menus
+    /**
+     * @param ResourceInterface $entity
+     * @param string            $privilege
+     *
+     * @return boolean
+     */
+    protected function assertEntity(ResourceInterface $entity, $privilege = null)
     {
-        return $this->assertPage($page);
+        $role        = $this->getRole();
+
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
+        // pareil si le rôle ne possède pas le privilège adéquat
+        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+
+        switch (true) {
+            case $entity instanceof Intervenant:
+                switch ($privilege) {
+                    case Privileges::ENSEIGNEMENT_CLOTURE:
+                        return $this->assertClotureSaisie($entity);
+                }
+            break;
+        }
+
+        return true;
     }
+
 
 
     protected function assertController($controller, $action = null, $privilege = null)
@@ -39,19 +62,6 @@ class IntervenantAssertion extends AbstractAssertion
             case 'cloturer-saisie':
                 return $this->assertClotureSaisie($intervenant);
             break;
-        }
-
-        return true;
-    }
-
-
-
-    protected function assertPage(array $page)
-    {
-        $role        = $this->getRole();
-
-        if ($role instanceof Role && isset($page['privilege'])){
-            return $role->hasPrivilege($page['privilege']);
         }
 
         return true;

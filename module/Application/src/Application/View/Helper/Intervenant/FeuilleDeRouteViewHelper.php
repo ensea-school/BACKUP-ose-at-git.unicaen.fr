@@ -289,7 +289,7 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
 
 
-    protected function getWhyNonAtteignable($etape)
+    public function getWhyNonAtteignable($etape, $toArray=false)
     {
         if ($etape instanceof TblWorkflow) {
             $etapes = [$etape];
@@ -299,20 +299,54 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
             throw new \LogicException('La classe de l\'étape fournie ne peut pas être prise en compte');
         }
         /* @var $etapes TblWorkflow[]  */
-        $naDesc = '';
+        $naDesc = $toArray ? [] : '';
         foreach ($etapes as $etp) {
             $deps = $etp->getEtapeDeps();
             foreach ($deps as $ed) {
                 /* @var $ed WfDepBloquante */
-                $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie() . "\n";
+                if ($toArray){
+                    $naDesc[] = $ed->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
+                }else{
+                    $naDesc .= ' - ' . $ed->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie() . "\n";
+                }
+
             }
             break; // pour ne pas répéter!!!
         }
 
-        if ($naDesc) {
+        if (!$toArray && $naDesc) {
             $naDesc = "Non atteignable : \n" . $naDesc;
         }
 
         return $naDesc;
+    }
+
+
+
+    public function renderWhyNonAtteignable( $etape, $structure=null)
+    {
+        if (is_string($etape)){
+            $etape = $this->getServiceWorkflow()->getEtape($etape, $this->getIntervenant());
+        }
+
+        if ($etape instanceof WorkflowEtape) {
+            $etape = $etape->getStructureEtape($structure);
+        }
+
+        if (!$etape instanceof TblWorkflow){
+            throw new \LogicException('L\'étape est innexistante ou est fournie dans un format qui ne peut pas être pris en compte');
+        }
+
+        /* @var $etape TblWorkflow */
+        $deps = $etape->getEtapeDeps();
+        foreach( $deps as $dep ){
+            $desc = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
+            ?>
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <?php echo $desc ?>
+            </div>
+            <?php
+        }
     }
 }

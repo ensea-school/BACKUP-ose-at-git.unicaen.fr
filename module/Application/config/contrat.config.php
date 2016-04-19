@@ -2,9 +2,10 @@
 
 namespace Application;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantExterieurRole;
+use Application\Assertion\ContratAssertion;
+use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
     'router'          => [
@@ -24,36 +25,13 @@ return [
                     'creer'               => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant',
+                            'route'       => '/:intervenant/creer/:structure',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
+                                'structure'   => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'action' => 'creer-contrat',
-                            ],
-                        ],
-                    ],
-                    'creer-avenant'       => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'creer-avenant',
-                            ],
-                        ],
-                    ],
-                    'voir'                => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'voir',
+                                'action' => 'creer',
                             ],
                         ],
                     ],
@@ -172,23 +150,47 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            'BjyAuthorize\Guard\Controller' => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => [
-                        'creer', 'supprimer', 'exporter', 'valider', 'devalider', 'saisir-retour',
-                        'deposer-fichier', 'supprimer-fichier',
-                    ],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'action'     => ['index', 'telecharger-fichier', 'lister-fichier'],
+                    'privileges' => Privileges::CONTRAT_VISUALISATION,
                     'assertion'  => 'assertionContrat',
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => [
-                        'index', 'voir',
-                        'telecharger-fichier', 'lister-fichier',
-                    ],
-                    'roles'      => [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'action'     => ['creer'],
+                    'privileges' => Privileges::CONTRAT_CREATION,
+                    'assertion'  => 'assertionContrat',
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['supprimer'],
+                    'privileges' => Privileges::CONTRAT_SUPPRESSION,
+                    'assertion'  => 'assertionContrat',
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['valider'],
+                    'privileges' => Privileges::CONTRAT_VALIDATION,
+                    'assertion'  => 'assertionContrat',
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['devalider'],
+                    'privileges' => Privileges::CONTRAT_DEVALIDATION,
+                    'assertion'  => 'assertionContrat',
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['exporter', 'deposer-fichier', 'supprimer-fichier'],
+                    'privileges' => Privileges::CONTRAT_DEPOT_RETOUR_SIGNE,
+                    'assertion'  => 'assertionContrat',
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['saisir-retour'],
+                    'privileges' => Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
                     'assertion'  => 'assertionContrat',
                 ],
             ],
@@ -199,27 +201,23 @@ return [
             ],
         ],
         'rule_providers'     => [
-            'BjyAuthorize\Provider\Rule\Config' => [
+            PrivilegeRuleProvider::class => [
                 'allow' => [
                     [
-                        [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                        'Contrat',
-                        [Assertion\ContratAssertionOld::PRIVILEGE_READ],
-                        'ContratAssertion',
-                    ],
-                    [
-                        [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                        'Contrat',
-                        [
-                            Assertion\ContratAssertionOld::PRIVILEGE_CREATE,
-                            Assertion\ContratAssertionOld::PRIVILEGE_DELETE,
-                            Assertion\ContratAssertionOld::PRIVILEGE_UPDATE,
-                            Assertion\ContratAssertionOld::PRIVILEGE_EXPORTER,
-                            Assertion\ContratAssertionOld::PRIVILEGE_VALIDER,
-                            Assertion\ContratAssertionOld::PRIVILEGE_DEVALIDER,
-                            Assertion\ContratAssertionOld::PRIVILEGE_DATE_RETOUR,
-                            Assertion\ContratAssertionOld::PRIVILEGE_DEPOSER],
-                        'ContratAssertion',
+                        'privileges' => [
+                            Privileges::CONTRAT_CREATION,
+                            Privileges::CONTRAT_DEPOT_RETOUR_SIGNE,
+                            Privileges::CONTRAT_DEVALIDATION,
+                            Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
+                            Privileges::CONTRAT_SUPPRESSION,
+                            Privileges::CONTRAT_VALIDATION,
+                            Privileges::CONTRAT_VISUALISATION,
+                            ContratAssertion::PRIV_LISTER_FICHIERS,
+                            ContratAssertion::PRIV_AJOUTER_FICHIER,
+                            ContratAssertion::PRIV_SUPPRIMER_FICHIER,
+                        ],
+                        'resources'  => 'Contrat',
+                        'assertion'  => 'assertionContrat',
                     ],
                 ],
             ],
@@ -234,13 +232,8 @@ return [
         'invokables' => [
             'ApplicationContrat'          => Service\Contrat::class,
             'ApplicationTypeContrat'      => Service\TypeContrat::class,
-            'ApplicationContratProcess'   => Service\Process\ContratProcess::class,
-            'NecessiteContratRule'        => Rule\Intervenant\NecessiteContratRule::class,
-            'PossedeContratRule'          => Rule\Intervenant\PossedeContratRule::class,
-            'PeutCreerContratInitialRule' => Rule\Intervenant\PeutCreerContratInitialRule::class,
-            'PeutCreerAvenantRule'        => Rule\Intervenant\PeutCreerAvenantRule::class,
-            'ContratAssertion'            => Assertion\ContratAssertionOld::class,
             'assertionContrat'            => Assertion\ContratAssertion::class,
+            'processusContrat'            => Processus\ContratProcessus::class,
         ],
     ],
     'view_helpers'    => [
@@ -250,7 +243,7 @@ return [
     'form_elements'   => [
         'invokables' => [
             'contratValivation' => Form\Intervenant\ContratValidation::class,
-            'contratRetour'     => Form\Intervenant\ContratRetour::class
+            'contratRetour'     => Form\Intervenant\ContratRetour::class,
         ],
     ],
 ];

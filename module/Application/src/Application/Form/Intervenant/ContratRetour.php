@@ -21,8 +21,9 @@ class ContratRetour extends AbstractForm
     {
         $this->setHydrator(new ClassMethods(false));
         $this->setAttribute('method', 'POST');
+        $this->setAttribute('action', $this->getCurrentUrl());
 
-        $contratToString = lcfirst($this->getContrat()->toString(true));
+        $contratToString = lcfirst($this->getContrat()->toString(true, true));
 
         $this->add([
             'name' => 'dateRetourSigne',

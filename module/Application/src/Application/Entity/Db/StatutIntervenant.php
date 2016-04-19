@@ -14,25 +14,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 {
     use HistoriqueAwareTrait;
 
-    const ENS_2ND_DEG        = 'ENS_2ND_DEG';
-    const ENS_CH             = 'ENS_CH';
-    const ASS_MI_TPS         = 'ASS_MI_TPS';
-    const ATER               = 'ATER';
-    const ATER_MI_TPS        = 'ATER_MI_TPS';
-    const DOCTOR             = 'DOCTOR';
-    const ENS_CONTRACT       = 'ENS_CONTRACT';
-    const LECTEUR            = 'LECTEUR';
-    const MAITRE_LANG        = 'MAITRE_LANG';
-    const BIATSS             = 'BIATSS';
-    const SALAR_PRIVE        = 'SALAR_PRIVE';
-    const SALAR_PUBLIC       = 'SALAR_PUBLIC';
-    const AUTO_LIBER_INDEP   = 'AUTO_LIBER_INDEP';
-    const RETR_UCBN          = 'RETR_UCBN';
-    const RETR_HORS_UCBN     = 'RETR_HORS_UCBN';
-    const ETUD_UCBN          = 'ETUD_UCBN';
-    const ETUD_HORS_UCBN     = 'ETUD_HORS_UCBN';
     const SS_EMPLOI_NON_ETUD = 'SS_EMPLOI_NON_ETUD';
-    const AUTRES             = 'AUTRES';
     const NON_AUTORISE       = 'NON_AUTORISE';
 
 
@@ -69,43 +51,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
     }
-
-
-
-    /**
-     * Indique si ce statut correspond aux vacataires BIATSS.
-     *
-     * @return bool
-     */
-    public function estBiatss()
-    {
-        return self::BIATSS === $this->getSourceCode();
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond aux "Autres cas".
-     *
-     * @return bool
-     */
-    public function estAutre()
-    {
-        return self::AUTRES === $this->getSourceCode();
-    }
-
-
-
-    /**
-     * Indique si ce statut correspond aux Agents Temporaires Vacataires.
-     *
-     * @return bool
-     */
-    public function estAgentTemporaireVacataire()
-    {
-        return in_array($this->getSourceCode(), [self::ETUD_HORS_UCBN, self::ETUD_UCBN, self::RETR_HORS_UCBN]);
-    }
-
 
 
     /**
@@ -194,6 +139,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     protected $peutAvoirContrat;
 
     /**
+     * @var boolean
+     */
+    protected $peutCloturerSaisie;
+
+    /**
      * @var integer
      */
     protected $ordre;
@@ -217,6 +167,35 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var float
      */
     private $plafondHcRemuFc;
+
+    /**
+     * @var boolean
+     */
+    private $temAtv;
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getTemAtv()
+    {
+        return $this->temAtv;
+    }
+
+
+
+    /**
+     * @param boolean $temAtv
+     *
+     * @return StatutIntervenant
+     */
+    public function setTemAtv($temAtv)
+    {
+        $this->temAtv = $temAtv;
+
+        return $this;
+    }
 
 
 
@@ -377,6 +356,31 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->peutAvoirContrat;
     }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getPeutCloturerSaisie()
+    {
+        return $this->peutCloturerSaisie;
+    }
+
+
+
+    /**
+     * @param boolean $peutCloturerSaisie
+     *
+     * @return StatutIntervenant
+     */
+    public function setPeutCloturerSaisie($peutCloturerSaisie)
+    {
+        $this->peutCloturerSaisie = $peutCloturerSaisie;
+
+        return $this;
+    }
+
 
 
 

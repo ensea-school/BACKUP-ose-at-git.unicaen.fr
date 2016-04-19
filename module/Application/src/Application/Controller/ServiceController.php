@@ -245,7 +245,7 @@ class ServiceController extends AbstractController
 
 
     /**
-     * Clôture de la saisie du réalisé des permanents.
+     * Clôture de la saisie du réalisé.
      *
      * GET  : affichage du bouton permettant de clôturer la saisie.
      * POST : création d'une validation pour clôturer la saisie, ou suppression pour déclôturer.
@@ -254,7 +254,8 @@ class ServiceController extends AbstractController
      */
     public function cloturerSaisieAction()
     {
-        $intervenant = $this->context()->intervenantFromRoute();
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant  */
         if (!$intervenant) {
             return false; // désactive la vue
         }
@@ -264,7 +265,7 @@ class ServiceController extends AbstractController
         $validation = $this->getServiceValidation()->findValidationClotureServices($intervenant, $tvh); // clôture existante
         $viewModel  = new ViewModel();
 
-        if (!$intervenant->getStatut()->estPermanent()) {
+        if (!$this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_CLOTURE)) {
             return false; // désactive la vue
         }
         if (TypeVolumeHoraire::CODE_REALISE !== $tvh->getCode()) {
@@ -316,7 +317,7 @@ class ServiceController extends AbstractController
 
     public function exportAction()
     {
-        $intervenant = $this->context()->intervenantFromRoute();
+        $intervenant = $this->getEvent()->getParam('intervernant');
 
         if (!$this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')) {
             throw new \BjyAuthorize\Exception\UnAuthorizedException();

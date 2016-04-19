@@ -9,9 +9,9 @@ INSERT INTO PARAMETRE (
   HISTO_CREATEUR_ID,
   HISTO_MODIFICATEUR_ID
 )VALUES(
-  'discipline_codes_corresp_1_libelle',
-  'Section(s) CNU Apogée',
-  'Libellé de la liste 1 des correspondances de codes des disciplines',
+  'contrat_etablissement',
+  'L''université de Caen',
+  'Contrat : établissement',
   PARAMETRE_ID_SEQ.NEXTVAL,
   (select id from utilisateur where username = 'lecluse'),
   (select id from utilisateur where username = 'lecluse')
@@ -25,9 +25,9 @@ INSERT INTO PARAMETRE (
   HISTO_CREATEUR_ID,
   HISTO_MODIFICATEUR_ID
 )VALUES(
-  'discipline_codes_corresp_2_libelle',
-  'Section(s) CNU Harpège',
-  'Libellé de la liste 2 des correspondances de codes des disciplines',
+  'contrat_etablissement_represente',
+  'représentée par son Président, Pierre DENISE',
+  'Contrat : représentant',
   PARAMETRE_ID_SEQ.NEXTVAL,
   (select id from utilisateur where username = 'lecluse'),
   (select id from utilisateur where username = 'lecluse')
@@ -41,9 +41,9 @@ INSERT INTO PARAMETRE (
   HISTO_CREATEUR_ID,
   HISTO_MODIFICATEUR_ID
 )VALUES(
-  'discipline_codes_corresp_3_libelle',
-  'Discipline Harpège',
-  'Libellé de la liste 3 des correspondances de codes des disciplines',
+  'contrat_civilite_president',
+  'le Président',
+  'Contrat : civilité du président (avec article)',
   PARAMETRE_ID_SEQ.NEXTVAL,
   (select id from utilisateur where username = 'lecluse'),
   (select id from utilisateur where username = 'lecluse')
@@ -57,9 +57,9 @@ INSERT INTO PARAMETRE (
   HISTO_CREATEUR_ID,
   HISTO_MODIFICATEUR_ID
 )VALUES(
-  'discipline_codes_corresp_4_libelle',
-  '',
-  'Libellé de la liste 4 des correspondances de codes des disciplines',
+  'contrat_lieu_signature',
+  'Caen',
+  'LContrat : lieu de signature',
   PARAMETRE_ID_SEQ.NEXTVAL,
   (select id from utilisateur where username = 'lecluse'),
   (select id from utilisateur where username = 'lecluse')

@@ -8,27 +8,7 @@ $.widget("ose.pieceJointe", {
         var that = this;
 
         that.element.on('click', '.valider-pj, .devalider-pj', function(event){
-            var a = $(this);
-            var tpj = a.parents('.tpj').data('tpj');
-
-            a.button('loading');
-            $.post(a.prop('href'), [], function (data, textStatus, jqXHR)
-            {
-                var container = that.getContainer(tpj);
-                container.find('.validation-bar').html(data);
-                container.removeClass('panel-default');
-                container.removeClass('panel-success');
-
-                var isValider = data.indexOf("/valider/") !== -1;
-
-                if (isValider){
-                    container.addClass('panel-default');
-                }else{
-                    container.addClass('panel-success');
-                }
-
-                that.onValidationChange( tpj, isValider );
-            });
+            that.validerDevalider( $(this) );
             event.preventDefault();
         });
 
@@ -38,6 +18,32 @@ $.widget("ose.pieceJointe", {
             that.onFileChange( tpj );
         });
 
+    },
+
+
+
+    validerDevalider: function( element )
+    {
+        var tpj = element.parents('.tpj').data('tpj');
+
+        element.button('loading');
+        $.post(element.prop('href'), [], function (data, textStatus, jqXHR)
+        {
+            var container = that.getContainer(tpj);
+            container.find('.validation-bar').html(data);
+            container.removeClass('panel-default');
+            container.removeClass('panel-success');
+
+            var isValider = data.indexOf("/valider/") !== -1;
+
+            if (isValider){
+                container.addClass('panel-default');
+            }else{
+                container.addClass('panel-success');
+            }
+
+            that.onValidationChange( tpj, isValider );
+        });
     },
 
 

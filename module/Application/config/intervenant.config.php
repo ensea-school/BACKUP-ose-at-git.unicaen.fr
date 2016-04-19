@@ -507,6 +507,11 @@ return [
                         'resources'  => 'Intervenant',
                         'assertion'  => 'ModificationServiceDuAssertion',
                     ],
+                    [
+                        'privileges' => Privileges::ENSEIGNEMENT_CLOTURE,
+                        'resources'  => 'Intervenant',
+                        'assertion'  => 'assertionIntervenant',
+                    ],
                 ],
             ],
         ],
@@ -531,7 +536,6 @@ return [
             'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
             'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
             'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
-            'EstAffecteRule'                        => Rule\Intervenant\EstAffecteRule::class,
         ],
     ],
     'view_helpers'    => [

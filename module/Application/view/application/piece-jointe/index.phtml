@@ -23,19 +23,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
 ?>
     <style>
 
-        .piece-jointe .tpj .panel-heading {
-            padding: 0px;
-
-        }
-
-        .piece-jointe .tpj h3 {
-            padding: 10px;
-            margin: 0px;
-        }
-
-        .piece-jointe .tpj .panel-heading .validation-bar a {
-            margin-top: -5px;
-        }
+        
 
         #alert-contrat {
             display: none;
@@ -52,6 +40,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
 
         $restantes = $fournies;
         if (!empty($demandees)) {
+            echo '<div class="well">';
             echo '<h2>Pièces demandées</h2>';
             $obligatoire = true;
             foreach ($demandees as $tpj) { // on liste les pièces demandées
@@ -63,6 +52,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
                 }
                 echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
             }
+            echo '</div>';
 
             if ($alertContrat) {
                 ?>
@@ -79,12 +69,14 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
         }
 
         if (!empty($restantes)) {
+            echo '<div class="well">';
             echo '<h2>Autres pièces fournies</h2>';
             $obligatoire = false;
             foreach ($restantes as $tpjId => $pj) { // on liste les pièces fournies mais qui ne sont pas demandées...
                 $tpj = $pj->getType();
                 echo $this->partial('application/piece-jointe/partial/piece-jointe', compact('intervenant', 'tpj', 'pj', 'canEdit', 'canValider', 'canDevalider', 'obligatoire'));
             }
+            echo '</div>';
         }
 
         ?>

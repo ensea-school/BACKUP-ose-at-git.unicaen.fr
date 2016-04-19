@@ -237,57 +237,8 @@ class EntityProvider
         return $this;
     }
 
-    /**
-     * Retourne à chaque appel une nouvelle instance d'IntervenantPermanent persistée.
-     *
-     * @param StatutIntervenant $statut
-     * @return IntervenantPermanent
-     */
-    public function getIntervenantPermanent(StatutIntervenant $statut = null)
-    {
-        $i = Asset::newIntervenantPermanent(
-                $this->getCivilite(),
-                $statut ?: $this->getStatutIntervenantByCode(StatutIntervenant::ENS_CH),
-                $this->getStructure(),
-                $this->getCorps());
 
-        // permet de repérer dans la bdd les intervenants de test non supprimés
-        if ($this->testClassName) {
-            $i->setNomUsuel(ltrim(strrchr($this->testClassName, '\\'), '\\'));
-        }
 
-        $this->getEntityManager()->persist($i);
-
-        $this->newEntities->push($i);
-
-        return $i;
-    }
-
-    /**
-     * Retourne à chaque appel une nouvelle instance d'IntervenantExterieur persistée.
-     *
-     * @param StatutIntervenant $statut
-     * @return IntervenantExterieur
-     */
-    public function getIntervenantExterieur(StatutIntervenant $statut = null)
-    {
-        $i = Asset::newIntervenantExterieur(
-                $this->getCivilite(),
-                $statut ?: $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE),
-                $this->getStructure(),
-                $this->getRegimeSecu());
-
-        // permet de repérer dans la bdd les intervenants de test non supprimés
-        if ($this->testClassName) {
-            $i->setNomUsuel(ltrim(strrchr($this->testClassName, '\\'), '\\'));
-        }
-
-        $this->getEntityManager()->persist($i);
-
-        $this->newEntities->push($i);
-
-        return $i;
-    }
 
     /**
      * Recherche et retourne la source de test.
@@ -567,26 +518,6 @@ class EntityProvider
         return $this->regimeSecu;
     }
 
-    /**
-     * Retourne à chaque appel une nouvelle instance de Dossier persistée.
-     *
-     * @return Dossier
-     */
-    public function getDossier()
-    {
-        $dossier = Asset::newDossier(
-                $this->getCivilite(),
-                true,
-                false,
-                $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE)
-        );
-
-        $this->getEntityManager()->persist($dossier);
-
-        $this->newEntities->push($dossier);
-
-        return $dossier;
-    }
 
     /**
      * Retourne à chaque appel une nouvelle instance de Service.

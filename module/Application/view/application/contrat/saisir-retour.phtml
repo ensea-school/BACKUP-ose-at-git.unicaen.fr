@@ -1,18 +1,21 @@
-<h2 class="page-header"><?php echo $title ?></h2>
+<?php
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger()->addMessages($messages) ?>
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $form \Application\Form\Intervenant\ContratRetour
+ * @var $done boolean
+ */
 
+?>
+    <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php $form->prepare(); ?>
-<?php echo $this->form()->openTag($form); ?>
-<div class="row">
-    <div class="col-md-8">
-        <?php 
-        echo $this->formControlGroup($form->get('dateRetourSigne'));
-        echo $this->formHidden($form->get('security'));
-        ?>
-    </div>
-</div>
-<hr />
-<?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
-<?php echo $this->form()->closeTag();
+<?php
+
+if (!$done) echo $this->messenger()->addMessagesFromFlashMessenger();
+
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formControlGroup($form->get('dateRetourSigne'));
+echo $this->formHidden($form->get('security'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+echo $this->form()->closeTag();

@@ -29,11 +29,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $intervenant;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $volumeHoraire;
-
-    /**
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
@@ -138,7 +133,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      */
     public function estUnAvenant()
     {
-        return $this->getTypeContrat()->estUnAvenant();
+        return $this->getTypeContrat() && $this->getTypeContrat()->estUnAvenant();
     }
 
 
@@ -247,46 +242,6 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-
-
-    /**
-     * Add volumeHoraire
-     *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
-     *
-     * @return self
-     */
-    public function addVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
-    {
-        $this->volumeHoraire[] = $volumeHoraire;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove volumeHoraire
-     *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
-     */
-    public function removeVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
-    {
-        $this->volumeHoraire->removeElement($volumeHoraire);
-    }
-
-
-
-    /**
-     * Get volumeHoraire
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVolumeHoraire()
-    {
-        return $this->volumeHoraire;
     }
 
 

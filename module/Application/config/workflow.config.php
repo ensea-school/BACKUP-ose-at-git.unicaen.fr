@@ -134,9 +134,6 @@ return [
         'invokables'   => [
             'Application\Controller\Workflow' => Controller\WorkflowController::class,
         ],
-        'initializers' => [
-            Service\Workflow\WorkflowIntervenantAwareInitializer::class,
-        ],
     ],
     'service_manager' => [
         'invokables'   => [
@@ -144,12 +141,7 @@ return [
             'applicationWfEtape'    => Service\WfEtape::class,
             'workflow'              => Service\WorkflowService::class,
             'assertionWorkflow'     => Assertion\WorkflowAssertion::class,
-
             'WfIntervenantEtapeService' => Service\WfIntervenantEtape::class,
-            'WorkflowIntervenant'       => Service\Workflow\WorkflowIntervenant::class,
-        ],
-        'initializers' => [
-            Service\Workflow\WorkflowIntervenantAwareInitializer::class,
         ],
     ],
     'form_elements'   => [
@@ -159,11 +151,7 @@ return [
     ],
     'view_helpers'    => [
         'invokables'   => [
-            'Workflow'       => View\Helper\Workflow::class,
             'feuilleDeRoute' => View\Helper\Intervenant\FeuilleDeRouteViewHelper::class,
-        ],
-        'initializers' => [
-            Service\Workflow\WorkflowIntervenantAwareInitializer::class,
         ],
     ],
 ];

@@ -60,22 +60,6 @@ class PeutSaisirReferentielRule extends AbstractIntervenantRule
         $result = $qb->getQuery()->getScalarResult();
 
         return $this->normalizeResult($result);
-
-//        $estPermanent = new EstPermanentRule($this->getIntervenant());
-//        if (!$estPermanent->execute()) {
-//            $this->setMessage($estPermanent->getMessage());
-//            return false;
-//        }
-//
-//        if ($this->getStructure()) {
-//            $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getStructure());
-//            if (!$estAffecte->execute()) {
-//                $this->setMessage($estAffecte->getMessage());
-//                return false;
-//            }
-//        }
-//
-//        return true;
     }
 
     public function isRelevant()

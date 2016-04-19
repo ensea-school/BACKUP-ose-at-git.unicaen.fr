@@ -9,9 +9,7 @@ use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WfEtapeAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Zend\View\Model\ViewModel;
+
 
 /**
  * Description of WorkflowController
@@ -19,11 +17,9 @@ use Zend\View\Model\ViewModel;
  * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
  * 
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class WorkflowController extends AbstractController implements WorkflowIntervenantAwareInterface
+class WorkflowController extends AbstractController
 {
-    use WorkflowIntervenantAwareTrait;
     use ContextAwareTrait;
     use WfEtapeDepServiceAwareTrait;
     use DependanceFormAwareTrait;
@@ -35,34 +31,6 @@ class WorkflowController extends AbstractController implements WorkflowIntervena
     public function indexAction()
     {
         return [];
-    }
-
-    /**
-     * Dessine le bouton pointant vers l'étape située après l'étape dont la route est spécifiée.
-     * 
-     * @return array
-     */
-    public function navNextAction()
-    {
-        if (!$this->getRequest()->isXmlHttpRequest()) {
-            exit;
-        }
-
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $this->context()->intervenantFromRoute();
-        $route       = $this->context()->routeFromQuery();
-        $prepend     = $this->context()->prependFromQuery();
-        
-        if (!$intervenant) {
-            exit;
-        }
-        
-        return new ViewModel([ 
-            'role'        => $role,
-            'intervenant' => $intervenant,
-            'route'       => $route,
-            'prepend'     => $prepend,
-        ]);
     }
 
 

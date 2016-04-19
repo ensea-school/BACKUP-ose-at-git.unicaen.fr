@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\TypeContrat as TypeContratEntity;
 
 /**
  * Description of TypeContrat
@@ -20,29 +20,50 @@ class TypeContrat extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\TypeContrat::class;
+        return TypeContratEntity::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'typec';
     }
 
-    /**
-     * Retourne la liste des types de volumes horaires
-     *
-     * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\TypeContrat[]
-     */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+
+
+    public function getContrat()
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.libelle");
-        return parent::getList($qb, $alias);
+        return $this->getByCode(TypeContratEntity::CODE_CONTRAT);
+    }
+
+
+
+    public function getAvenant()
+    {
+        return $this->getByCode(TypeContratEntity::CODE_AVENANT);
+    }
+
+
+
+    /**
+     *
+     * @param string $code
+     *
+     * @return TypeContratEntity
+     */
+    public function getByCode($code)
+    {
+        if (!isset($this->cache[$code])) {
+            $this->cache[$code] = $this->getRepo()->findOneBy(['code' => $code]);
+        }
+
+        return $this->cache[$code];
     }
 
 }

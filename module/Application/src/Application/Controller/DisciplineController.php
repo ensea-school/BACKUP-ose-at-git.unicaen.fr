@@ -7,7 +7,6 @@ use Application\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
-use Doctrine\ORM\EntityManager;
 use Application\Exception\DbException;
 
 

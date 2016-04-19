@@ -176,7 +176,6 @@ return [
             'ApplicationValidation'          => Service\Validation::class,
             'ValidationEnseignementRule'     => Rule\Validation\Enseignement\ValidationRule::class,
             'ValidationReferentielRule'      => Rule\Validation\Referentiel\ValidationRule::class,
-            'ClotureRealiseRule'             => Rule\Validation\ClotureRealiseRule::class,
             'ValidationAssertion'            => Assertion\ValidationAssertionProxy::class,
             'ValidationServiceAssertion'     => Assertion\ValidationServiceAssertion::class,
             'ValidationReferentielAssertion' => Assertion\ValidationReferentielAssertion::class,

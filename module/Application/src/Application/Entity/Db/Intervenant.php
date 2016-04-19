@@ -1946,10 +1946,8 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
             return null;
         }
 
-        $type = TypeContrat::CODE_CONTRAT;
-
-        $filter   = function ($contrat) use ($type) {
-            return $type === $contrat->getTypeContrat()->getCode();
+        $filter   = function ($contrat) {
+            return TypeContrat::CODE_CONTRAT === $contrat->getTypeContrat()->getCode();
         };
         $contrats = $this->getContrat()->filter($filter);
 

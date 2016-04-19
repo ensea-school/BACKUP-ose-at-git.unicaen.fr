@@ -7,9 +7,6 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Rule\AbstractBusinessRule;
 use Application\Rule\Paiement\MiseEnPaiementExisteRule;
-use Application\Service\Workflow\WorkflowIntervenant;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use LogicException;
@@ -21,11 +18,10 @@ use LogicException;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule implements WorkflowIntervenantAwareInterface
+abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule
 {
     use IntervenantAwareTrait;
     use TypeVolumeHoraireAwareTrait;
-    use WorkflowIntervenantAwareTrait;
 
     /**
      * Exécute la règle.

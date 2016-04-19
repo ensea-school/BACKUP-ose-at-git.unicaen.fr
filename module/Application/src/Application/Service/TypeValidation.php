@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 
 /**
  * Description of TypeValidation
@@ -20,7 +21,7 @@ class TypeValidation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\TypeValidation::class;
+        return TypeValidationEntity::class;
     }
 
     /**
@@ -35,7 +36,7 @@ class TypeValidation extends AbstractEntityService
     /**
      *
      * @param string $code
-     * @return \Application\Entity\Db\TypeValidation
+     * @return TypeValidationEntity
      */
     public function getByCode( $code )
     {
@@ -43,17 +44,55 @@ class TypeValidation extends AbstractEntityService
         return $this->getRepo()->findOneBy(['code' => $code]);
     }
 
+
+
+    public function getDonneesPerso()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_DONNEES_PERSO);
+    }
+
+    public function getEnseignement()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_ENSEIGNEMENT);
+    }
+
+    public function getReferentiel()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_REFERENTIEL);
+    }
+
+    public function getContrat()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_CONTRAT);
+    }
+
+    public function getFichier()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_FICHIER);
+    }
+
+    public function getPieceJointe()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_PIECE_JOINTE);
+    }
+
+    public function getClotureRealise()
+    {
+        return $this->getByCode(TypeValidationEntity::CODE_CLOTURE_REALISE);
+    }
+
+
     /**
      * Retourne la liste des types de volumes horaires
      *
      * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\TypeValidation[]
+     * @return TypeValidationEntity[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
-        return parent::getList($qb, $alias);
+        return $qb;
     }
 
 }

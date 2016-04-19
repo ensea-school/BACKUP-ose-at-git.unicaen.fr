@@ -217,6 +217,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             if ($intervenant) {
                 if ($intervenant->getStatut()->getId() == $statut['statut-id']) {
                     $role->setIntervenant($intervenant);
+                    $role->initPrivileges($rolesPrivileges['statut/'.$intervenant->getStatut()->getSourceCode()]);
                 }
             }
             $roles[$statut['role-id']] = $role;

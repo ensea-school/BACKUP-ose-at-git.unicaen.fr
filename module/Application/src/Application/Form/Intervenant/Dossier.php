@@ -106,13 +106,6 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
         }
 
         /**
-         * L'adresse mail perso n'est pas demandée aux BIATSS.
-         */
-        if ($intervenant->getStatut()->estBiatss()) {
-            $dossierFieldset->remove('emailPerso');
-        }
-
-        /**
          * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.
          */
         if ($dossier->getNumeroInsee() && !$dossier->getNumeroInseeEstProvisoire()) {

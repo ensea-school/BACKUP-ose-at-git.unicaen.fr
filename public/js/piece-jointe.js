@@ -24,6 +24,7 @@ $.widget("ose.pieceJointe", {
 
     validerDevalider: function( element )
     {
+        var that = this;
         var tpj = element.parents('.tpj').data('tpj');
 
         element.button('loading');

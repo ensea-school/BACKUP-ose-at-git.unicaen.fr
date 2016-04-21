@@ -247,20 +247,6 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getResourceId()
     {
-        switch ($this->getTypeValidation()->getCode()) {
-            case TypeValidation::CODE_ENSEIGNEMENT:
-                return self::RESOURCE_ID_VALIDATION_ENSEIGNEMENT;
-
-            case TypeValidation::CODE_REFERENTIEL:
-                return self::RESOURCE_ID_VALIDATION_REFERENTIEL;
-
-            case TypeValidation::CODE_CLOTURE_REALISE:
-                return self::RESOURCE_ID_CLOTURE_REALISE;
-
-            default:
-                break;
-        }
-
         return 'Validation';
     }
 }

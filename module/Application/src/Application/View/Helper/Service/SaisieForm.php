@@ -89,7 +89,7 @@ class SaisieForm extends AbstractHtmlElement implements ServiceLocatorAwareInter
         $fservice = $this->form->get('service');
 
         $res = $this->getView()->form()->openTag($this->form);
-        if (! $this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+        if (! $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()){
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
         }
         if ($fservice->has('interne-externe')){

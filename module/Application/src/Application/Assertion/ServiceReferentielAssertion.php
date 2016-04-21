@@ -5,7 +5,6 @@ namespace Application\Assertion;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\EtablissementRole;
-use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -247,7 +246,7 @@ class ServiceReferentielAssertion extends OldAbstractAssertion
          * Rôle Intervenant :
          * - si le réalisé est clôturé, on bloque.
          */
-        if ($this->role instanceof IntervenantRole) {
+        if ($this->role->getIntervenant()) {
             switch ($this->privilege) {
                 case self::PRIVILEGE_CREATE:
                 case self::PRIVILEGE_UPDATE:

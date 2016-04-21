@@ -112,55 +112,6 @@ class VolumeHoraire extends AbstractEntityService
 
 
     /**
-     * Recherche par structure d'intervention (i.e. structure où sont effectués les enseignements).
-     *
-     * @param StructureEntity   $structure
-     * @param QueryBuilder|null $qb
-     *
-     * @return QueryBuilder
-     */
-    public function finderByStructureIntervention(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $serviceService = $this->getServiceService();
-        $serviceElement = $this->getServiceElementPedagogique();
-
-        $this->join($serviceService, $qb, 'service');
-        $serviceService->leftJoin($serviceElement, $qb, 'elementPedagogique');
-        $serviceElement->finderByStructure($structure, $qb);
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Recherche par type de validation.
-     *
-     * @param TypeValidationEntity|string $type
-     * @param QueryBuilder|null           $qb
-     *
-     * @return QueryBuilder
-     */
-    public function finderByTypeValidation($type, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        if (!is_object($type)) {
-            $type = $this->getEntityManager()->getRepository(\Application\Entity\Db\TypeValidation::class)->findOneByCode($type);
-        }
-
-        $qb->join("$alias.validation", "v")
-            ->join("v.typeValidation", 'tv')
-            ->andWhere("tv = :tv")->setParameter('tv', $type);
-
-        return $qb;
-    }
-
-
-
-    /**
      *
      * @param EtatVolumeHoraireEntity $etatVolumeHoraire
      * @param QueryBuilder            $qb

@@ -2,17 +2,17 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\Service;
-use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\WfEtape;
+use Application\Entity\Db\Validation;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\View\Model\CsvModel;
+use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\View\Model\ViewModel;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
@@ -55,7 +55,7 @@ class ServiceController extends AbstractController
     use LocalContextAwareTrait;
     use SaisieAwareTrait;
     use RechercheFormAwareTrait;
-    use WorkflowServiceAwareTrait;
+    use ValidationProcessusAwareTrait;
 
 
 
@@ -66,9 +66,11 @@ class ServiceController extends AbstractController
      */
     protected function initFilters()
     {
+
         $this->em()->getFilters()->enable('historique')->init([
-            Service::class,
-            VolumeHoraire::class,
+            \Application\Entity\Db\Service::class,
+            \Application\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class
@@ -649,6 +651,143 @@ class ServiceController extends AbstractController
         }
 
         return compact('form', 'errors', 'title');
+    }
+
+
+
+    public function validationAction()
+    {
+        $this->initFilters();
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $filterStructure = $role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode( $this->params()->fromRoute('type-volume-horaire-code', 'PREVU') );
+
+        $title             = "Validation des enseignements";
+
+        if ($typeVolumeHoraire->isPrevu()) {
+            $title .= " prévisionnels";
+        } elseif ($typeVolumeHoraire->isRealise()) {
+            $title .= " réalisés";
+        }
+
+        $validations = $this->getProcessusValidation()->getValidationsEnseignement($intervenant, $filterStructure);
+        $services = [
+            'valides' => [],
+            'non-valides' => [],
+        ];
+
+        if ($validations){
+            foreach( $validations as $validation ){
+                $srvs = $this->getProcessusValidation()->getServices( $typeVolumeHoraire, $intervenant, $validation );
+                if ($srvs){
+                    $services['valides'][$validation->getId()] = $srvs;
+                }
+            }
+        }
+
+        $snv = $this->getProcessusValidation()->getServices( $typeVolumeHoraire, $intervenant, null );
+        foreach( $snv as $service ){
+            $structure = $this->getProcessusValidation()->getStructureValidation($service);
+            if (!$filterStructure || $filterStructure == $structure){
+                $validation = $this->getProcessusValidation()->creerValidationServices($intervenant, $structure);
+                $validations['nv'.$structure->getId()] =$validation;
+
+                if (!isset($services['non-valides']['nv'.$structure->getId()])){
+                    $services['non-valides']['nv'.$structure->getId()] = [];
+                }
+                $services['non-valides']['nv'.$structure->getId()][] = $service;
+            }
+        }
+
+        /* Messages */
+        if (empty($services['non-valides'])){
+            if ($role->getIntervenant()) {
+                $message = sprintf(
+                    "Tous vos enseignements %s ont été validés.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés"
+                );
+            } else {
+                $message = sprintf(
+                    "Aucun enseignement %s n'est en attente de validation.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé"
+                );
+            }
+            $this->flashMessenger()->addSuccessMessage($message);
+        }
+
+
+        return compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services');
+    }
+
+
+
+    public function validerAction()
+    {
+        $this->initFilters();
+
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        /* @var $typeVolumeHoraire TypeVolumeHoraire */
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $structure = $this->getEvent()->getParam('structure');
+        /* @var $structure Structure */
+
+
+        $validation = $this->getProcessusValidation()->creerValidationServices( $intervenant, $structure );
+
+        if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_VALIDATION)) {
+            if ($this->getRequest()->isPost()) {
+                try {
+                    $this->getProcessusValidation()->enregistrerValidationServices($typeVolumeHoraire, $validation);
+
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Validation effectuée avec succès."
+                    );
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            }
+        } else {
+            $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de valider ces enseignements.');
+        }
+
+        return new MessengerViewModel();
+    }
+
+
+
+    public function devaliderAction()
+    {
+        $this->initFilters();
+
+        $validation = $this->getEvent()->getParam('validation');
+        /* @var $structure Structure */
+
+        if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_DEVALIDATION)) {
+            if ($this->getRequest()->isPost()) {
+                try {
+                    $this->getProcessusValidation()->devaliderServices($validation);
+
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Dévalidation effectuée avec succès."
+                    );
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            }
+        } else {
+            $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de dévalider ces enseignements.');
+        }
+
+        return new MessengerViewModel();
     }
 
 

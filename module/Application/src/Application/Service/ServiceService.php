@@ -9,11 +9,8 @@ use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
-use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
-use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
@@ -31,7 +28,6 @@ use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Session\Container as SessionContainer;
 
@@ -478,252 +474,6 @@ class ServiceService extends AbstractEntityService
 
         if ($intervenant = $role->getIntervenant()) { // Si c'est un intervenant
             $this->finderByIntervenant($intervenant, $qb, $alias);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne la liste des services selon l'étape donnée
-     *
-     * @param TypeIntervenantEntity $typeIntervenant
-     * @param QueryBuilder|null     $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        if ($typeIntervenant) {
-            $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
-            $this->getServiceIntervenant()->finderByType($typeIntervenant, $qb);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne la liste des services dont les volumes horaires sont validés ou non.
-     *
-     * @param boolean|\Application\Entity\Db\Validation $validation <code>true</code>, <code>false</code> ou
-     *                                                              bien une Validation précise
-     * @param QueryBuilder|null                         $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByValidation($validation, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $qb->addSelect('vhv')
-            ->join("$alias.volumeHoraire", 'vhv');
-
-        if ($validation instanceof \Application\Entity\Db\Validation) {
-            $qb
-                ->join("vhv.validation", "v")
-                ->andWhere("v = :validation")->setParameter('validation', $validation);
-        } else {
-            $value = $validation ? 'is not null' : 'is null';
-            $qb->leftJoin("vhv.validation", 'vv')
-                ->andWhere("vv $value");
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Recherche par type
-     *
-     * @param TypeValidation|string $type
-     * @param QueryBuilder|null     $qb
-     *
-     * @return QueryBuilder
-     */
-    public function finderByTypeValidation($type, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $type = $this->getServiceValidation()->normalizeTypeValidation($type);
-
-        $qb
-            ->join("$alias.volumeHoraire", 'tvvh')
-            ->join("tvvh.validation", "tvv")
-            ->join("tvv.typeValidation", 'tvtv')
-            ->andWhere("tvtv = :tvtv")->setParameter('tvtv', $type);
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne la liste des services dont les volumes horaires ont été validés par une structure.
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @param QueryBuilder|null                $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByStructureValidation(\Application\Entity\Db\Structure $structure, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $qb->addSelect("vhs, vs")
-            ->join("$alias.volumeHoraire", 'vhs')
-            ->join("vhs.validation", "vs")
-            ->andWhere("vs.structure = :structurev")->setParameter('structurev', $structure);
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne la liste des services dont les volumes horaires ont fait ou non l'objet d'un contrat/avenant.
-     *
-     * @param boolean|\Application\Entity\Db\Contrat $contrat <code>true</code>, <code>false</code> ou
-     *                                                        bien un Contrat précis
-     * @param QueryBuilder|null                      $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByContrat($contrat, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $qb->addSelect("vhc")
-            ->join("$alias.volumeHoraire", 'vhc');
-
-        if ($contrat instanceof \Application\Entity\Db\Contrat) {
-            $qb->addSelect("c")
-                ->join("vhc.contrat", "c")
-                ->andWhere("c = :contrat")->setParameter('contrat', $contrat);
-        } else {
-            $value = $contrat ? 'is not null' : 'is null';
-            $qb->andWhere("vhc.contrat $value");
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Recherche des services (et volumes horaires) validables.
-     *
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
-     * @param IntervenantEntity       $intervenant
-     * @param                         StructureEntity [array|null $structureEns
-     *
-     * @return array
-     */
-    public function fetchServicesDisposPourValidation(
-        TypeVolumeHoraireEntity $typeVolumeHoraire,
-        IntervenantEntity $intervenant,
-        $structureEns = null)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select("s2, i, vh, tvh, ep, strens")
-            ->from("Application\Entity\Db\Service", 's2')
-            ->join("s2.intervenant", "i", Join::WITH, "s2.intervenant = :intervenant")
-            ->join("s2.volumeHoraire", 'vh')
-            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-            ->leftJoin("s2.elementPedagogique", "ep")
-            ->leftJoin("ep.structure", 'strens')
-            ->addOrderBy("strens.libelleCourt", 'asc')
-            ->addOrderBy("s2.histoModification", 'asc')
-            ->setParameter('intervenant', $intervenant)
-            ->setParameter('tvh', $typeVolumeHoraire);
-
-        /**
-         * Les volumes horaires du type spécifié ne doivent pas être validés.
-         */
-        $qb
-            ->leftJoin("vh.validation", "val")
-            ->andWhere("val.id IS NULL");
-
-        /**
-         * Filtrage éventuel par composante d'intervention.
-         */
-        if (null !== $structureEns) {
-            $structureEns = (array)$structureEns;
-            $whereStr     = [];
-            if (array_key_exists(ServiceEntity::HORS_ETABLISSEMENT, $structureEns)) {
-                $whereStr[] = "ep.structure IS NULL";
-            }
-            $structureEns = array_filter($structureEns);
-            foreach ($structureEns as $s) {
-                $paramName  = uniqid("str");
-                $whereStr[] = "strens = :" . $paramName;
-                $qb->setParameter($paramName, $s);
-            }
-            if ($whereStr) {
-                $qb->andWhere(implode(' OR ', $whereStr));
-            }
-        }
-
-        return $qb->getQuery()->getResult();
-    }
-
-
-
-    /**
-     *
-     * @param TypeVolumeHoraireEntity    $typeVolumeHoraire
-     * @param TypeValidationEntity       $validation
-     * @param IntervenantEntity          $intervenant
-     * @param StructureEntity|array|null $structureEns
-     * @param StructureEntity            $structureValidation
-     *
-     * @return QueryBuilder
-     */
-    public function finderServicesValides(
-        TypeVolumeHoraireEntity $typeVolumeHoraire,
-        ValidationEntity $validation = null,
-        IntervenantEntity $intervenant = null,
-        $structureEns = null)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select("s, i, vh, ep, strens")
-            ->from("Application\Entity\Db\Service", 's')
-            ->join("s.intervenant", "i")
-            ->join("s.volumeHoraire", 'vh')
-            ->leftJoin("s.elementPedagogique", 'ep')
-            ->leftJoin("ep.structure", 'strens')
-            ->join("vh.validation", "v")
-            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
-            ->join("v.typeValidation", 'tv')
-            ->join("v.structure", 'str')// validés par la structure spécifiée
-            ->orderBy("v.histoModification", 'desc')
-            ->addOrderBy("strens.libelleCourt", 'asc');
-
-        if ($validation) {
-            $qb->andWhere("v = :validation")->setParameter('validation', $validation);
-        }
-        if ($intervenant) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
-        }
-        if (null !== $structureEns) {
-            $structureEns = (array)$structureEns;
-            $whereStr     = [];
-            if (array_key_exists(ServiceEntity::HORS_ETABLISSEMENT, $structureEns)) {
-                $whereStr[] = "ep.structure IS NULL";
-            }
-            $structureEns = array_filter($structureEns);
-            foreach ($structureEns as $s) {
-                $paramName  = uniqid("str");
-                $whereStr[] = "strens = :" . $paramName;
-                $qb->setParameter($paramName, $s);
-            }
-            if ($whereStr) {
-                $qb->andWhere(implode(' OR ', $whereStr));
-            }
         }
 
         return $qb;
@@ -1212,7 +962,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return boolean
      */
-    public function isLocal(ServiceEntity $service)
+    protected function isLocal(ServiceEntity $service)
     {
         if (!$service->getEtablissement()) return true; // par défaut
         if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
@@ -1233,7 +983,6 @@ class ServiceService extends AbstractEntityService
     {
         if (!$this->isLocal($service)) return null;
         if (!$service->getElementPedagogique()) return null;
-        if (!$service->getElementPedagogique()->getPeriode()) return null;
 
         return $service->getElementPedagogique()->getPeriode();
     }
@@ -1293,7 +1042,7 @@ class ServiceService extends AbstractEntityService
         if (!$service->getIntervenant()->estPermanent()) {
             return $this->cannotDoThat("Un intervenant vacataire ne peut pas avoir de motif de non paiement", $runEx);
         }
-        if ($this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole) {
+        if ($this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
             return $this->cannotDoThat("Les intervenants n'ont pas le droit de visualiser ou modifier les motifs de non paiement", $runEx);
         }
 
@@ -1316,46 +1065,6 @@ class ServiceService extends AbstractEntityService
         $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
-    }
-
-
-
-    /**
-     * Détermine si on peut ajouter un nouveau service ou non
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant Eventuel intervenant concerné
-     *
-     * @deprecated
-     * @return boolean
-     */
-    public function canAdd($intervenant = null, $runEx = false)
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $role->getIntervenant();
-        }
-        if (!$intervenant) {
-            return $this->cannotDoThat("Anomalie : aucun intervenant spécifié.", $runEx);
-        } else {
-            if ($intervenant->getStatut()->getSourceCode() == \Application\Entity\Db\StatutIntervenant::NON_AUTORISE) {
-                return $this->cannotDoThat("Votre statut ne vous autorise pas à assurer des enseignements");
-            }
-        }
-
-        $rulesEvaluator = new \Application\Rule\Service\SaisieServiceRulesEvaluator($intervenant);
-        if (!$rulesEvaluator->execute()) {
-            $message = "?";
-            if ($role instanceof \Application\Acl\IntervenantRole) {
-                $message = "Vous ne pouvez pas saisir de service. ";
-            } elseif ($role instanceof \Application\Acl\ComposanteRole) {
-                $message = "Vous ne pouvez pas saisir de service pour $intervenant. ";
-            }
-
-            return $this->cannotDoThat($message . $rulesEvaluator->getMessage(), $runEx);
-        }
-
-        return true;
     }
 
 

@@ -62,10 +62,10 @@ class Rule extends ValidationEnsRefAbstractRule
         $this->addMessage(
                 "Les enseignements ne peuvent être validés que par la structure '{$this->structureValidation}'.", 
                 'info');
-                 
+         
         return $this;
     }
-    
+
     /**
      * Indique si le rôle courant possède le privilège spécifié d'après le contexte courant.
      * 
@@ -74,11 +74,11 @@ class Rule extends ValidationEnsRefAbstractRule
      */
     public function isAllowed($privilege)
     {
-        
+
         if (!$this->isAllowedMiseEnPaiement($privilege)) {
             return false;
         }
-        
+
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/

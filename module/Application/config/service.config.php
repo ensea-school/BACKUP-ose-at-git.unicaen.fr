@@ -4,7 +4,6 @@ namespace Application;
 
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
-use UnicaenAuth\Guard\PrivilegeRoute;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
@@ -249,15 +248,6 @@ return [
                         'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
-                        'pages'    => [
-//                            'consultation' => array(
-//                                'label'  => "Consultation",
-//                                'title'  => "Consultation des services",
-//                                'route'  => 'service',
-//                                'visible' => true,
-//                                'pages' => array(),
-//                            ),
-                        ],
                     ],
                 ],
             ],
@@ -265,6 +255,29 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
+            PrivilegeController::class => [
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['validation'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['valider'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_VALIDATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['devalider'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_DEVALIDATION,
+                    ],
+                ],
+            ],
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
@@ -296,6 +309,16 @@ return [
                     [
                         'privileges' => Privileges::ENSEIGNEMENT_VISUALISATION,
                         'resources'  => 'Service',
+                        'assertion'  => 'assertionService',
+                    ],
+                    [
+                        'privileges' => Privileges::ENSEIGNEMENT_VALIDATION,
+                        'resources'  => 'Validation',
+                        'assertion'  => 'assertionService',
+                    ],
+                    [
+                        'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
+                        'resources'  => 'Validation',
                         'assertion'  => 'assertionService',
                     ],
                 ],

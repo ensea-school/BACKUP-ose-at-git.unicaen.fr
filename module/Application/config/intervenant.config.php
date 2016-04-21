@@ -210,34 +210,68 @@ return [
                             ],
                         ],
                     ],
-                    'validation-service'             => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/validation/service-prevu',
+                    'validation'                     => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/:intervenant/validation',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults'    => [
-                                'controller'               => 'Validation',
-                                'action'                   => 'service',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                        ],
+                        'may_terminate' => true,
+                        'child_routes'  => [
+                            'service-prevu' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/service-prevu',
+                                    'defaults'    => [
+                                        'controller'               => 'Service',
+                                        'action'                   => 'validation',
+                                        'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                                    ],
+                                ],
+                            ],
+                            'service-realise' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/service-realise',
+                                    'defaults'    => [
+                                        'controller'               => 'Service',
+                                        'action'                   => 'validation',
+                                        'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
+                                    ],
+                                ],
+                            ],
+                            'valider-service' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/valider-service/:typeVolumeHoraire/:structure',
+                                    'constraints' => [
+                                        'typeVolumeHoraire' => '[0-9]*',
+                                        'structure' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'controller'               => 'Service',
+                                        'action'                   => 'valider',
+                                    ],
+                                ],
+                            ],
+                            'devalider-service' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/devalider-service/:validation',
+                                    'constraints' => [
+                                        'validation' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'controller'               => 'Service',
+                                        'action'                   => 'devalider',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                    'validation-service-realise'     => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/validation/service-realise',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'controller'               => 'Validation',
-                                'action'                   => 'service',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
-                            ],
-                        ],
-                    ],
+
                     'validation-referentiel'         => [
                         'type'    => 'Segment',
                         'options' => [
@@ -339,15 +373,15 @@ return [
                                 // coquille vide qui réserve l'emplacement du menu
                             ],
                             'service'                        => [
-                                'label'        => "Enseignements prévisionnels",
-                                'title'        => "Enseignements  prévisionnelsde l'intervenant",
-                                'route'        => 'intervenant/services',
-                                'paramsInject' => [
+                                'label'               => "Enseignements prévisionnels",
+                                'title'               => "Enseignements  prévisionnelsde l'intervenant",
+                                'route'               => 'intervenant/services',
+                                'paramsInject'        => [
                                     'intervenant',
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
-                                'withtarget'   => true,
-                                'visible'      => 'assertionService',
+                                'withtarget'          => true,
+                                'visible'             => 'assertionService',
                             ],
                             'pieces-jointes-saisie'          => [
                                 // coquille vide qui réserve l'emplacement du menu
@@ -355,12 +389,12 @@ return [
                             'validation-service-prevu'       => [
                                 'label'        => "Validation des enseignements prévisionnels",
                                 'title'        => "Validation des enseignements prévisionnels de l'intervenant",
-                                'route'        => 'intervenant/validation-service',
+                                'route'        => 'intervenant/validation/service-prevu',
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'service'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'validation'),
                                 //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-prevu'   => [
@@ -391,25 +425,25 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
                             ],
                             'services-realises'              => [
-                                'label'        => "Enseignements réalisés",
-                                'title'        => "Constatation des enseignements réalisés",
-                                'route'        => 'intervenant/services-realises',
-                                'paramsInject' => [
+                                'label'               => "Enseignements réalisés",
+                                'title'               => "Constatation des enseignements réalisés",
+                                'route'               => 'intervenant/services-realises',
+                                'paramsInject'        => [
                                     'intervenant',
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
-                                'withtarget'   => true,
-                                'visible'      => 'assertionService',
+                                'withtarget'          => true,
+                                'visible'             => 'assertionService',
                             ],
                             'validation-service-realise'     => [
                                 'label'        => "Validation des enseignements réalisés",
                                 'title'        => "Validation des enseignements réalisés de l'intervenant",
-                                'route'        => 'intervenant/validation-service-realise',
+                                'route'        => 'intervenant/validation/service-realise',
                                 'paramsInject' => [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'service'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'validation'),
                                 //'visible'      => 'IntervenantNavigationPageVisibility',
                             ],
                             'validation-referentiel-realise' => [
@@ -442,7 +476,7 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            PrivilegeController::class      => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['rechercher', 'recherche'],
@@ -485,12 +519,12 @@ return [
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_CLOTURE,
                     ],
-                    'assertion' => 'assertionIntervenant',
+                    'assertion'  => 'assertionIntervenant',
                 ],
                 [ /// @todo à protéger d'avantage...
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['formule-totaux-hetd'],
-                    'roles'      => ['user'],
+                  'controller' => 'Application\Controller\Intervenant',
+                  'action'     => ['formule-totaux-hetd'],
+                  'roles'      => ['user'],
                 ],
             ],
         ],
@@ -539,7 +573,7 @@ return [
         ],
     ],
     'view_helpers'    => [
-        'invokables'   => [
+        'invokables' => [
             'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
             'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
         ],

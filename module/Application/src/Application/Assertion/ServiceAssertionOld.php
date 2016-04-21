@@ -3,7 +3,6 @@
 namespace Application\Assertion;
 
 use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
 use Application\Acl\EtablissementRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Intervenant;
@@ -131,7 +130,7 @@ class ServiceAssertionOld extends OldAbstractAssertion
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->role instanceof ComposanteRole) {
+        if ($this->role->getStructure()) {
             if ('read' == $this->privilege) {
                 return true; // les composantes voient tout
             }

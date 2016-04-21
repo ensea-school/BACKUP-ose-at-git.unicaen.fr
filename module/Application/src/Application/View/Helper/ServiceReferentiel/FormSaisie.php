@@ -2,7 +2,6 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
-use Application\Acl\IntervenantRole;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\VolumeHoraireReferentielListe;
 use Application\Form\ServiceReferentiel\SaisieFieldset;
@@ -72,7 +71,7 @@ class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $part = $this->getView()->form()->openTag($this->form);
         
-        if (! $this->getServiceContext()->getSelectedIdentityRole() instanceof IntervenantRole) {
+        if (! $this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
             $template = <<<EOS
 <div>
     %s

@@ -2,10 +2,6 @@
 
 namespace Application;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantRole;
-
 return [
     'router' => [
         'routes' => [
@@ -96,7 +92,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Structure',
                     'action' => ['index', 'choisir', 'recherche'],
-                    'roles' => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID]
+                    'roles' => ['user']
                 ],
             ],
         ],

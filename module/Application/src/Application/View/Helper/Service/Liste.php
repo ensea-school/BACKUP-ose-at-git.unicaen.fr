@@ -543,7 +543,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $this->setColumnVisibility('structure-aff', $multiIntervenants);
 
         // si c'est une composante alors on affiche le détail pour l'enseignement
-        $detailsEns = !$role instanceof \Application\Acl\IntervenantRole;
+        $detailsEns = !$role->getIntervenant();
         /** @todo associer ça à un paramètre... */
         $this->setColumnVisibility('foad', $detailsEns);
         $this->setColumnVisibility('regimes-inscription', $detailsEns);

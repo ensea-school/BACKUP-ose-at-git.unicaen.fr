@@ -78,7 +78,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
              */
             $intervenant = $this->getServiceIntervenant()->getBySourceCode($utilisateurCode);
             $personnel = $this->getServicePersonnel()->getBySourceCode($utilisateurCode);
-
+            
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */

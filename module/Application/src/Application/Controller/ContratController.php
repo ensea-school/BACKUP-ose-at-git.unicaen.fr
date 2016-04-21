@@ -23,9 +23,7 @@ use Application\Constants;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\View\Model\ViewModel;
 use Application\Entity\Db\Contrat;
-use Application\Assertion\FichierAssertion;
 use Zend\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
 

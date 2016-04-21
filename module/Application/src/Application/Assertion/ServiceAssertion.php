@@ -5,8 +5,9 @@ namespace Application\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
-use Application\Entity\Db\WfEtape;
-use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\Validation;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -52,6 +53,14 @@ class ServiceAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_VISUALISATION:
                         return $this->assertServiceVisualisation($role, $entity);
+                }
+            break;
+            case $entity instanceof Validation:
+                switch ($privilege) {
+                    case Privileges::ENSEIGNEMENT_VALIDATION:
+                        return $this->assertServiceValidation($role, $entity);
+                    case Privileges::ENSEIGNEMENT_DEVALIDATION:
+                        return $this->assertServiceDevalidation($role, $entity);
                 }
             break;
         }
@@ -108,6 +117,28 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
+    protected function assertServiceValidation( Role $role, Validation $validation )
+    {
+        return $this->asserts([
+            ! $validation->getId(),
+            $this->assertIntervenant($role, $validation->getIntervenant()),
+            $this->assertStructure($role, $validation->getStructure()),
+        ]);
+    }
+
+
+
+    protected function assertServiceDevalidation( Role $role, Validation $validation )
+    {
+        return $this->asserts([
+            $validation->getId(),
+            $this->assertIntervenant($role, $validation->getIntervenant()),
+            $this->assertStructure($role, $validation->getStructure()),
+        ]);
+    }
+
+
+
     protected function assertIntervenant(Role $role, Intervenant $intervenant=null)
     {
         if ($intervenant) {
@@ -120,6 +151,19 @@ class ServiceAssertion extends AbstractAssertion
         return true;
     }
 
+
+
+    protected function assertStructure(Role $role, Structure $structure=null)
+    {
+        if ($structure) {
+            if ($ri = $role->getStructure()) {
+                if ($ri != $structure) { // une structure ne peut pas éditer les services d'une autre
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 
     protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)

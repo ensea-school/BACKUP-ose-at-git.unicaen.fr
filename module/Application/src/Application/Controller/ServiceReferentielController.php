@@ -72,7 +72,7 @@ class ServiceReferentielController extends AbstractController
         if ($intervenant) {
             $serviceReferentiel->finderByIntervenant($intervenant, $qb);
         }
-        if (!$intervenant && $role instanceof \Application\Acl\ComposanteRole) {
+        if (!$intervenant && $role->getStructure()) {
             $serviceReferentiel->finderByStructure($role->getStructure(), $qb);
         }
 

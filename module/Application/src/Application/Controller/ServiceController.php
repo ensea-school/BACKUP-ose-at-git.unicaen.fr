@@ -3,13 +3,12 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Validation;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\WorkflowServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -55,7 +54,7 @@ class ServiceController extends AbstractController
     use LocalContextAwareTrait;
     use SaisieAwareTrait;
     use RechercheFormAwareTrait;
-    use ValidationProcessusAwareTrait;
+    use ValidationEnseignementProcessusAwareTrait;
 
 
 
@@ -676,33 +675,17 @@ class ServiceController extends AbstractController
             $title .= " réalisés";
         }
 
-        $validations = $this->getProcessusValidation()->getValidationsEnseignement($intervenant, $filterStructure);
         $services = [
             'valides' => [],
             'non-valides' => [],
         ];
 
-        if ($validations){
-            foreach( $validations as $validation ){
-                $srvs = $this->getProcessusValidation()->getServices( $typeVolumeHoraire, $intervenant, $validation );
-                if ($srvs){
-                    $services['valides'][$validation->getId()] = $srvs;
-                }
-            }
-        }
-
-        $snv = $this->getProcessusValidation()->getServices( $typeVolumeHoraire, $intervenant, null );
-        foreach( $snv as $service ){
-            $structure = $this->getProcessusValidation()->getStructureValidation($service);
-            if (!$filterStructure || $filterStructure == $structure){
-                $validation = $this->getProcessusValidation()->creerValidationServices($intervenant, $structure);
-                $validations['nv'.$structure->getId()] =$validation;
-
-                if (!isset($services['non-valides']['nv'.$structure->getId()])){
-                    $services['non-valides']['nv'.$structure->getId()] = [];
-                }
-                $services['non-valides']['nv'.$structure->getId()][] = $service;
-            }
+        $validations = $this->getProcessusValidationEnseignement()->lister($typeVolumeHoraire, $intervenant, $filterStructure);
+        foreach( $validations as $validation ){
+            $key = $validation->getId() ? 'valides' : 'non-valides';
+            $vid = $this->getProcessusValidationEnseignement()->getValidationId($validation);
+            $sList = $this->getProcessusValidationEnseignement()->getServices( $typeVolumeHoraire, $validation );
+            $services[$key][$vid] = $sList;
         }
 
         /* Messages */
@@ -741,12 +724,12 @@ class ServiceController extends AbstractController
         /* @var $structure Structure */
 
 
-        $validation = $this->getProcessusValidation()->creerValidationServices( $intervenant, $structure );
+        $validation = $this->getProcessusValidationEnseignement()->creer( $intervenant, $structure );
 
         if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_VALIDATION)) {
             if ($this->getRequest()->isPost()) {
                 try {
-                    $this->getProcessusValidation()->enregistrerValidationServices($typeVolumeHoraire, $validation);
+                    $this->getProcessusValidationEnseignement()->enregistrer($typeVolumeHoraire, $validation);
 
                     $this->flashMessenger()->addSuccessMessage(
                         "Validation effectuée avec succès."
@@ -774,7 +757,7 @@ class ServiceController extends AbstractController
         if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_DEVALIDATION)) {
             if ($this->getRequest()->isPost()) {
                 try {
-                    $this->getProcessusValidation()->devaliderServices($validation);
+                    $this->getProcessusValidationEnseignement()->supprimer($validation);
 
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation effectuée avec succès."

@@ -22,7 +22,7 @@ class DbException extends RuntimeException {
         'ORA-01722' =>
             'Nombre invalide',
         'integrity constraint (OSE.MEP_FR_SERVICE_FK) violated' =>
-            'Vous ne pouvez pas dévalider ces heures d\'enseignement cas des demandes de mise en paiement ou des mises en paiement ont été faites.',
+            'Vous ne pouvez pas dévalider ces heures d\'enseignement car des demandes de mise en paiement ou des mises en paiement ont été faites.',
     ];
 
 

@@ -23,13 +23,3 @@ $intituleConcernes = "Référentiel de type '$typeVolumeHoraire'" . ($validation
             ->render(); 
     ?>
 </div>
-
-<script>
-$(function() {
-    // affichage/masquage du référentiel concerné
-    $("#validation-<?php echo $validation->getId() ?>-toggle").click(function() { 
-        $($(this).data('target')).slideToggle(); 
-        return false;
-    });
-});
-</script>

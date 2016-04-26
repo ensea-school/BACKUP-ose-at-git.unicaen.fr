@@ -151,7 +151,9 @@ class Validation extends AbstractEntityService
         
         return $entity;
     }
-    
+
+
+
     /**
      * Recherche par type 
      *
@@ -224,4 +226,41 @@ class Validation extends AbstractEntityService
         return $qb;
     }
 
+
+
+    /**
+     * @param TypeValidationEntity $typeValidation
+     * @param IntervenantEntity    $intervenant
+     * @param StructureEntity|null $structure
+     *
+     * @return array
+     */
+    public function lister( TypeValidationEntity $typeValidation, IntervenantEntity $intervenant, StructureEntity $structure=null )
+    {
+        $dql = "
+        SELECT
+          v
+        FROM
+          Application\Entity\Db\Validation v
+        WHERE
+          v.intervenant = :intervenant
+          AND v.typeValidation = :typeValidation
+          ".($structure ? 'AND v.structure = :structure' : '')."
+        ORDER BY
+          v.histoCreation
+        ";
+
+        $params = compact(
+            'intervenant', 'typeValidation'
+        );
+        if ($structure){
+            $params['structure'] = $structure;
+        }
+        $res = $this->getEntityManager()->createQuery($dql)->setParameters( $params )->getResult();
+        $validations = [];
+        foreach( $res as $v ){
+            $validations[$v->getId()] = $v;
+        }
+        return $validations;
+    }
 }

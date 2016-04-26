@@ -256,6 +256,7 @@ return [
     'bjyauthorize'    => [
         'guards'             => [
             PrivilegeController::class => [
+                /* Enseignements */
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],
@@ -275,6 +276,29 @@ return [
                     'action'     => ['devalider'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_DEVALIDATION,
+                    ],
+                ],
+
+                /* Référentiel */
+                [
+                    'controller' => 'Application\Controller\ServiceReferentiel',
+                    'action'     => ['validation'],
+                    'privileges' => [
+                        Privileges::REFERENTIEL_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\ServiceReferentiel',
+                    'action'     => ['valider'],
+                    'privileges' => [
+                        Privileges::REFERENTIEL_VALIDATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\ServiceReferentiel',
+                    'action'     => ['devalider'],
+                    'privileges' => [
+                        Privileges::REFERENTIEL_DEVALIDATION,
                     ],
                 ],
             ],
@@ -306,6 +330,7 @@ return [
         'rule_providers'     => [
             PrivilegeRuleProvider::class => [
                 'allow' => [
+                    /* Enseignements */
                     [
                         'privileges' => Privileges::ENSEIGNEMENT_VISUALISATION,
                         'resources'  => 'Service',
@@ -318,6 +343,18 @@ return [
                     ],
                     [
                         'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
+                        'resources'  => 'Validation',
+                        'assertion'  => 'assertionService',
+                    ],
+
+                    /* Référentiel */
+                    [
+                        'privileges' => Privileges::REFERENTIEL_VALIDATION,
+                        'resources'  => 'Validation',
+                        'assertion'  => 'assertionService',
+                    ],
+                    [
+                        'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
                         'resources'  => 'Validation',
                         'assertion'  => 'assertionService',
                     ],

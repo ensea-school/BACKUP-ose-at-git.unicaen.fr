@@ -3,15 +3,19 @@
 namespace Application\Controller;
 
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\ValidationReferentielProcessusAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Application\Exception\DbException;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextAwareTrait;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
  * Description of ServiceReferentielController
@@ -28,6 +32,8 @@ class ServiceReferentielController extends AbstractController
     use EtatVolumeHoraireAwareTrait;
     use VolumeHoraireReferentielAwareTrait;
     use SaisieAwareTrait;
+    use ValidationAwareTrait;
+    use ValidationReferentielProcessusAwareTrait;
 
 
 
@@ -35,8 +41,8 @@ class ServiceReferentielController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\ServiceReferentiel::class,
-            \Application\Entity\Db\FonctionReferentiel::class,
             \Application\Entity\Db\VolumeHoraireReferentiel::class,
+            \Application\Entity\Db\Validation::class,
         ]);
     }
 
@@ -152,6 +158,7 @@ class ServiceReferentielController extends AbstractController
         $this->initFilters();
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Structure::class,
+            \Application\Entity\Db\FonctionReferentiel::class,
         ]);
         $id                = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
@@ -308,6 +315,127 @@ class ServiceReferentielController extends AbstractController
         $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
 
         return $viewModel;
+    }
+
+
+
+    public function validationAction()
+    {
+        $this->initFilters();
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $filterStructure = $role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', 'PREVU'));
+
+        $title = "Validation du référentiel";
+
+        if ($typeVolumeHoraire->isPrevu()) {
+            $title .= " prévisionnel";
+        } elseif ($typeVolumeHoraire->isRealise()) {
+            $title .= " réalisé";
+        }
+
+        $services    = [
+            'valides'     => [],
+            'non-valides' => [],
+        ];
+
+        $validations = $this->getProcessusValidationReferentiel()->lister($typeVolumeHoraire, $intervenant, $filterStructure);
+        foreach( $validations as $validation ){
+            $key = $validation->getId() ? 'valides' : 'non-valides';
+            $vid = $this->getProcessusValidationReferentiel()->getValidationId($validation);
+            $sList = $this->getProcessusValidationReferentiel()->getServices( $typeVolumeHoraire, $validation );
+            $services[$key][$vid] = $sList;
+        }
+
+
+        /* Messages */
+        if (empty($services['non-valides'])) {
+            if ($role->getIntervenant()) {
+                $message = sprintf(
+                    "Tous votre référentiel %s a été validé.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé"
+                );
+            } else {
+                $message = sprintf(
+                    "Aucun référentiel %s n'est en attente de validation.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé"
+                );
+            }
+            $this->flashMessenger()->addSuccessMessage($message);
+        }
+
+        return compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services');
+    }
+
+
+
+    public function validerAction()
+    {
+        $this->initFilters();
+
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        /* @var $typeVolumeHoraire TypeVolumeHoraire */
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $structure = $this->getEvent()->getParam('structure');
+        /* @var $structure Structure */
+
+
+        $validation = $this->getProcessusValidationReferentiel()->creer($intervenant, $structure);
+
+        if ($this->isAllowed($validation, Privileges::REFERENTIEL_VALIDATION)) {
+            if ($this->getRequest()->isPost()) {
+                try {
+                    $this->getProcessusValidationReferentiel()->enregistrer($typeVolumeHoraire, $validation);
+
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Validation effectuée avec succès."
+                    );
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            }
+        } else {
+            $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de valider ce référentiel.');
+        }
+
+        return new MessengerViewModel();
+    }
+
+
+
+    public function devaliderAction()
+    {
+        $this->initFilters();
+
+        $validation = $this->getEvent()->getParam('validation');
+        /* @var $structure Structure */
+
+        if ($this->isAllowed($validation, Privileges::REFERENTIEL_DEVALIDATION)) {
+            if ($this->getRequest()->isPost()) {
+                try {
+                    $this->getProcessusValidationReferentiel()->supprimer($validation);
+
+                    $this->flashMessenger()->addSuccessMessage(
+                        "Dévalidation effectuée avec succès."
+                    );
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            }
+        } else {
+            $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de dévalider ce référentiel.');
+        }
+
+        return new MessengerViewModel();
     }
 
 

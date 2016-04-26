@@ -16,18 +16,19 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title);
 <?php
 
 $wells = [
-    'non-valides' => 'Enseignements non validés',
-    'valides'     => 'Enseignements validés',
+    'non-valides' => 'Référentiel non validé',
+    'valides'     => 'Référentiel validé',
 ];
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
 
 foreach ($wells as $well => $title) {
     if ($services[$well]) {
         echo '<div class="well"><h2>' . $title . '</h2>';
         foreach ($services[$well] as $validationId => $srvs) {
             $validation = $validations[$validationId];
-            echo $this->partial('application/service/partial/validation-service', [
+            echo $this->partial('application/service-referentiel/partial/validation-referentiel', [
                 'validation'        => $validation,
                 'structure'         => $validation->getStructure(),
                 'services'          => $srvs,
@@ -40,6 +41,6 @@ foreach ($wells as $well => $title) {
 
 echo $this->feuillederoute($intervenant)->renderNextBtn(
     $typeVolumeHoraire->isPrevu() ?
-        \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
-        : \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE
+        \Application\Entity\Db\WfEtape::CODE_REFERENTIEL_VALIDATION
+        : \Application\Entity\Db\WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE
 );

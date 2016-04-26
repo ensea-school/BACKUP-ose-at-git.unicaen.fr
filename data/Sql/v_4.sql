@@ -246,6 +246,64 @@ INSERT INTO PARAMETRE (
 );
 
 
+
+INSERT INTO REGLE_STRUCTURE_VALIDATION (
+    ID,
+    TYPE_VOLUME_HORAIRE_ID,
+    TYPE_INTERVENANT_ID,
+    PRIORITE
+  ) VALUES (
+    REGLE_STRUCTURE_VAL_ID_SEQ.NEXTVAL,
+    (select id from type_volume_horaire WHERE code = 'PREVU'), -- PREVU ou REALISE
+    (select id from TYPE_INTERVENANT WHERE code = 'P'), -- P ou E
+    'affectation'
+  );
+  
+  INSERT INTO REGLE_STRUCTURE_VALIDATION (
+    ID,
+    TYPE_VOLUME_HORAIRE_ID,
+    TYPE_INTERVENANT_ID,
+    PRIORITE
+  ) VALUES (
+    REGLE_STRUCTURE_VAL_ID_SEQ.NEXTVAL,
+    (select id from type_volume_horaire WHERE code = 'PREVU'), -- PREVU ou REALISE
+    (select id from TYPE_INTERVENANT WHERE code = 'E'), -- P ou E
+    'enseignement'
+  );
+  
+  INSERT INTO REGLE_STRUCTURE_VALIDATION (
+    ID,
+    TYPE_VOLUME_HORAIRE_ID,
+    TYPE_INTERVENANT_ID,
+    PRIORITE
+  ) VALUES (
+    REGLE_STRUCTURE_VAL_ID_SEQ.NEXTVAL,
+    (select id from type_volume_horaire WHERE code = 'REALISE'), -- PREVU ou REALISE
+    (select id from TYPE_INTERVENANT WHERE code = 'P'), -- P ou E
+    'enseignement'
+  );
+  
+  INSERT INTO REGLE_STRUCTURE_VALIDATION (
+    ID,
+    TYPE_VOLUME_HORAIRE_ID,
+    TYPE_INTERVENANT_ID,
+    PRIORITE
+  ) VALUES (
+    REGLE_STRUCTURE_VAL_ID_SEQ.NEXTVAL,
+    (select id from type_volume_horaire WHERE code = 'REALISE'), -- PREVU ou REALISE
+    (select id from TYPE_INTERVENANT WHERE code = 'E'), -- P ou E
+    'enseignement'
+  );
+  
+
+
+-- PENSER A TOUTES LES AUTRES DEMANDES DE PACKAGES ! ! !  
+INSERT INTO "OSE"."PACKAGE_DEPS" (ID, P1, P2) VALUES ('15', 'OSE_WORKFLOW', 'OSE_VALIDATION_ENSEIGNEMENT')
+INSERT INTO "OSE"."PACKAGE_DEPS" (ID, P1, P2) VALUES ('16', 'OSE_WORKFLOW', 'OSE_VALIDATION_REFERENTIEL')
+
+  
+
+
 -- ********************************************************************* --
 -- *          à faire APRÈS avoir mis à jour le code source            * --
 -- ********************************************************************* --

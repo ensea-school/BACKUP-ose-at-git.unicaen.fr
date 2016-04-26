@@ -134,7 +134,7 @@ class ContratController extends AbstractController
             throw new \LogicException('La structure n\'est pas précisée');
         }
 
-        $contrat = $this->getProcessusContrat()->nouveau($intervenant, $structure);
+        $contrat = $this->getProcessusContrat()->creer($intervenant, $structure);
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_CREATION)) {
             $this->flashMessenger()->addSuccessMessage("La création de contrat/avenant pour $intervenant n'est pas possible.");

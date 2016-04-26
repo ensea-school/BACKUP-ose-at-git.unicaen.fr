@@ -210,96 +210,6 @@ return [
                             ],
                         ],
                     ],
-                    'validation'                     => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/:intervenant/validation',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                        'child_routes'  => [
-                            'service-prevu' => [
-                                'type' => 'Literal',
-                                'options' => [
-                                    'route' => '/service-prevu',
-                                    'defaults'    => [
-                                        'controller'               => 'Service',
-                                        'action'                   => 'validation',
-                                        'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
-                                    ],
-                                ],
-                            ],
-                            'service-realise' => [
-                                'type' => 'Literal',
-                                'options' => [
-                                    'route' => '/service-realise',
-                                    'defaults'    => [
-                                        'controller'               => 'Service',
-                                        'action'                   => 'validation',
-                                        'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
-                                    ],
-                                ],
-                            ],
-                            'valider-service' => [
-                                'type' => 'Segment',
-                                'options' => [
-                                    'route' => '/valider-service/:typeVolumeHoraire/:structure',
-                                    'constraints' => [
-                                        'typeVolumeHoraire' => '[0-9]*',
-                                        'structure' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'controller'               => 'Service',
-                                        'action'                   => 'valider',
-                                    ],
-                                ],
-                            ],
-                            'devalider-service' => [
-                                'type' => 'Segment',
-                                'options' => [
-                                    'route' => '/devalider-service/:validation',
-                                    'constraints' => [
-                                        'validation' => '[0-9]*',
-                                    ],
-                                    'defaults'    => [
-                                        'controller'               => 'Service',
-                                        'action'                   => 'devalider',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-
-                    'validation-referentiel'         => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/validation/referentiel',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'controller'               => 'Validation',
-                                'action'                   => 'referentiel',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
-                            ],
-                        ],
-                    ],
-                    'validation-referentiel-realise' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:intervenant/validation/referentiel-realise',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'controller'               => 'Validation',
-                                'action'                   => 'referentiel',
-                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
-                            ],
-                        ],
-                    ],
                     'contrat'                        => [
                         'type'    => 'Segment',
                         'options' => [
@@ -387,26 +297,10 @@ return [
                                 // coquille vide qui réserve l'emplacement du menu
                             ],
                             'validation-service-prevu'       => [
-                                'label'        => "Validation des enseignements prévisionnels",
-                                'title'        => "Validation des enseignements prévisionnels de l'intervenant",
-                                'route'        => 'intervenant/validation/service-prevu',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'validation'),
-                                //'visible'      => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'validation-referentiel-prevu'   => [
-                                'label'        => "Validation du référentiel prévisionnel",
-                                'title'        => "Validation du référentiel prévisionnel de l'intervenant",
-                                'route'        => 'intervenant/validation-referentiel',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'referentiel'),
-                                //'visible'      => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'agrement-conseil-restreint'     => [
                                 // coquille vide qui réserve l'emplacement du menu
@@ -436,26 +330,10 @@ return [
                                 'visible'             => 'assertionService',
                             ],
                             'validation-service-realise'     => [
-                                'label'        => "Validation des enseignements réalisés",
-                                'title'        => "Validation des enseignements réalisés de l'intervenant",
-                                'route'        => 'intervenant/validation/service-realise',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'validation'),
-                                //'visible'      => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'validation-referentiel-realise' => [
-                                'label'        => "Validation du référentiel réalisé",
-                                'title'        => "Validation du référentiel réalisé de l'intervenant",
-                                'route'        => 'intervenant/validation-referentiel-realise',
-                                'paramsInject' => [
-                                    'intervenant',
-                                ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Validation', 'referentiel'),
-                                //'visible'      => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ],
                             'demande-mise-en-paiement'       => [
                                 'label'        => "Demande de mise en paiement",

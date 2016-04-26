@@ -58,8 +58,10 @@ class ServiceAssertion extends AbstractAssertion
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_VALIDATION:
+                    case Privileges::REFERENTIEL_VALIDATION:
                         return $this->assertServiceValidation($role, $entity);
                     case Privileges::ENSEIGNEMENT_DEVALIDATION:
+                    case Privileges::REFERENTIEL_DEVALIDATION:
                         return $this->assertServiceDevalidation($role, $entity);
                 }
             break;

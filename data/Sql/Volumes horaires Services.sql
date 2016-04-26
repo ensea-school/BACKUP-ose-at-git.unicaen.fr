@@ -31,15 +31,15 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.source_code = '2421'
+  AND i.id=503
 --  AND s.id = 3208
  -- AND vh.histo_destruction IS NULL
   --AND contrat_id = 341
-  AND tvh.id = 2
-  AND vh.periode_id = 12
+  --AND tvh.id = 2
+  --AND vh.periode_id = 12
   --AND i.nom_usuel = 'Campart'
   --AND ti.code = 'TP'
-  AND validation_id is null
+  --AND validation_id is null
 order by
   s_id, type_volume_horaire, periode, TI.ORDRE;
   

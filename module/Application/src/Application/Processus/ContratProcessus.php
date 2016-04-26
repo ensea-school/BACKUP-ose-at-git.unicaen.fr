@@ -148,7 +148,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Contrat
      */
-    public function nouveau(Intervenant $intervenant, Structure $structure)
+    public function creer(Intervenant $intervenant, Structure $structure)
     {
         $contrat    = $this->getServiceContrat()->newEntity();
         /* @var $contrat Contrat  */

@@ -50,11 +50,6 @@ if ($intervenant)
 
 <?php if ('afficher' === $action ): ?>
 
-    <?php if ($this->isAllowed('ServiceReferentielListView', 'aide-intervenant')): ?>
-        <?php //echo $this->messenger()->setMessage(
-              //  "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
-    <?php endif; ?>
-
     <?php echo $serviceReferentielListe->render(); ?>
 
 <?php else:?>

@@ -173,9 +173,12 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
             $attrs = [];
             $na    = $this->getWhyNonAtteignable($etape);
             if ($na) {
+                $t = 'abbr';
                 $attrs['title'] = $na;
+            }else{
+                $t = 'span';
             }
-            $res .= $tag('span', $attrs)->text($etape->getEtape()->getLibelle($role));
+            $res .= $tag($t, $attrs)->text($etape->getEtape()->getLibelle($role));
         }
 
         return $res;
@@ -268,7 +271,7 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
             $attrs = ['class' => 'list-group-item'];
 
             if (!$sEtape->getAtteignable()) {
-                if ($naDesc = $this->getWhyNonAtteignable($sEtape)) {
+                if ($naDesc = '99'.$this->getWhyNonAtteignable($sEtape)) {
                     $attrs['title'] = $naDesc;
                 }
                 $attrs['class'] .= ' after-courante';

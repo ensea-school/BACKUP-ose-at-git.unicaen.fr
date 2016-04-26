@@ -443,11 +443,6 @@ return [
             'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
             'assertionIntervenant'                  => Assertion\IntervenantAssertion::class,
             'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
-            'PeutSaisirServiceRule'                 => Rule\Intervenant\PeutSaisirServiceRule::class,
-            'PeutSaisirReferentielRule'             => Rule\Intervenant\PeutSaisirReferentielRule::class,
-            'ServiceValideRule'                     => Rule\Intervenant\ServiceValideRule::class,
-            'PeutValiderServiceRule'                => Rule\Intervenant\PeutValiderServiceRule::class,
-            'ReferentielValideRule'                 => Rule\Intervenant\ReferentielValideRule::class,
         ],
     ],
     'view_helpers'    => [

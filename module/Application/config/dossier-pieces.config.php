@@ -380,11 +380,9 @@ return [
         'invokables' => [
             'applicationTblPieceJointe'        => Service\TblPieceJointeService::class,
             'ApplicationDossier'               => Service\Dossier::class,
-            'PossedeDossierRule'               => Rule\Intervenant\PossedeDossierRule::class,
             'ApplicationPieceJointe'           => Service\PieceJointe::class,
             'ApplicationTypePieceJointe'       => Service\TypePieceJointe::class,
             'ApplicationTypePieceJointeStatut' => Service\TypePieceJointeStatut::class,
-            'FichierAssertion'                 => Assertion\FichierAssertion::class,
             'assertionDossierPieces'           => Assertion\DossierPiecesAssertion::class,
         ],
     ],

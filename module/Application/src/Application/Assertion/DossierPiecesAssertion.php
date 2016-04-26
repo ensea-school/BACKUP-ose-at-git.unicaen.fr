@@ -68,16 +68,7 @@ class DossierPiecesAssertion extends AbstractAssertion
                     break;
                 }
             break;
-            case 'Application\Controller\Validation':
-                switch ($action) {
-                    case 'dossier':
-                        if (!$this->assertPriv(Privileges::DOSSIER_VALIDATION)) return false;
-
-                        return $this->assertDossierValidation($intervenant);
-                    break;
-                }
-            break;
-        }
+         }
 
         return true;
     }
@@ -100,17 +91,6 @@ class DossierPiecesAssertion extends AbstractAssertion
     protected function assertDossierEdition(Intervenant $intervenant = null)
     {
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_SAISIE, $intervenant)) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-    protected function assertDossierValidation(Intervenant $intervenant = null)
-    {
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_DONNEES_PERSO_VALIDATION, $intervenant)) {
             return false;
         }
 

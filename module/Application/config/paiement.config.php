@@ -197,7 +197,6 @@ return [
             'ApplicationCentreCout'                         => Service\CentreCout::class,
             'ApplicationCentreCoutEp'                       => Service\CentreCoutEp::class,
             'MiseEnPaiementAssertion'                       => Assertion\MiseEnPaiementAssertion::class,
-            'MiseEnPaiementExisteRule'                      => Rule\Paiement\MiseEnPaiementExisteRule::class,
         ],
     ],
     'view_helpers'    => [

@@ -60,7 +60,8 @@ class ServiceController extends AbstractController
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
      * (services sur des enseignements fermés, etc.)
      */
     protected function initFilters()
@@ -72,7 +73,7 @@ class ServiceController extends AbstractController
             \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            ElementPedagogique::class
+            ElementPedagogique::class,
         ]);
     }
 
@@ -159,8 +160,8 @@ class ServiceController extends AbstractController
         $canAddService = $this->isAllowed($serviceProto, 'create');
 
 
-        if (!$this->isAllowed($serviceProto, Privileges::ENSEIGNEMENT_VISUALISATION)){
-            $eStr = 'L\'accès au service '. lcfirst($this->getTypeVolumeHoraire()->getLibelle()) .' est interdit.';
+        if (!$this->isAllowed($serviceProto, Privileges::ENSEIGNEMENT_VISUALISATION)) {
+            $eStr = 'L\'accès au service ' . lcfirst($this->getTypeVolumeHoraire()->getLibelle()) . ' est interdit.';
             throw new UnAuthorizedException($eStr);
         }
 
@@ -256,7 +257,7 @@ class ServiceController extends AbstractController
     public function cloturerSaisieAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant  */
+        /* @var $intervenant Intervenant */
         if (!$intervenant) {
             return false; // désactive la vue
         }
@@ -468,9 +469,10 @@ class ServiceController extends AbstractController
 
     public function horodatageAction()
     {
-        $intervenant = $this->getEvent()->getParam('intervenant');
+        $intervenant       = $this->getEvent()->getParam('intervenant');
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
-        $referentiel = $this->params('referentiel') ? true : false;
+        $referentiel       = $this->params('referentiel') ? true : false;
+
         return compact('intervenant', 'typeVolumeHoraire', 'referentiel');
     }
 
@@ -515,6 +517,7 @@ class ServiceController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getServiceService()->setPrevusFromPrevus($intervenant);
         $errors = [];
+
         return compact('errors');
     }
 
@@ -608,8 +611,8 @@ class ServiceController extends AbstractController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
         $service = $this->getServiceService();
-        $form   = $this->getFormServiceSaisie();
-        $errors = [];
+        $form    = $this->getFormServiceSaisie();
+        $errors  = [];
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
 
@@ -665,9 +668,9 @@ class ServiceController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode( $this->params()->fromRoute('type-volume-horaire-code', 'PREVU') );
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', 'PREVU'));
 
-        $title             = "Validation des enseignements";
+        $title = "Validation des enseignements";
 
         if ($typeVolumeHoraire->isPrevu()) {
             $title .= " prévisionnels";
@@ -676,20 +679,20 @@ class ServiceController extends AbstractController
         }
 
         $services = [
-            'valides' => [],
+            'valides'     => [],
             'non-valides' => [],
         ];
 
         $validations = $this->getProcessusValidationEnseignement()->lister($typeVolumeHoraire, $intervenant, $filterStructure);
-        foreach( $validations as $validation ){
-            $key = $validation->getId() ? 'valides' : 'non-valides';
-            $vid = $this->getProcessusValidationEnseignement()->getValidationId($validation);
-            $sList = $this->getProcessusValidationEnseignement()->getServices( $typeVolumeHoraire, $validation );
+        foreach ($validations as $validation) {
+            $key                  = $validation->getId() ? 'valides' : 'non-valides';
+            $vid                  = $this->getProcessusValidationEnseignement()->getValidationId($validation);
+            $sList                = $this->getProcessusValidationEnseignement()->getServices($typeVolumeHoraire, $validation);
             $services[$key][$vid] = $sList;
         }
 
         /* Messages */
-        if (empty($services['non-valides'])){
+        if (empty($services['non-valides'])) {
             if ($role->getIntervenant()) {
                 $message = sprintf(
                     "Tous vos enseignements %s ont été validés.",
@@ -703,7 +706,6 @@ class ServiceController extends AbstractController
             }
             $this->flashMessenger()->addSuccessMessage($message);
         }
-
 
         return compact('title', 'typeVolumeHoraire', 'intervenant', 'validations', 'services');
     }
@@ -724,7 +726,7 @@ class ServiceController extends AbstractController
         /* @var $structure Structure */
 
 
-        $validation = $this->getProcessusValidationEnseignement()->creer( $intervenant, $structure );
+        $validation = $this->getProcessusValidationEnseignement()->creer($intervenant, $structure);
 
         if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_VALIDATION)) {
             if ($this->getRequest()->isPost()) {

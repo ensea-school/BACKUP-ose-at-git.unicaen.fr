@@ -19,17 +19,6 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes'  => [
-                    'divers' => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route'    => '/divers',
-                            'defaults' => [
-                                'action' => 'divers',
-                            ],
-                        ],
-                    ],
-                ],
             ],
             'discipline' => [
                 'type'          => 'Literal',

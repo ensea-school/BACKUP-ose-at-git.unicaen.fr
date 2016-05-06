@@ -3,50 +3,22 @@
  /***************************************************************************************************************************************************/
 
 $.widget("ose.serviceListe", {
+    totaux: {},
+    total: 0,
 
     showHideTypesIntervention: function ()
     {
-        var that = this;
-
-        // initialisation des visibilités : tout masqué par défaut
-        for (var i in this.params["types-intervention-visibility"]) { // initialisation
-            this.params["types-intervention-visibility"][i] = false;
-        }
-
-        // on détecte les types (par leur code) qui ne doivent plus être masqués et on en profite pour mettre à jour les paramètres
-        this.element.find("table.service tr.service-ligne td.type-intervention").each(function ()
-        {
-            var typeInterventionCode = $(this).data('type-intervention-code');
-            var visibility = '1' == $(this).data('visibility');
-
-            if (visibility) {
-                that.params["types-intervention-visibility"][typeInterventionCode] = true;
-            }
-        });
-
-        // on applique la visilibité fraichement calculées sur les colonnes
-        this.element.find("table.service tr.service-ligne td.type-intervention").each(function ()
-        {
-            var typeInterventionCode = $(this).data('type-intervention-code');
-            var visibility = that.params["types-intervention-visibility"][typeInterventionCode];
-
-            if (visibility) {
-                $(this).show(200);
-            } else {
-                $(this).hide(200);
-            }
-        });
-
-        // on met à jour aussi les entêtes et les totaux
         var count = 0;
-        for (var i in this.params["types-intervention-visibility"]) {
-            if (this.params["types-intervention-visibility"][i]) {
+        for (var i in this.totaux) {
+            if (this.totaux[i] != 0) {
                 count++;
-                this.element.find("table.service tr th." + i).show(200); // entête
-                this.element.find("table.service tfoot tr td." + i).show(200); // total
+                this.element.find("table.service tr th." + i).show(); // entête
+                this.element.find("table.service tr.service-ligne td.type-intervention." + i).show();
+                this.element.find("table.service tfoot tr td." + i).show(); // total
             } else {
-                this.element.find("table.service tr th." + i).hide(200); // entête
-                this.element.find("table.service tfoot tr td." + i).hide(200); // total
+                this.element.find("table.service tr th." + i).hide(); // entête
+                this.element.find("table.service tr.service-ligne td.type-intervention." + i).hide();
+                this.element.find("table.service tfoot tr td." + i).hide(); // total
             }
         }
         this.element.find("table.service #total-general").attr('colspan', count);
@@ -56,6 +28,35 @@ $.widget("ose.serviceListe", {
             this.element.find("table.service tfoot").show();
         }
     },
+
+
+
+    calculTotaux: function ()
+    {
+        var that = this;
+        this.totaux = {};
+        this.total = 0;
+
+        this.element.find("table.service tr.service-ligne td.type-intervention").each(function ()
+        {
+            var typeInterventionCode = $(this).data('type-intervention-code');
+            var value = $(this).data('value');
+
+            if (that.totaux[typeInterventionCode] == undefined) that.totaux[typeInterventionCode] = 0;
+
+            that.totaux[typeInterventionCode] += value;
+            that.total += value;
+        });
+
+        // on met à jour aussi les entêtes et les totaux
+        for (var ti in this.totaux) {
+            var heures = this.totaux[ti];
+            this.element.find("table.service tfoot tr td." + ti).html(Util.formattedHeures(heures));
+        }
+        this.element.find("table.service #total-general").html(Util.formattedHeures(this.total));
+    },
+
+
 
     showHideDetails: function (serviceId, action)
     {
@@ -99,28 +100,35 @@ $.widget("ose.serviceListe", {
         });
     },
 
+
+
+    hasHeures: function ()
+    {
+        return this.total > 0;
+    },
+
+
+
     onAfterChange: function ()
     {
-        var that = this;
+        var exHasHeures = this.hasHeures();
+        var exHeures = this.total;
 
         this.init2();
-        this.element.find("tfoot").refresh({params: this.params}, function ()
-        {
-            that.showHideTypesIntervention();
-        }); // rafraichissement des totaux
-
-        // autres modifications...
-        $("#formule-totaux-hetd").refresh({}, function ()
-        {
-            that.showHideTypesIntervention();
-        });
+        this.showHideTypesIntervention();
+        if (this.hasHeures() !== exHasHeures) {
+            this._trigger('heures-change-exists', null, this);
+        }
+        if (this.heures != exHeures){
+            this._trigger('heures-change', null, this);
+        }
 
         if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
             $("#service-resume").refresh();
         }
-        $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
-        $("#s-horodatage").refresh();
     },
+
+
 
     onAfterSaisie: function (serviceId)
     {
@@ -217,9 +225,10 @@ $.widget("ose.serviceListe", {
                 $(this).show();
             }
         });
+        this.calculTotaux();
     },
 
-    _create: function()
+    _create: function ()
     {
         var that = this;
 
@@ -288,7 +297,7 @@ $.widget("ose.serviceListe", {
     },
 
 
-    getElementPrevuToPrevu : function (){ return this.element.find(".prevu-to-prevu") }
+    getElementPrevuToPrevu: function () { return this.element.find(".prevu-to-prevu") }
 });
 
 $(function ()

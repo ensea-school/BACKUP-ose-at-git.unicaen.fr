@@ -206,7 +206,7 @@ class WorkflowService extends AbstractService
                     $we->setStructure($structure);
                     $we->setEtape($e->getEtape());
 
-                    $url = $this->getUrl($e->getEtape()->getRoute(), ['intervenant' => $intervenant->getSourceCode()]);
+                    $url = $this->getUrl($e->getEtape()->getRoute(), ['intervenant' => $intervenant->getRouteParam()]);
                     $we->setUrl($url);
 
                     $this->feuillesDeRoute[$iid][$sid][$eid] = $we;

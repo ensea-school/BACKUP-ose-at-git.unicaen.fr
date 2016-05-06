@@ -169,7 +169,7 @@ class SaisieFieldset extends AbstractFieldset
         $cl = $this->getServiceLocalContext();
         if ($this->has('intervenant') && $cl->getIntervenant()) {
             $this->get('intervenant')->setValue([
-                'id'    => $cl->getIntervenant()->getSourceCode(),
+                'id'    => $cl->getIntervenant()->getRouteParam(),
                 'label' => (string)$cl->getIntervenant(),
             ]);
         }

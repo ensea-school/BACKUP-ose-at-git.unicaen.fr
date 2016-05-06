@@ -2,8 +2,10 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Service;
 use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
@@ -27,7 +29,8 @@ class VolumeHoraireController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\VolumeHoraire::class
         ]);
-        $service = $this->context()->serviceFromRoute('id');
+        $service = $this->getEvent()->getParam('service');
+        /* @var $service Service  */
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
@@ -49,7 +52,13 @@ class VolumeHoraireController extends AbstractController
         $periode            = $this->context()->periodeFromQueryPost();
         $typeIntervention   = $this->context()->typeInterventionFromQueryPost('type-intervention');
         $errors = [];
-        if ($this->getServiceService()->canHaveMotifNonPaiement($service)){
+
+
+        $canViewMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
+
+
+        if ($canViewMNP){
             $tousMotifsNonPaiement = $this->params()->fromQuery('tous-motifs-non-paiement');
             if ($tousMotifsNonPaiement == '1'){
                 $motifNonPaiement   = false;
@@ -70,7 +79,8 @@ class VolumeHoraireController extends AbstractController
         $volumeHoraireList->setMotifNonPaiement($motifNonPaiement);
 
         $form = $this->getFormVolumeHoraireSaisie();
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->setViewMNP( $canViewMNP );
+        $form->setEditMNP( $canEditMNP );
 
         $request = $this->getRequest();
         if ($request->isPost()){

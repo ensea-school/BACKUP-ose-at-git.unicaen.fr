@@ -32,7 +32,7 @@ class AttentePieceJustifIndicateurImpl extends AbstractIntervenantResultIndicate
     {
         return $this->getHelperUrl()->fromRoute(
                 'piece-jointe/intervenant', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

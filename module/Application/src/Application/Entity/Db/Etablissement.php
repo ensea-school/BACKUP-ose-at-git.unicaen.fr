@@ -3,13 +3,16 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Etablissement
  */
-class Etablissement implements HistoriqueAwareInterface
+class Etablissement implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -27,19 +30,10 @@ class Etablissement implements HistoriqueAwareInterface
     protected $localisation;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var integer
      */
     protected $id;
 
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
 
 
@@ -128,34 +122,6 @@ class Etablissement implements HistoriqueAwareInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Etablissement
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -165,33 +131,6 @@ class Etablissement implements HistoriqueAwareInterface
         return $this->id;
     }
 
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return Etablissement
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
 
 
     /**************************************************************************************************

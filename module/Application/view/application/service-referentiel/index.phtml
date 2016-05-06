@@ -42,7 +42,7 @@ if ($intervenant)
 </style>
 
 <?php if (! $intervenant): ?>
-    <?php if ($this->isAllowed('ServiceReferentielListView', 'info-only-structure')): ?>
+    <?php if ($this->isAllowed('Information', 'info-only-structure')): ?>
         <?php echo $this->messenger()->setMessages(['warning' => "Est visible ici le référentiel prévisionnel des intervenants affectés "
                 . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures."]); ?>
     <?php endif; ?>

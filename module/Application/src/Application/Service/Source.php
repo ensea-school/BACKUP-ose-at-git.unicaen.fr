@@ -12,6 +12,9 @@ use Application\Entity\Db\Source as SourceEntity;
  */
 class Source extends AbstractEntityService
 {
+    const CODE_SOURCE_OSE     = 'OSE';
+    const CODE_SOURCE_TEST    = 'Test';
+    
     /**
      * retourne la classe des entités
      *
@@ -20,7 +23,7 @@ class Source extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return SourceEntity::class;
+        return \UnicaenImport\Entity\Db\Source::class;
     }
 
     /**
@@ -40,7 +43,7 @@ class Source extends AbstractEntityService
      */
     public function getOse()
     {
-        return $this->getRepo()->findOneBy(['code' => SourceEntity::CODE_SOURCE_OSE]);
+        return $this->getRepo()->findOneBy(['code' => self::CODE_SOURCE_OSE]);
     }
 
     /**
@@ -50,7 +53,7 @@ class Source extends AbstractEntityService
      */
     public function getTest()
     {
-        return $this->getRepo()->findOneBy(['code' => SourceEntity::CODE_SOURCE_TEST]);
+        return $this->getRepo()->findOneBy(['code' => self::CODE_SOURCE_TEST]);
     }
 
     /**

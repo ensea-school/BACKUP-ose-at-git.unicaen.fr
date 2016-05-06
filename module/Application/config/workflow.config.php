@@ -66,6 +66,19 @@ return [
                             ],
                         ],
                     ],
+                    'feuille-de-route-btn-next' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route'    => '/feuille-de-route-btn-next/:wfEtapeCode/:intervenant',
+                            'defaults' => [
+                                'action' => 'feuilleDeRouteBtnNext',
+                            ],
+                            'constraints' => [
+                                'wfEtapeCode' => '[a-zA-Z0-9_-]*',
+                                'intervenant' => '[0-9]*',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -101,6 +114,11 @@ return [
     'bjyauthorize'    => [
         'guards'             => [
             PrivilegeController::class => [
+                [
+                    'controller' => 'Application\Controller\Workflow',
+                    'action'     => ['feuilleDeRouteBtnNext'],
+                    'privileges' => [Privileges::ENSEIGNEMENT_EDITION, Privileges::REFERENTIEL_EDITION],
+                ],
                 [
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => ['index', 'dependances'],

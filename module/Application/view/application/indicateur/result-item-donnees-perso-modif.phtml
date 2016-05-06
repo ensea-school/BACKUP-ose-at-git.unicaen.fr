@@ -4,7 +4,7 @@
 
 <?php
 $modifications = $this->intervenant->getIndicModifDossier(); /** @var $modifications \Application\Entity\Db\IndicModifDossier[] */
-$urlPurge      = $this->url('indicateur/purger-indicateur-donnees-perso-modif', ['intervenant' => $this->intervenant->getSourceCode()]);
+$urlPurge      = $this->url('indicateur/purger-indicateur-donnees-perso-modif', ['intervenant' => $this->intervenant->getRouteParam()]);
 $urlPostPurge  = $this->url('indicateur/result', ['indicateur' => $this->indicateur->getId()]);
 ?>
 
@@ -39,7 +39,7 @@ $urlPostPurge  = $this->url('indicateur/result', ['indicateur' => $this->indicat
     </tbody>
 </table>
 
-<a href="<?php echo $this->url('intervenant/saisir-dossier', ['intervenant' => $this->intervenant->getSourceCode()]) ?>"
+<a href="<?php echo $this->url('intervenant/saisir-dossier', ['intervenant' => $this->intervenant->getRouteParam()]) ?>"
    >Accéder à la page des données personnelles de <?php echo $this->intervenant ?></a>
 
 <hr/>

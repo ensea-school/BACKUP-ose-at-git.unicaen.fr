@@ -134,7 +134,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
             return $this->getView()->url($route,
                 [
-                    'intervenant' => $intervenant->getSourceCode(),
+                    'intervenant' => $intervenant->getRouteParam(),
                 ],
                 [
                     'query' => ['totaux' => 1],
@@ -262,7 +262,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= '</div>';
             $out .= '<div class="modal-footer">';
             $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getSourceCode() . '">OK</button>';
+            $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getRouteParam() . '">OK</button>';
             $out .= '</div>';
             $out .= '</div>';
             $out .= '</div>';

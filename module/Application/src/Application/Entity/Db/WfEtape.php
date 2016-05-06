@@ -21,8 +21,8 @@ class WfEtape
     const CODE_CLOTURE_REALISE                = 'CLOTURE_REALISE';
     const CODE_SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
     const CODE_REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
-    const DEMANDE_MEP                         = 'DEMANDE_MEP';
-    const SAISIE_MEP                          = 'SAISIE_MEP';
+    const CODE_DEMANDE_MEP                    = 'DEMANDE_MEP';
+    const CODE_SAISIE_MEP                     = 'SAISIE_MEP';
 
     const CURRENT = 'current-etape';
     const NEXT    = 'next-etape';

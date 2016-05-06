@@ -15,6 +15,7 @@ use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
 use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -250,7 +251,7 @@ class ServiceService extends AbstractEntityService
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);
             }
-            if (!$this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')) {
+            if (!$this->getAuthorize()->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
             }
 
@@ -434,8 +435,9 @@ class ServiceService extends AbstractEntityService
 
 
     /**
+     * Utile pour la recherche de services
      *
-     * @param StructureEntity   $structure
+*@param StructureEntity   $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -449,6 +451,27 @@ class ServiceService extends AbstractEntityService
         $this->join($serviceIntervenant, $qb, 'intervenant', false, $alias);
         $serviceIntervenant->finderByStructure($structure, $qb);
         $serviceIntervenant->finderByType($this->getServiceTypeIntervenant()->getPermanent(), $qb);
+
+        return $qb;
+    }
+
+
+
+    /**
+     * Utile pour la recherche de services
+     *
+*@param StructureEntity   $structure
+     * @param QueryBuilder|null $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByStructureEns(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $serviceElementPedagogique = $this->getServiceElementPedagogique();
+        $this->join($serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias);
+        $serviceElementPedagogique->finderByStructure($structure, $qb);
 
         return $qb;
     }
@@ -479,6 +502,25 @@ class ServiceService extends AbstractEntityService
         return $qb;
     }
 
+
+    /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param TypeIntervenantEntity $typeIntervenant
+     * @param QueryBuilder|null     $queryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        if ($typeIntervenant) {
+            $this->join($this->getServiceIntervenant(), $qb, 'intervenant', false, $alias);
+            $this->getServiceIntervenant()->finderByType($typeIntervenant, $qb);
+        }
+
+        return $qb;
+    }
 
 
     /**
@@ -531,7 +573,8 @@ class ServiceService extends AbstractEntityService
 
         $intervenantPrec = $this->getServiceIntervenant()->getBySourceCode(
             $intervenant->getSourceCode(),
-            $this->getServiceContext()->getAnneePrecedente()
+            $this->getServiceContext()->getAnneePrecedente(),
+            false
         );
 
         $sVolumeHoraire = $this->getServiceVolumeHoraire();

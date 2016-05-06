@@ -33,7 +33,7 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/contrat', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

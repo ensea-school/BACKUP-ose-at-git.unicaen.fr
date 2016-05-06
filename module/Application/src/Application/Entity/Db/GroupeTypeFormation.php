@@ -5,13 +5,16 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * GroupeTypeFormation
  */
-class GroupeTypeFormation implements HistoriqueAwareInterface
+class GroupeTypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -34,19 +37,9 @@ class GroupeTypeFormation implements HistoriqueAwareInterface
     protected $pertinenceNiveau;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
 
 
@@ -163,34 +156,6 @@ class GroupeTypeFormation implements HistoriqueAwareInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return GroupeTypeFormation
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -198,34 +163,6 @@ class GroupeTypeFormation implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return GroupeTypeFormation
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 

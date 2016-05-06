@@ -5,14 +5,17 @@ namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
  * StatutIntervenant
  */
-class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
+class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     const SS_EMPLOI_NON_ETUD = 'SS_EMPLOI_NON_ETUD';
     const NON_AUTORISE       = 'NON_AUTORISE';
@@ -53,15 +56,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     }
 
 
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
 
     /**
      * @var boolean
@@ -142,6 +136,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      * @var boolean
      */
     protected $peutCloturerSaisie;
+
+    /**
+     * @var boolean
+     */
+    protected $peutSaisirMotifNonPaiement;
 
     /**
      * @var integer
@@ -383,6 +382,29 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
 
+    /**
+     * @return boolean
+     */
+    public function getPeutSaisirMotifNonPaiement()
+    {
+        return $this->peutSaisirMotifNonPaiement;
+    }
+
+
+
+    /**
+     * @param boolean $peutSaisirMotifNonPaiement
+     *
+     * @return StatutIntervenant
+     */
+    public function setPeutSaisirMotifNonPaiement($peutSaisirMotifNonPaiement)
+    {
+        $this->peutSaisirMotifNonPaiement = $peutSaisirMotifNonPaiement;
+
+        return $this;
+    }
+
+
 
     /**
      * Set depassement
@@ -581,34 +603,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return StatutIntervenant
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -644,34 +638,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     public function getTypeIntervenant()
     {
         return $this->typeIntervenant;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return StatutIntervenant
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 
@@ -852,7 +818,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     }
 
 
-    
+
     public function getRoleId()
     {
         return 'statut/' . $this->getSourceCode();

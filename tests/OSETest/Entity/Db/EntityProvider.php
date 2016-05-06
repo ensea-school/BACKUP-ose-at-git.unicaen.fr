@@ -6,7 +6,6 @@ use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Corps;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\RegimeSecu;
-use Application\Entity\Db\Source;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
@@ -54,11 +53,6 @@ class EntityProvider
      * @var array
      */
     private $newEntities;
-
-    /**
-     * @var Source
-     */
-    private $source;
 
     /**
      * @var Annee
@@ -168,7 +162,7 @@ class EntityProvider
     {
         $this->setEntityManager($entityManager);
 
-        Asset::setSource($this->getSource());
+        //Asset::setSource($this->getSource());
 
         // recherche du pseudo-utilisateur OSE
         if (!($param = $this->getEntityManager()->getRepository("Application\Entity\Db\Parametre")->findOneByNom($nom = 'oseuser'))) {
@@ -237,26 +231,6 @@ class EntityProvider
         return $this;
     }
 
-
-
-
-    /**
-     * Recherche et retourne la source de test.
-     *
-     * @return Source
-     */
-    public function getSource()
-    {
-        if (null === $this->source) {
-            $this->source = $this->getEntityManager()->getRepository('Application\Entity\Db\Source')
-                    ->findOneBy(['libelle' => "Test"]);
-            if (!$this->source) {
-                throw new RuntimeException("Source de test (libelle = Test) introuvable.");
-            }
-        }
-
-        return $this->source;
-    }
 
     /**
      * Recherche et retourne l'année en cours.

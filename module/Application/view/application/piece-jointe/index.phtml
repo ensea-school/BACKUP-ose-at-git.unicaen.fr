@@ -18,7 +18,7 @@ $canEdit        = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_J
 $canValider     = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
 $canDevalider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
 
-$infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getSourceCode()]);
+$infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getRouteParam()]);
 
 ?>
     <style>

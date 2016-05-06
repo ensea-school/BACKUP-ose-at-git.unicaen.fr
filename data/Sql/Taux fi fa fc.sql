@@ -69,9 +69,9 @@ SELECT
   ep.fa,ep.taux_fa,
   ep.fc,ep.taux_fc,
   -- NOUVEAUX TAUX FI FA FC
-  0 /100 n_taux_fi,
+  100 /100 n_taux_fi,
   0 /100 n_taux_fa,
-  100 /100 n_taux_fc
+  0 /100 n_taux_fc
   -- FIN DES NOUVEAUX TAUX FI FA FC
 FROM
   element_pedagogique ep
@@ -83,15 +83,37 @@ WHERE
   -- FILTRES
   1 = ose_divers.comprise_entre( ep.histo_creation,ep.histo_destruction )
   --AND s.code <> 'OSE'
-  AND e.source_code = 'DUPLCI_211'
+  AND e.source_code IN (
+  'L1DROI_301',
+'L2DROI_301',
+'LCDR13_211',
+'LCDR13_212',
+'LCDR13_213',
+'LCDRA0_400',
+'LCDRD0_500',
+'MSDCD0_500',
+'MSDGD0_500',
+'MSDR03_205',
+'MSDR04_201',
+'MSDR04_206',
+'MSDR05_202',
+'MSDR07_201',
+'MSDT04_204',
+'MSDT08_201',
+'L1DROI_303',
+'L2DROI_303'
+  )
   AND ep.annee_id = 2015
   -- FIN DES FILTRES
 ) t1
 WHERE
-  taux_fi <> n_taux_fi
-  OR taux_fa <> n_taux_fa
-  OR taux_fc <> n_taux_fc; -- Que s'il y a des différences
-
+  1=1
+  OR (
+    taux_fi <> n_taux_fi
+    OR taux_fa <> n_taux_fa
+    OR taux_fc <> n_taux_fc -- Que s'il y a des différences
+  )
+;
      
      
      select * from element_taux_regimes where id = 44174;
@@ -134,14 +156,29 @@ SELECT * FROM ELEMENT_PEDAGOGIQUE WHERE source_code like '%DUUE%';
 
 
 select source_code from etape where source_code in (
-'ORTH01_201',
-'ORTH02_201',
-'ORTH03_201',
-'DUPLCI_211'
+'L1DROI_301',
+'L2DROI_301',
+'LCDR13_211',
+'LCDR13_212',
+'LCDR13_213',
+'LCDRA0_400',
+'LCDRD0_500',
+'MSDCD0_500',
+'MSDGD0_500',
+'MSDR03_205',
+'MSDR04_201',
+'MSDR04_206',
+'MSDR05_202',
+'MSDR07_201',
+'MSDT04_204',
+'MSDT08_201',
+'L1DROI_303',
+'L2DROI_303'
+
 ) order by source_code;
      
 select * from etape where source_code like 
 
-'%DUPLCI%'
+'%L1DROI%'
 
 order by source_code;

@@ -7,7 +7,7 @@ use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\ElementModulateur;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
-use Application\Entity\Db\Source;
+use UnicaenImport\Entity\Db\Source;
 use Application\Entity\Db\Structure;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
@@ -156,6 +156,6 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertSourceSaisie(Source $source)
     {
-        return $source->isOse();
+        return ! $source->getImportable();
     }
 }

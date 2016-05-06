@@ -29,7 +29,7 @@ class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurIm
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/contrat', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

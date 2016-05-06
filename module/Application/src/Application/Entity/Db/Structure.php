@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
@@ -10,9 +12,10 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ResourceInterface
+class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -32,22 +35,12 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var string
      */
-    protected $sourceCode;
-
-    /**
-     * @var string
-     */
     protected $contactPj;
 
     /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * @var \Application\Entity\Db\TypeStructure
@@ -177,34 +170,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Structure
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Set contactPj
      *
      * @param string $contactPj
@@ -240,34 +205,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return Structure
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 

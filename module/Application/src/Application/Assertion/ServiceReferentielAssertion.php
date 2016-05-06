@@ -9,7 +9,6 @@ use Application\Acl\IntervenantPermanentRole;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Structure;
-use Application\Rule\Paiement\MiseEnPaiementExisteRule;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;

@@ -8,15 +8,17 @@ use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * VolumeHoraireEns
  */
-class VolumeHoraireEns implements HistoriqueAwareInterface
+class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
     use ElementPedagogiqueAwareTrait;
-    use SourceAwareTrait;
     use TypeInterventionAwareTrait;
 
     /**
@@ -28,11 +30,6 @@ class VolumeHoraireEns implements HistoriqueAwareInterface
      * @var float
      */
     protected $heures;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
 
 
 
@@ -74,31 +71,4 @@ class VolumeHoraireEns implements HistoriqueAwareInterface
         return $this->heures;
     }
 
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return VolumeHoraireEns
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
 }

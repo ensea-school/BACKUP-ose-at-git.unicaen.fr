@@ -43,7 +43,7 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
         $fr = $this->getFormuleResultat();
         return $this->getView()->url(
             'intervenant/formule-totaux-hetd', [
-                'intervenant'       => $fr->getIntervenant()->getSourceCode(),
+                'intervenant'       => $fr->getIntervenant()->getRouteParam(),
                 'typeVolumeHoraire' => $fr->getTypeVolumeHoraire()->getId(),
                 'etatVolumeHoraire' => $fr->getEtatVolumeHoraire()->getId()
             ] );

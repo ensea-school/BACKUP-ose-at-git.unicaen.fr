@@ -1,15 +1,20 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Personnel
  */
-class Personnel implements HistoriqueAwareInterface
+class Personnel implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
+
     /**
      * @var string
      */
@@ -31,19 +36,9 @@ class Personnel implements HistoriqueAwareInterface
     protected $prenom;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * @var \Application\Entity\Db\Structure
@@ -60,18 +55,23 @@ class Personnel implements HistoriqueAwareInterface
      */
     protected $affectation;
 
+
+
     /**
-     * 
+     *
      */
     public function __construct()
     {
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+
     /**
      * Set email
      *
      * @param string $email
+     *
      * @return Personnel
      */
     public function setEmail($email)
@@ -81,20 +81,25 @@ class Personnel implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
         return $this->email;
     }
 
+
+
     /**
      * Set nomPatronymique
      *
      * @param string $nomPatronymique
+     *
      * @return Personnel
      */
     public function setNomPatronymique($nomPatronymique)
@@ -104,20 +109,25 @@ class Personnel implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get nomPatronymique
      *
-     * @return string 
+     * @return string
      */
     public function getNomPatronymique()
     {
         return $this->nomPatronymique;
     }
 
+
+
     /**
      * Set nomUsuel
      *
      * @param string $nomUsuel
+     *
      * @return Personnel
      */
     public function setNomUsuel($nomUsuel)
@@ -127,20 +137,25 @@ class Personnel implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get nomUsuel
      *
-     * @return string 
+     * @return string
      */
     public function getNomUsuel()
     {
         return $this->nomUsuel;
     }
 
+
+
     /**
      * Set prenom
      *
      * @param string $prenom
+     *
      * @return Personnel
      */
     public function setPrenom($prenom)
@@ -150,76 +165,37 @@ class Personnel implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get prenom
      *
-     * @return string 
+     * @return string
      */
     public function getPrenom()
     {
         return $this->prenom;
     }
 
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Personnel
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
 
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return Personnel
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
 
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
 
     /**
      * Set structure
      *
      * @param \Application\Entity\Db\Structure $structure
+     *
      * @return Personnel
      */
     public function setStructure(\Application\Entity\Db\Structure $structure = null)
@@ -229,20 +205,25 @@ class Personnel implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getStructure()
     {
         return $this->structure;
     }
 
+
+
     /**
      * Set civilite
      *
      * @param \Application\Entity\Db\Civilite $civilite
+     *
      * @return Personnel
      */
     public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
@@ -252,20 +233,25 @@ class Personnel implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get civilite
      *
-     * @return \Application\Entity\Db\Civilite 
+     * @return \Application\Entity\Db\Civilite
      */
     public function getCivilite()
     {
         return $this->civilite;
     }
 
+
+
     /**
      * Add affectation
      *
      * @param \Application\Entity\Db\Affectation $affectation
+     *
      * @return Personnel
      */
     public function addAffectation(\Application\Entity\Db\Affectation $affectation)
@@ -274,6 +260,8 @@ class Personnel implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove affectation
@@ -285,34 +273,40 @@ class Personnel implements HistoriqueAwareInterface
         $this->affectation->removeElement($affectation);
     }
 
+
+
     /**
      * Get affectation
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAffectation()
     {
         return $this->affectation;
     }
-    
+
+
+
     /**
      * Get civilite
      *
-     * @return string 
+     * @return string
      */
     public function getCiviliteToString()
     {
         return $this->getCivilite()->getLibelleCourt();
     }
-    
+
+
+
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         $f = new \Application\Filter\NomCompletFormatter();
-        
+
         return $f->filter($this);
     }
 }

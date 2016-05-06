@@ -5,13 +5,14 @@ namespace Application\Controller;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Zend\Http\Request;
 use Zend\View\Model\ViewModel;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
@@ -38,6 +39,7 @@ use Application\Service\Traits\PeriodeAwareTrait;
  */
 class ServiceController extends AbstractController
 {
+    use ServiceProcessusAwareTrait;
     use ContextAwareTrait;
     use ServiceAwareTrait;
     use VolumeHoraireAwareTrait;
@@ -66,7 +68,6 @@ class ServiceController extends AbstractController
      */
     protected function initFilters()
     {
-
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Service::class,
             \Application\Entity\Db\VolumeHoraire::class,
@@ -79,169 +80,41 @@ class ServiceController extends AbstractController
 
 
 
-    /**
-     *
-     * @param Intervenant|null $intervenant
-     * @param Recherche        $recherche
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    private function getFilteredServices($intervenant, $recherche)
-    {
-        //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-
-        $service                   = $this->getServiceService();
-        $volumeHoraireService      = $this->getServiceVolumeHoraire();
-        $elementPedagogiqueService = $this->getServiceElementPedagogique();
-        $structureService          = $this->getServiceStructure();
-        $etapeService              = $this->getServiceEtape();
-        $periodeService            = $this->getServicePeriode();
-
-        $this->initFilters();
-        $qb = $service->initQuery()[0];
-        /* @var $qb \Doctrine\ORM\QueryBuilder */
-
-        //@formatter:off
-        $service
-            ->join(     'applicationIntervenant',       $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
-            ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
-            ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures'] );
-
-//        $intervenantService
-//            ->leftJoin( 'applicationUtilisateur',       $qb, 'utilisateur',         true );
-
-        $elementPedagogiqueService
-            ->leftJoin( $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
-            ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
-            ->leftJoin( $periodeService,                $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
-            ->leftJoin( 'applicationTypeIntervention',  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
-
-        $volumeHoraireService
-            ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] );
-
-        $volumeHoraireService->leftJoin( 'applicationEtatVolumeHoraire',    $qb, 'etatVolumeHoraire',    ['id','code','libelle','ordre'] );
-        $volumeHoraireService->leftJoin( 'ApplicationFormuleVolumeHoraire', $qb, 'formuleVolumeHoraire', ['id'] );
-        //@formatter:on
-
-        $service->finderByContext($qb);
-        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
-
-        if ($intervenant) {
-            $service->finderByIntervenant($intervenant, $qb);
-        }
-
-        $qb
-            ->addOrderBy($structureService->getAlias() . '.libelleCourt')
-            ->addOrderBy($etapeService->getAlias() . '.libelle')
-            ->addOrderBy($periodeService->getAlias() . '.libelleCourt')
-            ->addOrderBy($elementPedagogiqueService->getAlias() . '.sourceCode');
-
-        if (!$intervenant && $composante = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
-            $service->finderByComposante($composante, $qb);
-        }
-
-        return $qb;
-    }
-
-
-
     public function indexAction()
     {
-        $totaux           = $this->params()->fromQuery('totaux', 0) == '1';
+        $this->initFilters();
+
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role             = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant      = $this->context()->intervenantFromRoute();
         $viewModel        = new \Zend\View\Model\ViewModel();
 
-        $serviceProto = $this->getServiceService()->newEntity()
-            ->setIntervenant($intervenant)
-            ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+        $canAddService = true; /* A REVOIR ! ! ! */
 
-        $canAddService = $this->isAllowed($serviceProto, 'create');
-
-
-        if (!$this->isAllowed($serviceProto, Privileges::ENSEIGNEMENT_VISUALISATION)) {
+        /*if (!$this->isAllowed($serviceProto, Privileges::ENSEIGNEMENT_VISUALISATION)) {
             $eStr = 'L\'accès au service ' . lcfirst($this->getTypeVolumeHoraire()->getLibelle()) . ' est interdit.';
             throw new UnAuthorizedException($eStr);
-        }
+        }*/
 
+        $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
+        $params             = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action']   = 'recherche';
+        $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
+        $viewModel->addChild($rechercheViewModel, 'recherche');
 
-//        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
-//            throw new \BjyAuthorize\Exception\UnAuthorizedException();
-//        }
-
-        if (!$intervenant) {
-            $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-            $params             = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action']   = 'recherche';
-            $rechercheViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
-            $viewModel->addChild($rechercheViewModel, 'recherche');
-
-            $recherche = $this->getServiceService()->loadRecherche();
-        } else {
-
-            $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
-            $action    = 'afficher'; // Affichage par défaut
-            $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
-            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-
-            $params = [
-                'intervenant' => $intervenant->getSourceCode(),
-                'action'      => 'formule-totaux-hetd',
-            ];
-            $this->getEvent()->setParam('typeVolumeHoraire', $recherche->getTypeVolumeHoraire());
-            $this->getEvent()->setParam('etatVolumeHoraire', $recherche->getEtatVolumeHoraire());
-            $totalViewModel = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-            $viewModel->addChild($totalViewModel, 'formuleTotauxHetd');
-        }
+        $recherche = $this->getServiceService()->loadRecherche();
 
         /* Préparation et affichage */
-        if ('afficher' === $action || $totaux) {
-            $qb       = $this->getFilteredServices($intervenant, $recherche);
-            $services = $this->getServiceService()->getList($qb);
-
-            // services référentiels : délégation au contrôleur
-            if (!$totaux) {
-                $controller                   = 'Application\Controller\ServiceReferentiel';
-                $params                       = $this->getEvent()->getRouteMatch()->getParams();
-                $params['action']             = 'index';
-                $params['recherche']          = $recherche;
-                $params['query']              = $this->params()->fromQuery();
-                $params['renderIntervenants'] = !$intervenant;
-                $listeViewModel               = $this->forward()->dispatch($controller, $params);
-                $viewModel->addChild($listeViewModel, 'servicesRefListe');
-            }
+        if ('afficher' === $action) {
+            $services = $this->getProcessusService()->getServices(null, $recherche);
+            /* Services référentiels */
         } else {
             $services = [];
         }
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
-        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'canAddService', 'params'));
-        if ($totaux) {
-            $viewModel->setTemplate('application/service/rafraichir-totaux');
-        } else {
-            $viewModel->setTemplate('application/service/index');
-
-            // gestion du bouton permettant de clôturer la saisie du réalisé pour les permanents
-            $this->injectClotureSaisie($viewModel);
-        }
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'canAddService', 'params'));
+        $viewModel->setTemplate('application/service/index');
 
         return $viewModel;
-    }
-
-
-
-    private function injectClotureSaisie(\Zend\View\Model\ModelInterface $viewModel)
-    {
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'cloturer-saisie';
-
-        $widget = $this->forward()->dispatch('Application\Controller\Service', $params);
-
-        if ($widget instanceof \Zend\View\Model\ModelInterface) {
-            $viewModel->addChild($widget, 'clotureSaisie');
-        }
     }
 
 
@@ -434,7 +307,7 @@ class ServiceController extends AbstractController
         $rechercheForm->bind($entity);
 
         $request = $this->getRequest();
-        /* @var $request Http\Request */
+        /* @var $request Request */
         if ('afficher' === $request->getQuery('action', null)) {
             $rechercheForm->setData($request->getQuery());
             if ($rechercheForm->isValid()) {
@@ -460,7 +333,7 @@ class ServiceController extends AbstractController
         $params      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $details     = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
-        $service     = $this->context()->serviceFromRoute('id'); // remplacer id par service au besoin, à cause des routes définies en config.
+        $service     = $this->getEvent()->getParam('service');
 
         return compact('service', 'params', 'details', 'onlyContent');
     }
@@ -612,7 +485,6 @@ class ServiceController extends AbstractController
         }
         $service = $this->getServiceService();
         $form    = $this->getFormServiceSaisie();
-        $errors  = [];
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
 
@@ -629,30 +501,36 @@ class ServiceController extends AbstractController
             $title = "Ajout d'enseignement";
         }
 
-        $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
-        $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (!$this->isAllowed($assertionEntity, 'create') && !$this->isAllowed($assertionEntity, 'update')) {
-            throw new \LogicException("Cette opération n'est pas autorisée.");
+        if ($intervenant) {
+            $form->get('service')->setCanSaisieExterieur($this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_EXTERIEUR));
+        } else {
+            $form->get('service')->setCanSaisieExterieur($this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXTERIEUR)));
         }
+
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setData($request->getPost());
-            $form->saveToContext();
-            if ($form->isValid()) {
-                try {
-                    $entity = $service->save($entity->setIntervenant($intervenant));
-                    $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
-                } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
-                }
+            if (!$this->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
+                $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
             } else {
-                $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
+
+                $form->setData($request->getPost());
+                $form->saveToContext();
+                if ($form->isValid()) {
+                    try {
+                        $entity = $service->save($entity->setIntervenant($intervenant));
+                        $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
+                    } catch (\Exception $e) {
+                        $e = DbException::translate($e);
+                        $this->flashMessenger()->addErrorMessage($e->getMessage());
+                    }
+                } else {
+                    $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
+                }
             }
         }
 
-        return compact('form', 'errors', 'title');
+        return compact('form', 'title');
     }
 
 

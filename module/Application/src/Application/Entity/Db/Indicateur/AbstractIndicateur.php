@@ -66,7 +66,7 @@ abstract class AbstractIndicateur
     public function getUrlParams()
     {
         return [
-            'intervenant'  => $this->getIntervenant()->getSourceCode(),
+            'intervenant'  => $this->getIntervenant()->getRouteParam(),
         ];
     }
 

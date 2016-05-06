@@ -69,7 +69,7 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
                 $out = sprintf("<strong>%s</strong> : %s <small>(n°%s, %s%s)</small>, total Référentiel = %s (plafond = %s)", 
                     $resultItem->getStructure(),
                     $intervenant,
-                    $intervenant->getSourceCode(),
+                    $intervenant->getRouteParam(),
                     $intervenant->getStatut(),
                     $intervenant->getStatut()->estPermanent() ? ", " . $intervenant->getStructure() : null,
                     Util::formattedNumber($resultItem->getTotal()),

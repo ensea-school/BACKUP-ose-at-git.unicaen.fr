@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -14,6 +15,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use TypeIntervenantAwareTrait;
 
     /**
      * Filtre de données
@@ -180,13 +182,5 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $res = '<td style="text-align:right;white-space:nowrap"'.$class.'>'.$solde.'</td>'."\n";
         return $res;
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
     }
 }

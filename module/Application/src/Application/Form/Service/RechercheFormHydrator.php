@@ -93,7 +93,7 @@ class RechercheFormHydrator implements HydratorInterface, ServiceLocatorAwareInt
             'type-intervenant'      => $object->getTypeIntervenant()    ? $object->getTypeIntervenant()->getId()    : null,
             'structure-aff'         => $object->getStructureAff()       ? $object->getStructureAff()->getId()       : null,
             'intervenant'           => [
-                'id'                => $object->getIntervenant()        ? $object->getIntervenant()->getSourceCode(): null,
+                'id'                => $object->getIntervenant()        ? $object->getIntervenant()->getRouteParam(): null,
                 'label'             => $object->getIntervenant()        ? (string)$object->getIntervenant()         : null,
             ],
             'element-pedagogique'   => [

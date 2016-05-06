@@ -10,13 +10,11 @@ use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Query\Expr\Join;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
-use Application\Entity\Db\Validation as ValidationEntity;
+
 
 /**
  * Description of ServiceReferentiel
@@ -79,87 +77,6 @@ class ServiceReferentiel extends AbstractEntityService
             ->join($this->getServiceIntervenant(), $qb, 'intervenant', true, $alias);
 
         return [$qb, $alias];
-    }
-
-
-
-    /**
-     *
-     * @param TypeIntervenantEntity $typeIntervenant
-     * @param QueryBuilder|null     $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        if ($typeIntervenant) {
-            $this->join($this->getServiceIntervenant(), $qb, 'intervenant', $alias);
-            $this->getServiceIntervenant()->finderByType($typeIntervenant, $qb);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     *
-     * @param StructureEntity   $structure
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByStructureAff(StructureEntity $structure = null, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        if ($structure) {
-            $this->join($this->getServiceIntervenant(), $qb, 'intervenant', $alias);
-            $this->getServiceIntervenant()->finderByStructure($structure, $qb);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     *
-     * @param StructureEntity   $structure
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByStructureEns(StructureEntity $structure = null, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        if ($structure) {
-            $this->finderByStructure($structure, $qb, $alias);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne le query builder permettant de rechercher les services référentiels
-     * selon la composante spécifiée.
-     *
-     * @param StructureEntity   $structure
-     * @param QueryBuilder|null $queryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function finderByComposante(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $iAlias = $this->getServiceIntervenant()->getAlias();
-        $filter = "($iAlias.structure = :composante OR $alias.structure = :composante)";
-        $qb->andWhere($filter)->setParameter('composante', $structure);
-
-        return $qb;
     }
 
 
@@ -357,96 +274,6 @@ class ServiceReferentiel extends AbstractEntityService
 
 
     /**
-     *
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
-     * @param IntervenantEntity       $intervenant
-     * @param StructureEntity         $structureRef
-     *
-     * @return QueryBuilder
-     */
-    public function finderReferentielsNonValides(
-        TypeVolumeHoraireEntity $typeVolumeHoraire,
-        IntervenantEntity $intervenant = null,
-        StructureEntity $structureRef = null)
-    {
-        $dqlNotExists = <<<EOS
-SELECT vhv FROM Application\Entity\Db\VolumeHoraireReferentiel vhv
-JOIN vhv.validation v
-WHERE vhv = vh
-EOS;
-
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select("s2, i, vh, f, strref")
-            ->from("Application\Entity\Db\ServiceReferentiel", 's2')
-            ->join("s2.intervenant", "i")
-            ->join("s2.volumeHoraireReferentiel", 'vh')
-            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
-            ->join("s2.structure", 'strref')
-            ->join("s2.fonction", 'f')
-            ->andWhere("NOT EXISTS ($dqlNotExists)")
-            ->addOrderBy("strref.libelleCourt", 'asc')
-            ->addOrderBy("s2.histoModification", 'asc');
-
-        if ($intervenant) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
-        }
-        if ($structureRef) {
-            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
-        }
-
-//        print_r($qb->getQuery()->getSQL());
-
-        return $qb;
-    }
-
-
-
-    /**
-     *
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
-     * @param TypeValidationEntity    $validation
-     * @param IntervenantEntity       $intervenant
-     * @param StructureEntity         $structureRef
-     * @param StructureEntity         $structureValidation
-     *
-     * @return QueryBuilder
-     */
-    public function finderReferentielsValides(
-        TypeVolumeHoraireEntity $typeVolumeHoraire,
-        ValidationEntity $validation = null,
-        IntervenantEntity $intervenant = null,
-        StructureEntity $structureRef = null)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select("s, i, vh, f, strref")
-            ->from("Application\Entity\Db\ServiceReferentiel", 's')
-            ->join("s.intervenant", "i")
-            ->join("s.volumeHoraireReferentiel", 'vh')
-            ->join("s.structure", 'strref')
-            ->join("s.fonction", 'f')
-            ->join("vh.validation", "v")
-            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
-            ->join("v.typeValidation", 'tv')
-            ->join("v.structure", 'str')// validés par la structure spécifiée
-            ->orderBy("v.histoModification", 'desc')
-            ->addOrderBy("strref.libelleCourt", 'asc');
-
-        if ($validation) {
-            $qb->andWhere("v = :validation")->setParameter('validation', $validation);
-        }
-        if ($intervenant) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
-        }
-        if ($structureRef) {
-            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
-        }
-
-        return $qb;
-    }
-
-
-
-    /**
      * Prend les services d'un intervenant, année n-1, et reporte ces services (et les volumes horaires associés)
      * sur l'année n
      *
@@ -490,7 +317,8 @@ EOS;
 
         $intervenantPrec = $this->getServiceIntervenant()->getBySourceCode(
             $intervenant->getSourceCode(),
-            $this->getServiceContext()->getAnneePrecedente()
+            $this->getServiceContext()->getAnneePrecedente(),
+            false
         );
 
         $sVolumeHoraireReferentiel = $this->getServiceVolumeHoraireReferentiel();

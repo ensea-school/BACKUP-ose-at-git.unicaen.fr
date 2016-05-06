@@ -12,11 +12,11 @@ use RuntimeException;
 /**
  * Plugin facilitant l'accès au gestionnaire d'entités Doctrine.
  *
- * @method mixed *FromRoute($name = null, $default = null) Description
- * @method mixed *FromQuery($name = null, $default = null) Description
- * @method mixed *FromPost($name = null, $default = null) Description
- * @method mixed *FromSources($name = null, $default = null, array $sources = null) Description
- * @method mixed *FromQueryPost($name = null, $default = null) Description
+ * @method *FromRoute($name = null, $default = null) Description
+ * @method *FromQuery($name = null, $default = null) Description
+ * @method *FromPost($name = null, $default = null) Description
+ * @method *FromSources($name = null, $default = null, array $sources = null) Description
+ * @method *FromQueryPost($name = null, $default = null) Description
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see Params

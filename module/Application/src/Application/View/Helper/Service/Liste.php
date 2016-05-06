@@ -148,13 +148,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
 
 
-    public function getTotalRefreshUrl()
-    {
-        return $this->getView()->url(null, [], ['query' => ['totaux' => 1]], true);
-    }
-
-
-
     public function getAddUrl()
     {
         return $this->getView()->url('service/saisie', [], ['query' => ['type-volume-horaire' => $this->getTypeVolumeHoraire()->getId()]]);
@@ -210,7 +203,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
 
         $style = $this->getTotaux()['total_general'] == 0 ? ' style="display:none"' : '';
-        $out .= '<tfoot data-url="' . $this->getTotalRefreshUrl() . '"' . $style . '>' . "\n";
+        $out .= '<tfoot ' . $style . '>' . "\n";
         $out .= $this->renderTotaux();
         $out .= '</tfoot>' . "\n";
         $out .= '</table>' . "\n";
@@ -276,7 +269,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= '</div>';
             $out .= '<div class="modal-footer">';
             $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getSourceCode() . '">OK</button>';
+            $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getRouteParam() . '">OK</button>';
             $out .= '</div>';
             $out .= '</div>';
             $out .= '</div>';
@@ -378,7 +371,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $out .= "</tr>\n";
         $out .= '<tr>';
         $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de service :</th>\n";
-        $out .= "<td id=\"total-general\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \UnicaenApp\Util::formattedNumber($data['total_general']) . "</td>\n";
+        $out .= "<td id=\"total-general\" style=\"text-align:right\" data-total=\"".$data['total_general']."\" colspan=\"" . $typesInterventionDisplayed . "\">" . \UnicaenApp\Util::formattedNumber($data['total_general']) . "</td>\n";
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
 
@@ -461,14 +454,10 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             'read-only'                     => $this->getReadOnly(),
             'type-volume-horaire'           => $this->getTypeVolumeHoraire()->getId(),
             'columns-visibility'            => [],
-            'types-intervention-visibility' => [],
             'in-realise'                    => $this->isInRealise(),
         ];
         foreach ($this->getColumnsList() as $columnName) {
             $params['columns-visibility'][$columnName] = $this->getColumnVisibility($columnName);
-        }
-        foreach ($this->getTypesIntervention() as $typeIntervention) {
-            $params['types-intervention-visibility'][$typeIntervention->getCode()] = $this->getTypeInterventionVisibility($typeIntervention);
         }
 
         return $params;
@@ -496,11 +485,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 $this->setColumnVisibility($columnName, filter_var($visibility, FILTER_VALIDATE_BOOLEAN));
             }
         }
-        if (isset($params['types-intervention-visibility']) && is_array($params['types-intervention-visibility'])) {
-            foreach ($params['types-intervention-visibility'] as $typeInterventionCode => $visibility) {
-                $this->setTypeInterventionVisibility($typeInterventionCode, filter_var($visibility, FILTER_VALIDATE_BOOLEAN));
-            }
-        }
 
         return $this;
     }
@@ -523,7 +507,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $multiAnnees       = false;
         $intervenant       = null;
         $multiIntervenants = false;
-        foreach ($services as $service) {
+        foreach ($services as $service) if ($service){
             if (empty($annee)) {
                 $annee = $service->getIntervenant()->getAnnee();
             } elseif ($annee !== $service->getIntervenant()->getAnnee()) {
@@ -583,24 +567,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         } else {
             $this->prevuToPrevu = null;
         }
-    }
-
-
-
-    /**
-     *
-     * @param TypeIntervention|string $typeIntervention
-     *
-     * @return self
-     */
-    public function setTypeInterventionVisibility($typeIntervention, $visibility)
-    {
-        if ($typeIntervention instanceof TypeIntervention) {
-            $typeIntervention = $typeIntervention->getCode();
-        }
-        $this->typesInterventionVisibility[$typeIntervention] = (boolean)$visibility;
-
-        return $this;
     }
 
 

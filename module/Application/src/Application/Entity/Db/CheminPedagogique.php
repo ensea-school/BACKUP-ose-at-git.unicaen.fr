@@ -3,13 +3,16 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * CheminPedagogique
  */
-class CheminPedagogique implements HistoriqueAwareInterface
+class CheminPedagogique implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var integer
@@ -17,19 +20,9 @@ class CheminPedagogique implements HistoriqueAwareInterface
     protected $ordre;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
@@ -72,34 +65,6 @@ class CheminPedagogique implements HistoriqueAwareInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return CheminPedagogique
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -107,34 +72,6 @@ class CheminPedagogique implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return CheminPedagogique
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 

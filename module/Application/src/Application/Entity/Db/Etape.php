@@ -4,14 +4,17 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Etape
  */
-class Etape implements HistoriqueAwareInterface, ResourceInterface
+class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
 
 
@@ -55,11 +58,6 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface
     private $niveauFormation;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var boolean
      */
     protected $specifiqueEchanges;
@@ -88,11 +86,6 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface
      * @var \Application\Entity\Db\TypeFormation
      */
     protected $typeFormation;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * @var \Application\Entity\Db\DomaineFonctionnel
@@ -168,34 +161,6 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface
         if (false === $res) $res = null;
 
         return $res;
-    }
-
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Etape
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
     }
 
 
@@ -400,34 +365,6 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface
     public function getDomaineFonctionnel()
     {
         return $this->domaineFonctionnel;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return Etape
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 

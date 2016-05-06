@@ -11,8 +11,6 @@ return [
                     'route'    => '/recherche/:action',
                     'constraints' => [
                         'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'typeIntervenant'   => '[0-9]*',
-                        'structure'         => '[0-9]*',
                     ],
                     'defaults' => [
                         'controller' => 'Application\Controller\Recherche',

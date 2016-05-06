@@ -45,7 +45,7 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/agrement/liste', 
-                ['intervenant'  => $result->getSourceCode(), 'typeAgrement' => $this->getTypeAgrement()->getId()], 
+                ['intervenant'  => $result->getRouteParam(), 'typeAgrement' => $this->getTypeAgrement()->getId()], 
                 ['force_canonical' => true]);
     }
     

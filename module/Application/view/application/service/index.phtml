@@ -3,111 +3,30 @@
 /**
  * @var $this \Application\View\Renderer\PhpRenderer
  * @var $typeVolumeHoraire Application\Entity\Db\TypeVolumeHoraire
- * @var $role \Application\Acl\Role
  */
 
-use Application\Entity\Db\WfEtape;
-
-$titles = [
-  'PREVU'  => 'Enseignements',
-  'REALISE' => 'Constatation des enseignements réalisés',
-];
-
-$title = $titles[$typeVolumeHoraire->getCode()];
-if ($intervenant){
-    $title .= ' <small>'.$intervenant.'</small>';
-    $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
-}else{
-    $this->headTitle()->append("Enseignements");
-}
+$this->headTitle()->append("Enseignements");
 
 $serviceListe = $this->serviceListe( $services ); /* @var $serviceListe \Application\View\Helper\Service\Liste  */
 $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
              ->setAddButtonVisibility($canAddService);
-if ($intervenant) $serviceListe->showPrevuToPrevu($intervenant);
 
+    $this->headTitle()->append("Enseignements");
 ?>
+<h1 class="page-header">Enseignements</h1>
+<?php
 
-<h1 class="page-header"><?php echo $title; ?></h1>
+if ($this->isAllowed('Information', 'info-only-structure')){
+    echo $this->messenger()->setMessages(['warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
+        . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."]);
+}
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
+echo '<div id="filtres">';
+echo $this->recherche;
+echo '</div>';
 
-<style>
-    .modal-dialog {
-        width: 70%;
-    }
-    div.row {
-        padding:1px;
-    }
-    th.heures, td.heures { width: 3em !important; }
-</style>
-
-<?php if (! $intervenant): ?>
-<?php if ($this->isAllowed('ServiceListView', 'info-only-structure')): ?>
-<?php echo $this->messenger()->setMessages(['warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
-        . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures."]); ?>
-<?php endif; ?>
-
-<div id="filtres">
-    <?php echo $this->recherche; ?>
-</div>
-<?php endif; ?>
-
-<?php if ('afficher' === $action ): ?>
-
-    <?php if ($this->isAllowed('ServiceListView', 'aide-intervenant')): ?>
-        <?php echo $this->messenger()->setMessage(
-                "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
-    <?php endif; ?>
-
-    <!-- bouton de cloture de la saisie du réalisé des permanents -->
-    <?php echo $this->clotureSaisie ?>
-    <hr />
-
-    <?php echo $serviceListe->render(); ?>
-    <?php if ($intervenant): ?>
-    <div id="s-horodatage" data-url="<?php echo $this->url('service/horodatage', [
-        'intervenant'       => $intervenant->getSourceCode(),
-        'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
-        'referentiel'       => false
-    ]); ?>">
-        <?php echo $this->partial('application/service/horodatage', [
-            'intervenant'       => $intervenant,
-            'typeVolumeHoraire' => $typeVolumeHoraire,
-            'referentiel'       => false
-        ]); ?>
-    </div>
-    <?php endif; ?>
-
-    <?php if ($intervenant && $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
-        <?php echo $this->servicesRefListe; ?>
-        <div id="sr-horodatage" data-url="<?php echo $this->url('service/horodatage', [
-            'intervenant'       => $intervenant->getSourceCode(),
-            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
-            'referentiel'       => true
-        ]); ?>">
-            <?php echo $this->partial('application/service/horodatage', [
-                'intervenant'       => $intervenant,
-                'typeVolumeHoraire' => $typeVolumeHoraire,
-                'referentiel'       => true
-            ]); ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- bouton de cloture de la saisie du réalisé des permanents -->
-    <hr />
-    <?php echo $this->clotureSaisie ?>
-    <hr />
-    
-    <?php echo $this->formuleTotauxHetd; ?>
-
-    <?php if ($intervenant && $typeVolumeHoraire->getCode() === 'PREVU'): ?>
-        <hr />
-        <?php echo $this->feuillederoute($intervenant)->renderNextBtn(WfEtape::CODE_SERVICE_SAISIE); ?>
-    <?php endif; ?>
-
-<?php else:?>
-
-    <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
-
-<?php endif; ?>
+if ('afficher' === $action ) {
+    echo $serviceListe->render();
+}else{
+    echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO);
+}

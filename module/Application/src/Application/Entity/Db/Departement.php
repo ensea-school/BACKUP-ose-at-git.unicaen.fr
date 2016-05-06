@@ -3,13 +3,16 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Departement
  */
-class Departement implements HistoriqueAwareInterface
+class Departement implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -22,19 +25,10 @@ class Departement implements HistoriqueAwareInterface
     protected $libelleLong;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var integer
      */
     protected $id;
 
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * Retourne la représentation littérale de cet objet.
@@ -92,28 +86,6 @@ class Departement implements HistoriqueAwareInterface
         return $this->libelleLong;
     }
 
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Structure
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
 
     /**
      * Get id
@@ -125,26 +97,4 @@ class Departement implements HistoriqueAwareInterface
         return $this->id;
     }
 
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return Structure
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
 }

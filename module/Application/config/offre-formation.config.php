@@ -208,8 +208,17 @@ return [
                 /* Éléments pédagogiques */
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action'     => ['voir', 'search', 'getPeriode'], // getPeriode est utilisé pour la saisie de service!!!
+                    'action'     => ['voir'], // getPeriode est utilisé pour la saisie de service!!!
                     'privileges' => Privileges::ODF_ELEMENT_VISUALISATION,
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                    'action'     => ['search', 'getPeriode'], // getPeriode est utilisé pour la saisie de service!!!
+                    'privileges' =>  [
+                        Privileges::ODF_ELEMENT_VISUALISATION,
+                        Privileges::ENSEIGNEMENT_EDITION,
+                    ],
+
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',

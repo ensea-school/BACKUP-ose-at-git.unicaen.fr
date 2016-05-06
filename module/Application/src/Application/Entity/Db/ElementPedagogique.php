@@ -11,30 +11,27 @@ use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface
+class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use DisciplineAwareTrait;
     use AnneeAwareTrait;
     use StructureAwareTrait;
     use PeriodeAwareTrait;
-    use SourceAwareTrait;
     use EtapeAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
      */
     protected $libelle;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
 
     /**
      * @var integer
@@ -222,34 +219,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     public function getLibelle()
     {
         return $this->libelle;
-    }
-
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return ElementPedagogique
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
     }
 
 

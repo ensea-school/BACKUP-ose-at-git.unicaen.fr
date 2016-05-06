@@ -27,7 +27,7 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/validation-service', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

@@ -36,7 +36,7 @@ class Em extends AbstractPlugin implements ServiceLocatorAwareInterface
      * Retourne le gestionnaire d'entités.
      * 
      * @param string $name
-     * @return \Application\Entity\Db\Repository\IntervenantRepository
+     * @return EntityManager
      */
     protected function getEntityManager($name)
     {

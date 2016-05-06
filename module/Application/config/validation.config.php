@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Entity\Db\WfEtape;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
@@ -147,44 +148,48 @@ return [
                     'intervenant' => [
                         'pages' => [
                             'validation-service-prevu'       => [
-                                'label'        => "Validation des enseignements prévisionnels",
-                                'title'        => "Validation des enseignements prévisionnels de l'intervenant",
-                                'route'        => 'intervenant/validation/service/prevu',
-                                'paramsInject' => [
+                                'label'               => "Validation des enseignements prévisionnels",
+                                'title'               => "Validation des enseignements prévisionnels de l'intervenant",
+                                'route'               => 'intervenant/validation/service/prevu',
+                                'paramsInject'        => [
                                     'intervenant',
                                 ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'validation'),
+                                'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
+                                'withtarget'          => true,
+                                'visible'             => 'assertionService',
                             ],
                             'validation-referentiel-prevu'   => [
-                                'label'        => "Validation du référentiel prévisionnel",
-                                'title'        => "Validation du référentiel prévisionnel de l'intervenant",
-                                'route'        => 'intervenant/validation/referentiel/prevu',
-                                'paramsInject' => [
+                                'label'               => "Validation du référentiel prévisionnel",
+                                'title'               => "Validation du référentiel prévisionnel de l'intervenant",
+                                'route'               => 'intervenant/validation/referentiel/prevu',
+                                'paramsInject'        => [
                                     'intervenant',
                                 ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ServiceReferentiel', 'validation'),
+                                'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION,
+                                'withtarget'          => true,
+                                'visible'             => 'assertionService',
                             ],
                             'validation-service-realise'     => [
-                                'label'        => "Validation des enseignements réalisés",
-                                'title'        => "Validation des enseignements réalisés de l'intervenant",
-                                'route'        => 'intervenant/validation/service/realise',
-                                'paramsInject' => [
+                                'label'               => "Validation des enseignements réalisés",
+                                'title'               => "Validation des enseignements réalisés de l'intervenant",
+                                'route'               => 'intervenant/validation/service/realise',
+                                'paramsInject'        => [
                                     'intervenant',
                                 ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Service', 'validation'),
+                                'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
+                                'withtarget'          => true,
+                                'visible'             => 'assertionService',
                             ],
                             'validation-referentiel-realise' => [
-                                'label'        => "Validation du référentiel réalisé",
-                                'title'        => "Validation du référentiel réalisé de l'intervenant",
-                                'route'        => 'intervenant/validation/referentiel/realise',
-                                'paramsInject' => [
+                                'label'               => "Validation du référentiel réalisé",
+                                'title'               => "Validation du référentiel réalisé de l'intervenant",
+                                'route'               => 'intervenant/validation/referentiel/realise',
+                                'paramsInject'        => [
                                     'intervenant',
                                 ],
-                                'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ServiceReferentiel', 'validation'),
+                                'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
+                                'withtarget'          => true,
+                                'visible'             => 'assertionService',
                             ],
                         ],
                     ],

@@ -6,14 +6,16 @@ use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\TypeRessourceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * TypeDotation
  */
-class TypeDotation implements HistoriqueAwareInterface
+class TypeDotation implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
-    use SourceAwareTrait;
+    use ImportAwareTrait;
     use TypeRessourceAwareTrait;
 
 
@@ -24,11 +26,6 @@ class TypeDotation implements HistoriqueAwareInterface
      * @var string
      */
     private $libelle;
-
-    /**
-     * @var string
-     */
-    private $sourceCode;
 
     /**
      * @var integer
@@ -73,34 +70,6 @@ class TypeDotation implements HistoriqueAwareInterface
     public function getLibelle()
     {
         return $this->libelle;
-    }
-
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return TypeDotation
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
     }
 
 

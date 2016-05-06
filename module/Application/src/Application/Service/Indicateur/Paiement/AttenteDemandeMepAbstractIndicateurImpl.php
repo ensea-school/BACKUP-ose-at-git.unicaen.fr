@@ -52,7 +52,7 @@ abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervena
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/demande-mise-en-paiement', 
-                ['intervenant' => $result->getIntervenant()->getSourceCode()], 
+                ['intervenant' => $result->getIntervenant()->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

@@ -26,7 +26,7 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
     {
         return $this->getHelperUrl()->fromRoute(
                 'indicateur/result-item', 
-                ['action' => 'result-item-donnees-perso-diff-import', 'intervenant' => $result->getSourceCode()], 
+                ['action' => 'result-item-donnees-perso-diff-import', 'intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

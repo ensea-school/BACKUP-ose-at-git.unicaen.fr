@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -84,16 +85,32 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
+                    'intervenant' => [
+                        'pages' => [
+                            'demande-mise-en-paiement' => [
+                                'label'               => "Demande de mise en paiement",
+                                'title'               => "Demande de mise en paiement",
+                                'route'               => 'intervenant/demande-mise-en-paiement',
+                                'paramsInject'        => [
+                                    'intervenant',
+                                ],
+                                'withtarget'          => true,
+                                'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
+                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
+                                'visible'             => 'assertionPaiement',
+                            ],
+                        ],
+                    ],
                     'gestion' => [
                         'pages' => [
-                            'paiement' => [
-                                'label'    => "Paiement",
-                                'title'    => "Paiement",
-                                'route'    => 'paiement',
-                                'icon'     => 'fa fa-credit-card',
+                            'paiement'    => [
+                                'label'        => "Paiement",
+                                'title'        => "Paiement",
+                                'route'        => 'paiement',
+                                'icon'         => 'fa fa-credit-card',
                                 'border-color' => '#9F491F',
-                                'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
-                                'pages' => [
+                                'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
+                                'pages'        => [
                                     'etat-demande-paiement' => [
                                         'label'    => "Mises en paiement",
                                         'title'    => "Mises en paiement",
@@ -142,7 +159,7 @@ return [
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     ],
-                    'assertion'  => 'MiseEnPaiementAssertion',
+                    'assertion'  => 'assertionPaiement',
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
@@ -173,7 +190,7 @@ return [
         'resource_providers' => [
             \BjyAuthorize\Provider\Resource\Config::class => [
                 'MiseEnPaiement' => [],
-                'TypeRessource' => [],
+                'TypeRessource'  => [],
             ],
         ],
         'rule_providers'     => [
@@ -182,7 +199,7 @@ return [
                     [
                         'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                         'resources'  => 'MiseEnPaiement',
-                        'assertion'  => 'MiseEnPaiementAssertion',
+                        'assertion'  => 'assertionPaiement',
                     ],
                 ],
             ],
@@ -196,7 +213,7 @@ return [
             'ApplicationTypeHeures'                         => Service\TypeHeures::class,
             'ApplicationCentreCout'                         => Service\CentreCout::class,
             'ApplicationCentreCoutEp'                       => Service\CentreCoutEp::class,
-            'MiseEnPaiementAssertion'                       => Assertion\MiseEnPaiementAssertion::class,
+            'assertionPaiement'                             => Assertion\PaiementAssertion::class,
         ],
     ],
     'view_helpers'    => [

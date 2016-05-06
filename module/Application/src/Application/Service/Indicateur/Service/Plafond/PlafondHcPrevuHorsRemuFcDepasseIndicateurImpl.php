@@ -31,7 +31,7 @@ class PlafondHcPrevuHorsRemuFcDepasseIndicateurImpl extends PlafondHcHorsRemuFcD
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services', 
-                ['intervenant' => $result->getIntervenant()->getSourceCode()], 
+                ['intervenant' => $result->getIntervenant()->getRouteParam()], 
                 ['force_canonical' => true]);
     }
 }

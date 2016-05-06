@@ -53,11 +53,11 @@ Util = {
         heures = Math.round(heures * 100) / 100;
         var parts = heures.toString().split(".");
         if (undefined === parts[1]) {
-            parts[1] = '<span class="heures-dec-00">,00</span>';
+            parts[1] = '<span class="number-dec-00">,00</span>';
         } else {
             parts[1] = ',' + parts[1];
         }
-        return '<span class="heures heures-' + hclass + '">' + parts[0] + parts[1] + '</span>';
+        return '<span class="number number-' + hclass + '">' + parts[0] + parts[1] + '</span>';
     },
 
     json: {

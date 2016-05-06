@@ -5,13 +5,16 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * CentreCout
  */
-class CentreCout implements HistoriqueAwareInterface
+class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -22,11 +25,6 @@ class CentreCout implements HistoriqueAwareInterface
      * @var CentreCout
      */
     private $parent;
-
-    /**
-     * @var string
-     */
-    private $sourceCode;
 
     /**
      * @var integer
@@ -42,11 +40,6 @@ class CentreCout implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\TypeRessource
      */
     private $typeRessource;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
 
     /**
      * @var \Application\Entity\Db\CcActivite
@@ -132,34 +125,6 @@ class CentreCout implements HistoriqueAwareInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return CentreCout
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -207,34 +172,6 @@ class CentreCout implements HistoriqueAwareInterface
     public function getTypeRessource()
     {
         return $this->typeRessource;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return CentreCout
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 

@@ -6,15 +6,17 @@ use Application\Entity\Db\Traits\CorpsAwareTrait;
 use Application\Entity\Db\Traits\SourceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Grade
  */
-class Grade implements HistoriqueAwareInterface
+class Grade implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use CorpsAwareTrait;
-    use SourceAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var integer
@@ -35,11 +37,6 @@ class Grade implements HistoriqueAwareInterface
      * @var integer
      */
     protected $echelle;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
 
 
 
@@ -131,34 +128,6 @@ class Grade implements HistoriqueAwareInterface
         $this->echelle = $echelle;
 
         return $this;
-    }
-
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Corps
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
     }
 
 

@@ -57,7 +57,7 @@ class AttenteValidationPermAutreCompIndicateurImpl extends AbstractIntervenantRe
     {
         return $this->getHelperUrl()->fromRoute(
             'intervenant/validation-service-realise',
-            ['intervenant' => $result->getIntervenant()->getSourceCode()],
+            ['intervenant' => $result->getIntervenant()->getRouteParam()],
             ['force_canonical' => true]);
     }
 

@@ -44,7 +44,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

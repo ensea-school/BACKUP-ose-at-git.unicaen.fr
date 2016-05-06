@@ -5,13 +5,16 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Discipline
  */
-class Discipline implements HistoriqueAwareInterface
+class Discipline implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -22,11 +25,6 @@ class Discipline implements HistoriqueAwareInterface
      * @var string
      */
     protected $libelleLong;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
 
     /**
      * @var string
@@ -52,11 +50,6 @@ class Discipline implements HistoriqueAwareInterface
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
 
 
@@ -112,34 +105,6 @@ class Discipline implements HistoriqueAwareInterface
     public function getLibelleLong()
     {
         return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Discipline
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
     }
 
 
@@ -252,37 +217,9 @@ class Discipline implements HistoriqueAwareInterface
 
 
 
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return Discipline
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-
-
     public function __toString()
     {
-        return $this->getSourceCode().' '.$this->getLibelleLong();
+        return $this->getSourceCode() . ' ' . $this->getLibelleLong();
     }
 
 }

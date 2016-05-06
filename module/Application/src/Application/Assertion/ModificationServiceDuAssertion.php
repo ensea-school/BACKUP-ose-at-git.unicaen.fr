@@ -39,7 +39,7 @@ class ModificationServiceDuAssertion extends OldAbstractAssertion
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
             if ($intervenant){
                 return $this->assertIntervenant($intervenant);
-            }       
+            }
         }
         parent::assertController($acl, $role, $controller, $action, $privilege);
     }

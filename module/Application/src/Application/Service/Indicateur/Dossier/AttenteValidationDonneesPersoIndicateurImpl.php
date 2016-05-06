@@ -28,7 +28,7 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIntervenantRes
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/validation-dossier', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

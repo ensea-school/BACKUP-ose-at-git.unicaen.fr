@@ -1,18 +1,22 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Pays
  */
-class Pays implements HistoriqueAwareInterface
+class Pays implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     const CODE_FRANCE = "100";
-    
+
     /**
      * @var string
      */
@@ -29,19 +33,9 @@ class Pays implements HistoriqueAwareInterface
     protected $temoinUe;
 
     /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * @var \DateTime
@@ -53,9 +47,11 @@ class Pays implements HistoriqueAwareInterface
      */
     protected $validiteFin;
 
+
+
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
@@ -63,10 +59,13 @@ class Pays implements HistoriqueAwareInterface
         return $this->getLibelleLong();
     }
 
+
+
     /**
      * Set libelleCourt
      *
      * @param string $libelleCourt
+     *
      * @return Structure
      */
     public function setLibelleCourt($libelleCourt)
@@ -76,20 +75,25 @@ class Pays implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleCourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleCourt()
     {
         return $this->libelleCourt;
     }
 
+
+
     /**
      * Set libelleLong
      *
      * @param string $libelleLong
+     *
      * @return Structure
      */
     public function setLibelleLong($libelleLong)
@@ -99,20 +103,25 @@ class Pays implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleLong
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleLong()
     {
         return $this->libelleLong;
     }
 
+
+
     /**
      * Set temoinUe
      *
      * @param boolean $temoinUe
+     *
      * @return Structure
      */
     public function setTemoinUe($temoinUe)
@@ -122,76 +131,37 @@ class Pays implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get temoinUe
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getTemoinUe()
     {
         return $this->temoinUe;
     }
 
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Structure
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
 
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return Structure
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
 
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
 
     /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
+     *
      * @return self
      */
     public function setValiditeDebut($validiteDebut)
@@ -201,20 +171,25 @@ class Pays implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get validiteDebut
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValiditeDebut()
     {
         return $this->validiteDebut;
     }
 
+
+
     /**
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
+     *
      * @return self
      */
     public function setValiditeFin($validiteFin)
@@ -224,10 +199,12 @@ class Pays implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get validiteFin
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValiditeFin()
     {

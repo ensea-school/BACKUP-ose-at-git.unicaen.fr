@@ -60,7 +60,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInt
 
         if ($object->getIntervenant()) {
             $data['intervenant'] = [
-                'id'    => $object->getIntervenant()->getSourceCode(),
+                'id'    => $object->getIntervenant()->getRouteParam(),
                 'label' => (string) $object->getIntervenant()
             ];
         }

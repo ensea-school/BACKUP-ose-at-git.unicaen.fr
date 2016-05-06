@@ -178,7 +178,7 @@ class RechercheForm extends AbstractForm
 
 
         $this->addActionButton('submit-resume' , 'Afficher (résumé)' , $this->getUrl('service/resume'), true );
-        $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service/default', ['action' => 'index']));
+        $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service'));
         $this->addActionButton('submit-export' , 'Exporter (CSV)'    , $this->getUrl('service/export'));
     }
 

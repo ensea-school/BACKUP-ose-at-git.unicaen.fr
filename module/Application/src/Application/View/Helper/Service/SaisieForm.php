@@ -70,9 +70,8 @@ class SaisieForm extends AbstractHtmlElement implements ServiceLocatorAwareInter
     public function getVolumesHorairesRefreshUrl()
     {
         $url = $this->getView()->url(
-                'service/default',
+                'service/volumes-horaires-refresh',
                 [
-                    'action' => 'volumes-horaires-refresh',
                     'id' => $this->form->get('service')->get('id')->getValue()
                 ]);
         return $url;

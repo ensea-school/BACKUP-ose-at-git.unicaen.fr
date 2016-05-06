@@ -13,6 +13,7 @@ use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -34,6 +35,7 @@ class SaisieFieldset extends AbstractFieldset
     use NiveauEtapeAwareTrait;
     use StructureAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
+    use AuthorizeServiceAwareTrait;
 
     /**
      * etablissement par défaut
@@ -41,6 +43,11 @@ class SaisieFieldset extends AbstractFieldset
      * @var Etablissement
      */
     protected $etablissement;
+
+    /**
+     * @var boolean
+     */
+    protected $canSaisieExterieur;
 
 
 
@@ -75,22 +82,20 @@ class SaisieFieldset extends AbstractFieldset
             $this->add($intervenant);
         }
 
-        if (!($role->getIntervenant() && !$role->getIntervenant()->estPermanent())) {
-            $this->add([
-                'type'       => 'Radio',
-                'name'       => 'interne-externe',
-                'options'    => [
-                    'label'         => "Enseignement effectué :",
-                    'value_options' => [
-                        'service-interne' => 'en interne',
-                        'service-externe' => 'hors ' . $this->etablissement,
-                    ],
+        $this->add([
+            'type'       => 'Radio',
+            'name'       => 'interne-externe',
+            'options'    => [
+                'label'         => "Enseignement effectué :",
+                'value_options' => [
+                    'service-interne' => 'en interne',
+                    'service-externe' => 'hors ' . $this->etablissement,
                 ],
-                'attributes' => [
-                    'value' => 'service-interne',
-                ],
-            ]);
-        }
+            ],
+            'attributes' => [
+                'value' => 'service-interne',
+            ],
+        ]);
 
         $fs = $this->getFieldsetOffreFormationElementPedagogiqueRecherche();
         $fs->setName('element-pedagogique');
@@ -128,7 +133,7 @@ class SaisieFieldset extends AbstractFieldset
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         if ($this->has('intervenant') && $this->getServiceLocalContext()->getIntervenant()) {
             $this->get('intervenant')->setValue([
-                'id'    => $this->getServiceLocalContext()->getIntervenant()->getSourceCode(),
+                'id'    => $this->getServiceLocalContext()->getIntervenant()->getRouteParam(),
                 'label' => (string)$this->getServiceLocalContext()->getIntervenant(),
             ]);
         }
@@ -208,6 +213,36 @@ class SaisieFieldset extends AbstractFieldset
             ],
         ];
     }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getCanSaisieExterieur()
+    {
+        return $this->canSaisieExterieur;
+    }
+
+
+
+    /**
+     * @param boolean $canSaisieExterieur
+     *
+     * @return SaisieFieldset
+     */
+    public function setCanSaisieExterieur($canSaisieExterieur)
+    {
+        $this->canSaisieExterieur = $canSaisieExterieur;
+
+        if (!$canSaisieExterieur) {
+            $this->remove('interne-externe');
+            $this->remove('etablissement');
+        }
+
+        return $this;
+    }
+
 }
 
 
@@ -277,7 +312,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareIn
 
         if ($object->getIntervenant()) {
             $data['intervenant'] = [
-                'id'    => $object->getIntervenant()->getSourceCode(),
+                'id'    => $object->getIntervenant()->getRouteParam(),
                 'label' => (string)$object->getIntervenant(),
             ];
         } else {

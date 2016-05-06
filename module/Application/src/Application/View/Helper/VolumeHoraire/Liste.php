@@ -2,6 +2,8 @@
 
 namespace Application\View\Helper\VolumeHoraire;
 
+use Application\Entity\Db\MotifNonPaiement;
+use Application\Provider\Privilege\Privileges;
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\VolumeHoraireListe;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -105,9 +107,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
     public function getRefreshUrl()
     {
         $url = $this->getView()->url(
-                'volume-horaire/default',
+                'volume-horaire/liste',
                 [
-                    'action' => 'liste', 'id' => $this->getVolumeHoraireListe()->getService()->getId()
+                    'service' => $this->getVolumeHoraireListe()->getService()->getId()
                 ], ['query' => [
                     'read-only' => $this->getReadOnly() ? '1' : '0',
                     'type-volume-horaire' => $this->getVolumeHoraireListe()->getTypeVolumehoraire()->getId(),
@@ -122,7 +124,8 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
      */
     public function render(){
         $this->hasForbiddenPeriodes = false;
-        $hasMotifNonPaiement = $this->getServiceService()->canHaveMotifNonPaiement($this->getVolumeHoraireListe()->getService());
+        $canViewMNP = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEditMNP = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
 
         $out = '<table class="table table-condensed table-bordered volume-horaire">';
         $out .= '<tr>';
@@ -130,7 +133,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         foreach( $this->getTypesInterventions() as $ti ){
             $out .= "<th style=\"width:1%\"><abbr title=\"".$ti->getLibelle()."\">".$ti->getCode()."</abbr></th>\n";
         }
-        if ($hasMotifNonPaiement){
+        if ($canViewMNP){
             $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
         }
         $out .= "</tr>\n";
@@ -138,13 +141,17 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         foreach( $periodes as $periode ){
             $vhl = $this->getVolumeHoraireListe()->setPeriode($periode)->setTypeIntervention(false);
             $motifsNonPaiement = [];
-            if ($hasMotifNonPaiement){  // découpage par motif de non paiement
+            if ($canViewMNP){  // découpage par motif de non paiement
                 $motifsNonPaiement = $vhl->getMotifsNonPaiement();
+                if (!isset($motifsNonPaiement[0]) && !$canEditMNP){
+                    $motifsNonPaiement = [0 => null] + $motifsNonPaiement;
+                }
             }
             if(empty($motifsNonPaiement)){
                 $motifsNonPaiement = [0 => false];
             }
             foreach( $motifsNonPaiement as $motifNonPaiement ){
+                $readOnly = $motifNonPaiement instanceof MotifNonPaiement && !$canEditMNP;
                 $forbiddenPeriode = false;
                 if (
                        $this->getVolumeHoraireListe()->getService()
@@ -171,9 +178,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
                     }else{
                         $class="heures-not-empty";
                     }
-                    $out .= '<td style="text-align:right" class="'.$class.'">'.$this->renderHeures( $vhl ).'</td>';
+                    $out .= '<td style="text-align:right" class="'.$class.'">'.$this->renderHeures( $vhl, $readOnly ).'</td>';
                 }
-                if ($hasMotifNonPaiement){
+                if ($canViewMNP){
                     $out .= "<td>".$this->renderMotifNonPaiement($motifNonPaiement)."</td>\n";
                 }
                 $out .= "</tr>\n";
@@ -190,7 +197,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         return $out;
     }
 
-    public function renderHeures(VolumeHoraireListe $volumeHoraireListe)
+    public function renderHeures(VolumeHoraireListe $volumeHoraireListe, $readOnly=false)
     {
         $heures = $volumeHoraireListe->getHeures();
         $heures = \UnicaenApp\Util::formattedNumber($heures);
@@ -199,7 +206,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         if (false === $volumeHoraireListe->getMotifNonPaiement()){
             $query['tous-motifs-non-paiement'] = '1';
         }
-        if ($this->getReadOnly()){
+        if ($readOnly || $this->getReadOnly()){
             return $heures;
         }else{
             $url = $this->getView()->url(
@@ -234,7 +241,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
     public function setVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
     {
         $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly = ! $this->getView()->isAllowed($volumeHoraireListe->getService(), 'update');
+        $this->forcedReadOnly = ! $this->getView()->isAllowed($volumeHoraireListe->getService(), Privileges::ENSEIGNEMENT_EDITION);
         $this->typesIntervention = null;
         return $this;
     }

@@ -1,15 +1,19 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Effectifs
  */
-class Effectifs implements HistoriqueAwareInterface
+class Effectifs implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var integer
@@ -27,11 +31,6 @@ class Effectifs implements HistoriqueAwareInterface
     private $fi = '0';
 
     /**
-     * @var string
-     */
-    private $sourceCode;
-
-    /**
      * @var integer
      */
     private $id;
@@ -40,11 +39,6 @@ class Effectifs implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\ElementPedagogique
      */
     private $elementPedagogique;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
 
 
 
@@ -133,34 +127,6 @@ class Effectifs implements HistoriqueAwareInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Effectifs
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -196,34 +162,6 @@ class Effectifs implements HistoriqueAwareInterface
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return Effectifs
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 }

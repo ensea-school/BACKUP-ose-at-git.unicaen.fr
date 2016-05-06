@@ -51,7 +51,7 @@ abstract class IntervAffectMemeIntervAutreAbstractIndicateurImpl extends Abstrac
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

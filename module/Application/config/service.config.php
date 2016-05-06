@@ -22,7 +22,7 @@ return [
                 'may_terminate' => true,
                 'child_routes'  => [
                     'resume'           => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'options' => [
                             'route'    => '/resume',
                             'defaults' => [
@@ -40,7 +40,7 @@ return [
                         ],
                     ],
                     'resume-refresh'   => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'options' => [
                             'route'    => '/resume-refresh',
                             'defaults' => [
@@ -74,23 +74,24 @@ return [
                             ],
                         ],
                     ],
+                    'supprimer'        => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/supprimer/:service',
+                            'constraints' => [
+                                'service' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                    ],
                     'recherche'        => [
-                        'type'         => 'Segment',
-                        'options'      => [
+                        'type'    => 'Literal',
+                        'options' => [
                             'route'    => '/recherche',
                             'defaults' => [
                                 'action' => 'recherche',
-                            ],
-                        ],
-                        'child_routes' => [
-                            'default' => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'    => '/',
-                                    'defaults' => [
-                                        'action' => 'recherche',
-                                    ],
-                                ],
                             ],
                         ],
                     ],
@@ -103,18 +104,6 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'rafraichir-ligne',
-                            ],
-                        ],
-                    ],
-                    'intervenant'      => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/intervenant/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
                             ],
                         ],
                     ],
@@ -139,7 +128,19 @@ return [
                             ],
                         ],
                     ],
-                    'default'          => [
+                    'volumes-horaires-refresh' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/volumes-horaires-refresh[/:id]',
+                            'constraints' => [
+                                'id'     => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'volumes-horaires-refresh',
+                            ],
+                        ],
+                    ],
+                    /*'default'          => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:id]',
@@ -151,7 +152,7 @@ return [
                                 'id'     => '[0-9]*',
                             ],
                         ],
-                    ],
+                    ],*/
                     'initialisation'   => [
                         'type'    => 'Segment',
                         'options' => [
@@ -177,7 +178,7 @@ return [
                 ],
                 'may_terminate' => false,
                 'child_routes'  => [
-                    'saisie'           => [
+                    'saisie'                   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie[/:id]',
@@ -189,7 +190,7 @@ return [
                             ],
                         ],
                     ],
-                    'rafraichir-ligne' => [
+                    'rafraichir-ligne'         => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/rafraichir-ligne/:serviceReferentiel',
@@ -201,7 +202,7 @@ return [
                             ],
                         ],
                     ],
-                    'constatation'     => [
+                    'constatation'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/constatation',
@@ -210,20 +211,7 @@ return [
                             ],
                         ],
                     ],
-                    'default'          => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:action[/:id]',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
-                            ],
-                        ],
-                    ],
-                    'initialisation'   => [
+                    'initialisation'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/initialisation/:intervenant',
@@ -255,14 +243,31 @@ return [
     ],
     'bjyauthorize'    => [
         'guards'             => [
-            PrivilegeController::class => [
+            PrivilegeController::class      => [
                 /* Enseignements */
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['index'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                    ],
+                    'assertion'  => 'assertionService',
+                ],
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'horodatage'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_EDITION,
+                    ],
+                    'assertion'  => 'assertionService',
+                ],
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_VISUALISATION,
                     ],
+                    'assertion'  => 'assertionService',
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
@@ -278,14 +283,38 @@ return [
                         Privileges::ENSEIGNEMENT_DEVALIDATION,
                     ],
                 ],
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['export'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_EXPORT_CSV,
+                    ],
+                ],
 
                 /* Référentiel */
+                [
+                    'controller' => 'Application\Controller\ServiceReferentiel',
+                    'action'     => ['index'],
+                    'privileges' => [
+                        Privileges::REFERENTIEL_VISUALISATION,
+                    ],
+                    'assertion'  => 'assertionService',
+                ],
+                [
+                    'controller' => 'Application\Controller\ServiceReferentiel',
+                    'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
+                    'privileges' => [
+                        Privileges::REFERENTIEL_EDITION,
+                    ],
+                    'assertion'  => 'assertionService',
+                ],
                 [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action'     => ['validation'],
                     'privileges' => [
                         Privileges::REFERENTIEL_VISUALISATION,
                     ],
+                    'assertion'  => 'assertionService',
                 ],
                 [
                     'controller' => 'Application\Controller\ServiceReferentiel',
@@ -301,30 +330,39 @@ return [
                         Privileges::REFERENTIEL_DEVALIDATION,
                     ],
                 ],
+
+                /* Commun */
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['resume-refresh'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_EDITION,
+                        Privileges::REFERENTIEL_EDITION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['resume', 'recherche'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_VISUALISATION,
+                        Privileges::REFERENTIEL_VISUALISATION,
+                    ],
+                    'assertion'  => 'assertionService',
+                ],
             ],
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action'     => ['index', 'export', 'saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie', 'horodatage'],
+                    'action'     => ['cloturer-saisie'],
                     'roles'      => ['user'],
                     'assertion'  => 'assertionService',
-                ], [
-                    'controller' => 'Application\Controller\Service',
-                    'action'     => ['resume', 'resume-refresh', 'recherche'],
-                    'roles'      => [R_ADMINISTRATEUR, R_COMPOSANTE, R_ETABLISSEMENT],
-                ], [
-                    'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action'     => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
-                    'roles'      => ['user'],
                 ],
             ],
         ],
         'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
+            \BjyAuthorize\Provider\Resource\Config::class => [
                 'Service'            => [],
                 'ServiceReferentiel' => [],
-                'ServiceListView'    => [],
-                'ServiceController'  => [],
             ],
         ],
         'rule_providers'     => [
@@ -332,8 +370,11 @@ return [
                 'allow' => [
                     /* Enseignements */
                     [
-                        'privileges' => Privileges::ENSEIGNEMENT_VISUALISATION,
-                        'resources'  => 'Service',
+                        'privileges' => [
+                            Privileges::ENSEIGNEMENT_VISUALISATION,
+                            Privileges::ENSEIGNEMENT_EDITION,
+                        ],
+                        'resources'  => ['Service', 'Intervenant'],
                         'assertion'  => 'assertionService',
                     ],
                     [
@@ -346,8 +387,31 @@ return [
                         'resources'  => 'Validation',
                         'assertion'  => 'assertionService',
                     ],
+                    [
+                        'privileges' => [
+                            Privileges::ENSEIGNEMENT_EXTERIEUR,
+                        ],
+                        'resources'  => ['Intervenant', 'Service'],
+                        'assertion'  => 'assertionService',
+                    ],
+                    [
+                        'privileges' => [
+                            Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+                            Privileges::MOTIF_NON_PAIEMENT_EDITION,
+                        ],
+                        'resources'  => 'Intervenant',
+                        'assertion'  => 'assertionService',
+                    ],
 
                     /* Référentiel */
+                    [
+                        'privileges' => [
+                            Privileges::REFERENTIEL_VISUALISATION,
+                            Privileges::REFERENTIEL_EDITION,
+                        ],
+                        'resources'  => 'ServiceReferentiel',
+                        'assertion'  => 'assertionService',
+                    ],
                     [
                         'privileges' => Privileges::REFERENTIEL_VALIDATION,
                         'resources'  => 'Validation',
@@ -357,34 +421,6 @@ return [
                         'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
                         'resources'  => 'Validation',
                         'assertion'  => 'assertionService',
-                    ],
-                ],
-            ],
-            'BjyAuthorize\Provider\Rule\Config' => [
-                'allow' => [
-                    [
-                        ['user'],
-                        'Service',
-                        ['create', 'read', 'delete', 'update'],
-                        'ServiceAssertion',
-                    ],
-                    [
-                        [R_COMPOSANTE],
-                        'ServiceListView',
-                        ['info-only-structure'],
-                        'ServiceAssertion',
-                    ],
-                    [
-                        [R_INTERVENANT],
-                        'ServiceListView',
-                        ['aide-intervenant'],
-                        'ServiceAssertion',
-                    ],
-                    [
-                        [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
-                        'ServiceReferentiel',
-                        ['create', 'read', 'delete', 'update'],
-                        'ServiceReferentielAssertion',
                     ],
                 ],
             ],
@@ -410,6 +446,7 @@ return [
             'ServiceAssertion'                             => Assertion\ServiceAssertionOld::class,
             'assertionService'                             => Assertion\ServiceAssertion::class,
             'ServiceReferentielAssertion'                  => Assertion\ServiceReferentielAssertion::class,
+            'processusService'                             => Processus\ServiceProcessus::class,
         ],
     ],
     'hydrators'       => [

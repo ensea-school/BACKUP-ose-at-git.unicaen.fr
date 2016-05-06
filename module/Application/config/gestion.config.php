@@ -104,7 +104,6 @@ return [
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['index'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
                         Privileges::MISE_EN_PAIEMENT_VISUALISATION,

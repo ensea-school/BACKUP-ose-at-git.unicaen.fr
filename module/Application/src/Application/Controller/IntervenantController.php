@@ -2,9 +2,16 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Service\Recherche;
 use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
+use Application\Processus\Traits\IntervenantProcessusAwareTrait;
+use Application\Processus\Traits\ServiceProcessusAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
@@ -12,6 +19,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
+use Zend\View\Model\ViewModel;
 
 /**
  * Description of IntervenantController
@@ -26,8 +34,11 @@ class IntervenantController extends AbstractController
     use HeuresCompFormAwareTrait;
     use SessionContainerTrait;
     use EditionFormAwareTrait;
-
-
+    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireAwareTrait;
+    use IntervenantProcessusAwareTrait;
+    use ServiceProcessusAwareTrait;
+    use LocalContextAwareTrait;
 
 
 
@@ -37,7 +48,7 @@ class IntervenantController extends AbstractController
 
         if ($intervenant = $role->getIntervenant()) {
             $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
-            if ($etapeCourante && $url = $etapeCourante->getUrl()){
+            if ($etapeCourante && $url = $etapeCourante->getUrl()) {
                 return $this->redirect()->toUrl($url);
             }
         }
@@ -50,6 +61,7 @@ class IntervenantController extends AbstractController
     public function rechercherAction()
     {
         $recents = $this->getIntervenantsRecents();
+
         return compact('recents');
     }
 
@@ -62,7 +74,7 @@ class IntervenantController extends AbstractController
         ]);
 
         $critere      = $this->params()->fromPost('critere');
-        $intervenants = $this->getServiceIntervenant()->recherche($critere, 21);
+        $intervenants = $this->getProcessusIntervenant()->rechercher($critere, 21);
 
         return compact('intervenants');
     }
@@ -74,13 +86,79 @@ class IntervenantController extends AbstractController
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
 
-        if (! $intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant introuvable');
         }
 
         $this->addIntervenantRecent($intervenant);
 
         return compact('intervenant', 'role');
+    }
+
+
+
+    public function servicesAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\Service::class,
+            \Application\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\Validation::class,
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            \Application\Entity\Db\ElementPedagogique::class,
+        ]);
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
+            $vh = new ViewModel();
+            $vh->setTemplate('application/intervenant/menu');
+
+            return $vh;
+        }
+
+        $typeVolumeHoraire = $this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU);
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraire);
+
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
+
+        $vm = new ViewModel();
+
+        /* Liste des services */
+        $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+        $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
+        $services = $this->getProcessusService()->getServices($intervenant, $recherche);
+
+        /* Services référentiels (si nécessaire) */
+        /*if ($intervenant->getStatut()->getPeutSaisirReferentiel()) {
+            $params                       = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action']             = 'index';
+            $params['query']              = $this->params()->fromQuery();
+            $params['renderIntervenants'] = !$intervenant;
+            $widget                       = $this->forward()->dispatch('Application\Controller\ServiceReferentiel', $params);
+            if ($widget) $vm->addChild($widget, 'referentiel');
+        }*/
+
+        /* Totaux HETD */
+        $params = $this->getEvent()->getRouteMatch()->getParams();
+        $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
+        $this->getEvent()->setParam('etatVolumeHoraire', $etatVolumeHoraire);
+        $params['action'] = 'formuleTotauxHetd';
+        $widget           = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+        if ($widget) $vm->addChild($widget, 'formuleTotauxHetd');
+
+        /* Clôture de saisie (si nécessaire) */
+        if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getPeutCloturerSaisie()) {
+            $params           = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action'] = 'cloturer-saisie';
+            $widget = $this->forward()->dispatch('Application\Controller\Service', $params);
+            if ($widget) $vm->addChild($widget, 'clotureSaisie');
+        }
+
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services'));
+
+        return $vm;
     }
 
 
@@ -104,7 +182,7 @@ class IntervenantController extends AbstractController
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $title       = "Saisie d'un intervenant";
         $form        = $this->getFormIntervenantEdition();
-        $errors = [];
+        $errors      = [];
 
         if ($intervenant) {
             $form->bind($intervenant);

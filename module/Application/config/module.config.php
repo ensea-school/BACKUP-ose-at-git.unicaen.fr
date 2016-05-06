@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 const R_ADMINISTRATEUR = Acl\AdministrateurRole::ROLE_ID;
 const R_COMPOSANTE     = Acl\ComposanteRole::ROLE_ID;
 const R_ETABLISSEMENT  = Acl\EtablissementRole::ROLE_ID;
@@ -32,10 +33,10 @@ $main = [
         'configuration' => [
             'orm_default' => [
                 'string_functions' => [
-                    'CONVERT'                             => ORM\Query\Functions\Convert::class,
-                    'REPLACE'                             => ORM\Query\Functions\Replace::class,
-                    'compriseEntre'                       => ORM\Query\Functions\OseDivers\CompriseEntre::class,
-                    'pasHistorise'                        => ORM\Query\Functions\OseDivers\PasHistorise::class,
+                    'CONVERT'       => ORM\Query\Functions\Convert::class,
+                    'REPLACE'       => ORM\Query\Functions\Replace::class,
+                    'compriseEntre' => ORM\Query\Functions\OseDivers\CompriseEntre::class,
+                    'pasHistorise'  => ORM\Query\Functions\OseDivers\PasHistorise::class,
                 ],
                 'filters'          => [
                     'historique' => ORM\Filter\HistoriqueFilter::class,
@@ -122,7 +123,7 @@ $main = [
     'bjyauthorize'       => [
         'identity_provider' => 'ApplicationIdentityProvider',
 
-        'role_providers' => [
+        'role_providers'     => [
             'ApplicationRoleProvider' => [
                 Acl\Role::class,
 
@@ -136,7 +137,7 @@ $main = [
                 Acl\IntervenantPermanentRole::class,
             ],
         ],
-        'guards'         => [
+        'guards'             => [
             \BjyAuthorize\Guard\Controller::class => [
                 [
                     'controller' => 'Application\Controller\Index',
@@ -145,29 +146,44 @@ $main = [
                 ],
             ],
         ],
+        'resource_providers' => [
+            \BjyAuthorize\Provider\Resource\Config::class => [
+                'Information' => [],
+            ],
+        ],
+        'rule_providers'     => [
+            PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'roles'     => ['user'],
+                        'resources' => 'Information',
+                        'assertion' => 'assertionInformation',
+                    ],
+                ],
+            ],
+        ],
     ],
     'service_manager'    => [
-        'invokables'         => [
-            'ApplicationAnnee'                    => Service\Annee::class,
-            'ApplicationContext'                  => Service\Context::class,
-            'ApplicationLocalContext'             => Service\LocalContext::class,
-            'ApplicationParametres'               => Service\Parametres::class,
-            'ApplicationUtilisateur'              => Service\Utilisateur::class,
-            'ApplicationTypeIntervention'         => Service\TypeIntervention::class,
-            'ApplicationSource'                   => Service\Source::class,
-            'ApplicationAffectation'              => Service\Affectation::class,
-            'ApplicationRole'                     => Service\Role::class,
-            'ApplicationPays'                     => Service\Pays::class,
-            'ApplicationDepartement'              => Service\Departement::class,
-            'applicationFichier'                  => Service\FichierService::class,
-            'UnicaenAuth\Service\Privilege'       => Service\PrivilegeService::class
+        'invokables' => [
+            'ApplicationAnnee'              => Service\Annee::class,
+            'ApplicationContext'            => Service\Context::class,
+            'ApplicationLocalContext'       => Service\LocalContext::class,
+            'ApplicationParametres'         => Service\Parametres::class,
+            'ApplicationUtilisateur'        => Service\Utilisateur::class,
+            'ApplicationTypeIntervention'   => Service\TypeIntervention::class,
+            'ApplicationSource'             => Service\Source::class,
+            'ApplicationAffectation'        => Service\Affectation::class,
+            'ApplicationRole'               => Service\Role::class,
+            'ApplicationPays'               => Service\Pays::class,
+            'ApplicationDepartement'        => Service\Departement::class,
+            'applicationFichier'            => Service\FichierService::class,
+            'UnicaenAuth\Service\Privilege' => Service\PrivilegeService::class,
+            'assertionInformation'          => Assertion\InformationAssertion::class,
         ],
-        'factories'          => [
+        'factories'  => [
             'navigation'                  => Service\NavigationFactoryFactory::class,
             'ApplicationRoleProvider'     => Provider\Role\RoleProviderFactory::class,
             'ApplicationIdentityProvider' => Provider\Identity\IdentityProviderFactory::class,
-        ],
-        'abstract_factories' => [
         ],
     ],
     'view_helpers'       => [
@@ -220,7 +236,7 @@ $main = [
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
     ],
     'public_files'       => [
-        'head_scripts' => [
+        'head_scripts'   => [
             '020_jqueryui' => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.js',
         ],
         'inline_scripts' => [
@@ -237,18 +253,18 @@ $main = [
             '010_jquery-ui'           => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.css',
             '020_jquery-ui-structure' => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.structure.min.css',
             '030_jquery-ui-theme'     => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.theme.min.css',
-            '110_' => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css',
-            '111_' => 'css/cartridge.css',
-            '112_' => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
-            '113_' => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
-            '114_' => 'css/budget.css',
-            '115_' => 'css/paiement.css',
-            '116_' => 'css/agrement.css',
-            '117_' => 'css/service.css',
-            '118_' => 'css/acceuil.css',
-            '119_' => 'css/droits.css',
-            '120_' => 'css/callout.css',
-            '121_' => 'css/piece-jointe.css',
+            '110_'                    => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css',
+            '111_'                    => 'css/cartridge.css',
+            '112_'                    => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',
+            '113_'                    => 'https://gest.unicaen.fr/public/open-sans-gh-pages/open-sans.css',
+            '114_'                    => 'css/budget.css',
+            '115_'                    => 'css/paiement.css',
+            '116_'                    => 'css/agrement.css',
+            '117_'                    => 'css/service.css',
+            '118_'                    => 'css/acceuil.css',
+            '119_'                    => 'css/droits.css',
+            '120_'                    => 'css/callout.css',
+            '121_'                    => 'css/piece-jointe.css',
         ],
     ],
 ];

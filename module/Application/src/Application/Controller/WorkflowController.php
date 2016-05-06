@@ -9,6 +9,7 @@ use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WfEtapeAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use UnicaenApp\Exception\LogicException;
 
 
 /**
@@ -137,5 +138,20 @@ class WorkflowController extends AbstractController
         }
 
         return compact('action', 'title', 'error');
+    }
+
+
+
+    public function feuilleDeRouteBtnNextAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $wfEtapeCode = $this->params()->fromRoute('wfEtapeCode');
+        if (!$wfEtapeCode){
+            throw new LogicException('L\'étape du workflow doit être précisée');
+        }
+
+        return compact('intervenant', 'wfEtapeCode');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
+use Application\Provider\Privilege\Privileges;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -240,7 +241,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             'class'                         => 'heures type-intervention '.$liste->getTypeIntervention()->getCode(),
             'style'                         => 'text-align:right'.$display,
             'id'                            => 'service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId(),
-            'data-visibility'               => $heures != 0 ? '1' : '0',
+            'data-value'                    => $heures,
             'data-type-intervention-code'   => $liste->getTypeIntervention()->getCode(),
         ];
         $out = '<td '.$this->htmlAttribs($attribs).'>';
@@ -263,7 +264,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service/default', ['action' => 'suppression', 'id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+        $url = $this->getView()->url('service/supprimer', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
         return '<a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-trash"></span></a>';
     }
 
@@ -318,7 +319,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     public function setService(Service $service = null)
     {
         $service->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire());
-        $this->forcedReadOnly = ! $this->getView()->isAllowed($service, 'update');
+        $this->forcedReadOnly = ! $this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
         $this->service = $service;
         return $this;
     }

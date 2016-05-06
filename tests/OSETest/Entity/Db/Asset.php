@@ -10,7 +10,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\RegimeSecu;
-use Application\Entity\Db\Source;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervenant;
@@ -47,32 +46,7 @@ use DateTime;
 class Asset
 {
     const SOURCE_TEST = 'Test';
-    
-    /**
-     * @var Source
-     */
-    static protected $source;
-    
-    static public function setSource(Source $source)
-    {
-        static::$source = $source;
-    }
-    
-    static public function getSource()
-    {
-        if (null === static::$source) {
-            throw new \LogicException("Vous devez spécifier une source par défaut avec " . __CLASS__ . "::setSource().");
-        }
-        return static::$source;
-    }
-    
-    static public function newSource()
-    {
-        $e = new Source();
-        $e->setLibelle('Source de test');
-        
-        return $e;
-    }
+
     
     static public function newUser()
     {

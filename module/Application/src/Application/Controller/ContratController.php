@@ -147,7 +147,7 @@ class ContratController extends AbstractController
             }
         }
 
-        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getSourceCode()]);
+        return $this->redirect()->toRoute('intervenant/contrat', ['intervenant' => $intervenant->getRouteParam()]);
     }
 
 

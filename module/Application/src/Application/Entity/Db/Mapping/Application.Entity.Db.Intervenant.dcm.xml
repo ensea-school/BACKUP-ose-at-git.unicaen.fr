@@ -2,7 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" repository-class="Application\Entity\Db\Repository\IntervenantRepository">
+    <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT">
         <indexes>
             <index name="IDX_FED386B4C2443469" columns="TYPE_ID"/>
             <index name="IDX_FED386B48C579EB7" columns="CIVILITE_ID"/>
@@ -51,7 +51,7 @@
                 <join-column name="GRADE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="source" target-entity="Application\Entity\Db\Source">
+        <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
             <join-columns>
                 <join-column name="SOURCE_ID" referenced-column-name="ID"/>
             </join-columns>

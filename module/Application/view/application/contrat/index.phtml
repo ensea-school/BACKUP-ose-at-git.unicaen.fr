@@ -63,7 +63,7 @@ if ($services['non-contractualises']) {
                     <td>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
-                               href="<?php echo $this->url('contrat/creer', ['intervenant' => $intervenant->getSourceCode(), 'structure' => $structure->getId()]); ?>">
+                               href="<?php echo $this->url('contrat/creer', ['intervenant' => $intervenant->getRouteParam(), 'structure' => $structure->getId()]); ?>">
                                 <span class="glyphicon glyphicon-file"></span> Créer un
                                 projet <?php echo $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                             </a>

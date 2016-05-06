@@ -77,28 +77,6 @@ class Etape extends AbstractEntityService
 
 
 
-    /**
-     * Retourne le chercheur d'étapes orphelines (i.e. sans EP).
-     *
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function finderByOrphelines(QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $qb
-            ->join("$alias.source", "src")
-            ->andWhere("NOT EXISTS (SELECT eptmp FROM Application\Entity\Db\ElementPedagogique eptmp WHERE eptmp.etape = $alias)")
-            ->andWhere("NOT EXISTS (SELECT cptmp FROM Application\Entity\Db\CheminPedagogique  cptmp WHERE cptmp.etape = $alias)")
-            ->andWhere("$alias.specifiqueEchanges = 0 OR src.code = :sourceOse")
-            ->setParameter('sourceOse', \Application\Entity\Db\Source::CODE_SOURCE_OSE);
-
-        return $qb;
-    }
-
-
 
     /**
      * Retourne le chercheur d'étapes orphelines (i.e. sans EP).

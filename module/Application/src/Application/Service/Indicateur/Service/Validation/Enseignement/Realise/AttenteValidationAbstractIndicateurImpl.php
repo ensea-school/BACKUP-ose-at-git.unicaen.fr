@@ -43,7 +43,7 @@ abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValida
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/validation-service-realise', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

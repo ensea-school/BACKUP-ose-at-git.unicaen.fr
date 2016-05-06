@@ -7,6 +7,8 @@ use Application\Entity\Db\Traits\DossierAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Form\Annotation;
 use Application\Constants;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -19,12 +21,13 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface
+class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use GradeAwareTrait;
     use DisciplineAwareTrait;
     use DossierAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var \DateTime
@@ -126,11 +129,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     /**
      * @var string
      */
-    protected $sourceCode;
-
-    /**
-     * @var string
-     */
     protected $telMobile;
 
     /**
@@ -175,11 +173,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      * @var \Application\Entity\Db\Adresse
      */
     protected $adressePrinc;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
     /**
      * @var \Application\Entity\Db\StatutIntervenant
@@ -731,34 +724,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return Intervenant
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Set telMobile
      *
      * @param string $telMobile
@@ -986,34 +951,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function getAdresse()
     {
         return $this->adresse;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return Intervenant
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 
@@ -2008,5 +1945,17 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function getResourceId()
     {
         return 'Intervenant';
+    }
+
+
+
+    /**
+     * retourne le paramètre de route
+     *
+     * @return string
+     */
+    public function getRouteParam()
+    {
+        return $this->getSourceCode();
     }
 }

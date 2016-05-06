@@ -26,7 +26,7 @@ class DonneesPersoModifIndicateurImpl extends AbstractIntervenantResultIndicateu
     {
         return $this->getHelperUrl()->fromRoute(
                 'indicateur/result-item', 
-                ['action' => 'result-item-donnees-perso-modif', 'intervenant' => $result->getSourceCode()],
+                ['action' => 'result-item-donnees-perso-modif', 'intervenant' => $result->getRouteParam()],
                 ['force_canonical' => true]);
     }
     

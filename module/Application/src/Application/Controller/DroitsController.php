@@ -62,7 +62,7 @@ class DroitsController extends AbstractController
 
     public function roleEditionAction()
     {
-        $role   = $this->context()->roleFromRoute();
+        $role   = $this->getEvent()->getParam('role');
         $errors = [];
 
         $form = $this->getFormDroitsRole();
@@ -96,7 +96,7 @@ class DroitsController extends AbstractController
 
     public function roleSuppressionAction()
     {
-        $role = $this->context()->mandatory()->roleFromRoute();
+        $role   = $this->getEvent()->getParam('role');
 
         $title  = "Suppression du rôle";
         $form   = $this->makeFormSupprimer( function() use ($role){
@@ -281,7 +281,8 @@ class DroitsController extends AbstractController
 
     public function affectationEditionAction()
     {
-        $affectation = $this->context()->affectationFromRoute();
+        $affectation = $this->getEvent()->getParam('affectation');
+        
         /* @var $affectation Affectation */
         $errors = [];
 

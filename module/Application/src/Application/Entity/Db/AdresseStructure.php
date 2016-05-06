@@ -5,13 +5,17 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+
 
 /**
  * AdresseStructure
  */
-class AdresseStructure implements HistoriqueAwareInterface
+class AdresseStructure implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var string
@@ -51,11 +55,6 @@ class AdresseStructure implements HistoriqueAwareInterface
     /**
      * @var string
      */
-    protected $sourceCode;
-
-    /**
-     * @var string
-     */
     protected $telephone;
 
     /**
@@ -73,10 +72,6 @@ class AdresseStructure implements HistoriqueAwareInterface
      */
     protected $structure;
 
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
 
 
 
@@ -277,34 +272,6 @@ class AdresseStructure implements HistoriqueAwareInterface
 
 
     /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     *
-     * @return AdresseStructure
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get sourceCode
-     *
-     * @return string
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-
-
-    /**
      * Set telephone
      *
      * @param string $telephone
@@ -396,34 +363,6 @@ class AdresseStructure implements HistoriqueAwareInterface
     public function getStructure()
     {
         return $this->structure;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return AdresseStructure
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
 }

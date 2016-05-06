@@ -32,7 +32,7 @@ class EnsRealisePermSaisieNonClotureeIndicateurImpl extends AbstractIntervenantR
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services-realises', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

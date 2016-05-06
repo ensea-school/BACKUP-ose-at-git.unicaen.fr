@@ -31,7 +31,7 @@ class AttenteValidationPieceJustifIndicateurImpl extends AbstractIntervenantResu
     {
         return $this->getHelperUrl()->fromRoute(
                 'piece-jointe/intervenant', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getRouteParam()], 
                 ['force_canonical' => true]);
     }
     

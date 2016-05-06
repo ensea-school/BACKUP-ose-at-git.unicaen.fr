@@ -122,7 +122,7 @@ class ServiceReferentielController extends AbstractController
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
 
             $params = [
-                'intervenant' => $intervenant->getSourceCode(),
+                'intervenant' => $intervenant->getRouteParam(),
                 'action'      => 'formule-totaux-hetd',
             ];
             $this->getEvent()->setParam('typeVolumeHoraire', $recherche->getTypeVolumeHoraire());

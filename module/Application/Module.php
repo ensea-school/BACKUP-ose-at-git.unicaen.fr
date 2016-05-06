@@ -93,10 +93,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         $role       = $e->getApplication()->getServiceManager()->get('ApplicationContext')->getSelectedIdentityRole();
         $routeMatch = $e->getRouteMatch();
         if ($role && $intervenant = $role->getIntervenant()) {
-            if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $intervenant->getSourceCode()) {
-                $routeMatch->setParam($name, $intervenant->getSourceCode());
+            if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $intervenant->getRouteParam()) {
+                $routeMatch->setParam($name, $intervenant->getRouteParam());
             }
-            $routeMatch->setParam('intervenant', $intervenant->getSourceCode());
+            $routeMatch->setParam('intervenant', $intervenant->getRouteParam());
         }
     }
 

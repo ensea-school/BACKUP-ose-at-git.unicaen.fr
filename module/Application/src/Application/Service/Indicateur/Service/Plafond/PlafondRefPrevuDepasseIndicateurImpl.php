@@ -31,7 +31,7 @@ class PlafondRefPrevuDepasseIndicateurImpl extends PlafondRefDepasseAbstractIndi
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services', 
-                ['intervenant' => $result->getIntervenant()->getSourceCode()], 
+                ['intervenant' => $result->getIntervenant()->getRouteParam()], 
                 ['force_canonical' => true]);
     }
 }

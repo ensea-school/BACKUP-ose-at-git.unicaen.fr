@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Role;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -17,6 +18,16 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class IntervenantAssertion extends AbstractAssertion
 {
+    use WorkflowServiceAwareTrait;
+
+    /* ---- Routage général ---- */
+    public function __invoke(array $page) // gestion des visibilités de menus
+    {
+        return $this->assertPage($page);
+    }
+
+
+
     /**
      * @param ResourceInterface $entity
      * @param string            $privilege
@@ -53,7 +64,7 @@ class IntervenantAssertion extends AbstractAssertion
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
         // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        //if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -62,6 +73,22 @@ class IntervenantAssertion extends AbstractAssertion
             case 'cloturer-saisie':
                 return $this->assertClotureSaisie($intervenant);
             break;
+        }
+
+        return true;
+    }
+
+
+
+    protected function assertPage(array $page)
+    {
+        if (isset($page['workflow-etape-code'])) {
+            $etape       = $page['workflow-etape-code'];
+            $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+            if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
+                return false;
+            }
         }
 
         return true;

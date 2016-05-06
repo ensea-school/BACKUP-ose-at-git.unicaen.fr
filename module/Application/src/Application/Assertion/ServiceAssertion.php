@@ -6,8 +6,11 @@ use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -21,6 +24,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class ServiceAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
+    use ContextAwareTrait;
 
 
 
@@ -28,6 +32,31 @@ class ServiceAssertion extends AbstractAssertion
     public function __invoke(array $page) // gestion des visibilités de menus
     {
         return $this->assertPage($page);
+    }
+
+
+
+    protected function assertPage(array $page)
+    {
+        $intervenant = null;
+        if (isset($page['workflow-etape-code'])) {
+            $etape       = $page['workflow-etape-code'];
+            $intervenant = $this->getMvcEvent()->getParam('intervenant');
+
+            if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
+                return false;
+            }
+        }
+
+        if ($intervenant && isset($page['route'])) {
+            switch ($page['route']) {
+                case 'intervenant/validation/service/prevu':
+                    return $this->assertEntity($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION);
+                break;
+            }
+        }
+
+        return true;
     }
 
 
@@ -53,6 +82,24 @@ class ServiceAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_VISUALISATION:
                         return $this->assertServiceVisualisation($role, $entity);
+                    case Privileges::ENSEIGNEMENT_EDITION:
+                        return $this->assertServiceEdition($role, $entity);
+                    case Privileges::ENSEIGNEMENT_EXTERIEUR:
+                        return $this->assertServiceExterieur($role, $entity);
+                }
+            break;
+            case $entity instanceof Intervenant:
+                switch ($privilege) {
+                    case Privileges::ENSEIGNEMENT_VISUALISATION:
+                    case Privileges::ENSEIGNEMENT_EDITION:
+                        return $this->assertIntervenant($role, $entity);
+
+                    case Privileges::MOTIF_NON_PAIEMENT_VISUALISATION:
+                    case Privileges::MOTIF_NON_PAIEMENT_EDITION:
+                        return $this->assertMotifNonPaiement($role, $entity);
+
+                    case Privileges::ENSEIGNEMENT_EXTERIEUR:
+                        return $this->assertIntervenantServiceExterieur($role, $entity);
                 }
             break;
             case $entity instanceof Validation:
@@ -81,22 +128,21 @@ class ServiceAssertion extends AbstractAssertion
      */
     protected function assertController($controller, $action = null, $privilege = null)
     {
-        //$intervenant = $this->getMvcEvent()->getParam('intervenant');
+        $role        = $this->getRole();
+        $intervenant = $this->getMvcEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
 
-        return true;
-    }
+        // Si le rôle n'est pas renseigné alors on s'en va...
+        if (!$role instanceof Role) return false;
 
+        if (!$this->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
 
+//        var_dump($intervenant->__toString());
+        switch ($controller . '.' . $action) {
+            case 'Application\Controller\Service.validation':
+                if (!$role->hasPrivilege(Privileges::ENSEIGNEMENT_VISUALISATION)) return false;
 
-    protected function assertPage(array $page)
-    {
-        if (isset($page['workflow-etape-code'])) {
-            $etape = $page['workflow-etape-code'];
-            $intervenant = $this->getMvcEvent()->getParam('intervenant');
-
-            if (!$this->assertEtapeAtteignable($etape, $intervenant)){
-                return false;
-            }
+            break;
         }
 
         return true;
@@ -106,23 +152,62 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertServiceVisualisation(Role $role, Service $service)
     {
-        if (!$this->assertIntervenant($role, $service->getIntervenant())) {
-            return false;
-        }
+        $wfEtape = $this->getWorkflowEtape($service->getTypeVolumeHoraire(), 'saisie');
 
-        if (!$this->assertEtapeAtteignable($service->getTypeVolumeHoraire(), $service->getIntervenant()))
-        {
-            return false;
-        }
-        return true;
+        return $this->asserts([
+            $this->assertIntervenant($role, $service->getIntervenant()),
+            $this->assertEtapeAtteignable($wfEtape, $service->getIntervenant()),
+        ]);
     }
 
 
 
-    protected function assertServiceValidation( Role $role, Validation $validation )
+    protected function assertServiceEdition(Role $role, Service $service)
+    {
+        $structure = $role->getStructure();
+
+        $asserts = [];
+
+        if ($structure) {
+            $structureAffectation  = $service->getIntervenant() ? $service->getIntervenant()->getStructure() : null;
+            $structureEnseignement = $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null;
+
+            if ($structureAffectation && $structureEnseignement) {
+                // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure
+                $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
+            } elseif ($structureAffectation && !$structureEnseignement) {
+                // cas d'un intervenant prenant des enseignements à l'extérieur
+                $asserts[] = $structure == $structureAffectation;
+            }
+        }
+
+        $asserts[] = $this->assertIntervenant($role, $service->getIntervenant());
+
+        if ($service->getEtablissement() != $this->getServiceContext()->getEtablissement()) {
+            $asserts[] = $this->assertServiceExterieur($role, $service);
+        }
+
+        return $this->asserts($asserts);
+    }
+
+
+
+    protected function assertServiceVisualisationValidation(Role $role, Service $service)
+    {
+        $wfEtape = $this->getWorkflowEtape($service->getTypeVolumeHoraire(), 'validation-enseignement');
+
+        return $this->asserts([
+            $this->assertIntervenant($role, $service->getIntervenant()),
+            $this->assertEtapeAtteignable($wfEtape, $service->getIntervenant()),
+        ]);
+    }
+
+
+
+    protected function assertServiceValidation(Role $role, Validation $validation)
     {
         return $this->asserts([
-            ! $validation->getId(),
+            !$validation->getId(),
             $this->assertIntervenant($role, $validation->getIntervenant()),
             $this->assertStructure($role, $validation->getStructure()),
         ]);
@@ -130,7 +215,7 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertServiceDevalidation( Role $role, Validation $validation )
+    protected function assertServiceDevalidation(Role $role, Validation $validation)
     {
         return $this->asserts([
             $validation->getId(),
@@ -141,7 +226,37 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
-    protected function assertIntervenant(Role $role, Intervenant $intervenant=null)
+    protected function assertServiceExterieur(Role $role, Service $service)
+    {
+        return $this->asserts([
+            $this->assertIntervenantServiceExterieur($role, $service->getIntervenant()),
+        ]);
+    }
+
+
+
+    protected function assertIntervenantServiceExterieur(Role $role, Intervenant $intervenant)
+    {
+        return $this->asserts([
+            $intervenant->estPermanent(),
+            $role->hasPrivilege(Privileges::ENSEIGNEMENT_EXTERIEUR),
+        ]);
+    }
+
+
+
+    protected function assertMotifNonPaiement(Role $role, Intervenant $intervenant)
+    {
+        // filtrer pour la structure ? ?
+        return $this->asserts([
+            $intervenant->getStatut()->getPeutSaisirMotifNonPaiement(),
+            $this->assertIntervenant($role, $intervenant),
+        ]);
+    }
+
+
+
+    protected function assertIntervenant(Role $role, Intervenant $intervenant = null)
     {
         if ($intervenant) {
             if ($ri = $role->getIntervenant()) {
@@ -150,12 +265,13 @@ class ServiceAssertion extends AbstractAssertion
                 }
             }
         }
+
         return true;
     }
 
 
 
-    protected function assertStructure(Role $role, Structure $structure=null)
+    protected function assertStructure(Role $role, Structure $structure = null)
     {
         if ($structure) {
             if ($ri = $role->getStructure()) {
@@ -164,8 +280,10 @@ class ServiceAssertion extends AbstractAssertion
                 }
             }
         }
+
         return true;
     }
+
 
 
     protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
@@ -178,5 +296,22 @@ class ServiceAssertion extends AbstractAssertion
         }
 
         return true;
+    }
+
+
+
+    private function getWorkflowEtape(TypeVolumeHoraire $typeVolumeHoraire, $action)
+    {
+        $key    = $action . '-' . strtolower($typeVolumeHoraire->getCode());
+        $etapes = [
+            'saisie-prevu'                    => WfEtape::CODE_SERVICE_SAISIE,
+            'saisie-realise'                  => WfEtape::CODE_SERVICE_SAISIE_REALISE,
+            'validation-enseignement-prevu'   => WfEtape::CODE_SERVICE_VALIDATION,
+            'validation-enseignement-realise' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
+            'validation-referentiel-prevu'    => WfEtape::CODE_REFERENTIEL_VALIDATION,
+            'validation-referentiel-realise'  => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
+        ];
+
+        return $etapes[$key];
     }
 }

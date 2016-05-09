@@ -7,7 +7,7 @@ if ($rechercheForm):
 <style>
     div.filter input[type=radio] { margin-left: 1em; margin-right: 3px; } 
 </style>
-
+<div class="service-filtres">
 <div class="panel panel-default filter">
 
     <div class="panel-heading">Filtres</div>
@@ -52,11 +52,6 @@ if ($rechercheForm):
         echo $this->formErrors( $rechercheForm );
         ?>
     </div>
-    <script>
-        $(function() {
-            ServiceFilter.initRecherche();
-        });
-    </script>
 </div>
-
+</div>
 <?php endif; ?>

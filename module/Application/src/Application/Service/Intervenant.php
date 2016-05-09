@@ -11,8 +11,8 @@ use Application\Filter\StringFromFloat;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
-use Import\Processus\Import;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
+use UnicaenImport\Service\Traits\QueryGeneratorServiceAwareTrait;
 
 
 /**
@@ -24,6 +24,7 @@ class Intervenant extends AbstractEntityService
 {
     use StatutIntervenantAwareTrait;
     use ImportProcessusAwareTrait;
+    use QueryGeneratorServiceAwareTrait;
 
 
 

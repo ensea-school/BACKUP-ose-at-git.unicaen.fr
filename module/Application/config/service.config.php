@@ -31,7 +31,7 @@ return [
                         ],
                     ],
                     'export'           => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'options' => [
                             'route'    => '/export',
                             'defaults' => [
@@ -120,7 +120,7 @@ return [
                         ],
                     ],
                     'constatation'     => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'options' => [
                             'route'    => '/constatation',
                             'defaults' => [
@@ -140,19 +140,6 @@ return [
                             ],
                         ],
                     ],
-                    /*'default'          => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:action[/:id]',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
-                                'id'     => '[0-9]*',
-                            ],
-                        ],
-                    ],*/
                     'initialisation'   => [
                         'type'    => 'Segment',
                         'options' => [

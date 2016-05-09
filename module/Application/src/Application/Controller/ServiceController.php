@@ -192,11 +192,11 @@ class ServiceController extends AbstractController
 
     public function exportAction()
     {
-        $intervenant = $this->getEvent()->getParam('intervernant');
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
+        /* @var $intervenant Intervenant  */
 
-        if (!$this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')) {
-            throw new \BjyAuthorize\Exception\UnAuthorizedException();
-        }
+
 
         $this->initFilters();
         if ($intervenant) {
@@ -240,24 +240,26 @@ class ServiceController extends AbstractController
      */
     public function resumeAction()
     {
-        $intervenant   = $this->context()->intervenantFromRoute();
-        $canAddService = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
+        /* @var $intervenant Intervenant  */
+
+        $canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION));
         $annee         = $this->getServiceContext()->getAnnee();
         $action        = $this->getRequest()->getQuery('action', null);
         $tri           = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
-        if ($intervenant) {
-            $this->getServiceLocalContext()->setIntervenant($intervenant);
-        }
-
         if (!$intervenant) {
             $this->rechercheAction();
             $recherche = $this->getServiceService()->loadRecherche();
         } else {
+            $this->getServiceLocalContext()->setIntervenant($intervenant);
+
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $recherche->setIntervenant($intervenant);
         }
 
         $viewModel = new \Zend\View\Model\ViewModel();
@@ -267,7 +269,6 @@ class ServiceController extends AbstractController
         $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
         $viewModel->addChild($listeViewModel, 'recherche');
 
-        $recherche = $this->getServiceService()->loadRecherche();
         if ('afficher' == $action || 'trier' == $action) {
             $params = [
                 'tri'              => $tri,

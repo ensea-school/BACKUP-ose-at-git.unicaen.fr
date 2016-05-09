@@ -104,9 +104,6 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHtmlElement
         $html .= '</div></div>';
 
         $html .= '</div>';
-        $html .= '<script type="text/javascript">';
-        $html .= '$(function() { ElementPedagogiqueRecherche.get("'.$this->getId().'").init(); });';
-        $html .= '</script>';
 
         return $html;
     }

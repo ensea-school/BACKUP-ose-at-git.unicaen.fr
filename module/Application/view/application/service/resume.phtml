@@ -7,14 +7,12 @@
         . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."]);
 ?>
 
-<div id="filtres" data-url="<?php echo $this->url('service/default', ['action'=>'filtres']) ?>">
-    <?php echo $this->recherche; ?>
-</div>
+<?php echo $this->recherche; ?>
 
 <?php if ('afficher' === $action || 'trier' === $action): ?>
 
 <?php if ($canAddService): ?>
-<?php $url = $this->url('service/default', ['action' => 'saisie']); ?>
+<?php $url = $this->url('service/saisie'); ?>
 <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un enseignement"><span class="glyphicon glyphicon-plus"></span> Saisir un nouvel enseignement</a>
 <br /><br />
 <?php endif; ?>

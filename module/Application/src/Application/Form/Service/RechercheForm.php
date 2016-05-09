@@ -4,10 +4,13 @@ namespace Application\Form\Service;
 
 use Application\Entity\Service\Recherche;
 use Application\Form\AbstractForm;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use UnicaenAuth\Guard\PrivilegeController;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Zend\Form\Element\Select;
 use Zend\Form\Element\Hidden;
 use UnicaenApp\Form\Element\SearchAndSelect;
@@ -24,6 +27,7 @@ class RechercheForm extends AbstractForm
     use TypeIntervenantAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
+    use AuthorizeServiceAwareTrait;
 
 
     /**
@@ -176,10 +180,11 @@ class RechercheForm extends AbstractForm
         $action->setValue('afficher');
         $this->add($action);
 
-
         $this->addActionButton('submit-resume' , 'Afficher (résumé)' , $this->getUrl('service/resume'), true );
         $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service'));
-        $this->addActionButton('submit-export' , 'Exporter (CSV)'    , $this->getUrl('service/export'));
+        if ($this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXPORT_CSV))){
+            $this->addActionButton('submit-export' , 'Exporter (CSV)'    , $this->getUrl('service/export'));
+        }
     }
 
     /**

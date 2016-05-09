@@ -119,7 +119,7 @@ $.widget("ose.serviceListe", {
         if (this.hasHeures() !== exHasHeures) {
             this._trigger('heures-change-exists', null, this);
         }
-        if (this.heures != exHeures){
+        if (this.heures != exHeures) {
             this._trigger('heures-change', null, this);
         }
 
@@ -439,42 +439,49 @@ $(function ()
 
 
 
-ServiceFilter = function ()
-{
 
-}
 
-ServiceFilter.initRecherche = function ()
-{
-    var structureAffName = 'form.service-recherche select[name=\"structure-aff\"]';
-    var intervenantName = 'form.service-recherche input[name=\"intervenant[label]\"]';
-    var changeIntervenant = function ()
+$.widget("ose.serviceFiltres", {
+
+    _create: function ()
     {
-        var structure_aff = $("form.service-recherche select[name=\"structure-aff\"]");
-        var type_intervenant = $('input[name=type-intervenant]:checked', 'form.service-recherche');
-        var url = $(intervenantName).autocomplete("option", "source");
+        var that = this;
+
+        this.getElementStructureAff().change(function(){ that.changeIntervenant(); });
+        this.getElementTypeIntervenant().change(function(){ that.changeIntervenant(); });
+        this.changeIntervenant();
+    },
+
+    changeIntervenant: function ()
+    {
+        var url = this.getElementIntervenant().autocomplete("option", "source");
         var pi = url.indexOf('?');
 
         if (-1 !== pi) {
             url = url.substring(0, pi);
         }
         url += '?' + $.param({
-                typeIntervenant: type_intervenant.val(),
-                structure: structure_aff.val(),
+                typeIntervenant: this.getElementTypeIntervenantSelected().val(),
+                structure: this.getElementStructureAff().val(),
                 'having-services': 1
             });
-        $(intervenantName).autocomplete("option", "source", url);
+        this.getElementIntervenant().autocomplete("option", "source", url);
 
-        if (type_intervenant.val() !== undefined && type_intervenant.data('intervenant-exterieur-id') == type_intervenant.val()) {
-            $('#structure-aff-div').hide();
-            structure_aff.val('');
+        if (this.getElementTypeIntervenantSelected().val() !== undefined && this.getElementTypeIntervenantSelected().data('intervenant-exterieur-id') == this.getElementTypeIntervenantSelected().val()) {
+            this.element.find('#structure-aff-div').hide();
+            this.getElementStructureAff().val('');
         } else {
-            $('#structure-aff-div').show();
+            this.element.find('#structure-aff-div').show();
         }
-    }
+    },
 
-    $(structureAffName).change(changeIntervenant);
-    $('input[name=type-intervenant]', 'form.service-recherche').change(changeIntervenant);
-}
+    getElementStructureAff: function () { return this.element.find('form.service-recherche select[name=\"structure-aff\"]'); },
+    getElementIntervenant: function () { return this.element.find('form.service-recherche input[name=\"intervenant[label]\"]') },
+    getElementTypeIntervenant: function () { return this.element.find('form.service-recherche input[name=type-intervenant]') },
+    getElementTypeIntervenantSelected: function () { return this.element.find('form.service-recherche input[name=type-intervenant]:checked') }
+});
 
-
+$(function ()
+{
+    WidgetInitializer.add('service-filtres', 'serviceFiltres');
+});

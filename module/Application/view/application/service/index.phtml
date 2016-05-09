@@ -21,9 +21,7 @@ if ($this->isAllowed('Information', 'info-only-structure')){
         . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."]);
 }
 
-echo '<div id="filtres">';
 echo $this->recherche;
-echo '</div>';
 
 if ('afficher' === $action ) {
     echo $serviceListe->render();

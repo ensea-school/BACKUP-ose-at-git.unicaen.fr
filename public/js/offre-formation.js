@@ -1,16 +1,14 @@
-function ElementPedagogiqueRecherche(id)
-{
-    this.id = id;
-    this.element = $(".element-pedagogique-recherche#" + this.id);
-    this.relations = this.element.data('relations');
+/**
+ * etapeCentreCout
+ */
+$.widget("ose.elementPedagogiqueRecherche", {
 
-    this.updateValues = function ()
+    updateValues: function ()
     {
         var structureId = this.getStructureElement().val();
         var niveauId = this.getNiveauElement().val();
         var etapeId = this.getFormationElement().val();
         var elementId = this.getElementId();
-        var lastEtapeId = etapeId;
 
         var niveauxValues = [];
         for (nId in this.relations[structureId ? structureId : 'ALL']) {
@@ -40,12 +38,12 @@ function ElementPedagogiqueRecherche(id)
                 that.populateElements(data);
             });
         } else {
-            this.getElementAutocompleteElement().autocomplete("option", "source", url);
             this.setElementState('search');
+            this.getElementAutocompleteElement().autocomplete("option", "source", url);
         }
-    }
+    },
 
-    this.updateElementValue = function ()
+    updateElementValue: function ()
     {
         var id = this.getElementListeElement().val();
         var label = this.getElementListeElement().find(":selected").text();
@@ -54,9 +52,9 @@ function ElementPedagogiqueRecherche(id)
         this.element.find('input#element').val(id);
         if (lastVal != id) this.element.find('input#element').trigger("change");
         this.getElementAutocompleteElement().val(label);
-    }
+    },
 
-    this.filterSelect = function (select, values)
+    filterSelect: function (select, values)
     {
         var ul = select.prev().find('ul');
         select.find('option').each(function ()
@@ -74,9 +72,9 @@ function ElementPedagogiqueRecherche(id)
             }
 
         });
-    }
+    },
 
-    this.setElementState = function (state)
+    setElementState: function (state)
     {
         switch (state) {
             case 'liste':
@@ -95,9 +93,9 @@ function ElementPedagogiqueRecherche(id)
                 this.element.find("#ep-search").show();
                 break;
         }
-    }
+    },
 
-    this.populateElements = function (data)
+    populateElements: function (data)
     {
         var select = this.getElementListeElement();
         var value = this.getElementId();
@@ -117,69 +115,66 @@ function ElementPedagogiqueRecherche(id)
         select.selectpicker('refresh');
         this.setElementState('liste');
         this.updateElementValue();
-    }
+    },
 
-    this.getElementId = function ()
-    {
-        return this.element.find('input#element').attr('value');
-    }
-
-    this.getStructureElement = function ()
-    {
-        return this.element.find('select#structure');
-    }
-
-    this.getNiveauElement = function ()
-    {
-        return this.element.find('select#niveau');
-    }
-
-    this.getFormationElement = function ()
-    {
-        return this.element.find('select#formation');
-    }
-
-    this.getElementElement = function ()
-    {
-        return this.element.find('select#element');
-    }
-
-    this.getElementListeElement = function ()
-    {
-        return this.element.find('select#element-liste');
-    }
-
-    this.getElementAutocompleteElement = function ()
-    {
-        return this.element.find('input#element-autocomplete');
-    }
-
-    this.init = function ()
+    _create: function ()
     {
         var that = this;
 
-        $('.selectpicker').selectpicker();
+        this.relations = this.element.data('relations');
+        this.getElementAutocompleteElement().autocomplete();
+        this.getElementElement().hide();
+
+        this.element.find('.selectpicker').selectpicker();
         this.getStructureElement().change(function () { that.updateValues(); });
         this.getNiveauElement().change(function () { that.updateValues(); });
         this.getFormationElement().change(function () { that.updateValues(); });
         this.getElementListeElement().change(function () { that.updateElementValue(); });
         this.updateValues();
+    },
+
+    getElementId: function ()
+    {
+        return this.getElementElement().attr('value');
+    },
+
+    getStructureElement: function ()
+    {
+        return this.element.find('select#structure');
+    },
+
+    getNiveauElement: function ()
+    {
+        return this.element.find('select#niveau');
+    },
+
+    getFormationElement: function ()
+    {
+        return this.element.find('select#formation');
+    },
+
+    getElementElement: function ()
+    {
+        return this.element.find('input#element');
+    },
+    getElementListeElement: function ()
+    {
+        return this.element.find('select#element-liste');
+    },
+
+    getElementAutocompleteElement: function ()
+    {
+        return this.element.find('input#element-autocomplete');
     }
 
-}
+})
+;
 
-/**
- *
- * @param {string} id
- * @returns {PaiementMiseEnPaiementForm}
- */
-ElementPedagogiqueRecherche.get = function (id)
+
+$(function ()
 {
-    if (null == ElementPedagogiqueRecherche.instances) ElementPedagogiqueRecherche.instances = new Array();
-    if (null == ElementPedagogiqueRecherche.instances[id]) ElementPedagogiqueRecherche.instances[id] = new ElementPedagogiqueRecherche(id);
-    return ElementPedagogiqueRecherche.instances[id];
-}
-
+    WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche');
+});
 
 
 
@@ -193,7 +188,7 @@ $.widget("ose.etapeCentreCout", {
     {
         var that = this;
 
-        this.element.find("button.form-set-value").click( function (e)
+        this.element.find("button.form-set-value").click(function (e)
         {
             var typeHeuresCode = $(this).data('code');
             var value = that.getElementEtapeSelect(typeHeuresCode).val();
@@ -244,7 +239,7 @@ $.widget("ose.etapeModulateurs", {
         var that = this;
 
         this.getElementElementSelects()
-        this.element.find("button.form-set-value").click( function ()
+        this.element.find("button.form-set-value").click(function ()
         {
             var typeModulateurCode = $(this).data('code');
             var value = that.getElementEtapeSelect(typeModulateurCode).val();
@@ -284,17 +279,17 @@ $(function ()
  */
 $.widget("ose.etapeSaisie", {
 
-    onAjouter: function(event)
+    onAjouter: function (event)
     {
         window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
     },
 
-    onModifier: function(event)
+    onModifier: function (event)
     {
         window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
     },
 
-    getId: function()
+    getId: function ()
     {
         return this.element.find('input[name=id]').val();
     }
@@ -303,17 +298,20 @@ $.widget("ose.etapeSaisie", {
 $(function ()
 {
     WidgetInitializer.add('etape-saisie', 'etapeSaisie');
-    $("body").on("etape-ajouter", function(event, data) {
+    $("body").on("etape-ajouter", function (event, data)
+    {
         event.div.modal('hide'); // ferme la fenêtre modale
         event.div.find('.etape-saisie').etapeSaisie();
         event.div.find('.etape-saisie').etapeSaisie('onAjouter', event);
     });
-    $("body").on("etape-modifier", function(event, data) {
+    $("body").on("etape-modifier", function (event, data)
+    {
         event.div.modal('hide'); // ferme la fenêtre modale
         event.div.find('.etape-saisie').etapeSaisie();
         event.div.find('.etape-saisie').etapeSaisie('onModifier', event);
     });
-    $("body").on("etape-supprimer", function(event, data) {
+    $("body").on("etape-supprimer", function (event, data)
+    {
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });
@@ -328,12 +326,12 @@ $(function ()
  */
 $.widget("ose.elementPedagogiqueSaisie", {
 
-    onAjouter: function(event)
+    onAjouter: function (event)
     {
         window.location.reload();
     },
 
-    onModifier: function(event)
+    onModifier: function (event)
     {
         window.location.reload();
     },
@@ -343,17 +341,20 @@ $.widget("ose.elementPedagogiqueSaisie", {
 $(function ()
 {
     WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie');
-    $("body").on("element-pedagogique-ajouter", function(event, data) {
+    $("body").on("element-pedagogique-ajouter", function (event, data)
+    {
         event.div.modal('hide'); // ferme la fenêtre modale
         event.div.find('.element-pedagogique-saisie').elementPedagogiqueSaisie();
         event.div.find('.element-pedagogique-saisie').elementPedagogiqueSaisie('onAjouter', event);
     });
-    $("body").on("element-pedagogique-modifier", function(event, data) {
+    $("body").on("element-pedagogique-modifier", function (event, data)
+    {
         event.div.modal('hide'); // ferme la fenêtre modale
         event.div.find('.element-pedagogique-saisie').elementPedagogiqueSaisie();
         event.div.find('.element-pedagogique-saisie').elementPedagogiqueSaisie('onModifier', event);
     });
-    $("body").on("element-pedagogique-supprimer", function(event, data) {
+    $("body").on("element-pedagogique-supprimer", function (event, data)
+    {
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });

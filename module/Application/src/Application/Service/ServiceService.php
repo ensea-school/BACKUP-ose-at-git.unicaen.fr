@@ -10,6 +10,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;

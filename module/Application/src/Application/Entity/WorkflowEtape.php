@@ -7,7 +7,6 @@ use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\WfEtape;
-use Application\Entity\Db\WfIntervenantEtape;
 use Application\Resource\WorkflowResource;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -25,7 +24,7 @@ class WorkflowEtape implements ResourceInterface
     private $etape;
 
     /**
-     * @var WfIntervenantEtape[]
+     * @var TblWorkflow[]
      */
     private $etapes = [];
 
@@ -76,7 +75,7 @@ class WorkflowEtape implements ResourceInterface
 
 
     /**
-     * @return WfIntervenantEtape[]
+     * @return TblWorkflow[]
      */
     public function getEtapes()
     {
@@ -88,7 +87,7 @@ class WorkflowEtape implements ResourceInterface
     /**
      * @param Structure $structure
      *
-     * @return WfIntervenantEtape|null
+     * @return TblWorkflow|null
      */
     public function getStructureEtape( Structure $structure )
     {

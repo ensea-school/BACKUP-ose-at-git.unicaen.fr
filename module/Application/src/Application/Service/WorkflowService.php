@@ -4,9 +4,9 @@ namespace Application\Service;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\WfEtape;
-use Application\Entity\Db\WfIntervenantEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
@@ -47,7 +47,7 @@ class WorkflowService extends AbstractService
                 if (!$intervenant) $intervenant = $etape->getIntervenant();
                 if (!$structure)    $structure = $etape->getStructure();
             break;
-            case $etape instanceof WfIntervenantEtape:
+            case $etape instanceof TblWorkflow:
                 $etapeCode = $etape->getEtape()->getCode();
                 if (!$intervenant) $intervenant = $etape->getIntervenant();
                 if (!$structure)    $structure = $etape->getStructure();
@@ -73,7 +73,7 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                          $intervenant
      * @param StructureEntity|null                            $structure
      *
@@ -96,7 +96,7 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                          $intervenant
      * @param StructureEntity|null                            $structure
      *
@@ -123,7 +123,7 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                          $intervenant
      * @param StructureEntity|null                            $structure
      *
@@ -150,7 +150,7 @@ class WorkflowService extends AbstractService
     
 
     /**
-     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                          $intervenant
      * @param StructureEntity|null                            $structure
      *
@@ -292,7 +292,6 @@ class WorkflowService extends AbstractService
             $franchies   = 0;
             $etapes      = $etape->getEtapes();
             foreach ($etapes as $sEtape) {
-                /* @var $wei WfIntervenantEtape */
                 if ($sEtape->getAtteignable()) $atteignable = true;
 
                 $franchies += $sEtape->getFranchie();
@@ -320,7 +319,7 @@ class WorkflowService extends AbstractService
     /**
      * @param IntervenantEntity|null $intervenant
      *
-     * @return WfIntervenantEtape[]
+     * @return TblWorkflow[]
      */
     protected function getEtapes(IntervenantEntity $intervenant, StructureEntity $structure = null)
     {

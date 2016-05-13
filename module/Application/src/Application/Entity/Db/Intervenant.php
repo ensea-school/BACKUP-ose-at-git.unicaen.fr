@@ -236,11 +236,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    protected $wfIntervenantEtape;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
     private $formuleReferentiel;
 
     /**
@@ -1490,46 +1485,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function getPremierRecrutement()
     {
         return $this->premierRecrutement;
-    }
-
-
-
-    /**
-     * Add wfIntervenantEtape
-     *
-     * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
-     *
-     * @return Intervenant
-     */
-    public function addWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
-    {
-        $this->wfIntervenantEtape[] = $wfIntervenantEtape;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Remove wfIntervenantEtape
-     *
-     * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
-     */
-    public function removeWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
-    {
-        $this->wfIntervenantEtape->removeElement($wfIntervenantEtape);
-    }
-
-
-
-    /**
-     * Get wfIntervenantEtape
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getWfIntervenantEtape()
-    {
-        return $this->wfIntervenantEtape;
     }
 
 

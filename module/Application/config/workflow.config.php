@@ -159,7 +159,6 @@ return [
             'applicationWfEtape'    => Service\WfEtape::class,
             'workflow'              => Service\WorkflowService::class,
             'assertionWorkflow'     => Assertion\WorkflowAssertion::class,
-            'WfIntervenantEtapeService' => Service\WfIntervenantEtape::class,
         ],
     ],
     'form_elements'   => [

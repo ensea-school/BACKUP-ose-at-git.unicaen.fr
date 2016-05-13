@@ -7,7 +7,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\WfEtape;
-use Application\Entity\Db\WfIntervenantEtape;
+use Application\Entity\Db\TblWorkflow;
 use Application\Entity\WorkflowEtape;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -18,7 +18,7 @@ class WorkflowResource implements ResourceInterface
     use StructureAwareTrait;
 
     /**
-     * @var WfEtape|WorkflowEtape|WfIntervenantEtape|string
+     * @var WfEtape|WorkflowEtape|TblWorkflow|string
      */
     private $etape;
 
@@ -27,7 +27,7 @@ class WorkflowResource implements ResourceInterface
     /**
      * WorkflowResource constructor.
      *
-     * @param WfEtape|WfIntervenantEtape|WorkflowEtape|string $etape
+     * @param WfEtape|TblWorkflow|WorkflowEtape|string $etape
      * @param Intervenant|null                                $intervenant
      * @param Structure|null                                  $structure
      */
@@ -43,7 +43,7 @@ class WorkflowResource implements ResourceInterface
     /**
      * WorkflowResource constructor.
      *
-     * @param WfEtape|WfIntervenantEtape|WorkflowEtape|string $etape
+     * @param WfEtape|TblWorkflow|WorkflowEtape|string $etape
      * @param Intervenant|null                                $intervenant
      * @param Structure|null                                  $structure
      *
@@ -59,7 +59,7 @@ class WorkflowResource implements ResourceInterface
 
 
     /**
-     * @return WfEtape|WfIntervenantEtape|WorkflowEtape|string
+     * @return WfEtape|TblWorkflow|WorkflowEtape|string
      */
     public function getEtape()
     {
@@ -69,7 +69,7 @@ class WorkflowResource implements ResourceInterface
 
 
     /**
-     * @param WfEtape|WfIntervenantEtape|WorkflowEtape|string $etape
+     * @param WfEtape|TblWorkflow|WorkflowEtape|string $etape
      *
      * @return WorkflowResource
      */
@@ -78,7 +78,7 @@ class WorkflowResource implements ResourceInterface
         if ($etape instanceof WorkflowEtape) {
             $this->setIntervenant($etape->getIntervenant());
             $this->setStructure($etape->getStructure());
-        } elseif ($etape instanceof WfIntervenantEtape) {
+        } elseif ($etape instanceof TblWorkflow) {
             $this->setIntervenant($etape->getIntervenant());
             $this->setStructure($this->getStructure());
         }

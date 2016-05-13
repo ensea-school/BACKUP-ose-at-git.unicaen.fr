@@ -5,8 +5,8 @@ namespace Application\Controller;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblAgrement;
+use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\TypeAgrement;
-use Application\Entity\Db\WfIntervenantEtape;
 use Application\Form\Agrement\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AgrementAwareTrait;
@@ -202,7 +202,7 @@ class AgrementController extends AbstractController
         SELECT
           wie, i, s
         FROM
-          " . WfIntervenantEtape::class . " wie
+          " . TblWorkflow::class . " wie
           JOIN wie.intervenant i
           JOIN wie.etape we
           LEFT JOIN wie.structure s
@@ -225,7 +225,7 @@ class AgrementController extends AbstractController
 
         $res = $query->getResult();
 
-        /* @var $res WfIntervenantEtape[] */
+        /* @var $res TblWorkflow[] */
 
         $needStructure = false;
         $needAction    = false;

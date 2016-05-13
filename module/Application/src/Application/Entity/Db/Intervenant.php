@@ -1883,10 +1883,15 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
             return null;
         }
 
-        $filter   = function ($contrat) {
+        $contrats = $this->getContrat()->filter(function ($contrat) {
             return TypeContrat::CODE_CONTRAT === $contrat->getTypeContrat()->getCode();
-        };
-        $contrats = $this->getContrat()->filter($filter);
+        });
+
+        if (count($contrats) > 1){
+            $contrats = $contrats->filter(function ($contrat) {
+                return $contrat->getValidation();
+            });
+        }
 
         return count($contrats) ? $contrats->first() : null;
     }

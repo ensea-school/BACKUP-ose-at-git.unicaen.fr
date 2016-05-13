@@ -157,9 +157,7 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($etape->getUrl() && $etape->isAtteignable()) {
-
-            $resource = \Application\Util::routeToActionResource($etape->getEtape()->getRoute());
-            if ($this->getView()->isAllowed($resource)) {
+            if ($this->getServiceWorkflow()->isAllowed($etape)) {
                 if (!isset($attributes['title'])) {
                     $attributes['title'] = 'Cliquez sur ce lien pour accéder à la page correspondant à cette étape';
                 }
@@ -188,9 +186,8 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
     /**
      * @param $etape
-     * @param $intervenant
      */
-    public function renderNextBtn($etape)
+    public function renderNav($etape)
     {
         $nextEtape = $this->getServiceWorkflow()->getNextAccessibleEtape($etape, $this->getIntervenant());
 

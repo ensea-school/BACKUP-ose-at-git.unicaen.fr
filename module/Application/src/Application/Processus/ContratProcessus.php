@@ -239,8 +239,8 @@ class ContratProcessus extends AbstractProcessus
             ->setIntervenant($contrat->getIntervenant())
             ->setStructure($contrat->getStructure());
 
-        $contrat->setValidation($validation);
         $this->requalification($contrat); // requalifie le contrat en avenant si nécessaire!!
+        $contrat->setValidation($validation);
 
         if ($contrat->estUnAvenant()){
             // on recalcule l'index car il peut avoir changé... ? ? ?
@@ -287,7 +287,9 @@ class ContratProcessus extends AbstractProcessus
             $contratInitial = null; //projet ou lui-même seulement donc on oublie
         }
 
-        return (bool)$contrat->estUnAvenant() === !(bool)$contratInitial;
+        $result = (bool)$contrat->estUnAvenant() === !(bool)$contratInitial;
+
+        return $result;
     }
 
 

@@ -14,22 +14,15 @@ use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append($intervenant->getNomComplet())->append("Pièces justificatives");
 
-$canEdit        = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
-$canValider     = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
-$canDevalider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
+$canEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_EDITION));
+$canValider   = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_VALIDATION));
+$canDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION));
 
 $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $intervenant->getRouteParam()]);
 
+$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()], ['query' => ['menu' => 1]] );
+
 ?>
-    <style>
-
-        
-
-        #alert-contrat {
-            display: none;
-        }
-
-    </style>
     <h1 class="page-header"><?php echo $title ?></h1>
 
     <div class="piece-jointe">
@@ -56,7 +49,7 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
 
             if ($alertContrat) {
                 ?>
-                <div id="alert-contrat" class="alert alert-warning" role="alert">
+                <div id="alert-contrat" class="alert alert-warning" role="alert" style="display:none">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                     <p><strong>Information importante</strong></p>
@@ -81,6 +74,21 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
 
         ?>
     </div>
+    <script>
+
+        $(function(){
+
+            $('.piece-jointe').pieceJointe({
+                'validation-change': function ()
+                {
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?php echo $menuUrl; ?>');
+                },
+            });
+
+        });
+
+    </script>
 <?php
 
-echo $this->feuillederoute($intervenant)->renderNextBtn(\Application\Entity\Db\WfEtape::CODE_PJ_VALIDATION);
+echo $this->feuillederoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_PJ_VALIDATION);

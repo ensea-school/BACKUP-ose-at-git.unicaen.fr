@@ -120,6 +120,11 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
                 <a
                     href="<?php echo $urlValidation ?>"
                     class="btn btn-primary pop-ajax"
+                    title="Valider les données personnelles"
+                    data-content="Confirmez-vous cette validation ?"
+                    data-confirm="true"
+                    data-confirm-button="Je confirme"
+                    data-cancel-button="Non"
                     data-submit-reload="true"
                 >
                     <span class="glyphicon glyphicon-thumbs-up"></span> Valider

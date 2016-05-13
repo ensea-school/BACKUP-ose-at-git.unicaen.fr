@@ -10,7 +10,6 @@ use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
-use Application\Form\Intervenant\Traits\ContratValidationAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratAwareTrait;
@@ -41,15 +40,9 @@ class ContratController extends AbstractController
     use ServiceServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
-    use ContratValidationAwareTrait;
     use ContratRetourAwareTrait;
     use ParametresAwareTrait;
     use ContratProcessusAwareTrait;
-
-    /**
-     * @var Contrat
-     */
-    private $contrat;
 
 
 
@@ -192,15 +185,14 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
 
-        $form            = $this->getFormIntervenantContratValidation()->setContrat($contrat)->init2();
-        $contratToString = $contrat->toString(true, true);
-        $title           = "Validation $contratToString <small>" . $contrat->getIntervenant() . "</small>";
+        //$form            = $this->getFormIntervenantContratValidation()->setContrat($contrat)->init2();
+        //$contratToString = $contrat->toString(true, true);
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)) {
             $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de valider ce projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat'));
-            $form = null;
+            //$form = null;
 
-            return compact('form', 'title');
+            return new MessengerViewModel;
         }
 
         if ($this->getProcessusContrat()->doitEtreRequalifie($contrat)) {
@@ -210,7 +202,19 @@ class ContratController extends AbstractController
             $this->flashMessenger()->addWarningMessage($message);
         }
 
-        $form->requestSave($this->getRequest(), function () use ($contrat) {
+        if ($this->getRequest()->isPost()) {
+            try {
+                $this->getProcessusContrat()->valider($contrat);
+
+                $this->flashMessenger()->addSuccessMessage(
+                    "Validation " . lcfirst($contrat->toString(true, true)) . " enregistrée avec succès."
+                );
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            }
+        }
+        
+/*        $form->requestSave($this->getRequest(), function () use ($contrat) {
             try {
                 $this->getProcessusContrat()->valider($contrat);
 
@@ -221,8 +225,8 @@ class ContratController extends AbstractController
                 $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
             }
         });
-
-        return compact('form', 'title');
+*/
+        return new MessengerViewModel;
     }
 
 

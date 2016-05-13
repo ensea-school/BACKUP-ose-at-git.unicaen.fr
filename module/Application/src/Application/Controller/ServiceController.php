@@ -497,6 +497,7 @@ class ServiceController extends AbstractController
         } else {
             $entity = $service->newEntity();
             $entity->setTypeVolumeHoraire($typeVolumeHoraire);
+            $entity->setIntervenant($intervenant);
             $form->bind($entity);
             $form->initFromContext();
             $title = "Ajout d'enseignement";
@@ -507,7 +508,6 @@ class ServiceController extends AbstractController
         } else {
             $form->get('service')->setCanSaisieExterieur($this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXTERIEUR)));
         }
-
 
         $request = $this->getRequest();
         if ($request->isPost()) {

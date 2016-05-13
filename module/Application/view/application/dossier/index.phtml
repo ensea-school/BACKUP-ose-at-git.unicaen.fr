@@ -1,5 +1,7 @@
 <?php
 
+use Application\Entity\Db\WfEtape;
+
 /**
  * @var $this             \Application\View\Renderer\PhpRenderer
  * @var $role             \Application\Acl\Role
@@ -11,6 +13,8 @@
 
 $intervenant = $form->getObject();
 /* @var $intervenant \Application\Entity\Db\Intervenant */
+
+$nextEtape = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
 
 $this->headTitle()->append($intervenant->getNomUsuel())->append("Données personnelles");
 
@@ -38,4 +42,5 @@ if ($validation) echo $this->tag('div', ['class' => 'bg-success'])->open();
 echo $this->partial('application/dossier/partial/form', compact('form', 'canValider', 'canDevalider'));
 if ($validation) echo $this->tag('div')->close();
 
-echo $this->feuillederoute($intervenant)->renderNextBtn(\Application\Entity\Db\WfEtape::CODE_DONNEES_PERSO_SAISIE);
+
+echo $this->feuillederoute($intervenant)->renderNav($nextEtape);

@@ -183,7 +183,7 @@ class ServiceAssertion extends AbstractAssertion
 
         $asserts[] = $this->assertIntervenant($role, $service->getIntervenant());
 
-        if ($service->getEtablissement() != $this->getServiceContext()->getEtablissement()) {
+        if ($service->getEtablissement() && $service->getEtablissement() != $this->getServiceContext()->getEtablissement()) {
             $asserts[] = $this->assertServiceExterieur($role, $service);
         }
 

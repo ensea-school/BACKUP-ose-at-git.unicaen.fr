@@ -100,7 +100,7 @@ if ($services['non-contractualises']) {
 <?php endif; ?>
 
 <hr/>
-<?php echo $this->feuillederoute($intervenant)->renderNextBtn(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?php echo $this->feuillederoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
     $("body").on("event-contrat-suppr event-contrat-validation event-validation-suppr event-saisie-retour-suppr", function (event, data)

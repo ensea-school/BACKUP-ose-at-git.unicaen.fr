@@ -53,6 +53,7 @@ $.widget("ose.pieceJointe", {
     {
         this.refreshFiles(tpj, isValider);
         this.refreshInfos();
+        this._trigger('validation-change', null, this);
     },
 
 

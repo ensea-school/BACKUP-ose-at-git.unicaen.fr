@@ -38,7 +38,7 @@ foreach ($wells as $well => $title) {
     }
 }
 
-echo $this->feuillederoute($intervenant)->renderNextBtn(
+echo $this->feuillederoute($intervenant)->renderNav(
     $typeVolumeHoraire->isPrevu() ?
         \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
         : \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE

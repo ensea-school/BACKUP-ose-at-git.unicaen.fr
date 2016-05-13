@@ -9,6 +9,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Entity\Db\WfIntervenantEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
+use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 
 /**
  * Description of WorkflowService
@@ -18,6 +19,7 @@ use Application\Service\Traits\ContextAwareTrait;
 class WorkflowService extends AbstractService
 {
     use ContextAwareTrait;
+    use AuthorizeServiceAwareTrait;
 
     /**
      * @var array Feuilles de route
@@ -127,14 +129,14 @@ class WorkflowService extends AbstractService
      *
      * @return WorkflowEtape
      */
-    public function getNextAccessibleEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getPreviousAccessibleEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
     {
         list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
         $isCurrent = false;
         foreach ($fdr as $etape) {
-            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl()){
+            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl() && $this->isAllowed($etape)){
                 return $etape;
             }
             if ($etape->getEtape()->getCode() == $etapeCode) {
@@ -143,6 +145,48 @@ class WorkflowService extends AbstractService
         }
 
         return null;
+    }
+    
+    
+
+    /**
+     * @param WfEtape|WorkflowEtape|WfIntervenantEtape|string $etape
+     * @param IntervenantEntity|null                          $intervenant
+     * @param StructureEntity|null                            $structure
+     *
+     * @return WorkflowEtape
+     */
+    public function getNextAccessibleEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    {
+        list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
+
+        $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
+        $isCurrent = false;
+        foreach ($fdr as $etape) {
+            if ($isCurrent && $etape->isAtteignable() && $etape->getUrl() && $this->isAllowed($etape)){
+                return $etape;
+            }
+            if ($etape->getEtape()->getCode() == $etapeCode) {
+                $isCurrent = true;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    public function isAllowed($etape)
+    {
+        if ($etape instanceof WorkflowEtape){
+            $etape = $etape->getEtape();
+        }
+        if (!$etape instanceof WfEtape){
+            throw new \Exception('L\'étape fournie n\'est pas de classe WfEtape');
+        }
+
+        $resource = \Application\Util::routeToActionResource($etape->getRoute());
+        return $this->getServiceAuthorize()->isAllowed($resource);
     }
 
 

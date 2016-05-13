@@ -147,14 +147,12 @@ class AgrementController extends AbstractController
             $agrement->setStructure($this->getEvent()->getParam('structure'));
         }
 
-        $title = sprintf("Agrément par %s <small>%s</small>", $agrement->getType()->toString(true), $agrement->getIntervenant());
-
         $form = $this->getFormAgrementSaisie();
         $form->bindRequestSave($agrement, $this->getRequest(), function ($a) {
             $this->getServiceAgrement()->save($a);
         });
 
-        return compact('title', 'form');
+        return compact('form');
     }
 
 

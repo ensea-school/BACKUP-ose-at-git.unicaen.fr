@@ -43,7 +43,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
                 <?php if ($hasActions): ?>
                     <td>
                         <?php if ($actionUrl): ?>
-                            <a class="btn btn-primary ajax-modal" data-event="event-update-agrement"
+                            <a class="btn btn-primary pop-ajax" data-submit-reload="true" data-min-width="13em" data-placement="left"
                                href="<?php echo $actionUrl ?>"><?php echo $actionLabel ?></a>
                         <?php endif; ?>
                     </td>
@@ -58,17 +58,6 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
 <?php endif; ?>
 
 
-<?php if ($intervenant = $role->getIntervenant()): ?>
-    <hr/>
-    <?php echo $this->feuillederoute($intervenant)->renderNextBtn($typeAgrement->getCode()); ?>
-<?php endif; ?>
 
-<script>
-    $(function ()
-    {
-        $(document).on('event-update-agrement', "body", function (event, data)
-        {
-            window.location.reload(); // on rafraichit toute la page!!
-        });
-    });
-</script>
+    <hr/>
+    <?php echo $this->feuillederoute($intervenant)->renderNav($typeAgrement->getCode()); ?>

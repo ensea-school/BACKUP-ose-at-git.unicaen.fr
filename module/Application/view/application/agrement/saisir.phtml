@@ -1,23 +1,31 @@
 <?php
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $title string
- * @var $form \Application\Form\Agrement\Saisie
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\Agrement\Saisie
  */
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header">Saisie de l'agrément</h1>
 <?php echo $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
+
+<?php
+echo $this->form()->openTag($form);
+?>
 <div class="row">
-    <div class="col-sm-5">
-        <?php
-        echo $this->form()->openTag($form);
-        echo $this->formControlGroup($form->get('dateDecision'));
-        echo $this->formHidden($form->get('security'));
-        ?>
-        <br />
-        <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
-        <?php echo $this->form()->closeTag(); ?>
+    <div class="col-md-12">
+        <?php echo $this->formControlGroup($form->get('dateDecision')); ?>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-default pop-ajax-hide">Annuler</a>
+    </div>
+</div>
+<?php
+
+echo $this->formHidden($form->get('security'));
+echo $this->form()->closeTag(); ?>

@@ -9,6 +9,7 @@ use Application\Provider\Privilege\Privileges;
  */
 
 $canAddService = $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_EDITION);
+$canAddServiceReferentiel = $this->isAllowed($intervenant, Privileges::REFERENTIEL_EDITION);
 
 if ($typeVolumeHoraire->isPrevu()){
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
@@ -35,28 +36,37 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 if (isset($clotureSaisie)) echo $clotureSaisie;
 
 /* Services et horodatage */
-$serviceListe = $this->serviceListe( $services );
-$serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
-if ($canAddService && $typeVolumeHoraire->isPrevu()){
-    $serviceListe->showPrevuToPrevu($intervenant);
-}
-echo $serviceListe->render();
+if ($services !== false) {
+    $serviceListe = $this->serviceListe($services);
+    $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
+    if ($canAddService && $typeVolumeHoraire->isPrevu()) {
+        $serviceListe->showPrevuToPrevu($intervenant);
+    }
+    echo $serviceListe->render();
 
-echo $this->partial('application/intervenant/partial/horodatage', [
-    'intervenant'       => $intervenant,
-    'typeVolumeHoraire' => $typeVolumeHoraire,
-    'referentiel'       => false
-]);
+    echo $this->partial('application/intervenant/partial/horodatage', [
+        'intervenant'       => $intervenant,
+        'typeVolumeHoraire' => $typeVolumeHoraire,
+        'referentiel'       => false
+    ]);
+}
 
 /* Référentiel et horodatage */
-if (isset($referentiel)){
-    echo $referentiel;
+if ($servicesReferentiel !== false){
+    $serviceReferentielListe = $this->serviceReferentielListe( $servicesReferentiel );
+    $serviceReferentielListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddServiceReferentiel);
+    if ($canAddServiceReferentiel && $typeVolumeHoraire->isPrevu()){
+        $serviceReferentielListe->showPrevuToPrevu($intervenant);
+    }
+    echo '<h1>Référentiel</h1><hr />';
+    echo $serviceReferentielListe->render();
+
     echo $this->partial('application/intervenant/partial/horodatage', [
         'intervenant'       => $intervenant,
         'typeVolumeHoraire' => $typeVolumeHoraire,
         'referentiel'       => true
     ]);
-}var_dump('REFERENTIEL A FAIRE');
+}
 
 echo $formuleTotauxHetd;
 
@@ -68,30 +78,49 @@ if (isset($clotureSaisie)) echo $clotureSaisie;
 <div id="feuille-de-route-btn-next" data-url="<?php echo $btnNextUrl ?>">
     <?php echo $this->feuillederoute($intervenant)->renderNav($nextEtape); ?>
 </div>
+
+<?php if ($services !== false || $servicesReferentiel !== false): ?>
 <script>
 
     $(function ()
     {
 
-        $('.service-liste').serviceListe({
-            'heures-change-exists': function ()
-            {
+        <?php if ($services !== false): ?>$('.service-liste').serviceListe({
+            'heures-change-exists': function(){
                 // chargement du menu pour faire apparaître ou disparaitre les liens de validation
                 $('#sidebar').load('<?php echo $menuUrl; ?>');
 
                 // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
                 $('#feuille-de-route-btn-next').refresh();
             },
-            'heures-change': function ()
-            {
+            'heures-change': function(){
                 // on met à jour le résultat de la formule
                 $("#formule-totaux-hetd").refresh(); // HETD rafraichis
 
                 // on met à jour l'horodatage des services !!
                 $("#s-horodatage").refresh();
             }
-        });
+        });<?php endif; ?>
+
+
+        <?php if ($servicesReferentiel !== false): ?>$('.service-referentiel-liste').serviceReferentielListe({
+            'heures-change-exists': function(){
+                // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                $('#sidebar').load('<?php echo $menuUrl; ?>');
+
+                // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                $('#feuille-de-route-btn-next').refresh();
+            },
+            'heures-change': function(){
+                // on met à jour le résultat de la formule
+                $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+
+                // on met à jour l'horodatage des services !!
+                $("#sr-horodatage").refresh();
+            }
+        });<?php endif; ?>
 
     });
 
 </script>
+<?php endif; ?>

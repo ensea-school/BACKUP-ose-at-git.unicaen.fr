@@ -228,6 +228,24 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
 
 
     /**
+     * Détermine si le VHR a une validation ou non
+     *
+     * @return boolean
+     */
+    public function hasValidation()
+    {
+        $validations = $this->getValidation();
+        foreach( $validations as $validation ){
+            /* @var $validation Validation */
+            if ($validation->estNonHistorise())
+                return true;
+        }
+        return false;
+    }
+
+
+
+    /**
      * Get etatVolumeHoraireReferentiel
      *
      * @return \Doctrine\Common\Collections\Collection

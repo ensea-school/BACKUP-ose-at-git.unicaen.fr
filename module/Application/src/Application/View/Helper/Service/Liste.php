@@ -230,7 +230,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             ];
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
             $out .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-sm">';
+            $out .= '<div class="modal-dialog modal-md">';
             $out .= '<div class="modal-content">';
             $out .= '<div class="modal-header">';
             $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
@@ -258,7 +258,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             ];
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu '.$this->getServiceContext()->getAnneePrecedente().' <span class="glyphicon glyphicon-arrow-right"></span> Prévu '.$this->getServiceContext()->getAnnee().'</button>&nbsp;';
             $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-sm">';
+            $out .= '<div class="modal-dialog modal-md">';
             $out .= '<div class="modal-content">';
             $out .= '<div class="modal-header">';
             $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';

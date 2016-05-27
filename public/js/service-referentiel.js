@@ -2,38 +2,77 @@
  Propre à l'affichage du référentiel
  /***************************************************************************************************************************************************/
 
-function ServiceReferentielListe(id)
-{
-    this.id = id;
-    this.params = $("#" + this.id).data('params');
+$.widget("ose.serviceReferentielListe", {
+    total: 0,
 
-    this.onAfterChange = function ()
+    calculTotaux: function ()
     {
         var that = this;
+        this.total = 0;
 
-        $("#" + this.id + " tfoot").refresh({params: this.params}); // rafraichissement des totaux
+        this.element.find("table.service-referentiel td.sr-heures").each(function ()
+        {
+            var value = $(this).data('value');
+            that.total += value;
+        });
 
-//        // autres modifications...
-        $("#formule-totaux-hetd").refresh({});
-        if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
-            $("#service-resume").refresh();
+        // on met à jour aussi les entêtes et les totaux
+        this.element.find("table.service-referentiel #total-referentiel").html(Util.formattedHeures(this.total));
+    },
+
+
+
+    hasHeures: function ()
+    {
+        return this.total > 0;
+    },
+
+
+
+    getHeures: function (serviceId)
+    {
+        return this.element.find("#referentiel-" + serviceId + "-ligne td.sr-heures").data('value');
+    },
+
+
+
+    getHeuresPrevues: function (serviceId)
+    {
+        return this.element.find("tr#referentiel-" + serviceId + "-ligne td.sr-heures").data('prevues');
+    },
+
+
+
+    onAfterChange: function ()
+    {
+        var exHasHeures = this.hasHeures();
+        var exHeures = this.total;
+
+        this.init();
+
+        if (this.hasHeures() !== exHasHeures) {
+            this._trigger('heures-change-exists', null, this);
         }
-        $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
-        $("#sr-horodatage").refresh();
-    }
+        if (this.heures != exHeures) {
+            this._trigger('heures-change', null, this);
+        }
+    },
 
-    this.onAfterSaisie = function (serviceId)
+
+
+    onAfterSaisie: function (serviceId)
     {
         var that = this;
-        if ($("#" + that.id + " #referentiel-" + serviceId + "-ligne").length) { // simple modification
-            $("#" + that.id + " #referentiel-" + serviceId + "-ligne").refresh({
+
+        if (that.element.find("#referentiel-" + serviceId + "-ligne").length) { // simple modification
+            that.element.find("#referentiel-" + serviceId + "-ligne").refresh({
                 details: $('#referentiel-' + serviceId + '-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
                 params: that.params
             }, function ()
             {
                 that.onAfterChange();
             });
-            $("#" + that.id + " #referentiel-" + serviceId + "-volume-horaire-td").refresh();
+            that.element.find("#referentiel-" + serviceId + "-volume-horaire-td").refresh();
         } else { // nouveau service
             var url = Url("referentiel/rafraichir-ligne/" + serviceId, {
                 'only-content': 0,
@@ -42,27 +81,27 @@ function ServiceReferentielListe(id)
             });
             $.get(url, function (data)
             {
-                $("#" + that.id + " > table > tbody:last").append(data);
+                that.element.find("table.service-referentiel > tbody:last").append(data);
                 that.onAfterChange();
             });
         }
-    }
+    },
 
-    this.onAfterDelete = function (serviceId)
+    onAfterDelete: function (serviceId)
     {
-        if (this.params['in-realise']) { // si on est dans le réalisé alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
+        if (this.params['in-realise'] && this.getHeuresPrevues(serviceId) > 0) { // si on est dans le réalisé alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
             this.onAfterSaisie(serviceId);
         } else {
-            $("#" + this.id + " #referentiel-" + serviceId + "-volume-horaire-tr").remove();
-            $("#" + this.id + " #referentiel-" + serviceId + "-ligne").remove();
+            this.element.find("#referentiel-" + serviceId + "-volume-horaire-tr").remove();
+            this.element.find("#referentiel-" + serviceId + "-ligne").remove();
             this.onAfterChange();
         }
-    }
+    },
 
-    this.setRealisesFromPrevus = function ()
+    setRealisesFromPrevus: function ()
     {
         var services = '';
-        $("#" + this.id + " table.service-referentiel tr.referentiel-ligne").each(function ()
+        this.element.find("table.service-referentiel tr.referentiel-ligne").each(function ()
         {
             if (services != '') services += ',';
             services += $(this).data('id');
@@ -72,9 +111,9 @@ function ServiceReferentielListe(id)
             {services: services},
             function () { window.location.reload(); }
         );
-    }
+    },
 
-    this.setPrevusFromPrevus = function ()
+    setPrevusFromPrevus: function ()
     {
         var that = this;
         $.get(
@@ -83,20 +122,22 @@ function ServiceReferentielListe(id)
             function (data)
             {
                 if (data != 'OK') {
-                    $("#" + that.id + " #referentiel-prevu-to-prevu-modal").modal('hide');
-                    $("#" + that.id + " #referentiel-prevu-to-prevu-modal").after('<div style="margin-top:.5em">' + data + '</div>');
+                    that.element.find("#referentiel-prevu-to-prevu-modal").modal('hide');
+                    that.element.find("#referentiel-prevu-to-prevu-modal").after('<div style="margin-top:.5em">' + data + '</div>');
                 } else {
                     window.location.reload();
                 }
             }
         );
-    }
+    },
 
-    this.init = function ()
+    _create: function ()
     {
         var that = this;
 
-        $("#" + this.id + " .referentiel-prevu-to-realise").on('click', function () { that.setRealisesFromPrevus(); });
+        this.params = this.element.data('params');
+
+        this.element.find(".referentiel-prevu-to-realise").on('click', function () { that.setRealisesFromPrevus(); });
         this.getElementPrevuToPrevu().on('click', function () { that.setPrevusFromPrevus(); });
 
         $("body").on("service-referentiel-modify-message", function (event, data)
@@ -130,13 +171,6 @@ function ServiceReferentielListe(id)
             }
         });
 
-        $("body").on("service-referentiel-delete-message", function (event, data)
-        {
-            var serviceId = event.a.parents('tr.referentiel-ligne').data('id');
-            event.div.modal('hide'); // ferme la fenêtre modale
-            that.onAfterDelete(serviceId);
-        });
-
         $("body").tooltip({
             selector: 'a.volume-horaire',
             placement: 'top',
@@ -149,146 +183,66 @@ function ServiceReferentielListe(id)
             event.a.popover('hide');
             that.onAfterSaisie(serviceId);
         });
-    }
 
-    this.getElementPrevuToPrevu = function () { return $("#" + this.id + " .referentiel-prevu-to-prevu") };
-}
+        this.init();
+    },
 
-ServiceReferentielListe.get = function (id)
-{
-    if (null == ServiceReferentielListe.instances) {
-        ServiceReferentielListe.instances = new Array();
-    }
-    if (null == ServiceReferentielListe.instances[id]) {
-        ServiceReferentielListe.instances[id] = new ServiceReferentielListe(id);
-    }
-    return ServiceReferentielListe.instances[id];
-}
-
-
-
-
-
-function ServiceReferentielForm(id)
-{
-
-    this.id = id;
-
-    this.showInterneExterne = function ()
+    init: function ()
     {
-        if ('service-interne' == this.id) {
-            $('#element-interne').show();
-            $('#element-externe').hide();
-            $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
-            $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
-        } else {
-            $('#element-interne').hide();
-            $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']").val('');
-            $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']").val('');
-            $('#element-externe').show();
-        }
-        this.refreshFormVolumesHoraires(
-            $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val(),
-            $("input[name='service\\[etablissement\\]\\[id\\]']").val(),
-            $("input[name='type-volume-horaire']").val()
-        );
-    }
+        var that = this;
 
-    this.refreshFormVolumesHoraires = function (elementId, etablissementId, typeVolumeHoraireId)
-    {
-        $('form#service div#volumes-horaires').refresh({
-            element: elementId,
-            etablissement: etablissementId,
-            'type-volume-horaire': typeVolumeHoraireId
-        }, function ()
-        {
-            $('form#service div#volumes-horaires input.form-control').each(function (element)
+        this.element.find('.referentiel-delete').popAjax({
+            title: 'Suppression de référentiel', submit: function (event, popAjax)
             {
-                $(this).val('0');
-            });
+                if (!popAjax.errorsInContent()) {
+                    var serviceId = popAjax.element.parents('tr.referentiel-ligne').data('id');
+                    popAjax.hide();
+                    that.onAfterDelete(serviceId);
+                }
+            }
+        });
+
+        this.calculTotaux();
+    },
+
+    getElementPrevuToPrevu: function () { return this.element.find(".referentiel-prevu-to-prevu") }
+});
+
+$(function ()
+{
+    WidgetInitializer.add('service-referentiel-liste', 'serviceReferentielListe');
+});
+
+
+
+
+
+
+
+$.widget("ose.serviceReferentielForm", {
+
+    prevuToRealise: function ()
+    {
+        this.element.find("input.fonction-referentiel-heures", this.element).val(
+            Util.formattedHeures( this.element.find("#rappel-heures-prevu", this.element).data('heures'), false )
+        );
+    },
+
+
+
+    _create: function ()
+    {
+        var that = this;
+        this.element.find("button.referentiel-prevu-to-realise", this.element).on('click', function ()
+        {
+            that.prevuToRealise();
         });
     }
 
-    this.prevuToRealise = function ()
-    {
-        var form = $("form#referentiel");
-        $("input.fonction-referentiel-heures", form).val($("#rappel-heures-prevu", form).data('heures'));
-    }
+})
+;
 
-}
-
-ServiceReferentielForm.get = function (id)
+$(function ()
 {
-    if (null == ServiceReferentielForm.services) {
-        ServiceReferentielForm.services = new Array();
-    }
-    if (null == ServiceReferentielForm.services[id]) {
-        ServiceReferentielForm.services[id] = new ServiceReferentielForm(id);
-    }
-    return ServiceReferentielForm.services[id];
-}
-
-ServiceReferentielForm.init = function ()
-{
-    var form = $("form#referentiel");
-    $("button.referentiel-prevu-to-realise", form).on('click', function ()
-    {
-        var serviceId = $('input[name="service\\[id\\]"]', form).val();
-        ServiceReferentielForm.get(serviceId).prevuToRealise();
-    });
-}
-
-
-
-
-
-
-/*************** Propre à l'affichage des services référentiels ***************/
-
-function ServiceReferentiel(id)
-{
-
-    this.id = id;
-
-    this.onAfterAdd = function ()
-    {
-        $.get(ServiceReferentiel.voirLigneUrl, [], function (data) { $("#services-ref").replaceWith($(data).filter("table").fadeIn()); });
-        $("#formule-totaux-hetd").refresh();
-    }
-
-    this.onAfterDelete = function ()
-    {
-        $("#service-ref-" + this.id + "-ligne").fadeOut().remove();
-        $("#formule-totaux-hetd").refresh();
-    }
-}
-
-ServiceReferentiel.get = function (id)
-{
-    if (null == ServiceReferentiel.services) ServiceReferentiel.services = new Array();
-    if (null == ServiceReferentiel.services[id]) ServiceReferentiel.services[id] = new ServiceReferentiel(id);
-    return ServiceReferentiel.services[id];
-}
-
-ServiceReferentiel.init = function (voirLigneUrl)
-{
-    ServiceReferentiel.voirLigneUrl = voirLigneUrl;
-
-    $("body").on("service-ref-add-message service-ref-modify-message", function (event, data)
-    {
-        var id = null;
-        event.div.modal('hide'); // ferme la fenêtre modale
-        ServiceReferentiel.get(id).onAfterAdd();
-    });
-
-    $("body").on("service-ref-delete-message", function (event, data)
-    {
-        event.div.modal('hide'); // ferme la fenêtre modale
-//        console.log(event.a.data('id'));
-        ServiceReferentiel.get(event.a.data('id')).onAfterDelete();
-    });
-}
-
-
-
-
+    WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm');
+});

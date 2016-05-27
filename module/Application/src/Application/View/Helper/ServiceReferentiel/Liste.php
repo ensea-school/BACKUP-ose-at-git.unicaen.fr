@@ -3,6 +3,7 @@
 namespace Application\View\Helper\ServiceReferentiel;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
@@ -165,7 +166,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
         $attribs = [
             'id'          => $this->getId(true),
-            'class'       => 'referentiel-liste',
+            'class'       => 'service-referentiel-liste',
             'data-params' => json_encode($this->exportParams()),
         ];
 
@@ -191,16 +192,15 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $out .= "</tr>\n";
 
         foreach ($this->services as $service) {
-            $out .= $this->renderLigne($service, $details);
+            if ($this->mustRenderLigne($service)) {
+                $out .= $this->renderLigne($service, $details);
+            }
         }
         $out .= '<tfoot data-url="' . $this->getTotalRefreshUrl() . '">' . "\n";
         $out .= $this->renderTotaux();
         $out .= '</tfoot>' . "\n";
         $out .= '</table>' . "\n";
         $out .= '</div>' . "\n";
-        $out .= '<script type="text/javascript">';
-        $out .= '$(function() { ServiceReferentielListe.get("' . $this->getId() . '").init(); });';
-        $out .= '</script>';
 
         return $out;
     }
@@ -223,7 +223,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             ];
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
             $out .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-sm">';
+            $out .= '<div class="modal-dialog modal-md">';
             $out .= '<div class="modal-content">';
             $out .= '<div class="modal-header">';
             $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
@@ -249,9 +249,9 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 //'href'          => $this->getAddUrl(),
                 'title'       => "Initialiser le service référentiel prévisionnel avec le service référentiel prévisionnel validé l'année dernière",
             ];
-            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu '.$this->getServiceContext()->getAnneePrecedente().' <span class="glyphicon glyphicon-arrow-right"></span> Prévu '.$this->getServiceContext()->getAnnee().'</button>&nbsp;';
+            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévu ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
             $out .= '<div class="modal fade" id="referentiel-prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-sm">';
+            $out .= '<div class="modal-dialog modal-md">';
             $out .= '<div class="modal-content">';
             $out .= '<div class="modal-header">';
             $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
@@ -277,6 +277,32 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $out .= '<a ' . $this->htmlAttribs($attribs) . '><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
 
         return $out;
+    }
+
+
+
+    public function mustRenderLigne(ServiceReferentiel $service)
+    {
+        $vhSum = 0;
+        $vhSum2 = 0;
+
+        $vhs = $service->getVolumeHoraireReferentiel();
+        foreach ($vhs as $vh) {
+            /* @var $vh VolumeHoraireReferentiel */
+            if ($service->getTypeVolumeHoraire()->isPrevu()) {
+                if ($vh->getTypeVolumeHoraire()->isPrevu()) {
+                    $vhSum += $vh->getHeures();
+                }
+            } elseif ($service->getTypeVolumeHoraire()->isRealise()) {
+                if ($vh->getTypeVolumeHoraire()->isPrevu() && $vh->hasValidation()) {
+                    $vhSum += $vh->getHeures();
+                } elseif ($vh->getTypeVolumeHoraire()->isRealise()) {
+                    $vhSum2 += $vh->getHeures();
+                }
+            }
+        }
+
+        return $vhSum != 0 || $vhSum2 != 0;
     }
 
 

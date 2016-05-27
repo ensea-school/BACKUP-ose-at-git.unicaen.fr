@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\FonctionReferentiel as FonctionReferentielEntity;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\FonctionReferentielAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -136,13 +137,15 @@ class ServiceReferentiel extends AbstractEntityService
      * @param IntervenantEntity         $intervenant
      * @param FonctionReferentielEntity $fonction
      * @param StructureEntity           $structure
+     * @param string                    $commentaires
      *
      * @return null|\Application\Entity\Db\ServiceReferentiel
      */
     public function getBy(
         IntervenantEntity $intervenant,
         FonctionReferentielEntity $fonction,
-        StructureEntity $structure
+        StructureEntity $structure,
+        $commentaires
     )
     {
         $result = $this->getRepo()->findBy([
@@ -151,17 +154,20 @@ class ServiceReferentiel extends AbstractEntityService
             'structure'   => $structure,
         ]);
 
-        if (count($result) > 1){
-            foreach( $result as $sr ){
-                /* @var $sr \Application\Entity\Db\ServiceReferentiel  */
-                if ($sr->estNonHistorise()) return $sr;
-            }
-            return $result[0]; // sinon retourne le premier trouvé...
-        }elseif(isset($result[0])){
-            return $result[0];
-        }else{
-            return null;
+        /* Retourne le premier NON historisé */
+        foreach ($result as $sr) {
+            /* @var $sr \Application\Entity\Db\ServiceReferentiel */
+            if ($sr->estNonHistorise() && $sr->getCommentaires() == $commentaires) return $sr;
         }
+
+        /* Sinon retourne le premier trouvé */
+        foreach ($result as $sr) {
+            /* @var $sr \Application\Entity\Db\ServiceReferentiel */
+            if ($sr->getCommentaires() == $commentaires) return $sr;
+        }
+
+        /* Sinon ne retourne rien */
+        return null;
     }
 
 
@@ -232,18 +238,18 @@ class ServiceReferentiel extends AbstractEntityService
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);
             }
-            if (!$this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')) {
+            if (!$this->getAuthorize()->isAllowed($entity, Privileges::REFERENTIEL_EDITION)) {
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
             }
 
             $serviceAllreadyExists = null;
             if (!$entity->getId()) { // uniquement pour les nouveaux services!!
-                $serviceAllreadyExists = $this->getRepo()->findOneBy([
-                    'intervenant'  => $entity->getIntervenant(),
-                    'structure'    => $entity->getStructure(),
-                    'fonction'     => $entity->getFonction(),
-                    'commentaires' => $entity->getCommentaires(),
-                ]);
+                $serviceAllreadyExists = $this->getBy(
+                    $entity->getIntervenant(),
+                    $entity->getFonction(),
+                    $entity->getStructure(),
+                    $entity->getCommentaires()
+                );
             }
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
@@ -252,8 +258,8 @@ class ServiceReferentiel extends AbstractEntityService
             }
 
             /* Sauvegarde automatique des volumes horaires associés */
-            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraireReferentiel');
-            /* @var $serviceVolumeHoraire VolumeHoraireReferentiel */
+            $serviceVolumeHoraire = $this->getServiceVolumeHoraireReferentiel();
+
             foreach ($entity->getVolumeHoraireReferentiel() as $volumeHoraire) {
                 if ($result !== $entity) $volumeHoraire->setServiceReferentiel($result);
                 if ($volumeHoraire->getRemove()) {
@@ -269,6 +275,42 @@ class ServiceReferentiel extends AbstractEntityService
         }
 
         return $result;
+    }
+
+
+
+    /**
+     * Supprime (historise par défaut) le service spécifié.
+     *
+     * @param \Application\Entity\Db\ServiceReferentiel $entity Entité à détruire
+     * @param bool                                      $softDelete
+     *
+     * @return self
+     */
+    public function delete($entity, $softDelete = true)
+    {
+
+        $vhListe = $entity->getVolumeHoraireReferentielListe();
+        $vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
+
+        $vhrl = $entity->getVolumeHoraireReferentiel();
+
+        $delete = true;
+        foreach ($vhrl as $volumeHoraire) {
+            if ($volumeHoraire->getRemove()) {
+                $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire, $softDelete);
+                $vhrl->removeElement($volumeHoraire);
+            } else {
+                $delete = false;
+                $this->getServiceVolumeHoraireReferentiel()->save($volumeHoraire);
+            }
+        }
+
+        if ($delete) {
+            parent::delete($entity, $softDelete);
+        }
+
+        return $this;
     }
 
 
@@ -345,10 +387,10 @@ class ServiceReferentiel extends AbstractEntityService
 
             /* @var $service \Application\Entity\Db\ServiceReferentiel */
 
-            $ok =  $service->getFonction()->estNonHistorise()
+            $ok = $service->getFonction()->estNonHistorise()
                 && $service->getStructure()->estNonHistorise();
 
-            if ($ok){
+            if ($ok) {
                 $o = [
                     'type-volume-horaire' => $tvhPrevu,
                     'fonction'            => $service->getFonction(),
@@ -395,18 +437,7 @@ class ServiceReferentiel extends AbstractEntityService
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
 
-        foreach ($realises->get() as $vh) {
-            /* @var $vh \Application\Entity\Db\VolumeHoraire */
-            $vh->setRemove(true);
-        }
-
-        foreach ($prevus->get() as $vh) {
-            $nvh = new \Application\Entity\Db\VolumeHoraireReferentiel;
-            $nvh->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
-            $nvh->setServiceReferentiel($service);
-            $nvh->setHeures($vh->getHeures());
-            $service->addVolumeHoraireReferentiel($nvh);
-        }
+        $realises->setHeures($prevus->getHeures());
         $this->save($service);
     }
 }

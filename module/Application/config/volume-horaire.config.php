@@ -46,45 +46,6 @@ return [
                     ],
                 ],
             ],
-            'volume-horaire-referentiel' => [
-                'type'          => 'Literal',
-                'options'       => [
-                    'route'    => '/volume-horaire-referentiel',
-                    'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'VolumeHoraireReferentiel',
-                        'action'        => 'index',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes'  => [
-                    'liste'  => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/liste[/:id]',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
-                            ],
-                        ],
-                    ],
-                    'saisie' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/saisie/:serviceReferentiel',
-                            'constraints' => [
-                                'serviceReferentiel' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'saisie',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
     'bjyauthorize'    => [
@@ -102,26 +63,12 @@ return [
                     'privileges' => Privileges::ENSEIGNEMENT_EDITION,
                     'assertion'  => 'assertionService',
                 ],
-
-                /* Référentiel */
-                [
-                    'controller' => 'Application\Controller\VolumeHoraireReferentiel',
-                    'action'     => ['liste'],
-                    'privileges' => Privileges::REFERENTIEL_VISUALISATION,
-                ],
-                [
-                    'controller' => 'Application\Controller\VolumeHoraireReferentiel',
-                    'action'     => ['saisie'],
-                    'privileges' => Privileges::REFERENTIEL_EDITION,
-                    'assertion'  => 'assertionService',
-                ],
             ],
         ],
     ],
     'controllers'     => [
         'invokables' => [
             'Application\Controller\VolumeHoraire'            => Controller\VolumeHoraireController::class,
-            'Application\Controller\VolumeHoraireReferentiel' => Controller\VolumeHoraireReferentielController::class,
         ],
     ],
     'service_manager' => [
@@ -136,15 +83,12 @@ return [
     'view_helpers'    => [
         'invokables' => [
             'volumeHoraireListe'            => View\Helper\VolumeHoraire\Liste::class,
-            'volumeHoraireReferentielListe' => View\Helper\VolumeHoraireReferentiel\Liste::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
             'VolumeHoraireSaisie'                            => Form\VolumeHoraire\Saisie::class,
             'VolumeHoraireSaisieMultipleFieldset'            => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
-            'VolumeHoraireReferentielSaisie'                 => Form\VolumeHoraireReferentiel\Saisie::class,
-            'VolumeHoraireReferentielSaisieMultipleFieldset' => Form\VolumeHoraireReferentiel\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
         ],
     ],
 ];

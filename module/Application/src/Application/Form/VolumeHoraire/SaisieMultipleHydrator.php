@@ -1,6 +1,7 @@
 <?php
 namespace Application\Form\VolumeHoraire;
 
+use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -57,7 +58,7 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
         foreach ($this->getTypesInterventions($object->getService()) as $typeIntervention) {
             $object->setTypeIntervention($typeIntervention);
             if (isset($data[$typeIntervention->getCode()])) {
-                $heures = (float)$data[$typeIntervention->getCode()];
+                $heures = FloatFromString::run($data[$typeIntervention->getCode()]);
             } else {
                 $heures = 0;
             }

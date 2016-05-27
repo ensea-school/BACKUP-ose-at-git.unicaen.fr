@@ -51,9 +51,8 @@ class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface
     public function getVolumesHorairesRefreshUrl()
     {
         $url = $this->getView()->url(
-                'referentiel/default',
+                'referentiel/volumes-horaires-refresh',
                 [
-                    'action' => 'volumes-horaires-refresh',
                     'id' => $this->form->get('service')->get('id')->getValue()
                 ]);
         return $url;
@@ -145,7 +144,7 @@ EOS;
                 $this->getView()->formControlGroup($fservice->get('structure')), 
                 $this->getView()->formControlGroup($fservice->get('fonction')),
                 $this->getVolumesHorairesRefreshUrl(),
-                $this->getView()->formControlGroup($fservice->get('heures'), 'formNumber')
+                $this->getView()->formControlGroup($fservice->get('heures'))
         );
         
         $template = <<<EOS
@@ -162,11 +161,7 @@ EOS;
         $part .= $this->getView()->formRow($this->form->get('submit'));
         $part .= $this->getView()->formHidden($this->form->get('type-volume-horaire'));
         $part .= $this->getView()->form()->closeTag().'<br />';
-        
-        $part .= '<script type="text/javascript">';
-        $part .= '  $(function() { ServiceReferentielForm.init(); });';
-        $part .= '</script>';
-        
+
         $this->includeJavascript($part);
         
         return $part;

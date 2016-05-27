@@ -21,7 +21,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'resume'           => [
+                    'resume'                   => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/resume',
@@ -30,7 +30,7 @@ return [
                             ],
                         ],
                     ],
-                    'export'           => [
+                    'export'                   => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/export',
@@ -39,7 +39,7 @@ return [
                             ],
                         ],
                     ],
-                    'resume-refresh'   => [
+                    'resume-refresh'           => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/resume-refresh',
@@ -48,7 +48,7 @@ return [
                             ],
                         ],
                     ],
-                    'horodatage'       => [
+                    'horodatage'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
@@ -62,7 +62,7 @@ return [
                             ],
                         ],
                     ],
-                    'modifier'         => [
+                    'modifier'                 => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/modifier/:id',
@@ -74,7 +74,7 @@ return [
                             ],
                         ],
                     ],
-                    'supprimer'        => [
+                    'supprimer'                => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/supprimer/:service',
@@ -86,7 +86,7 @@ return [
                             ],
                         ],
                     ],
-                    'recherche'        => [
+                    'recherche'                => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/recherche',
@@ -95,7 +95,7 @@ return [
                             ],
                         ],
                     ],
-                    'rafraichir-ligne' => [
+                    'rafraichir-ligne'         => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/rafraichir-ligne/:service',
@@ -107,7 +107,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie'           => [
+                    'saisie'                   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie[/:id]',
@@ -119,7 +119,7 @@ return [
                             ],
                         ],
                     ],
-                    'constatation'     => [
+                    'constatation'             => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/constatation',
@@ -133,14 +133,14 @@ return [
                         'options' => [
                             'route'       => '/volumes-horaires-refresh[/:id]',
                             'constraints' => [
-                                'id'     => '[0-9]*',
+                                'id' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'volumes-horaires-refresh',
                             ],
                         ],
                     ],
-                    'initialisation'   => [
+                    'initialisation'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/initialisation/:intervenant',
@@ -165,7 +165,7 @@ return [
                 ],
                 'may_terminate' => false,
                 'child_routes'  => [
-                    'saisie'                   => [
+                    'saisie'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie[/:id]',
@@ -177,7 +177,19 @@ return [
                             ],
                         ],
                     ],
-                    'rafraichir-ligne'         => [
+                    'volumes-horaires-refresh'           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/volumes-horaires-refresh[/:id]',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'volumes-horaires-refresh',
+                            ],
+                        ],
+                    ],
+                    'rafraichir-ligne' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/rafraichir-ligne/:serviceReferentiel',
@@ -189,7 +201,7 @@ return [
                             ],
                         ],
                     ],
-                    'constatation'             => [
+                    'constatation'     => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/constatation',
@@ -198,7 +210,19 @@ return [
                             ],
                         ],
                     ],
-                    'initialisation'           => [
+                    'suppression'                => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/suppression/:id',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'suppression',
+                            ],
+                        ],
+                    ],
+                    'initialisation'   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/initialisation/:intervenant',
@@ -245,6 +269,7 @@ return [
                     'action'     => ['saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'horodatage'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_EDITION,
+                        Privileges::REFERENTIEL_EDITION,
                     ],
                     'assertion'  => 'assertionService',
                 ],
@@ -396,7 +421,7 @@ return [
                             Privileges::REFERENTIEL_VISUALISATION,
                             Privileges::REFERENTIEL_EDITION,
                         ],
-                        'resources'  => 'ServiceReferentiel',
+                        'resources'  => ['ServiceReferentiel', 'Intervenant'],
                         'assertion'  => 'assertionService',
                     ],
                     [
@@ -434,6 +459,7 @@ return [
             'assertionService'                             => Assertion\ServiceAssertion::class,
             'ServiceReferentielAssertion'                  => Assertion\ServiceReferentielAssertion::class,
             'processusService'                             => Processus\ServiceProcessus::class,
+            'processusServiceReferentiel'                  => Processus\ServiceReferentielProcessus::class,
         ],
     ],
     'hydrators'       => [

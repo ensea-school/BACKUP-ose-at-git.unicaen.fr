@@ -225,6 +225,24 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * Détermine si le VHR a une validation ou non
+     *
+     * @return boolean
+     */
+    public function hasValidation()
+    {
+        $volumesHoraires = $this->getVolumeHoraireReferentiel();
+        foreach( $volumesHoraires as $volumeHoraire ){
+            /* @var $volumeHoraire VolumeHoraireReferentiel */
+            if ($volumeHoraire->hasValidation())
+                return true;
+        }
+        return false;
+    }
+
+
+
+    /**
      * Get formuleServiceReferentiel
      *
      * @return FormuleServiceReferentiel

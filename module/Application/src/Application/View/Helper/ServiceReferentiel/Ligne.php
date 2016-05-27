@@ -2,6 +2,7 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
@@ -10,7 +11,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\Interfaces\ServiceReferentielAwareInterface;
 use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
-use Application\View\Helper\VolumeHoraireReferentiel\Liste as ListeHelper;
+
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -18,7 +19,7 @@ use Application\View\Helper\VolumeHoraireReferentiel\Liste as ListeHelper;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Ligne extends AbstractHtmlElement
-            implements ServiceLocatorAwareInterface, ServiceReferentielAwareInterface
+    implements ServiceLocatorAwareInterface, ServiceReferentielAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ServiceReferentielAwareTrait;
@@ -37,19 +38,25 @@ class Ligne extends AbstractHtmlElement
      */
     protected $forcedReadOnly = false;
 
+
+
     /**
      * Helper entry point.
      *
-     * @param Liste $liste
+     * @param Liste              $liste
      * @param ServiceReferentiel $service
+     *
      * @return self
      */
-    final public function __invoke( Liste $liste, ServiceReferentiel $service )
+    final public function __invoke(Liste $liste, ServiceReferentiel $service)
     {
         $this->setListe($liste);
-        $this->setServiceReferentiel( $service );
+        $this->setServiceReferentiel($service);
+
         return $this;
     }
+
+
 
     /**
      * Retourne le code HTML généré par cette aide de vue.
@@ -61,58 +68,77 @@ class Ligne extends AbstractHtmlElement
         return $this->render();
     }
 
+
+
     /**
      * @return string
      */
     public function getRefreshUrl()
     {
         $url = $this->getView()->url(
-                'referentiel/rafraichir-ligne',
-                [
-                    'serviceReferentiel' => $this->getServiceReferentiel()->getId(),
-                ],
-                [
-                    'query' => [
-                        'only-content' => 1,
-                        'read-only'    => $this->getListe()->getReadOnly() ? '1' : '0' ]
-                ]
+            'referentiel/rafraichir-ligne',
+            [
+                'serviceReferentiel' => $this->getServiceReferentiel()->getId(),
+            ],
+            [
+                'query' => [
+                    'only-content' => 1,
+                    'read-only'    => $this->getListe()->getReadOnly() ? '1' : '0'],
+            ]
         );
+
         return $url;
     }
+
+
 
     /**
      * Génère le code HTML.
      *
      * @param boolean $details
+     *
      * @return string
      */
-    public function render( $details=false )
+    public function render($details = false)
     {
-        $liste = $this->getListe();
-        $service = $this->getServiceReferentiel();
-
-        $out = '';
-        if ($liste->getColumnVisibility('intervenant')){
-            $out .= '<td>'.$this->renderIntervenant($service->getIntervenant()).'</td>';
+        $liste         = $this->getListe();
+        $service       = $this->getServiceReferentiel();
+        $vhlListe      = $service->getVolumeHoraireReferentielListe();
+        $heuresTVH     = $vhlListe
+                            ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+                            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi())
+                            ->getHeures();
+        $heuresPrevues = $vhlListe
+                            ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide())
+                            ->getHeures();
+        $out           = '';
+        if ($liste->getColumnVisibility('intervenant')) {
+            $out .= '<td>' . $this->renderIntervenant($service->getIntervenant()) . '</td>';
         }
-        if ($liste->getColumnVisibility('structure')){
-            $out .= '<td>'.$this->renderStructure($service->getStructure())."</td>\n";
+        if ($liste->getColumnVisibility('structure')) {
+            $out .= '<td>' . $this->renderStructure($service->getStructure()) . "</td>\n";
         }
-        if ($liste->getColumnVisibility('fonction')){
-            $out .= '<td>'.$this->renderFonction($service->getFonction())."</td>\n";
+        if ($liste->getColumnVisibility('fonction')) {
+            $out .= '<td>' . $this->renderFonction($service->getFonction()) . "</td>\n";
         }
-        if ($liste->getColumnVisibility('commentaires')){
-            $out .= '<td>'.$this->renderCommentaires($service->getCommentaires())."</td>\n";
+        if ($liste->getColumnVisibility('commentaires')) {
+            $out .= '<td>' . $this->renderCommentaires($service->getCommentaires()) . "</td>\n";
         }
-        if ($liste->getColumnVisibility('heures')){
-            $out .= '<td style="text-align:right">'.$this->renderHeures($service)."</td>\n";
+        if ($liste->getColumnVisibility('heures')) {
+            $out .= $this->getView()->tag('td', [
+                'style'        => "text-align:right",
+                'class'        => "sr-heures",
+                'data-prevues' => $heuresPrevues,
+                'data-value'   => $heuresTVH,
+            ])->html($this->renderHeures($service));
         }
-        if ($liste->getColumnVisibility('annee')){
-            $out .= '<td>'.$this->renderAnnee( $service->getIntervenant()->getAnnee() )."</td>\n";
+        if ($liste->getColumnVisibility('annee')) {
+            $out .= '<td>' . $this->renderAnnee($service->getIntervenant()->getAnnee()) . "</td>\n";
         }
 
         $out .= '<td class="actions">';
-        if (! $this->getReadOnly()) {
+        if (!$this->getReadOnly()) {
             $out .= $this->renderModifier();
             $out .= $this->renderSupprimer();
         }
@@ -121,38 +147,49 @@ class Ligne extends AbstractHtmlElement
         return $out;
     }
 
+
+
     protected function renderIntervenant($intervenant)
     {
         return $this->getView()->intervenant($intervenant)->renderLink();
     }
 
+
+
     protected function renderStructure($structure)
     {
-        if (! $structure) return '';
+        if (!$structure) return '';
 
         return $this->getView()->structure($structure)->renderLink();
     }
 
+
+
     protected function renderFonction($fonction)
     {
-        if (! $fonction) return '';
+        if (!$fonction) return '';
         $out = $fonction;
+
         return $out;
     }
 
+
+
     protected function renderCommentaires($commentaires)
     {
-        if (! $commentaires) return '';
+        if (!$commentaires) return '';
         $out = $commentaires;
+
         return $out;
     }
+
+
 
     protected function renderHeures(ServiceReferentiel $service)
     {
         $out = '';
 
         $vhlListe = $service->getVolumeHoraireReferentielListe();
-        $vhlView  = $this->getView()->volumeHoraireReferentielListe($vhlListe);  /* @var $vhlView ListeHelper */
 
         if ($this->isInRealise()) {
             $out .= '<table style="width: 100%">';
@@ -161,61 +198,80 @@ class Ligne extends AbstractHtmlElement
              * PREVU, lecture seule
              */
             $vhlListe
-                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
-                    ->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
-            $vhlView->setReadOnly(true);
+                ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                ->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
+
             $out .= sprintf(
-                    '<tr style="opacity: 0.5"><td><strong>Prévisionnel %s :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>',
-                    $etat);
+                '<tr style="opacity: 0.5"><td><strong>Prévisionnel %s :</strong></td><td class="heures">' . \UnicaenApp\Util::formattedNumber($vhlListe->getHeures()) . '</td></tr>',
+                $etat);
 
             /**
              * REALISE
              */
             $vhlListe
-                    ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
-                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $vhlView->setReadOnly($this->getListe()->getReadOnly());
-            $out .= '<tr><td><strong>Réalisé :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>';
+                ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+                ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $out .= '<tr><td><strong>Réalisé :</strong></td><td class="heures">' . \UnicaenApp\Util::formattedNumber($vhlListe->getHeures()) . '</td></tr>';
 
             $out .= '</table>';
-        }
-        else {
+        } else {
             $vhlListe
-                    ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
-                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $vhlView->setReadOnly($this->getListe()->getReadOnly());
-            $out .= $vhlView->render();
+                ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+                ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $out .= \UnicaenApp\Util::formattedNumber($vhlListe->getHeures());
         }
 
         return $out;
     }
+
+
 
     protected function renderAnnee($annee)
     {
         $out = $annee->getLibelle();
+
         return $out;
     }
+
+
 
     protected function renderModifier()
     {
         $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="'.$url.'" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-pencil"></span></a>';
+
+        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="' . $url . '" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-pencil"></span></a>';
     }
+
+
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('referentiel/default', ['action' => 'suppression', 'id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getServiceReferentiel()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-trash"></span></a>';
+        $url = $this->getView()->url('referentiel/suppression', ['id' => $this->getServiceReferentiel()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+
+        return $this->getView()->tag('a', [
+            'class'        => 'referentiel-delete',
+            'data-title'   => 'Suppression de référentiel',
+            'data-content' => 'Souhaitez-vous vraiment supprimer ces heures de référentiel ?',
+            'data-confirm' => 'true',
+            'data-id'      => $this->getServiceReferentiel()->getId(),
+            'href'         => $url,
+            'title'        => 'Supprimer cette ligne de référentiel',
+        ])->html('<span class="glyphicon glyphicon-trash"></span>');
     }
+
+
 
     protected function toQuery($param)
     {
-        if (null === $param) return null;
-        elseif (false === $param) return 'false';
-        elseif( true === $param) return 'true';
-        elseif(method_exists($param, 'getId')) return $param->getId();
+        if (null === $param) {
+            return null;
+        } elseif (false === $param) return 'false';
+        elseif (true === $param) return 'true';
+        elseif (method_exists($param, 'getId')) return $param->getId();
         else throw new \LogicException('Le paramètre n\'est pas du bon type');
     }
+
+
 
     /**
      * Détermine si nous sommes en service réalisé ou non
@@ -227,6 +283,8 @@ class Ligne extends AbstractHtmlElement
         return $this->getListe()->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
 
+
+
     /**
      *
      * @return Liste
@@ -236,19 +294,25 @@ class Ligne extends AbstractHtmlElement
         return $this->liste;
     }
 
+
+
     /**
      *
      * @param Liste $liste
+     *
      * @return self
      */
     function setListe(Liste $liste)
     {
         $this->liste = $liste;
+
         return $this;
     }
 
+
+
     /**
-     * 
+     *
      * @return boolean
      */
     public function getReadOnly()
@@ -256,15 +320,19 @@ class Ligne extends AbstractHtmlElement
         return $this->getListe()->getReadOnly() || $this->forcedReadOnly;
     }
 
+
+
     /**
      *
-     * @param ServiceReferentiel $service
+     * @param ServiceReferentiel $serviceReferentiel
+     *
      * @return self
      */
-    public function setService(ServiceReferentiel $service = null)
+    public function setServiceReferentiel(ServiceReferentiel $serviceReferentiel = null)
     {
-        $this->forcedReadOnly = ! $this->getView()->isAllowed($service, 'update');
-        $this->service = $service;
+        $this->forcedReadOnly = !$this->getView()->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
+        $this->serviceReferentiel = $serviceReferentiel;
+
         return $this;
     }
 

@@ -2,6 +2,8 @@
 
 namespace Application\Form\ServiceReferentiel;
 
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
@@ -35,7 +37,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInt
         $fonction = isset($data['fonction']) ? (int) $data['fonction'] : null;
         $object->setFonction($fonction ? $em->find(\Application\Entity\Db\FonctionReferentiel::class, $fonction) : null );
 
-        $heures = isset($data['heures']) ? (float) $data['heures'] : 0;
+        $heures = isset($data['heures']) ? FloatFromString::run($data['heures']) : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);
 
         $commentaires = isset($data['commentaires']) ? $data['commentaires'] : null;
@@ -82,7 +84,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInt
             $data['fonction'] = null;
         }
 
-        $data['heures'] = $object->getVolumeHoraireReferentielListe()->getHeures();
+        $data['heures'] = StringFromFloat::run($object->getVolumeHoraireReferentielListe()->getHeures());
 
         $data['commentaires'] = $object->getCommentaires();
 

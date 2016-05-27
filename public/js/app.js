@@ -1,4 +1,3 @@
-
 $(function ()
 {
     //$(document).ajaxError(function (event, jqxhr, settings, exception)
@@ -45,19 +44,28 @@ Url.getBase = function ()
 }
 
 Util = {
-    formattedHeures: function (heures)
+    formattedHeures: function (heures, html)
     {
         heures = parseFloat(heures);
-        var hclass = (heures < 0) ? 'negatif' : 'positif';
+
+        if (false === html) {
+            var snd0 = ',00';
+            var sn = '';
+            var snf = '';
+        } else {
+            var snd0 = '<span class="number-dec-00">,00</span>';
+            var sn = '<span class="number number-' + ( (heures < 0) ? 'negatif' : 'positif' ) + '">';
+            var snf = '</span>';
+        }
 
         heures = Math.round(heures * 100) / 100;
         var parts = heures.toString().split(".");
         if (undefined === parts[1]) {
-            parts[1] = '<span class="number-dec-00">,00</span>';
+            parts[1] = snd0;
         } else {
             parts[1] = ',' + parts[1];
         }
-        return '<span class="number number-' + hclass + '">' + parts[0] + parts[1] + '</span>';
+        return sn + parts[0] + parts[1] + snf;
     },
 
     json: {
@@ -102,16 +110,17 @@ function changementAnnee(annee)
  */
 $.widget("ose.intervenantRecherche", {
 
-    rechercher: function( critere )
+    rechercher: function (critere)
     {
         var that = this;
 
         if (critere.length > 1) {
             that.getElementLoading().show();
-            that.getElementRecherche().refresh({critere: critere}, function( response, status, xhr ){
-                if ( status == "error" ) {
+            that.getElementRecherche().refresh({critere: critere}, function (response, status, xhr)
+            {
+                if (status == "error") {
                     var msg = "Désolé mais une erreur est survenue: ";
-                    that.getElementRecherche().html( msg + xhr.status + " " + xhr.statusText + xhr.responseText );
+                    that.getElementRecherche().html(msg + xhr.status + " " + xhr.statusText + xhr.responseText);
                 }
                 that.getElementLoading().hide();
             });
@@ -123,7 +132,8 @@ $.widget("ose.intervenantRecherche", {
         var that = this;
 
         this.getElementCritere().autocomplete({
-            source: function( event, ui ) {
+            source: function (event, ui)
+            {
                 that.rechercher(event.term);
                 return {};
             }
@@ -132,9 +142,9 @@ $.widget("ose.intervenantRecherche", {
         this.getElementCritere().focus();
     },
 
-    getElementCritere: function(){ return this.element.find( "#critere" ); },
-    getElementRecherche : function () { return this.element.find('.recherche'); },
-    getElementLoading: function(){ return this.element.find('#intervenant-recherche-loading'); },
+    getElementCritere: function () { return this.element.find("#critere"); },
+    getElementRecherche: function () { return this.element.find('.recherche'); },
+    getElementLoading: function () { return this.element.find('#intervenant-recherche-loading'); },
 });
 
 $(function ()

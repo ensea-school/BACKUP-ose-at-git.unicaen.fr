@@ -249,11 +249,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     private $formuleIntervenant;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $vIndicDiffDossier;
-
-    /**
      * @var \Application\Entity\Db\IndicModifDossier
      */
     private $indicModifDossier;
@@ -264,26 +259,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      * @var MiseEnPaiementIntervenantStructure
      */
     protected $miseEnPaiementIntervenantStructure;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $vIndicAttenteDemandeMep;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $vIndicAttenteMep;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $vIndicDepassHcHorsRemuFc;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $vIndicDepassRef;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -317,11 +292,8 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleIntervenant                 = new \Doctrine\Common\Collections\ArrayCollection();
         $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vIndicAttenteDemandeMep            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vIndicAttenteMep                   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vIndicDiffDossier                  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -1489,21 +1461,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
 
-    /**
-     * Get vIndicDiffDossier
-     *
-     * @return \Application\Entity\Db\VIndicDiffDossier
-     */
-    public function getVIndicDiffDossier()
-    {
-        if (!count($this->vIndicDiffDossier)) {
-            return null;
-        }
-
-        return $this->vIndicDiffDossier->first();
-    }
-
-
 
     /**
      * Get indicDiffDossier
@@ -1513,54 +1470,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function getIndicModifDossier()
     {
         return $this->indicModifDossier;
-    }
-
-
-
-    /**
-     * Get vIndicAttenteDemandeMep
-     *
-     * @return VIndicAttenteDemandeMep[]
-     */
-    public function getVIndicAttenteDemandeMep()
-    {
-        return $this->vIndicAttenteDemandeMep;
-    }
-
-
-
-    /**
-     * Get vIndicAttenteMep
-     *
-     * @return VIndicAttenteMep[]
-     */
-    public function getVIndicAttenteMep()
-    {
-        return $this->vIndicAttenteMep;
-    }
-
-
-
-    /**
-     * Get vIndicDepassHcHorsRemuFc
-     *
-     * @return VIndicDepassHcHorsRemuFc[]
-     */
-    public function getVIndicDepassHcHorsRemuFc()
-    {
-        return $this->vIndicDepassHcHorsRemuFc;
-    }
-
-
-
-    /**
-     * Get vIndicDepassRef
-     *
-     * @return VIndicDepassRef[]
-     */
-    public function getVIndicDepassRef()
-    {
-        return $this->vIndicDepassRef;
     }
 
 

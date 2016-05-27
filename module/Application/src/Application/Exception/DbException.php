@@ -23,6 +23,8 @@ class DbException extends RuntimeException {
             'Nombre invalide',
         'integrity constraint (OSE.MEP_FR_SERVICE_FK) violated' =>
             'Vous ne pouvez pas dévalider ces heures d\'enseignement car des demandes de mise en paiement ou des mises en paiement ont été faites.',
+        'integrity constraint (OSE.MEP_FR_SERVICE_REF_FK) violated' =>
+            'Vous ne pouvez pas dévalider ces heures de référentiel car des demandes de mise en paiement ou des mises en paiement ont été faites.',
     ];
 
 

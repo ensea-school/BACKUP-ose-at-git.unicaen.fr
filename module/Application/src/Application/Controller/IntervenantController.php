@@ -9,6 +9,8 @@ use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
+use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
@@ -38,6 +40,7 @@ class IntervenantController extends AbstractController
     use EtatVolumeHoraireAwareTrait;
     use IntervenantProcessusAwareTrait;
     use ServiceProcessusAwareTrait;
+    use ServiceReferentielProcessusAwareTrait;
     use LocalContextAwareTrait;
 
 
@@ -102,6 +105,8 @@ class IntervenantController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\Service::class,
             \Application\Entity\Db\VolumeHoraire::class,
+            \Application\Entity\Db\ServiceReferentiel::class,
+            \Application\Entity\Db\VolumeHoraireReferentiel::class,
             \Application\Entity\Db\Validation::class,
         ]);
         $this->em()->getFilters()->enable('annee')->init([
@@ -128,17 +133,19 @@ class IntervenantController extends AbstractController
         /* Liste des services */
         $this->getServiceLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
         $recherche = new Recherche($typeVolumeHoraire, $etatVolumeHoraire);
-        $services = $this->getProcessusService()->getServices($intervenant, $recherche);
+
+        if ($intervenant->getStatut()->getPeutSaisirService() && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION)) {
+            $services = $this->getProcessusService()->getServices($intervenant, $recherche);
+        }else{
+            $services = false;
+        }
 
         /* Services référentiels (si nécessaire) */
-        /*if ($intervenant->getStatut()->getPeutSaisirReferentiel()) {
-            $params                       = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action']             = 'index';
-            $params['query']              = $this->params()->fromQuery();
-            $params['renderIntervenants'] = !$intervenant;
-            $widget                       = $this->forward()->dispatch('Application\Controller\ServiceReferentiel', $params);
-            if ($widget) $vm->addChild($widget, 'referentiel');
-        }*/
+        if ($intervenant->getStatut()->getPeutSaisirReferentiel() && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION)) {
+            $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
+        }else{
+            $servicesReferentiel = false;
+        }
 
         /* Totaux HETD */
         $params = $this->getEvent()->getRouteMatch()->getParams();
@@ -156,7 +163,7 @@ class IntervenantController extends AbstractController
             if ($widget) $vm->addChild($widget, 'clotureSaisie');
         }
 
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services'));
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel'));
 
         return $vm;
     }

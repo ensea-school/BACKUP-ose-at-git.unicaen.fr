@@ -5,6 +5,7 @@ namespace Application\Assertion;
 use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
+use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
@@ -88,10 +89,20 @@ class ServiceAssertion extends AbstractAssertion
                         return $this->assertServiceExterieur($role, $entity);
                 }
             break;
+            case $entity instanceof ServiceReferentiel:
+                switch ($privilege) {
+                    case Privileges::REFERENTIEL_VISUALISATION:
+                        return $this->assertServiceReferentielVisualisation($role, $entity);
+                    case Privileges::REFERENTIEL_EDITION:
+                        return $this->assertServiceReferentielEdition($role, $entity);
+                }
+            break;
             case $entity instanceof Intervenant:
                 switch ($privilege) {
                     case Privileges::ENSEIGNEMENT_VISUALISATION:
                     case Privileges::ENSEIGNEMENT_EDITION:
+                    case Privileges::REFERENTIEL_VISUALISATION:
+                    case Privileges::REFERENTIEL_EDITION:
                         return $this->assertIntervenant($role, $entity);
 
                     case Privileges::MOTIF_NON_PAIEMENT_VISUALISATION:
@@ -162,6 +173,18 @@ class ServiceAssertion extends AbstractAssertion
 
 
 
+    protected function assertServiceReferentielVisualisation(Role $role, ServiceReferentiel $serviceReferentiel)
+    {
+        $wfEtape = $this->getWorkflowEtape($serviceReferentiel->getTypeVolumeHoraire(), 'saisie');
+
+        return $this->asserts([
+            $this->assertIntervenant($role, $serviceReferentiel->getIntervenant()),
+            $this->assertEtapeAtteignable($wfEtape, $serviceReferentiel->getIntervenant()),
+        ]);
+    }
+
+
+
     protected function assertServiceEdition(Role $role, Service $service)
     {
         $structure = $role->getStructure();
@@ -186,6 +209,32 @@ class ServiceAssertion extends AbstractAssertion
         if ($service->getEtablissement() && $service->getEtablissement() != $this->getServiceContext()->getEtablissement()) {
             $asserts[] = $this->assertServiceExterieur($role, $service);
         }
+
+        return $this->asserts($asserts);
+    }
+
+
+
+    protected function assertServiceReferentielEdition(Role $role, ServiceReferentiel $serviceReferentiel)
+    {
+        $structure = $role->getStructure();
+
+        $asserts = [];
+
+        if ($structure) {
+            $structureAffectation  = $serviceReferentiel->getIntervenant() ? $serviceReferentiel->getIntervenant()->getStructure() : null;
+            $structureEnseignement = $serviceReferentiel->getStructure();
+
+            if ($structureAffectation && $structureEnseignement) {
+                // cas d'un intervenant d'une autre structure prenant un enseignement dans une autre structure
+                $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
+            } elseif ($structureAffectation && !$structureEnseignement) {
+                // cas d'un intervenant prenant des enseignements à l'extérieur
+                $asserts[] = $structure == $structureAffectation;
+            }
+        }
+
+        $asserts[] = $this->assertIntervenant($role, $serviceReferentiel->getIntervenant());
 
         return $this->asserts($asserts);
     }

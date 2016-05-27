@@ -2,7 +2,9 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\ServiceReferentiel;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Processus\Traits\ValidationReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
@@ -33,6 +35,7 @@ class ServiceReferentielController extends AbstractController
     use VolumeHoraireReferentielAwareTrait;
     use SaisieAwareTrait;
     use ValidationAwareTrait;
+    use ServiceReferentielProcessusAwareTrait;
     use ValidationReferentielProcessusAwareTrait;
 
 
@@ -48,63 +51,13 @@ class ServiceReferentielController extends AbstractController
 
 
 
-    /**
-     *
-     * @param Intervenant|null $intervenant
-     * @param Recherche        $recherche
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    private function getFilteredServices($intervenant, $recherche)
-    {
-        //              \Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $serviceReferentiel              = $this->getServiceServiceReferentiel();
-        $volumeHoraireReferentielService = $this->getServiceVolumeHoraireReferentiel();
-
-        $this->initFilters();
-        $qb = $serviceReferentiel->initQuery()[0];
-
-        $serviceReferentiel
-            ->join('applicationIntervenant', $qb, 'intervenant', ['id', 'nomUsuel', 'prenom', 'sourceCode'])
-            ->join($volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures']);
-
-        $volumeHoraireReferentielService->leftJoin('applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
-
-        $serviceReferentiel->finderByContext($qb);
-        $serviceReferentiel->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
-
-        if ($intervenant) {
-            $serviceReferentiel->finderByIntervenant($intervenant, $qb);
-        }
-        if (!$intervenant && $role->getStructure()) {
-            $serviceReferentiel->finderByStructure($role->getStructure(), $qb);
-        }
-
-        return $qb;
-    }
-
-
-
     public function indexAction()
     {
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
-        $totaux                = $this->params()->fromQuery('totaux', 0) == '1';
         $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                  = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant           = $this->context()->intervenantFromRoute();
         $viewModel             = new \Zend\View\Model\ViewModel();
-
-        if ($intervenant && $intervenant->estPermanent()) {
-            $serviceRefProto = $this->getServiceServiceReferentiel()->newEntity()
-                ->setIntervenant($intervenant)
-                ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
-
-            $canAddServiceReferentiel = $intervenant->estPermanent() && $this->isAllowed($serviceRefProto, 'create');
-        } else {
-            $canAddServiceReferentiel = false;
-        }
 
         if (!$intervenant) {
             $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -120,20 +73,13 @@ class ServiceReferentielController extends AbstractController
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode));
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-
-            $params = [
-                'intervenant' => $intervenant->getRouteParam(),
-                'action'      => 'formule-totaux-hetd',
-            ];
             $this->getEvent()->setParam('typeVolumeHoraire', $recherche->getTypeVolumeHoraire());
             $this->getEvent()->setParam('etatVolumeHoraire', $recherche->getEtatVolumeHoraire());
         }
 
         /* Préparation et affichage */
-        if ('afficher' === $action || $totaux) {
-            $qb       = $this->getFilteredServices($intervenant, $recherche);
-            $services = $this->getServiceServiceReferentiel()->getList($qb);
-            $this->getServiceServiceReferentiel()->setTypeVolumeHoraire($services, $recherche->getTypeVolumeHoraire());
+        if ('afficher' === $action) {
+            $services = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
         } else {
             $services = [];
         }
@@ -142,11 +88,7 @@ class ServiceReferentielController extends AbstractController
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
 
-        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddServiceReferentiel', 'params'));
-
-        if ($totaux) {
-            $viewModel->setTemplate('application/service-referentiel/rafraichir-totaux');
-        }
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'params'));
 
         return $viewModel;
     }
@@ -171,7 +113,6 @@ class ServiceReferentielController extends AbstractController
         //$role    = $this->getServiceContext()->getSelectedIdentityRole();
         $form = $this->getFormServiceReferentielSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
-        $errors = [];
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
 
@@ -193,7 +134,7 @@ class ServiceReferentielController extends AbstractController
         $assertionEntity
             ->setTypeVolumeHoraire($typeVolumeHoraire)
             ->setIntervenant($intervenant);
-        if (!$this->isAllowed($assertionEntity, 'create') || !$this->isAllowed($assertionEntity, 'update')) {
+        if (!$this->isAllowed($assertionEntity, Privileges::REFERENTIEL_EDITION)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
@@ -207,18 +148,15 @@ class ServiceReferentielController extends AbstractController
                     $entity = $service->save($entity);
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $e = DbException::translate($e);
+                    $this->flashMessenger()->addErrorMessage($e->getMessage());
                 }
             } else {
-                $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
+                $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }
         }
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables(compact('form', 'errors', 'title'));
-
-        return $viewModel;
+        return compact('form', 'title');
     }
 
 
@@ -230,7 +168,7 @@ class ServiceReferentielController extends AbstractController
         $params      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $details     = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
-        $service     = $this->context()->serviceReferentielFromRoute('id'); // remplacer id par service au besoin, à cause des routes définies en config.
+        $service     = $this->getEvent()->getParam('serviceReferentiel');
 
         return compact('service', 'params', 'details', 'onlyContent');
     }
@@ -256,11 +194,13 @@ class ServiceReferentielController extends AbstractController
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceServiceReferentiel()->get($sid);
-                if ($this->isAllowed($service, 'update')) {
+                if ($this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
                 }
             }
         }
+
+        return new MessengerViewModel;
     }
 
 
@@ -273,48 +213,28 @@ class ServiceReferentielController extends AbstractController
         } else {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
-        $id      = (int)$this->params()->fromRoute('id', 0);
+        $id      = (int)$this->params()->fromRoute('id', null);
         $service = $this->getServiceServiceReferentiel()->get($id);
-        $title   = "Suppression de référentiel";
-        $form    = new \Application\Form\Supprimer('suppr');
-        $form->setServiceLocator($this->getServiceLocator()->get('formElementManager'));
-        $form->init();
-        $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
-        $viewModel = new \Zend\View\Model\ViewModel();
+        /* @var $service ServiceReferentiel */
 
-        $intervenant     = $this->getServiceLocalContext()->getIntervenant();
-        $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
-        if (!$this->isAllowed($assertionEntity, 'delete')) {
+        if (!$service) {
+            throw new \LogicException('Le service référentiel n\'existe pas');
+        }
+        $service->setTypeVolumeHoraire($typeVolumeHoraire);
+        if (!$this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
-
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-        $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
-
         if ($this->getRequest()->isPost()) {
-            $errors = [];
             try {
-                if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE) {
-                    // destruction des seuls volumes horaires REALISES associés, pas les PREVUS
-                    foreach ($service->getVolumeHoraireReferentiel() as $vh) {
-                        if ($vh->getTypeVolumeHoraire() === $typeVolumeHoraire) {
-                            $this->getServiceVolumeHoraire()->delete($vh);
-                        }
-                    }
-                } else {
-                    // destruction du service même
-                    $this->getServiceServiceReferentiel()->delete($service);
-                }
+                $this->getServiceServiceReferentiel()->delete($service);
+                $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
             } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-            $viewModel->setVariable('errors', $errors);
         }
 
-        $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
-
-        return $viewModel;
+        return new MessengerViewModel;
     }
 
 
@@ -340,16 +260,16 @@ class ServiceReferentielController extends AbstractController
             $title .= " réalisé";
         }
 
-        $services    = [
+        $services = [
             'valides'     => [],
             'non-valides' => [],
         ];
 
         $validations = $this->getProcessusValidationReferentiel()->lister($typeVolumeHoraire, $intervenant, $filterStructure);
-        foreach( $validations as $validation ){
-            $key = $validation->getId() ? 'valides' : 'non-valides';
-            $vid = $this->getProcessusValidationReferentiel()->getValidationId($validation);
-            $sList = $this->getProcessusValidationReferentiel()->getServices( $typeVolumeHoraire, $validation );
+        foreach ($validations as $validation) {
+            $key                  = $validation->getId() ? 'valides' : 'non-valides';
+            $vid                  = $this->getProcessusValidationReferentiel()->getValidationId($validation);
+            $sList                = $this->getProcessusValidationReferentiel()->getServices($typeVolumeHoraire, $validation);
             $services[$key][$vid] = $sList;
         }
 
@@ -436,28 +356,6 @@ class ServiceReferentielController extends AbstractController
         }
 
         return new MessengerViewModel();
-    }
-
-
-
-    /**
-     * @var TypeVolumeHoraire
-     */
-    private $typeVolumeHoraire;
-
-
-
-    /**
-     * @return TypeVolumeHoraire
-     */
-    private function getTypeVolumeHoraire()
-    {
-        if (null === $this->typeVolumeHoraire) {
-            $typeVolumeHoraireCode   = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
-            $this->typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode);
-        }
-
-        return $this->typeVolumeHoraire;
     }
 
 }

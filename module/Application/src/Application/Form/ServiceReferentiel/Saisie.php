@@ -41,6 +41,8 @@ class Saisie extends AbstractForm
     {
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceReferentielSaisieHydrator'));
 
+        $this->setAttribute('class', 'service-referentiel-form');
+
         $saisie = $this->getServiceLocator()->get('ServiceReferentielSaisieFieldset'); /* @var $saisie SaisieFieldset */
         //$saisie->setUseAsBaseFieldset(true);
         $this->add($saisie);

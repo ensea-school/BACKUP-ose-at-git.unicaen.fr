@@ -151,7 +151,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         if ($heures > $this->heures){
             $this->setTemPlafondFcMaj(2); // si augmentation alors on force...
         }
-        $this->heures = $heures;
+        $this->heures = round($heures, 2);
 
         return $this;
     }

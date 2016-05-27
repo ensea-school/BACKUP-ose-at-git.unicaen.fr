@@ -100,7 +100,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
      */
     public function setHeures($heures)
     {
-        $this->heures = $heures;
+        $this->heures = round($heures,2);
 
         return $this;
     }

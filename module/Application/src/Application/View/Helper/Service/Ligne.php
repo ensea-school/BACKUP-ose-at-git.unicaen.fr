@@ -264,8 +264,17 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service/supprimer', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-trash"></span></a>';
+        $url = $this->getView()->url('service/suppression', ['service' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+
+        return $this->getView()->tag('a', [
+            'class'        => 'pop-ajax service-delete',
+            'data-title'   => 'Suppression d\'enseignement',
+            'data-content' => 'Souhaitez-vous vraiment supprimer ces heures d\'enseignement ?',
+            'data-confirm' => 'true',
+            'data-id'      => $this->getService()->getId(),
+            'href'         => $url,
+            'title'        => 'Supprimer cet enseignement',
+        ])->html('<span class="glyphicon glyphicon-trash"></span>');
     }
 
     protected function renderDetails( $details=false )

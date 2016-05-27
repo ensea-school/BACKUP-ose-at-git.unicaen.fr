@@ -192,7 +192,7 @@ $.widget("ose.serviceReferentielListe", {
         var that = this;
 
         this.element.find('.referentiel-delete').popAjax({
-            title: 'Suppression de référentiel', submit: function (event, popAjax)
+            submit: function (event, popAjax)
             {
                 if (!popAjax.errorsInContent()) {
                     var serviceId = popAjax.element.parents('tr.referentiel-ligne').data('id');

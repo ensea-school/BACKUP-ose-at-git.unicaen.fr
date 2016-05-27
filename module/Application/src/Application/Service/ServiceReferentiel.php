@@ -145,7 +145,7 @@ class ServiceReferentiel extends AbstractEntityService
         IntervenantEntity $intervenant,
         FonctionReferentielEntity $fonction,
         StructureEntity $structure,
-        $commentaires
+        $commentaires=null
     )
     {
         $result = $this->getRepo()->findBy([
@@ -289,7 +289,6 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function delete($entity, $softDelete = true)
     {
-
         $vhListe = $entity->getVolumeHoraireReferentielListe();
         $vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
 

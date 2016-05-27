@@ -74,15 +74,15 @@ return [
                             ],
                         ],
                     ],
-                    'supprimer'                => [
+                    'suppression'                => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/supprimer/:service',
+                            'route'       => '/suppression/:service',
                             'constraints' => [
                                 'service' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'action' => 'supprimer',
+                                'action' => 'suppression',
                             ],
                         ],
                     ],

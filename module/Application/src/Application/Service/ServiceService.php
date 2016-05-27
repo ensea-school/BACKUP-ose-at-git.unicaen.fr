@@ -8,6 +8,7 @@ use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Service as ServiceEntity;
+use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
@@ -258,11 +259,11 @@ class ServiceService extends AbstractEntityService
 
             $serviceAllreadyExists = null;
             if (!$entity->getId()) { // uniquement pour les nouveaux services!!
-                $serviceAllreadyExists = $this->getRepo()->findOneBy([
-                    'intervenant'        => $entity->getIntervenant(),
-                    'elementPedagogique' => $entity->getElementPedagogique(),
-                    'etablissement'      => $entity->getEtablissement(),
-                ]);
+                $serviceAllreadyExists = $this->getBy(
+                    $entity->getIntervenant(),
+                    $entity->getElementPedagogique(),
+                    $entity->getEtablissement()
+                );
             }
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
@@ -301,6 +302,47 @@ class ServiceService extends AbstractEntityService
         }
 
         return $result;
+    }
+
+
+
+    /**
+     * Supprime (historise par défaut) le service spécifié.
+     *
+     * @param Service $entity Entité à détruire
+     * @param bool  $softDelete
+     *
+     * @return self
+     */
+    public function delete($entity, $softDelete = true)
+    {
+        $vhListe = $entity->getVolumeHoraireListe();
+        foreach($vhListe->getPeriodes() as $periode){
+            $lc = $vhListe->getChild()->setPeriode($periode);
+            foreach( $lc->getTypesIntervention() as $typeIntervention){
+                $lc->getChild()->setTypeIntervention($typeIntervention)->setHeures(0);
+            }
+        }
+        //$vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
+
+        $vhl = $entity->getVolumeHoraire();
+
+        $delete = true;
+        foreach ($vhl as $volumeHoraire) {
+            if ($volumeHoraire->getRemove()) {
+                $this->getServiceVolumeHoraire()->delete($volumeHoraire, $softDelete);
+                $vhl->removeElement($volumeHoraire);
+            } else {
+                $delete = false;
+                $this->getServiceVolumeHoraire()->save($volumeHoraire);
+            }
+        }
+
+        if ($delete) {
+            parent::delete($entity, $softDelete);
+        }
+
+        return $this;
     }
 
 
@@ -1077,20 +1119,6 @@ class ServiceService extends AbstractEntityService
         });
 
         return $typesIntervention;
-    }
-
-
-
-    public function canHaveMotifNonPaiement(ServiceEntity $service, $runEx = false)
-    {
-        if (!$service->getIntervenant()->estPermanent()) {
-            return $this->cannotDoThat("Un intervenant vacataire ne peut pas avoir de motif de non paiement", $runEx);
-        }
-        if ($this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
-            return $this->cannotDoThat("Les intervenants n'ont pas le droit de visualiser ou modifier les motifs de non paiement", $runEx);
-        }
-
-        return true;
     }
 
 

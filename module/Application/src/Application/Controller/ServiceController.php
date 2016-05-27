@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Service;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
@@ -406,7 +407,7 @@ class ServiceController extends AbstractController
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceService()->get($sid);
-                if ($this->isAllowed($service, 'update')) {
+                if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
                     try {
                         $this->getServiceService()->setRealisesFromPrevus($service);
                     } catch (\Exception $e) {
@@ -429,27 +430,22 @@ class ServiceController extends AbstractController
         } else {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
-        $id      = (int)$this->params()->fromRoute('id', 0);
-        $service = $this->getServiceService()->get($id);
-        $title   = "Suppression de service";
-        $form    = new \Application\Form\Supprimer('suppr');
-        $form->setServiceLocator($this->getServiceLocator()->get('formElementManager'));
-        $form->init();
-        $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
-        $viewModel = new \Zend\View\Model\ViewModel();
+        $service = $this->getEvent()->getParam('service');
+        /* @var $service Service */
 
+        if (!$service) {
+            throw new \LogicException('Le service n\'existe pas');
+        }
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (!$this->isAllowed($service, 'delete')) {
+        if (!$this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-        $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
-
         if ($this->getRequest()->isPost()) {
-            $errors = [];
             try {
-                if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE) {
+                $this->getServiceService()->delete($service);
+                $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
+                /*if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE) {
                     // destruction des volumes horaires associés
                     foreach ($service->getVolumeHoraire() as $vh) {
                         if ($vh->getTypeVolumeHoraire() === $typeVolumeHoraire) {
@@ -459,17 +455,14 @@ class ServiceController extends AbstractController
                 } else {
                     // destruction du service même
                     $this->getServiceService()->delete($service);
-                }
+                }*/
             } catch (\Exception $e) {
                 $e        = DbException::translate($e);
-                $errors[] = $e->getMessage();
+                $this->flashMessenger()->addErrorMessage( $e->getMessage() );
             }
-            $viewModel->setVariable('errors', $errors);
         }
 
-        $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
-
-        return $viewModel;
+        return new MessengerViewModel;
     }
 
 

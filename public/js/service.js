@@ -78,6 +78,8 @@ $.widget("ose.serviceListe", {
         }
     },
 
+
+
     showAllDetails: function ()
     {
         var that = this;
@@ -88,6 +90,8 @@ $.widget("ose.serviceListe", {
             }
         });
     },
+
+
 
     hideAllDetails: function ()
     {
@@ -153,6 +157,8 @@ $.widget("ose.serviceListe", {
         }
     },
 
+
+
     onAfterDelete: function (serviceId)
     {
         if (this.params['in-realise']) { // si on est dans les services réalisés alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
@@ -163,6 +169,8 @@ $.widget("ose.serviceListe", {
             this.onAfterChange();
         }
     },
+
+
 
     setRealisesFromPrevus: function ()
     {
@@ -188,6 +196,8 @@ $.widget("ose.serviceListe", {
         );
     },
 
+
+
     setPrevusFromPrevus: function ()
     {
         var that = this;
@@ -205,6 +215,8 @@ $.widget("ose.serviceListe", {
             }
         );
     },
+
+
 
     init2: function ()
     {
@@ -225,8 +237,22 @@ $.widget("ose.serviceListe", {
                 $(this).show();
             }
         });
+
+        this.element.find('.service-delete').popAjax({
+            submit: function (event, popAjax)
+            {
+                if (!popAjax.errorsInContent()) {
+                    var serviceId = popAjax.element.parents('tr.service-ligne').data('id');
+                    popAjax.hide();
+                    that.onAfterDelete(serviceId);
+                }
+            }
+        });
+
         this.calculTotaux();
     },
+
+
 
     _create: function ()
     {
@@ -271,14 +297,6 @@ $.widget("ose.serviceListe", {
                     that.onAfterSaisie(serviceId);
                 }
             }
-        });
-
-        $("body").on("service-delete-message", function (event, data)
-        {
-            var thatId = event.a.parents('div.service-liste').attr('id');
-            var serviceId = event.a.parents('tr.service-ligne').data('id');
-            event.div.modal('hide'); // ferme la fenêtre modale
-            that.onAfterDelete(serviceId);
         });
 
         $("body").tooltip({

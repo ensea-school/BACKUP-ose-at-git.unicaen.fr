@@ -184,23 +184,4 @@ class VolumeHoraire extends AbstractEntityService
         return $qb;
     }
 
-    /**
-     * Recherche les volumes horaires
-     *
-     * @param TypeValidationEntity $typeValidation
-     * @param QueryBuilder|null    $qb
-     *
-     * @return QueryBuilder
-     */
-//    public function finderByNotHavingValidation(TypeValidationEntity $typeValidation, QueryBuilder $qb = null, $alias = null)
-//    {
-//        list($qb, $alias) = $this->initQuery($qb, $alias);
-//
-//        $qb
-//                ->andWhere($qb->expr()->not($qb->expr()->exists(
-//                        "SELECT valid FROM Application\Entity\Db\Validation valid WHERE valid.typeValidation = :typev AND $alias.validation = valid")))
-//                ->setParameter('typev', $typeValidation);
-//
-//        return $qb;
-//    }
 }

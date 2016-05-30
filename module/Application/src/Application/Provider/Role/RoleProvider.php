@@ -103,25 +103,15 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $roles                  = [];
         $r                      = new Role();
         $roles[$r->getRoleId()] = $r;
-        $r                      = new \Application\Acl\ComposanteRole();
-        $roles[$r->getRoleId()] = $r;
-        $r                      = new \Application\Acl\EtablissementRole();
-        $roles[$r->getRoleId()] = $r;
-        $r                      = new \Application\Acl\IntervenantRole();
-        $roles[$r->getRoleId()] = $r;
-        $r                      = new \Application\Acl\IntervenantExterieurRole();
-        $roles[$r->getRoleId()] = $r;
-        $r                      = new \Application\Acl\IntervenantPermanentRole();
-        $roles[$r->getRoleId()] = $r;
 
         $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
         /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
 
 
         if ($ldapUser = $serviceAuthUserContext->getLdapUser()) {
-            $numeroPersonnel = (integer)$ldapUser->getSupannEmpId();
-            $intervenant     = $this->getServiceIntervenant()->getBySourceCode($numeroPersonnel);
-            $personnel       = $this->getServicePersonnel()->getBySourceCode($numeroPersonnel);
+            $supannEmpId = (integer)$ldapUser->getSupannEmpId();
+            $intervenant     = $this->getServiceIntervenant()->getBySourceCode($supannEmpId);
+            $personnel       = $this->getServicePersonnel()->getBySourceCode($supannEmpId);
         } else {
             $intervenant = null;
             $personnel = null;
@@ -148,31 +138,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /* @var $dbRole \Application\Entity\Db\Role */
             $roleId = $dbRole->getRoleId();
 
-            $roleClass = \Application\Acl\Role::class;
-            $parent    = 'user';
-            /** @deprecated */
-            if ($roleId == 'gestionnaire-composante') {
-                $roleClass = \Application\Acl\GestionnaireComposanteRole::class;
-                $parent    = 'composante';
-            }
-            if ($roleId == 'directeur-composante') {
-                $roleClass = \Application\Acl\DirecteurComposanteRole::class;
-                $parent    = 'composante';
-            }
-            if ($roleId == 'administrateur') {
-                $roleClass = \Application\Acl\AdministrateurRole::class;
-            }
-            if ($roleId == 'responsable-composante') {
-                $roleClass = \Application\Acl\ResponsableComposanteRole::class;
-                $parent    = 'composante';
-            }
-            if ($roleId == 'superviseur-etablissement') {
-                $roleClass = \Application\Acl\EtablissementRole::class;
-                $parent    = 'etablissement';
-            }
-            /* FIN de deprecated */
-
-            $role = new $roleClass($roleId, $parent, $dbRole->getLibelle());
+            $role = new Role($roleId, 'user', $dbRole->getLibelle());
             if (isset($rolesPrivileges[$roleId])){
                 $role->initPrivileges($rolesPrivileges[$roleId]);
             }
@@ -198,7 +164,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     $affRoleId = $roleId . '-' . $structure->getSourceCode();
                     if (!isset($roles[$affRoleId])) {
                         $affRoleLibelle = $dbRole->getLibelle() . ' (' . $structure->getLibelleCourt() . ')';
-                        $affRole        = new $roleClass($affRoleId, $roleId, $affRoleLibelle);
+                        $affRole        = new \Application\Acl\Role($affRoleId, $roleId, $affRoleLibelle);
                         $affRole->setPersonnel($personnel);
                         $affRole->setStructure($structure);
                         $roles[$affRoleId] = $affRole;
@@ -207,17 +173,15 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             }
         }
 
-
         // Chargement des rôles par statut d'intervenant
         $si = $this->getStatutsInfo();
         foreach ($si as $statut) {
-            $roleClass = $statut['role-class'];
-            $role      = new $roleClass($statut['role-id'], $statut['parent'], $roles[$statut['parent']]->getRoleName());
+            $role = new Role($statut['role-id'], 'user', $statut['role-name']);
 
             if ($intervenant) {
                 if ($intervenant->getStatut()->getId() == $statut['statut-id']) {
                     $role->setIntervenant($intervenant);
-                    $role->initPrivileges($rolesPrivileges['statut/'.$intervenant->getStatut()->getSourceCode()]);
+                    $role->initPrivileges($rolesPrivileges[$intervenant->getStatut()->getRoleId()]);
                 }
             }
             $roles[$statut['role-id']] = $role;
@@ -235,19 +199,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $si      = [];
             $statuts = $this->getServiceStatutIntervenant()->getList();
             foreach ($statuts as $statut) {
-                /** @deprecated */
-                if ($statut->getTypeIntervenant()->getCode() === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT) {
-                    $parent    = \Application\Acl\IntervenantPermanentRole::ROLE_ID;
-                    $roleClass = \Application\Acl\IntervenantPermanentRole::class;
-                } else {
-                    $parent    = \Application\Acl\IntervenantExterieurRole::ROLE_ID;
-                    $roleClass = \Application\Acl\IntervenantExterieurRole::class;
-                }
                 $si[] = [
                     'statut-id'  => $statut->getId(),
                     'role-id'    => $statut->getRoleId(),
-                    'parent'     => $parent,
-                    'role-class' => $roleClass,
+                    'role-name'  => $statut->getTypeIntervenant()->getLibelle(),
                 ];
             }
             $session->statutsInfo = $si;

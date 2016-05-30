@@ -18,6 +18,16 @@ class Personnel implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @var string
      */
+    protected $code;
+
+    /**
+     * @var string
+     */
+    protected $supannEmpId;
+
+    /**
+     * @var string
+     */
     protected $email;
 
     /**
@@ -63,6 +73,54 @@ class Personnel implements HistoriqueAwareInterface, ImportAwareInterface
     public function __construct()
     {
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return Personnel
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getSupannEmpId()
+    {
+        return $this->supannEmpId;
+    }
+
+
+
+    /**
+     * @param string $supannEmpId
+     *
+     * @return Personnel
+     */
+    public function setSupannEmpId($supannEmpId)
+    {
+        $this->supannEmpId = $supannEmpId;
+
+        return $this;
     }
 
 

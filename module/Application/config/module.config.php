@@ -3,11 +3,6 @@
 namespace Application;
 
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
-const R_ADMINISTRATEUR = Acl\AdministrateurRole::ROLE_ID;
-const R_COMPOSANTE     = Acl\ComposanteRole::ROLE_ID;
-const R_ETABLISSEMENT  = Acl\EtablissementRole::ROLE_ID;
-const R_INTERVENANT    = Acl\IntervenantRole::ROLE_ID;
-
 
 $main = [
     'doctrine'           => [
@@ -126,15 +121,6 @@ $main = [
         'role_providers'     => [
             'ApplicationRoleProvider' => [
                 Acl\Role::class,
-
-                Acl\AdministrateurRole::class,
-
-                Acl\ComposanteRole::class,
-
-                Acl\EtablissementRole::class,
-                Acl\IntervenantRole::class,
-                Acl\IntervenantExterieurRole::class,
-                Acl\IntervenantPermanentRole::class,
             ],
         ],
         'guards'             => [

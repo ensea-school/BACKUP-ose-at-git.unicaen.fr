@@ -2,9 +2,6 @@
 
 namespace Application;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-
 return [
     'router' => [
         'routes' => [
@@ -115,12 +112,12 @@ return [
                 [
                     'controller' => 'Application\Controller\Notification',
                     'action'     => ['indicateurs', 'indicateur-fetch-title', 'notifier-indicateur-personnel'],
-                    'roles'      => [AdministrateurRole::ROLE_ID],
+                    'roles'      => ['user'],
                 ],
                 [
                     'controller' => 'Application\Controller\Notification',
                     'action'     => ['indicateur-intervenants'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'roles'      => ['user'],
                 ],
                 [
                     'controller' => 'Application\Controller\Notification',

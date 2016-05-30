@@ -30,6 +30,16 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     use ImportAwareTrait;
 
     /**
+     * @var string
+     */
+    protected $code;
+
+    /**
+     * @var string
+     */
+    protected $supannEmpId;
+    
+    /**
      * @var \DateTime
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
      * @Annotation\Options({"date_inf_label":"Date de naissance :"})
@@ -294,6 +304,54 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return Intervenant
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getSupannEmpId()
+    {
+        return $this->supannEmpId;
+    }
+
+
+
+    /**
+     * @param string $supannEmpId
+     *
+     * @return Intervenant
+     */
+    public function setSupannEmpId($supannEmpId)
+    {
+        $this->supannEmpId = $supannEmpId;
+
+        return $this;
     }
 
 

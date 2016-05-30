@@ -15,6 +15,8 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
+    <field name="code" type="string" column="CODE" length="60" nullable="false"/>
+    <field name="supannEmpId" type="string" column="SUPANN_EMP_ID" length="60" nullable="false"/>
     <field name="email" type="string" column="EMAIL" length="255" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>

@@ -43,6 +43,15 @@ return [
                                     ],
                                 ],
                             ],
+                            'supprimer'  => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'       => '/supprimer',
+                                    'defaults'    => [
+                                        'action' => 'supprimer',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -291,6 +300,11 @@ return [
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => ['devalider'],
                     'privileges' => [Privileges::DOSSIER_DEVALIDATION],
+                ],
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['supprimer'],
+                    'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                 ],
 
 

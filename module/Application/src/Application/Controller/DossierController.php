@@ -69,7 +69,7 @@ class DossierController extends AbstractController
         $validation  = $this->getServiceDossier()->getValidation($intervenant);
         $form        = $this->getFormIntervenantDossier();
 
-        if (!($dossier = $intervenant->getDossier())) {
+        if (!($dossier = $intervenant->getDossier()) || !$dossier->estNonHistorise()) {
             $dossier = $this->getServiceDossier()->newEntity()->fromIntervenant($intervenant);
             $intervenant->setDossier($dossier);
         }
@@ -77,10 +77,12 @@ class DossierController extends AbstractController
         $privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
         $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
         $privDevalider = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_DEVALIDATION));
+        $privSupprimer = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_SUPPRESSION));
 
         $canValider   = !$validation && $dossier->getId() && $privValider;
         $canDevalider = $validation && $privDevalider;
         $canEdit      = !$validation && $privEdit;
+        $canSupprimer = !$validation && $dossier->getId() && $privSupprimer;
 
         /* Mise en place du formulaires */
         $form->personnaliser($intervenant, $iPrec);
@@ -155,7 +157,7 @@ class DossierController extends AbstractController
             }
         }
 
-        return compact('role', 'form', 'validation', 'canValider', 'canDevalider');
+        return compact('role', 'form', 'validation', 'canValider', 'canDevalider', 'canSupprimer');
     }
 
 
@@ -188,6 +190,25 @@ class DossierController extends AbstractController
         $validation  = $this->getServiceDossier()->getValidation($intervenant);
         try {
             $this->getServiceValidation()->delete($validation);
+            $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+        }
+
+        return new MessengerViewModel;
+    }
+
+
+
+    public function supprimerAction()
+    {
+        $this->initFilters();
+
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+
+        try {
+            $this->getServiceDossier()->delete($intervenant->getDossier());
             $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e));

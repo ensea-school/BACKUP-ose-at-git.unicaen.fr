@@ -5,6 +5,7 @@
  * @var $form         \Application\Form\Intervenant\Dossier
  * @var $canValider   boolean
  * @var $canDevalider boolean
+ * @var $canSupprimer boolean
  */
 
 $form->prepare();
@@ -67,7 +68,7 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
             <?php echo $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
         <?php endif ?>
 
-        <!-- actions de validation de la pièce jointe entière -->
+        <!-- actions de validation du dossier -->
         <?php if ($canValider): ?>
             <a class="valider-dossier btn btn-success pop-ajax"
                href="<?php echo $this->url('intervenant/dossier/valider', [], [], true) ?>"
@@ -82,9 +83,9 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
             </a>
         <?php endif ?>
 
-        <!-- actions de dévalidation de la pièce jointe entière -->
+        <!-- actions de dévalidation du dossier -->
         <?php if ($canDevalider): ?>
-            <a class="devalider-pj btn btn-danger pop-ajax"
+            <a class="devalider-dossier btn btn-danger pop-ajax"
                href="<?php echo $this->url('intervenant/dossier/devalider', [], [], true) ?>"
                title="Dévalider les données personnelles"
                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
@@ -94,6 +95,21 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
                data-submit-reload="true"
             >
                 <span class="glyphicon glyphicon-thumbs-down"></span> Je dévalide les données
+            </a>
+        <?php endif ?>
+
+        <!-- actions de suppression du dossier -->
+        <?php if ($canSupprimer): ?>
+            <a class="supprimer-dossier btn btn-danger pop-ajax"
+               href="<?php echo $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
+               title="Suppression des données personnelles"
+               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression de toutes les données personnelles ?</p>"
+               data-confirm="true"
+               data-confirm-button="Oui"
+               data-cancel-button="Non"
+               data-submit-reload="true"
+            >
+                <span class="glyphicon glyphicon-thumbs-down"></span> Je supprime les données
             </a>
         <?php endif ?>
     </div>

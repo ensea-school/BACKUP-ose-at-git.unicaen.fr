@@ -6,10 +6,19 @@ use Application\Provider\Privilege\Privileges;
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $intervenant       \Application\Entity\Db\Intervenant
  * @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire
+ * @var $cloture           \Application\Entity\Db\Validation|null
+ * @var $role              \Application\Acl\Role
  */
 
-$canAddService = $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_EDITION);
-$canAddServiceReferentiel = $this->isAllowed($intervenant, Privileges::REFERENTIEL_EDITION);
+$service = new \Application\Entity\Db\Service();
+$service->setIntervenant($intervenant);
+$service->setTypeVolumeHoraire($typeVolumeHoraire);
+$canAddService = $this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+
+$serviceReferentiel = new \Application\Entity\Db\ServiceReferentiel();
+$serviceReferentiel->setIntervenant($intervenant);
+$serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
+$canAddServiceReferentiel = $this->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
 
 if ($typeVolumeHoraire->isPrevu()){
     $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
@@ -33,7 +42,8 @@ $title .= ' <small>'.$intervenant.'</small>';
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-if (isset($clotureSaisie)) echo $clotureSaisie;
+$bottom = false;
+if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));
 
 /* Services et horodatage */
 if ($services !== false) {
@@ -67,6 +77,10 @@ if ($servicesReferentiel !== false){
         'referentiel'       => true
     ]);
 }
+
+$bottom = true;
+if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));
+
 
 echo $formuleTotauxHetd;
 

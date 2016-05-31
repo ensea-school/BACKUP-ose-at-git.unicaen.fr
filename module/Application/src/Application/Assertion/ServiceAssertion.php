@@ -11,7 +11,9 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -26,6 +28,8 @@ class ServiceAssertion extends AbstractAssertion
 {
     use WorkflowServiceAwareTrait;
     use ContextAwareTrait;
+    use CampagneSaisieServiceAwareTrait;
+    use ValidationAwareTrait;
 
 
 
@@ -169,7 +173,7 @@ class ServiceAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $role->hasPrivilege(Privileges::ENSEIGNEMENT_VISUALISATION),
-            ! $role->getIntervenant()
+            !$role->getIntervenant(),
         ]);
     }
 
@@ -224,6 +228,9 @@ class ServiceAssertion extends AbstractAssertion
             $asserts[] = $this->assertServiceExterieur($role, $service);
         }
 
+        $asserts[] = $this->assertCampagneSaisie($role, $service->getTypeVolumeHoraire());
+        $asserts[] = $this->assertCloture($role, $service->getIntervenant());
+
         return $this->asserts($asserts);
     }
 
@@ -249,8 +256,36 @@ class ServiceAssertion extends AbstractAssertion
         }
 
         $asserts[] = $this->assertIntervenant($role, $serviceReferentiel->getIntervenant());
+        $asserts[] = $this->assertCampagneSaisie($role, $serviceReferentiel->getTypeVolumeHoraire());
+        $asserts[] = $this->assertCloture($role, $serviceReferentiel->getIntervenant());
 
         return $this->asserts($asserts);
+    }
+
+
+
+    protected function assertCampagneSaisie( Role $role, TypeVolumeHoraire $typeVolumeHoraire )
+    {
+        if ($typeVolumeHoraire && $role->getIntervenant()) {
+            $campagneSaisie = $this->getServiceCampagneSaisie()->getBy(
+                $role->getIntervenant()->getStatut()->getTypeIntervenant(),
+                $typeVolumeHoraire
+            );
+            if (!$campagneSaisie->estOuverte()) return false;
+        }
+        return true;
+    }
+
+
+
+    protected function assertCloture(Role $role, Intervenant $intervenant)
+    {
+        if (!$role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES)) { // si on peut éditer toujours alors pas la peine de tester...
+            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+            if ($cloture->getId() !== null) return false; // pas de saisie si c'est clôturé
+        }
+
+        return true;
     }
 
 

@@ -3,7 +3,8 @@
 namespace Application\Assertion;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Role;
+use Application\Acl\Role;
+use Application\Entity\Db\Validation;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -46,32 +47,17 @@ class IntervenantAssertion extends AbstractAssertion
         switch (true) {
             case $entity instanceof Intervenant:
                 switch ($privilege) {
-                    case Privileges::ENSEIGNEMENT_CLOTURE:
-                        return $this->assertClotureSaisie($entity);
+                    case Privileges::CLOTURE_CLOTURE:
+                    case Privileges::CLOTURE_REOUVERTURE:
+                        return $this->assertCloture($entity);
                 }
             break;
-        }
-
-        return true;
-    }
-
-
-
-    protected function assertController($controller, $action = null, $privilege = null)
-    {
-        $role        = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-        // pareil si le rôle ne possède pas le privilège adéquat
-        //if ($privilege && !$role->hasPrivilege($privilege)) return false;
-
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-
-        switch ($action) {
-            case 'cloturer-saisie':
-                return $this->assertClotureSaisie($intervenant);
+            case $entity instanceof Validation:
+                switch ($privilege) {
+                    case Privileges::CLOTURE_CLOTURE:
+                    case Privileges::CLOTURE_REOUVERTURE:
+                        return $this->assertCloture($entity->getIntervenant());
+                }
             break;
         }
 
@@ -96,7 +82,7 @@ class IntervenantAssertion extends AbstractAssertion
 
 
 
-    protected function assertClotureSaisie( Intervenant $intervenant=null )
+    protected function assertCloture( Intervenant $intervenant=null )
     {
         if (!$intervenant) return false;
         if (!$this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant)){

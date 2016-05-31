@@ -16,7 +16,7 @@ select
   vh.histo_destruction vh_histo,
   s.histo_destruction s_histo,
   ep.histo_destruction ep_histo,
-  v.histo_destruction v_histo
+  v.histo_destruction v_histo, vh.histo_creation, vh.histo_createur_id
 from
   volume_horaire vh
   JOIN service s ON s.id = vh.service_id
@@ -31,9 +31,10 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.id=503
+  AND i.id=7218
 --  AND s.id = 3208
- -- AND vh.histo_destruction IS NULL
+  AND vh.histo_destruction IS NULL
+  AND tvh.code = 'REALISE'
   --AND contrat_id = 341
   --AND tvh.id = 2
   --AND vh.periode_id = 12
@@ -43,6 +44,7 @@ where
 order by
   s_id, type_volume_horaire, periode, TI.ORDRE;
   
+  select * from utilisateur where id in (3,234);
   
 --INSERT INTO VALIDATION_VOL_HORAIRE (VALIDATION_ID,VOLUME_HORAIRE_ID) VALUES ( 42, 725 );
 --DELETE FROM VALIDATION_VOL_HORAIRE WHERE VALIDATION_ID in (158,175) AND VOLUME_HORAIRE_ID in (634);

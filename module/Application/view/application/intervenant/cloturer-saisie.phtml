@@ -6,7 +6,7 @@ $libelle = "J'ai terminé la saisie de la totalité de mon service réalisé";
 <!--                            Bouton de clôture                            -->
 <!----------------------------------------------------------------------------->
 
-<?php if ($this->isAllowed($this->validation, 'create')): ?>
+
 
     <?php echo $this->messenger()->renderMessage($this->avertissement, 'warning') ?>
 
@@ -27,8 +27,6 @@ $libelle = "J'ai terminé la saisie de la totalité de mon service réalisé";
             });
         });
     </script>
-
-<?php endif; ?>
 
     
 <!----------------------------------------------------------------------------->

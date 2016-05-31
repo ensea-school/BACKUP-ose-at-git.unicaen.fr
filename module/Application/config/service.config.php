@@ -452,6 +452,7 @@ return [
             'ApplicationPeriode'                           => Service\Periode::class,
             'ApplicationMotifNonPaiement'                  => Service\MotifNonPaiement::class,
             'ApplicationModificationServiceDu'             => Service\ModificationServiceDu::class,
+            'ApplicationCampagneSaisie'                    => Service\CampagneSaisieService::class,
             'ServiceRechercheFormHydrator'                 => Form\Service\RechercheFormHydrator::class,
             'FormServiceReferentielSaisieFieldsetHydrator' => Form\ServiceReferentiel\SaisieFieldsetHydrator::class,
             'FormServiceReferentielSaisieHydrator'         => Form\ServiceReferentiel\SaisieHydrator::class,

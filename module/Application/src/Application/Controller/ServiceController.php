@@ -14,7 +14,6 @@ use Application\Service\Traits\LocalContextAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\Http\Request;
-use Zend\View\Model\ViewModel;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -28,7 +27,6 @@ use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
@@ -50,7 +48,6 @@ class ServiceController extends AbstractController
     use IntervenantAwareTrait;
     use ServiceReferentielAwareTrait;
     use EtatVolumeHoraireAwareTrait;
-    use ValidationAwareTrait;
     use StructureAwareTrait;
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
@@ -114,77 +111,6 @@ class ServiceController extends AbstractController
         $params            = $viewHelperParams;
         $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'canAddService', 'params'));
         $viewModel->setTemplate('application/service/index');
-
-        return $viewModel;
-    }
-
-
-
-    /**
-     * Clôture de la saisie du réalisé.
-     *
-     * GET  : affichage du bouton permettant de clôturer la saisie.
-     * POST : création d'une validation pour clôturer la saisie, ou suppression pour déclôturer.
-     *
-     * @return ViewModel
-     */
-    public function cloturerSaisieAction()
-    {
-        $intervenant = $this->getEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant */
-        if (!$intervenant) {
-            return false; // désactive la vue
-        }
-
-        $structure  = $intervenant->getStructure();
-        $tvh        = $this->getTypeVolumeHoraire();
-        $validation = $this->getServiceValidation()->findValidationClotureServices($intervenant, $tvh); // clôture existante
-        $viewModel  = new ViewModel();
-
-        if (!$this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_CLOTURE)) {
-            return false; // désactive la vue
-        }
-        if (TypeVolumeHoraire::CODE_REALISE !== $tvh->getCode()) {
-            return false; // désactive la vue
-        }
-
-        if (!$validation) {
-            $validation = $this->getServiceValidation()->createValidationClotureServices($intervenant, $structure, $tvh);
-        }
-
-        if ($this->getRequest()->isPost()) {
-            $cloturer = $this->params()->fromPost('cloturer');
-            if (null === $cloturer || $validation->getId() && 1 === $cloturer || !$validation->getId() && 0 === $cloturer) {
-                exit;
-            }
-            if ($cloturer) {
-                $this->em()->persist($validation);
-            } else {
-                $this->em()->remove($validation);
-            }
-            $this->em()->flush();
-        }
-
-        if ($validation->getId()) {
-            $dateCloture = $validation->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT);
-            $this->messenger()->addMessage("La saisie du service réalisé a été clôturée le $dateCloture.", 'success');
-        }
-
-        $avertissement = "<strong>Attention!</strong> <br />"
-            . "Assurez-vous d'avoir saisi la totalité de vos services réalisés (enseignements et référentiel), "
-            . "quelle que soit la composante d'intervention. <br />"
-            . "Cliquer sur le bouton ci-dessous vous empêchera de revenir sur votre saisie.";
-        $confirm       = "Attention! "
-            . "Confirmez-vous avoir saisi la totalité de vos services réalisés (enseignements et référentiel), "
-            . "quelle que soit la composante d'intervention ? "
-            . "Cliquer sur OK vous empêchera de revenir sur votre saisie.";
-
-        $viewModel->setVariables([
-            'typeVolumeHoraire' => $tvh,
-            'validation'        => $validation,
-            'avertissement'     => $avertissement,
-            'confirm'           => $confirm,
-        ]);
 
         return $viewModel;
     }
@@ -647,25 +573,4 @@ class ServiceController extends AbstractController
         return new MessengerViewModel();
     }
 
-
-
-    /**
-     * @var TypeVolumeHoraire
-     */
-    private $typeVolumeHoraire;
-
-
-
-    /**
-     * @return TypeVolumeHoraire
-     */
-    private function getTypeVolumeHoraire()
-    {
-        if (null === $this->typeVolumeHoraire) {
-            $typeVolumeHoraireCode   = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
-            $this->typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode);
-        }
-
-        return $this->typeVolumeHoraire;
-    }
 }

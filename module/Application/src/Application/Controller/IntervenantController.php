@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Validation;
 use Application\Entity\Service\Recherche;
 use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
@@ -11,9 +12,11 @@ use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
@@ -21,6 +24,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
+use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -42,6 +46,8 @@ class IntervenantController extends AbstractController
     use ServiceProcessusAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use LocalContextAwareTrait;
+    use CampagneSaisieServiceAwareTrait;
+    use ValidationAwareTrait;
 
 
 
@@ -116,6 +122,8 @@ class IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
         if ($this->params()->fromQuery('menu', false) !== false) { // pour gérer uniquement l'affichage du menu
             $vh = new ViewModel();
             $vh->setTemplate('application/intervenant/menu');
@@ -125,6 +133,16 @@ class IntervenantController extends AbstractController
 
         $typeVolumeHoraire = $this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraire);
+
+        $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
+        if (!$campagneSaisie->estOuverte()) {
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
+            if ($role->getIntervenant()) {
+                $this->flashMessenger()->addErrorMessage($campagneSaisie->getMessage($role));
+            } else {
+                $this->flashMessenger()->addWarningMessage($campagneSaisie->getMessage($role));
+            }
+        }
 
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getSaisi();
 
@@ -136,14 +154,14 @@ class IntervenantController extends AbstractController
 
         if ($intervenant->getStatut()->getPeutSaisirService() && $this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_VISUALISATION)) {
             $services = $this->getProcessusService()->getServices($intervenant, $recherche);
-        }else{
+        } else {
             $services = false;
         }
 
         /* Services référentiels (si nécessaire) */
         if ($intervenant->getStatut()->getPeutSaisirReferentiel() && $this->isAllowed($intervenant, Privileges::REFERENTIEL_VISUALISATION)) {
             $servicesReferentiel = $this->getProcessusServiceReferentiel()->getServices($intervenant, $recherche);
-        }else{
+        } else {
             $servicesReferentiel = false;
         }
 
@@ -157,15 +175,54 @@ class IntervenantController extends AbstractController
 
         /* Clôture de saisie (si nécessaire) */
         if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getPeutCloturerSaisie()) {
-            $params           = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action'] = 'cloturer-saisie';
-            $widget = $this->forward()->dispatch('Application\Controller\Service', $params);
-            if ($widget) $vm->addChild($widget, 'clotureSaisie');
+            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+        }else{
+            $cloture = null;
         }
 
-        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel'));
+        $vm->setVariables(compact('intervenant', 'typeVolumeHoraire', 'services', 'servicesReferentiel', 'cloture', 'role'));
 
         return $vm;
+    }
+
+
+
+    public function cloturerAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            Validation::class,
+        ]);
+
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $validation = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+
+        if ($this->getRequest()->isPost()) {
+            if ($validation->getId()) {
+                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_REOUVERTURE)) {
+                    throw new \Exception("Vous n'avez pas le droit de déclôturer la saisie de services réalisés d'un intervenant");
+                }
+                try {
+                    $this->getServiceValidation()->delete($validation);
+                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            } else {
+                if (!$this->isAllowed($intervenant, Privileges::CLOTURE_CLOTURE)) {
+                    throw new \Exception("Vous n'avez pas le droit de clôturer la saisie de services réalisés d'un intervenant");
+                }
+                try {
+                    $this->getServiceValidation()->save($validation);
+                    $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            }
+        }
+
+        return new MessengerViewModel;
     }
 
 
@@ -182,9 +239,6 @@ class IntervenantController extends AbstractController
 
     public function saisirAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-        ]);
-
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $title       = "Saisie d'un intervenant";

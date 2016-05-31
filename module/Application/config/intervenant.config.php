@@ -183,17 +183,15 @@ return [
                             ],
                         ],
                     ],
-                    'cloturer-saisie'          => [
+                    'cloturer'          => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/services/:type-volume-horaire-code/cloturer',
+                            'route'       => '/:intervenant/cloturer',
                             'constraints' => [
-                                'id'                       => '[0-9]*',
-                                'type-volume-horaire-code' => '[a-zA-Z0-9]*',
+                                'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'controller' => 'Application\Controller\Service',
-                                'action'     => 'cloturer-saisie',
+                                'action'     => 'cloturer',
                             ],
                         ],
                     ],
@@ -395,10 +393,11 @@ return [
                     ],
                 ],
                 [
-                    'controller' => 'Application\Controller\Intervenant', /// @todo transférer l'action depuis le contrôleur de service
-                    'action'     => ['cloturer-saisie'],
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['cloturer'],
                     'privileges' => [
-                        Privileges::ENSEIGNEMENT_CLOTURE,
+                        Privileges::CLOTURE_CLOTURE,
+                        Privileges::CLOTURE_REOUVERTURE,
                     ],
                     'assertion'  => 'assertionIntervenant',
                 ],
@@ -426,8 +425,11 @@ return [
                         'assertion'  => 'ModificationServiceDuAssertion',
                     ],
                     [
-                        'privileges' => Privileges::ENSEIGNEMENT_CLOTURE,
-                        'resources'  => 'Intervenant',
+                        'privileges' => [
+                            Privileges::CLOTURE_CLOTURE,
+                            Privileges::CLOTURE_REOUVERTURE,
+                        ],
+                        'resources'  => ['Validation', 'Intervenant'],
                         'assertion'  => 'assertionIntervenant',
                     ],
                 ],

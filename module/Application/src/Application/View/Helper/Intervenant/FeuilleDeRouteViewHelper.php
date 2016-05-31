@@ -266,15 +266,18 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         $res .= $tag('ul', ['class' => 'list-group']);
         foreach ($etape->getEtapes() as $sEtape) {
             $attrs = ['class' => 'list-group-item'];
-
+            $spanTag = 'span';
+            $spanTitle = '';
             if (!$sEtape->getAtteignable()) {
-                if ($naDesc = '99'.$this->getWhyNonAtteignable($sEtape)) {
+                if ($naDesc = $this->getWhyNonAtteignable($sEtape)) {
                     $attrs['title'] = $naDesc;
+                    $spanTag = 'abbr';
+                    $spanTitle = $naDesc;
                 }
                 $attrs['class'] .= ' after-courante';
             }
             $res .= $tag('li', $attrs);
-            $res .= $tag('span')->text($sEtape->getStructure());
+            $res .= $tag($spanTag, ['title' => $spanTitle])->text($sEtape->getStructure());
 
             $res .= $this->renderEtapeIndicateur($sEtape->getFranchie());
 

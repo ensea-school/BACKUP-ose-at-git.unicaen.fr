@@ -198,6 +198,20 @@ class WorkflowEtape implements ResourceInterface
 
 
     /**
+     * @return float
+     */
+    public function getObjectif()
+    {
+        $objectif = 0;
+        foreach( $this->getEtapes() as $etape ){
+            $objectif += $etape->getObjectif();
+        }
+        return $objectif;
+    }
+
+
+
+    /**
      * @param float $franchie
      *
      * @return WorkflowEtape

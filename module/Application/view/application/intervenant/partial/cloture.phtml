@@ -4,7 +4,6 @@ use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this               \Application\View\Renderer\PhpRenderer
- * @var $cloture            \Application\Entity\Db\Validation
  * @var $cloture            \Application\Entity\Db\Validation|null
  * @var $role               \Application\Acl\Role
  * @var $bottom             boolean
@@ -68,7 +67,15 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
         <p>La saisie du service réalisé a été clôturée
             le <?php echo $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
         <?php if (!$canEditAfter): ?>
-            <p>Vous ne pouvez donc plus modifier <?php echo $isSelf ? 'vos' : 'les' ?> données.</p>
+            <p>strong>Vous ne pouvez donc plus modifier <?php echo $isSelf ? 'vos' : 'les' ?> données.</strong></p>
+        <?php else: ?>
+            <?php if ($cloture->getIntervenant()->hasMiseEnPaiement()): ?>
+                <p><strong>Vous ne pouvez plus modifier le service réalisé car outre la clôture de saisie,
+                        des demandes de mise en paiement et/ou des mises en paiement ont été faites.
+                        Pour pouvoir modifier à nouveau le service, toutes les demandes de mise ne paiement ET toutes les mises en paiement
+                        doivent être supprimées.
+                    </strong></p>
+            <?php endif; ?>
         <?php endif; ?>
         <?php if ($canDecloturer): ?>
             <a

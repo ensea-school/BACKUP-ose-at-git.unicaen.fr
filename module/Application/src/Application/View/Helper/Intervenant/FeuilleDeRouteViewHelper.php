@@ -134,7 +134,7 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
         $res .= $this->renderEtapeLink($etape, [], true);
 
-        $res .= $this->renderEtapeIndicateur($etape->getFranchie(), $detailsLink);
+        $res .= $this->renderEtapeIndicateur($etape, $detailsLink);
         $res .= $detailsRes;
 
         $res .= $tag('li')->close();
@@ -213,8 +213,18 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
 
 
 
-    protected function renderEtapeIndicateur($franchissement, $detailsLink = null)
+    protected function renderEtapeIndicateur($etape, $detailsLink = null)
     {
+
+        $objectif = null;
+        if ($etape instanceof TblWorkflow){
+            $franchissement = $etape->getFranchie();
+            $objectif = $etape->getObjectif();
+        }elseif($etape instanceof WorkflowEtape){
+            $franchissement = $etape->getFranchie();
+            $objectif = $etape->getObjectif();
+        }
+
         $res = '';
         $tag = $this->getView()->tag();
         /* @var $tag TagViewHelper */
@@ -228,11 +238,18 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
                 $content = $tag('span', ['class' => 'text-success glyphicon glyphicon-ok']);
             break;
             case $franchissement == 0:
-                $attrs   = [
-                    'title' => 'À faire',
-                    'class' => 'text-danger pull-right',
-                ];
-                $content = $tag('span', ['class' => 'text-danger glyphicon glyphicon-remove']);
+                if ($objectif === .0){
+                    $attrs   = [
+                        'class' => 'text-danger pull-right',
+                    ];
+                    $content = $tag('span', ['class' => 'text-danger glyphicon glyphicon-remove']);
+                }else{
+                    $attrs   = [
+                        'title' => 'À faire',
+                        'class' => 'text-danger pull-right',
+                    ];
+                    $content = Util::formattedPourcentage($franchissement, true);
+                }
             break;
             default:
                 $attrs   = [
@@ -279,7 +296,7 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
             $res .= $tag('li', $attrs);
             $res .= $tag($spanTag, ['title' => $spanTitle])->text($sEtape->getStructure());
 
-            $res .= $this->renderEtapeIndicateur($sEtape->getFranchie());
+            $res .= $this->renderEtapeIndicateur($sEtape);
 
             $res .= $tag('li')->close();
         }
@@ -304,6 +321,13 @@ class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLoc
         /* @var $etapes TblWorkflow[]  */
         $naDesc = $toArray ? [] : '';
         foreach ($etapes as $etp) {
+            if ($etp->getObjectif() == 0 && $etp->getEtape()->getDescSansObjectif()){
+                if ($toArray){
+                    $naDesc[] = $etp->getEtape()->getDescSansObjectif();
+                }else{
+                    $naDesc .= ' - ' . $etp->getEtape()->getDescSansObjectif() . "\n";
+                }
+            }
             $deps = $etp->getEtapeDeps();
             foreach ($deps as $ed) {
                 /* @var $ed WfDepBloquante */

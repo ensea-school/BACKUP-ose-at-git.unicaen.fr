@@ -67,6 +67,11 @@ class WfEtape
      */
     private $descNonFranchie;
 
+    /**
+     * @var string
+     */
+    private $descSansObjectif;
+
 
 
     /**
@@ -194,6 +199,30 @@ class WfEtape
     }
 
 
+
+    /**
+     * @return mixed
+     */
+    public function getDescSansObjectif()
+    {
+        return $this->descSansObjectif;
+    }
+
+
+
+    /**
+     * @param mixed $descSansObjectif
+     *
+     * @return WfEtape
+     */
+    public function setDescSansObjectif($descSansObjectif)
+    {
+        $this->descSansObjectif = $descSansObjectif;
+
+        return $this;
+    }
+
+    
 
     public function __toString()
     {

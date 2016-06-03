@@ -11,5 +11,6 @@
     <field name="route" type="string" column="ROUTE" length="256" nullable="false"/>
     <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
     <field name="descNonFranchie" type="string" column="DESC_NON_FRANCHIE" length="256" nullable="false"/>
+    <field name="descSansObjectif" type="string" column="DESC_SANS_OBJECTIF" length="256" nullable="true"/>
   </entity>
 </doctrine-mapping>

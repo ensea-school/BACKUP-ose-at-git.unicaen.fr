@@ -285,6 +285,11 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      */
     protected $montantIndemniteFc;
 
+    /**
+     * @var boolean
+     */
+    protected $hasMiseEnPaiement = null;
+
 
 
     /**
@@ -1519,7 +1524,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
 
-
     /**
      * Get indicDiffDossier
      *
@@ -1809,7 +1813,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
             return TypeContrat::CODE_CONTRAT === $contrat->getTypeContrat()->getCode();
         });
 
-        if (count($contrats) > 1){
+        if (count($contrats) > 1) {
             $contrats = $contrats->filter(function ($contrat) {
                 return $contrat->getValidation();
             });
@@ -1884,5 +1888,22 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function getRouteParam()
     {
         return $this->getSourceCode();
+    }
+
+
+
+    /**
+     * @param bool $demande
+     */
+    public function hasMiseEnPaiement($demande = true)
+    {
+        if ($this->hasMiseEnPaiement === null) {
+            $this->hasMiseEnPaiement = $this->getMiseEnPaiementIntervenantStructure()->filter(function (MiseEnPaiementIntervenantStructure $mis) {
+
+                    return $mis->getMiseEnPaiement()->estNonHistorise();
+                })->count() > 0;
+        }
+
+        return $this->hasMiseEnPaiement;
     }
 }

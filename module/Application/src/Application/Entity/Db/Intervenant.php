@@ -38,7 +38,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      * @var string
      */
     protected $supannEmpId;
-    
+
     /**
      * @var \DateTime
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")

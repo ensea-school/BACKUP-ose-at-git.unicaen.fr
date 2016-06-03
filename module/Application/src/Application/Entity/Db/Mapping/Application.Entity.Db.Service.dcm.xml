@@ -50,12 +50,12 @@
       </join-columns>
     </many-to-one>
     <!-- NB: Ajout de relations à la main -->
-    <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="service">
+    <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="service" fetch="EXTRA_LAZY">
         <cascade>
             <cascade-all/>
         </cascade>
     </one-to-many>
-    <one-to-one field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="service" />
-    <one-to-many field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService" mapped-by="service" />
+    <one-to-one field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="service" fetch="EXTRA_LAZY" />
+    <one-to-many field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService" mapped-by="service"  fetch="EXTRA_LAZY" />
   </entity>
 </doctrine-mapping>

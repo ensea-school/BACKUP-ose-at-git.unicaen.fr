@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -62,6 +63,46 @@ class EtatVolumeHoraire implements HistoriqueAwareInterface
     public function getCode()
     {
         return $this->code;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isSaisi()
+    {
+        return $this->getCode() == self::CODE_SAISI;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isValide()
+    {
+        return $this->getCode() == self::CODE_VALIDE;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isContratEdite()
+    {
+        return $this->getCode() == self::CODE_CONTRAT_EDITE;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isContratSigne()
+    {
+        return $this->getCode() == self::CODE_CONTRAT_SIGNE;
     }
 
 

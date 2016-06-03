@@ -43,6 +43,24 @@ class Intervenant extends AbstractEntityService
 
 
     /**
+     * Retourne l'intervenant de l'année précédente
+     *
+     * @param IntervenantEntity $intervenant
+     *
+     * @return IntervenantEntity
+     */
+    public function getPrecedent( IntervenantEntity $intervenant )
+    {
+        return $this->getBySourceCode(
+            $intervenant->getSourceCode(),
+            $this->getServiceContext()->getAnneePrecedente(),
+            false
+        );
+    }
+
+
+
+    /**
      *
      * @param string      $sourceCode
      * @param AnneeEntity $annee

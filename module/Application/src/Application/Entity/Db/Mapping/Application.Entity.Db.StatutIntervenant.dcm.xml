@@ -65,7 +65,7 @@
         </many-to-one>
         <one-to-many field="typeAgrementStatut" target-entity="Application\Entity\Db\TypeAgrementStatut" mapped-by="statut"/>
         <one-to-many field="typePieceJointeStatut" target-entity="Application\Entity\Db\TypePieceJointeStatut"
-                     mapped-by="statut"/>
+                     mapped-by="statut" fetch="EXTRA_LAZY"/>
         <many-to-many field="privilege" target-entity="UnicaenAuth\Entity\Db\Privilege">
             <cascade>
                 <cascade-all/>

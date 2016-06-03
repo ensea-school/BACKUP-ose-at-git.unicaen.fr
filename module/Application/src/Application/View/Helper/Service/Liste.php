@@ -3,8 +3,10 @@
 namespace Application\View\Helper\Service;
 
 use Application\Entity\Db\Intervenant;
+use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
@@ -30,6 +32,8 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     use TypeInterventionAwareTrait;
     use ServiceTypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
+    use IntervenantAwareTrait;
+    use IntervenantProcessusAwareTrait;
 
     /**
      *
@@ -247,33 +251,39 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= '</div>';
             $out .= '</div>';
             $out .= '</div>';
-        } elseif ($this->prevuToPrevu && $this->getServiceService()->getPrevusFromPrevusData($this->prevuToPrevu)) {
-            $attribs = [
-                'class'       => 'btn btn-warning prevu-to-prevu-show',
-                'data-toggle' => 'modal',
-                'data-target' => '#prevu-to-prevu-modal',
-                //'data-event'    => 'service-constatation',
-                //'href'          => $this->getAddUrl(),
-                'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
-            ];
-            $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu '.$this->getServiceContext()->getAnneePrecedente().' <span class="glyphicon glyphicon-arrow-right"></span> Prévu '.$this->getServiceContext()->getAnnee().'</button>&nbsp;';
-            $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
-            $out .= '<div class="modal-dialog modal-md">';
-            $out .= '<div class="modal-content">';
-            $out .= '<div class="modal-header">';
-            $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
-            $out .= '<h4 class="modal-title">Reporter ici le service prévisionnel validé de l\'année précédente.</h4>';
-            $out .= '</div>';
-            $out .= '<div class="modal-body">';
-            $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
-            $out .= '</div>';
-            $out .= '<div class="modal-footer">';
-            $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
-            $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getRouteParam() . '">OK</button>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
-            $out .= '</div>';
+        } elseif ($this->prevuToPrevu){
+            $iPrec = $this->getServiceIntervenant()->getPrecedent($this->prevuToPrevu);
+            $tvh = $this->getServiceTypeVolumeHoraire()->getPrevu();
+            $evh = $this->getServiceEtatVolumeHoraire()->getValide();
+            $hasHeures = $this->getProcessusIntervenant()->hasHeuresEnseignement($iPrec, $tvh, $evh );
+            if ($hasHeures) {
+                $attribs = [
+                    'class'       => 'btn btn-warning prevu-to-prevu-show',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#prevu-to-prevu-modal',
+                    //'data-event'    => 'service-constatation',
+                    //'href'          => $this->getAddUrl(),
+                    'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
+                ];
+                $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu ' . $this->getServiceContext()->getAnneePrecedente() . ' <span class="glyphicon glyphicon-arrow-right"></span> Prévu ' . $this->getServiceContext()->getAnnee() . '</button>&nbsp;';
+                $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+                $out .= '<div class="modal-dialog modal-md">';
+                $out .= '<div class="modal-content">';
+                $out .= '<div class="modal-header">';
+                $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+                $out .= '<h4 class="modal-title">Reporter ici le service prévisionnel validé de l\'année précédente.</h4>';
+                $out .= '</div>';
+                $out .= '<div class="modal-body">';
+                $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
+                $out .= '</div>';
+                $out .= '<div class="modal-footer">';
+                $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+                $out .= '<button type="button" class="btn btn-primary prevu-to-prevu" data-intervenant="' . $this->prevuToPrevu->getRouteParam() . '">OK</button>';
+                $out .= '</div>';
+                $out .= '</div>';
+                $out .= '</div>';
+                $out .= '</div>';
+            }
         }
         $attribs = [
             'class'      => 'ajax-modal services btn btn-primary',

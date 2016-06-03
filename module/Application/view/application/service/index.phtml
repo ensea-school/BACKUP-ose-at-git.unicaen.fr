@@ -7,11 +7,6 @@
 
 $this->headTitle()->append("Enseignements");
 
-$serviceListe = $this->serviceListe( $services ); /* @var $serviceListe \Application\View\Helper\Service\Liste  */
-$serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
-             ->setAddButtonVisibility($canAddService);
-
-    $this->headTitle()->append("Enseignements");
 ?>
 <h1 class="page-header">Enseignements</h1>
 <?php
@@ -24,6 +19,8 @@ if ($this->isAllowed('Information', 'info-only-structure')){
 echo $this->recherche;
 
 if ('afficher' === $action ) {
+    $serviceListe = $this->serviceListe( $services ); /* @var $serviceListe \Application\View\Helper\Service\Liste  */
+    $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
     echo $serviceListe->render();
 }else{
     echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO);

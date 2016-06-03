@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\CampagneSaisie;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 
 /**
  * Description of CampagneSaisieService
@@ -45,22 +45,23 @@ class CampagneSaisieService extends AbstractEntityService
 
 
     /**
-     * @param TypeIntervenant   $typeIntervenant
-     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param TypeIntervenant         $typeIntervenant
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      *
      * @return CampagneSaisie
      */
-    public function getBy(TypeIntervenant $typeIntervenant, TypeVolumeHoraire $typeVolumeHoraire)
+    public function getBy(TypeIntervenant $typeIntervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
     {
         $result = $this->getRepo()->findOneBy([
             'typeIntervenant'   => $typeIntervenant,
             'typeVolumeHoraire' => $typeVolumeHoraire,
         ]);
-        if (!$result){
+        if (!$result) {
             $result = new CampagneSaisie();
             $result->setTypeIntervenant($typeIntervenant);
             $result->setTypeVolumeHoraire($typeVolumeHoraire);
         }
+
         return $result;
     }
 }

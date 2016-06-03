@@ -11,6 +11,7 @@ use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\Http\Request;
@@ -55,6 +56,7 @@ class ServiceController extends AbstractController
     use SaisieAwareTrait;
     use RechercheFormAwareTrait;
     use ValidationEnseignementProcessusAwareTrait;
+    use RegleStructureValidationServiceAwareTrait;
 
 
 
@@ -85,12 +87,7 @@ class ServiceController extends AbstractController
         $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $viewModel        = new \Zend\View\Model\ViewModel();
 
-        $canAddService = true; /* A REVOIR ! ! ! */
-
-        /*if (!$this->isAllowed($serviceProto, Privileges::ENSEIGNEMENT_VISUALISATION)) {
-            $eStr = 'L\'accès au service ' . lcfirst($this->getTypeVolumeHoraire()->getLibelle()) . ' est interdit.';
-            throw new UnAuthorizedException($eStr);
-        }*/
+        $canAddService = Privileges::ENSEIGNEMENT_EDITION;
 
         $action             = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
         $params             = $this->getEvent()->getRouteMatch()->getParams();
@@ -468,6 +465,11 @@ class ServiceController extends AbstractController
 
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', 'PREVU'));
 
+        $rsv = $this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $intervenant);
+        if ($rsv && $rsv->getMessage()){
+            $this->flashMessenger()->addInfoMessage($rsv->getMessage());
+        }
+        
         $title = "Validation des enseignements";
 
         if ($typeVolumeHoraire->isPrevu()) {

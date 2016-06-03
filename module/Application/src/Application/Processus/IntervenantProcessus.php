@@ -1,6 +1,10 @@
 <?php
 
 namespace Application\Processus;
+use Application\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TblService;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextAwareTrait;
 use UnicaenApp\Util;
 
@@ -68,5 +72,37 @@ class IntervenantProcessus extends AbstractProcessus{
         }
 
         return $intervenants;
+    }
+
+
+
+    /**
+     * @param Intervenant       $intervenant
+     * @param TypeVolumeHoraire $typeVolumehoraire
+     * @param EtatVolumeHoraire $etatVolumeHoraire
+     *
+     * @return boolean
+     */
+    public function hasHeuresEnseignement( Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    {
+        $heuresCol = $etatVolumeHoraire->isValide() ? 'valide' : 'nbvh';
+
+        $dql = "
+        SELECT
+          s        
+        FROM
+          ".TblService::class." s
+        WHERE
+            s.intervenant = :intervenant
+            AND s.typeVolumeHoraire = :typeVolumeHoraire
+            AND s.$heuresCol > 0
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql)->setMaxResults(1);
+        $query->setParameters(compact('intervenant','typeVolumeHoraire'));
+
+        $s = $query->getResult();
+
+        return count($s) > 0;
     }
 }

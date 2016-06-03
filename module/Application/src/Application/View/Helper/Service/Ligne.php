@@ -195,11 +195,6 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
     }
 
-    protected function renderElementPedagogique($element)
-    {
-        return $this->getView()->elementPedagogique()->setElementPedagogique($element)->renderLink();
-    }
-
     protected function renderFOAD($element)
     {
         if (! $element) return '';

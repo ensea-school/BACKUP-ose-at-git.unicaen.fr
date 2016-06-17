@@ -307,6 +307,16 @@ UPDATE INTERVENANT SET SUPANN_EMP_ID = SOURCE_CODE;
 UPDATE PERSONNEL SET CODE = SOURCE_CODE;
 UPDATE PERSONNEL SET SUPANN_EMP_ID = SOURCE_CODE;
 
+update formule_resultat set
+
+  type_intervenant_code = (SELECT ti.code FROM type_intervenant ti JOIN statut_intervenant si ON si.type_intervenant_id = ti.id JOIN intervenant i ON i.statut_id = si.id WHERE i.id = formule_resultat.intervenant_id),
+  type_volume_horaire_code = (SELECT tvh.code FROM type_volume_horaire tvh WHERE tvh.id = formule_resultat.type_volume_horaire_id),
+  etat_volume_horaire_code = (SELECT evh.code FROM etat_volume_horaire evh WHERE evh.id = formule_resultat.etat_volume_horaire_id)
+;
+
+
+
+--penser à la table des indicateurs ! !
 
 -- ********************************************************************* --
 -- *          à faire APRÈS avoir mis à jour le code source            * --

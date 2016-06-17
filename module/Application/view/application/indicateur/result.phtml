@@ -1,13 +1,47 @@
-<?php 
-use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
-/* @var $indicateurImpl AbstractIntervenantResultIndicateurImpl */
+<?php
+
+/**
+ * @var $this       \Application\View\Renderer\PhpRenderer
+ * @var $indicateur \Application\Entity\Db\Indicateur
+ */
+
+$this->headTitle()->append((string)$this->indicateur);
+
+$result = $indicateur->getResult();
+
+$url = $indicateur->getRoute();
+
 ?>
+<h1 class="page-header"><?php echo $indicateur->getLibelle() ?>
+    <small><?php echo $indicateur ?></small>
+</h1>
 
-<?php $this->headTitle()->append((string)$this->indicateur) ?>
-<h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?> <small><?php echo $this->indicateur ?></small></h1>
+<div style="margin:1em">
 
-<?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl, 'displaySendMailLink' => true]); ?>
-
-
-<!-- Inclusion du script de l'éditeur WYSIWYG (vers HTML) : http://www.tinymce.com -->
-<script type="text/javascript" src="<?php echo $this->basePath() . '/js/tinymce/tinymce.min.js' ?>"></script>
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Composante</th>
+            <th>Intervenant</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($result as $r): ?>
+            <tr>
+                <th>&nbsp;</th>
+                <td><?php echo $r->getStructure() ?></td>
+                <td>
+                    <a href="<?php echo $this->url($indicateur->getRoute(), $r->getUrlParams()) ?>">
+                        <?php echo $r->getIntervenant() ?>
+                    </a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <a class="btn btn-primary" href="<?php echo $this->url('indicateur'); ?>">
+        <span class="glyphicon glyphicon-backward"></span>
+        Retour à la liste des indicateurs
+    </a>
+</div>

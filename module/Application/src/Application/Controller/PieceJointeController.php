@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
+use Application\Exception\DbException;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\PieceJointeAwareTrait;
 use Zend\Http\Response;
@@ -16,7 +17,6 @@ use Application\Service\Traits\ContextAwareTrait;
 /**
  * Description of UploadController
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class PieceJointeController extends AbstractController
 {
@@ -152,7 +152,12 @@ class PieceJointeController extends AbstractController
         $this->initFilters();
 
         $pj = $this->getEvent()->getParam('pieceJointe');
-        $this->getServicePieceJointe()->valider($pj);
+//        try {
+            $this->getServicePieceJointe()->valider($pj);
+ //           $this->flashMessenger()->addSuccessMessage('Validation effectuée');
+ //       }catch(\Exception $e){
+ //           $this->flashMessenger()->addErrorMessage( DbException::translate($e)->getMessage() );
+ //       }
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('application/piece-jointe/validation');

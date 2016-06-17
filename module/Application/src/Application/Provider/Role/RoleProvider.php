@@ -147,6 +147,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 $role->setPeutChangerStructure(true);
             }
             /* @var $role Role */
+            $role->setDbRole( $dbRole );
             $role->setPersonnel($personnel);
             $role->setPerimetre($dbRole->getPerimetre());
 
@@ -165,6 +166,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     if (!isset($roles[$affRoleId])) {
                         $affRoleLibelle = $dbRole->getLibelle() . ' (' . $structure->getLibelleCourt() . ')';
                         $affRole        = new \Application\Acl\Role($affRoleId, $roleId, $affRoleLibelle);
+                        $affRole->setDbRole( $dbRole );
                         $affRole->setPersonnel($personnel);
                         $affRole->setStructure($structure);
                         $roles[$affRoleId] = $affRole;

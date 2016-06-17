@@ -234,6 +234,7 @@ $main = [
             '115_' => 'js/droits.js',
             '116_' => 'js/piece-jointe.js',
             '117_' => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
+            '118_' => 'js/indicateur.js',
         ],
         'stylesheets'    => [
             '010_jquery-ui'           => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.css',

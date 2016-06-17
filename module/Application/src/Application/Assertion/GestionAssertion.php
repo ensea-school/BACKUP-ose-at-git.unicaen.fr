@@ -15,20 +15,36 @@ use Application\Acl\Role;
  */
 class GestionAssertion extends AbstractAssertion
 {
+    /**
+     * @var boolean[]
+     */
+    protected $cache=[];
+
+
 
     protected function assertController($controller, $action = null, $privilege = null)
     {
-        $role        = $this->getRole();
+        $role = $this->getRole();
 
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
+        $key = $controller.'.'.$action.'>'.$privilege;
 
-        if ($role->getIntervenant()) return false; // les intervenants n'ont pour le moment pas accès au menu Gestion
-
-        return true;
+        if (!isset($this->cache[$key])){
+            $this->cache[$key] = $this->asserts([
+                $role instanceof Role,
+                $this->assertIntervenant($role, $privilege)
+            ]);
+        }
+        return $this->cache[$key];
     }
 
+
+
+    protected function assertIntervenant( Role $role, $privilege )
+    {
+        return $this->asserts([
+            !$privilege || $role->hasPrivilege($privilege), // pareil si le rôle ne possède pas le privilège adéquat
+            !$role->getIntervenant() // les intervenants n'ont pour le moment pas accès au menu Gestion
+        ]);
+    }
 
 }

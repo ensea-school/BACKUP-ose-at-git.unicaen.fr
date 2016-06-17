@@ -2,85 +2,65 @@
 
 namespace Application\Controller;
 
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\VIndicModifDossier;
 use Application\Service\Indicateur as IndicateurService;
-use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Application\Entity\Db\Indicateur;
+use Application\Service\Traits\AffectationAwareTrait;
+use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
-/**
- * Opérations autour des notifications.
- *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- */
+
 class IndicateurController extends AbstractController
 {
     use \Application\Service\Traits\IndicateurServiceAwareTrait;
     use \Application\Service\Traits\IntervenantAwareTrait;
     use \Application\Service\Traits\ContextAwareTrait;
+    use NotificationIndicateurAwareTrait;
+    use AffectationAwareTrait;
+
 
 
     /**
      * Liste des indicateurs.
-     * 
+     *
      * @return ViewModel
      */
     public function indexAction()
     {
-        $indicateurs     = $this->getServiceIndicateur()->getList();
-        $indicateursImpl = $this->getServiceIndicateur()->getIndicateursImpl($indicateurs, $this->getStructure());
-        $serviceNotif    = $this->getServiceNotificationIndicateur();
-        $personnel       = $this->getServiceContext()->getSelectedIdentityRole()->getPersonnel();
-        
-        $qb = $serviceNotif->finderByPersonnel($personnel);
-        if ($this->getStructure()) {
-            $qb = $serviceNotif->finderByStructure($this->getStructure(), $qb);
+        $indicateurs   = $this->getServiceIndicateur()->getList();
+        $notifications = $this->getServiceNotificationIndicateur()->getList(
+            $this->getServiceNotificationIndicateur()->finderByRole()
+        );
+
+        $abonnements = [];
+        foreach ($notifications as $notification) {
+            $abonnements[$notification->getIndicateur()->getId()] = $notification;
         }
-        $abonnements = $abonnementsInfos = [];
-        foreach ($qb->getQuery()->getResult() as $notificationIndicateur) {
-            $indicateur = $notificationIndicateur->getIndicateur();
-            $abonnements[$indicateur->getId()] = $notificationIndicateur;
-            $abonnementsInfos[$indicateur->getId()] = $notificationIndicateur->getExtraInfos();
-        }
-        
-        $viewModel = new ViewModel();
-        $viewModel->setVariables([
-            'indicateurs'      => $indicateurs,
-            'indicateursImpl'  => $indicateursImpl,
-            'abonnementUrl'    => $this->url()->fromRoute('indicateur/abonner', ['indicateur' => '_indicateur_']),
-            'abonnements'      => $abonnements,
-            'abonnementsInfos' => $abonnementsInfos,
-        ]);
-        
-        return $viewModel;
+
+        return compact('indicateurs', 'abonnements');
     }
-    
-    /**
-     * Affichage du résultat complet renvoyé par un indicateur.
-     * 
-     * @return ViewModel
-     */
+
+
+
     public function resultAction()
     {
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $indicateur = $this->getEvent()->getParam('indicateur');
+        /* @var $indicateur Indicateur */
         $indicateur->setServiceIndicateur($this->getServiceIndicateur());
-        $structure  = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
-        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure);
-        
-        $viewModel = new ViewModel();
-        $viewModel->setVariables([
-            'indicateur'     => $indicateur,
-            'indicateurImpl' => $indicateurImpl,
-        ]);
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
-        return $viewModel;
+        /* @var $structure Structure */
+
+        return compact('indicateur', 'structure');
     }
+
+
 
     /**
      * Affichage du résultat complet renvoyé par un indicateur.
@@ -94,14 +74,16 @@ class IndicateurController extends AbstractController
         $indicateur->setServiceIndicateur($this->getServiceIndicateur());
         /* @var $indicateur Indicateur */
         $indicateur->setServiceIndicateur($this->getServiceIndicateur());
-        $structure  = $role->getStructure() ?: $this->getEvent()->getParam('structure');
+        $structure = $role->getStructure() ?: $this->getEvent()->getParam('structure');
 
         return compact('indicateur');
     }
 
+
+
     /**
      * Affichage d'un item du résultat renvoyé par l'indicateur "DonneesPersoDiffImport".
-     * 
+     *
      * @return ViewModel
      */
     public function resultItemDonneesPersoDiffImportAction()
@@ -115,6 +97,8 @@ class IndicateurController extends AbstractController
 
         return $viewModel;
     }
+
+
 
     /**
      * Affichage d'un item du résultat renvoyé par l'indicateur "DonneesPersoModif".
@@ -145,6 +129,8 @@ class IndicateurController extends AbstractController
 
         return $viewModel;
     }
+
+
 
     /**
      * Suppression de l'historique des modifications sur les données personnelles.
@@ -177,9 +163,11 @@ class IndicateurController extends AbstractController
         return $viewModel;
     }
 
+
+
     /**
      * Réponse aux requêtes AJAX d'abonnement de l'utilisateur connecté aux notifications concernant un indicateur.
-     * 
+     *
      * @return JsonModel
      */
     public function abonnerAction()
@@ -187,80 +175,63 @@ class IndicateurController extends AbstractController
         if (!$this->getRequest()->isXmlHttpRequest()) {
             return $this->redirect()->toRoute('home');
         }
-        
-        $indicateur   = $this->context()->mandatory()->indicateurFromRoute();
-        $frequence    = $this->params()->fromPost('abonnement');
-        $personnel    = $this->getServiceContext()->getSelectedIdentityRole()->getPersonnel();
+
+        $indicateur = $this->getEvent()->getParam('indicateur');
+        $frequence  = $this->params()->fromPost('notification');
+        $inHome     = $this->params()->fromPost('in-home') == '1';
+
         $serviceNotif = $this->getServiceNotificationIndicateur();
-        $status       = 'success';
-        
-        $notificationIndicateur = null;
+
         try {
-            $notificationIndicateur = $serviceNotif->abonner($personnel, $indicateur, $frequence, $this->getStructure());
-            $message = $serviceNotif->getMessage(PHP_EOL);
+            $notificationIndicateur = $serviceNotif->abonner($indicateur, $frequence, $inHome);
+            $status                 = 'success';
+            $message                = 'Demande prise en compte';
+            if (!$notificationIndicateur) {
+                $message .= ' (Abonnement supprimé)';
+            }
+        } catch (Exception $e) {
+            $notificationIndicateur = null;
+            $status                 = 'error';
+            $message                = "Abonnement impossible: {$e->getMessage()}";
         }
-        catch (Exception $e) {
-            $status  = 'error';
-            $message = "Abonnement de $personnel impossible: {$e->getMessage()}";
-        }
-        
+
         return new JsonModel([
             'status'  => $status,
             'message' => $message,
             'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
         ]);
     }
-    
+
+
+
     /**
      * Indicateurs auxquels est abonné l'utilisateur (un Personnel) spécifié dans la requête.
-     * 
+     *
      * @return ViewModel
      */
     public function abonnementsAction()
     {
-        $personnel    = $this->context()->mandatory()->personnelFromRoute();
-        $serviceNotif = $this->getServiceNotificationIndicateur();
-        
-        $qb = $serviceNotif->finderByPersonnel($personnel);
-        $qb
-                ->join("ni.indicateur", "i")
-                ->orderBy("i.type, i.ordre");
-        $abonnements = $abonnementsInfos = $indicateurs = [];
-        foreach ($qb->getQuery()->getResult() as $notificationIndicateur) {
-            $indicateur = $notificationIndicateur->getIndicateur();
-            $indicateur->setServiceIndicateur($this->getServiceIndicateur());
-            $indicateurs[$indicateur->getId()] = $indicateur;
-            $abonnements[$indicateur->getId()] = $notificationIndicateur;
-            $abonnementsInfos[$indicateur->getId()] = $notificationIndicateur->getExtraInfos();
+        $sab = $this->getServiceNotificationIndicateur();
+        $saf = $this->getServiceAffectation();
+        $sid = $this->getServiceIndicateur();
+
+        $qb = $sab->finderByRole(); // filtre selon le rôle courant
+        $sab->join($sid, $qb, 'indicateur', true);
+        $sab->finderByInHome(true, $qb);
+
+        $sab->join($saf, $qb, 'affectation');
+        $saf->finderByHistorique($qb);
+
+        $sid->orderBy($qb);
+
+        $notifications = $sab->getList($qb);
+
+        $indicateurs = [];
+        foreach( $notifications as $notification ){
+            $indicateurs[] = $notification->getIndicateur()->setServiceIndicateur($sid);
         }
-        
-        $indicateursImpl = $this->getServiceIndicateur()->getIndicateursImpl($indicateurs, $this->getStructure());
-        
-        $viewModel = new ViewModel();
-        $viewModel->setVariables([
-            'indicateurs'      => $indicateurs,
-            'indicateursImpl'  => $indicateursImpl,
-            'abonnements'      => $abonnements,
-            'abonnementsInfos' => $abonnementsInfos,
-        ]);
-        
-        return $viewModel;
+
+        return compact('indicateurs');
     }
-    
-    /**
-     * @return StructureEntity
-     */
-    private function getStructure()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        return $role->getStructure();
-    }
-    
-    /**
-     * @return NotificationIndicateurService
-     */
-    private function getServiceNotificationIndicateur()
-    {
-        return $this->getServiceLocator()->get('NotificationIndicateurService');
-    }
+
 }

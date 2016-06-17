@@ -55,7 +55,6 @@
             <cascade-all/>
         </cascade>
     </one-to-many>
-    <one-to-one field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="service" fetch="EXTRA_LAZY" />
     <one-to-many field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService" mapped-by="service"  fetch="EXTRA_LAZY" />
   </entity>
 </doctrine-mapping>

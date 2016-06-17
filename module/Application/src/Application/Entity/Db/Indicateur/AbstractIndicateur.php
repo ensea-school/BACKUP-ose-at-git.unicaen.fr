@@ -2,8 +2,11 @@
 
 namespace Application\Entity\Db\Indicateur;
 
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Indicateur;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -15,6 +18,11 @@ abstract class AbstractIndicateur
      * @var integer
      */
     protected $id;
+
+    /**
+     * @var Annee
+     */
+    protected $annee;
 
     /**
      * @var Intervenant
@@ -39,6 +47,16 @@ abstract class AbstractIndicateur
     }
 
 
+
+    /**
+     * @return Annee
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
+    }
+
+    
 
     /**
      * @return Intervenant
@@ -66,7 +84,7 @@ abstract class AbstractIndicateur
     public function getUrlParams()
     {
         return [
-            'intervenant'  => $this->getIntervenant()->getRouteParam(),
+            'intervenant' => $this->getIntervenant()->getRouteParam(),
         ];
     }
 
@@ -80,5 +98,16 @@ abstract class AbstractIndicateur
     public function getUrlOptions()
     {
         return ['force_canonical' => true];
+    }
+
+
+
+    /**
+     * @param QueryBuilder $qb
+     *
+     */
+    public static function appendQueryBuilder(QueryBuilder $qb)
+    {
+
     }
 }

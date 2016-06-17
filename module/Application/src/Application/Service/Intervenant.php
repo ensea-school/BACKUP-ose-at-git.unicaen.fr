@@ -135,24 +135,6 @@ class Intervenant extends AbstractEntityService
 
 
     /**
-     * Retourne la liste des intervenants
-     *
-     * @param QueryBuilder|null $queryBuilder
-     * @param string|null       $alias
-     *
-     * @return \Application\Entity\Db\Intervenant[]
-     */
-    public function getList(QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.nomUsuel, $alias.prenom");
-
-        return parent::getList($qb, $alias);
-    }
-
-
-
-    /**
      * Sauvegarde une entité
      *
      * @param IntervenantEntity $entity
@@ -170,6 +152,22 @@ class Intervenant extends AbstractEntityService
             );
         }
         return parent::save($entity);
+    }
+
+
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb->addOrderBy("$alias.nomUsuel, $alias.prenom");
+
+        return $qb;
     }
 
 

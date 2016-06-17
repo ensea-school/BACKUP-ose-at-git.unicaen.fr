@@ -44,6 +44,9 @@ $.widget("ose.pieceJointe", {
             }
 
             that.onValidationChange( tpj, isValider );
+        }).fail(function( jqXHR ) {
+            alert('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.');
+            console.log(jqXHR);
         });
     },
 

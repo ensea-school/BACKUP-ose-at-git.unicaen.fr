@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use Application\Service\Traits\IndicateurServiceAwareTrait;
 
 /**
@@ -42,6 +43,30 @@ class Indicateur
      */
     private $ordre;
 
+    /**
+     * @var string
+     */
+    private $libelleSingulier;
+
+    /**
+     * @var string
+     */
+    private $libellePluriel;
+
+    /**
+     * @var string
+     */
+    private $route;
+
+    /**
+     * @var boolean
+     */
+    private $distinct;
+
+    /**
+     * @var boolean
+     */
+    private $notStructure;
 
 
 
@@ -188,6 +213,142 @@ class Indicateur
     public function getOrdre()
     {
         return $this->ordre;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibelleSingulier()
+    {
+        return $this->libelleSingulier;
+    }
+
+
+
+    /**
+     * @param string $libelleSingulier
+     *
+     * @return Indicateur
+     */
+    public function setLibelleSingulier($libelleSingulier)
+    {
+        $this->libelleSingulier = $libelleSingulier;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibellePluriel()
+    {
+        return $this->libellePluriel;
+    }
+
+
+
+    /**
+     * @param string $libellePluriel
+     *
+     * @return Indicateur
+     */
+    public function setLibellePluriel($libellePluriel)
+    {
+        $this->libellePluriel = $libellePluriel;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibelle()
+    {
+        $count = $this->getCount();
+
+        if ($count > 1) {
+            return sprintf($this->getLibellePluriel(), $count);
+        } else {
+            return sprintf($this->getLibelleSingulier(), $count);
+        }
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+
+
+    /**
+     * @param string $route
+     *
+     * @return Indicateur
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getDistinct()
+    {
+        return $this->distinct;
+    }
+
+
+
+    /**
+     * @param boolean $distinct
+     *
+     * @return Indicateur
+     */
+    public function setDistinct($distinct)
+    {
+        $this->distinct = $distinct;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return boolean
+     */
+    public function getNotStructure()
+    {
+        return $this->notStructure;
+    }
+
+
+
+    /**
+     * @param boolean $notStructure
+     *
+     * @return Indicateur
+     */
+    public function setNotStructure($notStructure)
+    {
+        $this->notStructure = $notStructure;
+
+        return $this;
     }
 
 

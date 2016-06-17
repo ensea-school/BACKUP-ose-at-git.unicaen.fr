@@ -118,6 +118,5 @@
             </join-table>
         </many-to-many>
         <one-to-many field="centreCoutEp" target-entity="Application\Entity\Db\CentreCoutEp" mapped-by="elementPedagogique"/>
-        <one-to-one field="effectifs" target-entity="Application\Entity\Db\Effectifs" mapped-by="elementPedagogique"/>
     </entity>
 </doctrine-mapping>

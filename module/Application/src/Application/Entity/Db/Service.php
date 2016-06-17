@@ -54,11 +54,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     protected $typeVolumeHoraire;
 
     /**
-     * @var FormuleService
-     */
-    private $formuleService;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatService;
@@ -318,18 +313,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
         $this->typeVolumeHoraire = $typeVolumeHoraire;
 
         return $this;
-    }
-
-
-
-    /**
-     * Get formuleService
-     *
-     * @return FormuleService
-     */
-    public function getFormuleService()
-    {
-        return $this->formuleService;
     }
 
 

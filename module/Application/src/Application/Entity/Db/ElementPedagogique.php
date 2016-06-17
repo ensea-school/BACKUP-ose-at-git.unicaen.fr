@@ -9,8 +9,12 @@ use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\Traits\PeriodeAwareTrait;
 use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManagerAware;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -18,7 +22,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface, ImportAwareInterface
+class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
 {
     use HistoriqueAwareTrait;
     use DisciplineAwareTrait;
@@ -27,6 +31,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     use PeriodeAwareTrait;
     use EtapeAwareTrait;
     use ImportAwareTrait;
+    use EntityManagerAwareTrait;
 
     /**
      * @var string
@@ -130,7 +135,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     /**
      * @var \Application\Entity\Db\Effectifs
      */
-    private $effectifs;
+    private $effectifs = false;
 
 
 
@@ -659,28 +664,18 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
 
     /**
-     * Set effectifs
-     *
-     * @param \Application\Entity\Db\Effectifs $effectifs
-     *
-     * @return ElementPedagogique
-     */
-    public function setEffectifs(\Application\Entity\Db\Effectifs $effectifs = null)
-    {
-        $this->effectifs = $effectifs;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get effectifs
      *
      * @return \Application\Entity\Db\Effectifs
      */
     public function getEffectifs()
     {
+        if (false === $this->effectifs){
+            $this->effectifs = $this->getEntityManager()->getRepository(Effectifs::class)->findOneBy([
+                'elementPedagogique' => $this,
+            ]);
+        }
+
         return $this->effectifs;
     }
 
@@ -694,6 +689,28 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     public function getResourceId()
     {
         return 'ElementPedagogique';
+    }
+
+
+
+    /**
+     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
+     *
+     * @param ObjectManager $objectManager
+     * @param ClassMetadata $classMetadata
+     *
+     * @return void
+     */
+    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
+    {
+        $this->setEntityManager($objectManager);
+    }
+
+
+
+    function __sleep()
+    {
+        return [];
     }
 
 }

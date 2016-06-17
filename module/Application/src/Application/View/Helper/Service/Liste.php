@@ -255,7 +255,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $iPrec = $this->getServiceIntervenant()->getPrecedent($this->prevuToPrevu);
             $tvh = $this->getServiceTypeVolumeHoraire()->getPrevu();
             $evh = $this->getServiceEtatVolumeHoraire()->getValide();
-            $hasHeures = $this->getProcessusIntervenant()->hasHeuresEnseignement($iPrec, $tvh, $evh );
+            $hasHeures = $iPrec ? $this->getProcessusIntervenant()->hasHeuresEnseignement($iPrec, $tvh, $evh ) : false;
             if ($hasHeures) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',

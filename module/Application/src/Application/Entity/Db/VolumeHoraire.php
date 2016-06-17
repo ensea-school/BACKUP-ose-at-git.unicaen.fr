@@ -71,11 +71,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
     protected $remove = false;
 
     /**
-     * @var FormuleVolumeHoraire
-     */
-    private $formuleVolumeHoraire;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatVolumeHoraire;
@@ -415,18 +410,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
     public function getEtatVolumeHoraire()
     {
         return $this->etatVolumeHoraire->first();
-    }
-
-
-
-    /**
-     * Get formuleVolumeHoraire
-     *
-     * @return FormuleVolumeHoraire
-     */
-    public function getFormuleVolumeHoraire()
-    {
-        return $this->formuleVolumeHoraire;
     }
 
 

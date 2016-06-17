@@ -2,28 +2,33 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Entity\Db\Personnel as PersonnelEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Service\Traits\AffectationAwareTrait;
 use LogicException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use UnicaenApp\Traits\MessageAwareInterface;
-use UnicaenApp\Traits\MessageAwareTrait;
 
 /**
- * 
+ * Description of WfEtapeDepService
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ *
+ * @method NotificationIndicateurEntity get($id)
+ * @method NotificationIndicateurEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method NotificationIndicateurEntity newEntity()
+ *
  */
 class NotificationIndicateur extends AbstractEntityService
 {
-    use MessageAwareTrait;
-    
+    use AffectationAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -43,67 +48,63 @@ class NotificationIndicateur extends AbstractEntityService
     {
         return 'ni';
     }
-    
+
+
+
+    public function finderByRole( $role=null, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $affectation = $this->getServiceAffectation()->getByRole($role);
+        $this->finderByAffectation( $affectation, $qb, $alias );
+
+        return $qb;
+    }
+
+
+
     /**
      * Abonne un personnel à un indicateur.
      * 
-     * @param PersonnelEntity $personnel
      * @param IndicateurEntity $indicateur
      * @param string $frequence
-     * @param StructureEntity $structure
      * @return NotificationIndicateurEntity
      */
-    public function abonner(PersonnelEntity $personnel, IndicateurEntity $indicateur, $frequence, StructureEntity $structure = null)
+    public function abonner(IndicateurEntity $indicateur, $frequence=null, $inHome=false, Affectation $affectation = null)
     {
         if ($frequence && !array_key_exists($frequence, NotificationIndicateurEntity::$frequences)) {
             throw new LogicException("Fréquence spécifiée inconnue: $frequence.");
         }
-        
-        // recherche d'abonnement existant
-        $qb = $this->finderByPersonnel($personnel);
-        $this->finderByIndicateur($indicateur, $qb);
-        if ($structure) {
-            $this->finderByStructure($structure, $qb);
+
+        if (!$affectation){
+            $affectation = $this->getServiceAffectation()->getByRole();
         }
-        $abonnement = $qb->getQuery()->getOneOrNullResult();
-        
-        $structureStr = $structure ? "pour la structure $structure" : null;
-        
-        // nouvel abonnement
-        if (null === $abonnement) {
-            $abonnement = new NotificationIndicateurEntity();
-            $abonnement
-                    ->setPersonnel($personnel)
-                    ->setIndicateur($indicateur)
-                    ->setFrequence($frequence)
-                    ->setStructure($structure)
-                    ->setDateAbonnement(new DateTime());
-            $this->getEntityManager()->persist($abonnement);
-            $this->getEntityManager()->flush($abonnement);
-            $message = "Abonnement de $personnel ({$personnel->getEmail()}) $structureStr enregistré avec succès.";
-        }
-        // une frequence spécifiée = modification d'un abonnement
-        elseif ($frequence) {
-            if (!array_key_exists($frequence, NotificationIndicateurEntity::$frequences)) {
-                throw new LogicException("Fréquence spécifiée inconnue: '$frequence'.");
+
+        $notification = $this->getRepo()->findOneBy([
+            'indicateur' => $indicateur,
+            'affectation' => $affectation,
+        ]);
+
+        if ($frequence || $inHome){
+            if (!$notification){
+                $notification = $this->newEntity();
+                $notification->setAffectation($affectation);
+                $notification->setIndicateur($indicateur);
             }
-            $abonnement
-                    ->setFrequence($frequence)
-                    ->setDateAbonnement(new DateTime());
-            $this->getEntityManager()->flush($abonnement);
-            $message = "Abonnement de $personnel ({$personnel->getEmail()}) $structureStr modifié avec succès.";
+
+            $notification->setFrequence($frequence);
+            $notification->setInHome($inHome);
+            $notification->setDateAbonnement(new DateTime());
+
+            $this->save( $notification );
+        }else{
+            if ($notification){
+                $this->delete($notification);
+                $notification = null;
+            }
         }
-        // aucune frequence spécifiée = désabonnement
-        else {
-            $this->getEntityManager()->remove($abonnement);
-            $message = "Abonnement de $personnel $structureStr supprimé avec succès.";
-            $this->getEntityManager()->flush($abonnement);
-            $abonnement = null;
-        }
-            
-        $this->addMessage($message, MessageAwareInterface::SUCCESS);
-        
-        return $abonnement;
+
+        return $notification;
     }
     
     /**
@@ -144,185 +145,5 @@ class NotificationIndicateur extends AbstractEntityService
     public function createQueryBuilder()
     {
         return new NotificationIndicateurQueryBuilder($this->getEntityManager());
-    }
-}
-
-
-
-
-
-//--------------------------------------------------------------------------------------
-//
-// Expérimentation : expressivité du query builder.
-//
-//--------------------------------------------------------------------------------------
-
-class NotificationIndicateurQueryBuilder extends QueryBuilder
-{
-    protected $rootAlias = "ni";
-
-    public function __construct(EntityManagerInterface $em, $rootAlias = null)
-    {
-        parent::__construct($em);
-
-        $this->rootAlias = $rootAlias ?: $this->rootAlias;
-        $this->initWithDefault();
-    }
-
-    public function initWithDefault()
-    {
-        $this
-            ->from(NotificationIndicateurEntity::class, $this->rootAlias)
-            ->select("$this->rootAlias, p, i, s")
-            ->join("$this->rootAlias.personnel", "p")
-            ->join("$this->rootAlias.indicateur", "i", Join::WITH, "i.enabled = 1")
-            ->leftJoin("$this->rootAlias.structure", "s")
-            ->orderBy("p.nomUsuel, i.type, i.ordre");
-
-        return $this;
-    }
-
-    public function andWhereIndicateurIs(IndicateurEntity $indicateur)
-    {
-        return $this->applyExpr(new AndWhereIndicateurIs($indicateur, "i")); // alias si pas de jointure: "$this->rootAlias.indicateur"
-    }
-
-    public function andWhereIndicateurIsEnabled($enabled = true)
-    {
-        return $this->applyExpr(new AndWhereIndicateurEnabled($enabled, "i")); // NB: l'alias "$this->rootAlias.indicateur" est impossible ici
-    }
-
-    public function andWherePersonnelIs(PersonnelEntity $personnel)
-    {
-        return $this->applyExpr(new AndWherePersonnelIs($personnel, "p")); // alias si pas de jointure: "$this->rootAlias.personnel"
-    }
-
-    public function andWhereStructureIs(StructureEntity $structure)
-    {
-        return $this->applyExpr(new AndWhereStructurelIs($structure, "s"));
-    }
-
-    public function andWhereNotificationNecessaire($notificationNecessaire = true)
-    {
-        return $this->applyExpr(new AndWhereNotificationNecessaire($notificationNecessaire, "ni"));
-    }
-
-    private function applyExpr(AndWhereExpr $expr)
-    {
-        $expr->applyToQueryBuilder($this);
-        return $this;
-    }
-}
-
-class AndWherePersonnelIs extends AndWhereExpr
-{
-    public function __construct(PersonnelEntity $entity, $alias)
-    {
-        parent::__construct($alias);
-
-        $this->where      = "$alias = :personnel";
-        $this->parameters = ['personnel' => $entity];
-    }
-
-    protected function getJoinSuggestion($rootAlias)
-    {
-        return sprintf(
-            "Peut-être avez-vous oublié de faire la jointure suivante: '->join(\"%s.personnel\", \"%s\")'.",
-            $rootAlias,
-            $this->alias
-        );
-    }
-}
-
-class AndWhereStructurelIs extends AndWhereExpr
-{
-    public function __construct(StructureEntity $entity, $alias)
-    {
-        parent::__construct($alias);
-
-        $this->where      = "$alias = :structure";
-        $this->parameters = ['structure' => $entity];
-    }
-}
-
-class AndWhereNotificationNecessaire extends AndWhereExpr
-{
-    public function __construct($notificationNecessaire = true, $alias)
-    {
-        parent::__construct($alias);
-
-        $this->where = $notificationNecessaire ?
-            "$alias.dateDernNotif IS NULL OR $alias.dateDernNotif + $alias.frequence/(24*60*60) <= :now" :
-            "$alias.dateDernNotif IS NOT NULL AND $alias.dateDernNotif + $alias.frequence/(24*60*60) > :now" ;
-        $this->parameters = ['now' => new DateTime()];
-    }
-}
-
-
-
-
-
-
-class AndWhereIndicateurIs extends AndWhereExpr
-{
-    public function __construct(IndicateurEntity $entity, $alias)
-    {
-        parent::__construct($alias);
-
-        $this->where      = "$alias = :indicateur";
-        $this->parameters = ['indicateur' => $entity];
-    }
-}
-
-class AndWhereIndicateurEnabled extends AndWhereExpr
-{
-    public function __construct($enabled = true, $alias)
-    {
-        parent::__construct($alias);
-
-        $this->where      = "$alias.enabled = :enabled";
-        $this->parameters = ['enabled' => (bool) $enabled];
-    }
-}
-
-
-
-
-
-
-abstract class AndWhereExpr
-{
-    protected $alias;
-    protected $where;
-    protected $parameters;
-
-    public function __construct($alias)
-    {
-        $this->alias = $alias;
-    }
-
-    public static function instance(array $args = [])
-    {
-        $expr = new static($args['alias']);
-    }
-
-    public function applyToQueryBuilder(QueryBuilder $qb)
-    {
-        if (! in_array($this->alias, $qb->getAllAliases())) {
-            throw new \RuntimeException("L'alias $this->alias est inconnu du QueryBuilder. " . $this->getJoinSuggestion($qb->getRootAlias()));
-        }
-
-        $qb->andWhere($this->where);
-
-        foreach ((array) $this->parameters as $name => $value) {
-            $qb->setParameter($name, $value);
-        }
-
-        return $this;
-    }
-
-    protected function getJoinSuggestion($rootAlias)
-    {
-        return "";
     }
 }

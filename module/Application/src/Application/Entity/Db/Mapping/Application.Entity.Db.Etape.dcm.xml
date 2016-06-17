@@ -53,7 +53,7 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="etape" />
-    <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique" mapped-by="etape" />
+    <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique" mapped-by="etape" fetch="EXTRA_LAZY" />
     <many-to-many field="niveauFormation" target-entity="Application\Entity\Db\NiveauFormation">
         <join-table name="V_ETAPE_NIVEAU_FORMATION">
             <join-columns>

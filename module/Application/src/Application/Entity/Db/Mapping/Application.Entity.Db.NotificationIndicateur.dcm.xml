@@ -5,6 +5,7 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="frequence" type="integer" column="FREQUENCE" nullable="false"/>
+    <field name="inHome" type="boolean" column="IN_HOME" nullable="false"/>
     <field name="dateAbonnement" type="datetime" column="DATE_ABONNEMENT" nullable="false"/>
     <field name="dateDernNotif" type="datetime" column="DATE_DERN_NOTIF" nullable="true"/>
     <many-to-one field="indicateur" target-entity="Application\Entity\Db\Indicateur">
@@ -12,14 +13,9 @@
         <join-column name="INDICATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
+    <many-to-one field="affectation" target-entity="Application\Entity\Db\Affectation">
       <join-columns>
-        <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        <join-column name="AFFECTATION_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

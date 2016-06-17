@@ -6,17 +6,23 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
-use Application\Entity\Db\Indicateur as IndicateurEntity;
+use Application\Entity\Db\Indicateur;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Service\Indicateur\AbstractIndicateurImpl;
 
 
 /**
  * Description of IndicateurService
  *
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ *
+ * @method Indicateur get($id)
+ * @method Indicateur newEntity()
+ *
  */
 class IndicateurService extends AbstractEntityService
 {
+    protected $countCache = [];
+
     use IntervenantAwareTrait;
 
 
@@ -28,7 +34,7 @@ class IndicateurService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return IndicateurEntity::class;
+        return Indicateur::class;
     }
 
 
@@ -46,40 +52,31 @@ class IndicateurService extends AbstractEntityService
 
 
     /**
-     * @param integer|IndicateurEntity $indicateur Indicateur concerné
-     *
-     * @return int
-     */
-    private function getIndicateurNumero($indicateur)
-    {
-        if ($indicateur instanceof IndicateurEntity) {
-            return (integer)$indicateur->getNumero();
-        } else {
-            return (integer)$indicateur;
-        }
-    }
-
-
-
-    /**
-     * @param integer|IndicateurEntity $indicateur Indicateur concerné
-     * @param null                     $structure
+     * @param Indicateur $indicateur Indicateur concerné
+     * @param null       $structure
      *
      * @return QueryBuilder
      */
-    private function getBaseQueryBuilder($indicateur, $structure = null)
+    private function getBaseQueryBuilder(Indicateur $indicateur, $structure = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->from(\Application\Entity\Db\Indicateur\Indicateur::class . $this->getIndicateurNumero($indicateur), 'indicateur');
+        $qb->from(\Application\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero(), 'indicateur');
 
         /* Filtrage par intervenant */
-        $qb->join('indicateur.intervenant', 'intervenant');
-        $this->getServiceIntervenant()->finderByHistorique($qb, 'intervenant');
-        $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, 'intervenant');
+        //$qb->join('indicateur.intervenant', 'intervenant');
 
-        /* Filtreage par structure, si nécessaire */
+        //$this->getServiceIntervenant()->finderByHistorique($qb, 'intervenant');
+        //$this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, 'intervenant');
+
+        $qb->andWhere('indicateur.annee = :annee')->setParameter('annee', $this->getServiceContext()->getAnnee());
+
+        /* Filtrage par structure, si nécessaire */
+        if (!$structure) {
+            $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
+        }
         if ($structure) {
-            $qb->andWhere('indicateur.structure = ' . $structure->getId());
+            $sign = $indicateur->getNotStructure() ? '<>' : '=';
+            $qb->andWhere('indicateur.structure IS NULL OR indicateur.structure ' . $sign . ' ' . $structure->getId());
         }
 
         return $qb;
@@ -87,81 +84,54 @@ class IndicateurService extends AbstractEntityService
 
 
 
-    private function getQueryBuilder($indicateur, StructureEntity $structure = null)
+    /**
+     * @param integer|Indicateur   $indicateur Indicateur concerné
+     * @param StructureEntity|null $structure
+     */
+    public function getCount(Indicateur $indicateur, StructureEntity $structure = null)
+    {
+        if (!isset($this->countCache[$indicateur->getNumero()])) {
+            $qb = $this->getBaseQueryBuilder($indicateur, $structure);
+            $qb->addSelect('COUNT(' . ($indicateur->getDistinct() ? 'DISTINCT ' : '') . 'indicateur.intervenant) result');
+
+            $this->countCache[$indicateur->getNumero()] = (integer)$qb->getQuery()->getResult()[0]['result'];
+        }
+
+        return $this->countCache[$indicateur->getNumero()];
+    }
+
+
+
+    /**
+     * @param Indicateur $indicateur Indicateur concerné
+     *
+     * @return Indicateur\AbstractIndicateur[]
+     */
+    public function getResult(Indicateur $indicateur, StructureEntity $structure = null)
     {
         $qb = $this->getBaseQueryBuilder($indicateur, $structure);
+
+        $qb->join('indicateur.intervenant', 'intervenant');
+        $qb->leftJoin('intervenant.dossier', 'dossier');
 
         $qb->addSelect('indicateur');
-        $qb->addSelect('intervenant');
+        $qb->addSelect('partial intervenant.{id, nomUsuel, prenom, email, sourceCode}');
+        $qb->addSelect('partial dossier.{id}');
 
-        /* Pour l'optimisation!! */
-        $methodName = 'appendQueryBuilder' . $this->getIndicateurNumero($indicateur);
-        if (method_exists($this, $methodName)) {
-            $this->$methodName($qb);
-        }
+        $qb->addSelect('partial structure.{id, libelleCourt, libelleLong}');
+        $qb->leftJoin('indicateur.structure', 'structure');
 
-        return $qb;
-    }
+        $indicateurClass = \Application\Entity\Db\Indicateur\Indicateur::class . $indicateur->getNumero();
+        $indicateurClass::appendQueryBuilder($qb);
 
-
-
-    private function appendQueryBuilder210(QueryBuilder $qb)
-    {
-        $qb->addSelect('structure');
-        $qb->join('indicateur.structure', 'structure');
-
-        $qb->addSelect('typeAgrement');
-        $qb->join('indicateur.typeAgrement', 'typeAgrement');
-
+        $qb->addOrderBy('structure.libelleCourt');
         $this->getServiceIntervenant()->orderBy($qb, 'intervenant');
-    }
-
-
-
-    /**
-     * @param integer|IndicateurEntity $indicateur Indicateur concerné
-     * @param StructureEntity|null     $structure
-     */
-    public function getCount($indicateur, StructureEntity $structure = null)
-    {
-        /* COMPATIBILITE ANCIEN SYSTEME */
-        if (! $indicateur instanceof IndicateurEntity){
-            $indic = $this->getByNumero($indicateur);
-            $numero = $indicateur;
-        }else{
-            $indic = $indicateur;
-            $numero = $indicateur->getNumero();
-        }
-        if (! class_exists(\Application\Entity\Db\Indicateur\Indicateur::class.$numero)){
-            return $this->getIndicateurImpl($indic,$structure)->getResultCount();
-        }
-        /* FIN COMPATIBILITE ANCIEN SYSTEME */
-
-        $qb = $this->getBaseQueryBuilder($indicateur, $structure);
-        $qb->addSelect('COUNT(intervenant) result');
-
-        return (integer)$qb->getQuery()->getResult()[0]['result'];
-    }
-
-
-
-    /**
-     * @param integer|IndicateurEntity $indicateur Indicateur concerné
-     *
-     * @return IndicateurEntity\AbstractIndicateur[]
-     */
-    public function getResult($indicateur, StructureEntity $structure = null)
-    {
-        $qb = $this->getQueryBuilder($indicateur, $structure);
-
 
         $entities = $qb->getQuery()->execute();
+        /* @var $entities Indicateur\AbstractIndicateur[] */
         $result = [];
-//        $entityClass = $this->getEntityClass();
         foreach ($entities as $entity) {
-//            if ($entity instanceof $entityClass) {
-                $result[$entity->getId()] = $entity;
-//            }
+            $result[$entity->getId()] = $entity;
         }
 
         return $result;
@@ -181,6 +151,7 @@ class IndicateurService extends AbstractEntityService
 
         $indicateur = $this->getRepo()->findOneBy(['numero' => $numero]);
         $indicateur->setServiceIndicateur($this);
+
         return $indicateur;
     }
 
@@ -198,6 +169,7 @@ class IndicateurService extends AbstractEntityService
 
         $indicateur = $this->getRepo()->findOneBy(['code' => $code]);
         $indicateur->setServiceIndicateur($this);
+
         return $indicateur;
     }
 
@@ -224,7 +196,7 @@ class IndicateurService extends AbstractEntityService
      * @param QueryBuilder $qb
      * @param string|null  $alias
      *
-     * @return \Application\Entity\Db\Indicateur[]
+     * @return Indicateur[]
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
@@ -233,52 +205,13 @@ class IndicateurService extends AbstractEntityService
         $qb->andWhere("$alias.enabled = 1");
 
         $list = parent::getList($qb, $alias);
-        /* @var $list IndicateurEntity[] */
+        /* @var $list Indicateur[] */
 
-        foreach( $list as $indicateur ){
+        foreach ($list as $indicateur) {
             $indicateur->setServiceIndicateur($this);
         }
 
         return $list;
-    }
-
-
-
-    /**
-     *
-     * @param IndicateurEntity $indicateur
-     * @param StructureEntity  $structure
-     *
-     * @return AbstractIndicateurImpl
-     */
-    public function getIndicateurImpl(IndicateurEntity $indicateur, StructureEntity $structure = null)
-    {
-        /** @var AbstractIndicateurImpl $impl */
-        $impl = clone $this->getServiceLocator()->get($indicateur->getCode());
-        $impl
-            ->setIndicateurEntity($indicateur)
-            ->setStructure($structure);
-
-        return $impl;
-    }
-
-
-
-    /**
-     *
-     * @param IndicateurEntity[] $indicateurs
-     * @param StructureEntity    $structure
-     *
-     * @return AbstractIndicateurImpl[]
-     */
-    public function getIndicateursImpl($indicateurs, StructureEntity $structure = null)
-    {
-        $impls = [];
-        foreach ($indicateurs as $indicateur) {
-            $impls[$indicateur->getId()] = $this->getIndicateurImpl($indicateur, $structure);
-        }
-
-        return $impls;
     }
 
 

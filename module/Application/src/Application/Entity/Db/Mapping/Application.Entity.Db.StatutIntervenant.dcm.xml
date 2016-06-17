@@ -38,6 +38,7 @@
         <field name="peutCloturerSaisie" type="boolean" column="PEUT_CLOTURER_SAISIE" nullable="false"/>
         <field name="peutSaisirMotifNonPaiement" type="boolean" column="PEUT_SAISIR_MOTIF_NON_PAIEMENT" nullable="false"/>
         <field name="temAtv" type="boolean" column="TEM_ATV" nullable="false"/>
+        <field name="temBiatss" type="boolean" column="TEM_BIATSS" nullable="false"/>
         <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
             <join-columns>
                 <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>

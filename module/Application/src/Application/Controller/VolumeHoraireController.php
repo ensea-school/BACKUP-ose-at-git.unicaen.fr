@@ -34,6 +34,8 @@ class VolumeHoraireController extends AbstractController
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
+
+        $service->setTypeVolumeHoraire($typeVolumeHoraire);
         $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
         $volumeHoraireListe = $service->getVolumeHoraireListe()->setTypeVolumehoraire( $typeVolumeHoraire );

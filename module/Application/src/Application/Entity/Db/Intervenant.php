@@ -5,8 +5,12 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\DisciplineAwareTrait;
 use Application\Entity\Db\Traits\DossierAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManagerAware;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Form\Annotation;
@@ -21,13 +25,14 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface
+class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware
 {
     use HistoriqueAwareTrait;
     use GradeAwareTrait;
     use DisciplineAwareTrait;
     use DossierAwareTrait;
     use ImportAwareTrait;
+    use EntityManagerAwareTrait;
 
     /**
      * @var string
@@ -1898,12 +1903,37 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function hasMiseEnPaiement($demande = true)
     {
         if ($this->hasMiseEnPaiement === null) {
-            $this->hasMiseEnPaiement = $this->getMiseEnPaiementIntervenantStructure()->filter(function (MiseEnPaiementIntervenantStructure $mis) {
+            $id = (int)$this->getId();
+            $heures = $demande ? 'heures_demandees' : 'heures_payees';
 
-                    return $mis->getMiseEnPaiement()->estNonHistorise();
-                })->count() > 0;
+            $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
+                  ."WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
+
+            $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
+
+            $this->hasMiseEnPaiement = $res[0]['RES'] == 1;
         }
 
         return $this->hasMiseEnPaiement;
+    }
+
+
+
+    /**
+     * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
+     *
+     * @param ObjectManager $objectManager
+     * @param ClassMetadata $classMetadata
+     *
+     * @return void
+     */
+    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata)
+    {
+        $this->setEntityManager($objectManager);
+    }
+
+    function __sleep()
+    {
+        return [];
     }
 }

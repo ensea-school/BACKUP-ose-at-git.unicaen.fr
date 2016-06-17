@@ -39,8 +39,6 @@ class ServiceProcessus extends AbstractProcessus
      */
     public function getServices($intervenant, $recherche)
     {
-        //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         if ($role->getIntervenant()) {
             $intervenant = $role->getIntervenant();
@@ -62,9 +60,6 @@ class ServiceProcessus extends AbstractProcessus
             ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
             ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures'] );
 
-//        $intervenantService
-//            ->leftJoin( 'applicationUtilisateur',       $qb, 'utilisateur',         true );
-
         $elementPedagogiqueService
             ->leftJoin( $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
             ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
@@ -72,10 +67,9 @@ class ServiceProcessus extends AbstractProcessus
             ->leftJoin( 'applicationTypeIntervention',  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
 
         $volumeHoraireService
-            ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] );
+            ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] )
+            ->leftJoin( 'applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraire',   ['id','code','libelle','ordre'] );
 
-        $volumeHoraireService->leftJoin( 'applicationEtatVolumeHoraire',    $qb, 'etatVolumeHoraire',    ['id','code','libelle','ordre'] );
-        $volumeHoraireService->leftJoin( 'ApplicationFormuleVolumeHoraire', $qb, 'formuleVolumeHoraire', ['id'] );
         //@formatter:on
 
         $service->finderByContext($qb);

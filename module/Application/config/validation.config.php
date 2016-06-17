@@ -3,7 +3,6 @@
 namespace Application;
 
 use Application\Entity\Db\WfEtape;
-use UnicaenAuth\Guard\PrivilegeController;
 
 return [
     'router' => [

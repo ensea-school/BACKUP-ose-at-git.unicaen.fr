@@ -28,7 +28,10 @@ class Role extends NamedRole
      */
     protected $privileges = [];
 
-
+    /**
+     * @var \Application\Entity\Db\Role
+     */
+    protected $dbRole;
 
     const ROLE_ID = 'role';
 
@@ -41,7 +44,31 @@ class Role extends NamedRole
 
 
 
-    public function initPrivileges( array $privileges )
+    /**
+     * @return \Application\Entity\Db\Role
+     */
+    public function getDbRole()
+    {
+        return $this->dbRole;
+    }
+
+
+
+    /**
+     * @param \Application\Entity\Db\Role $dbRole
+     *
+     * @return Role
+     */
+    public function setDbRole($dbRole)
+    {
+        $this->dbRole = $dbRole;
+
+        return $this;
+    }
+
+
+
+    public function initPrivileges(array $privileges)
     {
         $this->privileges = $privileges;
     }
@@ -55,11 +82,12 @@ class Role extends NamedRole
 
 
 
-    public function hasPrivilege( $privilege )
+    public function hasPrivilege($privilege)
     {
-        if ($privilege instanceof Privilege){
+        if ($privilege instanceof Privilege) {
             $privilege = $privilege->getFullCode();
         }
+
         return in_array($privilege, $this->privileges);
     }
 

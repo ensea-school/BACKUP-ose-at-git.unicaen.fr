@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Acl\Role;
 use Application\Service\Traits\SourceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Affectation as EntityAffectation;
@@ -54,6 +55,34 @@ class Affectation extends AbstractEntityService
         }
         return parent::save($entity);
     }
+
+
+
+    /**
+     * @param Role|null $role
+     *
+     * @return null|EntityAffectation
+     */
+    public function getByRole( Role $role = null )
+    {
+        if (!$role){
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
+        }
+
+        if (!$role->getPersonnel()) return null;
+
+        $this->getEntityManager()->getFilters()->enable('historique')->init([
+            EntityAffectation::class,
+        ]);
+
+        return $this->getRepo()->findOneBy([
+            'personnel' => $role->getPersonnel(),
+            'role'      => $role->getDbRole(),
+            'structure' => $role->getStructure(),
+        ]);
+    }
+
+
 
     /**
      * 

@@ -280,15 +280,16 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertCloture(Role $role, Intervenant $intervenant)
     {
-        if (!$role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES)) { // si on peut éditer toujours alors pas la peine de tester...
-            $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-            if ($cloture->getId() !== null) return false; // pas de saisie si c'est clôturé
-        }else{
-            if ($intervenant->hasMiseEnPaiement()){
-                return false;
+        if ($intervenant->getStatut()->getPeutCloturerSaisie()) {
+            if (!$role->hasPrivilege(Privileges::CLOTURE_EDITION_SERVICES)) { // si on peut éditer toujours alors pas la peine de tester...
+                $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
+                if ($cloture->getId() !== null) return false; // pas de saisie si c'est clôturé
+            } else {
+                if ($intervenant->hasMiseEnPaiement()) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
 

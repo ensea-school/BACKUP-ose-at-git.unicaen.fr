@@ -32,7 +32,7 @@ class IntervenantEmailFormatter extends AbstractFilter
             $intervenant = $value;
             $email = $intervenant->getEmailPerso(true);
             if (! $email) {
-                $this->intervenantsWithNoEmail[$intervenant->getSourceCode()] = $intervenant;
+                $this->intervenantsWithNoEmail[$intervenant->getCode()] = $intervenant;
             }
 
             $emails = [

@@ -5,14 +5,11 @@ namespace Application\Service;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
-use Application\Entity\Db\Personnel as PersonnelEntity;
-use Application\Entity\Db\Structure as StructureEntity;
 use Application\Service\Traits\AffectationAwareTrait;
+use Application\Service\Traits\IndicateurServiceAwareTrait;
 use LogicException;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -28,6 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 class NotificationIndicateur extends AbstractEntityService
 {
     use AffectationAwareTrait;
+    use IndicateurServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -106,7 +104,9 @@ class NotificationIndicateur extends AbstractEntityService
 
         return $notification;
     }
-    
+
+
+
     /**
      * Recherche des notifications à faire concernant les indicateurs.
      * 
@@ -115,35 +115,35 @@ class NotificationIndicateur extends AbstractEntityService
      * - l'âge de la dernière notification est supérieur à la fréquence de notification.
      * 
      * @param bool $force Si true, toutes les notifications sont considérées comme devant être faites
-     * @return QueryBuilder
+     * @return \Application\Entity\Db\NotificationIndicateur[]
      */
-    public function findNotificationsIndicateurs($force = false)
+    public function getNotifications($force = false)
     {
-        $now = new DateTime();
-        $now->setTime($now->format('H'), 0, 0); // raz minutes et secondes
-        
         $qb = $this->getRepo()->createQueryBuilder("ni")
-                ->select("ni, p, i, s")
-                ->join("ni.personnel", "p")
-                ->join("ni.indicateur", "i", Join::WITH, "i.enabled = 1")
-                ->leftJoin("ni.structure", "s")
-                ->orderBy("p.nomUsuel, i.type, i.ordre");
-        
-        if (!$force) {
-            $qb
-                    ->andWhere("ni.dateDernNotif IS NULL OR ni.dateDernNotif + ni.frequence/(24*60*60) <= :now")
-                    ->setParameter('now', $now);
+            ->select("ni, i, a, p, s")
+            ->join('ni.indicateur', 'i')
+            ->join('ni.affectation', 'a')
+            ->join('a.personnel', 'p')
+            ->leftJoin('a.structure', 's')
+
+            ->andWhere('ni.frequence IS NOT NULL')
+            ->andWhere('i.enabled = true')
+            ->andWhere('1 = compriseEntre( a.histoCreation, a.histoDestruction )')
+        ;
+
+        if (!$force){
+            $now = new \DateTime();
+            $now->setTime($now->format('H'), 0, 0); // raz minutes et secondes
+            $qb->andWhere("ni.dateDernNotif IS NULL OR ni.dateDernNotif + ni.frequence/(24*60*60) <= :now")
+                ->setParameter('now', $now);
         }
-        
-        return $qb->getQuery()->getResult();
+
+        $nis = $qb->getQuery()->getResult();
+        /* @var $nis \Application\Entity\Db\NotificationIndicateur[] */
+        foreach( $nis as $ni ){
+            $ni->getIndicateur()->setServiceIndicateur( $this->getServiceIndicateur() );
+        }
+        return $nis;
     }
 
-
-    /**
-     * @return NotificationIndicateurQueryBuilder
-     */
-    public function createQueryBuilder()
-    {
-        return new NotificationIndicateurQueryBuilder($this->getEntityManager());
-    }
 }

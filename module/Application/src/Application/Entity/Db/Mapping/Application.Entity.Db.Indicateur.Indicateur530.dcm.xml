@@ -6,6 +6,9 @@
     <entity name="Application\Entity\Db\Indicateur\Indicateur530" table="V_INDICATEUR_530" read-only="true">
         <id name="id" type="integer" column="ID"/>
 
+        <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+        <field name="plafond" type="float" column="PLAFOND" precision="126" scale="0" nullable="false"/>
+
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-column name="ANNEE_ID" referenced-column-name="ID"/>
         </many-to-one>

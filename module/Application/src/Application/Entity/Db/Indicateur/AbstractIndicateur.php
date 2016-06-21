@@ -103,6 +103,18 @@ abstract class AbstractIndicateur
 
 
     /**
+     * Retourne les détails concernant l'indicateur
+     * 
+     * @return string|null
+     */
+    public function getDetails()
+    {
+        return null;
+    }
+    
+
+
+    /**
      * @param QueryBuilder $qb
      *
      */

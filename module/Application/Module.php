@@ -129,7 +129,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
     {
         return [
             "Notifications",
-            'notifier indicateurs [--force] --requestUriHost= [--requestUriScheme=]' => "Notification par mail des personnes abonnées à des indicateurs",
+            'notifier indicateurs [--force]' => "Notification par mail des personnes abonnées à des indicateurs",
             ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
             ['--requestUriHost', "Obligatoire", "Exemples: \"/ose.unicaen.fr\", \"/test.unicaen.fr/ose\"."],
             ['--requestUriScheme', "Facultatif", "Exemples: \"http\" (par défaut), \"https\"."],
@@ -140,6 +140,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
     public function getConsoleBanner(ConsoleAdapterInterface $console)
     {
-        return "OSE Application Module";
+        return "OSE";
     }
 }

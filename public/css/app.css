@@ -410,24 +410,3 @@ td .alert {
 .panel .panel-heading-h3 {
     padding: 0px;
 }
-
-
-
-.indicateurs table td.numero {
-    width: 5em;
-    text-align: center;
-}
-
-.indicateurs table th.numero {
-    width: 5em;
-    text-align: center;
-}
-
-.indicateurs .notification {
-    width: 12em;
-}
-
-.indicateurs .page-accueil {
-    width: 2em;
-    text-align:center;
-}

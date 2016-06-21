@@ -7,73 +7,86 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router' => [
         'routes' => [
-            'indicateur' => [
-                'type'    => 'Literal',
-                'options' => [
+            'indicateur'   => [
+                'type'          => 'Literal',
+                'options'       => [
                     'route'    => '/gestion/indicateur',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Indicateur',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Indicateur',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    'result' => [
+                'child_routes'  => [
+                    'result'                  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/result/:indicateur[/structure/:structure]',
+                            'route'       => '/result/:indicateur[/structure/:structure]',
                             'constraints' => [
                                 'indicateur' => '[0-9]*',
                                 'structure'  => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'result',
                             ],
                         ],
                     ],
-                    'details' => [
+                    'details'                 => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:indicateur[/structure/:structure]',
+                            'route'       => '/:indicateur[/structure/:structure]',
                             'constraints' => [
                                 'indicateur' => '[0-9]*',
                                 'structure'  => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'details',
                             ],
                         ],
                     ],
-                    'abonner' => [
+                    'abonner'                 => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/abonner/:indicateur',
+                            'route'       => '/abonner/:indicateur',
                             'constraints' => [
                                 'indicateur' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'abonner',
                             ],
                         ],
                     ],
-                    'abonnements' => [
+                    'abonnements'             => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/abonnements/:personnel',
+                            'route'       => '/abonnements/:personnel',
                             'constraints' => [
                                 'personnel' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'abonnements',
                             ],
                         ],
                     ],
-                    'result-item' => [
+                    'envoi-mail-intervenants' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/result-item/:action/:intervenant',
+                            'route'       => '/envoi-mail-intervenants/:indicateur',
                             'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'indicateur' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'envoi-mail-intervenants',
+                            ],
+                        ],
+                    ],
+
+                    'result-item'                           => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/result-item/:action/:intervenant',
+                            'constraints' => [
+                                'action'      => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant' => '[0-9]*',
                             ],
                         ],
@@ -81,11 +94,11 @@ return [
                     'purger-indicateur-donnees-perso-modif' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/purger-indicateur-donnees-perso-modif/:intervenant',
+                            'route'       => '/purger-indicateur-donnees-perso-modif/:intervenant',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'purger-indicateur-donnees-perso-modif',
                             ],
                         ],
@@ -94,19 +107,36 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+
+    'console' => [
+        'router' => [
+            'routes' => [
+                'notifier-indicateurs' => [
+                    'options' => [
+                        'route'    => 'notifier indicateurs [--force] [--requestUriHost= [--requestUriScheme=]',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Indicateur',
+                            'action'     => 'envoi-notifications',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
                     'gestion' => [
                         'pages' => [
                             'indicateurs' => [
-                                'label'    => "Indicateurs",
-                                'icon'     => 'fa fa-line-chart',
+                                'label'        => "Indicateurs",
+                                'icon'         => 'fa fa-line-chart',
                                 'border-color' => '#E5272E',
-                                'title'    => "Indicateurs",
-                                'route'    => 'indicateur',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\Indicateur','index'),
+                                'title'        => "Indicateurs",
+                                'route'        => 'indicateur',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Indicateur', 'index'),
                             ],
                         ],
                     ],
@@ -114,34 +144,40 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
+    'bjyauthorize'    => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => [
                         'index',
-                        'result','details',
+                        'result', 'details',
                         'abonner',
                         'abonnements',
                         'result-item-donnees-perso-diff-import',
                         'result-item-donnees-perso-modif',
-                        'purger-indicateur-donnees-perso-modif'
+                        'purger-indicateur-donnees-perso-modif',
                     ],
+                    'roles'      => ['user'],
+                ],
+                [
+                    'controller' => 'Application\Controller\Indicateur',
+                    'action'     => ['envoi-mail-intervenants'],
                     'roles'      => ['user'],
                 ],
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Application\Controller\Indicateur' => Controller\IndicateurController::class,
+            'Application\Controller\Indicateur'   => Controller\IndicateurController::class,
         ],
     ],
     'service_manager' => [
-        'invokables'   => [
-            'applicationIndicateur'                    => Service\IndicateurService::class,
-            'NotificationIndicateurService'            => Service\NotificationIndicateur::class,
+        'invokables' => [
+            'processusIndicateur'           => Processus\IndicateurProcessus::class,
+            'applicationIndicateur'         => Service\IndicateurService::class,
+            'NotificationIndicateurService' => Service\NotificationIndicateur::class,
         ],
     ],
 ];

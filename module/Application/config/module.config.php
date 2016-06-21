@@ -235,6 +235,7 @@ $main = [
             '116_' => 'js/piece-jointe.js',
             '117_' => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
             '118_' => 'js/indicateur.js',
+            '900_' => 'js/tinymce/tinymce.min.js',
         ],
         'stylesheets'    => [
             '010_jquery-ui'           => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.css',
@@ -252,6 +253,7 @@ $main = [
             '119_'                    => 'css/droits.css',
             '120_'                    => 'css/callout.css',
             '121_'                    => 'css/piece-jointe.css',
+            '122_'                    => 'css/indicateur.css',
         ],
     ],
 ];
@@ -274,7 +276,6 @@ return array_merge_recursive(
     include 'formule.config.php',
     include 'workflow.config.php',
     include 'indicateur.config.php',
-    include 'notification.config.php',
     include 'paiement.config.php',
     include 'log.config.php',
     include 'pilotage.config.php',

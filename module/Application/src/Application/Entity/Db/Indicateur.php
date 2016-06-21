@@ -56,6 +56,11 @@ class Indicateur
     /**
      * @var string
      */
+    private $message;
+
+    /**
+     * @var string
+     */
     private $route;
 
     /**
@@ -67,6 +72,16 @@ class Indicateur
      * @var boolean
      */
     private $notStructure;
+
+    /**
+     * @var array
+     */
+    private $count = [];
+
+    /**
+     * @var array
+     */
+    private $result = [];
 
 
 
@@ -284,6 +299,30 @@ class Indicateur
     /**
      * @return string
      */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+
+
+    /**
+     * @param string $message
+     *
+     * @return Indicateur
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
     public function getRoute()
     {
         return $this->route;
@@ -354,20 +393,34 @@ class Indicateur
 
 
     /**
+     * @param Structure|null $structure
+     *
      * @return int
      */
-    public function getCount()
+    public function getCount(Structure $structure = null)
     {
-        return $this->getServiceIndicateur()->getCount($this);
+        $id = $structure ? $structure->getId() : 0;
+        if (!isset($this->count[$id])) {
+            $this->count[$id] = $this->getServiceIndicateur()->getCount($this, $structure);
+        }
+
+        return $this->count[$id];
     }
 
 
 
     /**
+     * @param Structure|null $structure
+     *
      * @return Indicateur\AbstractIndicateur[]
      */
-    public function getResult()
+    public function getResult(Structure $structure = null)
     {
-        return $this->getServiceIndicateur()->getResult($this);
+        $id = $structure ? $structure->getId() : 0;
+        if (!isset($this->result[$id])) {
+            $this->result[$id] = $this->getServiceIndicateur()->getResult($this, $structure);
+        }
+
+        return $this->result[$id];
     }
 }

@@ -3,10 +3,15 @@
 $env = getenv('APPLICATION_ENV') ?: 'production';
 
 $modules = [
-    'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
+    'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM',
     'UnicaenApp', 'UnicaenAuth', 'UnicaenImport',
-    'Application' //, 'Import',
+    'Application'
 ];
+
+if (!\Zend\Console\Console::isConsole()){
+    array_unshift($modules, 'BjyAuthorize'); // ne charge BjyAuthorize QUE si on n'est pas en mode console
+}
+
 
 $moduleListenerOptions = [
     'config_glob_paths'    => [

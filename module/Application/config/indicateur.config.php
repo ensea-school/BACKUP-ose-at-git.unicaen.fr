@@ -8,7 +8,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router' => [
         'routes' => [
-            'indicateur'   => [
+            'indicateur' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/gestion/indicateur',
@@ -47,8 +47,8 @@ return [
                     'abonnements'             => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/abonnements',
-                            'defaults'    => [
+                            'route'    => '/abonnements',
+                            'defaults' => [
                                 'action' => 'abonnements',
                             ],
                         ],
@@ -112,12 +112,12 @@ return [
                 [
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => ['index', 'result', 'abonnements'],
-                    'privileges'      => [Privileges::INDICATEUR_VISUALISATION],
+                    'privileges' => [Privileges::INDICATEUR_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => ['abonner'],
-                    'privileges'      => [Privileges::INDICATEUR_ABONNEMENT],
+                    'privileges' => [Privileges::INDICATEUR_ABONNEMENT],
                 ],
                 [
                     'controller' => 'Application\Controller\Indicateur',
@@ -129,7 +129,7 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\Indicateur'   => Controller\IndicateurController::class,
+            'Application\Controller\Indicateur' => Controller\IndicateurController::class,
         ],
     ],
     'service_manager' => [

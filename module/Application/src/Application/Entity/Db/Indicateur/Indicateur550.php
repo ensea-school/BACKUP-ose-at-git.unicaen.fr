@@ -4,7 +4,7 @@ namespace Application\Entity\Db\Indicateur;
 
 use UnicaenApp\Util;
 
-class Indicateur530 extends AbstractIndicateur
+class Indicateur550 extends AbstractIndicateur
 {
     /**
      * @var float

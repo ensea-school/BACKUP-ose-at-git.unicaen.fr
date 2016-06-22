@@ -115,6 +115,7 @@ return [
                         Privileges::PILOTAGE_VISUALISATION,
                         Privileges::BUDGET_VISUALISATION,
                         Privileges::DISCIPLINE_GESTION,
+                        Privileges::INDICATEUR_VISUALISATION,
                     ],
                     'assertion'  => 'AssertionGestion',
                 ],

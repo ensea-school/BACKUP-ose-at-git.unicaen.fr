@@ -52,6 +52,24 @@ return [
                                     ],
                                 ],
                             ],
+                            'differences' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'       => '/differences',
+                                    'defaults'    => [
+                                        'action' => 'differences',
+                                    ],
+                                ],
+                            ],
+                            'purger-differences' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'       => '/purger-differences',
+                                    'defaults'    => [
+                                        'action' => 'purger-differences',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -289,6 +307,18 @@ return [
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => ['index'],
                     'privileges' => [Privileges::DOSSIER_VISUALISATION],
+                    'assertion'  => 'assertionDossierPieces',
+                ],
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['differences'],
+                    'privileges' => [Privileges::DOSSIER_DIFFERENCES],
+                    'assertion'  => 'assertionDossierPieces',
+                ],
+                [
+                    'controller' => 'Application\Controller\Dossier',
+                    'action'     => ['purger-differences'],
+                    'privileges' => [Privileges::DOSSIER_PURGER_DIFFERENCES],
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [

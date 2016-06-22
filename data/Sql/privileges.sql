@@ -25,7 +25,7 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'piece-justificative' c, 'telechargement' p, 'Téléchargement' l FROM dual
+      SELECT 'indicateur' c, 'envoi-mail-intervenants' p, 'Mail aux intervenants' l FROM dual
 
 ) t1;
 
@@ -43,6 +43,7 @@ order by
 select * from categorie_privilege order by ordre;
 
 
+--delete from privilege where code = 'desabonnement';
 
 
 update categorie_privilege set ordre = 10 WHERE code = 'odf';

@@ -13,11 +13,11 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
 
-    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="vIndicModifDossier">
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
           <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
-    </one-to-one>
+    </many-to-one>
 
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>

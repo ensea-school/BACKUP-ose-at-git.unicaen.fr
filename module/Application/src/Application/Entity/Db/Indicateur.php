@@ -11,8 +11,6 @@ class Indicateur
 {
     use IndicateurServiceAwareTrait;
 
-    const CODE_DONNEES_PERSO_MODIF = 'DonneesPersoModif';
-
     /**
      * @var integer
      */
@@ -22,11 +20,6 @@ class Indicateur
      * @var integer
      */
     private $numero;
-
-    /**
-     * @var string
-     */
-    private $code;
 
     /**
      * @var boolean
@@ -132,18 +125,6 @@ class Indicateur
     public function getNumero()
     {
         return $this->numero;
-    }
-
-
-
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
     }
 
 

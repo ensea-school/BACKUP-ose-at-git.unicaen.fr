@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Constants;
+use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Exception\DbException;
@@ -13,6 +14,7 @@ use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Doctrine\ORM\Query\Expr\Join;
 use RuntimeException;
 use NumberFormatter;
 use UnicaenApp\Util;
@@ -66,8 +68,8 @@ class DossierController extends AbstractController
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $iPrec       = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         /* @var $intervenant Intervenant */
-        $validation  = $this->getServiceDossier()->getValidation($intervenant);
-        $form        = $this->getFormIntervenantDossier();
+        $validation = $this->getServiceDossier()->getValidation($intervenant);
+        $form       = $this->getFormIntervenantDossier();
 
         if (!($dossier = $intervenant->getDossier()) || !$dossier->estNonHistorise()) {
             $dossier = $this->getServiceDossier()->newEntity()->fromIntervenant($intervenant);
@@ -123,7 +125,6 @@ class DossierController extends AbstractController
         }
 
 
-
         /* Action d'enregistrement du dossier */
         if ($this->params()->fromPost('enregistrer') && $canEdit && $this->getRequest()->isPost()) {
             if ($validation) {
@@ -153,6 +154,7 @@ class DossierController extends AbstractController
                         return $this->redirect()->toUrl($url);
                     }
                 }
+
                 return $this->redirect()->toUrl($this->url()->fromRoute('intervenant/dossier', [], [], true));
             }
         }
@@ -215,6 +217,64 @@ class DossierController extends AbstractController
         }
 
         return new MessengerViewModel;
+    }
+
+
+
+    public function differencesAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $dql = "
+        SELECT
+          vi
+        FROM
+          " . IndicModifDossier::class . " vi
+        WHERE
+          1=compriseEntre(vi.histoCreation, vi.histoDestruction)
+          AND vi.intervenant = :intervenant
+        ORDER BY
+          vi.attrName, vi.histoCreation
+        ";
+
+        // refetch intervenant avec jointures
+        $query = $this->em()->createQuery($dql);
+        $query->setParameter('intervenant', $intervenant);
+
+        $differences = $query->getResult();
+        $title       = "Historique des modifications d'informations importantes dans les données personnelles";
+
+        return compact('title', 'intervenant', 'differences');
+    }
+
+
+
+    public function purgerDifferencesAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+        
+        if ($this->getRequest()->isPost()) {
+            try {
+                $utilisateur = $this->identity()['db'];
+                $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
+
+                $this->flashMessenger()->addSuccessMessage(sprintf(
+                    "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
+                    $intervenant));
+
+                
+
+                $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            }
+
+            return new MessengerViewModel();
+        } else {
+            return compact('intervenant');
+        }
     }
 
 

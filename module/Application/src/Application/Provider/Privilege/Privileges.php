@@ -36,6 +36,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DOSSIER_VALIDATION                        = 'dossier-validation';
     const DOSSIER_DEVALIDATION                      = 'dossier-devalidation';
     const DOSSIER_SUPPRESSION                       = 'dossier-suppression';
+    const DOSSIER_DIFFERENCES                       = 'dossier-differences';
+    const DOSSIER_PURGER_DIFFERENCES                = 'dossier-purger-differences';
     const PIECE_JUSTIFICATIVE_VISUALISATION         = 'piece-justificative-visualisation';
     const PIECE_JUSTIFICATIVE_EDITION               = 'piece-justificative-edition';
     const PIECE_JUSTIFICATIVE_VALIDATION            = 'piece-justificative-validation';
@@ -79,6 +81,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const INDICATEUR_DESABONNEMENT                  = 'indicateur-desabonnement';
     const INDICATEUR_ABONNEMENTS_EDITION            = 'indicateur-abonnements-edition';
     const INDICATEUR_ABONNEMENTS_VISUALISATION      = 'indicateur-abonnements-visualisation';
+    const INDICATEUR_ENVOI_MAIL_INTERVENANTS        = 'indicateur-envoi-mail-intervenants';
     const DROIT_AFFECTATION_VISUALISATION           = 'droit-affectation-visualisation';
     const DROIT_AFFECTATION_EDITION                 = 'droit-affectation-edition';
     const IMPORT_ECARTS                             = 'import-ecarts';

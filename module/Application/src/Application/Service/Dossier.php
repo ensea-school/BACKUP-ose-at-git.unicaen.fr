@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -125,5 +126,34 @@ class Dossier extends AbstractEntityService
             $validation = current($validations);
         }
         return $validation;
+    }
+
+
+
+    /**
+     * Suppression (historisation) de l'historique des modifications sur les données perso d'un intervenant.
+     *
+     * @param IntervenantEntity $intervenant
+     * @param UtilisateurEntity $destructeur
+     *
+     * @return $this
+     */
+    public function purgerDonneesPersoModif(IntervenantEntity $intervenant, UtilisateurEntity $destructeur)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->update(\Application\Entity\Db\IndicModifDossier::class, 't')
+            ->set("t.histoDestruction", ":destruction")
+            ->set("t.histoDestructeur", ":destructeur")
+            ->where("t.intervenant = :intervenant")
+            ->andWhere("1 = compriseEntre(t.histoCreation, t.histoDestruction)");
+
+        $qb
+            ->setParameter('intervenant', $intervenant)
+            ->setParameter('destructeur', $destructeur)
+            ->setParameter('destruction', new \DateTime());
+
+        $qb->getQuery()->execute();
+
+        return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
@@ -28,19 +29,6 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'result',
-                            ],
-                        ],
-                    ],
-                    'details'                 => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:indicateur[/structure/:structure]',
-                            'constraints' => [
-                                'indicateur' => '[0-9]*',
-                                'structure'  => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'details',
                             ],
                         ],
                     ],
@@ -77,29 +65,6 @@ return [
                             ],
                             'defaults'    => [
                                 'action' => 'envoi-mail-intervenants',
-                            ],
-                        ],
-                    ],
-
-                    'result-item'                           => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/result-item/:action/:intervenant',
-                            'constraints' => [
-                                'action'      => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
-                            ],
-                        ],
-                    ],
-                    'purger-indicateur-donnees-perso-modif' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/purger-indicateur-donnees-perso-modif/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'purger-indicateur-donnees-perso-modif',
                             ],
                         ],
                     ],
@@ -146,24 +111,21 @@ return [
     ],
     'bjyauthorize'    => [
         'guards' => [
-            'BjyAuthorize\Guard\Controller' => [
+            PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => [
-                        'index',
-                        'result', 'details',
-                        'abonner',
-                        'abonnements',
-                        'result-item-donnees-perso-diff-import',
-                        'result-item-donnees-perso-modif',
-                        'purger-indicateur-donnees-perso-modif',
-                    ],
-                    'roles'      => ['user'],
+                    'action'     => ['index', 'result', 'abonnements'],
+                    'privileges'      => [Privileges::INDICATEUR_VISUALISATION],
+                ],
+                [
+                    'controller' => 'Application\Controller\Indicateur',
+                    'action'     => ['abonner'],
+                    'privileges'      => [Privileges::INDICATEUR_ABONNEMENT],
                 ],
                 [
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => ['envoi-mail-intervenants'],
-                    'roles'      => ['user'],
+                    'privileges' => [Privileges::INDICATEUR_ENVOI_MAIL_INTERVENANTS],
                 ],
             ],
         ],

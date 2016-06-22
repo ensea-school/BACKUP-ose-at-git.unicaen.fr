@@ -1,5 +1,7 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $indicateur \Application\Entity\Db\Indicateur
@@ -10,7 +12,12 @@ $this->headTitle()->append((string)$this->indicateur);
 $result = $indicateur->getResult();
 
 $url = $indicateur->getRoute();
-$mailUrl = $this->url('indicateur/envoi-mail-intervenants', ['indicateur' => $indicateur->getId()]);
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ENVOI_MAIL_INTERVENANTS))){
+    $mailUrl = $this->url('indicateur/envoi-mail-intervenants', ['indicateur' => $indicateur->getId()]);
+}else{
+    $mailUrl = null;
+}
+
 
 $hasDetails = false;
 foreach($result as $r ){
@@ -33,7 +40,9 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
         <table class="table table-bordered table-condensed table-hover">
             <thead>
             <tr>
+                <?php if ($mailUrl): ?>
                 <th>&nbsp;</th>
+                <?php endif; ?>
                 <th>Composante</th>
                 <th>Intervenant</th>
                 <?php if ($hasDetails): ?>
@@ -44,8 +53,10 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             <tbody>
             <?php foreach ($result as $r): ?>
                 <tr>
+                    <?php if ($mailUrl): ?>
                     <th class="cc"><input type="checkbox" checked="checked" value="<?php echo $r->getIntervenant()->getId() ?>"
                                           class="indic-intervenant"/></th>
+                    <?php endif; ?>
                     <td><?php echo $r->getStructure() ?></td>
                     <td>
                         <a href="<?php echo $this->url($indicateur->getRoute(), $r->getUrlParams()) ?>">
@@ -68,10 +79,13 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
         <i class="fa fa-undo" aria-hidden="true"></i>
         Retour à la liste des indicateurs
     </a>
+    <?php if ($mailUrl): ?>
     <a id="send-mail-link"
        class="btn btn-primary"
        href="javascript:envoiMail()">Rédiger un mail pour les intervenants sélectionnés...</a>
+    <?php endif; ?>
 </div>
+<?php if ($mailUrl): ?>
 <script>
 
     function cocherTout(){
@@ -99,3 +113,4 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
     }
 
 </script>
+<?php endif; ?>

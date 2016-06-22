@@ -152,7 +152,6 @@ class ServiceAssertion extends AbstractAssertion
 
         if (!$this->assertIntervenant($role, $intervenant)) return false; // si on n'est pas le bon intervenant!!
 
-//        var_dump($intervenant->__toString());
         switch ($controller . '.' . $action) {
             case 'Application\Controller\Service.validation':
                 return $role->hasPrivilege(Privileges::ENSEIGNEMENT_VISUALISATION);

@@ -645,7 +645,6 @@ return array(
     'Application\Assertion\PaiementAssertion'                                                            => __DIR__ . '/src/Application/Assertion/PaiementAssertion.php',
     'Application\Assertion\ServiceAssertion'                                                             => __DIR__ . '/src/Application/Assertion/ServiceAssertion.php',
     'Application\Assertion\DossierPiecesAssertion'                                                       => __DIR__ . '/src/Application/Assertion/DossierPiecesAssertion.php',
-    'Application\Assertion\OldAbstractAssertion'                                                         => __DIR__ . '/src/Application/Assertion/OldAbstractAssertion.php',
     'Application\Exception\DbException'                                                                  => __DIR__ . '/src/Application/Exception/DbException.php',
     'Application\Hydrator\Service\Interfaces\RechercheHydratorAwareInterface'                            => __DIR__ . '/src/Application/Hydrator/Service/Interfaces/RechercheHydratorAwareInterface.php',
     'Application\Hydrator\Service\RechercheHydrator'                                                     => __DIR__ . '/src/Application/Hydrator/Service/RechercheHydrator.php',

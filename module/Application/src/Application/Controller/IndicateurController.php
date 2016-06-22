@@ -11,7 +11,6 @@ use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
-use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Zend\Form\Element\Hidden;
 use Zend\Form\Element\Text;

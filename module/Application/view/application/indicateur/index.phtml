@@ -6,6 +6,7 @@ use Application\Entity\Db\Indicateur;
 use Application\Entity\Db\NotificationIndicateur;
 use Zend\Form\Element\Checkbox;
 use Zend\Form\Element\Select;
+use Application\Provider\Privilege\Privileges;
 
 /**
  * @var $this        \Application\View\Renderer\PhpRenderer
@@ -13,7 +14,7 @@ use Zend\Form\Element\Select;
  * @var $abonnements NotificationIndicateur[]
  */
 
-$showAbonnements = true;
+$showAbonnements = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 
 $this->headTitle()->append($title = "Indicateurs");
 

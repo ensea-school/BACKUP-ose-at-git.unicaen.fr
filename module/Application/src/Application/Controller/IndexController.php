@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Acl\Role;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Zend\View\Model\ViewModel;
 
@@ -30,9 +31,9 @@ class IndexController extends AbstractController
             'role'  => $role,
         ]);
 
-        if ($role && $personnel = $role->getPersonnel()) {
+        if ($role && $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_VISUALISATION))) {
             // URL de la page affichant les indicateurs auxquels est abonné l'utilisateur
-            $view->setVariable('abonnementsUrl', $this->url()->fromRoute('indicateur/abonnements', ['personnel' => $personnel->getId()]));
+            $view->setVariable('abonnementsUrl', $this->url()->fromRoute('indicateur/abonnements'));
         }
 
         return $view;

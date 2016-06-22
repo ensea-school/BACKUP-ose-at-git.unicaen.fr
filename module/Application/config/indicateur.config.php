@@ -47,10 +47,7 @@ return [
                     'abonnements'             => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/abonnements/:personnel',
-                            'constraints' => [
-                                'personnel' => '[0-9]*',
-                            ],
+                            'route'       => '/abonnements',
                             'defaults'    => [
                                 'action' => 'abonnements',
                             ],

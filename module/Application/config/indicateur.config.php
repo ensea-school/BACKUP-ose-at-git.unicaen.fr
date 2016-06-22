@@ -106,6 +106,7 @@ return [
             ],
         ],
     ],
+    
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
@@ -127,11 +128,13 @@ return [
             ],
         ],
     ],
+    
     'controllers'     => [
         'invokables' => [
             'Application\Controller\Indicateur' => Controller\IndicateurController::class,
         ],
     ],
+    
     'service_manager' => [
         'invokables' => [
             'processusIndicateur'           => Processus\IndicateurProcessus::class,

@@ -163,6 +163,7 @@ $main = [
             'ApplicationPays'               => Service\Pays::class,
             'ApplicationDepartement'        => Service\Departement::class,
             'applicationFichier'            => Service\FichierService::class,
+            'applicationTauxHoraireHETD'    => Service\TauxHoraireHETDService::class,
             'UnicaenAuth\Service\Privilege' => Service\PrivilegeService::class,
             'assertionInformation'          => Assertion\InformationAssertion::class,
         ],

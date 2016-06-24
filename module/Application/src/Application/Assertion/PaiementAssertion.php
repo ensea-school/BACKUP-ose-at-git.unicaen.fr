@@ -5,6 +5,7 @@ namespace Application\Assertion;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -145,19 +146,18 @@ class PaiementAssertion extends AbstractAssertion
         $oriStructure  = $role->getStructure();
         $destStructure = $serviceAPayer->getStructure();
 
-        if (empty($oriStructure) || empty($destStructure)) {
-            return true; // pas essez d'éléments pour statuer
-        } else {
-            return $oriStructure === $destStructure;
-        }
+        return $this->asserts([
+            $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $serviceAPayer->getIntervenant(), $destStructure),
+            empty($oriStructure) || empty($destStructure) || $oriStructure === $destStructure
+        ]);
     }
 
 
 
-    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null)
+    protected function assertEtapeAtteignable($etape, Intervenant $intervenant = null, Structure $structure = null)
     {
         if ($intervenant) {
-            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant);
+            $workflowEtape = $this->getServiceWorkflow()->getEtape($etape, $intervenant, $structure);
             if (!$workflowEtape || !$workflowEtape->isAtteignable()) { // l'étape doit être atteignable
                 return false;
             }

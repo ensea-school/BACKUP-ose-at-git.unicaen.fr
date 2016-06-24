@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Constants;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -365,4 +366,18 @@ class AdresseStructure implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->structure;
     }
 
+
+
+    public function __toString()
+    {
+        $pays = $this->getPaysLibelle();
+        if (strtoupper($pays) == Constants::ADRESSE_PAYS_DEFAULT) $pays = '';
+
+        return implode( "\n", array_filter([
+            trim( $this->getNoVoie().' '.$this->getNomVoie() ),
+            trim( $this->getLocalite() ),
+            trim( $this->getCodePostal().' '.$this->getVille() ),
+            trim( $pays )
+        ]));
+    }
 }

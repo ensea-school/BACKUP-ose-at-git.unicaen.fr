@@ -16,6 +16,7 @@ use Application\Service\Traits\ContratAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Constants;
@@ -43,6 +44,7 @@ class ContratController extends AbstractController
     use ContratRetourAwareTrait;
     use ParametresAwareTrait;
     use ContratProcessusAwareTrait;
+    use TauxHoraireHETDServiceAwareTrait;
 
 
 
@@ -214,18 +216,6 @@ class ContratController extends AbstractController
             }
         }
         
-/*        $form->requestSave($this->getRequest(), function () use ($contrat) {
-            try {
-                $this->getProcessusContrat()->valider($contrat);
-
-                $this->flashMessenger()->addSuccessMessage(
-                    "Validation " . lcfirst($contrat->toString(true, true)) . " enregistrée avec succès."
-                );
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
-            }
-        });
-*/
         return new MessengerViewModel;
     }
 
@@ -329,6 +319,8 @@ class ContratController extends AbstractController
         $servicesRecaps  = $this->getProcessusContrat()->getServicesRecaps($contrat); // récap de tous les services au sein de la structure d'ens
         $totalHETD       = $contrat->getTotalHetd() ?: $this->getProcessusContrat()->getIntervenantTotalHetd($intervenant);
 
+        $tauxHoraire = $this->getServiceTauxHoraireHETD()->getByDate( $contrat->getHistoCreation() );
+
         if ($intervenant->getDossier()) {
             $adresseIntervenant    = $intervenant->getDossier()->getAdresse();
             $numeroINSEE           = $intervenant->getDossier()->getNumeroInsee();
@@ -363,6 +355,7 @@ class ContratController extends AbstractController
             'dateSignature'           => $dateSignature->format(Constants::DATE_FORMAT),
             'servicesRecaps'          => $servicesRecaps,
             'totalHETD'               => \UnicaenApp\Util::formattedFloat($totalHETD, \NumberFormatter::DECIMAL, 2),
+            'tauxHoraire'             => $tauxHoraire,
         ];
 
         // Création du pdf, complétion et envoi au navigateur
@@ -370,6 +363,7 @@ class ContratController extends AbstractController
         $exp->setHeaderSubtitle($contratToString)
             ->setMarginBottom(25)
             ->setMarginTop(25);
+        $exp->setFooterTitle($contratToString.' - '.$intervenant->getAnnee());
         if ($estUnProjet) {
             $exp->setWatermark("Projet");
         }
@@ -377,7 +371,8 @@ class ContratController extends AbstractController
         $variables['mentionRetourner'] = "EXEMPLAIRE À CONSERVER";
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', false, $variables);
 
-        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER SIGNÉ";
+        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER SIGNÉ À L'ADRESSE SUIVANTE :<br />";
+        $variables['mentionRetourner'] .= $contrat->getStructure()->getAdressePrincipale();
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);

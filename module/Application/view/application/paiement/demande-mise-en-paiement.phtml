@@ -9,6 +9,7 @@
  * @var $dernierModificateur \Application\Entity\Db\Utilisateur
  * @var $changeIndex integer
  * @var $budget array
+ * @var $whyNotEditable array
  */
 
 $title = 'Demande de mise en paiement';
@@ -24,18 +25,29 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 <h1 class="page-header"><?php echo $title; ?></h1>
 
 <?php
-$html = $this->demandeMiseEnPaiement($servicesAPayer, $changeIndex)->setBudget($budget)->render();
 
-/**
- * NB: l'appel $this->messageCollector() doit être fait après $this->demandeMiseEnPaiement() car
- * MiseEnPaiementAssertion transmet des messages au collecteur de messages.
- */
-echo $this->messageCollector();
 
-echo $html;
+if ($whyNotEditable){
+    echo '<div class="alert alert-warning">'
+        .'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+        .'<strong>Attention</strong> : certaines demandes de mise en paiement ne peuvent pas être faites :'
+        .'<ul>';
+    foreach ($whyNotEditable as $ws){
+        echo '<li>'.($ws['structure'] ? $ws['structure'] : 'Toutes composantes');
+        echo '<ul>';
+        foreach( $ws['raisons'] as $raison){
+            echo "<li>$raison</li>";
+        }
+        echo '</ul></li>';
+    }
+    echo '</ul></div>';
+}
+
+
+
+echo $this->demandeMiseEnPaiement($servicesAPayer, $changeIndex)->setBudget($budget)->render();
 
 echo $this->historique()->setHistoModification($dateDerniereModif)->setHistoModificateur($dernierModificateur);
-
 
 if ($saved){
 ?>

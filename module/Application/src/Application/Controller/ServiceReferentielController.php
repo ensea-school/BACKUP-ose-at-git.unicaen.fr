@@ -169,6 +169,12 @@ class ServiceReferentielController extends AbstractController
         $details     = 1 == (int)$this->params()->fromQuery('details', (int)$this->params()->fromPost('details', 0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content', 0);
         $service     = $this->getEvent()->getParam('serviceReferentiel');
+        /* @var $service ServiceReferentiel */
+
+        if (isset($params['type-volume-horaire'])) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get((int)$params['type-volume-horaire']);
+            $service->setTypeVolumeHoraire($typeVolumeHoraire);
+        }
 
         return compact('service', 'params', 'details', 'onlyContent');
     }
@@ -194,6 +200,7 @@ class ServiceReferentielController extends AbstractController
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceServiceReferentiel()->get($sid);
+                $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
                 }

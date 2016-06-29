@@ -8,6 +8,7 @@ use Application\Entity\Db\TypeRessource;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
+use Application\Entity\Db\WfEtape;
 use Application\Form\Paiement\Traits\MiseEnPaiementFormAwareTrait;
 use Application\Form\Paiement\Traits\MiseEnPaiementRechercheFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -22,6 +23,7 @@ use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
@@ -47,6 +49,7 @@ class PaiementController extends AbstractController
     use SessionContainerTrait;
     use TypeRessourceServiceAwareTrait;
     use DotationServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -127,6 +130,27 @@ class PaiementController extends AbstractController
         }
         $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
 
+        /* On récupère du workflow les raisons de non édition éventuelles (selon sa structure le cas échéant) */
+        $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+        $etapes = $workflowEtape->getEtapes();
+        $whyNotEditable = [];
+        foreach( $etapes as $we ){
+            if (!$role->getStructure() || !$we->getStructure() || $role->getStructure() == $we->getStructure()) {
+                $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
+                $deps = $we->getEtapeDeps();
+                foreach ($deps as $dep) {
+                    if (!isset($whyNotEditable[$sid])) {
+                        $whyNotEditable[$sid] = [
+                            'structure' => (string)$we->getStructure(),
+                            'raisons'   => []
+                        ];
+                    }
+                    $whyNotEditable[$sid]['raisons'][] = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
+                }
+            }
+        }
+        
+
         $dateDerniereModif   = null;
         $dernierModificateur = null;
 
@@ -167,7 +191,7 @@ class PaiementController extends AbstractController
             }
         }
 
-        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget');
+        return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
     }
 
 

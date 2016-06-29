@@ -42,6 +42,12 @@ class WfEtapeDep
      */
     private $etapePrec;
 
+    /**
+     * @var \Application\Entity\Db\TypeIntervenant
+     */
+    private $typeIntervenant;
+
+
 
     /**
      * Set locale
@@ -57,6 +63,8 @@ class WfEtapeDep
         return $this;
     }
 
+
+
     /**
      * Get locale
      *
@@ -66,6 +74,8 @@ class WfEtapeDep
     {
         return $this->locale;
     }
+
+
 
     /**
      * Set complete
@@ -81,6 +91,8 @@ class WfEtapeDep
         return $this;
     }
 
+
+
     /**
      * Get complete
      *
@@ -90,6 +102,8 @@ class WfEtapeDep
     {
         return $this->complete;
     }
+
+
 
     /**
      * Set partielle
@@ -104,6 +118,8 @@ class WfEtapeDep
 
         return $this;
     }
+
+
 
     /**
      * Get partielle
@@ -130,6 +146,8 @@ class WfEtapeDep
 
         return $this;
     }
+
+
 
     /**
      * Get integrale
@@ -177,6 +195,8 @@ class WfEtapeDep
         return $this->id;
     }
 
+
+
     /**
      * Set etapeSuiv
      *
@@ -191,6 +211,8 @@ class WfEtapeDep
         return $this;
     }
 
+
+
     /**
      * Get etapeSuiv
      *
@@ -200,6 +222,8 @@ class WfEtapeDep
     {
         return $this->etapeSuiv;
     }
+
+
 
     /**
      * Set etapePrec
@@ -215,6 +239,8 @@ class WfEtapeDep
         return $this;
     }
 
+
+
     /**
      * Get etapePrec
      *
@@ -224,5 +250,30 @@ class WfEtapeDep
     {
         return $this->etapePrec;
     }
+
+
+
+    /**
+     * @return TypeIntervenant
+     */
+    public function getTypeIntervenant()
+    {
+        return $this->typeIntervenant;
+    }
+
+
+
+    /**
+     * @param TypeIntervenant $typeIntervenant
+     *
+     * @return WfEtapeDep
+     */
+    public function setTypeIntervenant($typeIntervenant)
+    {
+        $this->typeIntervenant = $typeIntervenant;
+
+        return $this;
+    }
+    
 }
 

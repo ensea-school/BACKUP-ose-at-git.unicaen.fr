@@ -153,9 +153,14 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['index', 'telecharger-fichier', 'lister-fichier'],
+                    'action'     => ['index'],
                     'privileges' => Privileges::CONTRAT_VISUALISATION,
                     'assertion'  => 'assertionContrat',
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['exporter', 'telecharger-fichier', 'lister-fichier'],
+                    'privileges' => Privileges::CONTRAT_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -183,7 +188,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['exporter', 'deposer-fichier', 'supprimer-fichier'],
+                    'action'     => ['deposer-fichier', 'supprimer-fichier'],
                     'privileges' => Privileges::CONTRAT_DEPOT_RETOUR_SIGNE,
                     'assertion'  => 'assertionContrat',
                 ],

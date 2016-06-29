@@ -288,7 +288,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareIn
         $etablissement = isset($data['etablissement']['id']) ? (int)$data['etablissement']['id'] : null;
         $object->setEtablissement($etablissement ? $this->getServiceEtablissement()->get($etablissement) : null);
 
-        $object->setDescription($data['description']);
+        $object->setDescription(isset($data['description']) ? $data['description'] : null);
 
         return $object;
     }

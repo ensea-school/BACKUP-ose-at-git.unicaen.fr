@@ -4,6 +4,7 @@ namespace Application\Form\Workflow;
 
 use Application\Entity\Db\WfEtapeDep;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\WfEtapeAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -17,6 +18,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class DependanceForm extends AbstractForm
 {
     use WfEtapeAwareTrait;
+    use TypeIntervenantAwareTrait;
 
 
 
@@ -24,11 +26,13 @@ class DependanceForm extends AbstractForm
     {
         $hydrator = new DependanceFormHydrator;
         $hydrator->setServiceWfEtape($this->getServiceWfEtape());
+        $hydrator->setServiceTypeIntervenant($this->getServiceTypeIntervenant());
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());
 
         $etapes = $this->getServiceWfEtape()->getList();
+        $typesIntervenants = $this->getServiceTypeIntervenant()->getList();
 
         $this->add([
             'name'       => 'etape-suivante',
@@ -60,7 +64,7 @@ class DependanceForm extends AbstractForm
             'name'       => 'active',
             'options'    => [
                 'label'              => '<abbr title="Définit si la dépendance est prise en compte par le Workflow ou non">Active</abbr>',
-                'label_options' => [
+                'label_options'      => [
                     'disable_html_escape' => true,
                 ],
                 'use_hidden_element' => true,
@@ -77,7 +81,7 @@ class DependanceForm extends AbstractForm
             'name'       => 'locale',
             'options'    => [
                 'label'              => '<abbr title="Le test ne se fait qu\'au sein d\'une même composante ou sur des étapes non attachées à des composantes">Locale</abbr>',
-                'label_options' => [
+                'label_options'      => [
                     'disable_html_escape' => true,
                 ],
                 'use_hidden_element' => true,
@@ -94,7 +98,7 @@ class DependanceForm extends AbstractForm
             'name'       => 'integrale',
             'options'    => [
                 'label'              => '<abbr title="Franchissement impératif pour toutes les composantes concernées">Intégrale</abbr>',
-                'label_options' => [
+                'label_options'      => [
                     'disable_html_escape' => true,
                 ],
                 'use_hidden_element' => true,
@@ -111,7 +115,7 @@ class DependanceForm extends AbstractForm
             'name'       => 'partielle',
             'options'    => [
                 'label'              => '<abbr title="L\'étape peut n\'être que partiellement franchie">Partielle</abbr>',
-                'label_options' => [
+                'label_options'      => [
                     'disable_html_escape' => true,
                 ],
                 'use_hidden_element' => true,
@@ -122,6 +126,20 @@ class DependanceForm extends AbstractForm
                 'title' => "L'étape n'est atteignable que si ses dépendances ont été partiellement franchies",
             ],
             'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'       => 'type-intervenant',
+            'options'    => [
+                'label'         => 'Type d\'intervenant',
+                'value_options' => Util::collectionAsOptions($typesIntervenants),
+                'empty_option' => 'Tous',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -151,6 +169,7 @@ class DependanceForm extends AbstractForm
             'locale'           => ['required' => true],
             'integrale'        => ['required' => true],
             'partielle'        => ['required' => true],
+            'type-intervenant' => ['required' => false],
         ];
     }
 
@@ -163,6 +182,7 @@ class DependanceForm extends AbstractForm
 class DependanceFormHydrator implements HydratorInterface
 {
     use WfEtapeAwareTrait;
+    use TypeIntervenantAwareTrait;
 
 
 
@@ -181,6 +201,7 @@ class DependanceFormHydrator implements HydratorInterface
         $object->setLocale($data['locale'] == 'true');
         $object->setIntegrale($data['integrale'] == 'true');
         $object->setPartielle($data['partielle'] == 'true');
+        $object->setTypeIntervenant($data['type-intervenant'] ? $this->getServiceTypeIntervenant()->get($data['type-intervenant']) : null);
 
         return $object;
     }
@@ -195,12 +216,13 @@ class DependanceFormHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'etape-suivante'   => $object->getEtapeSuiv()   ? $object->getEtapeSuiv()->getId() : null,
-            'etape-precedante' => $object->getEtapePrec()   ? $object->getEtapePrec()->getId() : null,
-            'active'           => $object->getActive()      ? 'true' : 'false',
-            'locale'           => $object->getLocale()      ? 'true' : 'false',
-            'integrale'        => $object->getIntegrale()   ? 'true' : 'false',
-            'partielle'        => $object->getPartielle()   ? 'true' : 'false',
+            'etape-suivante'   => $object->getEtapeSuiv() ? $object->getEtapeSuiv()->getId() : null,
+            'etape-precedante' => $object->getEtapePrec() ? $object->getEtapePrec()->getId() : null,
+            'active'           => $object->getActive() ? 'true' : 'false',
+            'locale'           => $object->getLocale() ? 'true' : 'false',
+            'integrale'        => $object->getIntegrale() ? 'true' : 'false',
+            'partielle'        => $object->getPartielle() ? 'true' : 'false',
+            'type-intervenant' => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,
         ];
 
         return $data;

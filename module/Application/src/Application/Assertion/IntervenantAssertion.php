@@ -55,8 +55,9 @@ class IntervenantAssertion extends AbstractAssertion
             case $entity instanceof Validation:
                 switch ($privilege) {
                     case Privileges::CLOTURE_CLOTURE:
-                    case Privileges::CLOTURE_REOUVERTURE:
                         return $this->assertCloture($entity->getIntervenant());
+                    case Privileges::CLOTURE_REOUVERTURE:
+                        return $this->assertReouverture($entity->getIntervenant());
                 }
             break;
         }
@@ -84,11 +85,27 @@ class IntervenantAssertion extends AbstractAssertion
 
     protected function assertCloture( Intervenant $intervenant=null )
     {
-        if (!$intervenant) return false;
-        if (!$this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant)){
-            return false;
+        return $this->asserts([
+            $intervenant,
+            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant)
+        ]);
+    }
+
+
+
+    protected function assertReouverture( Intervenant $intervenant=null )
+    {
+        $hasNoDMEP = false;
+        if ($intervenant){
+            $dmepEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+            $hasNoDMEP = $dmepEtape->getFranchie() == 0;
         }
-        return true;
+
+        return $this->asserts([
+            $hasNoDMEP,
+            $intervenant,
+            $this->assertEtapeAtteignable(WfEtape::CODE_CLOTURE_REALISE, $intervenant)
+        ]);
     }
 
 

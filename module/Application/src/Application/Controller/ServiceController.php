@@ -330,6 +330,7 @@ class ServiceController extends AbstractController
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceService()->get($sid);
+                $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
                     try {
                         $this->getServiceService()->setRealisesFromPrevus($service);

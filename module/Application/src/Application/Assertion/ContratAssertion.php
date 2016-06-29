@@ -85,29 +85,6 @@ class ContratAssertion extends AbstractAssertion
     }
 
 
-/*
-    protected function assertController($controller, $action = null, $privilege = null)
-    {
-        $role        = $this->getRole();
-
-        // Si le rôle n'est pas renseigné alors on s'en va...
-        if (!$role instanceof Role) return false;
-        // pareil si le rôle ne possède pas le privilège adéquat
-        if ($privilege && !$role->hasPrivilege($privilege)) return false;
-
-        $intervenant = $this->getMvcEvent()->getParam('intervenant');
-        /* @var $intervenant Intervenant *
-
-        switch ($action) {
-            case 'cloturer-saisie':
-                return $this->assertClotureSaisie($intervenant);
-            break;
-        }
-
-        return true;
-    }*/
-
-
 
     /**
      * @param string $controller

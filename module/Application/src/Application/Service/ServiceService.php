@@ -38,6 +38,10 @@ use Zend\Session\Container as SessionContainer;
  * Description of Service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method ServiceEntity get($id)
+ * @method ServiceEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ *         
  */
 class ServiceService extends AbstractEntityService
 {

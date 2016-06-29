@@ -305,7 +305,7 @@ class ContratController extends AbstractController
         $intervenant = $contrat->getIntervenant();
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
-            throw new UnAuthorizedException("Interdit !");
+            throw new UnAuthorizedException("Visualisation du contrat interdite.");
         }
 
         $estUnAvenant    = $contrat->estUnAvenant();

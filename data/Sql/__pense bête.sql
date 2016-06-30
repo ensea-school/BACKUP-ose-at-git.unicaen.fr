@@ -1,5 +1,6 @@
 select q'[o'connor]' from dual;
 
+SELECT TRIM(TO_CHAR(100, '9999999.99')) FROM DUAL;
 
 
 select 

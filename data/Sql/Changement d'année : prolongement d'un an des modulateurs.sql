@@ -26,4 +26,4 @@ FROM
                                 AND 1 = ose_divers.comprise_entre( tmep.histo_creation, tmep.histo_destruction )
 WHERE
   1 = ose_divers.comprise_entre( em.histo_creation, em.histo_destruction )
-  AND ep.annee_id = 2014;
+  AND ep.annee_id = 2015;

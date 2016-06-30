@@ -80,15 +80,13 @@ class OffreFormationController extends AbstractController
                 partial e.{id,libelle,sourceCode,niveau,histoDestruction},
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre},
-                partial ep.{id,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa},
-                partial eff.{id,fi,fa,fc}
+                partial ep.{id,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
             FROM
               Application\Entity\Db\Etape e
               JOIN e.structure s
               JOIN e.typeFormation tf
-              JOIN  tf.groupe gtf
+              JOIN tf.groupe gtf
               LEFT JOIN e.elementPedagogique ep
-              LEFT JOIN ep.effectifs eff
             WHERE
               s = :structure
             ORDER BY

@@ -52,7 +52,8 @@ class ServiceAssertion extends AbstractAssertion
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
             if (
-                $role->getStructure()
+                $intervenant
+                && $role->getStructure()
                 && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
             ){ // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...
                // car on peut très bien avoir à visualiser cette page sans pour autant avoir de services à soi à valider!!

@@ -6,7 +6,6 @@ use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 
@@ -247,43 +246,6 @@ class Context extends AbstractService
     public function setDateObservation(DateTime $dateObservation)
     {
         $sc->dateObservation = $dateObservation;
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return DateTime
-     */
-    function getDateFinSaisiePermanents()
-    {
-        $sc = $this->getSessionContainer();
-        if (!$sc->offsetExists('dateFinSaisiePermanents')) {
-            $sc->dateFinSaisiePermanents = DateTime::createFromFormat(
-                'd/m/Y',
-                $this->getServiceParametres()->date_fin_saisie_permanents
-            );
-        }
-
-        return $sc->dateFinSaisiePermanents;
-    }
-
-
-
-    /**
-     *
-     * @param DateTime $dateFinSaisiePermanents
-     *
-     * @return self
-     */
-    public function setDateFinSaisiePermanents(DateTime $dateFinSaisiePermanents, $updateParametres = false)
-    {
-        $sc->dateFinSaisiePermanents = $dateFinSaisiePermanents;
-        if ($updateParametres) {
-            $this->getServiceParametres()->date_fin_saisie_permanents = $sc->dateFinSaisiePermanents->format('d/m/Y');
-        }
 
         return $this;
     }

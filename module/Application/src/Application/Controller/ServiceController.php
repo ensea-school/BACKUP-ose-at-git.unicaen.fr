@@ -459,7 +459,8 @@ class ServiceController extends AbstractController
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $filterStructure = $role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
+        $filterStructure = null;//$role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
+        // pas de filtre pour qu'une composante puisse voir ses enseignements validée par d'autres en prévisionnel
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
@@ -470,7 +471,7 @@ class ServiceController extends AbstractController
         if ($rsv && $rsv->getMessage()){
             $this->flashMessenger()->addInfoMessage($rsv->getMessage());
         }
-        
+
         $title = "Validation des enseignements";
 
         if ($typeVolumeHoraire->isPrevu()) {

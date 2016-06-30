@@ -43,12 +43,20 @@ class ServiceAssertion extends AbstractAssertion
 
     protected function assertPage(array $page)
     {
+        $role = $this->getRole();
+        /* @var $role Role */
+
         $intervenant = null;
         if (isset($page['workflow-etape-code'])) {
             $etape       = $page['workflow-etape-code'];
             $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
-            if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
+            if (
+                $role->getStructure()
+                && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
+            ){
+                return $this->assertHasServices( $intervenant, $role->getStructure() );
+            }else if (!$this->assertEtapeAtteignable($etape, $intervenant)) {
                 return false;
             }
         }
@@ -259,6 +267,17 @@ class ServiceAssertion extends AbstractAssertion
         $asserts[] = $this->assertCloture($role, $serviceReferentiel->getIntervenant());
 
         return $this->asserts($asserts);
+    }
+
+
+
+    protected function assertHasServices( Intervenant $intervenant, Structure $structure )
+    {
+        $services = $intervenant->getService()->filter( function(Service $service) use ($structure){
+            if (!$service->getElementPedagogique()) return false;
+            return $service->getElementPedagogique()->getStructure() == $structure;
+        });
+        return $services->count() > 0;
     }
 
 

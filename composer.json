@@ -21,6 +21,6 @@
     "require-dev": {
         "zendframework/zend-test":              ">=2.3",
         "phpunit/PHPUnit":                      ">=3.7",
-        "zendframework/zend-developer-tools": "dev-master"
+        "zendframework/zend-developer-tools":   ">=1.0"
     }
 }

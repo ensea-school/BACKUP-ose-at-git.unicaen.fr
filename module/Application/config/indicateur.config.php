@@ -75,7 +75,7 @@ return [
             'routes' => [
                 'notifier-indicateurs' => [
                     'options' => [
-                        'route'    => 'notifier indicateurs [--force] [--requestUriHost= [--requestUriScheme=]',
+                        'route'    => 'notifier indicateurs [--force] [--requestUriHost=] [--requestUriScheme=]',
                         'defaults' => [
                             'controller' => 'Application\Controller\Indicateur',
                             'action'     => 'envoi-notifications',

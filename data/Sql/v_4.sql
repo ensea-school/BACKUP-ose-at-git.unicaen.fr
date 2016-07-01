@@ -4,170 +4,7 @@
 
 BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END; 
 
--- déannualisation des étapes du WF
-SELECT
-  'UPDATE wf_intervenant_etape SET etape_id = ' || we2.id || ' WHERE id = ' || wie.id || ';' req
-FROM
-  wf_intervenant_etape wie
-  JOIN wf_etape we ON we.id = wie.etape_id AND we.annee_id <> 2015
-  JOIN wf_etape we2 ON we2.code = we.code AND we2.annee_id = 2015;
-  
-DELETE FROM wf_etape where annee_id <> 2015;
-
-
-
--- suppr des étapes de début et de fin
-
-
-INSERT INTO WF_TYPE_DEP (
-  ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
-  'locale-partielle',
-  'Les étapes dépendantes à la structure près doivent être au moins partiellement franchies'
-);
-  
-INSERT INTO WF_TYPE_DEP (
-  ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
-  'locale-complete',
-  'Les étapes dépendantes à la structure près doivent être intégralement franchies'
-);
-
-INSERT INTO WF_TYPE_DEP (
-  ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
-  'globale-partielle',
-  'Toutes les étapes dépendantes doivent être au moins partiellement franchies'
-);
-
-INSERT INTO WF_TYPE_DEP (
-  ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  WF_TYPE_DEP_ID_SEQ.NEXTVAL,
-  'globale-complete',
-  'Toutes les étapes dépendantes doivent être intégralement franchies'
-);
-
-
--- insert des dépendances
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'PJ_SAISIE'),
-  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_SAISIE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'PJ_SAISIE'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'PJ_VALIDATION'),
-  (SELECT id FROM wf_etape WHERE code = 'PJ_SAISIE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_VALIDATION'),
-  (SELECT id FROM wf_etape WHERE code = 'PJ_VALIDATION')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'REFERENTIEL_VALIDATION'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_RESTREINT'),
-  (SELECT id FROM wf_etape WHERE code = 'REFERENTIEL_VALIDATION')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_RESTREINT'),
-  (SELECT id FROM wf_etape WHERE code = 'DONNEES_PERSO_VALIDATION')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_RESTREINT'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_RESTREINT'),
-  (SELECT id FROM wf_etape WHERE code = 'PJ_VALIDATION')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_ACADEMIQUE'),
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_RESTREINT')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONTRAT'),
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_RESTREINT')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CONTRAT'),
-  (SELECT id FROM wf_etape WHERE code = 'CONSEIL_ACADEMIQUE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE_REALISE'),
-  (SELECT id FROM wf_etape WHERE code = 'CONTRAT')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'CLOTURE_REALISE'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE_REALISE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION_REALISE'),
-  (SELECT id FROM wf_etape WHERE code = 'CLOTURE_REALISE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'REFERENTIEL_VALIDATION_REALISE'),
-  (SELECT id FROM wf_etape WHERE code = 'CLOTURE_REALISE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_VALIDATION_REALISE'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE_REALISE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'REFERENTIEL_VALIDATION_REALISE'),
-  (SELECT id FROM wf_etape WHERE code = 'SERVICE_SAISIE_REALISE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'DEMANDE_MEP'),
-  (SELECT id FROM wf_etape WHERE code = 'CLOTURE_REALISE')
-);
-
-INSERT INTO WF_ETAPE_DEP (ETAPE_SUIV_ID, ETAPE_PREC_ID) VALUES (
-  (SELECT id FROM wf_etape WHERE code = 'SAISIE_MEP'),
-  (SELECT id FROM wf_etape WHERE code = 'DEMANDE_MEP')
-);
-
 /
-
 
 update statut_intervenant set tem_atv = 1 WHERE source_code IN (
 
@@ -297,26 +134,60 @@ INSERT INTO REGLE_STRUCTURE_VALIDATION (
   
 
 
--- PENSER A TOUTES LES AUTRES DEMANDES DE PACKAGES ! ! !  
-INSERT INTO "OSE"."PACKAGE_DEPS" (ID, P1, P2) VALUES ('15', 'OSE_WORKFLOW', 'OSE_VALIDATION_ENSEIGNEMENT')
-INSERT INTO "OSE"."PACKAGE_DEPS" (ID, P1, P2) VALUES ('16', 'OSE_WORKFLOW', 'OSE_VALIDATION_REFERENTIEL')
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('180','191','1','0','1','39','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('180','194','0','1','0','40','1','1');
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('184','182','0','0','0','1','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('185','184','0','0','1','2','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('186','182','0','1','0','3','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('187','185','0','0','0','4','0',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('187','186','0','0','0','5','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('187','183','1','0','1','6','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('188','183','1','0','1','7','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('189','187','1','0','1','11','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('189','185','0','0','0','12','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('189','186','0','0','0','10','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('190','189','0','0','1','13','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('191','190','1','0','0','14','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('192','189','0','0','0','15','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('196','192','0','0','1','16','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('179','180','1','0','1','22','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('193','192','1','0','1','18','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('194','192','1','0','1','19','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('180','196','0','0','0','20','1','1');
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('180','193','0','1','0','21','1','1');
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('192','190','0','1','0','23','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('192','191','0','0','1','24','1',null);
+Insert into WF_ETAPE_DEP (ETAPE_SUIV_ID,ETAPE_PREC_ID,LOCALE,INTEGRALE,PARTIELLE,ID,ACTIVE,TYPE_INTERVENANT_ID) values ('191','189','1','0','1','26','1',null);
 
-  
-  UPDATE INTERVENANT SET CODE = SOURCE_CODE;
-UPDATE INTERVENANT SET SUPANN_EMP_ID = SOURCE_CODE;
+
+
+
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('1','OSE_AGREMENT','OSE_FORMULE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('2','OSE_WORKFLOW','OSE_AGREMENT');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('3','OSE_WORKFLOW','OSE_CLOTURE_REALISE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('4','OSE_WORKFLOW','OSE_CONTRAT');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('5','OSE_WORKFLOW','OSE_DOSSIER');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('6','OSE_WORKFLOW','OSE_PAIEMENT');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('7','OSE_WORKFLOW','OSE_PIECE_JOINTE_FOURNIE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('8','OSE_WORKFLOW','OSE_PIECE_JOINTE_DEMANDE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('11','OSE_WORKFLOW','OSE_SERVICE_SAISIE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('12','OSE_PIECE_JOINTE','OSE_PIECE_JOINTE_FOURNIE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('13','OSE_PIECE_JOINTE','OSE_PIECE_JOINTE_DEMANDE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('14','OSE_PAIEMENT','OSE_FORMULE');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('15','OSE_WORKFLOW','OSE_VALIDATION_ENSEIGNEMENT');
+Insert into PACKAGE_DEPS (ID,P1,P2) values ('16','OSE_WORKFLOW','OSE_VALIDATION_REFERENTIEL');
+
+
+
 UPDATE PERSONNEL SET CODE = SOURCE_CODE;
 UPDATE PERSONNEL SET SUPANN_EMP_ID = SOURCE_CODE;
 
 update formule_resultat set
-
-  type_intervenant_code = (SELECT ti.code FROM type_intervenant ti JOIN statut_intervenant si ON si.type_intervenant_id = ti.id JOIN intervenant i ON i.statut_id = si.id WHERE i.id = formule_resultat.intervenant_id),
-  type_volume_horaire_code = (SELECT tvh.code FROM type_volume_horaire tvh WHERE tvh.id = formule_resultat.type_volume_horaire_id),
-  etat_volume_horaire_code = (SELECT evh.code FROM etat_volume_horaire evh WHERE evh.id = formule_resultat.etat_volume_horaire_id)
+  type_intervenant_code = (SELECT ti.code FROM type_intervenant ti JOIN statut_intervenant si ON si.type_intervenant_id = ti.id JOIN intervenant i ON i.statut_id = si.id WHERE i.id = formule_resultat.intervenant_id)
 ;
 
 
 
---penser à la table des indicateurs ! !
 
 -- ********************************************************************* --
 -- *          à faire APRÈS avoir mis à jour le code source            * --

@@ -71,6 +71,6 @@ from
   join WF_ETAPE E on e.id = w.etape_id
   left join structure s on s.id = w.structure_id
 where 
-  intervenant_id = 35533;
+  intervenant_id = 35580;
   
 select * from v_workflow_etape_pertinente where intervenant_id = 35533;

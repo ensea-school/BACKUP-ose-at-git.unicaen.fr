@@ -34,8 +34,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const DOSSIER_VISUALISATION                     = 'dossier-visualisation';
     const DOSSIER_EDITION                           = 'dossier-edition';
     const DOSSIER_VALIDATION                        = 'dossier-validation';
-    const DOSSIER_DEVALIDATION                      = 'dossier-devalidation';
     const DOSSIER_SUPPRESSION                       = 'dossier-suppression';
+    const DOSSIER_DEVALIDATION                      = 'dossier-devalidation';
     const DOSSIER_DIFFERENCES                       = 'dossier-differences';
     const DOSSIER_PURGER_DIFFERENCES                = 'dossier-purger-differences';
     const PIECE_JUSTIFICATIVE_VISUALISATION         = 'piece-justificative-visualisation';
@@ -78,7 +78,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MISE_EN_PAIEMENT_EXPORT_PAIE              = 'mise-en-paiement-export-paie';
     const INDICATEUR_VISUALISATION                  = 'indicateur-visualisation';
     const INDICATEUR_ABONNEMENT                     = 'indicateur-abonnement';
-    const INDICATEUR_DESABONNEMENT                  = 'indicateur-desabonnement';
     const INDICATEUR_ABONNEMENTS_EDITION            = 'indicateur-abonnements-edition';
     const INDICATEUR_ABONNEMENTS_VISUALISATION      = 'indicateur-abonnements-visualisation';
     const INDICATEUR_ENVOI_MAIL_INTERVENANTS        = 'indicateur-envoi-mail-intervenants';
@@ -88,15 +87,17 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const IMPORT_MAJ                                = 'import-maj';
     const IMPORT_TBL                                = 'import-tbl';
     const IMPORT_VUES_PROCEDURES                    = 'import-vues-procedures';
+    const PARAMETRES_GENERAL_EDITION                = 'parametres-general-edition';
     const WORKFLOW_DEPENDANCES_EDITION              = 'workflow-dependances-edition';
     const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
     const CLOTURE_CLOTURE                           = 'cloture-cloture';
-    const WORKFLOW_DEPENDANCES_VISUALISATION        = 'workflow-dependances-visualisation';
+    const PARAMETRES_GENERAL_VISUALISATION          = 'parametres-general-visualisation';
     const CLOTURE_REOUVERTURE                       = 'cloture-reouverture';
-    const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
+    const WORKFLOW_DEPENDANCES_VISUALISATION        = 'workflow-dependances-visualisation';
     const BUDGET_VISUALISATION                      = 'budget-visualisation';
-    const CLOTURE_EDITION_SERVICES                  = 'cloture-edition-services';
+    const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
     const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE      = 'budget-edition-engagement-composante';
+    const CLOTURE_EDITION_SERVICES                  = 'cloture-edition-services';
     const BUDGET_EXPORT                             = 'budget-export';
     const BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT   = 'budget-edition-engagement-etablissement';
 

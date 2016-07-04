@@ -166,6 +166,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     if (!isset($roles[$affRoleId])) {
                         $affRoleLibelle = $dbRole->getLibelle() . ' (' . $structure->getLibelleCourt() . ')';
                         $affRole        = new \Application\Acl\Role($affRoleId, $roleId, $affRoleLibelle);
+                        if (isset($rolesPrivileges[$roleId])){
+                            $affRole->initPrivileges($rolesPrivileges[$roleId]);
+                        }
                         $affRole->setDbRole( $dbRole );
                         $affRole->setPersonnel($personnel);
                         $affRole->setStructure($structure);

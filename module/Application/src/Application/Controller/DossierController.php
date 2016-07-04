@@ -14,7 +14,6 @@ use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use Doctrine\ORM\Query\Expr\Join;
 use RuntimeException;
 use NumberFormatter;
 use UnicaenApp\Util;

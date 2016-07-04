@@ -280,5 +280,6 @@ return array_merge_recursive(
     include 'paiement.config.php',
     include 'log.config.php',
     include 'pilotage.config.php',
-    include 'budget.config.php'
+    include 'budget.config.php',
+    include 'parametre.config.php'
 );

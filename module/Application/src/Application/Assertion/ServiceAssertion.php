@@ -53,6 +53,7 @@ class ServiceAssertion extends AbstractAssertion
 
             if (
                 $intervenant
+                && $role
                 && $role->getStructure()
                 && (WfEtape::CODE_SERVICE_VALIDATION == $etape || WfEtape::CODE_SERVICE_VALIDATION_REALISE == $etape)
             ){ // dans ce cas ce n'est pas le WF qui agit mais on voit la validation dès qu'on a des services directement...

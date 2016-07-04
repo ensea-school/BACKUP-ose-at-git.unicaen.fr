@@ -57,14 +57,14 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
         data-confirm="true"
         data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Clôture des services"
         data-submit-reload="true"
-    >Saisie de la totalité du service réalisé terminée</a>
+    >L'intervenant a terminé la saisie de la totalité de son service réalisé</a>
     <br/><br/>
 
 <?php elseif ($isCloture && !$bottom): ?>
 
     <div class="alert alert-success">
         <span class="glyphicon glyphicon-off pull-left" style="font-size: 48pt;margin-right:.2em"></span>
-        <p>La saisie du service réalisé a été clôturée
+        <p>La saisie du service réalisé a été clôturée par <?php echo $cloture->getHistoModificateur() ?>
             le <?php echo $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
         <?php if (!$canEditAfter): ?>
             <p><strong>Vous ne pouvez donc plus modifier <?php echo $isSelf ? 'vos' : 'les' ?> données.</strong></p>

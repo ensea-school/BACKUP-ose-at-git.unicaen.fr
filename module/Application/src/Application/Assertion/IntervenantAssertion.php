@@ -98,7 +98,7 @@ class IntervenantAssertion extends AbstractAssertion
         $hasNoDMEP = false;
         if ($intervenant){
             $dmepEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-            $hasNoDMEP = $dmepEtape->getFranchie() == 0;
+            $hasNoDMEP = !$dmepEtape || $dmepEtape->getFranchie() == 0;
         }
 
         return $this->asserts([

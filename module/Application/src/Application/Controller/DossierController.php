@@ -91,7 +91,6 @@ class DossierController extends AbstractController
         // le formulaire est en lecture seule si les données ont été validées ou si on n'a pas le droit de le modifier!!
         $form->setReadOnly(!$canEdit);
 
-
         /* Affichage de messages informatifs*/
 
         /* Si l'intervenant a effectué des heures avant */

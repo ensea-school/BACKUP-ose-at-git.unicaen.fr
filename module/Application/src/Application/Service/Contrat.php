@@ -96,7 +96,7 @@ class Contrat extends AbstractEntityService
 
 
     /**
-     * Calcule le numero d'avenant suivant : nombre d'avenants validés + 1.
+     * Calcule le numero d'avenant suivant : nombre d'avenants validés.
      *
      * @param Intervenant $intervenant              Intervenant concerné
      * @param bool        $avenantsValidesSeulement Ne compter que les avenants validés ?
@@ -112,7 +112,7 @@ class Contrat extends AbstractEntityService
         }
         $avenantsCount = (int)$qb->select('COUNT(' . $this->getAlias() . ')')->getQuery()->getSingleScalarResult();
 
-        return $avenantsCount + 1;
+        return $avenantsCount;
     }
 
 

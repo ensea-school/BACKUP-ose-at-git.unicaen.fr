@@ -51,7 +51,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
         <!-- Lien de téléchargement du fichier -->
         <?php if ($urlExport): ?>
             <span class="pull-right">
-            <a href="<?php echo $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
+            <a class="btn btn-<?php echo $panel ?>" href="<?php echo $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
                 <span class="glyphicon glyphicon-export"></span> Exporter en PDF
             </a>
             </span>

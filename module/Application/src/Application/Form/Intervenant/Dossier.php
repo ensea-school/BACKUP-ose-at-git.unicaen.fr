@@ -166,7 +166,7 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
             'numeroInsee'               => 'readonly',
             'numeroInseeEstProvisoire'  => 'disabled',
             'adresse'                   => 'readonly',
-            'email'                     => 'readonly',
+            //'email'                     => 'readonly',
             'emailPerso'                => 'readonly',
             'telephone'                 => 'readonly',
             'premierRecrutement'        => 'disabled',

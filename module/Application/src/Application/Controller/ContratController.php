@@ -331,7 +331,7 @@ class ContratController extends AbstractController
             $nomCompletIntervenant = $intervenant->getCivilite() . ' ' . $nomIntervenant;
         }
 
-        $fileName = sprintf("contrat_%s_%s_%s.pdf",
+        $fileName = sprintf(($estUnAvenant ? 'avenant' : 'contrat')."_%s_%s_%s.pdf",
             $contrat->getStructure()->getSourceCode(),
             $intervenant->getNomUsuel(),
             $intervenant->getSourceCode());
@@ -372,7 +372,9 @@ class ContratController extends AbstractController
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', false, $variables);
 
         $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER SIGNÉ À L'ADRESSE SUIVANTE :<br />";
-        $variables['mentionRetourner'] .= $contrat->getStructure()->getAdressePrincipale();
+        $variables['mentionRetourner'] .= str_replace( "\n", ' - ',
+            strtoupper($contrat->getStructure())."\n".$contrat->getStructure()->getAdressePrincipale()
+        );
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);

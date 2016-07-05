@@ -275,6 +275,10 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 $out .= '</div>';
                 $out .= '<div class="modal-body">';
                 $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
+                $out .= '<div class="alert alert-info" id="prevu-to-prevu-attente" style="display:none">';
+                $out .= '<img src="'.$this->getView()->basePath().'/images/wait.gif" alt="Attente..."/>';
+                $out .= '<div>Reprise des enseignements de l\'année dernière en cours... Merci de patienter.</div>';
+                $out .= '</div>';
                 $out .= '</div>';
                 $out .= '<div class="modal-footer">';
                 $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';

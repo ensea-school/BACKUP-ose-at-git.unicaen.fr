@@ -41,7 +41,7 @@ use Zend\Session\Container as SessionContainer;
  *
  * @method ServiceEntity get($id)
  * @method ServiceEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- *         
+ *
  */
 class ServiceService extends AbstractEntityService
 {
@@ -604,6 +604,7 @@ class ServiceService extends AbstractEntityService
             }
             $service->setHistoDestructeur(null); // restauration du service si besoin!!
             $service->setHistoDestruction(null);
+            $service->setTypeVolumeHoraire($typeVolumeHoraire);
             $this->save($service, false);
         }
         if ($plafondControl) {
@@ -630,9 +631,7 @@ class ServiceService extends AbstractEntityService
         //@formatter:off
         $this->join(    'applicationEtablissement',                     $qb, 'etablissement',           true);//['id', 'sourceCode']);
         $this->leftJoin('applicationElementPedagogique',                $qb, 'elementPedagogique',      true);//['id', 'sourceCode']);
-        $this->leftJoin('applicationFormuleService',                    $qb, 'formuleService',          true);//['id']);
         $this->leftJoin($sVolumeHoraire,                                $qb, 'volumeHoraire',           true);//['id', 'periode', 'typeIntervention', 'heures']);
-        $sVolumeHoraire->leftJoin('applicationFormuleVolumeHoraire',    $qb, 'formuleVolumeHoraire',    true);//['id']);
         $sVolumeHoraire->leftJoin('applicationPeriode',                 $qb, 'periode',                 true);//['id']);
         $sVolumeHoraire->leftJoin('applicationTypeIntervention',        $qb, 'typeIntervention',        true);//['id']);
         //@formatter:on
@@ -649,6 +648,7 @@ class ServiceService extends AbstractEntityService
         foreach ($s as $service) {
 
             /* @var $service \Application\Entity\Db\Service */
+            $service->setTypeVolumeHoraire($tvhPrevu);
             $oldElement = $service->getElementPedagogique();
             $newElement = $oldElement ? $this->getServiceElementPedagogique()->getBySourceCode(
                 $oldElement->getSourceCode(),
@@ -695,8 +695,11 @@ class ServiceService extends AbstractEntityService
 
                 if (!empty($o['heures'])) {
                     $newService = $this->getBy($intervenant, $newElement, $service->getEtablissement());
+                    if ($newService){
+                        $newService->setTypeVolumeHoraire($tvhPrevu);
+                    }
                     if ($newService && $newService->estNonHistorise()) {
-                        $newHeures = $newService->getVolumeHoraireListe()->setTypeVolumeHoraire($tvhPrevu)->getHeures();
+                        $newHeures = $newService->getVolumeHoraireListe()->getHeures();
                     } else {
                         $newHeures = 0;
                     }

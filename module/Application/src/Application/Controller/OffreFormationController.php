@@ -88,7 +88,7 @@ class OffreFormationController extends AbstractController
               JOIN tf.groupe gtf
               LEFT JOIN e.elementPedagogique ep
             WHERE
-              s = :structure
+              s = :structure OR ep.structure = :structure
             ORDER BY
               gtf.ordre, e.niveau
             ');

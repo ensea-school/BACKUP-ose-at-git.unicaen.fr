@@ -6,11 +6,9 @@ use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\NiveauEtape;
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\GroupeTypeFormationAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
-use Application\Service\Traits\TypeFormationAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 
@@ -18,13 +16,10 @@ use Doctrine\ORM\QueryBuilder;
  * Description of ElementPedagogiqueRechercheFieldset
  *
  */
-class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
+class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements EntityManagerAwareInterface
 {
-    use EtapeAwareTrait;
-    use StructureAwareTrait;
-    use ElementPedagogiqueAwareTrait;
-    use TypeFormationAwareTrait;
-    use GroupeTypeFormationAwareTrait;
+    use EntityManagerAwareTrait;
+    use ContextAwareTrait;
     use SessionContainerTrait;
 
     protected $structureName    = 'structure';
@@ -168,48 +163,74 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
     protected function getData()
     {
         if (!$this->getSessionContainer()->data) {
-            $qb       = $this->getQueryBuilder();
-            $entities = $qb->getQuery()->execute();
-            $result   = [
+
+            $sql = "
+            SELECT DISTINCT
+              s.id structure_id,
+              s.libelle_court structure_libelle,
+              
+              CASE WHEN gtf.pertinence_niveau = 0 THEN 'Autre' ELSE
+                gtf.libelle_court || e.niveau 
+              END niveau_id,
+              CASE WHEN gtf.pertinence_niveau = 0 THEN 'Autre' ELSE
+                gtf.libelle_court || e.niveau 
+              END niveau_libelle,
+              
+              e.id etape_id,
+              e.libelle etape_libelle
+            FROM
+              element_pedagogique ep
+              JOIN etape e ON e.id = ep.etape_id
+              JOIN type_formation tf ON tf.id = e.type_formation_id
+              JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id
+              JOIN structure s ON s.id = ep.structure_id
+            WHERE
+              1 = ose_divers.comprise_entre( ep.histo_creation, ep.histo_destruction )
+              AND ep.annee_id = :annee
+              ";
+
+            $res = $query = $this->getEntityManager()->getConnection()->executeQuery(
+                $sql,
+                ['annee' => $this->getServiceContext()->getAnnee()->getId()]
+            )->fetchAll();
+
+            $result = [
                 'structures' => [],
                 'niveaux'    => [],
                 'etapes'     => [],
                 'relations'  => ['ALL' => ['ALL' => []]],
             ];
-            foreach ($entities as $entity) {
-                if ($entity instanceof Etape) {
-                    $etape     = $entity;
-                    $niveau    = NiveauEtape::getInstanceFromEtape($etape);
-                    $structure = $etape->getStructure();
+            foreach ($res as $e) {
+                $structureId = $e['STRUCTURE_ID'];
+                $structure   = $e['STRUCTURE_LIBELLE'];
+                $niveauId    = $e['NIVEAU_ID'];
+                $niveau      = $e['NIVEAU_LIBELLE'];
+                $etapeId     = $e['ETAPE_ID'];
+                $etape       = $e['ETAPE_LIBELLE'];
 
-                    $structureId = (string)$structure->getId();
-                    $niveauId    = (string)$niveau->getId();
-                    $etapeId     = (string)$etape->getId();
-
-                    if (!isset($result['structures'][$structureId])) {
-                        $result['structures'][$structureId] = (string)$structure;
-                    }
-                    if (!isset($result['niveaux'][$niveauId])) {
-                        $result['niveaux'][$niveauId] = (string)$niveau;
-                    }
-                    if (!isset($result['etapes'][$etapeId])) {
-                        $result['etapes'][$etapeId] = (string)$etape;
-                    }
-
-                    if (!isset($result['relations'][$structureId]['ALL'])) {
-                        $result['relations'][$structureId]['ALL'] = [];
-                    }
-                    if (!isset($result['relations']['ALL'][$niveauId])) {
-                        $result['relations']['ALL'][$niveauId] = [];
-                    }
-                    if (!isset($result['relations'][$structureId][$niveauId])) {
-                        $result['relations'][$structureId][$niveauId] = [];
-                    }
-                    $result['relations']['ALL']['ALL'][]            = $etapeId;
-                    $result['relations'][$structureId]['ALL'][]     = $etapeId;
-                    $result['relations']['ALL'][$niveauId][]        = $etapeId;
-                    $result['relations'][$structureId][$niveauId][] = $etapeId;
+                if (!isset($result['structures'][$structureId])) {
+                    $result['structures'][$structureId] = $structure;
                 }
+                if (!isset($result['niveaux'][$niveauId])) {
+                    $result['niveaux'][$niveauId] = $niveau;
+                }
+                if (!isset($result['etapes'][$etapeId])) {
+                    $result['etapes'][$etapeId] = $etape;
+                }
+
+                if (!isset($result['relations'][$structureId]['ALL'])) {
+                    $result['relations'][$structureId]['ALL'] = [];
+                }
+                if (!isset($result['relations']['ALL'][$niveauId])) {
+                    $result['relations']['ALL'][$niveauId] = [];
+                }
+                if (!isset($result['relations'][$structureId][$niveauId])) {
+                    $result['relations'][$structureId][$niveauId] = [];
+                }
+                $result['relations']['ALL']['ALL'][]            = $etapeId;
+                $result['relations'][$structureId]['ALL'][]     = $etapeId;
+                $result['relations']['ALL'][$niveauId][]        = $etapeId;
+                $result['relations'][$structureId][$niveauId][] = $etapeId;
             }
             asort($result['structures']);
             asort($result['niveaux']);
@@ -323,22 +344,5 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset
                 'required' => false,
             ],
         ];
-    }
-
-
-
-    private function getQueryBuilder()
-    {
-        if (!$this->queryBuilder) {
-            $this->queryBuilder = $this->getServiceEtape()->initQuery()[0];
-
-            $this->getServiceEtape()->join($this->getServiceStructure(), $this->queryBuilder, 'structure', true);
-            $this->getServiceEtape()->join($this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation', true);
-            $this->getServiceTypeFormation()->join($this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe', true);
-
-            $this->getServiceEtape()->finderByHistorique($this->queryBuilder);
-            $this->getServiceEtape()->finderByNonOrphelines($this->queryBuilder);
-        }
-        return $this->queryBuilder;
     }
 }

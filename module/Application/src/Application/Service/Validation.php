@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Dossier;
+use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
@@ -49,7 +49,7 @@ class Validation extends AbstractEntityService
 
 
 
-    public function validerDossier(Dossier $dossier)
+    public function validerDossier(DossierEntity $dossier)
     {
         $typeDonneesPerso = $this->getServiceTypeValidation()->getByCode(TypeValidationEntity::CODE_DONNEES_PERSO);
 

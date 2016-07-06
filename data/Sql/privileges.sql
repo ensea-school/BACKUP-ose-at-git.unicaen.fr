@@ -6,8 +6,8 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'workflow',
-  'Gestion du Workflow'
+  'parametres',
+  'Paramétrages'
 );
 
 INSERT INTO PRIVILEGE (
@@ -25,7 +25,8 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'indicateur' c, 'envoi-mail-intervenants' p, 'Mail aux intervenants' l FROM dual
+      SELECT 'parametres' c, 'general-visualisation' p, 'Général - Visualisation' l FROM dual
+      UNION SELECT 'parametres' c, 'general-edition' p, 'Général - Édition' l FROM dual
 
 ) t1;
 

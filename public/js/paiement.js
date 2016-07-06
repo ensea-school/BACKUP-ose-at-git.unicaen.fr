@@ -561,7 +561,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         this.element.find('.heures-non-dmep').html(Util.formattedHeures(this.params['heures-non-dmep']));
 
-        if (this.params['heures-dmep'] + this.params['heures-mep'] > this.params['heures-total']) {
+        if (Math.round((this.params['heures-dmep'] + this.params['heures-mep'])*100)/100 > this.params['heures-total']) {
             this.element.addClass('bg-danger');
             if (0 == this.params['heures-non-dmep']) {
                 this.element.find('.heures-non-dmep').parents('tr').hide();

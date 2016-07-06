@@ -31,10 +31,10 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.id=7218
+  AND i.id=10344
 --  AND s.id = 3208
   AND vh.histo_destruction IS NULL
-  AND tvh.code = 'REALISE'
+  AND tvh.code = 'PREVU'
   --AND contrat_id = 341
   --AND tvh.id = 2
   --AND vh.periode_id = 12

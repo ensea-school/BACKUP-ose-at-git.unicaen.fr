@@ -465,7 +465,8 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 $params['heures-dmep'] += $miseEnPaiement->getHeures();
             }
         }
-        $params['heures-non-dmep'] = $params['heures-total'] - $params['heures-mep'] - $params['heures-dmep'];
+        $params['heures-non-dmep'] = (float)$params['heures-total'] - (float)$params['heures-mep'] - (float)$params['heures-dmep'];
+        if (abs($params['heures-non-dmep']) < 0.01) $params['heures-non-dmep'] = 0.0;
 
         // tri du buffer et mise en paramètres
         usort($mepBuffer, function ($a, $b) {

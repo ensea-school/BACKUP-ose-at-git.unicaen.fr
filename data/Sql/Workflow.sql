@@ -1,13 +1,13 @@
 DECLARE
-  intervenant_id NUMERIC DEFAULT 10347;
+  intervenant_id NUMERIC DEFAULT 6863;
 BEGIN
   DBMS_OUTPUT.ENABLE(1000000); 
   ose_test.debug_enabled := false;
 
 --ose_pj.update_intervenant(intervenant_id);
 --OSE_FORMULE.CALCULER(intervenant_id);
---OSE_WORKFLOW.CALCULER(intervenant_id);
-OSE_WORKFLOW.CALCULER_TOUT(2014);
+OSE_WORKFLOW.CALCULER(intervenant_id);
+--OSE_WORKFLOW.CALCULER_TOUT(2014);
 --OSE_PIECE_JOINTE_FOURNIE.calculer_tout;
 END;
 /
@@ -71,7 +71,7 @@ from
   join WF_ETAPE E on e.id = w.etape_id
   left join structure s on s.id = w.structure_id
 where 
-  intervenant_id = 193
+  intervenant_id =     6863
 order by
   E.ORDRE;
   

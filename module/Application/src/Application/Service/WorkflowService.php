@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TblWorkflow;
-use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
@@ -52,10 +52,10 @@ class WorkflowService extends AbstractService
                 if (!$intervenant) $intervenant = $etape->getIntervenant();
                 if (!$structure)    $structure = $etape->getStructure();
             break;
-            case $etape instanceof TypeVolumeHoraire:
+            case $etape instanceof TypeVolumeHoraireEntity:
                 $mapping = [
-                    TypeVolumeHoraire::CODE_PREVU => WfEtape::CODE_SERVICE_SAISIE,
-                    TypeVolumeHoraire::CODE_REALISE => WfEtape::CODE_SERVICE_SAISIE_REALISE,
+                    TypeVolumeHoraireEntity::CODE_PREVU => WfEtape::CODE_SERVICE_SAISIE,
+                    TypeVolumeHoraireEntity::CODE_REALISE => WfEtape::CODE_SERVICE_SAISIE_REALISE,
                 ];
                 $etapeCode = $mapping[$etape->getCode()];
             break;

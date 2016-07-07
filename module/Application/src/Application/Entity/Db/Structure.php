@@ -428,6 +428,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
         WHERE
           a.structure = :structure
           AND a.principale = true
+          AND 1 = compriseEntre( a.histoCreation, a.histoDestruction )
         ";
 
         return $this->getEntityManager()->createQuery($dql)->setParameter('structure', $this)->getOneOrNullResult();

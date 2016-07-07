@@ -1,5 +1,5 @@
 DECLARE
-  intervenant_id NUMERIC DEFAULT 6863;
+  intervenant_id NUMERIC DEFAULT 5021;
 BEGIN
   DBMS_OUTPUT.ENABLE(1000000); 
   ose_test.debug_enabled := false;
@@ -71,7 +71,7 @@ from
   join WF_ETAPE E on e.id = w.etape_id
   left join structure s on s.id = w.structure_id
 where 
-  intervenant_id =     6863
+  intervenant_id =     5021
 order by
   E.ORDRE;
   

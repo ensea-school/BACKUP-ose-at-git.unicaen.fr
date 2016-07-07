@@ -264,9 +264,9 @@ class Indicateur
     /**
      * @return string
      */
-    public function getLibelle()
+    public function getLibelle(Structure $structure = null)
     {
-        $count = $this->getCount();
+        $count = $this->getCount($structure);
 
         if ($count > 1) {
             return sprintf($this->getLibellePluriel(), $count);

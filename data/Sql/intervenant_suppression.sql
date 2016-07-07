@@ -8,7 +8,7 @@ select * from mise_en_paiement
 where formule_res_service_id IN (
   select id from formule_resultat_service where service_id IN (
     select id from service where intervenant_id IN (
-      select id from intervenant where source_code = '114111'
+      select id from intervenant where source_code = '99322'
     )
   )
 );
@@ -21,7 +21,7 @@ WHERE contrat_id IN (
   --;delete from contrat
   --;update contrat set histo_destructeur_id = 4, histo_destruction=sysdate
   where intervenant_id IN (
-    select id from intervenant where source_code = '114111'
+    select id from intervenant where source_code = '99322'
   )
 );
 
@@ -30,7 +30,7 @@ select * from contrat
 --;delete from contrat
 --;update contrat set histo_destructeur_id = 4, histo_destruction=sysdate
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 
@@ -40,7 +40,7 @@ select * from validation_vol_horaire
 where volume_horaire_id IN (
   select id FROM volume_horaire WHERE service_id IN (
     select id from service where intervenant_id IN (
-      select id from intervenant where source_code = '114111'
+      select id from intervenant where source_code = '99322'
     )
   )
 );
@@ -52,7 +52,7 @@ select * from volume_horaire
 --;update volume_horaire set histo_destructeur_id = 4, histo_destruction=sysdate
 where service_id IN (
   select id from service where intervenant_id IN (
-    select id from intervenant where source_code = '114111'
+    select id from intervenant where source_code = '99322'
   )
 );
 
@@ -62,7 +62,7 @@ select * from service
 --;delete from service
 --;update service set histo_destructeur_id = 4, histo_destruction=sysdate
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 
@@ -71,7 +71,7 @@ select * from agrement
 --;delete from agrement
 --;update agrement set histo_destructeur_id = 4, histo_destruction=sysdate
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 
@@ -80,36 +80,34 @@ select * from validation
 --;delete from validation
 --;update validation set histo_destructeur_id = 4, histo_destruction=sysdate
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 -- pieces justificatives
 select * from piece_jointe
 --;delete from piece_jointe
-where dossier_id IN (
-  select id FROM dossier WHERE intervenant_id IN (
-    select id from intervenant where source_code = '114111'
-  )
+where intervenant_id IN (
+  select id from intervenant where source_code = '99322'
 );
 
 -- dossier
 select * from dossier
 --;delete from dossier
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 -- workflow
-select * from wf_intervenant_etape
---;delete from wf_intervenant_etape
+select * from tbl_workflow
+--;delete from tbl_workflow
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 select * from indic_modif_dossier
 --;delete from indic_modif_dossier
 where intervenant_id IN (
-  select id from intervenant where source_code = '114111'
+  select id from intervenant where source_code = '99322'
 );
 
 
@@ -118,4 +116,4 @@ where intervenant_id IN (
 select * from intervenant
 --;delete from intervenant
 --;update intervenant set histo_destructeur_id = 4, histo_destruction=sysdate
-where source_code = '114111';
+where source_code = '99322';

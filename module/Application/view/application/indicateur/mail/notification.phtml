@@ -32,7 +32,7 @@ if (!$notification->getAffectation()->getStructure()) {
 
 ?>
 
-<h1><?php echo $notification->getIndicateur()->getLibelle() ?></h1>
+<h1><?php echo $notification->getIndicateur()->getLibelle($notification->getAffectation()->getStructure()) ?></h1>
 <?php if ($hasStructure): ?>
     <table border="1" style="border-collapse: collapse">
         <thead>

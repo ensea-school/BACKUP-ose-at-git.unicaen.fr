@@ -1,4 +1,5 @@
 SELECT
+  mep.id || ',' /*
   mep.id mep_id,
   i.id i_id, i.prenom || ' ' || i.nom_usuel intervenant,
   s.id s_id, s.libelle_court structure,
@@ -11,7 +12,7 @@ SELECT
   to_char(mep.histo_creation, 'DD/MM/YYYY HH:MI:SS') mep_histo_creation,
   mep.histo_createur_id,
   mep.histo_modification,
-  mep.histo_destructeur_id
+  mep.histo_destructeur_id*/
 FROM
   v_mep_intervenant_structure  mis
   JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id
@@ -27,13 +28,26 @@ WHERE
   --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  i.source_code = '108252'
+  i.id = 6609
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;
 
 
---delete from mise_en_paiement where id in ();
+select * from tbl_paiement where intervenant_id = 7222;
+
+
+delete from mise_en_paiement where id in (
+28969,
+28970,
+28971,
+28972,
+28973,
+28974,
+28975,
+28976
+
+);
 
 --update mise_en_paiement set heures = 1.38 WHERE id = 446;
 

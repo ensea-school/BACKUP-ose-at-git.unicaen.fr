@@ -58,7 +58,9 @@ class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManager
 
     protected function creerMailNotification(NotificationIndicateur $notification)
     {
-        $result = $notification->getIndicateur()->getResult($notification->getAffectation()->getStructure());
+        $structure = $notification->getAffectation()->getStructure();
+
+        $result = $notification->getIndicateur()->getResult($structure);
         $count  = count($result);
 
         if (0 == $count) return null; // pas de notification pour cet indicateur
@@ -84,7 +86,7 @@ class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManager
                 $this->getServiceContext()->getAnnee(),
                 $notification->getIndicateur()->getNumero(),
                 $notification->getFrequenceToString(),
-                strip_tags($notification->getIndicateur()->getLibelle())
+                strip_tags($notification->getIndicateur()->getLibelle($structure))
             ) )
             ->setBody($body)
             ->addTo($notification->getAffectation()->getPersonnel()->getEmail(), (string)$notification->getAffectation()->getPersonnel());

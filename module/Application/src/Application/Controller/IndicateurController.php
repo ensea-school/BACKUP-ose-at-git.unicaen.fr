@@ -217,16 +217,41 @@ class IndicateurController extends AbstractController
      *      php public/index.php notifier indicateurs --force
      * Arguments de la ligne de commande :
      * - <code>force</code> (facultatif)
-     * - <code>requestUriHost</code> (obligatoire),
      */
     public function envoiNotificationsAction()
     {
+        // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
+        // n'est pas en mesure de construire des URL (car le ConsoleRouter ne sait pas ce qu'est une URL!).
+        // On injecte donc provisoirement un HttpRouter dans le circuit.
+        $event      = $this->getEvent();
+        $router     = $event->getRouter();
+        $httpRouter = $this->getServiceLocator()->get('HttpRouter'); /* @var $httpRouter TreeRouteStack */
+        $event->setRouter($httpRouter);
+
+        $config = $this->getServiceLocator()->get('Config');
+        $host = $config['cli_config']['domain'];
+        $scheme = $config['cli_config']['scheme'];
+
+        // De plus, pour fonctionner, le HttpRouter a besoin du "prefixe" à utiliser pour assembler les URL
+        // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
+        // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
+        $httpUri = (new \Zend\Uri\Http())
+            ->setHost($host)              // ex: "/localhost/ose", "ose.unicaen.fr"
+            ->setScheme($scheme);
+        $httpRouter->setRequestUri($httpUri);
+
+
         $request = $this->getRequest();
 
         $force = (bool)$request->getParam('force');
 
         $this->getProcessusIndicateur()->envoiNotifications($force);
-        
+
+        // S'il s'agit d'une requête de type Console (CLI), rétablissement du router initial (cf. commentaires plus haut).
+        if ($this->getRequest() instanceof \Zend\Console\Request) {
+            $event->setRouter($router);
+        }
+
         exit;
     }
 

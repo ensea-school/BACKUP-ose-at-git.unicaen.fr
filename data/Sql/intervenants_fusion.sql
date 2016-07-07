@@ -1,17 +1,12 @@
 -- déplacer les données d'un compte vers un autre en vue d'une fusion
 alter trigger "OSE"."SERVICE_HISTO_CK" disable;
-alter trigger "OSE"."VALIDATION_CK" disable;
-alter trigger "OSE"."F_CONTRAT_S" disable;
-alter trigger "OSE"."F_MODIF_SERVICE_DU_S" disable;
-alter trigger "OSE"."SERVICE_CK" disable;
-alter trigger "OSE"."F_SERVICE_S" disable;
-alter trigger "OSE"."F_SERVICE_REFERENTIEL_S" disable;
-alter trigger "OSE"."F_VALIDATION_S" disable;
-alter trigger "OSE"."FORMULE_RES_SERVICE_DEL_CK" disable;
+
+
+
 /
 DECLARE
-  old_source_code NUMERIC := '112292';
-  new_source_code NUMERIC := '40926';
+  old_source_code NUMERIC := '99322';
+  new_source_code NUMERIC := '26623';
 
   old_id NUMERIC;
   new_id NUMERIC;
@@ -31,6 +26,8 @@ BEGIN
  -- select id, dossier_id INTO ie_new_id, new_dossier_id from intervenant_exterieur where id = new_id;
 
   SELECT id INTO ose_id FROM source WHERE code = 'OSE';
+
+  ose_event.set_actif(false);
   
   --UPDATE adresse_intervenant SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   --UPDATE affectation_recherche SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
@@ -45,26 +42,36 @@ BEGIN
   UPDATE service_referentiel SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   
   UPDATE validation SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  UPDATE wf_intervenant_etape SET intervenant_id = new_id WHERE intervenant_id = old_id;
   
-  -- traitement du dossier
-  /*IF old_dossier_id is not null and new_dossier_id is not null THEN
-    UPDATE piece_jointe SET dossier_id = new_dossier_id WHERE dossier_id = old_dossier_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);  
-  ELSIF ie_new_id IS NOT NULL AND old_dossier_id IS NOT NULL THEN
-    UPDATE intervenant SET dossier_id = new_dossier_id WHERE id = ie_new_id;
-  END IF;*/
+  UPDATE piece_jointe SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   
+  UPDATE dossier SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
+  
+  UPDATE formule_resultat SET intervenant_id = new_id WHERE intervenant_id = old_id;
+
+  ose_event.set_actif(true);
+
+  
+  ose_agrement.calculer(old_id);ose_agrement.calculer(new_id);
+  OSE_CLOTURE_REALISE.calculer(old_id);OSE_CLOTURE_REALISE.calculer(new_id);
+  OSE_CONTRAT.calculer(old_id);OSE_CONTRAT.calculer(new_id);
+  OSE_DOSSIER.calculer(old_id);OSE_DOSSIER.calculer(new_id);
+  OSE_FORMULE.calculer(old_id);OSE_FORMULE.calculer(new_id);
+  OSE_PAIEMENT.calculer(old_id);OSE_PAIEMENT.calculer(new_id);
+  OSE_PIECE_JOINTE.calculer(old_id);OSE_PIECE_JOINTE.calculer(new_id);
+  OSE_PIECE_JOINTE_DEMANDE.calculer(old_id);OSE_PIECE_JOINTE_DEMANDE.calculer(new_id);
+  OSE_PIECE_JOINTE_FOURNIE.calculer(old_id);OSE_PIECE_JOINTE_FOURNIE.calculer(new_id);
+  OSE_SERVICE.calculer(old_id);OSE_SERVICE.calculer(new_id);
+  OSE_SERVICE_REFERENTIEL.calculer(old_id);OSE_SERVICE_REFERENTIEL.calculer(new_id);
+  OSE_SERVICE_SAISIE.calculer(old_id);OSE_SERVICE_SAISIE.calculer(new_id);
+  OSE_VALIDATION_ENSEIGNEMENT.calculer(old_id);OSE_VALIDATION_ENSEIGNEMENT.calculer(new_id);
+  OSE_VALIDATION_REFERENTIEL.calculer(old_id);OSE_VALIDATION_REFERENTIEL.calculer(new_id);
+  OSE_WORKFLOW.calculer(old_id);OSE_WORKFLOW.calculer(new_id);
+
 END;
 /
 alter trigger "OSE"."SERVICE_HISTO_CK" enable;
-alter trigger "OSE"."VALIDATION_CK" enable;
-alter trigger "OSE"."F_CONTRAT_S" enable;
-alter trigger "OSE"."F_MODIF_SERVICE_DU_S" enable;
-alter trigger "OSE"."SERVICE_CK" enable;
-alter trigger "OSE"."F_SERVICE_S" enable;
-alter trigger "OSE"."F_SERVICE_REFERENTIEL_S" enable;
-alter trigger "OSE"."F_VALIDATION_S" enable;
-alter trigger "OSE"."FORMULE_RES_SERVICE_DEL_CK" enable;
+
 /
 
 

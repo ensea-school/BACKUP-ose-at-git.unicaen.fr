@@ -252,7 +252,7 @@ class ServiceReferentielController extends AbstractController
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $filterStructure = $role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
+        $filterStructure = null;//$role->getStructure(); // pour filtrer les affichages à la structure concernée uniquement
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */

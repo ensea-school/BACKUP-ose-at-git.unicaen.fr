@@ -8,7 +8,6 @@ SELECT
   m.libelle                   m_libelle,
   M.PONDERATION_SERVICE_DU    m_pondaration_service_du,
   M.PONDERATION_SERVICE_COMPL m_PONDERATION_SERVICE_COMPL
- 
 FROM
   TYPE_MODULATEUR TM
   LEFT JOIN modulateur M ON m.type_modulateur_id = tm.id AND m.histo_destruction IS NULL
@@ -28,6 +27,7 @@ UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 3', code = 'IAE_FC_3' WHERE code
 UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 2', code = 'IAE_FC_2' WHERE code = 'IAE_FC_NM';
 UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 1', code = 'IAE_FC_1' WHERE code = 'IAE_FC_NL';
 
+select * from type_modulateur;
 
 INSERT INTO   TYPE_MODULATEUR  (
     ID,
@@ -47,13 +47,13 @@ INSERT INTO   TYPE_MODULATEUR  (
   )
   VALUES  (
     TYPE_MODULATEUR_id_seq.nextval,
-    'PSYCHO_FC',
+    'STAPS_FC',
     'Formation continue',
     0,
     1,
     0,
-    (SELECT id FROM utilisateur WHERE username = 'gauthierb'),
-    (SELECT id FROM utilisateur WHERE username = 'gauthierb')
+    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
+    (SELECT id FROM utilisateur WHERE username = 'lecluse')
   );
   
 INSERT INTO MODULATEUR
@@ -64,7 +64,6 @@ INSERT INTO MODULATEUR
     TYPE_MODULATEUR_ID,
     PONDERATION_SERVICE_DU,
     PONDERATION_SERVICE_COMPL,
-    VALIDITE_DEBUT,
     --HISTO_CREATION,
     HISTO_CREATEUR_ID,
     --HISTO_MODIFICATION,
@@ -73,21 +72,18 @@ INSERT INTO MODULATEUR
   VALUES
   (
     modulateur_id_seq.nextval,
-    'PSYCHO_FC_1',
-    'Niveau 1',
-    (SELECT id FROM type_modulateur WHERE code = 'PSYCHO_FC'),
+    'STAPS_FC_4',
+    'Niveau 4',
+    (SELECT id FROM type_modulateur WHERE code = 'STAPS_FC'),
     1, 1.92,
-    SYSDATE,
-    (SELECT id FROM utilisateur WHERE username = 'gauthierb'),
-    (SELECT id FROM utilisateur WHERE username = 'gauthierb')
+    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
+    (SELECT id FROM utilisateur WHERE username = 'lecluse')
   );
   
 INSERT INTO   TYPE_MODULATEUR_STRUCTURE  (
     ID,
     TYPE_MODULATEUR_ID,
     STRUCTURE_ID,
-    VALIDITE_DEBUT,
-    --VALIDITE_FIN,
     --HISTO_CREATION,
     HISTO_CREATEUR_ID,
     --HISTO_MODIFICATION,
@@ -97,9 +93,10 @@ INSERT INTO   TYPE_MODULATEUR_STRUCTURE  (
   )
   VALUES  (
     TYPE_MODULATEUR_STRUCTU_ID_SEQ.nextval,
-    (SELECT id FROM type_modulateur WHERE code = 'PSYCHO_FC'),
-    (SELECT id FROM structure WHERE source_code = 'U24'),
-    sysdate,
-    (SELECT id FROM utilisateur WHERE username = 'gauthierb'),
-    (SELECT id FROM utilisateur WHERE username = 'gauthierb')
+    (SELECT id FROM type_modulateur WHERE code = 'STAPS_FC'),
+    (SELECT id FROM structure WHERE source_code = 'U14'),
+    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
+    (SELECT id FROM utilisateur WHERE username = 'lecluse')
   );
+  
+  select  * from structure where libelle_court like '%STAPS%';

@@ -6,6 +6,8 @@
     <entity name="Application\Entity\Db\Indicateur\Indicateur650" table="V_INDICATEUR_650" read-only="true">
         <id name="id" type="integer" column="ID"/>
 
+        <field name="structuresConcernees" type="string" column="STRUCTURES_CONCERNEES" length="1000" nullable="true"/>
+
         <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
             <join-column name="ANNEE_ID" referenced-column-name="ID"/>
         </many-to-one>

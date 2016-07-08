@@ -28,7 +28,7 @@ WHERE
   --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  i.id = 6609
+  i.id = 7222
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;
@@ -38,14 +38,46 @@ select * from tbl_paiement where intervenant_id = 7222;
 
 
 delete from mise_en_paiement where id in (
-28969,
-28970,
-28971,
-28972,
-28973,
-28974,
-28975,
-28976
+43050,
+43051,
+43052,
+43053,
+43054,
+43055,
+43056,
+43057,
+43058,
+43059,
+43060,
+43061,
+43062,
+43063,
+43064,
+43065,
+43066,
+43067,
+43068,
+43069,
+43070,
+43071,
+43072,
+43073,
+43074,
+43075,
+43076,
+43077,
+43078,
+43079,
+43080,
+43081,
+43082,
+43083,
+43084,
+43085,
+43086,
+43087,
+43088,
+43089
 
 );
 

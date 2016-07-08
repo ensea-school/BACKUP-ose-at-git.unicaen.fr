@@ -228,7 +228,7 @@ class ServiceAssertion extends AbstractAssertion
                 $asserts[] = $structure == $structureAffectation || $structure == $structureEnseignement; // le service doit avoir un lien avec la structure
             } elseif ($structureAffectation && !$structureEnseignement) {
                 // cas d'un intervenant prenant des enseignements à l'extérieur
-                $asserts[] = $structure == $structureAffectation;
+                //$asserts[] = $structure == $structureAffectation;
             }
         }
 

@@ -79,6 +79,11 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      */
     protected $miseEnPaiementIntervenantStructure;
 
+    /**
+     * @var boolean
+     */
+    protected $affAdresseContrat;
+
 
 
     function __construct()
@@ -388,6 +393,30 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
         return $this->miseEnPaiementIntervenantStructure;
     }
 
+
+
+    /**
+     * @return boolean
+     */
+    public function getAffAdresseContrat()
+    {
+        return $this->affAdresseContrat;
+    }
+
+
+
+    /**
+     * @param boolean $affAdresseContrat
+     *
+     * @return Structure
+     */
+    public function setAffAdresseContrat($affAdresseContrat)
+    {
+        $this->affAdresseContrat = $affAdresseContrat;
+
+        return $this;
+    }
+    
 
 
     /**

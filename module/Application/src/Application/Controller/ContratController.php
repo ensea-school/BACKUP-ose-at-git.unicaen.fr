@@ -371,9 +371,11 @@ class ContratController extends AbstractController
         $variables['mentionRetourner'] = "EXEMPLAIRE À CONSERVER";
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', false, $variables);
 
-        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER SIGNÉ À L'ADRESSE SUIVANTE :<br />";
+        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER ".(($contrat->getStructure()->getAffAdresseContrat()) ? 'SIGNÉ À L\'ADRESSE SUIVANTE :<br />' : '');
         $variables['mentionRetourner'] .= str_replace( "\n", ' - ',
+            $contrat->getStructure()->getAffAdresseContrat() ?
             strtoupper($contrat->getStructure())."\n".$contrat->getStructure()->getAdressePrincipale()
+            : ''
         );
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 

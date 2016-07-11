@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\CampagneSaisie;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  * Description of CampagneSaisieService
@@ -18,6 +19,9 @@ use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
  */
 class CampagneSaisieService extends AbstractEntityService
 {
+    use ContextAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -52,12 +56,16 @@ class CampagneSaisieService extends AbstractEntityService
      */
     public function getBy(TypeIntervenant $typeIntervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
     {
+        $annee = $this->getServiceContext()->getAnnee();
+
         $result = $this->getRepo()->findOneBy([
+            'annee'             => $annee,
             'typeIntervenant'   => $typeIntervenant,
             'typeVolumeHoraire' => $typeVolumeHoraire,
         ]);
         if (!$result) {
             $result = new CampagneSaisie();
+            $result->setAnnee($annee);
             $result->setTypeIntervenant($typeIntervenant);
             $result->setTypeVolumeHoraire($typeVolumeHoraire);
         }

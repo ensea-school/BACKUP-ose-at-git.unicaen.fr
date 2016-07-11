@@ -3,6 +3,7 @@
 namespace Application\Entity\Db;
 
 use Application\Constants;
+use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
@@ -11,6 +12,7 @@ use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
  */
 class CampagneSaisie
 {
+    use AnneeAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeIntervenantAwareTrait;
 

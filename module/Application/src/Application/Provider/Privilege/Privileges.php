@@ -87,18 +87,20 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const IMPORT_MAJ                                = 'import-maj';
     const IMPORT_TBL                                = 'import-tbl';
     const IMPORT_VUES_PROCEDURES                    = 'import-vues-procedures';
+    const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
     const PARAMETRES_GENERAL_EDITION                = 'parametres-general-edition';
     const WORKFLOW_DEPENDANCES_EDITION              = 'workflow-dependances-edition';
-    const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
     const CLOTURE_CLOTURE                           = 'cloture-cloture';
     const PARAMETRES_GENERAL_VISUALISATION          = 'parametres-general-visualisation';
     const CLOTURE_REOUVERTURE                       = 'cloture-reouverture';
     const WORKFLOW_DEPENDANCES_VISUALISATION        = 'workflow-dependances-visualisation';
     const BUDGET_VISUALISATION                      = 'budget-visualisation';
     const PILOTAGE_VISUALISATION                    = 'pilotage-visualisation';
-    const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE      = 'budget-edition-engagement-composante';
     const CLOTURE_EDITION_SERVICES                  = 'cloture-edition-services';
-    const BUDGET_EXPORT                             = 'budget-export';
+    const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE      = 'budget-edition-engagement-composante';
+    const PARAMETRES_CAMPAGNES_SAISIE_EDITION       = 'parametres-campagnes-saisie-edition';
     const BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT   = 'budget-edition-engagement-etablissement';
+    const BUDGET_EXPORT                             = 'budget-export';
+    const PARAMETRES_CAMPAGNES_SAISIE_VISUALISATION = 'parametres-campagnes-saisie-visualisation';
 
 }

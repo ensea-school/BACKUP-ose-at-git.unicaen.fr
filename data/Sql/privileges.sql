@@ -25,10 +25,11 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'parametres' c, 'general-visualisation' p, 'Général - Visualisation' l FROM dual
-      UNION SELECT 'parametres' c, 'general-edition' p, 'Général - Édition' l FROM dual
+      SELECT 'parametres' c, 'campagnes-saisie-visualisation' p, 'Campagnes de saisie - Visualisation' l FROM dual
+      UNION SELECT 'parametres' c, 'campagnes-saisie-edition' p, 'Campagnes de saisie - Édition' l FROM dual
 
 ) t1;
+
 
 
 /* Liste... */

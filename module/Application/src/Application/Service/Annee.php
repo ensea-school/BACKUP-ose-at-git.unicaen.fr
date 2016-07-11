@@ -9,6 +9,10 @@ use Application\Entity\Db\Annee as AnneeEntity;
 /**
  * Description of Annee
  *
+ * @method AnneeEntity get($id)
+ * @method AnneeEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method AnneeEntity newEntity()
+ * 
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Annee extends AbstractEntityService

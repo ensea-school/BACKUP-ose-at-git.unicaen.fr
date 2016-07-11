@@ -9,7 +9,7 @@ use LogicException;
  * Service Paramètres
  *
  * Permet d'accéder facilement aux paramètres globaux de l'application
- *
+ * 
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
 class Parametres extends AbstractService {
@@ -20,7 +20,7 @@ class Parametres extends AbstractService {
      */
     protected $cache = [];
 
-    protected function getCache($param)
+    protected function getCache($param=null)
     {
         if (! $this->cache){
             $repository = $this->getEntityManager()->getRepository(ParametreEntity::class);

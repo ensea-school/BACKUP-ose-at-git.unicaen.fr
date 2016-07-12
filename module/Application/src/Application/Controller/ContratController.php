@@ -310,30 +310,37 @@ class ContratController extends AbstractController
 
         $estUnAvenant    = $contrat->estUnAvenant();
         $contratToString = (string)$contrat;
-        $nomIntervenant  = (string)$intervenant;
-        $dateNaissance   = $intervenant->getDateNaissanceToString();
-        $estATV          = $intervenant->getStatut()->getTemAtv();
         $estUnProjet     = $contrat->getValidation() ? false : true;
         $contratIniModif = $estUnAvenant && $contrat->getContrat()->getStructure() === $contrat->getStructure() ? true : false;
         $dateSignature   = $estUnProjet ? $contrat->getHistoCreation() : $contrat->getValidation()->getHistoCreation();
         $servicesRecaps  = $this->getProcessusContrat()->getServicesRecaps($contrat); // récap de tous les services au sein de la structure d'ens
         $totalHETD       = $contrat->getTotalHetd() ?: $this->getProcessusContrat()->getIntervenantTotalHetd($intervenant);
 
-        $tauxHoraire = $this->getServiceTauxHoraireHETD()->getByDate( $contrat->getHistoCreation() );
+        $tauxHoraire = $this->getServiceTauxHoraireHETD()->getByDate($contrat->getHistoCreation());
 
-        if ($intervenant->getDossier()) {
-            $adresseIntervenant    = $intervenant->getDossier()->getAdresse();
-            $numeroINSEE           = $intervenant->getDossier()->getNumeroInsee();
-            $nomCompletIntervenant = $intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
+        if ($dossier = $intervenant->getDossier()) {
+            $nomIntervenant        = strtoupper($dossier->getNomUsuel()) . ' ' . ucfirst($dossier->getPrenom());
+            $nomUsuel              = $dossier->getNomUsuel();
+            $dateNaissance         = $dossier->getDateNaissance()->format(Constants::DATE_FORMAT);
+            $adresseIntervenant    = $dossier->getAdresse();
+            $numeroINSEE           = $dossier->getNumeroInsee();
+            $nomCompletIntervenant = $dossier->getCivilite() . ' ' . $nomIntervenant;
+            $estUneFemme           = $dossier->getCivilite()->estUneFemme();
+            $estATV                = $dossier->getStatut()->getTemAtv();
         } else {
+            $nomIntervenant        = (string)$intervenant;
+            $nomUsuel              = $intervenant->getNomUsuel();
+            $dateNaissance         = $intervenant->getDateNaissanceToString();
             $adresseIntervenant    = $intervenant->getAdressePrincipale(true);
             $numeroINSEE           = $intervenant->getNumeroInsee() . ' ' . $intervenant->getNumeroInseeCle();
             $nomCompletIntervenant = $intervenant->getCivilite() . ' ' . $nomIntervenant;
+            $estUneFemme           = $intervenant->getCivilite()->estUneFemme();
+            $estATV                = $intervenant->getStatut()->getTemAtv();
         }
 
-        $fileName = sprintf(($estUnAvenant ? 'avenant' : 'contrat')."_%s_%s_%s.pdf",
+        $fileName = sprintf(($estUnAvenant ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             $contrat->getStructure()->getSourceCode(),
-            $intervenant->getNomUsuel(),
+            $nomUsuel,
             $intervenant->getSourceCode());
 
         $variables = [
@@ -345,7 +352,7 @@ class ContratController extends AbstractController
             'civilitePresident'       => $this->getServiceParametres()->get('contrat_civilite_president'),
             'lieuSignature'           => $this->getServiceParametres()->get('contrat_lieu_signature'),
             'nomIntervenant'          => $nomIntervenant,
-            'f'                       => $intervenant->estUneFemme(),
+            'f'                       => $estUneFemme,
             'dateNaissance'           => $dateNaissance,
             'adresseIntervenant'      => nl2br($adresseIntervenant),
             'numeroINSEE'             => $numeroINSEE,
@@ -363,7 +370,7 @@ class ContratController extends AbstractController
         $exp->setHeaderSubtitle($contratToString)
             ->setMarginBottom(25)
             ->setMarginTop(25);
-        $exp->setFooterTitle($contratToString.' - '.$intervenant->getAnnee());
+        $exp->setFooterTitle($contratToString . ' - ' . $intervenant->getAnnee());
         if ($estUnProjet) {
             $exp->setWatermark("Projet");
         }
@@ -371,11 +378,11 @@ class ContratController extends AbstractController
         $variables['mentionRetourner'] = "EXEMPLAIRE À CONSERVER";
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', false, $variables);
 
-        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER ".(($contrat->getStructure()->getAffAdresseContrat()) ? 'SIGNÉ À L\'ADRESSE SUIVANTE :<br />' : '');
-        $variables['mentionRetourner'] .= str_replace( "\n", ' - ',
+        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER " . (($contrat->getStructure()->getAffAdresseContrat()) ? 'SIGNÉ À L\'ADRESSE SUIVANTE :<br />' : '');
+        $variables['mentionRetourner'] .= str_replace("\n", ' - ',
             $contrat->getStructure()->getAffAdresseContrat() ?
-            strtoupper($contrat->getStructure())."\n".$contrat->getStructure()->getAdressePrincipale()
-            : ''
+                strtoupper($contrat->getStructure()) . "\n" . $contrat->getStructure()->getAdressePrincipale()
+                : ''
         );
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 

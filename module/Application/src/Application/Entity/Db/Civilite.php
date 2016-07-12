@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Civilite
 {
+    const SEXE_FEMININ = 'F';
+    const SEXE_MASCULIN = 'M';
+
     /**
      * @var string
      */
@@ -34,7 +37,7 @@ class Civilite
     {
         return $this->getLibelleCourt();
     }
-    
+
     /**
      * Set libelleCourt
      *
@@ -51,7 +54,7 @@ class Civilite
     /**
      * Get libelleCourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleCourt()
     {
@@ -74,7 +77,7 @@ class Civilite
     /**
      * Get libelleLong
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleLong()
     {
@@ -97,7 +100,7 @@ class Civilite
     /**
      * Get sexe
      *
-     * @return string 
+     * @return string
      */
     public function getSexe()
     {
@@ -107,7 +110,7 @@ class Civilite
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -115,9 +118,16 @@ class Civilite
     }
 
 
-	/**************************************************************************************************
-	 * 										Début ajout
-	 **************************************************************************************************/
+
+    public function estUneFemme()
+    {
+        return $this->getSexe() == self::SEXE_FEMININ;
+    }
+
+
+    /**************************************************************************************************
+     * 										Début ajout
+     **************************************************************************************************/
 
     /**
      * @since PHP 5.6.0

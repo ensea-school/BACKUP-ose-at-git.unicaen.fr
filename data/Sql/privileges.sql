@@ -76,3 +76,8 @@ AND categorie_id = (select cp.id from categorie_privilege cp where cp.code='doss
 --UPDATE CATEGORIE_PRIVILEGE SET CODE = 'droit' WHERE CODE = 'privilege';
 --update privilege set code = 'role-visualisation' where code = 'visualisation' AND categorie_id = (SELECT id FROM categorie_privilege WHERE code='droit');
 --update privilege set code = 'role-edition' where code = 'edition' AND categorie_id = (SELECT id FROM categorie_privilege WHERE code='droit');
+
+
+select * from categorie_privilege where code = 'privilege';
+
+delete from categorie_privilege where id = 5;

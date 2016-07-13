@@ -55,10 +55,17 @@ class ParametreController extends AbstractController
             foreach ($typesVolumesHoraires as $tvh) {
                 $campagne = $this->getServiceCampagneSaisie()->getBy($ti, $tvh);
                 $form     = $this->getFormCampagneSaisie();
+
+                if (!$canEdit){
+                    foreach( $form->getElements() as $element ){
+                        $element->setAttribute('disabled', true);
+                    }
+                }
+
                 $form->bind($campagne);
                 $forms[$ti->getId()][$tvh->getId()] = $form;
 
-                if ($ti == $typeIntervenant && $tvh == $typeVolumeHoraire){
+                if ($canEdit && $ti == $typeIntervenant && $tvh == $typeVolumeHoraire){
                     $form->requestSave($this->getRequest(), function() use ($campagne){
                         if (!$campagne->getDateDebut() && !$campagne->getDateFin() && !$campagne->getMessageIntervenant() && !$campagne->getMessageAutres()){
                             $this->getServiceCampagneSaisie()->delete($campagne);

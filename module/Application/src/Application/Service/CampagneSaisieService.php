@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\CampagneSaisie;
-use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Service\Traits\ContextAwareTrait;
 
@@ -49,12 +49,12 @@ class CampagneSaisieService extends AbstractEntityService
 
 
     /**
-     * @param TypeIntervenant         $typeIntervenant
+     * @param TypeIntervenantEntity         $typeIntervenant
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      *
      * @return CampagneSaisie
      */
-    public function getBy(TypeIntervenant $typeIntervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    public function getBy(TypeIntervenantEntity $typeIntervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
     {
         $annee = $this->getServiceContext()->getAnnee();
 

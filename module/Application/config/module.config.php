@@ -261,6 +261,7 @@ $main = [
 
 return array_merge_recursive(
     $main,
+    include 'gestion.config.php',
     include 'intervenant.config.php',
     include 'dossier-pieces.config.php',
     include 'structure.config.php',
@@ -271,7 +272,7 @@ return array_merge_recursive(
     include 'offre-formation.config.php',
     include 'contrat.config.php',
     include 'validation.config.php',
-    include 'gestion.config.php',
+
     include 'droits.config.php',
     include 'agrement.config.php',
     include 'formule.config.php',

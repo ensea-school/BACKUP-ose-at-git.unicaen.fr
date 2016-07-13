@@ -101,7 +101,6 @@ return [
                                 'label'        => 'Budget',
                                 'title'        => 'Budget',
                                 'icon'         => 'fa fa-eur',
-                                'border-color' => '#A22CAE',
                                 'route'        => 'budget',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Budget', 'index'),
 

@@ -277,7 +277,6 @@ return [
                     'gestion'     => [
                         'pages' => [
                             'dossier-pj' => [
-                                'border-color' => '#EB4995',
                                 'icon'         => 'glyphicon glyphicon-file',
                                 'label'        => "Dossier et pièces justificatives",
                                 'title'        => "Dossier et pièces justificatives",

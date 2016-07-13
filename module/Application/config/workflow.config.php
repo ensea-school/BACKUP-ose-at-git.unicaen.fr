@@ -94,7 +94,6 @@ return [
                                 'title'        => "Workflow",
                                 'route'        => 'workflow',
                                 'icon'         => 'fa fa-gears',
-                                'border-color' => '#111',
                                 'resource'     => Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION),
                                 'pages'        => [
                                     'dependances' => [

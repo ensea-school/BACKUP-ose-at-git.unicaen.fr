@@ -108,7 +108,6 @@ return [
                                 'title'        => "Paiement",
                                 'route'        => 'paiement',
                                 'icon'         => 'fa fa-credit-card',
-                                'border-color' => '#9F491F',
                                 'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
                                 'pages'        => [
                                     'etat-demande-paiement' => [

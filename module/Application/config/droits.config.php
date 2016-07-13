@@ -130,7 +130,6 @@ return [
                         'pages' => [
                             'droits' => [
                                 'icon'     => 'glyphicon glyphicon-off',
-                                'border-color'    => '#217DD8',
                                 'label'    => "Droits d'accès",
                                 'title'    => "Gestion des droits d'accès",
                                 'route'    => 'droits',

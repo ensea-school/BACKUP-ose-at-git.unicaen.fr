@@ -45,7 +45,6 @@ return [
                                 'label'        => 'Pilotage',
                                 'title'        => 'Pilotage',
                                 'icon'         => 'fa fa-tachometer',
-                                'border-color' => '#00A020',
                                 'route'        => 'pilotage',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'index'),
                                 'pages'        => [

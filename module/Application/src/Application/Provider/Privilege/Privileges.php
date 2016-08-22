@@ -76,6 +76,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const MISE_EN_PAIEMENT_EXPORT_PDF               = 'mise-en-paiement-export-pdf';
     const MISE_EN_PAIEMENT_MISE_EN_PAIEMENT         = 'mise-en-paiement-mise-en-paiement';
     const MISE_EN_PAIEMENT_EXPORT_PAIE              = 'mise-en-paiement-export-paie';
+    const MISE_EN_PAIEMENT_EDITION                  = 'mise-en-paiement-edition';
     const INDICATEUR_VISUALISATION                  = 'indicateur-visualisation';
     const INDICATEUR_ABONNEMENT                     = 'indicateur-abonnement';
     const INDICATEUR_ABONNEMENTS_EDITION            = 'indicateur-abonnements-edition';
@@ -87,10 +88,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const IMPORT_MAJ                                = 'import-maj';
     const IMPORT_TBL                                = 'import-tbl';
     const IMPORT_VUES_PROCEDURES                    = 'import-vues-procedures';
-    const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
-    const PARAMETRES_GENERAL_EDITION                = 'parametres-general-edition';
-    const WORKFLOW_DEPENDANCES_EDITION              = 'workflow-dependances-edition';
     const CLOTURE_CLOTURE                           = 'cloture-cloture';
+    const WORKFLOW_DEPENDANCES_EDITION              = 'workflow-dependances-edition';
+    const PARAMETRES_GENERAL_EDITION                = 'parametres-general-edition';
+    const PILOTAGE_ECARTS_ETATS                     = 'pilotage-ecarts-etats';
     const PARAMETRES_GENERAL_VISUALISATION          = 'parametres-general-visualisation';
     const CLOTURE_REOUVERTURE                       = 'cloture-reouverture';
     const WORKFLOW_DEPENDANCES_VISUALISATION        = 'workflow-dependances-visualisation';

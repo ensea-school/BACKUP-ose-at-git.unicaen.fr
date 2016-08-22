@@ -24,11 +24,6 @@
         <option name="default">0</option>
       </options>
     </field>
-    <field name="toDelete" type="boolean" column="TO_DELETE" nullable="false">
-      <options>
-        <option name="default">0</option>
-      </options>
-    </field>
     <field name="valide" type="float" column="VALIDE" precision="126" scale="0" nullable="false">
       <options>
         <option name="default">0</option>

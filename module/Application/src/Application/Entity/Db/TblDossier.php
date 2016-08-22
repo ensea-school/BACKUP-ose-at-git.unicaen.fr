@@ -10,12 +10,7 @@ class TblDossier
     /**
      * @var boolean
      */
-    private $peutSaisirDossier = '0';
-
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
+    private $peutSaisirDossier = false;
 
     /**
      * @var integer
@@ -43,19 +38,6 @@ class TblDossier
     private $annee;
 
 
-    /**
-     * Set peutSaisirDossier
-     *
-     * @param boolean $peutSaisirDossier
-     *
-     * @return TblDossier
-     */
-    public function setPeutSaisirDossier($peutSaisirDossier)
-    {
-        $this->peutSaisirDossier = $peutSaisirDossier;
-
-        return $this;
-    }
 
     /**
      * Get peutSaisirDossier
@@ -67,29 +49,7 @@ class TblDossier
         return $this->peutSaisirDossier;
     }
 
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblDossier
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
 
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
 
     /**
      * Get id
@@ -101,19 +61,7 @@ class TblDossier
         return $this->id;
     }
 
-    /**
-     * Set validation
-     *
-     * @param \Application\Entity\Db\Validation $validation
-     *
-     * @return TblDossier
-     */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
-    {
-        $this->validation = $validation;
 
-        return $this;
-    }
 
     /**
      * Get validation
@@ -125,19 +73,7 @@ class TblDossier
         return $this->validation;
     }
 
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblDossier
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
 
-        return $this;
-    }
 
     /**
      * Get intervenant
@@ -149,19 +85,7 @@ class TblDossier
         return $this->intervenant;
     }
 
-    /**
-     * Set dossier
-     *
-     * @param \Application\Entity\Db\Dossier $dossier
-     *
-     * @return TblDossier
-     */
-    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
-    {
-        $this->dossier = $dossier;
 
-        return $this;
-    }
 
     /**
      * Get dossier
@@ -173,19 +97,7 @@ class TblDossier
         return $this->dossier;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblDossier
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
-    }
 
     /**
      * Get annee

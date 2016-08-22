@@ -8,11 +8,6 @@ namespace Application\Entity\Db;
 class TblPieceJointeFournie
 {
     /**
-     * @var boolean
-     */
-    private $toDelete = '0';
-
-    /**
      * @var integer
      */
     private $id;
@@ -50,34 +45,6 @@ class TblPieceJointeFournie
 
 
     /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -85,22 +52,6 @@ class TblPieceJointeFournie
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set validation
-     *
-     * @param \Application\Entity\Db\Validation $validation
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setValidation(\Application\Entity\Db\Validation $validation = null)
-    {
-        $this->validation = $validation;
-
-        return $this;
     }
 
 
@@ -118,22 +69,6 @@ class TblPieceJointeFournie
 
 
     /**
-     * Set pieceJointe
-     *
-     * @param \Application\Entity\Db\PieceJointe $pieceJointe
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setPieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe = null)
-    {
-        $this->pieceJointe = $pieceJointe;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get pieceJointe
      *
      * @return \Application\Entity\Db\PieceJointe
@@ -141,22 +76,6 @@ class TblPieceJointeFournie
     public function getPieceJointe()
     {
         return $this->pieceJointe;
-    }
-
-
-
-    /**
-     * Set typePieceJointe
-     *
-     * @param \Application\Entity\Db\TypePieceJointe $typePieceJointe
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setTypePieceJointe(\Application\Entity\Db\TypePieceJointe $typePieceJointe = null)
-    {
-        $this->typePieceJointe = $typePieceJointe;
-
-        return $this;
     }
 
 
@@ -174,22 +93,6 @@ class TblPieceJointeFournie
 
 
     /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant
@@ -202,22 +105,6 @@ class TblPieceJointeFournie
 
 
     /**
-     * Set fichier
-     *
-     * @param \Application\Entity\Db\Fichier $fichier
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setFichier(\Application\Entity\Db\Fichier $fichier = null)
-    {
-        $this->fichier = $fichier;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get fichier
      *
      * @return \Application\Entity\Db\Fichier
@@ -225,22 +112,6 @@ class TblPieceJointeFournie
     public function getFichier()
     {
         return $this->fichier;
-    }
-
-
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblPieceJointeFournie
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
     }
 
 

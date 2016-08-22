@@ -98,6 +98,8 @@ class PaiementAssertion extends AbstractAssertion
 
         if (!$intervenant) return false;
 
+        if ($role->getIntervenant() && $action != 'visualisationmiseenpaiement') return false; // pas pour les intervenant mais seulement au niveau admin...
+
         // Si c'est bon alors on affine...
         switch ($action) {
             case 'demandemiseenpaiement':

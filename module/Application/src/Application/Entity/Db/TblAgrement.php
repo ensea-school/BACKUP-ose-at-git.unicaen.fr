@@ -57,20 +57,6 @@ class TblAgrement implements ResourceInterface
 
 
     /**
-     * @param boolean $obligatoire
-     *
-     * @return TblAgrement
-     */
-    public function setObligatoire($obligatoire)
-    {
-        $this->obligatoire = $obligatoire;
-
-        return $this;
-    }
-
-
-
-    /**
      * Returns the string identifier of the Resource
      *
      * @return string

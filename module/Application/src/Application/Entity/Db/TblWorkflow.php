@@ -10,22 +10,17 @@ class TblWorkflow
     /**
      * @var boolean
      */
-    private $atteignable = '1';
+    private $atteignable = true;
 
     /**
      * @var float
      */
-    private $objectif = '1';
+    private $objectif = 0;
 
     /**
      * @var float
      */
-    private $realisation = '0';
-
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
+    private $realisation = 0;
 
     /**
      * @var integer
@@ -62,22 +57,6 @@ class TblWorkflow
 
 
     /**
-     * Set atteignable
-     *
-     * @param boolean $atteignable
-     *
-     * @return TblWorkflow
-     */
-    public function setAtteignable($atteignable)
-    {
-        $this->atteignable = $atteignable;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get atteignable
      *
      * @return boolean
@@ -85,22 +64,6 @@ class TblWorkflow
     public function getAtteignable()
     {
         return $this->atteignable;
-    }
-
-
-
-    /**
-     * Set objectif
-     *
-     * @param float $objectif
-     *
-     * @return TblWorkflow
-     */
-    public function setObjectif($objectif)
-    {
-        $this->objectif = $objectif;
-
-        return $this;
     }
 
 
@@ -118,22 +81,6 @@ class TblWorkflow
 
 
     /**
-     * Set realisation
-     *
-     * @param float $realisation
-     *
-     * @return TblWorkflow
-     */
-    public function setRealisation($realisation)
-    {
-        $this->realisation = $realisation;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get realisation
      *
      * @return float
@@ -141,34 +88,6 @@ class TblWorkflow
     public function getRealisation()
     {
         return $this->realisation;
-    }
-
-
-
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblWorkflow
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
     }
 
 
@@ -186,22 +105,6 @@ class TblWorkflow
 
 
     /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return TblWorkflow
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get structure
      *
      * @return \Application\Entity\Db\Structure
@@ -214,22 +117,6 @@ class TblWorkflow
 
 
     /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblWorkflow
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant
@@ -237,22 +124,6 @@ class TblWorkflow
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-
-
-    /**
-     * Set etape
-     *
-     * @param \Application\Entity\Db\WfEtape $etape
-     *
-     * @return TblWorkflow
-     */
-    public function setEtape(\Application\Entity\Db\WfEtape $etape = null)
-    {
-        $this->etape = $etape;
-
-        return $this;
     }
 
 
@@ -289,7 +160,7 @@ class TblWorkflow
     public function getFranchie()
     {
         $res = 0;
-        if ($this->objectif > 0){
+        if ($this->objectif > 0) {
             $res = $this->realisation / $this->objectif;
         }
         if ($res > 1) $res = 1; // pour éviter tout malentendu au cas où...

@@ -18,11 +18,6 @@
         <option name="default">0</option>
       </options>
     </field>
-    <field name="toDelete" type="boolean" column="TO_DELETE" nullable="false">
-      <options>
-        <option name="default">0</option>
-      </options>
-    </field>
     <many-to-one field="validation" target-entity="Application\Entity\Db\Validation" fetch="LAZY">
       <join-columns>
         <join-column name="VALIDATION_ID" referenced-column-name="ID"/>

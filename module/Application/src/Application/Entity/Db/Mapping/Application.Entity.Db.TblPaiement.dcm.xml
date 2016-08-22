@@ -15,21 +15,20 @@
       <generator strategy="SEQUENCE"/>
       <sequence-generator sequence-name="TBL_PAIEMENT_ID_seq" allocation-size="1" initial-value="1"/>
     </id>
-    <field name="serviceAPayerId" type="integer" column="SERVICE_A_PAYER_ID" nullable="false">
-      <options>
-        <option name="unsigned"/>
-      </options>
-    </field>
-    <field name="serviceAPayerType" type="string" column="SERVICE_A_PAYER_TYPE" length="25" nullable="false">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
-    <field name="toDelete" type="boolean" column="TO_DELETE" nullable="false">
-      <options>
-        <option name="default">0</option>
-      </options>
-    </field>
+    <field name="heuresAPayer" type="float" column="HEURES_A_PAYER" precision="126" scale="0" nullable="false" />
+    <field name="heuresAPayerPond" type="float" column="HEURES_A_PAYER_POND" precision="126" scale="0" nullable="false" />
+    <field name="heuresDemandees" type="float" column="HEURES_DEMANDEES" precision="126" scale="0" nullable="false" />
+    <field name="heuresPayees" type="float" column="HEURES_PAYEES" precision="126" scale="0" nullable="false" />
+    <many-to-one field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService">
+      <join-columns>
+        <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel">
+      <join-columns>
+        <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" fetch="LAZY">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>

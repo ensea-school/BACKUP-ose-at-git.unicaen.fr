@@ -55,7 +55,8 @@ class PaiementController extends AbstractController
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
-     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
+     * éventuelles
      * (services sur des enseignements fermés, etc.)
      */
     protected function initFilters()
@@ -86,27 +87,34 @@ class PaiementController extends AbstractController
     protected function getChangeIndex()
     {
         $session = $this->getSessionContainer();
-        if (! isset($session->cgtIndex)) $session->cgtIndex = 0;
+        if (!isset($session->cgtIndex)) $session->cgtIndex = 0;
         $result = $session->cgtIndex;
-        $session->cgtIndex ++;
+        $session->cgtIndex++;
+
         return $result;
     }
 
 
-    protected function isChangeIndexSaved( $changeIndex ){
+
+    protected function isChangeIndexSaved($changeIndex)
+    {
         $session = $this->getSessionContainer();
-        if (! isset($session->cht)) $session->cht = [];
+        if (!isset($session->cht)) $session->cht = [];
+
         return isset($session->cht[$changeIndex]) && $session->cht[$changeIndex];
     }
 
 
-    protected function setChangeIndexSaved( $changeIndex ){
+
+    protected function setChangeIndexSaved($changeIndex)
+    {
         $session = $this->getSessionContainer();
-        if (! isset($session->cht)) $session->cht = [];
+        if (!isset($session->cht)) $session->cht = [];
         $session->cht[$changeIndex] = true;
 
         return $this;
     }
+
 
 
     public function demandeMiseEnPaiementAction()
@@ -115,13 +123,13 @@ class PaiementController extends AbstractController
 
         // pour empêcher le ré-enregistrement avec un rafraichissement (F5)
         $postChangeIndex = (int)$this->params()->fromPost('change-index');
-        $changeIndex = $this->getChangeIndex();
+        $changeIndex     = $this->getChangeIndex();
 
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $saved = false;
-        if ($this->getRequest()->isPost() && ! $this->isChangeIndexSaved($postChangeIndex)) {
+        if ($this->getRequest()->isPost() && !$this->isChangeIndexSaved($postChangeIndex)) {
             $changements = $this->params()->fromPost('changements', '{}');
             $changements = Json::decode($changements, Json::TYPE_ARRAY);
             $this->getServiceMiseEnPaiement()->saveChangements($changements);
@@ -131,10 +139,10 @@ class PaiementController extends AbstractController
         $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
 
         /* On récupère du workflow les raisons de non édition éventuelles (selon sa structure le cas échéant) */
-        $workflowEtape = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
-        $etapes = $workflowEtape->getEtapes();
+        $workflowEtape  = $this->getServiceWorkflow()->getEtape(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+        $etapes         = $workflowEtape->getEtapes();
         $whyNotEditable = [];
-        foreach( $etapes as $we ){
+        foreach ($etapes as $we) {
             if (!$role->getStructure() || !$we->getStructure() || $role->getStructure() == $we->getStructure()) {
                 $sid  = $we->getStructure() ? $we->getStructure()->getId() : 0;
                 $deps = $we->getEtapeDeps();
@@ -142,23 +150,23 @@ class PaiementController extends AbstractController
                     if (!isset($whyNotEditable[$sid])) {
                         $whyNotEditable[$sid] = [
                             'structure' => (string)$we->getStructure(),
-                            'raisons'   => []
+                            'raisons'   => [],
                         ];
                     }
                     $whyNotEditable[$sid]['raisons'][] = $dep->getWfEtapeDep()->getEtapePrec()->getDescNonFranchie();
                 }
             }
         }
-        
+
 
         $dateDerniereModif   = null;
         $dernierModificateur = null;
 
         $typesRessources = $this->getServiceTypeRessource()->getList();
-        $structures = [];
+        $structures      = [];
 
         foreach ($servicesAPayer as $sap) {
-            if (null == $role->getStructure() || $sap->getStructure() == $role->getStructure()){
+            if (null == $role->getStructure() || $sap->getStructure() == $role->getStructure()) {
                 $structures[$sap->getStructure()->getId()] = $sap->getStructure();
             }
             $mepListe = $sap->getMiseEnPaiement();
@@ -175,23 +183,56 @@ class PaiementController extends AbstractController
 
         $budget = [
             'structures'      => $structures,
-            'typesRessources' => $typesRessources
+            'typesRessources' => $typesRessources,
         ];
-        $dot = $this->getServiceDotation()->getTableauBord($structures);
-        $liq = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
-        foreach( $structures as $structure ){
+        $dot    = $this->getServiceDotation()->getTableauBord($structures);
+        $liq    = $this->getServiceMiseEnPaiement()->getTblLiquidation($structures);
+        foreach ($structures as $structure) {
             $sid = $structure->getId();
-            foreach( $typesRessources as $typeRessource ){
+            foreach ($typesRessources as $typeRessource) {
                 $trid = $typeRessource->getId();
 
                 $dotation = isset($dot[$sid][$trid]) ? $dot[$sid][$trid] : 0;
                 $usage    = isset($liq[$sid][$trid]) ? $liq[$sid][$trid] : 0;
 
-                $budget[$sid][$trid] = compact('dotation','usage');
+                $budget[$sid][$trid] = compact('dotation', 'usage');
             }
         }
 
         return compact('intervenant', 'changeIndex', 'servicesAPayer', 'saved', 'dateDerniereModif', 'dernierModificateur', 'budget', 'whyNotEditable');
+    }
+
+
+
+    public function visualisationMiseEnPaiementAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $dql = "
+        SELECT
+          p
+        FROM
+          Application\Entity\Db\TblPaiement p
+        WHERE
+          p.intervenant = :intervenant";
+
+        $query = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $paiements = $query->getResult();
+
+        return compact('intervenant', 'paiements');
+    }
+
+
+
+    public function editionMiseEnPaiementAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant Intervenant */
+
+        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
+
+        return compact('intervenant', 'servicesAPayer');
     }
 
 
@@ -246,7 +287,7 @@ class PaiementController extends AbstractController
             }
 
             $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement($structure, $periode);
-            $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
+            $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
             $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($typeIntervenant, $qb);
             $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
             $rechercheForm->populateIntervenants($this->getServiceIntervenant()->getList($qb));
@@ -283,7 +324,7 @@ class PaiementController extends AbstractController
                 $fileName = 'demande_mise_en_paiement';
                 $title    = 'Demandes de mises en paiement';
                 //$exp->setWatermark("Demandes");
-                break;
+            break;
             default                                     :
                 $fileName = 'etat_paiement';
                 $title    = 'État de paiement';
@@ -394,7 +435,7 @@ class PaiementController extends AbstractController
             return compact('types');
         } elseif (empty($periode)) {
             $annee = $this->getServiceContext()->getAnnee();
-            $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
+            $qb    = $this->getServicePeriode()->finderByMiseEnPaiement();
             $this->getServiceMiseEnPaiement()->finderByEtat(MiseEnPaiement::MIS_EN_PAIEMENT, $qb);
             $periodes = $this->getServicePeriode()->getList($qb);
 
@@ -420,7 +461,7 @@ class PaiementController extends AbstractController
             foreach ($data as $d) {
                 $csvModel->addLine($d);
             }
-            $csvModel->setFilename(str_replace( ' ', '_', 'ose-export-winpaie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($this->getServiceContext()->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
+            $csvModel->setFilename(str_replace(' ', '_', 'ose-export-winpaie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($this->getServiceContext()->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;
         }
@@ -443,13 +484,13 @@ class PaiementController extends AbstractController
             $form->isValid();
 
             $periodeId = $form->get('periode')->getValue();
-            $periode = $this->getServicePeriode()->get($periodeId);
+            $periode   = $this->getServicePeriode()->get($periodeId);
             /* @var $periode \Application\Entity\Db\Periode */
 
             $dateMiseEnPaiementValue = $form->get('date-mise-en-paiement')->getValue();
             if ($dateMiseEnPaiementValue) {
                 $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiementValue);
-            }else{
+            } else {
                 $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // à défaut
             }
 

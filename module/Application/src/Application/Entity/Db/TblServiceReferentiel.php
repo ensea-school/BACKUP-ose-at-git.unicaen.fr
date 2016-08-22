@@ -10,22 +10,17 @@ class TblServiceReferentiel
     /**
      * @var float
      */
-    private $nbvh = '0';
+    private $nbvh = 0;
 
     /**
      * @var boolean
      */
-    private $peutSaisirService = '0';
-
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
+    private $peutSaisirService = false;
 
     /**
      * @var float
      */
-    private $valide = '0';
+    private $valide = 0;
 
     /**
      * @var integer
@@ -53,19 +48,6 @@ class TblServiceReferentiel
     private $annee;
 
 
-    /**
-     * Set nbvh
-     *
-     * @param float $nbvh
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setNbvh($nbvh)
-    {
-        $this->nbvh = $nbvh;
-
-        return $this;
-    }
 
     /**
      * Get nbvh
@@ -77,19 +59,7 @@ class TblServiceReferentiel
         return $this->nbvh;
     }
 
-    /**
-     * Set peutSaisirService
-     *
-     * @param boolean $peutSaisirService
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setPeutSaisirService($peutSaisirService)
-    {
-        $this->peutSaisirService = $peutSaisirService;
 
-        return $this;
-    }
 
     /**
      * Get peutSaisirService
@@ -101,43 +71,7 @@ class TblServiceReferentiel
         return $this->peutSaisirService;
     }
 
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
 
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
-
-    /**
-     * Set valide
-     *
-     * @param float $valide
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setValide($valide)
-    {
-        $this->valide = $valide;
-
-        return $this;
-    }
 
     /**
      * Get valide
@@ -149,6 +83,8 @@ class TblServiceReferentiel
         return $this->valide;
     }
 
+
+
     /**
      * Get id
      *
@@ -159,19 +95,7 @@ class TblServiceReferentiel
         return $this->id;
     }
 
-    /**
-     * Set typeVolumeHoraire
-     *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
 
-        return $this;
-    }
 
     /**
      * Get typeVolumeHoraire
@@ -183,19 +107,7 @@ class TblServiceReferentiel
         return $this->typeVolumeHoraire;
     }
 
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
 
-        return $this;
-    }
 
     /**
      * Get structure
@@ -207,19 +119,7 @@ class TblServiceReferentiel
         return $this->structure;
     }
 
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
 
-        return $this;
-    }
 
     /**
      * Get intervenant
@@ -231,19 +131,7 @@ class TblServiceReferentiel
         return $this->intervenant;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblServiceReferentiel
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
-    }
 
     /**
      * Get annee

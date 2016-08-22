@@ -10,27 +10,22 @@ class TblContrat
     /**
      * @var float
      */
-    private $edite = '0';
+    private $edite = false;
 
     /**
      * @var float
      */
-    private $nbvh = '0';
+    private $nbvh = false;
 
     /**
      * @var boolean
      */
-    private $peutAvoirContrat = '0';
+    private $peutAvoirContrat = false;
 
     /**
      * @var float
      */
-    private $signe = '0';
-
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
+    private $signe = 0;
 
     /**
      * @var integer
@@ -53,19 +48,6 @@ class TblContrat
     private $annee;
 
 
-    /**
-     * Set edite
-     *
-     * @param float $edite
-     *
-     * @return TblContrat
-     */
-    public function setEdite($edite)
-    {
-        $this->edite = $edite;
-
-        return $this;
-    }
 
     /**
      * Get edite
@@ -77,19 +59,7 @@ class TblContrat
         return $this->edite;
     }
 
-    /**
-     * Set nbvh
-     *
-     * @param float $nbvh
-     *
-     * @return TblContrat
-     */
-    public function setNbvh($nbvh)
-    {
-        $this->nbvh = $nbvh;
 
-        return $this;
-    }
 
     /**
      * Get nbvh
@@ -101,19 +71,7 @@ class TblContrat
         return $this->nbvh;
     }
 
-    /**
-     * Set peutAvoirContrat
-     *
-     * @param boolean $peutAvoirContrat
-     *
-     * @return TblContrat
-     */
-    public function setPeutAvoirContrat($peutAvoirContrat)
-    {
-        $this->peutAvoirContrat = $peutAvoirContrat;
 
-        return $this;
-    }
 
     /**
      * Get peutAvoirContrat
@@ -125,19 +83,7 @@ class TblContrat
         return $this->peutAvoirContrat;
     }
 
-    /**
-     * Set signe
-     *
-     * @param float $signe
-     *
-     * @return TblContrat
-     */
-    public function setSigne($signe)
-    {
-        $this->signe = $signe;
 
-        return $this;
-    }
 
     /**
      * Get signe
@@ -149,29 +95,7 @@ class TblContrat
         return $this->signe;
     }
 
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblContrat
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
 
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
 
     /**
      * Get id
@@ -183,19 +107,7 @@ class TblContrat
         return $this->id;
     }
 
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return TblContrat
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
 
-        return $this;
-    }
 
     /**
      * Get structure
@@ -207,19 +119,7 @@ class TblContrat
         return $this->structure;
     }
 
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblContrat
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
 
-        return $this;
-    }
 
     /**
      * Get intervenant
@@ -231,19 +131,7 @@ class TblContrat
         return $this->intervenant;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblContrat
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
-    }
 
     /**
      * Get annee

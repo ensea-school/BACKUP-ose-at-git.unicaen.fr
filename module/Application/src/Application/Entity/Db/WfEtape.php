@@ -58,6 +58,11 @@ class WfEtape
     private $route;
 
     /**
+     * @var string
+     */
+    private $routeIntervenant;
+
+    /**
      * @var boolean
      */
     private $obligatoire;
@@ -153,6 +158,26 @@ class WfEtape
 
 
     /**
+     * @param string $route
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+    }
+
+
+
+    /**
+     * @param string $routeIntervenant
+     */
+    public function getRouteIntervenant()
+    {
+        return $this->routeIntervenant;
+    }
+
+
+
+    /**
      * @return boolean
      */
     public function getObligatoire()
@@ -222,7 +247,7 @@ class WfEtape
         return $this;
     }
 
-    
+
 
     public function __toString()
     {

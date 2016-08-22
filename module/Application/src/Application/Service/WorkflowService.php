@@ -344,6 +344,15 @@ class WorkflowService extends AbstractService
         $query->setParameter('intervenant', $intervenant);
         if ($structure) $query->setParameter('structure', $structure);
         $etapes = $query->getResult();
+        /* @var $etapes TblWorkflow[] */
+        if ($this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()){
+            foreach( $etapes as $etape ){
+                $we = $etape->getEtape();
+                if ($we->getRouteIntervenant()){
+                    $we->setRoute($we->getRouteIntervenant());
+                }
+            }
+        }
 
         return $etapes;
     }

@@ -10,12 +10,7 @@ class TblDmepLiquidation
     /**
      * @var float
      */
-    private $heures = '0';
-
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
+    private $heures = 0;
 
     /**
      * @var integer
@@ -38,19 +33,6 @@ class TblDmepLiquidation
     private $annee;
 
 
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     *
-     * @return TblDmepLiquidation
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
 
     /**
      * Get heures
@@ -62,29 +44,7 @@ class TblDmepLiquidation
         return $this->heures;
     }
 
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblDmepLiquidation
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
 
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
 
     /**
      * Get id
@@ -96,19 +56,7 @@ class TblDmepLiquidation
         return $this->id;
     }
 
-    /**
-     * Set typeRessource
-     *
-     * @param \Application\Entity\Db\TypeRessource $typeRessource
-     *
-     * @return TblDmepLiquidation
-     */
-    public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = null)
-    {
-        $this->typeRessource = $typeRessource;
 
-        return $this;
-    }
 
     /**
      * Get typeRessource
@@ -120,19 +68,7 @@ class TblDmepLiquidation
         return $this->typeRessource;
     }
 
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return TblDmepLiquidation
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
 
-        return $this;
-    }
 
     /**
      * Get structure
@@ -144,19 +80,7 @@ class TblDmepLiquidation
         return $this->structure;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblDmepLiquidation
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
-    }
 
     /**
      * Get annee

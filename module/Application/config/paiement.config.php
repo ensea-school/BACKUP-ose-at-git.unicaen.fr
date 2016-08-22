@@ -90,13 +90,37 @@ return [
                             'demande-mise-en-paiement' => [
                                 'label'               => "Demande de mise en paiement",
                                 'title'               => "Demande de mise en paiement",
-                                'route'               => 'intervenant/demande-mise-en-paiement',
+                                'route'               => 'intervenant/mise-en-paiement/demande',
                                 'paramsInject'        => [
                                     'intervenant',
                                 ],
                                 'withtarget'          => true,
                                 'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
+                                'visible'             => 'assertionPaiement',
+                            ],
+                            'visualisation-mise-en-paiement' => [
+                                'label'               => "Visualisation des mises en paiement",
+                                'title'               => "Visualisation des mises en paiement",
+                                'route'               => 'intervenant/mise-en-paiement/visualisation',
+                                'paramsInject'        => [
+                                    'intervenant',
+                                ],
+                                'withtarget'          => true,
+                                'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
+                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'visualisationMiseEnPaiement'),
+                                'visible'             => 'assertionPaiement',
+                            ],
+                            'edition-mise-en-paiement' => [
+                                'label'               => "Édition des mises en paiement",
+                                'title'               => "Édition des mises en paiement",
+                                'route'               => 'intervenant/mise-en-paiement/edition',
+                                'paramsInject'        => [
+                                    'intervenant',
+                                ],
+                                'withtarget'          => true,
+                                'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
+                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'editionMiseEnPaiement'),
                                 'visible'             => 'assertionPaiement',
                             ],
                         ],
@@ -162,15 +186,34 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['visualisationMiseEnPaiement'],
+                    'privileges' => [
+                        Privileges::MISE_EN_PAIEMENT_DEMANDE,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                    ],
+                    'assertion'  => 'assertionPaiement',
+                ],
+                [
+                    'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['editionMiseEnPaiement'],
+                    'privileges' => [
+                        Privileges::MISE_EN_PAIEMENT_EDITION,
+                    ],
+                    'assertion'  => 'assertionPaiement',
+                ],
+                [
+                    'controller' => 'Application\Controller\Paiement',
                     'action'     => ['etatPaiement'],
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_VISUALISATION,
                     ],
+                    'assertion'  => 'assertionPaiement',
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['miseEnPaiement'],
                     'privileges' => [Privileges::MISE_EN_PAIEMENT_VISUALISATION],
+                    'assertion'  => 'assertionPaiement',
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',

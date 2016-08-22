@@ -43,11 +43,8 @@ return [
                     'voir'                     => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/voir',
+                            'defaults' => [
                                 'action' => 'voir',
                             ],
                         ],
@@ -55,11 +52,8 @@ return [
                     'fiche'                    => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/fiche',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/fiche',
+                            'defaults' => [
                                 'action' => 'fiche',
                             ],
                         ],
@@ -67,11 +61,8 @@ return [
                     'saisir'                   => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/saisir',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/saisir',
+                            'defaults' => [
                                 'action' => 'saisir',
                             ],
                         ],
@@ -79,11 +70,8 @@ return [
                     'voir-heures-comp'         => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/voir-heures-comp/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/voir-heures-comp/:intervenant',
+                            'defaults' => [
                                 'action' => 'voir-heures-comp',
                             ],
                         ],
@@ -93,7 +81,6 @@ return [
                         'options' => [
                             'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
                             'constraints' => [
-                                'intervenant'       => '[0-9]*',
                                 'typeVolumeHoraire' => '[0-9]*',
                                 'etatVolumeHoraire' => '[0-9]*',
                             ],
@@ -105,11 +92,8 @@ return [
                     'feuille-de-route'         => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/feuille-de-route',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/feuille-de-route',
+                            'defaults' => [
                                 'action' => 'feuille-de-route',
                             ],
                         ],
@@ -117,11 +101,8 @@ return [
                     'modification-service-du'  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/modification-service-du',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/modification-service-du',
+                            'defaults' => [
                                 'controller' => 'ModificationServiceDu',
                                 'action'     => 'saisir',
                             ],
@@ -130,11 +111,8 @@ return [
                     'services'                 => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/services',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/services',
+                            'defaults' => [
                                 'controller'               => 'Application\Controller\Intervenant',
                                 'action'                   => 'services',
                                 'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
@@ -144,11 +122,8 @@ return [
                     'referentiel'              => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/referentiel',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/referentiel',
+                            'defaults' => [
                                 'controller'               => 'Application\Controller\ServiceReferentiel',
                                 'action'                   => 'index',
                                 'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
@@ -158,11 +133,8 @@ return [
                     'services-realises'        => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/services-realises',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/services-realises',
+                            'defaults' => [
                                 'controller'               => 'Application\Controller\Intervenant',
                                 'action'                   => 'services',
                                 'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
@@ -172,50 +144,77 @@ return [
                     'referentiel-realise'      => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/referentiel',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/referentiel',
+                            'defaults' => [
                                 'controller'               => 'Application\Controller\ServiceReferentiel',
                                 'action'                   => 'index',
                                 'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                             ],
                         ],
                     ],
-                    'cloturer'          => [
+                    'cloturer'                 => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/cloturer',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action'     => 'cloturer',
+                            'route'    => '/:intervenant/cloturer',
+                            'defaults' => [
+                                'action' => 'cloturer',
                             ],
                         ],
                     ],
-                    'demande-mise-en-paiement' => [
+                    'mise-en-paiement'         => [
+                        'type'          => 'Segment',
+                        'may_terminate' => false,
+                        'options'       => [
+                            'route'    => '/:intervenant/mise-en-paiement',
+                            'defaults' => [
+                                'controller' => 'Application\Controller\Paiement',
+                            ],
+                        ],
+                        'child_routes'  => [
+                            'visualisation' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/visualisation',
+                                    'defaults' => [
+                                        'action' => 'visualisationMiseEnPaiement',
+                                    ],
+                                ],
+                            ],
+                            'demande'       => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/demande',
+                                    'defaults' => [
+                                        'action' => 'demandeMiseEnPaiement',
+                                    ],
+                                ],
+                            ],
+                            'edition'       => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/edition',
+                                    'defaults' => [
+                                        'action' => 'editionMiseEnPaiement',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    /*'demande-mise-en-paiement' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/demande-mise-en-paiement',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/demande-mise-en-paiement',
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Paiement',
                                 'action'     => 'demandeMiseEnPaiement',
                             ],
                         ],
-                    ],
+                    ],*/
                     'contrat'                  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/:intervenant/contrat',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
-                            'defaults'    => [
+                            'route'    => '/:intervenant/contrat',
+                            'defaults' => [
                                 'controller' => 'Contrat',
                                 'action'     => 'index',
                             ],

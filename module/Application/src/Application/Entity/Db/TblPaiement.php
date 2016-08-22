@@ -10,22 +10,17 @@ class TblPaiement
     /**
      * @var integer
      */
-    private $serviceAPayerId;
-
-    /**
-     * @var string
-     */
-    private $serviceAPayerType;
-
-    /**
-     * @var boolean
-     */
-    private $toDelete = '0';
-
-    /**
-     * @var integer
-     */
     private $id;
+
+    /**
+     * @var FormuleResultatService
+     */
+    private $formuleResultatService;
+
+    /**
+     * @var FormuleResultatServiceReferentiel
+     */
+    private $formuleResultatServiceReferentiel;
 
     /**
      * @var \Application\Entity\Db\Structure
@@ -52,78 +47,27 @@ class TblPaiement
      */
     private $annee;
 
+    /**
+     * @var float
+     */
+    private $heuresAPayer;
 
     /**
-     * Set serviceAPayerId
-     *
-     * @param integer $serviceAPayerId
-     *
-     * @return TblPaiement
+     * @var float
      */
-    public function setServiceAPayerId($serviceAPayerId)
-    {
-        $this->serviceAPayerId = $serviceAPayerId;
-
-        return $this;
-    }
+    private $heuresAPayerPond;
 
     /**
-     * Get serviceAPayerId
-     *
-     * @return integer
+     * @var float
      */
-    public function getServiceAPayerId()
-    {
-        return $this->serviceAPayerId;
-    }
+    private $heuresDemandees;
 
     /**
-     * Set serviceAPayerType
-     *
-     * @param string $serviceAPayerType
-     *
-     * @return TblPaiement
+     * @var float
      */
-    public function setServiceAPayerType($serviceAPayerType)
-    {
-        $this->serviceAPayerType = $serviceAPayerType;
+    private $heuresPayees;
 
-        return $this;
-    }
 
-    /**
-     * Get serviceAPayerType
-     *
-     * @return string
-     */
-    public function getServiceAPayerType()
-    {
-        return $this->serviceAPayerType;
-    }
-
-    /**
-     * Set toDelete
-     *
-     * @param boolean $toDelete
-     *
-     * @return TblPaiement
-     */
-    public function setToDelete($toDelete)
-    {
-        $this->toDelete = $toDelete;
-
-        return $this;
-    }
-
-    /**
-     * Get toDelete
-     *
-     * @return boolean
-     */
-    public function getToDelete()
-    {
-        return $this->toDelete;
-    }
 
     /**
      * Get id
@@ -135,19 +79,41 @@ class TblPaiement
         return $this->id;
     }
 
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return TblPaiement
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
 
-        return $this;
+
+    /**
+     * @return FormuleResultatService
+     */
+    public function getFormuleResultatService()
+    {
+        return $this->formuleResultatService;
     }
+
+
+
+    /**
+     * @return FormuleResultatServiceReferentiel
+     */
+    public function getFormuleResultatServiceReferentiel()
+    {
+        return $this->formuleResultatServiceReferentiel;
+    }
+
+
+
+    /**
+     *
+     * @return ServiceAPayerInterface
+     */
+    public function getServiceAPayer()
+    {
+        if ($this->formuleResultatService) return $this->formuleResultatService;
+        if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
+
+        return null;
+    }
+
+
 
     /**
      * Get structure
@@ -159,19 +125,7 @@ class TblPaiement
         return $this->structure;
     }
 
-    /**
-     * Set periodePaiement
-     *
-     * @param \Application\Entity\Db\Periode $periodePaiement
-     *
-     * @return TblPaiement
-     */
-    public function setPeriodePaiement(\Application\Entity\Db\Periode $periodePaiement = null)
-    {
-        $this->periodePaiement = $periodePaiement;
 
-        return $this;
-    }
 
     /**
      * Get periodePaiement
@@ -183,19 +137,7 @@ class TblPaiement
         return $this->periodePaiement;
     }
 
-    /**
-     * Set miseEnPaiement
-     *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
-     *
-     * @return TblPaiement
-     */
-    public function setMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement = null)
-    {
-        $this->miseEnPaiement = $miseEnPaiement;
 
-        return $this;
-    }
 
     /**
      * Get miseEnPaiement
@@ -207,19 +149,7 @@ class TblPaiement
         return $this->miseEnPaiement;
     }
 
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     *
-     * @return TblPaiement
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
 
-        return $this;
-    }
 
     /**
      * Get intervenant
@@ -231,19 +161,7 @@ class TblPaiement
         return $this->intervenant;
     }
 
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return TblPaiement
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
 
-        return $this;
-    }
 
     /**
      * Get annee
@@ -254,5 +172,45 @@ class TblPaiement
     {
         return $this->annee;
     }
-}
 
+
+
+    /**
+     * @return float
+     */
+    public function getHeuresAPayer()
+    {
+        return $this->heuresAPayer;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getHeuresAPayerPond()
+    {
+        return $this->heuresAPayerPond;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getHeuresDemandees()
+    {
+        return $this->heuresDemandees;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getHeuresPayees()
+    {
+        return $this->heuresPayees;
+    }
+
+}

@@ -96,14 +96,22 @@ class PaiementAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        if (!$intervenant) return false;
-
-        if ($role->getIntervenant() && $action != 'visualisationmiseenpaiement') return false; // pas pour les intervenant mais seulement au niveau admin...
-
         // Si c'est bon alors on affine...
         switch ($action) {
             case 'demandemiseenpaiement':
                 return $this->assertEtapeAtteignable(WfEtape::CODE_DEMANDE_MEP, $intervenant);
+            break;
+            case 'visualisationmiseenpaiement':
+
+            break;
+            case 'editionmiseenpaiement':
+
+            break;
+            case 'etatpaiement':
+                if ($role->getIntervenant()) return false; // pas pour les intervenants
+            break;
+            case  'miseenpaiement':
+
             break;
         }
 

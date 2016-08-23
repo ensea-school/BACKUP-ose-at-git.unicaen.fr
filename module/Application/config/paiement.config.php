@@ -132,19 +132,19 @@ return [
                                 'title'        => "Paiement",
                                 'route'        => 'paiement',
                                 'icon'         => 'fa fa-credit-card',
-                                'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
+                                'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                                 'pages'        => [
                                     'etat-demande-paiement' => [
                                         'label'    => "Mises en paiement",
                                         'title'    => "Mises en paiement",
                                         'route'    => 'paiement/etat-demande-paiement',
-                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                                     ],
                                     'etat-paiement'         => [
                                         'label'    => "État de paiement",
                                         'title'    => "État de paiement",
                                         'route'    => 'paiement/etat-paiement',
-                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION),
+                                        'resource' => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
                                     ],
                                     'mises-en-paiement-csv' => [
                                         'label'    => "Mises en paiement (CSV)",
@@ -173,7 +173,7 @@ return [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['index'],
                     'privileges' => [
-                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
                     ],
                 ],
                 [
@@ -189,7 +189,7 @@ return [
                     'action'     => ['visualisationMiseEnPaiement'],
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_DEMANDE,
-                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT,
                     ],
                     'assertion'  => 'assertionPaiement',
                 ],
@@ -205,14 +205,14 @@ return [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['etatPaiement'],
                     'privileges' => [
-                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
                     ],
                     'assertion'  => 'assertionPaiement',
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['miseEnPaiement'],
-                    'privileges' => [Privileges::MISE_EN_PAIEMENT_VISUALISATION],
+                    'privileges' => [Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION],
                     'assertion'  => 'assertionPaiement',
                 ],
                 [

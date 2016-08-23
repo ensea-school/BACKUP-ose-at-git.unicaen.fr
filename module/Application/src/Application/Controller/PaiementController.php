@@ -230,9 +230,63 @@ class PaiementController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        $servicesAPayer = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
+        $mep = $this->params()->fromPost('mep', null);
+        $paiements = [];
+        /* @var $paiements MiseEnPaiement[] */
 
-        return compact('intervenant', 'servicesAPayer');
+        $dql = "
+            SELECT
+              mep, frs, fr, pp, s, cc, df, ep, str
+            FROM
+              Application\Entity\Db\MiseEnPaiement mep
+              JOIN mep.formuleResultatService frs
+              JOIN frs.formuleResultat fr
+              JOIN mep.periodePaiement pp
+              JOIN frs.service s
+              LEFT JOIN mep.centreCout cc
+              LEFT JOIN mep.domaineFonctionnel df
+              LEFT JOIN s.elementPedagogique ep
+              LEFT JOIN ep.structure str
+            WHERE
+              fr.intervenant = :intervenant
+              AND 1 = compriseEntre( mep.histoCreation, mep.histoDestruction )
+        ";
+
+        $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $paiements = array_merge($paiements, $res->getResult());
+
+        $dql = "
+            SELECT
+              mep, frsr, fr, pp, sr, cc, df, f, str
+            FROM
+              Application\Entity\Db\MiseEnPaiement mep
+              JOIN mep.formuleResultatServiceReferentiel frsr
+              JOIN frsr.formuleResultat fr
+              JOIN mep.periodePaiement pp
+              JOIN frsr.serviceReferentiel sr
+              LEFT JOIN mep.centreCout cc
+              LEFT JOIN mep.domaineFonctionnel df
+              LEFT JOIN sr.fonction f
+              LEFT JOIN sr.structure str
+            WHERE
+              fr.intervenant = :intervenant
+              AND 1 = compriseEntre( mep.histoCreation, mep.histoDestruction )
+        ";
+
+        $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
+        $paiements = array_merge($paiements, $res->getResult());
+
+
+        foreach( $paiements as $index => $paiement ){
+            if ($mep[$paiement->getId()] == "1"){
+                $paiement->setPeriodePaiement(null);
+                $paiement->setDateMiseEnPaiement(null);
+                $this->getServiceMiseEnPaiement()->save($paiement);
+                unset($paiements[$index]);
+            }
+        }
+
+        return compact('intervenant', 'paiements');
     }
 
 

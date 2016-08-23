@@ -119,7 +119,7 @@ return [
                     'action'     => ['index'],
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_EXPORT_PAIE,
-                        Privileges::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
                         Privileges::DROIT_ROLE_VISUALISATION,
                         Privileges::DROIT_PRIVILEGE_VISUALISATION,
                         Privileges::DROIT_AFFECTATION_VISUALISATION,

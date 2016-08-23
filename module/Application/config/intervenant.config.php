@@ -200,16 +200,6 @@ return [
                             ],
                         ],
                     ],
-                    /*'demande-mise-en-paiement' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:intervenant/demande-mise-en-paiement',
-                            'defaults' => [
-                                'controller' => 'Application\Controller\Paiement',
-                                'action'     => 'demandeMiseEnPaiement',
-                            ],
-                        ],
-                    ],*/
                     'contrat'                  => [
                         'type'    => 'Segment',
                         'options' => [

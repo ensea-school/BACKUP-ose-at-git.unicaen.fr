@@ -13,6 +13,7 @@ use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Zend\View\Model\JsonModel;
 
 
 /**
@@ -37,6 +38,33 @@ class ParametreController extends AbstractController
     public function indexAction()
     {
         return [];
+    }
+
+
+
+    public function anneesAction()
+    {
+        $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PARAMETRES_ANNEES_EDITION));
+
+        if ($this->getRequest()->isPost()){
+
+            $anneeId = $this->params()->fromPost('annee');
+            $annee = $this->getServiceAnnee()->get($anneeId);
+
+            $annee->setActive(!$annee->isActive());
+            $this->getServiceAnnee()->save($annee);
+
+            return new JsonModel([
+                'message' => 'Action effectuée',
+                'status' => 'success',
+            ]);
+        }else{
+            $annees = $this->getServiceAnnee()->getList();
+
+            return compact('annees', 'canEdit');
+        }
+
+
     }
 
 

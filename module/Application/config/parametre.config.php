@@ -25,16 +25,25 @@ return [
                     'generaux'         => [
                         'type'    => 'Literal',
                         'options' => [
-                            'route'    => 'generaux',
+                            'route'    => '/generaux',
                             'defaults' => [
                                 'action' => 'generaux',
+                            ],
+                        ],
+                    ],
+                    'annees' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/annees',
+                            'defaults' => [
+                                'action' => 'annees',
                             ],
                         ],
                     ],
                     'campagnes-saisie' => [
                         'type'    => 'Literal',
                         'options' => [
-                            'route'    => 'campagnes-saisie',
+                            'route'    => '/campagnes-saisie',
                             'defaults' => [
                                 'action' => 'campagnes-saisie',
                             ],
@@ -58,6 +67,11 @@ return [
                                 'route'    => 'parametres',
                                 'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'index'),
                                 'pages'    => [
+                                    'annees' => [
+                                        'label'    => "Années",
+                                        'route'    => 'parametres/annees',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'annees'),
+                                    ],
                                     'generaux'         => [
                                         'label'    => "Paramètres généraux",
                                         'route'    => 'parametres/generaux',
@@ -86,6 +100,13 @@ return [
                     'action'     => ['index'],
                     'privileges' => [
                         Privileges::PARAMETRES_GENERAL_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Parametre',
+                    'action'     => ['annees'],
+                    'privileges' => [
+                        Privileges::PARAMETRES_ANNEES_VISUALISATION,
                     ],
                 ],
                 [

@@ -43,8 +43,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const PIECE_JUSTIFICATIVE_VALIDATION             = 'piece-justificative-validation';
     const PIECE_JUSTIFICATIVE_DEVALIDATION           = 'piece-justificative-devalidation';
     const PIECE_JUSTIFICATIVE_GESTION_EDITION        = 'piece-justificative-gestion-edition';
-    const PIECE_JUSTIFICATIVE_GESTION_VISUALISATION  = 'piece-justificative-gestion-visualisation';
     const PIECE_JUSTIFICATIVE_TELECHARGEMENT         = 'piece-justificative-telechargement';
+    const PIECE_JUSTIFICATIVE_GESTION_VISUALISATION  = 'piece-justificative-gestion-visualisation';
     const ENSEIGNEMENT_VISUALISATION                 = 'enseignement-visualisation';
     const ENSEIGNEMENT_EDITION                       = 'enseignement-edition';
     const ENSEIGNEMENT_EXTERIEUR                     = 'enseignement-exterieur';
@@ -71,13 +71,13 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const CONTRAT_DEPOT_RETOUR_SIGNE                 = 'contrat-depot-retour-signe';
     const CONTRAT_SAISIE_DATE_RETOUR_SIGNE           = 'contrat-saisie-date-retour-signe';
     const MISE_EN_PAIEMENT_VISUALISATION_GESTION     = 'mise-en-paiement-visualisation-gestion';
-    const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT = 'mise-en-paiement-visualisation-intervenant';
     const MISE_EN_PAIEMENT_DEMANDE                   = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EXPORT_CSV                = 'mise-en-paiement-export-csv';
     const MISE_EN_PAIEMENT_EXPORT_PDF                = 'mise-en-paiement-export-pdf';
     const MISE_EN_PAIEMENT_MISE_EN_PAIEMENT          = 'mise-en-paiement-mise-en-paiement';
     const MISE_EN_PAIEMENT_EXPORT_PAIE               = 'mise-en-paiement-export-paie';
     const MISE_EN_PAIEMENT_EDITION                   = 'mise-en-paiement-edition';
+    const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT = 'mise-en-paiement-visualisation-intervenant';
     const INDICATEUR_VISUALISATION                   = 'indicateur-visualisation';
     const INDICATEUR_ABONNEMENT                      = 'indicateur-abonnement';
     const INDICATEUR_ABONNEMENTS_EDITION             = 'indicateur-abonnements-edition';
@@ -91,18 +91,20 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const IMPORT_VUES_PROCEDURES                     = 'import-vues-procedures';
     const CLOTURE_CLOTURE                            = 'cloture-cloture';
     const WORKFLOW_DEPENDANCES_EDITION               = 'workflow-dependances-edition';
-    const PARAMETRES_GENERAL_EDITION                 = 'parametres-general-edition';
     const PILOTAGE_ECARTS_ETATS                      = 'pilotage-ecarts-etats';
-    const PARAMETRES_GENERAL_VISUALISATION           = 'parametres-general-visualisation';
-    const CLOTURE_REOUVERTURE                        = 'cloture-reouverture';
+    const PARAMETRES_GENERAL_EDITION                 = 'parametres-general-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION         = 'workflow-dependances-visualisation';
-    const BUDGET_VISUALISATION                       = 'budget-visualisation';
     const PILOTAGE_VISUALISATION                     = 'pilotage-visualisation';
+    const PARAMETRES_GENERAL_VISUALISATION           = 'parametres-general-visualisation';
+    const BUDGET_VISUALISATION                       = 'budget-visualisation';
+    const CLOTURE_REOUVERTURE                        = 'cloture-reouverture';
     const CLOTURE_EDITION_SERVICES                   = 'cloture-edition-services';
-    const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE       = 'budget-edition-engagement-composante';
     const PARAMETRES_CAMPAGNES_SAISIE_EDITION        = 'parametres-campagnes-saisie-edition';
-    const BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT    = 'budget-edition-engagement-etablissement';
+    const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE       = 'budget-edition-engagement-composante';
     const BUDGET_EXPORT                              = 'budget-export';
     const PARAMETRES_CAMPAGNES_SAISIE_VISUALISATION  = 'parametres-campagnes-saisie-visualisation';
+    const BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT    = 'budget-edition-engagement-etablissement';
+    const PARAMETRES_ANNEES_EDITION                  = 'parametres-annees-edition';
+    const PARAMETRES_ANNEES_VISUALISATION            = 'parametres-annees-visualisation';
 
 }

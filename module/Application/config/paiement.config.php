@@ -119,7 +119,6 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'          => true,
-                                'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'editionMiseEnPaiement'),
                                 'visible'             => 'assertionPaiement',
                             ],

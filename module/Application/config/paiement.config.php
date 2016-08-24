@@ -112,8 +112,8 @@ return [
                                 'visible'             => 'assertionPaiement',
                             ],
                             'edition-mise-en-paiement' => [
-                                'label'               => "Édition des mises en paiement",
-                                'title'               => "Édition des mises en paiement",
+                                'label'               => "Annulation de mises en paiement",
+                                'title'               => "Annulation de mises en paiement",
                                 'route'               => 'intervenant/mise-en-paiement/edition',
                                 'paramsInject'        => [
                                     'intervenant',

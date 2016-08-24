@@ -22,11 +22,8 @@ if (!$passed){
 }
 /* Fin de fermeture du service*/
 
+\Locale::setDefault('fr_FR');
 define('REQUEST_MICROTIME', microtime(true));
-/**
- * This makes our life easier when dealing with paths. Everything is relative
- * to the application root now.
- */
 chdir(dirname(__DIR__));
 
 // Setup autoloading

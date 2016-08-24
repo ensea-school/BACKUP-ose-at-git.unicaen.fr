@@ -174,11 +174,11 @@ foreach( $data as $d ){
     </tr>
     <?php endif; endforeach; ?>
     <tr>
-        <th colspan="2">Mises en paiement (total <abbr title="Heures équivalent TD">HETD</abbr>)</th>
-        <td style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-payees']['total']) ?></td>
+        <th>Mises en paiement (total <abbr title="Heures équivalent TD">HETD</abbr>)</th>
+        <td colspan="2" style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-payees']['total']) ?></td>
     </tr>
     <tr>
-        <th colspan="2">Restant à payer <abbr title="Heures équivalent TD">(HETD)</abbr></th>
-        <td style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-a-payer']-$total['heures-payees']['total']) ?></td>
+        <th>Restant à payer <abbr title="Heures équivalent TD">(HETD)</abbr></th>
+        <td colspan="2" style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-a-payer']-$total['heures-payees']['total']) ?></td>
     </tr>
 </table>

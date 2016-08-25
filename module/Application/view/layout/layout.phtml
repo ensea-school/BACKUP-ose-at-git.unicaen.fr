@@ -11,10 +11,13 @@
     <?php echo $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(false) ?>
 
     <!-- Links -->
-    <?php echo $this->headLink(array(
-        'rel'  => 'shortcut icon',
-        'type' => 'image/vnd.microsoft.icon',
-        'href' => '//www.unicaen.fr/images/favicon.ico')) ?>
+    <?php echo $this->headLink() ?>
+
+    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-16x16.png" sizes="16x16">
 
     <!-- Scripts -->
     <?php echo $this->headScript(); ?>

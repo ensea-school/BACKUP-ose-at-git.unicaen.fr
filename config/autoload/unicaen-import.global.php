@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use UnicaenAuth\Guard\PrivilegeController;
+
 return [
     'unicaen-import' => [
         'differentiel_view_helpers' => [

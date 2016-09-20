@@ -1131,14 +1131,14 @@ class ServiceService extends AbstractEntityService
 
 
     /**
-     * Retourne le total HETD des enseignements (prévisionnels et validés) d'un intervenant.
+     * Retourne le total HETD des enseignements (réalisés et validés) d'un intervenant.
      *
      * @prama IntervenantEntity $intervenant
      * @return float
      */
     public function getTotalHetdIntervenant(IntervenantEntity $intervenant)
     {
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
 
         $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);

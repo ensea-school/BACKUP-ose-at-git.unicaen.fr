@@ -4,7 +4,6 @@ namespace Application\Form\Droits;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\PerimetreAwareTrait;
-use Zend\Form;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 

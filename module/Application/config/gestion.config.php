@@ -102,7 +102,7 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
                             ],
                             'dossier-pj'  => [ 'border-color' => '#A22CAE' ],
-                            'droits'      => [  'border-color' => '#E5272E'],
+                            'droits'      => [ 'border-color' => '#E5272E' ],
                             'parametres'  => [ /* Emplacement réservé */],
                             'workflow'    => [ 'border-color' => '#111' ],
                         ],

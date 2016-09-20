@@ -215,7 +215,7 @@ class ContratController extends AbstractController
                 $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
             }
         }
-        
+
         return new MessengerViewModel;
     }
 
@@ -321,7 +321,7 @@ class ContratController extends AbstractController
         if ($dossier = $intervenant->getDossier()) {
             $nomIntervenant        = strtoupper($dossier->getNomUsuel()) . ' ' . ucfirst($dossier->getPrenom());
             $nomUsuel              = $dossier->getNomUsuel();
-            $dateNaissance         = $dossier->getDateNaissance()->format(Constants::DATE_FORMAT);
+            $dateNaissance         = $dossier->getDateNaissance() ? $dossier->getDateNaissance()->format(Constants::DATE_FORMAT) : $intervenant->getAdressePrincipale(true);
             $adresseIntervenant    = $dossier->getAdresse();
             $numeroINSEE           = $dossier->getNumeroInsee();
             $nomCompletIntervenant = $dossier->getCivilite() . ' ' . $nomIntervenant;

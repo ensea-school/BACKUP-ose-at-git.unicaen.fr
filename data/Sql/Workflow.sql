@@ -1,8 +1,8 @@
 DECLARE
-  intervenant_id NUMERIC DEFAULT 5021;
+  intervenant_id NUMERIC DEFAULT 9884;
 BEGIN
   DBMS_OUTPUT.ENABLE(1000000); 
-  ose_test.debug_enabled := false;
+  ose_test.debug_enabled := true;
 
 --ose_pj.update_intervenant(intervenant_id);
 --OSE_FORMULE.CALCULER(intervenant_id);
@@ -10,10 +10,15 @@ OSE_WORKFLOW.CALCULER(intervenant_id);
 --OSE_WORKFLOW.CALCULER_TOUT(2014);
 --OSE_PIECE_JOINTE_FOURNIE.calculer_tout;
 END;
+
 /
 
+begin
+  ose_test.debug_enabled := false;
+  ose_workflow.calculer_tout;
+end;
 
-
+/
 
 
 
@@ -33,6 +38,7 @@ DELETE FROM TBL_SERVICE_SAISIE;
 DELETE FROM TBL_WORKFLOW;
 
 END;
+
 /
 
       SELECT COUNT(*) LIGNES, 'TBL_AGREMENT'             TBL FROM TBL_AGREMENT
@@ -52,11 +58,9 @@ UNION SELECT COUNT(*) LIGNES, 'WF_DEP_BLOQUANTE'         TBL FROM WF_DEP_BLOQUAN
 
 
 
-
 select * from tbl_piece_jointe where intervenant_id = 548;
-  
-  
-  
+
+
 
 select 
   i.id i_id,
@@ -74,5 +78,5 @@ where
   intervenant_id =     5021
 order by
   E.ORDRE;
-  
+
 select * from v_workflow_etape_pertinente where intervenant_id = 10347;

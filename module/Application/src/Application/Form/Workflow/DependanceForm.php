@@ -112,6 +112,23 @@ class DependanceForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'obligatoire',
+            'options'    => [
+                'label'              => '<abbr title="Quelque chose doit obligatoirement avoir été fait dans l\'étape précédante">Obligatoire</abbr>',
+                'label_options'      => [
+                    'disable_html_escape' => true,
+                ],
+                'use_hidden_element' => true,
+                'checked_value'      => 'true',
+                'unchecked_value'    => 'false',
+            ],
+            'attributes' => [
+                'title' => "La dépendance impose à l'étape précédante d'être franchie à plus de 0%",
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
             'name'       => 'partielle',
             'options'    => [
                 'label'              => '<abbr title="L\'étape peut n\'être que partiellement franchie">Partielle</abbr>',
@@ -169,6 +186,7 @@ class DependanceForm extends AbstractForm
             'locale'           => ['required' => true],
             'integrale'        => ['required' => true],
             'partielle'        => ['required' => true],
+            'obligatoire'      => ['required' => true],
             'type-intervenant' => ['required' => false],
         ];
     }
@@ -201,6 +219,7 @@ class DependanceFormHydrator implements HydratorInterface
         $object->setLocale($data['locale'] == 'true');
         $object->setIntegrale($data['integrale'] == 'true');
         $object->setPartielle($data['partielle'] == 'true');
+        $object->setObligatoire($data['obligatoire'] == 'true');
         $object->setTypeIntervenant($data['type-intervenant'] ? $this->getServiceTypeIntervenant()->get($data['type-intervenant']) : null);
 
         return $object;
@@ -222,6 +241,7 @@ class DependanceFormHydrator implements HydratorInterface
             'locale'           => $object->getLocale() ? 'true' : 'false',
             'integrale'        => $object->getIntegrale() ? 'true' : 'false',
             'partielle'        => $object->getPartielle() ? 'true' : 'false',
+            'obligatoire'      => $object->getObligatoire() ? 'true' : 'false',
             'type-intervenant' => $object->getTypeIntervenant() ? $object->getTypeIntervenant()->getId() : null,
         ];
 

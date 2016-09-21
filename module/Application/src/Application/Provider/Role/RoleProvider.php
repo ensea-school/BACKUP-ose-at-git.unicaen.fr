@@ -80,7 +80,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
 
-    protected function getRolesPrivileges($roleId)
+    protected function getRolesPrivileges()
     {
         if (!$this->rolesPrivileges){
             $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
@@ -93,12 +93,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }
             }
         }
-
-        if (isset($this->rolesPrivileges[$roleId])){
-            return $this->rolesPrivileges[$roleId];
-        }else{
-            return [];
-        }
+        return $this->rolesPrivileges;
     }
 
 
@@ -126,7 +121,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
         // chargement des rôles métiers
         $query = $this->getEntityManager()->createQuery(
-        'SELECT DISTINCT
+            'SELECT DISTINCT
             r, a, s, p
         FROM
             Application\Entity\Db\Role r
@@ -138,12 +133,15 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         )->setParameter(':personnel', $personnel);
 
         $result = $query->getResult();
+        $rolesPrivileges = $this->getRolesPrivileges();
         foreach ($result as $dbRole) {
             /* @var $dbRole \Application\Entity\Db\Role */
             $roleId = $dbRole->getRoleId();
 
             $role = new Role($roleId, 'user', $dbRole->getLibelle());
-            $role->initPrivileges($this->getRolesPrivileges($roleId));
+            if (isset($rolesPrivileges[$roleId])){
+                $role->initPrivileges($rolesPrivileges[$roleId]);
+            }
 
             if ($dbRole->getPeutChangerStructure()){
                 $role->setPeutChangerStructure(true);
@@ -168,7 +166,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     if (!isset($roles[$affRoleId])) {
                         $affRoleLibelle = $dbRole->getLibelle() . ' (' . $structure->getLibelleCourt() . ')';
                         $affRole        = new \Application\Acl\Role($affRoleId, $roleId, $affRoleLibelle);
-                        $role->initPrivileges($this->getRolesPrivileges($roleId));
+                        if (isset($rolesPrivileges[$roleId])){
+                            $affRole->initPrivileges($rolesPrivileges[$roleId]);
+                        }
                         $affRole->setDbRole( $dbRole );
                         $affRole->setPersonnel($personnel);
                         $affRole->setStructure($structure);
@@ -186,7 +186,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             if ($intervenant) {
                 if ($intervenant->getStatut()->getId() == $statut['statut-id']) {
                     $role->setIntervenant($intervenant);
-                    $role->initPrivileges($this->getRolesPrivileges($intervenant->getStatut()->getRoleId()));
+                    if (isset($rolesPrivileges[$intervenant->getStatut()->getRoleId()])){
+                        $role->initPrivileges($rolesPrivileges[$intervenant->getStatut()->getRoleId()]);
+                    }
                 }
             }
             $roles[$statut['role-id']] = $role;

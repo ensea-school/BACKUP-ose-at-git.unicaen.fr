@@ -168,14 +168,8 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
             SELECT DISTINCT
               s.id structure_id,
               s.libelle_court structure_libelle,
-              
-              CASE WHEN gtf.pertinence_niveau = 0 THEN 'Autre' ELSE
-                gtf.libelle_court || e.niveau 
-              END niveau_id,
-              CASE WHEN gtf.pertinence_niveau = 0 THEN 'Autre' ELSE
-                gtf.libelle_court || e.niveau 
-              END niveau_libelle,
-              
+              gtf.libelle_court || e.niveau niveau_id,
+              gtf.libelle_court || e.niveau niveau_libelle,
               e.id etape_id,
               e.libelle etape_libelle
             FROM

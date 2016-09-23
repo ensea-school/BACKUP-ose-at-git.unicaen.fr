@@ -18,35 +18,43 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
         <p class="lead">Année <?php echo $annee ?>.</p>
 
         <?php
-        if ($role){
+        if ($role) {
 
-            if ($intervenant = $role->getIntervenant()){
-                if ($intervenant->getStatut()->getNonAutorise()){
+            if ($intervenant = $role->getIntervenant()) {
+                if ($intervenant->getStatut()->getNonAutorise()) {
 
-                    ?><p><div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div></p><?php
+                    ?><p>
+                    <div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div></p><?php
+                } else {
+                    echo $this->tag('div')->html( $this->feuillederoute($intervenant)->renderCurrentBtn() );
 
-                }else{
-                    echo $this->feuillederoute($intervenant)->renderCurrentBtn();
+                    /* Guide à télécharger... */
+                    $guideType = $intervenant->getStatut()->estVacataire() ? 'guide_ose_vacataire' : 'guide_ose_permanent';
+                    $guideUrl = $this->basePath().'/doc/intervenant/'.$guideType.'.pdf';
+                    echo $this->tag('div', ['class' => 'alert alert-info', 'style' => 'margin-top:1em', 'role' => 'alert'])->html(
+                        'Un guide d\'utilisation de OSE vous est proposé. Vous pouvez le télécharger en suivant le lien ci-contre : '
+                        .$this->tag('a', ['href' => $guideUrl])->html(
+                            $this->tag('span', ['class' => 'glyphicon glyphicon-book'])->openClose().' Guide d\'utilisation'
+                        )
+                    );
                 }
-
-            }elseif ($role->getStructure()) {
+            } elseif ($role->getStructure()) {
 
                 $url   = $this->url('service/resume');
                 $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
                 ?><p><a class="btn btn-primary btn-large" href="<?php echo $url ?>"><?php echo $label ?></a></p><?php
-
-            }elseif (!$role->getPersonnel()){
-            ?>
-            <div class="alert alert-danger" role="alert">
-                Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de votre composante pour en obtenir un valide.
-            </div>
-            <?php
+            } elseif (!$role->getPersonnel()) {
+                ?>
+                <div class="alert alert-danger" role="alert">
+                    Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de
+                    votre composante pour en obtenir un valide.
+                </div>
+                <?php
             }
+        } else {
 
-        }else{
-
-            ?><a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a><?php
-
+            ?><a class="btn btn-success btn-large"
+                 href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a><?php
         }
         ?>
     </div>
@@ -66,8 +74,9 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
         });
     </script>
     <h2 class="abonnements">Vos indicateurs <?php if ($canAbonne): ?><a class="btn btn-default btn-sm pull-right"
-                                               href="<?php echo $this->url('indicateur') ?>">Gérer vos abonnements à des
-            indicateurs</a><?php endif; ?></h2>
+                                                                        href="<?php echo $this->url('indicateur') ?>">Gérer
+                vos abonnements à des
+                indicateurs</a><?php endif; ?></h2>
     <div id="abonnements">
         <div class="loading"></div>
     </div>
@@ -75,6 +84,6 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
 
     <!----------------------------- Feuille de route --------------------------->
 <?php
-if ($role && $intervenant = $role->getIntervenant()){
+if ($role && $intervenant = $role->getIntervenant()) {
     echo $this->feuillederoute($intervenant);
 }

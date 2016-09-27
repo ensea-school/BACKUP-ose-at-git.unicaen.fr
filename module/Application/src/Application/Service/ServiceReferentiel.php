@@ -334,6 +334,7 @@ class ServiceReferentiel extends AbstractEntityService
                 $service->setFonction($o['fonction']);
                 $service->setStructure($o['structure']);
                 $service->setCommentaires($o['commentaires']);
+                $service->setTypeVolumeHoraire( $o['type-volume-horaire'] );
             }
             $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
             //@formatter:off

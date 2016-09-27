@@ -78,13 +78,13 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
 
 
 
-    public function personnaliser(Intervenant $intervenant, Intervenant $intervenantAnneePrec = null)
+    public function personnaliser(Intervenant $intervenant, $lastHETD = 0)
     {
         $dossier         = $intervenant->getDossier();
         $dossierFieldset = $this->get('dossier');
         /* @var $dossierFieldset DossierFieldset */
 
-        if ($intervenantAnneePrec) {
+        if ($lastHETD > 0) {
             /**
              * Si l'intervenant était un vacataire connu l'année précédente, alors
              * la question "Avez-vous exercé une activité..." est retirée puisque la réponse est forcément OUI.

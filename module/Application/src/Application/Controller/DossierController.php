@@ -85,8 +85,10 @@ class DossierController extends AbstractController
         $canEdit      = !$validation && $privEdit;
         $canSupprimer = !$validation && $dossier->getId() && $privSupprimer;
 
+        $lastHETD = $this->getServiceService()->getTotalHetdIntervenant($iPrec);
+
         /* Mise en place du formulaires */
-        $form->personnaliser($intervenant, $iPrec);
+        $form->personnaliser($intervenant, $lastHETD);
         $form->bind($intervenant);
         // le formulaire est en lecture seule si les données ont été validées ou si on n'a pas le droit de le modifier!!
         $form->setReadOnly(!$canEdit);
@@ -94,9 +96,9 @@ class DossierController extends AbstractController
         /* Affichage de messages informatifs*/
 
         /* Si l'intervenant a effectué des heures avant */
-        if ($iPrec) {
+        if ($lastHETD > 0) {
             $hetd = Util::formattedFloat(
-                $this->getServiceService()->getTotalHetdIntervenant($iPrec),
+                $lastHETD,
                 NumberFormatter::DECIMAL,
                 2);
             $this->flashMessenger()->addInfoMessage(
@@ -252,7 +254,7 @@ class DossierController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        
+
         if ($this->getRequest()->isPost()) {
             try {
                 $utilisateur = $this->identity()['db'];
@@ -262,7 +264,7 @@ class DossierController extends AbstractController
                     "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
                     $intervenant));
 
-                
+
 
                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
             } catch (\Exception $e) {

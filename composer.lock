@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b6d11a914b1f966115119a75a6bd7b50",
-    "content-hash": "40d314b038632bbaf050515df19c6bc2",
+    "hash": "4077c0a6cd0912886bcd43bf1ecdf48c",
+    "content-hash": "deaa4e323f5fab2258aac73a9ac2acba",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1238,7 +1238,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@720"
+                "reference": "/trunk/@723"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1281,7 +1281,7 @@
                 ]
             },
             "description": "Module commun aux applis ZF2 de l'UCBN",
-            "time": "2016-09-15 14:26:18"
+            "time": "2016-09-26 15:47:05"
         },
         {
             "name": "unicaen/unicaen-auth",
@@ -1289,7 +1289,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenAuth",
-                "reference": "/trunk/@300"
+                "reference": "/trunk/@301"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1311,7 +1311,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applis ZF2 de l'UCBN",
-            "time": "2016-09-09 12:15:12"
+            "time": "2016-09-22 17:22:10"
         },
         {
             "name": "unicaen/unicaen-code",
@@ -1347,7 +1347,11 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenImport",
-                "reference": "/trunk/@19"
+                "reference": "/trunk/@32"
+            },
+            "require": {
+                "unicaen/unicaen-auth": "1.*",
+                "unicaen/unicaen-oracle": "1.*"
             },
             "require-dev": {
                 "phpunit/phpunit": ">=3.7"
@@ -1363,7 +1367,36 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2016-09-16 11:01:01"
+            "time": "2016-09-27 09:03:18"
+        },
+        {
+            "name": "unicaen/unicaen-oracle",
+            "version": "1.0.2",
+            "source": {
+                "type": "svn",
+                "url": "https://svn.unicaen.fr/svn/UnicaenOracle",
+                "reference": "/tags/1.0.2/@7"
+            },
+            "require": {
+                "doctrine/dbal": "^2.5",
+                "doctrine/orm": "^2.5",
+                "zendframework/zend-mvc": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenOracle": "src/",
+                    "UnicaenOracleTest": "tests/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Bibliothèque utile lorsqu'on utilise un base de données Oracle",
+            "time": "2016-09-26 13:48:46"
         },
         {
             "name": "zendframework/zend-authentication",
@@ -4796,7 +4829,32 @@
             "time": "2015-05-07 14:55:31"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.2.4",
+            "alias_normalized": "1.2.4.0",
+            "version": "9999999-dev",
+            "package": "unicaen/unicaen-app"
+        },
+        {
+            "alias": "1.1.3",
+            "alias_normalized": "1.1.3.0",
+            "version": "9999999-dev",
+            "package": "unicaen/unicaen-auth"
+        },
+        {
+            "alias": "1.0.1",
+            "alias_normalized": "1.0.1.0",
+            "version": "9999999-dev",
+            "package": "unicaen/unicaen-code"
+        },
+        {
+            "alias": "1.0.6",
+            "alias_normalized": "1.0.6.0",
+            "version": "9999999-dev",
+            "package": "unicaen/unicaen-import"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "unicaen/unicaen-app": 20,

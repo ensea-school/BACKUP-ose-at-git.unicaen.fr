@@ -91,14 +91,16 @@ class IndicateurService extends AbstractEntityService
      */
     public function getCount(Indicateur $indicateur, StructureEntity $structure = null)
     {
-        if (!isset($this->countCache[$indicateur->getNumero()])) {
+        $key = $indicateur->getNumero().'_'.($structure ? $structure->getId() : '0');
+
+        if (!isset($this->countCache[$key])) {
             $qb = $this->getBaseQueryBuilder($indicateur, $structure);
             $qb->addSelect('COUNT(' . ($indicateur->getDistinct() ? 'DISTINCT ' : '') . 'indicateur.intervenant) result');
 
-            $this->countCache[$indicateur->getNumero()] = (integer)$qb->getQuery()->getResult()[0]['result'];
+            $this->countCache[$key] = (integer)$qb->getQuery()->getResult()[0]['result'];
         }
 
-        return $this->countCache[$indicateur->getNumero()];
+        return $this->countCache[$key];
     }
 
 

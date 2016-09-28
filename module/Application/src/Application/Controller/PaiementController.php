@@ -541,7 +541,12 @@ class PaiementController extends AbstractController
             $periode   = $this->getServicePeriode()->get($periodeId);
             /* @var $periode \Application\Entity\Db\Periode */
 
-            $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee());
+            $dateMiseEnPaiementValue = $this->params()->fromPost('date-mise-en-paiement');
+            if ($dateMiseEnPaiementValue) {
+                $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiementValue);
+            } else {
+                $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // à défaut
+            }
 
             $intervenants = $this->getServiceIntervenant()->get(explode(',', $intervenants));
             try {

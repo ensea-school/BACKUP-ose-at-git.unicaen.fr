@@ -27,6 +27,8 @@ class DbException extends RuntimeException {
             'Vous ne pouvez pas dévalider ces heures de référentiel car des demandes de mise en paiement ou des mises en paiement ont été faites.',
         'unique constraint (OSE.EP_CODE__UN) violated' =>
             'Un enseignement existe déjà avec le même code. Merci de choisir un autre code d\'enseignement.',
+        'unique constraint (OSE.ETAPE_CODE__UN) violated' =>
+            'Une formation existe déjà avec le même code. Merci de choisir un autre code de formation.',
     ];
 
 

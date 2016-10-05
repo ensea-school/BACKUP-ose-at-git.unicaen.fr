@@ -39,7 +39,7 @@ class DossierController extends AbstractController
      * éventuelles
      * (services sur des enseignements fermés, etc.)
      *
-     * @see \Common\ORM\Filter\HistoriqueFilter
+     * @see \Application\ORM\Filter\HistoriqueFilter
      */
     protected function initFilters()
     {
@@ -85,7 +85,7 @@ class DossierController extends AbstractController
         $canEdit      = !$validation && $privEdit;
         $canSupprimer = !$validation && $dossier->getId() && $privSupprimer;
 
-        $lastHETD = $this->getServiceService()->getTotalHetdIntervenant($iPrec);
+        $lastHETD = $iPrec ? $this->getServiceService()->getTotalHetdIntervenant($iPrec) : 0;
 
         /* Mise en place du formulaires */
         $form->personnaliser($intervenant, $lastHETD);

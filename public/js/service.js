@@ -231,7 +231,12 @@ $.widget("ose.serviceListe", {
         this.element.find("table.service tr.service-ligne").each(function ()
         {
             var id = $(this).data('id');
-            if (that.element.find("table.service tr#service-" + id + "-volume-horaire-tr td.heures-not-empty").length ? false : true) {
+            var totalHeures = 0;
+            $(this).find('td.heures').each(function(){
+                totalHeures += $(this).data('value');
+            });
+
+            if (totalHeures = 0){
                 $(this).hide();
                 that.element.find("table.service tr#service-" + id + "-volume-horaire-tr").hide();
             } else {

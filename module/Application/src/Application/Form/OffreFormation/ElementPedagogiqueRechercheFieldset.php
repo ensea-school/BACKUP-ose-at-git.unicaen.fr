@@ -3,8 +3,6 @@
 namespace Application\Form\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Etape;
-use Application\Entity\NiveauEtape;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -162,7 +160,9 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
 
     protected function getData()
     {
-        if (!$this->getSessionContainer()->data) {
+        $key = $this->getServiceContext()->getAnnee()->getId();
+
+        if (!$this->getSessionContainer()->{$key}) {
 
             $sql = "
             SELECT DISTINCT
@@ -229,10 +229,10 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
             asort($result['structures']);
             asort($result['niveaux']);
             asort($result['etapes']);
-            $this->getSessionContainer()->data = $result;
+            $this->getSessionContainer()->{$key} = $result;
         }
 
-        return $this->getSessionContainer()->data;
+        return $this->getSessionContainer()->{$key};
     }
 
 

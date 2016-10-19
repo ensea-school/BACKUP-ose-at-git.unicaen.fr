@@ -236,7 +236,7 @@ $main = [
             '116_' => 'js/piece-jointe.js',
             '117_' => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js',
             '118_' => 'js/indicateur.js',
-            '900_' => 'js/tinymce/tinymce.min.js',
+            '900_' => 'https://gest.unicaen.fr/public/tinymce-4.4.1/js/tinymce/tinymce.min.js',
         ],
         'stylesheets'    => [
             '010_jquery-ui'           => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.css',

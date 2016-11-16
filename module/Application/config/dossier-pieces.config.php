@@ -233,6 +233,44 @@ return [
                             ],
                         ],
                     ],
+                    'type-piece-jointe-saisie'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-piece-jointe-saisie[/:typePieceJointe]',
+                            'constraints' => [
+                                'typePieceJointe' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'type-piece-jointe-saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'type-piece-jointe-delete'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-piece-jointe-delete[/:typePieceJointe]',
+                            'constraints' => [
+                                'typePieceJointe' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'type-piece-jointe-delete',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'type-piece-jointe-trier' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/type-piece-jointe-trier',
+                            'contraints' => [
+                            ],
+                            'defaults' => [
+                                'action' => 'type-piece-jointe-trier',
+                            ],
+                        ],
+                        'may_terminate' => 'true',
+                    ],
                     'modifier-type-piece-jointe-statut' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -353,7 +391,21 @@ return [
                     'action'     => ['configuration'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
                 ],
-
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['type-piece-jointe-delete'],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
+                ],                
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['type-piece-jointe-saisie'],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['type-piece-jointe-trier'],
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
+                ],
                 /* Pièces jointes */
                 [
                     'controller' => 'Application\Controller\PieceJointe',
@@ -437,6 +489,7 @@ return [
     'form_elements'   => [
         'invokables' => [
             'IntervenantDossier' => Form\Intervenant\Dossier::class,
+            'typePieceJointeSaisie' => Form\PieceJointe\TypePieceJointeSaisieForm::class,
         ],
     ],
 ];

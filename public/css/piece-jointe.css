@@ -8,3 +8,9 @@
     line-height: 3.4em;
     padding-right: 1em;
 }
+
+#tblTpjs tr th:first-child {
+    min-width: 260px;
+    max-width: 260px;
+    width: 260px;
+}

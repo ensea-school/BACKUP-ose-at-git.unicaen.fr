@@ -78,6 +78,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 
 <p>Il a été convenu ce qui suit :</p>
 
+<p style="page-break-inside: avoid;">
 <dl class="articles">
 
     <?php
@@ -112,8 +113,9 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 
     <?php endif ?>
 </dl>
+</p>
 
-<div style="page-break-inside: avoid;">
+<p style="page-break-inside: avoid;">
     <dl class="articles">
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
@@ -125,7 +127,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
             <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $e ?> entraîne un abattement correspondant aux heures non faites.</p>
         </dd>
     </dl>
-</div>
+</p>
 
 <p class="fait">Fait à <?php echo $lieuSignature ?>, le <?php echo $dateSignature ?></p>
 

@@ -1,11 +1,15 @@
 DECLARE
-  intervenant_id NUMERIC DEFAULT 9884;
+  intervenant_id NUMERIC DEFAULT 11340;
 BEGIN
   DBMS_OUTPUT.ENABLE(1000000); 
   ose_test.debug_enabled := true;
 
 --ose_pj.update_intervenant(intervenant_id);
---OSE_FORMULE.CALCULER(intervenant_id);
+OSE_FORMULE.CALCULER(intervenant_id);
+OSE_DOSSIER.calculer(intervenant_id);
+OSE_SERVICE.calculer(intervenant_id);
+OSE_SERVICE_REFERENTIEL.calculer(intervenant_id);
+OSE_SERVICE_SAISIE.calculer(intervenant_id);
 OSE_WORKFLOW.CALCULER(intervenant_id);
 --OSE_WORKFLOW.CALCULER_TOUT(2014);
 --OSE_PIECE_JOINTE_FOURNIE.calculer_tout;
@@ -13,9 +17,13 @@ END;
 
 /
 
+declare
+  annee_id numeric default 2016;
 begin
   ose_test.debug_enabled := false;
-  ose_workflow.calculer_tout;
+  --OSE_FORMULE.calculer_tout(annee_id);
+  --OSE_DOSSIER.CALCULER_TOUT(annee_id);
+  OSE_WORKFLOW.CALCULER_TOUT(annee_id);
 end;
 
 /

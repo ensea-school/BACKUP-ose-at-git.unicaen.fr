@@ -84,26 +84,9 @@ WHERE
   1 = ose_divers.comprise_entre( ep.histo_creation,ep.histo_destruction )
   --AND s.code <> 'OSE'
   AND e.source_code IN (
-  'L1DROI_301',
-'L2DROI_301',
-'LCDR13_211',
-'LCDR13_212',
-'LCDR13_213',
-'LCDRA0_400',
-'LCDRD0_500',
-'MSDCD0_500',
-'MSDGD0_500',
-'MSDR03_205',
-'MSDR04_201',
-'MSDR04_206',
-'MSDR05_202',
-'MSDR07_201',
-'MSDT04_204',
-'MSDT08_201',
-'L1DROI_303',
-'L2DROI_303'
+  'MSAS01_204'
   )
-  AND ep.annee_id = 2015
+  AND ep.annee_id = 2016
   -- FIN DES FILTRES
 ) t1
 WHERE

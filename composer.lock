@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@726"
+                "reference": "/trunk/@736"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1386,7 +1386,7 @@
                 ]
             },
             "description": "Module commun aux applis ZF2 de l'UCBN",
-            "time": "2016-10-11 11:13:04"
+            "time": "2016-10-19 15:50:29"
         },
         {
             "name": "unicaen/unicaen-auth",

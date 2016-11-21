@@ -223,9 +223,6 @@ $main = [
         'layout'              => 'layout/layout', // e.g., 'layout/layout'
     ],
     'public_files'       => [
-        'head_scripts'   => [
-            '020_jqueryui' => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.js',
-        ],
         'inline_scripts' => [
             '001_' => 'js/datepicker-fr.js',
             '111_' => 'js/service.js',
@@ -239,9 +236,6 @@ $main = [
             '900_' => 'https://gest.unicaen.fr/public/tinymce-4.4.1/js/tinymce/tinymce.min.js',
         ],
         'stylesheets'    => [
-            '010_jquery-ui'           => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.min.css',
-            '020_jquery-ui-structure' => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.structure.min.css',
-            '030_jquery-ui-theme'     => 'https://gest.unicaen.fr/public/jquery-ui-1.11.4.minimal/jquery-ui.theme.min.css',
             '110_'                    => 'https://gest.unicaen.fr/public/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css',
             '111_'                    => 'css/cartridge.css',
             '112_'                    => 'https://gest.unicaen.fr/public/font-awesome-4.5.0/css/font-awesome.min.css',

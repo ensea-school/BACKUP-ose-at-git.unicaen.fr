@@ -16,6 +16,8 @@ $totalService =
 
 $depassementServiceDuSansHC = $intervenant->getFormuleIntervenant()->getDepassementServiceDuSansHC();
 
+$serviceDu = $data['heures-service-statutaire'] + $data['heures-modification-service'];
+
 $hasDecharge = $data['heures-decharge'] < 0;
 
 $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.");
@@ -51,7 +53,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
 </div>
 <div class="row">
     <div class="col-sm-4">= Service dû<?php echo $depassementServiceDuSansHC ? '*' : '' ?></div>
-    <div class="col-sm-2 nombre"><span class="label label-info" style="font-size:12pt"><?php echo \UnicaenApp\Util::formattedNumber($resultat->getServiceDu()) ?></span></div>
+    <div class="col-sm-2 nombre"><span class="label label-info" style="font-size:12pt"><?php echo \UnicaenApp\Util::formattedNumber($serviceDu) ?></span></div>
 </div>
 
 <?php if ($depassementServiceDuSansHC): ?>
@@ -134,14 +136,14 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
             <?php endif; ?>
         </td>
         <?php endforeach; ?>
-        
-        
+
+
         <?php if ($data['has-ponderation-service-compl']): ?>
             <td class="nombre">
                 <?php echo \UnicaenApp\Util::formattedNumber($ls['ponderation-service-compl'])?>
             </td>
         <?php endif; ?>
-        
+
         <td><?php echo $this->structure( $ls['structure'] )->renderLink() ?></td>
         <?php foreach( $data['types-intervention'] as $ti ): ?>
         <td class="nombre">

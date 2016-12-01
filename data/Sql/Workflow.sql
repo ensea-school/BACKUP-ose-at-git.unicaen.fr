@@ -23,6 +23,8 @@ begin
   ose_test.debug_enabled := false;
   --OSE_FORMULE.calculer_tout(annee_id);
   --OSE_DOSSIER.CALCULER_TOUT(annee_id);
+  OSE_PIECE_JOINTE_DEMANDE.CALCULER_TOUT(annee_id);
+  OSE_PIECE_JOINTE_FOURNIE.CALCULER_TOUT(annee_id);
   OSE_WORKFLOW.CALCULER_TOUT(annee_id);
 end;
 

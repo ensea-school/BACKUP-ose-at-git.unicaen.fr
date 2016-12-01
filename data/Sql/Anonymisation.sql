@@ -1,3 +1,10 @@
+BEGIN
+  DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"');
+END;
+/
+
+
+
 CREATE TABLE "OSE"."MV_INTERVENANT_DEMO" 
    (	"ANNEE_CREATION" NUMBER NOT NULL ENABLE, 
 	"CIVILITE_ID" NUMBER(*,0) NOT NULL ENABLE, 
@@ -34,13 +41,15 @@ CREATE TABLE "OSE"."MV_INTERVENANT_DEMO"
 	"Z_DISCIPLINE_ID_SPE_CNU" VARCHAR2(9 BYTE), 
 	"Z_DISCIPLINE_ID_DIS2DEG" VARCHAR2(15 BYTE), 
 	"CRITERE_RECHERCHE" VARCHAR2(4000 CHAR), 
-	 CONSTRAINT "MV_INTERVENANT_PK" PRIMARY KEY ("SOURCE_CODE", "ORDRE")
+	 CONSTRAINT "MV_INTERVENANT_DEMO_PK" PRIMARY KEY ("SOURCE_CODE", "ORDRE")
 );
   
 insert into MV_INTERVENANT_DEMO select * from mv_intervenant;
   
-CREATE OR REPLACE VIEW SRC_INTERVENANT
-AS WITH srci as (
+  
+
+CREATE OR REPLACE FORCE VIEW "OSE"."SRC_INTERVENANT" ("ID", "CODE", "SUPANN_EMP_ID", "CIVILITE_ID", "NOM_USUEL", "PRENOM", "NOM_PATRONYMIQUE", "DATE_NAISSANCE", "PAYS_NAISSANCE_CODE_INSEE", "PAYS_NAISSANCE_LIBELLE", "DEP_NAISSANCE_CODE_INSEE", "DEP_NAISSANCE_LIBELLE", "VILLE_NAISSANCE_CODE_INSEE", "VILLE_NAISSANCE_LIBELLE", "PAYS_NATIONALITE_CODE_INSEE", "PAYS_NATIONALITE_LIBELLE", "TEL_PRO", "TEL_MOBILE", "EMAIL", "STATUT_ID", "STRUCTURE_ID", "SOURCE_ID", "SOURCE_CODE", "NUMERO_INSEE", "NUMERO_INSEE_CLE", "NUMERO_INSEE_PROVISOIRE", "IBAN", "BIC", "GRADE_ID", "DISCIPLINE_ID", "ANNEE_ID", "CRITERE_RECHERCHE") AS 
+  WITH srci as (
 SELECT
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
@@ -64,7 +73,8 @@ FROM
   LEFT JOIN grade           g ON g.source_code = i.z_grade_id
   LEFT JOIN discipline d99 ON d99.source_code = '99'
   LEFT JOIN discipline d ON
-    1 = CASE WHEN -- si rien n'ac été défini
+    1 = ose_divers.comprise_entre( d.histo_creation, d.histo_destruction )
+    AND 1 = CASE WHEN -- si rien n'ac été défini
     
       COALESCE( i.z_discipline_id_cnu, i.z_discipline_id_sous_cnu, i.z_discipline_id_spe_cnu, i.z_discipline_id_dis2deg ) IS NULL
       AND d.source_code = '00'
@@ -92,6 +102,7 @@ WHERE
 )
 SELECT
   null id,
+  i.source_code code, i.source_code supann_emp_id,
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
@@ -107,17 +118,18 @@ SELECT
   i.iban, i.bic,
   i.grade_id,
   i.discipline_id,
-  ose_import.get_current_annee annee_id,
+  unicaen_import.get_current_annee annee_id,
   i.critere_recherche
 FROM
   srci i
-  LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = ose_import.get_current_annee
-  LEFT JOIN dossier               d  ON d.id = i2.dossier_id
+  LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee
+  LEFT JOIN dossier               d  ON d.intervenant_id = i2.id
 
 UNION ALL
 
 SELECT
   null id,
+  i.source_code code, i.source_code supann_emp_id,
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
@@ -133,23 +145,23 @@ SELECT
   i.iban, i.bic,
   i.grade_id,
   i.discipline_id,
-  ose_import.get_current_annee - 1 annee_id,
+  unicaen_import.get_current_annee - 1 annee_id,
   i.critere_recherche
 FROM
   srci i
-  LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = ose_import.get_current_annee - 1
-  LEFT JOIN dossier               d  ON d.id = i2.dossier_id;
+  LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee - 1
+  LEFT JOIN dossier               d  ON d.intervenant_id = i2.id AND 1 = ose_divers.comprise_entre( d.histo_creation, d.histo_destruction );
+
+  
+  
 
 
 
 
 /
-alter trigger "OSE"."F_INTERVENANT" disable;
-alter trigger "OSE"."PJ_TRG_DOSSIER" disable;
-alter trigger "OSE"."PJ_TRG_DOSSIER_S" disable;
-alter trigger "OSE"."WF_TRG_DOSSIER" disable;
-alter trigger "OSE"."WF_TRG_DOSSIER_S" disable;
-
+begin
+ose_event.set_actif(false);
+end;
 /
 
 UPDATE intervenant SET
@@ -218,23 +230,20 @@ update adresse_intervenant set
 ;
 
 
-select * from intervenant where source_code = '25481';
-select * from dossier where intervenant_id = 5768;
-select * from piece_jointe where dossier_id = 3895;
-select * from PIECE_JOINTE_FICHIER where piece_jointe_id = 8869;
-select * from fichier where id = 14892;
-select * from type_piece_jointe;
-update fichier set contenu = (select contenu from fichier where id=14892);
+update fichier set 
+  contenu = (select contenu from fichier where id=1), 
+  type='application/pdf', 
+  taille=16683, 
+  description=null,
+  nom='fichier_' || id || '.pdf';
 
-
+select * from fichier where id = 1;
 
 
 /
-alter trigger "OSE"."F_INTERVENANT" enable;
-alter trigger "OSE"."PJ_TRG_DOSSIER" enable;
-alter trigger "OSE"."PJ_TRG_DOSSIER_S" enable;
-alter trigger "OSE"."WF_TRG_DOSSIER" enable;
-alter trigger "OSE"."WF_TRG_DOSSIER_S" enable;
+begin
+ose_event.set_actif(true);
+end;
 /
 
 
@@ -461,6 +470,3 @@ from
   fonction_referentiel fr
   JOIN ll ON ll.rn = fr.id
 ORDER BY rownum;
-
-
-

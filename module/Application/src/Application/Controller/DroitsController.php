@@ -223,8 +223,6 @@ class DroitsController extends AbstractController
 
     public function affectationsAction()
     {
-        $tri = $this->params()->fromQuery('tri');
-
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $serviceAffectations = $this->getServiceAffectation();
@@ -238,43 +236,13 @@ class DroitsController extends AbstractController
         $serviceAffectations->finderByHistorique($qb);
         if ($structure = $role->getStructure()){
             $serviceAffectations->finderByStructure($structure, $qb);
-            if (empty($tri)) $tri = 'personnel';
-        }else{
-            if (empty($tri)) $tri = 'structure';
         }
 
         /* @var $qb \Doctrine\ORM\QueryBuilder */
 
-        switch ($tri) {
-            case 'structure':
-                $this->getServiceStructure()->orderBy($qb);
-                $this->getServiceRole()->orderBy($qb);
-                $this->getServicePersonnel()->orderBy($qb);
-                $this->getServiceSource()->orderBy($qb);
-                break;
-            case 'role':
-                $this->getServiceRole()->orderBy($qb);
-                $this->getServicePersonnel()->orderBy($qb);
-                $this->getServiceStructure()->orderBy($qb);
-                $this->getServiceSource()->orderBy($qb);
-                break;
-            case 'personnel':
-                $this->getServicePersonnel()->orderBy($qb);
-                $this->getServiceStructure()->orderBy($qb);
-                $this->getServiceRole()->orderBy($qb);
-                $this->getServiceSource()->orderBy($qb);
-                break;
-            case 'source':
-                $this->getServiceSource()->orderBy($qb);
-                $this->getServiceStructure()->orderBy($qb);
-                $this->getServiceRole()->orderBy($qb);
-                $this->getServicePersonnel()->orderBy($qb);
-                break;
-        }
-
         $affectations = $serviceAffectations->getList($qb);
 
-        return compact('structure', 'affectations', 'tri');
+        return compact('structure', 'affectations');
     }
 
 
@@ -282,7 +250,7 @@ class DroitsController extends AbstractController
     public function affectationEditionAction()
     {
         $affectation = $this->getEvent()->getParam('affectation');
-        
+
         /* @var $affectation Affectation */
         $errors = [];
 

@@ -3,7 +3,6 @@
 /**
  * @var $this \Application\View\Renderer\PhpRenderer
  * @var $affectations Application\Entity\Db\Affectation[]
- * @var $tri string
  * @var $structure \Application\Entity\Db\Structure
  */
 
@@ -13,7 +12,7 @@ $head = [
     'structure' => 'Structure',
     'role'      => 'Rôle',
     'personnel' => 'Personnel',
-    'source'    => 'Src/Actions',
+    'source'    => '<abbr title="Source de données">Src</abbr>/Actions',
 ];
 
 if ($structure) unset($head['structure']);
@@ -24,31 +23,25 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
 ?>
 <h1 class="page-header">Gestion des affectations</h1>
 
-
-<table class="table table-bordered table-condensed">
+<table class="table table-bordered table-condensed table-sort">
 <thead>
     <tr>
     <?php foreach( $head as $id => $label ): ?>
         <th style="white-space: nowrap">
-            <a href="?tri=<?php echo $id ?>">
-                <?php echo $label ?>
-                <?php if ($tri == $id): ?>
-                    <span class="glyphicon glyphicon-arrow-down" style="font-size: xx-small"></span>
-                <?php endif; ?>
-            </a>
+            <?php echo $label ?>
         </th>
     <?php endforeach; ?>
     </tr>
 </thead>
 <tbody>
-<?php foreach( $affectations as $affectation ): 
+<?php foreach( $affectations as $affectation ):
     $editionUrl     = $this->url( 'droits/affectations/edition',     ['affectation' => $affectation->getId()] );
     $suppressionUrl = $this->url( 'droits/affectations/suppression', ['affectation' => $affectation->getId()] );
 ?>
     <tr>
         <?php if (!$structure): ?>
 
-        <td><?php 
+        <td><?php
             $str = (string)$affectation->getStructure();
             if ('' == $str){
                 $str = '<span class="bg-info">&Eacute;tablissement</span>';
@@ -62,7 +55,7 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
             if (! $affectation->getSource()->getImportable() && $canEdit){
                 ?>
                 <a href="<?php echo $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><span class="glyphicon glyphicon-edit"></span></a>
-                <a href="<?php echo $suppressionUrl; ?>" class="ajax-modal" data-event="affectation-suppression"><span class="glyphicon glyphicon-remove"></span></a>
+                <a href="<?php echo $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><span class="glyphicon glyphicon-remove"></span></a>
                 <?php
             }else{
                 echo $affectation->getSource();
@@ -79,6 +72,7 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
 <script type="text/javascript">
     $(function() {
         $("body").on("affectation-edition", function(event, data) {
+            alertFlash("L'action a bien été prise en compte", 'success');
             window.location.reload();
         });
 

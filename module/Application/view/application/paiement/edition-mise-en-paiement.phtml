@@ -8,23 +8,12 @@
 
 $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paiement");
 
-$this->headLink()->appendStylesheet('https://gest.unicaen.fr/public/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css');
-$this->headScript()->appendFile('https://gest.unicaen.fr/public/DataTables-1.10.12/media/js/jquery.dataTables.min.js');
-$this->headScript()->appendFile('https://gest.unicaen.fr/public/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js');
-$this->headScript()->appendScript('$(document).ready(function() {
-        $(\'.datatable\').DataTable(
-            {"language": {
-                "url": "https://gest.unicaen.fr/public/DataTables-1.10.12/plug-ins/i18n/french.json"
-            }}
-        );
-    } );');
-
 ?>
 <h1 class="page-header">Annulation de mises en paiement
     <small><?php echo $intervenant ?></small>
 </h1>
 <form method="post" id="mepform">
-<table class="datatable table table-bordered table-condensed table-extra-condensed table-hover">
+<table class="table table-bordered table-condensed table-extra-condensed table-hover table-sort">
     <thead>
     <tr>
         <th>&nbsp;</th>

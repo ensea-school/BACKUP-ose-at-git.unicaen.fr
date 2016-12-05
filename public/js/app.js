@@ -11,6 +11,12 @@ $(function ()
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();
     WidgetInitializer.add('selectpicker', 'selectpicker');
+
+    $('.table-sort').DataTable(
+        {"language": {
+            "url": "https://gest.unicaen.fr/public/DataTables-1.10.12/plug-ins/i18n/french.json"
+        }}
+    );
 });
 
 function errorDialog() {}

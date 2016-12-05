@@ -69,9 +69,9 @@ SELECT
   ep.fa,ep.taux_fa,
   ep.fc,ep.taux_fc,
   -- NOUVEAUX TAUX FI FA FC
-  100 /100 n_taux_fi,
+  50 /100 n_taux_fi,
   0 /100 n_taux_fa,
-  0 /100 n_taux_fc
+  50 /100 n_taux_fc
   -- FIN DES NOUVEAUX TAUX FI FA FC
 FROM
   element_pedagogique ep
@@ -139,24 +139,27 @@ SELECT * FROM ELEMENT_PEDAGOGIQUE WHERE source_code like '%DUUE%';
 
 
 select source_code from etape where source_code in (
-'L1DROI_301',
+'L2DROI_303',
 'L2DROI_301',
-'LCDR13_211',
-'LCDR13_212',
-'LCDR13_213',
-'LCDRA0_400',
-'LCDRD0_500',
+'L2DROI_301',
+'L3DRPP_313',
+'L3DRPP_313',
+'L3DRPP_313',
+'L3DRPP_313',
 'MSDCD0_500',
-'MSDGD0_500',
+'MSDCD0_500',
 'MSDR03_205',
-'MSDR04_201',
-'MSDR04_206',
-'MSDR05_202',
-'MSDR07_201',
-'MSDT04_204',
-'MSDT08_201',
-'L1DROI_303',
-'L2DROI_303'
+'MSDR03_205',
+'MSDR03_205',
+'MSDR03_205',
+'MSDR03_205',
+'MSDR03_205',
+'MSDR12_211',
+'MSDR12_211',
+'MSDR12_211',
+'MSDR12_211',
+'MSDR12_211',
+'MSDR12_211'
 
 ) order by source_code;
      

@@ -1,5 +1,3 @@
-  
-  
 INSERT INTO CATEGORIE_PRIVILEGE (
   ID,
   CODE,
@@ -25,23 +23,21 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'parametres' c, 'campagnes-saisie-visualisation' p, 'Campagnes de saisie - Visualisation' l FROM dual
-      UNION SELECT 'parametres' c, 'campagnes-saisie-edition' p, 'Campagnes de saisie - Édition' l FROM dual
+      SELECT 'formation' c, 'pj-impression' p, 'Pièces jointes - Edition Nb ex. imprimés' l FROM dual
 
 ) t1;
 
-
+delete from privilege where id = 123;
 
 /* Liste... */
 select
-  cp.code, p.code
-  
+  cp.code, p.code, p.libelle
 from
   privilege p
   join categorie_privilege cp on cp.id = p.categorie_id
 order by
   cp.code, p.ordre;
-  
+
 select * from categorie_privilege order by ordre;
 
 

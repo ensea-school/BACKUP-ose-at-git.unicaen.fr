@@ -13,7 +13,6 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
-use Zend\Form\Annotation;
 use Application\Constants;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Application\Entity\Db\Interfaces\AnneeAwareInterface;
@@ -21,9 +20,6 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 /**
  * Intervenant
  *
- * @Annotation\Name("intervenant")
- * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
- * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
 class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware
 {
@@ -46,18 +42,28 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
     /**
      * @var \DateTime
-     * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
-     * @Annotation\Options({"date_inf_label":"Date de naissance :"})
      */
     protected $dateNaissance;
 
     /**
      * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Département de naissance (code INSEE) :"})
      */
     protected $depNaissanceCodeInsee;
+
+    /**
+     * @var Pays
+     */
+    private $paysNaissance;
+
+    /**
+     * @var Pays
+     */
+    private $paysNationalite;
+
+    /**
+     * @var Departement
+     */
+    private $depNaissance;
 
     /**
      * @var string
@@ -66,33 +72,21 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
     /**
      * @var string
-     * @Annotation\Type("Zend\Form\Element\Email")
-     * @Annotation\Validator({"name":"EmailAddress"})
-     * @Annotation\Options({"label":"Adresse mail :"})
      */
     protected $email;
 
     /**
      * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Nom patronymique :"})
      */
     protected $nomPatronymique;
 
     /**
      * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Nom usuel :"})
      */
     protected $nomUsuel;
 
     /**
      * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Numéro INSEE :"})
      */
     protected $numeroInsee;
 
@@ -108,36 +102,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
     /**
      * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Pays de naissance (code Insee) :"})
-     */
-    protected $paysNaissanceCodeInsee;
-
-    /**
-     * @var string
-     */
-    protected $paysNaissanceLibelle;
-
-    /**
-     * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Pays de nationalité (code Insee) :"})
-     */
-    protected $paysNationaliteCodeInsee;
-
-    /**
-     * @var string
-     */
-    protected $paysNationaliteLibelle;
-
-    /**
-     * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Validator({"name":"StringLength", "options":{"min":1, "max":25}})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Prénom :"})
      */
     protected $prenom;
 
@@ -153,9 +117,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
     /**
      * @var string
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"VIlle de naissance (code Insee) :"})
      */
     protected $villeNaissanceCodeInsee;
 
@@ -201,10 +162,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
     /**
      * @var \Application\Entity\Db\Civilite
-     * @Annotation\Type("Zend\Form\Element\Select")
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Civilité :"})
      */
     protected $civilite;
 
@@ -423,6 +380,78 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
+     * @return Pays
+     */
+    public function getPaysNaissance()
+    {
+        return $this->paysNaissance;
+    }
+
+
+
+    /**
+     * @param Pays $paysNaissance
+     *
+     * @return Intervenant
+     */
+    public function setPaysNaissance($paysNaissance)
+    {
+        $this->paysNaissance = $paysNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Pays
+     */
+    public function getPaysNationalite()
+    {
+        return $this->paysNationalite;
+    }
+
+
+
+    /**
+     * @param Pays $paysNationalite
+     *
+     * @return Intervenant
+     */
+    public function setPaysNationalite($paysNationalite)
+    {
+        $this->paysNationalite = $paysNationalite;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Departement
+     */
+    public function getDepNaissance()
+    {
+        return $this->depNaissance;
+    }
+
+
+
+    /**
+     * @param Departement $depNaissance
+     *
+     * @return Intervenant
+     */
+    public function setDepNaissance($depNaissance)
+    {
+        $this->depNaissance = $depNaissance;
+
+        return $this;
+    }
+
+
+
+    /**
      * Set depNaissanceLibelle
      *
      * @param string $depNaissanceLibelle
@@ -614,118 +643,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function getNumeroInseeProvisoire()
     {
         return $this->numeroInseeProvisoire;
-    }
-
-
-
-    /**
-     * Set paysNaissanceCodeInsee
-     *
-     * @param string $paysNaissanceCodeInsee
-     *
-     * @return Intervenant
-     */
-    public function setPaysNaissanceCodeInsee($paysNaissanceCodeInsee)
-    {
-        $this->paysNaissanceCodeInsee = $paysNaissanceCodeInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get paysNaissanceCodeInsee
-     *
-     * @return string
-     */
-    public function getPaysNaissanceCodeInsee()
-    {
-        return $this->paysNaissanceCodeInsee;
-    }
-
-
-
-    /**
-     * Set paysNaissanceLibelle
-     *
-     * @param string $paysNaissanceLibelle
-     *
-     * @return Intervenant
-     */
-    public function setPaysNaissanceLibelle($paysNaissanceLibelle)
-    {
-        $this->paysNaissanceLibelle = $paysNaissanceLibelle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get paysNaissanceLibelle
-     *
-     * @return string
-     */
-    public function getPaysNaissanceLibelle()
-    {
-        return $this->paysNaissanceLibelle;
-    }
-
-
-
-    /**
-     * Set paysNationaliteCodeInsee
-     *
-     * @param string $paysNationaliteCodeInsee
-     *
-     * @return Intervenant
-     */
-    public function setPaysNationaliteCodeInsee($paysNationaliteCodeInsee)
-    {
-        $this->paysNationaliteCodeInsee = $paysNationaliteCodeInsee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get paysNationaliteCodeInsee
-     *
-     * @return string
-     */
-    public function getPaysNationaliteCodeInsee()
-    {
-        return $this->paysNationaliteCodeInsee;
-    }
-
-
-
-    /**
-     * Set paysNationaliteLibelle
-     *
-     * @param string $paysNationaliteLibelle
-     *
-     * @return Intervenant
-     */
-    public function setPaysNationaliteLibelle($paysNationaliteLibelle)
-    {
-        $this->paysNationaliteLibelle = $paysNationaliteLibelle;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get paysNationaliteLibelle
-     *
-     * @return string
-     */
-    public function getPaysNationaliteLibelle()
-    {
-        return $this->paysNationaliteLibelle;
     }
 
 
@@ -1920,8 +1837,8 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
-     * Détermine simplement si l'intervenant dépasse le plafond de la rému D714-60 
-     * 
+     * Détermine simplement si l'intervenant dépasse le plafond de la rému D714-60
+     *
      * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return float

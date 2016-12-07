@@ -23,8 +23,6 @@
         <field name="code" type="string" column="CODE" length="60" nullable="false"/>
         <field name="supannEmpId" type="string" column="SUPANN_EMP_ID" length="60" nullable="false"/>
         <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>
-        <field name="depNaissanceCodeInsee" type="string" column="DEP_NAISSANCE_CODE_INSEE" length="3" nullable="true"/>
-        <field name="depNaissanceLibelle" type="string" column="DEP_NAISSANCE_LIBELLE" length="30" nullable="true"/>
         <field name="email" type="string" column="EMAIL" length="255" nullable="true"/>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
@@ -34,10 +32,6 @@
         <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
         <field name="numeroInseeCle" type="string" column="NUMERO_INSEE_CLE" length="2" nullable="true"/>
         <field name="numeroInseeProvisoire" type="boolean" column="NUMERO_INSEE_PROVISOIRE" nullable="true"/>
-        <field name="paysNaissanceCodeInsee" type="string" column="PAYS_NAISSANCE_CODE_INSEE" length="3" nullable="false"/>
-        <field name="paysNaissanceLibelle" type="string" column="PAYS_NAISSANCE_LIBELLE" length="30" nullable="false"/>
-        <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
-        <field name="paysNationaliteLibelle" type="string" column="PAYS_NATIONALITE_LIBELLE" length="30" nullable="false"/>
         <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
         <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
@@ -48,6 +42,23 @@
         <field name="IBAN" type="string" column="IBAN" length="255" nullable="true"/>
         <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
         <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true" />
+
+        <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
+            <join-columns>
+                <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="paysNationalite" target-entity="Application\Entity\Db\Pays">
+            <join-columns>
+                <join-column name="PAYS_NATIONALITE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="depNaissance" target-entity="Application\Entity\Db\Departement">
+            <join-columns>
+                <join-column name="DEP_NAISSANCE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+
         <many-to-one field="grade" target-entity="Application\Entity\Db\Grade">
             <join-columns>
                 <join-column name="GRADE_ID" referenced-column-name="ID"/>

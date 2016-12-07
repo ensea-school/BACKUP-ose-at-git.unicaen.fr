@@ -47,7 +47,7 @@ class Asset
 {
     const SOURCE_TEST = 'Test';
 
-    
+
     static public function newUser()
     {
         $e = new Utilisateur();
@@ -57,10 +57,10 @@ class Asset
                 ->setPassword('azerty')
                 ->setState(1)
                 ->setUsername(uniqid());
-        
+
         return $e;
     }
-    
+
     static public function newEtablissement()
     {
         $e = new Etablissement();
@@ -68,18 +68,18 @@ class Asset
                 ->setLibelle('Établissement de test')
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
-        
+
         return $e;
     }
-        
+
     static public function newTypeStructure()
     {
         $e = new TypeStructure();
         $e->setLibelle('Type de test');
-        
+
         return $e;
     }
-        
+
     static public function newStructure(TypeStructure $typeStructure, Etablissement $etablissement, Structure $parente)
     {
         $e = new Structure();
@@ -93,10 +93,10 @@ class Asset
                 ->setParenteNiv2($e)
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
-        
+
         return $e;
     }
-        
+
     static public function newStatutIntervenant(TypeIntervenant $typeIntervenant)
     {
         $e = new StatutIntervenant();
@@ -117,20 +117,20 @@ class Asset
                 ->setOrdre(1)
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
-        
+
         return $e;
     }
-        
+
     static public function newTypeIntervenant()
     {
         $e = new TypeIntervenant();
         $e
                 ->setCode('|')
                 ->setLibelle(uniqid("Type Intervenant "));
-        
+
         return $e;
     }
-        
+
     static public function newCorps()
     {
         $e = new Corps();
@@ -139,10 +139,10 @@ class Asset
                 ->setLibelleLong("Corps de test")
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
-        
+
         return $e;
     }
-        
+
     static public function newRegimeSecu()
     {
         $e = new RegimeSecu();
@@ -150,20 +150,20 @@ class Asset
                 ->setCode('' . rand(1, 99))
                 ->setLibelle("Taux de test")
                 ->setTauxTaxe(5.5);
-        
+
         return $e;
     }
-        
+
     static public function newCivilite()
     {
         $e = new Civilite();
         $e
                 ->setLibelle("Mister")
                 ->setSexe('M');
-        
+
         return $e;
     }
-        
+
     static public function newDossier(
             Civilite $civilite,
             $premierRecrutement,
@@ -185,10 +185,10 @@ class Asset
                 ->setPremierRecrutement($premierRecrutement)
                 ->setPerteEmploi($perteEmploi)
                 ->setStatut($statutIntervenant);
-        
+
         return $e;
     }
-        
+
     static public function newService(
             Intervenant $intervenant,
             Structure $structureEns,
@@ -202,10 +202,10 @@ class Asset
                 ->setEtablissement($intervenant->getStructure()->getEtablissement())
                 ->setIntervenant($intervenant)
                 ->setTypeVolumeHoraire($typeVolumeHoraire);
-        
+
         return $e;
     }
-        
+
     static public function newServiceReferentiel(
             Intervenant $intervenant,
             FonctionReferentiel $fonction,
@@ -218,10 +218,10 @@ class Asset
                 ->setHeures(rand(1, 50))
                 ->setIntervenant($intervenant)
                 ->setStructure($structure);
-        
+
         return $e;
     }
-        
+
     static public function newElementPedagogique(
             Structure $structure,
             Etape $etape,
@@ -235,10 +235,10 @@ class Asset
                 ->setSource(self::getSource())
                 ->setSourceCode(uniqid())
                 ->setStructure($structure);
-        
+
         return $e;
     }
-        
+
     static public function newVolumeHoraire(
             Service $service,
             TypeIntervention $typeIntervention,
@@ -254,104 +254,41 @@ class Asset
                 ->setService($service)
                 ->setTypeIntervention($typeIntervention)
                 ->setTypeVolumeHoraire($service->getTypeVolumeHoraire());
-        
+
         return $e;
     }
-        
-    static public function newIntervenantPermanent(
-            Civilite $civilite, 
-            StatutIntervenant $statut, 
-            Structure $structure, 
-            Corps $corps)
-    {
-        $e = new IntervenantPermanent();
-        $e
-                ->setStructure($structure)
-                ->setStatut($statut)
-                ->setCorps($corps)
-                ->setCivilite($civilite)
-                ->setDateNaissance(new DateTime())
-                ->setDepNaissanceCodeInsee('75')
-                ->setDepNaissanceLibelle('IDF')
-                ->setEmail(uniqid() . '@unicaen.fr')
-                ->setNomPatronymique(uniqid('Nom patro '))
-                ->setNomUsuel(uniqid('Nom '))
-                ->setPaysNaissanceCodeInsee('12')
-                ->setPaysNaissanceLibelle('France')
-                ->setPaysNationaliteCodeInsee('12')
-                ->setPaysNationaliteLibelle('Française')
-                ->setPrenom(uniqid('Prénom '))
-                ->setSource(static::getSource())
-                ->setSourceCode(uniqid())
-                ->setTelMobile(null)
-                ->setVilleNaissanceCodeInsee('75019')
-                ->setVilleNaissanceLibelle('CF');
-        
-        return $e;
-    }
-    
-    static public function newIntervenantExterieur(
-            Civilite $civilite, 
-            StatutIntervenant $statut, 
-            Structure $structure, 
-            RegimeSecu $regimeSecu)
-    {
-        $e = new IntervenantExterieur();
-        $e
-                ->setStructure($structure)
-                ->setStatut($statut)
-                ->setRegimeSecu($regimeSecu)
-                ->setCivilite($civilite)
-                ->setDateNaissance(new DateTime())
-                ->setDepNaissanceCodeInsee('75')
-                ->setDepNaissanceLibelle('IDF')
-                ->setEmail(uniqid() . '@unicaen.fr')
-                ->setNomPatronymique(uniqid('Nom patro '))
-                ->setNomUsuel(uniqid('Nom '))
-                ->setPaysNaissanceCodeInsee('12')
-                ->setPaysNaissanceLibelle('France')
-                ->setPaysNationaliteCodeInsee('12')
-                ->setPaysNationaliteLibelle('Française')
-                ->setPrenom(uniqid('Prénom '))
-                ->setSource(static::getSource())
-                ->setSourceCode(uniqid())
-                ->setTelMobile(null)
-                ->setVilleNaissanceCodeInsee('75019')
-                ->setVilleNaissanceLibelle('CF');
-        
-        return $e;
-    }
-    
+
+
     static public function newTypePieceJointe()
     {
         $e = new TypePieceJointe();
         $e
                 ->setCode(uniqid())
                 ->setLibelle(uniqid("TPJ "));
-        
+
         return $e;
     }
-    
+
     static public function newTypePieceJointeStatut(StatutIntervenant $statut, TypePieceJointe $type)
     {
         $e = new TypePieceJointeStatut();
         $e
                 ->setType($type)
                 ->setStatut($statut);
-        
+
         return $e;
     }
-    
+
     static public function newPieceJointe(TypePieceJointe $type, Dossier $dossier = null)
     {
         $e = new PieceJointe();
         $e
                 ->setType($type)
                 ->setDossier($dossier);
-        
+
         return $e;
     }
-        
+
     static public function newFichier()
     {
         $e = new Fichier();
@@ -361,30 +298,30 @@ class Asset
                 ->setType("image/png")
                 ->setTaille(1024)
                 ->setContenu("binary data");
-        
+
         return $e;
     }
-    
+
     static public function newTypeAgrement()
     {
         $e = new TypeAgrement();
         $e
                 ->setCode(uniqid())
                 ->setLibelle(uniqid("TA "));
-        
+
         return $e;
     }
-    
+
     static public function newTypeAgrementStatut(StatutIntervenant $statut, TypeAgrement $type)
     {
         $e = new TypeAgrementStatut();
         $e
                 ->setType($type)
                 ->setStatut($statut);
-        
+
         return $e;
     }
-    
+
     static public function newAgrement(TypeAgrement $type, Intervenant $intervenant, Structure $structure, Annee $annee)
     {
         $e = new Agrement();
@@ -394,10 +331,10 @@ class Asset
                 ->setIntervenant($intervenant)
                 ->setStructure($structure)
                 ->setDateDecision(new \DateTime());
-        
+
         return $e;
     }
-        
+
     static public function newValidation(TypeValidation $type, Intervenant $intervenant, Structure $structure = null)
     {
         $e = new Validation();
@@ -405,10 +342,10 @@ class Asset
                 ->setIntervenant($intervenant)
                 ->setStructure($structure ?: $intervenant->getStructure())
                 ->setTypeValidation($type);
-        
+
         return $e;
     }
-    
+
     static public function newContrat(TypeContrat $type, Intervenant $intervenant, Structure $structure)
     {
         $e = new Contrat();
@@ -417,17 +354,17 @@ class Asset
                 ->setIntervenant($intervenant)
                 ->setStructure($structure)
                 ->setNumeroAvenant($type->estUnAvenant() ? 1 : 0);
-        
+
         return $e;
     }
-    
+
     static public function newTypeContrat($avenant = false)
     {
         $e = new TypeContrat();
         $e
                 ->setCode($avenant ? TypeContrat::CODE_AVENANT : TypeContrat::CODE_CONTRAT)
                 ->setLibelle(uniqid("TC "));
-        
+
         return $e;
     }
 }

@@ -52,7 +52,7 @@ class Dossier implements HistoriqueAwareInterface
      * @var string
      */
     protected $numeroInsee;
-    
+
     /**
      * @var boolean
      */
@@ -109,7 +109,7 @@ class Dossier implements HistoriqueAwareInterface
     protected $villeNaissance;
 
     /**
-     * 
+     *
      */
     public function __construct()
     {
@@ -132,7 +132,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get adresse
      *
-     * @return string 
+     * @return string
      */
     public function getAdresse()
     {
@@ -155,7 +155,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get civilite
      *
-     * @return Civilite 
+     * @return Civilite
      */
     public function getCivilite()
     {
@@ -178,7 +178,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -201,7 +201,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get emailPerso
      *
-     * @return string 
+     * @return string
      */
     public function getEmailPerso()
     {
@@ -224,7 +224,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get telephone
      *
-     * @return string 
+     * @return string
      */
     public function getTelephone()
     {
@@ -247,7 +247,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get nomPatronymique
      *
-     * @return string 
+     * @return string
      */
     public function getNomPatronymique()
     {
@@ -270,7 +270,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get nomUsuel
      *
-     * @return string 
+     * @return string
      */
     public function getNomUsuel()
     {
@@ -293,7 +293,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get numeroInsee
      *
-     * @return string 
+     * @return string
      */
     public function getNumeroInsee()
     {
@@ -316,7 +316,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get numeroInseeEstProvisoire
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getNumeroInseeEstProvisoire()
     {
@@ -339,7 +339,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get prenom
      *
-     * @return string 
+     * @return string
      */
     public function getPrenom()
     {
@@ -362,7 +362,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get rib
      *
-     * @return string 
+     * @return string
      */
     public function getRib()
     {
@@ -385,7 +385,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get statut
      *
-     * @return StatutIntervenant 
+     * @return StatutIntervenant
      */
     public function getStatut()
     {
@@ -408,7 +408,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get premierRecrutement
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPremierRecrutement()
     {
@@ -418,42 +418,42 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * 
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getPieceJointe()
     {
         return $this->pieceJointe;
     }
-    
+
     /**
-     * 
+     *
      * @return PieceJointe
      */
     public function addPieceJointe(PieceJointe $pieceJointe)
     {
         $this->pieceJointe->add($pieceJointe);
-        
+
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @param PieceJointe $pieceJointe
      * @return self
      */
     public function removePieceJointe(PieceJointe $pieceJointe)
     {
         $this->pieceJointe->removeElement($pieceJointe);
-        
+
         return $this;
     }
 
@@ -466,7 +466,7 @@ class Dossier implements HistoriqueAwareInterface
     public function setDateNaissance($dateNaissance)
     {
         $dateNaissance->setTime(0, 0, 0);
-        
+
         $this->dateNaissance = $dateNaissance;
 
         return $this;
@@ -475,7 +475,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get dateNaissance
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateNaissance()
     {
@@ -498,7 +498,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get paysNaissance
      *
-     * @return Pays 
+     * @return Pays
      */
     public function getPaysNaissance()
     {
@@ -521,7 +521,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get departementNaissance
      *
-     * @return Departement 
+     * @return Departement
      */
     public function getDepartementNaissance()
     {
@@ -544,15 +544,15 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get villeNaissance
      *
-     * @return string 
+     * @return string
      */
     public function getVilleNaissance()
     {
         return $this->villeNaissance;
     }
-        
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Intervenant $intervenant
      * @return \Application\Entity\Db\Dossier
      */
@@ -565,8 +565,8 @@ class Dossier implements HistoriqueAwareInterface
                 ->setPrenom($intervenant->getPrenom())
                 ->setCivilite($intervenant->getCivilite())
                 ->setDateNaissance($intervenant->getDateNaissance())
-//                ->setPaysNaissance($intervenant->getPaysNaissance())
-//                ->setDepartementNaissance($intervenant->getDepNaissance())
+                ->setPaysNaissance($intervenant->getPaysNaissance())
+                ->setDepartementNaissance($intervenant->getDepNaissance())
                 ->setVilleNaissance($intervenant->getVilleNaissanceLibelle())
                 ->setNumeroInsee($intervenant->getNumeroInsee() . $intervenant->getNumeroInseeCle())
                 ->setAdresse((string) $intervenant->getAdressePrincipale())
@@ -574,7 +574,7 @@ class Dossier implements HistoriqueAwareInterface
                 ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
                 ->setStatut($intervenant->getStatut())
                 ->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()));
-        
+
         return $this;
     }
 }

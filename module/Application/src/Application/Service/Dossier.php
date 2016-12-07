@@ -14,6 +14,10 @@ use Application\Service\Traits\ValidationAwareTrait;
  * Description of Dossier
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method DossierEntity get($id)
+ * @method DossierEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method DossierEntity newEntity()
  */
 class Dossier extends AbstractEntityService
 {

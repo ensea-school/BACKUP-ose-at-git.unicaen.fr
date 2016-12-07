@@ -26,6 +26,7 @@
     <field name="villeNaissance" type="string" column="VILLE_NAISSANCE" length="128" nullable="true"/>
     <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="false"/>
     <!--<one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" mapped-by="dossier"/>-->
+
     <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
       <join-columns>
         <join-column name="CIVILITE_ID" referenced-column-name="ID"/>

@@ -61,7 +61,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Civilité"           => $entity->getCiviliteToString(),
                 "Date de naissance"  => $entity->getDateNaissanceToString(),
                 "Ville de naissance" => $entity->getVilleNaissanceLibelle() ?: '<span class="inconnu">(Inconnue)</span>',
-                "Pays de naissance"  => $entity->getPaysNaissanceLibelle(),
+                "Pays de naissance"  => $entity->getPaysNaissance(),
                 "N° INSEE"           => $entity->getNumeroInsee(),
             ],
             'coordonnees' => [

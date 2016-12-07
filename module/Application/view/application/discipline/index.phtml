@@ -17,8 +17,8 @@ function truncCodesCorresp($value){
 
 ?>
 <h1 class="page-header">Gestion des disciplines</h1>
-<table class="table table-bordered">
-    <htead>
+<table class="table table-bordered table-sort">
+    <thead>
         <tr>
             <th>Code</th>
             <th>Libellé court</th>
@@ -29,7 +29,7 @@ function truncCodesCorresp($value){
             <?php if (isset($libellesCodesCorresp[4])) echo '<th>'.$libellesCodesCorresp[4].'</th>' ?>
             <th>Src/Actions</th>
         </tr>
-    </htead>
+    </thead>
     <tbody>
     <?php foreach( $disciplines as $discipline ): ?>
         <tr>

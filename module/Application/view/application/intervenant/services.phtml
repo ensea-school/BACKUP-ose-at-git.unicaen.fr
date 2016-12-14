@@ -97,6 +97,9 @@ echo $formuleTotauxHetd;
 
         $(function ()
         {
+            WidgetInitializer.includeJs(Url('js/service.js'));
+            WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+            WidgetInitializer.includeCss(Url('css/service.css'));
 
             <?php if ($services !== false): ?>$('.service-liste').serviceListe({
                 'heures-change-exists': function ()

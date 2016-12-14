@@ -124,6 +124,7 @@ class Dossier extends AbstractEntityService
         $validation = null;
         $serviceValidation = $this->getServiceValidation();
         $qb                = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $serviceValidation->finderByHistorique($qb);
         $serviceValidation->finderByIntervenant($intervenant, $qb);
         $validations = $serviceValidation->getList($qb);
         if (count($validations)) {

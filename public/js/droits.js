@@ -203,10 +203,6 @@ $.widget("ose.droitsTbl", {
     }
 });
 
-$(function ()
-{
-    WidgetInitializer.add('droits-tbl', 'droitsTbl');
-});
 
 
 
@@ -252,9 +248,4 @@ $.widget("ose.affectationForm", {
     getElementRole              : function () { return this.element.find('select[name="role"]'); },
     getElementStructure         : function () { return this.element.find('select[name="structure"]'); }
     //@formatter:on
-});
-
-$(function ()
-{
-    WidgetInitializer.add('affectation-form', 'affectationForm');
 });

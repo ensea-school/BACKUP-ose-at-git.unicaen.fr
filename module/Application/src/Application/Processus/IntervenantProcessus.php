@@ -5,6 +5,7 @@ use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblService;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Processus\Intervenant\SuppressionDataProcessus;
 use Application\Service\Traits\ContextAwareTrait;
 use UnicaenApp\Util;
 
@@ -104,5 +105,12 @@ class IntervenantProcessus extends AbstractProcessus{
         $s = $query->getResult();
 
         return count($s) > 0;
+    }
+
+
+
+    public function getSuppressionData( Intervenant $intervenant )
+    {
+        return SuppressionDataProcessus::run($intervenant);
     }
 }

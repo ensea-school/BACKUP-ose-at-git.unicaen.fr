@@ -139,8 +139,3 @@ $.widget("ose.pieceJointe", {
     getContainer: function (tpj) { return this.element.find('.tpj.tpj-' + tpj); },
 
 });
-
-$(function ()
-{
-    WidgetInitializer.add('piece-jointe', 'pieceJointe');
-});

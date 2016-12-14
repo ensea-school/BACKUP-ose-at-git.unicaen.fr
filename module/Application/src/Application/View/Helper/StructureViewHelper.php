@@ -84,7 +84,7 @@ class StructureViewHelper extends AbstractHelper implements StructureAwareInterf
         if (!$structure) return '';
 
         if ($structure->getHistoDestruction()) {
-            return '<p class="bg-danger"><abbr title="Cette structure n\'existe plus">' . $structure . '</abbr></p>';
+            return '<span class="bg-danger"><abbr title="Cette structure n\'existe plus">' . $structure . '</abbr></span>';
         }
 
         $url   = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);

@@ -39,7 +39,3 @@ $.widget("ose.indicateur", {
 
 });
 
-$(function ()
-{
-    WidgetInitializer.add('indicateur', 'indicateur');
-});

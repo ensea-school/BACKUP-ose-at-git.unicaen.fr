@@ -73,4 +73,21 @@ class ValidationViewHelper extends AbstractHtmlElement
         return $html;
     }
 
+
+
+    public function renderLabel()
+    {
+        $entity = $this->getValidation();
+
+        if (!$entity) {
+            return '';
+        }
+
+        $title = $entity->getTypeValidation().' de '.$entity->getIntervenant();
+
+        return $this->getView()->tag('abbr', compact('title'))->html(
+            'Validation'
+        );
+    }
+
 }

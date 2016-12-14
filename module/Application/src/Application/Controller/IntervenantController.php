@@ -57,11 +57,11 @@ class IntervenantController extends AbstractController
 
         if ($intervenant = $role->getIntervenant()) {
             $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
-            if ($this->getServiceWorkflow()->isAllowed($etapeCourante)){
+            if ($this->getServiceWorkflow()->isAllowed($etapeCourante)) {
                 if ($etapeCourante && $url = $etapeCourante->getUrl()) {
                     return $this->redirect()->toUrl($url);
                 }
-            }else{
+            } else {
                 return $this->redirect()->toRoute('intervenant/voir', ['intervenant' => $intervenant->getRouteParam()]);
             }
         }
@@ -180,7 +180,7 @@ class IntervenantController extends AbstractController
         /* Clôture de saisie (si nécessaire) */
         if ($typeVolumeHoraire->isRealise() && $intervenant->getStatut()->getPeutCloturerSaisie()) {
             $cloture = $this->getServiceValidation()->getValidationClotureServices($intervenant);
-        }else{
+        } else {
             $cloture = null;
         }
 
@@ -452,6 +452,18 @@ class IntervenantController extends AbstractController
         $formuleResultat   = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return compact('formuleResultat');
+    }
+
+
+
+    public function supprimerAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
+
+        $data = $this->getProcessusIntervenant()->getSuppressionData($intervenant);
+
+        return compact('intervenant', 'data');
     }
 
 

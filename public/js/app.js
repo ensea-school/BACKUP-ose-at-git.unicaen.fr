@@ -1,64 +1,100 @@
 $(function ()
 {
-    //$(document).ajaxError(function (event, jqxhr, settings, exception)
-    //{
-    //    if ($('body').hasClass('development')) {
-    //        errorDialog.show('Une erreur ' + jqxhr.status + '(' + jqxhr.statusText + ') est survenue', jqxhr.responseText);
-    //    }
-    //    console.log(jqxhr);
-    //});
+    WidgetInitializer.add('selectpicker', 'selectpicker', function(){
+        WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css'));
+    });
+
+    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function(){
+        WidgetInitializer.includeJs(Url('intervenant-recherche/widget.js'));
+        WidgetInitializer.includeCss(Url('intervenant-recherche/widget.css'));
+    });
+
+    WidgetInitializer.add('treeview', 'jstree', function ()
+    {
+        WidgetInitializer.includeJs(Url('vendor/vakata-jstree-3.3.3/dist/jstree.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/vakata-jstree-3.3.3/dist/themes/default/style.min.css'));
+    });
+
+    WidgetInitializer.add('table-sort', 'tableSort', function ()
+    {
+        WidgetInitializer.includeJs(Url('vendor/DataTables-1.10.12/media/js/jquery.dataTables.min.js'));
+        WidgetInitializer.includeJs(Url('vendor/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css'));
+
+        WidgetInitializer.includeJs(Url('table-sort/widget.js'));
+    });
+
+    /* Services */
+    WidgetInitializer.add('service-liste', 'serviceListe', function(){
+        WidgetInitializer.includeJs(Url('js/service.js'));
+        WidgetInitializer.includeCss(Url('css/service.css'));
+    });
+    WidgetInitializer.add('service-form', 'serviceForm', function(){
+        WidgetInitializer.includeJs(Url('js/service.js'));
+        WidgetInitializer.includeCss(Url('css/service.css'));
+    });
+    WidgetInitializer.add('service-filtres', 'serviceFiltres', function(){
+        WidgetInitializer.includeJs(Url('js/service.js'));
+        WidgetInitializer.includeCss(Url('css/service.css'));
+    });
+
+    /* Service référentiel */
+    WidgetInitializer.add('service-referentiel-liste', 'serviceReferentielListe', function(){
+        WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+        WidgetInitializer.includeCss(Url('css/service.css'));
+    });
+    WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm', function(){
+        WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+        WidgetInitializer.includeCss(Url('css/service.css'));
+    });
+
+    /* Indicateurs */
+    WidgetInitializer.add('indicateur', 'indicateur', function(){
+        WidgetInitializer.includeJs(Url('js/indicateur.js'));
+        WidgetInitializer.includeCss(Url('css/indicateur.css'));
+    });
+
+    /* Pièces jointes */
+    WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
+        WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
+        WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
+    });
+
+    /* Offre de formation */
+    WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function(){
+        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+    });
+    WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function(){
+        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+    });
+    WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs', function(){
+        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+    });
+    WidgetInitializer.add('etape-saisie', 'etapeSaisie', function(){
+        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+    });
+    WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function(){
+        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+    });
+
+    /* Droits */
+    WidgetInitializer.add('droits-tbl', 'droitsTbl', function(){
+        WidgetInitializer.includeJs(Url('js/droits.js'));
+        WidgetInitializer.includeCss(Url('css/droits.css'));
+    });
+    WidgetInitializer.add('affectation-form', 'affectationForm', function(){
+        WidgetInitializer.includeJs(Url('js/droits.js'));
+        WidgetInitializer.includeCss(Url('css/droits.css'));
+    });
+
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();
-    WidgetInitializer.add('selectpicker', 'selectpicker');
 
-    $('.table-sort').DataTable(
-        {
-            stateSave: true,
-            "language": {
-                "sProcessing":     "Traitement en cours...",
-                "sSearch":         "Rechercher&nbsp;:",
-                "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
-                "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-                "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                "sInfoPostFix":    "",
-                "sLoadingRecords": "Chargement en cours...",
-                "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
-                "oPaginate": {
-                    "sFirst":      "Premier",
-                    "sPrevious":   "Pr&eacute;c&eacute;dent",
-                    "sNext":       "Suivant",
-                    "sLast":       "Dernier"
-                },
-                "oAria": {
-                    "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-                    "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-                }
-            }
-        }
-    );
 });
 
-function errorDialog() {}
-errorDialog.show = function (title, text)
-{
-    if (undefined === errorDialog.sequence) {
-        errorDialog.sequence = 1;
-    } else {
-        errorDialog.sequence += 1;
-    }
 
-    $(document.body).append(
-        '<div id="error-dialog-' + errorDialog.sequence + '" class="scr-center">'
-        + '<div class="alert alert-danger alert-dismissable">'
-        + '<button type="button" class="close" onclick="document.getElementById(\'error-dialog-' + errorDialog.sequence + '\').style.display=\'none\';" data-dismiss="alert" aria-hidden="true">&times;</button>'
-        + '<h1>' + title + '</h1>' + text
-        + '<br /><hr /><button type="button" onclick="document.getElementById(\'error-dialog-' + errorDialog.sequence + '\').style.display=\'none\';" class="btn btn-danger">Fermer</button>'
-        + '</div>'
-        + '</div>');
-}
 
 function Url(route, data)
 {
@@ -116,115 +152,18 @@ Util = {
             }
         }
 
+    },
+
+    changementAnnee: function (annee)
+    {
+        $.get(
+            Url('changement-annee/' + annee),
+            {},
+            function ()
+            {
+                window.location.reload();
+            }
+        );
     }
 };
-
-
-function changementAnnee(annee)
-{
-    $.get(
-        Url('changement-annee/' + annee),
-        {},
-        function ()
-        {
-            window.location.reload();
-        }
-    );
-}
-
-/**
- *
- * @constructor
- */
-$.widget("ose.intervenantRecherche", {
-
-    rechercher: function (critere)
-    {
-        var that = this;
-
-        if (critere.length > 1) {
-            that.getElementLoading().show();
-            that.getElementRecherche().refresh({critere: critere}, function (response, status, xhr)
-            {
-                if (status == "error") {
-                    var msg = "Désolé mais une erreur est survenue: ";
-                    that.getElementRecherche().html(msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                }
-                that.getElementLoading().hide();
-            });
-        }
-    },
-
-    _create: function ()
-    {
-        var that = this;
-
-        this.getElementCritere().autocomplete({
-            source: function (event, ui)
-            {
-                that.rechercher(event.term);
-                return {};
-            }
-        });
-
-        this.getElementCritere().focus();
-    },
-
-    getElementCritere: function () { return this.element.find("#critere"); },
-    getElementRecherche: function () { return this.element.find('.recherche'); },
-    getElementLoading: function () { return this.element.find('#intervenant-recherche-loading'); },
-});
-
-$(function ()
-{
-    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche');
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

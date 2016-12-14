@@ -309,12 +309,6 @@ form#dossier .form-control[disabled], form#dossier .form-control[readonly], form
 
 
 
-
-.intervenant-recherche .critere{
-    padding-bottom: 1em;
-}
-
-
 .feuille-de-route li.after-courante {
     opacity:.5;
     background-color:#eee;

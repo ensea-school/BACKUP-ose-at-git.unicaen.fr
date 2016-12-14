@@ -11,13 +11,13 @@ use UnicaenApp\Exception\LogicException;
 use Zend\Form\Element\Select;
 
 /**
- * Aide de vue dessinant le titre (de niveau 1) de l'application sous forme d'un lien 
+ * Aide de vue dessinant le titre (de niveau 1) de l'application sous forme d'un lien
  * pointant vers la page d'accueil.
- * 
+ *
  * Si l'on se trouve déjà sur la page d'accueil, ce n'est pas un lien.
- * 
+ *
  * Possibilité d'inclure une courte description de l'application comme sous-titre.
- * 
+ *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class AppLink extends AbstractTranslatorHelper
@@ -69,29 +69,29 @@ class AppLink extends AbstractTranslatorHelper
     {
         $this->setTitle($title)
              ->setSubtitle($subtitle);
-        
+
         return $this->render();
     }
-    
+
     /**
      * Retourne le code généré par cette aide de vue.
      *
      * @return string Code HTML
      */
     protected function render()
-    { 
+    {
         if (!$this->title) {
             throw new LogicException("Aucun titre spécifié.");
         }
 
         $appName = $this->title;
         $appDesc = null;
-        
+
         $select = new Select;
         $select->setName('annee');
         $select->setAttribute('id', 'annee');
         $select->setAttribute('data-url', $this->router->assemble(array(), array('name' => $this->homeRouteName)));
-        $select->setAttribute('onchange', 'changementAnnee(this.value);');
+        $select->setAttribute('onchange', 'Util.changementAnnee(this.value);');
         $select->setValueOptions($this->getAnnees());
         $select->setValue($this->getAnnee()->getId());
 
@@ -101,7 +101,7 @@ class AppLink extends AbstractTranslatorHelper
             $appDesc = sprintf('<span>%s</span>',
                     $this->getTranslator()->translate($this->subtitle, $this->getTranslatorTextDomain()));
         }
-        
+
         if (!$this->routeMatch || $this->homeRouteName != $this->routeMatch->getMatchedRouteName()) {
             $out = sprintf('<a class="navbar-brand" href="%s" title="%s"><h1 class="title">%s%s</h1></a>%s',
                     $this->router->assemble(array(), array('name' => $this->homeRouteName)),
@@ -116,13 +116,13 @@ class AppLink extends AbstractTranslatorHelper
                     $appDesc,
                     $appAnnee);
         }
-        
+
         return $out;
     }
 
     /**
      * Spécifie le titre.
-     * 
+     *
      * @param string $title
      * @return self
      */
@@ -134,7 +134,7 @@ class AppLink extends AbstractTranslatorHelper
 
     /**
      * Spécifie le sous-titre.
-     * 
+     *
      * @param string $subtitle
      * @return self
      */
@@ -180,7 +180,7 @@ class AppLink extends AbstractTranslatorHelper
 
     /**
      * Spécifie le nom de la route correspondant à la page d'accueil.
-     * 
+     *
      * @param string $homeRouteName
      * @return self
      */

@@ -19,11 +19,6 @@ class AgrementViewHelper extends AbstractHtmlElement
     /**
      * @var boolean
      */
-    private $short;
-
-    /**
-     * @var boolean
-     */
     private $box;
 
 
@@ -55,15 +50,6 @@ class AgrementViewHelper extends AbstractHtmlElement
 
 
 
-    public function short()
-    {
-        $this->short = true;
-
-        return $this;
-    }
-
-
-
     public function box()
     {
         $this->box = true;
@@ -87,15 +73,15 @@ class AgrementViewHelper extends AbstractHtmlElement
         }
 
         $vars = [
-            "Type d'agrément" => (string)$entity->getType()
+            "Type d'agrément" => (string)$entity->getType(),
         ];
 
-        if (!$this->short) {
-            $vars["Intervenant"] = (string)$entity->getIntervenant();
-            if ($structure = $entity->getStructure()) {
-                $vars["Structure"] = (string)$structure;
-            }
+
+        $vars["Intervenant"] = (string)$entity->getIntervenant();
+        if ($structure = $entity->getStructure()) {
+            $vars["Structure"] = (string)$structure;
         }
+
         $vars["Date de la décision"] = $entity->getDateDecision()->format(Constants::DATE_FORMAT);
 
         $html = "<dl class=\"agrement dl-horizontal\">\n";
@@ -106,13 +92,30 @@ class AgrementViewHelper extends AbstractHtmlElement
 
         $html .= $this->getView()->historique($entity);
 
-        if ($this->box){
-            $html = '<div class="agrement agrement-box alert alert-success"><span class="glyphicon glyphicon-ok-sign"></span>'.$html.'</div>';
+        if ($this->box) {
+            $html = '<div class="agrement agrement-box alert alert-success"><span class="glyphicon glyphicon-ok-sign"></span>' . $html . '</div>';
         }
 
-        $this->short = false; // réinitialisation
         $this->box = false;
+
         return $html;
     }
 
+
+
+    public function renderLabel()
+    {
+        $entity = $this->getAgrement();
+
+        if ($entity->getStructure()){
+            $html = $entity->getStructure()->getLibelleCourt();
+        }else{
+            $html = $entity->getType()->getLibelle();
+        }
+
+        if ($entity->getDateDecision()) {
+            $html .= ' (décision du '.$entity->getDateDecision()->format(Constants::DATE_FORMAT).')';
+        }
+        return $html;
+    }
 }

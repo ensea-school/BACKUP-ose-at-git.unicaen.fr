@@ -113,6 +113,7 @@
         <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant"/>
         <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant"/>
         <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant"/>
+        <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="intervenant" fetch="EXTRA_LAZY"/>
         <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService" mapped-by="intervenant"/>
         <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
             <cascade>

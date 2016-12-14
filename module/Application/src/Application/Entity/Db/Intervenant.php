@@ -183,6 +183,11 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    protected $pieceJointe;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     protected $histoService;
 
     /**
@@ -264,6 +269,7 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         $this->validation                         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->agrement                           = new \Doctrine\Common\Collections\ArrayCollection();
         $this->service                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pieceJointe                        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histoService                       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1048,6 +1054,46 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
+     * Add pieceJointe
+     *
+     * @param \Application\Entity\Db\PieceJointe $pieceJointe
+     *
+     * @return Intervenant
+     */
+    public function addPieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe)
+    {
+        $this->pieceJointe[] = $pieceJointe;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove pieceJointe
+     *
+     * @param \Application\Entity\Db\PieceJointe $pieceJointe
+     */
+    public function removePieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe)
+    {
+        $this->service->removeElement($pieceJointe);
+    }
+
+
+
+    /**
+     * Get pieceJointe
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPieceJointe()
+    {
+        return $this->pieceJointe;
+    }
+
+
+
+    /**
      * Add service
      *
      * @param \Application\Entity\Db\Service $service
@@ -1820,11 +1866,11 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     public function hasMiseEnPaiement($demande = true)
     {
         if ($this->hasMiseEnPaiement === null) {
-            $id = (int)$this->getId();
+            $id     = (int)$this->getId();
             $heures = $demande ? 'heures_demandees' : 'heures_payees';
 
             $sql = "SELECT COUNT(*) res FROM tbl_paiement p "
-                  ."WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
+                . "WHERE p.intervenant_id = $id AND p.$heures > 0 AND rownum = 1";
 
             $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
 
@@ -1844,9 +1890,9 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
      * @return float
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function hasDeplacementPlafondFcMaj( TypeVolumeHoraire $typeVolumeHoraire )
+    public function hasDeplacementPlafondFcMaj(TypeVolumeHoraire $typeVolumeHoraire)
     {
-        $sql = "
+        $sql    = "
         SELECT 
           SUM(plafond) RES
         FROM 
@@ -1860,8 +1906,8 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
           AND rownum = 1
         ";
         $result = $this->getEntityManager()->getConnection()->executeQuery($sql, [
-            'intervenant' => $this->getId(),
-            'typeVolumeHoraire' => $typeVolumeHoraire->getId()
+            'intervenant'       => $this->getId(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
         ])->fetchAll();
 
         $result = $result[0]['RES'];
@@ -1884,6 +1930,8 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
     {
         $this->setEntityManager($objectManager);
     }
+
+
 
     function __sleep()
     {

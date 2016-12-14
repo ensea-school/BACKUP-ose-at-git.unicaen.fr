@@ -22,7 +22,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'rechercher'               => [
+                    'rechercher'              => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/rechercher',
@@ -31,7 +31,7 @@ return [
                             ],
                         ],
                     ],
-                    'recherche'                => [
+                    'recherche'               => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/recherche',
@@ -40,7 +40,7 @@ return [
                             ],
                         ],
                     ],
-                    'voir'                     => [
+                    'voir'                    => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/voir',
@@ -49,7 +49,7 @@ return [
                             ],
                         ],
                     ],
-                    'fiche'                    => [
+                    'fiche'                   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/fiche',
@@ -58,7 +58,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisir'                   => [
+                    'saisir'                  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/saisir',
@@ -67,7 +67,16 @@ return [
                             ],
                         ],
                     ],
-                    'voir-heures-comp'         => [
+                    'supprimer'               => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/supprimer',
+                            'defaults' => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                    ],
+                    'voir-heures-comp'        => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/voir-heures-comp/:intervenant',
@@ -76,7 +85,7 @@ return [
                             ],
                         ],
                     ],
-                    'formule-totaux-hetd'      => [
+                    'formule-totaux-hetd'     => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
@@ -89,7 +98,7 @@ return [
                             ],
                         ],
                     ],
-                    'feuille-de-route'         => [
+                    'feuille-de-route'        => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/feuille-de-route',
@@ -98,7 +107,7 @@ return [
                             ],
                         ],
                     ],
-                    'modification-service-du'  => [
+                    'modification-service-du' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/modification-service-du',
@@ -108,7 +117,7 @@ return [
                             ],
                         ],
                     ],
-                    'services'                 => [
+                    'services'                => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/services',
@@ -119,7 +128,7 @@ return [
                             ],
                         ],
                     ],
-                    'referentiel'              => [
+                    'referentiel'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/referentiel',
@@ -130,7 +139,7 @@ return [
                             ],
                         ],
                     ],
-                    'services-realises'        => [
+                    'services-realises'       => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/services-realises',
@@ -141,7 +150,7 @@ return [
                             ],
                         ],
                     ],
-                    'referentiel-realise'      => [
+                    'referentiel-realise'     => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/referentiel',
@@ -152,7 +161,7 @@ return [
                             ],
                         ],
                     ],
-                    'cloturer'                 => [
+                    'cloturer'                => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/cloturer',
@@ -161,7 +170,7 @@ return [
                             ],
                         ],
                     ],
-                    'mise-en-paiement'         => [
+                    'mise-en-paiement'        => [
                         'type'          => 'Segment',
                         'may_terminate' => false,
                         'options'       => [
@@ -200,7 +209,7 @@ return [
                             ],
                         ],
                     ],
-                    'contrat'                  => [
+                    'contrat'                 => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/:intervenant/contrat',
@@ -367,6 +376,13 @@ return [
                     ],
                 ],
                 [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['supprimer'],
+                    'privileges' => [
+                        Privileges::INTERVENANT_SUPPRESSION,
+                    ],
+                ],
+                [
                     'controller' => 'Application\Controller\ModificationServiceDu',
                     'action'     => ['saisir'],
                     'privileges' => [
@@ -445,8 +461,9 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'formuleTotauxHetd' => View\Helper\Intervenant\TotauxHetdViewHelper::class,
-            'Intervenant'       => View\Helper\Intervenant\IntervenantViewHelper::class,
+            'formuleTotauxHetd'          => View\Helper\Intervenant\TotauxHetdViewHelper::class,
+            'Intervenant'                => View\Helper\Intervenant\IntervenantViewHelper::class,
+            'intervenantSuppressionData' => View\Helper\Intervenant\IntervenantSuppressionDataViewHelper::class,
         ],
     ],
     'form_elements'   => [

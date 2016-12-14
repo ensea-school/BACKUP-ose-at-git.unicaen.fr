@@ -292,6 +292,22 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * @return Structure|null
+     */
+    public function getStructure()
+    {
+        if ($this->getElementPedagogique()){
+            return $this->getElementPedagogique()->getStructure();
+        }
+        if ($this->getIntervenant()){
+            return $this->getIntervenant()->getStructure();
+        }
+        return null;
+    }
+
+
+
+    /**
      *
      * @return TypeVolumeHoraire
      */

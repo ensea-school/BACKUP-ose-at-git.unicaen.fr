@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $intervenant \Application\Entity\Db\Intervenant
+ */
+
+$that = $this;
+
+$this->messenger()->addMessage('Attention : La suppression d\'une fiche entraine la suppression de toutes les données associées pour l\'année en cours', 'warning');
+
+echo $this->messenger();
+/*
+$ck = function ($entity) use ($that) {
+    $params = [
+        'type'  => 'checkbox',
+        'name'  => 'del[]',
+        'value' => get_class($entity) . '-' . $entity->getId(),
+    ];
+
+    return (string)$that->tag('input', $params)->openClose() . ' ' . $that->entity($entity);
+};
+
+
+*/
+
+echo $this->tag('div', ['class' => 'treeview'])->html($this->intervenantSuppressionData($data));
+
+?>
+

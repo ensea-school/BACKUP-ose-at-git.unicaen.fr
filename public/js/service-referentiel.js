@@ -208,10 +208,7 @@ $.widget("ose.serviceReferentielListe", {
     getElementPrevuToPrevu: function () { return this.element.find(".referentiel-prevu-to-prevu") }
 });
 
-$(function ()
-{
-    WidgetInitializer.add('service-referentiel-liste', 'serviceReferentielListe');
-});
+
 
 
 
@@ -241,8 +238,3 @@ $.widget("ose.serviceReferentielForm", {
 
 })
 ;
-
-$(function ()
-{
-    WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm');
-});

@@ -125,7 +125,6 @@ $.widget("ose.elementPedagogiqueRecherche", {
         this.getElementAutocompleteElement().autocomplete();
         this.getElementElement().hide();
 
-        this.element.find('.selectpicker').selectpicker();
         this.getStructureElement().change(function () { that.updateValues(); });
         this.getNiveauElement().change(function () { that.updateValues(); });
         this.getFormationElement().change(function () { that.updateValues(); });
@@ -171,10 +170,7 @@ $.widget("ose.elementPedagogiqueRecherche", {
 ;
 
 
-$(function ()
-{
-    WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche');
-});
+
 
 
 
@@ -220,10 +216,6 @@ $.widget("ose.etapeCentreCout", {
 
 });
 
-$(function ()
-{
-    WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout');
-});
 
 
 
@@ -265,10 +257,7 @@ $.widget("ose.etapeModulateurs", {
 
 });
 
-$(function ()
-{
-    WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs');
-});
+
 
 
 
@@ -297,7 +286,6 @@ $.widget("ose.etapeSaisie", {
 
 $(function ()
 {
-    WidgetInitializer.add('etape-saisie', 'etapeSaisie');
     $("body").on("etape-ajouter", function (event, data)
     {
         event.div.modal('hide'); // ferme la fenêtre modale
@@ -340,7 +328,6 @@ $.widget("ose.elementPedagogiqueSaisie", {
 
 $(function ()
 {
-    WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie');
     $("body").on("element-pedagogique-ajouter", function (event, data)
     {
         event.div.modal('hide'); // ferme la fenêtre modale

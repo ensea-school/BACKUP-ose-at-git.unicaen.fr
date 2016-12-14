@@ -324,10 +324,7 @@ $.widget("ose.serviceListe", {
     getElementPrevuToPrevu: function () { return this.element.find(".prevu-to-prevu") }
 });
 
-$(function ()
-{
-    WidgetInitializer.add('service-liste', 'serviceListe');
-});
+
 
 
 
@@ -456,10 +453,7 @@ $.widget("ose.serviceForm", {
     getElementVolumesHoraires: function () { return this.element.find('div#volumes-horaires'); }
 });
 
-$(function ()
-{
-    WidgetInitializer.add('service-form', 'serviceForm');
-});
+
 
 
 
@@ -503,9 +497,4 @@ $.widget("ose.serviceFiltres", {
     getElementIntervenant: function () { return this.element.find('form.service-recherche input[name=\"intervenant[label]\"]') },
     getElementTypeIntervenant: function () { return this.element.find('form.service-recherche input[name=type-intervenant]') },
     getElementTypeIntervenantSelected: function () { return this.element.find('form.service-recherche input[name=type-intervenant]:checked') }
-});
-
-$(function ()
-{
-    WidgetInitializer.add('service-filtres', 'serviceFiltres');
 });

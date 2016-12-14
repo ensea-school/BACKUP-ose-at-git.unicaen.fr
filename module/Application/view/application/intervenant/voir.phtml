@@ -33,4 +33,12 @@ if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_EDITION))
     ];
 }
 
+if ($this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_SUPPRESSION))) {
+    $tabs[] = [
+        'id'    => 'suppression',
+        'label' => '<span class="glyphicon glyphicon-trash"></span> Suppression',
+        'url'   => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getRouteParam()]),
+    ];
+}
+
 echo $this->tabajax($tabs);

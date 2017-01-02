@@ -786,6 +786,11 @@ class ServiceService extends AbstractEntityService
             'total',
             'solde',
         ];
+        $dateColumns = [
+            'service-date-modification',
+            'intervenant-date-naissance',
+            'date-cloture-service-realise',
+        ];
         $addableColumns    = [
             '__total__',
             'heures-non-payees',
@@ -855,11 +860,12 @@ class ServiceService extends AbstractEntityService
                 '__total__'     => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
                 'type-etat'     => $d['TYPE_ETAT'],
                 'date'          => $dateExtraction,
+                'service-date-modification' => $d['SERVICE_DATE_MODIFICATION'],
                 'annee-libelle' => (string)$annee,
 
                 'intervenant-code'               => $d['INTERVENANT_CODE'],
                 'intervenant-nom'                => $d['INTERVENANT_NOM'],
-                'intervenant-date-naissance'     => new \DateTime($d['INTERVENANT_DATE_NAISSANCE']),
+                'intervenant-date-naissance'     => $d['INTERVENANT_DATE_NAISSANCE'],
                 'intervenant-statut-libelle'     => $d['INTERVENANT_STATUT_LIBELLE'],
                 'intervenant-type-code'          => $d['INTERVENANT_TYPE_CODE'],
                 'intervenant-type-libelle'       => $d['INTERVENANT_TYPE_LIBELLE'],
@@ -903,7 +909,7 @@ class ServiceService extends AbstractEntityService
                 'heures-compl-referentiel'     => (float)$d['HEURES_COMPL_REFERENTIEL'],
                 'total'                        => (float)$d['TOTAL'],
                 'solde'                        => (float)$d['SOLDE'],
-                'date-cloture-service-realise' => empty($d['DATE_CLOTURE_REALISE']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_CLOTURE_REALISE'], 0, 10)),
+                'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
             ];
 
             if (
@@ -959,6 +965,7 @@ class ServiceService extends AbstractEntityService
             'type-etat'     => 'Type État',
             'date'          => 'Date d\'extraction',
             'annee-libelle' => 'Année universitaire',
+            'service-date-modification' => 'Date de modif. du service',
 
             'intervenant-code'               => 'Code intervenant',
             'intervenant-nom'                => 'Intervenant',
@@ -1034,6 +1041,11 @@ class ServiceService extends AbstractEntityService
                     if (null === $value && (in_array($column, $numericColunms) || 0 === strpos($column, 'type-intervention-'))) {
                         $value = 0;
                     }
+
+                    if (in_array($column, $dateColumns)){
+                        if (empty($value)) $value = null; else $value = \DateTime::createFromFormat('Y-m-d', substr($value, 0, 10));
+                    }
+
                     $data[$sid][$column] = $value;
                 }
             }

@@ -1,5 +1,7 @@
 <?php
 
+/** @var \Application\Entity\Db\Intervenant $intervenant */
+
 $ihs = $intervenant->getHistoService($typeVolumeHoraire, $referentiel);
 if ($ihs){
     echo $this->historique()

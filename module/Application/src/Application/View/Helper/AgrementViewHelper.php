@@ -19,6 +19,11 @@ class AgrementViewHelper extends AbstractHtmlElement
     /**
      * @var boolean
      */
+    private $short;
+
+    /**
+     * @var boolean
+     */
     private $box;
 
 
@@ -50,6 +55,15 @@ class AgrementViewHelper extends AbstractHtmlElement
 
 
 
+    public function short()
+    {
+        $this->short = true;
+
+        return $this;
+    }
+
+
+
     public function box()
     {
         $this->box = true;
@@ -76,12 +90,12 @@ class AgrementViewHelper extends AbstractHtmlElement
             "Type d'agrément" => (string)$entity->getType(),
         ];
 
-
-        $vars["Intervenant"] = (string)$entity->getIntervenant();
-        if ($structure = $entity->getStructure()) {
-            $vars["Structure"] = (string)$structure;
+        if (!$this->short) {
+            $vars["Intervenant"] = (string)$entity->getIntervenant();
+            if ($structure = $entity->getStructure()) {
+                $vars["Structure"] = (string)$structure;
+            }
         }
-
         $vars["Date de la décision"] = $entity->getDateDecision()->format(Constants::DATE_FORMAT);
 
         $html = "<dl class=\"agrement dl-horizontal\">\n";
@@ -96,7 +110,8 @@ class AgrementViewHelper extends AbstractHtmlElement
             $html = '<div class="agrement agrement-box alert alert-success"><span class="glyphicon glyphicon-ok-sign"></span>' . $html . '</div>';
         }
 
-        $this->box = false;
+        $this->short = false;
+        $this->box   = false;
 
         return $html;
     }
@@ -107,15 +122,16 @@ class AgrementViewHelper extends AbstractHtmlElement
     {
         $entity = $this->getAgrement();
 
-        if ($entity->getStructure()){
+        if ($entity->getStructure()) {
             $html = $entity->getStructure()->getLibelleCourt();
-        }else{
+        } else {
             $html = $entity->getType()->getLibelle();
         }
 
         if ($entity->getDateDecision()) {
-            $html .= ' (décision du '.$entity->getDateDecision()->format(Constants::DATE_FORMAT).')';
+            $html .= ' (décision du ' . $entity->getDateDecision()->format(Constants::DATE_FORMAT) . ')';
         }
+
         return $html;
     }
 }

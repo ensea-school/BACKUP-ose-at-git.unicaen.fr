@@ -46,10 +46,10 @@
     <many-to-many field="etatVolumeHoraireReferentiel" target-entity="Application\Entity\Db\EtatVolumeHoraire">
         <join-table name="V_VOLUME_HORAIRE_REF_ETAT">
             <join-columns>
-                <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID" unique="true"/>
+                <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID" unique="true" on-delete="CASCADE"/>
             </join-columns>
             <inverse-join-columns>
-                <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+                <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID" on-delete="CASCADE"/>
             </inverse-join-columns>
         </join-table>
     </many-to-many>

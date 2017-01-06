@@ -164,6 +164,7 @@ $main = [
             'ApplicationDepartement'        => Service\Departement::class,
             'applicationFichier'            => Service\FichierService::class,
             'applicationTauxHoraireHETD'    => Service\TauxHoraireHETDService::class,
+            'dbEvent'                       => Service\DbEventService::class,
             'UnicaenAuth\Service\Privilege' => Service\PrivilegeService::class,
             'assertionInformation'          => Assertion\InformationAssertion::class,
         ],
@@ -229,6 +230,8 @@ $main = [
         ],
         'inline_scripts' => [
             '010_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            '030_util'        => 'vendor/unicaen-app/js/util.js',
+            '040_unicaen'     => 'vendor/unicaen-app/js/unicaen.js',
             '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
 
             '001_' => 'js/datepicker-fr.js',
@@ -240,6 +243,7 @@ $main = [
             '030_jquery-ui-theme'     => 'vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css',
             '040_bootstrap'           => 'vendor/bootstrap-3.3.5/css/bootstrap.min.css',
             '050_bootstrap-theme'     => 'vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css',
+            '060_unicaen'             => 'vendor/unicaen-app/css/unicaen.css',
 
             '111_' => 'css/cartridge.css',
             '112_' => 'vendor/font-awesome-4.5.0/css/font-awesome.min.css',
@@ -250,7 +254,6 @@ $main = [
             '118_' => 'css/acceuil.css',
             '120_' => 'css/callout.css',
         ],
-
     ],
 ];
 

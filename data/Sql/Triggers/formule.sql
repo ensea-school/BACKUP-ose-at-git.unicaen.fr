@@ -2,6 +2,9 @@ create or replace TRIGGER "OSE"."F_CONTRAT"
   AFTER DELETE OR UPDATE OF INTERVENANT_ID, HISTO_CREATION, HISTO_DESTRUCTION, STRUCTURE_ID, DATE_RETOUR_SIGNE, VALIDATION_ID ON "OSE"."CONTRAT"
   REFERENCING FOR EACH ROW
   BEGIN
+  
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+  
   FOR p IN (
 
     SELECT DISTINCT
@@ -42,6 +45,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR"
 AFTER INSERT OR UPDATE OR DELETE ON element_modulateur
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -79,7 +85,11 @@ END;
 CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE" 
   AFTER DELETE OR UPDATE OF ID, STRUCTURE_ID, PERIODE_ID, TAUX_FOAD, FI, FC, FA, HISTO_CREATION, HISTO_DESTRUCTION, TAUX_FA, TAUX_FC, TAUX_FI, ANNEE_ID ON "OSE"."ELEMENT_PEDAGOGIQUE"
   REFERENCING FOR EACH ROW
-  BEGIN FOR p IN
+  BEGIN 
+  
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+  
+  FOR p IN
     ( SELECT DISTINCT s.intervenant_id
     FROM service s
     WHERE (s.element_pedagogique_id = :NEW.id
@@ -108,6 +118,8 @@ CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT"
   AFTER UPDATE OF ID, DATE_NAISSANCE, STATUT_ID, STRUCTURE_ID, HISTO_CREATION, HISTO_DESTRUCTION, PREMIER_RECRUTEMENT, ANNEE_ID ON "OSE"."INTERVENANT"
   REFERENCING FOR EACH ROW
   BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
 
   FOR p IN (
       
@@ -147,6 +159,8 @@ AFTER INSERT OR UPDATE OR DELETE ON modification_service_du
 FOR EACH ROW
 BEGIN
 
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   IF DELETING OR UPDATING THEN
     OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :OLD.intervenant_id );
   END IF;
@@ -176,6 +190,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR"
 AFTER UPDATE OR DELETE ON modulateur
 FOR EACH ROW
 BEGIN
+  
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+  
   FOR p IN (
 
     SELECT DISTINCT
@@ -216,6 +233,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE"
 AFTER UPDATE OR DELETE ON MOTIF_MODIFICATION_SERVICE
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -247,50 +267,6 @@ END;
 /
 
 --------------------------------------------------------
---  DDL for Trigger FORMULE_RES_SERVICE_DEL_CK
---------------------------------------------------------
-
-CREATE OR REPLACE TRIGGER "OSE"."FORMULE_RES_SERVICE_DEL_CK" 
-BEFORE DELETE ON formule_resultat_service
-FOR EACH ROW
-DECLARE
-  cc NUMERIC;
-BEGIN
-
-  SELECT count(*) INTO cc FROM mise_en_paiement mep WHERE mep.histo_destruction IS NULL AND formule_res_service_id = :OLD.id;
-
-  IF (cc > 0) THEN
-    raise_application_error(-20101, 'Il est impossible d''effectuer cette action : des demandes de mise en paiement ont été saisies et ne peuvent pas être modifiées');
-  ELSE
-    DELETE FROM mise_en_paiement WHERE formule_res_service_id = :OLD.id AND histo_destruction IS NOT NULL;
-  END IF;
-
-END;
-/
-
---------------------------------------------------------
---  DDL for Trigger FORMULE_RES_SERVICE_REF_DEL_CK
---------------------------------------------------------
-
-CREATE OR REPLACE TRIGGER "OSE"."FORMULE_RES_SERVICE_REF_DEL_CK" 
-BEFORE DELETE ON formule_resultat_service_ref
-FOR EACH ROW
-DECLARE
-  cc NUMERIC;
-BEGIN
-
-  SELECT count(*) INTO cc FROM mise_en_paiement mep WHERE mep.histo_destruction IS NULL AND formule_res_service_ref_id = :OLD.id;
-
-  IF (cc > 0) THEN
-    raise_application_error(-20101, 'Il est impossible d''effectuer cette action : des demandes de mise en paiement ont été saisies et ne peuvent pas être modifiées');
-  ELSE
-    DELETE FROM mise_en_paiement WHERE formule_res_service_ref_id = :OLD.id AND histo_destruction IS NOT NULL;
-  END IF;
-
-END;
-/
-
---------------------------------------------------------
 --  DDL for Trigger F_SERVICE
 --------------------------------------------------------
 
@@ -298,6 +274,8 @@ CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE"
 AFTER INSERT OR UPDATE OR DELETE ON service
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
 
   IF DELETING OR UPDATING THEN
     OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :OLD.intervenant_id );
@@ -316,6 +294,8 @@ CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL"
 AFTER INSERT OR UPDATE OR DELETE ON service_referentiel
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
 
   IF DELETING OR UPDATING THEN
     OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, :OLD.intervenant_id );
@@ -357,6 +337,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_STATUT_INTERVENANT"
 AFTER UPDATE ON statut_intervenant
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -395,6 +378,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION"
 AFTER UPDATE ON type_intervention
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -433,6 +419,8 @@ CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION"
 AFTER UPDATE ON validation
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
 
   FOR p IN ( -- validations de volume horaire
 
@@ -490,6 +478,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE"
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -517,6 +508,9 @@ CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF"
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire_ref
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -570,6 +564,9 @@ OR UPDATE OF TYPE_VOLUME_HORAIRE_ID, SERVICE_ID, PERIODE_ID, TYPE_INTERVENTION_I
 OR DELETE ON volume_horaire
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
   
     SELECT DISTINCT
@@ -596,8 +593,11 @@ CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_REF"
 AFTER INSERT OR UPDATE OR DELETE ON volume_horaire_ref
 FOR EACH ROW
 BEGIN
+
+  IF NOT OSE_EVENT.GET_ACTIF THEN RETURN; END IF;
+
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -605,9 +605,9 @@ BEGIN
     WHERE
       1 = ose_divers.comprise_entre(s.histo_creation, s.histo_destruction)
       AND (s.id = :NEW.service_referentiel_id OR s.id = :OLD.service_referentiel_id)
-  
+
   ) LOOP
-  
+
     OSE_EVENT.DEMANDE_CALCUL( OSE_FORMULE.package_sujet, p.intervenant_id );
   END LOOP;
 END;

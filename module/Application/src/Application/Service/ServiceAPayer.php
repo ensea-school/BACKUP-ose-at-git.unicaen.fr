@@ -55,7 +55,7 @@ class ServiceAPayer extends AbstractService
             ->toArray();
 
         /* Tri */
-        usort($frsList, function ($a, $b) {
+        @usort($frsList, function ($a, $b) {
             /* @var $a \Application\Entity\Db\FormuleResultatService */
             /* @var $b \Application\Entity\Db\FormuleResultatService */
             $aTriStr = $a->getStructure()->getLibelleCourt();

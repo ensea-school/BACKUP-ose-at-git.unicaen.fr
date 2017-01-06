@@ -3,7 +3,6 @@
 namespace Application\Processus\Intervenant;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\IntervenantSuppressionData;
@@ -15,7 +14,19 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
+use Application\Service\Traits\AgrementAwareTrait;
+use Application\Service\Traits\ContratAwareTrait;
+use Application\Service\Traits\DbEventServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\FichierServiceAwareTrait;
+use Application\Service\Traits\MiseEnPaiementAwareTrait;
+use Application\Service\Traits\ModificationServiceDuAwareTrait;
+use Application\Service\Traits\PieceJointeAwareTrait;
+use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\VolumeHoraireAwareTrait;
+use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 
 
 class SuppressionDataProcessus
@@ -25,6 +36,19 @@ class SuppressionDataProcessus
 
     use IntervenantAwareTrait;
     use DossierAwareTrait;
+    use ModificationServiceDuAwareTrait;
+    use ValidationAwareTrait;
+    use MiseEnPaiementAwareTrait;
+    use FichierServiceAwareTrait;
+    use PieceJointeAwareTrait;
+    use AgrementAwareTrait;
+    use VolumeHoraireAwareTrait;
+    use VolumeHoraireReferentielAwareTrait;
+    use ServiceServiceAwareTrait;
+    use ServiceReferentielAwareTrait;
+    use \Application\Service\Traits\IntervenantAwareTrait;
+    use ContratAwareTrait;
+    use DbEventServiceAwareTrait;
 
     /**
      * @var IntervenantSuppressionData
@@ -51,11 +75,146 @@ class SuppressionDataProcessus
 
 
 
-    private function newIsd($entity = null)
+    public static function delete(IntervenantSuppressionData $isd, array $ids)
     {
-        $isd = new IntervenantSuppressionData();
-        if ($entity) {
-            $isd->setEntity($entity);
+        if (!self::$instance) {
+            self::$instance = new self;
+        }
+
+        return self::$instance->deleteData($isd, $ids);
+    }
+
+
+
+    private function deleteData(IntervenantSuppressionData $isd, array $ids)
+    {
+        $isd->order();
+
+        $entities = [];
+        foreach ($ids as $id) {
+            $i = $isd->findOneByAbsoluteId($id);
+            if ($i && $e = $i->getEntity()) {
+                if (!$i->isUnbreakable()) {
+                    $entities[(new \ReflectionClass($e))->getShortName()][] = $i;
+                }
+                $p = $i->getParent();
+                $i->remove();
+                if ($p && !$p->getEntity() && !$p->hasChildren()) {
+                    $p->remove();
+                }
+            }
+        }
+
+
+        $this->getServiceDbEvent()->stopManager();
+
+        /* Mises en paiement */
+        if (isset($entities['MiseEnPaiement'])) {
+            foreach ($entities['MiseEnPaiement'] as $v) {
+                $this->getServiceMiseEnPaiement()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Fichiers */
+        if (isset($entities['Fichier'])) {
+            foreach ($entities['Fichier'] as $v) {
+                $this->getServiceFichier()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Avenants */
+        if (isset($entities['Contrat'])) {
+            foreach ($entities['Contrat'] as $v) {
+                /** @var Contrat $avenant */
+                $avenant = $v->getEntity();
+                if ($avenant->estUnAvenant()){
+                    $this->getServiceContrat()->delete($v->getEntity(), false);
+                }
+            }
+        }
+
+        /* Contrats */
+        if (isset($entities['Contrat'])) {
+            foreach ($entities['Contrat'] as $v) {
+                $this->getServiceContrat()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Validations */
+        if (isset($entities['Validation'])) {
+            foreach ($entities['Validation'] as $v) {
+                $this->getServiceValidation()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Volumes horaire */
+        if (isset($entities['VolumeHoraire'])) {
+            foreach ($entities['VolumeHoraire'] as $v) {
+                $this->getServiceVolumeHoraire()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Volume horaire Référentiel */
+        if (isset($entities['VolumeHoraireReferentiel'])) {
+            foreach ($entities['VolumeHoraireReferentiel'] as $v) {
+                $this->getServiceVolumeHoraireReferentiel()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Service */
+        if (isset($entities['Service'])) {
+            foreach ($entities['Service'] as $v) {
+                $this->getServiceService()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Service référentiel */
+        if (isset($entities['ServiceReferentiel'])) {
+            foreach ($entities['ServiceReferentiel'] as $v) {
+                $this->getServiceServiceReferentiel()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Agréments */
+        if (isset($entities['Agrement'])) {
+            foreach ($entities['Agrement'] as $v) {
+                $this->getServiceAgrement()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Pièces justificatives */
+        if (isset($entities['PieceJointe'])) {
+            foreach ($entities['PieceJointe'] as $v) {
+                $this->getServicePieceJointe()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Dossier */
+        if (isset($entities['Dossier'])) {
+            foreach ($entities['Dossier'] as $v) {
+                $this->getServiceDossier()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Modifications de service du */
+        if (isset($entities['ModificationServiceDu'])) {
+            foreach ($entities['ModificationServiceDu'] as $v) {
+                $this->getServiceModificationServiceDu()->delete($v->getEntity(), false);
+            }
+        }
+
+        /* Fiche intervenant */
+        if (isset($entities['Intervenant'])) {
+            foreach ($entities['Intervenant'] as $v) {
+                $this->getServiceIntervenant()->delete($v->getEntity(), false);
+            }
+        }
+
+        $this->getServiceDbEvent()->startManager();
+        $this->getServiceDbEvent()->forcerCalculer($this->getIntervenant());
+
+        if (in_array($isd->getAbsoluteId(), $ids)) {
+            return null;
         }
 
         return $isd;
@@ -63,7 +222,26 @@ class SuppressionDataProcessus
 
 
 
-    private function addIsdSR($service, $sRub, IntervenantSuppressionData $isd)
+    private function newIsd($entity = null)
+    {
+        if (is_object($entity) && method_exists($entity, 'getId')) {
+            $id = $entity->getId();
+        } else {
+            $id = (string)$entity;
+        }
+
+        $isd = new IntervenantSuppressionData($id);
+        if ($entity) {
+            $isd->setEntity($entity);
+            $isd->setId($entity->getId());
+        }
+
+        return $isd;
+    }
+
+
+
+    private function addIsdSR($service, $sRub = null, IntervenantSuppressionData $isd = null)
     {
         $k1        = $service instanceof Service ? 'service' : 'referentiel';
         $structure = $service->getStructure() ?: $service->getIntervenant()->getStructure();
@@ -72,18 +250,20 @@ class SuppressionDataProcessus
         $k4        = $sRub;
 
         if (!$this->data[$k1][$k2]) {
-            $this->data[$k1][$k2] = $this->newIsd($structure);
+            $this->data[$k1][$k2] = $this->newIsd($structure)->setUnbreakable(true);
         }
 
         if (!$this->data[$k1][$k2][$k3]) {
             $this->data[$k1][$k2][$k3] = $this->newIsd($service);
         }
 
-        if (!$this->data[$k1][$k2][$k3][$k4]) {
-            $this->data[$k1][$k2][$k3][$k4] = clone($this->srsr[$sRub]);
-        }
+        if ($sRub) {
+            if (!$this->data[$k1][$k2][$k3][$k4]) {
+                $this->data[$k1][$k2][$k3][$k4] = clone($this->srsr[$sRub]);
+            }
 
-        $this->data[$k1][$k2][$k3][$k4][] = $isd;
+            $this->data[$k1][$k2][$k3][$k4][] = $isd;
+        }
     }
 
 
@@ -103,7 +283,7 @@ class SuppressionDataProcessus
         $sousRubriques = [
             TypeVolumeHoraire::CODE_PREVU   => 'Prévisionnel',
             TypeVolumeHoraire::CODE_REALISE => 'Réalisé',
-            'dmep'                          => 'Demande de mise ne paiement',
+            'dmep'                          => 'Demande de mise en paiement',
             'mep'                           => 'Mise en paiement',
         ];
 
@@ -111,7 +291,6 @@ class SuppressionDataProcessus
         foreach ($rubriques as $k => $l) {
             $rd = $this->newIsd();
             $rd->setId($k);
-            $rd->setSubject('rubrique');
             $rd->setLabel($l);
 
             $this->data[] = $rd;
@@ -122,7 +301,6 @@ class SuppressionDataProcessus
             $ordre++;
             $srd = $this->newIsd();
             $srd->setId($k);
-            $srd->setSubject('sous-rubrique');
             $srd->setLabel($l);
             $srd->setOrdre($ordre);
 
@@ -156,7 +334,9 @@ class SuppressionDataProcessus
             return $m->estNonHistorise();
         });
         foreach ($msds as $msd) {
-            $this->data['modifs-service-du'][] = $this->newIsd($msd);
+            $this->data['modifs-service-du'][] = $this
+                ->newIsd($msd)
+                ->setIcon('glyphicon glyphicon-calendar');
         }
     }
 
@@ -167,11 +347,11 @@ class SuppressionDataProcessus
         /* Récup des données personnelles */
         $dossier = $this->getIntervenant()->getDossier();
         if ($dossier && $dossier->estNonHistorise()) {
-            $d = $this->newIsd($dossier);
+            $d = $this->newIsd($dossier)->setIcon('glyphicon glyphicon-user');
 
             $validation = $this->getServiceDossier()->getValidation($this->getIntervenant());
             if ($validation) {
-                $d[] = $this->newIsd($validation);
+                $d[] = $this->newIsd($validation)->setIcon('glyphicon glyphicon-ok');
             }
             $this->data['dossier'][] = $d;
         }
@@ -192,21 +372,19 @@ class SuppressionDataProcessus
                     return $v->estNonHistorise();
                 });
 
+                $this->addIsdSR($s);
+
                 /** @var VolumeHoraire $vh */
                 foreach ($vhs as $vh) {
-                    $sr        = 'service';
-                    $structure = $s->getStructure();
-                    $service   = $s;
-                    $sRub      = $vh->getTypeVolumeHoraire()->getCode();
-
+                    $sRub = $vh->getTypeVolumeHoraire()->getCode();
 
                     $vs = $vh->getValidation()->filter(function ($v) {
                         return $v->estNonHistorise();
                     });
 
-                    $vhd = $this->newIsd($vh);
+                    $vhd = $this->newIsd($vh)->setIcon('glyphicon glyphicon-calendar');
                     foreach ($vs as $v) {
-                        $vhd[] = $this->newIsd($v);
+                        $vhd[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
                     }
 
                     $this->addIsdSR($s, $sRub, $vhd);
@@ -230,6 +408,8 @@ class SuppressionDataProcessus
                     return $v->estNonHistorise();
                 });
 
+                $this->addIsdSR($ref);
+
                 /** @var VolumeHoraireReferentiel $vh */
                 foreach ($vhs as $vh) {
                     $sRub = $vh->getTypeVolumeHoraire()->getCode();
@@ -238,9 +418,9 @@ class SuppressionDataProcessus
                         return $v->estNonHistorise();
                     });
 
-                    $vhd = $this->newIsd($vh);
+                    $vhd = $this->newIsd($vh)->setIcon('glyphicon glyphicon-calendar');
                     foreach ($vs as $v) {
-                        $vhd[] = $this->newIsd($v);
+                        $vhd[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
                     }
 
                     $this->addIsdSR($ref, $sRub, $vhd);
@@ -260,17 +440,17 @@ class SuppressionDataProcessus
         /** @var PieceJointe $pj */
         foreach ($pjs as $pj) {
 
-            $dpj = $this->newIsd($pj);
+            $dpj = $this->newIsd($pj)->setIcon('glyphicon glyphicon-envelope');
 
             $children = $pj->getFichier()->filter(function ($f) {
                 return $f->estNonHistorise();
             });
             foreach ($children as $f) {
-                $dpj[] = $this->newIsd($f);
+                $dpj[] = $this->newIsd($f)->setIcon('glyphicon glyphicon-file');
             }
 
             if (($v = $pj->getValidation()) && $v->estNonHistorise()) {
-                $dpj[] = $this->newIsd($v);
+                $dpj[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
             }
 
             $this->data['pieces-jointes'][] = $dpj;
@@ -288,7 +468,7 @@ class SuppressionDataProcessus
         /** @var Agrement $agr */
         foreach ($agrs as $agr) {
             $key                              = str_replace('_', '-', strtolower($agr->getType()->getCode()));
-            $this->data['agrement-' . $key][] = $this->newIsd($agr);
+            $this->data['agrement-' . $key][] = $this->newIsd($agr)->setIcon('glyphicon glyphicon-ok-sign');
         }
     }
 
@@ -312,7 +492,7 @@ class SuppressionDataProcessus
             }
 
             if (($v = $c->getValidation()) && $v->estNonHistorise()) {
-                $dc[] = $this->newIsd($v);
+                $dc[] = $this->newIsd($v)->setIcon('glyphicon glyphicon-ok');
             }
 
             $this->data['contrats'][] = $dc;
@@ -331,10 +511,10 @@ class SuppressionDataProcessus
             $mep = $mis->getMiseEnPaiement();
             if ($mep->estNonHistorise()) {
 
-                $dm = $this->newIsd($mep);
+                $dm = $this->newIsd($mep)->setIcon('glyphicon glyphicon-euro');
 
                 $service = $mep->getFormuleResultatService() ? $mep->getFormuleResultatService()->getService() : $mep->getFormuleResultatServiceReferentiel()->getServiceReferentiel();
-                $sRub = $mep->getPeriodePaiement() ? 'mep' : 'dmep';
+                $sRub    = $mep->getPeriodePaiement() ? 'mep' : 'dmep';
 
                 $this->addIsdSR($service, $sRub, $dm);
             }

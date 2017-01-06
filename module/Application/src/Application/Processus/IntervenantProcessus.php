@@ -5,6 +5,7 @@ use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblService;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\IntervenantSuppressionData;
 use Application\Processus\Intervenant\SuppressionDataProcessus;
 use Application\Service\Traits\ContextAwareTrait;
 use UnicaenApp\Util;
@@ -112,5 +113,12 @@ class IntervenantProcessus extends AbstractProcessus{
     public function getSuppressionData( Intervenant $intervenant )
     {
         return SuppressionDataProcessus::run($intervenant);
+    }
+
+
+
+    public function deleteRecursive( IntervenantSuppressionData $isd, array $ids )
+    {
+        return SuppressionDataProcessus::delete($isd, $ids);
     }
 }

@@ -13,6 +13,7 @@ use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
@@ -320,11 +321,13 @@ class ServiceService extends AbstractEntityService
      */
     public function delete($entity, $softDelete = true)
     {
-        $vhListe = $entity->getVolumeHoraireListe();
-        foreach($vhListe->getPeriodes() as $periode){
-            $lc = $vhListe->getChild()->setPeriode($periode);
-            foreach( $lc->getTypesIntervention() as $typeIntervention){
-                $lc->getChild()->setTypeIntervention($typeIntervention)->setHeures(0);
+        if ($softDelete) {
+            $vhListe = $entity->getVolumeHoraireListe();
+            foreach ($vhListe->getPeriodes() as $periode) {
+                $lc = $vhListe->getChild()->setPeriode($periode);
+                foreach ($lc->getTypesIntervention() as $typeIntervention) {
+                    $lc->getChild()->setTypeIntervention($typeIntervention)->setHeures(0);
+                }
             }
         }
         //$vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
@@ -332,8 +335,9 @@ class ServiceService extends AbstractEntityService
         $vhl = $entity->getVolumeHoraire();
 
         $delete = true;
+        /** @var VolumeHoraire $volumeHoraire */
         foreach ($vhl as $volumeHoraire) {
-            if ($volumeHoraire->getRemove()) {
+            if ($volumeHoraire->getRemove() || !$volumeHoraire->estNonHistorise()) {
                 $this->getServiceVolumeHoraire()->delete($volumeHoraire, $softDelete);
                 $vhl->removeElement($volumeHoraire);
             } else {

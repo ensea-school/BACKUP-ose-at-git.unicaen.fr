@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
+use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure as StructureEntity;
@@ -674,6 +675,24 @@ class MiseEnPaiement extends AbstractEntityService
             $mep->setDateMiseEnPaiement($dateMiseEnPaiement);
             $this->save($mep);
         }
+    }
+
+
+
+    /**
+     * @param ServiceAPayerInterface $sap
+     *
+     * @return $this
+     */
+    public function deleteHistorises( ServiceAPayerInterface $sap )
+    {
+        $sap->getMiseEnPaiement()->map( function(MiseEnPaiementEntity $mep){
+            if (!$mep->estNonHistorise()){
+                $this->delete( $mep, false );
+            }
+        });
+
+        return $this;
     }
 
 

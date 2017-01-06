@@ -13,9 +13,9 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
-    const RESOURCE_ID_VALIDATION_ENSEIGNEMENT  = 'VALIDATION_ENSEIGNEMENT';
-    const RESOURCE_ID_VALIDATION_REFERENTIEL   = 'VALIDATION_REFERENTIEL';
-    const RESOURCE_ID_CLOTURE_REALISE          = 'CLOTURE_REALISE';
+    const RESOURCE_ID_VALIDATION_ENSEIGNEMENT = 'VALIDATION_ENSEIGNEMENT';
+    const RESOURCE_ID_VALIDATION_REFERENTIEL  = 'VALIDATION_REFERENTIEL';
+    const RESOURCE_ID_CLOTURE_REALISE         = 'CLOTURE_REALISE';
 
     /**
      * @var integer
@@ -46,6 +46,11 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     private $volumeHoraireReferentiel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $miseEnPaiement;
 
 
 
@@ -235,6 +240,18 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     public function getVolumeHoraireReferentiel()
     {
         return $this->volumeHoraireReferentiel;
+    }
+
+
+
+    /**
+     * Get miseEnPaiement
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiement()
+    {
+        return $this->miseEnPaiement;
     }
 
 

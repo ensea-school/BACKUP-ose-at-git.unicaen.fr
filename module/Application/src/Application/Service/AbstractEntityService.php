@@ -177,10 +177,11 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return QueryBuilder
      */
-    public function select( array $fields=[] )
+    public function select(array $fields = [])
     {
-        return $this->initQuery( null, null, $fields)[0];
+        return $this->initQuery(null, null, $fields)[0];
     }
+
 
 
     /**
@@ -268,8 +269,8 @@ abstract class AbstractEntityService extends AbstractService
     public function getQbFromAliases(QueryBuilder $qb)
     {
         $aliases = [];
-        $from = $qb->getDQLPart('from');
-        $join = $qb->getDQLPart('join');
+        $from    = $qb->getDQLPart('from');
+        $join    = $qb->getDQLPart('join');
 
         foreach ($from as $ef) {
             /* @var $ef Expr\From */
@@ -316,7 +317,8 @@ abstract class AbstractEntityService extends AbstractService
     /**
      * Retourne une liste d'entités en fonction du QueryBuilder donné
      *
-     * La liste de présente sous la forme d'un tableau associatif, dont les clés sont les ID des entités et les valeurs les entités elles-mêmes
+     * La liste de présente sous la forme d'un tableau associatif, dont les clés sont les ID des entités et les valeurs les
+     * entités elles-mêmes
      *
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
@@ -327,8 +329,8 @@ abstract class AbstractEntityService extends AbstractService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $this->orderBy($qb);
-        $entities = $qb->getQuery()->execute();
-        $result = [];
+        $entities    = $qb->getQuery()->execute();
+        $result      = [];
         $entityClass = $this->getEntityClass();
         foreach ($entities as $entity) {
             if ($entity instanceof $entityClass) {
@@ -395,7 +397,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function delete($entity, $softDelete = true)
     {
-        $entityClass = get_class($entity);
+        $entityClass        = get_class($entity);
         $serviceEntityClass = $this->getEntityClass();
         if ($serviceEntityClass != $entityClass && !is_subclass_of($entity, $serviceEntityClass)) {
             throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
@@ -422,7 +424,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function save($entity)
     {
-        $entityClass = get_class($entity);
+        $entityClass        = get_class($entity);
         $serviceEntityClass = $this->getEntityClass();
         if ($serviceEntityClass != $entityClass && !is_subclass_of($entity, $serviceEntityClass)) {
             throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
@@ -451,8 +453,8 @@ abstract class AbstractEntityService extends AbstractService
 
     /**
      * Filtre une liste d'entités à partir d'un objet chargé de lui préciser les filtres à appliquer
-     * Si l'hydrateur n'est pas précisé et que l'objet implémente HydratorAwareInterface, alors l'hydrateur de l'objet est utilisé.
-     * Si lhydrateur n'a toujours pas pu être déterminé, alors l'hydrateur ObjectProperty est utilisé.
+     * Si l'hydrateur n'est pas précisé et que l'objet implémente HydratorAwareInterface, alors l'hydrateur de l'objet est
+     * utilisé. Si lhydrateur n'a toujours pas pu être déterminé, alors l'hydrateur ObjectProperty est utilisé.
      *
      * @param \StdClass         $object   Objet contenant les filtres
      * @param HydratorInterface $hydrator Hydrateur
@@ -478,8 +480,8 @@ abstract class AbstractEntityService extends AbstractService
 
 
     /**
-     * Filtre une liste d'entités à partir d'untableau associatif dont les clés sont les propriétés à filtrer et les valeurs les données à filtrer.
-     * Le filtre ne prend pas en compte les valeurs nulles
+     * Filtre une liste d'entités à partir d'untableau associatif dont les clés sont les propriétés à filtrer et les valeurs
+     * les données à filtrer. Le filtre ne prend pas en compte les valeurs nulles
      *
      * @param array        $properties Liste des propriétés à filtrer
      * @param QueryBuilder $qb         QueryBuilder à ne pas recréer. Permet de chaîner les filtres
@@ -571,13 +573,12 @@ abstract class AbstractEntityService extends AbstractService
         }
         if (0 === strpos($name, 'finderBy')) {
             $property = lcfirst(substr($name, 8));
-            $value = isset($arguments[0]) ? $arguments[0] : null;
-            $qb = isset($arguments[1]) ? $arguments[1] : null;
-            $alias = isset($arguments[2]) ? $arguments[2] : null;
+            $value    = isset($arguments[0]) ? $arguments[0] : null;
+            $qb       = isset($arguments[1]) ? $arguments[1] : null;
+            $alias    = isset($arguments[2]) ? $arguments[2] : null;
 
             return $this->finderByProperty($property, $value, $qb, $alias);
         }
         throw new RuntimeException('Méthode "' . $name . '" inconnue dans le service');
     }
-
 }

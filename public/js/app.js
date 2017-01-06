@@ -10,7 +10,7 @@ $(function ()
         WidgetInitializer.includeCss(Url('intervenant-recherche/widget.css'));
     });
 
-    WidgetInitializer.add('treeview', 'jstree', function ()
+    WidgetInitializer.add('jstree', 'jstree', function ()
     {
         WidgetInitializer.includeJs(Url('vendor/vakata-jstree-3.3.3/dist/jstree.min.js'));
         WidgetInitializer.includeCss(Url('vendor/vakata-jstree-3.3.3/dist/themes/default/style.min.css'));

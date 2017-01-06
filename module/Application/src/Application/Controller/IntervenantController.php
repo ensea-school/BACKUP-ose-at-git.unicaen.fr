@@ -461,7 +461,32 @@ class IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
-        $data = $this->getProcessusIntervenant()->getSuppressionData($intervenant);
+        if ($intervenant){
+            $data = $this->getProcessusIntervenant()->getSuppressionData($intervenant);
+        }else{
+            $data = null;
+        }
+
+
+        $ids = $this->params()->fromPost('ids');
+
+        if ($ids){
+            try {
+                if ($data) $data = $this->getProcessusIntervenant()->deleteRecursive($data, $ids);
+
+                if (!$data){
+                    $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');
+                }else{
+                    $this->flashMessenger()->addSuccessMessage('Données bien supprimées');
+                }
+            }catch(\Exception $e ){
+                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            }
+        }else{
+            $this->flashMessenger()->addWarningMessage(
+                'Attention : La suppression d\'une fiche entraine la suppression de toutes les données associées pour l\'année en cours'
+            );
+        }
 
         return compact('intervenant', 'data');
     }

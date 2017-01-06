@@ -32,6 +32,7 @@ class IntervenantSuppressionDataViewHelper extends AbstractHtmlElement implement
     use ServiceLocatorAwareTrait;
 
 
+
     /**
      *
      * @return self
@@ -73,29 +74,45 @@ class IntervenantSuppressionDataViewHelper extends AbstractHtmlElement implement
      *
      * @return string
      */
-    public function renderItem( IntervenantSuppressionData $isd, $first=false )
+    public function renderItem(IntervenantSuppressionData $isd, $first = false)
     {
 
-        if ($isd->getLabel()){
+        if ($isd->getLabel()) {
             $html = $isd->getLabel();
-        }elseif($isd->getEntity()){
-            $html = $this->renderEntity($isd->getEntity());
-        }else{
+        } elseif ($isd->getEntity()) {
+            if ($isd->getEntity()->estNonHistorise()){
+                $html = $this->renderEntity($isd->getEntity());
+            }else{
+                $html = $this->getView()->tag('span', ['class' => 'bg-danger'] )->html($this->renderEntity($isd->getEntity()));
+            }
+
+        } else {
             $html = 'Inconnu';
         }
 
-        if ($isd->hasChildren()){
+        if ($isd->hasChildren()) {
             $sHtml = '';
             $isd->order();
-            foreach( $isd as $child ){
+            foreach ($isd as $child) {
                 $sHtml .= $this->renderItem($child);
             }
             $html .= $this->getView()->tag('ul')->html($sHtml);
         }
 
-        $html = $this->getView()->tag('li')->html($html);
+        $attrs = [
+            'class' => ['jstree-open'],
+            'id'    => $isd->getAbsoluteId(),
+        ];
+        if ($isd->getIcon()) {
+            $attrs['data-jstree'] = [
+                'icon'  => $isd->getIcon(),
 
-        if ($first){
+            ];
+        }
+
+        $html = $this->getView()->tag('li', $attrs)->html($html);
+
+        if ($first) {
             $html = $this->getView()->tag('ul')->html($html);
         }
 
@@ -116,7 +133,7 @@ class IntervenantSuppressionDataViewHelper extends AbstractHtmlElement implement
                 return $this->renderModificationServiceDu($entity);
 
             case $entity instanceof Intervenant:
-                return (string)$this->getView()->intervenant($entity)->renderLink();
+                return (string)$entity->getNomComplet().' <small>(Fiche '.$entity->getAnnee().' uniquement)</small>';
 
             case $entity instanceof Validation:
                 return (string)$this->getView()->validation($entity)->renderLabel();
@@ -263,11 +280,11 @@ class IntervenantSuppressionDataViewHelper extends AbstractHtmlElement implement
             $contrat->getTypeContrat()->getLibelle(),
             $contrat->getValidation() && $contrat->getValidation()->estNonHistorise() ? '' : '(PROJET)',
             $contrat->getId(),
-            $contrat->getNumeroAvenant() ? '.'.$contrat->getNumeroAvenant() : '',
+            $contrat->getNumeroAvenant() ? '.' . $contrat->getNumeroAvenant() : '',
             $contrat->getStructure()->getLibelleCourt()
         );
-        if ($drs = $contrat->getDateRetourSigne()){
-            $label .= ', retourné signé le '.$drs->format(Constants::DATE_FORMAT);
+        if ($drs = $contrat->getDateRetourSigne()) {
+            $label .= ', retourné signé le ' . $drs->format(Constants::DATE_FORMAT);
         }
 
         return $this->getView()->tag('span')->html(
@@ -286,14 +303,14 @@ class IntervenantSuppressionDataViewHelper extends AbstractHtmlElement implement
         );
 
         $title = [
-            'Centre de coûts : '.$mep->getCentreCout()->getSourceCode()
+            'Centre de coûts : ' . $mep->getCentreCout()->getSourceCode(),
         ];
-        if ($mep->getDomaineFonctionnel()){
-            $title[] = 'Domaine fonctionnel : '.$mep->getDomaineFonctionnel();
+        if ($mep->getDomaineFonctionnel()) {
+            $title[] = 'Domaine fonctionnel : ' . $mep->getDomaineFonctionnel();
         }
 
         $attrs = [
-            'title' => implode( "\n",$title),
+            'title' => implode("\n", $title),
         ];
 
         return $this->getView()->tag('abbr', $attrs)->html(

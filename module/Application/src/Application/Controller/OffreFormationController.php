@@ -52,6 +52,7 @@ class OffreFormationController extends AbstractController
         ]);
         $this->em()->getFilters()->enable('annee')->init([
             ElementPedagogique::class,
+            Etape::class,
         ]);
     }
 

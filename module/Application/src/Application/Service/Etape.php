@@ -102,49 +102,6 @@ class Etape extends AbstractEntityService
 
 
     /**
-     * Filtre par historique, si l'entité est compatible avec les historiques
-     *
-     * @param QueryBuilder $qb
-     * @param string       $alias
-     *
-     * @return QueryBuilder
-     */
-    public function finderByHistorique(QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $dateObservation = $this->getServiceContext()->getDateObservation();
-        if ($dateObservation) {
-            $dqldobs = ', :fbh_dateObservation';
-            $qb->setParameter('fbh_dateObservation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
-        } else {
-            $dqldobs = '';
-        }
-
-        $qb->setParameter('fbh_annee', $this->getServiceContext()->getAnnee());
-
-        $qb->andWhere("
-            1 = compriseEntre($alias.histoCreation,$alias.histoDestruction$dqldobs)
-            OR EXISTS(
-              SELECT
-                cp.id
-              FROM
-                Application\Entity\Db\CheminPedagogique cp
-                JOIN Application\Entity\Db\ElementPedagogique ep WITH ep = cp.elementPedagogique
-              WHERE
-                1 = compriseEntre(cp.histoCreation,cp.histoDestruction$dqldobs)
-                AND 1 = compriseEntre(ep.histoCreation,ep.histoDestruction$dqldobs)
-                AND cp.etape = $alias
-                AND ep.annee = :fbh_annee
-          )
-        ");
-
-        return $qb;
-    }
-
-
-
-    /**
      * Retourne la liste des étapes
      *
      * @param QueryBuilder|null $queryBuilder
@@ -170,6 +127,10 @@ class Etape extends AbstractEntityService
      */
     public function save($entity)
     {
+        if (!$entity->getAnnee()){
+            $entity->setAnnee($this->getServiceContext()->getAnnee());
+        }
+
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
         }

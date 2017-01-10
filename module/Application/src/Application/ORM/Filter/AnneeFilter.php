@@ -2,8 +2,6 @@
 
 namespace Application\ORM\Filter;
 
-use Application\Entity\Db\Etape;
-use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use Application\Service\Traits\ContextAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
 use Application\Entity\Db\Annee;
@@ -24,41 +22,10 @@ class AnneeFilter extends AbstractFilter
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
     {
         if (isset($this->enabledEntities[$targetEntity->name])) {
-            if ($targetEntity->name == Etape::class) {
-                return $this->addEtapeFilterConstraint($targetTableAlias);
-            } elseif ($targetEntity->reflClass->implementsInterface(AnneeAwareInterface::class)) {
-                return $targetTableAlias . '.ANNEE_ID = ' . $this->getServiceContext()->getAnnee()->getId();
-            }
+            return $targetTableAlias . '.ANNEE_ID = ' . $this->getServiceContext()->getAnnee()->getId();
         }
 
         return '';
-    }
-
-
-
-    protected function addEtapeFilterConstraint($targetTableAlias)
-    {
-        $sqldObs = '';
-        if ($dateObservation = $this->getServiceContext()->getDateObservation()) {
-            $sqldObs = ', ' . $this->getParameter('date_observation');
-            $this->setParameter('date_observation', $dateObservation);
-        }
-
-        $annee = $this->getServiceContext()->getAnnee()->getId();
-
-        return "
-          1 = OSE_DIVERS.COMPRISE_ENTRE($targetTableAlias.HISTO_CREATION,$targetTableAlias.HISTO_DESTRUCTION$sqldObs)
-          OR EXISTS(
-            SELECT
-              cp.etape_id
-            FROM
-              chemin_pedagogique cp
-              JOIN element_pedagogique ep ON ep.id = cp.element_pedagogique_id AND 1 = ose_divers.comprise_entre(cp.histo_creation,cp.histo_destruction$sqldObs)
-            WHERE
-              1 = ose_divers.comprise_entre(ep.histo_creation,ep.histo_destruction$sqldObs)
-              AND cp.etape_id = $targetTableAlias.id
-              AND ep.annee_id = $annee
-          )";
     }
 
 

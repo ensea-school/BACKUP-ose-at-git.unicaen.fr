@@ -36,6 +36,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     /**
      * @var string
      */
+    protected $code;
+
+    /**
+     * @var string
+     */
     protected $libelle;
 
     /**
@@ -196,6 +201,30 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     public function __construct()
     {
         $this->cheminPedagogique = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return ElementPedagogique
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
     }
 
 

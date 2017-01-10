@@ -105,6 +105,7 @@ class ElementPedagogiqueController extends AbstractController
     {
         $this->em()->getFilters()->enable('annee')->init([
             \Application\Entity\Db\ElementPedagogique::class,
+            \Application\Entity\Db\Etape::class,
         ]);
 
         $structure = $this->context()->structureFromQuery();

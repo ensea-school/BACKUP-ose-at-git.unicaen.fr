@@ -43,7 +43,7 @@ class EtapeSaisie extends AbstractForm
 
         /* construction du formulaire */
         $this->add([
-            'name'    => 'source-code',
+            'name'    => 'code',
             'options' => [
                 'label' => 'Code',
             ],
@@ -221,7 +221,7 @@ class EtapeSaisie extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'source-code'         => [
+            'code'         => [
                 'required' => true,
             ],
             'libelle'             => [
@@ -273,7 +273,8 @@ class EtapeSaisieHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setSourceCode($data['source-code']);
+        $object->setCode($data['code']);
+        $object->setSourceCode($data['code']);
         $object->setLibelle($data['libelle']);
         $object->setTypeFormation($this->getServiceTypeFormation()->get($data['type-formation']));
         if (array_key_exists('niveau', $data)) {
@@ -302,7 +303,7 @@ class EtapeSaisieHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'source-code'         => $object->getSourceCode(),
+            'code'                => $object->getCode(),
             'libelle'             => $object->getLibelle(),
             'id'                  => $object->getId(),
             'type-formation'      => ($tf = $object->getTypeFormation()) ? $tf->getId() : null,

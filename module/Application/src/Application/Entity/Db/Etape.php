@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Interfaces\AnneeAwareInterface;
+use Application\Entity\Db\Traits\AnneeAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -11,9 +13,10 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * Etape
  */
-class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
+class Etape implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use AnneeAwareTrait;
     use ImportAwareTrait;
 
 
@@ -41,6 +44,11 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
     }
 
 
+
+    /**
+     * @var string
+     */
+    protected $code;
 
     /**
      * @var string
@@ -91,6 +99,30 @@ class Etape implements HistoriqueAwareInterface, ResourceInterface, ImportAwareI
      * @var \Application\Entity\Db\DomaineFonctionnel
      */
     private $domaineFonctionnel;
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return self
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
 
 
 

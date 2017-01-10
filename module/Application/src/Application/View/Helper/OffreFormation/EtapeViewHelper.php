@@ -128,7 +128,7 @@ class EtapeViewHelper extends AbstractHtmlElement
         ];
 
 
-        if ($etape->getHistoDestruction() && 0 == $etape->getCheminPedagogique()->count()) {
+        if ($etape->estNonHistorise()) {
             $default['title']   = 'Cette formation n\'existe plus';
             $default['class'][] = 'bg-danger';
         }

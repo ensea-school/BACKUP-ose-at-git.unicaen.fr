@@ -38,6 +38,45 @@ INSERT INTO package_deps (id,p1,p2) values (26, 'OSE_VALIDATION_ENSEIGNEMENT', n
 INSERT INTO package_deps (id,p1,p2) values (27, 'OSE_VALIDATION_REFERENTIEL', null);
 
 
+BEGIN
+  OSE_EVENT.SET_ACTIF(FALSE);
+END;
+/
+
+
+
+SELECT
+  'UPDATE element_pedagogique SET etape_id = ' || en.id || ' WHERE id = ' || ep.id || ';' usql
+FROM
+  element_pedagogique ep
+  JOIN etape eo ON eo.id = ep.etape_id
+  JOIN etape en ON en.source_code = eo.source_code AND en.annee_id = ep.annee_id AND NVL(en.histo_destruction,sysdate) = NVL(en.histo_destruction,sysdate)
+WHERE
+  eo.id <> en.id;
+
+
+
+SELECT
+  'UPDATE chemin_pedagogique SET etape_id = ' || en.id || ' WHERE id = ' || cp.id || ';' usql
+FROM
+  chemin_pedagogique cp
+  JOIN element_pedagogique ep ON ep.id = cp.element_pedagogique_id
+  JOIN etape eo ON eo.id = ep.etape_id
+  JOIN etape en ON en.source_code = eo.source_code AND en.annee_id = ep.annee_id AND NVL(en.histo_destruction,sysdate) = NVL(en.histo_destruction,sysdate)
+WHERE
+  eo.id <> en.id;
+
+
+  
+/
+BEGIN
+  OSE_EVENT.SET_ACTIF(true);
+  OSE_EVENT.force_calculer_tout(2014);
+  OSE_EVENT.force_calculer_tout(2015);
+  OSE_EVENT.force_calculer_tout(2016);
+END;
+
+
 BEGIN DBMS_SCHEDULER.enable(name=>'"OSE"."OSE_SRC_SYNC"'); END;
 /
 BEGIN OSE_FORMULE.CALCULER_TOUT; END;

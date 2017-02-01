@@ -9,8 +9,7 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
-{
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
 
     const ODF_VISUALISATION                          = 'odf-visualisation';
     const ODF_EXPORT_CSV                             = 'odf-export-csv';
@@ -109,5 +108,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const BUDGET_EXPORT                              = 'budget-export';
     const PARAMETRES_ANNEES_EDITION                  = 'parametres-annees-edition';
     const PARAMETRES_ANNEES_VISUALISATION            = 'parametres-annees-visualisation';
-
+    const BUDGET_TYPE_DOTATION_VISUALISATION	     = 'budget-type-dotation-visualisation';
+    const BUDGET_TYPE_DOTATION_EDITION	     	= 'budget-type-dotation-edition';
 }

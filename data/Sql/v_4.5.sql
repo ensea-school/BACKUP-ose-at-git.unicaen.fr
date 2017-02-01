@@ -37,6 +37,31 @@ INSERT INTO package_deps (id,p1,p2) values (25, 'OSE_SERVICE_SAISIE', null);
 INSERT INTO package_deps (id,p1,p2) values (26, 'OSE_VALIDATION_ENSEIGNEMENT', null);
 INSERT INTO package_deps (id,p1,p2) values (27, 'OSE_VALIDATION_REFERENTIEL', null);
 
+INSERT INTO SCENARIO (
+    ID,
+    CODE,
+    LIBELLE,
+    STRUCTURE_ID,
+    DEFINITIF,
+    REEL,
+    HISTO_CREATION,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,
+    HISTO_MODIFICATEUR_ID
+) VALUES (
+    SCENARIO_id_seq.nextval,
+    'reel',
+    'Réel',
+    null,
+    1,
+    1,
+    sysdate,
+    (select id from utilisateur where username='lecluse'),
+    sysdate,
+    (select id from utilisateur where username='lecluse')
+);
+
+
 
 BEGIN
   OSE_EVENT.SET_ACTIF(FALSE);

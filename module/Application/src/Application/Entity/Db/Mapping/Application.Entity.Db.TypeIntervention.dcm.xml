@@ -19,6 +19,7 @@
     <field name="tauxHetdService" type="float" column="TAUX_HETD_SERVICE" nullable="false"/>
     <field name="tauxHetdComplementaire" type="float" column="TAUX_HETD_Complementaire" nullable="false"/>
     <field name="visible" type="boolean" column="VISIBLE" nullable="false"/>
+    <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

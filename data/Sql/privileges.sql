@@ -23,7 +23,8 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'formation' c, 'pj-impression' p, 'Pièces jointes - Edition Nb ex. imprimés' l FROM dual
+      SELECT 'budget' c, 'type-dotation-visualisation' p, 'Types de dotation - Visualisation' l FROM dual
+      UNION SELECT 'budget' c, 'type-dotation-edition' p, 'Types de dotation - Édition' l FROM dual
 
 ) t1;
 

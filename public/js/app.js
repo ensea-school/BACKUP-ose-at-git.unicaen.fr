@@ -77,6 +77,11 @@ $(function ()
     WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function(){
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
+    WidgetInitializer.add('diagramme', 'diagramme', function(){
+        WidgetInitializer.includeJs(Url('vendor/go2.js'));
+        WidgetInitializer.includeJs(Url('js/diagramme.js'));
+        WidgetInitializer.includeCss(Url('css/diagramme.css'));
+    });
 
     /* Droits */
     WidgetInitializer.add('droits-tbl', 'droitsTbl', function(){

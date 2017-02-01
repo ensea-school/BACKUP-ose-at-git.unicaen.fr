@@ -32,7 +32,9 @@ UNION ALL SELECT 2014 annee_id, null annee_debut_id, 2013 annee_fin_id, 0 res FR
 ) t1;
 
 select
-  
   to_date('31/01/2015', 'dd/mm/YYYY')  + 1
-  
+  from dual;
+
+select
+  to_char( sysdate, 'dd/mm/YYYY' )
   from dual;

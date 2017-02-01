@@ -59,6 +59,15 @@ class TypeIntervention implements HistoriqueAwareInterface
      */
     protected $visible;
 
+    /**
+     * enseignement
+     *
+     * @var boolean
+     */
+    protected $enseignement;
+
+
+
 
 
     public function __toString()
@@ -109,6 +118,31 @@ class TypeIntervention implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getEnseignement()
+    {
+        return $this->enseignement;
+    }
+
+
+
+    /**
+     * @param bool $enseignement
+     *
+     * @return TypeIntervention
+     */
+    public function setEnseignement($enseignement)
+    {
+        $this->enseignement = $enseignement;
+
+        return $this;
+    }
+
 
 
 

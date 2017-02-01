@@ -1,0 +1,31 @@
+.diagramme {
+    width: 100%;
+    background-color: white;
+}
+
+.diagramme.fullscreen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1050;
+    height: 100%;
+    width: 100%;
+}
+
+.diagramme .controles .navbar {
+    margin-bottom: 1px;
+}
+
+.form-noeud {
+    overflow: hidden !important;
+}
+
+.form-lien {
+    overflow: hidden !important;
+}
+
+.ui-front {
+    z-index: 1051;
+}

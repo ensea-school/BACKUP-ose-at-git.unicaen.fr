@@ -226,10 +226,11 @@ $main = [
     'public_files'       => [
         'head_scripts'   => [
             '010_jquery'   => 'vendor/jquery-1.11.3.min.js',
+            '019_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
             '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
         ],
         'inline_scripts' => [
-            '010_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            '010_bootstrap'   => null,
             '030_util'        => 'vendor/unicaen-app/js/util.js',
             '040_unicaen'     => 'vendor/unicaen-app/js/unicaen.js',
             '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
@@ -281,5 +282,5 @@ return array_merge_recursive(
     include 'pilotage.config.php',
     include 'budget.config.php',
     include 'parametre.config.php',
-    include 'fonction-referentiel.config.php'
+    include 'charge.config.php'
 );

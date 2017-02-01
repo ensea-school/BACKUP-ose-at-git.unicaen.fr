@@ -43,6 +43,11 @@ class TypeHeures implements HistoriqueAwareInterface
     private $eligibleCentreCoutEp;
 
     /**
+     * @var boolean
+     */
+    private $enseignement;
+
+    /**
      * @var integer
      */
     private $id;
@@ -201,6 +206,30 @@ class TypeHeures implements HistoriqueAwareInterface
     public function getEligibleCentreCoutEp()
     {
         return $this->eligibleCentreCoutEp;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isEnseignement()
+    {
+        return $this->enseignement;
+    }
+
+
+
+    /**
+     * @param bool $enseignement
+     *
+     * @return TypeHeures
+     */
+    public function setEnseignement($enseignement)
+    {
+        $this->enseignement = $enseignement;
+
+        return $this;
     }
 
 

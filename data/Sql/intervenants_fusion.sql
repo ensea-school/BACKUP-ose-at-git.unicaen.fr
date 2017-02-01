@@ -5,18 +5,19 @@ alter trigger "OSE"."SERVICE_HISTO_CK" disable;
 
 /
 DECLARE
-  old_source_code NUMERIC := '99322';
-  new_source_code NUMERIC := '26623';
+  old_source_code NUMERIC := '119531';
+  new_source_code NUMERIC := '3657';
+  annee_id NUMERIC := 2016;
 
   old_id NUMERIC;
   new_id NUMERIC;
-  
+
   ie_old_id NUMERIC;
   ie_new_id NUMERIC;
-  
+
   old_dossier_id NUMERIC;
   new_dossier_id NUMERIC;
-  
+
   ose_id NUMERIC;
 BEGIN
   select id INTO old_id from intervenant where source_code = old_source_code AND annee_id = 2015;  
@@ -28,30 +29,31 @@ BEGIN
   SELECT id INTO ose_id FROM source WHERE code = 'OSE';
 
   ose_event.set_actif(false);
-  
+
   --UPDATE adresse_intervenant SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   --UPDATE affectation_recherche SET intervenant_id = new_id WHERE intervenant_id = old_id AND source_id = ose_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
 
   UPDATE agrement SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE contrat SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE modification_service_du SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
   UPDATE service SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE service_referentiel SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE validation SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE piece_jointe SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE dossier SET intervenant_id = new_id WHERE intervenant_id = old_id AND 1 = ose_divers.comprise_entre(histo_creation,histo_destruction);
-  
+
   UPDATE formule_resultat SET intervenant_id = new_id WHERE intervenant_id = old_id;
 
   ose_event.set_actif(true);
 
-  
+--ose_event.
+
   ose_agrement.calculer(old_id);ose_agrement.calculer(new_id);
   OSE_CLOTURE_REALISE.calculer(old_id);OSE_CLOTURE_REALISE.calculer(new_id);
   OSE_CONTRAT.calculer(old_id);OSE_CONTRAT.calculer(new_id);

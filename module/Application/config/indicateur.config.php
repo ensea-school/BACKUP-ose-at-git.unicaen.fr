@@ -105,7 +105,7 @@ return [
             ],
         ],
     ],
-    
+
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
@@ -127,18 +127,20 @@ return [
             ],
         ],
     ],
-    
+
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Indicateur' => Controller\IndicateurController::class,
+        'factories' => [
+            'Application\Controller\Indicateur' => Controller\Factory\IndicateurControllerFactory::class,
         ],
     ],
-    
+
     'service_manager' => [
         'invokables' => [
-            'processusIndicateur'           => Processus\IndicateurProcessus::class,
             'applicationIndicateur'         => Service\IndicateurService::class,
             'NotificationIndicateurService' => Service\NotificationIndicateur::class,
+        ],
+        'factories' => [
+            'processusIndicateur'           => Processus\Factory\IndicateurProcessusFactory::class,
         ],
     ],
 ];

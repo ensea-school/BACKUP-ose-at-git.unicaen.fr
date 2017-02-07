@@ -1,17 +1,18 @@
 <?php
 
-namespace Application\Provider\Charge;
+namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
-use Application\Entity\Charge\Lien;
-use Application\Entity\Charge\Noeud;
-use Application\Entity\Charge\ScenarioLien;
-use Application\Entity\Charge\ScenarioNoeud;
+use Application\Entity\Chargens\Lien;
+use Application\Entity\Chargens\Noeud;
+use Application\Entity\Chargens\ScenarioLien;
+use Application\Entity\Chargens\ScenarioNoeud;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
+use Application\Entity\Db\TypeIntervention;
 
-class ChargeProvider
+class ChargensProvider
 {
     use BddConnecteurAwareTrait;
 
@@ -23,37 +24,37 @@ class ChargeProvider
     /**
      * @var Scenario[]
      */
-    private $scenarios;
+    private $scenarios = [];
 
     /**
      * @var Noeud[]
      */
-    private $noeuds;
+    private $noeuds = [];
 
     /**
      * @var Lien[]
      */
-    private $liensById;
+    private $liensById = [];
 
     /**
      * @var Lien[][]
      */
-    private $liensByNoeudInf;
+    private $liensByNoeudInf = [];
 
     /**
      * @var Lien[][]
      */
-    private $liensByNoeudSup;
+    private $liensByNoeudSup = [];
 
     /**
      * @var $scenarioNoeud [][]
      */
-    private $scenarioNoeud;
+    private $scenarioNoeud = [];
 
     /**
      * @var $scenarioLien [][]
      */
-    private $scenarioLien;
+    private $scenarioLien = [];
 
 
 
@@ -85,7 +86,8 @@ class ChargeProvider
                 $nids[$lien->getNoeudSup(false)] = true;
             }
 
-            $this->loadNoeuds(array_keys($nids));
+            $noeuds = $this->loadNoeuds(array_keys($nids));
+            $this->loadLiens(array_keys($noeuds), 'direct'); // Préchargement des liens au cas où!!
 
             return $this->getNoeud($noeudId);
         } else {
@@ -97,7 +99,6 @@ class ChargeProvider
 
     private function loadNoeud($noeudId)
     {
-
         $this->loadLiens($noeudId, 'recursive');
 
         $sql  = "SELECT id, code, libelle, etape_id, element_pedagogique_id FROM noeud WHERE id IN (:noeud)";
@@ -117,19 +118,40 @@ class ChargeProvider
     {
         $ids  = implode(',', $noeudIds);
         $sql  = "SELECT id, code, libelle, etape_id, element_pedagogique_id FROM noeud WHERE id IN (" . $ids . ")";
-        $data = $this->getBdd()->fetch($sql);
+        $data = $this->getBdd()->fetch($sql, [], 'ID');
 
+        /** @var Noeud[] $noeuds */
         $noeuds = [];
 
-        foreach ($data as $d) {
-            $id = (int)$d['ID'];
+        $sql = "
+        SELECT
+          n.id noeud_id,
+          vhe.type_intervention_id
+        FROM
+          noeud n 
+          JOIN volume_horaire_ens vhe ON 
+            vhe.element_pedagogique_id = n.element_pedagogique_id
+            AND vhe.heures > 0
+            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( vhe.histo_creation, vhe.histo_destruction )
+        WHERE
+          n.element_pedagogique_id IS NOT NULL
+          AND n.id IN (" . implode(',', array_keys($data)) . ")
+        ";
+        $dti = $this->getBdd()->fetch($sql);
+        foreach ($dti as $d) {
+            $nid = $d['NOEUD_ID'];
 
-            $noeud             = new Noeud($this, $d);
-            $this->noeuds[$id] = $noeud;
-            $noeuds[$id]       = $noeud;
+            if (!isset($data[$nid])) {
+                $data[$nid]['TYPES_INTERVENTION'] = [];
+            }
+            $data[$nid]['TYPES_INTERVENTION'][] = (int)$d['TYPE_INTERVENTION_ID'];
         }
 
-        $this->loadLiens(array_keys($noeuds), 'direct'); // Préchargement des liens au cas où!!
+        foreach ($data as $d) {
+            $noeud                         = new Noeud($this, $d);
+            $this->noeuds[$noeud->getId()] = $noeud;
+            $noeuds[$noeud->getId()]       = $noeud;
+        }
 
         return $noeuds;
     }
@@ -232,7 +254,6 @@ class ChargeProvider
           sn.id,
           sn.scenario_id,
           sn.noeud_id,
-          sn.groupes,
           sn.choix_minimum,
           sn.choix_maximum,
           sn.assiduite
@@ -315,7 +336,6 @@ class ChargeProvider
     {
         if (!array_key_exists('ID', $data)) $data['ID'] = null;
         if (!array_key_exists('SCENARIO_ID', $data)) $data['SCENARIO_ID'] = $this->getScenario() ? $this->getScenario()->getId() : null;
-        if (!array_key_exists('GROUPES', $data)) $data['GROUPES'] = '1';
         if (!array_key_exists('CHOIX_MINIMUM', $data)) $data['CHOIX_MINIMUM'] = '0';
         if (!array_key_exists('CHOIX_MAXIMUM', $data)) $data['CHOIX_MAXIMUM'] = '0';
         if (!array_key_exists('ASSIDUITE', $data)) $data['ASSIDUITE'] = '1';
@@ -415,7 +435,7 @@ class ChargeProvider
      *
      * @return Etape
      */
-    public function getEtape( $etapeId )
+    public function getEtape($etapeId)
     {
         return $this->getBdd()->getEntityManager()->getRepository(Etape::class)->get($etapeId);
     }
@@ -427,9 +447,21 @@ class ChargeProvider
      *
      * @return ElementPedagogique
      */
-    public function getElementPedagogique( $elementPedagogiqueId )
+    public function getElementPedagogique($elementPedagogiqueId)
     {
         return $this->getBdd()->getEntityManager()->getRepository(ElementPedagogique::class)->get($elementPedagogiqueId);
+    }
+
+
+
+    /**
+     * @param $typeInterventionId
+     *
+     * @return TypeIntervention
+     */
+    public function getTypeIntervention($typeInterventionId)
+    {
+        return $this->getBdd()->getEntityManager()->getRepository(TypeIntervention::class)->get($typeInterventionId);
     }
 
 
@@ -528,9 +560,10 @@ class ChargeProvider
     public function noeudsToArray()
     {
         $result = [];
-        foreach( $this->noeuds as $noeud ){
+        foreach ($this->noeuds as $noeud) {
             $result[$noeud->getId()] = $noeud->toArray();
         }
+
         return $result;
     }
 
@@ -542,9 +575,10 @@ class ChargeProvider
     public function liensToArray()
     {
         $result = [];
-        foreach( $this->liensById as $lien ){
+        foreach ($this->liensById as $lien) {
             $result[$lien->getId()] = $lien->toArray();
         }
+
         return $result;
     }
 

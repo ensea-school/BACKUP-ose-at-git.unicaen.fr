@@ -3,6 +3,7 @@
 namespace Application\Controller\OffreFormation;
 
 use Application\Controller\AbstractController;
+use Application\Form\OffreFormation\Traits\EtapeModulateursSaisieAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Exception\DbException;
 
@@ -14,6 +15,7 @@ use Application\Exception\DbException;
 class ModulateurController extends AbstractController
 {
     use EtapeAwareTrait;
+    use EtapeModulateursSaisieAwareTrait;
 
 
 
@@ -33,7 +35,7 @@ class ModulateurController extends AbstractController
             throw new \RuntimeException('La formation n\'a pas été spécifiée ou bien elle est invalide.');
         }
 
-        $form   = $this->getFormSaisie();
+        $form   = $this->getFormOffreFormationEtapeModulateursSaisie();
         $errors = [];
 
         $form->bind($etape);
@@ -56,16 +58,5 @@ class ModulateurController extends AbstractController
         $title = "Saisie des modulateurs <br /><small>$etape</small>";
 
         return compact('title', 'form', 'errors');
-    }
-
-
-
-    /**
-     *
-     * @return \Application\Form\Service\Saisie
-     */
-    protected function getFormSaisie()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('EtapeModulateursSaisie');
     }
 }

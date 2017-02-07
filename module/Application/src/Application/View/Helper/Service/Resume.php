@@ -3,18 +3,15 @@
 namespace Application\View\Helper\Service;
 
 use Application\Service\Traits\TypeIntervenantAwareTrait;
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
 
 /**
  * Aide de vue permettant d'afficher un résumé des services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
+class Resume extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use TypeIntervenantAwareTrait;
 
     /**

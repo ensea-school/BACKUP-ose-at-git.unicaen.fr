@@ -3,8 +3,11 @@
 namespace Application\Form\OffreFormation;
 
 use Application\Form\AbstractForm;
+use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
 use Application\Service\Traits\TypeModulateurAwareTrait;
 use Application\Entity\Db\Etape;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementModulateursSaisie
@@ -14,6 +17,8 @@ use Application\Entity\Db\Etape;
 class EtapeModulateursSaisie extends AbstractForm
 {
     use TypeModulateurAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use ElementModulateursFieldsetAwareTrait;
 
     /**
      * Etape
@@ -30,7 +35,8 @@ class EtapeModulateursSaisie extends AbstractForm
 
     public function init()
     {
-        $hydrator = $this->getServiceLocator()->getServiceLocator()->get('EtapeModulateursFormHydrator');
+        $hydrator = new EtapeModulateursHydrator();
+        $hydrator->setServiceElementPedagogique($this->getServiceElementPedagogique());
         $this->setHydrator($hydrator);
 
         $this->setAttribute('class', 'etape-modulateurs');
@@ -88,7 +94,7 @@ class EtapeModulateursSaisie extends AbstractForm
 
         $elements = $etape->getElementPedagogique();
         foreach( $elements as $element ){
-            $mf = $this->getServiceLocator()->get('ElementModulateursFieldset');
+            $mf = $this->getFieldsetOffreFormationElementModulateurs();
             $mf->setName('EL'.$element->getId());
             $this->add($mf);
         }
@@ -143,6 +149,53 @@ class EtapeModulateursSaisie extends AbstractForm
             ];
         }
         return $filters;
+    }
+
+}
+
+
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class EtapeModulateursHydrator implements HydratorInterface
+{
+    use ElementPedagogiqueAwareTrait;
+
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array $data
+     * @param  \Application\Entity\Db\Etape $object
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        return $object;
+    }
+
+    /**
+     * Extract values from an object
+     *
+     * @param  \Application\Entity\Db\Etape $object
+     * @return array
+     */
+    public function extract($object)
+    {
+        $sel = $this->getServiceElementPedagogique();
+
+        $data = [];
+
+        $elements = $sel->getList( $sel->finderByEtape($object) );
+        foreach( $elements as $element ){
+            $data['EL'.$element->getId()] = $element;
+        }
+
+        return $data;
     }
 
 }

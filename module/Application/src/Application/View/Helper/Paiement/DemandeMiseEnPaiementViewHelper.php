@@ -8,12 +8,9 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
-use Application\View\Renderer\PhpRenderer;
+use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\View\Helper\TagViewHelper;
 use UnicaenAuth\Guard\PrivilegeController;
-use Zend\View\Helper\AbstractHtmlElement;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
@@ -26,9 +23,8 @@ use Application\Entity\Db\DomaineFonctionnel;
  *
  * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
  */
-class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use TypeHeuresAwareTrait;
     use ContextAwareTrait;

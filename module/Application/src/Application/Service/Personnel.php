@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Personnel as PersonnelEntity;
+use Application\Service\Traits\ParametresAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -13,6 +14,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Personnel extends AbstractEntityService
 {
+    use ParametresAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -126,15 +128,5 @@ class Personnel extends AbstractEntityService
         $qb->addOrderBy("$alias.nomUsuel, $alias.prenom");
 
         return $qb;
-    }
-
-
-
-    /**
-     * @return Parametres
-     */
-    protected function getServiceParametres()
-    {
-        return $this->getServiceLocator()->get('applicationParametres');
     }
 }

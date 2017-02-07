@@ -1,31 +1,28 @@
 <?php
 namespace Application\Provider\Identity;
 
-use Application\Acl;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
-use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
 use UnicaenApp\Traits\SessionContainerTrait;
+use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 
 /**
  * Classe chargée de fournir les rôles que possède l'identité authentifiée.
  *
  */
-class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvider, EntityManagerAwareInterface, IdentityProviderInterface
+class IdentityProvider implements ChainableProvider, IdentityProviderInterface
 {
-    use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
     use SessionContainerTrait;
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
+    use UserContextServiceAwareTrait;
 
 
 
@@ -42,10 +39,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
      */
     public function getIdentityRoles()
     {
-        $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
-        /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
-
-        if ($ldapUser = $serviceAuthUserContext->getLdapUser()) {
+        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
             $utilisateurCode = (integer)$ldapUser->getSupannEmpId();
         }else{
             $utilisateurCode = null;
@@ -57,13 +51,12 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             $session->utilisateurCode = $utilisateurCode;
         }
 
-        if ($serviceAuthUserContext->getNextSelectedIdentityRole()){
+        if ($this->getServiceUserContext()->getNextSelectedIdentityRole()){
             $mustRefresh = true; // on rafraichit si un rôle prochain est forcé!!
         }
 
         if (! isset($session->roles) || $mustRefresh) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
-            $filter->setServiceLocator($this->getServiceLocator());
             $filter->init([
                 Role::class,
                 Affectation::class,
@@ -78,7 +71,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
              */
             $intervenant = $this->getServiceIntervenant()->getBySourceCode($utilisateurCode);
             $personnel = $this->getServicePersonnel()->getBySourceCode($utilisateurCode);
-            
+
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */

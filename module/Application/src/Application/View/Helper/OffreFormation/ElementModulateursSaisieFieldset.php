@@ -3,20 +3,18 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\ElementModulateursFieldset;
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
+
 
 /**
  * Description of ElementModulateursSaisieFieldset
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementModulateursSaisieFieldset extends AbstractHelper implements ServiceLocatorAwareInterface
+class ElementModulateursSaisieFieldset extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\TypeModulateurAwareTrait
-        ;
+    use TypeModulateurAwareTrait;
 
     /**
      * @var Saisie

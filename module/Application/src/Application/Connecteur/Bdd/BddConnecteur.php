@@ -13,9 +13,18 @@ class BddConnecteur{
      *
      * @return array
      */
-    public function fetch($sql, $params = [])
+    public function fetch($sql, $params = [], $key=null)
     {
-        return $this->getEntityManager()->getConnection()->fetchAll($sql, $this->prepareParams($params));
+        $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $this->prepareParams($params));
+        if (null === $key){
+            return $result;
+        }else{
+            $res = [];
+            foreach( $result as $d ){
+                $res[$d[$key]] = $d;
+            }
+            return $res;
+        }
     }
 
 

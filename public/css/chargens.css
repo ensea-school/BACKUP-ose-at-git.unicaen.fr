@@ -1,9 +1,9 @@
-.diagramme {
+.chargens {
     width: 100%;
     background-color: white;
 }
 
-.diagramme.fullscreen {
+.chargens.fullscreen {
     position: absolute;
     left: 0;
     right: 0;
@@ -14,7 +14,7 @@
     width: 100%;
 }
 
-.diagramme .controles .navbar {
+.chargens .controles .navbar {
     margin-bottom: 1px;
 }
 

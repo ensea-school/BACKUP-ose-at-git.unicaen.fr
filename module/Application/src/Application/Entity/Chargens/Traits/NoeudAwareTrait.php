@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Entity\Charge\Traits;
+namespace Application\Entity\Chargens\Traits;
 
-use Application\Entity\Charge\Noeud;
+use Application\Entity\Chargens\Noeud;
 
 /**
  * Description of NoeudAwareTrait

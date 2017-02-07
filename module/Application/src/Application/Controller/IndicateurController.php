@@ -11,6 +11,7 @@ use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
+use Zend\View\Renderer\PhpRenderer;
 use Exception;
 use Zend\Form\Element\Hidden;
 use Zend\Form\Element\Text;
@@ -33,6 +34,43 @@ class IndicateurController extends AbstractController
     use NotificationIndicateurAwareTrait;
     use AffectationAwareTrait;
     use IndicateurProcessusAwareTrait;
+
+    /**
+     * @var TreeRouteStack
+     */
+    private $httpRouter;
+
+    /**
+     * @var PhpRenderer
+     */
+    private $renderer;
+
+    /**
+     * @var array
+     */
+    private $cliConfig;
+
+
+
+    /**
+     * PHP 5 allows developers to declare constructor methods for classes.
+     * Classes which have a constructor method call this method on each newly-created object,
+     * so it is suitable for any initialization that the object may need before it is used.
+     *
+     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
+     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
+     *
+     * param [ mixed $args [, $... ]]
+     *
+     * @return void
+     * @link http://php.net/manual/en/language.oop5.decon.php
+     */
+    public function __construct( TreeRouteStack $httpRouter, PhpRenderer $renderer, array $cliConfig )
+    {
+        $this->httpRouter = $httpRouter;
+        $this->renderer = $renderer;
+        $this->cliConfig = $cliConfig;
+    }
 
 
 
@@ -175,7 +213,7 @@ class IndicateurController extends AbstractController
                 "Aucune adresse mail trouvée pour l'intervenant suivant: " . implode(", ", Util::collectionAsOptions($intervenantsWithNoEmail)));
         }
 
-        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur);
+        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
         $from    = $mailer->getFrom();
         $subject = $mailer->getDefaultSubject();
         $body    = $mailer->getDefaultBody();
@@ -225,20 +263,15 @@ class IndicateurController extends AbstractController
         // On injecte donc provisoirement un HttpRouter dans le circuit.
         $event      = $this->getEvent();
         $router     = $event->getRouter();
-        $httpRouter = $this->getServiceLocator()->get('HttpRouter'); /* @var $httpRouter TreeRouteStack */
-        $event->setRouter($httpRouter);
-
-        $config = $this->getServiceLocator()->get('Config');
-        $host = $config['cli_config']['domain'];
-        $scheme = $config['cli_config']['scheme'];
+        $event->setRouter($this->httpRouter);
 
         // De plus, pour fonctionner, le HttpRouter a besoin du "prefixe" à utiliser pour assembler les URL
         // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
         // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
         $httpUri = (new \Zend\Uri\Http())
-            ->setHost($host)              // ex: "/localhost/ose", "ose.unicaen.fr"
-            ->setScheme($scheme);
-        $httpRouter->setRequestUri($httpUri);
+            ->setHost($this->cliConfig['dmoain'])              // ex: "/localhost/ose", "ose.unicaen.fr"
+            ->setScheme($this->cliConfig['scheme']);
+        $this->httpRouter->setRequestUri($httpUri);
 
 
         $request = $this->getRequest();
@@ -268,16 +301,30 @@ class IndicateurController extends AbstractController
  */
 class IndicateurIntervenantsMailer
 {
+    use ContextAwareTrait;
+
+    /**
+     * @var AbstractController
+     */
     private $controller;
 
+    /**
+     * @var Indicateur
+     */
     private $indicateur;
 
+    /**
+     * @var PhpRenderer
+     */
+    private $renderer;
 
 
-    public function __construct(AbstractController $controller, Indicateur $indicateur)
+
+    public function __construct(AbstractController $controller, Indicateur $indicateur, PhpRenderer $renderer)
     {
         $this->controller = $controller;
         $this->indicateur = $indicateur;
+        $this->renderer = $renderer;
     }
 
 
@@ -338,11 +385,9 @@ class IndicateurIntervenantsMailer
     public function getDefaultBody()
     {
         $role     = $this->controller->getServiceContext()->getSelectedIdentityRole();
-        $renderer = $this->controller->getServiceLocator()->get('view_manager')->getRenderer();
-        /* @var $renderer PhpRenderer */
 
         // corps au format HTML
-        $html = $renderer->render('application/indicateur/mail/intervenants', [
+        $html = $this->renderer->render('application/indicateur/mail/intervenants', [
             'phrase'    => $this->indicateur->getMessage(),
             'signature' => $role->getPersonnel(),
             'structure' => $role->getStructure(),

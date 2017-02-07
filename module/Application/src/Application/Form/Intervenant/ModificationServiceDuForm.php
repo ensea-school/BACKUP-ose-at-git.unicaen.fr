@@ -2,35 +2,16 @@
 
 namespace Application\Form\Intervenant;
 
-use Zend\Form\Form;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Form\AbstractForm;
+use Application\Form\Intervenant\Traits\ModificationServiceDuFieldsetAwareTrait;
 
 /**
  * Formulaire de modification de service dû d'un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInterface, \UnicaenApp\Service\EntityManagerAwareInterface
-{
-    use ServiceLocatorAwareTrait;
-    use \UnicaenApp\Service\EntityManagerAwareTrait;
-
-    /**
-     * @param  null|int|string  $name    Optional name for the element
-     * @param  array            $options Optional options for the element
-     */
-    public function __construct($name = null, $options = [])
-    {
-        parent::__construct($name, $options);
-
-        $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'modification-service-du')
-                ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
-                ->setInputFilter(new \Zend\InputFilter\InputFilter())
-//                ->setPreferFormInputFilter(false)
-         ;
-    }
+class ModificationServiceDuForm extends AbstractForm {
+    use ModificationServiceDuFieldsetAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -38,7 +19,13 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
      */
     public function init()
     {
-        $fs = $this->getServiceLocator()->get("IntervenantModificationServiceDuFieldset"); /* @var $fs ModificationServiceDuFieldset */
+        $this   ->setAttribute('method', 'post')
+            ->setAttribute('class', 'modification-service-du')
+            ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
+            ->setInputFilter(new \Zend\InputFilter\InputFilter())
+        ;
+
+        $fs = $this->getFieldsetIntervenantModificationServiceDu();
         $fs->setUseAsBaseFieldset(true);
         $this->add($fs, ['name' => 'fs']);
 
@@ -57,14 +44,8 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
             ],
         ]);
 
-        /**
-         * Csrf
-         */
         $this->add(new \Zend\Form\Element\Csrf('security'));
 
-        /**
-         * Submit
-         */
         $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
@@ -74,18 +55,17 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
         ]);
     }
 
+
+
     /**
-     * Bind an object to the form
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
      *
-     * Ensures the object is populated with validated values.
-     *
-     * @param  \Application\Entity\Db\Intervenant $object
-     * @param  int $flags
-     * @return mixed|void
-     * @throws \InvalidArgumentException
+     * @return array
      */
-    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
+    public function getInputFilterSpecification()
     {
-        return parent::bind($object, $flags);
+        return [];
     }
+
 }

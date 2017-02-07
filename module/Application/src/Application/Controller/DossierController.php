@@ -18,7 +18,7 @@ use RuntimeException;
 use NumberFormatter;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
-use UnicaenAuth\Service\UserContext;
+use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 
@@ -30,6 +30,7 @@ class DossierController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ValidationAwareTrait;
     use \Application\Form\Intervenant\Traits\DossierAwareTrait;
+    use UserContextServiceAwareTrait;
 
 
 
@@ -275,16 +276,6 @@ class DossierController extends AbstractController
         } else {
             return compact('intervenant');
         }
-    }
-
-
-
-    /**
-     * @return UserContext
-     */
-    private function getServiceUserContext()
-    {
-        return $this->getServiceLocator()->get('authUserContext');
     }
 
 }

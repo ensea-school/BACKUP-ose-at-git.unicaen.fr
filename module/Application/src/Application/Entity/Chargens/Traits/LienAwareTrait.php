@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Entity\Charge\Traits;
+namespace Application\Entity\Chargens\Traits;
 
-use Application\Entity\Charge\Lien;
+use Application\Entity\Chargens\Lien;
 
 /**
  * Description of LienAwareTrait

@@ -2,49 +2,71 @@
 
 namespace Application\Form\Intervenant;
 
-use Zend\Form\Fieldset;
+use Application\Entity\Db\ModificationServiceDu;
+use Application\Form\AbstractFieldset;
+use Application\Form\Intervenant\Traits\MotifModificationServiceDuFieldsetAwareTrait;
 use Application\Entity\Db\Intervenant;
+use Zend\Stdlib\ArrayUtils;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie des modifications de service dû par un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- * @see FonctionModificationServiceDuFieldset
+ * @see    FonctionModificationServiceDuFieldset
  */
-class ModificationServiceDuFieldset extends Fieldset implements \Zend\ServiceManager\ServiceLocatorAwareInterface
+class ModificationServiceDuFieldset extends AbstractFieldset
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use MotifModificationServiceDuFieldsetAwareTrait;
+
+
 
     public function init()
     {
         $this
-                ->setHydrator(new ModificationServiceDuFieldsetHydrator())
-                ->setObject(new Intervenant());
-
-        $targetElement = $this->getServiceLocator()->get('IntervenantMotifModificationServiceDuFieldset');
+            ->setHydrator(new ModificationServiceDuFieldsetHydrator())
+            ->setObject(new Intervenant());
 
         $this->add([
-            'type' => 'Zend\Form\Element\Collection',
-            'name' => 'modificationServiceDu',
+            'type'    => 'Zend\Form\Element\Collection',
+            'name'    => 'modificationServiceDu',
             'options' => [
-//                'label' => 'Ajoutez autant de fonctions que nécessaire...',
-                'count' => 0,
+                'count'                  => 0,
                 'should_create_template' => true,
-                'allow_add' => true,
-                'allow_remove' => true,
-                'target_element' => $targetElement,
+                'allow_add'              => true,
+                'allow_remove'           => true,
+                'target_element'         => $this->getFieldsetIntervenantMotifModificationServiceDu(),
             ],
         ]);
     }
+
+
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        return [];
+    }
+
 }
 
-class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
+
+
+
+
+class ModificationServiceDuFieldsetHydrator implements HydratorInterface
 {
 
     /**
      * Extract values from an object
      *
      * @param  Intervenant $intervenant
+     *
      * @return array
      */
     public function extract($intervenant)
@@ -54,26 +76,31 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
         ];
     }
 
+
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
+     * @param  array       $data
      * @param  Intervenant $intervenant
+     *
      * @return Intervenant
      */
     public function hydrate(array $data, $intervenant)
     {
         $newModificationsServiceDu = $data['modificationServiceDu'];
-        $curModificationsServiceDu = \Zend\Stdlib\ArrayUtils::iteratorToArray($intervenant->getModificationServiceDu());
+        $curModificationsServiceDu = ArrayUtils::iteratorToArray($intervenant->getModificationServiceDu());
 
         // historicisation des enregistrements supprimés
         $toRemove = array_diff($curModificationsServiceDu, $newModificationsServiceDu);
-        foreach ($toRemove as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
+        foreach ($toRemove as $modificationServiceDu) {
+            /* @var $modificationServiceDu ModificationServiceDu */
             $modificationServiceDu->setHistoDestruction(new \DateTime());
         }
 
         // insertion des nouveaux enregistrements
-        foreach ($newModificationsServiceDu as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
+        foreach ($newModificationsServiceDu as $modificationServiceDu) {
+            /* @var $modificationServiceDu ModificationServiceDu */
             if (null === $modificationServiceDu->getId()) {
                 $intervenant->addModificationServiceDu($modificationServiceDu);
                 $modificationServiceDu->setIntervenant($intervenant);

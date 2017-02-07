@@ -5,11 +5,8 @@ namespace Application\View\Helper\ServiceReferentiel;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Entity\Db\Interfaces\ServiceReferentielAwareInterface;
 use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
 
 
@@ -18,10 +15,8 @@ use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHtmlElement
-    implements ServiceLocatorAwareInterface, ServiceReferentielAwareInterface
+class Ligne extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use ServiceReferentielAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;

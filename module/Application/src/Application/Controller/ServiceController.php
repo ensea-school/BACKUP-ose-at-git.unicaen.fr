@@ -124,9 +124,7 @@ class ServiceController extends AbstractController
 
         $this->initFilters();
         if ($intervenant) {
-            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-            /* @var $localContext \Application\Service\LocalContext */
-            $localContext->setIntervenant($intervenant);
+            $this->getServiceLocalContext()->setIntervenant($intervenant);
         }
 
         if (!$intervenant) {

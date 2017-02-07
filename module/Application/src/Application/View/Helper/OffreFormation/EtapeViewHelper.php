@@ -7,14 +7,14 @@ use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
 use Application\Util;
-use Zend\View\Helper\AbstractHtmlElement;
+use Application\View\Helper\AbstractViewHelper;
 
 /**
  * Description of ElementPedagogique
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeViewHelper extends AbstractHtmlElement
+class EtapeViewHelper extends AbstractViewHelper
 {
     use EtapeAwareTrait;
     use ServiceEtapeAwareTrait;

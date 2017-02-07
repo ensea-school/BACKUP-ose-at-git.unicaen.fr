@@ -16,7 +16,7 @@ abstract class AbstractFieldset extends Fieldset implements ServiceLocatorAwareI
     /**
      * Generates a url given the name of a route.
      *
-     * @see    Zend\Mvc\Router\RouteInterface::assemble()
+     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
      *
      * @param  string            $name               Name of the route
      * @param  array             $params             Parameters for the link

@@ -10,7 +10,6 @@ use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
@@ -198,7 +197,7 @@ class MiseEnPaiementRechercheForm extends AbstractForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MiseEnPaiementRechercheFormHydrator implements HydratorInterface, ServiceLocatorAwareInterface
+class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
 {
     use ServiceLocatorAwareTrait;
     use IntervenantAwareTrait;

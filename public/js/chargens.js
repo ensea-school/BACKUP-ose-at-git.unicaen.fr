@@ -1,6 +1,7 @@
-$.widget("ose.diagramme", {
+$.widget("ose.chargens", {
     noeuds: {},
     liens: {},
+    typesIntervention: {},
     diagramme: undefined,
     formNoeud: undefined,
     formLien: undefined,
@@ -15,14 +16,15 @@ $.widget("ose.diagramme", {
         var that = this;
         this.noeuds = this.element.data('noeuds');
         this.liens = this.element.data('liens');
+        this.typesIntervention = this.element.data('type-intervention');
 
         this.diagramme = this.__makeGraph();
 
         this.formNoeud = this.element.find(".form-noeud");
         this.formNoeud.dialog({
             autoOpen: false,
-            hide: { effect: 'clip', duration: 200 },
-            show: { effect: 'clip', duration: 200 },
+            hide: {effect: 'clip', duration: 200},
+            show: {effect: 'clip', duration: 200},
             title: 'Édition',
             width: 400
         });
@@ -31,8 +33,8 @@ $.widget("ose.diagramme", {
         this.formLien = this.element.find(".form-lien");
         this.formLien.dialog({
             autoOpen: false,
-            hide: { effect: 'clip', duration: 200 },
-            show: { effect: 'clip', duration: 200 },
+            hide: {effect: 'clip', duration: 200},
+            show: {effect: 'clip', duration: 200},
             title: 'Édition',
             width: 280
         });
@@ -49,7 +51,8 @@ $.widget("ose.diagramme", {
         this.element.find('.controles .fullscreen').change(function () { that.fullScreen(); });
         this.element.find('.controles .sauvegarder').click(function () { that.sauvegarder(); });
 
-        this.diagramme.addDiagramListener("ObjectSingleClicked", function (e){
+        this.diagramme.addDiagramListener("ObjectSingleClicked", function (e)
+        {
             var part = e.subject.part;
 
             if (part instanceof go.Link) {
@@ -59,7 +62,11 @@ $.widget("ose.diagramme", {
             }
         });
 
-        this.getFormNoeudBtnCancel().click(function () { that.formNoeud.dialog('close'); that.diagramme.clearSelection();});
+        this.getFormNoeudBtnCancel().click(function ()
+        {
+            that.formNoeud.dialog('close');
+            that.diagramme.clearSelection();
+        });
         this.getFormNoeudBtnSave().click(function ()
         {
             that.applicationEditionNoeud();
@@ -67,7 +74,11 @@ $.widget("ose.diagramme", {
             that.diagramme.clearSelection();
         });
 
-        this.getFormLienBtnCancel().click(function () { that.formLien.dialog('close'); that.diagramme.clearSelection();});
+        this.getFormLienBtnCancel().click(function ()
+        {
+            that.formLien.dialog('close');
+            that.diagramme.clearSelection();
+        });
         this.getFormLienBtnSave().click(function ()
         {
             that.applicationEditionLien();
@@ -106,59 +117,117 @@ $.widget("ose.diagramme", {
     {
         this.editionNoeudId = noeudId;
 
-        this.formNoeud.find('#choix-minimum').val( this.noeuds[noeudId]['choix-minimum'] );
-        this.formNoeud.find('#choix-maximum').val( this.noeuds[noeudId]['choix-maximum'] );
-        this.formNoeud.find('#assiduite').val( this.noeuds[noeudId]['assiduite'] * 100 );
+        this.formNoeud.find('#choix-minimum').val(this.noeuds[noeudId]['choix-minimum']);
+        this.formNoeud.find('#choix-maximum').val(this.noeuds[noeudId]['choix-maximum']);
+        this.formNoeud.find('#assiduite').val(this.noeuds[noeudId]['assiduite'] * 100);
 
-        for( var tid in this.element.data('type-heures')){
+        for (var tid in this.element.data('type-heures')) {
             var val = this.noeuds[noeudId]['effectifs'][tid];
             if (val === undefined) val = 0;
-            this.formNoeud.find('#effectifs-'+tid).val( val );
+            this.formNoeud.find('#effectifs-' + tid).val(val);
         }
-        for( var tid in this.element.data('type-intervention')){
+        for (var tid in this.element.data('type-intervention')) {
             var val = this.noeuds[noeudId]['seuils-ouverture'][tid];
             if (val === undefined) val = 0;
-            this.formNoeud.find('#seuil-ouverture-'+tid).val( val );
+            this.formNoeud.find('#seuil-ouverture-' + tid).val(val);
 
             var val = this.noeuds[noeudId]['seuils-dedoublement'][tid];
             if (val === undefined) val = 0;
-            this.formNoeud.find('#seuil-dedoublement-'+tid).val( val );
+            this.formNoeud.find('#seuil-dedoublement-' + tid).val(val);
         }
 
-        if (this.noeuds[noeudId]['etape']){
+
+        if (this.noeuds[noeudId]['element-pedagogique']){
+            this.formNoeud.find('#choix-assiduite').hide();
+        } else {
+            this.formNoeud.find('#choix-assiduite').show();
+        }
+
+
+        if (this.noeuds[noeudId]['etape']) {
             this.formNoeud.find('#effectifs').show();
-        }else{
+        } else {
             this.formNoeud.find('#effectifs').hide();
         }
 
-        this.formNoeud.dialog({
-            position: {
-                my: "center center",
-                of: this.mousePosEvent
-            },
-            title: this.noeuds[noeudId].libelle + ' (' + this.noeuds[noeudId].code + ')'
-        });
+        if (this.noeuds[noeudId]['etape']) {
+            this.formNoeud.find('#seuils').show();
+            this.formNoeud.find('#seuils .seuil').show();
+        } else if (this.noeuds[noeudId]['types-intervention'].length == 0) {
+            this.formNoeud.find('#seuils').hide();
+        } else {
+            this.formNoeud.find('#seuils').show();
+            this.formNoeud.find('#seuils .seuil').hide();
+            for (ti in this.noeuds[noeudId]['types-intervention']) {
+                this.formNoeud.find('#seuils #seuil-' + this.noeuds[noeudId]['types-intervention'][ti]).show();
+            }
+        }
 
-        this.formNoeud.dialog("open");
+
+        if (this.formNoeud.find('#choix-assiduite').css('display') != 'none'
+            || this.formNoeud.find('#effectifs').css('display') != 'none'
+            || this.formNoeud.find('#seuils').css('display') != 'none'
+        ){
+            this.formNoeud.dialog({
+                position: {
+                    my: "center center",
+                    of: this.mousePosEvent
+                },
+                title: this.noeuds[noeudId].libelle + ' (' + this.noeuds[noeudId].code + ')'
+            });
+
+            this.formNoeud.dialog("open");
+        }
     },
 
 
 
     applicationEditionNoeud: function ()
     {
+        var values = {
+            id: this.editionNoeudId,
+            'choix-minimum': parseInt(this.formNoeud.find('#choix-minimum').val()),
+            'choix-maximum': parseInt(this.formNoeud.find('#choix-maximum').val()),
+            assiduite: parseInt(this.formNoeud.find('#assiduite').val()) / 100,
+        };
+        for (var tid in this.element.data('type-heures')) {
+            values['effectifs'][tid] = parseInt(this.formNoeud.find('#effectifs-' + tid).val());
+        }
+        for (var tid in this.element.data('type-intervention')) {
+            values['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-' + tid).val());
+            values['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-' + tid).val());
+        }
+
+
+
+
         this.noeuds[this.editionNoeudId]['choix-minimum'] = parseInt(this.formNoeud.find('#choix-minimum').val());
         this.noeuds[this.editionNoeudId]['choix-maximum'] = parseInt(this.formNoeud.find('#choix-maximum').val());
         this.noeuds[this.editionNoeudId]['assiduite'] = parseInt(this.formNoeud.find('#assiduite').val()) / 100;
-        for( var tid in this.element.data('type-heures')){
-            this.noeuds[this.editionNoeudId]['effectifs'][tid] = parseInt(this.formNoeud.find('#effectifs-'+tid).val());
+        for (var tid in this.element.data('type-heures')) {
+            this.noeuds[this.editionNoeudId]['effectifs'][tid] = parseInt(this.formNoeud.find('#effectifs-' + tid).val());
         }
-        for( var tid in this.element.data('type-intervention')){
-            this.noeuds[this.editionNoeudId]['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-'+tid).val());
-            this.noeuds[this.editionNoeudId]['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-'+tid).val());
+        for (var tid in this.element.data('type-intervention')) {
+            this.noeuds[this.editionNoeudId]['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-' + tid).val());
+            this.noeuds[this.editionNoeudId]['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-' + tid).val());
         }
-        this.majNoeud(this.editionNoeudId);
+        this.mergeNoeudData(values);
 
         return this;
+    },
+
+
+
+    mergeNoeudData: function( data )
+    {
+        var noeudId = data.id;
+        var noeud = this.noeuds[noeudId];
+
+        if (data['choix-minimum'] !== undefined && data['choix-minimum'] != noeud['choix-minimum']){
+            noeud['choix-minimum'] = data['choix-minimum'];
+        }
+
+        this.majNoeud(noeudId);
     },
 
 
@@ -172,9 +241,11 @@ $.widget("ose.diagramme", {
             data = model.nodeDataArray[i];
             if (data.key == noeudId) {
                 model.setDataProperty(data, 'choix', this.__dataToGraph(noeudId, 'choix'));
-                model.setDataProperty(data, 'groupes', this.__dataToGraph(noeudId, 'groupes'));
                 model.setDataProperty(data, 'assiduite', this.__dataToGraph(noeudId, 'assiduite'));
                 model.setDataProperty(data, 'effectifs', this.__dataToGraph(noeudId, 'effectifs'));
+                for( var ti in this.typesIntervention ){
+                    model.setDataProperty(data, 'groupes-' + ti, this.__dataToGraph(noeudId, 'groupes', ti));
+                }
             }
         }
         model.commitTransaction("majNoeud");
@@ -187,8 +258,8 @@ $.widget("ose.diagramme", {
     {
         this.editionLienId = lienId;
 
-        this.formLien.find('#actif').prop('checked', this.liens[lienId]['actif'] );
-        this.formLien.find('#poids').val( this.liens[lienId]['poids'] );
+        this.formLien.find('#actif').prop('checked', this.liens[lienId]['actif']);
+        this.formLien.find('#poids').val(this.liens[lienId]['poids']);
 
         this.formLien.dialog({
             position: {
@@ -278,6 +349,25 @@ $.widget("ose.diagramme", {
     {
         var that = this;
         var $ = go.GraphObject.make;
+
+        var yellowGradient = {
+            fill: $(go.Brush, "Linear", { 0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)" }),
+            stroke: '#EDD6A3'
+        };
+
+        var grayGradient = {
+            fill: $(go.Brush, "Linear", { 0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)" }),
+            stroke: '#ccc'
+        };
+
+        var blueGradient = {
+            fill: $(go.Brush, "Linear", { 0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)" }),
+            stroke: '#98CED9'
+        };
+
+
+
+
         var d =
             $(go.Diagram, this.element.find('.dessin').attr('id'),
                 {
@@ -305,13 +395,30 @@ $.widget("ose.diagramme", {
                 }
             );
 
-        var defaultNodeTemplate = $(go.Node, "Vertical",
+        var newNodeTemplatePropriete = function (index, propriete, label)
+        {
+            return $(go.Panel, "TableRow", {row: index},
+                $(go.TextBlock, label, {column: 0, font: "8pt \"Open Sans\""}),
+                $(go.TextBlock, new go.Binding("text", propriete), {column: 1, font: "8pt \"Open Sans\""})
+            )
+        };
+
+        var sel = {
+            selectionAdornmentTemplate:
+                $(go.Adornment, "Auto",
+                    $(go.Shape, "RoundedRectangle",
+                        { fill: null, stroke: "dodgerblue", strokeWidth: 4 }),
+                    $(go.Placeholder)
+                )  // end Adornment
+        }
+
+        var defaultNodeTemplate = $(go.Node, "Vertical",sel,
             $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 105},
-                $(go.Shape, "RoundedRectangle", {fill: "#eee", name: "SHAPE", stroke: '#bbb'}),
+                {name: 'panel', width: 110, height: 95},
+                $(go.Shape, "RoundedRectangle", grayGradient),
                 $(go.Panel, "Vertical",
                     {padding: 10},
-                    $(go.TextBlock, new go.Binding("text", "code")),
+                    $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#999"}),
                     $(go.TextBlock,
                         {
                             column: 0,
@@ -336,35 +443,23 @@ $.widget("ose.diagramme", {
                         },
                         $(go.RowColumnDefinition, {column: 0, width: 70}),
                         $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
-
-                        $(go.Panel, "TableRow", {row: 0},
-                            $(go.TextBlock, "Choix", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "choix"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 1},
-                            $(go.TextBlock, "Assiduité", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "assiduite"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 2},
-                            $(go.TextBlock, "Effectifs", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "effectifs"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 3},
-                            $(go.TextBlock, "Groupes", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "groupes"), {column: 1, font: "8pt \"Open Sans\""})
-                        )
+                        [
+                            newNodeTemplatePropriete(0, 'choix', 'Choix'),
+                            newNodeTemplatePropriete(1, 'assiduite', 'Assiduité'),
+                            newNodeTemplatePropriete(2, 'effectifs', 'Effectifs')
+                        ]
                     )
                 )
             )
         );
 
-        var etapeNodeTemplate = $(go.Node, "Vertical",
+        var etapeNodeTemplate = $(go.Node, "Vertical",sel,
             $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 105},
-                $(go.Shape, "RoundedRectangle", {fill: "#FFF6C6", name: "SHAPE", stroke: '#C7AE24'}),
+                {name: 'panel', width: 110, height: 95},
+                $(go.Shape, "RoundedRectangle", yellowGradient),
                 $(go.Panel, "Vertical",
                     {padding: 10},
-                    $(go.TextBlock, new go.Binding("text", "code")),
+                    $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#B39F2D"}),
                     $(go.TextBlock,
                         {
                             column: 0,
@@ -389,35 +484,34 @@ $.widget("ose.diagramme", {
                         },
                         $(go.RowColumnDefinition, {column: 0, width: 70}),
                         $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
-
-                        $(go.Panel, "TableRow", {row: 0},
-                            $(go.TextBlock, "Choix", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "choix"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 1},
-                            $(go.TextBlock, "Assiduité", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "assiduite"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 2},
-                            $(go.TextBlock, "Effectifs", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "effectifs"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 3},
-                            $(go.TextBlock, "Groupes", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "groupes"), {column: 1, font: "8pt \"Open Sans\""})
-                        )
+                        [
+                            newNodeTemplatePropriete(0, 'choix', 'Choix'),
+                            newNodeTemplatePropriete(1, 'assiduite', 'Assiduité'),
+                            newNodeTemplatePropriete(2, 'effectifs', 'Effectifs')
+                        ]
                     )
                 )
             )
         );
 
-        var elementNodeTemplate = $(go.Node, "Vertical",
+        var index = 0;
+        var elementNodeTemplateProprietes = [
+            newNodeTemplatePropriete(index++, 'effectifs', 'Effectifs')
+        ];
+
+        for (var ti in this.typesIntervention) {
+            elementNodeTemplateProprietes.push(
+                newNodeTemplatePropriete(index++, 'groupes-' + ti, 'Groupes ' + this.typesIntervention[ti])
+            );
+        }
+
+        var elementNodeTemplate = $(go.Node, "Vertical",sel,
             $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 105},
-                $(go.Shape, "RoundedRectangle", {fill: "#DAE8FF", name: "SHAPE", stroke: '#587DBA'}),
+                {name: 'panel', width: 110, height: 55 + (elementNodeTemplateProprietes.length) * 13},
+                $(go.Shape, "RoundedRectangle", blueGradient),
                 $(go.Panel, "Vertical",
                     {padding: 10},
-                    $(go.TextBlock, new go.Binding("text", "code")),
+                    $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#3C728D"}),
                     $(go.TextBlock,
                         {
                             column: 0,
@@ -425,7 +519,7 @@ $.widget("ose.diagramme", {
                             width: 100,
                             height: 28,
                             isMultiline: true,
-                            maxLines: 3,
+                            maxLines: 2,
                             stroke: "black",
                             textAlign: "center",
                             font: "9pt \"Open Sans\""
@@ -442,23 +536,7 @@ $.widget("ose.diagramme", {
                         },
                         $(go.RowColumnDefinition, {column: 0, width: 70}),
                         $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
-
-                        $(go.Panel, "TableRow", {row: 0},
-                            $(go.TextBlock, "Choix", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "choix"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 1},
-                            $(go.TextBlock, "Assiduité", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "assiduite"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 2},
-                            $(go.TextBlock, "Effectifs", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "effectifs"), {column: 1, font: "8pt \"Open Sans\""})
-                        ),
-                        $(go.Panel, "TableRow", {row: 3},
-                            $(go.TextBlock, "Groupes", {column: 0, font: "8pt \"Open Sans\""}),
-                            $(go.TextBlock, new go.Binding("text", "groupes"), {column: 1, font: "8pt \"Open Sans\""})
-                        )
+                        elementNodeTemplateProprietes
                     )
                 )
             )
@@ -471,13 +549,13 @@ $.widget("ose.diagramme", {
                 relinkableFrom: false, relinkableTo: false
             },
             $(go.Shape, {
-                stroke:'gray'
-            },new go.Binding("strokeWidth", "poids")),
+                stroke: '#3F3F3F'
+            }, new go.Binding("strokeWidth", "poids")),
             $(go.Shape, {
-                fill:'gray',
-                stroke:'gray',
+                fill: '#3F3F3F',
+                stroke: '#3F3F3F',
                 toArrow: "Standard"
-            },new go.Binding("strokeWidth", "poids"))
+            }, new go.Binding("strokeWidth", "poids"))
         );
 
         var desactivedLinkTemplate = $(go.Link,
@@ -487,14 +565,14 @@ $.widget("ose.diagramme", {
                 relinkableFrom: false, relinkableTo: false
             },
             $(go.Shape, {
-                stroke:'red',
+                stroke: '#CB0000',
                 strokeDashArray: [3, 5]
-            },new go.Binding("strokeWidth", "poids")),
+            }, new go.Binding("strokeWidth", "poids")),
             $(go.Shape, {
-                fill:'red',
-                stroke:'red',
+                fill: '#CB0000',
+                stroke: '#CB0000',
                 toArrow: "Standard"
-            },new go.Binding("strokeWidth", "poids"))
+            }, new go.Binding("strokeWidth", "poids"))
         );
 
         d.nodeTemplateMap = new go.Map("string", go.Node);
@@ -505,9 +583,6 @@ $.widget("ose.diagramme", {
         d.linkTemplateMap = new go.Map("string", go.Link);
         d.linkTemplateMap.add("actif", defaultLinkTemplate);
         d.linkTemplateMap.add("non-actif", desactivedLinkTemplate);
-
-        //d.nodeTemplate = defaultNodeTemplate;
-        //d.linkTemplate = defaultLinkTemplate;
 
         d.model = $(go.GraphLinksModel, {
             nodeDataArray: this.__makeNodeData(),
@@ -524,18 +599,25 @@ $.widget("ose.diagramme", {
         var nd = [];
 
         for (var noeudId in this.noeuds) {
-            nd.push({
+            var n = this.noeuds[noeudId];
+            var d = {
                 key: noeudId,
                 id: noeudId,
-                code: this.noeuds[noeudId].code,
-                libelle: this.noeuds[noeudId].libelle,
+                code: n.code,
+                libelle: n.libelle,
                 choix: this.__dataToGraph(noeudId, 'choix'),
-                groupes: this.__dataToGraph(noeudId, 'groupes'),
                 assiduite: this.__dataToGraph(noeudId, 'assiduite'),
                 effectifs: this.__dataToGraph(noeudId, 'effectifs'),
-                category: this.noeuds[noeudId].etape ? 'etape' : this.noeuds[noeudId]['element-pedagogique'] ? 'element' : 'noeud'
-            });
+                category: n.etape ? 'etape' : n['element-pedagogique'] ? 'element' : 'noeud'
+            };
+
+            for( var ti in this.typesIntervention ){
+                d['groupes-' + ti] = this.__dataToGraph(noeudId, 'groupes', ti);
+            }
+
+            nd.push(d);
         }
+
         return nd;
     },
 
@@ -545,7 +627,7 @@ $.widget("ose.diagramme", {
     {
         var ld = [];
 
-        for(var lienId in this.liens){
+        for (var lienId in this.liens) {
             ld.push({
                 id: lienId,
                 from: this.liens[lienId]['noeud-sup'],
@@ -555,19 +637,17 @@ $.widget("ose.diagramme", {
                 category: (this.liens[lienId].actif) ? 'actif' : 'non-actif'
             });
         }
+
         return ld;
     },
 
 
 
-    __dataToGraph: function (noeudId, propriete)
+    __dataToGraph: function (noeudId, propriete, propriete2)
     {
         switch (propriete) {
             case 'choix':
                 return this.noeuds[noeudId]['choix-minimum'] + ' / ' + this.noeuds[noeudId]['choix-maximum'];
-
-            case 'groupes':
-                return this.noeuds[noeudId]['groupes'];
 
             case 'assiduite':
                 return Formatter.floatToString(this.noeuds[noeudId]['assiduite'] * 100) + '%';
@@ -578,6 +658,42 @@ $.widget("ose.diagramme", {
                     effectifs += this.noeuds[noeudId]['effectifs'][ti];
                 }
                 return effectifs;
+
+            case 'groupes':
+                if (
+                    this.noeuds[noeudId]['types-intervention'].length > 0
+                    && -1 != this.noeuds[noeudId]['types-intervention'].indexOf(parseInt(propriete2))
+                ){
+                    var effectifs = 0;
+                    for (var ti in this.noeuds[noeudId]['effectifs']) {
+                        effectifs += this.noeuds[noeudId]['effectifs'][ti];
+                    }
+
+                    var seuilOuverture = this.noeuds[noeudId]['seuils-ouverture'][propriete2];
+                    if (!seuilOuverture) seuilOuverture = 1;
+
+                    var seuilDedoublement = this.noeuds[noeudId]['seuils-dedoublement'][propriete2];
+                    if (!seuilOuverture) seuilOuverture = 9999;
+
+                    if (effectifs < seuilOuverture) return 0;
+                    return Math.ceil( effectifs / seuilDedoublement );
+                }else{
+                    return '-';
+                }
         }
     }
+});
+
+
+
+
+
+$.widget("ose.chargensFiltre", {
+
+    _create: function ()
+    {
+        var that = this;
+
+    },
+
 });

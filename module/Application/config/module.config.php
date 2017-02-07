@@ -207,9 +207,8 @@ $main = [
         ],
     ],
     'controller_plugins' => [
-        'invokables' => [
-            'em'      => Controller\Plugin\Em::class,
-            'context' => Controller\Plugin\Context::class,
+        'factories' => [
+            'context' => Controller\Plugin\ContextFactory::class,
         ],
     ],
     'view_manager'       => [
@@ -271,7 +270,6 @@ return array_merge_recursive(
     include 'offre-formation.config.php',
     include 'contrat.config.php',
     include 'validation.config.php',
-
     include 'droits.config.php',
     include 'agrement.config.php',
     include 'formule.config.php',
@@ -282,5 +280,5 @@ return array_merge_recursive(
     include 'pilotage.config.php',
     include 'budget.config.php',
     include 'parametre.config.php',
-    include 'charge.config.php'
+    include 'chargens.config.php'
 );

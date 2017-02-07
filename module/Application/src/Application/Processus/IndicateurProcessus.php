@@ -5,12 +5,8 @@ namespace Application\Processus;
 use Application\Entity\Db\NotificationIndicateur;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
-use Application\View\Renderer\PhpRenderer;
+use Zend\View\Renderer\PhpRenderer;
 use UnicaenApp\Controller\Plugin\Mail;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Mime\Part as MimePart;
 use Zend\Mime\Mime;
 use Zend\Mail\Message as MailMessage;
@@ -22,12 +18,28 @@ use Zend\Mime\Message as MimeMessage;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
+class IndicateurProcessus extends AbstractProcessus
 {
-    use ServiceLocatorAwareTrait;
     use NotificationIndicateurAwareTrait;
     use ContextAwareTrait;
-    use EntityManagerAwareTrait;
+
+    /**
+     * @var PhpRenderer
+     */
+    private $renderer;
+
+    /**
+     * @var Mail
+     */
+    private $mail;
+
+
+
+    public function __construct(PhpRenderer $renderer, Mail $mail)
+    {
+        $this->renderer = $renderer;
+        $this->mail     = $mail;
+    }
 
 
 
@@ -39,7 +51,7 @@ class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManager
             $message = $this->creerMailNotification($ni);
 
             if ($message) {
-                $this->getMail()->send($message);
+                $this->mail->send($message);
 
                 if (!$force) {
                     // enregistrement de la date de dernière notification
@@ -50,7 +62,7 @@ class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManager
                 }
             }
         }
-        
+
         return $nis;
     }
 
@@ -65,10 +77,7 @@ class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManager
 
         if (0 == $count) return null; // pas de notification pour cet indicateur
 
-        $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();
-        /* @var $renderer PhpRenderer */
-
-        $html          = $renderer->render('application/indicateur/mail/notification', [
+        $html          = $this->renderer->render('application/indicateur/mail/notification', [
             'notification' => $notification,
         ]);
         $part          = new MimePart($html);
@@ -81,26 +90,16 @@ class IndicateurProcessus implements ServiceLocatorAwareInterface, EntityManager
         $message = new MailMessage();
         $message->setEncoding('UTF-8')
             ->setFrom('ne_pas_repondre@unicaen.fr', "Application OSE")
-            ->setSubject( sprintf(
+            ->setSubject(sprintf(
                 "[OSE %s, n°%s: Notif %s] %s",
                 $this->getServiceContext()->getAnnee(),
                 $notification->getIndicateur()->getNumero(),
                 $notification->getFrequenceToString(),
                 strip_tags($notification->getIndicateur()->getLibelle($structure))
-            ) )
+            ))
             ->setBody($body)
             ->addTo($notification->getAffectation()->getPersonnel()->getEmail(), (string)$notification->getAffectation()->getPersonnel());
 
         return $message;
-    }
-
-
-
-    /**
-     * @return Mail
-     */
-    private function getMail()
-    {
-        return $this->getServiceLocator()->get('ControllerPluginManager')->get('mail');
     }
 }

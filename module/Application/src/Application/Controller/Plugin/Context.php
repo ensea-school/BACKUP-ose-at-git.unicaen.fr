@@ -3,9 +3,8 @@
 namespace Application\Controller\Plugin;
 
 use Application\Service\Traits\IntervenantAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\Mvc\Controller\Plugin\Params;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use LogicException;
 use RuntimeException;
 
@@ -21,9 +20,9 @@ use RuntimeException;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see Params
  */
-class Context extends Params implements ServiceLocatorAwareInterface
+class Context extends Params
 {
-    use ServiceLocatorAwareTrait;
+    use EntityManagerAwareTrait;
     use IntervenantAwareTrait;
 
     /**
@@ -108,8 +107,6 @@ class Context extends Params implements ServiceLocatorAwareInterface
             }
         }
 
-        $em = $this->getServiceLocator()->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
         /* Cas particulier pour les intervenants : import implicite */
         if ('intervenant' === $target && $value) {
             $value = $this->intervenantFromSourceCode($value);
@@ -125,7 +122,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
             if (!is_object($value) && ! is_array($value)){
                 $id = (int)$value;
                 if ($id){
-                    $value = $em->find($className, $id);
+                    $value = $this->getEntityManager()->find($className, $id);
                     if (!$value && $this->mandatory) {
                         throw new RuntimeException($className." introuvable avec cet id : $id.");
                     }

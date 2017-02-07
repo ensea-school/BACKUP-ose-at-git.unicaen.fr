@@ -371,7 +371,7 @@ class PaiementController extends AbstractController
 
     protected function etatPaiementPdf($typeIntervenant, $etat, $structure, $periode, $etatPaiement)
     {
-        $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
+        $exp = $this->pdf();
 
         switch ($etat) {
             case MiseEnPaiement::A_METTRE_EN_PAIEMENT   :

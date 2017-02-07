@@ -8,6 +8,8 @@ use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Filter\StringFromFloat;
+use Application\Service\Traits\MiseEnPaiementAwareTrait;
+use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
@@ -25,6 +27,8 @@ class Intervenant extends AbstractEntityService
     use StatutIntervenantAwareTrait;
     use ImportProcessusAwareTrait;
     use QueryGeneratorServiceAwareTrait;
+    use MiseEnPaiementAwareTrait;
+    use MiseEnPaiementIntervenantStructureAwareTrait;
 
 
 
@@ -110,16 +114,12 @@ class Intervenant extends AbstractEntityService
 
     public function finderByMiseEnPaiement(StructureEntity $structure = null, PeriodeEntity $periode = null, QueryBuilder $qb = null, $alias = null)
     {
-        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
-        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
-
-        $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
-        /* @var $serviceMiseEnPaiement MiseEnPaiement */
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->join($serviceMiseEnPaiement, $qb, 'miseEnPaiement');
+        $serviceMIS->join($this->getServiceMiseEnPaiement(), $qb, 'miseEnPaiement');
 
         if ($structure) {
             $serviceMIS->finderByStructure($structure, $qb);

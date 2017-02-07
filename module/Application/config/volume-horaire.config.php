@@ -77,7 +77,6 @@ return [
             'ApplicationVolumeHoraireReferentiel'     => Service\VolumeHoraireReferentiel::class,
             'ApplicationTypeVolumeHoraire'            => Service\TypeVolumeHoraire::class,
             'ApplicationEtatVolumeHoraire'            => Service\EtatVolumeHoraire::class,
-            'FormVolumeHoraireSaisieMultipleHydrator' => Form\VolumeHoraire\SaisieMultipleHydrator::class,
         ],
     ],
     'view_helpers'    => [

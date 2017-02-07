@@ -1,15 +1,16 @@
 <?php
 
-namespace Application\Entity\Charge;
+namespace Application\Entity\Chargens;
 
+use Application\Entity\Db\Scenario;
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\TypeIntervention;
-use Application\Provider\Charge\ChargeProvider;
+use Application\Provider\Chargens\ChargensProvider;
 
 class ScenarioNoeud
 {
     /**
-     * @var ChargeProvider
+     * @var ChargensProvider
      */
     private $provider;
 
@@ -25,7 +26,7 @@ class ScenarioNoeud
 
 
 
-    public function __construct(ChargeProvider $provider, array $data)
+    public function __construct(ChargensProvider $provider, array $data)
     {
         $this->provider = $provider;
         $this->data     = $data;
@@ -60,38 +61,13 @@ class ScenarioNoeud
     /**
      * @param bool $object
      *
-     * @return \Application\Entity\Db\Scenario|int
+     * @return Scenario|int
      */
     public function getScenario($object = true)
     {
         $id = (int)$this->data['SCENARIO_ID'];
 
         return $object ? $this->provider->getScenario($id) : $id;
-    }
-
-
-
-    /**
-     * @return integer
-     */
-    public function getGroupes()
-    {
-        return (int)$this->data['GROUPES'];
-    }
-
-
-
-    /**
-     * @param integer $groupes
-     *
-     * @return $this
-     */
-    public function setGroupes($groupes)
-    {
-        $this->data['GROUPES']    = (string)(int)$groupes;
-        $this->changes['GROUPES'] = $this->data['GROUPES'];
-
-        return $this;
     }
 
 

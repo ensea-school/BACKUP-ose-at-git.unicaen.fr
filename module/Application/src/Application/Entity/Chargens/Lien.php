@@ -1,13 +1,13 @@
 <?php
 
-namespace Application\Entity\Charge;
+namespace Application\Entity\Chargens;
 
-use Application\Provider\Charge\ChargeProvider;
+use Application\Provider\Chargens\ChargensProvider;
 
 class Lien
 {
     /**
-     * @var ChargeProvider
+     * @var ChargensProvider
      */
     private $provider;
 
@@ -18,7 +18,7 @@ class Lien
 
 
 
-    public function __construct(ChargeProvider $provider, array $data)
+    public function __construct(ChargensProvider $provider, array $data)
     {
         $this->provider = $provider;
         $this->data     = $data;

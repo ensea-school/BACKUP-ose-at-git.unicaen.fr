@@ -366,8 +366,8 @@ class ContratController extends AbstractController
         ];
 
         // Création du pdf, complétion et envoi au navigateur
-        $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
-        $exp->setHeaderSubtitle($contratToString)
+        $exp = $this->pdf()
+            ->setHeaderSubtitle($contratToString)
             ->setMarginBottom(25)
             ->setMarginTop(25);
         $exp->setFooterTitle($contratToString . ' - ' . $intervenant->getAnnee());

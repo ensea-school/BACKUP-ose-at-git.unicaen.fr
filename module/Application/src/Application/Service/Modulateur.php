@@ -4,6 +4,8 @@ namespace Application\Service;
 
 use Application\Entity\Db\Modulateur as ModulateurEntity;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
+use Application\Service\Traits\ElementModulateurAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -14,6 +16,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Modulateur extends AbstractEntityService
 {
+    use ElementPedagogiqueAwareTrait;
+    use ElementModulateurAwareTrait;
 
     /**
      * Liste de tous les modulateurs
@@ -35,48 +39,55 @@ class Modulateur extends AbstractEntityService
         return \Application\Entity\Db\Modulateur::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'modu';
     }
 
 
-    public function finderByElementPedagogique(ElementPedagogiqueEntity $element, QueryBuilder $qb=null, $alias=null)
+
+    public function finderByElementPedagogique(ElementPedagogiqueEntity $element, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique'); /* @var $serviceElementPedagogique ElementPedagogique */
-        $serviceElementModulateur = $this->getServiceLocator()->get('ApplicationElementModulateur'); /* @var $serviceElementModulateur ElementModulateur */
-//        $serviceTypeModulateur = $this->getServiceLocator()->get('ApplicationTypeModulateur'); /* @var $serviceTypeModulateur TypeModulateur */
+        $serviceElementModulateur = $this->getServiceElementModulateur();
 
-        $this->join( $serviceElementModulateur, $qb, 'elementModulateur' );
-//        $this->join( $serviceTypeModulateur, $qb, 'typeModulateur' ); // pour éviter des sous-reqûetes intempestives par la suite !!
-        $serviceElementModulateur->join( $serviceElementPedagogique, $qb, 'element' );
-        $qb->andWhere($serviceElementPedagogique->getAlias().'.id = '.$element->getId());
+        $this->join($serviceElementModulateur, $qb, 'elementModulateur');
+        $serviceElementModulateur->join($this->getServiceElementPedagogique(), $qb, 'element');
+        $qb->andWhere($this->getServiceElementPedagogique()->getAlias() . '.id = ' . $element->getId());
 
-        $serviceElementModulateur->finderByContext( $qb );
+        $serviceElementModulateur->finderByContext($qb);
 
         return $qb;
     }
+
 
 
     /**
      * Retourne la liste des modulateurs
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
+     *
      * @return ModulateurEntity[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
         $qb->addOrderBy("$alias.libelle");
-        return parent::getList($qb, $alias);
+
+        return $qb;
     }
+
+
 
     /**
      * Retourne la liste de tous les modulateurs
@@ -85,9 +96,10 @@ class Modulateur extends AbstractEntityService
      */
     public function getAll()
     {
-        if (! $this->all){
+        if (!$this->all) {
             $this->all = $this->getList();
         }
+
         return $this->all;
     }
 }

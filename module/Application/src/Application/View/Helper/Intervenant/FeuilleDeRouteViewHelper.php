@@ -10,20 +10,18 @@ use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\Util;
 use UnicaenApp\View\Helper\TagViewHelper;
-use Zend\View\Helper\AbstractHtmlElement;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 
 /**
  * Description of FeuilleDeRouteViewHelper
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class FeuilleDeRouteViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+class FeuilleDeRouteViewHelper extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use WorkflowServiceAwareTrait;
     use IntervenantAwareTrait;
     use ContextAwareTrait;

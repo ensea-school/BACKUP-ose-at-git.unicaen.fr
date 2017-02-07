@@ -8,6 +8,7 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset;
+use Application\Form\OffreFormation\EtapeCentreCout\Traits\ElementCentreCoutFieldsetAwareTrait;
 use Application\Service\Traits\CentreCoutAwareTrait;
 use RuntimeException;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -22,6 +23,7 @@ use Zend\Form\Element\Select;
 class EtapeCentreCoutForm extends AbstractForm
 {
     use CentreCoutAwareTrait;
+    use ElementCentreCoutFieldsetAwareTrait;
 
     /**
      * Etape
@@ -87,7 +89,7 @@ class EtapeCentreCoutForm extends AbstractForm
 
     private function createFieldset(ElementPedagogique $element)
     {
-        $f = $this->getServiceLocator()->get('ElementCentreCoutFieldset');
+        $f = $this->getFieldsetOffreFormationEtapeCentreCoutElementCentreCout();
         /* @var $f ElementCentreCoutFieldset */
         $f->setName('EL' . $element->getId());
         $f->setElementPedagogique($element);

@@ -9,9 +9,9 @@ use BjyAuthorize\Provider\Role\ProviderInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
+use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -25,12 +25,12 @@ use Application\Service\Traits\IntervenantAwareTrait;
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
-    use ServiceLocatorAwareTrait;
     use StatutIntervenantAwareTrait;
     use SessionContainerTrait;
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
     use PrivilegeProviderAwareTrait;
+    use UserContextServiceAwareTrait;
 
     /**
      * @var array
@@ -104,11 +104,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $r                      = new Role();
         $roles[$r->getRoleId()] = $r;
 
-        $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
-        /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
-
-
-        if ($ldapUser = $serviceAuthUserContext->getLdapUser()) {
+        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
             $supannEmpId = (integer)$ldapUser->getSupannEmpId();
             $intervenant     = $this->getServiceIntervenant()->getBySourceCode($supannEmpId, null, false);
             $personnel       = $this->getServicePersonnel()->getBySourceCode($supannEmpId);

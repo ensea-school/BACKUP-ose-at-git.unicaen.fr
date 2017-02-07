@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Provider\Charge;
+namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteur;
 use Zend\ServiceManager\FactoryInterface;
@@ -11,13 +11,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ChargeProviderFactory implements FactoryInterface
+class ChargensProviderFactory implements FactoryInterface
 {
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @return ChargeProvider
+     * @return ChargensProvider
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -26,9 +26,9 @@ class ChargeProviderFactory implements FactoryInterface
         $bdd = new BddConnecteur();
         $bdd->setEntityManager($em);
 
-        $chargeProvider = new ChargeProvider();
-        $chargeProvider->setBdd($bdd);
+        $chargensProvider = new ChargensProvider();
+        $chargensProvider->setBdd($bdd);
 
-        return $chargeProvider;
+        return $chargensProvider;
     }
 }

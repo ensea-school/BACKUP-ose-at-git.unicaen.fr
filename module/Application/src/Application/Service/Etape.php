@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
@@ -13,6 +14,9 @@ use Application\Entity\Db\Etape as EtapeEntity;
  * Description of ElementPedagogique
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method EtapeEntity get($id)
+ * @method EtapeEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
  */
 class Etape extends AbstractEntityService
 {
@@ -22,6 +26,7 @@ class Etape extends AbstractEntityService
     use TypeFormationAwareTrait;
     use GroupeTypeFormationAwareTrait;
     use StructureAwareTrait;
+    use ContextAwareTrait;
 
 
 
@@ -102,19 +107,33 @@ class Etape extends AbstractEntityService
 
 
     /**
-     * Retourne la liste des étapes
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @param string|null       $alias
+     * @param \Doctrine\ORM\QueryBuilder       $qb
+     * @param string                           $alias
      *
-     * @return \Application\Entity\Db\Etape[]
+     * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $this->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb, $alias );
+        if ($cStructure = $this->getServiceContext()->getStructure()){
+            $this->finderByStructure( $cStructure, $qb, $alias );
+        }
+
+        return $qb;
+    }
+
+
+
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
         $qb->addOrderBy("$alias.libelle");
 
-        return parent::getList($qb, $alias);
+        return $qb;
     }
 
 

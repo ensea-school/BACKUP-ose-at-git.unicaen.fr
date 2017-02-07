@@ -3,11 +3,8 @@
 namespace Application\View\Helper\Service;
 
 use Application\Provider\Privilege\Privileges;
-use Zend\View\Helper\AbstractHtmlElement;
+use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\Service;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Entity\Db\Interfaces\ServiceAwareInterface;
 use Application\Entity\Db\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 
@@ -16,9 +13,8 @@ use Application\Service\Traits\ContextAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ServiceAwareInterface
+class Ligne extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use ServiceAwareTrait;
     use ContextAwareTrait;
 

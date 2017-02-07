@@ -17,19 +17,16 @@ use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\IntervenantSuppressionData;
 use Application\Entity\Traits\IntervenantSuppressionDataAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
 
 /**
  * Description of EntityViewHelper
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class IntervenantSuppressionDataViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+class IntervenantSuppressionDataViewHelper extends AbstractViewHelper
 {
     use IntervenantSuppressionDataAwareTrait;
-    use ServiceLocatorAwareTrait;
 
 
 

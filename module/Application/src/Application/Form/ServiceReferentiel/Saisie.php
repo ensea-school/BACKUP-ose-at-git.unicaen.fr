@@ -4,8 +4,11 @@ namespace Application\Form\ServiceReferentiel;
 
 use Application\Entity\Db\Service;
 use Application\Form\AbstractForm;
+use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
 use Zend\Form\FormInterface;
 use Zend\Form\Element\Hidden;
+use Zend\Stdlib\Hydrator\HydratorInterface;
+
 
 /**
  * Description of Saisie
@@ -14,6 +17,7 @@ use Zend\Form\Element\Hidden;
  */
 class Saisie extends AbstractForm
 {
+    use SaisieFieldsetAwareTrait;
 
     public function __construct($name = null, $options = [])
     {
@@ -39,13 +43,12 @@ class Saisie extends AbstractForm
 
     public function init()
     {
-        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceReferentielSaisieHydrator'));
+        $hydrator = new SaisieHydrator();
+        $this->setHydrator($hydrator);
 
         $this->setAttribute('class', 'service-referentiel-form');
 
-        $saisie = $this->getServiceLocator()->get('ServiceReferentielSaisieFieldset'); /* @var $saisie SaisieFieldset */
-        //$saisie->setUseAsBaseFieldset(true);
-        $this->add($saisie);
+        $this->add($this->getFieldsetServiceReferentielSaisie());
 
         $this->add(new Hidden('type-volume-horaire'));
 
@@ -80,5 +83,44 @@ class Saisie extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [];
+    }
+}
+
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class SaisieHydrator implements HydratorInterface
+{
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array $data
+     * @param  \Application\Entity\Db\ServiceReferentiel $object
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $object = $data['service'];
+
+        return $object;
+    }
+
+    /**
+     * Extract values from an object
+     *
+     * @param  \Application\Entity\Db\ServiceReferentiel $object
+     * @return array
+     */
+    public function extract($object)
+    {
+        $data = [];
+        $data['service'] = $object;
+
+        return $data;
     }
 }

@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\IntervenantAwareTrait;
+use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -12,9 +13,10 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractController
 {
-    use \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\AnneeAwareTrait,
-        IntervenantAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\AnneeAwareTrait;
+    use IntervenantAwareTrait;
+    use UserContextServiceAwareTrait;
 
 
 
@@ -59,13 +61,4 @@ class IndexController extends AbstractController
         return [];
     }
 
-
-
-    /**
-     * @return UserContext
-     */
-    private function getServiceUserContext()
-    {
-        return $this->getServiceLocator()->get('authUserContext');
-    }
 }

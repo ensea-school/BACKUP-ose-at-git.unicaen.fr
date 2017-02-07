@@ -4,7 +4,6 @@ namespace Application\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Interfaces\StructureAwareInterface;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
@@ -12,7 +11,7 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class StructureViewHelper extends AbstractHelper implements StructureAwareInterface
+class StructureViewHelper extends AbstractHelper
 {
     use StructureAwareTrait;
 

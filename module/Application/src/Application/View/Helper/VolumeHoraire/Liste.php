@@ -4,10 +4,10 @@ namespace Application\View\Helper\VolumeHoraire;
 
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Provider\Privilege\Privileges;
-use Zend\View\Helper\AbstractHelper;
+use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\VolumeHoraireListe;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 
 
@@ -16,9 +16,10 @@ use Application\Entity\Db\TypeIntervention;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
+class Liste extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceServiceAwareTrait;
+    use TypeInterventionAwareTrait;
 
     /**
      * @var VolumeHoraireListe
@@ -169,7 +170,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
                     $out .= '<tr>';
                     $out .= "<td>".$this->renderPeriode($periode)."</td>\n";
                 }
-                
+
                 foreach( $this->typesIntervention as $typeIntervention ){
                     $vhl->setMotifNonPaiement($motifNonPaiement)
                         ->setTypeIntervention($typeIntervention);
@@ -278,22 +279,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
             return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
         });
         return $periodes;
-    }
-
-    /**
-     * @return \Application\Service\ServiceService
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
     }
 
 }

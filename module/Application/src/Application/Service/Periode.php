@@ -5,6 +5,9 @@ namespace Application\Service;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
 
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\MiseEnPaiementAwareTrait;
+use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -15,6 +18,10 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Periode extends AbstractEntityService
 {
+    use MiseEnPaiementAwareTrait;
+    use IntervenantAwareTrait;
+    use MiseEnPaiementIntervenantStructureAwareTrait;
+
     /**
      * Périodes d'enseignement
      *
@@ -91,26 +98,19 @@ class Periode extends AbstractEntityService
 
     public function finderByMiseEnPaiement(StructureEntity $structure = null, QueryBuilder $qb = null, $alias = null)
     {
-        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
-        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
-
-        $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
-        /* @var $serviceMiseEnPaiement MiseEnPaiement */
-
-        $serviceIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
-        /* @var $serviceIntervenant Intervenant */
+        $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $this->join($serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias);
-        $serviceMIS->join($serviceMiseEnPaiement, $qb, 'miseEnPaiement');
-        $serviceMIS->join($serviceIntervenant, $qb, 'intervenant', false);
+        $serviceMIS->join($this->getServiceMiseEnPaiement(), $qb, 'miseEnPaiement');
+        $serviceMIS->join($this->getServiceIntervenant(), $qb, 'intervenant', false);
 
         if ($structure) {
             $serviceMIS->finderByStructure($structure, $qb);
         }
 
-        $serviceIntervenant->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
+        $this->getServiceIntervenant()->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
         return $qb;
     }

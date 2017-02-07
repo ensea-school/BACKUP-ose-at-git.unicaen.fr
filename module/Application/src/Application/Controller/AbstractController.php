@@ -4,12 +4,13 @@ namespace Application\Controller;
 
 use Application\Exception\DbException;
 use Application\Form\Supprimer;
+use Doctrine\ORM\EntityManager;
+use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
  * Description of AbstractController
  *
- * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
  *
  */
@@ -40,4 +41,23 @@ abstract class AbstractController extends AbstractActionController
         return $form;
     }
 
+
+
+    /**
+     * @return EntityManager
+     */
+    protected function em()
+    {
+        return $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    }
+
+
+
+    /**
+     * @return Pdf
+     */
+    protected function pdf()
+    {
+        return new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
+    }
 }

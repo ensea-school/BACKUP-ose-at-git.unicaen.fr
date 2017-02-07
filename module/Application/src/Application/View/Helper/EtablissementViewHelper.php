@@ -4,7 +4,6 @@ namespace Application\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Etablissement;
-use Application\Entity\Db\Interfaces\EtablissementAwareInterface;
 use Application\Entity\Db\Traits\EtablissementAwareTrait;
 
 /**
@@ -12,7 +11,7 @@ use Application\Entity\Db\Traits\EtablissementAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtablissementViewHelper extends AbstractHelper implements EtablissementAwareInterface
+class EtablissementViewHelper extends AbstractHelper
 {
     use EtablissementAwareTrait;
 

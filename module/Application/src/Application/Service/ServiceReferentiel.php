@@ -119,11 +119,8 @@ class ServiceReferentiel extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
-            $serviceVolumeHoraireReferentiel = $this->getServiceLocator()->get('applicationVolumeHoraireReferentiel');
-            /* @var $serviceVolumeHoraireReferentiel VolumeHoraireReferentiel */
-
-            $this->join($serviceVolumeHoraireReferentiel, $qb, 'volumeHoraireReferentiel');
-            $serviceVolumeHoraireReferentiel->finderByTypeVolumeHoraire($typeVolumeHoraire, $qb);
+            $this->join($this->getServiceVolumeHoraireReferentiel(), $qb, 'volumeHoraireReferentiel');
+            $this->getServiceVolumeHoraireReferentiel()->finderByTypeVolumeHoraire($typeVolumeHoraire, $qb);
         }
 
         return $qb;

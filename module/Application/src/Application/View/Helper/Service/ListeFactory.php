@@ -21,6 +21,7 @@ class ListeFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $helper = new Liste();
+        $helper->setServiceLocator($serviceLocator);
         return $helper;
     }
 }

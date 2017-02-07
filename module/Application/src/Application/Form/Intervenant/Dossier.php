@@ -4,24 +4,21 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
+use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Form;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Dossier extends Form implements ServiceLocatorAwareInterface
+class Dossier extends AbstractForm
 {
-    use ServiceLocatorAwareTrait;
     use StatutIntervenantAwareTrait;
     use ContextAwareTrait;
     use DossierAwareTrait;
@@ -197,6 +194,19 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
         }
 
         return $this;
+    }
+
+
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        return [];
     }
 
 }

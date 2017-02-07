@@ -1,13 +1,15 @@
 <?php
 
-namespace Application\Entity\Charge;
+namespace Application\Entity\Chargens;
 
-use Application\Provider\Charge\ChargeProvider;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etape;
+use Application\Provider\Chargens\ChargensProvider;
 
 class Noeud
 {
     /**
-     * @var ChargeProvider
+     * @var ChargensProvider
      */
     private $provider;
 
@@ -18,7 +20,7 @@ class Noeud
 
 
 
-    public function __construct(ChargeProvider $provider, array $data)
+    public function __construct(ChargensProvider $provider, array $data)
     {
         $this->provider = $provider;
         $this->data     = $data;
@@ -59,7 +61,7 @@ class Noeud
     /**
      * @param bool $object
      *
-     * @return \Application\Entity\Db\ElementPedagogique|int
+     * @return Etape|int
      */
     public function getEtape($object = true)
     {
@@ -73,7 +75,7 @@ class Noeud
     /**
      * @param bool $object
      *
-     * @return \Application\Entity\Db\ElementPedagogique|int
+     * @return ElementPedagogique|int
      */
     public function getElementPedagogique($object = true)
     {
@@ -104,26 +106,23 @@ class Noeud
 
 
 
-    /**
-     * @return integer
-     */
-    public function getGroupes()
+    public function getTypesIntervention($object = true)
     {
-        return $this->provider->getScenarioNoeud($this)->getGroupes();
-    }
+        $ti = isset($this->data['TYPES_INTERVENTION']) ? $this->data['TYPES_INTERVENTION'] : [];
 
+        $res = [];
+        if (!empty($ti)) {
+            foreach ($ti as $i => $t) {
+                if ($object) {
+                    $t                = $this->provider->getTypeIntervention($t);
+                    $res[$t->getId()] = $t;
+                } else {
+                    $res[(int)$t] = (int)$t;
+                }
+            }
+        }
 
-
-    /**
-     * @param integer $groupes
-     *
-     * @return Noeud
-     */
-    public function setGroupes($groupes)
-    {
-        $this->provider->getScenarioNoeud($this)->setGroupes($groupes);
-
-        return $this;
+        return $res;
     }
 
 
@@ -286,13 +285,13 @@ class Noeud
             'libelle'             => $this->getLibelle(),
             'choix-minimum'       => $this->getChoixMinimum(),
             'choix-maximum'       => $this->getChoixMaximum(),
-            'groupes'             => $this->getGroupes(),
             'assiduite'           => $this->getAssiduite(),
             'effectifs'           => $this->getEffectif(),
             'seuils-ouverture'    => $this->getSeuilOuverture(),
             'seuils-dedoublement' => $this->getSeuilDedoublement(),
             'etape'               => $this->getEtape(false),
             'element-pedagogique' => $this->getElementPedagogique(false),
+            'types-intervention'  => array_values($this->getTypesIntervention(false)),
         ];
     }
 }

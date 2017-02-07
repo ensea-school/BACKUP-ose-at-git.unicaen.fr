@@ -1,30 +1,29 @@
 <?php
 
-namespace Application\View\Helper\Charge;
+namespace Application\View\Helper\Chargens;
 
-use Application\Provider\Charge\ChargeProvider;
+use Application\Form\Chargens\Traits\FiltreFormAwareTrait;
+use Application\Provider\Chargens\ChargensProvider;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Application\View\Helper\AbstractViewHelper;
 use Zend\View\Resolver\TemplatePathStack;
 
 /**
- * Description of DiagrammeViewHelper
+ * Description of ChargensViewHelper
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class DiagrammeViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+class ChargensViewHelper extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use TypeHeuresAwareTrait;
     use TypeInterventionAwareTrait;
+    use FiltreFormAwareTrait;
 
     private $buffer = [];
 
     /**
-     * @var ChargeProvider
+     * @var ChargensProvider
      */
     private $provider;
 
@@ -34,7 +33,7 @@ class DiagrammeViewHelper extends AbstractHtmlElement implements ServiceLocatorA
      *
      * @return self
      */
-    public function __invoke(ChargeProvider $provider)
+    public function __invoke(ChargensProvider $provider)
     {
         $this->getView()->resolver()->attach(new TemplatePathStack(['script_paths' => [__DIR__ . "/view"]]));
 
@@ -67,7 +66,7 @@ class DiagrammeViewHelper extends AbstractHtmlElement implements ServiceLocatorA
         $t = $this->getView()->tag();
 
         return (string)$t('div', [
-            'class'                  => 'diagramme',
+            'class'                  => 'chargens',
             'data-noeuds'            => $this->provider->noeudsToArray(),
             'data-liens'            => $this->provider->liensToArray(),
             'data-type-heures'       => $this->getTypeHeuresArray(),
@@ -82,7 +81,7 @@ class DiagrammeViewHelper extends AbstractHtmlElement implements ServiceLocatorA
                 ])
             )
             . $t('div', [
-                'id'    => uniqid('diagramme-'),
+                'id'    => uniqid('chargens-'),
                 'class' => 'dessin',
             ])->text()
         );

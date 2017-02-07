@@ -9,12 +9,9 @@ use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\Service;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Entity\Db\TypeIntervention;
-use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
@@ -23,9 +20,8 @@ use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeH
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface, TypeVolumeHoraireAwareInterface
+class Liste extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use ContextAwareTrait;
     use ServiceAwareTrait;

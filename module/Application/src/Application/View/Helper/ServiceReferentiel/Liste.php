@@ -5,13 +5,11 @@ namespace Application\View\Helper\ServiceReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Entity\Db\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
@@ -20,14 +18,14 @@ use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeH
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface, TypeVolumeHoraireAwareInterface
+class Liste extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use ServiceAwareTrait;
     use ServiceTypeVolumeHoraireAwareTrait;
     use ServiceReferentielAwareTrait;
+    use LocalContextAwareTrait;
 
     /**
      *
@@ -123,10 +121,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     public function getTotalRefreshUrl()
     {
-        $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
-
-        if (($intervenant = $localContext->getIntervenant())) {
+        if (($intervenant = $this->getServiceLocalContext()->getIntervenant())) {
             if ($this->isInRealise()) {
                 $route = 'intervenant/referentiel-realise';
             } else {

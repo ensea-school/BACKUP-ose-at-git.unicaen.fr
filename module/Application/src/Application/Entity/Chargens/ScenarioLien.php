@@ -1,13 +1,14 @@
 <?php
 
-namespace Application\Entity\Charge;
+namespace Application\Entity\Chargens;
 
-use Application\Provider\Charge\ChargeProvider;
+use Application\Entity\Db\Scenario;
+use Application\Provider\Chargens\ChargensProvider;
 
 class ScenarioLien
 {
     /**
-     * @var ChargeProvider
+     * @var ChargensProvider
      */
     private $provider;
 
@@ -23,7 +24,7 @@ class ScenarioLien
 
 
 
-    public function __construct(ChargeProvider $provider, array $data)
+    public function __construct(ChargensProvider $provider, array $data)
     {
         $this->provider = $provider;
         $this->data     = $data;
@@ -58,7 +59,7 @@ class ScenarioLien
     /**
      * @param bool $object
      *
-     * @return \Application\Entity\Db\Scenario|int
+     * @return Scenario|int
      */
     public function getScenario($object = true)
     {

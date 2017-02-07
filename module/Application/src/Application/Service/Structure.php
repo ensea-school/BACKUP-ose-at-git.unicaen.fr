@@ -15,6 +15,10 @@ use Application\Entity\Db\Structure as EntityStructure;
  * Description of Structure
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method EntityStructure get($id)
+ * @method EntityStructure[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method EntityStructure newEntity()
  */
 class Structure extends AbstractEntityService
 {

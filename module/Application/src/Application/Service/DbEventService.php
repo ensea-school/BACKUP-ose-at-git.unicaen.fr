@@ -3,19 +3,13 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of DbEventService
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class DbEventService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface {
-    use ServiceLocatorAwareTrait;
-    use EntityManagerAwareTrait;
+class DbEventService extends AbstractService {
 
     /**
      * @return AbstractEntityService

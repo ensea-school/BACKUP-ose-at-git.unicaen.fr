@@ -9,6 +9,12 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Zend\Stdlib\Hydrator\HydratorInterface;
+
+
+
+
 
 /**
  * Description of ElementPedagogiqueRechercheFieldset
@@ -19,6 +25,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
     use EntityManagerAwareTrait;
     use ContextAwareTrait;
     use SessionContainerTrait;
+    use ElementPedagogiqueAwareTrait;
 
     protected $structureName    = 'structure';
 
@@ -44,7 +51,10 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
 
     public function init()
     {
-        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'))
+        $hydrator = new ElementPedagogiqueRechercheHydrator;
+        $hydrator->setServiceElementPedagogique( $this->getServiceElementPedagogique() );
+
+        $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ElementPedagogique::class);
 
         $this->add([
@@ -338,5 +348,61 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
                 'required' => false,
             ],
         ];
+    }
+}
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class ElementPedagogiqueRechercheHydrator implements HydratorInterface
+{
+    use ElementPedagogiqueAwareTrait;
+
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array $data
+     * @param  object $object
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $id = (int)$data['element']['id'];
+        if ($id){
+            $object = $this->getServiceElementPedagogique()->get($id);
+            return $object;
+        }
+        return null;
+    }
+
+    /**
+     * Extract values from an object
+     *
+     * @param  \Application\Entity\Db\ElementPedagogique $object
+     * @return array
+     */
+    public function extract($object)
+    {
+        $data = [];
+
+        $data['element'] = [
+            'id'    => $object ? $object->getId() : null,
+            'label' => $object ? $object->getLibelle() : null,
+        ];
+
+        $etape = $object ? $object->getEtape() : null;
+        if ($etape){
+            $data['etape'] = $etape->getId();
+        }
+        $structure = $object ? $object->getStructure() : null;
+        if ($structure){
+            $data['structure'] = $structure->getId();
+        }
+
+        return $data;
     }
 }

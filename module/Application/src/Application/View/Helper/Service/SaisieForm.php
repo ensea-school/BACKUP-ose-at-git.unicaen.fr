@@ -6,24 +6,22 @@ use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\View\Helper\AbstractViewHelper;
 use \Application\Service\Traits\ContextAwareTrait;
 use \Application\Service\Traits\ServiceAwareTrait;
 use \Application\Service\Traits\PeriodeAwareTrait;
 use \Application\Service\Traits\TypeInterventionAwareTrait;
 use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use \Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Zend\View\Helper\AbstractHtmlElement;
+
 
 /**
  * Description of SaisieForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieForm extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+class SaisieForm extends AbstractViewHelper
 {
-    use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use ServiceAwareTrait;
     use PeriodeAwareTrait;

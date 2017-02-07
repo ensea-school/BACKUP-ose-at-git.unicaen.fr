@@ -8,6 +8,7 @@ use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
+use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -22,6 +23,7 @@ class Context extends AbstractService
     use Traits\ParametresAwareTrait;
     use Traits\StructureAwareTrait;
     use SessionContainerTrait;
+    use UserContextServiceAwareTrait;
 
     /**
      * selectedIdentityRole
@@ -77,8 +79,7 @@ class Context extends AbstractService
     public function getSelectedIdentityRole()
     {
         if (null === $this->selectedIdentityRole) {
-            $authUserContext = $this->getServiceLocator()->get('authUserContext');
-            /* @var $authUserContext \UnicaenAuth\Service\UserContext */
+            $authUserContext = $this->getServiceUserContext();
 
             if ($authUserContext->getIdentity()) {
                 $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();

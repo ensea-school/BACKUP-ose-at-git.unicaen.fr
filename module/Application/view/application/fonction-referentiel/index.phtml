@@ -32,7 +32,7 @@ use Application\Provider\Privilege\Privileges;
             <td><?php echo $fr->getPlafond() ?></td>
             <td><?php echo $this->structure($fr->getStructure())->renderLink() ?></td>
             <td style="text-align:center;width:1px;white-space: nowrap">
-                <a class="pop-ajax" data-event="fonction-referentiel-saisie"
+                <a class="ajax-modal" data-event="fonction-referentiel-saisie"
                    href="<?php echo $this->url('fonction-referentiel/saisie', ['fonctionReferentiel' => $fr->getId()]) ?>"
                    title="Modifier la fonction référentielle">
                     <span class="glyphicon glyphicon-edit"></span></a>

@@ -28,10 +28,6 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name' => 'id',
-            'type' => 'Hidden',
-        ]);
-        $this->add([
             'name' => 'code',
             'options' => [
                 'label' => "Code",
@@ -119,12 +115,24 @@ class FonctionReferentielSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
+            'code' => [
+                'required' => false,
+            ],
+            'libelle-long' => [
+                'required' => true,
+            ],
+            'libelle-court' => [
+                'required' => true,
+            ],
+            'domaine-fonctionnel' => [
+                'required' => true,
+            ],
+            'plafond' => [
+                'required' => true,
+            ],
             'structure' => [
                 'required' => false,
             ],
-            'plafond' => [
-                'required' => false,
-            ]
         ];
     }
 

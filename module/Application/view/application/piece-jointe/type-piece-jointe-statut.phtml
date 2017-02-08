@@ -3,6 +3,8 @@ use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
+
 ?>
 
 <style>
@@ -107,8 +109,6 @@ $isset = function ($tpj, $premierRecrut, $statut) use ($typesPiecesJointesStatut
         null;
 };
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
-
 $that = $this;
 $url = function ($tpj, $si, $premierRecrutement) use ($that) {
     return $that->url(
@@ -174,6 +174,7 @@ $tblCol = 0; // indices dans le tableau ?>
                 <span class="pull-right">
                     <span class="glyphicon glyphicon-move"
                           title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
+                    <?php if ($canEdit): ?>
                     <a class="pop-ajax" data-event="type-piece-jointe-saisie"
                        href="<?php echo $this->url('piece-jointe/type-piece-jointe-saisie', ['typePieceJointe' => $tpj->getId()]) ?>"
                        title="Modifier le type de pièce jointe"
@@ -191,6 +192,7 @@ $tblCol = 0; // indices dans le tableau ?>
                         <span style="padding-right: 8px" class="glyphicon pull-right glyphicon-trash"></span>
                     </a>
                 </span>
+                <?php endif; ?>
             </th>
             <!-- Premier recrutement -->
             <?php foreach ($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
@@ -237,6 +239,7 @@ $tblCol = 0; // indices dans le tableau ?>
     </tbody>
 
 </table>
+<?php if ($canEdit): ?>
 <a class="btn btn-primary pop-ajax" data-submit-reload="true"
    href="<?php echo $this->url('piece-jointe/type-piece-jointe-saisie') ?>"
    title="Ajouter un type de pièce jointe"><span class="glyphicon glyphicon-edit"></span>
@@ -250,3 +253,4 @@ $tblCol = 0; // indices dans le tableau ?>
         });
     });
 </script>
+<?php endif; ?>

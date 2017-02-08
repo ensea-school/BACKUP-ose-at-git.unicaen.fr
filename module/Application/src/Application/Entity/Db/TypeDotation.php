@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\TypeRessourceAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -73,7 +72,7 @@ class TypeDotation implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-
+    
     public function isDotationInitiale()
     {
         return $this->getSourceCode() == self::CODE_DOTATION_INITIALE;

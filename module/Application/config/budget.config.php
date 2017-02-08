@@ -87,6 +87,44 @@ return [
                             ],
                         ],
                     ],
+                    'type-dotation' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/type-dotation',
+                            'constraints' => [
+                            ],
+                            'defaults' => [
+                                'action' => 'type-dotation',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'type-dotation-saisie' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/type-dotation-saisie[/:typeDotation]',
+                            'constraints' => [
+                                'typeDotation' => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'type-dotation-saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'type-dotation-delete' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/type-dotation-delete/:typeDotation',
+                            'constraints' => [
+                                'typeDotation' => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'type-dotation-delete',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -122,6 +160,13 @@ return [
                                         'title'    => 'Export des données de paiement (CSV)',
                                         'route'    => 'budget/export',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'export'),
+                                    ],
+                                    'type-dotation' => [
+                                        'label' => 'Types de dotation',
+                                        'title' => 'Types de dotations',
+                                        'route' => 'budget/type-dotation',
+                                        'withtarget' => true,
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'type-dotation'),
                                     ],
                                 ],
                             ],
@@ -179,6 +224,16 @@ return [
                         Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT,
                     ],
                 ],
+                [
+                    'controller' => 'Application\Controller\Budget',
+                    'action' => ['type-dotation'],
+                    'privileges' => [Privileges::BUDGET_TYPE_DOTATION_VISUALISATION],
+                ],
+                [
+                    'controller' => 'Application\Controller\Budget',
+                    'action' => ['type-dotation-saisie','type-dotation-delete'],
+                    'privileges' => [Privileges::BUDGET_TYPE_DOTATION_EDITION],
+                ],
             ],
         ],
         'resource_providers' => [
@@ -204,6 +259,7 @@ return [
     'form_elements'   => [
         'invokables' => [
             'BudgetDotationSaisie' => Form\Budget\DotationSaisieForm::class,
+            'typeDotationSaisie' => Form\Budget\TypeDotationSaisieForm::class,
         ],
     ],
     'service_manager' => [
@@ -211,6 +267,7 @@ return [
             'applicationTypeRessource' => Service\TypeRessourceService::class,
             'applicationDotation'      => Service\DotationService::class,
             'assertionBudget'          => Assertion\BudgetAssertion::class,
+            'ApplicationTypeDotation' => Service\TypeDotationService::class,
         ],
     ],
     'controllers'     => [

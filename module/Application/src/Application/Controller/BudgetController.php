@@ -8,7 +8,6 @@ use Application\Form\Budget\Traits\DotationSaisieFormAwareTrait;
 use Application\Service\Traits\AnneeAwareTrait;
 use Application\Service\Traits\FormuleResultatAwareTrait;
 use Application\Entity\Db\TypeRessource;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
@@ -16,6 +15,11 @@ use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Element\Select;
+use Application\Entity\Db\TypeDotation;
+use Application\Service\Traits\TypeDotationServiceAwareTrait;
+use Application\Service\Traits\SourceAwareTrait;
+use Application\Exception\DbException;
+use Application\Form\Budget\Traits\TypeDotationSaisieFormAwareTrait;
 
 
 /**
@@ -31,6 +35,9 @@ class BudgetController extends AbstractController
     use DotationSaisieFormAwareTrait;
     use AnneeAwareTrait;
     use MiseEnPaiementAwareTrait;
+    use TypeDotationServiceAwareTrait;
+    use TypeDotationSaisieFormAwareTrait;
+    use SourceAwareTrait;
 
 
 
@@ -334,4 +341,55 @@ class BudgetController extends AbstractController
         return $structureElement;
     }
 
+    public function typeDotationAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            TypeDotation::class,
+        ]);
+        
+        $typeDotations = $this->getServiceTypeDotation()->getList();
+        
+        return compact('typeDotations');
+    }
+
+    public function typeDotationSaisieAction()
+    {
+        /* @var $typeDotation TypeDotation */
+
+        $typeDotation = $this->getEvent()->getParam('typeDotation');
+        $form = $this->getFormTypeDotationSaisie();
+        if (empty($typeDotation)) {
+            $title = 'Création d\'un nouveau type de dotation';
+            $typeDotation = $this->getServiceTypeDotation()->newEntity();
+        } else {
+            $title = 'Édition d\'un type de dotation';
+        }
+        
+        $form->bindRequestSave($typeDotation,$this->getRequest(),function(TypeDotation $td){
+            try {
+                $this->getServiceTypeDotation()->save($td);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $td->getId());
+            }
+        });
+
+        $title = 'Saisie d\'un type de dotation';
+
+        return compact('title', 'form');
+    }
+
+    public function typeDotationDeleteAction()
+    {
+        /* @var $typeDotation TypeDotation */
+        $typeDotation = $this->getEvent()->getParam('typeDotation');
+        try {
+            $this->getServiceTypeDotation()->delete($typeDotation);
+            $this->flashMessenger()->addSuccessMessage("Type de dotation supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        }
+        return new \UnicaenApp\View\Model\MessengerViewModel(compact('typeDotation'));
+    }
 }

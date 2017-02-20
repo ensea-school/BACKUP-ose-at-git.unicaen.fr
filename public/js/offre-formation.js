@@ -19,8 +19,8 @@ $.widget("ose.elementPedagogiqueRecherche", {
             etapeId = "";
         }
 
-        this.filterSelect(this.getNiveauElement(), niveauxValues);
-        this.filterSelect(this.getFormationElement(), etapesValues);
+        Util.filterSelectPicker(this.getNiveauElement(), niveauxValues);
+        Util.filterSelectPicker(this.getFormationElement(), etapesValues);
 
         var query = {
             structure: structureId,
@@ -52,26 +52,6 @@ $.widget("ose.elementPedagogiqueRecherche", {
         this.element.find('input#element').val(id);
         if (lastVal != id) this.element.find('input#element').trigger("change");
         this.getElementAutocompleteElement().val(label);
-    },
-
-    filterSelect: function (select, values)
-    {
-        var ul = select.prev().find('ul');
-        select.find('option').each(function ()
-        {
-
-            var li = ul.find("li[data-original-index='" + this.index + "']");
-
-            if (this.index == 1 || $.inArray(this.value, values) !== -1) {
-                li.show();
-            } else {
-                if (select.val() == this.value) {
-                    select.selectpicker('val', '');
-                }
-                li.hide();
-            }
-
-        });
     },
 
     setElementState: function (state)

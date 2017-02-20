@@ -2,7 +2,6 @@
 
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $provider   \Application\Provider\Chargens\ChargensProvider
  * @var $etape      \Application\Entity\Db\Etape
  * @var $scenario   \Application\Entity\Db\Scenario
  * @var $filtre     \Application\Form\Chargens\FiltreForm
@@ -10,27 +9,8 @@
 
 ?>
     <h1 class="page-header">Charges d'enseignement</h1>
-
-
-    <?php echo $this->form()->openTag($filtre); ?>
-    <div class="row">
-        <div class="col-md-2">
-            <?php echo $this->formSelect($filtre->get('structure')) ?>
-        </div>
-        <div class="col-md-7">
-            <?php echo $this->formSelect($filtre->get('etape')) ?>
-        </div>
-        <div class="col-md-3">
-            <?php echo $this->formSelect($filtre->get('scenario')) ?>
-        </div>
-    </div>
-    <?php echo $this->form()->closeTag(); ?>
-
-
+    <script src="/ose/js/chargens.js"></script>
 <?php
 
 
-
-
-
-echo $this->chargens( $provider );
+echo $this->chargens()->setFormFiltre($filtre)->render();

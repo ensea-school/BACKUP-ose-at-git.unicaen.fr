@@ -116,12 +116,14 @@ class ChargensProvider
 
     private function loadNoeuds(array $noeudIds)
     {
+        /** @var Noeud[] $noeuds */
+        $noeuds = [];
+
+        if (empty($noeudIds)) return $noeuds;
+
         $ids  = implode(',', $noeudIds);
         $sql  = "SELECT id, code, libelle, etape_id, element_pedagogique_id FROM noeud WHERE id IN (" . $ids . ")";
         $data = $this->getBdd()->fetch($sql, [], 'ID');
-
-        /** @var Noeud[] $noeuds */
-        $noeuds = [];
 
         $sql = "
         SELECT
@@ -249,6 +251,8 @@ class ChargensProvider
 
         $data = [];
 
+        if (empty($this->noeuds)) return $this;
+
         $sql = "
         SELECT
           sn.id,
@@ -357,6 +361,8 @@ class ChargensProvider
     private function loadScenarioLien()
     {
         $liens = implode(', ', array_keys($this->liensById));
+
+        if (empty($this->liensById)) return $this;
 
         $sql  = "
         SELECT
@@ -587,9 +593,9 @@ class ChargensProvider
     /**
      * @return $this
      */
-    public function sauvegarder()
+    public function enregistrer( array $data )
     {
-        var_dump($this->changes);
+        //var_dump($data);
 
         return $this;
     }

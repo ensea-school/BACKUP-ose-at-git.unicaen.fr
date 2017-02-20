@@ -2,8 +2,7 @@
 
 namespace Application\View\Helper\Chargens;
 
-use Application\Form\Chargens\Traits\FiltreFormAwareTrait;
-use Application\Provider\Chargens\ChargensProvider;
+use Application\Form\Chargens\FiltreForm;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
@@ -18,14 +17,13 @@ class ChargensViewHelper extends AbstractViewHelper
 {
     use TypeHeuresAwareTrait;
     use TypeInterventionAwareTrait;
-    use FiltreFormAwareTrait;
 
     private $buffer = [];
 
     /**
-     * @var ChargensProvider
+     * @var FiltreForm;
      */
-    private $provider;
+    private $formFiltre;
 
 
 
@@ -33,11 +31,9 @@ class ChargensViewHelper extends AbstractViewHelper
      *
      * @return self
      */
-    public function __invoke(ChargensProvider $provider)
+    public function __invoke()
     {
         $this->getView()->resolver()->attach(new TemplatePathStack(['script_paths' => [__DIR__ . "/view"]]));
-
-        $this->provider = $provider;
 
         return $this;
     }
@@ -67,10 +63,10 @@ class ChargensViewHelper extends AbstractViewHelper
 
         return (string)$t('div', [
             'class'                  => 'chargens',
-            'data-noeuds'            => $this->provider->noeudsToArray(),
-            'data-liens'            => $this->provider->liensToArray(),
             'data-type-heures'       => $this->getTypeHeuresArray(),
             'data-type-intervention' => $this->getTypeInterventionsArray(),
+            'data-url-json-etape'    => $this->getView()->url('chargens/json/etape'),
+            'data-url-enregistrer'   => $this->getView()->url('chargens/enregistrer'),
         ])->html(
             $t('div', [
                 'class' => 'controles',
@@ -78,6 +74,7 @@ class ChargensViewHelper extends AbstractViewHelper
                 $this->getView()->render("controles.phtml", [
                     'typeHeures'        => $this->getTypeHeuresArray(),
                     'typeInterventions' => $this->getTypeInterventionsArray(),
+                    'filtre'            => $this->getFormFiltre(),
                 ])
             )
             . $t('div', [
@@ -124,5 +121,29 @@ class ChargensViewHelper extends AbstractViewHelper
         }
 
         return $this->buffer[__METHOD__];
+    }
+
+
+
+    /**
+     * @return FiltreForm
+     */
+    public function getFormFiltre()
+    {
+        return $this->formFiltre;
+    }
+
+
+
+    /**
+     * @param FiltreForm $formFiltre
+     *
+     * @return ChargensViewHelper
+     */
+    public function setFormFiltre(FiltreForm $formFiltre = null)
+    {
+        $this->formFiltre = $formFiltre;
+
+        return $this;
     }
 }

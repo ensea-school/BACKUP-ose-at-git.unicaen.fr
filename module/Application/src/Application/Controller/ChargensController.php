@@ -4,13 +4,14 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
-use Application\Entity\Db\Structure;
 use Application\Form\Chargens\Traits\FiltreFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
+use Zend\View\Model\JsonModel;
 
 
 /**
@@ -32,44 +33,75 @@ class ChargensController extends AbstractController
     public function indexAction()
     {
         /** @var Etape $etape */
-        $etape = $this->getEvent()->getParam('etape');
+        $etape = $this->context()->etapeFromQuery();
         /** @var Scenario $scenario */
-        $scenario = $this->getEvent()->getParam('scenario');
+        $scenario = $this->context()->scenarioFromQuery();
 
-        if ($etape){
+        $contextStructure = $this->getServiceContext()->getStructure();
+
+        if ($etape) {
             $structure = $etape->getStructure();
-        }else{
-            /** @var Structure $structure */
-            $structure = $this->getEvent()->getParam('structure');
+
+            if ($contextStructure && $contextStructure !== $structure) {
+                throw new UnAuthorizedException('La formation sélectionnée n\'est pas gérée par votre composante');
+            }
+        } else {
+            $structure = $contextStructure;
         }
 
-        $provider = $this->getProviderChargens();
-        $filtre = $this->getFormChargensFiltre();
+        $filtre   = $this->getFormChargensFiltre();
+        if ($etape) $filtre->get('etape')->setValue($etape->getId());
+        if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
+        if ($structure) $filtre->get('structure')->setValue($structure->getId());
 
-        if ($etape){
-            $provider->loadEtape($etape);
-            $filtre->get('etape')->setValue($etape->getId());
-        }
-        if ($scenario){
-            $provider->loadScenario( $scenario );
-            $filtre->get('scenario')->setValue($scenario->getId());
-        }
-        if ($structure){
-            $filtre->get('structure')->setValue($structure->getId());
-        }
-
-        return compact('structure', 'etape', 'scenario', 'provider', 'filtre');
+        return compact('structure', 'etape', 'scenario', 'filtre');
     }
 
 
 
-    public function scenarioAction()
+    public function etapeJsonAction()
     {
-        $noeuds = $this->params()->fromPost('noeuds');
-
-
+        /** @var Etape $etape */
+        $etape = $this->context()->etapeFromPost();
         /** @var Scenario $scenario */
-        $scenario = $this->getEvent()->getParam('scenario');
+        $scenario = $this->context()->scenarioFromPost();
+
+        $result = ['errors' => []];
+
+        if (!$etape){
+            $result['errors'][] = 'La formation n\'est pas précisée';
+        }
+
+        if (!$scenario){
+            $result['errors'][] = 'Le scénario n\'est pas précisé';
+        }
+
+        if (!empty($result['errors'])){
+            $result['errors'] = implode( ', ', $result['errors'] );
+        }
+
+        if (empty($result['errors'])){
+            $provider = $this->getProviderChargens();
+
+            if ($data = $this->params()->fromPost('data')){
+                $provider->enregistrer( $data );
+            }
+
+            $provider->loadEtape($etape);
+            $provider->loadScenario($scenario);
+
+            $result['noeuds'] = $provider->noeudsToArray();
+            $result['liens'] = $provider->liensToArray();
+        }
+
+        return new JsonModel($result);
+    }
+
+
+
+    public function enregistrerAction()
+    {
+        return $this->etapeJsonAction();
     }
 
 }

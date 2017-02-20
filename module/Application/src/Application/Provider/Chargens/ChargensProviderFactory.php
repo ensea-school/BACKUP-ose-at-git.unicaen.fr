@@ -21,7 +21,7 @@ class ChargensProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $em = $serviceLocator->get('doctrine.entitymanager.orm_default'); /* @var $em \Doctrine\ORM\EntityManager */
+        $em = $serviceLocator->get(\Application\Constants::BDD); /* @var $em \Doctrine\ORM\EntityManager */
 
         $bdd = new BddConnecteur();
         $bdd->setEntityManager($em);

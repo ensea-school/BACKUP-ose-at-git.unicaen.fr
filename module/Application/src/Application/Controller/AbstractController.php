@@ -48,7 +48,7 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function em()
     {
-        return $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        return $this->getServiceLocator()->get(\Application\Constants::BDD);
     }
 
 

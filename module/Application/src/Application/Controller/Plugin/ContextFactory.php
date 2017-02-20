@@ -25,7 +25,7 @@ class ContextFactory implements FactoryInterface
 
         $context = new Context();
 
-        $context->setEntityManager( $sl->get('doctrine.entitymanager.orm_default') );
+        $context->setEntityManager( $sl->get(\Application\Constants::BDD) );
         $context->setServiceIntervenant( $sl->get('applicationIntervenant') );
 
         return $context;

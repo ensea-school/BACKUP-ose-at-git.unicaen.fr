@@ -15,18 +15,18 @@ trait EntityManagerAwareTrait
      * @var EntityManager
      */
     protected $em;
-    
+
     /**
-     * 
+     *
      * @param string $name
      * @return EntityManager
      */
     protected function getEntityManager($name = 'orm_default')
     {
         if (null === $this->em) {
-            $this->em = Bootstrap::getServiceManager()->get("doctrine.entitymanager.$name");
+            $this->em = Bootstrap::getServiceManager()->get(\Application\Constants::BDD);
         }
-        
+
         return $this->em;
     }
 }

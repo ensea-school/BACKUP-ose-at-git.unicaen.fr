@@ -4,7 +4,7 @@ namespace Application;
 
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
-$main = [
+return [
     'doctrine'           => [
         'connection'    => [
             'orm_default' => [
@@ -107,6 +107,9 @@ $main = [
                     ],
                     'of'          => [
                         // réservation de l'emplacement pour le menu Offre de formation
+                    ],
+                    'chargens'     => [
+                        // réservation de l'emplacement pour le menu Charges
                     ],
                     'gestion'     => [
                         // réservation de l'emplacement pour le menu Gestion
@@ -256,30 +259,3 @@ $main = [
         ],
     ],
 ];
-
-return array_merge_recursive(
-    $main,
-    include 'gestion.config.php',
-    include 'intervenant.config.php',
-    include 'dossier-pieces.config.php',
-    include 'structure.config.php',
-    include 'etablissement.config.php',
-    include 'recherche.config.php',
-    include 'service.config.php',
-    include 'volume-horaire.config.php',
-    include 'offre-formation.config.php',
-    include 'contrat.config.php',
-    include 'validation.config.php',
-    include 'droits.config.php',
-    include 'agrement.config.php',
-    include 'formule.config.php',
-    include 'workflow.config.php',
-    include 'indicateur.config.php',
-    include 'paiement.config.php',
-    include 'log.config.php',
-    include 'pilotage.config.php',
-    include 'budget.config.php',
-    include 'parametre.config.php',
-    include 'chargens.config.php',
-    include 'fonction-referentiel.config.php'
-);

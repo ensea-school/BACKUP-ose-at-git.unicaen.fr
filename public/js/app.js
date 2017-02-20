@@ -175,6 +175,45 @@ Util = {
                 window.location.reload();
             }
         );
+    },
+
+    filterSelectPicker: function (select, values)
+    {
+        var ul = select.prev().find('ul');
+        var shown = 0;
+        var lastShown = null;
+
+        select.find('option').each(function ()
+        {
+            var li = ul.find("li[data-original-index='" + this.index + "']");
+
+            if (values === 'all' || Util.inArray(this.value, values)) {
+                li.show();
+                shown++;
+                lastShown = this.value;
+            } else {
+                if (select.val() == this.value) {
+                    select.selectpicker('val', '');
+                }
+                li.hide();
+            }
+
+        });
+
+        if (1 == shown){
+            select.selectpicker('val', lastShown);
+        }
+    },
+
+    inArray: function ( needle, haystack, strict )
+    {
+        for( var i in haystack ){
+            if (strict){
+                if (haystack[i] === needle) return true;
+            }else{
+                if (haystack[i] == needle) return true;
+            }
+        }
+        return false;
     }
 };
-

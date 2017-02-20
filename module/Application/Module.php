@@ -15,6 +15,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Zend\Stdlib\Glob;
+use Zend\Config\Factory as ConfigFactory;
 
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
@@ -104,7 +106,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        //return include __DIR__ . '/config/module.config.php';
+        $paths = Glob::glob(__DIR__ . '/config/{,*.}{config}.php', Glob::GLOB_BRACE);
+
+        return ConfigFactory::fromFiles($paths);
     }
 
 

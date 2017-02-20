@@ -4,41 +4,52 @@
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $typeHeures        array
  * @var $typeInterventions array
+ * @var $filtre            \Application\Form\Chargens\FiltreForm
  */
 
 ?>
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <form class="navbar-form navbar-left">
+    <?php if ($filtre): ?>
+        <div class="row div-filtre chargens-filtre">
+            <div class="col-md-3 div-structure">
+                <?php echo $this->formSelect($filtre->get('structure')) ?>
+            </div>
+            <div class="col-md-7 div-etape">
+                <?php echo $this->formSelect($filtre->get('etape')) ?>
+            </div>
+            <div class="col-md-2 div-scenario">
+                <?php echo $this->formSelect($filtre->get('scenario')) ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <div class="row div-controles">
+        <div class="col-md-12">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default" title="Plein écran">
-                    <input type="checkbox" class="fullscreen" autocomplete="off"/><span
-                            class="glyphicon glyphicon-fullscreen"></span>
+                    <input type="checkbox" class="fullscreen" autocomplete="off"/>
+                        <span class="glyphicon glyphicon-fullscreen"></span>
+                        Plein écran
                 </label>
             </div>
 
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default zplus" title="Zoomer">
                     <span class="glyphicon glyphicon-zoom-in"></span>
+                    Zoom +
                 </button>
                 <button type="button" class="btn btn-default zmoins" title="Dézoomer">
                     <span class="glyphicon glyphicon-zoom-out"></span>
+                    Zoom -
                 </button>
                 <button type="button" class="btn btn-default zdefaut" title="Zoom par défaut">
                     <span class="glyphicon glyphicon-search"></span>
+                    Zoom par défaut
                 </button>
             </div>
-
-            <div class="btn-group" data-toggle="buttons">
-                <button type="button" class="btn btn-primary sauvegarder" title="Enregistrer les modifications">
-                    <span class="glyphicon glyphicon-save"></span> Enregistrer
-                </button>
-            </div>
-
-        </form>
+        </div>
+    </div>
 
 
-    </div><!-- /.container-fluid -->
 </nav>
 <div class="form-noeud" style="display:none">
     <div class="row" id="choix-assiduite">

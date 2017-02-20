@@ -31,7 +31,7 @@ class RoleProviderFactory implements FactoryInterface
         $this->setServiceLocator($serviceLocator);
 
         $config = $this->getServiceLocator()->get('BjyAuthorize\Config');
-        $em     = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $em     = $this->getServiceLocator()->get(\Application\Constants::BDD);
         /* @var $em \Doctrine\ORM\EntityManager */
 
         if (!isset($config['role_providers']['ApplicationRoleProvider'])) {

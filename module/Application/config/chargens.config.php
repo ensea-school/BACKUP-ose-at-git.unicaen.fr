@@ -11,22 +11,45 @@ return [
         'routes' => [
             'chargens' => [
                 'type'          => 'Segment',
+                'may_terminate' => true,
                 'options'       => [
-                    'route'       => '/chargens[/:etape][/:scenario]',
-                    'constraints' => [
-                        'structure' => '[0-9]*',
-                        'etape'     => '[0-9]*',
-                        'scenario'  => '[0-9]*',
-                    ],
-                    'defaults'    => [
+                    'route'    => '/chargens',
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Chargens',
                         'action'        => 'index',
                     ],
                 ],
-                'may_terminate' => true,
                 'child_routes'  => [
-                    /* Placez ici vos routes filles */
+                    'json'        => [
+                        'type'          => 'Literal',
+                        'may_terminate' => false,
+                        'options'       => [
+                            'route' => '/json',
+                        ],
+                        'child_routes'  => [
+                            'etape' => [
+                                'type'          => 'Literal',
+                                'may_terminate' => true,
+                                'options'       => [
+                                    'route'    => '/etape',
+                                    'defaults' => [
+                                        'action' => 'etape-json',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'enregistrer' => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/enregistrer',
+                            'defaults' => [
+                                'action' => 'enregistrer',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -54,7 +77,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Chargens',
-                    'action'     => ['index'],
+                    'action'     => ['index', 'etape-json', 'enregistrer'],
                     'privileges' => [
                         Provider\Privilege\Privileges::CHARGENS_VISUALISATION,
                     ],
@@ -83,7 +106,7 @@ return [
             'chargens' => View\Helper\Chargens\ChargensViewHelper::class,
         ],
     ],
-    'form_elements'     => [
+    'form_elements'   => [
         'invokables' => [
             'chargensFiltre' => Form\Chargens\FiltreForm::class,
         ],

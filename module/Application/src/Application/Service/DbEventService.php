@@ -53,5 +53,4 @@ class DbEventService extends AbstractService {
         return $this;
     }
 
-    /* Placez ici vos méthodes */
 }

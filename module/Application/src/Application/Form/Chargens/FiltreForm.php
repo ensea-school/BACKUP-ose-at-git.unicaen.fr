@@ -48,7 +48,13 @@ class FiltreForm extends AbstractForm
     /**
      * @var array
      */
+    private $etapesStructure;
+
+    /**
+     * @var array
+     */
     private $structuresScenarios;
+
 
 
     public function init()
@@ -57,26 +63,27 @@ class FiltreForm extends AbstractForm
 
         $this->setAttributes([
             'action' => $this->getCurrentUrl(),
-            'data-structures-etapes' => json_encode($this->structuresEtapes),
-            'data-structures-scenarios' => json_encode($this->structuresScenarios),
         ]);
 
         $this->add([
             'name'       => 'structure',
             'options'    => [
                 'label'                     => "Composante :",
+                'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
                     'title' => "Structure gestionnaire de l'enseignement",
                 ],
-                'value_options' => Util::collectionAsOptions($this->structures),
+                'value_options'             => Util::collectionAsOptions($this->structures),
             ],
             'attributes' => [
                 'id'               => 'structure',
                 'title'            => "Composante ...",
-                'class'            => 'input-sm selectpicker',
+                'class'            => 'selectpicker',
                 'data-width'       => "100%",
                 'data-live-search' => "true",
+                'data-etapes'      => json_encode($this->structuresEtapes),
+                'data-scenarios'   => json_encode($this->structuresScenarios),
             ],
             'type'       => 'Select',
         ]);
@@ -89,14 +96,15 @@ class FiltreForm extends AbstractForm
                 'label_attributes'          => [
                     'title' => "Formation",
                 ],
-                'value_options' => Util::collectionAsOptions($this->etapes),
+                'value_options'             => Util::collectionAsOptions($this->etapes),
             ],
             'attributes' => [
-                'id'               => 'formation',
+                'id'               => 'etape',
                 'title'            => "Formation ...",
-                'class'            => 'input-sm selectpicker',
+                'class'            => 'selectpicker',
                 'data-width'       => "100%",
                 'data-live-search' => "true",
+                'data-structures'  => json_encode($this->etapesStructure),
             ],
             'type'       => 'Select',
         ]);
@@ -109,12 +117,12 @@ class FiltreForm extends AbstractForm
                 'label_attributes'          => [
                     'title' => "Scénario",
                 ],
-                'value_options' => Util::collectionAsOptions($this->scenarios),
+                'value_options'             => Util::collectionAsOptions($this->scenarios),
             ],
             'attributes' => [
                 'id'               => 'scenario',
                 'title'            => "Scénario ...",
-                'class'            => 'input-sm selectpicker',
+                'class'            => 'selectpicker',
                 'data-width'       => "100%",
                 'data-live-search' => "true",
             ],
@@ -155,25 +163,41 @@ class FiltreForm extends AbstractForm
         $this->scenarios = $this->getServiceScenario()->getList($qb);
 
         $sEtapes = [];
+        $eStructures = [];
         foreach ($this->etapes as $etape) {
             $sid = $etape->getStructure()->getId();
             if (!isset($sEtapes[$sid])) {
                 $sEtapes[$sid] = [];
             }
             $sEtapes[$sid][] = $etape->getId();
+            $eStructures[$etape->getId()] = $sid;
         }
 
         $sScenarios = [];
         foreach ($this->scenarios as $scenario) {
             $sid = $scenario->getStructure() ? $scenario->getStructure()->getId() : 0;
-            if (!isset($sScenarios[$sid])) {
-                $sScenarios[$sid] = [];
+
+            if (0 === $sid && $cStructure) {
+                continue; // pas de scénario de niveau établissement si on est dans une structure particulière
             }
-            $sScenarios[$sid][] = $scenario->getId();
+
+            if (0 === $sid) {
+                $structures = $this->structures;
+            } else {
+                $structures = [$scenario->getStructure()];
+            }
+
+            foreach ($structures as $structure) {
+                if (!isset($sScenarios[$structure->getId()])) {
+                    $sScenarios[$structure->getId()] = [];
+                }
+                $sScenarios[$structure->getId()][] = $scenario->getId();
+            }
         }
 
-        $this->structuresEtapes = $sEtapes;
+        $this->structuresEtapes    = $sEtapes;
         $this->structuresScenarios = $sScenarios;
+        $this->etapesStructure     = $eStructures;
 
         return $this;
     }

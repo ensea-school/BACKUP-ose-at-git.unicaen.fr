@@ -1,7 +1,10 @@
 $.widget("ose.chargens", {
+    etape: null,
+    scenario: null,
     noeuds: {},
     liens: {},
     typesIntervention: {},
+    typesHeures: {},
     diagramme: undefined,
     formNoeud: undefined,
     formLien: undefined,
@@ -14,9 +17,9 @@ $.widget("ose.chargens", {
     _create: function ()
     {
         var that = this;
-        this.noeuds = this.element.data('noeuds');
-        this.liens = this.element.data('liens');
+
         this.typesIntervention = this.element.data('type-intervention');
+        this.typesHeures = this.element.data('type-heures');
 
         this.diagramme = this.__makeGraph();
 
@@ -49,7 +52,6 @@ $.widget("ose.chargens", {
         this.element.find('.controles .zmoins').click(function () { that.zoomMoins(); });
         this.element.find('.controles .zdefaut').click(function () { that.zoomDefaut(); });
         this.element.find('.controles .fullscreen').change(function () { that.fullScreen(); });
-        this.element.find('.controles .sauvegarder').click(function () { that.sauvegarder(); });
 
         this.diagramme.addDiagramListener("ObjectSingleClicked", function (e)
         {
@@ -115,65 +117,65 @@ $.widget("ose.chargens", {
 
     editionNoeud: function (noeudId)
     {
+        var noeud = this.noeuds[noeudId];
         this.editionNoeudId = noeudId;
 
-        this.formNoeud.find('#choix-minimum').val(this.noeuds[noeudId]['choix-minimum']);
-        this.formNoeud.find('#choix-maximum').val(this.noeuds[noeudId]['choix-maximum']);
-        this.formNoeud.find('#assiduite').val(this.noeuds[noeudId]['assiduite'] * 100);
+        this.formNoeud.find('#choix-minimum').val(noeud['choix-minimum']);
+        this.formNoeud.find('#choix-maximum').val(noeud['choix-maximum']);
+        this.formNoeud.find('#assiduite').val(noeud['assiduite'] * 100);
 
-        for (var tid in this.element.data('type-heures')) {
-            var val = this.noeuds[noeudId]['effectifs'][tid];
+        for (var tid in this.typesHeures) {
+            var val = noeud['effectifs'][tid];
             if (val === undefined) val = 0;
             this.formNoeud.find('#effectifs-' + tid).val(val);
         }
-        for (var tid in this.element.data('type-intervention')) {
-            var val = this.noeuds[noeudId]['seuils-ouverture'][tid];
+        for (var tid in this.typesIntervention) {
+            var val = noeud['seuils-ouverture'][tid];
             if (val === undefined) val = 0;
             this.formNoeud.find('#seuil-ouverture-' + tid).val(val);
 
-            var val = this.noeuds[noeudId]['seuils-dedoublement'][tid];
+            var val = noeud['seuils-dedoublement'][tid];
             if (val === undefined) val = 0;
             this.formNoeud.find('#seuil-dedoublement-' + tid).val(val);
         }
 
 
-        if (this.noeuds[noeudId]['element-pedagogique']){
+        if (noeud['element-pedagogique']) {
             this.formNoeud.find('#choix-assiduite').hide();
         } else {
             this.formNoeud.find('#choix-assiduite').show();
         }
 
 
-        if (this.noeuds[noeudId]['etape']) {
+        if (noeud['etape']) {
             this.formNoeud.find('#effectifs').show();
         } else {
             this.formNoeud.find('#effectifs').hide();
         }
 
-        if (this.noeuds[noeudId]['etape']) {
+        if (noeud['etape']) {
             this.formNoeud.find('#seuils').show();
             this.formNoeud.find('#seuils .seuil').show();
-        } else if (this.noeuds[noeudId]['types-intervention'].length == 0) {
+        } else if (noeud['types-intervention'].length == 0) {
             this.formNoeud.find('#seuils').hide();
         } else {
             this.formNoeud.find('#seuils').show();
             this.formNoeud.find('#seuils .seuil').hide();
-            for (ti in this.noeuds[noeudId]['types-intervention']) {
-                this.formNoeud.find('#seuils #seuil-' + this.noeuds[noeudId]['types-intervention'][ti]).show();
+            for (ti in noeud['types-intervention']) {
+                this.formNoeud.find('#seuils #seuil-' + noeud['types-intervention'][ti]).show();
             }
         }
-
 
         if (this.formNoeud.find('#choix-assiduite').css('display') != 'none'
             || this.formNoeud.find('#effectifs').css('display') != 'none'
             || this.formNoeud.find('#seuils').css('display') != 'none'
-        ){
+        ) {
             this.formNoeud.dialog({
                 position: {
                     my: "center center",
                     of: this.mousePosEvent
                 },
-                title: this.noeuds[noeudId].libelle + ' (' + this.noeuds[noeudId].code + ')'
+                title: noeud.libelle + ' (' + noeud.code + ')'
             });
 
             this.formNoeud.dialog("open");
@@ -184,50 +186,64 @@ $.widget("ose.chargens", {
 
     applicationEditionNoeud: function ()
     {
-        var values = {
+        var noeud = {
             id: this.editionNoeudId,
             'choix-minimum': parseInt(this.formNoeud.find('#choix-minimum').val()),
             'choix-maximum': parseInt(this.formNoeud.find('#choix-maximum').val()),
             assiduite: parseInt(this.formNoeud.find('#assiduite').val()) / 100,
+            effectifs: {},
+            'seuils-ouverture': {},
+            'seuils-dedoublement': {}
         };
-        for (var tid in this.element.data('type-heures')) {
-            values['effectifs'][tid] = parseInt(this.formNoeud.find('#effectifs-' + tid).val());
+        for (var tid in this.typesHeures) {
+            noeud.effectifs[tid] = parseInt(this.formNoeud.find('#effectifs-' + tid).val());
         }
-        for (var tid in this.element.data('type-intervention')) {
-            values['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-' + tid).val());
-            values['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-' + tid).val());
+        for (var tid in this.typesIntervention) {
+            noeud['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-' + tid).val());
+            noeud['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-' + tid).val());
         }
 
-
-
-
-        this.noeuds[this.editionNoeudId]['choix-minimum'] = parseInt(this.formNoeud.find('#choix-minimum').val());
-        this.noeuds[this.editionNoeudId]['choix-maximum'] = parseInt(this.formNoeud.find('#choix-maximum').val());
-        this.noeuds[this.editionNoeudId]['assiduite'] = parseInt(this.formNoeud.find('#assiduite').val()) / 100;
-        for (var tid in this.element.data('type-heures')) {
-            this.noeuds[this.editionNoeudId]['effectifs'][tid] = parseInt(this.formNoeud.find('#effectifs-' + tid).val());
-        }
-        for (var tid in this.element.data('type-intervention')) {
-            this.noeuds[this.editionNoeudId]['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-' + tid).val());
-            this.noeuds[this.editionNoeudId]['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-' + tid).val());
-        }
-        this.mergeNoeudData(values);
+        this.mergeNoeudData(noeud);
 
         return this;
     },
 
 
 
-    mergeNoeudData: function( data )
+    mergeNoeudData: function (data)
     {
-        var noeudId = data.id;
-        var noeud = this.noeuds[noeudId];
+        var noeud = this.noeuds[data.id];
 
-        if (data['choix-minimum'] !== undefined && data['choix-minimum'] != noeud['choix-minimum']){
+        if (data['choix-minimum'] !== undefined) {
             noeud['choix-minimum'] = data['choix-minimum'];
         }
+        if (data['choix-maximum'] !== undefined) {
+            noeud['choix-maximum'] = data['choix-maximum'];
+        }
+        if (data['assiduite'] !== undefined) {
+            noeud['assiduite'] = data['assiduite'];
+        }
+        for (var tid in this.typesHeures) {
+            if (data.effectifs[tid] !== undefined){
+                noeud.effectifs[tid] = data.effectifs[tid];
+            }
+        }
+        for (var tid in this.typesIntervention) {
+            if (data['seuils-ouverture'][tid] !== undefined){
+                noeud['seuils-ouverture'][tid] = data['seuils-ouverture'][tid];
+            }
+            if (data['seuils-dedoublement'][tid] !== undefined){
+                noeud['seuils-dedoublement'][tid] = data['seuils-dedoublement'][tid];
+            }
+        }
 
-        this.majNoeud(noeudId);
+        this.majNoeud(data.id);
+
+        saveData = {noeuds: {}};
+        saveData.noeuds[data.id] = data;
+        this.enregistrer(saveData);
+
+        return this;
     },
 
 
@@ -243,12 +259,13 @@ $.widget("ose.chargens", {
                 model.setDataProperty(data, 'choix', this.__dataToGraph(noeudId, 'choix'));
                 model.setDataProperty(data, 'assiduite', this.__dataToGraph(noeudId, 'assiduite'));
                 model.setDataProperty(data, 'effectifs', this.__dataToGraph(noeudId, 'effectifs'));
-                for( var ti in this.typesIntervention ){
+                for (var ti in this.typesIntervention) {
                     model.setDataProperty(data, 'groupes-' + ti, this.__dataToGraph(noeudId, 'groupes', ti));
                 }
             }
         }
         model.commitTransaction("majNoeud");
+
         return this;
     },
 
@@ -256,10 +273,11 @@ $.widget("ose.chargens", {
 
     editionLien: function (lienId)
     {
+        var lien = this.liens[lienId];
         this.editionLienId = lienId;
 
-        this.formLien.find('#actif').prop('checked', this.liens[lienId]['actif']);
-        this.formLien.find('#poids').val(this.liens[lienId]['poids']);
+        this.formLien.find('#actif').prop('checked', lien['actif']);
+        this.formLien.find('#poids').val(lien['poids']);
 
         this.formLien.dialog({
             position: {
@@ -275,10 +293,35 @@ $.widget("ose.chargens", {
 
     applicationEditionLien: function ()
     {
-        this.liens[this.editionLienId].actif = this.formLien.find('#actif').is(':checked');
-        this.liens[this.editionLienId].poids = parseFloat(this.formLien.find('#poids').val());
+        var lien = {
+            id: this.editionLienId,
+            actif: this.formLien.find('#actif').is(':checked'),
+            poids: parseFloat(this.formLien.find('#poids').val())
+        };
 
-        this.majLien(this.editionLienId);
+        this.mergeLienData(lien);
+
+        return this;
+    },
+
+
+
+    mergeLienData: function (data)
+    {
+        var lien = this.liens[data.id];
+
+        if (data.actif !== undefined){
+            lien.actif = data.actif;
+        }
+        if (data.poids !== undefined){
+            lien.poids = data.poids;
+        }
+
+        this.majLien(data.id);
+
+        saveData = {liens: {}};
+        saveData.liens[data.id] = data;
+        this.enregistrer(saveData);
 
         return this;
     },
@@ -304,8 +347,78 @@ $.widget("ose.chargens", {
 
 
 
-    sauvegarder: function ()
+    majDiagramme: function ()
     {
+        var nd = [];
+
+        for (var noeudId in this.noeuds) {
+            var n = this.noeuds[noeudId];
+            var d = {
+                key: noeudId,
+                id: noeudId,
+                code: n.code,
+                libelle: n.libelle,
+                choix: this.__dataToGraph(noeudId, 'choix'),
+                assiduite: this.__dataToGraph(noeudId, 'assiduite'),
+                effectifs: this.__dataToGraph(noeudId, 'effectifs'),
+                category: n.etape ? 'etape' : n['element-pedagogique'] ? 'element' : 'noeud'
+            };
+
+            for (var ti in this.typesIntervention) {
+                d['groupes-' + ti] = this.__dataToGraph(noeudId, 'groupes', ti);
+            }
+
+            nd.push(d);
+        }
+
+        var ld = [];
+
+        for (var lienId in this.liens) {
+            ld.push({
+                id: lienId,
+                from: this.liens[lienId]['noeud-sup'],
+                to: this.liens[lienId]['noeud-inf'],
+                actif: this.liens[lienId].actif,
+                poids: this.liens[lienId].poids,
+                category: (this.liens[lienId].actif) ? 'actif' : 'non-actif'
+            });
+        }
+
+        this.diagramme.model = go.GraphObject.make(go.GraphLinksModel, {
+            nodeDataArray: nd,
+            linkDataArray: ld
+        });
+    },
+
+
+
+    majDiagrammeData: function ()
+    {
+        for (var noeudId in this.noeuds) {
+            this.majNoeud(noeudId);
+        }
+
+        for (var lienId in this.liens) {
+            this.majLien(lienId);
+        }
+    },
+
+
+
+    chargerDonnees: function (etape, scenario, noeuds, liens)
+    {
+        if (!noeuds) return this;
+
+        this.scenario = scenario;
+        this.noeuds = noeuds;
+        this.liens = liens;
+
+        if (etape != this.etape) {
+            this.etape = etape;
+            this.majDiagramme();
+        } else {
+            this.majDiagrammeData();
+        }
 
         return this;
     },
@@ -338,6 +451,58 @@ $.widget("ose.chargens", {
         return this;
     },
 
+
+
+    charger: function (etape, scenario)
+    {
+        var url = this.element.data('url-json-etape');
+        var params = {
+            etape: etape,
+            scenario: scenario
+        };
+
+        this.__actionServeur(url, params);
+        return this;
+    },
+
+
+
+    enregistrer: function (data)
+    {
+        var url = this.element.data('url-enregistrer');
+        var params = {
+            etape: this.etape,
+            scenario: this.scenario,
+            data: data,
+        };
+        this.__actionServeur(url, params);
+        return this;
+    },
+
+
+
+    __actionServeur: function (url, params)
+    {
+        var that = this;
+        var p = params;
+
+        $.post(url, params, function (data)
+        {
+            if (data.erreur) {
+                alertFlash(data.erreur, 'danger', 5000);
+            } else {
+                that.chargerDonnees(p.etape, p.scenario, data.noeuds, data.liens);
+            }
+
+        }).fail(function (jqXHR)
+        {
+            alertFlash('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.', 'danger', 5000);
+            console.log(jqXHR);
+        });
+    },
+
+
+
     getFormNoeudBtnCancel: function () { return this.formNoeud.find('#btn-cancel')},
     getFormNoeudBtnSave: function () { return this.formNoeud.find('#btn-save')},
     getFormLienBtnCancel: function () { return this.formLien.find('#btn-cancel')},
@@ -351,17 +516,17 @@ $.widget("ose.chargens", {
         var $ = go.GraphObject.make;
 
         var yellowGradient = {
-            fill: $(go.Brush, "Linear", { 0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)" }),
-            stroke: '#EDD6A3'
+            fill: $(go.Brush, "Linear", {0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)"}),
+            stroke: '#edd6a3'
         };
 
         var grayGradient = {
-            fill: $(go.Brush, "Linear", { 0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)" }),
+            fill: $(go.Brush, "Linear", {0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)"}),
             stroke: '#ccc'
         };
 
         var blueGradient = {
-            fill: $(go.Brush, "Linear", { 0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)" }),
+            fill: $(go.Brush, "Linear", {0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)"}),
             stroke: '#98CED9'
         };
 
@@ -404,15 +569,14 @@ $.widget("ose.chargens", {
         };
 
         var sel = {
-            selectionAdornmentTemplate:
-                $(go.Adornment, "Auto",
-                    $(go.Shape, "RoundedRectangle",
-                        { fill: null, stroke: "dodgerblue", strokeWidth: 4 }),
-                    $(go.Placeholder)
-                )  // end Adornment
+            selectionAdornmentTemplate: $(go.Adornment, "Auto",
+                $(go.Shape, "RoundedRectangle",
+                    {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
+                $(go.Placeholder)
+            )  // end Adornment
         }
 
-        var defaultNodeTemplate = $(go.Node, "Vertical",sel,
+        var defaultNodeTemplate = $(go.Node, "Vertical", sel,
             $(go.Panel, "Auto",
                 {name: 'panel', width: 110, height: 95},
                 $(go.Shape, "RoundedRectangle", grayGradient),
@@ -453,7 +617,7 @@ $.widget("ose.chargens", {
             )
         );
 
-        var etapeNodeTemplate = $(go.Node, "Vertical",sel,
+        var etapeNodeTemplate = $(go.Node, "Vertical", sel,
             $(go.Panel, "Auto",
                 {name: 'panel', width: 110, height: 95},
                 $(go.Shape, "RoundedRectangle", yellowGradient),
@@ -505,7 +669,7 @@ $.widget("ose.chargens", {
             );
         }
 
-        var elementNodeTemplate = $(go.Node, "Vertical",sel,
+        var elementNodeTemplate = $(go.Node, "Vertical", sel,
             $(go.Panel, "Auto",
                 {name: 'panel', width: 110, height: 55 + (elementNodeTemplateProprietes.length) * 13},
                 $(go.Shape, "RoundedRectangle", blueGradient),
@@ -584,61 +748,7 @@ $.widget("ose.chargens", {
         d.linkTemplateMap.add("actif", defaultLinkTemplate);
         d.linkTemplateMap.add("non-actif", desactivedLinkTemplate);
 
-        d.model = $(go.GraphLinksModel, {
-            nodeDataArray: this.__makeNodeData(),
-            linkDataArray: this.__makeLinkData()
-        });
-
         return d;
-    },
-
-
-
-    __makeNodeData: function ()
-    {
-        var nd = [];
-
-        for (var noeudId in this.noeuds) {
-            var n = this.noeuds[noeudId];
-            var d = {
-                key: noeudId,
-                id: noeudId,
-                code: n.code,
-                libelle: n.libelle,
-                choix: this.__dataToGraph(noeudId, 'choix'),
-                assiduite: this.__dataToGraph(noeudId, 'assiduite'),
-                effectifs: this.__dataToGraph(noeudId, 'effectifs'),
-                category: n.etape ? 'etape' : n['element-pedagogique'] ? 'element' : 'noeud'
-            };
-
-            for( var ti in this.typesIntervention ){
-                d['groupes-' + ti] = this.__dataToGraph(noeudId, 'groupes', ti);
-            }
-
-            nd.push(d);
-        }
-
-        return nd;
-    },
-
-
-
-    __makeLinkData: function ()
-    {
-        var ld = [];
-
-        for (var lienId in this.liens) {
-            ld.push({
-                id: lienId,
-                from: this.liens[lienId]['noeud-sup'],
-                to: this.liens[lienId]['noeud-inf'],
-                actif: this.liens[lienId].actif,
-                poids: this.liens[lienId].poids,
-                category: (this.liens[lienId].actif) ? 'actif' : 'non-actif'
-            });
-        }
-
-        return ld;
     },
 
 
@@ -663,7 +773,7 @@ $.widget("ose.chargens", {
                 if (
                     this.noeuds[noeudId]['types-intervention'].length > 0
                     && -1 != this.noeuds[noeudId]['types-intervention'].indexOf(parseInt(propriete2))
-                ){
+                ) {
                     var effectifs = 0;
                     for (var ti in this.noeuds[noeudId]['effectifs']) {
                         effectifs += this.noeuds[noeudId]['effectifs'][ti];
@@ -676,8 +786,8 @@ $.widget("ose.chargens", {
                     if (!seuilOuverture) seuilOuverture = 9999;
 
                     if (effectifs < seuilOuverture) return 0;
-                    return Math.ceil( effectifs / seuilDedoublement );
-                }else{
+                    return Math.ceil(effectifs / seuilDedoublement);
+                } else {
                     return '-';
                 }
         }
@@ -689,11 +799,77 @@ $.widget("ose.chargens", {
 
 
 $.widget("ose.chargensFiltre", {
+    structuresEtapes: [],
+    structuresScenarios: [],
+    etapesStructure: [],
+
 
     _create: function ()
     {
         var that = this;
 
+        this.structuresEtapes = this.getStructureElement().data('etapes');
+        this.structuresScenarios = this.getStructureElement().data('scenarios');
+        this.etapesStructure = this.getEtapeElement().data('structures');
+
+        this.getStructureElement().change(function ()
+        {
+            that.updateEtapeValues();
+            that.change();
+        });
+        this.getEtapeElement().change(function ()
+        {
+            that.updateScenarioValues();
+            that.change();
+        });
+        this.getScenarioElement().change(function () { that.change(); });
+
+        this.updateEtapeValues();
+        this.change();
     },
+
+
+
+    updateEtapeValues: function ()
+    {
+        var structure = this.getStructureElement().val();
+
+        var etapes = structure ? this.structuresEtapes[structure] : 'all';
+
+        Util.filterSelectPicker(this.getEtapeElement(), etapes);
+        this.updateScenarioValues();
+    },
+
+
+
+    updateScenarioValues: function ()
+    {
+        var etape = this.getEtapeElement().val();
+        var structure = this.getStructureElement().val();
+
+        if (etape) {
+            var scenarios = this.etapesStructure[etape] ? this.structuresScenarios[[this.etapesStructure[etape]]] : 'all';
+        } else {
+            var scenarios = structure ? this.structuresScenarios[structure] : 'all';
+        }
+
+        Util.filterSelectPicker(this.getScenarioElement(), scenarios);
+    },
+
+
+
+    change: function ()
+    {
+        var etape = this.getEtapeElement().val();
+        var scenario = this.getScenarioElement().val();
+
+        $('.chargens').chargens('charger', etape, scenario);
+    },
+
+
+
+    getStructureElement: function () { return this.element.find('#structure'); },
+    getEtapeElement: function () { return this.element.find('#etape'); },
+    getScenarioElement: function () { return this.element.find('#scenario'); }
 
 });

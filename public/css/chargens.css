@@ -29,3 +29,25 @@
 .ui-front {
     z-index: 1051;
 }
+
+.chargens .navbar .div-filtre {
+    padding:4px;
+    padding-bottom: 0px;
+}
+
+.chargens .navbar .div-filtre .div-structure {
+    padding-right:2px;
+}
+
+.chargens .navbar .div-filtre .div-etape {
+    padding-left:2px;
+    padding-right:2px;
+}
+
+.chargens .navbar .div-filtre .div-scenario {
+    padding-left:2px;
+}
+
+.chargens .navbar .div-controles {
+    padding:4px;
+}

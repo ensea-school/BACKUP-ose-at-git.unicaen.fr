@@ -113,4 +113,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const BUDGET_TYPE_DOTATION_VISUALISATION         = 'budget-type-dotation-visualisation';
     const BUDGET_CC_ACTIVITE_VISUALISATION           = 'budget-cc-activite-visualisation';
     const BUDGET_CC_ACTIVITE_EDITION                 = 'budget-cc-activite-edition';
+    const TYPE_INTERVENTION_VISUALISATION            = 'type-intervention-visualisation';
+    const TYPE_INTERVENTION_EDITION                  = 'type-intervention-edition';
 }

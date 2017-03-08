@@ -218,7 +218,10 @@ form#modulateurs-saisie th select {
     padding-left: 10px;
 }
 
-
+.btn-group .bootstrap-select {
+    width: auto;
+    float: left !important;
+}
 
 
 

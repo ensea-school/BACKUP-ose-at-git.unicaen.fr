@@ -1,0 +1,66 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $scenarios \Application\Entity\Db\Scenario[]
+ */
+
+$title = "Gestion des scénarios";
+
+$this->headTitle()->append($title);
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_VISUALISATION));
+
+?>
+    <h1 class="page-header"><?php echo $title ?></h1>
+    <table class="table table-bordered table-sort">
+        <thead>
+        <tr>
+            <th>Scénario</th>
+            <th>Type</th>
+            <th>Composante</th>
+            <?php if ($canEdit): ?>
+                <th>Actions</th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($scenarios as $scenario): ?>
+            <tr>
+                <td><?php echo $scenario->getLibelle(); ?></td>
+                <td style="text-align:center"><?php echo $scenario->getTypeString() ?></td>
+                <td><?php echo $this->structure($scenario->getStructure())->renderLink(); ?></td>
+                <?php if ($canEdit): ?>
+                    <td style="text-align: center">
+                        <a class="pop-ajax" data-submit-reload="true"
+                           href="<?php echo $this->url('chargens/scenario/saisir', ['scenario' => $scenario->getId()]) ?>"
+                           title="Modifier le scénario"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="pop-ajax" data-submit-reload="true"
+                           href="<?php echo $this->url('chargens/scenario/dupliquer', ['scenario' => $scenario->getId()]) ?>"
+                           title="Dupliquer le scénario"><span class="glyphicon glyphicon-copy"></span></a>
+                        <a class="pop-ajax"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true"
+                           href="<?php echo $this->url('chargens/scenario/supprimer', ['scenario' => $scenario->getId()]) ?>"
+                           title="Supprimer le scénario"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary pop-ajax" data-submit-reload="true"
+       href="<?php echo $this->url('chargens/scenario/saisir'); ?>"><span class="glyphicon glyphicon-plus"></span> Ajout d'un
+        nouveau scenario local</a>
+
+    <a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
+        <i class="fa fa-undo" aria-hidden="true"></i>
+        Retour à la gestion des charges d'enseignement
+    </a>
+<?php endif; ?>

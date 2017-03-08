@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -13,6 +14,11 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
+
+    /**
+     * @var string
+     */
+    protected $code;
 
     /**
      * @var string
@@ -30,20 +36,48 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     protected $id;
 
 
+
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
-        return $this->getSourceCode() . " - " . $this->getLibelleLong();
+        return $this->getCode() . " - " . $this->getLibelleLong();
     }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return Departement
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
 
     /**
      * Set libelleCourt
      *
      * @param string $libelleCourt
+     *
      * @return Structure
      */
     public function setLibelleCourt($libelleCourt)
@@ -53,20 +87,25 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleCourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleCourt()
     {
         return $this->libelleCourt;
     }
 
+
+
     /**
      * Set libelleLong
      *
      * @param string $libelleLong
+     *
      * @return Structure
      */
     public function setLibelleLong($libelleLong)
@@ -76,10 +115,12 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleLong
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleLong()
     {
@@ -87,10 +128,11 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {

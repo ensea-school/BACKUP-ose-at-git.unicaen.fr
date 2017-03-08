@@ -96,7 +96,7 @@ class FiltreForm extends AbstractForm
                 'label_attributes'          => [
                     'title' => "Formation",
                 ],
-                'value_options'             => Util::collectionAsOptions($this->etapes),
+                'value_options'             => $this->etapes,
             ],
             'attributes' => [
                 'id'               => 'etape',
@@ -105,6 +105,7 @@ class FiltreForm extends AbstractForm
                 'data-width'       => "100%",
                 'data-live-search' => "true",
                 'data-structures'  => json_encode($this->etapesStructure),
+            //    'multiple'         => 'multiple',
             ],
             'type'       => 'Select',
         ]);
@@ -123,7 +124,25 @@ class FiltreForm extends AbstractForm
                 'id'               => 'scenario',
                 'title'            => "Scénario ...",
                 'class'            => 'selectpicker',
-                'data-width'       => "100%",
+                'data-live-search' => "true",
+            ],
+            'type'       => 'Select',
+        ]);
+
+        $this->add([
+            'name'       => 'duplication',
+            'options'    => [
+                'label'                     => "Dupliquer vers :",
+                'disable_inarray_validator' => true,
+                'label_attributes'          => [
+                    'title' => "Scénario",
+                ],
+                'value_options'             => Util::collectionAsOptions($this->scenarios),
+            ],
+            'attributes' => [
+                'id'               => 'duplication',
+                'title'            => "Dupliquer le scénario vers ...",
+                'class'            => 'selectpicker',
                 'data-live-search' => "true",
             ],
             'type'       => 'Select',
@@ -154,9 +173,29 @@ class FiltreForm extends AbstractForm
             $this->structures = $this->getServiceStructure()->getList($qb);
         }
 
-        $qb = $this->getServiceEtape()->finderByHistorique();
+        $etapesSql = '
+        SELECT DISTINCT
+            e.id,
+            e.code,
+            e.libelle,
+            e.structure_id
+        FROM
+          etape e
+          JOIN noeud n ON n.etape_id = e.id
+        WHERE
+          1 = OSE_DIVERS.COMPRISE_ENTRE( e.histo_creation, e.histo_destruction )
+          AND 1 = OSE_DIVERS.COMPRISE_ENTRE( n.histo_creation, n.histo_destruction )
+          AND e.annee_id = '.$this->getServiceContext()->getAnnee()->getId().'
+          '.(($s=$this->getServiceContext()->getStructure()) ? 'AND e.structure_id = '.$s->getId() : '').' 
+        ORDER BY
+            e.libelle, e.code
+        ';
+        $this->etapes = [];
+        $dEtapes = $this->getServiceEtape()->getEntityManager()->getConnection()->fetchAll($etapesSql);
+
+        /*$qb = $this->getServiceEtape()->finderByHistorique();
         $this->getServiceEtape()->finderByContext($qb);
-        $this->etapes = $this->getServiceEtape()->getList($qb);
+        $this->etapes = $this->getServiceEtape()->getList($qb);*/
 
         $qb = $this->getServiceScenario()->finderByHistorique();
         $this->getServiceScenario()->finderByContext($qb);
@@ -164,22 +203,22 @@ class FiltreForm extends AbstractForm
 
         $sEtapes = [];
         $eStructures = [];
-        foreach ($this->etapes as $etape) {
-            $sid = $etape->getStructure()->getId();
+        foreach( $dEtapes as $e ){
+            $id = (int)$e['ID'];
+            $label = $e['LIBELLE'].' ('.$e['CODE'].')';
+            $sid = (int)$e['STRUCTURE_ID'];
+
+            $this->etapes[$id] = $label;
+
             if (!isset($sEtapes[$sid])) {
                 $sEtapes[$sid] = [];
             }
-            $sEtapes[$sid][] = $etape->getId();
-            $eStructures[$etape->getId()] = $sid;
+            $sEtapes[$sid][] = $id;
+            $eStructures[$id] = $sid;
         }
 
-        $sScenarios = [];
         foreach ($this->scenarios as $scenario) {
             $sid = $scenario->getStructure() ? $scenario->getStructure()->getId() : 0;
-
-            if (0 === $sid && $cStructure) {
-                continue; // pas de scénario de niveau établissement si on est dans une structure particulière
-            }
 
             if (0 === $sid) {
                 $structures = $this->structures;

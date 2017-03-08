@@ -11,14 +11,19 @@
 <nav class="navbar navbar-default">
     <?php if ($filtre): ?>
         <div class="row div-filtre chargens-filtre">
-            <div class="col-md-3 div-structure">
+            <div class="col-md-2 div-structure">
                 <?php echo $this->formSelect($filtre->get('structure')) ?>
             </div>
             <div class="col-md-7 div-etape">
                 <?php echo $this->formSelect($filtre->get('etape')) ?>
             </div>
-            <div class="col-md-2 div-scenario">
-                <?php echo $this->formSelect($filtre->get('scenario')) ?>
+            <div class="col-md-3 div-scenario">
+                <div class="btn-group" role="group">
+                    <?php echo $this->formSelect($filtre->get('scenario')) ?>
+                    <a href="<?php echo $this->url('chargens/scenario') ?>" class="btn btn-default" title="Modification des scénarios">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                </div>
             </div>
         </div>
     <?php endif; ?>
@@ -27,8 +32,8 @@
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default" title="Plein écran">
                     <input type="checkbox" class="fullscreen" autocomplete="off"/>
-                        <span class="glyphicon glyphicon-fullscreen"></span>
-                        Plein écran
+                    <span class="glyphicon glyphicon-fullscreen"></span>
+                    Plein écran
                 </label>
             </div>
 
@@ -46,26 +51,23 @@
                     Zoom par défaut
                 </button>
             </div>
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default dupliquer" title="Dupliquer les données de ce diagramme dans un autre scénario">
+                   <span class="glyphicon glyphicon-copy"></span> Dupliquer
+                </button>
+            </div>
+
+            <div class="nav navbar-nav navbar-right navbar-brand div-hetd-composante">
+                <span>Total composante (HETD) :</span>
+                <span id="hetd-composante">NC</span>
+            </div>
         </div>
     </div>
-
-
 </nav>
 <div class="form-noeud" style="display:none">
     <div class="row" id="choix-assiduite">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="choix-minimum" title="Choix minimum">Choix min.</label>
-                <input type="number" class="form-control" placeholder="Min." id="choix-minimum"/>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="choix-maximum" title="Choix maximum">Choix max.</label>
-                <input type="number" class="form-control" placeholder="Max." id="choix-maximum"/>
-            </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="form-group">
                 <label for="groupes">Assiduité</label>
                 <div class="input-group">
@@ -107,10 +109,10 @@
             <tr class="seuil" id="seuil-<?php echo $tid ?>">
                 <th style="width:20%"><?php echo $tval ?></th>
                 <td style="width:40%">
-                    <input type="number" class="form-control" id="seuil-ouverture-<?php echo $tid ?>"/>
+                    <input type="number" class="form-control" placeholder="Aucun" id="seuil-ouverture-<?php echo $tid ?>"/>
                 </td>
                 <td style="width:40%">
-                    <input type="number" class="form-control" id="seuil-dedoublement-<?php echo $tid ?>"/>
+                    <input type="number" class="form-control" placeholder="Aucun" id="seuil-dedoublement-<?php echo $tid ?>"/>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -123,6 +125,20 @@
     </div>
 </div>
 <div class="form-lien" style="display:none">
+    <div class="row" id="choix">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="choix-minimum" title="Choix minimum">Choix min.</label>
+                <input type="number" class="form-control" placeholder="Min." id="choix-minimum"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="choix-maximum" title="Choix maximum">Choix max.</label>
+                <input type="number" class="form-control" placeholder="Max." id="choix-maximum"/>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">

@@ -8,7 +8,15 @@
  */
 
 
-/** @var \Application\Processus\IndicateurProcessus $p */
-$p = $sl->get('processusIndicateur');
+/** @var \Application\Service\ScenarioService $s */
+$s = $sl->get('applicationScenario');
 
-var_dump($p->getServiceContext());
+$bdd = new \Application\Connecteur\Bdd\BddConnecteur();
+$bdd->setEntityManager( $s->getEntityManager() );
+
+$bdd->execPlsql('OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur);', [
+    'source'      => 1,
+    'destination' => 20,
+    'utilisateur' => 2,
+]);
+

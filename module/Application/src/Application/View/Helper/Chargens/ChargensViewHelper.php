@@ -62,11 +62,12 @@ class ChargensViewHelper extends AbstractViewHelper
         $t = $this->getView()->tag();
 
         return (string)$t('div', [
-            'class'                  => 'chargens',
-            'data-type-heures'       => $this->getTypeHeuresArray(),
-            'data-type-intervention' => $this->getTypeInterventionsArray(),
-            'data-url-json-etape'    => $this->getView()->url('chargens/json/etape'),
-            'data-url-enregistrer'   => $this->getView()->url('chargens/enregistrer'),
+            'class'                       => 'chargens',
+            'data-type-heures'            => $this->getTypeHeuresArray(),
+            'data-type-intervention'      => $this->getTypeInterventionsArray(),
+            'data-url-json-etape'         => $this->getView()->url('chargens/json/etape'),
+            'data-url-enregistrer'        => $this->getView()->url('chargens/enregistrer'),
+            'data-url-scenario-dupliquer' => $this->getView()->url('chargens/scenario/dupliquer'),
         ])->html(
             $t('div', [
                 'class' => 'controles',

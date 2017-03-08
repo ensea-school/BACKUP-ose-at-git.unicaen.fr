@@ -26,7 +26,12 @@ class HistoriqueFilter extends AbstractFilter
         }
 
         if (isset($this->enabledEntities[$targetEntity->name])) {
-            $dateObservation = $this->getServiceContext()->getDateObservation();
+            if ($this->getServiceContext()){
+                $dateObservation = $this->getServiceContext()->getDateObservation();
+            }else{
+                $dateObservation = new \DateTime();
+            }
+
 
             if ($dateObservation) {
                 $this->setParameter('date_observation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);

@@ -2,32 +2,53 @@
 
 namespace Application\Entity\Chargens;
 
+use Application\Entity\Chargens\Traits\LienAwareTrait;
 use Application\Entity\Db\Scenario;
-use Application\Provider\Chargens\ChargensProvider;
+use Application\Entity\Db\Traits\ScenarioAwareTrait;
+
 
 class ScenarioLien
 {
-    /**
-     * @var ChargensProvider
-     */
-    private $provider;
+    use ScenarioAwareTrait;
+    use LienAwareTrait;
 
     /**
-     * @var array
+     * @var integer
      */
-    private $data;
+    private $id;
 
     /**
-     * @var array
+     * @var boolean
      */
-    private $changes = [];
+    private $actif = true;
+
+    /**
+     * @var float
+     */
+    private $poids = 1.0;
+
+    /**
+     * @var integer
+     */
+    private $choixMinimum = null;
+
+    /**
+     * @var integer
+     */
+    private $choixMaximum = null;
 
 
 
-    public function __construct(ChargensProvider $provider, array $data)
+    /**
+     * ScenarioLien constructor.
+     *
+     * @param Lien     $lien
+     * @param Scenario $scenario
+     */
+    public function __construct(Lien $lien, Scenario $scenario)
     {
-        $this->provider = $provider;
-        $this->data     = $data;
+        $this->setLien($lien);
+        $this->setScenario($scenario);
     }
 
 
@@ -37,58 +58,43 @@ class ScenarioLien
      */
     public function getId()
     {
-        return (int)$this->data['ID'];
+        return $this->id;
     }
 
 
 
     /**
-     * @param bool $object
+     * @param int $id
      *
-     * @return Lien|int
+     * @return ScenarioLien
      */
-    public function getLien($object = true)
+    public function setId($id)
     {
-        $id = (int)$this->data['LIEN_ID'];
+        $this->id = $id;
 
-        return $object ? $this->provider->getLien($id) : $id;
+        return $this;
     }
 
 
 
     /**
-     * @param bool $object
-     *
-     * @return Scenario|int
-     */
-    public function getScenario($object = true)
-    {
-        $id = (int)$this->data['SCENARIO_ID'];
-
-        return $object ? $this->provider->getScenario($id) : $id;
-    }
-
-
-
-    /**
-     * @return boolean
+     * @return bool
      */
     public function isActif()
     {
-        return $this->data['ACTIF'] == '1';
+        return $this->actif;
     }
 
 
 
     /**
-     * @param boolean $actif
+     * @param bool $actif
      *
-     * @return $this
+     * @return ScenarioLien
      */
     public function setActif($actif)
     {
-        $this->data['ACTIF']    = $actif ? '1' : '0';
-        $this->changes['ACTIF'] = $this->data['ACTIF'];
+        $this->actif = $actif;
 
         return $this;
     }
@@ -100,20 +106,67 @@ class ScenarioLien
      */
     public function getPoids()
     {
-        return (float)$this->data['POIDS'];
+        return $this->poids;
     }
 
 
 
     /**
-     * @param $poids
+     * @param float $poids
      *
-     * @return $this
+     * @return ScenarioLien
      */
     public function setPoids($poids)
     {
-        $this->data['POIDS']    = (string)(float)$poids;
-        $this->changes['POIDS'] = $this->data['POIDS'];
+        $this->poids = $poids;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getChoixMinimum()
+    {
+        return $this->choixMinimum;
+    }
+
+
+
+    /**
+     * @param int $choixMinimum
+     *
+     * @return ScenarioLien
+     */
+    public function setChoixMinimum($choixMinimum)
+    {
+        $this->choixMinimum = $choixMinimum;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getChoixMaximum()
+    {
+        return $this->choixMaximum;
+    }
+
+
+
+    /**
+     * @param int $choixMaximum
+     *
+     * @return ScenarioLien
+     */
+    public function setChoixMaximum($choixMaximum)
+    {
+        $this->choixMaximum = $choixMaximum;
 
         return $this;
     }

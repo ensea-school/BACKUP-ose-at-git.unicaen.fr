@@ -4,6 +4,8 @@ namespace Application\Entity\Chargens;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
+use Application\Entity\Db\Scenario;
+use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Chargens\ChargensProvider;
 
 class Noeud
@@ -14,16 +16,65 @@ class Noeud
     private $provider;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $code;
+
+    /**
+     * @var string
+     */
+    private $libelle;
+
+    /**
+     * @var boolean
+     */
+    private $liste = false;
+
+    /**
+     * @var integer
+     */
+    private $etape = null;
+
+    /**
+     * @var integer
+     */
+    private $elementPedagogique = null;
+
+    /**
+     * @var TypeIntervention[]
+     */
+    private $typeIntervention = [];
+
+    /**
      * @var array
      */
-    private $data;
+    private $scenarioNoeud = [];
+
+    /**
+     * @var integer
+     */
+    private $nbLiensSup;
+
+    /**
+     * @var integer
+     */
+    private $nbLiensInf;
 
 
 
-    public function __construct(ChargensProvider $provider, array $data)
+    /**
+     * Noeud constructor.
+     *
+     * @param ChargensProvider $provider
+     */
+    public function __construct(ChargensProvider $provider)
     {
         $this->provider = $provider;
-        $this->data     = $data;
     }
 
 
@@ -33,27 +84,93 @@ class Noeud
      */
     public function getId()
     {
-        return (int)$this->data['ID'];
+        return $this->id;
     }
 
 
 
     /**
-     * @return Lien[]
+     * @param int $id
+     *
+     * @return Noeud
      */
-    public function getLiensInf()
+    public function setId($id)
     {
-        return $this->provider->getLiensByNoeudSup($this);
+        $this->id = $id;
+
+        return $this;
     }
 
 
 
     /**
-     * @return Lien[]
+     * @return string
      */
-    public function getLiensSup()
+    public function getCode()
     {
-        return $this->provider->getLiensByNoeudInf($this);
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return Noeud
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+
+
+    /**
+     * @param string $libelle
+     *
+     * @return Noeud
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isListe()
+    {
+        return $this->liste;
+    }
+
+
+
+    /**
+     * @param bool $liste
+     *
+     * @return Noeud
+     */
+    public function setListe($liste)
+    {
+        $this->liste = $liste;
+
+        return $this;
     }
 
 
@@ -65,9 +182,24 @@ class Noeud
      */
     public function getEtape($object = true)
     {
-        $id = (int)$this->data['ETAPE_ID'];
+        return $object ? $this->provider->getEtape($this->etape) : $this->etape;
+    }
 
-        return $object ? $this->provider->getEtape($id) : $id;
+
+
+    /**
+     * @param Etape|int $etape
+     *
+     * @return Noeud
+     */
+    public function setEtape($etape)
+    {
+        if ($etape instanceof Etape) {
+            $etape = $etape->getId();
+        }
+        $this->etape = $etape;
+
+        return $this;
     }
 
 
@@ -79,219 +211,287 @@ class Noeud
      */
     public function getElementPedagogique($object = true)
     {
-        $id = (int)$this->data['ELEMENT_PEDAGOGIQUE_ID'];
-
-        return $object ? $this->provider->getElementPedagogique($id) : $id;
+        return $object ? $this->provider->getElementPedagogique($this->elementPedagogique) : $this->elementPedagogique;
     }
 
 
 
     /**
-     * @return string
+     * @param ElementPedagogique|int $elementPedagogique
+     *
+     * @return Noeud
      */
-    public function getCode()
+    public function setElementPedagogique($elementPedagogique)
     {
-        return $this->data['CODE'];
+        if ($elementPedagogique instanceof ElementPedagogique) {
+            $elementPedagogique = $elementPedagogique->getId();
+        }
+        $this->elementPedagogique = $elementPedagogique;
+
+        return $this;
     }
 
 
 
     /**
-     * @return string
+     * @return TypeIntervention[]
      */
-    public function getLibelle()
+    public function getTypeIntervention()
     {
-        return $this->data['LIBELLE'];
+        return $this->typeIntervention;
     }
 
 
 
-    public function getTypesIntervention($object = true)
+    /**
+     * @param TypeIntervention|int $typeIntervention
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function addTypeIntervention($typeIntervention)
     {
-        $ti = isset($this->data['TYPES_INTERVENTION']) ? $this->data['TYPES_INTERVENTION'] : [];
+        if (!$typeIntervention instanceof TypeIntervention) {
+            $typeIntervention = $this->provider->getEntities()->get(TypeIntervention::class, $typeIntervention);
+        }
 
-        $res = [];
-        if (!empty($ti)) {
-            foreach ($ti as $i => $t) {
-                if ($object) {
-                    $t                = $this->provider->getTypeIntervention($t);
-                    $res[$t->getId()] = $t;
-                } else {
-                    $res[(int)$t] = (int)$t;
+        if (!$typeIntervention) {
+            throw new \Exception('Type d\'intervention inconnu');
+        }
+
+        if (!array_key_exists($typeIntervention->getId(), $this->typeIntervention)) {
+            $this->typeIntervention[$typeIntervention->getId()] = $typeIntervention;
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param TypeIntervention|int|null $typeIntervention
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function removeTypeIntervention($typeIntervention)
+    {
+        if (!$typeIntervention) {
+            $this->typeIntervention = [];
+
+            return $this;
+        }
+
+        if (!$typeIntervention instanceof TypeIntervention) {
+            $typeIntervention = $this->provider->getEntities()->get(TypeIntervention::class, $typeIntervention);
+        }
+
+        if (!$typeIntervention) {
+            throw new \Exception('Type d\'intervention inconnu');
+        }
+
+        if (array_key_exists($typeIntervention->getId(), $this->typeIntervention)) {
+            unset($this->typeIntervention[$typeIntervention->getId()]);
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Scenario|null $scenario
+     *
+     * @return bool
+     */
+    public function hasScenarioNoeud(Scenario $scenario = null)
+    {
+        if (!$scenario) {
+            $scenario = $this->provider->getScenario();
+        }
+
+        if (!$scenario) {
+            throw new \Exception('Le scénario n\'a pas été défini');
+        }
+
+        return array_key_exists($scenario->getId(), $this->scenarioNoeud);
+    }
+
+
+
+    /**
+     * @param Scenario|null $scenario
+     *
+     * @return ScenarioNoeud
+     */
+    public function getScenarioNoeud(Scenario $scenario = null)
+    {
+        if (!$scenario) {
+            $scenario = $this->provider->getScenario();
+        }
+
+        if (!$scenario) {
+            throw new \Exception('Le scénario n\'a pas été défini');
+        }
+
+        if (!array_key_exists($scenario->getId(), $this->scenarioNoeud)) {
+            $this->scenarioNoeud[$scenario->getId()] = new ScenarioNoeud($this, $scenario);
+        }
+
+        return $this->scenarioNoeud[$scenario->getId()];
+    }
+
+
+
+    /**
+     * @param ScenarioNoeud $scenarioNoeud
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function addScenarioNoeud(ScenarioNoeud $scenarioNoeud)
+    {
+        if (!$scenarioNoeud->getScenario()) {
+            throw new \Exception('Le scénario du noeud n\'a pas été défini');
+        }
+
+        $scenarioNoeud->setNoeud($this);
+
+        $this->scenarioNoeud[$scenarioNoeud->getScenario()->getId()] = $scenarioNoeud;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return $this
+     */
+    public function removeScenarioNoeud(Scenario $scenario = null)
+    {
+        if ($scenario) {
+            unset($this->scenarioNoeud[$scenario->getId()]);
+        } else {
+            $this->scenarioNoeud = [];
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Lien[]
+     */
+    public function getLiensInf()
+    {
+        return $this->provider->getLiens()->getLiensByNoeudSup($this);
+    }
+
+
+
+    /**
+     * @return Lien[]
+     */
+    public function getLiensSup()
+    {
+        return $this->provider->getLiens()->getLiensByNoeudInf($this);
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getNbLiensSup()
+    {
+        return $this->nbLiensSup;
+    }
+
+
+
+    /**
+     * @param int $nbLiensSup
+     *
+     * @return Noeud
+     */
+    public function setNbLiensSup($nbLiensSup)
+    {
+        $this->nbLiensSup = $nbLiensSup;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getNbLiensInf()
+    {
+        return $this->nbLiensInf;
+    }
+
+
+
+    /**
+     * @param int $nbLiensInf
+     *
+     * @return Noeud
+     */
+    public function setNbLiensInf($nbLiensInf)
+    {
+        $this->nbLiensInf = $nbLiensInf;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function fromArray(array $data)
+    {
+        if (array_key_exists('assiduite', $data)) {
+            $assiduite = (float)$data['assiduite'];
+            if ($assiduite != $this->getAssiduite()) {
+                $this->setAssiduite($assiduite);
+            }
+        }
+
+        if (array_key_exists('effectifs', $data)) {
+            $effectifs = (array)$data['effectifs'];
+            foreach ($effectifs as $typeHeures => $effectif) {
+                $effectif = (int)$effectif;
+                if ($effectif != $this->getEffectif($typeHeures)) {
+                    $this->setEffectif($typeHeures, $effectif);
                 }
             }
         }
 
-        return $res;
-    }
+        if (array_key_exists('seuils-ouverture', $data)) {
+            $seuilsOuverture = (array)$data['seuils-ouverture'];
+            foreach ($seuilsOuverture as $typeIntervention => $seuilOuverture) {
+                $seuilOuverture = (int)$seuilOuverture;
+                if ($seuilOuverture != $this->getSeuilOuverture($typeIntervention)) {
+                    $this->setSeuilOuverture($typeIntervention, $seuilOuverture);
+                }
+            }
+        }
 
-
-
-    /**
-     * @return int
-     */
-    public function getChoixMinimum()
-    {
-        return $this->provider->getScenarioNoeud($this)->getChoixMinimum();
-    }
-
-
-
-    /**
-     * @param int $choixMinimum
-     */
-    public function setChoixMinimum($choixMinimum)
-    {
-        $this->provider->getScenarioNoeud($this)->setChoixMinimum($choixMinimum);
+        if (array_key_exists('seuils-dedoublement', $data)) {
+            $seuilsDedoublement = (array)$data['seuils-dedoublement'];
+            foreach ($seuilsDedoublement as $typeIntervention => $seuilDedoublement) {
+                $seuilDedoublement = (int)$seuilDedoublement;
+                if ($seuilDedoublement != $this->getSeuilDedoublement($typeIntervention)) {
+                    $this->setSeuilDedoublement($typeIntervention, $seuilDedoublement);
+                }
+            }
+        }
 
         return $this;
-    }
-
-
-
-    /**
-     * @return int
-     */
-    public function getChoixMaximum()
-    {
-        return $this->provider->getScenarioNoeud($this)->getChoixMaximum();
-    }
-
-
-
-    /**
-     * @param int $choixMaximum
-     */
-    public function setChoixMaximum($choixMaximum)
-    {
-        $this->provider->getScenarioNoeud($this)->setChoixMinimum($choixMaximum);
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return float
-     */
-    public function getAssiduite()
-    {
-        return $this->provider->getScenarioNoeud($this)->getAssiduite();
-    }
-
-
-
-    /**
-     * @param float $assiduite
-     */
-    public function setAssiduite($assiduite)
-    {
-        $this->provider->getScenarioNoeud($this)->setAssiduite($assiduite);
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param TypeHeures|integer|null $typeHeures
-     *
-     * @return float
-     */
-    public function getEffectif($typeHeures = null)
-    {
-        return $this->provider->getScenarioNoeud($this)->getEffectif($typeHeures);
-    }
-
-
-
-    /**
-     * @param TypeHeures|integer $typeHeures
-     * @param float              $effectif
-     *
-     * @return $this
-     */
-    public function setEffectif($typeHeures, $effectif)
-    {
-        $this->provider->getScenarioNoeud($this)->setEffectif($typeHeures, $effectif);
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param TypeIntervention|integer|null $typeIntervention
-     *
-     * @return integer
-     */
-    public function getSeuilOuverture($typeIntervention = null)
-    {
-        return $this->provider->getScenarioNoeud($this)->getSeuilOuverture($typeIntervention);
-    }
-
-
-
-    /**
-     * @param TypeIntervention|integer $typeIntervention
-     * @param integer                  $seuilOuverture
-     *
-     * @return $this
-     */
-    public function setSeuilOuverture($typeIntervention, $seuilOuverture)
-    {
-        $this->provider->getScenarioNoeud($this)->setSeuilOuverture($typeIntervention, $seuilOuverture);
-
-        return $this;
-    }
-
-
-
-    /**
-     * @param TypeIntervention|integer|null $typeIntervention
-     *
-     * @return integer
-     */
-    public function getSeuilDedoublement($typeIntervention = null)
-    {
-        return $this->provider->getScenarioNoeud($this)->getSeuilDedoublement($typeIntervention);
-    }
-
-
-
-    /**
-     * @param TypeIntervention|integer $typeIntervention
-     * @param integer                  $seuilDedoublement
-     *
-     * @return $this
-     */
-    public function setSeuilDedoublement($typeIntervention, $seuilDedoublement)
-    {
-        $this->provider->getScenarioNoeud($this)->setSeuilDedoublement($typeIntervention, $seuilDedoublement);
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return [
-            'id'                  => $this->getId(),
-            'code'                => $this->getCode(),
-            'libelle'             => $this->getLibelle(),
-            'choix-minimum'       => $this->getChoixMinimum(),
-            'choix-maximum'       => $this->getChoixMaximum(),
-            'assiduite'           => $this->getAssiduite(),
-            'effectifs'           => $this->getEffectif(),
-            'seuils-ouverture'    => $this->getSeuilOuverture(),
-            'seuils-dedoublement' => $this->getSeuilDedoublement(),
-            'etape'               => $this->getEtape(false),
-            'element-pedagogique' => $this->getElementPedagogique(false),
-            'types-intervention'  => array_values($this->getTypesIntervention(false)),
-        ];
     }
 }

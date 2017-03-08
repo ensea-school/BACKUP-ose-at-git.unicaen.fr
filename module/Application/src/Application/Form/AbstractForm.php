@@ -2,6 +2,8 @@
 
 namespace Application\Form;
 
+use Application\Exception\DbException;
+use Application\Service\AbstractEntityService;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\InputFilter\InputFilterProviderInterface;
@@ -79,13 +81,23 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
         if ($request->isPost()) {
             $this->setData($request->getPost());
             if ($this->isValid()) {
-                try {
-                    $saveFnc($entity);
-                } catch (\Exception $e) {
-                    $this->exception = $e;
-                    $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+                if ($saveFnc instanceof AbstractEntityService) {
+                    try {
+                        $saveFnc->save($entity);
+                        $this->getControllerPluginFlashMessenger()->addSuccessMessage('Enregistrement effectué');
+                    } catch (\Exception $e) {
+                        $e = DbException::translate($e);
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+                    }
+                }else{
+                    try {
+                        $saveFnc($entity);
+                    } catch (\Exception $e) {
+                        $this->exception = $e;
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
 
-                    return false;
+                        return false;
+                    }
                 }
             }
         }

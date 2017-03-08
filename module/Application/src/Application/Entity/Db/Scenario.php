@@ -3,9 +3,12 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
-class Scenario
+class Scenario implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
     use StructureAwareTrait;
 
     /**
@@ -16,22 +19,12 @@ class Scenario
     /**
      * @var string
      */
-    protected $code;
-
-    /**
-     * @var string
-     */
     protected $libelle;
 
     /**
-     * @var boolean
+     * @var integer
      */
-    protected $definitif;
-
-    /**
-     * @var boolean
-     */
-    protected $reel;
+    protected $type = 0;
 
 
 
@@ -43,26 +36,6 @@ class Scenario
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-
-
-    /**
-     * @param string $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
     }
 
 
@@ -94,23 +67,9 @@ class Scenario
     /**
      * @return bool
      */
-    public function isDefinitif()
+    public function isReel()
     {
-        return $this->definitif;
-    }
-
-
-
-    /**
-     * @param bool $definitif
-     *
-     * @return Scenario
-     */
-    public function setDefinitif($definitif)
-    {
-        $this->definitif = $definitif;
-
-        return $this;
+        return $this->type == 2;
     }
 
 
@@ -118,23 +77,33 @@ class Scenario
     /**
      * @return bool
      */
-    public function isReel()
+    public function isPrevisionnel()
     {
-        return $this->reel;
+        return $this->type == 1;
     }
 
 
 
     /**
-     * @param bool $reel
-     *
-     * @return Scenario
+     * @return bool
      */
-    public function setReel($reel)
+    public function isLocal()
     {
-        $this->reel = $reel;
+        return $this->type == 0;
+    }
 
-        return $this;
+
+
+    /**
+     * @return string
+     */
+    public function getTypeString()
+    {
+        switch( $this->type ){
+            case 0: return 'Local';
+            case 1: return 'Prévisionnel';
+            case 2: return 'Réel';
+        }
     }
 
 

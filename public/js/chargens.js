@@ -52,6 +52,7 @@ $.widget("ose.chargens", {
         this.element.find('.controles .zmoins').click(function () { that.zoomMoins(); });
         this.element.find('.controles .zdefaut').click(function () { that.zoomDefaut(); });
         this.element.find('.controles .fullscreen').change(function () { that.fullScreen(); });
+        this.element.find('.controles .dupliquer').click(function () { that.demanderDuplication(); });
 
         this.diagramme.addDiagramListener("ObjectSingleClicked", function (e)
         {
@@ -115,32 +116,71 @@ $.widget("ose.chargens", {
 
 
 
+    demanderDuplication: function ()
+    {
+        var that = this;
+        var source = this.element.find('.controles #scenario').val();
+        var eltDupl = this.element.find('.controles .dupliquer');
+
+        if (!source) return this;
+
+        var options = {
+            url: this.element.data('url-scenario-dupliquer') + '/' + source,
+            title: 'Dupliquer les données de ce diagramme dans un autre scénario',
+            autoShow: true,
+            submitClose: true,
+            change: function (event, popAjax)
+            {
+                if (content = popAjax.getContent()) {
+                    var noeuds = '';
+                    var liens = '';
+
+                    for (var n in that.noeuds) {
+                        if (noeuds != '') noeuds += ',';
+                        noeuds += n.toString();
+                    }
+
+                    for (var l in that.liens) {
+                        if (liens != '') liens += ',';
+                        liens += l.toString();
+                    }
+
+                    content.find('input:hidden[name=noeuds]').val(noeuds);
+                    content.find('input:hidden[name=liens]').val(liens);
+                }
+            }
+        };
+        eltDupl.popAjax(options);
+    },
+
+
+
     editionNoeud: function (noeudId)
     {
         var noeud = this.noeuds[noeudId];
         this.editionNoeudId = noeudId;
 
-        this.formNoeud.find('#choix-minimum').val(noeud['choix-minimum']);
-        this.formNoeud.find('#choix-maximum').val(noeud['choix-maximum']);
+        if (noeud.liste) return this;
+
         this.formNoeud.find('#assiduite').val(noeud['assiduite'] * 100);
 
         for (var tid in this.typesHeures) {
             var val = noeud['effectifs'][tid];
-            if (val === undefined) val = 0;
+            if (val === undefined) val = '';
             this.formNoeud.find('#effectifs-' + tid).val(val);
         }
         for (var tid in this.typesIntervention) {
             var val = noeud['seuils-ouverture'][tid];
-            if (val === undefined) val = 0;
+            if (val === undefined) val = '';
             this.formNoeud.find('#seuil-ouverture-' + tid).val(val);
 
             var val = noeud['seuils-dedoublement'][tid];
-            if (val === undefined) val = 0;
+            if (val === undefined) val = '';
             this.formNoeud.find('#seuil-dedoublement-' + tid).val(val);
         }
 
 
-        if (noeud['element-pedagogique']) {
+        if (noeud['element-pedagogique'] || noeud['etape']) {
             this.formNoeud.find('#choix-assiduite').hide();
         } else {
             this.formNoeud.find('#choix-assiduite').show();
@@ -186,21 +226,24 @@ $.widget("ose.chargens", {
 
     applicationEditionNoeud: function ()
     {
+        var assiduite = this.formNoeud.find('#assiduite').val();
+
         var noeud = {
             id: this.editionNoeudId,
-            'choix-minimum': parseInt(this.formNoeud.find('#choix-minimum').val()),
-            'choix-maximum': parseInt(this.formNoeud.find('#choix-maximum').val()),
-            assiduite: parseInt(this.formNoeud.find('#assiduite').val()) / 100,
+            assiduite: assiduite !== '' ? parseInt(assiduite) / 100 : 1,
             effectifs: {},
             'seuils-ouverture': {},
             'seuils-dedoublement': {}
         };
         for (var tid in this.typesHeures) {
-            noeud.effectifs[tid] = parseInt(this.formNoeud.find('#effectifs-' + tid).val());
+            var val = this.formNoeud.find('#effectifs-' + tid).val();
+            noeud.effectifs[tid] = val !== '' ? parseInt(val) : null;
         }
         for (var tid in this.typesIntervention) {
-            noeud['seuils-ouverture'][tid] = parseInt(this.formNoeud.find('#seuil-ouverture-' + tid).val());
-            noeud['seuils-dedoublement'][tid] = parseInt(this.formNoeud.find('#seuil-dedoublement-' + tid).val());
+            var valOuv = this.formNoeud.find('#seuil-ouverture-' + tid).val();
+            var valDed = this.formNoeud.find('#seuil-dedoublement-' + tid).val();
+            noeud['seuils-ouverture'][tid] = valOuv !== '' ? parseInt(valOuv) : null;
+            noeud['seuils-dedoublement'][tid] = valDed !== '' ? parseInt(valDed) : null;
         }
 
         this.mergeNoeudData(noeud);
@@ -214,27 +257,13 @@ $.widget("ose.chargens", {
     {
         var noeud = this.noeuds[data.id];
 
-        if (data['choix-minimum'] !== undefined) {
-            noeud['choix-minimum'] = data['choix-minimum'];
-        }
-        if (data['choix-maximum'] !== undefined) {
-            noeud['choix-maximum'] = data['choix-maximum'];
-        }
-        if (data['assiduite'] !== undefined) {
-            noeud['assiduite'] = data['assiduite'];
-        }
+        noeud['assiduite'] = data['assiduite'];
         for (var tid in this.typesHeures) {
-            if (data.effectifs[tid] !== undefined){
-                noeud.effectifs[tid] = data.effectifs[tid];
-            }
+            noeud.effectifs[tid] = data.effectifs[tid];
         }
         for (var tid in this.typesIntervention) {
-            if (data['seuils-ouverture'][tid] !== undefined){
-                noeud['seuils-ouverture'][tid] = data['seuils-ouverture'][tid];
-            }
-            if (data['seuils-dedoublement'][tid] !== undefined){
-                noeud['seuils-dedoublement'][tid] = data['seuils-dedoublement'][tid];
-            }
+            noeud['seuils-ouverture'][tid] = data['seuils-ouverture'][tid];
+            noeud['seuils-dedoublement'][tid] = data['seuils-dedoublement'][tid];
         }
 
         this.majNoeud(data.id);
@@ -248,23 +277,24 @@ $.widget("ose.chargens", {
 
 
 
-    majNoeud: function (noeudId)
+    majNoeud: function (noeudId, noTransaction)
     {
         var model = this.diagramme.model;
 
-        model.startTransaction("majNoeud");
+        if (!noTransaction) model.startTransaction("majNoeud");
         for (i in model.nodeDataArray) {
             data = model.nodeDataArray[i];
             if (data.key == noeudId) {
-                model.setDataProperty(data, 'choix', this.__dataToGraph(noeudId, 'choix'));
+                model.setDataProperty(data, 'hover', this.noeuds[noeudId].hover);
                 model.setDataProperty(data, 'assiduite', this.__dataToGraph(noeudId, 'assiduite'));
+                model.setDataProperty(data, 'hetd', this.__dataToGraph(noeudId, 'hetd'));
                 model.setDataProperty(data, 'effectifs', this.__dataToGraph(noeudId, 'effectifs'));
                 for (var ti in this.typesIntervention) {
                     model.setDataProperty(data, 'groupes-' + ti, this.__dataToGraph(noeudId, 'groupes', ti));
                 }
             }
         }
-        model.commitTransaction("majNoeud");
+        if (!noTransaction) model.commitTransaction("majNoeud");
 
         return this;
     },
@@ -274,7 +304,18 @@ $.widget("ose.chargens", {
     editionLien: function (lienId)
     {
         var lien = this.liens[lienId];
+        var noeudInf = this.noeuds[lien['noeud-inf']];
+
         this.editionLienId = lienId;
+
+        if (noeudInf.liste) {
+            this.formLien.find('#choix').show();
+        } else {
+            this.formLien.find('#choix').hide();
+        }
+
+        this.formLien.find('#choix-minimum').val(lien['choix-minimum']);
+        this.formLien.find('#choix-maximum').val(lien['choix-maximum']);
 
         this.formLien.find('#actif').prop('checked', lien['actif']);
         this.formLien.find('#poids').val(lien['poids']);
@@ -293,9 +334,14 @@ $.widget("ose.chargens", {
 
     applicationEditionLien: function ()
     {
+        var choixMinimum = this.formLien.find('#choix-minimum').val();
+        var choixMaximum = this.formLien.find('#choix-maximum').val();
+
         var lien = {
             id: this.editionLienId,
-            actif: this.formLien.find('#actif').is(':checked'),
+            'choix-minimum': choixMinimum !== '' ? parseInt(choixMinimum) : null,
+            'choix-maximum': choixMaximum !== '' ? parseInt(choixMaximum) : null,
+            actif: this.formLien.find('#actif').is(':checked') ? 1 : 0,
             poids: parseFloat(this.formLien.find('#poids').val())
         };
 
@@ -310,12 +356,10 @@ $.widget("ose.chargens", {
     {
         var lien = this.liens[data.id];
 
-        if (data.actif !== undefined){
-            lien.actif = data.actif;
-        }
-        if (data.poids !== undefined){
-            lien.poids = data.poids;
-        }
+        lien['choix-minimum'] = data['choix-minimum'];
+        lien['choix-maximum'] = data['choix-maximum'];
+        lien.actif = data.actif;
+        lien.poids = data.poids;
 
         this.majLien(data.id);
 
@@ -328,20 +372,21 @@ $.widget("ose.chargens", {
 
 
 
-    majLien: function (lienId)
+    majLien: function (lienId, noTransaction)
     {
         var model = this.diagramme.model;
 
-        model.startTransaction("majLien");
+        if (!noTransaction) model.startTransaction("majLien");
         for (i in model.linkDataArray) {
             data = model.linkDataArray[i];
             if (data.id == lienId) {
+                model.setDataProperty(data, 'hover', this.liens[lienId].hover);
                 model.setDataProperty(data, 'actif', this.liens[lienId].actif);
                 model.setDataProperty(data, 'poids', this.liens[lienId].poids);
-                model.setDataProperty(data, 'category', (this.liens[lienId].actif) ? 'actif' : 'non-actif');
             }
         }
-        model.commitTransaction("majLien");
+        if (!noTransaction) model.commitTransaction("majLien");
+
         return this;
     },
 
@@ -353,6 +398,8 @@ $.widget("ose.chargens", {
 
         for (var noeudId in this.noeuds) {
             var n = this.noeuds[noeudId];
+            var category = n.etape ? 'etape' : n['element-pedagogique'] ? 'element' : 'noeud';
+            if (n.liste) category = 'liste';
             var d = {
                 key: noeudId,
                 id: noeudId,
@@ -360,8 +407,9 @@ $.widget("ose.chargens", {
                 libelle: n.libelle,
                 choix: this.__dataToGraph(noeudId, 'choix'),
                 assiduite: this.__dataToGraph(noeudId, 'assiduite'),
+                hetd: this.__dataToGraph(noeudId, 'hetd'),
                 effectifs: this.__dataToGraph(noeudId, 'effectifs'),
-                category: n.etape ? 'etape' : n['element-pedagogique'] ? 'element' : 'noeud'
+                category: category
             };
 
             for (var ti in this.typesIntervention) {
@@ -380,7 +428,7 @@ $.widget("ose.chargens", {
                 to: this.liens[lienId]['noeud-inf'],
                 actif: this.liens[lienId].actif,
                 poids: this.liens[lienId].poids,
-                category: (this.liens[lienId].actif) ? 'actif' : 'non-actif'
+                category: 'default'
             });
         }
 
@@ -394,24 +442,28 @@ $.widget("ose.chargens", {
 
     majDiagrammeData: function ()
     {
+        var model = this.diagramme.model;
+
+        model.startTransaction("majDiagrammeData");
         for (var noeudId in this.noeuds) {
-            this.majNoeud(noeudId);
+            this.majNoeud(noeudId, true);
         }
 
         for (var lienId in this.liens) {
-            this.majLien(lienId);
+            this.majLien(lienId, true);
         }
+        model.commitTransaction("majDiagrammeData");
     },
 
 
 
-    chargerDonnees: function (etape, scenario, noeuds, liens)
+    chargerDonnees: function (etape, scenario, data)
     {
-        if (!noeuds) return this;
+        if (!data.noeuds) return this;
 
         this.scenario = scenario;
-        this.noeuds = noeuds;
-        this.liens = liens;
+        this.noeuds = data.noeuds;
+        this.liens = data.liens;
 
         if (etape != this.etape) {
             this.etape = etape;
@@ -419,6 +471,10 @@ $.widget("ose.chargens", {
         } else {
             this.majDiagrammeData();
         }
+
+        this.element.find('.controles #hetd-composante').html(
+            data.hetd == null ? 'NC' : Formatter.floatToString(data.hetd)
+        );
 
         return this;
     },
@@ -481,6 +537,29 @@ $.widget("ose.chargens", {
 
 
 
+    highlight: function (noeudId, hover, noTransaction)
+    {
+        var model = this.diagramme.model;
+
+        if (!noTransaction) model.startTransaction("highlight");
+
+        this.noeuds[noeudId].hover = hover;
+        this.majNoeud(noeudId);
+
+        for (var lienId in this.liens) {
+            var lien = this.liens[lienId];
+            if (lien.actif && lien['noeud-sup'] == noeudId) {
+                lien.hover = hover;
+                this.majLien(lien.id);
+                this.highlight(lien['noeud-inf'], hover, true);
+            }
+        }
+
+        if (!noTransaction) model.commitTransaction("highlight");
+    },
+
+
+
     __actionServeur: function (url, params)
     {
         var that = this;
@@ -491,7 +570,7 @@ $.widget("ose.chargens", {
             if (data.erreur) {
                 alertFlash(data.erreur, 'danger', 5000);
             } else {
-                that.chargerDonnees(p.etape, p.scenario, data.noeuds, data.liens);
+                that.chargerDonnees(p.etape, p.scenario, data);
             }
 
         }).fail(function (jqXHR)
@@ -507,6 +586,7 @@ $.widget("ose.chargens", {
     getFormNoeudBtnSave: function () { return this.formNoeud.find('#btn-save')},
     getFormLienBtnCancel: function () { return this.formLien.find('#btn-cancel')},
     getFormLienBtnSave: function () { return this.formLien.find('#btn-save')},
+    getHetdComposante: function () { return this.element.find('#hetd-composante')},
 
 
 
@@ -515,22 +595,34 @@ $.widget("ose.chargens", {
         var that = this;
         var $ = go.GraphObject.make;
 
-        var yellowGradient = {
-            fill: $(go.Brush, "Linear", {0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)"}),
-            stroke: '#edd6a3'
-        };
+        var highlightColor = "#00A1FF";
 
-        var grayGradient = {
-            fill: $(go.Brush, "Linear", {0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)"}),
-            stroke: '#ccc'
-        };
+        var yellowGradient = [
+            {
+                fill: $(go.Brush, "Linear", {0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)"}),
+                stroke: "#edd6a3"
+            },
+            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#edd6a3";}),
+            new go.Binding("strokeWidth", "hover", function (hover) {return hover ? 2 : 1;})
+        ];
 
-        var blueGradient = {
-            fill: $(go.Brush, "Linear", {0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)"}),
-            stroke: '#98CED9'
-        };
+        var grayGradient = [
+            {
+                fill: $(go.Brush, "Linear", {0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)"}),
+                stroke: "#ccc"
+            },
+            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#ccc";}),
+            new go.Binding("strokeWidth", "hover", function (hover) {return hover ? 2 : 1;})
+        ];
 
-
+        var blueGradient = [
+            {
+                fill: $(go.Brush, "Linear", {0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)"}),
+                stroke: "#98CED9"
+            },
+            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#98CED9";}),
+            new go.Binding("strokeWidth", "hover", function (hover) {return hover ? 2 : 1;})
+        ];
 
 
         var d =
@@ -539,13 +631,13 @@ $.widget("ose.chargens", {
                     initialContentAlignment: go.Spot.Top,
                     initialDocumentSpot: go.Spot.TopCenter,
                     initialViewportSpot: go.Spot.TopCenter,
-                    /*    initialAutoScale: go.Diagram.UniformToFill,*/
                     isReadOnly: true,
                     maxSelectionCount: 1,
                     layout: $(go.LayeredDigraphLayout, {
                         direction: 90,
-                        layerSpacing: 5,
-                        columnSpacing: 1
+                        layerSpacing: 20,
+                        columnSpacing: 1,
+                        aggressiveOption: go.LayeredDigraphLayout.AggressiveMore
                     }),
                     InitialLayoutCompleted: function (e)
                     {
@@ -573,13 +665,15 @@ $.widget("ose.chargens", {
                 $(go.Shape, "RoundedRectangle",
                     {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
                 $(go.Placeholder)
-            )  // end Adornment
+            ),
+            mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
+            mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
         }
 
         var defaultNodeTemplate = $(go.Node, "Vertical", sel,
             $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 95},
-                $(go.Shape, "RoundedRectangle", grayGradient),
+                {name: 'panel', width: 110, height: 82},
+                $(go.Shape, "RoundedRectangle", grayGradient, {name: "SHAPE"}),
                 $(go.Panel, "Vertical",
                     {padding: 10},
                     $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#999"}),
@@ -608,19 +702,35 @@ $.widget("ose.chargens", {
                         $(go.RowColumnDefinition, {column: 0, width: 70}),
                         $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
                         [
-                            newNodeTemplatePropriete(0, 'choix', 'Choix'),
-                            newNodeTemplatePropriete(1, 'assiduite', 'Assiduité'),
-                            newNodeTemplatePropriete(2, 'effectifs', 'Effectifs')
+                            newNodeTemplatePropriete(0, 'assiduite', 'Assiduité'),
+                            newNodeTemplatePropriete(1, 'effectifs', 'Effectifs')
                         ]
                     )
                 )
             )
         );
 
+        var listeNodeTemplate = $(go.Node, "Vertical", sel,
+            $(go.Panel, "Auto",
+                {name: 'panel', width: 10, height: 10},
+                $(go.Shape, "Circle", {
+                        name: "SHAPE",
+                        fill: '#3F3F3F',
+                        stroke: '#3F3F3F'
+                    },
+                    new go.Binding("fill", "hover", function (hover) {return hover ? highlightColor : "#3F3F3F";}),
+                    new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#3F3F3F";})
+                ),
+                $(go.Panel, "Vertical",
+                    {padding: 10}
+                )
+            )
+        );
+
         var etapeNodeTemplate = $(go.Node, "Vertical", sel,
             $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 95},
-                $(go.Shape, "RoundedRectangle", yellowGradient),
+                {name: 'panel', width: 110, height: 82},
+                $(go.Shape, "RoundedRectangle", yellowGradient, {name: "SHAPE"}),
                 $(go.Panel, "Vertical",
                     {padding: 10},
                     $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#B39F2D"}),
@@ -649,9 +759,8 @@ $.widget("ose.chargens", {
                         $(go.RowColumnDefinition, {column: 0, width: 70}),
                         $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
                         [
-                            newNodeTemplatePropriete(0, 'choix', 'Choix'),
-                            newNodeTemplatePropriete(1, 'assiduite', 'Assiduité'),
-                            newNodeTemplatePropriete(2, 'effectifs', 'Effectifs')
+                            newNodeTemplatePropriete(0, 'effectifs', 'Effectifs'),
+                            newNodeTemplatePropriete(1, 'hetd', 'HETD')
                         ]
                     )
                 )
@@ -669,10 +778,14 @@ $.widget("ose.chargens", {
             );
         }
 
+        elementNodeTemplateProprietes.push(
+            newNodeTemplatePropriete(index++, 'hetd', 'HETD')
+        );
+
         var elementNodeTemplate = $(go.Node, "Vertical", sel,
             $(go.Panel, "Auto",
                 {name: 'panel', width: 110, height: 55 + (elementNodeTemplateProprietes.length) * 13},
-                $(go.Shape, "RoundedRectangle", blueGradient),
+                $(go.Shape, "RoundedRectangle", blueGradient, {name: "SHAPE"}),
                 $(go.Panel, "Vertical",
                     {padding: 10},
                     $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#3C728D"}),
@@ -708,45 +821,30 @@ $.widget("ose.chargens", {
 
         var defaultLinkTemplate = $(go.Link,
             {
-                routing: go.Link.Orthogonal,
-                corner: 5,
+                curve: go.Link.Bezier,
+                toEndSegmentLength: 30, fromEndSegmentLength: 30,
                 relinkableFrom: false, relinkableTo: false
             },
-            $(go.Shape, {
-                stroke: '#3F3F3F'
-            }, new go.Binding("strokeWidth", "poids")),
-            $(go.Shape, {
-                fill: '#3F3F3F',
-                stroke: '#3F3F3F',
-                toArrow: "Standard"
-            }, new go.Binding("strokeWidth", "poids"))
-        );
-
-        var desactivedLinkTemplate = $(go.Link,
-            {
-                routing: go.Link.Orthogonal,
-                corner: 5,
-                relinkableFrom: false, relinkableTo: false
-            },
-            $(go.Shape, {
-                stroke: '#CB0000',
-                strokeDashArray: [3, 5]
-            }, new go.Binding("strokeWidth", "poids")),
-            $(go.Shape, {
-                fill: '#CB0000',
-                stroke: '#CB0000',
-                toArrow: "Standard"
-            }, new go.Binding("strokeWidth", "poids"))
+            $(
+                go.Shape,
+                new go.Binding("strokeWidth", "poids"),
+                new go.Binding("stroke", "", function (data)
+                {
+                    if (data.hover) return highlightColor;
+                    return data.actif ? "#3F3F3F" : "#CB0000";
+                }),
+                new go.Binding("strokeDashArray", "actif", function (actif) {return actif ? null : [3, 5];})
+            )
         );
 
         d.nodeTemplateMap = new go.Map("string", go.Node);
         d.nodeTemplateMap.add("noeud", defaultNodeTemplate);
         d.nodeTemplateMap.add("etape", etapeNodeTemplate);
+        d.nodeTemplateMap.add("liste", listeNodeTemplate);
         d.nodeTemplateMap.add("element", elementNodeTemplate);
 
         d.linkTemplateMap = new go.Map("string", go.Link);
-        d.linkTemplateMap.add("actif", defaultLinkTemplate);
-        d.linkTemplateMap.add("non-actif", desactivedLinkTemplate);
+        d.linkTemplateMap.add("default", defaultLinkTemplate);
 
         return d;
     },
@@ -756,11 +854,12 @@ $.widget("ose.chargens", {
     __dataToGraph: function (noeudId, propriete, propriete2)
     {
         switch (propriete) {
-            case 'choix':
-                return this.noeuds[noeudId]['choix-minimum'] + ' / ' + this.noeuds[noeudId]['choix-maximum'];
-
             case 'assiduite':
                 return Formatter.floatToString(this.noeuds[noeudId]['assiduite'] * 100) + '%';
+
+            case 'hetd':
+                if (this.noeuds[noeudId]['hetd'] == null) return 'NC';
+                return Formatter.floatToString(this.noeuds[noeudId]['hetd']);
 
             case 'effectifs':
                 var effectifs = 0;

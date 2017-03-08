@@ -17,15 +17,15 @@ trait NoeudAwareTrait
 
 
 
-
-
     /**
      * @param Noeud $noeud
+     *
      * @return self
      */
-    public function setNoeud( Noeud $noeud = null )
+    public function setNoeud(Noeud $noeud = null)
     {
         $this->noeud = $noeud;
+
         return $this;
     }
 

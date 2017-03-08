@@ -90,6 +90,18 @@ class BddConnecteur{
 
 
     /**
+     * @param $seqName
+     *
+     * @return int
+     */
+    public function sequenceNextVal($seqName)
+    {
+        return (int)$this->fetchOne('SELECT '.$seqName.'.NEXTVAL val FROM DUAL', [], 'VAL');
+    }
+
+
+
+    /**
      * @param array $params
      *
      * @return array

@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Chargens;
 
+use Application\Entity\Db\Scenario;
 use Application\Provider\Chargens\ChargensProvider;
 
 class Lien
@@ -12,16 +13,35 @@ class Lien
     private $provider;
 
     /**
-     * @var array
+     * @var integer
      */
-    private $data;
+    private $id;
+
+    /**
+     * @var integer
+     */
+    private $noeudSup;
+
+    /**
+     * @var integer
+     */
+    private $noeudInf;
+
+    /**
+     * @var ScenarioLien[]
+     */
+    private $scenarioLien = [];
 
 
 
-    public function __construct(ChargensProvider $provider, array $data)
+    /**
+     * Lien constructor.
+     *
+     * @param ChargensProvider $provider
+     */
+    public function __construct(ChargensProvider $provider)
     {
         $this->provider = $provider;
-        $this->data     = $data;
     }
 
 
@@ -31,7 +51,21 @@ class Lien
      */
     public function getId()
     {
-        return (int)$this->data['ID'];
+        return $this->id;
+    }
+
+
+
+    /**
+     * @param int $id
+     *
+     * @return Lien
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
 
@@ -43,9 +77,24 @@ class Lien
      */
     public function getNoeudSup($object = true)
     {
-        $id = (int)$this->data['NOEUD_SUP_ID'];
+        return $object ? $this->provider->getNoeuds()->getNoeud($this->noeudSup) : $this->noeudSup;
+    }
 
-        return $object ? $this->provider->getNoeud($id) : $id;
+
+
+    /**
+     * @param Noeud|integer $noeudSup
+     *
+     * @return $this
+     */
+    public function setNoeudSup($noeudSup)
+    {
+        if ($noeudSup instanceof Noeud) {
+            $noeudSup = $noeudSup->getId();
+        }
+        $this->noeudSup = $noeudSup;
+
+        return $this;
     }
 
 
@@ -57,31 +106,86 @@ class Lien
      */
     public function getNoeudInf($object = true)
     {
-        $id = (int)$this->data['NOEUD_INF_ID'];
-
-        return $object ? $this->provider->getNoeud($id) : $id;
+        return $object ? $this->provider->getNoeuds()->getNoeud($this->noeudInf) : $this->noeudInf;
     }
 
 
 
     /**
+     * @param Noeud|integer $noeudInf
+     *
+     * @return $this
+     */
+    public function setNoeudInf($noeudInf)
+    {
+        if ($noeudInf instanceof Noeud) {
+            $noeudInf = $noeudInf->getId();
+        }
+        $this->noeudInf = $noeudInf;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Scenario|null $scenario
+     *
      * @return bool
      */
-    public function isActif()
+    public function hasScenarioLien(Scenario $scenario = null)
     {
-        return $this->provider->getScenarioLien($this)->isActif();
+        if (!$scenario) {
+            $scenario = $this->provider->getScenario();
+        }
+
+        if (!$scenario) {
+            throw new \Exception('Le scénario n\'a pas été défini');
+        }
+
+        return array_key_exists($scenario->getId(), $this->scenarioLien);
     }
 
 
 
     /**
-     * @param bool $actif
+     * @param Scenario|null $scenario
      *
-     * @return Lien
+     * @return ScenarioLien
      */
-    public function setActif($actif)
+    public function getScenarioLien(Scenario $scenario = null)
     {
-        $this->provider->getScenarioLien($this)->setActif($actif);
+        if (!$scenario) {
+            $scenario = $this->provider->getScenario();
+        }
+
+        if (!$scenario) {
+            throw new \Exception('Le scénario n\'a pas été défini');
+        }
+
+        if (!array_key_exists($scenario->getId(), $this->scenarioLien)) {
+            $this->scenarioLien[$scenario->getId()] = new ScenarioLien($this, $scenario);
+        }
+
+        return $this->scenarioLien[$scenario->getId()];
+    }
+
+
+
+    /**
+     * @param ScenarioLien $scenarioLien
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function addScenarioLien(ScenarioLien $scenarioLien)
+    {
+        if (!$scenarioLien->getScenario()) {
+            throw new \Exception('Le scénario du lien n\'a pas été défini');
+        }
+
+        $scenarioLien->setLien($this);
+        $this->scenarioLien[$scenarioLien->getScenario()->getId()] = $scenarioLien;
 
         return $this;
     }
@@ -89,40 +193,16 @@ class Lien
 
 
     /**
-     * @return float
+     * @return $this
      */
-    public function getPoids()
+    public function removeScenarioLien(Scenario $scenario = null)
     {
-        return $this->provider->getScenarioLien($this)->getPoids();
-    }
-
-
-
-    /**
-     * @param float $poids
-     *
-     * @return Lien
-     */
-    public function setPoids($poids)
-    {
-        $this->provider->getScenarioLien($this)->setPoids($poids);
+        if ($scenario) {
+            unset($this->scenarioLien[$scenario->getId()]);
+        } else {
+            $this->scenarioLien = [];
+        }
 
         return $this;
-    }
-
-
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return [
-            'id'    => $this->getId(),
-            'noeud-sup' => $this->getNoeudSup(false),
-            'noeud-inf' => $this->getNoeudInf(false),
-            'actif' => $this->isActif(),
-            'poids' => $this->getPoids(),
-        ];
     }
 }

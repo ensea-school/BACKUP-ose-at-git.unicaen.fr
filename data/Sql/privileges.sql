@@ -4,8 +4,8 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'parametres',
-  'Paramétrages'
+  'type-intervention',
+  'Type d''intervention'
 );
 
 INSERT INTO PRIVILEGE (
@@ -23,8 +23,8 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'budget' c, 'type-dotation-visualisation' p, 'Types de dotation - Visualisation' l FROM dual
-      UNION SELECT 'budget' c, 'type-dotation-edition' p, 'Types de dotation - Édition' l FROM dual
+      SELECT 'type-intervention' c, 'visualisation' p, 'Visualisation' l FROM dual
+      UNION SELECT 'type-intervention' c, 'edition' p, 'Édition' l FROM dual
 
 ) t1;
 
@@ -32,7 +32,7 @@ delete from privilege where id = 123;
 
 /* Liste... */
 select
-  cp.code, p.code, p.libelle
+  cp.code, p.code, p.libelle, cp.libelle
 from
   privilege p
   join categorie_privilege cp on cp.id = p.categorie_id

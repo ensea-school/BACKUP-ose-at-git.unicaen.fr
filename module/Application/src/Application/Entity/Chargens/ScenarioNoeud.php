@@ -2,34 +2,54 @@
 
 namespace Application\Entity\Chargens;
 
+use Application\Entity\Chargens\Traits\NoeudAwareTrait;
 use Application\Entity\Db\Scenario;
+use Application\Entity\Db\Traits\ScenarioAwareTrait;
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\TypeIntervention;
-use Application\Provider\Chargens\ChargensProvider;
 
 class ScenarioNoeud
 {
-    /**
-     * @var ChargensProvider
-     */
-    private $provider;
+    use ScenarioAwareTrait;
+    use NoeudAwareTrait;
 
     /**
-     * @var array
+     * @var integer
      */
-    private $data;
+    private $id;
 
     /**
-     * @var array
+     * @var float
      */
-    private $changes = [];
+    private $assiduite = 1.0;
+
+    /**
+     * @var float
+     */
+    private $hetd;
+
+    /**
+     * @var ScenarioNoeudEffectif[]
+     */
+    private $effectif = [];
+
+    /**
+     * @var ScenarioNoeudSeuil[]
+     */
+    private $seuil = [];
 
 
 
-    public function __construct(ChargensProvider $provider, array $data)
+    /**
+     * ScenarioNoeud constructor.
+     *
+     * @param Noeud    $noeud
+     * @param Scenario $scenario
+     */
+    public function __construct(Noeud $noeud, Scenario $scenario)
     {
-        $this->provider = $provider;
-        $this->data     = $data;
+        $this->setNoeud($noeud);
+        $this->setScenario($scenario);
     }
 
 
@@ -39,83 +59,19 @@ class ScenarioNoeud
      */
     public function getId()
     {
-        return (int)$this->data['ID'];
+        return $this->id;
     }
 
 
 
     /**
-     * @param bool $object
+     * @param int $id
      *
-     * @return Noeud|int
+     * @return ScenarioNoeud
      */
-    public function getNoeud($object = true)
+    public function setId($id)
     {
-        $id = (int)$this->data['NOEUD_ID'];
-
-        return $object ? $this->provider->getNoeud($id) : $id;
-    }
-
-
-
-    /**
-     * @param bool $object
-     *
-     * @return Scenario|int
-     */
-    public function getScenario($object = true)
-    {
-        $id = (int)$this->data['SCENARIO_ID'];
-
-        return $object ? $this->provider->getScenario($id) : $id;
-    }
-
-
-
-    /**
-     * @return integer
-     */
-    public function getChoixMinimum()
-    {
-        return (int)$this->data['CHOIX_MINIMUM'];
-    }
-
-
-
-    /**
-     * @param integer $choixMinimum
-     *
-     * @return $this
-     */
-    public function setChoixMinimum($choixMinimum)
-    {
-        $this->data['CHOIX_MINIMUM']    = (string)(int)$choixMinimum;
-        $this->changes['CHOIX_MINIMUM'] = $this->data['CHOIX_MINIMUM'];
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return integer
-     */
-    public function getChoixMaximum()
-    {
-        return (int)$this->data['CHOIX_MAXIMUM'];
-    }
-
-
-
-    /**
-     * @param integer $choixMaximum
-     *
-     * @return $this
-     */
-    public function setChoixMaximum($choixMaximum)
-    {
-        $this->data['CHOIX_MAXIMUM']    = (string)(int)$choixMaximum;
-        $this->changes['CHOIX_MAXIMUM'] = $this->data['CHOIX_MAXIMUM'];
+        $this->id = $id;
 
         return $this;
     }
@@ -127,20 +83,19 @@ class ScenarioNoeud
      */
     public function getAssiduite()
     {
-        return (float)$this->data['ASSIDUITE'];
+        return $this->assiduite;
     }
 
 
 
     /**
-     * @param $assiduite
+     * @param float $assiduite
      *
-     * @return $this
+     * @return ScenarioNoeud
      */
     public function setAssiduite($assiduite)
     {
-        $this->data['ASSIDUITE']    = (string)(float)$assiduite;
-        $this->changes['ASSIDUITE'] = $this->data['ASSIDUITE'];
+        $this->assiduite = $assiduite;
 
         return $this;
     }
@@ -148,40 +103,23 @@ class ScenarioNoeud
 
 
     /**
-     * @param TypeHeures|integer|null $typeHeures
-     *
      * @return float
      */
-    public function getEffectif($typeHeures = null)
+    public function getHetd()
     {
-        if ($typeHeures instanceof TypeHeures) {
-            $thid = $typeHeures->getId();
-        } else {
-            $thid = (int)$typeHeures;
-        }
-        if (0 == $thid) return isset($this->data['EFFECTIFS']) ? $this->data['EFFECTIFS'] : [];
-
-        return isset($this->data['EFFECTIFS'][$thid]) ? (float)$this->data['EFFECTIFS'][$thid] : null;
+        return $this->hetd;
     }
 
 
 
     /**
-     * @param TypeHeures|integer $typeHeures
-     * @param float              $effectif
+     * @param float $hetd
      *
-     * @return $this
+     * @return ScenarioNoeud
      */
-    public function setEffectif($typeHeures, $effectif)
+    public function setHetd($hetd)
     {
-        if ($typeHeures instanceof TypeHeures) {
-            $thid = $typeHeures->getId();
-        } else {
-            $thid = (int)$typeHeures;
-        }
-
-        $this->data['EFFECTIFS'][$thid]    = (string)(float)$effectif;
-        $this->changes['EFFECTIFS'][$thid] = $this->data['EFFECTIFS'][$thid];
+        $this->hetd = $hetd;
 
         return $this;
     }
@@ -189,40 +127,51 @@ class ScenarioNoeud
 
 
     /**
-     * @param TypeIntervention|integer|null $typeIntervention
+     * @param TypeHeures $typeHeures
      *
-     * @return integer
+     * @return bool
      */
-    public function getSeuilOuverture($typeIntervention = null)
+    public function hasEffectif(TypeHeures $typeHeures)
     {
-        if ($typeIntervention instanceof TypeIntervention) {
-            $tiid = $typeIntervention->getId();
-        } else {
-            $tiid = (int)$typeIntervention;
-        }
-        if (0 == $tiid) return isset($this->data['SEUILS_OUVERTURE']) ? $this->data['SEUILS_OUVERTURE'] : [];
-
-        return isset($this->data['SEUILS_OUVERTURE'][$tiid]) ? (int)$this->data['SEUILS_OUVERTURE'][$tiid] : null;
+        return array_key_exists($typeHeures->getId(), $this->effectif);
     }
 
 
 
     /**
-     * @param TypeIntervention|integer $typeIntervention
-     * @param integer                  $seuilOuverture
+     * @param TypeHeures|null $typeHeures
      *
-     * @return $this
+     * @return ScenarioNoeudEffectif|ScenarioNoeudEffectif[]
      */
-    public function setSeuilOuverture($typeIntervention, $seuilOuverture)
+    public function getEffectif(TypeHeures $typeHeures = null)
     {
-        if ($typeIntervention instanceof TypeIntervention) {
-            $tiid = $typeIntervention->getId();
-        } else {
-            $tiid = (int)$typeIntervention;
+        if (!$typeHeures) {
+            return $this->effectif;
         }
 
-        $this->data['SEUILS_OUVERTURE'][$tiid]    = (string)(int)$seuilOuverture;
-        $this->changes['SEUILS_OUVERTURE'][$tiid] = $this->data['SEUILS_OUVERTURE'][$tiid];
+        if (!$this->hasEffectif($typeHeures)) {
+            $this->effectif[$typeHeures->getId()] = new ScenarioNoeudEffectif($this, $typeHeures);
+        }
+
+        return $this->effectif[$typeHeures->getId()];
+    }
+
+
+
+    /**
+     * @param ScenarioNoeudEffectif $effectif
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function addEffectif(ScenarioNoeudEffectif $effectif)
+    {
+        if (!$effectif->getTypeHeures()) {
+            throw new \Exception('Le type d\'heures de l\'effectif n\'a pas été défini');
+        }
+
+        $effectif->setScenarioNoeud($this);
+        $this->effectif[$effectif->getTypeHeures()->getId()] = $effectif;
 
         return $this;
     }
@@ -230,41 +179,85 @@ class ScenarioNoeud
 
 
     /**
-     * @param TypeIntervention|integer|null $typeIntervention
-     *
-     * @return integer
+     * @return $this
      */
-    public function getSeuilDedoublement($typeIntervention = null)
+    public function removeEffectif(TypeHeures $typeHeures = null)
     {
-        if ($typeIntervention instanceof TypeIntervention) {
-            $tiid = $typeIntervention->getId();
+        if ($typeHeures) {
+            unset($this->effectif[$typeHeures->getId()]);
         } else {
-            $tiid = (int)$typeIntervention;
+            $this->effectif = [];
         }
-        if (0 == $tiid) return isset($this->data['SEUILS_DEDOUBLEMENT']) ? $this->data['SEUILS_DEDOUBLEMENT'] : [];
 
-        return isset($this->data['SEUILS_DEDOUBLEMENT'][$tiid]) ? (int)$this->data['SEUILS_DEDOUBLEMENT'][$tiid] : null;
+        return $this;
     }
 
 
 
     /**
-     * @param TypeIntervention|integer $typeIntervention
-     * @param integer                  $seuilDedoublement
+     * @param TypeIntervention $typeIntervention
      *
-     * @return $this
+     * @return bool
      */
-    public function setSeuilDedoublement($typeIntervention, $seuilDedoublement)
+    public function hasSeuil(TypeIntervention $typeIntervention)
     {
-        if ($typeIntervention instanceof TypeIntervention) {
-            $tiid = $typeIntervention->getId();
-        } else {
-            $tiid = (int)$typeIntervention;
+        return array_key_exists($typeIntervention->getId(), $this->seuil);
+    }
+
+
+
+    /**
+     * @param TypeIntervention|null $typeIntervention
+     *
+     * @return ScenarioNoeudSeuil|ScenarioNoeudSeuil[]
+     */
+    public function getSeuil(TypeIntervention $typeIntervention = null)
+    {
+        if (!$typeIntervention) {
+            return $this->seuil;
         }
 
-        $this->data['SEUILS_DEDOUBLEMENT'][$tiid]    = (string)(int)$seuilDedoublement;
-        $this->changes['SEUILS_DEDOUBLEMENT'][$tiid] = $this->data['SEUILS_DEDOUBLEMENT'][$tiid];
+        if (!$this->hasSeuil($typeIntervention)) {
+            $this->seuil[$typeIntervention->getId()] = new ScenarioNoeudSeuil($this, $typeIntervention);
+        }
+
+        return $this->seuil[$typeIntervention->getId()];
+    }
+
+
+
+    /**
+     * @param ScenarioNoeudSeuil $seuil
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function addSeuil(ScenarioNoeudSeuil $seuil)
+    {
+        if (!$seuil->getTypeIntervention()) {
+            throw new \Exception('Le type d\'heures de l\'effectif n\'a pas été défini');
+        }
+
+        $seuil->setScenarioNoeud($this);
+        $this->seuil[$seuil->getTypeIntervention()->getId()] = $seuil;
 
         return $this;
     }
+
+
+
+    /**
+     * @return $this
+     */
+    public function removeSeuil(TypeIntervention $typeIntervention = null)
+    {
+        if ($typeIntervention) {
+            unset($this->seuil[$typeIntervention->getId()]);
+        } else {
+            $this->seuil = [];
+        }
+
+        return $this;
+    }
+
 }

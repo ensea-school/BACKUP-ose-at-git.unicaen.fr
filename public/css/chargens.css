@@ -46,8 +46,20 @@
 
 .chargens .navbar .div-filtre .div-scenario {
     padding-left:2px;
+    padding-right:2px;
+}
+
+.chargens .navbar .div-filtre .div-scenario-edit {
+    padding-left:2px;
 }
 
 .chargens .navbar .div-controles {
     padding:4px;
+}
+
+.chargens .controles .div-hetd-composante{
+    margin-right: 0px;
+    height: auto;
+    padding-top: 7px;
+    padding-bottom: 5px;
 }

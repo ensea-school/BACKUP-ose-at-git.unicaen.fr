@@ -6,6 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Utilisateur;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
@@ -88,6 +89,18 @@ class Context extends AbstractService
         }
 
         return $this->selectedIdentityRole;
+    }
+
+
+
+    /**
+     * @return Utilisateur|null
+     */
+    public function getUtilisateur()
+    {
+        $authUserContext = $this->getServiceUserContext();
+
+        return $authUserContext->getDbUser();
     }
 
 
@@ -246,6 +259,7 @@ class Context extends AbstractService
      */
     public function setDateObservation(DateTime $dateObservation)
     {
+        $sc = $this->getSessionContainer();
         $sc->dateObservation = $dateObservation;
 
         return $this;

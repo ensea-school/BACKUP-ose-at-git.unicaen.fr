@@ -2,16 +2,28 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Application\Entity\Db\Scenario" table="SCENARIO">
+    <entity name="Application\Entity\Db\SeuilCharge" table="SEUIL_CHARGE">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
         </id>
 
-        <field name="libelle" type="string" column="LIBELLE" length="255" nullable="false"/>
-        <field name="type" type="integer" column="TYPE" nullable="false"/>
+        <field name="ouverture" type="integer" column="OUVERTURE" nullable="true"/>
+        <field name="dedoublement" type="integer" column="DEDOUBLEMENT" nullable="true"/>
 
+        <many-to-one field="scenario" target-entity="Application\Entity\Db\Scenario">
+            <join-column name="SCENARIO_ID" referenced-column-name="ID"/>
+        </many-to-one>
         <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
             <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="typeFormation" target-entity="Application\Entity\Db\TypeFormation">
+            <join-column name="TYPE_FORMATION_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="etape" target-entity="Application\Entity\Db\Etape">
+            <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
+            <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
         </many-to-one>
 
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
@@ -32,6 +44,5 @@
                 <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-
     </entity>
 </doctrine-mapping>

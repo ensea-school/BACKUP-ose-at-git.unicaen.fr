@@ -31,7 +31,7 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
     /**
      * Generates a url given the name of a route.
      *
-     * @see    Zend\Mvc\Router\RouteInterface::assemble()
+     * @see    \Zend\Mvc\Router\RouteInterface::assemble()
      *
      * @param  string            $name               Name of the route
      * @param  array             $params             Parameters for the link
@@ -68,13 +68,14 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
      * Retourne true si tout s'est bien passé, false sinon.
      * Le message d'erreur pourra être récupéré via le FlashMessenger ou bien via getLastException() pour la traiter ensuite
      *
-     * @param         $entity
-     * @param Request $request
-     * @param         $saveFnc
+     * @param                                $entity
+     * @param Request                        $request
+     * @param AbstractEntityService|function $saveFnc
+     * @param string                         $successMessage
      *
      * @return bool
      */
-    public function bindRequestSave($entity, Request $request, $saveFnc)
+    public function bindRequestSave($entity, Request $request, $saveFnc, $successMessage = 'Enregistrement effectué')
     {
         $this->exception = null;
         $this->bind($entity);
@@ -84,12 +85,12 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
                 if ($saveFnc instanceof AbstractEntityService) {
                     try {
                         $saveFnc->save($entity);
-                        $this->getControllerPluginFlashMessenger()->addSuccessMessage('Enregistrement effectué');
+                        $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
                     } catch (\Exception $e) {
                         $e = DbException::translate($e);
                         $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
                     }
-                }else{
+                } else {
                     try {
                         $saveFnc($entity);
                     } catch (\Exception $e) {
@@ -100,6 +101,30 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
                     }
                 }
             }
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * @param                       $entity
+     * @param AbstractEntityService $service
+     * @param string                $successMessage
+     *
+     * @return bool
+     */
+    public function delete($entity, AbstractEntityService $service, $successMessage = 'Donnée supprimée avec succès.')
+    {
+        try {
+            $service->delete($entity);
+            $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
+        } catch (\Exception $e) {
+            $e = DbException::translate($e);
+            $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+
+            return false;
         }
 
         return true;

@@ -2,10 +2,9 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\EtapeAwareTrait;
+use Application\Entity\Db\Traits\GroupeTypeFormationAwareTrait;
 use Application\Entity\Db\Traits\ScenarioAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\TypeFormationAwareTrait;
 use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -16,21 +15,15 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class SeuilCharge implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
-    use ScenarioAwareTrait;
-    use StructureAwareTrait;
-    use TypeFormationAwareTrait;
-    use EtapeAwareTrait;
     use TypeInterventionAwareTrait;
+    use GroupeTypeFormationAwareTrait;
+    use StructureAwareTrait;
+    use ScenarioAwareTrait;
 
     /**
      * @var integer
      */
     private $id;
-
-    /**
-     * @var integer
-     */
-    private $ouverture;
 
     /**
      * @var integer
@@ -66,30 +59,6 @@ class SeuilCharge implements HistoriqueAwareInterface
     /**
      * @return int
      */
-    public function getOuverture()
-    {
-        return $this->ouverture;
-    }
-
-
-
-    /**
-     * @param int $ouverture
-     *
-     * @return SeuilCharge
-     */
-    public function setOuverture($ouverture)
-    {
-        $this->ouverture = $ouverture;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return int
-     */
     public function getDedoublement()
     {
         return $this->dedoublement;
@@ -107,6 +76,20 @@ class SeuilCharge implements HistoriqueAwareInterface
         $this->dedoublement = $dedoublement;
 
         return $this;
+    }
+
+
+
+    public function calcPoids()
+    {
+        $poids = 0;
+
+        if ($this->typeIntervention) $poids += 2;
+        if ($this->groupeTypeFormation) $poids += 4;
+        if ($this->structure) $poids += 8;
+        if ($this->scenario) $poids += 16;
+
+        return $poids;
     }
 
 }

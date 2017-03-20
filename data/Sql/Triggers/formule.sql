@@ -377,8 +377,11 @@ END;
 --  DDL for Trigger F_TYPE_INTERVENTION
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION" 
-AFTER UPDATE ON type_intervention
+create or replace TRIGGER "OSE"."F_TYPE_INTERVENTION" 
+AFTER UPDATE OF
+  taux_hetd_service,
+  taux_hetd_complementaire
+ON type_intervention
 FOR EACH ROW
 BEGIN
 

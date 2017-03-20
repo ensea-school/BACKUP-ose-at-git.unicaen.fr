@@ -8,15 +8,11 @@
  */
 
 
-/** @var \Application\Service\ScenarioService $s */
-$s = $sl->get('applicationScenario');
+/** @var \Application\Service\SeuilChargeService $s */
+$s = $sl->get('applicationSeuilCharge');
 
-$bdd = new \Application\Connecteur\Bdd\BddConnecteur();
-$bdd->setEntityManager( $s->getEntityManager() );
 
-$bdd->execPlsql('OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur);', [
-    'source'      => 1,
-    'destination' => 20,
-    'utilisateur' => 2,
-]);
 
+//var_dump( $s->getBy(1,0,0,1) );
+
+var_dump(stringToFloat('9 011,2'));

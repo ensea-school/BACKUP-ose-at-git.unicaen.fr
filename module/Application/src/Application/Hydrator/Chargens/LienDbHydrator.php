@@ -25,11 +25,14 @@ class LienDbHydrator implements HydratorInterface
         $id = isset($data['ID']) ? (int)$data['ID'] : 0;
         $object->setId($id == 0 ? null : $id);
 
-        $noeudSup = isset($data['NOEUD_SUP_ID']) ? (int)$data['NOEUD_SUP_ID'] : 0;
-        $object->setNoeudSup($noeudSup == 0 ? null : $noeudSup);
+        $noeudSup = isset($data['NOEUD_SUP_ID']) ? stringToInt($data['NOEUD_SUP_ID']) : null;
+        $object->setNoeudSup($noeudSup);
 
-        $noeudInf = isset($data['NOEUD_INF_ID']) ? (int)$data['NOEUD_INF_ID'] : 0;
-        $object->setNoeudInf($noeudInf == 0 ? null : $noeudInf);
+        $noeudInf = isset($data['NOEUD_INF_ID']) ? stringToInt($data['NOEUD_INF_ID']) : null;
+        $object->setNoeudInf($noeudInf);
+
+        $structure = isset($data['STRUCTURE_ID']) ? stringToInt($data['STRUCTURE_ID']) : null;
+        $object->setStructure($structure);
 
         return $object;
     }
@@ -49,6 +52,7 @@ class LienDbHydrator implements HydratorInterface
             'ID'           => $object->getId(),
             'NOEUD_SUP_ID' => $object->getNoeudSup(false),
             'NOEUD_INF_ID' => $object->getNoeudinf(false),
+            'STRUCTURE_ID' => $object->getNoeudinf(false),
         ];
 
         return $data;

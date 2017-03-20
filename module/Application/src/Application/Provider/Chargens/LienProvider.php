@@ -6,6 +6,7 @@ use Application\Entity\Chargens\Lien;
 use Application\Entity\Chargens\Noeud;
 use Application\Hydrator\Chargens\LienDbHydrator;
 use Application\Hydrator\Chargens\LienDiagrammeHydrator;
+use Application\Provider\Privilege\Privileges;
 
 
 class LienProvider
@@ -164,6 +165,7 @@ class LienProvider
         foreach ($data as $d) {
             $lien = new Lien($this->chargens);
             $hydrator->hydrate($d, $lien);
+            $this->initRules($lien);
 
             if (!$lien->getId()) {
                 throw new \Exception('ID non mentionné pour le lien');
@@ -188,7 +190,7 @@ class LienProvider
 
         $sql  = "
                 SELECT 
-                  id, noeud_sup_id, noeud_inf_id 
+                  id, noeud_sup_id, noeud_inf_id, structure_id
                 FROM 
                   LIEN l 
                 WHERE 
@@ -253,6 +255,43 @@ class LienProvider
 
             $lien = $this->getLien($lienId);
             $hydrator->hydrate($d, $lien);
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Lien $lien
+     *
+     * @return $this
+     */
+    protected function initRules(Lien $lien)
+    {
+        $cStructure = $this->chargens->getServiceContext()->getStructure();
+        $canEdit    = false;
+        if ($cStructure) {
+            $structureId = $lien->getStructure(false);
+
+            if (!$structureId || $structureId == $cStructure->getId()) {
+                $canEdit = true;
+            }
+        } else {
+            $canEdit = true;
+        }
+
+        if ($canEdit) {
+            $sa = $this->chargens->getServiceAuthorize();
+
+            $a = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_ACTIF_EDITION));
+            $lien->setCanEditActif($a);
+
+            $p = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_POIDS_EDITION));
+            $lien->setCanEditPoids($p);
+
+            $c = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_CHOIX_EDITION));
+            $lien->setCanEditChoix($c);
         }
 
         return $this;

@@ -1,11 +1,15 @@
 <?php
 
+use Application\Provider\Privilege\Privileges;
+
 /**
  * @var $this              \Application\View\Renderer\PhpRenderer
  * @var $typeHeures        array
  * @var $typeInterventions array
  * @var $filtre            \Application\Form\Chargens\FiltreForm
  */
+
+$canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_DUPLICATION));
 
 ?>
 <nav class="navbar navbar-default">
@@ -18,12 +22,7 @@
                 <?php echo $this->formSelect($filtre->get('etape')) ?>
             </div>
             <div class="col-md-3 div-scenario">
-                <div class="btn-group" role="group">
-                    <?php echo $this->formSelect($filtre->get('scenario')) ?>
-                    <a href="<?php echo $this->url('chargens/scenario') ?>" class="btn btn-default" title="Modification des scénarios">
-                        <span class="glyphicon glyphicon-edit"></span>
-                    </a>
-                </div>
+                <?php echo $this->formSelect($filtre->get('scenario')) ?>
             </div>
         </div>
     <?php endif; ?>
@@ -52,19 +51,25 @@
                 </button>
             </div>
 
+            <?php if ($canCopy): ?>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default dupliquer" title="Dupliquer les données de ce diagramme dans un autre scénario">
                    <span class="glyphicon glyphicon-copy"></span> Dupliquer
                 </button>
             </div>
+            <?php endif; ?>
 
             <div class="nav navbar-nav navbar-right navbar-brand div-hetd-composante">
-                <span>Total composante (HETD) :</span>
-                <span id="hetd-composante">NC</span>
+                <span>Total composante (heures) :</span>
+                <span id="heures-composante">NC</span>
             </div>
         </div>
     </div>
 </nav>
+
+
+
+
 <div class="form-noeud" style="display:none">
     <div class="row" id="choix-assiduite">
         <div class="col-md-12">
@@ -140,13 +145,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" id="div-actif">
             <div class="form-group">
                 <label for="actif" title="Lien actif">Actif</label>
                 <input type="checkbox" class="form-control" placeholder="Actif" id="actif" value="1"/>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" id="div-poids">
             <div class="form-group">
                 <label for="poids" title="Poids du lien par rapport aux autres">Poids</label>
                 <input type="text" class="form-control" placeholder="Poids" id="poids"/>

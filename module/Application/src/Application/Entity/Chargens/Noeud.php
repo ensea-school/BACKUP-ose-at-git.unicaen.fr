@@ -5,6 +5,7 @@ namespace Application\Entity\Chargens;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Chargens\ChargensProvider;
 
@@ -46,6 +47,11 @@ class Noeud
     private $elementPedagogique = null;
 
     /**
+     * @var integer
+     */
+    private $structure = null;
+
+    /**
      * @var TypeIntervention[]
      */
     private $typeIntervention = [];
@@ -64,6 +70,21 @@ class Noeud
      * @var integer
      */
     private $nbLiensInf;
+
+    /**
+     * @var boolean
+     */
+    private $canEditAssiduite = false;
+
+    /**
+     * @var boolean
+     */
+    private $canEditSeuils = false;
+
+    /**
+     * @var boolean
+     */
+    private $canEditEffectifs = false;
 
 
 
@@ -182,7 +203,7 @@ class Noeud
      */
     public function getEtape($object = true)
     {
-        return $object ? $this->provider->getEtape($this->etape) : $this->etape;
+        return $object ? $this->provider->getEntities()->get(Etape::class, $this->etape) : $this->etape;
     }
 
 
@@ -211,7 +232,7 @@ class Noeud
      */
     public function getElementPedagogique($object = true)
     {
-        return $object ? $this->provider->getElementPedagogique($this->elementPedagogique) : $this->elementPedagogique;
+        return $object ? $this->provider->getEntities()->get(ElementPedagogique::class, $this->elementPedagogique) : $this->elementPedagogique;
     }
 
 
@@ -227,6 +248,35 @@ class Noeud
             $elementPedagogique = $elementPedagogique->getId();
         }
         $this->elementPedagogique = $elementPedagogique;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param bool $object
+     *
+     * @return Structure|int
+     */
+    public function getStructure($object = true)
+    {
+        return $object ? $this->provider->getEntities()->get(Structure::class, $this->structure) : $this->structure;
+    }
+
+
+
+    /**
+     * @param Structure|int $structure
+     *
+     * @return Noeud
+     */
+    public function setStructure($structure)
+    {
+        if ($structure instanceof Structure) {
+            $structure = $structure->getId();
+        }
+        $this->structure = $structure;
 
         return $this;
     }
@@ -449,49 +499,73 @@ class Noeud
 
 
     /**
-     * @param array $data
-     *
-     * @return $this
+     * @return bool
      */
-    public function fromArray(array $data)
+    public function isCanEditAssiduite()
     {
-        if (array_key_exists('assiduite', $data)) {
-            $assiduite = (float)$data['assiduite'];
-            if ($assiduite != $this->getAssiduite()) {
-                $this->setAssiduite($assiduite);
-            }
-        }
+        return $this->canEditAssiduite;
+    }
 
-        if (array_key_exists('effectifs', $data)) {
-            $effectifs = (array)$data['effectifs'];
-            foreach ($effectifs as $typeHeures => $effectif) {
-                $effectif = (int)$effectif;
-                if ($effectif != $this->getEffectif($typeHeures)) {
-                    $this->setEffectif($typeHeures, $effectif);
-                }
-            }
-        }
 
-        if (array_key_exists('seuils-ouverture', $data)) {
-            $seuilsOuverture = (array)$data['seuils-ouverture'];
-            foreach ($seuilsOuverture as $typeIntervention => $seuilOuverture) {
-                $seuilOuverture = (int)$seuilOuverture;
-                if ($seuilOuverture != $this->getSeuilOuverture($typeIntervention)) {
-                    $this->setSeuilOuverture($typeIntervention, $seuilOuverture);
-                }
-            }
-        }
 
-        if (array_key_exists('seuils-dedoublement', $data)) {
-            $seuilsDedoublement = (array)$data['seuils-dedoublement'];
-            foreach ($seuilsDedoublement as $typeIntervention => $seuilDedoublement) {
-                $seuilDedoublement = (int)$seuilDedoublement;
-                if ($seuilDedoublement != $this->getSeuilDedoublement($typeIntervention)) {
-                    $this->setSeuilDedoublement($typeIntervention, $seuilDedoublement);
-                }
-            }
-        }
+    /**
+     * @param bool $canEditAssiduite
+     *
+     * @return Noeud
+     */
+    public function setCanEditAssiduite($canEditAssiduite)
+    {
+        $this->canEditAssiduite = $canEditAssiduite;
 
         return $this;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isCanEditSeuils()
+    {
+        return $this->canEditSeuils;
+    }
+
+
+
+    /**
+     * @param bool $canEditSeuils
+     *
+     * @return Noeud
+     */
+    public function setCanEditSeuils($canEditSeuils)
+    {
+        $this->canEditSeuils = $canEditSeuils;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isCanEditEffectifs()
+    {
+        return $this->canEditEffectifs;
+    }
+
+
+
+    /**
+     * @param bool $canEditEffectifs
+     *
+     * @return Noeud
+     */
+    public function setCanEditEffectifs($canEditEffectifs)
+    {
+        $this->canEditEffectifs = $canEditEffectifs;
+
+        return $this;
+    }
+
 }

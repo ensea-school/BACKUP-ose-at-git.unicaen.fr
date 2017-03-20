@@ -72,7 +72,7 @@ class FiltreForm extends AbstractForm
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "Structure gestionnaire de l'enseignement",
+                    'title' => "Structure gestionnaire de la formation",
                 ],
                 'value_options'             => Util::collectionAsOptions($this->structures),
             ],
@@ -124,6 +124,7 @@ class FiltreForm extends AbstractForm
                 'id'               => 'scenario',
                 'title'            => "Scénario ...",
                 'class'            => 'selectpicker',
+                'data-width'       => "100%",
                 'data-live-search' => "true",
             ],
             'type'       => 'Select',

@@ -2,11 +2,11 @@
 
 namespace Application;
 
+use Application\Assertion\ChargensAssertion;
 use UnicaenAuth\Guard\PrivilegeController;
+use Application\Provider\Privilege\Privileges;
 
 return [
-
-    /* Routes (à personnaliser) */
     'router'       => [
         'routes' => [
             'chargens' => [
@@ -17,39 +17,11 @@ return [
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Chargens',
-                        'action'        => 'index',
+                        'action'        => 'INDEX',
                     ],
                 ],
                 'child_routes'  => [
-                    'json'        => [
-                        'type'          => 'Literal',
-                        'may_terminate' => false,
-                        'options'       => [
-                            'route' => '/json',
-                        ],
-                        'child_routes'  => [
-                            'etape' => [
-                                'type'          => 'Literal',
-                                'may_terminate' => true,
-                                'options'       => [
-                                    'route'    => '/etape',
-                                    'defaults' => [
-                                        'action' => 'etape-json',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'enregistrer' => [
-                        'type'          => 'Literal',
-                        'may_terminate' => true,
-                        'options'       => [
-                            'route'    => '/enregistrer',
-                            'defaults' => [
-                                'action' => 'enregistrer',
-                            ],
-                        ],
-                    ],
+
                     'scenario' => [
                         'type'          => 'Literal',
                         'may_terminate' => true,
@@ -73,7 +45,7 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'dupliquer'    => [
+                            'dupliquer' => [
                                 'type'          => 'Segment',
                                 'options'       => [
                                     'route'       => '/dupliquer[/:scenario]',
@@ -100,13 +72,71 @@ return [
                                 'may_terminate' => true,
                             ],
                         ],
-                    ]
+                    ],
+
+                    'seuil' => [
+                        'type'          => 'Segment',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'       => '/seuil[/:scenario]',
+                            'constraints' => [
+                                'scenario' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'seuil',
+                            ],
+                        ],
+                        'child_routes'  => [
+                            'modifier' => [
+                                'type'          => 'Literal',
+                                'options'       => [
+                                    'route'    => '/modifier',
+                                    'defaults' => [
+                                        'action' => 'seuil-modifier',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                        ],
+                    ],
+
+                    'formation' => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/formation',
+                            'defaults' => [
+                                'action' => 'formation',
+                            ],
+                        ],
+                        'child_routes'  => [
+                            'json'        => [
+                                'type'          => 'Literal',
+                                'may_terminate' => true,
+                                'options'       => [
+                                    'route'    => '/json',
+                                    'defaults' => [
+                                        'action' => 'formation-json',
+                                    ],
+                                ],
+                            ],
+                            'enregistrer' => [
+                                'type'          => 'Literal',
+                                'may_terminate' => true,
+                                'options'       => [
+                                    'route'    => '/enregistrer',
+                                    'defaults' => [
+                                        'action' => 'formation-enregistrer',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
     ],
 
-    /* Exemple de menu */
     'navigation'   => [
         'default' => [
             'home' => [
@@ -116,6 +146,29 @@ return [
                         'title'    => "Charges d'enseignement",
                         'route'    => 'chargens',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Chargens', 'index'),
+                        'pages'    => [
+                            'scenario'  => [
+                                'label'       => "Gestion des scénarios",
+                                'description' => "Permet de créer, dupliquer ou supprimer des scénarios",
+                                'route'       => 'chargens/scenario',
+                                'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'scenario'),
+                                'visible'     => false,
+                            ],
+                            'seuil'     => [
+                                'label'       => "Gestion des seuils de dédoublement",
+                                'description' => "Permet de spécifier des seuils de dédoublement qui s'appliqueront à toutes les formations concernées",
+                                'route'       => 'chargens/seuil',
+                                'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'seuil'),
+                                'visible'     => false,
+                            ],
+                            'formation' => [
+                                'label'       => "Paramétrage des formations",
+                                'description' => "Permet de configurer de manière fine les formations (définition des taux d'assiduite, seuils, effectifs...)",
+                                'route'       => 'chargens/formation',
+                                'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'formation'),
+                                'visible'     => false,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -128,23 +181,89 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Chargens',
-                    'action'     => ['index', 'etape-json', 'enregistrer'],
+                    'action'     => ['index'],
                     'privileges' => [
-                        Provider\Privilege\Privileges::CHARGENS_VISUALISATION,
+                        Privileges::CHARGENS_VISUALISATION,
                     ],
                 ],
+
                 [
                     'controller' => 'Application\Controller\Chargens',
                     'action'     => ['scenario'],
                     'privileges' => [
-                        Provider\Privilege\Privileges::CHARGENS_VISUALISATION,
+                        Privileges::CHARGENS_SCENARIO_VISUALISATION,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Chargens',
                     'action'     => ['scenario-saisir', 'scenario-dupliquer', 'scenario-supprimer'],
                     'privileges' => [
-                        Provider\Privilege\Privileges::CHARGENS_VISUALISATION,
+                        Privileges::CHARGENS_SCENARIO_COMPOSANTE_EDITION,
+                        Privileges::CHARGENS_SCENARIO_ETABLISSEMENT_EDITION,
+                    ],
+                    'assertion'  => 'assertionChargens',
+                ],
+
+                [
+                    'controller' => 'Application\Controller\Chargens',
+                    'action'     => ['seuil'],
+                    'privileges' => [
+                        Privileges::CHARGENS_SEUIL_COMPOSANTE_VISUALISATION,
+                        Privileges::CHARGENS_SEUIL_ETABLISSEMENT_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Chargens',
+                    'action'     => ['seuil-modifier'],
+                    'privileges' => [
+                        Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION,
+                        Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION,
+                    ],
+                ],
+
+                [
+                    'controller' => 'Application\Controller\Chargens',
+                    'action'     => ['formation', 'formation-json'],
+                    'privileges' => [
+                        Privileges::CHARGENS_FORMATION_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Chargens',
+                    'action'     => ['formation-enregistrer'],
+                    'privileges' => [
+                        Privileges::CHARGENS_FORMATION_ASSIDUITE_EDITION,
+                        Privileges::CHARGENS_FORMATION_EFFECTIFS_EDITION,
+                        Privileges::CHARGENS_FORMATION_SEUILS_EDITION,
+                        Privileges::CHARGENS_FORMATION_ACTIF_EDITION,
+                        Privileges::CHARGENS_FORMATION_POIDS_EDITION,
+                        Privileges::CHARGENS_FORMATION_CHOIX_EDITION,
+                    ],
+                ],
+            ],
+        ],
+
+        'resource_providers' => [
+            \BjyAuthorize\Provider\Resource\Config::class => [
+                'Scenario' => [],
+            ],
+        ],
+
+        'rule_providers' => [
+            \UnicaenAuth\Provider\Rule\PrivilegeRuleProvider::class => [
+                'allow' => [
+                    [
+                        'privileges' => ChargensAssertion::SCENARIO_EDITION,
+                        'resources'  => ['Scenario', 'Structure'],
+                        'assertion'  => 'AssertionChargens',
+                    ],
+                    [
+                        'privileges' => [
+                            Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION,
+                            Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION,
+                        ],
+                        'resources'  => ['Structure'],
+                        'assertion'  => 'AssertionChargens',
                     ],
                 ],
             ],
@@ -160,7 +279,9 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'applicationScenario' => Service\ScenarioService::class,
+            'applicationScenario'    => Service\ScenarioService::class,
+            'applicationSeuilCharge' => Service\SeuilChargeService::class,
+            'assertionChargens'      => Assertion\ChargensAssertion::class,
         ],
         'factories'  => [
             'chargens' => Provider\Chargens\ChargensProviderFactory::class,
@@ -173,9 +294,9 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'chargensFiltre' => Form\Chargens\FiltreForm::class,
+            'chargensFiltre'              => Form\Chargens\FiltreForm::class,
             'chargensDuplicationScenario' => Form\Chargens\DuplicationScenarioForm::class,
-            'chargensScenario' => Form\Chargens\ScenarioForm::class,
+            'chargensScenario'            => Form\Chargens\ScenarioForm::class,
         ],
     ],
 ];

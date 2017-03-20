@@ -499,3 +499,16 @@ td .alert {
 .ui-dialog-titlebar-close {
 
 }
+
+
+
+
+
+.seuils-dedoublement tr#seuil-gtf-0 {
+    font-weight: bold;
+    background-color: oldlace;
+}
+
+.seuils-dedoublement td span.aucun {
+    color:darkgrey;
+}

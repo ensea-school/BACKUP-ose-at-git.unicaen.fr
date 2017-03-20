@@ -8,12 +8,18 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
+use BjyAuthorize\Service\Authorize;
 
 class ChargensProvider
 {
     use BddConnecteurAwareTrait;
     use SourceAwareTrait;
     use ContextAwareTrait;
+
+    /**
+     * @var Authorize
+     */
+    private $serviceAuthorize;
 
     /**
      * @var Scenario
@@ -44,6 +50,30 @@ class ChargensProvider
      * @var EntityProvider
      */
     private $entities;
+
+
+
+    /**
+     * @return Authorize
+     */
+    public function getServiceAuthorize()
+    {
+        return $this->serviceAuthorize;
+    }
+
+
+
+    /**
+     * @param Authorize $serviceAuthorize
+     *
+     * @return ChargensProvider
+     */
+    public function setServiceAuthorize($serviceAuthorize)
+    {
+        $this->serviceAuthorize = $serviceAuthorize;
+
+        return $this;
+    }
 
 
 
@@ -252,7 +282,7 @@ class ChargensProvider
     public function getDiagrammeData()
     {
         return [
-            'hetd'   => 0,
+            'heures' => null,
             'noeuds' => $this->getNoeuds()->getDiagrammeData(),
             'liens'  => $this->getLiens()->getDiagrammeData(),
         ];

@@ -18,6 +18,8 @@ use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Zend\Stdlib\Glob;
 use Zend\Config\Factory as ConfigFactory;
 
+include_once(__DIR__.'/src/Application/functions.php');
+
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
     /**

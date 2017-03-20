@@ -159,7 +159,7 @@ class ScenarioNoeudProvider
         $date        = $conn->convertToDatabaseValue(new \DateTime(), 'datetime');
         $oseSourceId = $this->chargens->getServiceSource()->getOse()->getId();
 
-        unset($changes['HETD']); // non mis à jour depuis l'interface !!
+        unset($changes['HEURES']); // non mis à jour depuis l'interface !!
         if ($scenarioNoeud->getId()) {
             unset($changes['ID']);
             $changes['SOURCE_ID']             = $oseSourceId;
@@ -275,7 +275,7 @@ class ScenarioNoeudProvider
           sn.scenario_id,
           sn.noeud_id,
           sn.assiduite,
-          sn.hetd
+          sn.heures
         FROM
           scenario_noeud sn
         WHERE

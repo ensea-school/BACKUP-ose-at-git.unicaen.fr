@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -11,62 +12,71 @@ class TypeIntervention implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
 
-    const CODE_CM = 'CM';
-    const CODE_TD = 'TD';
-    const CODE_TP = 'TP';
-
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * @var boolean
      */
-    protected $interventionIndividualisee;
+    private $interventionIndividualisee;
 
     /**
      * @var string
      */
-    protected $libelle;
+    private $libelle;
 
     /**
      * @var integer
      */
-    protected $ordre;
+    private $ordre;
 
     /**
      * @var integer
      */
-    protected $id;
+    private $id;
 
     /**
      *
      * @var float
      */
-    protected $tauxHetdService;
+    private $tauxHetdService;
 
     /**
      *
      * @var float
      */
-    protected $tauxHetdComplementaire;
+    private $tauxHetdComplementaire;
 
     /**
      * visible
      *
      * @var boolean
      */
-    protected $visible;
+    private $visible;
 
     /**
      * enseignement
      *
      * @var boolean
      */
-    protected $enseignement;
+    private $enseignement;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typeInterventionStructure;
 
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->typeInterventionStructure = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
 
@@ -105,8 +115,17 @@ class TypeIntervention implements HistoriqueAwareInterface
 
 
 
-    public function getVisible()
+    public function isVisible(Structure $structure = null, Annee $annee = null)
     {
+        if ($structure && $annee){
+            $lst = $this->getTypeInterventionStructure($structure, $annee);
+            if ($lst->count() == 1){
+                /** @var TypeInterventionStructure $tis */
+                $tis = $lst->first();
+                return $tis->isVisible();
+            }
+        }
+
         return $this->visible;
     }
 
@@ -143,6 +162,67 @@ class TypeIntervention implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
+    /**
+     * Add typeInterventionStructure
+     *
+     * @param TypeInterventionStructure $typeInterventionStructure
+     *
+     * @return self
+     */
+    public function addTypeInterventionStructure(TypeInterventionStructure $typeInterventionStructure)
+    {
+        $this->typeInterventionStructure[] = $typeInterventionStructure;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove typeInterventionStructure
+     *
+     * @param TypeInterventionStructure $typeInterventionStructure
+     *
+     * @return self
+     */
+    public function removeTypeInterventionStructure(TypeInterventionStructure $typeInterventionStructure)
+    {
+        $this->typeInterventionStructure->removeElement($typeInterventionStructure);
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get typeInterventionStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection|TypeInterventionStructure
+     */
+    public function getTypeInterventionStructure(Structure $structure = null, Annee $annee = null)
+    {
+        if ($structure) {
+            $tis = $this->typeInterventionStructure->filter(function (TypeInterventionStructure $t) use ($structure) {
+                return $t->getStructure() === $structure && $t->estNonHistorise();
+            });
+
+            if ($annee) {
+                $tis = $tis->filter(function (TypeInterventionStructure $t) use ($annee) {
+                    $aDeb = $t->getAnneeDebut() ? $t->getAnneeDebut()->getId() : 0;
+                    $aFin = $t->getAnneeFin() ? $t->getAnneeFin()->getId() : 9999999;
+                    $aId = $annee->getId();
+
+                    return $aDeb <= $aId && $aId <= $aFin;
+                });
+            }
+
+            return $tis;
+        }
+
+        return $this->typeInterventionStructure;
+    }
 
 
 

@@ -29,6 +29,9 @@ class ChargensProviderFactory implements FactoryInterface
         $chargensProvider = new ChargensProvider();
         $chargensProvider->setBdd($bdd);
 
+        $serviceAuthorize = $serviceLocator->get('BjyAuthorize\Service\Authorize');
+        $chargensProvider->setServiceAuthorize($serviceAuthorize);
+
         return $chargensProvider;
     }
 }

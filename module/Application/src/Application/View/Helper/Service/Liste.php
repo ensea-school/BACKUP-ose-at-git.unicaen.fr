@@ -559,7 +559,7 @@ class Liste extends AbstractViewHelper
         } else { // visibilité calculée
             $totaux = $this->getTotaux();
 
-            return $typeIntervention->getVisible() || (isset($totaux[$typeIntervention->getCode()]) && $totaux[$typeIntervention->getCode()] > 0);
+            return $typeIntervention->isVisible() || (isset($totaux[$typeIntervention->getCode()]) && $totaux[$typeIntervention->getCode()] > 0);
         }
     }
 

@@ -20,9 +20,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     <th>Libelle</th>
     <th>Taux HETD service</th>
     <th>Taux HETD complémentaire</th>
-    <th>Personnalisée?</th>
-    <th>Visible?</th>
-    <th>Enseignement?</th>
+    <th>Personnalisée</th>
+    <th>Visible</th>
+    <th>Enseignement</th>
     <?php if ($canEdit) echo '<th>Actions</th>' ?>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdService()) ?></td>
             <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
             <td style="text-align:center;"><?php echo ($ti->getInterventionIndividualisee()?'Oui':'Non') ?></td>
-            <td style="text-align:center;"><?php echo ($ti->getVisible()?'Oui':'Non') ?></td>
+            <td style="text-align:center;"><?php echo ($ti->isVisible()?'Oui':'Non') ?></td>
             <td style="text-align:center;"><?php echo ($ti->getEnseignement()?'Oui':'Non') ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">

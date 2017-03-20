@@ -6,7 +6,7 @@ use Application\Form\Chargens\FiltreForm;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
-use Zend\View\Resolver\TemplatePathStack;
+
 
 /**
  * Description of ChargensViewHelper
@@ -24,19 +24,6 @@ class ChargensViewHelper extends AbstractViewHelper
      * @var FiltreForm;
      */
     private $formFiltre;
-
-
-
-    /**
-     *
-     * @return self
-     */
-    public function __invoke()
-    {
-        $this->getView()->resolver()->attach(new TemplatePathStack(['script_paths' => [__DIR__ . "/view"]]));
-
-        return $this;
-    }
 
 
 
@@ -65,18 +52,23 @@ class ChargensViewHelper extends AbstractViewHelper
             'class'                       => 'chargens',
             'data-type-heures'            => $this->getTypeHeuresArray(),
             'data-type-intervention'      => $this->getTypeInterventionsArray(),
-            'data-url-json-etape'         => $this->getView()->url('chargens/json/etape'),
-            'data-url-enregistrer'        => $this->getView()->url('chargens/enregistrer'),
+            'data-url-json-etape'         => $this->getView()->url('chargens/formation/json'),
+            'data-url-enregistrer'        => $this->getView()->url('chargens/formation/enregistrer'),
             'data-url-scenario-dupliquer' => $this->getView()->url('chargens/scenario/dupliquer'),
         ])->html(
             $t('div', [
                 'class' => 'controles',
             ])->html(
-                $this->getView()->render("controles.phtml", [
+                $this->getView()->render("application/chargens/controles", [
                     'typeHeures'        => $this->getTypeHeuresArray(),
                     'typeInterventions' => $this->getTypeInterventionsArray(),
                     'filtre'            => $this->getFormFiltre(),
                 ])
+            )
+            . $t('div', ['id' => 'chargens-attente', 'class' => 'alert alert-info', 'style' => 'display:none'])->html(
+                'Construction du diagramme en cours. Veuillez patienter... '
+                .$t('img', ['src' => $this->getView()->basePath() . '/images/wait.gif', 'alt' => 'Attente...'])->openClose()
+
             )
             . $t('div', [
                 'id'    => uniqid('chargens-'),

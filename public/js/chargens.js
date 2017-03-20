@@ -180,31 +180,32 @@ $.widget("ose.chargens", {
         }
 
 
-        if (noeud['element-pedagogique'] || noeud['etape']) {
+        if (!noeud['can-edit-assiduite'] || noeud['element-pedagogique'] || noeud['etape']) {
             this.formNoeud.find('#choix-assiduite').hide();
         } else {
             this.formNoeud.find('#choix-assiduite').show();
         }
 
-
-        if (noeud['etape']) {
+        if (noeud['can-edit-effectifs'] && noeud['etape']) {
             this.formNoeud.find('#effectifs').show();
         } else {
             this.formNoeud.find('#effectifs').hide();
         }
 
-        if (noeud['etape']) {
-            this.formNoeud.find('#seuils').show();
-            this.formNoeud.find('#seuils .seuil').show();
-        } else if (noeud['types-intervention'].length == 0) {
+        if (!noeud['can-edit-seuils']) {
             this.formNoeud.find('#seuils').hide();
         } else {
-            this.formNoeud.find('#seuils').show();
-            this.formNoeud.find('#seuils .seuil').hide();
-            for (ti in noeud['types-intervention']) {
-                this.formNoeud.find('#seuils #seuil-' + noeud['types-intervention'][ti]).show();
+            if (noeud['types-intervention'].length == 0) {
+                this.formNoeud.find('#seuils').hide();
+            } else {
+                this.formNoeud.find('#seuils').show();
+                this.formNoeud.find('#seuils .seuil').hide();
+                for (ti in noeud['types-intervention']) {
+                    this.formNoeud.find('#seuils #seuil-' + noeud['types-intervention'][ti]).show();
+                }
             }
         }
+
 
         if (this.formNoeud.find('#choix-assiduite').css('display') != 'none'
             || this.formNoeud.find('#effectifs').css('display') != 'none'
@@ -277,6 +278,84 @@ $.widget("ose.chargens", {
 
 
 
+    noeudToNodeData: function (noeudId)
+    {
+        var noeud = this.noeuds[noeudId];
+
+        var category = noeud.etape ? 'etape' : noeud['element-pedagogique'] ? 'element' : 'noeud';
+        if (noeud.liste) category = 'liste';
+
+        var data = {
+            key: noeudId,
+            id: noeudId,
+            code: noeud.code,
+            libelle: noeud.libelle,
+            hover: noeud.hover,
+            category: category,
+            proprietes: []
+        };
+
+        /* Assiduité */
+        if (category == 'noeud') {
+            data.proprietes.push({
+                label: 'Assiduité',
+                value: Formatter.floatToString(noeud.assiduite * 100) + '%'
+            });
+        }
+
+        /* Effectifs */
+        if (category == 'noeud' || category == 'etape' || category == 'element') {
+            var effectifs = 0;
+            for (var eff in noeud.effectifs) {
+                effectifs += noeud.effectifs[eff];
+            }
+            data.proprietes.push({
+                label: 'Effectifs',
+                value: effectifs
+            });
+        }
+
+        /* Groupes */
+        if (category == 'element') {
+            for (var ti in this.typesIntervention) {
+                if (noeud['types-intervention'].length > 0
+                    && -1 != noeud['types-intervention'].indexOf(parseInt(ti))) {
+                    var seuilOuverture = noeud['seuils-ouverture'][ti];
+                    if (!seuilOuverture) seuilOuverture = 1;
+
+                    var seuilDedoublement = noeud['seuils-dedoublement'][ti];
+                    if (!seuilDedoublement) seuilDedoublement = 99999999;
+
+                    var value = 0;
+                    if (effectifs >= seuilOuverture) {
+                        value = Math.ceil(effectifs / seuilDedoublement);
+                    }
+
+                    data.proprietes.push({
+                        label: this.typesIntervention[ti],
+                        value: value
+                    });
+                }
+            }
+        }
+
+        /* Heures */
+        if (category == 'etape' || category == 'element') {
+            var heures = 'NC';
+            if (noeud.heures != null) {
+                heures = Formatter.floatToString(noeud.heures);
+            }
+            data.proprietes.push({
+                label: 'Heures',
+                value: heures
+            });
+        }
+
+        return data;
+    },
+
+
+
     majNoeud: function (noeudId, noTransaction)
     {
         var model = this.diagramme.model;
@@ -285,15 +364,13 @@ $.widget("ose.chargens", {
         for (i in model.nodeDataArray) {
             data = model.nodeDataArray[i];
             if (data.key == noeudId) {
-                model.setDataProperty(data, 'hover', this.noeuds[noeudId].hover);
-                model.setDataProperty(data, 'assiduite', this.__dataToGraph(noeudId, 'assiduite'));
-                model.setDataProperty(data, 'hetd', this.__dataToGraph(noeudId, 'hetd'));
-                model.setDataProperty(data, 'effectifs', this.__dataToGraph(noeudId, 'effectifs'));
-                for (var ti in this.typesIntervention) {
-                    model.setDataProperty(data, 'groupes-' + ti, this.__dataToGraph(noeudId, 'groupes', ti));
+                var newData = this.noeudToNodeData(noeudId);
+                for (var k in newData) {
+                    model.setDataProperty(data, k, newData[k]);
                 }
             }
         }
+
         if (!noTransaction) model.commitTransaction("majNoeud");
 
         return this;
@@ -308,10 +385,22 @@ $.widget("ose.chargens", {
 
         this.editionLienId = lienId;
 
-        if (noeudInf.liste) {
+        if (noeudInf.liste && lien['can-edit-choix']) {
             this.formLien.find('#choix').show();
         } else {
             this.formLien.find('#choix').hide();
+        }
+
+        if (lien['can-edit-actif']) {
+            this.formLien.find('#div-actif').show();
+        } else {
+            this.formLien.find('#div-actif').hide();
+        }
+
+        if (lien['can-edit-poids']) {
+            this.formLien.find('#div-poids').show();
+        } else {
+            this.formLien.find('#div-poids').hide();
         }
 
         this.formLien.find('#choix-minimum').val(lien['choix-minimum']);
@@ -320,14 +409,19 @@ $.widget("ose.chargens", {
         this.formLien.find('#actif').prop('checked', lien['actif']);
         this.formLien.find('#poids').val(lien['poids']);
 
-        this.formLien.dialog({
-            position: {
-                my: "center center",
-                of: this.mousePosEvent
-            }
-        });
+        if (this.formLien.find('#choix').css('display') != 'none'
+            || this.formLien.find('#div-actif').css('display') != 'none'
+            || this.formLien.find('#div-poids').css('display') != 'none'
+        ) {
+            this.formLien.dialog({
+                position: {
+                    my: "center center",
+                    of: this.mousePosEvent
+                }
+            });
 
-        this.formLien.dialog("open");
+            this.formLien.dialog("open");
+        }
     },
 
 
@@ -372,6 +466,25 @@ $.widget("ose.chargens", {
 
 
 
+    lienToLinkData: function (lienId)
+    {
+        var lien = this.liens[lienId];
+
+        var data = {
+            id: lienId,
+            from: lien['noeud-sup'],
+            to: lien['noeud-inf'],
+            actif: lien.actif,
+            poids: lien.poids,
+            hover: lien.hover,
+            category: 'default'
+        };
+
+        return data;
+    },
+
+
+
     majLien: function (lienId, noTransaction)
     {
         var model = this.diagramme.model;
@@ -380,9 +493,10 @@ $.widget("ose.chargens", {
         for (i in model.linkDataArray) {
             data = model.linkDataArray[i];
             if (data.id == lienId) {
-                model.setDataProperty(data, 'hover', this.liens[lienId].hover);
-                model.setDataProperty(data, 'actif', this.liens[lienId].actif);
-                model.setDataProperty(data, 'poids', this.liens[lienId].poids);
+                var newData = this.lienToLinkData(lienId);
+                for (var k in newData) {
+                    model.setDataProperty(data, k, newData[k]);
+                }
             }
         }
         if (!noTransaction) model.commitTransaction("majLien");
@@ -397,45 +511,20 @@ $.widget("ose.chargens", {
         var nd = [];
 
         for (var noeudId in this.noeuds) {
-            var n = this.noeuds[noeudId];
-            var category = n.etape ? 'etape' : n['element-pedagogique'] ? 'element' : 'noeud';
-            if (n.liste) category = 'liste';
-            var d = {
-                key: noeudId,
-                id: noeudId,
-                code: n.code,
-                libelle: n.libelle,
-                choix: this.__dataToGraph(noeudId, 'choix'),
-                assiduite: this.__dataToGraph(noeudId, 'assiduite'),
-                hetd: this.__dataToGraph(noeudId, 'hetd'),
-                effectifs: this.__dataToGraph(noeudId, 'effectifs'),
-                category: category
-            };
-
-            for (var ti in this.typesIntervention) {
-                d['groupes-' + ti] = this.__dataToGraph(noeudId, 'groupes', ti);
-            }
-
-            nd.push(d);
+            nd.push(this.noeudToNodeData(noeudId));
         }
 
         var ld = [];
 
         for (var lienId in this.liens) {
-            ld.push({
-                id: lienId,
-                from: this.liens[lienId]['noeud-sup'],
-                to: this.liens[lienId]['noeud-inf'],
-                actif: this.liens[lienId].actif,
-                poids: this.liens[lienId].poids,
-                category: 'default'
-            });
+            ld.push(this.lienToLinkData(lienId));
         }
 
         this.diagramme.model = go.GraphObject.make(go.GraphLinksModel, {
             nodeDataArray: nd,
             linkDataArray: ld
         });
+        this.element.find('#chargens-attente').hide();
     },
 
 
@@ -453,6 +542,7 @@ $.widget("ose.chargens", {
             this.majLien(lienId, true);
         }
         model.commitTransaction("majDiagrammeData");
+        this.element.find('#chargens-attente').hide();
     },
 
 
@@ -472,8 +562,8 @@ $.widget("ose.chargens", {
             this.majDiagrammeData();
         }
 
-        this.element.find('.controles #hetd-composante').html(
-            data.hetd == null ? 'NC' : Formatter.floatToString(data.hetd)
+        this.element.find('.controles #heures-composante').html(
+            data.heures == null ? 'NC' : Formatter.floatToString(data.heures)
         );
 
         return this;
@@ -511,6 +601,9 @@ $.widget("ose.chargens", {
 
     charger: function (etape, scenario)
     {
+        if (etape && scenario) {
+            this.element.find('#chargens-attente').show();
+        }
         var url = this.element.data('url-json-etape');
         var params = {
             etape: etape,
@@ -586,7 +679,7 @@ $.widget("ose.chargens", {
     getFormNoeudBtnSave: function () { return this.formNoeud.find('#btn-save')},
     getFormLienBtnCancel: function () { return this.formLien.find('#btn-cancel')},
     getFormLienBtnSave: function () { return this.formLien.find('#btn-save')},
-    getHetdComposante: function () { return this.element.find('#hetd-composante')},
+    getHeuresComposante: function () { return this.element.find('#heures-composante')},
 
 
 
@@ -602,8 +695,7 @@ $.widget("ose.chargens", {
                 fill: $(go.Brush, "Linear", {0: "rgb(252, 248, 227)", 1: "rgb(250, 242, 204)"}),
                 stroke: "#edd6a3"
             },
-            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#edd6a3";}),
-            new go.Binding("strokeWidth", "hover", function (hover) {return hover ? 2 : 1;})
+            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#edd6a3";})
         ];
 
         var grayGradient = [
@@ -611,8 +703,7 @@ $.widget("ose.chargens", {
                 fill: $(go.Brush, "Linear", {0: "rgb(245, 245, 245)", 1: "rgb(232, 232, 232)"}),
                 stroke: "#ccc"
             },
-            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#ccc";}),
-            new go.Binding("strokeWidth", "hover", function (hover) {return hover ? 2 : 1;})
+            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#ccc";})
         ];
 
         var blueGradient = [
@@ -620,8 +711,7 @@ $.widget("ose.chargens", {
                 fill: $(go.Brush, "Linear", {0: "rgb(217, 237, 247)", 1: "rgb(196, 227, 243)"}),
                 stroke: "#98CED9"
             },
-            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#98CED9";}),
-            new go.Binding("strokeWidth", "hover", function (hover) {return hover ? 2 : 1;})
+            new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#98CED9";})
         ];
 
 
@@ -652,65 +742,75 @@ $.widget("ose.chargens", {
                 }
             );
 
-        var newNodeTemplatePropriete = function (index, propriete, label)
+        var nodeTemplate = function (gradient)
         {
-            return $(go.Panel, "TableRow", {row: index},
-                $(go.TextBlock, label, {column: 0, font: "8pt \"Open Sans\""}),
-                $(go.TextBlock, new go.Binding("text", propriete), {column: 1, font: "8pt \"Open Sans\""})
-            )
-        };
-
-        var sel = {
-            selectionAdornmentTemplate: $(go.Adornment, "Auto",
-                $(go.Shape, "RoundedRectangle",
-                    {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
-                $(go.Placeholder)
-            ),
-            mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
-            mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
-        }
-
-        var defaultNodeTemplate = $(go.Node, "Vertical", sel,
-            $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 82},
-                $(go.Shape, "RoundedRectangle", grayGradient, {name: "SHAPE"}),
-                $(go.Panel, "Vertical",
-                    {padding: 10},
-                    $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#999"}),
-                    $(go.TextBlock,
-                        {
-                            column: 0,
-                            margin: 1,
-                            width: 100,
-                            height: 28,
-                            isMultiline: true,
-                            maxLines: 3,
-                            stroke: "black",
-                            textAlign: "center",
-                            font: "9pt \"Open Sans\""
-                        },
-                        new go.Binding("text", "libelle")
+            return $(go.Node, "Vertical", {
+                    selectionAdornmentTemplate: $(go.Adornment, "Auto",
+                        $(go.Shape, "RoundedRectangle",
+                            {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
+                        $(go.Placeholder)
                     ),
-                    $(go.Panel, "Table",
-                        {
-                            name: "details",
-                            defaultAlignment: go.Spot.Left,
-                            background: "white",
-                            padding: 1.5,
-                            visible: true
-                        },
-                        $(go.RowColumnDefinition, {column: 0, width: 70}),
-                        $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
-                        [
-                            newNodeTemplatePropriete(0, 'assiduite', 'Assiduité'),
-                            newNodeTemplatePropriete(1, 'effectifs', 'Effectifs')
-                        ]
+                    mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
+                    mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
+                },
+                $(go.Panel, "Auto",
+                    {name: 'panel', width: 110},
+                    $(go.Shape, "RoundedRectangle", gradient, {name: "SHAPE"}),
+                    $(go.Panel, "Vertical",
+                        $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#999"}),
+                        $(go.TextBlock,
+                            {
+                                column: 0,
+                                margin: 1,
+                                width: 100,
+                                height: 28,
+                                isMultiline: true,
+                                maxLines: 3,
+                                stroke: "black",
+                                textAlign: "center",
+                                font: "9pt \"Open Sans\""
+                            },
+                            new go.Binding("text", "libelle")
+                        ),
+                        $(go.Panel, "Table",
+                            new go.Binding("itemArray", "proprietes"),
+                            {
+                                name: "details",
+                                defaultAlignment: go.Spot.Left,
+                                background: "white",
+                                padding: 1.5,
+                                itemTemplate: $(go.Panel, "TableRow",
+                                    $(go.TextBlock, new go.Binding("text", 'label'), {
+                                        column: 0,
+                                        width: 70,
+                                        font: "8pt \"Open Sans\""
+                                    }),
+                                    $(go.TextBlock, new go.Binding("text", 'value'), {
+                                        column: 1,
+                                        width: 30,
+                                        font: "8pt \"Open Sans\""
+                                    })
+                                )
+                            }
+                        )
                     )
                 )
-            )
-        );
+            );
+        }
 
-        var listeNodeTemplate = $(go.Node, "Vertical", sel,
+        var defaultNodeTemplate = nodeTemplate(grayGradient);
+        var etapeNodeTemplate = nodeTemplate(yellowGradient);
+        var elementNodeTemplate = nodeTemplate(blueGradient);
+
+        var listeNodeTemplate = $(go.Node, "Vertical", {
+                selectionAdornmentTemplate: $(go.Adornment, "Auto",
+                    $(go.Shape, "RoundedRectangle",
+                        {fill: null, stroke: "dodgerblue", strokeWidth: 4}),
+                    $(go.Placeholder)
+                ),
+                mouseEnter: function (e, obj) { that.highlight(obj.part.data.id, true); },
+                mouseLeave: function (e, obj) { that.highlight(obj.part.data.id, false); }
+            },
             $(go.Panel, "Auto",
                 {name: 'panel', width: 10, height: 10},
                 $(go.Shape, "Circle", {
@@ -727,99 +827,7 @@ $.widget("ose.chargens", {
             )
         );
 
-        var etapeNodeTemplate = $(go.Node, "Vertical", sel,
-            $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 82},
-                $(go.Shape, "RoundedRectangle", yellowGradient, {name: "SHAPE"}),
-                $(go.Panel, "Vertical",
-                    {padding: 10},
-                    $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#B39F2D"}),
-                    $(go.TextBlock,
-                        {
-                            column: 0,
-                            margin: 1,
-                            width: 100,
-                            height: 28,
-                            isMultiline: true,
-                            maxLines: 3,
-                            stroke: "black",
-                            textAlign: "center",
-                            font: "9pt \"Open Sans\""
-                        },
-                        new go.Binding("text", "libelle")
-                    ),
-                    $(go.Panel, "Table",
-                        {
-                            name: "details",
-                            defaultAlignment: go.Spot.Left,
-                            background: "white",
-                            padding: 1.5,
-                            visible: true
-                        },
-                        $(go.RowColumnDefinition, {column: 0, width: 70}),
-                        $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
-                        [
-                            newNodeTemplatePropriete(0, 'effectifs', 'Effectifs'),
-                            newNodeTemplatePropriete(1, 'hetd', 'HETD')
-                        ]
-                    )
-                )
-            )
-        );
-
-        var index = 0;
-        var elementNodeTemplateProprietes = [
-            newNodeTemplatePropriete(index++, 'effectifs', 'Effectifs')
-        ];
-
-        for (var ti in this.typesIntervention) {
-            elementNodeTemplateProprietes.push(
-                newNodeTemplatePropriete(index++, 'groupes-' + ti, 'Groupes ' + this.typesIntervention[ti])
-            );
-        }
-
-        elementNodeTemplateProprietes.push(
-            newNodeTemplatePropriete(index++, 'hetd', 'HETD')
-        );
-
-        var elementNodeTemplate = $(go.Node, "Vertical", sel,
-            $(go.Panel, "Auto",
-                {name: 'panel', width: 110, height: 55 + (elementNodeTemplateProprietes.length) * 13},
-                $(go.Shape, "RoundedRectangle", blueGradient, {name: "SHAPE"}),
-                $(go.Panel, "Vertical",
-                    {padding: 10},
-                    $(go.TextBlock, new go.Binding("text", "code"), {stroke: "#3C728D"}),
-                    $(go.TextBlock,
-                        {
-                            column: 0,
-                            margin: 1,
-                            width: 100,
-                            height: 28,
-                            isMultiline: true,
-                            maxLines: 2,
-                            stroke: "black",
-                            textAlign: "center",
-                            font: "9pt \"Open Sans\""
-                        },
-                        new go.Binding("text", "libelle")
-                    ),
-                    $(go.Panel, "Table",
-                        {
-                            name: "details",
-                            defaultAlignment: go.Spot.Left,
-                            background: "white",
-                            padding: 1.5,
-                            visible: true
-                        },
-                        $(go.RowColumnDefinition, {column: 0, width: 70}),
-                        $(go.RowColumnDefinition, {column: 1, width: 30, minimum: 30}),
-                        elementNodeTemplateProprietes
-                    )
-                )
-            )
-        );
-
-        var defaultLinkTemplate = $(go.Link,
+        var linkTemplate = $(go.Link,
             {
                 curve: go.Link.Bezier,
                 toEndSegmentLength: 30, fromEndSegmentLength: 30,
@@ -844,53 +852,11 @@ $.widget("ose.chargens", {
         d.nodeTemplateMap.add("element", elementNodeTemplate);
 
         d.linkTemplateMap = new go.Map("string", go.Link);
-        d.linkTemplateMap.add("default", defaultLinkTemplate);
+        d.linkTemplateMap.add("default", linkTemplate);
 
         return d;
     },
 
-
-
-    __dataToGraph: function (noeudId, propriete, propriete2)
-    {
-        switch (propriete) {
-            case 'assiduite':
-                return Formatter.floatToString(this.noeuds[noeudId]['assiduite'] * 100) + '%';
-
-            case 'hetd':
-                if (this.noeuds[noeudId]['hetd'] == null) return 'NC';
-                return Formatter.floatToString(this.noeuds[noeudId]['hetd']);
-
-            case 'effectifs':
-                var effectifs = 0;
-                for (var ti in this.noeuds[noeudId]['effectifs']) {
-                    effectifs += this.noeuds[noeudId]['effectifs'][ti];
-                }
-                return effectifs;
-
-            case 'groupes':
-                if (
-                    this.noeuds[noeudId]['types-intervention'].length > 0
-                    && -1 != this.noeuds[noeudId]['types-intervention'].indexOf(parseInt(propriete2))
-                ) {
-                    var effectifs = 0;
-                    for (var ti in this.noeuds[noeudId]['effectifs']) {
-                        effectifs += this.noeuds[noeudId]['effectifs'][ti];
-                    }
-
-                    var seuilOuverture = this.noeuds[noeudId]['seuils-ouverture'][propriete2];
-                    if (!seuilOuverture) seuilOuverture = 1;
-
-                    var seuilDedoublement = this.noeuds[noeudId]['seuils-dedoublement'][propriete2];
-                    if (!seuilOuverture) seuilOuverture = 9999;
-
-                    if (effectifs < seuilOuverture) return 0;
-                    return Math.ceil(effectifs / seuilDedoublement);
-                } else {
-                    return '-';
-                }
-        }
-    }
 });
 
 
@@ -901,7 +867,6 @@ $.widget("ose.chargensFiltre", {
     structuresEtapes: [],
     structuresScenarios: [],
     etapesStructure: [],
-
 
     _create: function ()
     {

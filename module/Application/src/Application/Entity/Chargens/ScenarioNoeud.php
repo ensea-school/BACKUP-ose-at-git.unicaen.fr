@@ -26,7 +26,7 @@ class ScenarioNoeud
     /**
      * @var float
      */
-    private $hetd;
+    private $heures;
 
     /**
      * @var ScenarioNoeudEffectif[]
@@ -105,21 +105,21 @@ class ScenarioNoeud
     /**
      * @return float
      */
-    public function getHetd()
+    public function getHeures()
     {
-        return $this->hetd;
+        return $this->heures;
     }
 
 
 
     /**
-     * @param float $hetd
+     * @param float $heures
      *
      * @return ScenarioNoeud
      */
-    public function setHetd($hetd)
+    public function setHeures($heures)
     {
-        $this->hetd = $hetd;
+        $this->heures = $heures;
 
         return $this;
     }

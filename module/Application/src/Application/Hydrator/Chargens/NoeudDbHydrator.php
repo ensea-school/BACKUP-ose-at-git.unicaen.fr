@@ -22,8 +22,8 @@ class NoeudDbHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $id = isset($data['ID']) ? (int)$data['ID'] : 0;
-        $object->setId($id == 0 ? null : $id);
+        $id = isset($data['ID']) ? stringToInt($data['ID']) : null;
+        $object->setId($id);
 
         $code = isset($data['CODE']) ? $data['CODE'] : null;
         $object->setCode($code);
@@ -31,14 +31,17 @@ class NoeudDbHydrator implements HydratorInterface
         $libelle = isset($data['LIBELLE']) ? $data['LIBELLE'] : null;
         $object->setLibelle($libelle);
 
-        $liste = isset($data['LISTE']) ? $data['LISTE'] : '0';
-        $object->setListe($liste == '1');
+        $liste = isset($data['LISTE']) ? stringToBoolean($data['LISTE']) : false;
+        $object->setListe($liste);
 
-        $etape = isset($data['ETAPE_ID']) ? (int)$data['ETAPE_ID'] : 0;
-        $object->setEtape($etape == 0 ? null : $etape);
+        $etape = isset($data['ETAPE_ID']) ? stringToInt($data['ETAPE_ID']) : null;
+        $object->setEtape($etape);
 
-        $elementPedagogique = isset($data['ELEMENT_PEDAGOGIQUE_ID']) ? (int)$data['ELEMENT_PEDAGOGIQUE_ID'] : 0;
-        $object->setElementPedagogique($elementPedagogique == 0 ? null : $elementPedagogique);
+        $elementPedagogique = isset($data['ELEMENT_PEDAGOGIQUE_ID']) ? stringToInt($data['ELEMENT_PEDAGOGIQUE_ID']) : null;
+        $object->setElementPedagogique($elementPedagogique);
+
+        $structure = isset($data['STRUCTURE_ID']) ? stringToInt($data['STRUCTURE_ID']) : null;
+        $object->setStructure($structure);
 
         $nbLiensSup = isset($data['NB_LIENS_SUP']) ? (int)$data['NB_LIENS_SUP'] : 0;
         $object->setNbLiensSup($nbLiensSup);
@@ -68,9 +71,10 @@ class NoeudDbHydrator implements HydratorInterface
         $data = [
             'CODE'                   => $object->getCode(),
             'LIBELLE'                => $object->getLibelle(),
-            'LISTE'                  => $object->isListe() ? '1' : '0',
+            'LISTE'                  => booleanToString($object->isListe(), '1', '0'),
             'ETAPE_ID'               => $object->getEtape(false),
             'ELEMENT_PEDAGOGIQUE_ID' => $object->getElementPedagogique(false),
+            'STRUCTURE_ID'           => $object->getStructure(false),
             'TYPE_INTERVENTION_IDS'  => [],
             /* PAS de NB_LIENS_SUP et NB_LIENS_INF qui sont des champs calculés */
         ];

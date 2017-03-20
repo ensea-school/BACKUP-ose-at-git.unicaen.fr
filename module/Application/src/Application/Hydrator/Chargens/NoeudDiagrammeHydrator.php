@@ -46,91 +46,45 @@ class NoeudDiagrammeHydrator implements HydratorInterface
     {
         $scenarioNoeud = $object->getScenarioNoeud();
 
-        if (array_key_exists('code', $data)) {
-            $code = (string)$data['code'];
-            if ($object->getCode() != $code) {
-                $object->setCode($code);
-            }
-        }
-
-        if (array_key_exists('libelle', $data)) {
-            $libelle = (string)$data['libelle'];
-            if ($object->getLibelle() != $libelle) {
-                $object->setLibelle($libelle);
-            }
-        }
-
-        if (array_key_exists('liste', $data)) {
-            $liste = (boolean)$data['liste'];
-            if ($liste != $object->isListe()) {
-                $object->setListe($liste);
-            }
-        }
-
-        if (array_key_exists('assiduite', $data)) {
-            $assiduite = $data['assiduite'] === '' ? null : (float)$data['assiduite'];
+        if ($object->isCanEditAssiduite() && array_key_exists('assiduite', $data)) {
+            $assiduite = stringToFloat($data['assiduite']);
             if ($assiduite != $scenarioNoeud->getAssiduite()) {
                 $scenarioNoeud->setAssiduite($assiduite);
             }
         }
 
-        if (array_key_exists('hetd', $data)) {
-            $hetd = $data['hetd'] === '' ? null : (int)$data['hetd'];
-            if ($hetd != $scenarioNoeud->getHetd()) {
-                $scenarioNoeud->setHetd($hetd);
-            }
-        }
-
-        if (array_key_exists('effectifs', $data)) {
+        if ($object->isCanEditEffectifs() && array_key_exists('effectifs', $data)) {
             $effectifs = (array)$data['effectifs'];
             foreach ($effectifs as $typeHeuresId => $effectif) {
                 $typeHeures = $this->chargens->getEntities()->get(TypeHeures::class, $typeHeuresId);
-                $effectif   = $effectif === '' ? null : (int)$effectif;
+                $effectif   = stringToInt($effectif);
                 if ($effectif !== null || $scenarioNoeud->hasEffectif($typeHeures)) {
                     $scenarioNoeud->getEffectif($typeHeures)->setEffectif($effectif);
                 }
             }
         }
 
-        if (array_key_exists('seuils-ouverture', $data)) {
+        if ($object->isCanEditSeuils() && array_key_exists('seuils-ouverture', $data)) {
             $seuilsOuverture = (array)$data['seuils-ouverture'];
             foreach ($seuilsOuverture as $typeInterventionId => $seuilOuverture) {
                 $typeIntervention = $this->chargens->getEntities()->get(TypeIntervention::class, $typeInterventionId);
-                $seuilOuverture   = $seuilOuverture === '' ? null : (int)$seuilOuverture;
+                $seuilOuverture   = stringToInt($seuilOuverture);
                 if ($seuilOuverture !== null || $scenarioNoeud->hasSeuil($typeIntervention)) {
                     $scenarioNoeud->getSeuil($typeIntervention)->setOuverture($seuilOuverture);
                 }
             }
         }
 
-        if (array_key_exists('seuils-dedoublement', $data)) {
+        if ($object->isCanEditSeuils() && array_key_exists('seuils-dedoublement', $data)) {
             $seuilsDedoublement = (array)$data['seuils-dedoublement'];
             foreach ($seuilsDedoublement as $typeInterventionId => $seuilDedoublement) {
                 $typeIntervention  = $this->chargens->getEntities()->get(TypeIntervention::class, $typeInterventionId);
-                $seuilDedoublement = $seuilDedoublement === '' ? null : (int)$seuilDedoublement;
+                $seuilDedoublement = stringToInt($seuilDedoublement);
                 if ($seuilDedoublement !== null || $scenarioNoeud->hasSeuil($typeIntervention)) {
                     $scenarioNoeud->getSeuil($typeIntervention)->setDedoublement($seuilDedoublement);
                 }
             }
         }
-
-        if (array_key_exists('etape', $data)) {
-            $etape = (int)$data['etape'];
-            $object->setEtape($etape > 0 ? $etape : null);
-        }
-
-        if (array_key_exists('element-pedagogique', $data)) {
-            $elementPedagogique = (int)$data['element-pedagogique'];
-            $object->setElementPedagogique($elementPedagogique > 0 ? $elementPedagogique : null);
-        }
-
-        /*if (array_key_exists('types-intervention', $data)) {
-            $existingTypesIntervention = $object->getTypeIntervention();
-            $typesIntervention = (array)$data['types-intervention'];
-            foreach ($typesIntervention as $typeInterventionId) {
-
-            }
-        }*/
 
         return $object;
     }
@@ -154,7 +108,7 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             'libelle'             => $object->getLibelle(),
             'liste'               => $object->isListe(),
             'assiduite'           => $scenarioNoeud->getAssiduite(),
-            'hetd'                => $scenarioNoeud->getHetd(),
+            'heures'              => $scenarioNoeud->getHeures(),
             'effectifs'           => [],
             'seuils-ouverture'    => [],
             'seuils-dedoublement' => [],
@@ -163,6 +117,9 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             'nb-liens-sup'        => $object->getNbLiensSup(),
             'nb-liens-inf'        => $object->getNbLiensInf(),
             'types-intervention'  => array_keys($object->getTypeIntervention()),
+            'can-edit-assiduite'  => $object->isCanEditAssiduite(),
+            'can-edit-seuils'     => $object->isCanEditSeuils(),
+            'can-edit-effectifs'  => $object->isCanEditEffectifs(),
         ];
 
         $effectifs = $scenarioNoeud->getEffectif();

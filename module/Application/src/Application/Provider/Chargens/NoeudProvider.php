@@ -6,6 +6,7 @@ use Application\Entity\Chargens\Noeud;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Hydrator\Chargens\NoeudDbHydrator;
 use Application\Hydrator\Chargens\NoeudDiagrammeHydrator;
+use Application\Provider\Privilege\Privileges;
 
 class NoeudProvider
 {
@@ -118,6 +119,7 @@ class NoeudProvider
         foreach ($data as $d) {
             $noeud = new Noeud($this->chargens);
             $hydrator->hydrate($d, $noeud);
+            $this->initRules( $noeud );
 
             if (!$noeud->getId()) {
                 throw new \Exception('ID non mentionné pour le noeud');
@@ -144,7 +146,6 @@ class NoeudProvider
     {
         $anneeId = $this->chargens->getServiceContext()->getAnnee()->getId();
 
-
         if (empty($noeudIds)) return [];
 
         /* Récup des noeuds */
@@ -157,6 +158,7 @@ class NoeudProvider
           n.liste, 
           n.etape_id, 
           n.element_pedagogique_id,
+          n.structure_id,
           0 nb_liens_sup,
           0 nb_liens_inf
         FROM 
@@ -202,7 +204,7 @@ class NoeudProvider
         $sql = "
         SELECT
           n.id noeud_id,
-          vhe.type_intervention_id
+          ti.id type_intervention_id
         FROM
           noeud n 
           JOIN volume_horaire_ens vhe ON 
@@ -210,9 +212,34 @@ class NoeudProvider
             AND vhe.heures > 0
             AND 1 = OSE_DIVERS.COMPRISE_ENTRE( vhe.histo_creation, vhe.histo_destruction )
             AND n.annee_id = " . $this->chargens->getServiceContext()->getAnnee()->getId() . "
+          JOIN type_intervention ti ON
+            ti.id = vhe.type_intervention_id
+            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
+            AND ti.enseignement = 1
         WHERE
           n.element_pedagogique_id IS NOT NULL
           AND n.id IN (" . $ids . ")
+
+        UNION
+
+        SELECT
+          n.id noeud_id,
+          ti.id type_intervention_id
+        FROM
+          noeud n 
+          JOIN etape e ON e.id = n.etape_id
+          JOIN type_intervention ti ON 
+            1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
+            AND ti.enseignement = 1
+          
+          LEFT JOIN type_intervention_structure tis ON 
+            tis.structure_id = e.structure_id 
+            AND tis.type_intervention_id = ti.id
+            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( tis.histo_creation, tis.histo_destruction )
+
+        WHERE
+          n.id IN (" . $ids . ")
+          AND 1 = NVL(tis.visible, ti.visible)
         ";
         $dti = $this->chargens->getBdd()->fetch($sql);
         foreach ($dti as $d) {
@@ -280,6 +307,44 @@ class NoeudProvider
 
             $noeud = $this->getNoeud($noeudId);
             $hydrator->hydrate($d, $noeud);
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Noeud $noeud
+     *
+     * @return $this
+     */
+    protected function initRules(Noeud $noeud)
+    {
+        $cStructure = $this->chargens->getServiceContext()->getStructure();
+        $canEdit = false;
+        if ($cStructure){
+            $structureId = $noeud->getStructure(false);
+
+            if (!$structureId || $structureId == $cStructure->getId()){
+                $canEdit = true;
+            }
+
+        }else{
+            $canEdit = true;
+        }
+
+        if ($canEdit){
+            $sa = $this->chargens->getServiceAuthorize();
+
+            $a = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_ASSIDUITE_EDITION));
+            $noeud->setCanEditAssiduite( $a );
+
+            $e = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_EFFECTIFS_EDITION));
+            $noeud->setCanEditEffectifs( $e );
+
+            $s = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_SEUILS_EDITION));
+            $noeud->setCanEditSeuils( $s );
         }
 
         return $this;

@@ -1,16 +1,15 @@
 <?php
 
 /**
- * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $etape      \Application\Entity\Db\Etape
- * @var $scenario   \Application\Entity\Db\Scenario
- * @var $filtre     \Application\Form\Chargens\FiltreForm
+ * @var $this \Application\View\Renderer\PhpRenderer
  */
 
+$title = "Charges d'enseignement";
+
+$this->headTitle()->append($title);
+
 ?>
-    <h1 class="page-header">Charges d'enseignement</h1>
-    <script src="/ose/js/chargens.js"></script>
+    <h1 class="page-header"><?php echo $title ?></h1>
 <?php
 
-
-echo $this->chargens()->setFormFiltre($filtre)->render();
+echo $this->navigation('navigation')->menuContextuel()->setPartial('application/chargens/menu');

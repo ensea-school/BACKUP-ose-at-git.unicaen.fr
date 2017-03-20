@@ -4,14 +4,16 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
-use Application\Exception\DbException;
+use Application\Entity\Db\SeuilCharge;
 use Application\Form\Chargens\Traits\DuplicationScenarioFormAwareTrait;
 use Application\Form\Chargens\Traits\FiltreFormAwareTrait;
 use Application\Form\Chargens\Traits\ScenarioFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
+use Application\Service\Traits\SeuilChargeServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -34,10 +36,18 @@ class ChargensController extends AbstractController
     use FiltreFormAwareTrait;
     use ScenarioFormAwareTrait;
     use DuplicationScenarioFormAwareTrait;
+    use SeuilChargeServiceAwareTrait;
 
 
 
     public function indexAction()
+    {
+        return [];
+    }
+
+
+
+    public function formationAction()
     {
         /** @var Etape $etape */
         $etape = $this->context()->etapeFromQuery();
@@ -66,7 +76,7 @@ class ChargensController extends AbstractController
 
 
 
-    public function etapeJsonAction()
+    public function formationJsonAction()
     {
         $etapesIds = (array)$this->params()->fromPost('etape');
 
@@ -111,9 +121,9 @@ class ChargensController extends AbstractController
 
 
 
-    public function enregistrerAction()
+    public function formationEnregistrerAction()
     {
-        return $this->etapeJsonAction();
+        return $this->formationJsonAction();
     }
 
 
@@ -130,7 +140,8 @@ class ChargensController extends AbstractController
 
         $vm = new ViewModel();
         $vm->setTemplate('application/chargens/scenario/index');
-        $vm->setVariables( compact('scenarios') );
+        $vm->setVariables(compact('scenarios'));
+
         return $vm;
     }
 
@@ -153,7 +164,8 @@ class ChargensController extends AbstractController
 
         $vm = new ViewModel();
         $vm->setTemplate('application/chargens/scenario/saisir');
-        $vm->setVariables( compact('form', 'title') );
+        $vm->setVariables(compact('form', 'title'));
+
         return $vm;
     }
 
@@ -164,25 +176,40 @@ class ChargensController extends AbstractController
         /** @var Scenario $oldScenario */
         $oldScenario = $this->getEvent()->getParam('scenario');
 
-        $form = $this->getFormChargensDuplicationScenario();
-        $title    = 'Duplication du scénario';
+        $form  = $this->getFormChargensDuplicationScenario();
+        $title = 'Duplication du scénario';
 
+        /** @var Scenario $newScenario */
         $newScenario = $this->context()->scenarioFromPost('destination');
 
-        if ($oldScenario == $newScenario){
+        if ($oldScenario == $newScenario) {
             $this->flashMessenger()->addErrorMessage('Les scénario d\'origine et de destination sont identiques : la duplication ne peut pas avoir lieu.');
             $newScenario = null;
         }
 
-        if ($newScenario){
+        $cStructure = $this->getServiceContext()->getStructure();
+        $sStructure = $newScenario ? $newScenario->getStructure() : null;
+        if ($cStructure && $sStructure && $cStructure != $sStructure){
+            $this->flashMessenger()->addErrorMessage('Vous ne pouvez pas dupliquer ces données vers un scénario qui n\'appartient pas à votre composante');
+            $newScenario = null;
+        }
+
+        if ($newScenario) {
             $noeuds = $this->params()->fromPost('noeuds');
-            $liens = $this->params()->fromPost('liens');
-            $this->getServiceScenario()->dupliquer($oldScenario, $newScenario, $noeuds, $liens);
+            $liens  = $this->params()->fromPost('liens');
+            try{
+                $this->getServiceScenario()->dupliquer($oldScenario, $newScenario, $noeuds, $liens);
+                $this->flashMessenger()->addSuccessMessage('Le scénario a bien été dupliqué');
+            }catch(\Exception $e){
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+
         }
 
         $vm = new ViewModel();
         $vm->setTemplate('application/chargens/scenario/saisir');
-        $vm->setVariables( compact('form', 'title') );
+        $vm->setVariables(compact('form', 'title'));
+
         return $vm;
     }
 
@@ -193,13 +220,79 @@ class ChargensController extends AbstractController
         /** @var Scenario $scenario */
         $scenario = $this->getEvent()->getParam('scenario');
 
-        try {
-            $this->getServiceScenario()->delete($scenario);
-            $this->flashMessenger()->addSuccessMessage("Scénario supprimé avec succès.");
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        $form = $this->getFormChargensScenario();
+        $form->delete($scenario, $this->getServiceScenario(), "Scénario supprimé avec succès.");
+
+        return new MessengerViewModel();
+    }
+
+
+
+    public function seuilAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            SeuilCharge::class,
+            Scenario::class,
+        ]);
+
+        /** @var Scenario $scenario */
+        $scenario = $this->context()->scenarioFromRoute();
+
+        $filtre = $this->getFormChargensFiltre();
+        $filtre->get('structure')->setAttribute('data-width', null);
+        $filtre->get('scenario')->setAttribute('data-width', null);
+        if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
+
+        if ($scenario) {
+            if (($ss = $scenario->getStructure()) && ($cs = $this->getServiceContext()->getStructure())) {
+                if ($ss != $cs) {
+                    throw new UnAuthorizedException('Les données appartiennent à une autre composante. Vous ne pouvez pas y accéder');
+                }
+            }
+
+            $seuils = $this->getServiceSeuilCharge()->getSeuils($scenario);
+        } else {
+            $seuils = [];
+        }
+
+
+        return compact('scenario', 'seuils', 'filtre');
+    }
+
+
+
+    public function seuilModifierAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            SeuilCharge::class,
+        ]);
+
+        /** @var Scenario $scenario */
+        $scenario = $this->context()->scenarioFromRoute();
+
+
+        $typeIntervention    = stringToInt($this->params()->fromPost('typeIntervention'));
+        $groupeTypeFormation = stringToInt($this->params()->fromPost('groupeTypeFormation'));
+        $structure           = stringToInt($this->params()->fromPost('structure'));
+        $dedoublement        = stringToInt($this->params()->fromPost('dedoublement'));
+
+        $canEditEtab = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION));
+        $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION));
+
+        $canEdit = ($structure && $canEditcomp) || (!$structure && $canEditEtab);
+
+        if ($canEdit) {
+            try {
+                $this->getServiceSeuilCharge()->saveBy($scenario, $structure, $groupeTypeFormation, $typeIntervention, $dedoublement);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        }else{
+            $this->flashMessenger()->addErrorMessage('Ce seuil ne peut pas être modifié');
         }
 
         return new MessengerViewModel();
     }
+
 }

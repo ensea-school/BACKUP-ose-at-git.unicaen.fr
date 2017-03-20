@@ -5,8 +5,9 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
-class Scenario implements HistoriqueAwareInterface
+class Scenario implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use StructureAwareTrait;
@@ -116,4 +117,17 @@ class Scenario implements HistoriqueAwareInterface
     {
         return $this->getLibelle();
     }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'Scenario';
+    }
+
 }

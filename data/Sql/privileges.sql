@@ -4,8 +4,8 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'type-intervention',
-  'Type d''intervention'
+  'chargens',
+  'Charges d''enseignement'
 );
 
 INSERT INTO PRIVILEGE (
@@ -23,9 +23,22 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-      SELECT 'type-intervention' c, 'visualisation' p, 'Visualisation' l FROM dual
-      UNION SELECT 'type-intervention' c, 'edition' p, 'Édition' l FROM dual
+            SELECT 'chargens' c, 'formation-actif-edition' p, 'Édition des formations (activation liens)' l FROM dual
+      UNION SELECT 'chargens' c, 'formation-poids-edition' p, 'Édition des formations (poids liens)' l FROM dual
+      UNION SELECT 'chargens' c, 'formation-choix-edition' p, 'Édition des formations (choix liens)' l FROM dual
+/*      UNION SELECT 'chargens' c, 'seuil-etablissement-edition' p, 'Édition des seuil (établissement)' l FROM dual
 
+      UNION SELECT 'chargens' c, 'seuil-composante-visualisation' p, 'Visualisation des seuils (composantes)' l FROM dual
+      UNION SELECT 'chargens' c, 'seuil-composante-edition' p, 'Édition des seuil (composantes)' l FROM dual
+
+      UNION SELECT 'chargens' c, 'scenario-visualisation' p, 'Visualisation des scénarios' l FROM dual
+      UNION SELECT 'chargens' c, 'scenario-duplication' p, 'Duplication de scénario' l FROM dual
+      UNION SELECT 'chargens' c, 'scenario-composante-edition' p, 'Édition des scénarios (composantes)' l FROM dual
+
+      UNION SELECT 'chargens' c, 'formation-visualisation' p, 'Visualisation des formations' l FROM dual
+      UNION SELECT 'chargens' c, 'formation-effectifs-edition' p, 'Édition des formations (effectifs)' l FROM dual
+      UNION SELECT 'chargens' c, 'formation-assiduite-edition' p, 'Édition des formations (assiduité)' l FROM dual
+      UNION SELECT 'chargens' c, 'formation-seuils-edition' p, 'Édition des formations (seuils)' l FROM dual*/
 ) t1;
 
 delete from privilege where id = 123;
@@ -42,7 +55,7 @@ order by
 select * from categorie_privilege order by ordre;
 
 
---delete from privilege where code = 'desabonnement';
+delete from privilege where code = 'visualisation' AND CATEGORIE_ID = (select id from CATEGORIE_PRIVILEGE where code ='chargens');
 
 
 update categorie_privilege set ordre = 10 WHERE code = 'odf';

@@ -12,7 +12,6 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Doctrine\ORM\Query\Expr\Join;
 use Application\Service\Traits\TypeValidationAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;

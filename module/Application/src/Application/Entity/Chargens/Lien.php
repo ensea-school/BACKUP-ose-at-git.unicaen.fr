@@ -3,6 +3,7 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Db\Scenario;
+use Application\Entity\Db\Structure;
 use Application\Provider\Chargens\ChargensProvider;
 
 class Lien
@@ -26,6 +27,26 @@ class Lien
      * @var integer
      */
     private $noeudInf;
+
+    /**
+     * @var integer
+     */
+    private $structure = null;
+
+    /**
+     * @var boolean
+     */
+    private $canEditActif = false;
+
+    /**
+     * @var boolean
+     */
+    private $canEditPoids = false;
+
+    /**
+     * @var boolean
+     */
+    private $canEditChoix = false;
 
     /**
      * @var ScenarioLien[]
@@ -122,6 +143,107 @@ class Lien
             $noeudInf = $noeudInf->getId();
         }
         $this->noeudInf = $noeudInf;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param bool $object
+     *
+     * @return Structure|int
+     */
+    public function getStructure($object = true)
+    {
+        return $object ? $this->provider->getEntities()->get(Structure::class, $this->structure) : $this->structure;
+    }
+
+
+
+    /**
+     * @param Structure|int $structure
+     *
+     * @return self
+     */
+    public function setStructure($structure)
+    {
+        if ($structure instanceof Structure) {
+            $structure = $structure->getId();
+        }
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isCanEditActif()
+    {
+        return $this->canEditActif;
+    }
+
+
+
+    /**
+     * @param bool $canEditActif
+     *
+     * @return Lien
+     */
+    public function setCanEditActif($canEditActif)
+    {
+        $this->canEditActif = $canEditActif;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isCanEditPoids()
+    {
+        return $this->canEditPoids;
+    }
+
+
+
+    /**
+     * @param bool $canEditPoids
+     *
+     * @return Lien
+     */
+    public function setCanEditPoids($canEditPoids)
+    {
+        $this->canEditPoids = $canEditPoids;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isCanEditChoix()
+    {
+        return $this->canEditChoix;
+    }
+
+
+
+    /**
+     * @param bool $canEditChoix
+     *
+     * @return Lien
+     */
+    public function setCanEditChoix($canEditChoix)
+    {
+        $this->canEditChoix = $canEditChoix;
 
         return $this;
     }

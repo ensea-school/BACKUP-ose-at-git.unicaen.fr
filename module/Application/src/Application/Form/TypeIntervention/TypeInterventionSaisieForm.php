@@ -174,7 +174,7 @@ class TypeInterventionHydrator implements HydratorInterface
             'ordre' => $object->getOrdre(),
             'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
-            'visible' => $object->getVisible(),
+            'visible' => $object->isVisible(),
             'personnalise' => $object->getInterventionIndividualisee(),
             'enseignement' => $object->getEnseignement()
         ];

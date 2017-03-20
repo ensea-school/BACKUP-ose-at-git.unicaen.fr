@@ -2,10 +2,12 @@
 
 namespace Application\Service;
 
+use Application\Assertion\ChargensAssertion;
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Db\Scenario;
 use Application\Service\Traits\ContextAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -15,7 +17,6 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @method Scenario get($id)
  * @method Scenario[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method Scenario newEntity()
  *
  */
 class ScenarioService extends AbstractEntityService
@@ -72,10 +73,11 @@ class ScenarioService extends AbstractEntityService
         $bdd = new BddConnecteur();
         $bdd->setEntityManager($this->getEntityManager());
 
-        $bdd->execPlsql('OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur, :noeuds, :liens);', [
+        $bdd->execPlsql('OSE_CHARGENS.DUPLIQUER(:source, :destination, :utilisateur, :structure, :noeuds, :liens);', [
             'source'      => $source->getId(),
             'destination' => $destination->getId(),
             'utilisateur' => $this->getServiceContext()->getUtilisateur()->getId(),
+            'structure'   => $this->getServiceContext()->getStructure() ? $this->getServiceContext()->getStructure()->getId() : null,
             'noeuds'      => $noeuds,
             'liens'       => $liens,
         ]);

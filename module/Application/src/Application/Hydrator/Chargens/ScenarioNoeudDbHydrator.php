@@ -28,8 +28,8 @@ class ScenarioNoeudDbHydrator implements HydratorInterface
         $assiduite = isset($data['ASSIDUITE']) ? (float)$data['ASSIDUITE'] : 1;
         $object->setAssiduite($assiduite);
 
-        $hetd = isset($data['HETD']) ? (float)$data['HETD'] : null;
-        $object->setHetd($hetd);
+        $heures = isset($data['HEURES']) ? (float)$data['HEURES'] : null;
+        $object->setHeures($heures);
 
         return $object;
     }
@@ -50,7 +50,7 @@ class ScenarioNoeudDbHydrator implements HydratorInterface
             'SCENARIO_ID' => $object->getScenario()->getId(),
             'NOEUD_ID'    => $object->getNoeud()->getId(),
             'ASSIDUITE'   => $object->getAssiduite(),
-            'HETD'        => $object->getHetd(),
+            'HEURES'      => $object->getHeures(),
         ];
 
         return $data;

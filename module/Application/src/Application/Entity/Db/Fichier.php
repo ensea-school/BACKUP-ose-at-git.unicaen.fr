@@ -15,7 +15,7 @@ use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
 class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFileInterface
 {
     use HistoriqueAwareTrait;
-    
+
     const RESOURCE_ID = 'Fichier';
 
     /**
@@ -59,28 +59,28 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     private $validation;
 
     /**
-     * 
+     *
      */
     public function __construct()
     {
         $this->pieceJointe = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         $string = sprintf("%s - Fichier '%s'",
-                $this->getType(), 
+                $this->getTypeMime(),
                 $this->getNom());
-        
+
         if ($this->getValidation()) {
             $string .= $this->getValidation();
         }
-        
+
         return $string;
     }
 
@@ -100,7 +100,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -123,7 +123,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get contenu
      *
-     * @return string 
+     * @return string
      */
     public function getContenu()
     {
@@ -146,7 +146,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -169,7 +169,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get taille
      *
-     * @return float 
+     * @return float
      */
     public function getTaille()
     {
@@ -179,19 +179,19 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get taille
      *
-     * @return string 
+     * @return string
      */
     public function getTailleToString()
     {
         $f = new BytesFormatter();
-        
+
         return $f->filter($this->getTaille());
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -199,24 +199,24 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     }
 
     /**
-     * Set type
+     * Set typeMime
      *
-     * @param string $type
+     * @param string $typeMime
      * @return self
      */
-    public function setType($type = null)
+    public function setTypeMime($typeMime = null)
     {
-        $this->type = $type;
+        $this->type = $typeMime;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get typeMime
      *
      * @return string
      */
-    public function getType()
+    public function getTypeMime()
     {
         return $this->type;
     }
@@ -270,7 +270,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation 
+     * @return \Application\Entity\Db\Validation
      */
     public function getValidation()
     {
@@ -286,7 +286,7 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     {
         return $this->pieceJointe;
     }
-    
+
     /**
      * Returns the string identifier of the Resource
      *

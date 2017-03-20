@@ -200,7 +200,7 @@ class ChargensProvider
     private function loadSubTreeIds($noeud)
     {
         $liens  = [];
-        $noeuds = [];
+        $noeuds = [$noeud => true];
 
         if ($noeud instanceof Noeud) {
             $noeud = $noeud->getId();
@@ -210,7 +210,6 @@ class ChargensProvider
             throw new \Exception('Le sous-arbre du noeud ne peut pas être chargé car le noeud n\'est pas transmis');
         }
 
-        $this->getBdd()->execPlsql('OSE_CHARGENS.set_noeud(:noeud);', ['noeud' => $noeud]);
         $sql = "
         SELECT
           l.id,
@@ -223,10 +222,10 @@ class ChargensProvider
         CONNECT BY
           l.noeud_sup_id = PRIOR l.noeud_inf_id
         START WITH
-          l.noeud_sup_id = OSE_CHARGENS.GET_NOEUD
+          l.noeud_sup_id = :noeud
         ";
 
-        $relations = $this->getBdd()->fetch($sql);
+        $relations = $this->getBdd()->fetch($sql, compact('noeud'));
         foreach ($relations as $relation) {
             $liens[(int)$relation['ID']]            = true;
             $noeuds[(int)$relation['NOEUD_SUP_ID']] = true;

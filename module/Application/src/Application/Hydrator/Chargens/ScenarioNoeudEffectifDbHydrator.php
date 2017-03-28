@@ -46,6 +46,7 @@ class ScenarioNoeudEffectifDbHydrator implements HydratorInterface
             'ID'                => $object->getId(),
             'SCENARIO_NOEUD_ID' => $object->getScenarioNoeud()->getId(),
             'TYPE_HEURES_ID'    => $object->getTypeHeures()->getId(),
+            'ETAPE_ID'          => $object->getEtape()->getId(),
             'EFFECTIF'          => (string)$object->getEffectif(),
         ];
 

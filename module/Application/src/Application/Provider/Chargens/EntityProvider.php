@@ -119,6 +119,8 @@ class EntityProvider
      */
     public function get($name, $id)
     {
+        if (!$id) return null;
+
         if (!$this->has($name, $id)) {
             $this->load($name, $id);
         }

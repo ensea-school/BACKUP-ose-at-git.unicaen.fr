@@ -2,7 +2,9 @@
 
 namespace Application\Provider\Chargens;
 
+use Application\Entity\Chargens\Noeud;
 use Application\Entity\Chargens\ScenarioLien;
+use Application\Entity\Chargens\ScenarioNoeudEffectif;
 use Application\Entity\Db\Scenario;
 use Application\Hydrator\Chargens\ScenarioLienDbHydrator;
 
@@ -121,6 +123,24 @@ class ScenarioLienProvider
             $changes['HISTO_MODIFICATEUR_ID'] = $userId;
             $changes['HISTO_MODIFICATION']    = $date;
             $conn->insert('SCENARIO_LIEN', $changes);
+        }
+
+        $noeudSup = $scenarioLien->getLien()->getNoeudSup();
+        if ($noeudSup->isListe()){
+            $noeuds = [];
+            $liensSup = $noeudSup->getLiensSup();
+            foreach($liensSup as $lienSup){
+                if ($lienSup->getScenarioLien()->isActif()){
+                    $noeuds[] = $lienSup->getNoeudSup();
+                }
+            }
+        }else{
+            $noeuds = [$noeudSup];
+        }
+
+        /** @var Noeud $noeud */
+        foreach($noeuds as $noeud ){
+            $this->chargens->getScenarioNoeuds()->calculSousEffectifsByNoeud($noeud);
         }
 
         return $this;

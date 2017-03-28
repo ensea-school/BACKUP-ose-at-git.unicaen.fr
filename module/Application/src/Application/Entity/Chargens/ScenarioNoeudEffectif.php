@@ -3,6 +3,8 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Chargens\Traits\ScenarioNoeudAwareTrait;
+use Application\Entity\Db\Etape;
+use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\Traits\TypeHeuresAwareTrait;
 use Application\Entity\Db\TypeHeures;
 
@@ -11,6 +13,7 @@ class ScenarioNoeudEffectif
 {
     use ScenarioNoeudAwareTrait;
     use TypeHeuresAwareTrait;
+    use EtapeAwareTrait;
 
     /**
      * @var integer
@@ -18,7 +21,7 @@ class ScenarioNoeudEffectif
     private $id;
 
     /**
-     * @var integer
+     * @var float
      */
     private $effectif;
 
@@ -27,10 +30,11 @@ class ScenarioNoeudEffectif
     /**
      * ScenarioNoeudEffectif constructor.
      */
-    public function __construct( ScenarioNoeud $scenarioNoeud, TypeHeures $typeHeures )
+    public function __construct( ScenarioNoeud $scenarioNoeud, TypeHeures $typeHeures, Etape $etape )
     {
         $this->setScenarioNoeud($scenarioNoeud);
         $this->setTypeHeures($typeHeures);
+        $this->setEtape($etape);
     }
 
 
@@ -80,6 +84,5 @@ class ScenarioNoeudEffectif
 
         return $this;
     }
-
 
 }

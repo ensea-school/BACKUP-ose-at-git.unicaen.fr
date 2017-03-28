@@ -51,6 +51,11 @@ class ChargensProvider
      */
     private $entities;
 
+    /**
+     * @var SeuilProvider
+     */
+    private $seuils;
+
 
 
     /**
@@ -143,6 +148,20 @@ class ChargensProvider
         }
 
         return $this->entities;
+    }
+
+
+
+    /**
+     * @return SeuilProvider
+     */
+    public function getSeuils()
+    {
+        if (empty($this->seuils)) {
+            $this->seuils = new SeuilProvider($this);
+        }
+
+        return $this->seuils;
     }
 
 

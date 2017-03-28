@@ -2,9 +2,11 @@
 
 namespace Application\Provider\Chargens;
 
+use Application\Entity\Chargens\Noeud;
 use Application\Entity\Chargens\ScenarioNoeud;
 use Application\Entity\Chargens\ScenarioNoeudEffectif;
 use Application\Entity\Chargens\ScenarioNoeudSeuil;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\TypeIntervention;
@@ -48,6 +50,49 @@ class ScenarioNoeudProvider
 
 
 
+    public function newScenarioNoeud(Noeud $noeud, Scenario $scenario)
+    {
+        $scenarioNoeud = new ScenarioNoeud($noeud, $scenario);
+        $this->initSeuilsDedoublement($scenarioNoeud);
+
+        return $scenarioNoeud;
+    }
+
+
+
+    /**
+     * @param ScenarioNoeud $scenarioNoeud
+     *
+     * @return $this
+     */
+    protected function initSeuilsDedoublement(ScenarioNoeud $scenarioNoeud)
+    {
+        $typesIntervention = $scenarioNoeud->getNoeud()->getTypeIntervention();
+        if (empty($typesIntervention)) return $this;
+
+        $noeud = $scenarioNoeud->getNoeud();
+
+        $scenario = $scenarioNoeud->getScenario();
+        $structure = $noeud->getStructure(false);
+        $groupeTypeFormation = null;
+        if ($etape = $noeud->getEtape()){
+            $groupeTypeFormation = $etape->getTypeFormation()->getGroupe();
+        }elseif($element = $noeud->getElementPedagogique()){
+            $groupeTypeFormation = $element->getEtape()->getTypeFormation()->getGroupe();
+        }
+
+        foreach ($typesIntervention as $typeIntervention) {
+            $seuil = $this->chargens->getSeuils()->getSeuil($scenario, $typeIntervention, $structure, $groupeTypeFormation);
+            if ($seuil !== null){
+                $scenarioNoeud->setSeuilParDefaut($typeIntervention, $seuil);
+            }
+        }
+
+        return $this;
+    }
+
+
+
     /**
      * @return $this
      */
@@ -69,7 +114,7 @@ class ScenarioNoeudProvider
             $noeud    = $this->chargens->getNoeuds()->getNoeud($noeudId);
             $scenario = $this->chargens->getEntities()->get(Scenario::class, $scenarioId);
 
-            $scenarioNoeud = new ScenarioNoeud($noeud, $scenario);
+            $scenarioNoeud = $this->newScenarioNoeud($noeud, $scenario);
             $sndHydrator->hydrate($d, $scenarioNoeud);
 
             $scenarioNoeuds[$scenarioNoeud->getId()] = $scenarioNoeud;
@@ -81,11 +126,13 @@ class ScenarioNoeudProvider
         foreach ($sne as $d) {
             $scenarioNoeudId = (int)$d['SCENARIO_NOEUD_ID'];
             $typeHeuresId    = (int)$d['TYPE_HEURES_ID'];
+            $etapeId         = (int)$d['ETAPE_ID'];
 
             $scenarioNoeud = $scenarioNoeuds[$scenarioNoeudId];
             $typeHeures    = $this->chargens->getEntities()->get(TypeHeures::class, $typeHeuresId);
+            $etape         = $this->chargens->getEntities()->get(Etape::class, $etapeId);
 
-            $scenarioNoeudEffectif = new ScenarioNoeudEffectif($scenarioNoeud, $typeHeures);
+            $scenarioNoeudEffectif = new ScenarioNoeudEffectif($scenarioNoeud, $typeHeures, $etape);
             $sneHydrator->hydrate($d, $scenarioNoeudEffectif);
 
             $scenarioNoeud->addEffectif($scenarioNoeudEffectif);
@@ -178,11 +225,22 @@ class ScenarioNoeudProvider
             $changes['HISTO_MODIFICATEUR_ID'] = $userId;
             $changes['HISTO_MODIFICATION']    = $date;
 
-            if (!isset($changes['ASSIDUITE'])){
+            if (!isset($changes['ASSIDUITE'])) {
                 $changes['ASSIDUITE'] = 1.0; // par défaut
             }
 
             $conn->insert('SCENARIO_NOEUD', $changes);
+        }
+
+        if (isset($changes['ASSIDUITE'])) {
+            $liensSup = $scenarioNoeud->getNoeud()->getLiensSup();
+            foreach ($liensSup as $lienSup) {
+                $nListe         = $lienSup->getNoeudSup();
+                $nListeLiensSup = $nListe->getLiensSup();
+                foreach ($nListeLiensSup as $lienSup2) {
+                    $this->chargens->getScenarioNoeuds()->calculSousEffectifsByNoeud($lienSup2->getNoeudSup());
+                }
+            }
         }
 
         return $this;
@@ -211,7 +269,7 @@ class ScenarioNoeudProvider
                 $conn->update('SCENARIO_NOEUD_EFFECTIF', $changes, ['ID' => $scenarioNoeudEffectif->getId()]);
             }
         } else {
-            if (!$scenarioNoeudEffectif->getScenarioNoeud()->getId()){
+            if (!$scenarioNoeudEffectif->getScenarioNoeud()->getId()) {
                 $this->persistScenarioNoeud($scenarioNoeudEffectif->getScenarioNoeud());
             }
 
@@ -219,8 +277,54 @@ class ScenarioNoeudProvider
             $changes['ID']                = $scenarioNoeudEffectif->getId();
             $changes['SCENARIO_NOEUD_ID'] = $scenarioNoeudEffectif->getScenarioNoeud()->getId();
             $changes['TYPE_HEURES_ID']    = $scenarioNoeudEffectif->getTypeHeures()->getId();
+            $changes['ETAPE_ID']          = $scenarioNoeudEffectif->getEtape()->getId();
             $conn->insert('SCENARIO_NOEUD_EFFECTIF', $changes);
         }
+
+        if (isset($changes['EFFECTIF'])) {
+            $this->calculSousEffectifs($scenarioNoeudEffectif);
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Noeud $noeud
+     *
+     * @return $this
+     */
+    public function calculSousEffectifsByNoeud(Noeud $noeud)
+    {
+        $sn   = $noeud->getScenarioNoeud();
+        $effs = $sn->getEffectif();
+        foreach ($effs as $efs) {
+            /** @var ScenarioNoeudEffectif $eff */
+            foreach ($efs as $eff) {
+                $this->chargens->getScenarioNoeuds()->calculSousEffectifs($eff);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param ScenarioNoeudEffectif $scenarioNoeudEffectif
+     *
+     * @return $this
+     */
+    public function calculSousEffectifs(ScenarioNoeudEffectif $scenarioNoeudEffectif)
+    {
+        $bdd = $this->chargens->getBdd();
+        $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF(:scenarioNoeud, :typeHeures, :etape, :effectif);', [
+            'scenarioNoeud' => $scenarioNoeudEffectif->getScenarioNoeud()->getId(),
+            'typeHeures'    => $scenarioNoeudEffectif->getTypeHeures()->getId(),
+            'etape'         => $scenarioNoeudEffectif->getEtape()->getId(),
+            'effectif'      => (float)$scenarioNoeudEffectif->getEffectif(),
+        ]);
 
         return $this;
     }
@@ -248,7 +352,7 @@ class ScenarioNoeudProvider
                 $conn->update('SCENARIO_NOEUD_SEUIL', $changes, ['ID' => $scenarioNoeudSeuil->getId()]);
             }
         } else {
-            if (!$scenarioNoeudSeuil->getScenarioNoeud()->getId()){
+            if (!$scenarioNoeudSeuil->getScenarioNoeud()->getId()) {
                 $this->persistScenarioNoeud($scenarioNoeudSeuil->getScenarioNoeud());
             }
 
@@ -300,7 +404,8 @@ class ScenarioNoeudProvider
           sne.id,
           sne.scenario_noeud_id,
           sne.type_heures_id,
-          sne.effectif
+          sne.etape_id,
+          sne.effectif effectif
         FROM
           scenario_noeud_effectif sne
           JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id
@@ -353,6 +458,7 @@ class ScenarioNoeudProvider
         $effHydrator   = new ScenarioNoeudEffectifDbHydrator();
         $seuilHydrator = new ScenarioNoeudSeuilDbHydrator();
 
+        /** @var ScenarioNoeud $scenarioNoeud */
         foreach ($scenarioNoeuds as $scenarioNoeud) {
             $snKey = $scenarioNoeud->getNoeud()->getId() . '-' . $scenarioNoeud->getScenario()->getId();
 
@@ -362,13 +468,15 @@ class ScenarioNoeudProvider
             ];
 
             $effectifs = $scenarioNoeud->getEffectif();
-            foreach ($effectifs as $effectif) {
-                $effKey = $snKey . '-' . $effectif->getTypeHeures()->getId();
+            foreach ($effectifs as $effs) {
+                foreach ($effs as $effectif) {
+                    $effKey = $snKey . '-' . $effectif->getTypeHeures()->getId() . '-' . $effectif->getEtape()->getId();
 
-                $data['SCENARIO_NOEUD_EFFECTIF'][$effKey] = [
-                    'object' => $effectif,
-                    'data'   => $effHydrator->extract($effectif),
-                ];
+                    $data['SCENARIO_NOEUD_EFFECTIF'][$effKey] = [
+                        'object' => $effectif,
+                        'data'   => $effHydrator->extract($effectif),
+                    ];
+                }
             }
 
             $seuils = $scenarioNoeud->getSeuil();

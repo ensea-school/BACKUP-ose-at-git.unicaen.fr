@@ -3,6 +3,7 @@
 namespace Application\Entity\Chargens;
 
 use Application\Entity\Chargens\Traits\NoeudAwareTrait;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Traits\ScenarioAwareTrait;
 use Application\Entity\Db\TypeHeures;
@@ -29,7 +30,7 @@ class ScenarioNoeud
     private $heures;
 
     /**
-     * @var ScenarioNoeudEffectif[]
+     * @var ScenarioNoeudEffectif[][]
      */
     private $effectif = [];
 
@@ -37,6 +38,11 @@ class ScenarioNoeud
      * @var ScenarioNoeudSeuil[]
      */
     private $seuil = [];
+
+    /**
+     * @var array
+     */
+    private $seuilParDefaut = [];
 
 
 
@@ -128,32 +134,38 @@ class ScenarioNoeud
 
     /**
      * @param TypeHeures $typeHeures
+     * @param Etape      $etape
      *
      * @return bool
      */
-    public function hasEffectif(TypeHeures $typeHeures)
+    public function hasEffectif(TypeHeures $typeHeures, Etape $etape)
     {
-        return array_key_exists($typeHeures->getId(), $this->effectif);
+        return isset($this->effectif[$typeHeures->getId()][$etape->getId()]);
     }
 
 
 
     /**
      * @param TypeHeures|null $typeHeures
+     * @param Etape|null      $etape
      *
      * @return ScenarioNoeudEffectif|ScenarioNoeudEffectif[]
      */
-    public function getEffectif(TypeHeures $typeHeures = null)
+    public function getEffectif(TypeHeures $typeHeures = null, Etape $etape = null)
     {
         if (!$typeHeures) {
             return $this->effectif;
         }
 
-        if (!$this->hasEffectif($typeHeures)) {
-            $this->effectif[$typeHeures->getId()] = new ScenarioNoeudEffectif($this, $typeHeures);
-        }
+        if ($etape) {
+            if (!$this->hasEffectif($typeHeures, $etape)) {
+                $this->effectif[$typeHeures->getId()][$etape->getId()] = new ScenarioNoeudEffectif($this, $typeHeures, $etape);
+            }
 
-        return $this->effectif[$typeHeures->getId()];
+            return $this->effectif[$typeHeures->getId()][$etape->getId()];
+        } else {
+            return isset($this->effectif[$typeHeures->getId()]) ? $this->effectif[$typeHeures->getId()] : [];
+        }
     }
 
 
@@ -166,12 +178,8 @@ class ScenarioNoeud
      */
     public function addEffectif(ScenarioNoeudEffectif $effectif)
     {
-        if (!$effectif->getTypeHeures()) {
-            throw new \Exception('Le type d\'heures de l\'effectif n\'a pas été défini');
-        }
-
         $effectif->setScenarioNoeud($this);
-        $this->effectif[$effectif->getTypeHeures()->getId()] = $effectif;
+        $this->effectif[$effectif->getTypeHeures()->getId()][$effectif->getEtape()->getId()] = $effectif;
 
         return $this;
     }
@@ -179,11 +187,16 @@ class ScenarioNoeud
 
 
     /**
+     * @param TypeHeures|null $typeHeures
+     * @param Etape|null      $etape
+     *
      * @return $this
      */
-    public function removeEffectif(TypeHeures $typeHeures = null)
+    public function removeEffectif(TypeHeures $typeHeures = null, Etape $etape = null)
     {
-        if ($typeHeures) {
+        if ($typeHeures && $etape) {
+            unset($this->effectif[$typeHeures->getId()][$etape->getId()]);
+        } elseif ($typeHeures) {
             unset($this->effectif[$typeHeures->getId()]);
         } else {
             $this->effectif = [];
@@ -260,4 +273,54 @@ class ScenarioNoeud
         return $this;
     }
 
+
+
+    /**
+     * @param TypeIntervention $typeIntervention
+     *
+     * @return bool
+     */
+    public function hasSeuilParDefaut(TypeIntervention $typeIntervention)
+    {
+        return array_key_exists($typeIntervention->getId(), $this->seuilParDefaut);
+    }
+
+
+
+    /**
+     * @param TypeIntervention|null $typeIntervention
+     *
+     * @return array|integer|null
+     */
+    public function getSeuilParDefaut(TypeIntervention $typeIntervention = null)
+    {
+        if (!$typeIntervention) {
+            return $this->seuilParDefaut;
+        }
+
+        if (!$this->hasSeuilParDefaut($typeIntervention)) {
+            return null;
+        } else {
+            return $this->seuilParDefaut[$typeIntervention->getId()];
+        }
+    }
+
+
+
+    /**
+     * @param TypeIntervention $typeIntervention
+     * @param integer|null     $seuilParDefaut
+     *
+     * @return $this
+     */
+    public function setSeuilParDefaut(TypeIntervention $typeIntervention, $seuilParDefaut)
+    {
+        if (null === $seuilParDefaut) {
+            unset($this->seuilParDefaut[$typeIntervention->getId()]);
+        } else {
+            $this->seuilParDefaut[$typeIntervention->getId()] = $seuilParDefaut;
+        }
+
+        return $this;
+    }
 }

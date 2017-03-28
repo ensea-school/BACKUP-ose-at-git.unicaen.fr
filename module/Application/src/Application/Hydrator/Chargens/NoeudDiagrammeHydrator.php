@@ -57,9 +57,12 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             $effectifs = (array)$data['effectifs'];
             foreach ($effectifs as $typeHeuresId => $effectif) {
                 $typeHeures = $this->chargens->getEntities()->get(TypeHeures::class, $typeHeuresId);
-                $effectif   = stringToInt($effectif);
-                if ($effectif !== null || $scenarioNoeud->hasEffectif($typeHeures)) {
-                    $scenarioNoeud->getEffectif($typeHeures)->setEffectif($effectif);
+                $etape      = $object->getEtape(true);
+                if ($etape) { // on re rafraichit que pour l'étape
+                    $effectif = stringToInt($effectif);
+                    if ($effectif !== null || $scenarioNoeud->hasEffectif($typeHeures, $etape)) {
+                        $scenarioNoeud->getEffectif($typeHeures, $etape)->setEffectif($effectif);
+                    }
                 }
             }
         }
@@ -103,28 +106,34 @@ class NoeudDiagrammeHydrator implements HydratorInterface
         $scenarioNoeud = $object->getScenarioNoeud();
 
         $data = [
-            'id'                  => $object->getId(),
-            'code'                => $object->getCode(),
-            'libelle'             => $object->getLibelle(),
-            'liste'               => $object->isListe(),
-            'assiduite'           => $scenarioNoeud->getAssiduite(),
-            'heures'              => $scenarioNoeud->getHeures(),
-            'effectifs'           => [],
-            'seuils-ouverture'    => [],
-            'seuils-dedoublement' => [],
-            'etape'               => $object->getEtape(false),
-            'element-pedagogique' => $object->getElementPedagogique(false),
-            'nb-liens-sup'        => $object->getNbLiensSup(),
-            'nb-liens-inf'        => $object->getNbLiensInf(),
-            'types-intervention'  => array_keys($object->getTypeIntervention()),
-            'can-edit-assiduite'  => $object->isCanEditAssiduite(),
-            'can-edit-seuils'     => $object->isCanEditSeuils(),
-            'can-edit-effectifs'  => $object->isCanEditEffectifs(),
+            'id'                         => $object->getId(),
+            'code'                       => $object->getCode(),
+            'libelle'                    => $object->getLibelle(),
+            'liste'                      => $object->isListe(),
+            'assiduite'                  => $scenarioNoeud->getAssiduite(),
+            'heures'                     => $scenarioNoeud->getHeures(),
+            'effectifs'                  => [],
+            'seuils-ouverture'           => [],
+            'seuils-dedoublement'        => [],
+            'seuils-dedoublement-defaut' => [],
+            'etape'                      => $object->getEtape(false),
+            'element-pedagogique'        => $object->getElementPedagogique(false),
+            'nb-liens-sup'               => $object->getNbLiensSup(),
+            'nb-liens-inf'               => $object->getNbLiensInf(),
+            'types-intervention'         => array_keys($object->getTypeIntervention()),
+            'can-edit-assiduite'         => $object->isCanEditAssiduite(),
+            'can-edit-seuils'            => $object->isCanEditSeuils(),
+            'can-edit-effectifs'         => $object->isCanEditEffectifs(),
         ];
 
         $effectifs = $scenarioNoeud->getEffectif();
-        foreach ($effectifs as $e) {
-            $data['effectifs'][$e->getTypeHeures()->getId()] = $e->getEffectif();
+        foreach ($effectifs as $effs) {
+            foreach ($effs as $e) {
+                if (!isset($data['effectifs'][$e->getTypeHeures()->getId()])) {
+                    $data['effectifs'][$e->getTypeHeures()->getId()] = 0;
+                }
+                $data['effectifs'][$e->getTypeHeures()->getId()] += $e->getEffectif();
+            }
         }
 
         $seuils = $scenarioNoeud->getSeuil();
@@ -135,6 +144,11 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             if ($seuil->getDedoublement() !== null) {
                 $data['seuils-dedoublement'][$seuil->getTypeIntervention()->getId()] = $seuil->getDedoublement();
             }
+        }
+
+        $seuilsDefaut = $scenarioNoeud->getSeuilParDefaut();
+        foreach( $seuilsDefaut as $typeIntervention => $dedoublement ){
+            $data['seuils-dedoublement-defaut'][$typeIntervention] = $dedoublement;
         }
 
         return $data;

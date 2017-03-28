@@ -384,8 +384,9 @@ class Noeud
             throw new \Exception('Le scénario n\'a pas été défini');
         }
 
-        if (!array_key_exists($scenario->getId(), $this->scenarioNoeud)) {
-            $this->scenarioNoeud[$scenario->getId()] = new ScenarioNoeud($this, $scenario);
+        if (!$this->hasScenarioNoeud($scenario)) {
+            $scenarioNoeud = $this->provider->getScenarioNoeuds()->newScenarioNoeud($this, $scenario);
+            $this->addScenarioNoeud($scenarioNoeud);
         }
 
         return $this->scenarioNoeud[$scenario->getId()];

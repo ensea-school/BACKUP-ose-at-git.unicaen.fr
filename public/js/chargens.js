@@ -177,6 +177,12 @@ $.widget("ose.chargens", {
             var val = noeud['seuils-dedoublement'][tid];
             if (val === undefined) val = '';
             this.formNoeud.find('#seuil-dedoublement-' + tid).val(val);
+            if (noeud['seuils-dedoublement-defaut'][tid]){
+                this.formNoeud.find('#seuil-dedoublement-' + tid).attr('placeholder', 'Défaut : ' + noeud['seuils-dedoublement-defaut'][tid]);
+            }else{
+                this.formNoeud.find('#seuil-dedoublement-' + tid).attr('placeholder', 'Aucun');
+            }
+
         }
 
 
@@ -311,7 +317,7 @@ $.widget("ose.chargens", {
             }
             data.proprietes.push({
                 label: 'Effectifs',
-                value: effectifs
+                value: Formatter.floatToString(effectifs)
             });
         }
 
@@ -324,6 +330,7 @@ $.widget("ose.chargens", {
                     if (!seuilOuverture) seuilOuverture = 1;
 
                     var seuilDedoublement = noeud['seuils-dedoublement'][ti];
+                    if (!seuilDedoublement) seuilDedoublement = noeud['seuils-dedoublement-defaut'][ti];
                     if (!seuilDedoublement) seuilDedoublement = 99999999;
 
                     var value = 0;
@@ -397,7 +404,7 @@ $.widget("ose.chargens", {
             this.formLien.find('#div-actif').hide();
         }
 
-        if (lien['can-edit-poids']) {
+        if (!noeudInf.liste && lien['can-edit-poids']) {
             this.formLien.find('#div-poids').show();
         } else {
             this.formLien.find('#div-poids').hide();
@@ -630,7 +637,7 @@ $.widget("ose.chargens", {
 
 
 
-    highlight: function (noeudId, hover, noTransaction)
+    highlight: function (noeudId, hover, sens, noTransaction)
     {
         var model = this.diagramme.model;
 
@@ -641,10 +648,16 @@ $.widget("ose.chargens", {
 
         for (var lienId in this.liens) {
             var lien = this.liens[lienId];
-            if (lien.actif && lien['noeud-sup'] == noeudId) {
+            if (lien.actif && lien['noeud-sup'] == noeudId && sens != 'haut') {
                 lien.hover = hover;
                 this.majLien(lien.id);
-                this.highlight(lien['noeud-inf'], hover, true);
+                this.highlight(lien['noeud-inf'], hover, 'bas', true);
+            }
+
+            if (lien.actif && lien['noeud-inf'] == noeudId && sens != 'bas') {
+                lien.hover = hover;
+                this.majLien(lien.id);
+                this.highlight(lien['noeud-sup'], hover, 'haut', true);
             }
         }
 

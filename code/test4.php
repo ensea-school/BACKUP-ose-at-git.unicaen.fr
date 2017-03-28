@@ -8,11 +8,9 @@
  */
 
 
-/** @var \Application\Service\SeuilChargeService $s */
-$s = $sl->get('applicationSeuilCharge');
+/** @var \Application\Provider\Chargens\ChargensProvider $s */
+$s = $sl->get('chargens');
 
 
-
-//var_dump( $s->getBy(1,0,0,1) );
-
-var_dump(stringToFloat('9 011,2'));
+$res = $s->getSeuils()->getSeuils();
+var_dump($res);

@@ -171,8 +171,7 @@ class NumeroINSEEValidator extends NumeroINSEE
         if (empty($context['departementNaissance'])) {
             return true;
         }
-        $this->service->getEntityManager()->clear();
-        $departementNaissance = $this->service->get($context['departementNaissance']); /* @var $departementNaissance DepartementEntity */
+        $departementNaissance = $this->service->get($context['departementNaissance'], true); /* @var $departementNaissance DepartementEntity */
 
         // Si on trouve un code de département en métropole ou outre-mer valide,
         // on vérifie qu'il est cohérent avec le code du département de naissance saisi

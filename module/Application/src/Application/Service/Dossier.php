@@ -62,6 +62,7 @@ class Dossier extends AbstractEntityService
      */
     public function enregistrerDossier(DossierEntity $dossier, IntervenantEntity $intervenant)
     {
+        $this->getEntityManager()->persist($this->getServiceContext()->getUtilisateur());
         $this->getEntityManager()->persist($dossier);
         $this->getEntityManager()->persist($intervenant);
 

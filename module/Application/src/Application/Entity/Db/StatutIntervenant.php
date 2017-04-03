@@ -176,7 +176,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
      * @var boolean
      */
     private $temBiatss;
-    
+
 
 
     /**
@@ -791,7 +791,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
             $privilege = $privilege->getFullCode();
         }
         $privileges = $this->getPrivilege();
-        foreach ($privileges as $priv) {
+        if ($privileges) foreach ($privileges as $priv) {
             if ($priv->getFullCode() === $privilege) return true;
         }
 

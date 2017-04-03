@@ -369,8 +369,11 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return mixed|null
      */
-    public function get($id)
+    public function get($id, $autoClear=false)
     {
+        if ($autoClear){
+            $this->getRepo()->clear();
+        }
         if (is_array($id)) {
             list($qb, $alias) = $this->initQuery();
             foreach ($id as $idi) {

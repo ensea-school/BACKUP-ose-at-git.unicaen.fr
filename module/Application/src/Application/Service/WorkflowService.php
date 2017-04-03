@@ -84,7 +84,7 @@ class WorkflowService extends AbstractService
         list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
-        foreach ($fdr as $etape) {
+        if ($fdr) foreach ($fdr as $etape) {
             if ($etape->getEtape()->getCode() == $etapeCode) {
                 return $etape;
             }

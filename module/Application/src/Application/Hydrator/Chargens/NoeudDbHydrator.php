@@ -54,6 +54,32 @@ class NoeudDbHydrator implements HydratorInterface
             $object->addTypeIntervention($ti);
         }
 
+        //$this->hydradeSeuilHeures($data, $object);
+
+        return $object;
+    }
+
+
+
+    public function hydradeSeuilHeures(array $data, $object)
+    {
+        $seuilsParDefaut = isset($data['SEUILS_PAR_DEFAUT']) ? $data['SEUILS_PAR_DEFAUT'] : [];
+        foreach( $seuilsParDefaut as $scenario => $sd ){
+            foreach( $sd as $typeIntervention => $seuilParDefaut ){
+                $object->setSeuilParDefaut($scenario, $typeIntervention, $seuilParDefaut);
+            }
+        }
+
+        $heures = isset($data['HEURES']) ? $data['HEURES'] : [];
+        foreach( $heures as $scenario => $h ){
+            $object->setHeures($scenario, $h);
+        }
+
+        $hetd = isset($data['HETD']) ? $data['HETD'] : [];
+        foreach( $hetd as $scenario => $h ){
+            $object->setHetd($scenario, $h);
+        }
+
         return $object;
     }
 

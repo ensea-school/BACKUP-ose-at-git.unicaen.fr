@@ -25,11 +25,6 @@ class ScenarioNoeud
     private $assiduite = 1.0;
 
     /**
-     * @var float
-     */
-    private $heures;
-
-    /**
      * @var ScenarioNoeudEffectif[][]
      */
     private $effectif = [];
@@ -38,11 +33,6 @@ class ScenarioNoeud
      * @var ScenarioNoeudSeuil[]
      */
     private $seuil = [];
-
-    /**
-     * @var array
-     */
-    private $seuilParDefaut = [];
 
 
 
@@ -102,30 +92,6 @@ class ScenarioNoeud
     public function setAssiduite($assiduite)
     {
         $this->assiduite = $assiduite;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return float
-     */
-    public function getHeures()
-    {
-        return $this->heures;
-    }
-
-
-
-    /**
-     * @param float $heures
-     *
-     * @return ScenarioNoeud
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
 
         return $this;
     }
@@ -282,7 +248,7 @@ class ScenarioNoeud
      */
     public function hasSeuilParDefaut(TypeIntervention $typeIntervention)
     {
-        return array_key_exists($typeIntervention->getId(), $this->seuilParDefaut);
+        return $this->getNoeud()->hasSeuilParDefaut($this->getScenario(), $typeIntervention);
     }
 
 
@@ -294,33 +260,28 @@ class ScenarioNoeud
      */
     public function getSeuilParDefaut(TypeIntervention $typeIntervention = null)
     {
-        if (!$typeIntervention) {
-            return $this->seuilParDefaut;
-        }
-
-        if (!$this->hasSeuilParDefaut($typeIntervention)) {
-            return null;
-        } else {
-            return $this->seuilParDefaut[$typeIntervention->getId()];
-        }
+        return $this->getNoeud()->getSeuilParDefaut($this->getScenario(), $typeIntervention);
     }
 
 
 
     /**
-     * @param TypeIntervention $typeIntervention
-     * @param integer|null     $seuilParDefaut
      *
-     * @return $this
+     * @return float|null
      */
-    public function setSeuilParDefaut(TypeIntervention $typeIntervention, $seuilParDefaut)
+    public function getHeures()
     {
-        if (null === $seuilParDefaut) {
-            unset($this->seuilParDefaut[$typeIntervention->getId()]);
-        } else {
-            $this->seuilParDefaut[$typeIntervention->getId()] = $seuilParDefaut;
-        }
+        return $this->getNoeud()->getHeures($this->getScenario());
+    }
 
-        return $this;
+
+
+    /**
+     *
+     * @return float|null
+     */
+    public function getHetd()
+    {
+        return $this->getNoeud()->getHetd($this->getScenario());
     }
 }

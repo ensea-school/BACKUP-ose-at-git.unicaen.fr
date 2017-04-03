@@ -55,6 +55,9 @@ class EntityProvider
     {
         if ($entity && method_exists($entity, 'getId') && $entity->getId()) {
             $name = get_class($entity);
+            if (($pos = strpos($name,'Application')) > 0){
+                $name = substr( $name, $pos);
+            }
             $id    = $entity->getId();
 
             $this->entities[$name][$id] = $entity;

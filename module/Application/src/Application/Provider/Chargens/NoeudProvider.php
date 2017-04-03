@@ -119,7 +119,7 @@ class NoeudProvider
         foreach ($data as $d) {
             $noeud = new Noeud($this->chargens);
             $hydrator->hydrate($d, $noeud);
-            $this->initRules( $noeud );
+            $this->initRules($noeud);
 
             if (!$noeud->getId()) {
                 throw new \Exception('ID non mentionné pour le noeud');
@@ -133,6 +133,27 @@ class NoeudProvider
         }
 
         $this->chargens->getEntities()->load(ElementPedagogique::class, $elementsIds);
+    }
+
+
+
+    /**
+     * @return $this
+     */
+    public function loadSeuilsHeures()
+    {
+        $noeudIds = array_keys($this->noeuds);
+
+        $data = $this->getNoeudsSeuilsHeuresData($noeudIds);
+        $hydrator = new NoeudDbHydrator();
+
+        foreach( $this->noeuds as $noeud ){
+            if (isset($data[$noeud->getId()])){
+                $hydrator->hydradeSeuilHeures($data[$noeud->getId()], $noeud);
+            }
+        }
+
+        return $this;
     }
 
 
@@ -175,7 +196,7 @@ class NoeudProvider
         $ids = implode(',', array_keys($data));
 
         /* Récup des liens associés (nombre uniquement) */
-        $sql = "
+        $sql    = "
         SELECT 
           l.id, 
           l.noeud_sup_id, 
@@ -190,10 +211,10 @@ class NoeudProvider
           )
         ";
         $dliens = $this->chargens->getBdd()->fetch($sql);
-        foreach( $dliens as $lien ){
+        foreach ($dliens as $lien) {
             $noeudSupId = (int)$lien['NOEUD_SUP_ID'];
             $noeudInfId = (int)$lien['NOEUD_INF_ID'];
-            if (array_key_exists($noeudSupId, $data)){
+            if (array_key_exists($noeudSupId, $data)) {
                 $data[$noeudSupId]['NB_LIENS_INF'] += 1;
             }
             if (array_key_exists($noeudInfId, $data)) {
@@ -250,9 +271,101 @@ class NoeudProvider
             }
             $data[$nid]['TYPE_INTERVENTION_IDS'][] = (int)$d['TYPE_INTERVENTION_ID'];
         }
+/*
+        $nshd = $this->getNoeudsSeuilsHeuresData($noeudIds);
+        foreach( $nshd as $noeudId => $d ){
+            foreach( $d as $k => $v ){
+                $data[$noeudId][$k] = $v;
+            }
+        }
+*/
+        return $data;
+    }
+
+
+
+
+    /**
+     * @param array $noeudIds
+     *
+     * @return array
+     */
+    private function getNoeudsSeuilsHeuresData(array $noeudIds)
+    {
+        if (empty($noeudIds)) return [];
+        $ids  = implode(',', $noeudIds);
+
+        $data = [];
+
+        $sql = "
+        SELECT
+          csdd.noeud_id,
+          csdd.scenario_id,
+          csdd.type_intervention_id,
+          csdd.dedoublement
+        FROM
+          v_chargens_seuils_ded_def csdd
+        WHERE
+          csdd.noeud_id IN (" . $ids . ")
+        ";
+
+        $csdd = $this->chargens->getBdd()->fetch($sql);
+        foreach ($csdd as $d) {
+            $nid              = $d['NOEUD_ID'];
+            $scenario         = (int)$d['SCENARIO_ID'];
+            $typeIntervention = (int)$d['TYPE_INTERVENTION_ID'];
+            $dedoublement     = (int)$d['DEDOUBLEMENT'];
+
+            $data[$nid]['SEUILS_PAR_DEFAUT'][$scenario][$typeIntervention] = $dedoublement;
+        }
+
+
+        $sql = "
+        SELECT
+          noeud_ep_id noeud_id,
+          scenario_id,
+          SUM(heures) heures,
+          SUM(hetd) hetd
+        FROM
+          V_CHARGENS_PRECALCUL_HEURES cph
+        WHERE
+          noeud_ep_id IN (" . $ids . ")
+        GROUP BY
+          noeud_ep_id,
+          scenario_id
+
+        UNION
+
+        SELECT
+          noeud_etape_id noeud_id,
+          scenario_id,
+          SUM(heures) heures,
+          SUM(hetd) hetd
+        FROM
+          V_CHARGENS_PRECALCUL_HEURES cph
+        WHERE
+          noeud_etape_id IN (" . $ids . ")
+        GROUP BY
+          noeud_etape_id,
+          scenario_id
+        ";
+
+        $csdd = $this->chargens->getBdd()->fetch($sql);
+        foreach ($csdd as $d) {
+            $nid      = $d['NOEUD_ID'];
+            $scenario = (int)$d['SCENARIO_ID'];
+            $heures   = (float)$d['HEURES'];
+            $hetd     = (float)$d['HETD'];
+
+            $data[$nid]['HEURES'][$scenario] = $heures;
+            $data[$nid]['HETD'][$scenario] = $hetd;
+        }
+
 
         return $data;
     }
+
+
 
 
 
@@ -322,29 +435,28 @@ class NoeudProvider
     protected function initRules(Noeud $noeud)
     {
         $cStructure = $this->chargens->getServiceContext()->getStructure();
-        $canEdit = false;
-        if ($cStructure){
+        $canEdit    = false;
+        if ($cStructure) {
             $structureId = $noeud->getStructure(false);
 
-            if (!$structureId || $structureId == $cStructure->getId()){
+            if (!$structureId || $structureId == $cStructure->getId()) {
                 $canEdit = true;
             }
-
-        }else{
+        } else {
             $canEdit = true;
         }
 
-        if ($canEdit){
+        if ($canEdit) {
             $sa = $this->chargens->getServiceAuthorize();
 
             $a = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_ASSIDUITE_EDITION));
-            $noeud->setCanEditAssiduite( $a );
+            $noeud->setCanEditAssiduite($a);
 
             $e = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_EFFECTIFS_EDITION));
-            $noeud->setCanEditEffectifs( $e );
+            $noeud->setCanEditEffectifs($e);
 
             $s = $sa->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_FORMATION_SEUILS_EDITION));
-            $noeud->setCanEditSeuils( $s );
+            $noeud->setCanEditSeuils($s);
         }
 
         return $this;

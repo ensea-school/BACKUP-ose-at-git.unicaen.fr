@@ -3,6 +3,9 @@ $.widget("ose.chargens", {
     scenario: null,
     noeuds: {},
     liens: {},
+    structure: null,
+    heures: null,
+    hetd: null,
     typesIntervention: {},
     typesHeures: {},
     diagramme: undefined,
@@ -88,6 +91,8 @@ $.widget("ose.chargens", {
             that.formLien.dialog("close");
             that.diagramme.clearSelection();
         });
+
+        this.updateHeuresComposante();
     },
 
 
@@ -177,9 +182,9 @@ $.widget("ose.chargens", {
             var val = noeud['seuils-dedoublement'][tid];
             if (val === undefined) val = '';
             this.formNoeud.find('#seuil-dedoublement-' + tid).val(val);
-            if (noeud['seuils-dedoublement-defaut'][tid]){
+            if (noeud['seuils-dedoublement-defaut'][tid]) {
                 this.formNoeud.find('#seuil-dedoublement-' + tid).attr('placeholder', 'Défaut : ' + noeud['seuils-dedoublement-defaut'][tid]);
-            }else{
+            } else {
                 this.formNoeud.find('#seuil-dedoublement-' + tid).attr('placeholder', 'Aucun');
             }
 
@@ -244,7 +249,7 @@ $.widget("ose.chargens", {
         };
         for (var tid in this.typesHeures) {
             var val = this.formNoeud.find('#effectifs-' + tid).val();
-            noeud.effectifs[tid] = val !== '' ? parseInt(val) : null;
+            noeud.effectifs[tid] = val !== '' ? parseFloat(val) : null;
         }
         for (var tid in this.typesIntervention) {
             var valOuv = this.formNoeud.find('#seuil-ouverture-' + tid).val();
@@ -317,7 +322,7 @@ $.widget("ose.chargens", {
             }
             data.proprietes.push({
                 label: 'Effectifs',
-                value: Formatter.floatToString(effectifs)
+                value: Math.ceil(effectifs)
             });
         }
 
@@ -355,6 +360,15 @@ $.widget("ose.chargens", {
             data.proprietes.push({
                 label: 'Heures',
                 value: heures
+            });
+
+            var hetd = 'NC';
+            if (noeud.hetd != null) {
+                hetd = Formatter.floatToString(noeud.hetd);
+            }
+            data.proprietes.push({
+                label: 'HETD',
+                value: hetd
             });
         }
 
@@ -561,6 +575,9 @@ $.widget("ose.chargens", {
         this.scenario = scenario;
         this.noeuds = data.noeuds;
         this.liens = data.liens;
+        this.heures = data.heures;
+        this.hetd = data.hetd;
+        this.structure = data.structure;
 
         if (etape != this.etape) {
             this.etape = etape;
@@ -569,11 +586,25 @@ $.widget("ose.chargens", {
             this.majDiagrammeData();
         }
 
-        this.element.find('.controles #heures-composante').html(
-            data.heures == null ? 'NC' : Formatter.floatToString(data.heures)
-        );
+        this.updateHeuresComposante();
 
         return this;
+    },
+
+
+
+    updateHeuresComposante: function ()
+    {
+        var str = '';
+        var heures = 'NC';
+        var hetd = 'NC';
+        if (this.structure) {
+            heures = Formatter.floatToString(this.heures);
+            hetd = Formatter.floatToString(this.hetd);
+
+            str = 'Total ' + this.structure + ' (heures: ' + heures + ', hetd: ' + hetd + ')';
+        }
+        this.getHeuresComposante().html(str);
     },
 
 
@@ -795,12 +826,12 @@ $.widget("ose.chargens", {
                                 itemTemplate: $(go.Panel, "TableRow",
                                     $(go.TextBlock, new go.Binding("text", 'label'), {
                                         column: 0,
-                                        width: 70,
+                                        width: 50,
                                         font: "8pt \"Open Sans\""
                                     }),
                                     $(go.TextBlock, new go.Binding("text", 'value'), {
                                         column: 1,
-                                        width: 30,
+                                        width: 50,
                                         font: "8pt \"Open Sans\""
                                     })
                                 )

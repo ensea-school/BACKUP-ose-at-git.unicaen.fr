@@ -62,6 +62,21 @@ class Noeud
     private $scenarioNoeud = [];
 
     /**
+     * @var array
+     */
+    private $seuilParDefaut = [];
+
+    /**
+     * @var float[]
+     */
+    private $heures = [];
+
+    /**
+     * @var float[]
+     */
+    private $hetd = [];
+
+    /**
      * @var integer
      */
     private $nbLiensSup;
@@ -385,7 +400,7 @@ class Noeud
         }
 
         if (!$this->hasScenarioNoeud($scenario)) {
-            $scenarioNoeud = $this->provider->getScenarioNoeuds()->newScenarioNoeud($this, $scenario);
+            $scenarioNoeud = new ScenarioNoeud($this, $scenario);
             $this->addScenarioNoeud($scenarioNoeud);
         }
 
@@ -425,6 +440,147 @@ class Noeud
         } else {
             $this->scenarioNoeud = [];
         }
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Scenario|int         $scenario
+     * @param TypeIntervention|int $typeIntervention
+     *
+     * @return bool
+     */
+    public function hasSeuilParDefaut($scenario, $typeIntervention = null)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+        if ($typeIntervention instanceof TypeIntervention) $typeIntervention = $typeIntervention->getId();
+
+        if ($typeIntervention) {
+            return isset($this->seuilParDefaut[$scenario][$typeIntervention]);
+        } else {
+            return isset($this->seuilParDefaut[$scenario]);
+        }
+    }
+
+
+
+    /**
+     * @param Scenario|int              $scenario
+     * @param TypeIntervention|int|null $typeIntervention
+     *
+     * @return array|integer|null
+     */
+    public function getSeuilParDefaut($scenario, $typeIntervention = null)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+        if ($typeIntervention instanceof TypeIntervention) $typeIntervention = $typeIntervention->getId();
+
+        if ($this->hasSeuilParDefaut($scenario, $typeIntervention)) {
+            if ($typeIntervention) {
+                return $this->seuilParDefaut[$scenario][$typeIntervention];
+            } else {
+                return $this->seuilParDefaut[$scenario];
+            }
+        } else {
+            return $typeIntervention ? null : [];
+        }
+    }
+
+
+
+    /**
+     * @param Scenario|int         $scenario
+     * @param TypeIntervention|int $typeIntervention
+     * @param integer|null         $seuilParDefaut
+     *
+     * @return $this
+     */
+    public function setSeuilParDefaut($scenario, $typeIntervention, $seuilParDefaut)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+        if ($typeIntervention instanceof TypeIntervention) $typeIntervention = $typeIntervention->getId();
+
+        $this->seuilParDefaut[$scenario][$typeIntervention] = $seuilParDefaut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Scenario|int $scenario
+     *
+     * @return array|float|null
+     */
+    public function getHeures($scenario)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+
+        if ($scenario) {
+            if (isset($this->heures[$scenario])) {
+                return $this->heures[$scenario];
+            } else {
+                return null;
+            }
+        } else {
+            return $this->heures;
+        }
+    }
+
+
+
+    /**
+     * @param Scenario|int $scenario
+     * @param float|null   $heures
+     *
+     * @return $this
+     */
+    public function setHeures($scenario, $heures)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+
+        $this->heures[$scenario] = $heures;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Scenario|int $scenario
+     *
+     * @return array|float|null
+     */
+    public function getHetd($scenario)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+
+        if ($scenario) {
+            if (isset($this->hetd[$scenario])) {
+                return $this->hetd[$scenario];
+            } else {
+                return null;
+            }
+        } else {
+            return $this->hetd;
+        }
+    }
+
+
+
+    /**
+     * @param Scenario|int $scenario
+     * @param float|null   $hetd
+     *
+     * @return $this
+     */
+    public function setHetd($scenario, $hetd)
+    {
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+
+        $this->hetd[$scenario] = $hetd;
 
         return $this;
     }

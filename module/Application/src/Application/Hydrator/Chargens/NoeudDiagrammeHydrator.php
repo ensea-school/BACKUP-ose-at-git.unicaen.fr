@@ -112,6 +112,7 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             'liste'                      => $object->isListe(),
             'assiduite'                  => $scenarioNoeud->getAssiduite(),
             'heures'                     => $scenarioNoeud->getHeures(),
+            'hetd'                       => $scenarioNoeud->getHetd(),
             'effectifs'                  => [],
             'seuils-ouverture'           => [],
             'seuils-dedoublement'        => [],

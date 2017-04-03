@@ -50,49 +50,6 @@ class ScenarioNoeudProvider
 
 
 
-    public function newScenarioNoeud(Noeud $noeud, Scenario $scenario)
-    {
-        $scenarioNoeud = new ScenarioNoeud($noeud, $scenario);
-        $this->initSeuilsDedoublement($scenarioNoeud);
-
-        return $scenarioNoeud;
-    }
-
-
-
-    /**
-     * @param ScenarioNoeud $scenarioNoeud
-     *
-     * @return $this
-     */
-    protected function initSeuilsDedoublement(ScenarioNoeud $scenarioNoeud)
-    {
-        $typesIntervention = $scenarioNoeud->getNoeud()->getTypeIntervention();
-        if (empty($typesIntervention)) return $this;
-
-        $noeud = $scenarioNoeud->getNoeud();
-
-        $scenario = $scenarioNoeud->getScenario();
-        $structure = $noeud->getStructure(false);
-        $groupeTypeFormation = null;
-        if ($etape = $noeud->getEtape()){
-            $groupeTypeFormation = $etape->getTypeFormation()->getGroupe();
-        }elseif($element = $noeud->getElementPedagogique()){
-            $groupeTypeFormation = $element->getEtape()->getTypeFormation()->getGroupe();
-        }
-
-        foreach ($typesIntervention as $typeIntervention) {
-            $seuil = $this->chargens->getSeuils()->getSeuil($scenario, $typeIntervention, $structure, $groupeTypeFormation);
-            if ($seuil !== null){
-                $scenarioNoeud->setSeuilParDefaut($typeIntervention, $seuil);
-            }
-        }
-
-        return $this;
-    }
-
-
-
     /**
      * @return $this
      */
@@ -114,7 +71,7 @@ class ScenarioNoeudProvider
             $noeud    = $this->chargens->getNoeuds()->getNoeud($noeudId);
             $scenario = $this->chargens->getEntities()->get(Scenario::class, $scenarioId);
 
-            $scenarioNoeud = $this->newScenarioNoeud($noeud, $scenario);
+            $scenarioNoeud = new ScenarioNoeud($noeud, $scenario);
             $sndHydrator->hydrate($d, $scenarioNoeud);
 
             $scenarioNoeuds[$scenarioNoeud->getId()] = $scenarioNoeud;
@@ -259,15 +216,10 @@ class ScenarioNoeudProvider
         $bdd  = $this->chargens->getBdd();
         $conn = $bdd->getEntityManager()->getConnection();
 
-        $noData = $scenarioNoeudEffectif->getEffectif() === null;
-
         if ($scenarioNoeudEffectif->getId()) {
-            if ($noData) {
-                $conn->delete('SCENARIO_NOEUD_EFFECTIF', ['ID' => $scenarioNoeudEffectif->getId()]);
-            } else {
-                unset($changes['ID']);
-                $conn->update('SCENARIO_NOEUD_EFFECTIF', $changes, ['ID' => $scenarioNoeudEffectif->getId()]);
-            }
+            unset($changes['ID']);
+            $changes['EFFECTIF'] = (int)$changes['EFFECTIF'];
+            $conn->update('SCENARIO_NOEUD_EFFECTIF', $changes, ['ID' => $scenarioNoeudEffectif->getId()]);
         } else {
             if (!$scenarioNoeudEffectif->getScenarioNoeud()->getId()) {
                 $this->persistScenarioNoeud($scenarioNoeudEffectif->getScenarioNoeud());
@@ -319,11 +271,11 @@ class ScenarioNoeudProvider
     public function calculSousEffectifs(ScenarioNoeudEffectif $scenarioNoeudEffectif)
     {
         $bdd = $this->chargens->getBdd();
-        $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF(:scenarioNoeud, :typeHeures, :etape, :effectif);', [
-            'scenarioNoeud' => $scenarioNoeudEffectif->getScenarioNoeud()->getId(),
+        $bdd->execPlsql('OSE_CHARGENS.CALC_SUB_EFFECTIF2(:noeud, :scenario, :typeHeures, :etape);', [
+            'noeud'         => $scenarioNoeudEffectif->getScenarioNoeud()->getNoeud()->getId(),
+            'scenario'      => $scenarioNoeudEffectif->getScenarioNoeud()->getScenario()->getId(),
             'typeHeures'    => $scenarioNoeudEffectif->getTypeHeures()->getId(),
-            'etape'         => $scenarioNoeudEffectif->getEtape()->getId(),
-            'effectif'      => (float)$scenarioNoeudEffectif->getEffectif(),
+            'etape'         => $scenarioNoeudEffectif->getEtape()->getId()
         ]);
 
         return $this;
@@ -378,8 +330,7 @@ class ScenarioNoeudProvider
           sn.id,
           sn.scenario_id,
           sn.noeud_id,
-          sn.assiduite,
-          sn.heures
+          sn.assiduite
         FROM
           scenario_noeud sn
         WHERE
@@ -405,7 +356,7 @@ class ScenarioNoeudProvider
           sne.scenario_noeud_id,
           sne.type_heures_id,
           sne.etape_id,
-          sne.effectif effectif
+          sne.effectif
         FROM
           scenario_noeud_effectif sne
           JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id

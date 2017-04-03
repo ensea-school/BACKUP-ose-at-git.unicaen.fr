@@ -6,6 +6,7 @@ use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Chargens\Noeud;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
 use BjyAuthorize\Service\Authorize;
@@ -15,6 +16,7 @@ class ChargensProvider
     use BddConnecteurAwareTrait;
     use SourceAwareTrait;
     use ContextAwareTrait;
+    use StructureAwareTrait;
 
     /**
      * @var Authorize
@@ -50,11 +52,6 @@ class ChargensProvider
      * @var EntityProvider
      */
     private $entities;
-
-    /**
-     * @var SeuilProvider
-     */
-    private $seuils;
 
 
 
@@ -153,20 +150,6 @@ class ChargensProvider
 
 
     /**
-     * @return SeuilProvider
-     */
-    public function getSeuils()
-    {
-        if (empty($this->seuils)) {
-            $this->seuils = new SeuilProvider($this);
-        }
-
-        return $this->seuils;
-    }
-
-
-
-    /**
      * @param Etape $etape
      *
      * @return Noeud
@@ -187,6 +170,8 @@ class ChargensProvider
         ";
 
         $noeudId = $this->getBdd()->fetchOne($sql, ['etape' => $etape], 'ID', 'int');
+
+        $this->setStructure($etape->getStructure());
 
         if ($noeudId) {
             $subTreeIds = $this->loadSubTreeIds($noeudId);
@@ -284,6 +269,7 @@ class ChargensProvider
             $this->getBdd()->execPlsql('OSE_CHARGENS.set_scenario(:scenario);', ['scenario' => $scenario]);
             $this->getScenarioNoeuds()->load();
             $this->getScenarioLiens()->load();
+            $this->getNoeuds()->loadSeuilsHeures();
         } else {
             $this->getScenarioNoeuds()->clear();
             $this->getScenarioLiens()->clear();
@@ -299,11 +285,52 @@ class ChargensProvider
      */
     public function getDiagrammeData()
     {
-        return [
-            'heures' => null,
-            'noeuds' => $this->getNoeuds()->getDiagrammeData(),
-            'liens'  => $this->getLiens()->getDiagrammeData(),
+        $data           = $this->getComposanteHeures();
+        $data['noeuds'] = $this->getNoeuds()->getDiagrammeData();
+        $data['liens']  = $this->getLiens()->getDiagrammeData();
+
+        return $data;
+    }
+
+
+
+    public function getComposanteHeures()
+    {
+        $res = [
+            'structure' => null,
+            'heures'    => null,
+            'hetd'      => null,
         ];
+
+        if (!$this->getStructure() || !$this->getScenario()) {
+            return $res;
+        }
+
+        $sql = "
+        SELECT
+          SUM(heures) heures,
+          SUM(hetd) hetd
+        FROM
+          V_CHARGENS_PRECALCUL_HEURES cph
+        WHERE
+          cph.structure_id = :structure
+          AND cph.scenario_id = :scenario
+        GROUP BY
+          structure_id,
+          scenario_id
+        ";
+
+        $d = $this->getBdd()->fetchOne($sql, [
+            'structure' => $this->getStructure()->getId(),
+            'scenario'  => $this->getScenario()->getId(),
+        ]);
+        if (!empty($d)) {
+            $res['structure'] = (string)$this->getStructure();
+            $res['heures']    = (float)$d['HEURES'];
+            $res['hetd']      = (float)$d['HETD'];
+        }
+
+        return $res;
     }
 
 

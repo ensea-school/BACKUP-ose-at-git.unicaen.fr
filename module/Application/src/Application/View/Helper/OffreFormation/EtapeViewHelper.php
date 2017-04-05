@@ -128,7 +128,7 @@ class EtapeViewHelper extends AbstractViewHelper
         ];
 
 
-        if ($etape->estNonHistorise()) {
+        if (!$etape->estNonHistorise()) {
             $default['title']   = 'Cette formation n\'existe plus';
             $default['class'][] = 'bg-danger';
         }

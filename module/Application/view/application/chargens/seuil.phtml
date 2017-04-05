@@ -85,63 +85,61 @@ $seuilCalcHeuresUrl
                 </tbody>
             </table>
         </div>
-    <?php endforeach; ?>
-    <script>
-
-        function changementSeuil(element)
-        {
-            var url = "<?php echo $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
-            var params = $(element).data();
-            params.dedoublement = $(element).val();
-
-            $.post(url, params, function (data)
-            {
-                alertFlash(data, 'success', 3000);
-                seuilCalcHeures();
-            }).fail(function (jqXHR)
-            {
-                alertFlash(data, 'danger', 3000);
-                console.log(jqXHR);
-            });
-        }
-
-        function seuilCalcHeures()
-        {
-            var url = "<?php echo $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>";
-
-            $.post(url, {}, function (data)
-            {
-                for( sid in data ){
-                    $('#heures-'+sid).html(
-                        'Heures : ' + Formatter.floatToString(data[sid]['heures'])
-                        + '; HETD : '+  Formatter.floatToString(data[sid]['hetd'])
-                    );
-                }
-            }).fail(function (jqXHR)
-            {
-                console.log(jqXHR);
-            });
-        }
-
-        $(function ()
-        {
-            $(".chargens-filtre #scenario").change(function ()
-            {
-                var url = "<?php echo $this->url('chargens/seuil') ?>";
-
-                location.href = url + '/' + $(this).val();
-            });
-
-            seuilCalcHeures();
-        });
-
-    </script>
-
-<?php } ?>
+    <?php endforeach;
+ } ?>
 
 <a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
     <i class="fa fa-undo" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>
+<script>
 
+    function changementSeuil(element)
+    {
+        var url = "<?php echo $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
+        var params = $(element).data();
+        params.dedoublement = $(element).val();
+
+        $.post(url, params, function (data)
+        {
+            alertFlash(data, 'success', 3000);
+            seuilCalcHeures();
+        }).fail(function (jqXHR)
+        {
+            alertFlash(data, 'danger', 3000);
+            console.log(jqXHR);
+        });
+    }
+
+    function seuilCalcHeures()
+    {
+        var url = "<?php echo $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>";
+
+        $.post(url, {}, function (data)
+        {
+            for( sid in data ){
+                $('#heures-'+sid).html(
+                    'Heures : ' + Formatter.floatToString(data[sid]['heures'])
+                    + '; HETD : '+  Formatter.floatToString(data[sid]['hetd'])
+                );
+            }
+        }).fail(function (jqXHR)
+        {
+            console.log(jqXHR);
+        });
+    }
+
+    $(function ()
+    {
+        $(".chargens-filtre #scenario").change(function ()
+        {
+            var url = "<?php echo $this->url('chargens/seuil') ?>";
+
+            location.href = url + '/' + $(this).val();
+        });
+
+        seuilCalcHeures();
+    });
+
+</script>
 

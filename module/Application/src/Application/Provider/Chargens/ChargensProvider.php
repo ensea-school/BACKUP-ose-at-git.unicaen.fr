@@ -6,6 +6,7 @@ use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Chargens\Noeud;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
@@ -328,6 +329,58 @@ class ChargensProvider
             $res['structure'] = (string)$this->getStructure();
             $res['heures']    = (float)$d['HEURES'];
             $res['hetd']      = (float)$d['HETD'];
+        }
+
+        return $res;
+    }
+
+
+
+    public function getHeures( Structure $structure = null)
+    {
+        $res = [
+            0 => [
+                'heures' => 0.0,
+                'hetd'   => 0.0,
+            ],
+        ];
+
+        if (!$this->getScenario()) {
+            return $res;
+        }
+
+        $sql = "
+        SELECT
+          structure_id,
+          SUM(heures) heures,
+          SUM(hetd) hetd
+        FROM
+          V_CHARGENS_PRECALCUL_HEURES cph
+        WHERE
+          cph.scenario_id = :scenario
+          ".($structure ? ' AND cph.structure_id = :structure' : '')."
+        GROUP BY
+          structure_id,
+          scenario_id
+        ";
+
+        $params = [
+            'scenario' => $this->getScenario()->getId(),
+        ];
+        if ($structure){
+            $params['structure'] = $structure->getId();
+        }
+        $ds = $this->getBdd()->fetch($sql, $params);
+        foreach ($ds as $d) {
+            $sid       = (int)$d['STRUCTURE_ID'];
+            $heures    = (float)$d['HEURES'];
+            $hetd      = (float)$d['HETD'];
+            $res[$sid] = [
+                'heures' => $heures,
+                'hetd'   => $hetd,
+            ];
+            $res[0]['heures'] += $heures;
+            $res[0]['hetd'] += $hetd;
         }
 
         return $res;

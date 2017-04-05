@@ -97,6 +97,16 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
+                            'calc-heures' => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'    => '/calc-heures',
+                                    'defaults' => [
+                                        'action' => 'seuil-calc-heures',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
                         ],
                     ],
 
@@ -203,10 +213,9 @@ return [
                     ],
                     'assertion'  => 'assertionChargens',
                 ],
-
                 [
                     'controller' => 'Application\Controller\Chargens',
-                    'action'     => ['seuil'],
+                    'action'     => ['seuil', 'seuil-calc-heures'],
                     'privileges' => [
                         Privileges::CHARGENS_SEUIL_COMPOSANTE_VISUALISATION,
                         Privileges::CHARGENS_SEUIL_ETABLISSEMENT_VISUALISATION,

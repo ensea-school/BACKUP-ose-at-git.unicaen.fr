@@ -20,9 +20,9 @@ $data = explode( "\n", $data );
 $sql = [];
 
 $thids = [
-    'fi' => 1,
-    'fa' => 2,
-    'fc' => 3,
+    'fi' => 6,
+    'fa' => 7,
+    'fc' => 8,
 ];
 
 foreach( $data as $d ){
@@ -47,11 +47,10 @@ foreach( $data as $d ){
             foreach( $e as $ec => $eff ){
                 if ($eff > 0){
                     $thid = $thids[$ec];
-                    $sql[] = "OSE_CHARGENS.INIT_SCENARIO_NOEUD_EFFECTIF($etapeId,12,$thid, $eff, TRUE );";
+                    $scenarioId = 1;
+                    $sql[] = "OSE_CHARGENS.INIT_SCENARIO_NOEUD_EFFECTIF($etapeId,$scenarioId,$thid, $eff, TRUE );";
                 }
             }
-
-
         }else{
 //            var_dump('étape non trouvée : '.$code);
         }

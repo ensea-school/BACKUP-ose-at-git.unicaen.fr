@@ -15,6 +15,8 @@ $this->headTitle()->append($title);
 $canEditEtab = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION));
 $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION));
 
+$seuilCalcHeuresUrl
+
 ?>
 <h1 class="page-header"><?php echo $title ?></h1>
 
@@ -36,7 +38,9 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
             <div class="panel-heading panel-heading-h3">
                 <h3>
                     <?php echo $structure['libelle'] ?>
+                    <span class="pull-right" style="font-size:80%" id="heures-<?php echo $sid ?>"></span>
                 </h3>
+
             </div>
             <table class="table table-hover table-bordered seuils-dedoublement">
                 <thead>
@@ -81,40 +85,65 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
                 </tbody>
             </table>
         </div>
-    <?php endforeach;
-} ?>
+    <?php endforeach; ?>
+    <script>
+
+        function changementSeuil(element)
+        {
+            var url = "<?php echo $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
+            var params = $(element).data();
+            params.dedoublement = $(element).val();
+
+            $.post(url, params, function (data)
+            {
+                alertFlash(data, 'success', 3000);
+                seuilCalcHeures();
+            }).fail(function (jqXHR)
+            {
+                alertFlash(data, 'danger', 3000);
+                console.log(jqXHR);
+            });
+        }
+
+        function seuilCalcHeures()
+        {
+            var url = "<?php echo $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>";
+
+            $.post(url, {}, function (data)
+            {
+                for( sid in data ){
+                    $('#heures-'+sid).html(
+                        'Heures : ' + Formatter.floatToString(data[sid]['heures'])
+                        + '; HETD : '+  Formatter.floatToString(data[sid]['hetd'])
+                    );
+                }
+
+                console.log(data);
+            }).fail(function (jqXHR)
+            {
+                console.log(jqXHR);
+            });
+        }
+
+        $(function ()
+        {
+            $(".chargens-filtre #scenario").change(function ()
+            {
+                var url = "<?php echo $this->url('chargens/seuil') ?>";
+
+                location.href = url + '/' + $(this).val();
+            });
+
+            seuilCalcHeures();
+        });
+
+    </script>
+
+<?php } ?>
 
 <a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
     <i class="fa fa-undo" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>
 
-<script>
 
-    function changementSeuil(element)
-    {
-        var url = "<?php echo $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
-        var params = $(element).data();
-        params.dedoublement = $(element).val();
-
-        $.post(url, params, function (data)
-        {
-            alertFlash(data, 'success', 3000);
-        }).fail(function (jqXHR)
-        {
-            alertFlash(data, 'danger', 3000);
-            console.log(jqXHR);
-        });
-    }
-
-    $(function ()
-    {
-        $(".chargens-filtre #scenario").change(function ()
-        {
-            var url = "<?php echo $this->url('chargens/seuil') ?>";
-
-            location.href = url + '/' + $(this).val();
-        });
-    });
-
-</script>

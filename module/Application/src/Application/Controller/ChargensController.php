@@ -295,4 +295,17 @@ class ChargensController extends AbstractController
         return new MessengerViewModel();
     }
 
+
+
+    public function seuilCalcHeuresAction()
+    {
+        /** @var Scenario $scenario */
+        $scenario = $this->context()->scenarioFromRoute();
+
+        $provider = $this->getProviderChargens();
+        $provider->setScenario($scenario);
+
+        $result = $provider->getHeures();
+        return new JsonModel($result);
+    }
 }

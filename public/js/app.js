@@ -56,10 +56,10 @@ $(function ()
     });
 
     /* Pièces jointes */
-    WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
-        WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
-        WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
-    });
+  //  WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
+  //      WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
+  //      WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
+  //  });
 
     /* Offre de formation */
     WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function(){

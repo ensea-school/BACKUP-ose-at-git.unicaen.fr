@@ -78,6 +78,11 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
 
         $(function(){
 
+            //WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
+            //    WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
+            //    WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
+            //});
+
             $('.piece-jointe').pieceJointe({
                 'validation-change': function ()
                 {

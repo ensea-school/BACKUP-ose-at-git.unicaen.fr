@@ -169,7 +169,7 @@ class Contrat extends AbstractEntityService
             $tailleFichier = $file['size'];
 
             $fichier = (new FichierEntity())
-                ->setType($typeFichier)
+                ->setTypeMime($typeFichier)
                 ->setNom($nomFichier)
                 ->setTaille($tailleFichier)
                 ->setContenu(file_get_contents($path))

@@ -228,8 +228,12 @@ return [
     'public_files'       => [
         'head_scripts'   => [
             '010_jquery'   => 'vendor/jquery-1.11.3.min.js',
-            '019_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
-            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
+            '020_jqueryui' => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            '019_bootstrap'   => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
+
+//            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
+//            '019_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+
         ],
         'inline_scripts' => [
             '010_bootstrap'   => null,
@@ -239,6 +243,8 @@ return [
 
             '001_' => 'js/datepicker-fr.js',
             '113_' => 'js/paiement.js',
+
+            '121_' => 'js/piece-jointe.js',
         ],
         'stylesheets'    => [
             '010_jquery-ui'           => 'vendor/jquery-ui-1.11.4/jquery-ui.min.css',
@@ -248,6 +254,7 @@ return [
             '050_bootstrap-theme'     => 'vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css',
             '060_unicaen'             => 'vendor/unicaen-app/css/unicaen.css',
 
+
             '111_' => 'css/cartridge.css',
             '112_' => 'vendor/font-awesome-4.5.0/css/font-awesome.min.css',
             '113_' => 'vendor/open-sans-gh-pages/open-sans.css',
@@ -256,6 +263,8 @@ return [
             '116_' => 'css/agrement.css',
             '118_' => 'css/acceuil.css',
             '120_' => 'css/callout.css',
+
+            '121_' => 'css/piece-jointe.css',
         ],
     ],
 ];

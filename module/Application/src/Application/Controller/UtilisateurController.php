@@ -9,7 +9,7 @@ use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 
 /**
- * 
+ *
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -18,7 +18,7 @@ class UtilisateurController extends BaseController
     use ContextAwareTrait;
     use StructureAwareTrait;
 
-    
+
     /**
      * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
      * La sélection est mémorisé en session par le service AuthUserContext.
@@ -26,11 +26,11 @@ class UtilisateurController extends BaseController
     public function selectionnerProfilAction($addFlashMessage = true)
     {
         parent::selectionnerProfilAction($addFlashMessage = false);
-        
+
         $role        = $this->getAuthUserContextService()->getSelectedIdentityRole();
         /* @var $role Role */
         $structureId = $this->getRequest()->getPost('structure-'.$role->getRoleId());
-        
+
         if ($role->getPerimetre() && $role->getPerimetre()->isEtablissement()) {
             $structure = null;
             if ($structureId) {
@@ -40,10 +40,13 @@ class UtilisateurController extends BaseController
 
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>%s.",
                     $role->getRoleName(),
-                    $structure ? " pour la structure <strong>$structure</strong>" : null); 
+                    $structure ? " pour la structure <strong>$structure</strong>" : null);
         }
         else {
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role);
+            if ($s = $role->getStructure()){
+                $this->getServiceContext()->setStructure($s);
+            }
         }
 
         $this->flashMessenger()->addSuccessMessage($message);

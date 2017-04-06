@@ -314,7 +314,8 @@ class ChargensProvider
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
         WHERE
-          cph.structure_id = :structure
+          cph.annee_id = :annee
+          AND cph.structure_id = :structure
           AND cph.scenario_id = :scenario
         GROUP BY
           structure_id,
@@ -322,6 +323,7 @@ class ChargensProvider
         ";
 
         $d = $this->getBdd()->fetchOne($sql, [
+            'annee'     => $this->getServiceContext()->getAnnee()->getId(),
             'structure' => $this->getStructure()->getId(),
             'scenario'  => $this->getScenario()->getId(),
         ]);
@@ -336,7 +338,7 @@ class ChargensProvider
 
 
 
-    public function getHeures( Structure $structure = null)
+    public function getHeures(Structure $structure = null)
     {
         $res = [
             0 => [
@@ -357,17 +359,19 @@ class ChargensProvider
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
         WHERE
-          cph.scenario_id = :scenario
-          ".($structure ? ' AND cph.structure_id = :structure' : '')."
+          cph.annee_id = :annee
+          AND cph.scenario_id = :scenario
+          " . ($structure ? ' AND cph.structure_id = :structure' : '') . "
         GROUP BY
           structure_id,
           scenario_id
         ";
 
         $params = [
+            'annee'    => $this->getServiceContext()->getAnnee()->getId(),
             'scenario' => $this->getScenario()->getId(),
         ];
-        if ($structure){
+        if ($structure) {
             $params['structure'] = $structure->getId();
         }
         $ds = $this->getBdd()->fetch($sql, $params);

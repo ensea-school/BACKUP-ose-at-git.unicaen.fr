@@ -85,7 +85,7 @@ class ChargensAssertion extends AbstractAssertion
                 }else{
                     $structure = $this->getServiceContext()->getStructure();
                     if ($structure){
-                        return $this->assertScenarioStructureEdition($scenario);
+                        return $this->assertScenarioStructureEdition($structure);
                     }else{
                         return true;
                     }

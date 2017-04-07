@@ -2,7 +2,9 @@
 
 namespace Application\View\Helper\Intervenant;
 
+use Application\Constants;
 use Application\Util;
+use UnicaenImport\Entity\Db\Source;
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
@@ -93,6 +95,16 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 $html .= "\t<dt>$key :</dt><dd>$value</dd>\n";
             }
             $html .= "</dl>";
+        }
+
+        if ($entity->getHistoDestruction()) {
+            $msg = 'Cet intervenant a été supprimé de OSE le '.$entity->getHistoDestruction()->format(Constants::DATE_FORMAT).'.';
+
+            if ($entity->getSource()->getCode() !== \Application\Service\Source::CODE_SOURCE_OSE){
+                $msg .= ' Sa fiche ne remonte plus depuis l\'application '.$entity->getSource().'.';
+            }
+
+            $html .= '<div class="alert alert-danger">'.$msg.'</div>';
         }
 
         //$html .= $this->getView()->historique($entity); => pas de sens ici

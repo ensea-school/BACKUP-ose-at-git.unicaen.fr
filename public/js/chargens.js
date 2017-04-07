@@ -706,13 +706,15 @@ $.widget("ose.chargens", {
         {
             if (data.erreur) {
                 alertFlash(data.erreur, 'danger', 5000);
-            } else {
+            } else if(data.noeuds) {
                 that.chargerDonnees(p.etape, p.scenario, data);
+            } else{
+                alertFlash(data, 'danger', 15000);
             }
 
         }).fail(function (jqXHR)
         {
-            alertFlash('Une erreur est survenue. L\'opération n\'a pas pu être effectuée.', 'danger', 5000);
+            alertFlash(jqXHR.responseText, 'danger', 5000);
             console.log(jqXHR);
         });
     },

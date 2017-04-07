@@ -193,6 +193,8 @@ class NoeudProvider
         ";
         $data = $this->chargens->getBdd()->fetch($sql, ['annee' => $anneeId], 'ID');
 
+        if (empty($data)) return $data;
+
         $ids = implode(',', array_keys($data));
 
         /* Récup des liens associés (nombre uniquement) */

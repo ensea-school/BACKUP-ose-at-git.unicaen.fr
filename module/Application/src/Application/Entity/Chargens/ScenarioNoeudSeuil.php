@@ -27,6 +27,11 @@ class ScenarioNoeudSeuil
      */
     private $dedoublement;
 
+    /**
+     * @var float
+     */
+    private $assiduite;
+
 
 
     /**
@@ -106,6 +111,30 @@ class ScenarioNoeudSeuil
     public function setDedoublement($dedoublement)
     {
         $this->dedoublement = $dedoublement;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAssiduite()
+    {
+        return $this->assiduite;
+    }
+
+
+
+    /**
+     * @param float $assiduite
+     *
+     * @return ScenarioNoeudSeuil
+     */
+    public function setAssiduite($assiduite)
+    {
+        $this->assiduite = $assiduite;
 
         return $this;
     }

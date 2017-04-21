@@ -89,6 +89,17 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             }
         }
 
+        if ($object->isCanEditAssiduite() && array_key_exists('seuils-assiduite', $data)) {
+            $seuilsAssiduite = (array)$data['seuils-assiduite'];
+            foreach ($seuilsAssiduite as $typeInterventionId => $seuilAssiduite) {
+                $typeIntervention  = $this->chargens->getEntities()->get(TypeIntervention::class, $typeInterventionId);
+                $seuilAssiduite = stringToFloat($seuilAssiduite);
+                if ($seuilAssiduite !== null || $scenarioNoeud->hasSeuil($typeIntervention)) {
+                    $scenarioNoeud->getSeuil($typeIntervention)->setAssiduite($seuilAssiduite);
+                }
+            }
+        }
+
         return $object;
     }
 
@@ -117,6 +128,7 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             'seuils-ouverture'           => [],
             'seuils-dedoublement'        => [],
             'seuils-dedoublement-defaut' => [],
+            'seuils-assiduite'           => [],
             'etape'                      => $object->getEtape(false),
             'element-pedagogique'        => $object->getElementPedagogique(false),
             'nb-liens-sup'               => $object->getNbLiensSup(),
@@ -144,6 +156,9 @@ class NoeudDiagrammeHydrator implements HydratorInterface
             }
             if ($seuil->getDedoublement() !== null) {
                 $data['seuils-dedoublement'][$seuil->getTypeIntervention()->getId()] = $seuil->getDedoublement();
+            }
+            if ($seuil->getAssiduite() !== null) {
+                $data['seuils-assiduite'][$seuil->getTypeIntervention()->getId()] = $seuil->getAssiduite();
             }
         }
 

@@ -324,31 +324,33 @@ class NoeudProvider
 
         $sql = "
         SELECT
-          noeud_ep_id noeud_id,
+          noeud_id noeud_id,
           scenario_id,
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES cph
+          V_CHARGENS_PRECALCUL_HEURES2 cph
         WHERE
-          noeud_ep_id IN (" . $ids . ")
+          noeud_id IN (" . $ids . ")
         GROUP BY
-          noeud_ep_id,
+          noeud_id,
           scenario_id
 
         UNION
 
         SELECT
-          noeud_etape_id noeud_id,
+          n.id noeud_id,
           scenario_id,
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES cph
+          noeud n 
+          JOIN V_CHARGENS_PRECALCUL_HEURES2 cph ON cph.etape_id = n.etape_id
         WHERE
-          noeud_etape_id IN (" . $ids . ")
+          n.id IN (" . $ids . ")
+          AND n.etape_id IS NOT NULL
         GROUP BY
-          noeud_etape_id,
+          n.id,
           scenario_id
         ";
 

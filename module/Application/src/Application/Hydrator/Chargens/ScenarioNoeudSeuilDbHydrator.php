@@ -31,6 +31,9 @@ class ScenarioNoeudSeuilDbHydrator implements HydratorInterface
         $dedoublement = isset($data['DEDOUBLEMENT']) ? (int)$data['DEDOUBLEMENT'] : null;
         $object->setDedoublement($dedoublement);
 
+        $assiduite = isset($data['ASSIDUITE']) ? (float)$data['ASSIDUITE'] : null;
+        $object->setAssiduite($assiduite);
+
         return $object;
     }
 
@@ -51,6 +54,7 @@ class ScenarioNoeudSeuilDbHydrator implements HydratorInterface
             'TYPE_INTERVENTION_ID' => $object->getTypeIntervention()->getId(),
             'OUVERTURE'            => $object->getOuverture(),
             'DEDOUBLEMENT'         => $object->getDedoublement(),
+            'ASSIDUITE'            => $object->getAssiduite(),
         ];
 
         return $data;

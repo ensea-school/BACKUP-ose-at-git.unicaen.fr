@@ -312,7 +312,7 @@ class ChargensProvider
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES2 cph
+          V_CHARGENS_PRECALCUL_HEURES cph
         WHERE
           cph.annee_id = :annee
           AND cph.structure_id = :structure
@@ -357,7 +357,7 @@ class ChargensProvider
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES2 cph
+          V_CHARGENS_PRECALCUL_HEURES cph
         WHERE
           cph.annee_id = :annee
           AND cph.scenario_id = :scenario

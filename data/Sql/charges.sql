@@ -183,7 +183,7 @@ WHERE
 
 
 
---CREATE OR REPLACE VIEW V_CHARGENS_PRECALCUL_HEURES2 AS 
+CREATE OR REPLACE VIEW V_CHARGENS_PRECALCUL_HEURES AS 
 WITH t AS (
 SELECT
   n.annee_id          annee_id,
@@ -195,10 +195,10 @@ SELECT
   ep.id               element_pedagogique_id,
   ep.etape_id         etape_id,
   ep.structure_id     structure_id,
-  
+
   vhe.heures          heures,
   vhe.heures * ti.taux_hetd_service hetd,
-  
+
   GREATEST(COALESCE(sns.ouverture, 1),1)                      ouverture,
   GREATEST(COALESCE(sns.dedoublement, csdd.dedoublement,1),1) dedoublement,
   sne.effectif*COALESCE(sns.assiduite,1)                      effectif,
@@ -209,13 +209,13 @@ FROM
             scenario_noeud_effectif    sne
        JOIN type_heures                 th ON th.id = sne.type_heures_id
                                           AND th.code = 'fi' 
-       
+
        JOIN scenario_noeud              sn ON sn.id = sne.scenario_noeud_id
                                           AND sn.histo_destruction IS NULL
-       
+
        JOIN noeud                        n ON n.id = sn.noeud_id
                                           AND n.histo_destruction IS NULL
-                                          
+
        JOIN element_pedagogique         ep ON ep.id = n.element_pedagogique_id
        JOIN volume_horaire_ens         vhe ON vhe.element_pedagogique_id = ep.id
                                           AND vhe.histo_destruction IS NULL 
@@ -229,11 +229,6 @@ FROM
 
   LEFT JOIN scenario_noeud_seuil       sns ON sns.scenario_noeud_id = sn.id 
                                           AND sns.type_intervention_id = ti.id
-
-WHERE
-  1=1
-  --AND n.id IN (257933,239198,244766,246574)
-  --AND sn.scenario_id = 1
 )
 SELECT
   annee_id,
@@ -251,9 +246,9 @@ SELECT
   --effectif,
   --t_effectif,
 
-  CASE WHEN t_effectif < ouverture THEN 0 ELSE
-    CEIL( t_effectif / dedoublement ) * effectif / t_effectif
-  END groupes,
+  --CASE WHEN t_effectif < ouverture THEN 0 ELSE
+  --  CEIL( t_effectif / dedoublement ) * effectif / t_effectif
+  --END groupes,
 
   CASE WHEN t_effectif < ouverture THEN 0 ELSE
     CEIL( t_effectif / dedoublement ) * heures * effectif / t_effectif
@@ -265,6 +260,4 @@ SELECT
 
 FROM
   t
---ORDER BY
---  noeud_id, type_intervention_id
 ;

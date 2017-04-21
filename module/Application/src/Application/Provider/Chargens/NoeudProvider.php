@@ -329,7 +329,7 @@ class NoeudProvider
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES2 cph
+          V_CHARGENS_PRECALCUL_HEURES cph
         WHERE
           noeud_id IN (" . $ids . ")
         GROUP BY
@@ -345,7 +345,7 @@ class NoeudProvider
           SUM(hetd) hetd
         FROM
           noeud n 
-          JOIN V_CHARGENS_PRECALCUL_HEURES2 cph ON cph.etape_id = n.etape_id
+          JOIN V_CHARGENS_PRECALCUL_HEURES cph ON cph.etape_id = n.etape_id
         WHERE
           n.id IN (" . $ids . ")
           AND n.etape_id IS NOT NULL

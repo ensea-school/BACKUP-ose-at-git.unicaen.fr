@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $seuils    array
+ */
+
+$title = "Gestion des seuils de dédoublement";
+
+$this->headTitle()->append($title);
+
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<div class="row div-filtre chargens-filtre">
+    <div class="col-md-4 div-structure">
+        <label>Composante : </label>
+        <?php echo $this->formSelect($filtre->get('structure')) ?>
+    </div>
+    <div class="col-md-4 div-scenario">
+        <label>Scénario : </label>
+        <?php echo $this->formSelect($filtre->get('scenario')) ?>
+    </div>
+    <button
+</div>
+<br />
+
+
+<a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
+    <i class="fa fa-undo" aria-hidden="true"></i>
+    Retour au menu des charges d'enseignement
+</a>
+
+<script>
+
+    function getCsv()
+    {
+        var url = "<?php echo $this->url('chargens/export/csv') ?>";
+
+        location.href = url + '/' + $(".chargens-filtre #scenario").val();
+    }
+
+    $(function ()
+    {
+        $(".chargens-filtre #scenario").change(function () { getCsv(); });
+    });
+
+</script>

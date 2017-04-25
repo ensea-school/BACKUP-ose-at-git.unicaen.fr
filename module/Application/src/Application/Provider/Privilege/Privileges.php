@@ -25,6 +25,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const BUDGET_TYPE_DOTATION_EDITION               = 'budget-type-dotation-edition';
     const BUDGET_TYPE_DOTATION_VISUALISATION         = 'budget-type-dotation-visualisation';
     const BUDGET_VISUALISATION                       = 'budget-visualisation';
+    const CHARGENS_EXPORT_CSV                        = 'chargens-export-csv';
     const CHARGENS_FORMATION_ACTIF_EDITION           = 'chargens-formation-actif-edition';
     const CHARGENS_FORMATION_ASSIDUITE_EDITION       = 'chargens-formation-assiduite-edition';
     const CHARGENS_FORMATION_CHOIX_EDITION           = 'chargens-formation-choix-edition';

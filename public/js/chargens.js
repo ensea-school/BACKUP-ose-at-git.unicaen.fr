@@ -32,7 +32,7 @@ $.widget("ose.chargens", {
             hide: {effect: 'clip', duration: 200},
             show: {effect: 'clip', duration: 200},
             title: 'Édition',
-            width: 400
+            width: 500
         });
         this.formNoeud.css('display:block');
 
@@ -188,13 +188,22 @@ $.widget("ose.chargens", {
                 this.formNoeud.find('#seuil-dedoublement-' + tid).attr('placeholder', 'Aucun');
             }
 
+            var val = noeud['seuils-assiduite'][tid];
+            if (val === undefined) val = ''; else val *= 100;
+            this.formNoeud.find('#seuil-assiduite-' + tid).val(val);
         }
 
-
-        if (!noeud['can-edit-assiduite'] || noeud['element-pedagogique'] || noeud['etape']) {
+        this.formNoeud.find('#choix-assiduite').hide();
+        /*if (!noeud['can-edit-assiduite'] || noeud['element-pedagogique'] || noeud['etape']) {
             this.formNoeud.find('#choix-assiduite').hide();
         } else {
             this.formNoeud.find('#choix-assiduite').show();
+        }*/
+
+        if (noeud['can-edit-assiduite'] && noeud['element-pedagogique']){
+            this.formNoeud.find('.seuil-assiduite').show();
+        }else{
+            this.formNoeud.find('.seuil-assiduite').hide();
         }
 
         if (noeud['can-edit-effectifs'] && noeud['etape']) {
@@ -245,7 +254,8 @@ $.widget("ose.chargens", {
             assiduite: assiduite !== '' ? parseInt(assiduite) / 100 : 1,
             effectifs: {},
             'seuils-ouverture': {},
-            'seuils-dedoublement': {}
+            'seuils-dedoublement': {},
+            'seuils-assiduite': {}
         };
         for (var tid in this.typesHeures) {
             var val = this.formNoeud.find('#effectifs-' + tid).val();
@@ -254,8 +264,10 @@ $.widget("ose.chargens", {
         for (var tid in this.typesIntervention) {
             var valOuv = this.formNoeud.find('#seuil-ouverture-' + tid).val();
             var valDed = this.formNoeud.find('#seuil-dedoublement-' + tid).val();
+            var valAss = this.formNoeud.find('#seuil-assiduite-' + tid).val();
             noeud['seuils-ouverture'][tid] = valOuv !== '' ? parseInt(valOuv) : null;
             noeud['seuils-dedoublement'][tid] = valDed !== '' ? parseInt(valDed) : null;
+            noeud['seuils-assiduite'][tid] = valAss !== '' ? parseFloat(valAss) / 100 : null;
         }
 
         this.mergeNoeudData(noeud);
@@ -276,6 +288,7 @@ $.widget("ose.chargens", {
         for (var tid in this.typesIntervention) {
             noeud['seuils-ouverture'][tid] = data['seuils-ouverture'][tid];
             noeud['seuils-dedoublement'][tid] = data['seuils-dedoublement'][tid];
+            noeud['seuils-assiduite'][tid] = data['seuils-assiduite'][tid];
         }
 
         this.majNoeud(data.id);
@@ -307,12 +320,12 @@ $.widget("ose.chargens", {
         };
 
         /* Assiduité */
-        if (category == 'noeud') {
+        /*if (category == 'noeud') {
             data.proprietes.push({
                 label: 'Assiduité',
                 value: Formatter.floatToString(noeud.assiduite * 100) + '%'
             });
-        }
+        }*/
 
         /* Effectifs */
         if (category == 'noeud' || category == 'etape' || category == 'element') {
@@ -338,9 +351,12 @@ $.widget("ose.chargens", {
                     if (!seuilDedoublement) seuilDedoublement = noeud['seuils-dedoublement-defaut'][ti];
                     if (!seuilDedoublement) seuilDedoublement = 99999999;
 
+                    var seuilAssiduite = noeud['seuils-assiduite'][ti];
+                    if (!seuilAssiduite) seuilAssiduite = 1;
+
                     var value = 0;
-                    if (effectifs >= seuilOuverture) {
-                        value = Math.ceil(effectifs / seuilDedoublement);
+                    if (effectifs * seuilAssiduite >= seuilOuverture) {
+                        value = Math.ceil(effectifs * seuilAssiduite / seuilDedoublement);
                     }
 
                     data.proprietes.push({

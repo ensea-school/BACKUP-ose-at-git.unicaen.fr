@@ -16,6 +16,8 @@ use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\SeuilChargeServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use UnicaenApp\Util;
+use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
@@ -189,7 +191,7 @@ class ChargensController extends AbstractController
 
         $cStructure = $this->getServiceContext()->getStructure();
         $sStructure = $newScenario ? $newScenario->getStructure() : null;
-        if ($cStructure && $sStructure && $cStructure != $sStructure){
+        if ($cStructure && $sStructure && $cStructure != $sStructure) {
             $this->flashMessenger()->addErrorMessage('Vous ne pouvez pas dupliquer ces données vers un scénario qui n\'appartient pas à votre composante');
             $newScenario = null;
         }
@@ -197,13 +199,12 @@ class ChargensController extends AbstractController
         if ($newScenario) {
             $noeuds = $this->params()->fromPost('noeuds');
             $liens  = $this->params()->fromPost('liens');
-            try{
+            try {
                 $this->getServiceScenario()->dupliquer($oldScenario, $newScenario, $noeuds, $liens);
                 $this->flashMessenger()->addSuccessMessage('Le scénario a bien été dupliqué');
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-
         }
 
         $vm = new ViewModel();
@@ -288,7 +289,7 @@ class ChargensController extends AbstractController
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-        }else{
+        } else {
             $this->flashMessenger()->addErrorMessage('Ce seuil ne peut pas être modifié');
         }
 
@@ -306,6 +307,116 @@ class ChargensController extends AbstractController
         $provider->setScenario($scenario);
 
         $result = $provider->getHeures();
+
         return new JsonModel($result);
+    }
+
+
+
+    public function exportAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            SeuilCharge::class,
+            Scenario::class,
+        ]);
+
+        /** @var Scenario $scenario */
+        $scenario = $this->context()->scenarioFromRoute();
+
+        $filtre = $this->getFormChargensFiltre();
+        $filtre->get('structure')->setAttribute('data-width', null);
+        $filtre->get('scenario')->setAttribute('data-width', null);
+        if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
+
+        if ($scenario) {
+            if (($ss = $scenario->getStructure()) && ($cs = $this->getServiceContext()->getStructure())) {
+                if ($ss != $cs) {
+                    throw new UnAuthorizedException('Les données appartiennent à une autre composante. Vous ne pouvez pas y accéder');
+                }
+            }
+
+            $seuils = $this->getServiceSeuilCharge()->getSeuils($scenario);
+        } else {
+            $seuils = [];
+        }
+
+        return compact('scenario', 'seuils', 'filtre');
+    }
+
+
+
+    public function exportCsvAction()
+    {
+        /** @var Scenario $scenario */
+        $scenario = $this->context()->scenarioFromRoute();
+
+        $annee     = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
+
+        $sql    = 'SELECT * FROM V_CHARGENS_EXPORT_CSV WHERE scenario_id = :scenario AND annee_id = :annee';
+        $params = [
+            'scenario' => $scenario->getId(),
+            'annee'    => $annee->getId(),
+        ];
+        if ($structure) {
+            $sql .= ' AND structure_id = :structure';
+            $params['structure'] = $structure;
+        }
+        $data = $this->em()->getConnection()->fetchAll($sql, $params);
+
+        $csvModel = new CsvModel();
+        $csvModel->setHeader([
+            'annee'                  => 'Année',
+            'structure-code'         => 'Composante  (code)',
+            'structure-libelle'      => 'Composante (libellé)',
+            'etape-porteuse-code'    => 'Étape porteuse (code)',
+            'etape-porteuse-libelle' => 'Étape porteuse (libellé)',
+            'etape-ens-code'         => 'Étape (code)',
+            'etape-ens-libelle'      => 'Étape (libellé)',
+            'element-code'           => 'Ens. (code)',
+            'element-libelle'        => 'Enseignement (libellé)',
+            'discipline-code'        => 'Discipline (code)',
+            'discipline-libelle'     => 'Discipline (libellé)',
+            'type-heures'            => 'Type d\'heures',
+            'type-intervention'      => 'Type d\'intervention',
+            'seuil-ouverture'        => 'Seuil d\'ouverture',
+            'seuil-dedoublement'     => 'Seuil de dédoublement',
+            'effectif-etape'         => 'Effectifs (étape)',
+            'effectif-element'       => 'Effectifs (élément)',
+            'heures-ens'             => 'Vol. Horaire',
+            'groupes'                => 'Groupes',
+            'heures'                 => 'Heures',
+            'hetd'                   => 'HETD',
+        ]);
+
+        foreach ($data as $d) {
+            $l = [
+                'annee'                  => $d['ANNEE'],
+                'structure-code'         => $d['STRUCTURE_CODE'],
+                'structure-libelle'      => $d['STRUCTURE_LIBELLE'],
+                'etape-porteuse-code'    => $d['ETAPE_PORTEUSE_CODE'],
+                'etape-porteuse-libelle' => $d['ETAPE_PORTEUSE_LIBELLE'],
+                'etape-ens-code'         => $d['ETAPE_ENS_CODE'],
+                'etape-ens-libelle'      => $d['ETAPE_ENS_LIBELLE'],
+                'element-code'           => $d['ELEMENT_CODE'],
+                'element-libelle'        => $d['ELEMENT_LIBELLE'],
+                'discipline-code'        => $d['DISCIPLINE_CODE'],
+                'discipline-libelle'     => $d['DISCIPLINE_LIBELLE'],
+                'type-heures'            => $d['TYPE_HEURES'],
+                'type-intervention'      => $d['TYPE_INTERVENTION'],
+                'seuil-ouverture'        => (int)$d['SEUIL_OUVERTURE'],
+                'seuil-dedoublement'     => (int)$d['SEUIL_DEDOUBLEMENT'],
+                'effectif-etape'         => (int)$d['EFFECTIF_ETAPE'],
+                'effectif-element'       => (int)$d['EFFECTIF_ELEMENT'],
+                'heures-ens'             => (float)$d['HEURES_ENS'],
+                'groupes'                => (float)$d['GROUPES'],
+                'heures'                 => (float)$d['HEURES'],
+                'hetd'                   => (float)$d['HETD'],
+            ];
+            $csvModel->addLine($l);
+        }
+        $csvModel->setFilename('charges-enseignement-' . $annee->getId() . '-' . Util::reduce($scenario->getLibelle()) . '.csv');
+
+        return $csvModel;
     }
 }

@@ -294,7 +294,9 @@ class ScenarioNoeudProvider
         $bdd  = $this->chargens->getBdd();
         $conn = $bdd->getEntityManager()->getConnection();
 
-        $noData = $scenarioNoeudSeuil->getOuverture() === null && $scenarioNoeudSeuil->getDedoublement() === null;
+        $noData = $scenarioNoeudSeuil->getOuverture() === null
+            && $scenarioNoeudSeuil->getDedoublement() === null
+            && $scenarioNoeudSeuil->getAssiduite() === null;
 
         if ($scenarioNoeudSeuil->getId()) {
             if ($noData) {
@@ -383,7 +385,8 @@ class ScenarioNoeudProvider
           sns.scenario_noeud_id,
           sns.type_intervention_id,
           sns.ouverture,
-          sns.dedoublement
+          sns.dedoublement,
+          sns.assiduite
         FROM
           scenario_noeud_seuil sns 
           JOIN scenario_noeud sn ON sn.id = sns.scenario_noeud_id

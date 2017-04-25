@@ -142,6 +142,32 @@ return [
                             ],
                         ],
                     ],
+
+                    'export' => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/export',
+                            'defaults' => [
+                                'action' => 'export',
+                            ],
+                        ],
+                        'child_routes'  => [
+                            'csv'        => [
+                                'type'          => 'Segment',
+                                'may_terminate' => true,
+                                'options'       => [
+                                    'route'    => '/csv[/:scenario]',
+                                    'constraints' => [
+                                        'scenario' => '[0-9]*',
+                                    ],
+                                    'defaults' => [
+                                        'action' => 'export-csv',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -176,6 +202,13 @@ return [
                                 'description' => "Permet de configurer de manière fine les formations (définition des taux d'assiduite, seuils, effectifs...)",
                                 'route'       => 'chargens/formation',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'formation'),
+                                'visible'     => false,
+                            ],
+                            'export' => [
+                                'label'       => "Export au format CSV (pour tableur)",
+                                'description' => "Permet de récupérer les données liées aux charges d'enseignement",
+                                'route'       => 'chargens/export',
+                                'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'export'),
                                 'visible'     => false,
                             ],
                         ],
@@ -247,6 +280,14 @@ return [
                         Privileges::CHARGENS_FORMATION_ACTIF_EDITION,
                         Privileges::CHARGENS_FORMATION_POIDS_EDITION,
                         Privileges::CHARGENS_FORMATION_CHOIX_EDITION,
+                    ],
+                ],
+
+                [
+                    'controller' => 'Application\Controller\Chargens',
+                    'action'     => ['export', 'export-csv'],
+                    'privileges' => [
+                        Privileges::CHARGENS_EXPORT_CSV,
                     ],
                 ],
             ],

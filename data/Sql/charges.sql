@@ -1,7 +1,7 @@
 -- CALCUL récursif de TOUS les effectifs
 SELECT 
-  '
-BEGIN ose_chargens.calc_effectif( ' || sn.noeud_id || ', ' || sn.scenario_id || ', ' || sne.type_heures_id || ', ' || sne.etape_id || ' ); END;
+  'BEGIN ose_chargens.CALC_SUB_EFFECTIF2( ' || sn.noeud_id || ', ' || sn.scenario_id || ', ' || sne.type_heures_id || ', ' || sne.etape_id || ' ); END;' 
+  || '
 /' plsql
 FROM 
   scenario_noeud_effectif sne
@@ -12,11 +12,8 @@ WHERE
 ;
 
 
-/
-BEGIN ose_chargens.calc_effectif( 2127, 12, 1, 9494 ); END;
-/
 
-
+/
 BEGIN
   
   FOR p IN (
@@ -25,20 +22,19 @@ BEGIN
         sn.noeud_id,
         sn.scenario_id,
         sne.type_heures_id,
-        sne.etape_id,
+        sne.etape_id
       FROM 
         scenario_noeud_effectif sne
         JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id
         JOIN noeud n ON n.id = sn.noeud_id
       WHERE
-        1=1--n.etape_id IS NOT NULL
-        AND rownum < 1000
+        n.etape_id IS NOT NULL
 
     ) LOOP
       
-      ose_chargens.calc_effectif( p.noeud_id, p.scenario_id, p.type_heures_id, p.etape_id );
+      ose_chargens.CALC_SUB_EFFECTIF2( p.noeud_id, p.scenario_id, p.type_heures_id, p.etape_id );
       
-      ose_test.echo( 'Calcul global des effectifs : ' || p.rownum || ' / ' || p.nbr );
+      --ose_test.echo( 'Calcul global des effectifs : ' || p.rownum || ' / ' || p.nbr );
     END LOOP;
   
 END;

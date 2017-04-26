@@ -120,8 +120,8 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
                     <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-dedoublement-<?php echo $tid ?>"/>
                 </td>
                 <td>
-                    <div class="input-group">
-                        <input type="number" class="form-control seuil-assiduite" min="0" aria-describedby="pseuil-assiduite-<?php echo $tid ?>" placeholder="100" id="seuil-assiduite-<?php echo $tid ?>"/>
+                    <div class="input-group seuil-assiduite">
+                        <input type="number" class="form-control" min="0" aria-describedby="pseuil-assiduite-<?php echo $tid ?>" placeholder="100" id="seuil-assiduite-<?php echo $tid ?>"/>
                         <span class="input-group-addon" id="pseuil-assiduite-<?php echo $tid ?>">%</span>
                     </div>
                 </td>

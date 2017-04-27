@@ -7,7 +7,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 use Application\Provider\Privilege\Privileges;
 
 return [
-    'router'       => [
+    'router' => [
         'routes' => [
             'chargens' => [
                 'type'          => 'Segment',
@@ -87,7 +87,7 @@ return [
                             ],
                         ],
                         'child_routes'  => [
-                            'modifier' => [
+                            'modifier'    => [
                                 'type'          => 'Literal',
                                 'options'       => [
                                     'route'    => '/modifier',
@@ -153,15 +153,15 @@ return [
                             ],
                         ],
                         'child_routes'  => [
-                            'csv'        => [
+                            'csv' => [
                                 'type'          => 'Segment',
                                 'may_terminate' => true,
                                 'options'       => [
-                                    'route'    => '/csv[/:scenario]',
+                                    'route'       => '/csv[/:scenario]',
                                     'constraints' => [
                                         'scenario' => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => 'export-csv',
                                     ],
                                 ],
@@ -182,6 +182,7 @@ return [
                         'title'    => "Charges d'enseignement",
                         'route'    => 'chargens',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Chargens', 'index'),
+                        'order'    => 5,
                         'pages'    => [
                             'scenario'  => [
                                 'label'       => "Gestion des scénarios",
@@ -204,7 +205,7 @@ return [
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'formation'),
                                 'visible'     => false,
                             ],
-                            'export' => [
+                            'export'    => [
                                 'label'       => "Export au format CSV (pour tableur)",
                                 'description' => "Permet de récupérer les données liées aux charges d'enseignement",
                                 'route'       => 'chargens/export',

@@ -232,8 +232,9 @@ return [
                         'title'    => "Intervenant",
                         'route'    => 'intervenant',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'index'),
+                        'order'    => 1,
                         'pages'    => [
-                            'rechercher'                     => [
+                            'rechercher'              => [
                                 'label'        => " Rechercher",
                                 'title'        => "Rechercher un intervenant",
                                 'route'        => 'intervenant/rechercher',
@@ -243,8 +244,9 @@ return [
                                 'icon'         => "glyphicon glyphicon-search",
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'rechercher'),
+                                'order'        => 1,
                             ],
-                            'voir'                           => [
+                            'voir'                    => [
                                 'label'        => "Fiche individuelle",
                                 'title'        => "Consultation de la fiche de l'intervenant {id}",
                                 'route'        => 'intervenant/voir',
@@ -253,8 +255,9 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir'),
+                                'order'        => 2,
                             ],
-                            'voir-heures-comp'               => [
+                            'voir-heures-comp'        => [
                                 'label'        => "Calcul HETD",
                                 'title'        => "Calcul des heures équivalent TD {id}",
                                 'route'        => 'intervenant/voir-heures-comp',
@@ -264,8 +267,9 @@ return [
                                 'action'       => 'voir-heures-comp',
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'voir-heures-comp'),
+                                'order'        => 3,
                             ],
-                            'modification-service-du'        => [
+                            'modification-service-du' => [
                                 'label'        => "Modification de service dû",
                                 'title'        => "Modification de service dû de l'intervenant {id}",
                                 'route'        => 'intervenant/modification-service-du',
@@ -274,11 +278,9 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'saisir'),
+                                'order'        => 4,
                             ],
-                            'dossier'                        => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'service'                        => [
+                            'service'                 => [
                                 'label'               => "Enseignements prévisionnels",
                                 'title'               => "Enseignements  prévisionnelsde l'intervenant",
                                 'route'               => 'intervenant/services',
@@ -289,23 +291,9 @@ return [
                                 'withtarget'          => true,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services'),
                                 'visible'             => 'assertionService',
+                                'order'               => 6,
                             ],
-                            'pieces-jointes-saisie'          => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'validation-service-prevu'       => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'validation-referentiel-prevu'   => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'agrement-conseil-restreint'     => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'agrement-conseil-academique'    => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'contrat'                        => [
+                            'contrat'                 => [
                                 'label'        => "Contrat / avenant",
                                 'title'        => "Contrat et avenants de l'intervenant",
                                 'route'        => 'intervenant/contrat',
@@ -314,8 +302,9 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'index'),
+                                'order'        => 12,
                             ],
-                            'services-realises'              => [
+                            'services-realises'       => [
                                 'label'               => "Enseignements réalisés",
                                 'title'               => "Constatation des enseignements réalisés",
                                 'route'               => 'intervenant/services-realises',
@@ -326,15 +315,7 @@ return [
                                 'withtarget'          => true,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services'),
                                 'visible'             => 'assertionService',
-                            ],
-                            'validation-service-realise'     => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'validation-referentiel-realise' => [
-                                // coquille vide qui réserve l'emplacement du menu
-                            ],
-                            'demande-mise-en-paiement'       => [
-                                // coquille vide qui réserve l'emplacement du menu
+                                'order'               => 13,
                             ],
                         ],
                     ],

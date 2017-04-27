@@ -83,15 +83,16 @@ return [
                         'label'    => "Gestion",
                         'route'    => 'gestion',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Gestion', 'index'),
+                        'order'    => 6,
                         'pages'    => [
 
-                            'budget'      => [ 'border-color' => '#EB4995' ],
-                            'paiement'    => [ 'border-color' => '#F5E79E' ],
+                            'budget'   => ['border-color' => '#EB4995'],
+                            'paiement' => ['border-color' => '#F5E79E'],
 
-                            'agrement'    => [ 'border-color' => '#E1AC5A' ],
+                            'agrement' => ['border-color' => '#E1AC5A'],
 
-                            'indicateurs' => [ 'border-color' => '#217DD8' ],
-                            'pilotage'    => [ 'border-color' => '#00A020' ],
+                            'indicateurs' => ['border-color' => '#217DD8'],
+                            'pilotage'    => ['border-color' => '#00A020'],
 
                             'discipline' => [
                                 'border-color' => '#9F491F',
@@ -101,10 +102,10 @@ return [
                                 'route'        => 'discipline',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Discipline', 'index'),
                             ],
-                            'dossier-pj'  => [ 'border-color' => '#A22CAE' ],
-                            'droits'      => [ 'border-color' => '#E5272E' ],
-                            'parametres'  => [ /* Emplacement réservé */],
-                            'workflow'    => [ 'border-color' => '#111' ],
+                            'dossier-pj' => ['border-color' => '#A22CAE'],
+                            'droits'     => ['border-color' => '#E5272E'],
+                            'parametres' => [ /* Emplacement réservé */],
+                            'workflow'   => ['border-color' => '#111'],
                         ],
                     ],
                 ],

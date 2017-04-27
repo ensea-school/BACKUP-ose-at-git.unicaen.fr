@@ -74,7 +74,7 @@ return [
                             ],
                         ],
                     ],
-                    'suppression'                => [
+                    'suppression'              => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/suppression/:service',
@@ -165,7 +165,7 @@ return [
                 ],
                 'may_terminate' => false,
                 'child_routes'  => [
-                    'saisie'           => [
+                    'saisie'                   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/saisie[/:id]',
@@ -177,7 +177,7 @@ return [
                             ],
                         ],
                     ],
-                    'volumes-horaires-refresh'           => [
+                    'volumes-horaires-refresh' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/volumes-horaires-refresh[/:id]',
@@ -189,7 +189,7 @@ return [
                             ],
                         ],
                     ],
-                    'rafraichir-ligne' => [
+                    'rafraichir-ligne'         => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/rafraichir-ligne/:serviceReferentiel',
@@ -201,7 +201,7 @@ return [
                             ],
                         ],
                     ],
-                    'constatation'     => [
+                    'constatation'             => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/constatation',
@@ -210,7 +210,7 @@ return [
                             ],
                         ],
                     ],
-                    'suppression'                => [
+                    'suppression'              => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/suppression/:id',
@@ -222,7 +222,7 @@ return [
                             ],
                         ],
                     ],
-                    'initialisation'   => [
+                    'initialisation'           => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/initialisation/:intervenant',
@@ -247,6 +247,7 @@ return [
                         'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
+                        'order'    => 2,
                     ],
                 ],
             ],
@@ -446,16 +447,16 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationService'                           => Service\ServiceService::class,
-            'ApplicationServiceReferentiel'                => Service\ServiceReferentiel::class,
-            'ApplicationFonctionReferentiel'               => Service\FonctionReferentiel::class,
-            'ApplicationPeriode'                           => Service\Periode::class,
-            'ApplicationMotifNonPaiement'                  => Service\MotifNonPaiement::class,
-            'ApplicationModificationServiceDu'             => Service\ModificationServiceDu::class,
-            'ApplicationCampagneSaisie'                    => Service\CampagneSaisieService::class,
-            'assertionService'                             => Assertion\ServiceAssertion::class,
-            'processusService'                             => Processus\ServiceProcessus::class,
-            'processusServiceReferentiel'                  => Processus\ServiceReferentielProcessus::class,
+            'ApplicationService'               => Service\ServiceService::class,
+            'ApplicationServiceReferentiel'    => Service\ServiceReferentiel::class,
+            'ApplicationFonctionReferentiel'   => Service\FonctionReferentiel::class,
+            'ApplicationPeriode'               => Service\Periode::class,
+            'ApplicationMotifNonPaiement'      => Service\MotifNonPaiement::class,
+            'ApplicationModificationServiceDu' => Service\ModificationServiceDu::class,
+            'ApplicationCampagneSaisie'        => Service\CampagneSaisieService::class,
+            'assertionService'                 => Assertion\ServiceAssertion::class,
+            'processusService'                 => Processus\ServiceProcessus::class,
+            'processusServiceReferentiel'      => Processus\ServiceReferentielProcessus::class,
         ],
     ],
     'hydrators'       => [

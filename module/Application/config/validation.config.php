@@ -156,6 +156,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
                                 'withtarget'          => true,
                                 'visible'             => 'assertionService',
+                                'order'        => 8,
                             ],
                             'validation-referentiel-prevu'   => [
                                 'label'               => "Validation du référentiel prévisionnel",
@@ -167,6 +168,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION,
                                 'withtarget'          => true,
                                 'visible'             => 'assertionService',
+                                'order'        => 9,
                             ],
                             'validation-service-realise'     => [
                                 'label'               => "Validation des enseignements réalisés",
@@ -178,6 +180,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
                                 'withtarget'          => true,
                                 'visible'             => 'assertionService',
+                                'order'        => 14,
                             ],
                             'validation-referentiel-realise' => [
                                 'label'               => "Validation du référentiel réalisé",
@@ -189,6 +192,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
                                 'withtarget'          => true,
                                 'visible'             => 'assertionService',
+                                'order'        => 15,
                             ],
                         ],
                     ],

@@ -154,6 +154,7 @@ return [
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
                                 'visible'      => 'AssertionAgrement',
+                                'order'        => 10,
                             ],
                             'agrement-conseil-academique' => [
                                 'label'        => 'Agrément : Conseil académique',
@@ -165,6 +166,7 @@ return [
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
                                 'visible'      => 'AssertionAgrement',
+                                'order'        => 11,
                             ],
                         ],
                     ],

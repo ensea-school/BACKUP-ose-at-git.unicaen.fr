@@ -299,6 +299,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'index'),
+                                'order'        => 5,
                             ],
                             'pieces-jointes-saisie' => [
                                 'label'        => "Pièces justificatives",
@@ -309,6 +310,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'index'),
+                                'order'        => 7,
                             ],
                         ],
                     ],
@@ -395,7 +397,7 @@ return [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-delete'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
-                ],                
+                ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-saisie'],

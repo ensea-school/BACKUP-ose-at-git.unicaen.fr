@@ -175,6 +175,7 @@ return [
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
+                        'order'    => 3,
                     ],
                 ],
             ],
@@ -186,7 +187,7 @@ return [
                 /* Global */
                 [
                     'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => ['index','search-structures', 'search-niveaux'],
+                    'action'     => ['index', 'search-structures', 'search-niveaux'],
                     'privileges' => Privileges::ODF_VISUALISATION,
                 ],
                 [
@@ -214,7 +215,7 @@ return [
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => ['search', 'getPeriode'], // getPeriode est utilisé pour la saisie de service!!!
-                    'privileges' =>  [
+                    'privileges' => [
                         Privileges::ODF_ELEMENT_VISUALISATION,
                         Privileges::ENSEIGNEMENT_EDITION,
                     ],
@@ -285,18 +286,18 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationElementPedagogique'           => Service\ElementPedagogique::class,
-            'ApplicationCheminPedagogique'            => Service\CheminPedagogique::class,
-            'ApplicationEtape'                        => Service\Etape::class,
-            'ApplicationTypeFormation'                => Service\TypeFormation::class,
-            'ApplicationGroupeTypeFormation'          => Service\GroupeTypeFormation::class,
-            'ApplicationNiveauEtape'                  => Service\NiveauEtape::class,
-            'ApplicationNiveauFormation'              => Service\NiveauFormation::class,
-            'ApplicationModulateur'                   => Service\Modulateur::class,
-            'ApplicationElementModulateur'            => Service\ElementModulateur::class,
-            'ApplicationTypeModulateur'               => Service\TypeModulateur::class,
-            'ApplicationDomaineFonctionnel'           => Service\DomaineFonctionnel::class,
-            'AssertionOffreDeFormation'               => Assertion\OffreDeFormationAssertion::class,
+            'ApplicationElementPedagogique'  => Service\ElementPedagogique::class,
+            'ApplicationCheminPedagogique'   => Service\CheminPedagogique::class,
+            'ApplicationEtape'               => Service\Etape::class,
+            'ApplicationTypeFormation'       => Service\TypeFormation::class,
+            'ApplicationGroupeTypeFormation' => Service\GroupeTypeFormation::class,
+            'ApplicationNiveauEtape'         => Service\NiveauEtape::class,
+            'ApplicationNiveauFormation'     => Service\NiveauFormation::class,
+            'ApplicationModulateur'          => Service\Modulateur::class,
+            'ApplicationElementModulateur'   => Service\ElementModulateur::class,
+            'ApplicationTypeModulateur'      => Service\TypeModulateur::class,
+            'ApplicationDomaineFonctionnel'  => Service\DomaineFonctionnel::class,
+            'AssertionOffreDeFormation'      => Assertion\OffreDeFormationAssertion::class,
         ],
     ],
     'form_elements'   => [

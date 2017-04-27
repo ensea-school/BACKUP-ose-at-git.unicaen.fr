@@ -95,29 +95,6 @@ return [
             ],
         ],
     ],
-    'navigation'         => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'intervenant' => [
-                        // réservation de l'emplacement pour le menu Intervenant
-                    ],
-                    'service'     => [
-                        // réservation de l'emplacement pour le menu Enseignements
-                    ],
-                    'of'          => [
-                        // réservation de l'emplacement pour le menu Offre de formation
-                    ],
-                    'chargens'     => [
-                        // réservation de l'emplacement pour le menu Charges
-                    ],
-                    'gestion'     => [
-                        // réservation de l'emplacement pour le menu Gestion
-                    ],
-                ],
-            ],
-        ],
-    ],
     'bjyauthorize'       => [
         'identity_provider' => 'ApplicationIdentityProvider',
 

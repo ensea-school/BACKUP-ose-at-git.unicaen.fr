@@ -98,6 +98,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
                                 'visible'             => 'assertionPaiement',
+                                'order'        => 16,
                             ],
                             'visualisation-mise-en-paiement' => [
                                 'label'               => "Visualisation des mises en paiement",

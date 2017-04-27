@@ -92,18 +92,31 @@ class FonctionReferentielSaisieForm extends AbstractForm
         // peuplement liste des domaines fonctionnels
         $this->get('domaine-fonctionnel')
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList()));
-        // peuplement liste des structures
+
+        $this->get('structure')
+            ->setEmptyOption("(Aucun)")
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
+        return $this;
+    }
+
+
+
+    public function getStructures()
+    {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
         if ($role->getStructure()) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }
-        $this->get('structure')
-            ->setEmptyOption("(Aucun)")
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
-        return $this;
+
+        $structures = $serviceStructure->getList($qb);
+
+        $structures += $serviceStructure->getList( $serviceStructure->finderByNiveau(1) );
+
+        return $structures;
     }
+
 
 
     /**

@@ -56,6 +56,8 @@ return [
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Pilotage', 'ecartsEtats'),
                                     ],
                                 ],
+                                'order'        => 20,
+                                'border-color' => '#00A020',
                             ],
                         ],
                     ],

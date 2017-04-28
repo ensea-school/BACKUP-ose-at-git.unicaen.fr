@@ -175,7 +175,6 @@ return [
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
-                        'order'    => 3,
                     ],
                 ],
             ],

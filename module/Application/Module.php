@@ -108,7 +108,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
     public function getConfig()
     {
-        //return include __DIR__ . '/config/module.config.php';
         $paths = Glob::glob(__DIR__ . '/config/{,*.}{config}.php', Glob::GLOB_BRACE);
 
         return ConfigFactory::fromFiles($paths);

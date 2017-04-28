@@ -21,7 +21,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'dependances'   => [
+                    'dependances'               => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/dependances',
@@ -57,7 +57,7 @@ return [
                             ],
                         ],
                     ],
-                    'calculer-tout' => [
+                    'calculer-tout'             => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/calculer-tout',
@@ -67,10 +67,10 @@ return [
                         ],
                     ],
                     'feuille-de-route-btn-next' => [
-                        'type' => 'Segment',
+                        'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/feuille-de-route-btn-next/:wfEtapeCode/:intervenant',
-                            'defaults' => [
+                            'route'       => '/feuille-de-route-btn-next/:wfEtapeCode/:intervenant',
+                            'defaults'    => [
                                 'action' => 'feuilleDeRouteBtnNext',
                             ],
                             'constraints' => [
@@ -95,6 +95,8 @@ return [
                                 'route'        => 'workflow',
                                 'icon'         => 'fa fa-gears',
                                 'resource'     => Privileges::getResourceId(Privileges::WORKFLOW_DEPENDANCES_VISUALISATION),
+                                'order'        => 110,
+                                'border-color' => '#111',
                                 'pages'        => [
                                     'dependances' => [
                                         'label'    => "Gestion des dépendances",
@@ -148,12 +150,12 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables'   => [
+        'invokables' => [
             'Application\Controller\Workflow' => Controller\WorkflowController::class,
         ],
     ],
     'service_manager' => [
-        'invokables'   => [
+        'invokables' => [
             'applicationWfEtapeDep' => Service\WfEtapeDepService::class,
             'applicationWfEtape'    => Service\WfEtape::class,
             'workflow'              => Service\WorkflowService::class,
@@ -166,7 +168,7 @@ return [
         ],
     ],
     'view_helpers'    => [
-        'invokables'   => [
+        'invokables' => [
             'feuilleDeRoute' => View\Helper\Intervenant\FeuilleDeRouteViewHelper::class,
         ],
     ],

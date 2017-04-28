@@ -179,6 +179,8 @@ return [
                                 'route'        => 'gestion/agrement',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'index'),
                                 'visible'      => 'AssertionAgrement',
+                                'order'        => 50,
+                                'border-color' => '#E1AC5A',
                                 'pages'        => [
                                     'conseil-restreint'  => [
                                         'label'       => 'Conseil restreint',

@@ -31,7 +31,7 @@ return [
                             ],
                         ],
                     ],
-                    'annees' => [
+                    'annees'           => [
                         'type'    => 'Literal',
                         'options' => [
                             'route'    => '/annees',
@@ -66,8 +66,10 @@ return [
                                 'label'    => "Paramétrages",
                                 'route'    => 'parametres',
                                 'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'index'),
+                                'border-color' => '#9B9B9B',
+                                'order'    => 120,
                                 'pages'    => [
-                                    'annees' => [
+                                    'annees'           => [
                                         'label'    => "Années",
                                         'route'    => 'parametres/annees',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'annees'),

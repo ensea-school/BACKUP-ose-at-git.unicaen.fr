@@ -98,6 +98,8 @@ return [
                                 'title'        => "Indicateurs",
                                 'route'        => 'indicateur',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Indicateur', 'index'),
+                                'order'        => 10,
+                                'border-color' => '#217DD8',
                             ],
                         ],
                     ],

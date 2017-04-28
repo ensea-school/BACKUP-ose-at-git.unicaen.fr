@@ -98,7 +98,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
                                 'visible'             => 'assertionPaiement',
-                                'order'        => 16,
+                                'order'               => 16,
                             ],
                             'visualisation-mise-en-paiement' => [
                                 'label'               => "Visualisation des mises en paiement",
@@ -111,6 +111,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'visualisationMiseEnPaiement'),
                                 'visible'             => 'assertionPaiement',
+                                'order'               => 17,
                             ],
                             'edition-mise-en-paiement' => [
                                 'label'               => "Annulation de mises en paiement",
@@ -122,6 +123,7 @@ return [
                                 'withtarget'          => true,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'editionMiseEnPaiement'),
                                 'visible'             => 'assertionPaiement',
+                                'order'               => 18,
                             ],
                         ],
                     ],
@@ -132,7 +134,9 @@ return [
                                 'title'        => "Paiement",
                                 'route'        => 'paiement',
                                 'icon'         => 'fa fa-credit-card',
+                                'border-color' => '#F5E79E',
                                 'resource'     => Privileges::getResourceId(Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION),
+                                'order'        => 40,
                                 'pages'        => [
                                     'etat-demande-paiement' => [
                                         'label'    => "Mises en paiement",

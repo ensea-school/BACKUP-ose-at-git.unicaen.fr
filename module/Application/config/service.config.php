@@ -247,7 +247,6 @@ return [
                         'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
-                        'order'    => 2,
                     ],
                 ],
             ],

@@ -11,9 +11,9 @@ return [
         'routes' => [
             'intervenant'  => [
                 'child_routes' => [
-                    'dossier'     => [
-                        'type'    => 'Segment',
-                        'options' => [
+                    'dossier' => [
+                        'type'          => 'Segment',
+                        'options'       => [
                             'route'       => '/:intervenant/dossier',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
@@ -25,38 +25,38 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'valider'    => [
+                            'valider'            => [
                                 'type'    => 'Literal',
                                 'options' => [
-                                    'route'       => '/valider',
-                                    'defaults'    => [
+                                    'route'    => '/valider',
+                                    'defaults' => [
                                         'action' => 'valider',
                                     ],
                                 ],
                             ],
-                            'devalider'  => [
+                            'devalider'          => [
                                 'type'    => 'Literal',
                                 'options' => [
-                                    'route'       => '/devalider',
-                                    'defaults'    => [
+                                    'route'    => '/devalider',
+                                    'defaults' => [
                                         'action' => 'devalider',
                                     ],
                                 ],
                             ],
-                            'supprimer'  => [
+                            'supprimer'          => [
                                 'type'    => 'Literal',
                                 'options' => [
-                                    'route'       => '/supprimer',
-                                    'defaults'    => [
+                                    'route'    => '/supprimer',
+                                    'defaults' => [
                                         'action' => 'supprimer',
                                     ],
                                 ],
                             ],
-                            'differences' => [
+                            'differences'        => [
                                 'type'    => 'Literal',
                                 'options' => [
-                                    'route'       => '/differences',
-                                    'defaults'    => [
+                                    'route'    => '/differences',
+                                    'defaults' => [
                                         'action' => 'differences',
                                     ],
                                 ],
@@ -64,8 +64,8 @@ return [
                             'purger-differences' => [
                                 'type'    => 'Literal',
                                 'options' => [
-                                    'route'       => '/purger-differences',
-                                    'defaults'    => [
+                                    'route'    => '/purger-differences',
+                                    'defaults' => [
                                         'action' => 'purger-differences',
                                     ],
                                 ],
@@ -233,7 +233,7 @@ return [
                             ],
                         ],
                     ],
-                    'type-piece-jointe-saisie'    => [
+                    'type-piece-jointe-saisie'          => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/type-piece-jointe-saisie[/:typePieceJointe]',
@@ -246,7 +246,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-piece-jointe-delete'    => [
+                    'type-piece-jointe-delete'          => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/type-piece-jointe-delete[/:typePieceJointe]',
@@ -259,13 +259,13 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-piece-jointe-trier' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/type-piece-jointe-trier',
+                    'type-piece-jointe-trier'           => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'      => '/type-piece-jointe-trier',
                             'contraints' => [
                             ],
-                            'defaults' => [
+                            'defaults'   => [
                                 'action' => 'type-piece-jointe-trier',
                             ],
                         ],
@@ -322,6 +322,8 @@ return [
                                 'title'        => "Dossier et pièces justificatives",
                                 'route'        => 'piece-jointe/configuration',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'configuration'),
+                                'order'        => 90,
+                                'border-color' => '#A22CAE',
                                 'pages'        => [
                                     'type-piece-jointe-statut' => [
                                         'label'      => "Pièces justificatives attendues par statut d'intervenant",
@@ -381,7 +383,7 @@ return [
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-statut'],
-                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
@@ -396,17 +398,17 @@ return [
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-delete'],
-                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-saisie'],
-                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['type-piece-jointe-trier'],
-                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION
+                    'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                 ],
                 /* Pièces jointes */
                 [
@@ -447,7 +449,7 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'PieceJointe'                                    => [],
+                'PieceJointe' => [],
             ],
         ],
         'rule_providers'     => [
@@ -490,7 +492,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'IntervenantDossier' => Form\Intervenant\Dossier::class,
+            'IntervenantDossier'    => Form\Intervenant\Dossier::class,
             'typePieceJointeSaisie' => Form\PieceJointe\TypePieceJointeSaisieForm::class,
         ],
     ],

@@ -6,41 +6,41 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'fonction-referentiel' => [
-                'type' => 'Segment',
-                'options' => [
-                    'route' => '/fonction-referentiel',
+                'type'          => 'Segment',
+                'options'       => [
+                    'route'    => '/fonction-referentiel',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'FonctionReferentiel',
-                        'action' => 'index',
+                        'controller'    => 'FonctionReferentiel',
+                        'action'        => 'index',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
+                'child_routes'  => [
                     'saisie' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/saisie[/:fonctionReferentiel]',
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/saisie[/:fonctionReferentiel]',
                             'constraints' => [
                                 'fonctionReferentiel' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'saisie',
                             ],
                         ],
                         'may_terminate' => true,
                     ],
                     'delete' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/delete/:fonctionReferentiel',
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/delete/:fonctionReferentiel',
                             'constraints' => [
                                 'fonctionReferentiel' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'delete',
                             ],
                         ],
@@ -50,36 +50,38 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
                     'gestion' => [
                         'pages' => [
                             'fonction-referentiel' => [
-                                'label' => 'Fonctions référentiel',
-                                'title' => 'Fonctions référentiel',
-                                'icon' => 'fa fa-tachometer',
-                                'route' => 'fonction-referentiel',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\FonctionReferentiel', 'index'),
-                                ],
+                                'label'        => 'Fonctions référentiel',
+                                'title'        => 'Fonctions référentiel',
+                                'icon'         => 'fa fa-graduation-cap',
+                                'route'        => 'fonction-referentiel',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\FonctionReferentiel', 'index'),
+                                'order'        => 80,
+                                'border-color' => '#BBCF55',
                             ],
                         ],
                     ],
                 ],
             ],
         ],
-    'bjyauthorize' => [
+    ],
+    'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\FonctionReferentiel',
-                    'action' => ['index'],
+                    'action'     => ['index'],
                     'privileges' => [Privileges::REFERENTIEL_ADMIN_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\FonctionReferentiel',
-                    'action' => ['saisie', 'delete'],
+                    'action'     => ['saisie', 'delete'],
                     'privileges' => [Privileges::REFERENTIEL_ADMIN_EDITION],
                 ],
             ],
@@ -87,12 +89,12 @@ return [
     ],
     'service_manager' => [
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
             'Application\Controller\FonctionReferentiel' => Controller\FonctionReferentielController::class,
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'invokables' => [
             'fonctionReferentielSaisie' => Form\FonctionReferentiel\FonctionReferentielSaisieForm::class,
         ],

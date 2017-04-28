@@ -27,6 +27,7 @@ return [
                                 'order'        => 130,
                                 'border-color' => '#256A53',
                                 'route'        => 'import',
+                                'icon'         => 'fa fa-cloud-download',
                                 'resource'     => PrivilegeController::getResourceId('Import\Controller\Import', 'index'),
                                 'pages'        => [
                                     'showDiff'               => [

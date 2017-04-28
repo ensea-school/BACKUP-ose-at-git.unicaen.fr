@@ -39,15 +39,6 @@ return [
                                             'action' => 'show-diff',
                                         ],
                                     ],
-                                    'updateTables'           => [
-                                        'label'       => "Mise à jour des données à partir de leurs sources",
-                                        'description' => "Met à jour l'ensemble des données partir de leurs sources respectives.",
-                                        'route'       => 'import',
-                                        'resource'    => PrivilegeController::getResourceId('Import\Controller\Import', 'update-tables'),
-                                        'params'      => [
-                                            'action' => 'update-tables',
-                                        ],
-                                    ],
                                     'show-import-tbl'        => [
                                         'label'       => "Tableau de bord principal",
                                         'description' => "Liste, table par table, les colonnes dont les données sont importables ou non, leur caractéristiques et l'état de l'import à leur niveau.",

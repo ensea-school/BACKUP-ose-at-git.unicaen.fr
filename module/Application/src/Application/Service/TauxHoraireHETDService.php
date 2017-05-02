@@ -58,9 +58,12 @@ class TauxHoraireHETDService extends AbstractEntityService
           Application\Entity\Db\TauxHoraireHETD thh        
         WHERE
           1 = compriseEntre( thh.histoCreation, thh.histoDestruction, :date )
+          AND thh.histoCreation <= :date
+        ORDER BY
+          thh.histoCreation DESC
         ";
 
-        return $this->getEntityManager()->createQuery($dql)->setParameter('date', $date)->getOneOrNullResult();
+        return $this->getEntityManager()->createQuery($dql)->setParameter('date', $date)->setMaxResults(1)->getOneOrNullResult();
     }
 
 }

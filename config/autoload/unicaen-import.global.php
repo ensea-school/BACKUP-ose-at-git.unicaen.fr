@@ -20,7 +20,7 @@ return [
             'home' => [
                 'pages' => [
                     'import'  => ['visible' => false],
-                    'gestion' => [
+                    'administration' => [
                         'pages' => [
                             'import' => [
                                 'label'        => 'Import',

@@ -54,7 +54,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'gestion' => [
+                    'administration' => [
                         'pages' => [
                             'type-intervention' => [
                                 'label'        => 'Type d\'intervention',

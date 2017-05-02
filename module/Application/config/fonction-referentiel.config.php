@@ -54,7 +54,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'gestion' => [
+                    'administration' => [
                         'pages' => [
                             'fonction-referentiel' => [
                                 'label'        => 'Fonctions référentiel',

@@ -314,7 +314,7 @@ return [
                             ],
                         ],
                     ],
-                    'gestion'     => [
+                    'administration'     => [
                         'pages' => [
                             'dossier-pj' => [
                                 'icon'         => 'glyphicon glyphicon-file',

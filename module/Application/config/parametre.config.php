@@ -59,7 +59,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'gestion' => [
+                    'administration' => [
                         'pages' => [
                             'parametres' => [
                                 'icon'     => 'glyphicon glyphicon-wrench',

@@ -126,7 +126,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'gestion' => [
+                    'administration' => [
                         'pages' => [
                             'droits' => [
                                 'icon'         => 'glyphicon glyphicon-off',

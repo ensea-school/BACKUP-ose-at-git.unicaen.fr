@@ -87,7 +87,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'gestion' => [
+                    'administration' => [
                         'pages' => [
                             'workflow' => [
                                 'label'        => "Workflow",

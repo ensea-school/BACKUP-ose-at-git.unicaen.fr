@@ -356,7 +356,7 @@ class ChargensController extends AbstractController
             'annee'    => $annee->getId(),
         ];
         if ($structure) {
-            $sql                 .= ' AND structure_id = :structure';
+            $sql                 .= ' AND (structure_porteuse_id = :structure OR structure_ins_id = :structure)';
             $params['structure'] = $structure->getId();
         }
         $data = $this->em()->getConnection()->fetchAll($sql, $params);
@@ -420,6 +420,8 @@ class ChargensController extends AbstractController
                 'heures'             => (float)$d['HEURES'],
                 'hetd'               => (float)$d['HETD'],
             ];
+
+            if ($l['hetd'] === 120.00) $l['hetd'] = '120,00'; // Hack pour éviter un bug inxplicable
             $csvModel->addLine($l);
         }
         $csvModel->setFilename('charges-enseignement-' . $annee->getId() . '-' . Util::reduce($scenario->getLibelle()) . '.csv');

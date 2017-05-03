@@ -286,7 +286,7 @@ class ChargensProvider
      */
     public function getDiagrammeData()
     {
-        $data           = $this->getComposanteHeures();
+        $data           = $this->getComposanteHeuresFi();
         $data['noeuds'] = $this->getNoeuds()->getDiagrammeData();
         $data['liens']  = $this->getLiens()->getDiagrammeData();
 
@@ -295,7 +295,7 @@ class ChargensProvider
 
 
 
-    public function getComposanteHeures()
+    public function getComposanteHeuresFi()
     {
         $res = [
             'structure' => null,
@@ -313,6 +313,7 @@ class ChargensProvider
           SUM(hetd) hetd
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
+          JOIN type_heures th ON th.id = cph.type_heures_id AND th.code = 'fi'
         WHERE
           cph.annee_id = :annee
           AND cph.structure_id = :structure
@@ -338,7 +339,7 @@ class ChargensProvider
 
 
 
-    public function getHeures(Structure $structure = null)
+    public function getHeuresFi(Structure $structure = null)
     {
         $res = [
             0 => [
@@ -358,6 +359,7 @@ class ChargensProvider
           SUM(hetd) hetd
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
+          JOIN type_heures th ON th.id = cph.type_heures_id AND th.code = 'fi'
         WHERE
           cph.annee_id = :annee
           AND cph.scenario_id = :scenario

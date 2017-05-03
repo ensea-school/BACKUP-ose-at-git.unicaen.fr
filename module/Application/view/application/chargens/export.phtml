@@ -13,15 +13,10 @@ $this->headTitle()->append($title);
 ?>
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<div class="row div-filtre chargens-filtre">
-    <div class="col-md-4 div-structure">
-        <label>Composante : </label>
-        <?php echo $this->formSelect($filtre->get('structure')) ?>
-    </div>
-    <div class="col-md-4 div-scenario">
+<div class="chargens-filtre">
         <label>Scénario : </label>
         <?php echo $this->formSelect($filtre->get('scenario')) ?>
-    </div>
+        <button class="btn btn-default" type="button" onclick="getCsv()"><span class="glyphicon glyphicon-export"></span> Exporter</button>
 </div>
 <br />
 
@@ -35,9 +30,15 @@ $this->headTitle()->append($title);
 
     function getCsv()
     {
-        var url = "<?php echo $this->url('chargens/export/csv') ?>";
+        var scenario = $(".chargens-filtre #scenario").val();
 
-        location.href = url + '/' + $(".chargens-filtre #scenario").val();
+        if (!scenario){
+            alert('Scénario non sélectionné');
+        }else{
+            var url = "<?php echo $this->url('chargens/export/csv') ?>";
+
+            location.href = url + '/' + scenario;
+        }
     }
 
     $(function ()

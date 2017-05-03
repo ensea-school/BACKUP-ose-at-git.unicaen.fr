@@ -346,6 +346,7 @@ return [
     'form_elements'   => [
         'invokables' => [
             'chargensFiltre'              => Form\Chargens\FiltreForm::class,
+            'chargensScenarioFiltre'      => Form\Chargens\ScenarioFiltreForm::class,
             'chargensDuplicationScenario' => Form\Chargens\DuplicationScenarioForm::class,
             'chargensScenario'            => Form\Chargens\ScenarioForm::class,
         ],

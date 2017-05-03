@@ -618,7 +618,7 @@ $.widget("ose.chargens", {
             heures = Formatter.floatToString(this.heures);
             hetd = Formatter.floatToString(this.hetd);
 
-            str = 'Total ' + this.structure + ' (heures: ' + heures + ', hetd: ' + hetd + ')';
+            str = 'Total <abbr title="Formation initiale">(FI)</abbr> ' + this.structure + ' (heures: ' + heures + '; hetd: ' + hetd + ')';
         }
         this.getHeuresComposante().html(str);
     },

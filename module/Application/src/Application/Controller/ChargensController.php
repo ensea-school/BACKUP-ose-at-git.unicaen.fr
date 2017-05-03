@@ -7,6 +7,7 @@ use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
 use Application\Form\Chargens\Traits\DuplicationScenarioFormAwareTrait;
 use Application\Form\Chargens\Traits\FiltreFormAwareTrait;
+use Application\Form\Chargens\Traits\ScenarioFiltreFormAwareTrait;
 use Application\Form\Chargens\Traits\ScenarioFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -36,6 +37,7 @@ class ChargensController extends AbstractController
     use EtapeAwareTrait;
     use ScenarioServiceAwareTrait;
     use FiltreFormAwareTrait;
+    use ScenarioFiltreFormAwareTrait;
     use ScenarioFormAwareTrait;
     use DuplicationScenarioFormAwareTrait;
     use SeuilChargeServiceAwareTrait;
@@ -239,9 +241,7 @@ class ChargensController extends AbstractController
         /** @var Scenario $scenario */
         $scenario = $this->context()->scenarioFromRoute();
 
-        $filtre = $this->getFormChargensFiltre();
-        $filtre->get('structure')->setAttribute('data-width', null);
-        $filtre->get('scenario')->setAttribute('data-width', null);
+        $filtre = $this->getFormChargensScenarioFiltre();
         if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
 
         if ($scenario) {
@@ -255,7 +255,6 @@ class ChargensController extends AbstractController
         } else {
             $seuils = [];
         }
-
 
         return compact('scenario', 'seuils', 'filtre');
     }
@@ -306,7 +305,7 @@ class ChargensController extends AbstractController
         $provider = $this->getProviderChargens();
         $provider->setScenario($scenario);
 
-        $result = $provider->getHeures();
+        $result = $provider->getHeuresFi();
 
         return new JsonModel($result);
     }
@@ -323,9 +322,7 @@ class ChargensController extends AbstractController
         /** @var Scenario $scenario */
         $scenario = $this->context()->scenarioFromRoute();
 
-        $filtre = $this->getFormChargensFiltre();
-        $filtre->get('structure')->setAttribute('data-width', null);
-        $filtre->get('scenario')->setAttribute('data-width', null);
+        $filtre = $this->getFormChargensScenarioFiltre();
         if ($scenario) $filtre->get('scenario')->setValue($scenario->getId());
 
         if ($scenario) {
@@ -359,59 +356,69 @@ class ChargensController extends AbstractController
             'annee'    => $annee->getId(),
         ];
         if ($structure) {
-            $sql .= ' AND structure_id = :structure';
+            $sql                 .= ' AND structure_id = :structure';
             $params['structure'] = $structure->getId();
         }
         $data = $this->em()->getConnection()->fetchAll($sql, $params);
 
         $csvModel = new CsvModel();
         $csvModel->setHeader([
-            'annee'                  => 'Année',
-            'structure-code'         => 'Composante  (code)',
-            'structure-libelle'      => 'Composante (libellé)',
-            'etape-porteuse-code'    => 'Étape porteuse (code)',
-            'etape-porteuse-libelle' => 'Étape porteuse (libellé)',
-            'etape-ens-code'         => 'Étape (code)',
-            'etape-ens-libelle'      => 'Étape (libellé)',
-            'element-code'           => 'Ens. (code)',
-            'element-libelle'        => 'Enseignement (libellé)',
-            'discipline-code'        => 'Discipline (code)',
-            'discipline-libelle'     => 'Discipline (libellé)',
-            'type-heures'            => 'Type d\'heures',
-            'type-intervention'      => 'Type d\'intervention',
-            'seuil-ouverture'        => 'Seuil d\'ouverture',
-            'seuil-dedoublement'     => 'Seuil de dédoublement',
-            'effectif-etape'         => 'Effectifs (étape)',
-            'effectif-element'       => 'Effectifs (élément)',
-            'heures-ens'             => 'Vol. Horaire',
-            'groupes'                => 'Groupes',
-            'heures'                 => 'Heures',
-            'hetd'                   => 'HETD',
+            'annee'                      => 'Année',
+            'structure-porteuse-code'    => 'Composante porteuse (code)',
+            'structure-porteuse-libelle' => 'Composante porteuse (libellé)',
+            'etape-porteuse-code'        => 'Étape porteuse (code)',
+            'etape-porteuse-libelle'     => 'Étape porteuse (libellé)',
+
+            'structure-ins-code'    => 'Composante d\'inscription (code)',
+            'structure-ins-libelle' => 'Composante d\'inscription (libellé)',
+            'etape-ins-code'        => 'Étape d\'inscription (code)',
+            'etape-ins-libelle'     => 'Étape d\'inscription (libellé)',
+
+            'element-code'       => 'Ens. (code)',
+            'element-libelle'    => 'Enseignement (libellé)',
+            'discipline-code'    => 'Discipline (code)',
+            'discipline-libelle' => 'Discipline (libellé)',
+            'type-heures'        => 'Type d\'heures',
+            'type-intervention'  => 'Type d\'intervention',
+
+            'seuil-ouverture'    => 'Seuil d\'ouverture',
+            'seuil-dedoublement' => 'Seuil de dédoublement',
+            'effectif-etape'     => 'Effectifs (étape)',
+            'effectif-element'   => 'Effectifs (élément)',
+            'heures-ens'         => 'Vol. Horaire',
+            'groupes'            => 'Groupes',
+            'heures'             => 'Heures',
+            'hetd'               => 'HETD',
         ]);
 
         foreach ($data as $d) {
             $l = [
-                'annee'                  => $d['ANNEE'],
-                'structure-code'         => $d['STRUCTURE_CODE'],
-                'structure-libelle'      => $d['STRUCTURE_LIBELLE'],
-                'etape-porteuse-code'    => $d['ETAPE_PORTEUSE_CODE'],
-                'etape-porteuse-libelle' => $d['ETAPE_PORTEUSE_LIBELLE'],
-                'etape-ens-code'         => $d['ETAPE_ENS_CODE'],
-                'etape-ens-libelle'      => $d['ETAPE_ENS_LIBELLE'],
-                'element-code'           => $d['ELEMENT_CODE'],
-                'element-libelle'        => $d['ELEMENT_LIBELLE'],
-                'discipline-code'        => $d['DISCIPLINE_CODE'],
-                'discipline-libelle'     => $d['DISCIPLINE_LIBELLE'],
-                'type-heures'            => $d['TYPE_HEURES'],
-                'type-intervention'      => $d['TYPE_INTERVENTION'],
-                'seuil-ouverture'        => (int)$d['SEUIL_OUVERTURE'],
-                'seuil-dedoublement'     => (int)$d['SEUIL_DEDOUBLEMENT'],
-                'effectif-etape'         => (int)$d['EFFECTIF_ETAPE'],
-                'effectif-element'       => (int)$d['EFFECTIF_ELEMENT'],
-                'heures-ens'             => (float)$d['HEURES_ENS'],
-                'groupes'                => (float)$d['GROUPES'],
-                'heures'                 => (float)$d['HEURES'],
-                'hetd'                   => (float)$d['HETD'],
+                'annee'                      => $d['ANNEE'],
+                'structure-porteuse-code'    => $d['STRUCTURE_PORTEUSE_CODE'],
+                'structure-porteuse-libelle' => $d['STRUCTURE_PORTEUSE_LIBELLE'],
+                'etape-porteuse-code'        => $d['ETAPE_PORTEUSE_CODE'],
+                'etape-porteuse-libelle'     => $d['ETAPE_PORTEUSE_LIBELLE'],
+
+                'structure-ins-code'    => $d['STRUCTURE_INS_CODE'],
+                'structure-ins-libelle' => $d['STRUCTURE_INS_LIBELLE'],
+                'etape-ins-code'        => $d['ETAPE_INS_CODE'],
+                'etape-ins-libelle'     => $d['ETAPE_INS_LIBELLE'],
+
+                'element-code'       => $d['ELEMENT_CODE'],
+                'element-libelle'    => $d['ELEMENT_LIBELLE'],
+                'discipline-code'    => $d['DISCIPLINE_CODE'],
+                'discipline-libelle' => $d['DISCIPLINE_LIBELLE'],
+                'type-heures'        => $d['TYPE_HEURES'],
+                'type-intervention'  => $d['TYPE_INTERVENTION'],
+
+                'seuil-ouverture'    => (int)$d['SEUIL_OUVERTURE'],
+                'seuil-dedoublement' => (int)$d['SEUIL_DEDOUBLEMENT'],
+                'effectif-etape'     => (int)$d['EFFECTIF_ETAPE'],
+                'effectif-element'   => (int)$d['EFFECTIF_ELEMENT'],
+                'heures-ens'         => (float)$d['HEURES_ENS'],
+                'groupes'            => (float)$d['GROUPES'],
+                'heures'             => (float)$d['HEURES'],
+                'hetd'               => (float)$d['HETD'],
             ];
             $csvModel->addLine($l);
         }

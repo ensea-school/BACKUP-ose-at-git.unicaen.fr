@@ -1,7 +1,11 @@
 <?php
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $TypesInterventions \Application\Entity\Db\TypeIntervention[]
+ * @var $this                         \Application\View\Renderer\PhpRenderer
+ * @var $TypesInterventions           \Application\Entity\Db\TypeIntervention[]
+ * @var $TypesInterventionsStructures \Application\Entity\Db\TypeInterventionStructures[]
+ * @var $ti                           \Application\Entity\Db\TypeIntervention
+ * @var $typesInterventionsStructures \Application\Entity\Db\TypeInterventionStructure[]
+ *
  */
 
 use Application\Provider\Privilege\Privileges;
@@ -16,14 +20,19 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
 
 <table class="table table-bordered">
     <thead>
-    <th>Code</th>
-    <th>Libelle</th>
-    <th>Taux HETD service</th>
-    <th>Taux HETD complémentaire</th>
-    <th>Personnalisée</th>
-    <th>Visible</th>
-    <th>Enseignement</th>
-    <?php if ($canEdit) echo '<th>Actions</th>' ?>
+    <tr>
+        <th rowspan="2">Code</th>
+        <th rowspan="2">Libelle</th>
+        <th colspan="2" style="text-align:center;">Taux HETD</th>
+        <th rowspan="2">Visible</th>
+        <th rowspan="2">Personnalisée</th>
+        <th rowspan="2">Enseignement</th>
+        <?php if ($canEdit) echo '<th rowspan="2">Actions</th>' ?>
+    </tr>
+    <tr>
+        <th>service</th>
+        <th>comp.</th>
+    </tr>
     </thead>
     <tbody>
     <?php foreach ($typesInterventions as $ti): ?>
@@ -32,9 +41,34 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             <td><?php echo $ti->getLibelle() ?></td>
             <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdService()) ?></td>
             <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
-            <td style="text-align:center;"><?php echo ($ti->getInterventionIndividualisee()?'Oui':'Non') ?></td>
-            <td style="text-align:center;"><?php echo ($ti->isVisible()?'Oui':'Non') ?></td>
-            <td style="text-align:center;"><?php echo ($ti->getEnseignement()?'Oui':'Non') ?></td>
+            <td style="text-align:center"><?php echo ($ti->isVisible() ? 'Oui' : 'Non') ?></td>
+            <td style="text-align:center"><?php echo($ti->getInterventionIndividualisee() ? 'Oui' : 'Non') ?></td>
+            <td style="text-align:center;">
+                <a class="ajax-modal" data-event="type-intervention-saisie"
+                   href="<?php echo $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
+                   title="Ajouter un type d'intervention pour une structure">
+                    <span class="glyphicon glyphicon-plus"></span></a>
+                <?php echo($ti->getEnseignement() ? 'Oui' : 'Non') ?>
+                <?php
+                foreach ($typesInterventionsStructures as $tis) {
+                    if ($tis->getTypeIntervention() == $ti) { ?>
+                        <div style="white-space: nowrap">
+                            <a class="ajax-modal" data-event="type-intervention-saisie"
+                               href="<?php echo $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>">
+                                <?php echo($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></a>
+                            <a class="pop-ajax" data-event="type-intervention-saisie"
+                               href="<?php echo $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"
+                               title="Supprimer le type d'intervention"
+                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                               data-confirm="true" data-confirm-button="Oui"
+                               data-cancel-button="Non"
+                               data-submit-reload="true">
+                                <span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    <?php }
+                } ?>
+            </td>
+            <td style="text-align:center;"><?php echo($ti->getEnseignement() ? 'Oui' : 'Non') ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal" data-event="type-intervention-saisie"
@@ -53,9 +87,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>
-            <?php endif ?>
+            <?php endif; // $ti ?>
         </tr>
-    <?php endforeach ?>
+    <?php endforeach; ?>
     </tbody>
 </table>
 <?php if ($canEdit): ?>
@@ -66,10 +100,12 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
         Ajouter un type d'intervention</a>
 
     <script type="text/javascript">
-        $(function () {
-            $("body").on("type-intervention-saisie", function (event, data) {
+        $(function ()
+        {
+            $("body").on("type-intervention-saisie", function (event, data)
+            {
                 window.location.reload();
             });
         });
     </script>
-<?php endif ?>
+<?php endif; ?>

@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
-    'router'        => [
+    'router'          => [
         'routes' => [
             'type-intervention' => [
                 'type'          => 'Segment',
@@ -20,7 +20,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'saisie' => [
+                    'saisie'                             => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/saisie[/:typeIntervention]',
@@ -33,7 +33,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'delete' => [
+                    'delete'                             => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/delete/:typeIntervention',
@@ -46,11 +46,38 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'type-intervention-structure-saisie' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-intervention-structure-saisie/:typeIntervention[/:typeInterventionStructure]',
+                            'constraints' => [
+                                'typeIntervention'          => '[0-9]*',
+                                'typeInterventionStructure' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'type-intervention-structure-saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'type-intervention-structure-delete' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-intervention-structure-delete/:typeInterventionStructure',
+                            'constraints' => [
+                                'typeInterventionStructure' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'type-intervention-structure-delete',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
     ],
-    'navigation'    => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -71,7 +98,7 @@ return [
             ],
         ],
     ],
-    'bjyauthorize'  => [
+    'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
                 [
@@ -81,20 +108,26 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
-                    'action'     => ['saisie', 'delete'],
+                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete'],
                     'privileges' => [Privileges::TYPE_INTERVENTION_EDITION],
                 ],
             ],
         ],
     ],
-    'controllers'   => [
+    'service_manager' => [
+        'invokables' => [
+            'applicationTypeInterventionStructure' => Service\TypeInterventionStructureService::class,
+        ],
+    ],
+    'controllers'     => [
         'invokables' => [
             'Application\Controller\TypeIntervention' => Controller\TypeInterventionController::class,
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'invokables' => [
-            'typeInterventionSaisie' => Form\TypeIntervention\TypeInterventionSaisieForm::class,
+            'typeInterventionSaisie'          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
+            'typeInterventionStructureSaisie' => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
         ],
     ],
 ];

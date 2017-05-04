@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
-use Application\Entity\Db\Structure;
+use Application\Entity\Db\StructureEntity;
 use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
@@ -90,7 +90,7 @@ class SeuilChargeService extends AbstractEntityService
 
     /**
      * @param Scenario|integer                 $scenario
-     * @param Structure|integer|null           $structure
+     * @param StructureEntity|integer|null     $structure
      * @param GroupeTypeFormation|integer|null $groupeTypeFormation
      * @param TypeIntervention|integer         $typeIntervention
      * @param integer|null                     $dedoublement

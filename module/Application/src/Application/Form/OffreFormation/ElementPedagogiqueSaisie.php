@@ -54,7 +54,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
         ]);
 
         $this->add([
-            'name'    => 'source-code',
+            'name'    => 'code',
             'options' => [
                 'label' => 'Code',
             ],
@@ -162,7 +162,8 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $localContext = $this->getServiceLocalContext();
 
         // init étape
-        $this->get('etape')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceEtape()->getList()));
+        $qb = $this->getServiceEtape()->finderByContext();
+        $this->get('etape')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceEtape()->getList($qb)));
         if (($etape = $localContext->getEtape())) {
             $this->get('etape')->setValue($etape->getId());
         }
@@ -213,7 +214,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
                     ['name' => FloatFromString::class],
                 ],
             ],
-            'source-code' => [
+            'code' => [
                 'required' => true,
             ],
             'libelle'     => [
@@ -259,7 +260,8 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setSourceCode($data['source-code']);
+        $object->setCode($data['code']);
+        $object->setSourceCode($data['code']);
         $object->setLibelle($data['libelle']);
         $object->setEtape($this->getServiceEtape()->get($data['etape']));
         $object->setPeriode($this->getServicePeriode()->get($data['periode']));
@@ -288,7 +290,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     {
         $data = [
             'etape'       => ($e = $object->getEtape()) ? $e->getId() : null,
-            'source-code' => $object->getSourceCode(),
+            'code'        => $object->getCode(),
             'libelle'     => $object->getLibelle(),
             'id'          => $object->getId(),
             'periode'     => ($p = $object->getPeriode()) ? $p->getId() : null,

@@ -3,61 +3,57 @@ BEGIN
 END;
 /
 
-
-
-CREATE TABLE "OSE"."MV_INTERVENANT_DEMO" 
-   (	"ANNEE_CREATION" NUMBER NOT NULL ENABLE, 
-	"CIVILITE_ID" NUMBER(*,0) NOT NULL ENABLE, 
-	"NOM_USUEL" VARCHAR2(120 BYTE), 
-	"PRENOM" VARCHAR2(60 BYTE), 
-	"NOM_PATRONYMIQUE" VARCHAR2(120 BYTE), 
-	"DATE_NAISSANCE" DATE, 
-	"PAYS_NAISSANCE_CODE_INSEE" VARCHAR2(9 BYTE), 
-	"PAYS_NAISSANCE_LIBELLE" VARCHAR2(120 BYTE), 
-	"DEP_NAISSANCE_CODE_INSEE" VARCHAR2(9 BYTE), 
-	"DEP_NAISSANCE_LIBELLE" VARCHAR2(120 BYTE), 
-	"VILLE_NAISSANCE_CODE_INSEE" VARCHAR2(15 BYTE), 
-	"VILLE_NAISSANCE_LIBELLE" VARCHAR2(78 BYTE), 
-	"PAYS_NATIONALITE_CODE_INSEE" VARCHAR2(9 BYTE), 
-	"PAYS_NATIONALITE_LIBELLE" VARCHAR2(120 BYTE), 
-	"TEL_PRO" VARCHAR2(33 BYTE), 
-	"TEL_MOBILE" VARCHAR2(60 BYTE), 
-	"EMAIL" VARCHAR2(4000 BYTE), 
-	"STATUT_ID" NUMBER(*,0), 
-	"STATUT_CODE" VARCHAR2(100 CHAR), 
-	"Z_STRUCTURE_ID" VARCHAR2(4000 CHAR), 
-	"SOURCE_ID" NUMBER(*,0) NOT NULL ENABLE, 
-	"SOURCE_CODE" VARCHAR2(9 CHAR) NOT NULL ENABLE, 
-	"NUMERO_INSEE" VARCHAR2(39 BYTE), 
-	"NUMERO_INSEE_CLE" VARCHAR2(40 CHAR), 
-	"NUMERO_INSEE_PROVISOIRE" NUMBER, 
-	"IBAN" VARCHAR2(108 BYTE), 
-	"BIC" VARCHAR2(36 BYTE), 
-	"Z_GRADE_ID" VARCHAR2(4000 CHAR), 
-	"ORDRE" NUMBER NOT NULL ENABLE, 
-	"MIN_ORDRE" NUMBER, 
-	"Z_DISCIPLINE_ID_CNU" VARCHAR2(6 BYTE), 
-	"Z_DISCIPLINE_ID_SOUS_CNU" VARCHAR2(6 BYTE), 
-	"Z_DISCIPLINE_ID_SPE_CNU" VARCHAR2(9 BYTE), 
-	"Z_DISCIPLINE_ID_DIS2DEG" VARCHAR2(15 BYTE), 
-	"CRITERE_RECHERCHE" VARCHAR2(4000 CHAR), 
-	 CONSTRAINT "MV_INTERVENANT_DEMO_PK" PRIMARY KEY ("SOURCE_CODE", "ORDRE")
-);
+CREATE TABLE MV_INTERVENANT_DEMO
+(
+  ANNEE_CREATION NUMBER 
+, CIVILITE_ID NUMBER(*, 0) NOT NULL 
+, NOM_USUEL VARCHAR2(120 BYTE) 
+, PRENOM VARCHAR2(60 BYTE) 
+, NOM_PATRONYMIQUE VARCHAR2(120 BYTE) 
+, DATE_NAISSANCE DATE 
+, Z_PAYS_NAISSANCE_ID VARCHAR2(9 BYTE) 
+, Z_DEP_NAISSANCE_ID VARCHAR2(9 BYTE) 
+, VILLE_NAISSANCE_CODE_INSEE VARCHAR2(15 BYTE) 
+, VILLE_NAISSANCE_LIBELLE VARCHAR2(78 BYTE) 
+, Z_PAYS_NATIONALITE_ID VARCHAR2(9 BYTE) 
+, TEL_PRO VARCHAR2(33 BYTE) 
+, TEL_MOBILE VARCHAR2(60 BYTE) 
+, EMAIL VARCHAR2(4000 BYTE) 
+, STATUT_ID NUMBER(*, 0) 
+, STATUT_CODE VARCHAR2(100 CHAR) 
+, Z_STRUCTURE_ID VARCHAR2(4000 CHAR) 
+, SOURCE_ID NUMBER(*, 0) NOT NULL 
+, SOURCE_CODE VARCHAR2(9 CHAR) 
+, NUMERO_INSEE VARCHAR2(39 BYTE) 
+, NUMERO_INSEE_CLE VARCHAR2(40 CHAR) 
+, NUMERO_INSEE_PROVISOIRE NUMBER 
+, IBAN VARCHAR2(108 BYTE) 
+, BIC VARCHAR2(36 BYTE) 
+, Z_GRADE_ID VARCHAR2(4000 CHAR) 
+, ORDRE NUMBER 
+, MIN_ORDRE NUMBER 
+, Z_DISCIPLINE_ID_CNU VARCHAR2(6 BYTE) 
+, Z_DISCIPLINE_ID_SOUS_CNU VARCHAR2(6 BYTE) 
+, Z_DISCIPLINE_ID_SPE_CNU VARCHAR2(9 BYTE) 
+, Z_DISCIPLINE_ID_DIS2DEG VARCHAR2(15 BYTE) 
+, CRITERE_RECHERCHE VARCHAR2(4000 CHAR) 
+, CONSTRAINT "MV_INTERVENANT_DEMO_PK" PRIMARY KEY ("SOURCE_CODE", "ORDRE")
+); 
   
 insert into MV_INTERVENANT_DEMO select * from mv_intervenant;
   
   
-
-CREATE OR REPLACE FORCE VIEW "OSE"."SRC_INTERVENANT" ("ID", "CODE", "SUPANN_EMP_ID", "CIVILITE_ID", "NOM_USUEL", "PRENOM", "NOM_PATRONYMIQUE", "DATE_NAISSANCE", "PAYS_NAISSANCE_CODE_INSEE", "PAYS_NAISSANCE_LIBELLE", "DEP_NAISSANCE_CODE_INSEE", "DEP_NAISSANCE_LIBELLE", "VILLE_NAISSANCE_CODE_INSEE", "VILLE_NAISSANCE_LIBELLE", "PAYS_NATIONALITE_CODE_INSEE", "PAYS_NATIONALITE_LIBELLE", "TEL_PRO", "TEL_MOBILE", "EMAIL", "STATUT_ID", "STRUCTURE_ID", "SOURCE_ID", "SOURCE_CODE", "NUMERO_INSEE", "NUMERO_INSEE_CLE", "NUMERO_INSEE_PROVISOIRE", "IBAN", "BIC", "GRADE_ID", "DISCIPLINE_ID", "ANNEE_ID", "CRITERE_RECHERCHE") AS 
-  WITH srci as (
+  
+CREATE OR REPLACE VIEW SRC_INTERVENANT AS 
+WITH srci as (
 SELECT
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   COALESCE(i.date_naissance,TO_DATE('2099-01-01','YYYY-MM-DD')) date_naissance,
-  i.pays_naissance_code_insee,   i.pays_naissance_libelle,
-  i.dep_naissance_code_insee,    i.dep_naissance_libelle,
+  pnaiss.id pays_naissance_id,
+  dep.id dep_naissance_id,
   i.ville_naissance_code_insee,  i.ville_naissance_libelle,
-  i.pays_nationalite_code_insee, i.pays_nationalite_libelle,
+  pnat.id pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,
   i.statut_id, i.statut_code,
   NVL(s.structure_niv2_id,s.id) structure_id,
@@ -71,6 +67,9 @@ FROM
             mv_intervenant_demo  i
        JOIN structure       s ON s.source_code = i.z_structure_id
   LEFT JOIN grade           g ON g.source_code = i.z_grade_id
+  LEFT JOIN pays       pnaiss ON pnaiss.source_code = i.z_pays_naissance_id  
+  LEFT JOIN pays         pnat ON pnat.source_code = i.z_pays_nationalite_id
+  LEFT JOIN departement   dep ON dep.source_code = i.z_dep_naissance_id
   LEFT JOIN discipline d99 ON d99.source_code = '99'
   LEFT JOIN discipline d ON
     1 = ose_divers.comprise_entre( d.histo_creation, d.histo_destruction )
@@ -106,12 +105,15 @@ SELECT
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
-  i.pays_naissance_code_insee,   i.pays_naissance_libelle,
-  i.dep_naissance_code_insee,    i.dep_naissance_libelle,
+  i.pays_naissance_id,
+  i.dep_naissance_id,
   i.ville_naissance_code_insee,  i.ville_naissance_libelle,
-  i.pays_nationalite_code_insee, i.pays_nationalite_libelle,
+  i.pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,
-  CASE WHEN i.statut_code = 'AUTRES' AND d.statut_id IS NOT NULL THEN d.statut_id ELSE i.statut_id END statut_id,
+  COALESCE( 
+    isai.statut_id, 
+    CASE WHEN i.statut_code = 'AUTRES' AND d.statut_id IS NOT NULL THEN d.statut_id ELSE i.statut_id END
+  ) statut_id,
   i. structure_id,
   i.source_id, i.source_code,
   i.numero_insee, i.numero_insee_cle, i.numero_insee_provisoire,
@@ -123,6 +125,7 @@ SELECT
 FROM
   srci i
   LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee
+  LEFT JOIN intervenant_saisie  isai ON isai.intervenant_id = i2.id
   LEFT JOIN dossier               d  ON d.intervenant_id = i2.id
 
 UNION ALL
@@ -133,10 +136,10 @@ SELECT
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
-  i.pays_naissance_code_insee,   i.pays_naissance_libelle,
-  i.dep_naissance_code_insee,    i.dep_naissance_libelle,
+  i.pays_naissance_id,
+  i.dep_naissance_id,
   i.ville_naissance_code_insee,  i.ville_naissance_libelle,
-  i.pays_nationalite_code_insee, i.pays_nationalite_libelle,
+  i.pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,
   COALESCE(i2.statut_id,i.statut_id) statut_id,
   COALESCE(i2.structure_id,i.structure_id) structure_id,
@@ -154,6 +157,7 @@ FROM
 
   
   
+  
 
 
 
@@ -168,21 +172,18 @@ UPDATE intervenant SET
   --nom_usuel                   = ,
   --prenom                      = ,
   --nom_patronymique            = ,
-  
+
   date_naissance              = TO_DATE('2000-01-01', 'yyyy-mm-dd'),
-  pays_naissance_code_insee   = '100',
-  pays_naissance_libelle      = 'FRANCE',
-  dep_naissance_code_insee    = '014',
-  dep_naissance_libelle       = 'CALVADOS',
+  pays_naissance_id           = (SELECT id FROM pays WHERE libelle_court = 'FRANCE'),
+  dep_naissance_id            = (SELECT id FROM departement WHERE source_code = '014'),
   ville_naissance_code_insee  = '14118',
   ville_naissance_libelle     = 'CAEN',
-  pays_nationalite_code_insee = '100',
-  pays_nationalite_libelle    = 'FRANCE',
+  pays_nationalite_id         = (SELECT id FROM pays WHERE libelle_court = 'FRANCE'),
   tel_pro                     = NULL,
   tel_mobile                  = NULL,
   email                       = 'prenom.nom@unicaen.fr',
   numero_insee                = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Monsieur') THEN '1000114789156' ELSE '2000114789156' END,
-  numero_insee_cle            = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Madame'  ) THEN '12'            ELSE '59'            END,
+  numero_insee_cle            = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Monsieur') THEN '12'            ELSE '59'            END,
   numero_insee_provisoire     = 0,
   iban                        = 'FR7630006000011234567890189',
   bic                         = 'AGRIFRPPXXX'
@@ -206,14 +207,14 @@ SELECT
   email            = ''prenom.nom@unicaen.fr'',
   telephone        = null,
   rib              = ''AGRIFRPPXXX-FR7630006000011234567890189''
-WHERE intervenant_id = ' || i.id || ';
+WHERE intervenant_id = ' || i.id || ';'
+|| '
 ' usql
 FROM
   intervenant i
   JOIN dossier d ON d.intervenant_id = i.id
-  JOIN departement dep ON dep.source_code = '14'
-  JOIN pays ON pays.libelle_court = 'FRANCE'
-;
+  JOIN departement dep ON dep.source_code = '014'
+  JOIN pays ON pays.libelle_court = 'FRANCE';
 
 
 update adresse_intervenant set 
@@ -255,14 +256,11 @@ UPDATE mv_intervenant_demo SET
   --nom_patronymique            = ,
   
   date_naissance              = TO_DATE('2000-01-01', 'yyyy-mm-dd'),
-  pays_naissance_code_insee   = '100',
-  pays_naissance_libelle      = 'FRANCE',
-  dep_naissance_code_insee    = '014',
-  dep_naissance_libelle       = 'CALVADOS',
+  z_pays_naissance_id         = '100',
+  z_dep_naissance_id          = '014',
   ville_naissance_code_insee  = '14118',
   ville_naissance_libelle     = 'CAEN',
-  pays_nationalite_code_insee = '100',
-  pays_nationalite_libelle    = 'FRANCE',
+  z_pays_nationalite_id       = '100',
   tel_pro                     = NULL,
   tel_mobile                  = NULL,
   email                       = 'prenom.nom@unicaen.fr',
@@ -470,3 +468,18 @@ from
   fonction_referentiel fr
   JOIN ll ON ll.rn = fr.id
 ORDER BY rownum;
+
+DELETE FROM indic_modif_dossier;
+
+
+SELECT
+  i.annee_id, i.nom_usuel, i.prenom, i.code, si.source_code
+FROM
+  v_diff_intervenant i
+  JOIN statut_intervenant si ON si.id = i.statut_id
+WHERE
+  import_action = 'insert'
+  AND si.source_code = 'AUTRES'
+  AND rownum < 50
+  AND i.annee_id = 2016
+  

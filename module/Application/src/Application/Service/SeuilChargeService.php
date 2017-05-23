@@ -2,11 +2,11 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\GroupeTypeFormation;
+use Application\Entity\Db\GroupeTypeFormation as GroupeTypeFormationEntity;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
-use Application\Entity\Db\StructureEntity;
-use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
@@ -65,9 +65,9 @@ class SeuilChargeService extends AbstractEntityService
 
     /**
      * @param Scenario|integer                 $scenario
-     * @param Structure|integer|null           $structure
-     * @param GroupeTypeFormation|integer|null $groupeTypeFormation
-     * @param TypeIntervention|integer         $typeIntervention
+     * @param StructureEntity|integer|null           $structure
+     * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
+     * @param TypeInterventionEntity|integer         $typeIntervention
      *
      * @return SeuilCharge|null
      */
@@ -91,8 +91,8 @@ class SeuilChargeService extends AbstractEntityService
     /**
      * @param Scenario|integer                 $scenario
      * @param StructureEntity|integer|null     $structure
-     * @param GroupeTypeFormation|integer|null $groupeTypeFormation
-     * @param TypeIntervention|integer         $typeIntervention
+     * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
+     * @param TypeInterventionEntity|integer         $typeIntervention
      * @param integer|null                     $dedoublement
      *
      * @return self
@@ -109,13 +109,13 @@ class SeuilChargeService extends AbstractEntityService
             if (!$scenario instanceof Scenario) {
                 $scenario = $this->getServiceScenario()->get($scenario);
             }
-            if (!$structure instanceof Structure) {
+            if (!$structure instanceof StructureEntity) {
                 $structure = $this->getServiceStructure()->get($structure);
             }
-            if (!$groupeTypeFormation instanceof GroupeTypeFormation) {
+            if (!$groupeTypeFormation instanceof GroupeTypeFormationEntity) {
                 $groupeTypeFormation = $this->getServiceGroupeTypeFormation()->get($groupeTypeFormation);
             }
-            if (!$typeIntervention instanceof TypeIntervention) {
+            if (!$typeIntervention instanceof TypeInterventionEntity) {
                 $typeIntervention = $this->getServiceTypeIntervention()->get($typeIntervention);
             }
 

@@ -2,14 +2,13 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Affectation;
+use Application\Entity\Db\Affectation as AffectationEntity;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Service\Traits\AffectationAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
 use LogicException;
 use DateTime;
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -63,12 +62,12 @@ class NotificationIndicateur extends AbstractEntityService
 
     /**
      * Abonne un personnel à un indicateur.
-     * 
+     *
      * @param IndicateurEntity $indicateur
      * @param string $frequence
      * @return NotificationIndicateurEntity
      */
-    public function abonner(IndicateurEntity $indicateur, $frequence=null, $inHome=false, Affectation $affectation = null)
+    public function abonner(IndicateurEntity $indicateur, $frequence=null, $inHome=false, AffectationEntity $affectation = null)
     {
         if ($frequence && !array_key_exists($frequence, NotificationIndicateurEntity::$frequences)) {
             throw new LogicException("Fréquence spécifiée inconnue: $frequence.");
@@ -109,11 +108,11 @@ class NotificationIndicateur extends AbstractEntityService
 
     /**
      * Recherche des notifications à faire concernant les indicateurs.
-     * 
+     *
      * La notification est à faire si l'une des conditions suivantes est remplie :
      * - aucune notification n'a encore été faite (i.e. date de dernière notification = null) ;
      * - l'âge de la dernière notification est supérieur à la fréquence de notification.
-     * 
+     *
      * @param bool $force Si true, toutes les notifications sont considérées comme devant être faites
      * @return \Application\Entity\Db\NotificationIndicateur[]
      */

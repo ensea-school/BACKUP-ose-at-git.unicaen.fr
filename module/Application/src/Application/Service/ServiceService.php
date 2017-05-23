@@ -273,10 +273,10 @@ class ServiceService extends AbstractEntityService
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
             } else {
-                if ($entity->hasChanged()){
+                if ($entity->hasChanged()) {
                     $result = parent::save($entity);
                     $entity->setChanged(false);
-                }else{
+                } else {
                     $result = $entity;
                 }
             }
@@ -315,7 +315,7 @@ class ServiceService extends AbstractEntityService
      * Supprime (historise par défaut) le service spécifié.
      *
      * @param Service $entity Entité à détruire
-     * @param bool  $softDelete
+     * @param bool    $softDelete
      *
      * @return self
      */
@@ -488,7 +488,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Utile pour la recherche de services
      *
-*@param StructureEntity   $structure
+     * @param StructureEntity   $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -511,7 +511,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Utile pour la recherche de services
      *
-*@param StructureEntity   $structure
+     * @param StructureEntity   $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -554,6 +554,7 @@ class ServiceService extends AbstractEntityService
     }
 
 
+
     /**
      * Retourne la liste des services selon l'étape donnée
      *
@@ -572,6 +573,7 @@ class ServiceService extends AbstractEntityService
 
         return $qb;
     }
+
 
 
     /**
@@ -699,7 +701,7 @@ class ServiceService extends AbstractEntityService
 
                 if (!empty($o['heures'])) {
                     $newService = $this->getBy($intervenant, $newElement, $service->getEtablissement());
-                    if ($newService){
+                    if ($newService) {
                         $newService->setTypeVolumeHoraire($tvhPrevu);
                     }
                     if ($newService && $newService->estNonHistorise()) {
@@ -790,7 +792,7 @@ class ServiceService extends AbstractEntityService
             'total',
             'solde',
         ];
-        $dateColumns = [
+        $dateColumns       = [
             'service-date-modification',
             'intervenant-date-naissance',
             'date-cloture-service-realise',
@@ -861,11 +863,11 @@ class ServiceService extends AbstractEntityService
                 $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'] . '_' . $d['PERIODE_ID'] : $d['ID'];
             }
             $ds = [
-                '__total__'     => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
-                'type-etat'     => $d['TYPE_ETAT'],
-                'date'          => $dateExtraction,
+                '__total__'                 => (float)$d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
+                'type-etat'                 => $d['TYPE_ETAT'],
+                'date'                      => $dateExtraction,
                 'service-date-modification' => $d['SERVICE_DATE_MODIFICATION'],
-                'annee-libelle' => (string)$annee,
+                'annee-libelle'             => (string)$annee,
 
                 'intervenant-code'               => $d['INTERVENANT_CODE'],
                 'intervenant-nom'                => $d['INTERVENANT_NOM'],
@@ -966,9 +968,9 @@ class ServiceService extends AbstractEntityService
 
         // tri et préparation des entêtes
         $head = [
-            'type-etat'     => 'Type État',
-            'date'          => 'Date d\'extraction',
-            'annee-libelle' => 'Année universitaire',
+            'type-etat'                 => 'Type État',
+            'date'                      => 'Date d\'extraction',
+            'annee-libelle'             => 'Année universitaire',
             'service-date-modification' => 'Date de modif. du service',
 
             'intervenant-code'               => 'Code intervenant',
@@ -1046,7 +1048,7 @@ class ServiceService extends AbstractEntityService
                         $value = 0;
                     }
 
-                    if (in_array($column, $dateColumns)){
+                    if (in_array($column, $dateColumns)) {
                         if (empty($value)) $value = null; else $value = \DateTime::createFromFormat('Y-m-d', substr($value, 0, 10));
                     }
 
@@ -1060,6 +1062,109 @@ class ServiceService extends AbstractEntityService
             'data'               => $data,
             'types-intervention' => $typesIntervention,
         ];
+    }
+
+
+
+    /**
+     * Retourne les données du TBL des services en fonction des critères de recherche transmis
+     *
+     * @param Recherche $recherche
+     *
+     * @return array
+     */
+    public function getExportPdfData(Recherche $recherche)
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $data  = [];
+
+        // requêtage
+        $conditions = [
+            'annee_id = ' . $annee->getId(),
+        ];
+        if ($c1 = $recherche->getTypeVolumeHoraire()) $conditions['type_volume_horaire_id'] = '(es.type_volume_horaire_id = -1 OR es.type_volume_horaire_id = ' . $c1->getId() . ')';
+        if ($c2 = $recherche->getEtatVolumeHoraire()) $conditions['etat_volume_horaire_id'] = '(es.etat_volume_horaire_id = -1 OR es.etat_volume_horaire_id = ' . $c2->getId() . ')';
+        if ($c3 = $recherche->getTypeIntervenant()) $conditions['type_intervenant_id'] = '(es.type_intervenant_id = -1 OR es.type_intervenant_id = ' . $c3->getId() . ')';
+        if ($c4 = $recherche->getIntervenant()) $conditions['intervenant_id'] = '(es.intervenant_id = -1 OR es.intervenant_id = ' . $c4->getId() . ')';
+        //if ($c5 = $recherche->getNiveauFormation()    ) $conditions['niveau_formation_id']    = '(es.niveau_formation_id = -1 OR es.niveau_formation_id = '    . $c5->getId().')';
+        if ($c6 = $recherche->getEtape()) $conditions['etape_id'] = '(es.etape_id = -1 OR etape_id = ' . $c6->getId() . ')';
+        if ($c7 = $recherche->getElementPedagogique()) $conditions['element_pedagogique_id'] = '(es.element_pedagogique_id = -1 OR es.element_pedagogique_id = ' . $c7->getId() . ')';
+        if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(es.structure_aff_id = -1 OR es.structure_aff_id = ' . $c8->getId() . ')';
+        if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(es.structure_ens_id = -1 OR es.structure_ens_id = ' . $c9->getId() . ')';
+
+        $sql  = '
+          SELECT 
+            es.*, 
+            COALESCE(fsm.heures,0) modifications_service_du 
+          FROM 
+            V_EXPORT_SERVICE es
+            LEFT JOIN V_FORMULE_SERVICE_MODIFIE fsm ON fsm.intervenant_id = es.intervenant_id
+          WHERE 
+            ' . implode(' AND ', $conditions) . '
+          ORDER BY 
+            INTERVENANT_NOM, 
+            SERVICE_STRUCTURE_ENS_LIBELLE, 
+            ETAPE_LIBELLE, ETABLISSEMENT_LIBELLE,
+            ELEMENT_LIBELLE, FONCTION_REFERENTIEL_LIBELLE
+        ';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        // récupération des données
+        while ($d = $stmt->fetch()) {
+            $iid = (int)$d['INTERVENANT_ID'];
+            $sid = (int)$d['SERVICE_ID'];
+
+            if (!isset($data[$iid])) {
+                $data[$iid] = [
+                    'nom'              => $d['INTERVENANT_NOM'],
+                    'statut'           => $d['INTERVENANT_STATUT_LIBELLE'],
+                    'grade'            => $d['INTERVENANT_GRADE_LIBELLE'],
+                    'service-du'       => (float)$d['SERVICE_STATUTAIRE'],
+                    'modif-service-du' => (float)$d['MODIFICATIONS_SERVICE_DU'],
+                    'fi'               => 0,
+                    'fa'               => 0,
+                    'fc'               => 0,
+                    'referentiel'      => 0,
+                    'total'            => 0,
+                    'solde'            => (float)$d['SOLDE'],
+                    'services'         => [],
+                ];
+            }
+
+            if (!isset($data[$iid]['services'][$sid])) {
+                $data[$iid]['services'][$sid] = [
+                    'structure'      => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
+                    'type-formation' => $d['TYPE_FORMATION_LIBELLE'],
+                    'formation'      => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
+                    'enseignement'   => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
+                    'fi'             => 0,
+                    'fa'             => 0,
+                    'fc'             => 0,
+                    'referentiel'    => 0,
+                    'total'          => 0,
+                ];
+            }
+
+            $fi    = (float)$d['HEURES_COMPL_FI'];
+            $fa    = (float)$d['HEURES_COMPL_FA'];
+            $fc    = (float)$d['HEURES_COMPL_FC'] + (float)$d['HEURES_COMPL_FC_MAJOREES'];
+            $ref   = (float)$d['HEURES_COMPL_REFERENTIEL'];
+            $total = $fi + $fa + $fc + $ref;
+
+            $data[$iid]['fi']          += $fi;
+            $data[$iid]['fa']          += $fa;
+            $data[$iid]['fc']          += $fc;
+            $data[$iid]['referentiel'] += $ref;
+            $data[$iid]['total']       += $total;
+
+            $data[$iid]['services'][$sid]['fi']          += $fi;
+            $data[$iid]['services'][$sid]['fa']          += $fa;
+            $data[$iid]['services'][$sid]['fc']          += $fc;
+            $data[$iid]['services'][$sid]['referentiel'] += $ref;
+            $data[$iid]['services'][$sid]['total']       += $total;
+        }
+
+        return $data;
     }
 
 

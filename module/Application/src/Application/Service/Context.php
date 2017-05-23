@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Entity\Db\Utilisateur;
+use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
@@ -94,7 +94,7 @@ class Context extends AbstractService
 
 
     /**
-     * @return Utilisateur|null
+     * @return UtilisateurEntity|null
      */
     public function getUtilisateur()
     {

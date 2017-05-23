@@ -2,10 +2,10 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Contrat;
+use Application\Entity\Db\Contrat as ContratEntity;
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
@@ -110,7 +110,7 @@ class Validation extends AbstractEntityService
     {
         /* On détruit d'abord les dépendances possibles ... */
         foreach($entity->getMiseEnPaiement() as $mep){
-            /** @var MiseEnPaiement $mep */
+            /** @var MiseEnPaiementEntity $mep */
             if (!$mep->estNonHistorise()){ // seulement pour les historisés!!
                 $this->getServiceMiseEnPaiement()->delete($mep, false);
             }
@@ -126,8 +126,8 @@ class Validation extends AbstractEntityService
 
 
         if (!$softDelete){
-            /** @var Contrat[] $contrats */
-            $contrats = $this->getEntityManager()->getRepository(Contrat::class)->findBy(['validation' => $entity]);
+            /** @var ContratEntity[] $contrats */
+            $contrats = $this->getEntityManager()->getRepository(ContratEntity::class)->findBy(['validation' => $entity]);
             foreach( $contrats as $contrat ){
                 $contrat->setValidation(null);
                 $this->getServiceContrat()->save($contrat);

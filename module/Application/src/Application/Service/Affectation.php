@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Acl\Role;
+use Application\Acl\Role as RoleAcl;
 use Application\Service\Traits\SourceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Affectation as EntityAffectation;
@@ -59,11 +59,11 @@ class Affectation extends AbstractEntityService
 
 
     /**
-     * @param Role|null $role
+     * @param RoleAcl|null $role
      *
      * @return null|EntityAffectation
      */
-    public function getByRole( Role $role = null )
+    public function getByRole( RoleAcl $role = null )
     {
         if (!$role){
             $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -85,7 +85,7 @@ class Affectation extends AbstractEntityService
 
 
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Role|string $role
      * @param QueryBuilder $qb
      * @param string $alias
@@ -95,15 +95,15 @@ class Affectation extends AbstractEntityService
     public function finderByRole($role, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
-        
+
         if ($role instanceof \Application\Entity\Db\Role) {
             $role = $role->getCode();
         }
-        
+
         $qb
                 ->innerJoin($alias.'.role', $ralias = uniqid('r'))
                 ->andWhere("$ralias.code = :code")->setParameter('code', $role);
-        
+
         return $qb;
     }
 }

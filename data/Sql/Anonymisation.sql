@@ -265,7 +265,7 @@ UPDATE mv_intervenant_demo SET
   tel_mobile                  = NULL,
   email                       = 'prenom.nom@unicaen.fr',
   numero_insee                = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Monsieur') THEN '1000114789156' ELSE '2000114789156' END,
-  numero_insee_cle            = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Madame'  ) THEN '12'            ELSE '59'            END,
+  numero_insee_cle            = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Monsieur'  ) THEN '12'            ELSE '59'            END,
   numero_insee_provisoire     = 0,
   iban                        = 'FR7630006000011234567890189',
   bic                         = 'AGRIFRPPXXX',
@@ -479,7 +479,7 @@ FROM
   JOIN statut_intervenant si ON si.id = i.statut_id
 WHERE
   import_action = 'insert'
-  AND si.source_code = 'AUTRES'
+  AND si.source_code <> 'AUTRES' AND si.source_code <> 'BIATSS' AND si.source_code <> 'NON_AUTORISE'
   AND rownum < 50
   AND i.annee_id = 2016
   

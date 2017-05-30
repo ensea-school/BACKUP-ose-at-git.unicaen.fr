@@ -12,6 +12,8 @@ use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
+use Application\Service\Traits\TableauBordServiceAwareTrait;
+use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\Http\Request;
@@ -57,6 +59,7 @@ class ServiceController extends AbstractController
     use RechercheFormAwareTrait;
     use ValidationEnseignementProcessusAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
+    use TableauBordServiceAwareTrait;
 
 
 
@@ -116,10 +119,9 @@ class ServiceController extends AbstractController
 
     public function exportAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
-        /* @var $intervenant Intervenant  */
-
+        /* @var $intervenant Intervenant */
 
 
         $this->initFilters();
@@ -155,6 +157,44 @@ class ServiceController extends AbstractController
 
 
 
+    public function exportPdfAction()
+    {
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
+        /* @var $intervenant Intervenant */
+
+
+        $this->initFilters();
+        if (!$intervenant) {
+            $this->rechercheAction();
+            $recherche = $this->getServiceService()->loadRecherche();
+        } else {
+            $recherche = new Recherche;
+            $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
+            $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+        }
+
+        $variables = [
+            'typeIntervenant' => $recherche->getTypeIntervenant(),
+            'structure'       => $recherche->getStructureAff(),
+            'data'            => $this->getServiceService()->getExportPdfData($recherche),
+        ];
+
+        $exp = $this->pdf()
+            ->setOrientationPaysage(true)
+            ->setFormat('A3')
+            ->setHeaderTitle('État des services prévisionnels au titre de l\'année universitaire ' . $this->getServiceContext()->getAnnee())
+            ->setMarginBottom(25)
+            ->setMarginTop(25);
+//        $exp->setFooterTitle('FooterTitle');
+        $exp->addBodyScript('application/service/export-pdf.phtml', false, $variables);
+        $fileName = 'Listing des services - ' . date('dmY') . '.pdf';
+
+        $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+    }
+
+
+
     /**
      * Totaux de services et de référentiel par intervenant.
      *
@@ -162,9 +202,9 @@ class ServiceController extends AbstractController
      */
     public function resumeAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
-        /* @var $intervenant Intervenant  */
+        /* @var $intervenant Intervenant */
 
         $canAddService = $this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EDITION));
         $annee         = $this->getServiceContext()->getAnnee();
@@ -324,10 +364,13 @@ class ServiceController extends AbstractController
         $this->initFilters();
         $errors   = [];
         $services = $this->params()->fromQuery('services');
+//        $intervenants = [];
+//        $this->getServiceTableauBord()->desactiver();
         if ($services) {
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceService()->get($sid);
+//                $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
                 $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
                     try {
@@ -338,6 +381,11 @@ class ServiceController extends AbstractController
                 }
             }
         }
+//
+//        foreach( $intervenants as $id => $intervenant ){
+//            $this->getServiceTableauBord()->calculerTous($intervenant);
+//        }
+//        $this->getServiceTableauBord()->activer();
 
         return compact('errors');
     }
@@ -379,8 +427,8 @@ class ServiceController extends AbstractController
                     $this->getServiceService()->delete($service);
                 }*/
             } catch (\Exception $e) {
-                $e        = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage( $e->getMessage() );
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
         }
 
@@ -466,7 +514,7 @@ class ServiceController extends AbstractController
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', 'PREVU'));
 
         $rsv = $this->getServiceRegleStructureValidation()->getBy($typeVolumeHoraire, $intervenant);
-        if ($rsv && $rsv->getMessage()){
+        if ($rsv && $rsv->getMessage()) {
             $this->flashMessenger()->addInfoMessage($rsv->getMessage());
         }
 

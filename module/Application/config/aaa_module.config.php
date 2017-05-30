@@ -147,6 +147,7 @@ return [
             'dbEvent'                       => Service\DbEventService::class,
             'UnicaenAuth\Service\Privilege' => Service\PrivilegeService::class,
             'assertionInformation'          => Assertion\InformationAssertion::class,
+            'tableauBord'                   => Service\TableauBordService::class,
         ],
         'factories'  => [
             'navigation'                  => Service\NavigationFactoryFactory::class,
@@ -204,12 +205,12 @@ return [
     ],
     'public_files'       => [
         'head_scripts'   => [
-            '010_jquery'   => 'vendor/jquery-1.11.3.min.js',
-            '020_jqueryui' => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
-            '019_bootstrap'   => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
+            '010_jquery'    => 'vendor/jquery-1.11.3.min.js',
+            '020_jqueryui'  => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            '019_bootstrap' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
 
-//            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
-//            '019_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            //            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
+            //            '019_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
 
         ],
         'inline_scripts' => [

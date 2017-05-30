@@ -67,6 +67,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ENSEIGNEMENT_DEVALIDATION                  = 'enseignement-devalidation';
     const ENSEIGNEMENT_EDITION                       = 'enseignement-edition';
     const ENSEIGNEMENT_EXPORT_CSV                    = 'enseignement-export-csv';
+    const ENSEIGNEMENT_EXPORT_PDF                    = 'enseignement-export-pdf';
     const ENSEIGNEMENT_EXTERIEUR                     = 'enseignement-exterieur';
     const ENSEIGNEMENT_VALIDATION                    = 'enseignement-validation';
     const ENSEIGNEMENT_VISUALISATION                 = 'enseignement-visualisation';

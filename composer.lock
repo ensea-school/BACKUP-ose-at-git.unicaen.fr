@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fee35c1c24c0c32b1f8584f358fae7b1",
-    "content-hash": "deaa4e323f5fab2258aac73a9ac2acba",
+    "hash": "44be8cfa17f051728f09542f59d7214b",
+    "content-hash": "a2e4bcf2efac6a66dc6831bcc85c7a90",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1505,6 +1505,33 @@
             },
             "description": "Bibliothèque utile lorsqu'on utilise un base de données Oracle",
             "time": "2017-01-17 11:13:51"
+        },
+        {
+            "name": "unicaen/unicaen-tbl",
+            "version": "dev-trunk",
+            "source": {
+                "type": "svn",
+                "url": "https://svn.unicaen.fr/svn/UnicaenTbl",
+                "reference": "/trunk/@5"
+            },
+            "require": {
+                "unicaen/unicaen-app": "1.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenTbl": "src/",
+                    "UnicaenTblTest": "tests/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module Unicaen de gestion de tableaux de bord Oracle",
+            "time": "2017-05-15 13:55:05"
         },
         {
             "name": "zendframework/zend-authentication",
@@ -4981,7 +5008,8 @@
         "unicaen/unicaen-auth": 20,
         "bjyoungblood/bjy-authorize": 20,
         "unicaen/unicaen-code": 20,
-        "unicaen/unicaen-import": 20
+        "unicaen/unicaen-import": 20,
+        "unicaen/unicaen-tbl": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

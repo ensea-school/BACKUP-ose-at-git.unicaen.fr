@@ -7,54 +7,110 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
+/** @var \UnicaenTbl\Service\QueryGeneratorService $s */
+$s = $sl->get('UnicaenTbl\Service\QueryGenerator');
 
-/** @var \Application\Provider\Chargens\ChargensProvider $s */
-$s  = $sl->get('chargens');
 
-/** @var \Application\Service\Etape $se */
-$se = $sl->get('applicationEtape');
+//$p = $s->updateProcedures();
 
-$data = file_get_contents('/home/laurent/data.csv');
-$data = explode( "\n", $data );
 
-$sql = [];
+$s = $sl->get('applicationService');
 
-$thids = [
-    'fi' => 6,
-    'fa' => 7,
-    'fc' => 8,
-];
+$r = new \Application\Entity\Service\Recherche();
 
-foreach( $data as $d ){
-    if ($d != ''){
-        $d = explode( "\t", $d);
+$r->setIntervenant($sl->get('applicationIntervenant')->get(35424));
 
-        $code = trim($d[0]);
-        $e = [];
-        $e['fi'] = (int)trim($d[9]);
-        $e['fc'] = (int)trim($d[10]);
-        $e['fa'] = (int)trim($d[11]);
-        //var_dump($code, $fi, $fc, $fa);
+$d = $s->getExportPdfData($r);
 
-        $etape = $se->getRepo()->findOneBy([
-            'sourceCode' => $code,
-            'annee' => $se->getServiceContext()->getAnnee(),
-        ]);
+?>
+<table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+        <th>Intervenant</th>
+        <th>Statut intervenant</th>
+        <th>Grade</th>
+        <th>Structure d'enseignement</th>
+        <th>Type de formation</th>
+        <th>Formation ou établissement</th>
+        <th>Enseignement ou fonction référentielle</th>
+        <th>Service statutaire</th>
+        <th>Modification de service du</th>
+        <th>Total FI</th>
+        <th>Total FA</th>
+        <th>Total FC</th>
+        <th>Référentiel</th>
+        <th>Total HETD</th>
+        <th>Service (+/-) *</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach ($d as $di):
+        $s = 0;
 
-        if ($etape){
-            $etapeId = $etape->getId();
+        $ls = [
+            'structure'      => '------------',
+            'type-formation' => '------------',
+            'formation'      => '------------',
+            'enseignement'   => '------------',
+        ];
+        foreach ($di['services'] as $ds):
+            $s++;
 
-            foreach( $e as $ec => $eff ){
-                if ($eff > 0){
-                    $thid = $thids[$ec];
-                    $scenarioId = 1;
-                    $sql[] = "OSE_CHARGENS.INIT_SCENARIO_NOEUD_EFFECTIF($etapeId,$scenarioId,$thid, $eff, TRUE );";
-                }
+            if ($ls['formation'] != $ds['formation']) {
+                $ls['enseignement'] = '------------';
             }
-        }else{
-//            var_dump('étape non trouvée : '.$code);
-        }
-    }
-}
+            if ($ls['type-formation'] != $ds['type-formation']) {
+                $ls['formation']    = '------------';
+                $ls['enseignement'] = '------------';
+            }
+            if ($ls['structure'] != $ds['structure']) {
+                $ls['type-formation'] = '------------';
+                $ls['formation']      = '------------';
+                $ls['enseignement']   = '------------';
+            }
+            ?>
+            <tr>
+                <td><?php echo $s == 1 ? $di['nom'] : '' ?></td>
+                <td><?php echo $s == 1 ? $di['statut'] : '' ?></td>
+                <td><?php echo $s == 1 ? $di['grade'] : '' ?></td>
+                <td><?php echo $ls['structure'] != $ds['structure'] ? $ds['structure'] : '' ?></td>
+                <td><?php echo $ls['type-formation'] != $ds['type-formation'] ? $ds['type-formation'] : '' ?></td>
+                <td><?php echo $ls['formation'] != $ds['formation'] ? $ds['formation'] : '' ?></td>
+                <td><?php echo $ls['enseignement'] != $ds['enseignement'] ? $ds['enseignement'] : '' ?></td>
 
-echo implode( "<br />\n", $sql );
+                <td></td>
+                <td></td>
+                <td><?php echo \UnicaenApp\Util::formattedFloat($ds['fi']) ?></td>
+                <td><?php echo \UnicaenApp\Util::formattedFloat($ds['fa']) ?></td>
+                <td><?php echo \UnicaenApp\Util::formattedFloat($ds['fc']) ?></td>
+                <td><?php echo \UnicaenApp\Util::formattedFloat($ds['referentiel']) ?></td>
+                <td><?php echo \UnicaenApp\Util::formattedFloat($ds['total']) ?></td>
+                <td></td>
+            </tr>
+            <?php
+
+            $ls = $ds;
+
+        endforeach; ?>
+        <tr class="total">
+            <td>Total <?php echo $di['nom'] ?></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['service-du']) ?></td>
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['modif-service-du']) ?></td>
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['fi']) ?></td>
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['fa']) ?></td>
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['fc']) ?></td>
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['referentiel']) ?></td>
+            <td><?php echo \UnicaenApp\Util::formattedFloat($di['total']) ?></td>
+            <td<?php if ($di['solde'] < 0) echo ' class="solde-negatif"' ?>><?php echo \UnicaenApp\Util::formattedFloat($di['solde']) ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

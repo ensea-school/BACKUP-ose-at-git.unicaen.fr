@@ -16,7 +16,8 @@
         "zendframework/zend-file":              ">=2.3",
         "mpdf/mpdf":                            "v5.7.2",
         "unicaen/unicaen-code":                 "dev-trunk as 1.0.1",
-        "unicaen/unicaen-import":               "dev-trunk as 1.0.6"
+        "unicaen/unicaen-import":               "dev-trunk as 1.0.6",
+        "unicaen/unicaen-tbl":                  "dev-trunk"
     },
     "require-dev": {
         "zendframework/zend-test":              ">=2.3",

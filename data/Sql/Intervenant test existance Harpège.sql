@@ -73,4 +73,8 @@ FROM
   LEFT JOIN chercheur@harpprod          ch                 ON ch.no_individu                 = individu.no_individu
   LEFT JOIN affectation_recherche@harpprod ar              ON ar.no_dossier_pers             = individu.no_individu
 WHERE
-  individu.no_individu = '44164'
+ individu.no_individu = 31731
+-- individu.nom_usuel like 'Aubry%';
+ ;
+ 
+ SELECT * from individu@harpprod where nom_usuel like 'AUBRY%'

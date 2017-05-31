@@ -11,6 +11,7 @@ use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\TableauBordServiceAwareTrait;
 use UnicaenApp\Exporter\Pdf;
@@ -60,6 +61,7 @@ class ServiceController extends AbstractController
     use ValidationEnseignementProcessusAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
     use TableauBordServiceAwareTrait;
+    use ParametresAwareTrait;
 
 
 
@@ -176,7 +178,11 @@ class ServiceController extends AbstractController
 
         $variables = [
             'typeIntervenant' => $recherche->getTypeIntervenant(),
-            'structure'       => $recherche->getStructureAff(),
+            'structure'       => $recherche->getStructureEns(),
+            'signature1'      => $this->getServiceParametres()->get('export_pdf_services_signature_1'),
+            'signature2'      => $this->getServiceParametres()->get('export_pdf_services_signature_2'),
+            'signataire1'     => $this->getServiceParametres()->get('export_pdf_services_signataire_1'),
+            'signataire2'     => $this->getServiceParametres()->get('export_pdf_services_signataire_2'),
             'data'            => $this->getServiceService()->getExportPdfData($recherche),
         ];
 
@@ -188,6 +194,9 @@ class ServiceController extends AbstractController
             ->setMarginTop(25);
 //        $exp->setFooterTitle('FooterTitle');
         $exp->addBodyScript('application/service/export-pdf.phtml', false, $variables);
+        $exp->getMpdf()->packTableData = true;
+        //$exp->getMpdf()->simpleTables = true;
+
         $fileName = 'Listing des services - ' . date('dmY') . '.pdf';
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);

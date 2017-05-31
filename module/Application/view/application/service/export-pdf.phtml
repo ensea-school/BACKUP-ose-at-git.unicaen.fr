@@ -1,8 +1,12 @@
 <?php
 /**
- * @var $structure       \Application\Entity\Db\Structure
- * @var $typeIntervenant \Application\Entity\Db\TypeIntervenant
- * @var $data            array
+ * @var $structure        \Application\Entity\Db\Structure
+ * @var $typeIntervenant  \Application\Entity\Db\TypeIntervenant
+ * @var $signature1       string
+ * @var $signataire1      string
+ * @var $signature2       string
+ * @var $signataire2      string
+ * @var $data             array
  */
 
 ?>
@@ -25,7 +29,7 @@
         border-style: solid;
         border-width: 1px;
         padding: 15pt;
-        width: 100%;
+        width: 52em;
     }
 
     .signature-titre {
@@ -43,20 +47,29 @@
     }
 
     .data thead th {
-        background-color: royalblue;
-        color:white;
+        background-color: #4472C4;
+        color: white;
+        border-top-width: 2;
+        border-top-style: solid;
+        border-bottom-width: 2;
+        border-bottom-style: solid;
     }
 
     .total td {
-        background-color:mediumblue;
-        color:white;
+        background-color: #305496;
+        color: white;
+        border-bottom-width: 1;
+        border-bottom-style: solid;
     }
 
     .total td.solde_negatif {
         background-color: lightpink;
-        color:darkred;
+        color: darkred;
         border-right-width: 2;
         border-right-style: solid;
+        border-bottom-width: 1;
+        border-bottom-style: solid;
+        text-align: center;
     }
 
     .c1 {
@@ -74,24 +87,44 @@
         border-right-style: solid;
     }
 
+    .c8 {
+        text-align: center;
+    }
+
     .c9 {
         border-right-width: 2;
         border-right-style: solid;
+        text-align: center;
+    }
+
+    .c10 {
+        text-align: center;
+    }
+
+    .c11 {
+        text-align: center;
+    }
+
+    .c12 {
+        text-align: center;
     }
 
     .c13 {
         border-right-width: 2;
         border-right-style: solid;
+        text-align: center;
     }
 
     .c14 {
         border-right-width: 2;
         border-right-style: solid;
+        text-align: center;
     }
 
     .c15 {
         border-right-width: 2;
         border-right-style: solid;
+        text-align: center;
     }
 
     .data:last-child {
@@ -222,14 +255,10 @@
         <td class="sign-cell">
             <table class="signature">
                 <tr>
-                    <td class="signature-titre">Attestation de l'exactitude réglementaire des services mentionnés sur le
-                        présent document
-                    </td>
+                    <td class="signature-titre"><?php echo $signature1 ?></td>
                 </tr>
                 <tr>
-                    <td class="signature-personne">Pour le Président et par délégation,<br/>le Directeur administratif de la
-                        composante :
-                    </td>
+                    <td class="signature-personne"><?php echo nl2br($signataire1) ?></td>
                 </tr>
                 <tr>
                     <td>Date :</td>
@@ -248,13 +277,10 @@
         <td class="sign-cell">
             <table class="signature">
                 <tr>
-                    <td class="signature-titre">Le conseil de la composante et les directeurs des unités de recherche
-                        consultés
-                    </td>
+                    <td class="signature-titre"><?php echo $signature2 ?></td>
                 </tr>
                 <tr>
-                    <td class="signature-personne">Pour le Président et par délégation,<br/> le Directeur de la composante :
-                    </td>
+                    <td class="signature-personne"><?php echo nl2br($signataire2) ?></td>
                 </tr>
                 <tr>
                     <td>Date :</td>

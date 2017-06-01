@@ -1108,9 +1108,10 @@ class ServiceService extends AbstractEntityService
             ELEMENT_LIBELLE, FONCTION_REFERENTIEL_LIBELLE
         ';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-
+        $count = 0;
         // récupération des données
         while ($d = $stmt->fetch()) {
+            $count++;
             $iid = (int)$d['INTERVENANT_ID'];
             $sid = (int)$d['SERVICE_ID'];
 
@@ -1162,6 +1163,10 @@ class ServiceService extends AbstractEntityService
             $data[$iid]['services'][$sid]['fc']          += $fc;
             $data[$iid]['services'][$sid]['referentiel'] += $ref;
             $data[$iid]['services'][$sid]['total']       += $total;
+        }
+
+        if ($count > 5000){
+            die('La génération du fichier est impossible : trop de données sont remontées. Merci de placer un filtre (composante, type d\'intervenant, etc)');
         }
 
         return $data;

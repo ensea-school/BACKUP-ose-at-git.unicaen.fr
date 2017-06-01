@@ -15,8 +15,8 @@ $settings = [
         'version'                => "5.1.2",
         'date'                   => "01/06/2017",
         'contact'                => ['mail' => "assistance-ose@unicaen.fr", /*'tel' => "01 02 03 04 05"*/],
-        'mentionsLegales'        => "http://www.unicaen.fr/acces-direct/mentions-legales/",
-        'informatiqueEtLibertes' => "http://www.unicaen.fr/acces-direct/informatique-et-libertes/",
+        'mentionsLegales'        => "http://gest.unicaen.fr/acces-direct/mentions-legales/",
+        'informatiqueEtLibertes' => "http://gest.unicaen.fr/acces-direct/informatique-et-libertes/",
     ],
     /**
      * Période d'exécution de la requête de rafraîchissement de la session utilisateur, en millisecondes.

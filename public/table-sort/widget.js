@@ -29,6 +29,7 @@ $.widget("ose.tableSort", {
     {
         var options = {
             stateSave: true,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tous"]],
             "language": this.language
         };
 

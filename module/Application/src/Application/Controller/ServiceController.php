@@ -178,7 +178,7 @@ class ServiceController extends AbstractController
 
         $variables = [
             'typeIntervenant' => $recherche->getTypeIntervenant(),
-            'structure'       => $recherche->getStructureEns(),
+            'structure'       => $recherche->getStructureAff(),
             'signature1'      => $this->getServiceParametres()->get('export_pdf_services_signature_1'),
             'signature2'      => $this->getServiceParametres()->get('export_pdf_services_signature_2'),
             'signataire1'     => $this->getServiceParametres()->get('export_pdf_services_signataire_1'),
@@ -186,13 +186,17 @@ class ServiceController extends AbstractController
             'data'            => $this->getServiceService()->getExportPdfData($recherche),
         ];
 
+        $tprevrel = lcfirst((string)$recherche->getTypeVolumeHoraire()).'s';
+        $tannee = $this->getServiceContext()->getAnnee();
+        $title = "État des services $tprevrel au titre de l'année universitaire $tannee";
+
         $exp = $this->pdf()
             ->setOrientationPaysage(true)
             ->setFormat('A3')
-            ->setHeaderTitle('État des services prévisionnels au titre de l\'année universitaire ' . $this->getServiceContext()->getAnnee())
+            ->setHeaderTitle($title)
             ->setMarginBottom(25)
             ->setMarginTop(25);
-//        $exp->setFooterTitle('FooterTitle');
+        $exp->setFooterTitle($recherche->getTypeVolumeHoraire().' '.$recherche->getEtatVolumeHoraire());
         $exp->addBodyScript('application/service/export-pdf.phtml', false, $variables);
         $exp->getMpdf()->packTableData = true;
         //$exp->getMpdf()->simpleTables = true;

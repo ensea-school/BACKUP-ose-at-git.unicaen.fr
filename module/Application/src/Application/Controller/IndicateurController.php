@@ -270,7 +270,7 @@ class IndicateurController extends AbstractController
         // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
         // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
         $httpUri = (new \Zend\Uri\Http())
-            ->setHost($this->cliConfig['dmoain'])              // ex: "/localhost/ose", "ose.unicaen.fr"
+            ->setHost($this->cliConfig['domain'])              // ex: "/localhost/ose", "ose.unicaen.fr"
             ->setScheme($this->cliConfig['scheme']);
         $this->httpRouter->setRequestUri($httpUri);
 

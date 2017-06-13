@@ -241,7 +241,7 @@ class PaiementController extends AbstractController
               Application\Entity\Db\MiseEnPaiement mep
               JOIN mep.formuleResultatService frs
               JOIN frs.formuleResultat fr
-              JOIN mep.periodePaiement pp
+              LEFT JOIN mep.periodePaiement pp
               JOIN frs.service s
               LEFT JOIN mep.centreCout cc
               LEFT JOIN mep.domaineFonctionnel df
@@ -262,7 +262,7 @@ class PaiementController extends AbstractController
               Application\Entity\Db\MiseEnPaiement mep
               JOIN mep.formuleResultatServiceReferentiel frsr
               JOIN frsr.formuleResultat fr
-              JOIN mep.periodePaiement pp
+              LEFT JOIN mep.periodePaiement pp
               JOIN frsr.serviceReferentiel sr
               LEFT JOIN mep.centreCout cc
               LEFT JOIN mep.domaineFonctionnel df

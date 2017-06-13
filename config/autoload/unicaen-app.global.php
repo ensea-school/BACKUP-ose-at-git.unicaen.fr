@@ -12,8 +12,8 @@ $settings = [
     'app_infos'              => [
         'nom'                    => "OSE",
         'desc'                   => "Organisation des Services d'Enseignement",
-        'version'                => "5.1.2",
-        'date'                   => "01/06/2017",
+        'version'                => "5.1.3",
+        'date'                   => "13/06/2017",
         'contact'                => ['mail' => "assistance-ose@unicaen.fr", /*'tel' => "01 02 03 04 05"*/],
         'mentionsLegales'        => "http://gest.unicaen.fr/acces-direct/mentions-legales/",
         'informatiqueEtLibertes' => "http://gest.unicaen.fr/acces-direct/informatique-et-libertes/",

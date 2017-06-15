@@ -48,7 +48,7 @@ class RoleProviderFactory implements FactoryInterface
             ->setServicePersonnel($sl->get('applicationPersonnel'))
             ->setServiceIntervenant($sl->get('applicationIntervenant'))
             ->setServiceStatutIntervenant($sl->get('applicationStatutIntervenant'))
-            ->setServiceUserContext($sl->get(\UnicaenAuth\Service\UserContext::class))
+            ->setServiceContext($sl->get('applicationContext'))
             ->setPrivilegeProvider($sl->get('UnicaenAuth\Privilege\PrivilegeProvider'))
             ->setStructureSelectionnee($this->getServiceContext()->getStructure(true));
 

@@ -7,5 +7,8 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-/** @var \UnicaenTbl\Service\QueryGeneratorService $s */
-$s = $sl->get('UnicaenTbl\Service\QueryGenerator');
+/** @var \Application\Service\Context $s */
+$s = $sl->get('ApplicationContext');
+$i = $s->findPersonnel();
+
+var_dump($i);

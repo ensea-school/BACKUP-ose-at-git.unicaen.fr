@@ -1,8 +1,10 @@
 <?php
+
 namespace Application\Provider\Identity;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -10,7 +12,6 @@ use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
 use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
 use UnicaenApp\Traits\SessionContainerTrait;
-use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 
 /**
  * Classe chargée de fournir les rôles que possède l'identité authentifiée.
@@ -22,7 +23,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use SessionContainerTrait;
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
-    use UserContextServiceAwareTrait;
+    use ContextAwareTrait;
 
 
 
@@ -34,28 +35,27 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
         $event->addRoles($this->getIdentityRoles());
     }
 
+
+
     /**
      * {@inheritDoc}
      */
     public function getIdentityRoles()
     {
-        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
-            $utilisateurCode = (integer)$ldapUser->getSupannEmpId();
-        }else{
-            $utilisateurCode = null;
-        }
+        /**
+         * @todo attention : plusieurs intervenants pourront remonter si on peut leur donner plusieurs statuts par an!!
+         */
+        $intervenant = $this->getServiceContext()->getIntervenant();
+        $personnel   = $this->getServiceContext()->getPersonnel();
 
+        $utilisateurCode = 'i'.($intervenant ? $intervenant->getId() : '').'p'.($personnel ? $personnel->getId() : '');
 
         $session = $this->getSessionContainer();
-        if ($mustRefresh = ! isset($session->utilisateurCode) || $session->utilisateurCode != $utilisateurCode){
+        if ($mustRefresh = !isset($session->utilisateurCode) || $session->utilisateurCode != $utilisateurCode) {
             $session->utilisateurCode = $utilisateurCode;
         }
 
-        if ($this->getServiceUserContext()->getNextSelectedIdentityRole()){
-            $mustRefresh = true; // on rafraichit si un rôle prochain est forcé!!
-        }
-
-        if (! isset($session->roles) || $mustRefresh) {
+        if (!isset($session->roles) || $mustRefresh) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->init([
                 Role::class,
@@ -64,14 +64,6 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
 
             $roles = [];
 
-            if (! $utilisateurCode) return []; // pas connecté
-
-            /**
-             * @todo attention : plusieurs intervenants pourront remonter si on peut leur donner plusieurs statuts par an!!
-             */
-            $intervenant = $this->getServiceIntervenant()->getBySourceCode($utilisateurCode);
-            $personnel = $this->getServicePersonnel()->getBySourceCode($utilisateurCode);
-
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */
@@ -79,8 +71,8 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
                 foreach ($personnel->getAffectation() as $affectation) {
                     /* @var $affectation Affectation */
                     $roleId = $affectation->getRole()->getCode();
-                    if ($structure = $affectation->getStructure()){
-                        $roleId .= '-'.$structure->getSourceCode();
+                    if ($structure = $affectation->getStructure()) {
+                        $roleId .= '-' . $structure->getSourceCode();
                     }
                     $roles[] = $roleId;
                 }

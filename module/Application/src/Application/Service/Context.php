@@ -7,6 +7,8 @@ use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\PersonnelAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
@@ -25,6 +27,8 @@ class Context extends AbstractService
     use Traits\StructureAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
+    use PersonnelAwareTrait;
+    use IntervenantAwareTrait;
 
     /**
      * selectedIdentityRole
@@ -42,6 +46,16 @@ class Context extends AbstractService
      * @var AnneeEntity
      */
     protected $annee;
+
+    /**
+     * @var \Application\Entity\Db\Personnel
+     */
+    protected $personnel = false;
+
+    /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    protected $intervenant = false;
 
     /**
      * @var AnneeEntity
@@ -72,7 +86,6 @@ class Context extends AbstractService
 
 
 
-
     /**
      *
      * @return Role
@@ -84,7 +97,7 @@ class Context extends AbstractService
 
             if ($authUserContext->getIdentity()) {
                 $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
-                if (! $this->selectedIdentityRole instanceof Role) $this->selectedIdentityRole = new Role();
+                if (!$this->selectedIdentityRole instanceof Role) $this->selectedIdentityRole = new Role();
             }
         }
 
@@ -101,6 +114,94 @@ class Context extends AbstractService
         $authUserContext = $this->getServiceUserContext();
 
         return $authUserContext->getDbUser();
+    }
+
+
+
+    /**
+     * @return \Application\Entity\Db\Personnel
+     */
+    public function getPersonnel()
+    {
+        if (false === $this->personnel || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
+            $this->personnel = $this->findPersonnel();
+        }
+
+        return $this->personnel;
+    }
+
+
+
+    /**
+     * @return \Application\Entity\Db\Personnel|null
+     */
+    public function findPersonnel()
+    {
+        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
+            $utilisateurCode = (integer)$ldapUser->getSupannEmpId();
+        } elseif (($dbUser = $this->getServiceUserContext()->getDbUser()) && 'ldap' != $dbUser->getPassword()) {
+            $utilisateurCode = 'utilisateur-id-'.$dbUser->getId();
+        } else {
+            $utilisateurCode = null;
+        }
+
+        if ($utilisateurCode){
+            return $this->getServicePersonnel()->getBySourceCode($utilisateurCode);
+        }else{
+            return null;
+        }
+    }
+
+
+
+    /**
+     * @param \Application\Entity\Db\Personnel $personnel
+     *
+     * @return Context
+     */
+    public function setPersonnel($personnel)
+    {
+        $this->personnel = $personnel;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \Application\Entity\Db\Intervenant
+     */
+    public function getIntervenant()
+    {
+        if (false === $this->intervenant || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
+            $this->intervenant = $this->findIntervenant();
+        }
+
+        return $this->intervenant;
+    }
+
+
+
+    /**
+     * @return \Application\Entity\Db\Intervenant|null
+     */
+    public function findIntervenant()
+    {
+        return null;
+    }
+
+
+
+    /**
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     *
+     * @return Context
+     */
+    public function setIntervenant($intervenant)
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
     }
 
 
@@ -259,7 +360,7 @@ class Context extends AbstractService
      */
     public function setDateObservation(DateTime $dateObservation)
     {
-        $sc = $this->getSessionContainer();
+        $sc                  = $this->getSessionContainer();
         $sc->dateObservation = $dateObservation;
 
         return $this;
@@ -335,7 +436,7 @@ class Context extends AbstractService
         FROM
           intervenant i 
         WHERE
-          i.annee_id = ".((int)$annee->getId())."
+          i.annee_id = " . ((int)$annee->getId()) . "
           AND 1 = ose_divers.comprise_entre( i.histo_creation, i.histo_destruction )
           AND rownum = 1
         ";

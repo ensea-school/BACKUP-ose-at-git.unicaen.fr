@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Source as SourceEntity;
+use UnicaenImport\Entity\Db\Source as SourceEntity;
 
 /**
  * Description of Source
@@ -14,7 +14,7 @@ class Source extends AbstractEntityService
 {
     const CODE_SOURCE_OSE     = 'OSE';
     const CODE_SOURCE_TEST    = 'Test';
-    
+
     /**
      * retourne la classe des entités
      *

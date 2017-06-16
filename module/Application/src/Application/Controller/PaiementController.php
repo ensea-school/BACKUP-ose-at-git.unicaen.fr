@@ -279,9 +279,14 @@ class PaiementController extends AbstractController
 
         foreach( $paiements as $index => $paiement ){
             if ($mep[$paiement->getId()] == "1"){
-                $paiement->setPeriodePaiement(null);
-                $paiement->setDateMiseEnPaiement(null);
-                $this->getServiceMiseEnPaiement()->save($paiement);
+                if ($paiement->getPeriodePaiement()){
+                    $paiement->setPeriodePaiement(null);
+                    $paiement->setDateMiseEnPaiement(null);
+                    $this->getServiceMiseEnPaiement()->save($paiement);
+                }else{
+                    $this->getServiceMiseEnPaiement()->delete($paiement);
+                }
+
                 unset($paiements[$index]);
             }
         }

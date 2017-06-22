@@ -1076,7 +1076,16 @@ class ServiceService extends AbstractEntityService
     public function getExportPdfData(Recherche $recherche)
     {
         $annee = $this->getServiceContext()->getAnnee();
-        $data  = [];
+        $data  = [
+            'intervenants' => [],
+            'total'        => [
+                'fi'               => 0,
+                'fa'               => 0,
+                'fc'               => 0,
+                'referentiel'      => 0,
+                'total'            => 0,
+            ],
+        ];
 
         // requêtage
         $conditions = [
@@ -1092,7 +1101,7 @@ class ServiceService extends AbstractEntityService
         if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(es.structure_aff_id = -1 OR es.structure_aff_id = ' . $c8->getId() . ')';
         if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(es.structure_ens_id = -1 OR es.structure_ens_id = ' . $c9->getId() . ')';
 
-        $sql  = '
+        $sql   = '
           SELECT 
             es.*, 
             COALESCE(fsm.heures,0) modifications_service_du 
@@ -1107,7 +1116,7 @@ class ServiceService extends AbstractEntityService
             ETAPE_LIBELLE, ETABLISSEMENT_LIBELLE,
             ELEMENT_LIBELLE, FONCTION_REFERENTIEL_LIBELLE
         ';
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $stmt  = $this->getEntityManager()->getConnection()->executeQuery($sql);
         $count = 0;
         // récupération des données
         while ($d = $stmt->fetch()) {
@@ -1115,8 +1124,8 @@ class ServiceService extends AbstractEntityService
             $iid = (int)$d['INTERVENANT_ID'];
             $sid = (int)$d['SERVICE_ID'];
 
-            if (!isset($data[$iid])) {
-                $data[$iid] = [
+            if (!isset($data['intervenants'][$iid])) {
+                $data['intervenants'][$iid] = [
                     'nom'              => $d['INTERVENANT_NOM'],
                     'statut'           => $d['INTERVENANT_STATUT_LIBELLE'],
                     'grade'            => $d['INTERVENANT_GRADE_LIBELLE'],
@@ -1132,8 +1141,8 @@ class ServiceService extends AbstractEntityService
                 ];
             }
 
-            if (!isset($data[$iid]['services'][$sid])) {
-                $data[$iid]['services'][$sid] = [
+            if (!isset($data['intervenants'][$iid]['services'][$sid])) {
+                $data['intervenants'][$iid]['services'][$sid] = [
                     'structure'      => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
                     'type-formation' => $d['TYPE_FORMATION_LIBELLE'],
                     'formation'      => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
@@ -1152,20 +1161,26 @@ class ServiceService extends AbstractEntityService
             $ref   = (float)$d['SERVICE_REFERENTIEL'] + (float)$d['HEURES_COMPL_REFERENTIEL'];
             $total = $fi + $fa + $fc + $ref;
 
-            $data[$iid]['fi']          += $fi;
-            $data[$iid]['fa']          += $fa;
-            $data[$iid]['fc']          += $fc;
-            $data[$iid]['referentiel'] += $ref;
-            $data[$iid]['total']       += $total;
+            $data['total']['fi']          += $fi;
+            $data['total']['fa']          += $fa;
+            $data['total']['fc']          += $fc;
+            $data['total']['referentiel'] += $ref;
+            $data['total']['total']       += $total;
 
-            $data[$iid]['services'][$sid]['fi']          += $fi;
-            $data[$iid]['services'][$sid]['fa']          += $fa;
-            $data[$iid]['services'][$sid]['fc']          += $fc;
-            $data[$iid]['services'][$sid]['referentiel'] += $ref;
-            $data[$iid]['services'][$sid]['total']       += $total;
+            $data['intervenants'][$iid]['fi']          += $fi;
+            $data['intervenants'][$iid]['fa']          += $fa;
+            $data['intervenants'][$iid]['fc']          += $fc;
+            $data['intervenants'][$iid]['referentiel'] += $ref;
+            $data['intervenants'][$iid]['total']       += $total;
+
+            $data['intervenants'][$iid]['services'][$sid]['fi']          += $fi;
+            $data['intervenants'][$iid]['services'][$sid]['fa']          += $fa;
+            $data['intervenants'][$iid]['services'][$sid]['fc']          += $fc;
+            $data['intervenants'][$iid]['services'][$sid]['referentiel'] += $ref;
+            $data['intervenants'][$iid]['services'][$sid]['total']       += $total;
         }
 
-        if ($count > 5000){
+        if ($count > 5000) {
             die('La génération du fichier est impossible : trop de données sont remontées. Merci de placer un filtre (composante, type d\'intervenant, etc)');
         }
 

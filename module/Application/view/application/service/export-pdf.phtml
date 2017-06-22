@@ -179,7 +179,7 @@
     </thead>
     <tbody>
     <?php
-    if ($data) foreach ($data as $di):
+    if ($data && $data['intervenants']) foreach ($data['intervenants'] as $di):
         $s = 0;
 
         $ls = [
@@ -247,6 +247,26 @@
         </tr>
     <?php endforeach; ?>
     </tbody>
+    <tfoot>
+    <tr class="total">
+        <td class="c1">Total général</td>
+        <td class="c2"></td>
+        <td class="c3"></td>
+        <td class="c4"></td>
+        <td class="c5"></td>
+        <td class="c6"></td>
+        <td class="c7"></td>
+
+        <td class="c8"></td>
+        <td class="c9"></td>
+        <td class="c10"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['fi']) ?></td>
+        <td class="c11"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['fa']) ?></td>
+        <td class="c12"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['fc']) ?></td>
+        <td class="c13"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['referentiel']) ?></td>
+        <td class="c14"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['total']) ?></td>
+        <td class="c15"></td>
+    </tr>
+    </tfoot>
 </table>
 
 

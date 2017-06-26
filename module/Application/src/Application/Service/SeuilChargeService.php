@@ -233,16 +233,15 @@ class SeuilChargeService extends AbstractEntityService
           LEFT JOIN type_intervention_structure tis ON 
             tis.type_intervention_id = ti.id 
             AND 1 = OSE_DIVERS.COMPRISE_ENTRE( tis.histo_creation, tis.histo_destruction )
-            AND 2016 BETWEEN NVL(tis.annee_debut_id,1) AND NVL(tis.annee_fin_id,999999999)
+            AND :annee BETWEEN NVL(tis.annee_debut_id,1) AND NVL(tis.annee_fin_id,999999999)
             " . ($structure ? 'AND tis.structure_id = ' . $structure->getId() : '') . "
         WHERE
           1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
-          AND ti.enseignement = 1
         ORDER BY
           ti.ordre
         ";
 
-        $data = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $data = $this->getEntityManager()->getConnection()->fetchAll($sql, ['annee' => $this->getServiceContext()->getAnnee()->getId()]);
         $res  = [];
         foreach ($data as $t) {
             $id          = (int)$t['ID'];

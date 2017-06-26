@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
@@ -17,6 +18,8 @@ class TypeInterventionSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionAwareTrait;
 
+
+
     public function init()
     {
         $hydrator = new TypeInterventionHydrator();
@@ -24,72 +27,61 @@ class TypeInterventionSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name' => 'code',
+            'name'    => 'code',
             'options' => [
                 'label' => "Code",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'libelle',
+            'name'    => 'libelle',
             'options' => [
                 'label' => "Libelle",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'ordre',
+            'name'    => 'ordre',
             'options' => [
                 'label' => "Ordre",
             ],
-            'type' => 'Number',
+            'type'    => 'Number',
         ]);
         $this->add([
-            'name' => 'taux-hetd-service',
+            'name'    => 'taux-hetd-service',
             'options' => [
                 'label' => 'Taux Hetd Service',
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'taux-hetd-complementaire',
+            'name'    => 'taux-hetd-complementaire',
             'options' => [
                 'label' => 'Taux Hetd Complémentaire',
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'personnalise',
-            'options' => [
-                'label' => 'Personnalisé ?',
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'visible',
+            'name'    => 'visible',
             'options' => [
                 'label' => 'Visible ?',
             ],
-            'type' => 'Checkbox',
+            'type'    => 'Checkbox',
         ]);
-        $this->add([
-            'name' => 'enseignement',
-            'options' => [
-                'label' => 'Enseignement ?',
-            ],
-            'type' => 'Checkbox',
-        ]);
+
         $this->add(new Csrf('security'));
         $this->add([
-            'name' => 'submit',
-            'type' => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ],
         ]);
+
         return $this;
     }
+
 
 
     /**
@@ -101,30 +93,30 @@ class TypeInterventionSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'code' => [
+            'code'                     => [
                 'required' => true,
             ],
-            'libelle' => [
+            'libelle'                  => [
                 'required' => true,
             ],
-            'taux-hetd-service' => [
-                'required' => true,
+            'taux-hetd-service'        => [
+                'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
-                           return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }))
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
                 ],
             ],
             'taux-hetd-complementaire' => [
-                'required' => true,
+                'required'   => true,
                 'validators' => [
-                    new \Zend\Validator\Callback(array(
-                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
                         'callback' => function ($value) {
                             return (StringFromFloat::run($value) >= 0.0 ? true : false);
-                        }))
+                        }]),
                 ],
             ],
         ];
@@ -132,14 +124,20 @@ class TypeInterventionSaisieForm extends AbstractForm
 
 }
 
+
+
+
+
 class TypeInterventionHydrator implements HydratorInterface
 {
     use TypeInterventionAwareTrait;
 
+
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
+     * @param  array                                   $data
      * @param  \Application\Entity\Db\TypeIntervention $object
      *
      * @return object
@@ -152,10 +150,10 @@ class TypeInterventionHydrator implements HydratorInterface
         $object->setTauxHetdService(FloatFromString::run($data['taux-hetd-service']));
         $object->setTauxHetdComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
         $object->setVisible($data['visible']);
-        $object->setInterventionIndividualisee($data['personnalise']);
-        $object->setEnseignement($data['enseignement']);
+
         return $object;
     }
+
 
 
     /**
@@ -168,15 +166,13 @@ class TypeInterventionHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id' => $object->getId(),
-            'code' => $object->getCode(),
-            'libelle' => $object->getLibelle(),
-            'ordre' => $object->getOrdre(),
-            'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
+            'id'                       => $object->getId(),
+            'code'                     => $object->getCode(),
+            'libelle'                  => $object->getLibelle(),
+            'ordre'                    => $object->getOrdre(),
+            'taux-hetd-service'        => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
-            'visible' => $object->isVisible(),
-            'personnalise' => $object->getInterventionIndividualisee(),
-            'enseignement' => $object->getEnseignement()
+            'visible'                  => $object->isVisible(),
         ];
 
         return $data;

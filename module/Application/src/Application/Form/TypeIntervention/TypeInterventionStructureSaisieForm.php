@@ -184,7 +184,7 @@ class TypeInterventionStructureHydrator implements HydratorInterface
             'id'                => $object->getId(),
             'type-intervention' => $object->getTypeIntervention(),
             'structure'         => ($s = $object->getStructure()) ? $s->getId() : null,
-            'visible'           => $object->getVisible(),
+            'visible'           => $object->isVisible(),
             'annee-debut'       => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
             'annee-fin'         => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
         ];

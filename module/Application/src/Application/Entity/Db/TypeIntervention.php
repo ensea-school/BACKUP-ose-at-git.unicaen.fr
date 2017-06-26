@@ -18,11 +18,6 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $code;
 
     /**
-     * @var boolean
-     */
-    private $interventionIndividualisee;
-
-    /**
      * @var string
      */
     private $libelle;
@@ -55,13 +50,6 @@ class TypeIntervention implements HistoriqueAwareInterface
      * @var boolean
      */
     private $visible;
-
-    /**
-     * enseignement
-     *
-     * @var boolean
-     */
-    private $enseignement;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -222,34 +210,6 @@ class TypeIntervention implements HistoriqueAwareInterface
         }
 
         return $this->typeInterventionStructure;
-    }
-
-
-
-    /**
-     * Set interventionIndividualisee
-     *
-     * @param boolean $interventionIndividualisee
-     *
-     * @return TypeIntervention
-     */
-    public function setInterventionIndividualisee($interventionIndividualisee)
-    {
-        $this->interventionIndividualisee = $interventionIndividualisee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get interventionIndividualisee
-     *
-     * @return boolean
-     */
-    public function getInterventionIndividualisee()
-    {
-        return $this->interventionIndividualisee;
     }
 
 

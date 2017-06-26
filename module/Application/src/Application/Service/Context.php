@@ -187,7 +187,19 @@ class Context extends AbstractService
      */
     public function findIntervenant()
     {
-        return null;
+        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
+            $utilisateurCode = (integer)$ldapUser->getSupannEmpId();
+        } elseif (($dbUser = $this->getServiceUserContext()->getDbUser()) && 'ldap' != $dbUser->getPassword()) {
+            $utilisateurCode = 'utilisateur-id-'.$dbUser->getId();
+        } else {
+            $utilisateurCode = null;
+        }
+
+        if ($utilisateurCode){
+            return $this->getServiceIntervenant()->getBySourceCode($utilisateurCode);
+        }else{
+            return null;
+        }
     }
 
 

@@ -23,8 +23,8 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-            SELECT 'modulateur' c, 'visualisation' p, 'Visualisation' l FROM dual
-      UNION SELECT 'modulateur' c, 'edition' p, 'Édition' l FROM dual
+            SELECT 'modif-service-du' c, 'export-csv' p, 'Export CSV' l FROM dual
+      --UNION SELECT 'modulateur' c, 'edition' p, 'Édition' l FROM dual
       --UNION SELECT 'chargens' c, 'formation-choix-edition' p, 'Édition des formations (choix liens)' l FROM dual
 /*      UNION SELECT 'chargens' c, 'seuil-etablissement-edition' p, 'Édition des seuil (établissement)' l FROM dual
 

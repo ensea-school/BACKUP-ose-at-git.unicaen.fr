@@ -95,6 +95,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT = 'mise-en-paiement-visualisation-intervenant';
     const MODIF_SERVICE_DU_ASSOCIATION               = 'modif-service-du-association';
     const MODIF_SERVICE_DU_EDITION                   = 'modif-service-du-edition';
+    const MODIF_SERVICE_DU_EXPORT_CSV                = 'modif-service-du-export-csv';
     const MODIF_SERVICE_DU_VISUALISATION             = 'modif-service-du-visualisation';
     const MODULATEUR_EDITION                         = 'modulateur-edition';
     const MODULATEUR_VISUALISATION                   = 'modulateur-visualisation';

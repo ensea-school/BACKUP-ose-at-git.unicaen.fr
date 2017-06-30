@@ -2,13 +2,16 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ModificationServiceDu;
 use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\ModificationServiceDuAwareTrait;
 use Doctrine\DBAL\DBALException;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use RuntimeException;
+use UnicaenApp\View\Model\CsvModel;
 
 /**
  * Description of IntervenantController
@@ -20,6 +23,8 @@ class ModificationServiceDuController extends AbstractController
     use ContextAwareTrait;
     use IntervenantAwareTrait;
     use ModificationServiceDuFormAwareTrait;
+    use ModificationServiceDuAwareTrait;
+
 
 
     public function saisirAction()
@@ -29,7 +34,7 @@ class ModificationServiceDuController extends AbstractController
         ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
-        $canEdit     = $this->isAllowed( $intervenant, Privileges::MODIF_SERVICE_DU_EDITION );
+        $canEdit     = $this->isAllowed($intervenant, Privileges::MODIF_SERVICE_DU_EDITION);
 
         // NB: patch pour permettre de vider toutes les modifs de service dû
         if ($canEdit && $this->getRequest()->isPost()) {
@@ -45,15 +50,15 @@ class ModificationServiceDuController extends AbstractController
         }
 
         $form = $this->getFormIntervenantModificationServiceDu();
-        $fs = $form->getFieldsets()['fs'];
+        $fs   = $form->getFieldsets()['fs'];
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->bind($intervenant);
 
         $variables = [
-            'form' => $form,
+            'form'        => $form,
             'intervenant' => $intervenant,
-            'title' => "Modifications de service dû <small>$intervenant</small>",
-            'canEdit' => $canEdit
+            'title'       => "Modifications de service dû <small>$intervenant</small>",
+            'canEdit'     => $canEdit,
         ];
 
         $request = $this->getRequest();
@@ -69,13 +74,35 @@ class ModificationServiceDuController extends AbstractController
                     $this->em()->flush();
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);
-                }
-                catch (DBALException $exc) {
-                    $exception = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
+                } catch (DBALException $exc) {
+                    $exception              = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
                     $variables['exception'] = $exception;
                 }
             }
         }
+
         return $variables;
+    }
+
+
+
+    public function exportCsvAction()
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $this->em()->getFilters()->enable('historique')->init([
+            ModificationServiceDu::class,
+            Intervenant::class,
+        ]);
+
+        $data = $this->getServiceModificationServiceDu()->getExportCsvData( $annee, $role->getStructure() );
+
+        $csvModel = new CsvModel();
+        $csvModel->setHeader($data['head']);
+        $csvModel->addLines($data['data']);
+        $csvModel->setFilename('modifications-service-du-' . $annee . '.csv');
+
+        return $csvModel;
     }
 }

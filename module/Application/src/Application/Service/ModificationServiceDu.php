@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Constants;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;

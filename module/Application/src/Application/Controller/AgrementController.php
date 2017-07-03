@@ -14,6 +14,7 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
+use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Element\Checkbox;
 use Zend\View\Model\ViewModel;
 use Application\Service\Traits\ContextAwareTrait;
@@ -270,4 +271,20 @@ class AgrementController extends AbstractController
         return compact('agrement', 'form');
     }
 
+
+
+    public function exportCsvAction()
+    {
+        $annee = $this->getServiceContext()->getAnnee();
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $data = $this->getServiceAgrement()->getExportCsvData( $annee, $role->getStructure() );
+
+        $csvModel = new CsvModel();
+        $csvModel->setHeader($data['head']);
+        $csvModel->addLines($data['data']);
+        $csvModel->setFilename('agrements-' . $annee . '.csv');
+
+        return $csvModel;
+    }
 }

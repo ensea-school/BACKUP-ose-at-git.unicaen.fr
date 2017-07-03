@@ -132,6 +132,15 @@ return [
                                     ],
                                 ],
                             ],
+                            'export-csv' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'       => '/export-csv',
+                                    'defaults'    => [
+                                        'action' => 'export-csv',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -198,6 +207,13 @@ return [
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
                                         'visible'     => 'AssertionAgrement',
                                     ],
+                                    'export-csv' => [
+                                        'label'       => 'Export CSV',
+                                        'description' => 'Export CSV des agrément donnés ou en attente',
+                                        'title'       => 'Export CSV',
+                                        'route'       => 'gestion/agrement/export-csv',
+                                        'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'export-csv'),
+                                    ],
                                 ],
                             ],
                         ],
@@ -228,6 +244,13 @@ return [
                         Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
                     ],
                     'assertion'  => 'AssertionAgrement',
+                ],
+                [
+                    'controller' => 'Application\Controller\Agrement',
+                    'action'     => ['export-csv'],
+                    'privileges' => [
+                        Privileges::AGREMENT_EXPORT_CSV
+                    ],
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',

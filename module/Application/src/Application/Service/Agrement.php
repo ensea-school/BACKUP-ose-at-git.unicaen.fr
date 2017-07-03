@@ -4,6 +4,8 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Agrement as AgrementEntity;
+use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 
 
 /**
@@ -70,6 +72,54 @@ class Agrement extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
         return $qb;
+    }
+
+
+
+    public function getExportCsvData(AnneeEntity $annee, StructureEntity $structure = null)
+    {
+        $params = ['annee' => $annee->getId()];
+
+        $sql = "SELECT * FROM V_AGREMENT_EXPORT_CSV WHERE annee_id = :annee";
+        if ($structure) {
+            $sql                 .= " AND structure_id = :structure";
+            $params['structure'] = $structure->getId();
+        }
+
+        $data = $this->getEntityManager()->getConnection()->fetchAll($sql, $params);
+        $res  = [
+            'head' => [
+                'annee'                          => 'Année',
+                'structure-libelle'              => 'Structure d\'affectation',
+                'intervenant-code'               => 'Code intervenant',
+                'intervenant-nom-usuel'          => 'Nom usuel',
+                'intervenant-nom-patronymique'   => 'Nom patronymique',
+                'intervenant-prenom'             => 'Prénom',
+                'type-agrement'                  => 'Type d\'agrément',
+                'agree'                          => 'Agréé',
+                'date-decision'                  => 'Date de décision',
+                'modificateur'                   => 'Modificateur',
+                'date-modification'              => 'Date de modification',
+            ],
+            'data' => [],
+        ];
+        foreach ($data as $d) {
+            $res['data'][] = [
+                'annee'                          => $d['ANNEE'],
+                'structure-libelle'              => $d['STRUCTURE_LIBELLE'],
+                'intervenant-code'               => $d['INTERVENANT_CODE'],
+                'intervenant-nom-usuel'          => $d['INTERVENANT_NOM_USUEL'],
+                'intervenant-nom-patronymique'   => $d['INTERVENANT_NOM_PATRONYMIQUE'],
+                'intervenant-prenom'             => $d['INTERVENANT_PRENOM'],
+                'type-agrement'                  => $d['TYPE_AGREMENT'],
+                'agree'                          => $d['AGREE'],
+                'date-decision'                  => $d['DATE_DECISION'] ? new \DateTime($d['DATE_DECISION']) : null,
+                'modificateur'                   => $d['MODIFICATEUR'],
+                'date-modification'              => $d['DATE_MODIFICATION'] ? new \DateTime($d['DATE_MODIFICATION']) : null,
+            ];
+        }
+
+        return $res;
     }
 
 }

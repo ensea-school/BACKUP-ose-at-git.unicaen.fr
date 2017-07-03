@@ -17,6 +17,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const AGREMENT_CONSEIL_RESTREINT_EDITION         = 'agrement-conseil-restreint-edition';
     const AGREMENT_CONSEIL_RESTREINT_SUPPRESSION     = 'agrement-conseil-restreint-suppression';
     const AGREMENT_CONSEIL_RESTREINT_VISUALISATION   = 'agrement-conseil-restreint-visualisation';
+    const AGREMENT_EXPORT_CSV                        = 'agrement-export-csv';
     const BUDGET_CC_ACTIVITE_EDITION                 = 'budget-cc-activite-edition';
     const BUDGET_CC_ACTIVITE_VISUALISATION           = 'budget-cc-activite-visualisation';
     const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE       = 'budget-edition-engagement-composante';

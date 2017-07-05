@@ -44,4 +44,5 @@ class StatutIntervenant extends AbstractEntityService
         $qb->orderBy("$alias.ordre");
         return parent::getList($qb, $alias);
     }
+    
 }

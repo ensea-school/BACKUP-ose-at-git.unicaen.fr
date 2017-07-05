@@ -67,6 +67,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ENSEIGNEMENT_DEVALIDATION                  = 'enseignement-devalidation';
     const ENSEIGNEMENT_EDITION                       = 'enseignement-edition';
     const ENSEIGNEMENT_EXPORT_CSV                    = 'enseignement-export-csv';
+    const ENSEIGNEMENT_EXPORT_PDF                    = 'enseignement-export-pdf';
     const ENSEIGNEMENT_EXTERIEUR                     = 'enseignement-exterieur';
     const ENSEIGNEMENT_VALIDATION                    = 'enseignement-validation';
     const ENSEIGNEMENT_VISUALISATION                 = 'enseignement-visualisation';
@@ -83,6 +84,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const INTERVENANT_EDITION                        = 'intervenant-edition';
     const INTERVENANT_FICHE                          = 'intervenant-fiche';
     const INTERVENANT_RECHERCHE                      = 'intervenant-recherche';
+    const INTERVENANT_STATUT_EDITION                 = 'intervenant-statut-edition';
+    const INTERVENANT_STATUT_VISUALISATION           = 'intervenant-statut-visualisation';
     const INTERVENANT_SUPPRESSION                    = 'intervenant-suppression';
     const MISE_EN_PAIEMENT_DEMANDE                   = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EDITION                   = 'mise-en-paiement-edition';

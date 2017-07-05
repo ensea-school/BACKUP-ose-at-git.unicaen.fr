@@ -20,6 +20,16 @@
     <field name="tauxHetdComplementaire" type="float" column="TAUX_HETD_Complementaire" nullable="false"/>
     <field name="visible" type="boolean" column="VISIBLE" nullable="false"/>
     <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
+    <field name="regleFOAD" type="boolean" column="REGLE_FOAD" nullable="false"/>
+    <field name="regleFC" type="boolean" column="REGLE_FC" nullable="false"/>
+    <field name="regleChargens" type="boolean" column="REGLE_CHARGENS" nullable="false"/>
+    <field name="regleVHEns" type="boolean" column="REGLE_VHENS" nullable="false"/>
+    <many-to-one field="anneeDebutId" target-entity="Application\Entity\Db\Annee">
+      <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
+    </many-to-one>
+    <many-to-one field="anneeFinId" target-entity="Application\Entity\Db\Annee">
+      <join-column name="ANNEE_FIN_ID" referenced-column-name="ID"/>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

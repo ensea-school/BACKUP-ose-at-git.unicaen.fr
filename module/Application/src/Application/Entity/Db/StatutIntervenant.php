@@ -170,6 +170,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     /**
      * @var boolean
      */
+    private $peutSaisirServiceExt;
+
+    /**
+     * @var boolean
+     */
     private $temAtv;
 
     /**
@@ -179,6 +184,28 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
 
 
 
+    /**
+     * @return boolean
+     */
+    public function getPeutSaisirServiceExt()
+    {
+        return $this->peutSaisirServiceExt;
+    }
+
+
+
+    /**
+     * @param boolean $peutSaisirServieExt
+     *
+     * @return StatutIntervenant
+     */
+    public function setPeutSaisirServiceExt($peutSaisirServiceExt)
+    {
+        $this->peutSaisirServiceExt = $peutSaisirServiceExt;
+
+        return $this;
+    }
+    
     /**
      * @return boolean
      */

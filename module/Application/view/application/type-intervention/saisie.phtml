@@ -3,6 +3,58 @@
  * @var $this  \Application\View\Renderer\PhpRenderer
  * @var $form  \Application\Form\FonctionReferentiel\TypeInterventionSaisieForm
  */
-
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-echo $this->form($form);
+
+echo $this->form()->openTag($form); ?>
+
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('code')); ?>
+    </div>
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('libelle')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('ordre')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('taux-hetd-service')); ?>
+    </div>
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('taux-hetd-complementaire')); ?>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('visible')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('annee-debut-id')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('annee-fin-id')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('regle-foad')); ?>
+    </div>
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('regle-fc')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('regle-chargens')); ?>
+    </div>
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('regle-vh-ens')); ?>
+    </div>
+
+</div>
+<?php echo $this->formControlGroup($form->get('security')); ?>
+<?php echo $this->formSubmit($form->get('submit')); ?>
+<?php echo $this->form()->closeTag(); ?>

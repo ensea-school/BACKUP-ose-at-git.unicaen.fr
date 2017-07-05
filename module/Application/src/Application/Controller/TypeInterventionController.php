@@ -49,7 +49,7 @@ class TypeInterventionController extends AbstractController
         } else {
             $title = 'Édition d\'un type d\'intervention';
         }
-
+        
         $form->bindRequestSave($typeIntervention, $this->getRequest(), function (TypeIntervention $ti) {
             try {
                 $this->getServiceTypeIntervention()->save($ti);

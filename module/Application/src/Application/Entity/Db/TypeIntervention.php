@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Service\Annee;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -64,11 +65,52 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $enseignement;
 
     /**
+     * anneeDebutId
+     *
+     * @var Annee
+     */
+    private $anneeDebutId;
+
+    /**
+     * anneeFinId
+     *
+     * @var Annee
+     */
+    private $anneeFinId;
+
+    
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $typeInterventionStructure;
 
+    /**
+     * regleFOAD
+     *
+     * @var boolean
+     */
+    private $regleFOAD;
 
+    /**
+     * regleFC
+     *
+     * @var boolean
+     */
+    private $regleFC;
+
+    /**
+     * regleChargens
+     *
+     * @var boolean
+     */
+    private $regleChargens;
+
+    /**
+     * regleVHEns
+     *
+     * @var boolean
+     */
+    private $regleVHEns;
 
     /**
      * Constructor
@@ -162,7 +204,132 @@ class TypeIntervention implements HistoriqueAwareInterface
         return $this;
     }
 
+    /**
+     * @return Annee
+     */
+    public function getAnneeDebutId()
+    {
+        return $this->anneeDebutId;
+    }
 
+    /**
+     * @param Annee $anneeDebutId
+     *
+     * @return TypeIntervention
+     */
+    public function setAnneeDebutId($anneeDebutId)
+    {
+        $this->anneeDebutId = $anneeDebutId;
+
+        return $this;
+    }
+
+    /**
+     * @return Annee
+     */
+    public function getAnneeFinId()
+    {
+        return $this->anneeFinId;
+    }
+
+    /**
+     * @param Annee $anneeFinId
+     *
+     * @return TypeIntervention
+     */
+    public function setAnneeFinId($anneeFinId)
+    {
+        $this->anneeFinId = $anneeFinId;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRegleFOAD()
+    {
+        return $this->regleFOAD;
+    }
+    
+
+    /**
+     * @param bool $regleFOAD
+     *
+     * @return TypeIntervention
+     */
+    public function setRegleFOAD($regleFOAD)
+    {
+        $this->regleFOAD = $regleFOAD;
+
+        return $this;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function getRegleFC()
+    {
+        return $this->regleFC;
+    }
+
+
+
+    /**
+     * @param bool $regleFC
+     *
+     * @return TypeIntervention
+     */
+    public function setRegleFC($regleFC)
+    {
+        $this->regleFC = $regleFC;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRegleChargens()
+    {
+        return $this->regleChargens;
+    }
+
+
+
+    /**
+     * @param bool $regleChargens
+     *
+     * @return TypeIntervention
+     */
+    public function setRegleChargens($regleChargens)
+    {
+        $this->regleChargens = $regleChargens;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRegleVHEns()
+    {
+        return $this->regleVHEns;
+    }
+
+
+
+    /**
+     * @param bool $regleVHEns
+     *
+     * @return TypeIntervention
+     */
+    public function setRegleVHEns($regleVHEns)
+    {
+        $this->regleVHEns = $regleVHEns;
+
+        return $this;
+    }
 
     /**
      * Add typeInterventionStructure

@@ -20,29 +20,46 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
 
 <table class="table table-bordered">
     <thead>
-    <tr>
         <th rowspan="2">Code</th>
         <th rowspan="2">Libelle</th>
         <th colspan="2" style="text-align:center;">Taux HETD</th>
-        <th rowspan="2">Visible</th>
-        <th rowspan="2">Personnalisée</th>
-        <th rowspan="2">Enseignement</th>
+        <th rowspan="2">Actif</th>
+        <th rowspan="2">Conditions de mise en œuvre</th>
+        <th rowspan="2" style="text-align:center;">service</th>
         <?php if ($canEdit) echo '<th rowspan="2">Actions</th>' ?>
-    </tr>
-    <tr>
-        <th>service</th>
-        <th>comp.</th>
-    </tr>
     </thead>
     <tbody>
+    <tr></tr>
     <?php foreach ($typesInterventions as $ti): ?>
         <tr>
             <td><?php echo $ti->getCode() ?></td>
             <td><?php echo $ti->getLibelle() ?></td>
             <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdService()) ?></td>
             <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
-            <td style="text-align:center"><?php echo ($ti->isVisible() ? 'Oui' : 'Non') ?></td>
-            <td style="text-align:center"><?php echo($ti->getInterventionIndividualisee() ? 'Oui' : 'Non') ?></td>
+            <td style="text-align:center"><?php echo($ti->isVisible() ? 'Oui' : 'Non') ?></td>
+            <td><?php
+                $saut=0;
+                if ($ti->getRegleFOAD()){
+                    $saut=1;
+                    echo 'FOAD';
+                }
+                if ($ti->getRegleFC()){
+                    if ($saut) echo '<br>';
+                    echo 'FC';
+                    $saut=1;
+                }
+                if ($ti->getRegleChargens())
+                {
+                    if ($saut) echo '<br>';
+                    echo 'Charg Ens';
+                    $saut=1;
+                }
+                if ($ti->getRegleVHEns())
+                {
+                    if ($saut) echo '<br>';
+                    echo 'Maquette';
+                }?>
+            </td>
             <td style="text-align:center;">
                 <a class="ajax-modal" data-event="type-intervention-saisie"
                    href="<?php echo $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
@@ -68,7 +85,6 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     <?php }
                 } ?>
             </td>
-            <td style="text-align:center;"><?php echo($ti->getEnseignement() ? 'Oui' : 'Non') ?></td>
             <?php if ($canEdit): ?>
                 <td style="text-align:center;width:1px;white-space: nowrap">
                     <a class="ajax-modal" data-event="type-intervention-saisie"

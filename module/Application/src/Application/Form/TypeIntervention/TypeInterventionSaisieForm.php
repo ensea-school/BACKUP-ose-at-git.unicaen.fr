@@ -7,6 +7,8 @@ use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
+use Application\Service\Traits\AnneeAwareTrait;
+use UnicaenApp\Util;
 
 /**
  * Description of TypeInterventionSaisieForm
@@ -16,6 +18,7 @@ use Application\Filter\StringFromFloat;
 class TypeInterventionSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionAwareTrait;
+    use AnneeAwareTrait;
 
     public function init()
     {
@@ -59,26 +62,72 @@ class TypeInterventionSaisieForm extends AbstractForm
             'type' => 'Text',
         ]);
         $this->add([
-            'name' => 'personnalise',
-            'options' => [
-                'label' => 'Personnalisé ?',
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
             'name' => 'visible',
             'options' => [
-                'label' => 'Visible ?',
+                'label' => 'Actif ?',
             ],
             'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'annee-debut-id',
+            'options'    => [
+                'empty_option'  => 'Aucune',
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'label'         => 'année de début',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
         ]);
         $this->add([
-            'name' => 'enseignement',
+            'type'       => 'Select',
+            'name'       => 'annee-fin-id',
+            'options'    => [
+                'empty_option'  => 'Aucune',
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'label'         => 'année de fin',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'regle-foad',
             'options' => [
-                'label' => 'Enseignement ?',
+                'label' => 'limité à la FOAD',
             ],
             'type' => 'Checkbox',
         ]);
+
+        $this->add([
+            'name' => 'regle-fc',
+            'options' => [
+                'label' => 'limité à la FC',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name' => 'regle-chargens',
+            'options' => [
+                'label' => 'nécessite une charge d\'enseignement',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name' => 'regle-vh-ens',
+            'options' => [
+                'label' => 'nécessite des heures saisie dans la maquette',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
         $this->add(new Csrf('security'));
         $this->add([
             'name' => 'submit',
@@ -127,6 +176,24 @@ class TypeInterventionSaisieForm extends AbstractForm
                         }))
                 ],
             ],
+            'annee-debut-id' => [
+                'required' => false,
+            ],
+            'annee-fin-id'   => [
+                'required' => false,
+            ],
+            'regle-foad' => [
+                'required' => true,
+            ],
+            'regle-fc' => [
+                'required' => true,
+            ],
+            'regle-chargens' => [
+                'required' => true,
+            ],
+            'regle-vh-ens' => [
+                'required' => true,
+            ],
         ];
     }
 
@@ -135,6 +202,7 @@ class TypeInterventionSaisieForm extends AbstractForm
 class TypeInterventionHydrator implements HydratorInterface
 {
     use TypeInterventionAwareTrait;
+    use AnneeAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
@@ -152,8 +220,16 @@ class TypeInterventionHydrator implements HydratorInterface
         $object->setTauxHetdService(FloatFromString::run($data['taux-hetd-service']));
         $object->setTauxHetdComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
         $object->setVisible($data['visible']);
-        $object->setInterventionIndividualisee($data['personnalise']);
-        $object->setEnseignement($data['enseignement']);
+        if (array_key_exists('annee-debut-id', $data)) {
+            $object->setAnneeDebutId($this->getServiceAnnee()->get($data['annee-debut-id']));
+        }
+        if (array_key_exists('annee-fin-id', $data)) {
+            $object->setAnneeFinId($this->getServiceAnnee()->get($data['annee-fin-id']));
+        }
+        $object->setRegleFOAD($data['regle-foad']);
+        $object->setRegleFC($data['regle-fc']);
+        $object->setRegleChargens($data['regle-chargens']);
+        $object->setRegleVHEns($data['regle-vh-ens']);
         return $object;
     }
 
@@ -175,8 +251,12 @@ class TypeInterventionHydrator implements HydratorInterface
             'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
             'visible' => $object->isVisible(),
-            'personnalise' => $object->getInterventionIndividualisee(),
-            'enseignement' => $object->getEnseignement()
+            'annee-debut-id'       => $object->getAnneeDebutId() ? $object->getAnneeDebutId()->getId() : null,
+            'annee-fin-id'         => $object->getAnneeFinId() ? $object->getAnneeFinId()->getId() : null,
+            'regle-foad'           => $object->getRegleFOAD(),
+            'regle-fc'           => $object->getRegleFC(),
+            'regle-chargens'           => $object->getRegleChargens(),
+            'regle-vh-ens'           => $object->getRegleVHEns(),
         ];
 
         return $data;

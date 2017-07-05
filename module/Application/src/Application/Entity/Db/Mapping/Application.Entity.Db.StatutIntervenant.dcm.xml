@@ -40,6 +40,7 @@
         <field name="peutSaisirServiceExt" type="boolean" column="PEUT_SAISIR_SERVICE_EXT" nullable="false"/>
         <field name="temAtv" type="boolean" column="TEM_ATV" nullable="false"/>
         <field name="temBiatss" type="boolean" column="TEM_BIATSS" nullable="false"/>
+        <field name="depassementSDSHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
         <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
             <join-columns>
                 <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>

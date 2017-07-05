@@ -182,6 +182,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
      */
     private $temBiatss;
 
+    /**
+     * @var boolean
+     */
+    private $depassementSDSHC;
+
 
 
     /**
@@ -880,6 +885,28 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
         return 'statut/' . $this->getSourceCode();
     }
 
+
+    /**
+     * @return boolean
+     */
+    public function getDepassementSDSHC()
+    {
+        return $this->depassementSDSHC;
+    }
+
+
+
+    /**
+     * @param boolean $depassementSDSHC
+     *
+     * @return StatutIntervenant
+     */
+    public function setDepassementSDSHC($depassementSDSHC)
+    {
+        $this->depassementSDSHC = $depassementSDSHC;
+
+        return $this;
+    }
 
 
     /**

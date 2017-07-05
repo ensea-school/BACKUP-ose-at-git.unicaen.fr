@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\SourceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -11,6 +12,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class StatutIntervenant extends AbstractEntityService
 {
+    use SourceAwareTrait;
     /**
      * retourne la classe des entités
      *
@@ -44,5 +46,20 @@ class StatutIntervenant extends AbstractEntityService
         $qb->orderBy("$alias.ordre");
         return parent::getList($qb, $alias);
     }
-    
+
+    /**
+     * Retourne une nouvelle entité, initialisée avec les bons paramètres
+     *
+     * @return \Application\Entity\Db\TypeDotation
+     */
+    public function newEntity()
+    {
+        /** @var TypeDotation $entity */
+        $entity = parent::newEntity();
+
+        // toutes les entités créées ont OSE pour source!!
+        $entity->setSource($this->getServiceSource()->getOse());
+
+        return $entity;
+    }
 }

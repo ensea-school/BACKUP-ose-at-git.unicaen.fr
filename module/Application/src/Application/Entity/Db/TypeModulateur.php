@@ -3,11 +3,12 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * TypeModulateur
  */
-class TypeModulateur implements HistoriqueAwareInterface
+class TypeModulateur implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -309,4 +310,11 @@ class TypeModulateur implements HistoriqueAwareInterface
     {
         return $this->structure;
     }
+
+    public function getResourceId()
+    {
+        return "TypeModulateur";
+    }
+
+
 }

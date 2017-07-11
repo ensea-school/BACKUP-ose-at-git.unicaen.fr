@@ -418,7 +418,7 @@ class MiseEnPaiement extends AbstractEntityService
             $libelle  = $d['LIBELLE'];
             $nbuLimit = 99;
             $ds       = [
-                'insee'        => $d['INSEE'],
+                'insee'        => "'".$d['INSEE'],
                 'nom'          => $d['NOM'],
                 'carte'        => $d['CARTE'],
                 'code-origine' => $d['CODE_ORIGINE'],

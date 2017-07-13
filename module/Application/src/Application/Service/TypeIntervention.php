@@ -14,15 +14,6 @@ class TypeIntervention extends AbstractEntityService
 {
 
     /**
-     * Liste des types d'intervention
-     *
-     * @var Entity[]
-     */
-    protected $typesIntervention;
-
-
-
-    /**
      * retourne la classe des entités
      *
      * @return string
@@ -48,20 +39,42 @@ class TypeIntervention extends AbstractEntityService
 
 
     /**
-     * Retourne la liste des motifs de non paiement
      *
-     * @param QueryBuilder|null $queryBuilder
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string                     $alias
      *
-     * @return Entity[]
+     * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getList(QueryBuilder $qb = null, $alias = null)
+    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $annee = $this->getServiceContext()->getAnnee();
+
+        $qb->andWhere( ''.$alias.'.anneeDebut IS NULL OR '.$alias.'.anneeDebut <= '.$annee->getId());
+        $qb->andWhere( ''.$alias.'.anneeFin IS NULL OR '.$alias.'.anneeFin >= '.$annee->getId());
+
+        $this->finderByVisible(true, $qb);
+
+        return $qb;
+    }
+
+
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     *
+     * @return QueryBuilder
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.ordre");
 
-        return parent::getList($qb, $alias);
+        return $qb;
     }
-
 
 
     /**
@@ -84,21 +97,5 @@ class TypeIntervention extends AbstractEntityService
         } else {
             return null;
         }
-    }
-
-
-
-    /**
-     * Liste des types d'intervention
-     *
-     * @return Entity[]
-     */
-    public function getTypesIntervention()
-    {
-        if (!$this->typesIntervention) {
-            $this->typesIntervention = $this->getList($this->finderByVisible(true));
-        }
-
-        return $this->typesIntervention;
     }
 }

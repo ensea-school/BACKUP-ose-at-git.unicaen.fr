@@ -140,7 +140,7 @@ class SaisieForm extends AbstractViewHelper
         if ($element){
             $typesIntervention = $element->getTypeIntervention();
         }else{
-            $typesIntervention = $this->getServiceTypeIntervention()->getTypesIntervention();
+            $typesIntervention = $this->getServiceTypeIntervention()->getList($this->getServiceTypeIntervention()->finderByContext());
         }
 
         $res  = $this->getView()->formHidden($fieldset->get('service'));

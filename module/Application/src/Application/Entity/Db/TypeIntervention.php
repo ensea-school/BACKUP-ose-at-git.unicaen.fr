@@ -52,6 +52,16 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $visible;
 
     /**
+     * @var Annee
+     */
+    private $anneeDebut;
+
+    /**
+     * @var Annee
+     */
+    private $anneeFin;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $typeInterventionStructure;
@@ -129,26 +139,47 @@ class TypeIntervention implements HistoriqueAwareInterface
 
 
     /**
-     * @return bool
+     * @return Annee
      */
-    public function getEnseignement()
+    public function getAnneeDebut()
     {
-        return $this->enseignement;
+        return $this->anneeDebut;
     }
 
 
 
     /**
-     * @param bool $enseignement
-     *
-     * @return TypeIntervention
+     * @param Annee $anneeDebut
      */
-    public function setEnseignement($enseignement)
+    public function setAnneeDebut(Annee $anneeDebut)
     {
-        $this->enseignement = $enseignement;
+        $this->anneeDebut = $anneeDebut;
 
         return $this;
     }
+
+
+
+    /**
+     * @return Annee
+     */
+    public function getAnneeFin()
+    {
+        return $this->anneeFin;
+    }
+
+
+
+    /**
+     * @param Annee $anneeFin
+     */
+    public function setAnneeFin(Annee $anneeFin)
+    {
+        $this->anneeFin = $anneeFin;
+
+        return $this;
+    }
+
 
 
 

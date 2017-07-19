@@ -36,16 +36,16 @@ class TypeInterventionSaisieForm extends AbstractForm
         $this->add([
             'name' => 'libelle',
             'options' => [
-                'label' => "Libelle",
+                'label' => "Libellé",
             ],
             'type' => 'Text',
         ]);
         $this->add([
             'name' => 'ordre',
             'options' => [
-                'label' => "Ordre",
+                'label' => "",
             ],
-            'type' => 'Number',
+            'type' => 'hidden',
         ]);
         $this->add([
             'name' => 'taux-hetd-service',
@@ -64,18 +64,18 @@ class TypeInterventionSaisieForm extends AbstractForm
         $this->add([
             'name' => 'visible',
             'options' => [
-                'label' => 'Actif ?',
+                'label' => 'Visible ?',
             ],
             'type' => 'Checkbox',
         ]);
 
         $this->add([
             'type'       => 'Select',
-            'name'       => 'annee-debut-id',
+            'name'       => 'annee-debut',
             'options'    => [
                 'empty_option'  => 'Aucune',
                 'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
-                'label'         => 'année de début',
+                'label'         => 'Année de début',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -84,11 +84,11 @@ class TypeInterventionSaisieForm extends AbstractForm
         ]);
         $this->add([
             'type'       => 'Select',
-            'name'       => 'annee-fin-id',
+            'name'       => 'annee-fin',
             'options'    => [
                 'empty_option'  => 'Aucune',
                 'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
-                'label'         => 'année de fin',
+                'label'         => 'Année de fin',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -99,7 +99,7 @@ class TypeInterventionSaisieForm extends AbstractForm
         $this->add([
             'name' => 'regle-foad',
             'options' => [
-                'label' => 'limité à la FOAD',
+                'label' => 'Limité à la FOAD',
             ],
             'type' => 'Checkbox',
         ]);
@@ -107,23 +107,7 @@ class TypeInterventionSaisieForm extends AbstractForm
         $this->add([
             'name' => 'regle-fc',
             'options' => [
-                'label' => 'limité à la FC',
-            ],
-            'type' => 'Checkbox',
-        ]);
-
-        $this->add([
-            'name' => 'regle-chargens',
-            'options' => [
-                'label' => 'nécessite une charge d\'enseignement',
-            ],
-            'type' => 'Checkbox',
-        ]);
-
-        $this->add([
-            'name' => 'regle-vh-ens',
-            'options' => [
-                'label' => 'nécessite des heures saisie dans la maquette',
+                'label' => 'Limité à la FC',
             ],
             'type' => 'Checkbox',
         ]);
@@ -176,22 +160,16 @@ class TypeInterventionSaisieForm extends AbstractForm
                         }))
                 ],
             ],
-            'annee-debut-id' => [
+            'annee-debut' => [
                 'required' => false,
             ],
-            'annee-fin-id'   => [
+            'annee-fin'   => [
                 'required' => false,
             ],
             'regle-foad' => [
                 'required' => true,
             ],
             'regle-fc' => [
-                'required' => true,
-            ],
-            'regle-chargens' => [
-                'required' => true,
-            ],
-            'regle-vh-ens' => [
                 'required' => true,
             ],
         ];
@@ -220,16 +198,14 @@ class TypeInterventionHydrator implements HydratorInterface
         $object->setTauxHetdService(FloatFromString::run($data['taux-hetd-service']));
         $object->setTauxHetdComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
         $object->setVisible($data['visible']);
-        if (array_key_exists('annee-debut-id', $data)) {
-            $object->setAnneeDebutId($this->getServiceAnnee()->get($data['annee-debut-id']));
+        if (array_key_exists('annee-debut', $data)) {
+            $object->setAnneeDebutId($this->getServiceAnnee()->get($data['annee-debut']));
         }
-        if (array_key_exists('annee-fin-id', $data)) {
-            $object->setAnneeFinId($this->getServiceAnnee()->get($data['annee-fin-id']));
+        if (array_key_exists('annee-fin', $data)) {
+            $object->setAnneeFinId($this->getServiceAnnee()->get($data['annee-fin']));
         }
         $object->setRegleFOAD($data['regle-foad']);
         $object->setRegleFC($data['regle-fc']);
-        $object->setRegleChargens($data['regle-chargens']);
-        $object->setRegleVHEns($data['regle-vh-ens']);
         return $object;
     }
 
@@ -251,12 +227,10 @@ class TypeInterventionHydrator implements HydratorInterface
             'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
             'visible' => $object->isVisible(),
-            'annee-debut-id'       => $object->getAnneeDebutId() ? $object->getAnneeDebutId()->getId() : null,
-            'annee-fin-id'         => $object->getAnneeFinId() ? $object->getAnneeFinId()->getId() : null,
+            'annee-debut'       => $object->getAnneeDebutId() ? $object->getAnneeDebutId()->getId() : null,
+            'annee-fin'         => $object->getAnneeFinId() ? $object->getAnneeFinId()->getId() : null,
             'regle-foad'           => $object->getRegleFOAD(),
             'regle-fc'           => $object->getRegleFC(),
-            'regle-chargens'           => $object->getRegleChargens(),
-            'regle-vh-ens'           => $object->getRegleVHEns(),
         ];
 
         return $data;

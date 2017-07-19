@@ -19,11 +19,6 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $code;
 
     /**
-     * @var boolean
-     */
-    private $interventionIndividualisee;
-
-    /**
      * @var string
      */
     private $libelle;
@@ -58,13 +53,6 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $visible;
 
     /**
-     * enseignement
-     *
-     * @var boolean
-     */
-    private $enseignement;
-
-    /**
      * anneeDebutId
      *
      * @var Annee
@@ -97,21 +85,7 @@ class TypeIntervention implements HistoriqueAwareInterface
      * @var boolean
      */
     private $regleFC;
-
-    /**
-     * regleChargens
-     *
-     * @var boolean
-     */
-    private $regleChargens;
-
-    /**
-     * regleVHEns
-     *
-     * @var boolean
-     */
-    private $regleVHEns;
-
+    
     /**
      * Constructor
      */
@@ -176,30 +150,6 @@ class TypeIntervention implements HistoriqueAwareInterface
     public function setVisible($visible)
     {
         $this->visible = $visible;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function getEnseignement()
-    {
-        return $this->enseignement;
-    }
-
-
-
-    /**
-     * @param bool $enseignement
-     *
-     * @return TypeIntervention
-     */
-    public function setEnseignement($enseignement)
-    {
-        $this->enseignement = $enseignement;
 
         return $this;
     }
@@ -286,50 +236,7 @@ class TypeIntervention implements HistoriqueAwareInterface
 
         return $this;
     }
-
-    /**
-     * @return bool
-     */
-    public function getRegleChargens()
-    {
-        return $this->regleChargens;
-    }
-
-
-
-    /**
-     * @param bool $regleChargens
-     *
-     * @return TypeIntervention
-     */
-    public function setRegleChargens($regleChargens)
-    {
-        $this->regleChargens = $regleChargens;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getRegleVHEns()
-    {
-        return $this->regleVHEns;
-    }
-
-
-
-    /**
-     * @param bool $regleVHEns
-     *
-     * @return TypeIntervention
-     */
-    public function setRegleVHEns($regleVHEns)
-    {
-        $this->regleVHEns = $regleVHEns;
-
-        return $this;
-    }
+    
 
     /**
      * Add typeInterventionStructure
@@ -390,35 +297,6 @@ class TypeIntervention implements HistoriqueAwareInterface
 
         return $this->typeInterventionStructure;
     }
-
-
-
-    /**
-     * Set interventionIndividualisee
-     *
-     * @param boolean $interventionIndividualisee
-     *
-     * @return TypeIntervention
-     */
-    public function setInterventionIndividualisee($interventionIndividualisee)
-    {
-        $this->interventionIndividualisee = $interventionIndividualisee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get interventionIndividualisee
-     *
-     * @return boolean
-     */
-    public function getInterventionIndividualisee()
-    {
-        return $this->interventionIndividualisee;
-    }
-
 
 
     /**

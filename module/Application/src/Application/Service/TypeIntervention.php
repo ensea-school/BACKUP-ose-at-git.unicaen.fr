@@ -101,4 +101,5 @@ class TypeIntervention extends AbstractEntityService
 
         return $this->typesIntervention;
     }
+    
 }

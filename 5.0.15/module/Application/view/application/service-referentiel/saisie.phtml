@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ */
+
+
+echo $this->formServiceReferentielSaisie($form)->render();
+
+echo $this->formErrors($form);
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

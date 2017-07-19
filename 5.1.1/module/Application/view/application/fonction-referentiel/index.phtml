@@ -1,0 +1,73 @@
+<?php
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $fonctionsReferentiels \Application\Entity\Db\FonctionReferentiel[]
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Gestion du référentiel fonctionnel");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_ADMIN_EDITION));
+
+?>
+    <h1 class="page-header">Gestion du référentiel fonctionnel</h1>
+
+    <table class="table table-bordered table-sort">
+        <thead>
+        <th>Code</th>
+        <th>Libelle</th>
+        <th>Libelle court</th>
+        <th>Domaine Fonctionnel</th>
+        <th>Plafond</th>
+        <th>Structure</th>
+        <?php if ($canEdit) echo '<th>Actions</th>' ?>
+        </thead>
+        <tbody>
+        <?php foreach ($fonctionsReferentiels as $fr): ?>
+            <tr>
+                <td><?php echo $fr->getCode() ?>
+                </td>
+                <td><?php echo $fr->getLibelleLong() ?></td>
+                <td><?php echo $fr->getLibelleCourt() ?></td>
+                <td><?php echo $fr->getDomaineFonctionnel() ?></td>
+                <td><?php echo $fr->getPlafond() ?></td>
+                <td><?php echo $this->structure($fr->getStructure())->renderLink() ?></td>
+                <?php if ($canEdit) { ?>
+                    <td style="text-align:center;width:1px;white-space: nowrap">
+                        <a class="ajax-modal" data-event="fonction-referentiel-saisie"
+                           href="<?php echo $this->url('fonction-referentiel/saisie', ['fonctionReferentiel' => $fr->getId()]) ?>"
+                           title="Modifier la fonction référentielle">
+                            <span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="pop-ajax"
+                           href="<?php echo $this->url('fonction-referentiel/delete', ['fonctionReferentiel' => $fr->getId()]) ?>"
+                           title="Supprimer la fonction référentielle"
+                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                           data-confirm="true"
+                           data-confirm-button="Oui"
+                           data-cancel-button="Non"
+                           data-submit-reload="true"
+                        >
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+                <?php } ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="fonction-referentiel-saisie"
+       href="<?php echo $this->url('fonction-referentiel/saisie') ?>"
+       title="Ajouter une fonction référentielle">
+        <span class="glyphicon glyphicon-edit"></span>
+        Ajouter une fonction référentielle</a>
+
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("fonction-referentiel-saisie", function (event, data) {
+                window.location.reload();
+            });
+        });
+    </script>
+<?php endif ?>

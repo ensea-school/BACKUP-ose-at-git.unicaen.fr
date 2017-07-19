@@ -1,0 +1,15 @@
+<p>
+    Bonjour.
+</p>
+
+<p>
+    Ceci est un message d'information concernant le dépôt de pièces justificatives par l'intervenant 
+    <?php echo $this->intervenant ?> dans l'application 
+    <a href="<?php echo $this->url ?>"><?php echo $this->appInfos()->nom ?></a>.
+</p>
+
+<?php echo $this->htmlList($this->messages) ?>
+
+<p>
+    Bonne continuation.
+</p>

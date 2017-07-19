@@ -1,0 +1,112 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $title       string
+ * @var $intervenant \Application\Entity\Db\Intervenant
+ * @var $contrats    \Application\Entity\Db\Contrat[]
+ */
+
+$hasContrat = !empty($contrats);
+
+$this->headTitle()->append($intervenant->getNomUsuel())->append("Contrat/avenant");
+
+$this->messenger()->addMessagesFromFlashMessenger();
+if ($services['non-contractualises']) {
+    $this->messenger()->addMessage('Des heures prévisionnelles d\'enseignement validées ne font l\'objet d\'aucun contrat ou avenant. En voici la liste ci-dessous :', 'danger');
+}else{
+    $this->messenger()->addMessage('Tous les enseignements prévisionnels validés ont fait l\'objet d\'un contrat ou d\'un avenant.', 'success');
+}
+
+?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php echo $this->messenger() ?>
+
+<style>
+    th.structure, td.structure {
+        width: 10%;
+    }
+
+    .ui-datepicker {
+        z-index: 1151 !important;
+    }
+
+    td .panel {
+        margin-bottom: 0px;
+    }
+
+</style>
+
+<?php if ($contrats || $services['non-contractualises']): ?>
+
+    <?php if ($services['non-contractualises']): ?>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th class="structure">Composante</th>
+                <th>Enseignement(s) non contractualisé(s)</th>
+            </tr>
+
+            <?php foreach ($services['non-contractualises'] as $sid => $servicesNC):
+                $structure = current($servicesNC)->getElementPedagogique()->getStructure();
+                $contrat = new \Application\Entity\Db\Contrat();
+                $contrat->setIntervenant($intervenant);
+                $contrat->setStructure($structure);
+
+                $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
+                ?>
+                <tr>
+                    <td><?php echo $structure ?></td>
+                    <td>
+                        <?php if ($canCreer): ?>
+                            <a class="btn btn-primary"
+                               href="<?php echo $this->url('contrat/creer', ['intervenant' => $intervenant->getRouteParam(), 'structure' => $structure->getId()]); ?>">
+                                <span class="glyphicon glyphicon-file"></span> Créer un
+                                projet <?php echo $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                            </a>
+                        <?php else:
+                            echo $this->feuillederoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                        endif; ?>
+                        <p>
+                            Enseignements (validés) non contractualisés :<br/>
+                            <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
+                                      href="#details-enseignements-structure-<?php echo $sid ?>"
+                                      role="button"
+                                      aria-expanded="true" aria-controls="details-enseignements-structure-<?php echo $sid ?>"
+                                      data-toggle="collapse"
+                                >Afficher/masquer</a></small>
+                        </p>
+                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>" id="details-enseignements-structure-<?php echo $sid ?>">
+                            <?php echo $this->serviceListe($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+    <div class="well">
+    <h2>Contrats et avenants</h2>
+    <?php foreach ($contrats as $contrat): ?>
+
+        <?php echo $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()]]) ?>
+
+    <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>Aucun contrat/avenant trouvé.</p>
+<?php endif; ?>
+
+<hr/>
+<?php echo $this->feuillederoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+
+<script>
+    $("body").on("event-contrat-suppr event-contrat-validation event-validation-suppr event-saisie-retour-suppr", function (event, data)
+    {
+        console.log('event envoyé et affiché');
+        //event.div.modal('hide'); // ferme la fenêtre modale
+        //window.location.reload();
+    });
+</script>

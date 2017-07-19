@@ -1,0 +1,47 @@
+<?php
+
+use Application\Entity\Db\WfEtape;
+
+/**
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $role             \Application\Acl\Role
+ * @var $form             \Application\Form\Intervenant\Dossier
+ * @var $validation       \Application\Entity\Db\Validation
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ */
+
+$intervenant = $form->getObject();
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+
+$nextEtape = $validation ? WfEtape::CODE_DONNEES_PERSO_VALIDATION : WfEtape::CODE_DONNEES_PERSO_SAISIE;
+
+$this->headTitle()->append($intervenant->getNomUsuel())->append("Données personnelles");
+
+?>
+    <h1 class="page-header">Données personnelles
+        <small><?php echo $intervenant ?></small>
+    </h1>
+<?php
+
+/**
+ * Message Importance des données perso.
+ */
+if (!$form->getObject()->getId()){
+    $msg = "Ces données sont indispensables pour éditer %s contrat et mettre en paiement %s heures d'enseignement.";
+    if ($role->getIntervenant()) {
+        $this->messenger()->addMessage(sprintf($msg, 'votre', 'vos'), 'warning');
+    } else {
+        $this->messenger()->addMessage(sprintf($msg, 'le', 'les'), 'warning');
+    }
+}
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger()->addMessagesFromFlashMessenger();
+
+if ($validation) echo $this->tag('div', ['class' => 'bg-success'])->open();
+echo $this->partial('application/dossier/partial/form', compact('form', 'canValider', 'canDevalider', 'canSupprimer'));
+if ($validation) echo $this->tag('div')->close();
+
+
+echo $this->feuillederoute($intervenant)->renderNav($nextEtape);

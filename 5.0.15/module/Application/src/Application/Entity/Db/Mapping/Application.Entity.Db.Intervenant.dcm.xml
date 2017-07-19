@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT">
+        <indexes>
+            <index name="IDX_FED386B4C2443469" columns="TYPE_ID"/>
+            <index name="IDX_FED386B48C579EB7" columns="CIVILITE_ID"/>
+            <index name="IDX_FED386B4BB536304" columns="DISCIPLINE_ID"/>
+            <index name="IDX_FED386B459860CDC" columns="HISTO_CREATEUR_ID"/>
+            <index name="IDX_FED386B47E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+            <index name="IDX_FED386B463F06898" columns="HISTO_MODIFICATEUR_ID"/>
+            <index name="IDX_FED386B4E9B3446E" columns="SOURCE_ID"/>
+            <index name="IDX_FED386B48AAF600B" columns="STATUT_ID"/>
+            <index name="IDX_FED386B4884B0F7B" columns="STRUCTURE_ID"/>
+        </indexes>
+        <unique-constraints>
+            <unique-constraint name="intervenant_source__un" columns="SOURCE_CODE"/>
+        </unique-constraints>
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <field name="code" type="string" column="CODE" length="60" nullable="false"/>
+        <field name="supannEmpId" type="string" column="SUPANN_EMP_ID" length="60" nullable="false"/>
+        <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>
+        <field name="email" type="string" column="EMAIL" length="255" nullable="true"/>
+        <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+        <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+        <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+        <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="60" nullable="false"/>
+        <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
+        <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
+        <field name="numeroInseeCle" type="string" column="NUMERO_INSEE_CLE" length="2" nullable="true"/>
+        <field name="numeroInseeProvisoire" type="boolean" column="NUMERO_INSEE_PROVISOIRE" nullable="true"/>
+        <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
+        <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
+        <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
+        <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>
+        <field name="villeNaissanceCodeInsee" type="string" column="VILLE_NAISSANCE_CODE_INSEE" length="5" nullable="true"/>
+        <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
+        <field name="BIC" type="string" column="BIC" length="255" nullable="true"/>
+        <field name="IBAN" type="string" column="IBAN" length="255" nullable="true"/>
+        <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
+        <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true" />
+
+        <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
+            <join-columns>
+                <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="paysNationalite" target-entity="Application\Entity\Db\Pays">
+            <join-columns>
+                <join-column name="PAYS_NATIONALITE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="depNaissance" target-entity="Application\Entity\Db\Departement">
+            <join-columns>
+                <join-column name="DEP_NAISSANCE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+
+        <many-to-one field="grade" target-entity="Application\Entity\Db\Grade">
+            <join-columns>
+                <join-column name="GRADE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
+            <join-columns>
+                <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+            <join-columns>
+                <join-column name="STATUT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+            <join-columns>
+                <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
+            <join-columns>
+                <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="discipline" target-entity="Application\Entity\Db\Discipline">
+            <join-columns>
+                <join-column name="DISCIPLINE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+            <join-columns>
+                <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <one-to-one field="dossier" target-entity="Application\Entity\Db\Dossier" mapped-by="intervenant" fetch="EXTRA_LAZY"/>
+        <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant"/>
+        <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant"/>
+        <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant"/>
+        <one-to-many field="pieceJointe" target-entity="Application\Entity\Db\PieceJointe" mapped-by="intervenant" fetch="EXTRA_LAZY"/>
+        <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService" mapped-by="intervenant"/>
+        <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+        <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
+        <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant"/>
+        <one-to-many field="formuleIntervenant" target-entity="Application\Entity\Db\FormuleIntervenant" mapped-by="intervenant" fetch="EXTRA_LAZY"/>
+        <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
+        <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier" mapped-by="intervenant"/>
+        <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>
+        <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+        <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant"/>
+    </entity>
+</doctrine-mapping>

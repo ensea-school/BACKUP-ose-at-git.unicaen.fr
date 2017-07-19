@@ -1,0 +1,195 @@
+<?php
+
+namespace Application\Processus;
+
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TblValidationEnseignement;
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Validation;
+use Application\Service\Traits\TypeValidationAwareTrait;
+use Application\Service\Traits\ValidationAwareTrait;
+
+
+/**
+ * Description of ValidationEnseignementProcessus
+ *
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ */
+class ValidationEnseignementProcessus extends AbstractProcessus
+{
+    use TypeValidationAwareTrait;
+    use ValidationAwareTrait;
+
+
+
+    /**
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param Intervenant       $intervenant
+     * @param Structure|null    $structure
+     *
+     * @return Validation[]
+     */
+    public function lister(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant, Structure $structure = null)
+    {
+        $dql = "
+        SELECT
+          tve, str, v
+        FROM
+          Application\Entity\Db\TblValidationEnseignement tve
+          JOIN tve.structure        str
+          LEFT JOIN tve.validation  v
+        WHERE
+          tve.typeVolumeHoraire = :typeVolumeHoraire
+          AND tve.intervenant = :intervenant
+          " . ($structure ? 'AND tve.structure = :structure' : '') . "
+        ORDER BY
+          v.id, str.libelleCourt
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameters(compact('typeVolumeHoraire', 'intervenant'));
+        if ($structure) {
+            $query->setParameter('structure', $structure);
+        }
+        $res = $query->execute();
+        /* @var $res TblValidationEnseignement[] */
+
+        $validations = [];
+        foreach ($res as $tve) {
+            $this->getEntityManager()->detach($tve);
+            $validation        = $tve->getValidation() ?: $this->creer($intervenant, $tve->getStructure());
+            $vid               = $this->getValidationId($validation);
+            $validations[$vid] = $validation;
+        }
+
+        return $validations;
+    }
+
+
+
+    /**
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param Validation        $validation
+     * @param bool              $detach
+     *
+     * @return Service[]
+     */
+    public function getServices(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation, $detach = true)
+    {
+        $services = [];
+
+        $dql = "
+        SELECT
+          tve, str, s, vh, v
+        FROM
+          Application\Entity\Db\TblValidationEnseignement tve
+          JOIN tve.structure        str
+          JOIN tve.service          s
+          JOIN s.volumeHoraire      vh WITH vh = tve.volumeHoraire
+          LEFT JOIN tve.validation  v
+        WHERE
+          tve.typeVolumeHoraire = :typeVolumeHoraire
+          AND tve.intervenant = :intervenant
+          AND " . ($validation->getId() ? "tve.validation = :validation" : "tve.validation IS NULL AND tve.structure = :structure") . "
+        ";
+
+        $query = $this->getEntityManager()->createQuery($dql);
+        $query->setParameters([
+            'typeVolumeHoraire' => $typeVolumeHoraire,
+            'intervenant'       => $validation->getIntervenant(),
+        ]);
+        if ($validation->getId()) {
+            $query->setParameter('validation', $validation);
+        } else {
+            $query->setParameter('structure', $validation->getStructure());
+        }
+
+        $res = $query->execute();
+        /* @var $res TblValidationEnseignement[] */
+
+        foreach ($res as $tve) {
+            $service = $tve->getService();
+            if ($detach) {
+                $this->getEntityManager()->detach($service);
+            }
+            $service->setTypeVolumeHoraire($typeVolumeHoraire);
+            $services[$service->getId()] = $service;
+        }
+
+        return $services;
+    }
+
+
+
+    /**
+     * @param Intervenant $intervenant
+     * @param Structure   $structure
+     *
+     * @return Validation
+     */
+    public function creer(Intervenant $intervenant, Structure $structure)
+    {
+        $typeValidation = $this->getServiceTypeValidation()->getEnseignement();
+
+        $validation = $this->getServiceValidation()->newEntity($typeValidation)
+            ->setIntervenant($intervenant)
+            ->setStructure($structure);
+
+        return $validation;
+    }
+
+
+
+    /**
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param Validation        $validation
+     *
+     * @return self
+     */
+    public function enregistrer(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation)
+    {
+        $services = $this->getServices($typeVolumeHoraire, $validation, false);
+        foreach ($services as $service) {
+            foreach ($service->getVolumehoraire() as $vh) {
+                /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                $validation->addVolumeHoraire($vh);
+            }
+        }
+        $this->getServiceValidation()->save($validation);
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param Validation $validation
+     *
+     * @return $this
+     */
+    public function supprimer(Validation $validation)
+    {
+        $this->getServiceValidation()->delete($validation);
+
+        return $this;
+    }
+
+
+
+    /**
+     * Retourne un ID de validation. Si la validation n'existe pas alors il crée un ID composé de nv_ + ID de la structure
+     *
+     * @param Validation $validation
+     *
+     * @return int|string
+     */
+    public function getValidationId(Validation $validation)
+    {
+        if ($validation->getId()) {
+            return $validation->getId();
+        } else {
+            return 'nv_' . $validation->getStructure()->getId();
+        }
+    }
+}

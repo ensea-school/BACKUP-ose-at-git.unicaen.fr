@@ -1,0 +1,172 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $typeHeures        array
+ * @var $typeInterventions array
+ * @var $filtre            \Application\Form\Chargens\FiltreForm
+ */
+
+$canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENARIO_DUPLICATION));
+
+?>
+<nav class="navbar navbar-default">
+    <?php if ($filtre): ?>
+        <div class="row div-filtre chargens-filtre">
+            <div class="col-md-2 div-structure">
+                <?php echo $this->formSelect($filtre->get('structure')) ?>
+            </div>
+            <div class="col-md-7 div-etape">
+                <?php echo $this->formSelect($filtre->get('etape')) ?>
+            </div>
+            <div class="col-md-3 div-scenario">
+                <?php echo $this->formSelect($filtre->get('scenario')) ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <div class="row div-controles">
+        <div class="col-md-12">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default" title="Plein écran">
+                    <input type="checkbox" class="fullscreen" autocomplete="off"/>
+                    <span class="glyphicon glyphicon-fullscreen"></span>
+                    Plein écran
+                </label>
+            </div>
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default zplus" title="Zoomer">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                    Zoom +
+                </button>
+                <button type="button" class="btn btn-default zmoins" title="Dézoomer">
+                    <span class="glyphicon glyphicon-zoom-out"></span>
+                    Zoom -
+                </button>
+                <button type="button" class="btn btn-default zdefaut" title="Zoom par défaut">
+                    <span class="glyphicon glyphicon-search"></span>
+                    Zoom par défaut
+                </button>
+            </div>
+
+            <?php if ($canCopy): ?>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default dupliquer" title="Dupliquer les données de ce diagramme dans un autre scénario">
+                   <span class="glyphicon glyphicon-copy"></span> Dupliquer
+                </button>
+            </div>
+            <?php endif; ?>
+
+            <div class="nav navbar-nav navbar-right navbar-brand div-hetd-composante">
+                <span id="heures-composante"></span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<div class="form-noeud" style="display:none">
+    <div class="row" id="choix-assiduite">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="groupes">Assiduité</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" min="0" placeholder="Assiduité" id="assiduite"
+                           aria-describedby="add-assiduite">
+                    <span class="input-group-addon" id="add-assiduite">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" id="effectifs">
+        <label for="groupes" title="Effectifs">Effectifs</label>
+        <div class="input-group">
+
+            <div class="row">
+                <?php foreach ($typeHeures as $tid => $tval): ?>
+                    <div class="col-md-<?php echo floor(12 / count($typeHeures)) ?>">
+                        <div class="input-group">
+                            <input type="number" class="form-control" min="0" placeholder="<?php echo $tval ?>"
+                                   id="effectifs-<?php echo $tid ?>"
+                                   aria-describedby="add-effectifs-<?php echo $tid ?>">
+                            <span class="input-group-addon" id="add-effectifs-<?php echo $tid ?>"><?php echo $tval ?></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-condensed" id="seuils">
+        <thead>
+        <th>Seuils</th>
+        <th>Ouverture</th>
+        <th>Dédoublement</th>
+        <th class="seuil-assiduite">Assiduité</th>
+        </thead>
+        <tbody>
+        <?php foreach ($typeInterventions as $tid => $tval): ?>
+            <tr class="seuil" id="seuil-<?php echo $tid ?>">
+                <th style="width:20%"><?php echo $tval ?></th>
+                <td>
+                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-ouverture-<?php echo $tid ?>"/>
+                </td>
+                <td>
+                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-dedoublement-<?php echo $tid ?>"/>
+                </td>
+                <td>
+                    <div class="input-group seuil-assiduite">
+                        <input type="number" class="form-control" min="0" aria-describedby="pseuil-assiduite-<?php echo $tid ?>" placeholder="100" id="seuil-assiduite-<?php echo $tid ?>"/>
+                        <span class="input-group-addon" id="pseuil-assiduite-<?php echo $tid ?>">%</span>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div class="text-right">
+        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fa fa-undo"></i> Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save"><i class="fa fa-save"></i> Enregistrer</button>
+    </div>
+</div>
+<div class="form-lien" style="display:none">
+    <div class="row" id="choix">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="choix-minimum" title="Choix minimum">Choix min.</label>
+                <input type="number" class="form-control" placeholder="Min." id="choix-minimum"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="choix-maximum" title="Choix maximum">Choix max.</label>
+                <input type="number" class="form-control" placeholder="Max." id="choix-maximum"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" id="div-actif">
+            <div class="form-group">
+                <label for="actif" title="Lien actif">Actif</label>
+                <input type="checkbox" class="form-control" placeholder="Actif" id="actif" value="1"/>
+            </div>
+        </div>
+        <div class="col-md-6" id="div-poids">
+            <div class="form-group">
+                <label for="poids" title="Poids du lien par rapport aux autres">Poids</label>
+                <input type="text" class="form-control" placeholder="Poids" id="poids"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-right">
+        <button type="button" class="btn btn-warning" id="btn-cancel"><i class="fa fa-undo"></i> Annuler</button>
+        <button type="button" class="btn btn-primary" id="btn-save"><i class="fa fa-save"></i> Enregistrer</button>
+    </div>
+</div>

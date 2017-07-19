@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $form \Application\Form\Intervenant\ContratRetour
+ * @var $done boolean
+ */
+
+?>
+    <h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+
+if (!$done) echo $this->messenger()->addMessagesFromFlashMessenger();
+
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formControlGroup($form->get('dateRetourSigne'));
+echo $this->formHidden($form->get('security'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+echo $this->form()->closeTag();

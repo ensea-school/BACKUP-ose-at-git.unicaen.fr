@@ -1,0 +1,256 @@
+<?php
+use Application\Entity\Db\TypePieceJointe;
+use Application\Entity\Db\StatutIntervenant;
+use Application\Provider\Privilege\Privileges;
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
+
+?>
+
+<style>
+    .triables {
+        align: left;
+    }
+
+    .champ-triable tr {
+        align: left;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $(".triables").sortable({
+            handle: '.glyphicon-move',
+            axis: 'y',
+            update: function (event, ui) {
+                var champsIds = '';
+                ui.item.parent().find('tr.champ-triable').each(function () {
+                    if (champsIds != '') champsIds += ',';
+                    champsIds += $(this).data('id');
+                });
+                $.post(Url('piece-jointe/type-piece-jointe-trier'), {champsIds: champsIds}).done(function (res) {
+                    alertFlash(res.msg, 'success', 3000);
+                });
+            }
+        });
+    });
+    //        $(".triables").disableSelection();
+
+    /**
+     *
+     * @param i int
+     * @param j int
+     * position dans le tableau <colonne><ligne>
+     *     parcours tout le tableau
+     *     met le fond en blanc partout sauf sur l'intersection gauche/haut de la case de la souris dans la couleur #FCF8E3
+     */
+    function sourisHover(i, j) {
+        var k, l, n, m; // indices dans le tableau
+        var clr;
+        var objCell, objR, objP, objTb;
+        var objDiv;
+ //       ajuste(); // en incluant ajuste donne le width de la table
+        objP = document.getElementById('tblTpjs');
+        objTb = objP.children;
+        objR = objTb[0].children;
+        objCell = objR[0].children;
+        n = objCell.length - 1;
+        for (l = 1; l < n; l++) {
+            objDiv = document.getElementById('th' + l);
+            if (l == i) clr = "#FCF8E3";
+            else clr = "#FFFFFF";
+            objDiv.style.backgroundColor = clr;
+        }
+        objR = objTb[1].children;
+        m = objR.length;
+        // la colonne
+        for (k = 0; k < m; k++) {
+            objCell = objR[k].children;
+            n = objCell.length;
+            for (l = 0; l < n; l++) {
+                if ((k == j) && (l <= i)) clr = "#FCF8E3";
+                else if ((l == i) && (k <= j))  clr = "#FCF8E3";
+                else clr = "#FFFFFF";
+                objCell[l].style.backgroundColor = clr;
+            }
+        }
+    }
+
+    function ajuste(){
+        var i,n; // indice de ligne et nbe de colonnes
+        var ObjR,objCell,objDiv,objTb;
+        var taille;
+        objP = document.getElementById('tblTpjs');
+        objTb = objP.children;
+        objR = objTb[0].children;
+        objCell = objR[0].children;
+        n = objCell.length - 1;
+        taille=n*10+10+objCell[0].clientWidth; // padd 8+2 pour chaque bord * nbe de colonnnes
+        for(i=1;i<n;i++){
+            objDiv=document.getElementById('th'+i);
+            taille+=objDiv.clientWidth;
+        }
+     alert(taille);
+    }
+
+</script>
+
+<?php $this->headTitle()->append($title = "Pièces justificatives attendues par statut d'intervenant") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+$typesPiecesJointesStatuts = $this->typesPiecesJointesStatuts;
+$isset = function ($tpj, $premierRecrut, $statut) use ($typesPiecesJointesStatuts) {
+    return isset($typesPiecesJointesStatuts[$tpj->getId()][$premierRecrut][$statut->getId()]) ?
+        $typesPiecesJointesStatuts[$tpj->getId()][$premierRecrut][$statut->getId()] :
+        null;
+};
+
+$that = $this;
+$url = function ($tpj, $si, $premierRecrutement) use ($that) {
+    return $that->url(
+        'piece-jointe/modifier-type-piece-jointe-statut',
+        ['typePieceJointe' => $tpj->getId(), 'statutIntervenant' => $si->getId(), 'premierRecrutement' => $premierRecrutement],
+        [],
+        true);
+};
+
+$tpjsToString = function ($tpjs) {
+    if (!$tpjs->getObligatoire()) {
+        return 'Fac';
+    }
+
+    return $tpjs->getObligatoire() ? $tpjs->getSeuilHeures() ? ">{$tpjs->getSeuilHeures()}h" : "Obl" : '-';
+};
+?>
+
+<?php $tblRow = -1;
+$tblCol = 0; // indices dans le tableau ?>
+<table id="tblTpjs" class="table-bordered table-condensed table-header table-header-rotated" style="width:1121px">
+    <thead>
+    <tr>
+        <th class="rotate-45 si" data-si="<?php $si = '&nbsp;' ?>">
+            <div><span><?php echo $si ?></span></div>
+        </th>
+        <!-- Premier recrutement -->
+        <?php foreach ($statutsIntervenants as $si):
+            $tblCol++; ?>
+            <th class="rotate-45 si" data-si="<?php $si->getLibelle() ?>">
+                <div id="<?php echo 'th' . $tblCol ?>"><span><?php echo $si; ?></span></div>
+            </th>
+        <?php endforeach ?>
+
+        <th class="rotate-45 si" data-si="<?php $si = '&nbsp;' ?>">
+            <div id="<?php $tblCol++;
+            echo 'th' . $tblCol ?>"><span><?php echo $si ?></span></div>
+        </th>
+        <!-- Deuxième recrutement -->
+        <?php foreach ($statutsIntervenants as $si):
+            $tblCol++; ?>
+            <th class="rotate-45 si" data-si="<?php $si->getLibelle() ?>">
+                <div id="<?php echo 'th' . $tblCol ?>"><span><?php echo $si; ?></span></div>
+            </th>
+        <?php endforeach ?>
+        <th style="border:none; width:166px">&nbsp;</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th colspan="<?php echo count($this->statutsIntervenants) ?>">Premier recrutement</th>
+        <th></th>
+        <th colspan="<?php echo count($this->statutsIntervenants) ?>">Deuxième recrutement</th>
+    </tr>
+    </thead>
+
+    <tbody class="triables">
+    <?php foreach ($this->typesPiecesJointes as $tpj): /* @var $tpj TypePieceJointe */
+        $tblRow++;
+        $tblCol = 1; ?>
+        <tr class="champ-triable" data-id="<?php echo $tpj->getId() ?>">
+            <th>
+                <?php echo $tpj ?>
+                <span class="pull-right">
+                    <span class="glyphicon glyphicon-move"
+                          title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
+                    <?php if ($canEdit): ?>
+                    <a class="pop-ajax" data-event="type-piece-jointe-saisie"
+                       href="<?php echo $this->url('piece-jointe/type-piece-jointe-saisie', ['typePieceJointe' => $tpj->getId()]) ?>"
+                       title="Modifier le type de pièce jointe"
+                       data-submit-reload="true">
+                        <span class="glyphicon pull-right glyphicon-edit"></span></a>
+                    <a class="pop-ajax"
+                       href="<?php echo $this->url('piece-jointe/type-piece-jointe-delete', ['typePieceJointe' => $tpj->getId()]) ?>"
+                       title="Supprimer le type de piece jointe"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span style="padding-right: 8px" class="glyphicon pull-right glyphicon-trash"></span>
+                    </a>
+                </span>
+                <?php endif; ?>
+            </th>
+            <!-- Premier recrutement -->
+            <?php foreach ($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
+                <td onmouseover="sourisHover(<?php echo $tblCol . ',' . $tblRow ?>)">
+                    <?php $tblCol++;
+                    if ($canEdit): ?>
+                        <a class="pop-ajax data-submit-close=" true" href="<?php echo $url($tpj, $si, 1) ?>"
+                        data-event="event-update-tpjs"
+                        data-submit-reload="true"><?php endif; ?>
+                    <?php if (($tpjs = $isset($tpj, 1, $si))): ?>
+                        <span title="<?php echo $tpjs ?>">
+                        <?php echo $tpjsToString($tpjs) ?>
+                    </span>
+                    <?php else: ?>
+                        -
+                    <?php endif ?>
+                    <?php if ($canEdit): ?></a><?php endif; ?>
+                </td>
+            <?php endforeach;
+            $tblCol++; ?>
+
+            <td></td>
+
+            <!-- Deuxième recrutement -->
+            <?php foreach ($this->statutsIntervenants as $si): /* @var $si TypePieceJointe */ ?>
+                <td onmouseover="sourisHover(<?php echo $tblCol . ',' . $tblRow ?>)">
+                    <?php $tblCol++;
+                    if ($canEdit): ?><a class="pop-ajax data-submit-close=" true"
+                        data-submit-reload="true"
+                        href="<?php echo $url($tpj, $si, 0) ?>"
+                        data-event="event-update-tpjs"><?php endif; ?>
+                    <?php if (($tpjs = $isset($tpj, 0, $si))): ?>
+                        <span title="<?php echo $tpjs ?>">
+                        <?php echo $tpjsToString($tpjs) ?>
+                    </span>
+                    <?php else: ?>
+                        -
+                    <?php endif ?>
+                    <?php if ($canEdit): ?></a><?php endif; ?>
+                </td>
+            <?php endforeach ?>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+
+</table>
+<?php if ($canEdit): ?>
+<a class="btn btn-primary pop-ajax" data-submit-reload="true"
+   href="<?php echo $this->url('piece-jointe/type-piece-jointe-saisie') ?>"
+   title="Ajouter un type de pièce jointe"><span class="glyphicon glyphicon-edit"></span>
+    Ajouter un type de pièce jointe</a>
+<script>
+    $(function () {
+
+        $("body").on("event-update-tpjs", function (event, data) {
+//            console.log(event, data);
+            window.location.reload();
+        });
+    });
+</script>
+<?php endif; ?>

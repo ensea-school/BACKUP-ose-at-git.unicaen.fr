@@ -1,0 +1,52 @@
+<h1 class="page-header">Gestion des rôles</h1>
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+/* @var $roles Application\Entity\Db\Role[] */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_ROLE_EDITION));
+$ajoutUrl = $this->url( 'droits/roles/edition' );
+
+?>
+<table class="table table-condensed table-bordered">
+    <tr>
+        <th>Code</th>
+        <th>Libellé</th>
+        <th>Périmètre</th>
+        <th>Struct. modifiable</th>
+        <?php if ($canEdit): ?><th>Action</th><?php endif; ?>
+    </tr>
+<?php foreach( $roles as $role ):
+    $editionUrl     = $this->url( 'droits/roles/edition',     ['role' => $role->getId()] );
+    $suppressionUrl = $this->url( 'droits/roles/suppression', ['role' => $role->getId()] );
+?>
+    <tr>
+        <td><?php echo $role->getCode(); ?></td>
+        <td><?php echo $role->getLibelle(); ?></td>
+        <td><?php echo $role->getPerimetre(); ?></td>
+        <td style="text-align: center;"><?php echo $role->getPeutChangerStructure() ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>'; ?></td>
+        <?php if ($canEdit): ?>
+        <td style="width:1%;white-space: nowrap;text-align: center">
+            <a href="<?php echo $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><span class="glyphicon glyphicon-edit"></span></a>
+            <a href="<?php echo $suppressionUrl; ?>" class="ajax-modal" data-event="role-suppression"><span class="glyphicon glyphicon-remove"></span></a>
+        </td>
+        <?php endif; ?>
+    </tr>
+<?php endforeach; ?>
+</table>
+<?php if ($canEdit): // droits ?>
+<a href="<?php echo $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="role-edition">Création d'un nouveau rôle</a>
+<?php endif; ?>
+<?php echo $this->modalAjaxDialog('roles-edition-suppression'); ?>
+<script type="text/javascript">
+    $(function() {
+        $("body").on("role-edition", function(event, data) {
+            window.location.reload();
+        });
+
+        $("body").on("role-suppression", function(event, data) {
+            window.location.reload();
+        });
+    });
+</script>

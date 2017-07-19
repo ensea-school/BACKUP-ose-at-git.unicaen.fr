@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $title string
+ * @var $count integer
+ * @var $form  \Zend\Form\Form
+ */
+
+echo $this->form()->openTag($this->form->setAttribute('id','mail-form'));
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <?php echo $this->formControlGroup($this->form->get('from')->setLabel("Expéditeur du mail")->setAttribute('disabled', 'disabled')) ?>
+    </div>
+    <div class="col-md-4">
+        <?php echo $this->formControlGroup($this->form->get('nombre')->setLabel("Nombre de mails à envoyer")->setAttribute('disabled', 'disabled')) ?>
+    </div>
+</div>
+<?php echo $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
+<?php echo $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
+<button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fa fa-undo" aria-hidden="true"></i>
+    Retour à l'indicateur
+</button>
+<button class="btn btn-primary" type="submit"><span class='glyphicon glyphicon-send'></span> Envoyer</button>
+<?php echo $this->formHidden($form->get('intervenants')) . $this->form()->closeTag(); ?>
+
+<script type="text/javascript">
+    $(function ()
+    {
+        var selector = "textarea#<?php echo $this->form->get('body')->getAttribute('id') ?>";
+        var form = $("form#<?php echo $this->form->getAttribute('id') ?>");
+        var message = "Êtes-vous sûr(e) de vouloir envoyer ce message aux intervenants (<?php echo $count ?>) ?";
+
+        installEditor(selector, form);
+
+        //  avant de POSTer
+        form.submit(function (e)
+        {
+            if (!confirm(message)) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    });
+
+    /**
+     * Installation d'un éditeur WYSIWYG (vers HTML) : http://www.tinymce.com
+     * NB: l'inclusion du script de TinyMCE est faite dans la vue "mère" (application/indicateur/result.phtml).
+     * @param {string} selector
+     * @param {object} form
+     */
+    function installEditor(selector, form)
+    {
+        WidgetInitializer.includeJs(Url('vendor/tinymce-4.4.1/js/tinymce/tinymce.min.js'));
+        tinymce.editors = [];
+        tinymce.init({
+            selector: selector,
+            language: 'fr_FR',
+            width: '100%',
+            height: 400,
+            plugins: "link",
+            statusbar: false,
+            menubar: false,
+            toolbar: "bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | undo redo"
+        });
+        // Prevent bootstrap dialog from blocking focusin
+        $(document).on('focusin', function (e)
+        {
+            if ($(e.target).closest(".mce-window").length) {
+                e.stopImmediatePropagation();
+            }
+        });
+        // Indispensable pour que le contenu du textarea soit mis à jour avant de POSTer
+        form.submit(function ()
+        {
+            tinymce.triggerSave();
+        });
+    }
+</script>

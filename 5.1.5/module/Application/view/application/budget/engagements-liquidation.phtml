@@ -1,0 +1,157 @@
+<?php
+
+use UnicaenApp\Util;
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $structureElement   \Zend\Form\Element\Select
+ * @var $structure          \Application\Entity\Db\Structure
+ * @var $dotations          array
+ * @var $previsionnelValide float
+ * @var $liquidation        array
+ */
+
+echo '<h1 class="page-header">Budget '.$annee.' - Engagements & Liquidation</h1>';
+
+if ($structureElement) {
+    echo $this->formControlGroup($structureElement);
+}
+
+?>
+
+<?php if ($structure): ?>
+    <div class="engagement">
+        <!-- Abondements par types de ressources -->
+        <?php foreach ($dotations['typesRessources'] as $dtr):
+            $canEdit = $this->isAllowed($dtr['entity'], $dtr['entity']->getPrivilegeBudgetEdition());
+            ?>
+            <div class="col-md-<?php echo floor(12 / count($dotations['typesRessources'])) ?>">
+                <h2><?php echo $dtr['entity']->getLibelle() ?></h2>
+                <table class="table table-bordered table-hover">
+                    <?php foreach ($dtr['abondements'] as $libelle => $abondement): ?>
+                        <tr>
+                            <th><?php echo $abondement['libelle'] ?></th>
+                            <td class="dotation"><?php fdot($this, $dtr['entity'], $libelle, $abondement, $canEdit) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <th>Total</th>
+                        <td class="dotation"><?php fdot($this, $dtr['entity'], null, $dtr['total'], $canEdit) ?></td>
+                    </tr>
+                </table>
+            </div>
+        <?php endforeach; ?>
+
+        <!-- Liquidation -->
+        <div class="liquidation">
+            <h2>Liquidation</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <th rowspan="2">&nbsp;</th>
+                    <th rowspan="2">Prévisionnel</th>
+                    <th colspan="<?php echo count($dotations['typesRessources']) ?>">Réalisé (mises en paiement demandées)</th>
+                </tr>
+                <tr>
+                    <?php foreach ($dotations['typesRessources'] as $dtr): ?>
+                        <th style="width:12em"><?php echo $dtr['entity']->getLibelle() ?></th>
+                    <?php endforeach; ?>
+                </tr>
+                <tr>
+                    <th>Dotation</th>
+                    <td class="hetd"><?php echo Util::formattedNumber($dotations['total']['heures']) ?><span class="label">HETD</span></td>
+                    <?php foreach ($dotations['typesRessources'] as $dtr): ?>
+                        <td class="hetd"><?php echo Util::formattedNumber($dtr['total']['heures']) ?><span class="label">HETD</span></td>
+                    <?php endforeach; ?>
+                </tr>
+                <tr>
+                    <th>HETD positionnées</th>
+                    <td class="hetd"><?php echo Util::formattedNumber($previsionnelValide) ?><span class="label">HETD</span></td>
+                    <?php foreach ($dotations['typesRessources'] as $dtr): ?>
+                        <td class="hetd"><?php echo Util::formattedNumber($liquidation[$dtr['entity']->getId()]['dmep']) ?><span class="label">HETD</span></td>
+                    <?php endforeach; ?>
+                </tr>
+                <tr>
+                    <th>Solde</th>
+                    <td class="hetd"><?php echo Util::formattedNumber($dotations['total']['heures'] - $previsionnelValide) ?><span class="label">HETD</span></td>
+                    <?php foreach ($dotations['typesRessources'] as $dtr): ?>
+                        <td class="hetd"><?php echo Util::formattedNumber($liquidation[$dtr['entity']->getId()]['solde']) ?><span class="label">HETD</span></td>
+                    <?php endforeach; ?>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function ()
+        {
+            $("body").on("engagement-maj", function (event, data)
+            {
+                window.location.reload();
+            });
+        });
+    </script>
+    <?php if ($this->isAllowed(\UnicaenAuth\Guard\PrivilegeController::getResourceId('Application\Controller\Budget', 'export'))): ?>
+        <div class="budget-export">
+            <a href="<?php echo $this->url('budget/export', ['structure' => $structure->getId()]) ?>">
+                <span class="glyphicon glyphicon-download"></span>
+                Export des données de paiement au format CSV
+            </a>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+
+<?php function fdot($view, $typeRessource, $libelle, array $data, $canEdit = true) /* Formatage d'une dotation */
+{
+
+    $titleA1 = 'Année ' . $data['anneeCivile1']['annee'] . ' (chiffre en HETD)';
+    $titleA2 = 'Année ' . $data['anneeCivile2']['annee'] . ' (chiffre en HETD)';
+    $titleA  = 'Année universitaire ' . $data['annee']
+        . ' (dont ' . Util::formattedFloat($data['anneeCivile1']['s2'], \NumberFormatter::DECIMAL, 2) . ' au titre de ' . $data['anneeCivile1']['annee']
+        . ' et ' . Util::formattedFloat($data['anneeCivile2']['s1']) . ' au titre de ' . $data['anneeCivile2']['annee'] . ' chiffre en HETD)';
+
+    if ($canEdit) {
+        $params1 = [
+            'annee'         => $data['anneeCivile1']['annee'],
+            'structure'     => $view->structure->getId(),
+            'typeRessource' => $typeRessource->getId(),
+        ];
+        if (isset($data['anneeCivile1']['s1Entity'])) $params1['dotation1'] = $data['anneeCivile1']['s1Entity']->getId();
+        if (isset($data['anneeCivile1']['s2Entity'])) $params1['dotation2'] = $data['anneeCivile1']['s2Entity']->getId();
+        $dotEditUrl1 = $view->url('budget/saisie-dotation', $params1, ['query' => ['libelle' => $libelle]]);
+
+
+        $params2 = [
+            'annee'         => $data['anneeCivile2']['annee'],
+            'structure'     => $view->structure->getId(),
+            'typeRessource' => $typeRessource->getId(),
+        ];
+        if (isset($data['anneeCivile2']['s1Entity'])) $params2['dotation1'] = $data['anneeCivile2']['s1Entity']->getId();
+        if (isset($data['anneeCivile2']['s2Entity'])) $params2['dotation2'] = $data['anneeCivile2']['s2Entity']->getId();
+        $dotEditUrl2 = $view->url('budget/saisie-dotation', $params2, ['query' => ['libelle' => $libelle]]);
+    }
+
+    ?>
+
+    <div class="ha ha1 col-md-6" title="<?php echo $titleA1 ?>">
+        <?php echo Util::formattedNumber($data['anneeCivile1']['heures']) ?><span class="label">HETD</span>
+        <?php if ($canEdit): ?>
+            <a href="<?php echo $dotEditUrl1 ?>" class="ajax-modal" data-event="engagement-maj"
+               title="<?php echo $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
+                <span class="glyphicon glyphicon-<?php echo $libelle ? 'edit' : 'plus' ?>"></span>
+            </a>
+        <?php endif; ?>
+    </div>
+    <div class="ha ha2 col-md-6" title="<?php echo $titleA2 ?>">
+        <?php echo Util::formattedNumber($data['anneeCivile2']['heures']) ?><span class="label">HETD</span>
+        <?php if ($canEdit): ?>
+            <a href="<?php echo $dotEditUrl2 ?>" class="ajax-modal" data-event="engagement-maj"
+               title="<?php echo $libelle ? 'Modifier la dotation' : 'Nouvel abondement' ?>">
+                <span class="glyphicon glyphicon-<?php echo $libelle ? 'edit' : 'plus' ?>"></span>
+            </a>
+        <?php endif; ?>
+    </div>
+
+    <div class="ha ha3 col-md-offset-3 col-md-6" title="<?php echo $titleA ?>">
+        <?php echo Util::formattedNumber($data['heures']) ?><span class="label">HETD</span>
+    </div>
+
+<?php }

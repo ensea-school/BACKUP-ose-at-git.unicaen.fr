@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $intervenant \Application\Entity\Db\Intervenant
+ */
+
+if ($intervenant) {
+    echo $this->tag('div', [
+        'id'       => 'int-suppr-div',
+        'data-url' => $this->url('intervenant/supprimer', ['intervenant' => $intervenant->getRouteParam()]),
+    ])->open();
+}
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+if ($data) {
+
+    $attrs = [
+        'id'          => 'intervenant-suppr',
+        'class'       => 'jstree jstree-checkbox-selection',
+        'data-widget' => [
+            "checkbox" => [
+                "keep_selected_style" => true,
+                "three_state"         => false,
+                "cascade"             => 'down',
+            ],
+            "plugins"  => ["checkbox"],
+        ],
+    ];
+    echo $this->tag('div', $attrs)->html($this->intervenantSuppressionData($data));
+
+    ?>
+    <button class="btn btn-danger" onclick="supprimer()">Supprimer définitivement les données sélectionnées</button>
+    <script>
+
+        function supprimer()
+        {
+            var div = $('#int-suppr-div');
+            var tree = $('#intervenant-suppr');
+            var selectedElms = tree.jstree("get_selected", true);
+            var ids = [];
+            $.each(selectedElms, function ()
+            {
+                ids.push(this.id);
+            });
+
+            div.load(div.data('url'), {
+                ids: ids
+            });
+        }
+
+    </script>
+    <?php
+
+}else{
+
+    ?>
+    <script>
+
+        window.setTimeout(function(){
+
+            window.location.href = <?php echo json_encode($this->url('intervenant/rechercher')); ?>
+
+        }, 2000 );
+
+    </script>
+    <?php
+
+}
+
+if ($intervenant) echo '</div>';

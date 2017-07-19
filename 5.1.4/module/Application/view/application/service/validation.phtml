@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $validations       \Application\Entity\Db\Validation[]
+ * @var $typeVolumehoraire \Application\Entity\Db\TypeVolumeHoraire
+ */
+
+$this->headTitle()->append($intervenant->getNomUsuel())->append($title);
+
+?>
+    <h1 class="page-header">
+        <?php echo $title ?>
+        <small><?php echo $intervenant ?></small>
+    </h1>
+<?php
+
+$wells = [
+    'non-valides' => 'Enseignements non validés',
+    'valides'     => 'Enseignements validés',
+];
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+foreach ($wells as $well => $title) {
+    if ($services[$well]) {
+        echo '<div class="well"><h2>' . $title . '</h2>';
+        foreach ($services[$well] as $validationId => $srvs) {
+            $validation = $validations[$validationId];
+            echo $this->partial('application/service/partial/validation-service', [
+                'validation'        => $validation,
+                'structure'         => $validation->getStructure(),
+                'services'          => $srvs,
+                'typeVolumeHoraire' => $typeVolumeHoraire,
+            ]);
+        }
+        echo '</div>';
+    }
+}
+
+echo $this->feuillederoute($intervenant)->renderNav(
+    $typeVolumeHoraire->isPrevu() ?
+        \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION
+        : \Application\Entity\Db\WfEtape::CODE_SERVICE_VALIDATION_REALISE
+);

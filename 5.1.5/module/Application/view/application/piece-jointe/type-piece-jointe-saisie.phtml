@@ -1,0 +1,12 @@
+<?php
+/**
+* @var $this  \Application\View\Renderer\PhpRenderer
+* @var $form  \Application\Form\PieceJointe\TypePieceJointeSaisieForm
+*/
+
+?>
+<h1 class="page-header">Saisie d'un type de pièce jointe</h1>
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+echo $this->form($form);

@@ -1,0 +1,172 @@
+<?php
+
+use Application\Assertion\ContratAssertion;
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this     \Application\View\Renderer\PhpRenderer
+ * @var $contrat  \Application\Entity\Db\Contrat
+ * @var $services \Application\Entity\Db\Service[]
+ */
+
+$validation  = $contrat->getValidation();
+$retourSigne = $contrat->getDateRetourSigne();
+$uploader    = $this->uploader();
+
+$urlExport = $this->url('contrat/exporter', ['contrat' => $contrat->getId()]); // oui car on peut le voir!!
+
+$urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
+    ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)
+    : null;
+
+$urlValidation = $this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)
+    ? $this->url('contrat/valider', ['contrat' => $contrat->getId()])
+    : null;
+
+$urlDevalidation = $this->isAllowed($contrat, Privileges::CONTRAT_DEVALIDATION)
+    ? $this->url('contrat/devalider', ['contrat' => $contrat->getId()])
+    : null;
+
+$urlSaisieRetour = $this->isAllowed($contrat, Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE)
+    ? $this->url('contrat/saisir-retour', ['contrat' => $contrat->getId()])
+    : null;
+
+$urlAjouter = $this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)
+    ? $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true)
+    : null;
+
+$urlSuppression = $this->isAllowed($contrat, Privileges::CONTRAT_SUPPRESSION)
+    ? $this->url('contrat/supprimer', ['contrat' => $contrat->getId()])
+    : null;
+
+if ($urlAjouter) {
+    $uploader->setUrl($urlAjouter);
+}
+
+$panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default');
+
+?>
+<div class="contrat panel panel-<?php echo $panel ?>" id="contrat-<?php echo $contrat->getId() ?>">
+    <div class="panel-heading panel-heading-h3">
+        <!-- Lien de téléchargement du fichier -->
+        <?php if ($urlExport): ?>
+            <span class="pull-right">
+            <a class="btn btn-<?php echo $panel ?>" href="<?php echo $urlExport ?>" title="Exporter le contrat/avenant au format PDF">
+                <span class="glyphicon glyphicon-export"></span> Exporter en PDF
+            </a>
+            </span>
+        <?php endif; ?>
+        <h3><?php echo $contrat ?> - <?php echo $contrat->getStructure() ?></h3>
+    </div>
+
+    <div class="panel-body">
+        <!-- Informations -->
+        <ul style="list-style-type: none">
+            <li><span class="glyphicon glyphicon-thumbs-up"></span> Créé
+                le <?php echo $contrat->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
+                par <?php echo $this->utilisateur($contrat->getHistoModificateur()) ?></li>
+            <?php if ($validation): ?>
+                <li><span class="glyphicon glyphicon-thumbs-up"></span> Validé
+                    le <?php echo $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
+                    par <?php echo $this->utilisateur($validation->getHistoCreateur()) ?></li>
+            <?php endif; ?>
+            <?php if ($retourSigne): ?>
+                <li><span class="glyphicon glyphicon-thumbs-up"></span> Retourné signé
+                    le <?php echo $retourSigne->format(Application\Constants::DATE_FORMAT) ?></li>
+            <?php endif ?>
+        </ul>
+
+        <!-- Upload de fichiers -->
+        <?php if ($urlLister): ?>
+            <div class="upload-container">
+                <hr/>
+                <div class="row">
+                    <!-- Liste des fichiers déposés -->
+                    <div class="col-md-6">
+                        <?php echo $uploader->renderUploadedFiles($urlLister) ?>
+                    </div>
+                    <!-- formulaire de dépôt -->
+                    <?php if ($urlAjouter): ?>
+                        <div class="col-md-6">
+                            <?php echo $uploader->renderForm() ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Liste des enseignements concernés -->
+        <div>
+            <hr/>
+            <a title="Cliquez pour afficher/masquer les enseignements concernés"
+               href="#details-enseignements-contrat-<?php echo $contrat->getId() ?>"
+               role="button"
+               aria-expanded="false"
+               aria-controls="details-enseignements-contrat-<?php echo $contrat->getId() ?>"
+               data-toggle="collapse"
+            >Enseignements concernés
+                <small>(cliquez pour afficher/cacher)</small>
+            </a>
+            <div class="collapse" id="details-enseignements-contrat-<?php echo $contrat->getId() ?>">
+                <?php echo $this->serviceListe($services)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+            </div>
+        </div>
+    </div>
+
+    <?php if ($urlValidation || $urlSaisieRetour || $urlDevalidation || $urlSuppression): ?>
+        <div class="panel-footer">
+            <!-- Actions -->
+            <?php if ($urlValidation): ?>
+                <a
+                    href="<?php echo $urlValidation ?>"
+                    class="btn btn-primary pop-ajax"
+                    title="Valider les données personnelles"
+                    data-content="Confirmez-vous cette validation ?"
+                    data-confirm="true"
+                    data-confirm-button="Je confirme"
+                    data-cancel-button="Non"
+                    data-submit-reload="true"
+                >
+                    <span class="glyphicon glyphicon-thumbs-up"></span> Valider
+                </a>
+            <?php endif; ?>
+
+            <?php if ($urlSaisieRetour): ?>
+                <a href="<?php echo $urlSaisieRetour ?>" class="btn btn-primary pop-ajax"
+                   data-submit-reload="true">
+                    <span
+                        class="glyphicon glyphicon-calendar"></span> <?php echo $contrat->getDateRetourSigne() ? 'Modifier' : 'Saisir' ?>
+                    la date de retour signé
+                </a>
+            <?php endif; ?>
+
+            <?php if ($urlDevalidation): ?>
+                <a
+                    href="<?php echo $urlDevalidation ?>"
+                    class="btn btn-danger pop-ajax"
+                    data-submit-reload="true"
+                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
+                    data-confirm="true"
+                    data-confirm-button="Oui"
+                    data-cancel-button="Non"
+                >
+                    <span class="glyphicon glyphicon-thumbs-down"></span> Dévalider
+                </a>
+            <?php endif; ?>
+
+            <?php if ($urlSuppression): ?>
+                <a
+                    href="<?php echo $urlSuppression ?>"
+                    class="btn btn-danger pop-ajax"
+                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression <?php echo lcfirst($contrat->toString(true, true)) ?> ?</p>"
+                    data-confirm="true"
+                    data-confirm-button="Oui"
+                    data-cancel-button="Non"
+                    data-submit-reload="true"
+                >
+                    <span class="glyphicon glyphicon-trash"></span> Supprimer
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,146 @@
+<?php
+
+use Application\Entity\Db\WfEtape;
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this              \Application\View\Renderer\PhpRenderer
+ * @var $intervenant       \Application\Entity\Db\Intervenant
+ * @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire
+ * @var $cloture           \Application\Entity\Db\Validation|null
+ * @var $role              \Application\Acl\Role
+ */
+
+$service = new \Application\Entity\Db\Service();
+$service->setIntervenant($intervenant);
+$service->setTypeVolumeHoraire($typeVolumeHoraire);
+$canAddService = $this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
+
+$serviceReferentiel = new \Application\Entity\Db\ServiceReferentiel();
+$serviceReferentiel->setIntervenant($intervenant);
+$serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
+$canAddServiceReferentiel = $this->isAllowed($serviceReferentiel, Privileges::REFERENTIEL_EDITION);
+
+if ($typeVolumeHoraire->isPrevu()) {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE;
+    $title     = 'Enseignements';
+} else {
+    $nextEtape = WfEtape::CODE_SERVICE_SAISIE_REALISE;
+    $title     = 'Constatation des enseignements réalisés';
+}
+
+$menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()], ['query' => ['menu' => 1]]);
+
+$btnNextUrl = $this->url('workflow/feuille-de-route-btn-next', ['intervenant' => $intervenant->getRouteParam(), 'wfEtapeCode' => $nextEtape]);
+
+$this->headTitle()->append($intervenant->getNomUsuel())->append($title);
+$title .= ' <small>' . $intervenant . '</small>';
+
+
+?>
+    <h1 class="page-header"><?php echo $title; ?></h1>
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+$bottom = false;
+if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));
+
+/* Services et horodatage */
+if ($services !== false) {
+    $serviceListe = $this->serviceListe($services);
+    $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddService);
+    if ($canAddService && $typeVolumeHoraire->isPrevu()) {
+        $serviceListe->showPrevuToPrevu($intervenant);
+    }
+    echo $serviceListe->render();
+
+    echo $this->partial('application/intervenant/partial/horodatage', [
+        'intervenant'       => $intervenant,
+        'typeVolumeHoraire' => $typeVolumeHoraire,
+        'referentiel'       => false,
+    ]);
+}
+
+/* Référentiel et horodatage */
+if ($servicesReferentiel !== false) {
+    $serviceReferentielListe = $this->serviceReferentielListe($servicesReferentiel);
+    $serviceReferentielListe->setTypeVolumeHoraire($typeVolumeHoraire)->setAddButtonVisibility($canAddServiceReferentiel);
+    if ($canAddServiceReferentiel && $typeVolumeHoraire->isPrevu()) {
+        $serviceReferentielListe->showPrevuToPrevu($intervenant);
+    }
+    echo '<h1>Référentiel</h1><hr />';
+    echo $serviceReferentielListe->render();
+
+    echo $this->partial('application/intervenant/partial/horodatage', [
+        'intervenant'       => $intervenant,
+        'typeVolumeHoraire' => $typeVolumeHoraire,
+        'referentiel'       => true,
+    ]);
+}
+
+$bottom = true;
+if ($cloture) echo $this->partial('application/intervenant/partial/cloture', compact('cloture', 'role', 'bottom'));
+
+
+echo $formuleTotauxHetd;
+
+?>
+
+    <hr/>
+    <div id="feuille-de-route-btn-next" data-url="<?php echo $btnNextUrl ?>">
+        <?php echo $this->feuillederoute($intervenant)->renderNav($nextEtape); ?>
+    </div>
+
+<?php if ($services !== false || $servicesReferentiel !== false): ?>
+    <script>
+
+        $(function ()
+        {
+            WidgetInitializer.includeJs(Url('js/service.js'));
+            WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
+            WidgetInitializer.includeCss(Url('css/service.css'));
+
+            <?php if ($services !== false): ?>$('.service-liste').serviceListe({
+                'heures-change-exists': function ()
+                {
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?php echo $menuUrl; ?>');
+
+                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                    $('#feuille-de-route-btn-next').refresh();
+                },
+                'heures-change': function ()
+                {
+                    // on met à jour le résultat de la formule
+                    $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+
+                    // on met à jour l'horodatage des services !!
+                    $("#s-horodatage").refresh();
+                }
+            });<?php endif; ?>
+
+
+            <?php if ($servicesReferentiel !== false): ?>$('.service-referentiel-liste').serviceReferentielListe({
+                'heures-change-exists': function ()
+                {
+                    // chargement du menu pour faire apparaître ou disparaitre les liens de validation
+                    $('#sidebar').load('<?php echo $menuUrl; ?>');
+
+                    // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
+                    $('#feuille-de-route-btn-next').refresh();
+                },
+                'heures-change': function ()
+                {
+                    // on met à jour le résultat de la formule
+                    $("#formule-totaux-hetd").refresh(); // HETD rafraichis
+
+                    // on met à jour l'horodatage des services !!
+                    $("#sr-horodatage").refresh();
+                }
+            });<?php endif; ?>
+
+        });
+
+    </script>
+<?php endif; ?>

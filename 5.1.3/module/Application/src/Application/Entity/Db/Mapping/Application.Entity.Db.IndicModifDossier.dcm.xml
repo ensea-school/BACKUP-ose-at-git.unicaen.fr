@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\IndicModifDossier" table="INDIC_MODIF_DOSSIER">
+    <id name="id" type="integer" column="ID"/>
+    <field name="attrName" type="text" column="ATTR_NAME" nullable="false"/>
+    <field name="attrOldSourceName" type="text" column="ATTR_OLD_SOURCE_NAME" nullable="false"/>
+    <field name="attrOldValue" type="text" column="ATTR_OLD_VALUE" nullable="false"/>
+    <field name="attrNewSourceName" type="text" column="ATTR_NEW_SOURCE_NAME" nullable="false"/>
+    <field name="attrNewValue" type="text" column="ATTR_NEW_VALUE" nullable="false"/>
+    <field name="estCreationDossier" type="boolean" column="EST_CREATION_DOSSIER" nullable="false"/>
+
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+      <join-columns>
+          <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+          <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+          <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+          <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+
+  </entity>
+</doctrine-mapping>

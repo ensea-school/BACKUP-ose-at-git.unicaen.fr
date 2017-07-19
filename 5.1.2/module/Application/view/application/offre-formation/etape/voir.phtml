@@ -1,0 +1,38 @@
+<?php
+
+use Application\Provider\Privilege\Privileges;
+
+?>
+<h3><?php echo $etape ?>
+    <small><?php echo $etape->getSourceCode() ?></small>
+</h3>
+
+<?php
+
+/* @var $serviceEtape \Application\Service\Etape */
+
+$tabs = [
+    [
+        'id'      => 'fiche',
+        'label'   => 'Fiche',
+        'content' => (string)$this->etape($etape),
+    ],
+];
+
+if ($this->isAllowed($etape,Privileges::ODF_CENTRES_COUT_EDITION)){
+    $tabs[] = [
+        'id'    => 'centres-couts',
+        'label' => '<span class="glyphicon glyphicon-euro"></span> Centres de coûts',
+        'url'   => $this->url('of/etape/centres-couts', ['etape' => $etape->getId()]),
+    ];
+}
+
+if ($this->isAllowed($etape,Privileges::ODF_MODULATEURS_EDITION)){
+    $tabs[] = [
+        'id'    => 'modulateurs',
+        'label' => '<span class="glyphicon glyphicon-list-alt"></span> Modulateurs',
+        'url'   => $this->url('of/etape/modulateurs', ['etape' => $etape->getId()]),
+    ];
+}
+
+echo $this->tabajax($tabs);

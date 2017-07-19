@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Dossier" table="DOSSIER">
+    <indexes>
+      <index name="IDX_20D1E2D59860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_20D1E2D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_20D1E2D63F06898" columns="HISTO_MODIFICATEUR_ID"/>
+    </indexes>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="adresse" type="string" column="ADRESSE" length="1024" nullable="false"/>
+    <field name="email" type="string" column="EMAIL" length="128" nullable="false"/>
+    <field name="emailPerso" type="string" column="EMAIL_PERSO" length="128" nullable="true"/>
+    <field name="telephone" type="string" column="TELEPHONE" length="20" nullable="true"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="128" nullable="true"/>
+    <field name="nomUsuel" type="string" column="NOM_USUEL" length="128" nullable="false"/>
+    <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="10" nullable="false"/>
+    <field name="numeroInseeEstProvisoire" type="boolean" column="NUMERO_INSEE_EST_PROVISOIRE" nullable="false"/>
+    <field name="prenom" type="string" column="PRENOM" length="128" nullable="false"/>
+    <field name="rib" type="string" column="RIB" length="50" nullable="false"/>
+    <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="true"/>
+    <field name="villeNaissance" type="string" column="VILLE_NAISSANCE" length="128" nullable="true"/>
+    <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="false"/>
+    <!--<one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" mapped-by="dossier"/>-->
+
+    <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
+      <join-columns>
+        <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+      <join-columns>
+        <join-column name="STATUT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
+      <join-columns>
+        <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="departementNaissance" target-entity="Application\Entity\Db\Departement">
+      <join-columns>
+        <join-column name="DEPT_NAISSANCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="dossier">
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

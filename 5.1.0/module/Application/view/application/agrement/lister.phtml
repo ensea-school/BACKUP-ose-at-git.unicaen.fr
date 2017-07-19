@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @var $this          \Application\View\Renderer\PhpRenderer
+ * @var $role          \Application\Acl\Role
+ * @var $typeAgrement  \Application\Entity\Db\TypeAgrement
+ * @var $intervenant   \Application\Entity\Db\Intervenant
+ * @var $data          array
+ * @var $needStructure boolean
+ * @var $hasActions    boolean
+ */
+
+$this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $typeAgrement");
+
+?>
+
+<h1 class="page-header"><?php echo sprintf("Agrément par %s <small>%s</small>", $typeAgrement->toString(true), $intervenant) ?></h1>
+
+<?php if (!empty($data)): ?>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <?php if ($needStructure): ?><th style="width: 100px">Composante</th><?php endif; ?>
+            <th>Agrément</th>
+            <?php if ($hasActions): ?><th style="width:1px">Action</th><?php endif; ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($data as $d): extract($d); ?>
+            <tr>
+                <?php if ($needStructure): ?>
+                    <td class="structure"><?php echo $ta->getStructure() ?></td>
+                <?php endif; ?>
+                <td class="agrement">
+                    <?php
+                    if ($agrement = $ta->getAgrement()) {
+                        echo $this->agrement($agrement)->short()->box();
+                    } else {
+                        echo 'Aucun';
+                    }
+                    ?>
+                </td>
+                <?php if ($hasActions): ?>
+                    <td>
+                        <?php if ($actionUrl): ?>
+                            <a class="btn btn-primary pop-ajax" data-submit-reload="true" data-min-width="13em" data-placement="left"
+                               href="<?php echo $actionUrl ?>"><?php echo $actionLabel ?></a>
+                        <?php endif; ?>
+                    </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+<?php if (empty($data)): ?>
+    <div class="alert alert-info">Aucun agrément n'est nécessaire</div>
+<?php endif; ?>
+
+
+
+    <hr/>
+    <?php echo $this->feuillederoute($intervenant)->renderNav($typeAgrement->getCode()); ?>

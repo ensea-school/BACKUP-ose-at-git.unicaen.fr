@@ -1,0 +1,66 @@
+<?php
+
+namespace Application\Service;
+
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+
+/**
+ * Description of TypeIntervenant
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class TypeIntervenant extends AbstractEntityService
+{
+
+    /**
+     * retourne la classe des entités
+     *
+     * @return string
+     * @throws RuntimeException
+     */
+    public function getEntityClass()
+    {
+        return TypeIntervenantEntity::class;
+    }
+
+    /**
+     * Retourne le type d'intervenant Permanent
+     *
+     * @return TypeIntervenantEntity
+     */
+    public function getPermanent()
+    {
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenantEntity::CODE_PERMANENT]);
+    }
+
+    /**
+     * Retourne le type d'intervenant Extérieur
+     *
+     * @return TypeIntervenantEntity
+     */
+    public function getExterieur()
+    {
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenantEntity::CODE_EXTERIEUR]);
+    }
+
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias(){
+        return 'type_int';
+    }
+
+    /**
+     *
+     * @param string $code
+     * @return TypeIntervenantEntity
+     */
+    public function getByCode( $code )
+    {
+        if (null == $code) return null;
+        return $this->getRepo()->findOneBy(['code' => $code]);
+    }
+
+}

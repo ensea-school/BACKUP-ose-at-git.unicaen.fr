@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ * @var $seuils    array
+ */
+
+$title = "Export des charges d'enseignement";
+
+$this->headTitle()->append($title);
+
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<div class="chargens-filtre">
+        <label>Scénario : </label>
+        <?php echo $this->formSelect($filtre->get('scenario')) ?>
+        <button class="btn btn-default" type="button" onclick="getCsv()"><span class="glyphicon glyphicon-export"></span> Exporter</button>
+</div>
+<br />
+
+
+<a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
+    <i class="fa fa-undo" aria-hidden="true"></i>
+    Retour au menu des charges d'enseignement
+</a>
+
+<script>
+
+    function getCsv()
+    {
+        var scenario = $(".chargens-filtre #scenario").val();
+
+        if (!scenario){
+            alert('Scénario non sélectionné');
+        }else{
+            var url = "<?php echo $this->url('chargens/export/csv') ?>";
+
+            location.href = url + '/' + scenario;
+        }
+    }
+
+    $(function ()
+    {
+        $(".chargens-filtre #scenario").change(function () { getCsv(); });
+    });
+
+</script>

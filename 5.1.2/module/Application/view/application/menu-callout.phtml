@@ -1,0 +1,44 @@
+<?php
+
+use UnicaenApp\View\Helper\TagViewHelper;
+
+/**
+ * @var $container Zend\Navigation\Navigation
+ * @var $this      \Application\View\Renderer\PhpRenderer
+ */
+
+echo $this->tag('div', ['class'=>'callout-menu']);
+foreach ($container as $page) {
+    if ($this->navigation()->accept($page)) {
+        $attrs = [
+            'class' => 'callout',
+        ];
+        if ($borderColor = $page->get('border-color')) {
+            $attrs['style'] = 'border-left-color:' . $borderColor;
+        }
+        if ($description = $page->get('description')) {
+            $attrs['title'] = $description;
+        }
+
+        echo $this->tag('div', ['class'=>'callout-container']);
+        echo $this->tag('div', $attrs);
+        if ($icon = $page->get('icon')) {
+            echo $this->tag('span', ['class' => $icon])->open(TagViewHelper::AUTOCLOSE_FULL);
+        }
+        echo $this->tag('h1')->html($this->navigation()->htmlify($page));
+
+        if ($page->hasPages()) {
+            echo '<ul>';
+            $children = $page->getPages();
+            foreach ($children as $child) {
+                if ($this->navigation()->accept($child)) {
+                    echo $this->tag('li')->html($this->navigation()->htmlify($child));
+                }
+            }
+            echo '</ul>';
+        }
+        echo '</div>';
+        echo '</div>';
+    }
+}
+echo '</div>';

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\FormuleVolumeHoraire" table="V_FORMULE_VOLUME_HORAIRE" read-only="true">
+    <id name="id" type="integer" column="ID" />
+    <many-to-one field="service" target-entity="Application\Entity\Db\Service">
+      <join-columns>
+        <join-column name="SERVICE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
+      <join-columns>
+        <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
+      <join-columns>
+        <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+      <join-columns>
+        <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="tauxServiceCompl" type="float" column="TAUX_SERVICE_COMPL" precision="126" scale="0" nullable="false"/>
+    <field name="tauxServiceDu" type="float" column="TAUX_SERVICE_DU" precision="126" scale="0" nullable="false"/>
+    <many-to-one field="formuleService" target-entity="Application\Entity\Db\FormuleService">
+      <join-columns>
+        <join-column name="SERVICE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-one field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire">
+      <join-columns>
+        <join-column name="ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

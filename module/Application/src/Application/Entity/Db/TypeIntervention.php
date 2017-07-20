@@ -66,7 +66,7 @@ class TypeIntervention implements HistoriqueAwareInterface
      */
     private $anneeFinId;
 
-    
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -85,7 +85,7 @@ class TypeIntervention implements HistoriqueAwareInterface
      * @var boolean
      */
     private $regleFC;
-    
+
     /**
      * Constructor
      */
@@ -201,7 +201,7 @@ class TypeIntervention implements HistoriqueAwareInterface
     {
         return $this->regleFOAD;
     }
-    
+
 
     /**
      * @param bool $regleFOAD
@@ -214,7 +214,7 @@ class TypeIntervention implements HistoriqueAwareInterface
 
         return $this;
     }
-    
+
     /**
      * @return bool
      */
@@ -236,7 +236,7 @@ class TypeIntervention implements HistoriqueAwareInterface
 
         return $this;
     }
-    
+
 
     /**
      * Add typeInterventionStructure

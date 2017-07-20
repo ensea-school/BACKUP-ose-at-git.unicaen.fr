@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
-use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantService;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
@@ -175,13 +175,13 @@ class Intervenant extends AbstractEntityService
     /**
      * Filtre par le type d'intervenant
      *
-     * @param TypeIntervenant   $typeIntervenant Type de l'intervenant
+     * @param TypeIntervenantService   $typeIntervenant Type de l'intervenant
      * @param QueryBuilder|null $queryBuilder
      * @param string|null       $alias
      *
      * @return QueryBuilder
      */
-    public function finderByType(TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByType(TypeIntervenantService $typeIntervenant, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatutIntervenant();

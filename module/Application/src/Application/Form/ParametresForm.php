@@ -209,6 +209,38 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'export_pdf_services_signature_1',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Signature 1',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'export_pdf_services_signataire_1',
+            'type'    => 'Textarea',
+            'options' => [
+                'label' => 'Signataire 1',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'export_pdf_services_signature_2',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Signature 2',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'export_pdf_services_signataire_2',
+            'type'    => 'Textarea',
+            'options' => [
+                'label' => 'Signataire 2',
+            ],
+        ]);
+
+        $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [

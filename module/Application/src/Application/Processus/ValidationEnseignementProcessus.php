@@ -3,6 +3,7 @@
 namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblValidationEnseignement;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -149,7 +150,19 @@ class ValidationEnseignementProcessus extends AbstractProcessus
      */
     public function enregistrer(TypeVolumeHoraire $typeVolumeHoraire, Validation $validation)
     {
+        /** @var Service[] $services */
         $services = $this->getServices($typeVolumeHoraire, $validation, false);
+
+        /* Contrôle de validation */
+        foreach ($services as $service) {
+            foreach ($service->getVolumehoraire() as $vh) {
+                /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                if ($service->getElementPedagogique() && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())){
+                    throw new \Exception('Des heures sont saisies sur au moins un type d\'intervention ('.$vh->getTypeIntervention().') non approprié. Veuillez modifier le service avant de pouvoir le valider.');
+                }
+            }
+        }
+
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
                 /* @var $vh \Application\Entity\Db\VolumeHoraire */

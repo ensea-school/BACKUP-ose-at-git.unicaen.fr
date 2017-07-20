@@ -17,6 +17,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const AGREMENT_CONSEIL_RESTREINT_EDITION         = 'agrement-conseil-restreint-edition';
     const AGREMENT_CONSEIL_RESTREINT_SUPPRESSION     = 'agrement-conseil-restreint-suppression';
     const AGREMENT_CONSEIL_RESTREINT_VISUALISATION   = 'agrement-conseil-restreint-visualisation';
+    const AGREMENT_EXPORT_CSV                        = 'agrement-export-csv';
     const BUDGET_CC_ACTIVITE_EDITION                 = 'budget-cc-activite-edition';
     const BUDGET_CC_ACTIVITE_VISUALISATION           = 'budget-cc-activite-visualisation';
     const BUDGET_EDITION_ENGAGEMENT_COMPOSANTE       = 'budget-edition-engagement-composante';
@@ -97,6 +98,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT = 'mise-en-paiement-visualisation-intervenant';
     const MODIF_SERVICE_DU_ASSOCIATION               = 'modif-service-du-association';
     const MODIF_SERVICE_DU_EDITION                   = 'modif-service-du-edition';
+    const MODIF_SERVICE_DU_EXPORT_CSV                = 'modif-service-du-export-csv';
     const MODIF_SERVICE_DU_VISUALISATION             = 'modif-service-du-visualisation';
     const MODULATEUR_EDITION                         = 'modulateur-edition';
     const MODULATEUR_VISUALISATION                   = 'modulateur-visualisation';

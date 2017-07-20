@@ -2,11 +2,11 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\GroupeTypeFormation;
+use Application\Entity\Db\GroupeTypeFormation as GroupeTypeFormationEntity;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
@@ -65,9 +65,9 @@ class SeuilChargeService extends AbstractEntityService
 
     /**
      * @param Scenario|integer                 $scenario
-     * @param Structure|integer|null           $structure
-     * @param GroupeTypeFormation|integer|null $groupeTypeFormation
-     * @param TypeIntervention|integer         $typeIntervention
+     * @param StructureEntity|integer|null           $structure
+     * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
+     * @param TypeInterventionEntity|integer         $typeIntervention
      *
      * @return SeuilCharge|null
      */
@@ -90,9 +90,9 @@ class SeuilChargeService extends AbstractEntityService
 
     /**
      * @param Scenario|integer                 $scenario
-     * @param Structure|integer|null           $structure
-     * @param GroupeTypeFormation|integer|null $groupeTypeFormation
-     * @param TypeIntervention|integer         $typeIntervention
+     * @param StructureEntity|integer|null     $structure
+     * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
+     * @param TypeInterventionEntity|integer         $typeIntervention
      * @param integer|null                     $dedoublement
      *
      * @return self
@@ -109,13 +109,13 @@ class SeuilChargeService extends AbstractEntityService
             if (!$scenario instanceof Scenario) {
                 $scenario = $this->getServiceScenario()->get($scenario);
             }
-            if (!$structure instanceof Structure) {
+            if (!$structure instanceof StructureEntity) {
                 $structure = $this->getServiceStructure()->get($structure);
             }
-            if (!$groupeTypeFormation instanceof GroupeTypeFormation) {
+            if (!$groupeTypeFormation instanceof GroupeTypeFormationEntity) {
                 $groupeTypeFormation = $this->getServiceGroupeTypeFormation()->get($groupeTypeFormation);
             }
-            if (!$typeIntervention instanceof TypeIntervention) {
+            if (!$typeIntervention instanceof TypeInterventionEntity) {
                 $typeIntervention = $this->getServiceTypeIntervention()->get($typeIntervention);
             }
 
@@ -233,16 +233,15 @@ class SeuilChargeService extends AbstractEntityService
           LEFT JOIN type_intervention_structure tis ON 
             tis.type_intervention_id = ti.id 
             AND 1 = OSE_DIVERS.COMPRISE_ENTRE( tis.histo_creation, tis.histo_destruction )
-            AND 2016 BETWEEN NVL(tis.annee_debut_id,1) AND NVL(tis.annee_fin_id,999999999)
+            AND :annee BETWEEN NVL(tis.annee_debut_id,1) AND NVL(tis.annee_fin_id,999999999)
             " . ($structure ? 'AND tis.structure_id = ' . $structure->getId() : '') . "
         WHERE
           1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
-          AND ti.enseignement = 1
         ORDER BY
           ti.ordre
         ";
 
-        $data = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $data = $this->getEntityManager()->getConnection()->fetchAll($sql, ['annee' => $this->getServiceContext()->getAnnee()->getId()]);
         $res  = [];
         foreach ($data as $t) {
             $id          = (int)$t['ID'];

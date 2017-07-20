@@ -10,7 +10,7 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'intervenant' => [
+            'intervenant'             => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/intervenant',
@@ -221,12 +221,46 @@ return [
                     ],
                 ],
             ],
+            'modification-service-du' => [
+                'type'         => 'Literal',
+                'options'      => [
+                    'route'    => '/modification-service-du',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'ModificationServiceDu',
+                    ],
+                ],
+                'child_routes' => [
+                    'export-csv' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/export-csv',
+                            'defaults' => [
+                                'action' => 'export-csv',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
+                    'gestion'     => [
+                        'pages' => [
+                            'modification-service-du-export-csv' => [
+                                'label'        => "Modifications de service dû (CSV)",
+                                'icon'         => 'glyphicon glyphicon-adjust',
+                                'title'        => "Modifications de service dû (CSV)",
+                                'route'        => 'modification-service-du/export-csv',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\ModificationServiceDu', 'export-csv'),
+                                'order'        => 45,
+                                'border-color' => '#45DAE0',
+                            ],
+                        ],
+                    ],
                     'intervenant' => [
                         'label'    => 'Intervenant',
                         'title'    => "Intervenant",
@@ -370,6 +404,13 @@ return [
                         Privileges::MODIF_SERVICE_DU_VISUALISATION,
                     ],
                     'assertion'  => 'ModificationServiceDuAssertion',
+                ],
+                [
+                    'controller' => 'Application\Controller\ModificationServiceDu',
+                    'action'     => ['export-csv'],
+                    'privileges' => [
+                        Privileges::MODIF_SERVICE_DU_EXPORT_CSV,
+                    ],
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',

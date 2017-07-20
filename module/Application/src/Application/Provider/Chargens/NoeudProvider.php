@@ -238,7 +238,6 @@ class NoeudProvider
           JOIN type_intervention ti ON
             ti.id = vhe.type_intervention_id
             AND 1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
-            AND ti.enseignement = 1
         WHERE
           n.element_pedagogique_id IS NOT NULL
           AND n.id IN (" . $ids . ")
@@ -253,7 +252,6 @@ class NoeudProvider
           JOIN etape e ON e.id = n.etape_id
           JOIN type_intervention ti ON 
             1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
-            AND ti.enseignement = 1
           
           LEFT JOIN type_intervention_structure tis ON 
             tis.structure_id = e.structure_id 

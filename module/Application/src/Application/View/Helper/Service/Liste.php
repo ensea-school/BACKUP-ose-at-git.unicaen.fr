@@ -648,7 +648,7 @@ class Liste extends AbstractViewHelper
     public function getTypesIntervention()
     {
         if (!isset($this->typesIntervention)) {
-            $this->typesIntervention = $this->getServiceTypeIntervention()->getList();
+            $this->typesIntervention = $this->getServiceTypeIntervention()->getList( $this->getServiceTypeIntervention()->finderByContext() );
         }
 
         return $this->typesIntervention;

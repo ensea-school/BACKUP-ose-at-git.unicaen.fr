@@ -5,8 +5,8 @@ namespace Application\Service;
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
-use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\Validation;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 
@@ -118,13 +118,13 @@ class Dossier extends AbstractEntityService
      *
      * @param IntervenantEntity $intervenant
      *
-     * @return Validation
+     * @return ValidationEntity
      */
     public function getValidation(IntervenantEntity $intervenant)
     {
         $validation = null;
         $serviceValidation = $this->getServiceValidation();
-        $qb                = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $qb                = $serviceValidation->finderByType(TypeValidationEntity::CODE_DONNEES_PERSO);
         $serviceValidation->finderByHistorique($qb);
         $serviceValidation->finderByIntervenant($intervenant, $qb);
         $validations = $serviceValidation->getList($qb);

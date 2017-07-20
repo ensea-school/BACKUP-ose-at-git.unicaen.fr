@@ -102,7 +102,7 @@ class ChargensViewHelper extends AbstractViewHelper
     {
         if (!isset($this->buffer[__METHOD__])) {
             $qb = $this->getServiceTypeIntervention()->finderByHistorique();
-            $this->getServiceTypeIntervention()->finderByEnseignement(true, $qb);
+            $this->getServiceTypeIntervention()->finderByContext($qb);
 
             $typesIntervention = $this->getServiceTypeIntervention()->getList($qb);
             $data              = [];

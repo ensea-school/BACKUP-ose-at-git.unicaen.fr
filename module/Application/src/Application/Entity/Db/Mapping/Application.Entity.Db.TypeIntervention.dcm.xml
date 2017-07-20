@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\TypeIntervention" table="TYPE_INTERVENTION">
-    <indexes>
-      <index name="IDX_BF54E87F59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_BF54E87F7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_BF54E87F63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-    </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -18,14 +13,14 @@
     <field name="tauxHetdService" type="float" column="TAUX_HETD_SERVICE" nullable="false"/>
     <field name="tauxHetdComplementaire" type="float" column="TAUX_HETD_Complementaire" nullable="false"/>
     <field name="visible" type="boolean" column="VISIBLE" nullable="false"/>
-    <field name="regleFOAD" type="boolean" column="REGLE_FOAD" nullable="false"/>
-    <field name="regleFC" type="boolean" column="REGLE_FC" nullable="false"/>
-    <many-to-one field="anneeDebutId" target-entity="Application\Entity\Db\Annee">
-      <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
+    <many-to-one field="anneeDebut" target-entity="Application\Entity\Db\Annee">
+        <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
     </many-to-one>
-    <many-to-one field="anneeFinId" target-entity="Application\Entity\Db\Annee">
+    <many-to-one field="anneeFin" target-entity="Application\Entity\Db\Annee">
       <join-column name="ANNEE_FIN_ID" referenced-column-name="ID"/>
     </many-to-one>
+    <field name="regleFOAD" type="boolean" column="REGLE_FOAD" nullable="false"/>
+    <field name="regleFC" type="boolean" column="REGLE_FC" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

@@ -39,6 +39,15 @@ return [
                             ],
                         ],
                     ],
+                    'export-pdf'               => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/export-pdf',
+                            'defaults' => [
+                                'action' => 'export-pdf',
+                            ],
+                        ],
+                    ],
                     'resume-refresh'           => [
                         'type'    => 'Literal',
                         'options' => [
@@ -300,6 +309,13 @@ return [
                     'action'     => ['export'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_EXPORT_CSV,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['export-pdf'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_EXPORT_PDF,
                     ],
                 ],
 

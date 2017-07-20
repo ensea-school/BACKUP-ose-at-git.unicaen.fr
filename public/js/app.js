@@ -187,7 +187,7 @@ Util = {
         {
             var li = ul.find("li[data-original-index='" + this.index + "']");
 
-            if (values === 'all' || Util.inArray(this.value, values)) {
+            if (values === 'all' || Util.inArray(this.value, values) || this.value == '') {
                 li.show();
                 shown++;
                 lastShown = this.value;

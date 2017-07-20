@@ -62,7 +62,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paieme
             ?></td>
             <td><?php echo $paiement->getCentreCout() ?></td>
             <td><?php echo $paiement->getDomaineFonctionnel() ?></td>
-            <td data-order="<?php echo $paiement->getPeriodePaiement()->getOrdre() ?>"><?php echo $paiement->getPeriodePaiement()->getLibelleAnnuel($intervenant->getAnnee()) ?></td>
+            <td data-order="<?php echo $paiement->getPeriodePaiement() ? $paiement->getPeriodePaiement()->getOrdre() : 999999999 ?>"><?php echo $paiement->getPeriodePaiement() ? $paiement->getPeriodePaiement()->getLibelleAnnuel($intervenant->getAnnee()) : '<i>Simple demande</i>' ?></td>
             <td><?php echo $paiement->getTypeHeures() ?></td>
             <td><?php echo \UnicaenApp\Util::formattedNumber($paiement->getHeures()) ?></td>
         </tr>

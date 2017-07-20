@@ -4,12 +4,12 @@ namespace Application\Provider\Role;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
-use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
@@ -30,7 +30,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
     use PrivilegeProviderAwareTrait;
-    use UserContextServiceAwareTrait;
+    use ContextAwareTrait;
 
     /**
      * @var array
@@ -82,17 +82,18 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
     protected function getRolesPrivileges()
     {
-        if (!$this->rolesPrivileges){
+        if (!$this->rolesPrivileges) {
             $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
-            foreach( $pr as $priv => $roles ){
-                foreach( $roles as $role ){
-                    if (!isset($this->rolesPrivileges[$role])){
+            foreach ($pr as $priv => $roles) {
+                foreach ($roles as $role) {
+                    if (!isset($this->rolesPrivileges[$role])) {
                         $this->rolesPrivileges[$role] = [];
                     }
                     $this->rolesPrivileges[$role][] = $priv;
                 }
             }
         }
+
         return $this->rolesPrivileges;
     }
 
@@ -104,18 +105,13 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $r                      = new Role();
         $roles[$r->getRoleId()] = $r;
 
-        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
-            $supannEmpId = (integer)$ldapUser->getSupannEmpId();
-            $intervenant     = $this->getServiceIntervenant()->getBySourceCode($supannEmpId, null, false);
-            $personnel       = $this->getServicePersonnel()->getBySourceCode($supannEmpId);
-        } else {
-            $intervenant = null;
-            $personnel = null;
-        }
+        $intervenant = $this->getServiceContext()->getIntervenant();
+        $personnel   = $this->getServiceContext()->getPersonnel();
 
         /* Rôles du personnel */
 
         // chargement des rôles métiers
+
         $query = $this->getEntityManager()->createQuery(
             'SELECT DISTINCT
             r, a, s, p
@@ -126,24 +122,24 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             LEFT JOIN a.structure s
         WHERE
             1=compriseEntre(r.histoCreation,r.histoDestruction)'
-        )->setParameter(':personnel', $personnel);
+        )->setParameter('personnel', $personnel);
 
-        $result = $query->getResult();
+        $result          = $query->getResult();
         $rolesPrivileges = $this->getRolesPrivileges();
         foreach ($result as $dbRole) {
             /* @var $dbRole \Application\Entity\Db\Role */
             $roleId = $dbRole->getRoleId();
 
             $role = new Role($roleId, 'user', $dbRole->getLibelle());
-            if (isset($rolesPrivileges[$roleId])){
+            if (isset($rolesPrivileges[$roleId])) {
                 $role->initPrivileges($rolesPrivileges[$roleId]);
             }
 
-            if ($dbRole->getPeutChangerStructure()){
+            if ($dbRole->getPeutChangerStructure()) {
                 $role->setPeutChangerStructure(true);
             }
             /* @var $role Role */
-            $role->setDbRole( $dbRole );
+            $role->setDbRole($dbRole);
             $role->setPersonnel($personnel);
             $role->setPerimetre($dbRole->getPerimetre());
 
@@ -162,10 +158,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     if (!isset($roles[$affRoleId])) {
                         $affRoleLibelle = $dbRole->getLibelle() . ' (' . $structure->getLibelleCourt() . ')';
                         $affRole        = new \Application\Acl\Role($affRoleId, $roleId, $affRoleLibelle);
-                        if (isset($rolesPrivileges[$roleId])){
+                        if (isset($rolesPrivileges[$roleId])) {
                             $affRole->initPrivileges($rolesPrivileges[$roleId]);
                         }
-                        $affRole->setDbRole( $dbRole );
+                        $affRole->setDbRole($dbRole);
                         $affRole->setPersonnel($personnel);
                         $affRole->setStructure($structure);
                         $roles[$affRoleId] = $affRole;
@@ -173,6 +169,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }
             }
         }
+
 
         // Chargement des rôles par statut d'intervenant
         $si = $this->getStatutsInfo();
@@ -182,7 +179,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             if ($intervenant) {
                 if ($intervenant->getStatut()->getId() == $statut['statut-id']) {
                     $role->setIntervenant($intervenant);
-                    if (isset($rolesPrivileges[$intervenant->getStatut()->getRoleId()])){
+                    if (isset($rolesPrivileges[$intervenant->getStatut()->getRoleId()])) {
                         $role->initPrivileges($rolesPrivileges[$intervenant->getStatut()->getRoleId()]);
                     }
                 }
@@ -203,9 +200,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $statuts = $this->getServiceStatutIntervenant()->getList();
             foreach ($statuts as $statut) {
                 $si[] = [
-                    'statut-id'  => $statut->getId(),
-                    'role-id'    => $statut->getRoleId(),
-                    'role-name'  => $statut->getTypeIntervenant()->getLibelle(),
+                    'statut-id' => $statut->getId(),
+                    'role-id'   => $statut->getRoleId(),
+                    'role-name' => $statut->getTypeIntervenant()->getLibelle(),
                 ];
             }
             $session->statutsInfo = $si;

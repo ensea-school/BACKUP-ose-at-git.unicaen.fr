@@ -376,6 +376,7 @@ class ChargensController extends AbstractController
 
             'element-code'       => 'Ens. (code)',
             'element-libelle'    => 'Enseignement (libellé)',
+            'periode'            => 'Période',
             'discipline-code'    => 'Discipline (code)',
             'discipline-libelle' => 'Discipline (libellé)',
             'type-heures'        => 'Type d\'heures',
@@ -383,6 +384,7 @@ class ChargensController extends AbstractController
 
             'seuil-ouverture'    => 'Seuil d\'ouverture',
             'seuil-dedoublement' => 'Seuil de dédoublement',
+            'assiduite'          => 'Assiduité',
             'effectif-etape'     => 'Effectifs (étape)',
             'effectif-element'   => 'Effectifs (élément)',
             'heures-ens'         => 'Vol. Horaire',
@@ -406,6 +408,7 @@ class ChargensController extends AbstractController
 
                 'element-code'       => $d['ELEMENT_CODE'],
                 'element-libelle'    => $d['ELEMENT_LIBELLE'],
+                'periode'            => $d['PERIODE'],
                 'discipline-code'    => $d['DISCIPLINE_CODE'],
                 'discipline-libelle' => $d['DISCIPLINE_LIBELLE'],
                 'type-heures'        => $d['TYPE_HEURES'],
@@ -413,6 +416,7 @@ class ChargensController extends AbstractController
 
                 'seuil-ouverture'    => (int)$d['SEUIL_OUVERTURE'],
                 'seuil-dedoublement' => (int)$d['SEUIL_DEDOUBLEMENT'],
+                'assiduite'          => (float)$d['ASSIDUITE'],
                 'effectif-etape'     => (int)$d['EFFECTIF_ETAPE'],
                 'effectif-element'   => (int)$d['EFFECTIF_ELEMENT'],
                 'heures-ens'         => (float)$d['HEURES_ENS'],

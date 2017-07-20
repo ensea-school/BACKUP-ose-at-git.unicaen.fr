@@ -32,7 +32,7 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
      */
     public function getTypesInterventions()
     {
-        return $this->getServiceTypeIntervention()->getList();
+        return $this->getServiceTypeIntervention()->getList($this->getServiceTypeIntervention()->finderByContext());
     }
 
     /**
@@ -50,7 +50,8 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
                 ->setAllowedObjectBindingClass(VolumeHoraireListe::class)
         ;
 
-        foreach( $this->getTypesInterventions() as $typeIntervention ){
+        $tis = $this->getTypesInterventions();
+        foreach( $tis as $typeIntervention ){
             $this->add([
                 'name'       => $typeIntervention->getCode(),
                 'options'    => [
@@ -119,7 +120,7 @@ class SaisieMultipleHydrator implements HydratorInterface
         if ($service->getElementPedagogique()) {
             return $service->getElementPedagogique()->getTypeIntervention();
         } else {
-            return $this->getServiceTypeIntervention()->getTypesIntervention();
+            return $this->getServiceTypeIntervention()->getList($this->getServiceTypeIntervention()->finderByContext());
         }
     }
 
@@ -140,7 +141,8 @@ class SaisieMultipleHydrator implements HydratorInterface
 
         $object->setTypeVolumeHoraire($typeVolumeHoraire);
         $object->setPeriode($periode);
-        foreach ($this->getTypesInterventions($object->getService()) as $typeIntervention) {
+        $tis = $this->getTypesInterventions($object->getService());
+        foreach ($tis as $typeIntervention) {
             $object->setTypeIntervention($typeIntervention);
             if (isset($data[$typeIntervention->getCode()])) {
                 $heures = FloatFromString::run($data[$typeIntervention->getCode()]);
@@ -170,7 +172,8 @@ class SaisieMultipleHydrator implements HydratorInterface
             'service'             => $object->getService() ? $object->getService()->getId() : null,
             'periode'             => $object->getPeriode() ? $object->getPeriode()->getId() : null,
         ];
-        foreach ($this->getTypesInterventions($object->getService()) as $typeIntervention) {
+        $tis = $this->getTypesInterventions($object->getService());
+        foreach ($tis as $typeIntervention) {
             $vhl->setTypeIntervention($typeIntervention);
             $data[$typeIntervention->getCode()] = StringFromFloat::run($vhl->getHeures(), false);
         }

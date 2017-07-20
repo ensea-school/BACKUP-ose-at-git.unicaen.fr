@@ -84,6 +84,11 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      */
     protected $affAdresseContrat;
 
+    /**
+     * @var boolean
+     */
+    protected $enseignement;
+
 
 
     function __construct()
@@ -416,7 +421,31 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
         return $this;
     }
-    
+
+
+
+    /**
+     * @return bool
+     */
+    public function isEnseignement()
+    {
+        return $this->enseignement;
+    }
+
+
+
+    /**
+     * @param bool $enseignement
+     *
+     * @return Structure
+     */
+    public function setEnseignement($enseignement)
+    {
+        $this->enseignement = $enseignement;
+
+        return $this;
+    }
+
 
 
     /**

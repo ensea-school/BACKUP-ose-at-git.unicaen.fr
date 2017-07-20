@@ -46,6 +46,18 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'type-intervention-trier'           => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'      => '/type-intervention-trier',
+                            'contraints' => [
+                            ],
+                            'defaults'   => [
+                                'action' => 'type-intervention-trier',
+                            ],
+                        ],
+                        'may_terminate' => 'true',
+                    ],
                     'type-intervention-structure-saisie' => [
                         'type'          => 'Segment',
                         'options'       => [
@@ -108,7 +120,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
-                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete'],
+                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete','type-intervention-trier'],
                     'privileges' => [Privileges::TYPE_INTERVENTION_EDITION],
                 ],
             ],

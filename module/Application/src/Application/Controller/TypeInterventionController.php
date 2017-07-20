@@ -1,6 +1,7 @@
 <?php
 namespace Application\Controller;
 
+use Application\Entity\Db\Structure;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Entity\Db\TypeIntervention;
@@ -46,10 +47,12 @@ class TypeInterventionController extends AbstractController
         if (empty($typeIntervention)) {
             $title            = 'Création d\'un nouveau type d\'intervention';
             $typeIntervention = $this->getServiceTypeIntervention()->newEntity();
+            $typeIntervention->setVisible(true);
         } else {
             $title = 'Édition d\'un type d\'intervention';
         }
 
+        if ($typeIntervention->getOrdre() == NULL) $typeIntervention->setOrdre(9999);
         $form->bindRequestSave($typeIntervention, $this->getRequest(), function (TypeIntervention $ti) {
             try {
                 $this->getServiceTypeIntervention()->save($ti);
@@ -84,18 +87,25 @@ class TypeInterventionController extends AbstractController
 
     public function typeInterventionStructureSaisieAction()
     {
-        /* @var $typeInterventionStructure TypeInterventionStructure */
+        /* @var $typeInterventionStructure TypeInterventionStructure
+         * @var $typeIntervention TypeIntervention
+         */
+
+        $this->em()->getFilters()->enable('historique')->init([
+            Structure::class,
+        ]);
 
         $typeIntervention          = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStructure = $this->getEvent()->getParam('typeInterventionStructure');
         $form                      = $this->getFormTypeInterventionStructureSaisie();
         if (empty($typeInterventionStructure)) {
-            $title                     = 'Création d\'un type d\'intervention pour une structure';
+            $title                     = 'Ajouter une exception pour une structure';
             $typeInterventionStructure = $this->getServiceTypeInterventionStructure()->newEntity()
                 ->setTypeIntervention($typeIntervention);
         } else {
-            $title = 'Édition d\'un type d\'intervention pour une structure';
+            $title = 'Édition d\'une exception pour une structure';
         }
+        $typeInterventionStructure->setVisible(!$typeIntervention->isVisible());
         $form->bindRequestSave($typeInterventionStructure, $this->getRequest(), function (TypeInterventionStructure $tis) {
             try {
                 $this->getServiceTypeInterventionStructure()->save($tis);
@@ -126,4 +136,27 @@ class TypeInterventionController extends AbstractController
         return new MessengerViewModel(compact('typeInterventionStructure'));
     }
 
+    public function typeInterventionTrierAction()
+    {
+        /* @var $ti TypeIntervention */
+        $txt='result=';
+        $champsIds = explode(',', $this->params()->fromPost('champsIds', ''));
+        $ordre = 1;
+        foreach ($champsIds as $champId) {
+            $txt.=$champId.'=>';
+            $ti = $this->getServiceTypeIntervention()->get($champId);
+            if ($ti) {
+                $txt .= ';' . $ti->getOrdre();
+                $ti->setOrdre($ordre);
+                $ordre++;
+                try {
+                    $this->getServiceTypeIntervention()->save($ti);
+                } catch (\Exception $e) {
+                    $e = DbException::translate($e);
+                    $txt .= ':' . $e->getMessage();
+                }
+            }
+        }
+        return new JsonModel(['msg' => 'Tri des champs effectué']);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Service\Annee;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -52,21 +53,38 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $visible;
 
     /**
+     * anneeDebutId
+     *
      * @var Annee
      */
-    private $anneeDebut;
+    private $anneeDebutId;
 
     /**
+     * anneeFinId
+     *
      * @var Annee
      */
-    private $anneeFin;
+    private $anneeFinId;
+
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $typeInterventionStructure;
 
+    /**
+     * regleFOAD
+     *
+     * @var boolean
+     */
+    private $regleFOAD;
 
+    /**
+     * regleFC
+     *
+     * @var boolean
+     */
+    private $regleFC;
 
     /**
      * Constructor
@@ -136,51 +154,88 @@ class TypeIntervention implements HistoriqueAwareInterface
         return $this;
     }
 
-
-
     /**
      * @return Annee
      */
-    public function getAnneeDebut()
+    public function getAnneeDebutId()
     {
-        return $this->anneeDebut;
+        return $this->anneeDebutId;
     }
 
-
-
     /**
-     * @param Annee $anneeDebut
+     * @param Annee $anneeDebutId
+     *
+     * @return TypeIntervention
      */
-    public function setAnneeDebut(Annee $anneeDebut)
+    public function setAnneeDebutId($anneeDebutId)
     {
-        $this->anneeDebut = $anneeDebut;
+        $this->anneeDebutId = $anneeDebutId;
 
         return $this;
     }
 
-
-
     /**
      * @return Annee
      */
-    public function getAnneeFin()
+    public function getAnneeFinId()
     {
-        return $this->anneeFin;
+        return $this->anneeFinId;
     }
 
-
-
     /**
-     * @param Annee $anneeFin
+     * @param Annee $anneeFinId
+     *
+     * @return TypeIntervention
      */
-    public function setAnneeFin(Annee $anneeFin)
+    public function setAnneeFinId($anneeFinId)
     {
-        $this->anneeFin = $anneeFin;
+        $this->anneeFinId = $anneeFinId;
 
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function getRegleFOAD()
+    {
+        return $this->regleFOAD;
+    }
 
+
+    /**
+     * @param bool $regleFOAD
+     *
+     * @return TypeIntervention
+     */
+    public function setRegleFOAD($regleFOAD)
+    {
+        $this->regleFOAD = $regleFOAD;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRegleFC()
+    {
+        return $this->regleFC;
+    }
+
+
+
+    /**
+     * @param bool $regleFC
+     *
+     * @return TypeIntervention
+     */
+    public function setRegleFC($regleFC)
+    {
+        $this->regleFC = $regleFC;
+
+        return $this;
+    }
 
 
     /**
@@ -242,7 +297,6 @@ class TypeIntervention implements HistoriqueAwareInterface
 
         return $this->typeInterventionStructure;
     }
-
 
 
     /**

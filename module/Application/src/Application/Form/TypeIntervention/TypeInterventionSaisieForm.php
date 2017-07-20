@@ -1,5 +1,4 @@
 <?php
-
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
@@ -8,6 +7,8 @@ use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
+use Application\Service\Traits\AnneeAwareTrait;
+use UnicaenApp\Util;
 
 /**
  * Description of TypeInterventionSaisieForm
@@ -17,8 +18,7 @@ use Application\Filter\StringFromFloat;
 class TypeInterventionSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionAwareTrait;
-
-
+    use AnneeAwareTrait;
 
     public function init()
     {
@@ -27,61 +27,102 @@ class TypeInterventionSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name'    => 'code',
+            'name' => 'code',
             'options' => [
                 'label' => "Code",
             ],
-            'type'    => 'Text',
+            'type' => 'Text',
         ]);
         $this->add([
-            'name'    => 'libelle',
+            'name' => 'libelle',
             'options' => [
-                'label' => "Libelle",
+                'label' => "Libellé",
             ],
-            'type'    => 'Text',
+            'type' => 'Text',
         ]);
         $this->add([
-            'name'    => 'ordre',
+            'name' => 'ordre',
             'options' => [
-                'label' => "Ordre",
+                'label' => "",
             ],
-            'type'    => 'Number',
+            'type' => 'hidden',
         ]);
         $this->add([
-            'name'    => 'taux-hetd-service',
+            'name' => 'taux-hetd-service',
             'options' => [
                 'label' => 'Taux Hetd Service',
             ],
-            'type'    => 'Text',
+            'type' => 'Text',
         ]);
         $this->add([
-            'name'    => 'taux-hetd-complementaire',
+            'name' => 'taux-hetd-complementaire',
             'options' => [
                 'label' => 'Taux Hetd Complémentaire',
             ],
-            'type'    => 'Text',
+            'type' => 'Text',
         ]);
         $this->add([
-            'name'    => 'visible',
+            'name' => 'visible',
             'options' => [
                 'label' => 'Visible ?',
             ],
-            'type'    => 'Checkbox',
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'annee-debut',
+            'options'    => [
+                'empty_option'  => 'Aucune',
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'label'         => 'Année de début',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'annee-fin',
+            'options'    => [
+                'empty_option'  => 'Aucune',
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'label'         => 'Année de fin',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'regle-foad',
+            'options' => [
+                'label' => 'Limité à la FOAD',
+            ],
+            'type' => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name' => 'regle-fc',
+            'options' => [
+                'label' => 'Limité à la FC',
+            ],
+            'type' => 'Checkbox',
         ]);
 
         $this->add(new Csrf('security'));
         $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
+            'name' => 'submit',
+            'type' => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary',
+                'class' => 'btn btn-primary'
             ],
         ]);
-
         return $this;
     }
-
 
 
     /**
@@ -93,51 +134,58 @@ class TypeInterventionSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'code'                     => [
+            'code' => [
                 'required' => true,
             ],
-            'libelle'                  => [
+            'libelle' => [
                 'required' => true,
             ],
-            'taux-hetd-service'        => [
-                'required'   => true,
+            'taux-hetd-service' => [
+                'required' => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Zend\Validator\Callback(array(
+                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
                         'callback' => function ($value) {
-                            return (FloatFromString::run($value) >= 0.0 ? true : false);
-                        }]),
+                           return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }))
                 ],
             ],
             'taux-hetd-complementaire' => [
-                'required'   => true,
+                'required' => true,
                 'validators' => [
-                    new \Zend\Validator\Callback([
-                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                    new \Zend\Validator\Callback(array(
+                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
                         'callback' => function ($value) {
                             return (StringFromFloat::run($value) >= 0.0 ? true : false);
-                        }]),
+                        }))
                 ],
+            ],
+            'annee-debut' => [
+                'required' => false,
+            ],
+            'annee-fin'   => [
+                'required' => false,
+            ],
+            'regle-foad' => [
+                'required' => true,
+            ],
+            'regle-fc' => [
+                'required' => true,
             ],
         ];
     }
 
 }
 
-
-
-
-
 class TypeInterventionHydrator implements HydratorInterface
 {
     use TypeInterventionAwareTrait;
-
-
+    use AnneeAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                   $data
+     * @param  array $data
      * @param  \Application\Entity\Db\TypeIntervention $object
      *
      * @return object
@@ -150,10 +198,16 @@ class TypeInterventionHydrator implements HydratorInterface
         $object->setTauxHetdService(FloatFromString::run($data['taux-hetd-service']));
         $object->setTauxHetdComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
         $object->setVisible($data['visible']);
-
+        if (array_key_exists('annee-debut', $data)) {
+            $object->setAnneeDebutId($this->getServiceAnnee()->get($data['annee-debut']));
+        }
+        if (array_key_exists('annee-fin', $data)) {
+            $object->setAnneeFinId($this->getServiceAnnee()->get($data['annee-fin']));
+        }
+        $object->setRegleFOAD($data['regle-foad']);
+        $object->setRegleFC($data['regle-fc']);
         return $object;
     }
-
 
 
     /**
@@ -166,13 +220,17 @@ class TypeInterventionHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'                       => $object->getId(),
-            'code'                     => $object->getCode(),
-            'libelle'                  => $object->getLibelle(),
-            'ordre'                    => $object->getOrdre(),
-            'taux-hetd-service'        => StringFromFloat::run($object->getTauxHetdService()),
+            'id' => $object->getId(),
+            'code' => $object->getCode(),
+            'libelle' => $object->getLibelle(),
+            'ordre' => $object->getOrdre(),
+            'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
-            'visible'                  => $object->isVisible(),
+            'visible' => $object->isVisible(),
+            'annee-debut'       => $object->getAnneeDebutId() ? $object->getAnneeDebutId()->getId() : null,
+            'annee-fin'         => $object->getAnneeFinId() ? $object->getAnneeFinId()->getId() : null,
+            'regle-foad'           => $object->getRegleFOAD(),
+            'regle-fc'           => $object->getRegleFC(),
         ];
 
         return $data;

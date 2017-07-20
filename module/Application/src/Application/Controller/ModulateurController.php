@@ -4,12 +4,15 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Modulateur;
 use Application\Service\Traits\ModulateurAwareTrait;
+use Application\Entity\Db\TypeModulateurStructure;
+use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
 use Application\Entity\Db\TypeModulateur;
 use Application\Exception\DbException;
 use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeModulateurAwareTrait;
 use Application\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
+use Application\Service\Traits\ContextAwareTrait;
 
 class modulateurController extends AbstractController
 {
@@ -17,6 +20,8 @@ class modulateurController extends AbstractController
     use TypeModulateurAwareTrait;
     use ModulateurSaisieFormAwareTrait;
     use TypeModulateurSaisieFormAwareTrait;
+    use TypeModulateurStructureServiceAwareTrait;
+    use ContextAwareTrait;
 
 
 
@@ -24,16 +29,26 @@ class modulateurController extends AbstractController
     {
         /* @var $modulateurs [] modulateur */
         /* @var $typeModulateurs [] typeModulateur */
+        /* @var $typeModulateurStructures [] typeModulateurStructure */
+        /* @var $TMD typeModulateurStructure */
         $this->em()->getFilters()->enable('historique')->init([
             Modulateur::class,
         ]);
         $this->em()->getFilters()->enable('historique')->init([
             TypeModulateur::class,
         ]);
+        $this->em()->getFilters()->enable('historique')->init([
+            TypeModulateurStructure::class,
+        ]);
         $modulateurs     = $this->getServiceModulateur()->getList();
         $typeModulateurs = $this->getServiceTypeModulateur()->getList();
+        $typeModulateurStructures = $this->getServiceTypeModulateurStructure()->getList();
 
-        return compact('modulateurs', 'typeModulateurs');
+        
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure   = $role->getStructure();
+
+        return compact('modulateurs', 'typeModulateurs','typeModulateurStructures','structure');
     }
 
 
@@ -56,7 +71,7 @@ class modulateurController extends AbstractController
 
         $form->bindRequestSave($modulateur, $this->getRequest(), function (modulateur $modu) {
             try {
-                $this->getServicemodulateur()->save($modu);
+                $this->getServiceModulateur()->save($modu);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);

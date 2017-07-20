@@ -199,10 +199,10 @@ class TypeInterventionHydrator implements HydratorInterface
         $object->setTauxHetdComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
         $object->setVisible($data['visible']);
         if (array_key_exists('annee-debut', $data)) {
-            $object->setAnneeDebutId($this->getServiceAnnee()->get($data['annee-debut']));
+            $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));
         }
         if (array_key_exists('annee-fin', $data)) {
-            $object->setAnneeFinId($this->getServiceAnnee()->get($data['annee-fin']));
+            $object->setAnneeFin($this->getServiceAnnee()->get($data['annee-fin']));
         }
         $object->setRegleFOAD($data['regle-foad']);
         $object->setRegleFC($data['regle-fc']);
@@ -227,8 +227,8 @@ class TypeInterventionHydrator implements HydratorInterface
             'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
             'visible' => $object->isVisible(),
-            'annee-debut'       => $object->getAnneeDebutId() ? $object->getAnneeDebutId()->getId() : null,
-            'annee-fin'         => $object->getAnneeFinId() ? $object->getAnneeFinId()->getId() : null,
+            'annee-debut'       => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
+            'annee-fin'         => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
             'regle-foad'           => $object->getRegleFOAD(),
             'regle-fc'           => $object->getRegleFC(),
         ];

@@ -32,7 +32,9 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
      */
     public function getTypesInterventions()
     {
-        return $this->getServiceTypeIntervention()->getList($this->getServiceTypeIntervention()->finderByContext());
+        $qb = $this->getServiceTypeIntervention()->finderByContext();
+        $this->getServiceTypeIntervention()->finderByHistorique($qb);
+        return $this->getServiceTypeIntervention()->getList( $qb );
     }
 
     /**
@@ -120,7 +122,9 @@ class SaisieMultipleHydrator implements HydratorInterface
         if ($service->getElementPedagogique()) {
             return $service->getElementPedagogique()->getTypeIntervention();
         } else {
-            return $this->getServiceTypeIntervention()->getList($this->getServiceTypeIntervention()->finderByContext());
+            $qb = $this->getServiceTypeIntervention()->finderByHistorique();
+            $this->getServiceTypeIntervention()->finderByContext($qb);
+            return $this->getServiceTypeIntervention()->getList($qb);
         }
     }
 

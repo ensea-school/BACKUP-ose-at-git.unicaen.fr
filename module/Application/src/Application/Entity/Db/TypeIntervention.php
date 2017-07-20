@@ -53,18 +53,18 @@ class TypeIntervention implements HistoriqueAwareInterface
     private $visible;
 
     /**
-     * anneeDebutId
+     * anneeDebut
      *
      * @var Annee
      */
-    private $anneeDebutId;
+    private $anneeDebut;
 
     /**
-     * anneeFinId
+     * anneeFin
      *
      * @var Annee
      */
-    private $anneeFinId;
+    private $anneeFin;
 
 
     /**
@@ -157,19 +157,19 @@ class TypeIntervention implements HistoriqueAwareInterface
     /**
      * @return Annee
      */
-    public function getAnneeDebutId()
+    public function getAnneeDebut()
     {
-        return $this->anneeDebutId;
+        return $this->anneeDebut;
     }
 
     /**
-     * @param Annee $anneeDebutId
+     * @param Annee $anneeDebut
      *
      * @return TypeIntervention
      */
-    public function setAnneeDebutId($anneeDebutId)
+    public function setAnneeDebut($anneeDebut)
     {
-        $this->anneeDebutId = $anneeDebutId;
+        $this->anneeDebut = $anneeDebut;
 
         return $this;
     }
@@ -177,19 +177,19 @@ class TypeIntervention implements HistoriqueAwareInterface
     /**
      * @return Annee
      */
-    public function getAnneeFinId()
+    public function getAnneeFin()
     {
-        return $this->anneeFinId;
+        return $this->anneeFin;
     }
 
     /**
-     * @param Annee $anneeFinId
+     * @param Annee $anneeFin
      *
      * @return TypeIntervention
      */
-    public function setAnneeFinId($anneeFinId)
+    public function setAnneeFin($anneeFin)
     {
-        $this->anneeFinId = $anneeFinId;
+        $this->anneeFin = $anneeFin;
 
         return $this;
     }

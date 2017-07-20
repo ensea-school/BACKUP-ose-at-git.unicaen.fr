@@ -253,7 +253,9 @@ class Liste extends AbstractViewHelper
             if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()){
                 $tis = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
             }else{
-                $tis = $this->getServiceTypeIntervention()->getList( $this->getServiceTypeIntervention()->finderByVisible(true) );
+                $qb = $this->getServiceTypeIntervention()->finderByContext();
+                $this->getServiceTypeIntervention()->finderByHistorique($qb);
+                $tis = $this->getServiceTypeIntervention()->getList( $qb );
             }
             $this->typesIntervention = [];
             foreach( $tis as $ti ){

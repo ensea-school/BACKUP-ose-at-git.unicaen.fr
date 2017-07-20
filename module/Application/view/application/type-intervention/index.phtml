@@ -85,11 +85,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
         <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
         <td>
             <?php
-            if (($ti->getAnneeDebutId()) || ($ti->getAnneeFinId())) {
-                if (!$ti->getAnneeDebutId()) echo 'Jusqu\'en ' . $ti->getAnneeFinId();
+            if (($ti->getAnneeDebut()) || ($ti->getAnneeFin())) {
+                if (!$ti->getAnneeDebut()) echo 'Jusqu\'en ' . $ti->getAnneeFin();
                 else {
-                    if (!$ti->getAnneeFinId()) echo 'À partir de ' . $ti->getAnneeDebutId();
-                    else echo 'de ' . $ti->getAnneeDebutId() . ' à ' . $ti->getAnneeFinId();
+                    if (!$ti->getAnneeFin()) echo 'À partir de ' . $ti->getAnneeDebut();
+                    else echo 'de ' . $ti->getAnneeDebut() . ' à ' . $ti->getAnneeFin();
                 }
             } else echo 'Permanente';
             ?>

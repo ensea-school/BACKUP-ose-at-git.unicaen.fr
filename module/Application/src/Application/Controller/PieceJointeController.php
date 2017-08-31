@@ -45,7 +45,7 @@ class PieceJointeController extends AbstractController
         ]);
     }
 
-    
+
 
     /**
      *
@@ -75,7 +75,7 @@ class PieceJointeController extends AbstractController
     }
 
 
-    
+
     /**
      *
      * @return ViewModel
@@ -95,7 +95,7 @@ class PieceJointeController extends AbstractController
         return compact('messages');
     }
 
-    
+
 
     /**
      * @param TypePieceJointe[] $demandees
@@ -127,18 +127,18 @@ class PieceJointeController extends AbstractController
         if (0 == $nbDemandees) {
             $msgs['info'][] = 'Aucune pièce justificative n\'est à fournir';
         } elseif ($nbFournies < $nbDemandees) {
-            $msgs['danger'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
+            $msgs['warning'][] = "Des pièces justificatives obligatoires n'ont pas été fournies.";
         } elseif ($nbFournies == $nbDemandees && $nbValidees == $nbDemandees) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
         } elseif ($nbFournies == $nbDemandees && $nbValidees < $nbFournies) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-            $msgs['danger'][] = "Mais certaines doivent encore être validées par " . ($isIntervenant ? 'votre' : 'la') . " composante.";
+            $msgs['warning'][] = "Mais certaines doivent encore être validées par " . ($isIntervenant ? 'votre' : 'la') . " composante.";
         }
 
         return $msgs;
     }
 
-    
+
 
     public function validationAction()
     {
@@ -151,7 +151,7 @@ class PieceJointeController extends AbstractController
         return compact('pj');
     }
 
-    
+
 
     public function validerAction()
     {
@@ -172,7 +172,7 @@ class PieceJointeController extends AbstractController
     }
 
 
-    
+
     public function devaliderAction()
     {
         $this->initFilters();
@@ -186,7 +186,7 @@ class PieceJointeController extends AbstractController
         return $viewModel;
     }
 
-    
+
 
     public function listerAction()
     {
@@ -199,7 +199,7 @@ class PieceJointeController extends AbstractController
         return compact('pj');
     }
 
-    
+
 
     public function televerserAction()
     {
@@ -218,7 +218,7 @@ class PieceJointeController extends AbstractController
         return new JsonModel();
     }
 
-    
+
 
     public function telechargerAction()
     {
@@ -227,7 +227,7 @@ class PieceJointeController extends AbstractController
         $this->uploader()->download($fichier);
     }
 
-    
+
 
     public function supprimerAction()
     {
@@ -246,7 +246,7 @@ class PieceJointeController extends AbstractController
     }
 
 
-    
+
     /* Actions liées à la configuration des PJ */
 
     public function configurationAction()
@@ -254,7 +254,7 @@ class PieceJointeController extends AbstractController
         return [];
     }
 
-    
+
 
     public function typePieceJointeStatutAction()
     {
@@ -308,8 +308,8 @@ class PieceJointeController extends AbstractController
         return new MessengerViewModel();
     }
 
-    
-    
+
+
     public function typePieceJointeSaisieAction()
     {
         /* @var $typePieceJointe TypePieceJointe */
@@ -357,8 +357,8 @@ class PieceJointeController extends AbstractController
 
     }
 
-    
-    
+
+
     public function modifierTypePieceJointeStatutAction()
     {
         $type = $this->context()->mandatory()->typePieceJointeFromRoute();
@@ -368,13 +368,13 @@ class PieceJointeController extends AbstractController
         if (null === $premierRecrutement) {
             throw new \LogicException("Paramètre manquant : premierRecrutement");
         }
-        
+
         $obligatoireValueOptions = [
             1 => "Obligatoire",
             0 => "Facultatif",
             2 => "Non attendu",
         ];
-        
+
         $qb = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointeStatut::class)->createQueryBuilder("tpjs")
             ->select("tpjs, tpj, si")
             ->join("tpjs.type", "tpj", \Doctrine\ORM\Query\Expr\Join::WITH, "tpj = :tpj")

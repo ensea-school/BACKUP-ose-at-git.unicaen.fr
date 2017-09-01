@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Mouchard\MouchardCompleterContextFactory;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
@@ -153,6 +154,7 @@ return [
             'navigation'                  => Service\NavigationFactoryFactory::class,
             'ApplicationRoleProvider'     => Provider\Role\RoleProviderFactory::class,
             'ApplicationIdentityProvider' => Provider\Identity\IdentityProviderFactory::class,
+            'MouchardCompleterContext'    => MouchardCompleterContextFactory::class,
         ],
     ],
     'view_helpers'       => [

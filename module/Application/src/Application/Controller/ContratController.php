@@ -387,6 +387,7 @@ class ContratController extends AbstractController
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+        die(); // pour éviter de générer une erreur par la suite
     }
 
 

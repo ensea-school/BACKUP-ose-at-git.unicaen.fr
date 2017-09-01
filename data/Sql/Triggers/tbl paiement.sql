@@ -106,7 +106,7 @@ BEGIN
   IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       fr.intervenant_id
     FROM
@@ -114,13 +114,13 @@ BEGIN
       LEFT JOIN formule_resultat_service frs ON frs.formule_resultat_id = fr.id
       LEFT JOIN formule_resultat_service_ref frsr ON frsr.formule_resultat_id = fr.id
     WHERE
-         (frs.id  IS NOT NULL AND (frs.id  = :NEW.formule_res_service_id     OR frs.id  = :NEW.formule_res_service_id    ))
-      OR (frsr.id IS NOT NULL AND (frsr.id = :NEW.formule_res_service_ref_id OR frsr.id = :NEW.formule_res_service_ref_id))
-  
+         (frs.id  IS NOT NULL AND (frs.id  = :OLD.formule_res_service_id     OR frs.id  = :NEW.formule_res_service_id    ))
+      OR (frsr.id IS NOT NULL AND (frsr.id = :OLD.formule_res_service_ref_id OR frsr.id = :NEW.formule_res_service_ref_id))
+
   ) LOOP
-  
+
     UNICAEN_TBL.DEMANDE_CALCUL( 'paiement', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id ) );
-  
+
   END LOOP;
 
 END;

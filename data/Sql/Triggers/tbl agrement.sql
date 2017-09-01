@@ -29,7 +29,7 @@ BEGIN
   IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -37,11 +37,11 @@ BEGIN
     WHERE
          s.element_pedagogique_id = :NEW.id
       OR s.element_pedagogique_id = :OLD.id
-  
+
   ) LOOP
-  
+
     UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
   END LOOP;
 
 END;
@@ -63,7 +63,7 @@ BEGIN
   IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       i.id intervenant_id
     FROM
@@ -72,11 +72,11 @@ BEGIN
     WHERE
          si.id = :NEW.statut_intervenant_id
       OR si.id = :OLD.statut_intervenant_id
-  
+
   ) LOOP
-  
+
     UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
   END LOOP;
 
 END;

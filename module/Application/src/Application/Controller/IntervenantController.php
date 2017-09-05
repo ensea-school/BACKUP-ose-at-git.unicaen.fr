@@ -57,7 +57,7 @@ class IntervenantController extends AbstractController
 
         if ($intervenant = $role->getIntervenant()) {
             $etapeCourante = $this->getServiceWorkflow()->getEtapeCourante();
-            if ($this->getServiceWorkflow()->isAllowed($etapeCourante)) {
+            if ($etapeCourante && $this->getServiceWorkflow()->isAllowed($etapeCourante)) {
                 if ($etapeCourante && $url = $etapeCourante->getUrl()) {
                     return $this->redirect()->toUrl($url);
                 }

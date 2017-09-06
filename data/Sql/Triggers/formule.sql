@@ -2,13 +2,13 @@
 --  DDL for Trigger F_CONTRAT
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT" 
+CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT"
 AFTER DELETE OR UPDATE OF INTERVENANT_ID, HISTO_CREATION, HISTO_DESTRUCTION, STRUCTURE_ID, DATE_RETOUR_SIGNE, VALIDATION_ID ON "OSE"."CONTRAT"
 REFERENCING FOR EACH ROW
 BEGIN
-  
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
-  
+
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
+
   FOR p IN (
 
     SELECT DISTINCT
@@ -22,7 +22,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
 
@@ -33,7 +33,7 @@ END;
 --  DDL for Trigger F_CONTRAT_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT_S"
 AFTER UPDATE OR DELETE ON contrat
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -44,15 +44,15 @@ END;
 --  DDL for Trigger F_ELEMENT_MODULATEUR
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR" 
+CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR"
 AFTER INSERT OR UPDATE OR DELETE ON element_modulateur
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -60,11 +60,11 @@ BEGIN
     WHERE
       1 = OSE_DIVERS.COMPRISE_ENTRE( s.histo_creation, s.histo_destruction )
       AND (s.element_pedagogique_id = :OLD.element_id OR s.element_pedagogique_id = :NEW.element_id)
-      
+
   ) LOOP
-    
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-    
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 
 END;
@@ -74,7 +74,7 @@ END;
 --  DDL for Trigger F_ELEMENT_MODULATEUR_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR_S"
 AFTER INSERT OR UPDATE OR DELETE ON element_modulateur
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -85,20 +85,20 @@ END;
 --  DDL for Trigger F_ELEMENT_PEDAGOGIQUE
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE" 
+CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE"
   AFTER DELETE OR UPDATE OF ID, STRUCTURE_ID, PERIODE_ID, TAUX_FOAD, FI, FC, FA, HISTO_CREATION, HISTO_DESTRUCTION, TAUX_FA, TAUX_FC, TAUX_FI, ANNEE_ID ON "OSE"."ELEMENT_PEDAGOGIQUE"
   REFERENCING FOR EACH ROW
-  BEGIN 
-  
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
-  
+  BEGIN
+
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
+
   FOR p IN
     ( SELECT DISTINCT s.intervenant_id
     FROM service s
     WHERE (s.element_pedagogique_id = :NEW.id
     OR s.element_pedagogique_id     = :OLD.id)
     AND 1                           = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction )
-    ) LOOP UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    ) LOOP UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 END LOOP;
 END;
 /
@@ -108,7 +108,7 @@ END;
 --------------------------------------------------------
 
 CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE_S" AFTER
-UPDATE OR DELETE ON element_pedagogique BEGIN 
+UPDATE OR DELETE ON element_pedagogique BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;
 /
@@ -117,28 +117,28 @@ END;
 --  DDL for Trigger F_INTERVENANT
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT" 
+CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT"
   AFTER UPDATE OF ID, DATE_NAISSANCE, STATUT_ID, STRUCTURE_ID, HISTO_CREATION, HISTO_DESTRUCTION, PREMIER_RECRUTEMENT, ANNEE_ID ON "OSE"."INTERVENANT"
   REFERENCING FOR EACH ROW
   BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-      
+
     SELECT DISTINCT
       fr.intervenant_id
     FROM
       formule_resultat fr
     WHERE
       fr.intervenant_id = :NEW.id OR fr.intervenant_id = :OLD.id
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
-  
+
 END;
 /
 
@@ -146,7 +146,7 @@ END;
 --  DDL for Trigger F_INTERVENANT_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT_S"
 AFTER UPDATE ON "OSE"."INTERVENANT"
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -157,18 +157,18 @@ END;
 --  DDL for Trigger F_MODIF_SERVICE_DU
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU" 
+CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU"
 AFTER INSERT OR UPDATE OR DELETE ON modification_service_du
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF DELETING OR UPDATING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id) );
   END IF;
   IF INSERTING OR UPDATING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id) );
   END IF;
 
 END;
@@ -178,7 +178,7 @@ END;
 --  DDL for Trigger F_MODIF_SERVICE_DU_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU_S"
 AFTER INSERT OR UPDATE OR DELETE ON modification_service_du
 BEGIN
     UNICAEN_TBL.CALCULER_DEMANDES;
@@ -189,21 +189,21 @@ END;
 --  DDL for Trigger F_MODULATEUR
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR" 
+CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR"
 AFTER UPDATE OR DELETE ON modulateur
 FOR EACH ROW
 BEGIN
-  
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
-  
+
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
+
   FOR p IN (
 
     SELECT DISTINCT
       s.intervenant_id
     FROM
       service s
-      JOIN element_modulateur em ON 
-        em.element_id   = s.element_pedagogique_id 
+      JOIN element_modulateur em ON
+        em.element_id   = s.element_pedagogique_id
         AND 1 = ose_divers.comprise_entre( em.histo_creation, em.histo_destruction )
     WHERE
       1 = OSE_DIVERS.COMPRISE_ENTRE( s.histo_creation, s.histo_destruction )
@@ -211,7 +211,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
 END;
@@ -221,7 +221,7 @@ END;
 --  DDL for Trigger F_MODULATEUR_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR_S"
 AFTER UPDATE OR DELETE ON modulateur
 BEGIN
     UNICAEN_TBL.CALCULER_DEMANDES;
@@ -232,15 +232,15 @@ END;
 --  DDL for Trigger F_MOTIF_MODIFICATION_SERVICE
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE" 
+CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE"
 AFTER UPDATE OR DELETE ON MOTIF_MODIFICATION_SERVICE
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       intervenant_id
     FROM
@@ -248,11 +248,11 @@ BEGIN
     WHERE
       1 = OSE_DIVERS.COMPRISE_ENTRE( msd.histo_creation, msd.histo_destruction )
       AND (msd.motif_id = :NEW.id OR msd.motif_id = :OLD.id)
-      
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 
 END;
@@ -262,7 +262,7 @@ END;
 --  DDL for Trigger F_MOTIF_MODIFICATION_SERVICE_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE_S"
 AFTER UPDATE OR DELETE ON MOTIF_MODIFICATION_SERVICE
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -273,18 +273,18 @@ END;
 --  DDL for Trigger F_SERVICE
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE" 
+CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE"
 AFTER INSERT OR UPDATE OR DELETE ON service
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF DELETING OR UPDATING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id) );
   END IF;
   IF INSERTING OR UPDATING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id) );
   END IF;
 END;
 /
@@ -293,18 +293,18 @@ END;
 --  DDL for Trigger F_SERVICE_REFERENTIEL
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL" 
+CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL"
 AFTER INSERT OR UPDATE OR DELETE ON service_referentiel
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF DELETING OR UPDATING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id) );
   END IF;
   IF INSERTING OR UPDATING THEN
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id) );
   END IF;
 
 END;
@@ -314,7 +314,7 @@ END;
 --  DDL for Trigger F_SERVICE_REFERENTIEL_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL_S"
 AFTER INSERT OR UPDATE OR DELETE ON service_referentiel
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -325,7 +325,7 @@ END;
 --  DDL for Trigger F_SERVICE_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_S"
 AFTER INSERT OR UPDATE OR DELETE ON service
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -336,15 +336,15 @@ END;
 --  DDL for Trigger F_STATUT_INTERVENANT
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_STATUT_INTERVENANT" 
+CREATE OR REPLACE TRIGGER "OSE"."F_STATUT_INTERVENANT"
 AFTER UPDATE ON statut_intervenant
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       fr.intervenant_id
     FROM
@@ -353,11 +353,11 @@ BEGIN
     WHERE
       (i.statut_id = :NEW.id OR i.statut_id = :OLD.id)
       AND 1 = ose_divers.comprise_entre( i.histo_creation, i.histo_destruction )
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 END;
 /
@@ -366,7 +366,7 @@ END;
 --  DDL for Trigger F_STATUT_INTERVENANT_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_STATUT_INTERVENANT_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_STATUT_INTERVENANT_S"
 AFTER UPDATE ON statut_intervenant
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -377,7 +377,7 @@ END;
 --  DDL for Trigger F_TYPE_INTERVENTION
 --------------------------------------------------------
 
-create or replace TRIGGER "OSE"."F_TYPE_INTERVENTION" 
+create or replace TRIGGER "OSE"."F_TYPE_INTERVENTION"
 AFTER UPDATE OF
   taux_hetd_service,
   taux_hetd_complementaire
@@ -385,10 +385,10 @@ ON type_intervention
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -397,11 +397,11 @@ BEGIN
     WHERE
       1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
       AND (vh.type_intervention_id = :NEW.id OR vh.type_intervention_id = :OLD.id)
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 END;
 /
@@ -410,7 +410,7 @@ END;
 --  DDL for Trigger F_TYPE_INTERVENTION_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION_S"
 AFTER UPDATE ON type_intervention
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -421,12 +421,12 @@ END;
 --  DDL for Trigger F_VALIDATION
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION"
 AFTER UPDATE ON validation
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN ( -- validations de volume horaire
 
@@ -441,7 +441,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
 
@@ -458,7 +458,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
 
@@ -469,7 +469,7 @@ END;
 --  DDL for Trigger F_VALIDATION_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_S"
 AFTER UPDATE ON validation
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -480,15 +480,15 @@ END;
 --  DDL for Trigger F_VALIDATION_VOL_HORAIRE
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE"
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -497,11 +497,11 @@ BEGIN
     WHERE
       1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
       AND (vh.id = :NEW.volume_horaire_id OR vh.id = :OLD.volume_horaire_id)
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 END;
 /
@@ -510,15 +510,15 @@ END;
 --  DDL for Trigger F_VALIDATION_VOL_HORAIRE_REF
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF"
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire_ref
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -527,11 +527,11 @@ BEGIN
     WHERE
       1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
       AND (vh.id = :NEW.volume_horaire_ref_id OR vh.id = :OLD.volume_horaire_ref_id)
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 END;
 /
@@ -540,7 +540,7 @@ END;
 --  DDL for Trigger F_VALIDATION_VOL_HORAIRE_REF_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF_S"
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire_ref
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -551,7 +551,7 @@ END;
 --  DDL for Trigger F_VALIDATION_VOL_HORAIRE_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_S"
 AFTER INSERT OR UPDATE OR DELETE ON validation_vol_horaire
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -562,19 +562,19 @@ END;
 --  DDL for Trigger F_VOLUME_HORAIRE
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE" 
-AFTER INSERT 
-OR UPDATE OF TYPE_VOLUME_HORAIRE_ID, SERVICE_ID, PERIODE_ID, TYPE_INTERVENTION_ID, 
+CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE"
+AFTER INSERT
+OR UPDATE OF TYPE_VOLUME_HORAIRE_ID, SERVICE_ID, PERIODE_ID, TYPE_INTERVENTION_ID,
              HEURES, MOTIF_NON_PAIEMENT_ID, CONTRAT_ID,
              HISTO_CREATION, HISTO_MODIFICATION, HISTO_DESTRUCTION
 OR DELETE ON volume_horaire
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
@@ -582,11 +582,11 @@ BEGIN
     WHERE
       1 = ose_divers.comprise_entre(s.histo_creation, s.histo_destruction)
       AND (s.id = :NEW.service_id OR s.id = :OLD.service_id)
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
+
   END LOOP;
 END;
 /
@@ -595,12 +595,12 @@ END;
 --  DDL for Trigger F_VOLUME_HORAIRE_REF
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_REF" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_REF"
 AFTER INSERT OR UPDATE OR DELETE ON volume_horaire_ref
 FOR EACH ROW
 BEGIN
 
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
 
@@ -614,7 +614,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL('formule', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
   END LOOP;
 END;
 /
@@ -623,7 +623,7 @@ END;
 --  DDL for Trigger F_VOLUME_HORAIRE_REF_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_REF_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_REF_S"
 AFTER INSERT OR UPDATE OR DELETE ON volume_horaire_ref
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
@@ -634,7 +634,7 @@ END;
 --  DDL for Trigger F_VOLUME_HORAIRE_S
 --------------------------------------------------------
 
-CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_S" 
+CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE_S"
 AFTER INSERT OR UPDATE OR DELETE ON volume_horaire
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;

@@ -1,6 +1,6 @@
 CREATE OR REPLACE TRIGGER T_PJD_SERVICE
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
   intervenant_id,
 	histo_creation,
 	histo_destruction,
@@ -8,14 +8,14 @@ OR UPDATE OF
 OR DELETE ON SERVICE
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF :NEW.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id ) );
   END IF;
-  
+
   IF :OLD.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id ) );
   END IF;
 
 END;
@@ -23,8 +23,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_PJD_VOLUME_HORAIRE
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
   heures,
 	service_id,
 	type_volume_horaire_id,
@@ -34,22 +34,22 @@ OR UPDATE OF
 OR DELETE ON VOLUME_HORAIRE
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       s.intervenant_id
     FROM
       service s
     WHERE
       s.id = :NEW.service_id
-      OR s.id = :OLD.service_id    
+      OR s.id = :OLD.service_id
 
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id ) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id ) );
+
   END LOOP;
 
 END;
@@ -57,8 +57,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_PJD_INTERVENANT
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
   annee_id,
 	statut_id,
 	bic,
@@ -69,14 +69,14 @@ OR UPDATE OF
 OR DELETE ON INTERVENANT
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF :NEW.id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', :NEW.id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.id ) );
   END IF;
 
   IF :OLD.id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', :OLD.id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.id ) );
   END IF;
 
 END;
@@ -84,8 +84,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_PJD_DOSSIER
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
   intervenant_id,
 	histo_creation,
 	histo_destruction,
@@ -93,14 +93,14 @@ OR UPDATE OF
 OR DELETE ON DOSSIER
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF :NEW.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id ) );
   END IF;
-  
+
   IF :OLD.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id ) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id ) );
   END IF;
 
 END;
@@ -108,8 +108,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_PJD_T_PIECE_JOINTE_STATUT
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
   statut_intervenant_id,
 	histo_creation,
 	histo_destruction,
@@ -119,10 +119,10 @@ OR UPDATE OF
 OR DELETE ON TYPE_PIECE_JOINTE_STATUT
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       i.id intervenant_id
     FROM
@@ -130,11 +130,11 @@ BEGIN
     WHERE
          i.statut_id = :NEW.statut_intervenant_id
       OR i.statut_id = :OLD.statut_intervenant_id
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id ) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id ) );
+
   END LOOP;
 
 END;
@@ -142,18 +142,18 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_PJD_TYPE_PIECE_JOINTE
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
   histo_creation,
 	histo_destruction,
 	code
 OR DELETE ON TYPE_PIECE_JOINTE
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
-  
+
     SELECT DISTINCT
       i.id intervenant_id
     FROM
@@ -163,11 +163,11 @@ BEGIN
     WHERE
          TPJS.TYPE_PIECE_JOINTE_ID = :NEW.id
       OR TPJS.TYPE_PIECE_JOINTE_ID = :OLD.id
-  
+
   ) LOOP
-  
-    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id ) );
-  
+
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id ) );
+
   END LOOP;
 
 END;

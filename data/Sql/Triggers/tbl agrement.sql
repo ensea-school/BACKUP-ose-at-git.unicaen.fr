@@ -5,14 +5,14 @@ OR UPDATE OF
 OR DELETE ON SERVICE
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF :NEW.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id) );
   END IF;
-  
+
   IF :OLD.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id) );
   END IF;
 
 END;
@@ -20,13 +20,13 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_AGR_ELEMENT_PEDAGOGIQUE
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
     structure_id
 OR DELETE ON ELEMENT_PEDAGOGIQUE
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
 
@@ -40,7 +40,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
 
@@ -49,8 +49,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_AGR_TA_STATUT
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
     type_agrement_id,
 		obligatoire,
 		histo_creation,
@@ -60,7 +60,7 @@ OR UPDATE OF
 OR DELETE ON TYPE_AGREMENT_STATUT
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   FOR p IN (
 
@@ -75,7 +75,7 @@ BEGIN
 
   ) LOOP
 
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', p.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
 
   END LOOP;
 
@@ -84,8 +84,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_AGR_INTERVENANT
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
     histo_creation,
 		histo_destruction,
 		premier_recrutement,
@@ -94,14 +94,14 @@ OR UPDATE OF
 OR DELETE ON INTERVENANT
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF :NEW.id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', :NEW.id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.id) );
   END IF;
-  
+
   IF :OLD.id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', :OLD.id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.id) );
   END IF;
 
 END;
@@ -109,8 +109,8 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER T_AGR_AGREMENT
-AFTER INSERT 
-OR UPDATE OF 
+AFTER INSERT
+OR UPDATE OF
     type_agrement_id,
 		intervenant_id,
 		histo_creation,
@@ -119,14 +119,14 @@ OR UPDATE OF
 OR DELETE ON AGREMENT
 FOR EACH ROW
 BEGIN
-  IF NOT UNICAEN_TBL.GET_ACTIF THEN RETURN; END IF;
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
   IF :NEW.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', :NEW.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id) );
   END IF;
-  
+
   IF :OLD.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('intervenant_id', :OLD.intervenant_id) );
+    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id) );
   END IF;
 
 END;

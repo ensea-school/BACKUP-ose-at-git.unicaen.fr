@@ -77,6 +77,9 @@ class ContratController extends AbstractController
 
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
         $structure   = $role->getStructure();
 
         $title = "Contrat/avenants <small>{$intervenant}</small>";

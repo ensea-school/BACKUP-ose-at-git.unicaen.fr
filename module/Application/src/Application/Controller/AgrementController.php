@@ -88,6 +88,9 @@ class AgrementController extends AbstractController
         /* @var $typeAgrement TypeAgrement */
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
 
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
         $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);

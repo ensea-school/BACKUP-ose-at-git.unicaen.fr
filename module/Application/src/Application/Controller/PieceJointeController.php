@@ -60,6 +60,9 @@ class PieceJointeController extends AbstractController
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
 
         $title = "Pièces justificatives <small>{$intervenant}</small>";
 

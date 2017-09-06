@@ -128,6 +128,10 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
         $saved = false;
         if ($this->getRequest()->isPost() && !$this->isChangeIndexSaved($postChangeIndex)) {
             $changements = $this->params()->fromPost('changements', '{}');
@@ -208,6 +212,9 @@ class PaiementController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
 
         $dql = "
         SELECT
@@ -229,6 +236,9 @@ class PaiementController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
 
         $mep = $this->params()->fromPost('mep', null);
         $paiements = [];

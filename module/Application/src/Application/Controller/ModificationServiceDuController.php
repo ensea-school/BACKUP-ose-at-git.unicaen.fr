@@ -34,6 +34,10 @@ class ModificationServiceDuController extends AbstractController
         ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+
         $canEdit     = $this->isAllowed($intervenant, Privileges::MODIF_SERVICE_DU_EDITION);
 
         // NB: patch pour permettre de vider toutes les modifs de service dû

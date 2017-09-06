@@ -65,9 +65,13 @@ class DossierController extends AbstractController
 
         /* Initialisation */
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $iPrec       = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
         /* @var $intervenant Intervenant */
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        if (!$intervenant){
+            throw new \LogicException('Intervenant non précisé ou inexistant');
+        }
+        $iPrec       = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
+
         $validation = $this->getServiceDossier()->getValidation($intervenant);
         $form       = $this->getFormIntervenantDossier();
 

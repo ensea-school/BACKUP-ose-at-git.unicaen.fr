@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\GroupeTypeFormationAwareTrait;
 use Application\Entity\Db\Traits\ScenarioAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
@@ -19,6 +20,7 @@ class SeuilCharge implements HistoriqueAwareInterface
     use GroupeTypeFormationAwareTrait;
     use StructureAwareTrait;
     use ScenarioAwareTrait;
+    use AnneeAwareTrait;
 
     /**
      * @var integer

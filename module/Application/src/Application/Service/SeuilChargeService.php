@@ -120,6 +120,7 @@ class SeuilChargeService extends AbstractEntityService
             }
 
             $seuil = $this->newEntity();
+            $seuil->setAnnee($this->getServiceContext()->getAnnee());
             $seuil->setScenario($scenario);
             $seuil->setStructure($structure);
             $seuil->setGroupeTypeFormation($groupeTypeFormation);

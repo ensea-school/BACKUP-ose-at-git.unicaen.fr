@@ -33,7 +33,6 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
                     <?php echo $structure['libelle'] ?>
                     <span class="pull-right" style="font-size:80%" id="heures-<?php echo $sid ?>"></span>
                 </h3>
-
             </div>
             <table class="table table-hover table-bordered seuils-dedoublement">
                 <thead>
@@ -79,7 +78,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
             </table>
         </div>
     <?php endforeach;
- } ?>
+} ?>
 
 <a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
     <i class="fa fa-undo" aria-hidden="true"></i>

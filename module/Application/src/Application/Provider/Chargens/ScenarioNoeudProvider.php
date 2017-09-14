@@ -336,7 +336,7 @@ class ScenarioNoeudProvider
         FROM
           scenario_noeud sn
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( sn.histo_creation, sn.histo_destruction )
+          sn.histo_destruction IS NULL
           AND sn.noeud_id IN ($noeudIds)
         ";
 
@@ -363,7 +363,7 @@ class ScenarioNoeudProvider
           scenario_noeud_effectif sne
           JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( sn.histo_creation, sn.histo_destruction )
+          sn.histo_destruction IS NULL
           AND sn.noeud_id IN ($noeudIds)
         ";
 
@@ -391,7 +391,7 @@ class ScenarioNoeudProvider
           scenario_noeud_seuil sns 
           JOIN scenario_noeud sn ON sn.id = sns.scenario_noeud_id
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( sn.histo_creation, sn.histo_destruction )
+          sn.histo_destruction IS NULL
           AND sn.noeud_id IN ($noeudIds)
         ";
 

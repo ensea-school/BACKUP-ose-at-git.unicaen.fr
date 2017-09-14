@@ -331,10 +331,10 @@ return [
     'service_manager' => [
         'invokables' => [
             'applicationScenario'    => Service\ScenarioService::class,
-            'applicationSeuilCharge' => Service\SeuilChargeService::class,
             'assertionChargens'      => Assertion\ChargensAssertion::class,
         ],
         'factories'  => [
+            'applicationSeuilCharge' => Service\Factory\SeuilChargeServiceFactory::class,
             'chargens' => Provider\Chargens\ChargensProviderFactory::class,
         ],
     ],

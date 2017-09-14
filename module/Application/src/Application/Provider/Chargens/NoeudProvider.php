@@ -185,9 +185,9 @@ class NoeudProvider
         FROM 
           noeud n
         WHERE 
-          n.id IN (" . $ids . ")
-          AND 1 = ose_divers.comprise_entre( n.histo_creation, n.histo_destruction )
+          n.histo_destruction IS NULL
           AND n.annee_id = :annee
+          AND n.id IN (" . $ids . ")
         ORDER BY
             n.code
         ";
@@ -206,7 +206,7 @@ class NoeudProvider
         FROM 
           lien l 
         WHERE
-          1 = ose_divers.comprise_entre( l.histo_creation, l.histo_destruction )
+          l.histo_destruction IS NULL
           AND (
             l.noeud_sup_id IN (" . $ids . ")
             OR l.noeud_inf_id IN (" . $ids . ")
@@ -260,7 +260,7 @@ class NoeudProvider
 
         WHERE
           n.id IN (" . $ids . ")
-          AND 1 = NVL(tis.visible, ti.visible)
+          AND 1 = COALESCE(tis.visible, ti.visible)
         ";
         $dti = $this->chargens->getBdd()->fetch($sql);
         foreach ($dti as $d) {
@@ -271,14 +271,7 @@ class NoeudProvider
             }
             $data[$nid]['TYPE_INTERVENTION_IDS'][] = (int)$d['TYPE_INTERVENTION_ID'];
         }
-/*
-        $nshd = $this->getNoeudsSeuilsHeuresData($noeudIds);
-        foreach( $nshd as $noeudId => $d ){
-            foreach( $d as $k => $v ){
-                $data[$noeudId][$k] = $v;
-            }
-        }
-*/
+
         return $data;
     }
 
@@ -304,7 +297,7 @@ class NoeudProvider
           csdd.type_intervention_id,
           csdd.dedoublement
         FROM
-          tbl_chargens_seuils csdd
+          V_CHARGENS_SEUILS_DED_DEF csdd
         WHERE
           csdd.noeud_id IN (" . $ids . ")
         ";

@@ -481,5 +481,5 @@ WHERE
   import_action = 'insert'
   AND si.source_code <> 'AUTRES' AND si.source_code <> 'BIATSS' AND si.source_code <> 'NON_AUTORISE'
   AND rownum < 50
-  AND i.annee_id = 2016
+  AND i.annee_id = 2017
   

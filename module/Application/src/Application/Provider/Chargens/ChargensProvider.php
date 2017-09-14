@@ -161,12 +161,11 @@ class ChargensProvider
 
         $sql = "
         SELECT 
-          id
+          noeud_id id
         FROM 
-          noeud n 
+          tbl_noeud n 
         WHERE 
           n.etape_id = :etape
-          AND 1 = OSE_DIVERS.COMPRISE_ENTRE(n.histo_creation, n.histo_destruction)
           AND ROWNUM = 1
         ";
 

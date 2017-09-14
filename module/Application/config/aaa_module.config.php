@@ -148,7 +148,6 @@ return [
             'dbEvent'                       => Service\DbEventService::class,
             'UnicaenAuth\Service\Privilege' => Service\PrivilegeService::class,
             'assertionInformation'          => Assertion\InformationAssertion::class,
-            'tableauBord'                   => Service\TableauBordService::class,
         ],
         'factories'  => [
             'navigation'                  => Service\NavigationFactoryFactory::class,

@@ -14,6 +14,7 @@ use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
 
 /**
@@ -32,6 +33,7 @@ class SeuilChargeService extends AbstractEntityService
     use ScenarioServiceAwareTrait;
     use GroupeTypeFormationAwareTrait;
     use TypeInterventionAwareTrait;
+    use TableauBordServiceAwareTrait;
 
 
 
@@ -64,7 +66,7 @@ class SeuilChargeService extends AbstractEntityService
 
 
     /**
-     * @param Scenario|integer                 $scenario
+     * @param Scenario|integer                       $scenario
      * @param StructureEntity|integer|null           $structure
      * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
      * @param TypeInterventionEntity|integer         $typeIntervention
@@ -77,6 +79,7 @@ class SeuilChargeService extends AbstractEntityService
         $this->finderByStructure($structure == 0 ? null : $structure, $qb);
         $this->finderByGroupeTypeFormation($groupeTypeFormation == 0 ? null : $groupeTypeFormation, $qb);
         $this->finderByTypeIntervention($typeIntervention == 0 ? null : $typeIntervention, $qb);
+        $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
 
         $lst = $this->getList($qb);
         if (1 == count($lst)) {
@@ -89,11 +92,11 @@ class SeuilChargeService extends AbstractEntityService
 
 
     /**
-     * @param Scenario|integer                 $scenario
-     * @param StructureEntity|integer|null     $structure
+     * @param Scenario|integer                       $scenario
+     * @param StructureEntity|integer|null           $structure
      * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
      * @param TypeInterventionEntity|integer         $typeIntervention
-     * @param integer|null                     $dedoublement
+     * @param integer|null                           $dedoublement
      *
      * @return self
      */
@@ -101,7 +104,7 @@ class SeuilChargeService extends AbstractEntityService
     {
         $seuil = $this->getBy($scenario, $structure, $groupeTypeFormation, $typeIntervention);
 
-        if ($seuil && null === $dedoublement){
+        if ($seuil && null === $dedoublement) {
             return $this->delete($seuil);
         }
 
@@ -130,6 +133,26 @@ class SeuilChargeService extends AbstractEntityService
         $this->save($seuil);
 
         return $this;
+    }
+
+
+
+    /**
+     * Sauvegarde une entité
+     *
+     * @param self $entity
+     *
+     * @throws \RuntimeException
+     * @return self
+     */
+    public function save($entity)
+    {
+        parent::save($entity);
+
+        $params = ['ANNEE_ID' => $this->getServiceContext()->getAnnee()->getId()];
+        $this->getServiceTableauBord()->calculer('chargens_seuils_def', $params);
+
+        return $entity;
     }
 
 
@@ -183,16 +206,16 @@ class SeuilChargeService extends AbstractEntityService
     private function getSeuilsStructures(Scenario $scenario)
     {
         $canViewEtablissement = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_ETABLISSEMENT_VISUALISATION));
-        $canViewComposantes = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_VISUALISATION));
+        $canViewComposantes   = $this->getAuthorize()->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_VISUALISATION));
 
         $res = [];
-        if ($canViewEtablissement){
+        if ($canViewEtablissement) {
             $res[0] = 'Établissement';
         }
 
-        if ($canViewComposantes){
+        if ($canViewComposantes) {
             $cStructure = $this->getServiceContext()->getStructure();
-            if (!$cStructure && $scenario->getStructure()){
+            if (!$cStructure && $scenario->getStructure()) {
                 $cStructure = $scenario->getStructure();
             }
 
@@ -217,7 +240,7 @@ class SeuilChargeService extends AbstractEntityService
     private function getSeuilsTypesIntervention(Scenario $scenario)
     {
         $structure = $this->getServiceContext()->getStructure();
-        if (!$structure && $scenario->getStructure()){
+        if (!$structure && $scenario->getStructure()) {
             $structure = $scenario->getStructure();
         }
 
@@ -315,6 +338,7 @@ class SeuilChargeService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
+        $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb);
         if ($cStructure = $this->getServiceContext()->getStructure()) {
             $qb->andWhere($alias . '.structure = :structure OR ' . $alias . '.structure IS NULL')->setParameter(
                 'structure', $cStructure

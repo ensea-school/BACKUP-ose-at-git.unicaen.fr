@@ -776,7 +776,6 @@ $.widget("ose.chargens", {
             new go.Binding("stroke", "hover", function (hover) {return hover ? highlightColor : "#98CED9";})
         ];
 
-
         var d =
             $(go.Diagram, this.element.find('.dessin').attr('id'),
                 {
@@ -788,7 +787,7 @@ $.widget("ose.chargens", {
                     layout: $(go.LayeredDigraphLayout, {
                         direction: 90,
                         layerSpacing: 20,
-                        columnSpacing: 1,
+                        columnSpacing: 4,
                         aggressiveOption: go.LayeredDigraphLayout.AggressiveMore
                     }),
                     InitialLayoutCompleted: function (e)

@@ -32,6 +32,10 @@ class ChargensProviderFactory implements FactoryInterface
         $serviceAuthorize = $serviceLocator->get('BjyAuthorize\Service\Authorize');
         $chargensProvider->setServiceAuthorize($serviceAuthorize);
 
+        $chargensProvider->setServiceTypeHeures(
+            $serviceLocator->get('applicationTypeHeures')
+        );
+
         return $chargensProvider;
     }
 }

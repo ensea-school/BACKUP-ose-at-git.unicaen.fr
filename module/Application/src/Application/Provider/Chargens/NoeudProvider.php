@@ -233,11 +233,11 @@ class NoeudProvider
           JOIN volume_horaire_ens vhe ON 
             vhe.element_pedagogique_id = n.element_pedagogique_id
             AND vhe.heures > 0
-            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( vhe.histo_creation, vhe.histo_destruction )
+            AND vhe.histo_destruction IS NULL
             AND n.annee_id = " . $this->chargens->getServiceContext()->getAnnee()->getId() . "
           JOIN type_intervention ti ON
             ti.id = vhe.type_intervention_id
-            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
+            AND ti.histo_destruction IS NULL
         WHERE
           n.element_pedagogique_id IS NOT NULL
           AND n.id IN (" . $ids . ")
@@ -250,13 +250,12 @@ class NoeudProvider
         FROM
           noeud n 
           JOIN etape e ON e.id = n.etape_id
-          JOIN type_intervention ti ON 
-            1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
+          JOIN type_intervention ti ON ti.histo_destruction IS NULL
           
           LEFT JOIN type_intervention_structure tis ON 
             tis.structure_id = e.structure_id 
             AND tis.type_intervention_id = ti.id
-            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( tis.histo_creation, tis.histo_destruction )
+            AND tis.histo_destruction IS NULL
 
         WHERE
           n.id IN (" . $ids . ")
@@ -312,6 +311,14 @@ class NoeudProvider
             $data[$nid]['SEUILS_PAR_DEFAUT'][$scenario][$typeIntervention] = $dedoublement;
         }
 
+        $this->chargens->initPreCalculHeures(
+            $this->chargens->getServiceContext()->getAnnee(),
+            null,
+            $this->chargens->getScenario(),
+            null,
+            null,
+            $noeudIds
+        );
 
         $sql = "
         SELECT
@@ -321,8 +328,6 @@ class NoeudProvider
           SUM(hetd) hetd
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
-        WHERE
-          noeud_id IN (" . $ids . ")
         GROUP BY
           noeud_id,
           scenario_id
@@ -338,8 +343,7 @@ class NoeudProvider
           noeud n 
           JOIN V_CHARGENS_PRECALCUL_HEURES cph ON cph.etape_id = n.etape_id
         WHERE
-          n.id IN (" . $ids . ")
-          AND n.etape_id IS NOT NULL
+          n.etape_id IS NOT NULL
         GROUP BY
           n.id,
           scenario_id

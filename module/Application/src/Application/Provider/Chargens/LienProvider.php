@@ -195,7 +195,7 @@ class LienProvider
                   LIEN l 
                 WHERE 
                   l.id IN ($ids)
-                  AND 1 = OSE_DIVERS.COMPRISE_ENTRE( l.histo_creation, l.histo_destruction )
+                  AND l.histo_destruction IS NULL
                 ";
         $data = $this->chargens->getBdd()->fetch($sql, [], 'ID', 'int');
 

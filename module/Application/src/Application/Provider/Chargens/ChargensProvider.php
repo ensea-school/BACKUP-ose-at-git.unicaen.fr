@@ -4,12 +4,15 @@ namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Chargens\Noeud;
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\TypeHeures;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\TypeHeuresAwareTrait;
 use BjyAuthorize\Service\Authorize;
 
 class ChargensProvider
@@ -18,6 +21,7 @@ class ChargensProvider
     use SourceAwareTrait;
     use ContextAwareTrait;
     use StructureAwareTrait;
+    use TypeHeuresAwareTrait;
 
     /**
      * @var Authorize
@@ -222,7 +226,7 @@ class ChargensProvider
         FROM
           lien l
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( l.histo_creation, l.histo_destruction )
+          l.histo_destruction IS NULL
         CONNECT BY
           l.noeud_sup_id = PRIOR l.noeud_inf_id
         START WITH
@@ -294,6 +298,34 @@ class ChargensProvider
 
 
 
+    public function initPreCalculHeures($annee = null, $structure = null, $scenario = null, $typeHeures = null, $etape = null, array $noeuds = [])
+    {
+        /* Préparation des données en entrée */
+        if ($annee instanceof Annee) $annee = $annee->getId();
+        if ($structure instanceof Structure) $structure = $structure->getId();
+        if ($scenario instanceof Scenario) $scenario = $scenario->getId();
+        if ($typeHeures instanceof TypeHeures) $typeHeures = $typeHeures->getId();
+        if ($etape instanceof Etape) $etape = $etape->getId();
+        foreach ($noeuds as $k => $noeud) {
+            if ($noeud instanceof Noeud) $noeuds[$k] = $noeud->getId();
+        }
+
+        /* Préparation de la requête, puis exécution */
+        $params = compact('annee', 'structure', 'scenario', 'typeHeures', 'etape');
+        if (!empty($noeuds)) {
+            $pnoeuds = 'ose_chargens.tnoeud_ids(' . implode(',', $noeuds) . ')';
+        } else {
+            $pnoeuds = 'null';
+        }
+
+        $plsql = 'ose_chargens.set_precalc_heures_params(:annee, :structure, :scenario, :typeHeures, :etape, ' . $pnoeuds . ');';
+        $this->getBdd()->execPlsql($plsql, $params);
+
+        return $this;
+    }
+
+
+
     public function getComposanteHeuresFi()
     {
         $res = [
@@ -306,27 +338,25 @@ class ChargensProvider
             return $res;
         }
 
+        $this->initPreCalculHeures(
+            $this->getServiceContext()->getAnnee(),
+            $this->getStructure(),
+            $this->getScenario(),
+            $this->getServiceTypeHeures()->getByCode(TypeHeures::FI)
+        );
+
         $sql = "
         SELECT
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
-          JOIN type_heures th ON th.id = cph.type_heures_id AND th.code = 'fi'
-        WHERE
-          cph.annee_id = :annee
-          AND cph.structure_id = :structure
-          AND cph.scenario_id = :scenario
         GROUP BY
           structure_id,
           scenario_id
         ";
 
-        $d = $this->getBdd()->fetchOne($sql, [
-            'annee'     => $this->getServiceContext()->getAnnee()->getId(),
-            'structure' => $this->getStructure()->getId(),
-            'scenario'  => $this->getScenario()->getId(),
-        ]);
+        $d = $this->getBdd()->fetchOne($sql);
         if (!empty($d)) {
             $res['structure'] = (string)$this->getStructure();
             $res['heures']    = (float)$d['HEURES'];
@@ -351,6 +381,13 @@ class ChargensProvider
             return $res;
         }
 
+        $this->initPreCalculHeures(
+            $this->getServiceContext()->getAnnee(),
+            $structure,
+            $this->getScenario(),
+            $this->getServiceTypeHeures()->getByCode(TypeHeures::FI)
+        );
+
         $sql = "
         SELECT
           structure_id,
@@ -358,34 +395,22 @@ class ChargensProvider
           SUM(hetd) hetd
         FROM
           V_CHARGENS_PRECALCUL_HEURES cph
-          JOIN type_heures th ON th.id = cph.type_heures_id AND th.code = 'fi'
-        WHERE
-          cph.annee_id = :annee
-          AND cph.scenario_id = :scenario
-          " . ($structure ? ' AND cph.structure_id = :structure' : '') . "
         GROUP BY
           structure_id,
           scenario_id
         ";
 
-        $params = [
-            'annee'    => $this->getServiceContext()->getAnnee()->getId(),
-            'scenario' => $this->getScenario()->getId(),
-        ];
-        if ($structure) {
-            $params['structure'] = $structure->getId();
-        }
-        $ds = $this->getBdd()->fetch($sql, $params);
+        $ds = $this->getBdd()->fetch($sql);
         foreach ($ds as $d) {
-            $sid       = (int)$d['STRUCTURE_ID'];
-            $heures    = (float)$d['HEURES'];
-            $hetd      = (float)$d['HETD'];
-            $res[$sid] = [
+            $sid              = (int)$d['STRUCTURE_ID'];
+            $heures           = (float)$d['HEURES'];
+            $hetd             = (float)$d['HETD'];
+            $res[$sid]        = [
                 'heures' => $heures,
                 'hetd'   => $hetd,
             ];
             $res[0]['heures'] += $heures;
-            $res[0]['hetd'] += $hetd;
+            $res[0]['hetd']   += $hetd;
         }
 
         return $res;

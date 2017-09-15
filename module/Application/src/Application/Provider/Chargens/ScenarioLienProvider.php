@@ -166,7 +166,7 @@ class ScenarioLienProvider
           scenario_lien sl
           JOIN scenario s ON s.id = sl.scenario_id
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( sl.histo_creation, sl.histo_destruction )
+          sl.histo_destruction IS NULL
           AND sl.lien_id IN ($lienIds)
         ";
 

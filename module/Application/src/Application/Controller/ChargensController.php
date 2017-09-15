@@ -350,6 +350,12 @@ class ChargensController extends AbstractController
         $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();
 
+        $this->getProviderChargens()->initPreCalculHeures(
+            $annee,
+            null,
+            $scenario
+        );
+
         $sql    = 'SELECT * FROM V_CHARGENS_EXPORT_CSV WHERE scenario_id = :scenario AND annee_id = :annee';
         $params = [
             'scenario' => $scenario->getId(),

@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Application\Service\Annee;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 

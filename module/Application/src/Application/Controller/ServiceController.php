@@ -13,7 +13,6 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
-use Application\Service\Traits\TableauBordServiceAwareTrait;
 use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -60,7 +59,6 @@ class ServiceController extends AbstractController
     use RechercheFormAwareTrait;
     use ValidationEnseignementProcessusAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
-    use TableauBordServiceAwareTrait;
     use ParametresAwareTrait;
 
 

@@ -150,42 +150,42 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $typePieceJointeStatut;
+    protected $typePieceJointeStatut;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $privilege;
+    protected $privilege;
 
     /**
      * @var float
      */
-    private $plafondHcHorsRemuFc;
+    protected $plafondHcHorsRemuFc;
 
     /**
      * @var float
      */
-    private $plafondHcRemuFc;
+    protected $plafondHcRemuFc;
 
     /**
      * @var boolean
      */
-    private $peutSaisirServiceExt;
+    protected $peutSaisirServiceExt;
 
     /**
      * @var boolean
      */
-    private $temAtv;
+    protected $temAtv;
 
     /**
      * @var boolean
      */
-    private $temBiatss;
+    protected $temBiatss;
 
     /**
      * @var boolean
      */
-    private $depassementSDSHC;
+    protected $depassementSDSHC;
 
 
 
@@ -210,7 +210,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
 
         return $this;
     }
-    
+
     /**
      * @return boolean
      */

@@ -361,10 +361,10 @@ class ScenarioNoeudProvider
           sne.effectif
         FROM
           scenario_noeud_effectif sne
-          JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id
+          JOIN etape e ON e.id = sne.etape_id AND e.histo_destruction IS NULL
+          JOIN scenario_noeud sn ON sn.id = sne.scenario_noeud_id AND sn.histo_destruction IS NULL
         WHERE
-          sn.histo_destruction IS NULL
-          AND sn.noeud_id IN ($noeudIds)
+          sn.noeud_id IN ($noeudIds)
         ";
 
         return $this->chargens->getBdd()->fetch($sql);

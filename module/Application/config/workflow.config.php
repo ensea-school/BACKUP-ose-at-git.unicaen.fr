@@ -158,8 +158,10 @@ return [
         'invokables' => [
             'applicationWfEtapeDep' => Service\WfEtapeDepService::class,
             'applicationWfEtape'    => Service\WfEtape::class,
-            'workflow'              => Service\WorkflowService::class,
             'assertionWorkflow'     => Assertion\WorkflowAssertion::class,
+        ],
+        'factories' => [
+            'workflow'              => Service\Factory\WorkflowServiceFactory::class,
         ],
     ],
     'form_elements'   => [

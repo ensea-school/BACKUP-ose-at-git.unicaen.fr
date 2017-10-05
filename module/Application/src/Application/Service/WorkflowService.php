@@ -10,6 +10,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
 use Application\Service\Traits\ContextAwareTrait;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
+use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
 /**
  * Description of WorkflowService
@@ -20,6 +21,7 @@ class WorkflowService extends AbstractService
 {
     use ContextAwareTrait;
     use AuthorizeServiceAwareTrait;
+    use TableauBordServiceAwareTrait;
 
     /**
      * @var array Feuilles de route
@@ -271,8 +273,7 @@ class WorkflowService extends AbstractService
      */
     public function calculerTout()
     {
-        $sql = "BEGIN OSE_EVENT.CALCULER_TOUT( 'OSE_WORKFLOW' ); END;";
-        $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $this->getServiceTableauBord()->calculer('workflow');
 
         return $this;
     }

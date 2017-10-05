@@ -54,7 +54,7 @@ class TypeIntervention extends AbstractEntityService
         $qb->andWhere( ''.$alias.'.anneeDebut IS NULL OR '.$alias.'.anneeDebut <= '.$annee->getId());
         $qb->andWhere( ''.$alias.'.anneeFin IS NULL OR '.$alias.'.anneeFin >= '.$annee->getId());
 
-        $this->finderByVisible(true, $qb);
+        //$this->finderByVisible(true, $qb);
 
         return $qb;
     }
@@ -98,5 +98,5 @@ class TypeIntervention extends AbstractEntityService
             return null;
         }
     }
-    
+
 }

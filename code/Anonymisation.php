@@ -920,7 +920,3 @@ foreach ($intervenants as $code => $i) {
     $sql = "UPDATE intervenant SET prenom=$prenom , nom_usuel=$nom, nom_patronymique=$nom WHERE source_code = $code;";
     echo $sql . "<br />\n";
 }
-
-
-
-

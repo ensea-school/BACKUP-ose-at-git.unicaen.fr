@@ -1,78 +1,28 @@
 <?php
 
-use UnicaenCode\Form\ElementMaker;
-use UnicaenCode\Util;
+function creerAdmin($sl, array $admin)
+{
+
+    /** @var \Doctrine\ORM\EntityManager $em */
+    $em = $sl->get(\Application\Constants::BDD);
+
+    /** @var \Application\Service\Context $serviceContext */
+    $serviceContext = $sl->get('applicationContext');
+
+    /** @var \Application\Service\Source $serviceSource */
+    $serviceSource = $sl->get('applicationSource');
 
 
-/**
- * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
- */
-
-/** @var \Doctrine\ORM\EntityManager $em */
-$em = $sl->get(\Application\Constants::BDD);
-
-/** @var \Application\Service\Structure $serviceStructure */
-$serviceStructure = $sl->get('applicationStructure');
-
-/** @var \Application\Service\Context $serviceContext */
-$serviceContext = $sl->get('applicationContext');
-
-/** @var \Application\Service\Source $serviceSource */
-$serviceSource = $sl->get('applicationSource');
-
-/** @var \Application\Service\Role $serviceRole */
-$serviceRole = $sl->get('applicationRole');
-
-$civilites  = $em->getRepository(\Application\Entity\Db\Civilite::class)->findAll();
-$structures = $serviceStructure->getList($serviceStructure->finderByHistorique($serviceStructure->finderByNiveau(2)));
-$roles      = $serviceRole->getList($serviceRole->finderByHistorique());
-
-$form = new \Zend\Form\Form();
-$form->add(ElementMaker::select(
-    'civilite', 'Civilité', \UnicaenApp\Util::collectionAsOptions($civilites), null
-));
-$form->add(ElementMaker::text(
-    'nom', 'Nom'
-));
-$form->add(ElementMaker::text(
-    'prenom', 'Prénom'
-));
-$form->add(ElementMaker::text(
-    'mail', 'Email'
-));
-$form->add(ElementMaker::select(
-    'structure', 'Structure', \UnicaenApp\Util::collectionAsOptions($structures), null
-));
-$form->add(ElementMaker::text(
-    'login', 'Login'
-));
-$form->add(ElementMaker::text(
-    'motdepasse', 'Mot de passe'
-));
-$form->add(ElementMaker::select(
-   'role', 'Rôle', \UnicaenApp\Util::collectionAsOptions($roles), null
-));
-$form->add(ElementMaker::submit('create', 'Créer le compte'));
-$form->setData($controller->getRequest()->getPost());
-
-Util::displayForm($form);
-
-if ($controller->getRequest()->isPost() && $form->isValid()) {
-
-    $civilite   = $form->get('civilite')->getValue();
-    $nom        = $form->get('nom')->getValue();
-    $prenom     = $form->get('prenom')->getValue();
-    $mail       = $form->get('mail')->getValue();
-    $structure  = $form->get('structure')->getValue();
-    $login      = $form->get('login')->getValue();
-    $motdepasse = $form->get('motdepasse')->getValue();
-    $role       = $form->get('role')->getValue();
-
+    $nom        = $admin['nom'];
+    $prenom     = $admin['prenom'];
+    $mail       = isset($admin['mail']) ? $admin['mail'] : 'ne-pas-repondre@unicaen.fr';
+    $login      = $admin['login'];
     $bcrypt     = new Zend\Crypt\Password\Bcrypt();
-    $motdepasse = $bcrypt->create($motdepasse);
+    $motdepasse = $bcrypt->create($admin['motdepasse']);
+
+    $structure = $em->getRepository(\Application\Entity\Db\Structure::class)->findOneBy(['sourceCode' => 'C68'])->getId();
+    $role      = $em->getRepository(\Application\Entity\Db\Role::class)->findOneBy(['code' => 'administrateur'])->getId();
+    $civilite  = $em->getRepository(\Application\Entity\Db\Civilite::class)->findOneBy(['libelleLong' => $admin['civilite']])->getId();
 
     $source      = $serviceSource->getOse()->getId();
     $utilisateur = $serviceContext->getUtilisateur()->getId();
@@ -123,9 +73,11 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
         'histo_modification'    => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
         'histo_modificateur_id' => $utilisateur,
     ]);
+}
 
-    ?>
-    <div class="alert alert-success">Compte bien créé</div>
-    <?php
+$admins = [
+];
 
+foreach ($admins as $admin) {
+    creerAdmin($sl, $admin);
 }

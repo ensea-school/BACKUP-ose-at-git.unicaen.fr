@@ -69,9 +69,9 @@ SELECT
   ep.fa,ep.taux_fa,
   ep.fc,ep.taux_fc,
   -- NOUVEAUX TAUX FI FA FC
-  50 /100 n_taux_fi,
+  100 /100 n_taux_fi,
   0 /100 n_taux_fa,
-  50 /100 n_taux_fc
+  0 /100 n_taux_fc
   -- FIN DES NOUVEAUX TAUX FI FA FC
 FROM
   element_pedagogique ep
@@ -84,9 +84,11 @@ WHERE
   1 = ose_divers.comprise_entre( ep.histo_creation,ep.histo_destruction )
   --AND s.code <> 'OSE'
   AND e.source_code IN (
-  'MSAS01_204'
+'1LPSYC_701',
+'2LPSYC_701',
+'3LPSYC_711'
   )
-  AND ep.annee_id = 2016
+  AND ep.annee_id = 2017
   -- FIN DES FILTRES
 ) t1
 WHERE
@@ -138,33 +140,15 @@ where
 SELECT * FROM ELEMENT_PEDAGOGIQUE WHERE source_code like '%DUUE%';
 
 
-select source_code from etape where source_code in (
-'L2DROI_303',
-'L2DROI_301',
-'L2DROI_301',
-'L3DRPP_313',
-'L3DRPP_313',
-'L3DRPP_313',
-'L3DRPP_313',
-'MSDCD0_500',
-'MSDCD0_500',
-'MSDR03_205',
-'MSDR03_205',
-'MSDR03_205',
-'MSDR03_205',
-'MSDR03_205',
-'MSDR03_205',
-'MSDR12_211',
-'MSDR12_211',
-'MSDR12_211',
-'MSDR12_211',
-'MSDR12_211',
-'MSDR12_211'
+select source_code, annee_id from etape where source_code in (
+'1LPSYC_701',
+'2LPSYC_701',
+'3LPSYC_711'
 
 ) order by source_code;
      
 select * from etape where source_code like 
 
-'%L1DROI%'
+'%L%PSY%'
 
 order by source_code;

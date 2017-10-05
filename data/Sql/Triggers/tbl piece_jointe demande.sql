@@ -22,6 +22,35 @@ END;
 
 /
 
+CREATE OR REPLACE TRIGGER T_PJD_ELEMENT_PEDAGOGIQUE
+AFTER INSERT
+OR UPDATE OF
+	taux_fc
+OR DELETE ON ELEMENT_PEDAGOGIQUE
+FOR EACH ROW
+BEGIN
+  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
+
+FOR p IN (
+
+    SELECT DISTINCT
+      s.intervenant_id
+    FROM
+      service s
+    WHERE
+      s.element_pedagogique_id = :NEW.id
+      OR s.element_pedagogique_id = :OLD.id
+
+  ) LOOP
+
+    UNICAEN_TBL.DEMANDE_CALCUL( 'piece_jointe_demande', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id ) );
+
+  END LOOP;
+
+END;
+
+/
+
 CREATE OR REPLACE TRIGGER T_PJD_VOLUME_HORAIRE
 AFTER INSERT
 OR UPDATE OF
@@ -115,7 +144,9 @@ OR UPDATE OF
 	histo_destruction,
 	type_piece_jointe_id,
 	seuil_hetd,
-	premier_recrutement
+	premier_recrutement,
+  changement_rib,
+  fc
 OR DELETE ON TYPE_PIECE_JOINTE_STATUT
 FOR EACH ROW
 BEGIN
@@ -229,4 +260,10 @@ END;
 
 /
 
+CREATE OR REPLACE TRIGGER T_PJD_ELEMENT_PEDAGOGIQUE_S
+AFTER INSERT OR UPDATE OR DELETE ON ELEMENT_PEDAGOGIQUE
+BEGIN
+  UNICAEN_TBL.CALCULER_DEMANDES;
+END;
 
+/

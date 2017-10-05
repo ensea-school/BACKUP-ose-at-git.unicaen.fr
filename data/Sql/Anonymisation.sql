@@ -164,7 +164,7 @@ FROM
 
 /
 begin
-ose_event.set_actif(false);
+  unicaen_tbl.ACTIV_TRIGGERS := false;
 end;
 /
 

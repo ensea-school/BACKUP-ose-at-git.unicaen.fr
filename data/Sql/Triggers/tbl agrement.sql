@@ -1,24 +1,3 @@
-CREATE OR REPLACE TRIGGER T_AGR_SERVICE
-AFTER INSERT
-OR UPDATE OF
-    element_pedagogique_id
-OR DELETE ON SERVICE
-FOR EACH ROW
-BEGIN
-  IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
-
-  IF :NEW.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :NEW.intervenant_id) );
-  END IF;
-
-  IF :OLD.intervenant_id IS NOT NULL THEN
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', :OLD.intervenant_id) );
-  END IF;
-
-END;
-
-/
-
 CREATE OR REPLACE TRIGGER T_AGR_ELEMENT_PEDAGOGIQUE
 AFTER INSERT
 OR UPDATE OF
@@ -27,23 +6,20 @@ OR DELETE ON ELEMENT_PEDAGOGIQUE
 FOR EACH ROW
 BEGIN
   IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
+  
+  IF :OLD.id IS NOT NULL THEN
+    UNICAEN_TBL.DEMANDE_CALCUL( 
+      'agrement', 
+      'intervenant_id IN (SELECT intervenant_id FROM service WHERE histo_destruction IS NULL AND element_pedagogique_id = ' || :OLD.id || ')' 
+    );
+  END IF;
 
-  FOR p IN (
-
-    SELECT DISTINCT
-      s.intervenant_id
-    FROM
-      service s
-    WHERE
-         s.element_pedagogique_id = :NEW.id
-      OR s.element_pedagogique_id = :OLD.id
-
-  ) LOOP
-
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
-
-  END LOOP;
-
+  IF :NEW.id IS NOT NULL THEN
+    UNICAEN_TBL.DEMANDE_CALCUL( 
+      'agrement', 
+      'intervenant_id IN (SELECT intervenant_id FROM service WHERE histo_destruction IS NULL AND element_pedagogique_id = ' || :NEW.id || ')'
+    );
+  END IF;
 END;
 
 /
@@ -62,22 +38,19 @@ FOR EACH ROW
 BEGIN
   IF NOT UNICAEN_TBL.ACTIV_TRIGGERS THEN RETURN; END IF;
 
-  FOR p IN (
+  IF :OLD.statut_intervenant_id IS NOT NULL THEN
+    UNICAEN_TBL.DEMANDE_CALCUL( 
+      'agrement', 
+      'intervenant_id IN (SELECT id FROM intervenant WHERE statut_id = ' || :OLD.statut_intervenant_id || ')' 
+    );
+  END IF;
 
-    SELECT DISTINCT
-      i.id intervenant_id
-    FROM
-      statut_intervenant si
-      JOIN intervenant i ON i.statut_id = si.id
-    WHERE
-         si.id = :NEW.statut_intervenant_id
-      OR si.id = :OLD.statut_intervenant_id
-
-  ) LOOP
-
-    UNICAEN_TBL.DEMANDE_CALCUL( 'agrement', UNICAEN_TBL.make_params('INTERVENANT_ID', p.intervenant_id) );
-
-  END LOOP;
+  IF :NEW.statut_intervenant_id IS NOT NULL THEN
+    UNICAEN_TBL.DEMANDE_CALCUL( 
+      'agrement', 
+      'intervenant_id IN (SELECT id FROM intervenant WHERE statut_id = ' || :NEW.statut_intervenant_id || ')' 
+    );
+  END IF;
 
 END;
 
@@ -139,8 +112,8 @@ END;
 
 
 
-CREATE OR REPLACE TRIGGER T_AGR_SERVICE_S
-AFTER INSERT OR UPDATE OR DELETE ON SERVICE
+CREATE OR REPLACE TRIGGER T_AGR_TBL_AGREMENT_S
+AFTER INSERT OR UPDATE OR DELETE ON TBL_AGREMENT
 BEGIN
   UNICAEN_TBL.CALCULER_DEMANDES;
 END;

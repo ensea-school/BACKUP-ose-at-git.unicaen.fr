@@ -3,6 +3,7 @@
 namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteur;
+use UnicaenTbl\Service\TableauBordService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -17,11 +18,13 @@ class ChargensProviderFactory implements FactoryInterface
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return ChargensProvider
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $em = $serviceLocator->get(\Application\Constants::BDD); /* @var $em \Doctrine\ORM\EntityManager */
+        $em = $serviceLocator->get(\Application\Constants::BDD);
+        /* @var $em \Doctrine\ORM\EntityManager */
 
         $bdd = new BddConnecteur();
         $bdd->setEntityManager($em);
@@ -35,6 +38,8 @@ class ChargensProviderFactory implements FactoryInterface
         $chargensProvider->setServiceTypeHeures(
             $serviceLocator->get('applicationTypeHeures')
         );
+
+        $chargensProvider->setServiceTableauBord($serviceLocator->get(TableauBordService::class));
 
         return $chargensProvider;
     }

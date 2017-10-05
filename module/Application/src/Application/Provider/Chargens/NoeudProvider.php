@@ -311,14 +311,10 @@ class NoeudProvider
             $data[$nid]['SEUILS_PAR_DEFAUT'][$scenario][$typeIntervention] = $dedoublement;
         }
 
-        $this->chargens->initPreCalculHeures(
-            $this->chargens->getServiceContext()->getAnnee(),
-            null,
-            $this->chargens->getScenario(),
-            null,
-            null,
-            $noeudIds
-        );
+        $params = [
+            'annee' => $this->chargens->getServiceContext()->getAnnee()->getId(),
+            'scenario' => $this->chargens->getScenario()->getId(),
+        ];
 
         $sql = "
         SELECT
@@ -327,7 +323,11 @@ class NoeudProvider
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES cph
+          tbl_chargens cph
+        WHERE
+          cph.annee_id = :annee
+          AND cph.scenario_id = :scenario
+          AND cph.noeud_id IN (" . $ids . ")
         GROUP BY
           noeud_id,
           scenario_id
@@ -341,15 +341,18 @@ class NoeudProvider
           SUM(hetd) hetd
         FROM
           noeud n 
-          JOIN V_CHARGENS_PRECALCUL_HEURES cph ON cph.etape_id = n.etape_id
+          JOIN tbl_chargens cph ON cph.etape_id = n.etape_id
         WHERE
-          n.etape_id IS NOT NULL
+          cph.annee_id = :annee
+          AND cph.scenario_id = :scenario
+          AND n.etape_id IS NOT NULL
+          AND n.id IN (" . $ids . ")
         GROUP BY
           n.id,
           scenario_id
         ";
 
-        $csdd = $this->chargens->getBdd()->fetch($sql);
+        $csdd = $this->chargens->getBdd()->fetch($sql, $params);
         foreach ($csdd as $d) {
             $nid      = $d['NOEUD_ID'];
             $scenario = (int)$d['SCENARIO_ID'];

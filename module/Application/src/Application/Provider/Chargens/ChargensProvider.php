@@ -14,6 +14,7 @@ use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use BjyAuthorize\Service\Authorize;
+use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
 class ChargensProvider
 {
@@ -22,6 +23,7 @@ class ChargensProvider
     use ContextAwareTrait;
     use StructureAwareTrait;
     use TypeHeuresAwareTrait;
+    use TableauBordServiceAwareTrait;
 
     /**
      * @var Authorize
@@ -165,11 +167,12 @@ class ChargensProvider
 
         $sql = "
         SELECT 
-          noeud_id id
+          id
         FROM 
-          tbl_noeud n 
+          noeud n 
         WHERE 
           n.etape_id = :etape
+          AND n.histo_destruction IS NULL
           AND ROWNUM = 1
         ";
 
@@ -338,25 +341,27 @@ class ChargensProvider
             return $res;
         }
 
-        $this->initPreCalculHeures(
-            $this->getServiceContext()->getAnnee(),
-            $this->getStructure(),
-            $this->getScenario(),
-            $this->getServiceTypeHeures()->getByCode(TypeHeures::FI)
-        );
-
         $sql = "
         SELECT
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES cph
+          tbl_chargens cph
+          JOIN type_heures th ON th.id = cph.type_heures_id AND th.code = 'fi'
+        WHERE
+          cph.annee_id = :annee
+          AND cph.structure_id = :structure
+          AND cph.scenario_id = :scenario
         GROUP BY
           structure_id,
           scenario_id
         ";
 
-        $d = $this->getBdd()->fetchOne($sql);
+        $d = $this->getBdd()->fetchOne($sql, [
+            'annee'     => $this->getServiceContext()->getAnnee()->getId(),
+            'structure' => $this->getStructure()->getId(),
+            'scenario'  => $this->getScenario()->getId(),
+        ]);
         if (!empty($d)) {
             $res['structure'] = (string)$this->getStructure();
             $res['heures']    = (float)$d['HEURES'];
@@ -381,26 +386,31 @@ class ChargensProvider
             return $res;
         }
 
-        $this->initPreCalculHeures(
-            $this->getServiceContext()->getAnnee(),
-            $structure,
-            $this->getScenario(),
-            $this->getServiceTypeHeures()->getByCode(TypeHeures::FI)
-        );
-
         $sql = "
         SELECT
           structure_id,
           SUM(heures) heures,
           SUM(hetd) hetd
         FROM
-          V_CHARGENS_PRECALCUL_HEURES cph
+          tbl_chargens cph
+          JOIN type_heures th ON th.id = cph.type_heures_id AND th.code = 'fi'
+        WHERE
+          cph.annee_id = :annee
+          AND cph.scenario_id = :scenario
+          " . ($structure ? ' AND cph.structure_id = :structure' : '') . "
         GROUP BY
           structure_id,
           scenario_id
         ";
 
-        $ds = $this->getBdd()->fetch($sql);
+        $params = [
+            'annee'    => $this->getServiceContext()->getAnnee()->getId(),
+            'scenario' => $this->getScenario()->getId(),
+        ];
+        if ($structure) {
+            $params['structure'] = $structure->getId();
+        }
+        $ds = $this->getBdd()->fetch($sql, $params);
         foreach ($ds as $d) {
             $sid              = (int)$d['STRUCTURE_ID'];
             $heures           = (float)$d['HEURES'];
@@ -488,6 +498,8 @@ class ChargensProvider
 
         $diffData = $this->diffDbData($oldData, $newData);
         $this->persist($diffData);
+
+        $this->getServiceTableauBord()->calculerDemandes();
 
         if ($this->getScenario()) {
             $this->setScenario($this->getScenario());

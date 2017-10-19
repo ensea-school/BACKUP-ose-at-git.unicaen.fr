@@ -64,21 +64,18 @@ class DossierController extends AbstractController
         $this->initFilters();
 
         /* Initialisation */
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         /* @var $intervenant Intervenant */
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
-        $iPrec       = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
+        $iPrec = $this->getServiceDossier()->intervenantVacataireAnneesPrecedentes($intervenant, 1);
 
         $validation = $this->getServiceDossier()->getValidation($intervenant);
         $form       = $this->getFormIntervenantDossier();
 
-        if (!($dossier = $intervenant->getDossier()) || !$dossier->estNonHistorise()) {
-            $dossier = $this->getServiceDossier()->newEntity()->fromIntervenant($intervenant);
-            $intervenant->setDossier($dossier);
-        }
+        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
 
         $privEdit      = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_EDITION));
         $privValider   = $this->isAllowed(Privileges::getResourceId(Privileges::DOSSIER_VALIDATION));
@@ -141,7 +138,8 @@ class DossierController extends AbstractController
             if ($form->isValid()) {
                 $lastDossierId = $dossier->getId();
                 try {
-                    $this->getServiceDossier()->enregistrerDossier($dossier, $intervenant);
+                    $this->getServiceDossier()->enregistrerDossier($dossier);
+                    $this->updateTableauxBord($intervenant);
                     $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage(DbException::translate($e));
@@ -164,7 +162,7 @@ class DossierController extends AbstractController
             }
         }
 
-        return compact('role', 'form', 'validation', 'canValider', 'canDevalider', 'canSupprimer');
+        return compact('role', 'form', 'validation', 'canValider', 'canDevalider', 'canSupprimer', 'dossier');
     }
 
 
@@ -175,9 +173,10 @@ class DossierController extends AbstractController
 
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $dossier     = $intervenant->getDossier();
+        $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
         try {
             $this->getServiceValidation()->validerDossier($dossier);
+            $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e));
@@ -197,6 +196,7 @@ class DossierController extends AbstractController
         $validation  = $this->getServiceDossier()->getValidation($intervenant);
         try {
             $this->getServiceValidation()->delete($validation);
+            $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e));
@@ -213,9 +213,11 @@ class DossierController extends AbstractController
 
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
+        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
 
         try {
-            $this->getServiceDossier()->delete($intervenant->getDossier());
+            $this->getServiceDossier()->delete($dossier);
+            $this->updateTableauxBord($intervenant);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e));
@@ -237,7 +239,7 @@ class DossierController extends AbstractController
         FROM
           " . IndicModifDossier::class . " vi
         WHERE
-          1=compriseEntre(vi.histoCreation, vi.histoDestruction)
+          vi.histoDestruction IS NULL
           AND vi.intervenant = :intervenant
         ORDER BY
           vi.attrName, vi.histoCreation
@@ -269,8 +271,6 @@ class DossierController extends AbstractController
                     "L'historique des modifications d'informations importantes dans les données personnelles de %s a été effacé avec succès.",
                     $intervenant));
 
-
-
                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
@@ -282,4 +282,13 @@ class DossierController extends AbstractController
         }
     }
 
+
+
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'dossier',
+            'piece_jointe_demande',
+        ], $intervenant);
+    }
 }

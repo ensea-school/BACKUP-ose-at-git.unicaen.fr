@@ -39,7 +39,9 @@ class Dossier extends AbstractForm
      */
     public function init()
     {
-        $this->setHydrator(new DossierHydrator());
+        $hydrator = new DossierHydrator();
+        $hydrator->setServiceDossier( $this->getServiceDossier() );
+        $this->setHydrator($hydrator);
 
         $this->dossierFieldset = new DossierFieldset('dossier');
         $this->dossierFieldset
@@ -77,7 +79,7 @@ class Dossier extends AbstractForm
 
     public function personnaliser(Intervenant $intervenant, $lastHETD = 0)
     {
-        $dossier         = $intervenant->getDossier();
+        $dossier         = $this->getServiceDossier()->getByIntervenant($intervenant);
         $dossierFieldset = $this->get('dossier');
         /* @var $dossierFieldset DossierFieldset */
 

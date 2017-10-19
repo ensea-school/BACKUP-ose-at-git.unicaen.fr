@@ -20,6 +20,7 @@ use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 /**
  * Description of ServiceReferentiel
  *
+ * @method ServiceReferentielEntity get($id)
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class ServiceReferentiel extends AbstractEntityService

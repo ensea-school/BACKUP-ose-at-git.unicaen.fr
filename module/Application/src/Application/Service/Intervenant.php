@@ -11,6 +11,7 @@ use Application\Filter\StringFromFloat;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
@@ -29,6 +30,7 @@ class Intervenant extends AbstractEntityService
     use QueryGeneratorServiceAwareTrait;
     use MiseEnPaiementAwareTrait;
     use MiseEnPaiementIntervenantStructureAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -93,6 +95,9 @@ class Intervenant extends AbstractEntityService
             }
 
             $result = $repo->findOneBy($findParams); // on retente
+            if ($result){
+                $this->getServiceWorkflow()->calculerTableauxBord(null,$result);
+            }
         }
 
         return $result;

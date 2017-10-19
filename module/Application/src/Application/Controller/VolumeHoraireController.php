@@ -2,13 +2,16 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
+use Application\Entity\Db\WfEtape;
 use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Application\Exception\DbException;
 
@@ -23,6 +26,7 @@ class VolumeHoraireController extends AbstractController
     use VolumeHoraireAwareTrait;
     use ServiceAwareTrait;
     use SaisieAwareTrait;
+    use WorkflowServiceAwareTrait;
 
     public function listeAction()
     {
@@ -98,6 +102,7 @@ class VolumeHoraireController extends AbstractController
             if ($form->isValid()){
                 try{
                     $this->getServiceService()->save($service);
+                    $this->updateTableauxBord($service->getIntervenant());
                 }catch(\Exception $e){
                     $e = DbException::translate($e);
                     $errors[] = $e->getMessage();
@@ -116,6 +121,15 @@ class VolumeHoraireController extends AbstractController
             return $this->popoverInnerViewModel($viewModel, "Saisie d'heures d'enseignement", false);
         }
         return $viewModel;
+    }
+
+
+
+    private function updateTableauxBord(Intervenant $intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'formule','validation_enseignement','service','service_saisie','piece_jointe_fournie'
+        ], $intervenant);
     }
 
 }

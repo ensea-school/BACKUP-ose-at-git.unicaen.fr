@@ -13,6 +13,7 @@ use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratAwareTrait;
+use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
@@ -20,6 +21,7 @@ use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Constants;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -45,6 +47,8 @@ class ContratController extends AbstractController
     use ParametresAwareTrait;
     use ContratProcessusAwareTrait;
     use TauxHoraireHETDServiceAwareTrait;
+    use DossierAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -139,6 +143,7 @@ class ContratController extends AbstractController
         } else {
             try {
                 $this->getProcessusContrat()->enregistrer($contrat);
+                $this->updateTableauxBord($contrat->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
@@ -172,6 +177,7 @@ class ContratController extends AbstractController
         if ($this->getRequest()->isPost()) {
             try {
                 $this->getProcessusContrat()->supprimer($contrat);
+                $this->updateTableauxBord($contrat->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage("Suppression $contratToString effectuée avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
@@ -210,6 +216,7 @@ class ContratController extends AbstractController
         if ($this->getRequest()->isPost()) {
             try {
                 $this->getProcessusContrat()->valider($contrat);
+                $this->updateTableauxBord($contrat->getIntervenant());
 
                 $this->flashMessenger()->addSuccessMessage(
                     "Validation " . lcfirst($contrat->toString(true, true)) . " enregistrée avec succès."
@@ -241,6 +248,7 @@ class ContratController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusContrat()->devalider($contrat);
+                    $this->updateTableauxBord($contrat->getIntervenant());
 
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation " . lcfirst($contrat->toString(true, true)) . " effectuée avec succès."
@@ -285,6 +293,7 @@ class ContratController extends AbstractController
         $form->bindRequestSave($contrat, $this->getRequest(), function () use ($contrat, $contratToString) {
 
             $this->getServiceContrat()->save($contrat);
+            $this->updateTableauxBord($contrat->getIntervenant());
             $this->flashMessenger()->addSuccessMessage(
                 "Saisie du retour $contratToString signé enregistrée avec succès."
             );
@@ -321,7 +330,8 @@ class ContratController extends AbstractController
 
         $tauxHoraire = $this->getServiceTauxHoraireHETD()->getByDate($contrat->getHistoCreation());
 
-        if ($dossier = $intervenant->getDossier()) {
+        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        if ($dossier->getId()) {
             $nomIntervenant        = strtoupper($dossier->getNomUsuel()) . ' ' . ucfirst($dossier->getPrenom());
             $nomUsuel              = $dossier->getNomUsuel();
             $dateNaissance         = $dossier->getDateNaissance() ? $dossier->getDateNaissance()->format(Constants::DATE_FORMAT) : $intervenant->getAdressePrincipale(true);
@@ -416,6 +426,7 @@ class ContratController extends AbstractController
         }
         if (is_array($result)) {
             $this->getServiceContrat()->creerFichiers($result['files'], $contrat);
+            $this->updateTableauxBord($contrat->getIntervenant());
         }
 
         return $this->redirect()->toRoute('contrat/lister-fichier', [], [], true);
@@ -490,8 +501,16 @@ class ContratController extends AbstractController
         }
 
         $this->em()->flush();
-
+        $this->updateTableauxBord($contrat->getIntervenant());
         return $this->redirect()->toRoute('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true);
     }
 
+
+
+    private function updateTableauxBord(Intervenant $intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'contrat',
+        ], $intervenant);
+    }
 }

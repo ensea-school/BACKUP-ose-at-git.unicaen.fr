@@ -52,7 +52,7 @@ trait IntervenantProcessusAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->processusIntervenant = $serviceLocator->get('processusIntervenant');
+            $this->processusIntervenant = $serviceLocator->get(IntervenantProcessus::class);
         }
         return $this->processusIntervenant;
     }

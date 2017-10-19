@@ -7,3 +7,16 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
+//throw new \Exception('test');
+use Application\Entity\Db\Intervenant;
+use Application\Service\WorkflowService;
+
+/** @var WorkflowService $w */
+$w = $sl->get('workflow');
+
+$i = new Intervenant();
+
+//$w->calculerTableauxBord(['workflow','formule'], $i);
+
+
+

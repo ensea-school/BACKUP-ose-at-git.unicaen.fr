@@ -1,12 +1,15 @@
 <?php
 
 /**
- * @var $this         \Application\View\Renderer\PhpRenderer
- * @var $form         \Application\Form\Intervenant\Dossier
- * @var $canValider   boolean
- * @var $canDevalider boolean
- * @var $canSupprimer boolean
+ * @var $this             \Application\View\Renderer\PhpRenderer
+ * @var $form             \Application\Form\Intervenant\Dossier
+ * @var $canValider       boolean
+ * @var $canDevalider     boolean
+ * @var $canSupprimer     boolean
+ * @var $dossier          Dossier
  */
+
+$dossierEntity = $dossier;
 
 $form->prepare();
 $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
@@ -118,16 +121,15 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
 
 
 <?php
-if (($d = $form->getObject()->getDossier()) && $d->getId()) {
-    echo $this->historique($d);
+if ($dossierEntity->getId()) {
+    echo $this->historique($dossierEntity);
 }
 ?>
 
 <script type="text/javascript" src="<?php echo $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>
 
 <script type="text/javascript">
-    $(function ()
-    {
+    $(function () {
         var readonly = <?php echo $form->isReadOnly() ? 'true' : 'false' ?>;
 
         managePaysNaissance();
@@ -149,8 +151,7 @@ if (($d = $form->getObject()->getDossier()) && $d->getId()) {
              */
             function updateSelectPays(dateObservation)
             {
-                $("option.pays", selectPays).each(function ()
-                {
+                $("option.pays", selectPays).each(function () {
                     var option = $(this);
                     var dateDebutValid = moment(option.data("debut"), "D/M/YYYY", true);
                     var dateFinValid = option.data("fin") ? moment(option.data("fin"), "D/M/YYYY", true) : moment();
@@ -166,8 +167,7 @@ if (($d = $form->getObject()->getDossier()) && $d->getId()) {
             }
 
             // mise à jour de la liste des pays à chaque modif de la date de naissance
-            tfDate.change(function ()
-            {
+            tfDate.change(function () {
                 var dateObservation = moment(tfDate.val(), "D/M/YYYY", true);
                 if (!dateObservation.isValid()) {
                     dateObservation = moment();
@@ -189,8 +189,7 @@ if (($d = $form->getObject()->getDossier()) && $d->getId()) {
             var selectDept = $("select[name='dossier[departementNaissance]']");
             var emptyDept = $("option[value='']", selectDept);
 
-            selectPays.change(function ()
-            {
+            selectPays.change(function () {
                 if ($("option:selected", selectPays).hasClass("france")) {
                     selectDept.removeProp('disabled').parent().show();
                     emptyDept.html("(Sélectionnez un département...)");

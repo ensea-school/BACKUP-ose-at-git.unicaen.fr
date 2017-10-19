@@ -168,6 +168,17 @@ return [
                             ],
                         ],
                     ],
+
+                    'depassement' => [
+                        'type'          => 'Literal',
+                        'may_terminate' => true,
+                        'options'       => [
+                            'route'    => '/depassement',
+                            'defaults' => [
+                                'action' => 'depassement',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -210,6 +221,13 @@ return [
                                 'description' => "Permet de récupérer les données liées aux charges d'enseignement",
                                 'route'       => 'chargens/export',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'export'),
+                                'visible'     => false,
+                            ],
+                            'depassement'    => [
+                                'label'       => "Dépassement des charges par les services au format CSV (pour tableur)",
+                                'description' => "Permet de récupérer les données liées aux dépassement des heures de service par rapport aux charges d'enseignement",
+                                'route'       => 'chargens/depassement',
+                                'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'depassement'),
                                 'visible'     => false,
                             ],
                         ],
@@ -291,6 +309,14 @@ return [
                         Privileges::CHARGENS_EXPORT_CSV,
                     ],
                 ],
+
+                [
+                    'controller' => 'Application\Controller\Chargens',
+                    'action'     => ['depassement'],
+                    'privileges' => [
+                        Privileges::CHARGENS_DEPASSEMENT_CSV,
+                    ],
+                ],
             ],
         ],
 
@@ -330,12 +356,12 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'applicationScenario'    => Service\ScenarioService::class,
-            'assertionChargens'      => Assertion\ChargensAssertion::class,
+            'applicationScenario' => Service\ScenarioService::class,
+            'assertionChargens'   => Assertion\ChargensAssertion::class,
         ],
         'factories'  => [
             'applicationSeuilCharge' => Service\Factory\SeuilChargeServiceFactory::class,
-            'chargens' => Provider\Chargens\ChargensProviderFactory::class,
+            'chargens'               => Provider\Chargens\ChargensProviderFactory::class,
         ],
     ],
     'view_helpers'    => [

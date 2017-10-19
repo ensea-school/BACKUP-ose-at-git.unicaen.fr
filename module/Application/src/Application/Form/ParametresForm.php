@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Service\Traits\AnneeAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
+use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\UtilisateurAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
@@ -19,12 +20,11 @@ class ParametresForm extends AbstractForm
     use AnneeAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use UtilisateurAwareTrait;
+    use ScenarioServiceAwareTrait;
 
     public function init()
     {
         $this->setAttribute('action',$this->getCurrentUrl());
-
-        /* Ajoutez vos éléments de formulaire ici */
 
         $this->add([
             'type' => 'Select',
@@ -129,7 +129,7 @@ class ParametresForm extends AbstractForm
             'type' => 'Select',
             'name' => 'domaine_fonctionnel_ens_ext',
             'options'    => [
-                'value_options' => Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList()),
+                'value_options' => Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList($this->getServiceDomaineFonctionnel()->finderByHistorique())),
             ],
             'attributes' => [
                 'class' => 'selectpicker',
@@ -237,6 +237,19 @@ class ParametresForm extends AbstractForm
             'type'    => 'Textarea',
             'options' => [
                 'label' => 'Signataire 2',
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'scenario_charges_services',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceScenario()->getList($this->getServiceScenario()->finderByHistorique())),
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true',
+                'data-size' => 20,
             ],
         ]);
 

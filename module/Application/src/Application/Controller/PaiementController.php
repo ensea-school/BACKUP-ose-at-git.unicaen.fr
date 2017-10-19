@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\TypeRessource;
@@ -137,6 +138,7 @@ class PaiementController extends AbstractController
             $changements = $this->params()->fromPost('changements', '{}');
             $changements = Json::decode($changements, Json::TYPE_ARRAY);
             $this->getServiceMiseEnPaiement()->saveChangements($changements);
+            $this->updateTableauxBord($intervenant);
             $this->setChangeIndexSaved($postChangeIndex);
             $saved = true;
         }
@@ -259,7 +261,7 @@ class PaiementController extends AbstractController
               LEFT JOIN ep.structure str
             WHERE
               fr.intervenant = :intervenant
-              AND 1 = compriseEntre( mep.histoCreation, mep.histoDestruction )
+              mep.histoDestruction IS NULL
         ";
 
         $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
@@ -280,7 +282,7 @@ class PaiementController extends AbstractController
               LEFT JOIN sr.structure str
             WHERE
               fr.intervenant = :intervenant
-              AND 1 = compriseEntre( mep.histoCreation, mep.histoDestruction )
+              mep.histoDestruction IS NULL
         ";
 
         $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
@@ -293,6 +295,7 @@ class PaiementController extends AbstractController
                     $paiement->setPeriodePaiement(null);
                     $paiement->setDateMiseEnPaiement(null);
                     $this->getServiceMiseEnPaiement()->save($paiement);
+                    $this->updateTableauxBord($intervenant);
                 }else{
                     $this->getServiceMiseEnPaiement()->delete($paiement);
                 }
@@ -566,11 +569,24 @@ class PaiementController extends AbstractController
             $intervenants = $this->getServiceIntervenant()->get(explode(',', $intervenants));
             try {
                 $this->getServiceMiseEnPaiement()->mettreEnPaiement($structure, $intervenants, $periode, $dateMiseEnPaiement);
+                $this->updateTableauxBord($intervenants);
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
 
         return compact('form', 'title', 'errors');
+    }
+
+
+
+    /**
+     * @param Intervenant|Intervenant[] $intervenant
+     */
+    private function updateTableauxBord($intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'paiement',
+        ], $intervenant);
     }
 }

@@ -470,6 +470,9 @@ return [
         ],
     ],
     'service_manager' => [
+        'factories' => [
+            Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class
+        ],
         'invokables' => [
             'ApplicationIntervenant'                => Service\Intervenant::class,
             'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
@@ -478,7 +481,6 @@ return [
             'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
             'assertionIntervenant'                  => Assertion\IntervenantAssertion::class,
             'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
-            'processusIntervenant'                  => Processus\IntervenantProcessus::class,
         ],
     ],
     'view_helpers'    => [

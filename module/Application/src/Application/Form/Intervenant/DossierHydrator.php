@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant;
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
+use Application\Service\Traits\DossierAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -12,6 +13,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class DossierHydrator implements HydratorInterface
 {
+    use DossierAwareTrait;
+
     /**
      *
      * @param StatutIntervenant $defaultStatut
@@ -37,7 +40,6 @@ class DossierHydrator implements HydratorInterface
         }
 
         $intervenant
-                ->setDossier($dossier)
                 ->setStatut($dossier->getStatut())
                 ->setPremierRecrutement($dossier->getPremierRecrutement());
 
@@ -53,7 +55,7 @@ class DossierHydrator implements HydratorInterface
     public function extract($intervenant)
     {
         return [
-            'dossier' => $intervenant->getDossier(),
+            'dossier' => $this->getServiceDossier()->getByIntervenant($intervenant),
         ];
     }
 

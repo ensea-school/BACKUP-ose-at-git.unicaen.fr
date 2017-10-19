@@ -63,8 +63,9 @@ class Validation extends AbstractEntityService
         $validation->setIntervenant($dossier->getIntervenant());
         $validation->setTypeValidation($typeDonneesPerso);
         $validation->setStructure($dossier->getIntervenant()->getStructure());
+        $this->save($validation);
 
-        return $this->save($validation);
+        return $validation;
     }
 
 

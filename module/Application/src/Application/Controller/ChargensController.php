@@ -432,4 +432,89 @@ class ChargensController extends AbstractController
 
         return $csvModel;
     }
+
+
+
+    public function depassementAction()
+    {
+        $annee     = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
+
+        $sql = 'SELECT * FROM V_EXPORT_DEPASS_CHARGES WHERE annee_id = :annee';
+
+        $params = [
+            'annee' => $annee->getId(),
+        ];
+        if ($structure) {
+            $sql                 .= ' AND structure_id = :structure';
+            $params['structure'] = $structure->getId();
+        }
+        $data = $this->em()->getConnection()->fetchAll($sql, $params);
+
+        $csvModel = new CsvModel();
+        $csvModel->setHeader([
+            'annee'                         => 'Année',
+            'type_volume_horaire_code'      => 'Prév/Réal',
+            'intervenant_code'              => 'Code intervenant',
+            'intervenant_nom'               => 'Intervenant',
+            'intervenant_date_naissance'    => 'Date de naissance',
+            'intervenant_statut_libelle'    => 'Statut intervenant',
+            'intervenant_type_code'         => 'Type d\'intervenant (Code)',
+            'intervenant_type_libelle'      => 'Type d\'intervenant',
+            'structure_aff_libelle'         => 'Structure d\'affectation',
+            'structure_ens_libelle'         => 'Structure d\'enseignement',
+            'groupe_type_formation_libelle' => 'Groupe de type de formation',
+            'type_formation_libelle'        => 'Type de formation',
+            'etape_niveau'                  => 'Niveau',
+            'etape_code'                    => 'Code formation',
+            'etape_libelle'                 => 'Formation',
+            'element_code'                  => 'Code enseignement',
+            'element_libelle'               => 'Enseignement',
+            'element_taux_fi'               => 'Taux FI',
+            'element_taux_fc'               => 'Taux FC',
+            'element_taux_fa'               => 'Taux FA',
+            'element_source_libelle'        => 'Source enseignement',
+            'type_intervention_code'        => 'Type d\'intervention',
+            'heures_service'                => 'Heures (service)',
+            'heures_charges'                => 'Volume horaire (charges)',
+            'groupes_charges'               => 'Groupes (charges)',
+            'heures_depassement'            => 'Dépassement',
+        ]);
+
+        foreach ($data as $d) {
+            $l = [
+                'annee'                         => $d['ANNEE'],
+                'type_volume_horaire_code'      => $d['TYPE_VOLUME_HORAIRE_CODE'],
+                'intervenant_code'              => $d['INTERVENANT_CODE'],
+                'intervenant_nom'               => $d['INTERVENANT_NOM'],
+                'intervenant_date_naissance'    => \DateTime::createFromFormat('Y-m-d', substr($d['INTERVENANT_DATE_NAISSANCE'], 0, 10)),
+                'intervenant_statut_libelle'    => $d['INTERVENANT_STATUT_LIBELLE'],
+                'intervenant_type_code'         => $d['INTERVENANT_TYPE_CODE'],
+                'intervenant_type_libelle'      => $d['INTERVENANT_TYPE_LIBELLE'],
+                'structure_aff_libelle'         => $d['STRUCTURE_AFF_LIBELLE'],
+                'structure_ens_libelle'         => $d['STRUCTURE_ENS_LIBELLE'],
+                'groupe_type_formation_libelle' => $d['GROUPE_TYPE_FORMATION_LIBELLE'],
+                'type_formation_libelle'        => $d['TYPE_FORMATION_LIBELLE'],
+                'etape_niveau'                  => (int)$d['ETAPE_NIVEAU'],
+                'etape_code'                    => $d['ETAPE_CODE'],
+                'etape_libelle'                 => $d['ETAPE_LIBELLE'],
+                'element_code'                  => $d['ELEMENT_CODE'],
+                'element_libelle'               => $d['ELEMENT_LIBELLE'],
+                'element_taux_fi'               => (float)$d['ELEMENT_TAUX_FI'],
+                'element_taux_fc'               => (float)$d['ELEMENT_TAUX_FC'],
+                'element_taux_fa'               => (float)$d['ELEMENT_TAUX_FA'],
+                'element_source_libelle'        => $d['ELEMENT_SOURCE_LIBELLE'],
+                'type_intervention_code'        => $d['TYPE_INTERVENTION_CODE'],
+                'heures_service'                => (float)$d['HEURES_SERVICE'],
+                'heures_charges'                => (float)$d['HEURES_CHARGES'],
+                'groupes_charges'               => (float)$d['GROUPES_CHARGES'],
+                'heures_depassement'            => (float)$d['HEURES_DEPASSEMENT'],
+            ];
+
+            $csvModel->addLine($l);
+        }
+        $csvModel->setFilename('depassement-charges-services-' . $annee->getId() . '.csv');
+
+        return $csvModel;
+    }
 }

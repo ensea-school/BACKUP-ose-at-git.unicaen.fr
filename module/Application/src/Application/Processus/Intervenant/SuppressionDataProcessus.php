@@ -345,7 +345,7 @@ class SuppressionDataProcessus
     private function makeDossier()
     {
         /* Récup des données personnelles */
-        $dossier = $this->getIntervenant()->getDossier();
+        $dossier = $this->getServiceDossier()->getByIntervenant($this->getIntervenant());
         if ($dossier && $dossier->estNonHistorise()) {
             $d = $this->newIsd($dossier)->setIcon('glyphicon glyphicon-user');
 

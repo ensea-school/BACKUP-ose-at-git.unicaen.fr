@@ -2,9 +2,9 @@
 
 namespace Application\Filter;
 
+use Application\Entity\Db\Intervenant;
 use Zend\Filter\AbstractFilter;
 use UnicaenApp\Entity\Ldap\People;
-use Application\Entity\Db\IntervenantInterface;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\Personnel;
 
@@ -46,8 +46,7 @@ class NomCompletFormatter extends AbstractFilter
     public function filter($value)
     {
         // normalisation
-        if ($value instanceof IntervenantInterface) {
-            /* @var $value IntervenantInterface */
+        if ($value instanceof Intervenant) {
             $nomUsuel = $value->getNomUsuel();
             $nomPatro = $value->getNomPatronymique();
             $prenom   = $value->getPrenom();

@@ -272,7 +272,6 @@ return array(
     'Application\Entity\Db\WfEtapeDep'                                                                   => __DIR__ . '/src/Application/Entity/Db/WfEtapeDep.php',
     'Application\Entity\Db\Utilisateur'                                                                  => __DIR__ . '/src/Application/Entity/Db/Utilisateur.php',
     'Application\Entity\Db\Etape'                                                                        => __DIR__ . '/src/Application/Entity/Db/Etape.php',
-    'Application\Entity\Db\IntervenantInterface'                                                         => __DIR__ . '/src/Application/Entity/Db/IntervenantInterface.php',
     'Application\Entity\Db\Role'                                                                         => __DIR__ . '/src/Application/Entity/Db/Role.php',
     'Application\Entity\Db\TblAgrement'                                                                  => __DIR__ . '/src/Application/Entity/Db/TblAgrement.php',
     'Application\Entity\Db\VolumeHoraireReferentiel'                                                     => __DIR__ . '/src/Application/Entity/Db/VolumeHoraireReferentiel.php',

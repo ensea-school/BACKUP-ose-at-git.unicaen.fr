@@ -14,6 +14,7 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Element\Checkbox;
 use Zend\View\Model\ViewModel;
@@ -33,6 +34,7 @@ class AgrementController extends AbstractController
     use ContextAwareTrait;
     use SaisieAwareTrait;
     use StructureAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -154,6 +156,7 @@ class AgrementController extends AbstractController
         $form = $this->getFormAgrementSaisie();
         $form->bindRequestSave($agrement, $this->getRequest(), function ($a) {
             $this->getServiceAgrement()->save($a);
+            $this->updateTableauxBord($a->getIntervenant());
         });
 
         return compact('form');
@@ -194,6 +197,7 @@ class AgrementController extends AbstractController
                         }
                         try {
                             $this->getServiceAgrement()->save($agrement);
+                            $this->updateTableauxBord($agrement->getIntervenant());
                         } catch (\Exception $e) {
                             $this->flashMessenger()->addErrorMessage($e->getMessage());
                         }
@@ -263,12 +267,14 @@ class AgrementController extends AbstractController
 
     public function supprimerAction()
     {
+        /** @var Agrement $agrement */
         if (!($agrement = $this->getEvent()->getParam('agrement'))) {
             throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
         $form = $this->makeFormSupprimer(function () use ($agrement) {
             $this->getServiceAgrement()->delete($agrement);
+            $this->updateTableauxBord($agrement->getIntervenant());
         });
 
         return compact('agrement', 'form');
@@ -289,5 +295,15 @@ class AgrementController extends AbstractController
         $csvModel->setFilename('agrements-' . $annee . '.csv');
 
         return $csvModel;
+    }
+
+
+
+    private function updateTableauxBord(Intervenant $intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'agrement',
+            'contrat',
+        ], $intervenant);
     }
 }

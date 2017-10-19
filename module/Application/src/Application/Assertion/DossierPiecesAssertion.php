@@ -3,6 +3,7 @@
 namespace Application\Assertion;
 
 use Application\Acl\Role;
+use Application\Controller\DossierController;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
@@ -34,7 +35,7 @@ class DossierPiecesAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         switch ($controller) {
-            case 'Application\Controller\Dossier':
+            case DossierController::class:
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;

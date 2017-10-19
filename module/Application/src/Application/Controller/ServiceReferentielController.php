@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
@@ -17,6 +18,7 @@ use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Application\Exception\DbException;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
@@ -37,6 +39,7 @@ class ServiceReferentielController extends AbstractController
     use ValidationAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
     use ValidationReferentielProcessusAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -146,6 +149,7 @@ class ServiceReferentielController extends AbstractController
                 try {
                     $entity->setIntervenant($intervenant); // car après $form->isValid(), $entity->getIntervenant() === null
                     $entity = $service->save($entity);
+                    $this->updateTableauxBord($intervenant);
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $e = DbException::translate($e);
@@ -185,6 +189,7 @@ class ServiceReferentielController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getServiceServiceReferentiel()->setPrevusFromPrevus($intervenant);
+        $this->updateTableauxBord($intervenant);
         $errors = [];
 
         return compact('errors');
@@ -200,9 +205,11 @@ class ServiceReferentielController extends AbstractController
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceServiceReferentiel()->get($sid);
+
                 $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
+                    $this->updateTableauxBord($service->getIntervenant());
                 }
             }
         }
@@ -234,6 +241,7 @@ class ServiceReferentielController extends AbstractController
         if ($this->getRequest()->isPost()) {
             try {
                 $this->getServiceServiceReferentiel()->delete($service);
+                $this->updateTableauxBord($service->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);
@@ -325,7 +333,7 @@ class ServiceReferentielController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->enregistrer($typeVolumeHoraire, $validation);
-
+                    $this->updateTableauxBord($intervenant,true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Validation effectuée avec succès."
                     );
@@ -353,7 +361,7 @@ class ServiceReferentielController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationReferentiel()->supprimer($validation);
-
+                    $this->updateTableauxBord($validation->getIntervenant(),true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation effectuée avec succès."
                     );
@@ -366,6 +374,16 @@ class ServiceReferentielController extends AbstractController
         }
 
         return new MessengerViewModel();
+    }
+
+
+
+    private function updateTableauxBord(Intervenant $intervenant, $validation=false)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord(['formule','validation_referentiel','service_referentiel'], $intervenant);
+        if (!$validation){
+            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie','piece_jointe_fournie'], $intervenant);
+        }
     }
 
 }

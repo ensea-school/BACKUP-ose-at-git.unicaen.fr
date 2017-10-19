@@ -4,6 +4,8 @@ namespace Application\Controller;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Service;
+use Application\Entity\Db\Validation;
+use Application\Entity\Db\WfEtape;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
@@ -13,6 +15,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -60,6 +63,7 @@ class ServiceController extends AbstractController
     use ValidationEnseignementProcessusAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
     use ParametresAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -375,13 +379,11 @@ class ServiceController extends AbstractController
         $this->initFilters();
         $errors   = [];
         $services = $this->params()->fromQuery('services');
-//        $intervenants = [];
-//        $this->getServiceTableauBord()->desactiver();
         if ($services) {
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceService()->get($sid);
-//                $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
+                $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
                 $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
                     try {
@@ -392,11 +394,10 @@ class ServiceController extends AbstractController
                 }
             }
         }
-//
-//        foreach( $intervenants as $id => $intervenant ){
-//            $this->getServiceTableauBord()->calculerTous($intervenant);
-//        }
-//        $this->getServiceTableauBord()->activer();
+
+        foreach( $intervenants as $id => $intervenant ){
+            $this->updateTableauxBord($intervenant);
+        }
 
         return compact('errors');
     }
@@ -425,18 +426,8 @@ class ServiceController extends AbstractController
         if ($this->getRequest()->isPost()) {
             try {
                 $this->getServiceService()->delete($service);
+                $this->updateTableauxBord($service->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
-                /*if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE) {
-                    // destruction des volumes horaires associés
-                    foreach ($service->getVolumeHoraire() as $vh) {
-                        if ($vh->getTypeVolumeHoraire() === $typeVolumeHoraire) {
-                            $this->getServiceVolumeHoraire()->delete($vh);
-                        }
-                    }
-                } else {
-                    // destruction du service même
-                    $this->getServiceService()->delete($service);
-                }*/
             } catch (\Exception $e) {
                 $e = DbException::translate($e);
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
@@ -494,6 +485,7 @@ class ServiceController extends AbstractController
                 if ($form->isValid()) {
                     try {
                         $entity = $service->save($entity->setIntervenant($intervenant));
+                        $this->updateTableauxBord($intervenant);
                         $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                     } catch (\Exception $e) {
                         $e = DbException::translate($e);
@@ -595,7 +587,7 @@ class ServiceController extends AbstractController
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationEnseignement()->enregistrer($typeVolumeHoraire, $validation);
-
+                    $this->updateTableauxBord($validation->getIntervenant(), true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Validation effectuée avec succès."
                     );
@@ -617,13 +609,13 @@ class ServiceController extends AbstractController
         $this->initFilters();
 
         $validation = $this->getEvent()->getParam('validation');
-        /* @var $structure Structure */
+        /* @var $validation Validation */
 
         if ($this->isAllowed($validation, Privileges::ENSEIGNEMENT_DEVALIDATION)) {
             if ($this->getRequest()->isPost()) {
                 try {
                     $this->getProcessusValidationEnseignement()->supprimer($validation);
-
+                    $this->updateTableauxBord($validation->getIntervenant(), true);
                     $this->flashMessenger()->addSuccessMessage(
                         "Dévalidation effectuée avec succès."
                     );
@@ -638,4 +630,17 @@ class ServiceController extends AbstractController
         return new MessengerViewModel();
     }
 
+
+
+    private function updateTableauxBord(Intervenant $intervenant, $validation=false)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'formule',
+            'validation_enseignement'
+        ], $intervenant);
+
+        if (!$validation){
+            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie','service','piece_jointe_fournie'], $intervenant);
+        }
+    }
 }

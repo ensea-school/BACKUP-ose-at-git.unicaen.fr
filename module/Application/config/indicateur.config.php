@@ -65,6 +65,38 @@ return [
                             ],
                         ],
                     ],
+                    'depassement-charges'     => [
+                        'type'         => 'Segment',
+                        'options'      => [
+                            'route'       => '/depassement-charges/:intervenant',
+                            'constraints' => [
+                                'intervenant' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'depassement-charges',
+                            ],
+                        ],
+                        'child_routes' => [
+                            'prevu'   => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/prevu',
+                                    'defaults' => [
+                                        'type-volume-horaire-code' => 'PREVU',
+                                    ],
+                                ],
+                            ],
+                            'realise' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/realise',
+                                    'defaults' => [
+                                        'type-volume-horaire-code' => 'REALISE',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -86,7 +118,7 @@ return [
         ],
     ],
 
-    'navigation'      => [
+    'navigation' => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -108,12 +140,12 @@ return [
         ],
     ],
 
-    'bjyauthorize'    => [
+    'bjyauthorize' => [
         'guards' => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => ['index', 'result', 'abonnements'],
+                    'action'     => ['index', 'result', 'abonnements', 'depassement-charges'],
                     'privileges' => [Privileges::INDICATEUR_VISUALISATION],
                 ],
                 [
@@ -130,7 +162,7 @@ return [
         ],
     ],
 
-    'controllers'     => [
+    'controllers' => [
         'factories' => [
             'Application\Controller\Indicateur' => Controller\Factory\IndicateurControllerFactory::class,
         ],
@@ -141,8 +173,8 @@ return [
             'applicationIndicateur'         => Service\IndicateurService::class,
             'NotificationIndicateurService' => Service\NotificationIndicateur::class,
         ],
-        'factories' => [
-            'processusIndicateur'           => Processus\Factory\IndicateurProcessusFactory::class,
+        'factories'  => [
+            'processusIndicateur' => Processus\Factory\IndicateurProcessusFactory::class,
         ],
     ],
 ];

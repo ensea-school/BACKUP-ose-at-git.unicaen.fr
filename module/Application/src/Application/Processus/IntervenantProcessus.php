@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Processus;
+
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TblService;
@@ -16,7 +17,8 @@ use UnicaenApp\Util;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class IntervenantProcessus extends AbstractProcessus{
+class IntervenantProcessus extends AbstractProcessus
+{
     use ContextAwareTrait;
 
 
@@ -85,7 +87,7 @@ class IntervenantProcessus extends AbstractProcessus{
      *
      * @return boolean
      */
-    public function hasHeuresEnseignement( Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    public function hasHeuresEnseignement(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
         $heuresCol = $etatVolumeHoraire->isValide() ? 'valide' : 'nbvh';
 
@@ -93,7 +95,7 @@ class IntervenantProcessus extends AbstractProcessus{
         SELECT
           s        
         FROM
-          ".TblService::class." s
+          " . TblService::class . " s
         WHERE
             s.intervenant = :intervenant
             AND s.typeVolumeHoraire = :typeVolumeHoraire
@@ -101,7 +103,7 @@ class IntervenantProcessus extends AbstractProcessus{
         ";
 
         $query = $this->getEntityManager()->createQuery($dql)->setMaxResults(1);
-        $query->setParameters(compact('intervenant','typeVolumeHoraire'));
+        $query->setParameters(compact('intervenant', 'typeVolumeHoraire'));
 
         $s = $query->getResult();
 
@@ -110,14 +112,14 @@ class IntervenantProcessus extends AbstractProcessus{
 
 
 
-    public function getSuppressionData( Intervenant $intervenant )
+    public function getSuppressionData(Intervenant $intervenant)
     {
         return SuppressionDataProcessus::run($intervenant);
     }
 
 
 
-    public function deleteRecursive( IntervenantSuppressionData $isd, array $ids )
+    public function deleteRecursive(IntervenantSuppressionData $isd, array $ids)
     {
         return SuppressionDataProcessus::delete($isd, $ids);
     }

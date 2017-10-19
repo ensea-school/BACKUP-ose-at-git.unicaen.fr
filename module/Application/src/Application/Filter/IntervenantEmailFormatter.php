@@ -3,10 +3,13 @@
 namespace Application\Filter;
 
 use Application\Entity\Db\Intervenant;
+use Application\Service\Traits\DossierAwareTrait;
 use Zend\Filter\AbstractFilter;
 
 class IntervenantEmailFormatter extends AbstractFilter
 {
+    use DossierAwareTrait;
+
     private $intervenantsWithNoEmail = [];
 
     /**
@@ -30,7 +33,14 @@ class IntervenantEmailFormatter extends AbstractFilter
 
         if ($value instanceof Intervenant) {
             $intervenant = $value;
-            $email = $intervenant->getEmailPerso(true);
+
+            $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+            if ($dossier->getId() && $dossier->getEmailPerso()){
+                $email = $dossier->getEmailPerso();
+            }else{
+                $email = $intervenant->getEmail();
+            }
+
             if (! $email) {
                 $this->intervenantsWithNoEmail[$intervenant->getCode()] = $intervenant;
             }

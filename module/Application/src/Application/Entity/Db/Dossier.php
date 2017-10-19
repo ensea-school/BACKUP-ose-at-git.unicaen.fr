@@ -76,7 +76,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * @var boolean
      */
-    protected $premierRecrutement;
+    protected $premierRecrutement = false;
 
     /**
      * @var \Doctrine\Common\Collections\Collection

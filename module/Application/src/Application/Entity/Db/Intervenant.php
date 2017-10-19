@@ -3,7 +3,6 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\DisciplineAwareTrait;
-use Application\Entity\Db\Traits\DossierAwareTrait;
 use Application\Entity\Db\Traits\GradeAwareTrait;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -21,12 +20,11 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
  * Intervenant
  *
  */
-class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware
+class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface, ImportAwareInterface, ObjectManagerAware
 {
     use HistoriqueAwareTrait;
     use GradeAwareTrait;
     use DisciplineAwareTrait;
-    use DossierAwareTrait;
     use ImportAwareTrait;
     use EntityManagerAwareTrait;
 
@@ -1368,20 +1366,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
 
 
     /**
-     * Get estUneFemme
-     *
-     * @return bool
-     */
-    public function estUneFemme()
-    {
-        $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
-
-        return 'F' === $civilite->getSexe();
-    }
-
-
-
-    /**
      * Get civilite
      *
      * @return string
@@ -1678,31 +1662,6 @@ class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, Res
         }
 
         return $this;
-    }
-
-
-
-    /**
-     * Retourne l'adresse mail personnelle éventuelle.
-     * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
-     *
-     * @param bool $fallbackOnDefault
-     *
-     * @return string
-     */
-    public function getEmailPerso($fallbackOnDefault = false)
-    {
-        $mail = null;
-
-        if ($this->getDossier()) {
-            $mail = $this->getDossier()->getEmailPerso();
-        }
-
-        if (!$mail && $fallbackOnDefault) {
-            $mail = $this->getEmail();
-        }
-
-        return $mail;
     }
 
 

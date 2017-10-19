@@ -24,6 +24,11 @@ class Dossier extends AbstractEntityService
     use IntervenantAwareTrait;
     use ValidationAwareTrait;
 
+    /**
+     * @var DossierEntity[]
+     */
+    private $dcache = [];
+
 
 
     /**
@@ -52,35 +57,42 @@ class Dossier extends AbstractEntityService
 
 
     /**
-     * Enregistrement d'un dossier.
+     * @param IntervenantEntity $intervenant
      *
-     * NB: tout le travail est déjà fait via un formulaire en fait!
-     * Cette méthode existe surtout pour déclencher l'événement de workflow.
-     *
-     * @param \Application\Entity\Db\Dossier     $dossier
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return DossierEntity|null
      */
-    public function enregistrerDossier(DossierEntity $dossier, IntervenantEntity $intervenant)
+    public function getByIntervenant(IntervenantEntity $intervenant)
     {
-        $this->getEntityManager()->persist($this->getServiceContext()->getUtilisateur());
-        $this->getEntityManager()->persist($dossier);
-        $this->getEntityManager()->persist($intervenant);
+        if (isset($this->dcache[$intervenant->getId()])){
+            return $this->dcache[$intervenant->getId()];
+        }
 
-        $this->getEntityManager()->flush();
+        $qb = $this->finderByIntervenant($intervenant);
+        $this->finderByHistorique($qb);
+        foreach ($this->getList($qb) as $dossier) {
+            return $dossier;
+        }
+        $dossier = $this->newEntity()->fromIntervenant($intervenant);
+        $this->dcache[$intervenant->getId()] = $dossier;
+
+        return $dossier;
     }
 
 
 
     /**
-     * Suppression d'un dossier.
+     * Enregistrement d'un dossier.
      *
-     * @param \Application\Entity\Db\Dossier     $dossier
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * NB: tout le travail est déjà fait via un formulaire en fait!
+     * Cette méthode existe surtout pour déclencher l'événement de workflow.
+     *
+     * @param \Application\Entity\Db\Dossier $dossier
      */
-    public function supprimerDossier(DossierEntity $dossier, IntervenantEntity $intervenant)
+    public function enregistrerDossier(DossierEntity $dossier)
     {
-        $intervenant->setDossier(null);
-        $this->getEntityManager()->remove($dossier);
+        $this->getEntityManager()->persist($this->getServiceContext()->getUtilisateur());
+        $this->getEntityManager()->persist($dossier);
+        $this->getEntityManager()->persist($dossier->getIntervenant());
 
         $this->getEntityManager()->flush();
     }
@@ -122,7 +134,7 @@ class Dossier extends AbstractEntityService
      */
     public function getValidation(IntervenantEntity $intervenant)
     {
-        $validation = null;
+        $validation        = null;
         $serviceValidation = $this->getServiceValidation();
         $qb                = $serviceValidation->finderByType(TypeValidationEntity::CODE_DONNEES_PERSO);
         $serviceValidation->finderByHistorique($qb);
@@ -131,6 +143,7 @@ class Dossier extends AbstractEntityService
         if (count($validations)) {
             $validation = current($validations);
         }
+
         return $validation;
     }
 

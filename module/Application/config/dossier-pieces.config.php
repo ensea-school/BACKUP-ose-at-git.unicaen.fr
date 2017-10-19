@@ -19,7 +19,7 @@ return [
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'controller' => 'Dossier',
+                                'controller' => Controller\DossierController::class,
                                 'action'     => 'index',
                             ],
                         ],
@@ -298,7 +298,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'index'),
+                                'resource'     => PrivilegeController::getResourceId(Controller\DossierController::class, 'index'),
                                 'order'        => 5,
                             ],
                             'pieces-jointes-saisie' => [
@@ -345,35 +345,35 @@ return [
             PrivilegeController::class => [
                 /* Dossier */
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => Controller\DossierController::class,
                     'action'     => ['index'],
                     'privileges' => [Privileges::DOSSIER_VISUALISATION],
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => Controller\DossierController::class,
                     'action'     => ['differences'],
                     'privileges' => [Privileges::DOSSIER_DIFFERENCES],
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => Controller\DossierController::class,
                     'action'     => ['purger-differences'],
                     'privileges' => [Privileges::DOSSIER_PURGER_DIFFERENCES],
                     'assertion'  => 'assertionDossierPieces',
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => Controller\DossierController::class,
                     'action'     => ['valider'],
                     'privileges' => [Privileges::DOSSIER_VALIDATION],
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => Controller\DossierController::class,
                     'action'     => ['devalider'],
                     'privileges' => [Privileges::DOSSIER_DEVALIDATION],
                 ],
                 [
-                    'controller' => 'Application\Controller\Dossier',
+                    'controller' => Controller\DossierController::class,
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                 ],
@@ -470,8 +470,10 @@ return [
         ],
     ],
     'controllers'     => [
+        'factories' => [
+            Controller\DossierController::class     => Controller\Factory\DossierControllerFactory::class,
+        ],
         'invokables' => [
-            'Application\Controller\Dossier'     => Controller\DossierController::class,
             'Application\Controller\PieceJointe' => Controller\PieceJointeController::class,
         ],
     ],

@@ -294,7 +294,7 @@ $this->placeholder('export-of-link')->captureEnd();
                         <tr id="<?php echo $ep->getId() ?>">
                             <td><?php echo $ep->getEtape()->getNiveauToString() ?></td>
                             <td class="etape"><?php echo $this->etape($ep->getEtape())->renderLink() ?></td>
-                            <td class="element"><?php echo $ep->getSourceCode() ?></td>
+                            <td class="element"><?php echo $ep->getCode() ?></td>
                             <td class="element"><?php echo $this->elementPedagogique($ep)->renderLink($ep->getLibelle()) ?></td>
                             <td class="periode"><?php echo $ep->getPeriode() ?: "" ?></td>
                             <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>

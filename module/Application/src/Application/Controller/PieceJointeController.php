@@ -7,17 +7,15 @@ use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Exception\DbException;
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\PieceJointeAwareTrait;
 use Application\Service\Traits\TypePieceJointeAwareTrait;
 use Application\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
-use Doctrine\ORM\Query\Expr\Select;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Application\Service\Traits\ContextAwareTrait;
-use Zend\Db\Sql\Expression;
+
 
 /**
  * Description of UploadController
@@ -29,6 +27,9 @@ class PieceJointeController extends AbstractController
     use PieceJointeAwareTrait;
     use TypePieceJointeSaisieFormAwareTrait;
     use TypePieceJointeAwareTrait;
+    use WorkflowServiceAwareTrait;
+
+
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -60,7 +61,7 @@ class PieceJointeController extends AbstractController
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
@@ -102,15 +103,15 @@ class PieceJointeController extends AbstractController
 
     /**
      * @param TypePieceJointe[] $demandees
-     * @param PieceJointe[] $fournies
+     * @param PieceJointe[]     $fournies
      */
     protected function makeMessages($demandees, $fournies)
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role          = $this->getServiceContext()->getSelectedIdentityRole();
         $isIntervenant = (boolean)$role->getIntervenant();
-        $nbDemandees = 0;
-        $nbFournies = 0;
-        $nbValidees = 0;
+        $nbDemandees   = 0;
+        $nbFournies    = 0;
+        $nbValidees    = 0;
 
         foreach ($demandees as $demandee) {
             $nbDemandees++;
@@ -135,7 +136,7 @@ class PieceJointeController extends AbstractController
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
         } elseif ($nbFournies == $nbDemandees && $nbValidees < $nbFournies) {
             $msgs['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-            $msgs['danger'][] = "Mais certaines doivent encore être validées par " . ($isIntervenant ? 'votre' : 'la') . " composante.";
+            $msgs['danger'][]  = "Mais certaines doivent encore être validées par " . ($isIntervenant ? 'votre' : 'la') . " composante.";
         }
 
         return $msgs;
@@ -160,17 +161,15 @@ class PieceJointeController extends AbstractController
     {
         $this->initFilters();
 
+        /** @var PieceJointe $pj */
         $pj = $this->getEvent()->getParam('pieceJointe');
-//        try {
         $this->getServicePieceJointe()->valider($pj);
-        //           $this->flashMessenger()->addSuccessMessage('Validation effectuée');
-        //       }catch(\Exception $e){
-        //           $this->flashMessenger()->addErrorMessage( DbException::translate($e)->getMessage() );
-        //       }
+        $this->updateTableauxBord($pj->getIntervenant(), true);
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('application/piece-jointe/validation');
         $viewModel->setVariable('pj', $pj);
+
         return $viewModel;
     }
 
@@ -180,12 +179,15 @@ class PieceJointeController extends AbstractController
     {
         $this->initFilters();
 
+        /** @var PieceJointe $pj */
         $pj = $this->getEvent()->getParam('pieceJointe');
         $this->getServicePieceJointe()->devalider($pj);
+        $this->updateTableauxBord($pj->getIntervenant(), true);
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('application/piece-jointe/validation');
         $viewModel->setVariable('pj', $pj);
+
         return $viewModel;
     }
 
@@ -218,6 +220,8 @@ class PieceJointeController extends AbstractController
             $pj = $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
         }
 
+        $this->updateTableauxBord($intervenant);
+
         return new JsonModel();
     }
 
@@ -238,12 +242,15 @@ class PieceJointeController extends AbstractController
             return $this->redirect()->toRoute('home');
         }
 
+        /** @var PieceJointe $pj */
         $pj      = $this->getEvent()->getParam('pieceJointe');
         $fichier = $this->getEvent()->getParam('fichier');
 
         if ($fichier) {
             $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
         }
+
+        $this->updateTableauxBord($pj->getIntervenant());
 
         return new JsonModel();
     }
@@ -266,12 +273,12 @@ class PieceJointeController extends AbstractController
             \Application\Entity\Db\TypePieceJointeStatut::class,
         ]);
 
-        $qb = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointe::class)->createQueryBuilder("tpj")
+        $qb                 = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointe::class)->createQueryBuilder("tpj")
             ->select("tpj")
             ->orderBy("tpj.ordre");
         $typesPiecesJointes = $qb->getQuery()->getResult();
 
-        $qb = $this->em()->getRepository(\Application\Entity\Db\StatutIntervenant::class)->createQueryBuilder("si")
+        $qb                  = $this->em()->getRepository(\Application\Entity\Db\StatutIntervenant::class)->createQueryBuilder("si")
             ->select("si")
             ->andWhere("si.peutChoisirDansDossier = 1")
             ->orderBy("si.ordre");
@@ -298,6 +305,7 @@ class PieceJointeController extends AbstractController
     }
 
 
+
     public function typePieceJointeDeleteAction()
     {
         $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
@@ -308,6 +316,7 @@ class PieceJointeController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }
+
         return new MessengerViewModel();
     }
 
@@ -334,8 +343,9 @@ class PieceJointeController extends AbstractController
                 $this->flashMessenger()->addInfoMessage($txt);
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
-            if ($typePieceJointe)
+            if ($typePieceJointe) {
                 $form->setObject($typePieceJointe);
+            }
         } else {
             $title = 'Édition du type de pièce jointe';
             $form->bind($typePieceJointe);
@@ -357,15 +367,14 @@ class PieceJointeController extends AbstractController
         }
 
         return compact('form', 'title');
-
     }
 
 
 
     public function modifierTypePieceJointeStatutAction()
     {
-        $type = $this->context()->mandatory()->typePieceJointeFromRoute();
-        $statut = $this->context()->mandatory()->statutIntervenantFromRoute();
+        $type               = $this->context()->mandatory()->typePieceJointeFromRoute();
+        $statut             = $this->context()->mandatory()->statutIntervenantFromRoute();
         $premierRecrutement = $this->params()->fromRoute("premierRecrutement");
 
         if (null === $premierRecrutement) {
@@ -378,7 +387,7 @@ class PieceJointeController extends AbstractController
             2 => "Non attendu",
         ];
 
-        $qb = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointeStatut::class)->createQueryBuilder("tpjs")
+        $qb   = $this->em()->getRepository(\Application\Entity\Db\TypePieceJointeStatut::class)->createQueryBuilder("tpjs")
             ->select("tpjs, tpj, si")
             ->join("tpjs.type", "tpj", \Doctrine\ORM\Query\Expr\Join::WITH, "tpj = :tpj")
             ->join("tpjs.statut", "si", \Doctrine\ORM\Query\Expr\Join::WITH, "si = :si")
@@ -401,7 +410,7 @@ class PieceJointeController extends AbstractController
         if ($this->getRequest()->isPost()) {
 
             $obligatoire = (int)$this->params()->fromPost('obligatoire', 2);
-            $seuilHetd = (int)$this->params()->fromPost('seuil_heures');
+            $seuilHetd   = (int)$this->params()->fromPost('seuil_heures');
 
             if (!array_key_exists($obligatoire, $obligatoireValueOptions)) {
                 exit;
@@ -425,20 +434,21 @@ class PieceJointeController extends AbstractController
         }
 
         return [
-            'tpjs' => $tpjs,
+            'tpjs'                    => $tpjs,
             'obligatoireValueOptions' => $obligatoireValueOptions,
         ];
     }
 
 
+
     public function typePieceJointeTrierAction()
     {
         /* @var $tpj TypePieceJointe */
-        $txt='result=';
+        $txt       = 'result=';
         $champsIds = explode(',', $this->params()->fromPost('champsIds', ''));
-        $ordre = 1;
+        $ordre     = 1;
         foreach ($champsIds as $champId) {
-            $txt.=$champId.'=>';
+            $txt .= $champId . '=>';
             $tpj = $this->getServiceTypePieceJointe()->get($champId);
             if ($tpj) {
                 $txt .= ';' . $tpj->getCode();
@@ -447,11 +457,23 @@ class PieceJointeController extends AbstractController
                 try {
                     $this->getServiceTypePieceJointe()->save($tpj);
                 } catch (\Exception $e) {
-                    $e = DbException::translate($e);
+                    $e   = DbException::translate($e);
                     $txt .= ':' . $e->getMessage();
                 }
             }
         }
+
         return new JsonModel(['msg' => 'Tri des champs effectué']);
+    }
+
+
+
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'piece_jointe_fournie',
+            'agrement',
+            'contrat',
+        ], $intervenant);
     }
 }

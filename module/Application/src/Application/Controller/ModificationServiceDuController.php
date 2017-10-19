@@ -7,6 +7,7 @@ use Application\Entity\Db\ModificationServiceDu;
 use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ModificationServiceDuAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\DBAL\DBALException;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -24,6 +25,7 @@ class ModificationServiceDuController extends AbstractController
     use IntervenantAwareTrait;
     use ModificationServiceDuFormAwareTrait;
     use ModificationServiceDuAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -76,6 +78,7 @@ class ModificationServiceDuController extends AbstractController
             if ($canEdit && $form->isValid()) {
                 try {
                     $this->em()->flush();
+                    $this->updateTableauxBord($intervenant);
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);
                 } catch (DBALException $exc) {
@@ -108,5 +111,14 @@ class ModificationServiceDuController extends AbstractController
         $csvModel->setFilename('modifications-service-du-' . $annee . '.csv');
 
         return $csvModel;
+    }
+
+
+
+    private function updateTableauxBord(Intervenant $intervenant)
+    {
+        $this->getServiceWorkflow()->calculerTableauxBord([
+            'formule',
+        ], $intervenant);
     }
 }

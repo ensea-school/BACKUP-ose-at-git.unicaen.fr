@@ -2,15 +2,19 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\IndicateurDepassementCharges;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Processus\Traits\IndicateurProcessusAwareTrait;
 use Application\Entity\Db\Indicateur;
 use Application\Service\Traits\AffectationAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
+use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use Zend\View\Renderer\PhpRenderer;
 use Exception;
@@ -35,6 +39,8 @@ class IndicateurController extends AbstractController
     use NotificationIndicateurAwareTrait;
     use AffectationAwareTrait;
     use IndicateurProcessusAwareTrait;
+    use DossierAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
 
     /**
      * @var TreeRouteStack
@@ -208,6 +214,7 @@ class IndicateurController extends AbstractController
         }
 
         $formatter = new IntervenantEmailFormatter();
+        $formatter->setServiceDossier( $this->getServiceDossier() );
         $emails    = $formatter->filter($intervenants);
         if (($intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail())) {
             throw new \LogicException(
@@ -289,6 +296,50 @@ class IndicateurController extends AbstractController
         exit;
     }
 
+
+
+    public function depassementChargesAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+
+        if (!$intervenant){
+            throw new \Exception('Un intervenant doit être spécifié');
+        }
+
+        $params = compact('typeVolumeHoraire','intervenant');
+        if ($structure = $this->getServiceContext()->getStructure()){
+            $params['structure'] = $structure->getId();
+            $sFilter = ' AND idc.structure = :structure';
+        }else{
+            $sFilter = '';
+        }
+
+        $dql = "
+        SELECT
+          idc, s, ep, ti        
+        FROM
+          ".IndicateurDepassementCharges::class."   idc
+          JOIN idc.structure                        s
+          JOIN idc.elementPedagogique               ep
+          JOIN idc.typeIntervention                 ti
+        WHERE
+          idc.intervenant = :intervenant
+          AND idc.typeVolumeHoraire = :typeVolumeHoraire
+          $sFilter
+        ORDER BY
+          s.libelleCourt, ep.libelle, ti.ordre
+        ";
+
+
+        $idcs = $this->em()->createQuery($dql)->setParameters($params)->getResult();
+        $title = 'Dépassement d\'heures ('.$typeVolumeHoraire.') par rapport aux charges <small>'.$intervenant.'</small>';
+
+        return compact('title','intervenant', 'idcs');
+    }
 }
 
 

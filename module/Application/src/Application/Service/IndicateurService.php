@@ -115,11 +115,9 @@ class IndicateurService extends AbstractEntityService
         $qb = $this->getBaseQueryBuilder($indicateur, $structure);
 
         $qb->join('indicateur.intervenant', 'intervenant');
-        $qb->leftJoin('intervenant.dossier', 'dossier');
 
         $qb->addSelect('indicateur');
         $qb->addSelect('partial intervenant.{id, nomUsuel, prenom, email, code, sourceCode}');
-        $qb->addSelect('partial dossier.{id}');
 
         $qb->addSelect('partial structure.{id, libelleCourt, libelleLong}');
         $qb->leftJoin('indicateur.structure', 'structure');

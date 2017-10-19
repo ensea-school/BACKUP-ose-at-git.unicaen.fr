@@ -218,7 +218,7 @@ class Intervenant extends AbstractEntityService
               WHERE 
                 service_id IN (SELECT id FROM service s WHERE 
                   intervenant_id = $id
-                  AND 0 = OSE_DIVERS.COMPRISE_ENTRE(s.histo_creation, s.histo_destruction) 
+                  AND s.histo_destruction IS NOT NULL 
                 )
             ";
 
@@ -227,7 +227,7 @@ class Intervenant extends AbstractEntityService
               WHERE 
                 service_referentiel_id IN (SELECT id FROM service_referentiel s WHERE 
                   intervenant_id = $id
-                  AND 0 = OSE_DIVERS.COMPRISE_ENTRE(s.histo_creation, s.histo_destruction) 
+                  AND s.histo_destruction IS NOT NULL 
                 )
             ";
 
@@ -251,7 +251,7 @@ class Intervenant extends AbstractEntityService
                   $depTable
                 WHERE
                   intervenant_id = $id
-                  AND 0 = OSE_DIVERS.COMPRISE_ENTRE(histo_creation, histo_destruction)";
+                  AND histo_destruction IS NOT NULL";
             }
 
             foreach( $sqls as $sql ){

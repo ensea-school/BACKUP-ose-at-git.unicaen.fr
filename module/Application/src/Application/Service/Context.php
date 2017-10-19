@@ -449,7 +449,7 @@ class Context extends AbstractService
           intervenant i 
         WHERE
           i.annee_id = " . ((int)$annee->getId()) . "
-          AND 1 = ose_divers.comprise_entre( i.histo_creation, i.histo_destruction )
+          AND i.histo_destruction IS NULL
           AND rownum = 1
         ";
         $res = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();

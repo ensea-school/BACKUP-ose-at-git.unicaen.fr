@@ -74,8 +74,8 @@ class ContratProcessus extends AbstractProcessus
           JOIN vh.typeVolumeHoraire tvh
         WHERE
           i = :intervenant
-          AND 1 = compriseEntre(s.histoCreation, s.histoDestruction)
-          AND 1 = compriseEntre(vh.histoCreation, vh.histoDestruction)
+          AND s.histoDestruction IS NULL
+          AND vh.histoDestruction IS NULL
           AND " . ($contrat ? $fContrat : $fNonContrat) . "
           $fStructure
         ";

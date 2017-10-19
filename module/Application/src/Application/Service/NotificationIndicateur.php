@@ -127,7 +127,7 @@ class NotificationIndicateur extends AbstractEntityService
 
             ->andWhere('ni.frequence IS NOT NULL')
             ->andWhere('i.enabled = true')
-            ->andWhere('1 = compriseEntre( a.histoCreation, a.histoDestruction )')
+            ->andWhere('a.histoDestruction IS NULL')
         ;
 
         if (!$force){

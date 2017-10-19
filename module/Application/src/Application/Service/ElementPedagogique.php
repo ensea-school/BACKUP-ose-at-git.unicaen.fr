@@ -134,14 +134,14 @@ select * from (
     ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
   from
     chemin_pedagogique cp
-    JOIN element_pedagogique ep ON$af cp.element_pedagogique_id = ep.id  and 1 = ose_divers.comprise_entre( ep.histo_creation, ep.histo_destruction)$orEp
+    JOIN element_pedagogique ep ON$af cp.element_pedagogique_id = ep.id  AND ep.histo_destruction IS NULL$orEp
     JOIN etape e ON cp.etape_id = e.id
     JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID
     JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
     JOIN structure s ON ep.structure_id = s.id
     LEFT JOIN periode pe ON ep.periode_id = pe.id
   where
-    (1 = ose_divers.comprise_entre( cp.histo_creation, cp.histo_destruction )$orCp)
+    (cp.histo_destruction IS NULL$orCp)
     and $whereTerm
     $whereContext
   order by

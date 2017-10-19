@@ -164,7 +164,7 @@ class Dossier extends AbstractEntityService
             ->set("t.histoDestruction", ":destruction")
             ->set("t.histoDestructeur", ":destructeur")
             ->where("t.intervenant = :intervenant")
-            ->andWhere("1 = compriseEntre(t.histoCreation, t.histoDestruction)");
+            ->andWhere("t.histoDestruction IS NULL");
 
         $qb
             ->setParameter('intervenant', $intervenant)

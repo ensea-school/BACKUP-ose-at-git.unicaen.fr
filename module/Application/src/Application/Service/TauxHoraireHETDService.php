@@ -51,19 +51,20 @@ class TauxHoraireHETDService extends AbstractEntityService
     {
         if (!$date) $date = new \DateTime();
 
-        $dql = "
-        SELECT
-          thh
-        FROM
-          Application\Entity\Db\TauxHoraireHETD thh        
-        WHERE
-          1 = compriseEntre( thh.histoCreation, thh.histoDestruction, :date )
-          AND thh.histoCreation <= :date
-        ORDER BY
-          thh.histoCreation DESC
+        $date = $date->format('Y-m-d');
+
+        $sql = "
+        SELECT id
+        FROM taux_horaire_hetd t 
+        WHERE TO_DATE(:date,'YYYY-MM-DD') BETWEEN t.histo_creation AND COALESCE(t.histo_destruction,SYSDATE) AND rownum = 1
+        ORDER BY histo_creation DESC
         ";
 
-        return $this->getEntityManager()->createQuery($dql)->setParameter('date', $date)->setMaxResults(1)->getOneOrNullResult();
+        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['date' => $date]);
+        $id = (int)$res[0]['ID'];
+
+        return $this->getEntityManager()->getRepository(TauxHoraireHETD::class)->find($id);
+
     }
 
 }

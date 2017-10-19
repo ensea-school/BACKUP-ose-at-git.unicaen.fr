@@ -189,7 +189,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
               JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id
               JOIN structure s ON s.id = ep.structure_id
             WHERE
-              1 = ose_divers.comprise_entre( ep.histo_creation, ep.histo_destruction )
+              ep.histo_destruction IS NULL
               AND ep.annee_id = :annee
               ";
 

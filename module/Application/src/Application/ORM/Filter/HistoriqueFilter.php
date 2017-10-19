@@ -26,20 +26,7 @@ class HistoriqueFilter extends AbstractFilter
         }
 
         if (isset($this->enabledEntities[$targetEntity->name])) {
-            if ($this->getServiceContext()){
-                $dateObservation = $this->getServiceContext()->getDateObservation();
-            }else{
-                $dateObservation = new \DateTime();
-            }
-
-
-            if ($dateObservation) {
-                $this->setParameter('date_observation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
-
-                return '1 = OSE_DIVERS.COMPRISE_ENTRE(' . $targetTableAlias . '.HISTO_CREATION,' . $targetTableAlias . '.HISTO_DESTRUCTION, ' . $this->getParameter('date_observation') . ')';
-            } else {
-                return '1 = OSE_DIVERS.COMPRISE_ENTRE(' . $targetTableAlias . '.HISTO_CREATION,' . $targetTableAlias . '.HISTO_DESTRUCTION)';
-            }
+            return $targetTableAlias . '.HISTO_DESTRUCTION IS NULL';
         } else {
             return '';
         }
@@ -98,7 +85,7 @@ class HistoriqueFilter extends AbstractFilter
      *
      * @return self
      */
-    public function init($entity, $dateObservation = null)
+    public function init($entity)
     {
         if ($entity) {
             $this->enableForEntity($entity);

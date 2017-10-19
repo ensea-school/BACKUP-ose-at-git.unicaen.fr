@@ -118,10 +118,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         FROM
             Application\Entity\Db\Role r
             JOIN r.perimetre p
-            LEFT JOIN r.affectation a WITH 1=compriseEntre(a.histoCreation,a.histoDestruction) AND a.personnel = :personnel
+            LEFT JOIN r.affectation a WITH a.histoDestruction IS NULL AND a.personnel = :personnel
             LEFT JOIN a.structure s
         WHERE
-            1=compriseEntre(r.histoCreation,r.histoDestruction)'
+            r.histoDestruction IS NULL'
         )->setParameter('personnel', $personnel);
 
         $result          = $query->getResult();

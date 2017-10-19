@@ -185,9 +185,9 @@ class FiltreForm extends AbstractForm
           JOIN noeud n ON n.etape_id = e.id
           JOIN lien l ON l.noeud_sup_id = n.id
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( e.histo_creation, e.histo_destruction )
-          AND 1 = OSE_DIVERS.COMPRISE_ENTRE( n.histo_creation, n.histo_destruction )
-          AND 1 = OSE_DIVERS.COMPRISE_ENTRE( l.histo_creation, l.histo_destruction )
+          e.histo_destruction IS NULL
+          AND n.histo_destruction IS NULL
+          AND l.histo_destruction IS NULL
           AND e.annee_id = '.$this->getServiceContext()->getAnnee()->getId().'
           '.(($s=$this->getServiceContext()->getStructure()) ? 'AND e.structure_id = '.$s->getId() : '').' 
         ORDER BY

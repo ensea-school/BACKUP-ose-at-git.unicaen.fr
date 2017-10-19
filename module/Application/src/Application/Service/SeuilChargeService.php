@@ -269,11 +269,11 @@ class SeuilChargeService extends AbstractEntityService
           type_intervention ti
           LEFT JOIN type_intervention_structure tis ON 
             tis.type_intervention_id = ti.id 
-            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( tis.histo_creation, tis.histo_destruction )
+            AND tis.histo_destruction IS NULL
             AND :annee BETWEEN NVL(tis.annee_debut_id,1) AND NVL(tis.annee_fin_id,999999999)
             " . ($structure ? 'AND tis.structure_id = ' . $structure->getId() : '') . "
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( ti.histo_creation, ti.histo_destruction )
+          ti.histo_destruction IS NULL
         ORDER BY
           ti.ordre
         ";
@@ -316,9 +316,9 @@ class SeuilChargeService extends AbstractEntityService
           JOIN type_formation tf ON tf.id = e.type_formation_id
           JOIN groupe_type_formation gtf ON 
             gtf.id = tf.groupe_id 
-            AND 1 = OSE_DIVERS.COMPRISE_ENTRE( gtf.histo_creation, gtf.histo_destruction )
+            AND gtf.histo_destruction IS NULL
         WHERE
-          1 = OSE_DIVERS.COMPRISE_ENTRE( e.histo_creation, e.histo_destruction )
+          e.histo_destruction IS NULL
           
         ORDER BY
           gtf.ordre

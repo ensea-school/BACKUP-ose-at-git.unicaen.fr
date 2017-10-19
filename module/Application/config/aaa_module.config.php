@@ -31,8 +31,6 @@ return [
                 'string_functions' => [
                     'CONVERT'       => ORM\Query\Functions\Convert::class,
                     'REPLACE'       => ORM\Query\Functions\Replace::class,
-                    'compriseEntre' => ORM\Query\Functions\OseDivers\CompriseEntre::class,
-                    'pasHistorise'  => ORM\Query\Functions\OseDivers\PasHistorise::class,
                 ],
                 'filters'          => [
                     'historique' => ORM\Filter\HistoriqueFilter::class,

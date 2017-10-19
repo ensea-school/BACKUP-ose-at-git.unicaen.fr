@@ -58,7 +58,7 @@ SELECT
   ep.id ep_id,
   e.id e_id,
   etr.id etr_id,
-  CASE WHEN 1 = ose_divers.comprise_entre( etr.histo_creation,etr.histo_destruction ) THEN 1 ELSE 0 END etr_actif,
+  CASE WHEN etr.histo_destruction IS NULL THEN 1 ELSE 0 END etr_actif,
   s.libelle s_libelle,
   ep.annee_id annee,
   ep.source_code ep_code,
@@ -69,9 +69,9 @@ SELECT
   ep.fa,ep.taux_fa,
   ep.fc,ep.taux_fc,
   -- NOUVEAUX TAUX FI FA FC
-  100 /100 n_taux_fi,
+  92 /100 n_taux_fi,
   0 /100 n_taux_fa,
-  0 /100 n_taux_fc
+  8 /100 n_taux_fc
   -- FIN DES NOUVEAUX TAUX FI FA FC
 FROM
   element_pedagogique ep
@@ -81,12 +81,10 @@ FROM
   LEFT JOIN element_taux_regimes etr ON etr.element_pedagogique_id = ep.id
 WHERE
   -- FILTRES
-  1 = ose_divers.comprise_entre( ep.histo_creation,ep.histo_destruction )
+  ep.histo_destruction IS NULL
   --AND s.code <> 'OSE'
   AND e.source_code IN (
-'1LPSYC_701',
-'2LPSYC_701',
-'3LPSYC_711'
+'PLTERR_711'
   )
   AND ep.annee_id = 2017
   -- FIN DES FILTRES

@@ -727,8 +727,6 @@ return array(
     'Application\Controller\WorkflowController'                                                          => __DIR__ . '/src/Application/Controller/WorkflowController.php',
     'Application\Controller\IndicateurController'                                                        => __DIR__ . '/src/Application/Controller/IndicateurController.php',
     'Application\ORM\Query\Functions\Replace'                                                            => __DIR__ . '/src/Application/ORM/Query/Functions/Replace.php',
-    'Application\ORM\Query\Functions\OseDivers\CompriseEntre'                                            => __DIR__ . '/src/Application/ORM/Query/Functions/OseDivers/CompriseEntre.php',
-    'Application\ORM\Query\Functions\OseDivers\PasHistorise'                                             => __DIR__ . '/src/Application/ORM/Query/Functions/OseDivers/PasHistorise.php',
     'Application\ORM\Query\Functions\Convert'                                                            => __DIR__ . '/src/Application/ORM/Query/Functions/Convert.php',
     'Application\ORM\Filter\AbstractFilter'                                                              => __DIR__ . '/src/Application/ORM/Filter/AbstractFilter.php',
     'Application\ORM\Filter\AnneeFilter'                                                                 => __DIR__ . '/src/Application/ORM/Filter/AnneeFilter.php',

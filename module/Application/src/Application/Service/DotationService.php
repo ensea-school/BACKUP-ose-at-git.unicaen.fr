@@ -58,7 +58,7 @@ class DotationService extends AbstractEntityService
         FROM
           dotation d
         WHERE
-          1 = ose_divers.comprise_entre(d.histo_creation, d.histo_destruction)
+          d.histo_destruction IS NULL
           AND d.annee_id = :annee
           ".Util::sqlAndIn('structure_id', $structures)."
         GROUP BY

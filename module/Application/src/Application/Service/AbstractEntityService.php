@@ -526,10 +526,10 @@ abstract class AbstractEntityService extends AbstractService
         if ($hasHistorique) {
             $dateObservation = $this->getServiceContext()->getDateObservation();
             if ($dateObservation) {
-                $qb->andWhere('1 = compriseEntre(' . $alias . '.histoCreation,' . $alias . '.histoDestruction, :dateObservation)');
+                $qb->andWhere($alias . '.histoDestruction IS NULL');
                 $qb->setParameter('dateObservation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
             } else {
-                $qb->andWhere('1 = compriseEntre(' . $alias . '.histoCreation,' . $alias . '.histoDestruction)');
+                $qb->andWhere($alias . '.histoDestruction IS NULL');
             }
         }
 

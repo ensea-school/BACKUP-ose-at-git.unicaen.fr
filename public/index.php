@@ -1,12 +1,14 @@
 <?php
 
-/* Fermeture du service *
+/* Fermeture du service */
 if (php_sapi_name() === 'cli') {
     exit(0);
 }
 $whiteList = [
     ['127.0.0.1'], // localhost
-    ['10.14.1.38', '10.60.11.40'], // Laurent
+    ['10.26.24.16'], // Olivier
+    ['10.26.4.17'], // Laurent
+    ['10.26.24.39'], // Anthony
 ];
 $passed = false;
 foreach( $whiteList as $ip ){
@@ -17,7 +19,7 @@ foreach( $whiteList as $ip ){
     if ($passed) break;
 }
 if (!$passed){
-    $maintenanceText = 'Suite à un problème matériel, OSE est inaccessible. La résolution est en cours. Veuillez nous excuser pour la gêne occasionnée.';
+    $maintenanceText = 'Ose est actuellement en cours de mise à jour. L\'opération devrait être terminée dans l\'après-midi. Veuillez nous excuser pour ce déagrément.';
     include 'maintenance.php';
 }
 /* Fin de fermeture du service*/

@@ -25,6 +25,11 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use PersonnelAwareTrait;
     use ContextAwareTrait;
 
+    /**
+     * @var array
+     */
+    private $identityRoles;
+
 
 
     /**
@@ -42,52 +47,38 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
      */
     public function getIdentityRoles()
     {
-        /**
-         * @todo attention : plusieurs intervenants pourront remonter si on peut leur donner plusieurs statuts par an!!
-         */
-        $intervenant = $this->getServiceContext()->getIntervenant();
-        $personnel   = $this->getServiceContext()->getPersonnel();
-
-        $utilisateurCode = 'i'.($intervenant ? $intervenant->getId() : '').'p'.($personnel ? $personnel->getId() : '');
-
-        $session = $this->getSessionContainer();
-        if ($mustRefresh = !isset($session->utilisateurCode) || $session->utilisateurCode != $utilisateurCode) {
-            $session->utilisateurCode = $utilisateurCode;
-        }
-
-        if (!isset($session->roles) || $mustRefresh) {
+        if (!$this->identityRoles){
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->init([
                 Role::class,
                 Affectation::class,
             ]);
 
-            $roles = [];
+            $this->identityRoles = [];
 
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */
-            if ($personnel) {
+            if ($personnel = $this->getServiceContext()->getPersonnel()) {
                 foreach ($personnel->getAffectation() as $affectation) {
                     /* @var $affectation Affectation */
                     $roleId = $affectation->getRole()->getCode();
                     if ($structure = $affectation->getStructure()) {
                         $roleId .= '-' . $structure->getSourceCode();
                     }
-                    $roles[] = $roleId;
+                    $this->identityRoles[] = $roleId;
                 }
             }
 
             /**
              * Rôle lié au statut de l'intervenant
              */
-            if ($intervenant) {
-                $roles[] = $intervenant->getStatut()->getRoleId();
+            if ($intervenant = $this->getServiceContext()->getIntervenant()) {
+                $this->identityRoles[] = $intervenant->getStatut()->getRoleId();
             }
 
-            $session->roles = $roles;
         }
 
-        return $session->roles;
+        return $this->identityRoles;
     }
 }

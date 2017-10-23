@@ -12,7 +12,7 @@ use Application\Entity\Db\Annee as AnneeEntity;
  * @method AnneeEntity get($id)
  * @method AnneeEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
  * @method AnneeEntity newEntity()
- * 
+ *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Annee extends AbstractEntityService
@@ -91,18 +91,30 @@ class Annee extends AbstractEntityService
     public function getChoixAnnees()
     {
         $session = $this->getSessionContainer();
-        if (! $session->choixAnnees) {
-            $sql    = 'SELECT id, libelle FROM annee WHERE active = 1 ORDER BY id';
-            $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $rid = $role ? $role->getRoleId() : '__no___role__999az';
+        if (!$role || !$session->choixAnnees || !isset($session->choixAnnees[$rid])) {
+            if ($role && ($intervenant = $role->getIntervenant())){
+                $sql    = 'SELECT a.id, a.libelle FROM annee a JOIN intervenant i ON i.annee_id = a.id AND i.code = :code WHERE active = 1 ORDER BY id';
+                $params = ['code' => $intervenant->getCode()];
+            }else{
+                $sql    = 'SELECT id, libelle FROM annee WHERE active = 1 ORDER BY id';
+                $params = [];
+            }
+
+            $stmt   = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            $session->choixAnnees = [];
+            if (!$session->choixAnnees) {
+                $session->choixAnnees = [];
+            }
+            $session->choixAnnees[$rid] = [];
             foreach ($result as $annee) {
                 extract(array_change_key_case($annee, CASE_LOWER));
-                $session->choixAnnees[$id] = $libelle;
+                $session->choixAnnees[$rid][$id] = $libelle;
             }
         }
-        return $session->choixAnnees;
+        return $session->choixAnnees[$rid];
     }
 
 

@@ -6,3 +6,13 @@
  * @var $viewName   string
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
+
+use Application\Service\Context;
+
+/** @var Context $sc */
+$sc = $sl->get('applicationContext');
+
+
+$role = $sc->getSelectedIdentityRole();
+
+var_dump($role);

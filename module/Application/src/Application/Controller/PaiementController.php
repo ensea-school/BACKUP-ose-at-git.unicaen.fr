@@ -261,7 +261,7 @@ class PaiementController extends AbstractController
               LEFT JOIN ep.structure str
             WHERE
               fr.intervenant = :intervenant
-              mep.histoDestruction IS NULL
+              AND mep.histoDestruction IS NULL
         ";
 
         $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);
@@ -282,7 +282,7 @@ class PaiementController extends AbstractController
               LEFT JOIN sr.structure str
             WHERE
               fr.intervenant = :intervenant
-              mep.histoDestruction IS NULL
+              AND mep.histoDestruction IS NULL
         ";
 
         $res = $this->em()->createQuery($dql)->setParameter('intervenant', $intervenant);

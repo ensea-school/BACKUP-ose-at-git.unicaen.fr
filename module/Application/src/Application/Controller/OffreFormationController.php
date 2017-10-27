@@ -14,9 +14,7 @@ use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
-use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Form\Form;
 use Zend\Session\Container;
 
 
@@ -78,10 +76,10 @@ class OffreFormationController extends AbstractController
         $elements = [];
 
         $query = $this->em()->createQuery('SELECT
-                partial e.{id,libelle,sourceCode,niveau,histoDestruction},
+                partial e.{id,code,libelle,sourceCode,niveau,histoDestruction},
                 partial tf.{id},
                 partial gtf.{id, libelleCourt, ordre},
-                partial ep.{id,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
+                partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
             FROM
               Application\Entity\Db\Etape e
               JOIN e.structure s
@@ -153,14 +151,7 @@ class OffreFormationController extends AbstractController
         if ($structure) $params['structure'] = $structure->getId();
         if ($niveau) $params['niveau'] = $niveau->getId();
         if ($etape) $params['etape'] = $etape->getId();
-        $ep = new SearchAndSelect('element');
-        $ep
-            ->setAutocompleteSource($this->url()->fromRoute('of/element/search', [], ['query' => $params]))
-            ->setLabel("Recherche :")
-            ->setAttributes(['title' => "Saisissez 2 lettres au moins"]);
-        $form = new Form('search');
-        $form->setAttributes(['class' => 'element-rech']);
-        $form->add($ep);
+
 
         // élément pédagogique sélectionné dans le champ de recherche
         if (($element = $this->params()->fromPost('element')) && isset($element['id'])) {
@@ -175,7 +166,6 @@ class OffreFormationController extends AbstractController
             'structure'      => $structure,
             'niveau'         => $niveau,
             'etape'          => $etape,
-            'form'           => $form,
             'serviceEtape'   => $this->getServiceEtape(), // pour déterminer les droits
             'serviceElement' => $this->getServiceElementPedagogique(), // pour déterminer les droits
         ];

@@ -70,35 +70,14 @@ foreach ($etapes as $etp) {
 
 /* Liste des éléments */
 
-if ($structure){
+if ($structure) {
     $this->headTitle()->append((string)$structure);
 }
 $this->headTitle()->append("Offre de formation");
 
-/* Lien d'export de l'OF au format CSV */
-$this->placeholder('export-of-link')->captureStart();
-
-$canExport = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV));
-$canViewEtape = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
-
-if ($canExport && count($elements)) {
-    $params      = [
-        'structure' => $structure ? $structure->getId() : null,
-        'niveau'    => $niveau ? $niveau->getId() : null,
-        'etape'     => $etape ? $etape->getId() : null,
-    ];
-    $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
-
-    ?>
-    <div>
-        <a class="pull-right" href="<?php echo $urlExportOf ?>">
-            <span class="glyphicon glyphicon-export"></span> Télécharger l'offre de formation au format CSV
-        </a>
-    </div>
-    <?php
-}
-$this->placeholder('export-of-link')->captureEnd();
-
+$canExport      = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_EXPORT_CSV)) && count($elements);
+$canViewEtape   = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_ETAPE_VISUALISATION));
+$canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
 
 ?>
 <style>
@@ -143,8 +122,7 @@ $this->placeholder('export-of-link')->captureEnd();
                 echo $this->formSelect($selectStructure);
                 ?>
                 <script>
-                    $("body").on("change", "select.struct", function (event)
-                    {
+                    $("body").on("change", "select.struct", function (event) {
                         $("*").css('cursor', 'wait');
                         var id = $(this).val();
                         var url = '<?php echo $this->url('of', [], ['query' => ['structure' => '__structure__']]) ?>';
@@ -176,8 +154,7 @@ $this->placeholder('export-of-link')->captureEnd();
                 </ul>
             <?php endif; ?>
             <script>
-                $("body").on("click", "a.niveau", function (event)
-                {
+                $("body").on("click", "a.niveau", function (event) {
                     $("*").css('cursor', 'wait');
                 });
             </script>
@@ -187,7 +164,7 @@ $this->placeholder('export-of-link')->captureEnd();
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php if ($this->isAllowed($structure,Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure, Privileges::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...
@@ -197,16 +174,17 @@ $this->placeholder('export-of-link')->captureEnd();
                     <?php foreach ($etapesItems as $ei): ?>
                         <?php if ($etape === $ei['etape']): ?>
                             <li class="list-group-item active">
-                                <strong><?php echo $ei['label'] ?></strong>
+                            <strong><?php echo $ei['label'] ?></strong>
                         <?php else: ?>
                             <li class="list-group-item">
-                                <a class="etape<?php if ($ei['orpheline']) echo ' text-danger'; ?>"
-                                   title="Cliquez pour afficher les enseignements de cette formation"
-                                   href="<?php echo $ei['url'] ?>"><?php echo $ei['label'] ?></a>
+                            <a class="etape<?php if ($ei['orpheline']) echo ' text-danger'; ?>"
+                               title="Cliquez pour afficher les enseignements de cette formation"
+                               href="<?php echo $ei['url'] ?>"><?php echo $ei['label'] ?></a>
                         <?php endif; ?>
                         <?php
-                        if ($canViewEtape && $ei['etape'])
+                        if ($canViewEtape && $ei['etape']) {
                             echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs glyphicon glyphicon-search" style="float:right"></span>');
+                        }
                         ?>
                         <div style="clear: both"></div>
                         </li>
@@ -214,8 +192,7 @@ $this->placeholder('export-of-link')->captureEnd();
                 </ul>
             <?php endif; ?>
             <script>
-                $("body").on("click", "a.etape", function (event)
-                {
+                $("body").on("click", "a.etape", function (event) {
                     $("*").css('cursor', 'wait');
                 });
             </script>
@@ -233,47 +210,38 @@ $this->placeholder('export-of-link')->captureEnd();
 
             <!---------------- Champ de recherche d'un élément pédagogique --------------->
             <div class="element-rech panel panel-default">
-                <div class="panel-heading">
+                <div class="panel-heading" style="margin-bottom:1em">
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
                     Enseignements <?php echo $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
-                    <?php if ($this->isAllowed($structure,Privileges::ODF_ELEMENT_EDITION)) echo $this->elementPedagogique()->renderAjouterLink(
-                            '<span class="glyphicon glyphicon-plus"></span>',
-                            ['class' => 'btn-xs', 'style' => 'float:right']); ?>
+                    <?php
+                    if ($canEditElement) {
+                        echo $this->elementPedagogique()->renderAjouterLink(
+                            '<span class="glyphicon glyphicon-plus"></span> Nouvel enseignement',
+                            ['class' => 'pull-right btn-xs']);
+                    }
+                    if ($canExport) {
+                        $params      = [
+                            'structure' => $structure ? $structure->getId() : null,
+                            'niveau'    => $niveau ? $niveau->getId() : null,
+                            'etape'     => $etape ? $etape->getId() : null,
+                        ];
+                        $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
 
-                </div>
-                <div class="panel-body">
-                    <?php if (count($elements)): ?>
-                        <p>
-                            <?php echo $this->form()->openTag($form) ?>
-                            <label class="control-label"><?php echo $form->get('element')->getLabel() ?></label>
-                            <?php echo $this->formSearchAndSelect($form->get('element')); ?>
-                            <input id="filter" class="btn btn-primary element-rech-submit" type="submit" value="Y aller..."
-                                   name="submit"/>
-                            <?php echo $this->form()->closeTag() ?>
-                        </p>
-                        <script>
-                            $("body").on("submit", "form.element-rech", function (event)
-                            {
-                                var form = $(event.target);
-                                var id = $("input.sas", form).val();
-                                if (id && $("#" + id).offset()) {
-                                    $('html, body').animate({
-                                        scrollTop: $("#" + id).offset().top - $(window).height() / 2
-                                    }, 500, 'swing', function () { $("#" + id).effect("highlight"); });
-                                }
-                                event.preventDefault();
-                            });
-                        </script>
-                    <?php endif; ?>
+                        ?>
+                            <a class="pull-right btn btn-default btn-xs" href="<?php echo $urlExportOf ?>">
+                                <span class="glyphicon glyphicon-export"></span> Télécharger (CSV)
+                            </a>
+                        <?php
+                    }
 
-                    <p><?php echo count($elements) ?> enseignement(s) trouvé(s).</p>
 
-                    <?php echo $this->placeholder('export-of-link') ?>
+                    ?>
+
                 </div>
 
                 <!---------------- Tableau des éléments pédagogiques --------------->
-                <table class="table table-bordered table-condensed table-hover">
+                <table class="table table-bordered table-condensed table-hover table-sort">
                     <thead>
                     <tr>
                         <th colspan="2">Formation</th>
@@ -305,9 +273,6 @@ $this->placeholder('export-of-link')->captureEnd();
                 </table>
 
             </div>
-
-            <?php echo $this->placeholder('export-of-link') ?>
-
         <?php endif; ?>
 
     </div>

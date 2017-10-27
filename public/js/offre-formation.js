@@ -199,6 +199,45 @@ $.widget("ose.etapeCentreCout", {
 
 
 
+/**
+ * etapeTauxMixite
+ */
+$.widget("ose.etapeTauxMixite", {
+
+    _create: function ()
+    {
+        var that = this;
+
+        this.element.find("button.form-set-value").click(function (e)
+        {
+            var typeHeuresCode = $(this).data('code');
+            var value = that.getElementEtapeElement(typeHeuresCode).val();
+            that.setFormValues(typeHeuresCode, value);
+            e.stopPropagation();
+        });
+    },
+
+    setFormValues: function (typeHeuresCode, value)
+    {
+        this.getElementElementElements(typeHeuresCode).each(function ()
+        {
+            $(this).val(value);
+        });
+    },
+
+    getElementEtapeElement: function (typeHeuresCode)
+    {
+        return this.element.find('input[name="' + typeHeuresCode + '"]');
+    },
+
+    getElementElementElements: function (typeHeuresCode)
+    {
+        return this.element.find('input[name$="\\[' + typeHeuresCode + '\\]"]');
+    }
+
+});
+
+
 
 
 /**

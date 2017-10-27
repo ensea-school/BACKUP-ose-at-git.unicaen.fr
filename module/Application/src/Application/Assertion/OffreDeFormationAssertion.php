@@ -30,17 +30,19 @@ class OffreDeFormationAssertion extends AbstractAssertion
         if ($privilege && !$role->hasPrivilege($privilege)) return false;
 
         // Si c'est bon alors on affine...
-        switch(true){
+        switch (true) {
             case $entity instanceof ElementPedagogique:
                 switch ($privilege) {
                     case Privileges::ODF_ELEMENT_EDITION:
-                        return $this->assertElementPedagogiqueSaisie($role,$entity);
+                        return $this->assertElementPedagogiqueSaisie($role, $entity);
                     case Privileges::ODF_CENTRES_COUT_EDITION:
                         return $this->assertElementPedagogiqueSaisieCentresCouts($role, $entity);
                     case Privileges::ODF_MODULATEURS_EDITION:
                         return $this->assertElementPedagogiqueSaisieModulateurs($role, $entity);
+                    case Privileges::ODF_TAUX_MIXITE_EDITION:
+                        return $this->assertElementPedagogiqueSaisieTauxMixite($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof Etape:
                 switch ($privilege) {
                     case Privileges::ODF_ETAPE_EDITION:
@@ -49,29 +51,32 @@ class OffreDeFormationAssertion extends AbstractAssertion
                         return $this->assertEtapeSaisieCentresCouts($role, $entity);
                     case Privileges::ODF_MODULATEURS_EDITION:
                         return $this->assertEtapeSaisieModulateurs($role, $entity);
+                    case Privileges::ODF_TAUX_MIXITE_EDITION:
+                        return $this->assertEtapeSaisieTauxMixite($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof Structure:
                 switch ($privilege) {
                     case Privileges::ODF_ETAPE_EDITION:
                     case Privileges::ODF_ELEMENT_EDITION:
                     case Privileges::ODF_CENTRES_COUT_EDITION:
                     case Privileges::ODF_MODULATEURS_EDITION:
+                    case Privileges::ODF_TAUX_MIXITE_EDITION:
                         return $this->assertStructureSaisie($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof CentreCoutEp:
                 switch ($privilege) {
                     case Privileges::ODF_CENTRES_COUT_EDITION:
                         return $this->assertCentreCoutEpSaisieCentresCouts($role, $entity);
                 }
-                break;
+            break;
             case $entity instanceof ElementModulateur:
                 switch ($privilege) {
                     case Privileges::ODF_MODULATEURS_EDITION:
                         return $this->assertElementModulateurSaisieModulateurs($role, $entity);
                 }
-                break;
+            break;
         }
 
         return true;
@@ -84,7 +89,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
-            $this->assertSourceSaisie($elementPedagogique->getSource())
+            $this->assertSourceSaisie($elementPedagogique->getSource()),
         ]);
     }
 
@@ -93,7 +98,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertEtapeSaisie(Role $role, Etape $etape)
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
-        && $this->assertSourceSaisie($etape->getSource());
+            && $this->assertSourceSaisie($etape->getSource());
     }
 
 
@@ -102,7 +107,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertEtapeSaisieCentresCouts(Role $role, Etape $etape)
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
-        && $etape->getElementPedagogique()->count() > 0;
+            && $etape->getElementPedagogique()->count() > 0;
     }
 
 
@@ -121,11 +126,35 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
+    /* ---- Taux de mixité ---- */
+    protected function assertEtapeSaisieTauxMixite(Role $role, Etape $etape)
+    {
+        return $this->assertStructureSaisie($role, $etape->getStructure())
+            && $etape->getElementPedagogique()->count() > 0;
+    }
+
+
+
+    /*
+        protected function assertCentreCoutEpSaisieTauxMixite(Role $role, CentreCoutEp $centreCoutEp)
+        {
+            return $this->assertElementPedagogiqueSaisieTauxMixite($role, $centreCoutEp->getElementPedagogique());
+        }
+    */
+
+
+    protected function assertElementPedagogiqueSaisieTauxMixite(Role $role, ElementPedagogique $elementPedagogique)
+    {
+        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+    }
+
+
+
     /* ---- Modulateurs ---- */
     protected function assertEtapeSaisieModulateurs(Role $role, Etape $etape)
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
-        && $etape->getElementPedagogique()->count() > 0;
+            && $etape->getElementPedagogique()->count() > 0;
     }
 
 
@@ -158,6 +187,6 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertSourceSaisie(Source $source)
     {
-        return ! $source->getImportable();
+        return !$source->getImportable();
     }
 }

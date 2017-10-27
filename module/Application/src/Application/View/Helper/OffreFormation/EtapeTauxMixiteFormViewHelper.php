@@ -2,32 +2,29 @@
 
 namespace Application\View\Helper\OffreFormation;
 
-use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
+use Application\Form\OffreFormation\TauxMixite\TauxMixiteForm;
 use Zend\View\Helper\AbstractHtmlElement;
 
 /**
- * Dessine le formulaire de type EtapeCentreCoutFormViewHelper.
+ * Dessine le formulaire de type EtapeTauxMixiteFormViewHelper.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- * @see    EtapeCentreCoutSaisieForm
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @see TauxMixiteForm
  */
-class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
+class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
 {
 
     /**
-     * @var EtapeCentreCoutForm
+     * @var TauxMixiteForm
      */
     protected $form;
 
-
-
     /**
      *
-     * @param EtapeCentreCoutForm $form
-     *
+     * @param TauxMixiteForm $form
      * @return self|string
      */
-    public function __invoke(EtapeCentreCoutForm $form = null)
+    public function __invoke(TauxMixiteForm $form = null)
     {
         if (null === $form) {
             return $this;
@@ -36,18 +33,15 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
         return $this->render($form);
     }
 
-
-
     /**
      * Rendu du formulaire
      *
-     * @param EtapeCentreCoutForm $form
-     *
+     * @param TauxMixiteForm $form
      * @return string
      */
-    public function render(EtapeCentreCoutForm $form)
+    public function render(TauxMixiteForm $form)
     {
-        $elements    = $form->getEtape()->getElementPedagogique();
+        $elements = $form->getEtape()->getElementPedagogique();
         $typesHeures = $form->getTypesHeures();
 
         if (empty($elements)) {
@@ -73,18 +67,23 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
         $res .= '<tr>';
         foreach ($typesHeures as $th) {
             $res .= '<th>';
-            $res .= $this->getView()->formSelect($form->get($th->getCode()));
-            $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value pull-right" data-code="' . $th->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
+            $res .= '<div class="input-group">';
+            $res .= $this->getView()->formText( $form->get($th->getCode()) );
+            $res .= '<span class="input-group-addon" style="padding:6px 6px">%</span>';
+            $res .= '<span class="input-group-btn">';
+            $res .= '<button type="button" class="btn btn-default form-set-value" data-code="' . $th->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
+            $res .= '</span>';
+            $res .= '</div>';
             $res .= '</th>';
         }
         $res .= '</tr>';
 
         foreach ($elements as $element) {
-            $res         .= '<tr>';
-            $res         .= '<th class="element-pedagogique">' . $element . '</th>';
+            $res .= '<tr>';
+            $res .= '<th class="element-pedagogique">' . $element . '</th>';
             $formElement = $form->get('EL' . $element->getId());
-            $res         .= $this->getView()->ElementCentreCoutFieldset()->render($formElement, $typesHeures, true);
-            $res         .= '</tr>';
+            $res .= $this->getView()->ElementTauxMixiteFieldset()->render($formElement, $typesHeures, true);
+            $res .= '</tr>';
         }
 
         $res .= '</table>';

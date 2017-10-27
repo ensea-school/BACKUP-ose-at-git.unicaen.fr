@@ -68,6 +68,9 @@ $(function ()
     WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function(){
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
+    WidgetInitializer.add('etape-taux-mixite', 'etapeTauxMixite', function(){
+        WidgetInitializer.includeJs(Url('js/offre-formation.js'));
+    });
     WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs', function(){
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });

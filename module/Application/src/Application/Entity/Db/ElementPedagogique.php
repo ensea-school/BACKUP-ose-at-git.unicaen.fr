@@ -367,6 +367,24 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
 
     /**
+     * @param TypeHeures $typeHeures
+     *
+     * @return float|null
+     */
+    public function getTaux(TypeHeures $typeHeures)
+    {
+        switch($typeHeures->getCode()){
+            case TypeHeures::FI: return $this->getTauxFi();
+            case TypeHeures::FC: return $this->getTauxFc();
+            case TypeHeures::FA: return $this->getTauxFa();
+        }
+
+        return null;
+    }
+
+
+
+    /**
      *
      * @param boolean $fc
      *

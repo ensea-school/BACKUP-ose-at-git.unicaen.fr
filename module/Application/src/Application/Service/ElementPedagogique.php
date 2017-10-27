@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\ElementTauxRegimes;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CheminPedagogiqueAwareTrait;
 use Application\Service\Traits\ElementModulateurAwareTrait;
@@ -79,13 +80,13 @@ class ElementPedagogique extends AbstractEntityService
         }
 
         if ($filters['term']) {
-            $term = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
+            $term      = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
             $criterion = explode(' ', $term);
 
             $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
-            $parts = $params = [];
+            $parts  = $params = [];
             for ($i = 0; $i < count($criterion); $i++) {
-                $parts[] = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
+                $parts[]                  = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
                 $params["criterionStr$i"] = '%' . $criterion[$i] . '%';
             }
             $whereTerm = implode(' AND ', $parts);
@@ -95,19 +96,19 @@ class ElementPedagogique extends AbstractEntityService
 
         $whereContext = [];
         if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-            $whereContext[] = 's.structure_niv2_id = :structure';
+            $whereContext[]      = 's.structure_niv2_id = :structure';
             $params['structure'] = $filters['structure']->getId();
         }
         if (isset($filters['niveau']) && $filters['niveau']) {
             if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
                 $filters['niveau'] = $filters['niveau']->getId();
             }
-            $niveau = str_replace('-', '', $filters['niveau']);
-            $whereContext[] = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
+            $niveau           = str_replace('-', '', $filters['niveau']);
+            $whereContext[]   = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
             $params['niveau'] = $niveau;
         }
         if (isset($filters['etape']) && $filters['etape'] instanceof \Application\Entity\Db\Etape) {
-            $whereContext[] = 'cp.etape_id = :etape';
+            $whereContext[]  = 'cp.etape_id = :etape';
             $params['etape'] = $filters['etape']->getId();
         }
         $whereContext = implode(PHP_EOL . 'AND ', array_filter($whereContext));
@@ -210,7 +211,7 @@ where rang = 1
     protected function truncateResult($result, $length = 15)
     {
         if ($length && ($remain = count($result) - $length) > 0) {
-            $result = array_slice($result, 0, $length);
+            $result   = array_slice($result, 0, $length);
             $result[] = ['id' => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>"];
         }
 
@@ -247,7 +248,7 @@ where rang = 1
      */
     public function save($entity)
     {
-        if (! $this->getAuthorize()->isAllowed($entity,Privileges::ODF_ELEMENT_EDITION)){
+        if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
         }
 
@@ -279,7 +280,7 @@ where rang = 1
      */
     public function delete($entity, $softDelete = true)
     {
-        if (! $this->getAuthorize()->isAllowed($entity,Privileges::ODF_ELEMENT_EDITION)){
+        if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
         }
 
@@ -291,6 +292,72 @@ where rang = 1
         }
 
         return parent::delete($entity, $softDelete);
+    }
+
+
+
+    public function forcerTauxMixite(ElementPedagogiqueEntity $elementPedagogique, $tauxFi, $tauxFc, $tauxFa)
+    {
+        /** @var ElementTauxRegimes $etr */
+        $etr = $this->getEntityManager()->getRepository(ElementTauxRegimes::class)->findOneBy([
+            'elementPedagogique' => $elementPedagogique,
+            'histoDestruction'   => null,
+        ]);
+
+        $sourceOse = $this->getServiceSource()->getOse();
+        $hasTaux = ($tauxFi || $tauxFc || $tauxFa);
+
+        if ($elementPedagogique->getSource() !== $sourceOse) {
+            if ($hasTaux){
+                if ($etr) {
+                    if ($etr->getSource() != $sourceOse) {
+                        $etr->setSource($sourceOse);
+                    }
+                } else {
+                    $etr = new ElementTauxRegimes();
+                    $etr->setElementPedagogique($elementPedagogique);
+                    $etr->setSource($sourceOse);
+                    $etr->setSourceCode(uniqid('ose-etr-'));
+                }
+
+                $etr->setTauxFi($tauxFi);
+                $etr->setTauxFc($tauxFc);
+                $etr->setTauxFa($tauxFa);
+            }else{
+                if ($etr && $etr->getSource() == $sourceOse) {
+                    $etr->setHistoDestruction(new \DateTime);
+                    $etr->setHistoDestructeur($this->getServiceContext()->getUtilisateur());
+                    $this->getEntityManager()->persist($etr);
+                    $this->getEntityManager()->flush($etr);
+                }
+            }
+
+            $this->getEntityManager()->persist($etr);
+            $this->getEntityManager()->flush($etr);
+        }else{
+            if (!$hasTaux){
+                $tauxFi = $elementPedagogique->getFi();
+                $tauxFc = $elementPedagogique->getFc();
+                $tauxFa = $elementPedagogique->getFa();
+            }
+        }
+
+        $usql = "
+        UPDATE element_pedagogique SET
+          taux_fi = ose_divers.calcul_taux_fi( :tauxFi, :tauxFc, :tauxFa, fi, fc, fa ),
+          taux_fc = ose_divers.calcul_taux_fc( :tauxFi, :tauxFc, :tauxFa, fi, fc, fa ),
+          taux_fa = ose_divers.calcul_taux_fa( :tauxFi, :tauxFc, :tauxFa, fi, fc, fa )
+        WHERE
+          id = " . $elementPedagogique->getId();
+
+        $this->getEntityManager()->getConnection()->executeUpdate(
+            $usql,
+            compact('tauxFi', 'tauxFc', 'tauxFa')
+        );
+
+        $this->getEntityManager()->refresh($elementPedagogique);
+
+        return $this;
     }
 
 

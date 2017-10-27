@@ -27,6 +27,14 @@ if ($this->isAllowed($etape,Privileges::ODF_CENTRES_COUT_EDITION)){
     ];
 }
 
+if ($this->isAllowed($etape,Privileges::ODF_TAUX_MIXITE_EDITION)){
+    $tabs[] = [
+        'id'    => 'taux-mixite',
+        'label' => '<span class="glyphicon glyphicon-scale"></span> Taux de mixité',
+        'url'   => $this->url('of/etape/taux-mixite', ['etape' => $etape->getId()]),
+    ];
+}
+
 if ($this->isAllowed($etape,Privileges::ODF_MODULATEURS_EDITION)){
     $tabs[] = [
         'id'    => 'modulateurs',

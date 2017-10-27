@@ -160,6 +160,19 @@ return [
                                     ],
                                 ],
                             ],
+                            'taux-mixite'   => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/taux-mixite/:etape',
+                                    'constraints' => [
+                                        'etape' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => 'Etape',
+                                        'action'     => 'taux-mixite',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -237,6 +250,12 @@ return [
                     'action'     => ['saisir'],
                     'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
                 ],
+                /* Taux de mixité */
+                [
+                    'controller' => 'Application\Controller\OffreFormation\Etape',
+                    'action'     => ['taux-mixite'],
+                    'privileges' => Privileges::ODF_TAUX_MIXITE_EDITION,
+                ],
             ],
         ],
         'resource_providers' => [
@@ -270,6 +289,11 @@ return [
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'ElementModulateur'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
+                    [
+                        'privileges' => Privileges::ODF_TAUX_MIXITE_EDITION,
+                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique'],
+                        'assertion'  => 'AssertionOffreDeFormation',
+                    ],
                 ],
             ],
         ],
@@ -301,13 +325,15 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'FormElementPedagogiqueRechercheFieldset' => Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class,
-            'EtapeSaisie'                             => Form\OffreFormation\EtapeSaisie::class,
-            'ElementPedagogiqueSaisie'                => Form\OffreFormation\ElementPedagogiqueSaisie::class,
-            'EtapeModulateursSaisie'                  => Form\OffreFormation\EtapeModulateursSaisie::class,
-            'ElementModulateursFieldset'              => Form\OffreFormation\ElementModulateursFieldset::class,
-            'EtapeCentreCoutForm'                     => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
-            'ElementCentreCoutFieldset'               => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,
+            'FormElementPedagogiqueRechercheFieldset'                => Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class,
+            'EtapeSaisie'                                            => Form\OffreFormation\EtapeSaisie::class,
+            'ElementPedagogiqueSaisie'                               => Form\OffreFormation\ElementPedagogiqueSaisie::class,
+            'EtapeModulateursSaisie'                                 => Form\OffreFormation\EtapeModulateursSaisie::class,
+            'ElementModulateursFieldset'                             => Form\OffreFormation\ElementModulateursFieldset::class,
+            'EtapeCentreCoutForm'                                    => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
+            'ElementCentreCoutFieldset'                              => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,
+            Form\OffreFormation\TauxMixite\TauxMixiteForm::class     => Form\OffreFormation\TauxMixite\TauxMixiteForm::class,
+            Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
         ],
     ],
     'view_helpers'    => [
@@ -318,6 +344,8 @@ return [
             'Etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
             'EtapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
             'ElementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
+            'EtapeTauxMixiteForm'                 => View\Helper\OffreFormation\EtapeTauxMixiteFormViewHelper::class,
+            'ElementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
             'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
     ],

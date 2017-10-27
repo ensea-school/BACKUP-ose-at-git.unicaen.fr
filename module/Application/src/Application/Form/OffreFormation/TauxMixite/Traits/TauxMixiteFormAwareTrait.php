@@ -1,34 +1,34 @@
 <?php
 
-namespace <namespace>;
+namespace Application\Form\OffreFormation\TauxMixite\Traits;
 
-use <targetFullClass>;
+use Application\Form\OffreFormation\TauxMixite\TauxMixiteForm;
 use Application\Module;
 use RuntimeException;
 
 /**
- * Description of <class>
+ * Description of TauxMixiteFormAwareTrait
  *
  * @author UnicaenCode
  */
-trait <class>
+trait TauxMixiteFormAwareTrait
 {
     /**
-     * @var <targetClass>
+     * @var TauxMixiteForm
      */
-    private $<variable>;
+    private $formOffreFormationTauxMixite;
 
 
 
 
 
     /**
-     * @param <targetClass> $<variable>
+     * @param TauxMixiteForm $formOffreFormationTauxMixite
      * @return self
      */
-    public function set<method>( <targetClass> $<variable> )
+    public function setFormOffreFormationTauxMixite( TauxMixiteForm $formOffreFormationTauxMixite )
     {
-        $this-><variable> = $<variable>;
+        $this->formOffreFormationTauxMixite = $formOffreFormationTauxMixite;
         return $this;
     }
 
@@ -37,13 +37,13 @@ trait <class>
     /**
      * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
      *
-     * @return <targetClass>
+     * @return TauxMixiteForm
      * @throws RuntimeException
      */
-    public function get<method>()
+    public function getFormOffreFormationTauxMixite()
     {
-        if (!empty($this-><variable>)){
-            return $this-><variable>;
+        if (!empty($this->formOffreFormationTauxMixite)){
+            return $this->formOffreFormationTauxMixite;
         }
 
         $serviceLocator = Module::$serviceLocator;
@@ -57,6 +57,6 @@ trait <class>
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
         }
-        return $serviceLocator->get('FormElementManager')->get('<name>');
+        return $serviceLocator->get('FormElementManager')->get(TauxMixiteForm::class);
     }
 }

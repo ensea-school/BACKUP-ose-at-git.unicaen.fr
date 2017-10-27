@@ -7,6 +7,7 @@ use Application\Entity\Db\DomaineFonctionnel;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeFormation;
+use Application\Form\OffreFormation\TauxMixite\Traits\TauxMixiteFormAwareTrait;
 use Application\Form\OffreFormation\Traits\EtapeSaisieAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
@@ -25,6 +26,7 @@ class EtapeController extends AbstractController
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;
     use EtapeSaisieAwareTrait;
+    use TauxMixiteFormAwareTrait;
 
 
 
@@ -74,8 +76,8 @@ class EtapeController extends AbstractController
         if (!($etape = $this->getEvent()->getParam('etape'))) {
             throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
-        $title  = "Suppression de formation";
-        $form = $this->makeFormSupprimer(function()use($etape){
+        $title = "Suppression de formation";
+        $form  = $this->makeFormSupprimer(function () use ($etape) {
             $this->getServiceEtape()->delete($etape);
         });
 
@@ -97,5 +99,38 @@ class EtapeController extends AbstractController
         $serviceEtape = $this->getServiceEtape();
 
         return compact('etape', 'title', 'serviceEtape');
+    }
+
+
+
+    public function tauxMixiteAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\ElementPedagogique::class
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            \Application\Entity\Db\ElementPedagogique::class,
+        ]);
+
+        $etape = $this->getEvent()->getParam('etape');
+        /* @var $etape Etape */
+        $form = $this->getFormOffreFormationTauxMixite();
+
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->bind($etape);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $this->em()->flush();
+                $form->bind($etape); // on re-binde pour forcer la MAJ
+            } else {
+                $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
+            }
+        }
+        $title = "Paramétrage des taux de mixité <br /><small>$etape</small>";
+
+        return compact('etape', 'title', 'form');
     }
 }

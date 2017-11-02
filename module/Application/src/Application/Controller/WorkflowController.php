@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtapeDep;
 use Application\Exception\DbException;
 use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
@@ -10,6 +11,7 @@ use Application\Service\Traits\WfEtapeAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exception\LogicException;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 
 /**
@@ -17,7 +19,7 @@ use UnicaenApp\Exception\LogicException;
  *
  * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
- * 
+ *
  */
 class WorkflowController extends AbstractController
 {
@@ -138,6 +140,22 @@ class WorkflowController extends AbstractController
         }
 
         return compact('action', 'title', 'error');
+    }
+
+
+
+    public function feuilleDeRouteRefreshAction()
+    {
+        /** @var Intervenant $intervenant */
+        $intervenant = $this->getEvent()->getParam('intervenant');
+
+        if ($intervenant){
+            $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+        }
+
+        $this->flashMessenger()->addSuccessMessage('Feuille de route actualisée.');
+
+        return new MessengerViewModel();
     }
 
 

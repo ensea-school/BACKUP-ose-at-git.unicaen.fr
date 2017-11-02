@@ -66,6 +66,18 @@ return [
                             ],
                         ],
                     ],
+                    'feuille-de-route-refresh' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/feuille-de-route-refresh/:intervenant',
+                            'defaults'    => [
+                                'action' => 'feuilleDeRouteRefresh',
+                            ],
+                            'constraints' => [
+                                'intervenant' => '[0-9]*',
+                            ],
+                        ],
+                    ],
                     'feuille-de-route-btn-next' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -119,6 +131,11 @@ return [
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => ['feuilleDeRouteBtnNext'],
                     'privileges' => [Privileges::ENSEIGNEMENT_EDITION, Privileges::REFERENTIEL_EDITION],
+                ],
+                [
+                    'controller' => 'Application\Controller\Workflow',
+                    'action'     => ['feuilleDeRouteRefresh'],
+                    'privileges' => [Privileges::INTERVENANT_FICHE],
                 ],
                 [
                     'controller' => 'Application\Controller\Workflow',

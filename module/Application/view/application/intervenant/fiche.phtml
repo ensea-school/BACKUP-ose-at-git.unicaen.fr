@@ -3,8 +3,31 @@
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 
 echo $this->intervenant($intervenant);
+
+$urlRefresh = $this->url('workflow/feuille-de-route-refresh', ['intervenant' => $intervenant->getRouteParam()]);
+
 ?>
+    <script>
+        $(function () {
+
+            $('#feuille-de-route-refresh').popAjax({
+                change: function (event, popAjax) {
+                    window.location.reload();
+                }
+            });
+
+        });
+    </script>
     <hr/>
-    <h2>Feuille de route</h2>
+    <h2>Feuille de route
+        <a href="<?php echo $urlRefresh ?>"
+           id="feuille-de-route-refresh"
+           data-loading-title="Mise à jour de la feuille de route..."
+           style="font-size:12pt"
+           title="Mettre à jour la feuille de route"
+        >
+            <span class="glyphicon glyphicon-refresh"></span>
+        </a>
+    </h2>
 <?php
 echo $this->feuilleDeRoute($intervenant)->render();

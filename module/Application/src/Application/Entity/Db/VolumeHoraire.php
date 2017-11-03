@@ -104,7 +104,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
             "Id " . $this->getId(),
             $ep ? $ep->getStructure() : '',
             "Service " . $this->getService()->getId(),
-            "EP " . ($ep ? $ep->getSourceCode() : '') . " (" . ($ep ? $ep->getId() : '') . ")",
+            "EP " . ($ep ? $ep->getCode() : '') . " (" . ($ep ? $ep->getId() : '') . ")",
             $this->getHeures() . "h",
             $this->getTypeIntervention(),
             count($this->getValidation()) . " validations",

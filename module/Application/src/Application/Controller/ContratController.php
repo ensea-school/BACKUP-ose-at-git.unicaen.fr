@@ -352,9 +352,9 @@ class ContratController extends AbstractController
         }
 
         $fileName = sprintf(($estUnAvenant ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
-            $contrat->getStructure()->getSourceCode(),
+            $contrat->getStructure()->getCode(),
             $nomUsuel,
-            $intervenant->getSourceCode());
+            $intervenant->getCode());
 
         $variables = [
             'estUnAvenant'            => $estUnAvenant,

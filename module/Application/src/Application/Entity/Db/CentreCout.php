@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -15,6 +14,11 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
+
+    /***
+     * @var string
+     */
+    private $code;
 
     /**
      * @var string
@@ -64,6 +68,30 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
         $this->typeHeures     = new \Doctrine\Common\Collections\ArrayCollection();
         $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
         $this->structure      = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return CentreCout
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
     }
 
 
@@ -222,7 +250,7 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
      */
     public function __toString()
     {
-        return $this->getSourceCode() . ' - ' . $this->getLibelle();
+        return $this->getCode() . ' - ' . $this->getLibelle();
     }
 
 

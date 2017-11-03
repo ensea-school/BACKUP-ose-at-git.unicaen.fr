@@ -25,6 +25,11 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     /**
      * @var string
      */
+    protected $code;
+
+    /**
+     * @var string
+     */
     protected $libelleCourt;
 
     /**
@@ -96,6 +101,30 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
         $this->elementPedagogique                 = new ArrayCollection;
         $this->centreCout                         = new ArrayCollection;
         $this->miseEnPaiementIntervenantStructure = new ArrayCollection;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return Structure
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
     }
 
 

@@ -69,7 +69,6 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
             $res .= '<th>';
             $res .= '<div class="input-group">';
             $res .= $this->getView()->formText( $form->get($th->getCode()) );
-            $res .= '<span class="input-group-addon" style="padding:6px 6px">%</span>';
             $res .= '<span class="input-group-btn">';
             $res .= '<button type="button" class="btn btn-default form-set-value" data-code="' . $th->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
             $res .= '</span>';

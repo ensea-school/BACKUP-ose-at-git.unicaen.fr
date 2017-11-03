@@ -10,6 +10,8 @@ use Application\Form\OffreFormation\VolumeHoraireEnsForm;
  * @var $form             VolumeHoraireEnsForm
  */
 
+$canSave = false;
+
 ?>
 <style>
     .edition-volume-horaire-ens .source {
@@ -36,6 +38,7 @@ use Application\Form\OffreFormation\VolumeHoraireEnsForm;
         $canEdit = $this->isAllowed($vhe, Application\Provider\Privilege\Privileges::ODF_ELEMENT_VH_EDITION);
 
         if ($canEdit) {
+            $canSave = true;
             $heures  = $this->formText($form->getElement($vhe,'heures'));
             $groupes = $this->formText($form->getElement($vhe, 'groupes'));
         } else {
@@ -53,8 +56,10 @@ use Application\Form\OffreFormation\VolumeHoraireEnsForm;
     <?php endforeach; ?>
     </tbody>
 </table>
-<?php if ($form): ?>
-    <?php echo $this->formSubmit($form->get('submit')); ?>
-<?php endif; ?>
-<?php echo $this->form()->closeTag() ?>
-<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger() ?>
+<?php
+
+if ($canSave) {
+    echo $this->formSubmit($form->get('submit'));
+}
+echo $this->form()->closeTag();
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

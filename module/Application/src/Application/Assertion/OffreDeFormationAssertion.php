@@ -2,6 +2,8 @@
 
 namespace Application\Assertion;
 
+use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\VolumeHoraireEns;
 use Application\Provider\Privilege\Privileges;
 use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\ElementModulateur;
@@ -41,6 +43,8 @@ class OffreDeFormationAssertion extends AbstractAssertion
                         return $this->assertElementPedagogiqueSaisieModulateurs($role, $entity);
                     case Privileges::ODF_TAUX_MIXITE_EDITION:
                         return $this->assertElementPedagogiqueSaisieTauxMixite($role, $entity);
+                    case Privileges::ODF_ELEMENT_VH_EDITION:
+                        return $this->assertElementPedagogiqueSaisieVH($role, $entity);
                 }
             break;
             case $entity instanceof Etape:
@@ -53,6 +57,8 @@ class OffreDeFormationAssertion extends AbstractAssertion
                         return $this->assertEtapeSaisieModulateurs($role, $entity);
                     case Privileges::ODF_TAUX_MIXITE_EDITION:
                         return $this->assertEtapeSaisieTauxMixite($role, $entity);
+                    case Privileges::ODF_ELEMENT_VH_EDITION:
+                        return $this->assertEtapeSaisieVH($role, $entity);
                 }
             break;
             case $entity instanceof Structure:
@@ -62,6 +68,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
                     case Privileges::ODF_CENTRES_COUT_EDITION:
                     case Privileges::ODF_MODULATEURS_EDITION:
                     case Privileges::ODF_TAUX_MIXITE_EDITION:
+                    case Privileges::ODF_ELEMENT_VH_EDITION:
                         return $this->assertStructureSaisie($role, $entity);
                 }
             break;
@@ -75,6 +82,18 @@ class OffreDeFormationAssertion extends AbstractAssertion
                 switch ($privilege) {
                     case Privileges::ODF_MODULATEURS_EDITION:
                         return $this->assertElementModulateurSaisieModulateurs($role, $entity);
+                }
+            break;
+            case $entity instanceof VolumeHoraireEns:
+                switch ($privilege) {
+                    case Privileges::ODF_ELEMENT_VH_EDITION:
+                        return $this->assertVolumeHoraireEnsSaisieVH($role, $entity);
+                }
+            break;
+            case $entity instanceof TypeIntervention:
+                switch ($privilege) {
+                    case Privileges::ODF_ELEMENT_VH_EDITION:
+                        return $this->assertTypeInterventionSaisieVH($role, $entity);
                 }
             break;
         }
@@ -146,6 +165,40 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertElementPedagogiqueSaisieTauxMixite(Role $role, ElementPedagogique $elementPedagogique)
     {
         return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+    }
+
+
+
+    /* ---- Volumes horaires d'enseigneement ---- */
+    protected function assertEtapeSaisieVH(Role $role, Etape $etape)
+    {
+        return $this->assertStructureSaisie($role, $etape->getStructure())
+            && $etape->getElementPedagogique()->count() > 0;
+    }
+
+
+
+    protected function assertElementPedagogiqueSaisieVH(Role $role, ElementPedagogique $elementPedagogique)
+    {
+        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+    }
+
+
+
+    protected function assertTypeInterventionSaisieVH(Role $role, TypeIntervention $typeIntervention)
+    {
+        return true;
+    }
+
+
+
+    protected function assertVolumeHoraireEnsSaisieVH(Role $role, VolumeHoraireEns $volumeHoraireEns)
+    {
+        return $this->asserts([
+            $volumeHoraireEns->getSource() ? $this->assertSourceSaisie($volumeHoraireEns->getSource()) : true,
+            $volumeHoraireEns->getElementPedagogique() ? $this->assertElementPedagogiqueSaisieVH($role, $volumeHoraireEns->getElementPedagogique()) : true,
+            $volumeHoraireEns->getTypeIntervention() ? $this->assertTypeInterventionSaisieVH($role, $volumeHoraireEns->getTypeIntervention()) : true,
+        ]);
     }
 
 

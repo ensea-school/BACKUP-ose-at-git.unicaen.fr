@@ -88,6 +88,11 @@
                 <cascade-all/>
             </cascade>
         </one-to-many>
+        <one-to-many field="volumeHoraireEns" target-entity="Application\Entity\Db\VolumeHoraireEns" mapped-by="elementPedagogique">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
         <many-to-many field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
             <join-table name="V_ELEMENT_TYPE_INTERVENTION">
                 <join-columns>

@@ -23,14 +23,13 @@ $sep->forcerTauxMixite($ep, 0.5, 0.5,0);
 
 //var_dump($ep);
 
+$epid = 45788;
 
+/* @var \Application\Entity\Db\ElementPedagogique $ep */
+$ep = $sl->get('applicationElementPedagogique')->get($epid);
 
-$fn = '/home/laurent/test/test.txt';
-$data = 'salut';
+$tis = $ep->getTypesInterventionPossibles();
 
-mkdir( dirname($fn));
-chmod( dirname($fn), 0777);
-$r = file_put_contents($fn, $data);
-chmod($fn, 0777);
-
-var_dump(realpath($fn));
+foreach( $tis as $ti ){
+    var_dump($ti->getCode());
+}

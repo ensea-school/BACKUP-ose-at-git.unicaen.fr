@@ -111,6 +111,11 @@ return [
         ],
     ],
     'bjyauthorize'    => [
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'TypeIntervention' => [],
+            ],
+        ],
         'guards' => [
             PrivilegeController::class => [
                 [

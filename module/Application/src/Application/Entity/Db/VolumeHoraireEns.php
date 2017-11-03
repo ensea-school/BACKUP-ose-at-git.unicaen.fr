@@ -5,16 +5,16 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use Application\Entity\Db\Traits\SourceAwareTrait;
 use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
-use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
 use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * VolumeHoraireEns
  */
-class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
+class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
@@ -31,6 +31,11 @@ class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
      */
     protected $heures;
 
+    /**
+     * @var float
+     */
+    protected $groupes;
+
 
 
     /**
@@ -41,6 +46,18 @@ class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+
+
+    /**
+     * Get heures
+     *
+     * @return float
+     */
+    public function getHeures()
+    {
+        return $this->heures;
     }
 
 
@@ -62,13 +79,37 @@ class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Get heures
-     *
      * @return float
      */
-    public function getHeures()
+    public function getGroupes()
     {
-        return $this->heures;
+        return $this->groupes;
+    }
+
+
+
+    /**
+     * @param float $groupes
+     *
+     * @return VolumeHoraireEns
+     */
+    public function setGroupes($groupes)
+    {
+        $this->groupes = $groupes;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'VolumeHoraireEns';
     }
 
 }

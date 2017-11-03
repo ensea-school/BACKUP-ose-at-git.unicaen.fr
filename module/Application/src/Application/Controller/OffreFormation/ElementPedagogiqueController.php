@@ -3,10 +3,17 @@
 namespace Application\Controller\OffreFormation;
 
 use Application\Controller\AbstractController;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\VolumeHoraireEns;
+use Application\Filter\FloatFromString;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
 use Application\Exception\DbException;
+use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
+
 
 /**
  * Description of ElementPedagogiqueController
@@ -18,6 +25,8 @@ class ElementPedagogiqueController extends AbstractController
     use ElementPedagogiqueAwareTrait;
     use ContextAwareTrait;
     use ElementPedagogiqueSaisieAwareTrait;
+    use VolumeHoraireEnsFormAwareTrait;
+    use VolumeHoraireEnsServiceAwareTrait;
 
 
 
@@ -28,7 +37,7 @@ class ElementPedagogiqueController extends AbstractController
             \Application\Entity\Db\VolumeHoraire::class,
         ]);
         $element = $this->getEvent()->getParam('elementPedagogique');
-        $title   = "Enseignement";
+        $title   = $element->getLibelle() . ' (' . $element->getCode() . ')';
 
         return compact('element', 'title');
     }
@@ -75,8 +84,8 @@ class ElementPedagogiqueController extends AbstractController
             throw new \RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
-        $title  = "Suppression d'enseignement";
-        $form = $this->makeFormSupprimer(function()use($element){
+        $title = "Suppression d'enseignement";
+        $form  = $this->makeFormSupprimer(function () use ($element) {
             $this->getServiceElementPedagogique()->delete($element);
         });
 
@@ -143,7 +152,7 @@ class ElementPedagogiqueController extends AbstractController
             if (!$etape) {
                 $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
             }
-            $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
+            $extra               .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
             $template            = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
             $result[$item['ID']] = [
                 'id'       => $item['ID'],
@@ -174,4 +183,64 @@ class ElementPedagogiqueController extends AbstractController
         return new \Zend\View\Model\JsonModel($result);
     }
 
+
+
+    public function volumeHoraireAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\VolumeHoraireEns::class,
+        ]);
+
+        $title = 'Volumes horaires';
+
+        /** @var ElementPedagogique $element */
+        $element = $this->getEvent()->getParam('elementPedagogique');
+
+        $ev         = $element->getVolumeHoraireEns();
+        $existsVhes = [];
+        foreach ($ev as $vhe) {
+            $existsVhes[$vhe->getTypeIntervention()->getId()] = $vhe;
+        }
+
+        $saisie = $this->params()->fromPost('vhes');
+
+        $tis = $element->getTypesInterventionPossibles();
+        foreach ($tis as $typeIntervention) {
+            if (!isset($existsVhes[$typeIntervention->getId()])) {
+                $vhe = $this->getServiceVolumeHoraireEns()->newEntity($element, $typeIntervention);
+            } else {
+                $vhe = $existsVhes[$typeIntervention->getId()];
+            }
+
+            if ($this->isAllowed($vhe, Privileges::ODF_ELEMENT_VH_EDITION)) {
+                if (isset($saisie[$vhe->getTypeIntervention()->getId()]['heures'])) {
+                    $heures = FloatFromString::run($saisie[$vhe->getTypeIntervention()->getId()]['heures']);
+                } else {
+                    $heures = null;
+                }
+                if (isset($saisie[$vhe->getTypeIntervention()->getId()]['groupes'])) {
+                    $groupes = FloatFromString::run($saisie[$vhe->getTypeIntervention()->getId()]['groupes']);
+                } else {
+                    $groupes = null;
+                }
+                try {
+                    $this->getServiceVolumeHoraireEns()->changeHeuresGroupes($vhe, $heures, $groupes);
+                } catch (\Exception $e) {
+                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                }
+            }
+
+            if (!$vhe->estNonHistorise()){
+                $vhe = $this->getServiceVolumeHoraireEns()->newEntity($element, $typeIntervention);
+            }
+
+            $vhes[$typeIntervention->getId()] = $vhe;
+        }
+
+        $form = $this->getFormOffreFormationVolumeHoraireEns();
+        $form->setAttribute('action', $this->url()->fromRoute('of/element/volume-horaire', ['elementPedagogique' => $element->getId()]));
+        $form->build($vhes);
+
+        return compact('title', 'vhes', 'form');
+    }
 }

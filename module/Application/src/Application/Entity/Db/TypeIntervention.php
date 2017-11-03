@@ -4,11 +4,12 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * TypeIntervention
  */
-class TypeIntervention implements HistoriqueAwareInterface
+class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -394,6 +395,18 @@ class TypeIntervention implements HistoriqueAwareInterface
         $this->tauxHetdComplementaire = $tauxHetdComplementaire;
 
         return $this;
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'TypeIntervention';
     }
 
 }

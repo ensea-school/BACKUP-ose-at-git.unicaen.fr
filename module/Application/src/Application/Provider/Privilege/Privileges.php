@@ -107,6 +107,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MOTIF_NON_PAIEMENT_VISUALISATION           = 'motif-non-paiement-visualisation';
     const ODF_CENTRES_COUT_EDITION                   = 'odf-centres-cout-edition';
     const ODF_ELEMENT_EDITION                        = 'odf-element-edition';
+    const ODF_ELEMENT_VH_EDITION                     = 'odf-element-vh-edition';
+    const ODF_ELEMENT_VH_VISUALISATION               = 'odf-element-vh-visualisation';
     const ODF_ELEMENT_VISUALISATION                  = 'odf-element-visualisation';
     const ODF_ETAPE_EDITION                          = 'odf-etape-edition';
     const ODF_ETAPE_VISUALISATION                    = 'odf-etape-visualisation';
@@ -137,6 +139,9 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const REFERENTIEL_VISUALISATION                  = 'referentiel-visualisation';
     const TYPE_INTERVENTION_EDITION                  = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION            = 'type-intervention-visualisation';
+    const UNICAEN_TBL_ACTUALISATION                  = 'unicaen-tbl-actualisation';
+    const UNICAEN_TBL_ADMIN                          = 'unicaen-tbl-admin';
+    const UNICAEN_TBL_UPDATE_ACTUPROC                = 'unicaen-tbl-update-actuproc';
     const WORKFLOW_DEPENDANCES_EDITION               = 'workflow-dependances-edition';
     const WORKFLOW_DEPENDANCES_VISUALISATION         = 'workflow-dependances-visualisation';
 

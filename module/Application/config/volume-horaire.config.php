@@ -8,7 +8,7 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router'          => [
         'routes' => [
-            'volume-horaire'             => [
+            'volume-horaire' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/volume-horaire',
@@ -68,26 +68,27 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\VolumeHoraire'            => Controller\VolumeHoraireController::class,
+            'Application\Controller\VolumeHoraire' => Controller\VolumeHoraireController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationVolumeHoraire'                => Service\VolumeHoraire::class,
-            'ApplicationVolumeHoraireReferentiel'     => Service\VolumeHoraireReferentiel::class,
-            'ApplicationTypeVolumeHoraire'            => Service\TypeVolumeHoraire::class,
-            'ApplicationEtatVolumeHoraire'            => Service\EtatVolumeHoraire::class,
+            'ApplicationVolumeHoraire'            => Service\VolumeHoraire::class,
+            'ApplicationVolumeHoraireEns'         => Service\VolumeHoraireEnsService::class,
+            'ApplicationVolumeHoraireReferentiel' => Service\VolumeHoraireReferentiel::class,
+            'ApplicationTypeVolumeHoraire'        => Service\TypeVolumeHoraire::class,
+            'ApplicationEtatVolumeHoraire'        => Service\EtatVolumeHoraire::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
-            'volumeHoraireListe'            => View\Helper\VolumeHoraire\Liste::class,
+            'volumeHoraireListe' => View\Helper\VolumeHoraire\Liste::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'VolumeHoraireSaisie'                            => Form\VolumeHoraire\Saisie::class,
-            'VolumeHoraireSaisieMultipleFieldset'            => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
+            'VolumeHoraireSaisie'                 => Form\VolumeHoraire\Saisie::class,
+            'VolumeHoraireSaisieMultipleFieldset' => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
         ],
     ],
 ];

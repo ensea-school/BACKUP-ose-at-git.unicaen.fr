@@ -95,7 +95,7 @@ class EtapeController extends AbstractController
             ElementPedagogique::class,
         ]);
         $etape        = $this->getEvent()->getParam('etape');
-        $title        = 'Formation';
+        $title        = $etape.' ('.$etape->getCode().')';
         $serviceEtape = $this->getServiceEtape();
 
         return compact('etape', 'title', 'serviceEtape');

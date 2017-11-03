@@ -11,6 +11,8 @@ class FloatFromString extends AbstractFilter
 
     public function filter($value)
     {
+        if ($value === '') return null;
+
         $value = preg_replace("/[^0-9,\.-]/","",$value);
         $value = str_replace(',','.',$value);
         $value = floatval($value);
@@ -26,6 +28,6 @@ class FloatFromString extends AbstractFilter
             self::$instance = new self;
         }
 
-        return self::$instance->filter($value);
+        return self::$instance->filter($value );
     }
 }

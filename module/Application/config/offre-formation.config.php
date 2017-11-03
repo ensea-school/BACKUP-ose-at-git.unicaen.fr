@@ -91,6 +91,18 @@ return [
                                     'defaults'    => ['action' => 'getPeriode'],
                                 ],
                             ],
+                            'volume-horaire'   => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/volume-horaire/:elementPedagogique',
+                                    'constraints' => [
+                                        'elementPedagogique' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action'     => 'volume-horaire',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'etape'   => [
@@ -231,6 +243,14 @@ return [
                         Privileges::ODF_ELEMENT_VISUALISATION,
                         Privileges::ENSEIGNEMENT_EDITION,
                     ],
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                    'action'     => ['volume-horaire'],
+                    'privileges' => [
+                        Privileges::ODF_ELEMENT_VH_VISUALISATION,
+                        Privileges::ODF_ELEMENT_VH_EDITION,
+                    ],
 
                 ],
                 [
@@ -264,6 +284,7 @@ return [
                 'Etape'              => [],
                 'CentreCoutEp'       => [],
                 'ElementModulateur'  => [],
+                'VolumeHoraireEns'   => [],
             ],
         ],
         'rule_providers'     => [
@@ -294,6 +315,11 @@ return [
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
+                    [
+                        'privileges' => Privileges::ODF_ELEMENT_VH_EDITION,
+                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique','VolumeHoraireEns','TypeIntervention'],
+                        'assertion'  => 'AssertionOffreDeFormation',
+                    ],
                 ],
             ],
         ],
@@ -303,8 +329,10 @@ return [
             'Application\Controller\OffreFormation'                    => Controller\OffreFormationController::class,
             'Application\Controller\OffreFormation\Etape'              => Controller\OffreFormation\EtapeController::class,
             'Application\Controller\OffreFormation\Modulateur'         => Controller\OffreFormation\ModulateurController::class,
-            'Application\Controller\OffreFormation\ElementPedagogique' => Controller\OffreFormation\ElementPedagogiqueController::class,
             'Application\Controller\OffreFormation\EtapeCentreCout'    => Controller\OffreFormation\EtapeCentreCoutController::class,
+        ],
+        'factories' => [
+            'Application\Controller\OffreFormation\ElementPedagogique' => Controller\OffreFormation\Factory\ElementPedagogiqueControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -334,6 +362,9 @@ return [
             'ElementCentreCoutFieldset'                              => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,
             Form\OffreFormation\TauxMixite\TauxMixiteForm::class     => Form\OffreFormation\TauxMixite\TauxMixiteForm::class,
             Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
+        ],
+        'factories' => [
+            Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
         ],
     ],
     'view_helpers'    => [

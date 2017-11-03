@@ -1,5 +1,21 @@
-<h3><?php echo $element ?> <small><?php echo $element->getCode() ?></small></h3>
+<?php
 
-<?php echo $this->elementPedagogique($element) ?>
+use Application\Provider\Privilege\Privileges;
 
-<br /><?php //foreach( $changements as $changement ) { echo $this->differentielLigne( $changement ); } ?>
+$tabs = [
+    [
+        'id'      => 'fiche',
+        'label'   => 'Fiche',
+        'content' => (string)$this->elementPedagogique($element),
+    ],
+];
+
+if ($this->isAllowed(Privileges::getResourceId(Privileges::ODF_ELEMENT_VH_VISUALISATION))) {
+    $tabs[] = [
+        'id'    => 'volume-horaire-ens',
+        'label' => '<span class="glyphicon glyphicon-time"></span> Volumes horaires',
+        'url'   => $this->url('of/element/volume-horaire', ['elementPedagogique' => $element->getId()]),
+    ];
+}
+
+echo $this->tabajax($tabs);

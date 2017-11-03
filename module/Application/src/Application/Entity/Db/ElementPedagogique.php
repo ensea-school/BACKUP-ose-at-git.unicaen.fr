@@ -111,6 +111,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     protected $elementModulateur;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $volumeHoraireEns;
+
+    /**
      * haschanged
      *
      * @var boolean
@@ -577,6 +582,46 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
 
     /**
+     * Add volumeHoraireEns
+     *
+     * @param VolumeHoraireEns $volumeHoraireEns
+     *
+     * @return ElementPedagogique
+     */
+    public function addVolumeHoraireEns(VolumeHoraireEns $volumeHoraireEns)
+    {
+        $this->volumeHoraireEns[] = $volumeHoraireEns;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove volumeHoraireEns
+     *
+     * @param VolumeHoraireEns $volumeHoraireEns
+     */
+    public function removeVolumeHoraireEns(VolumeHoraireEns $volumeHoraireEns)
+    {
+        $this->volumeHoraireEns->removeElement($volumeHoraireEns);
+    }
+
+
+
+    /**
+     * Get volumeHoraireEns
+     *
+     * @return \Doctrine\Common\Collections\Collection|VolumeHoraireEns[]
+     */
+    public function getVolumeHoraireEns()
+    {
+        return $this->volumeHoraireEns;
+    }
+
+
+
+    /**
      * Add service
      *
      * @param \Application\Entity\Db\Service $service
@@ -724,6 +769,26 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         }
 
         return $this->effectifs;
+    }
+
+
+
+    /**
+     * @return TypeIntervention[]
+     */
+    public function getTypesInterventionPossibles()
+    {
+        if (!$this->getId()) return [];
+
+        $sql = 'SELECT type_intervention_id FROM V_ELEMENT_TYPE_INTERV_POSSIBLE WHERE element_pedagogique_id = :element';
+        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['element' => $this->getId()]);
+
+        $ids = [];
+        foreach( $res as $r ){
+            $ids[] = (int)$r['TYPE_INTERVENTION_ID'];
+        }
+
+        return $this->getEntityManager()->getRepository(TypeIntervention::class)->findBy(['id' => $ids], ['ordre' => 'ASC']);
     }
 
 

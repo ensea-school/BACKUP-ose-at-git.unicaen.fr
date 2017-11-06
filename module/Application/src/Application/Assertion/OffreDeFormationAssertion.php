@@ -180,7 +180,10 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertElementPedagogiqueSaisieVH(Role $role, ElementPedagogique $elementPedagogique)
     {
-        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+        return $this->asserts([
+            $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
+            $this->assertSourceSaisie($elementPedagogique->getSource()),
+        ]);
     }
 
 

@@ -1,33 +1,25 @@
--- export
+select id,annee_id,code, libelle,structure_id from element_pedagogique order by id desc;
+delete from element_pedagogique where id = 187015;
+select * from structure where niveau = 2;
 SELECT
-  a.libelle         "annee",
-  str.libelle_court "structure",
-  tf.libelle_court  "type_formation",
-  e.source_code     "code_etape",
-  e.libelle         "etape",
-  e.niveau          "niveau",
-  p.libelle_court   "periode",
-  ep.source_code    "code_element",
-  ep.libelle        "element",
-  ep.taux_foad      "taux_foad",
-  ep.fi             "fi",
-  ep.fc             "fc",
-  ep.fa             "fa"
-FROM
-  source s
-       JOIN element_pedagogique ep ON ep.source_id = s.id AND 1 = ose_divers.comprise_entre(ep.histo_creation,ep.histo_destruction)
-       JOIN annee                a ON a.id = ep.annee_id
-       JOIN structure          str ON str.id = ep.structure_id
-       JOIN etape                e ON e.id = ep.etape_id
-       JOIN type_formation      tf ON tf.id = e.type_formation_id
-  LEFT JOIN periode              p ON p.id = ep.periode_id
+  *
+FROM element_pedagogique
+
 WHERE
-  s.code = 'OSE'
-  AND ep.annee_id = 2014
-  AND str.source_code <> 'UNICAEN'
+  annee_id = 2016
+  AND source_code in (
+'REMED-11',
+'REMED-12',
+'REMED-13',
+'REMED-I11',
+'REMED-I12',
+'REMED-I13',
+'REMED-U01',
+'REMED-U07',
+'REMED-U24'
+
+  )
 ;
-
-
 -- Duplication sur l'année suivante
 INSERT INTO etape 
 (
@@ -68,14 +60,15 @@ FROM
 WHERE 
   histo_destruction IS NULL
   AND id IN (
-1392,
-1393,
-1397,
-1391,
-1394,
-1395,
-1400,
-1631
+2494,
+2495,
+1465,
+1472,
+1473,
+1460,
+1463,
+1464,
+1471
 );
 
 INSERT INTO element_pedagogique (
@@ -131,30 +124,52 @@ WHERE
   ep.histo_destruction IS NULL
   AND ep.annee_id = a.id - 1
   AND etape_id IN (
-1392,
-1393,
-1397,
-1391,
-1394,
-1395,
-1400,
-1631
+2494,
+2495,
+1465,
+1472,
+1473,
+1460,
+1463,
+1464,
+1471
 );
-delete from element_pedagogique where annee_id = 2017 AND source_code IN (
-'VAELICENCEPROS1',
-'VAELICENCEPROS2',
-'VAEDUTSES1',
-'VAEDUTSES2',
-'VAEDUTS1',
-'VAEDUTS2',
-'VAELICENCES1',
-'VAELICENCES2',
-'VAEMASTER1S1',
-'VAEMASTER1S2',
-'VAE IngenieurS1',
-'VAE IngenieurS2',
-'VAEMASTER2 S1',
-'VAEMASTER2 S2',
-'VAEDSCGS1',
-'VAEDSCGS2'
+
+select * from chemin_pedagogique;
+
+
+-- création des chemins!!
+INSERT INTO chemin_pedagogique (
+  id,
+  element_pedagogique_id,
+  etape_id,
+  ordre,
+  source_id,
+  source_code,
+  histo_creation,
+  histo_createur_id,
+  histo_modification,
+  histo_modificateur_id
 )
+SELECT
+  chemin_pedagogique_id_seq.nextval                             id,
+  ep.id                                                         element_pedagogique_id,
+  e.id                                                          etape_id,
+  rownum                                                        ordre,
+  s.id                                                          source_id,
+  e.source_code || '_' || ep.source_code || '_' || ep.annee_id  source_code,
+  sysdate                                                       histo_creation,
+  (SELECT id FROM utilisateur WHERE username = 'lecluse')       histo_createur_id,
+  sysdate                                                       histo_modification,
+  (SELECT id FROM utilisateur WHERE username = 'lecluse')       histo_modificateur_id
+FROM
+       source                   s
+  JOIN element_pedagogique     ep ON ep.histo_destruction IS NULL AND ep.source_id = s.id
+  JOIN etape                    e ON e.id = ep.etape_id AND e.histo_destruction IS NULL
+  LEFT JOIN chemin_pedagogique cp ON cp.element_pedagogique_id = ep.id
+WHERE
+  s.code = 'OSE'
+  AND cp.id IS NULL
+;
+  
+  

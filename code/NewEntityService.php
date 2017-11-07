@@ -34,8 +34,6 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
 
     $params = $sCodeGenerator->generateServiceParams([
         'classname'         => 'Application\\Service\\' . $entity . 'Service',
-        'name'              => 'application' . $entity,
-        'useServiceLocator' => false,
         'generateTrait'     => true,
         'generateInterface' => false,
     ], [

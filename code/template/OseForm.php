@@ -10,6 +10,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 <endif useHydrator>
 
 
+
 /**
  * Description of <classname>
  *
@@ -53,8 +54,9 @@ class <classname> extends AbstractForm
             /* Filtres et validateurs */
         ];
     }
-
 }
+
+
 
 
 

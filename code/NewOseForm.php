@@ -10,7 +10,7 @@ use UnicaenCode\Util;
  */
 
 ?>
-    <h1>Création d'un nouveau formulaire OSE (hérité d'AbstractForm)</h1>
+    <h1>Création d'un nouveau formulaire</h1>
     <h3>Etape 1 : Paramétrage</h3>
 
 <?php
@@ -18,6 +18,9 @@ use UnicaenCode\Util;
 $form = new \Zend\Form\Form();
 $form->add(ElementMaker::selectModule(
     'module', 'Module dans lequel sera placé votre formulaire'
+));
+$form->add(ElementMaker::select(
+    'type', 'Type de formulaire (Form ou Fieldset)', ['Form' => 'Form', 'Fieldset' => 'Fieldset'], 'Form'
 ));
 $form->add(ElementMaker::text(
     'classname', 'Nom de classe du formulaire (en CamelCase, avec éventuellement un namespace avant : MonNamespace\Exemple)', 'Exemple'
@@ -31,6 +34,12 @@ $form->add(ElementMaker::checkbox(
 $form->add(ElementMaker::checkbox(
     'generateInterface', 'Générer une interface', false
 ));
+$form->add(ElementMaker::checkbox(
+    'useGetter', 'Générer des getters dans les traits et les interfaces', true
+));
+$form->add(ElementMaker::checkbox(
+    'generateFactory', 'Générer une factory', true
+));
 $form->add(ElementMaker::submit('generate', 'Générer le formulaire'));
 $form->setData($controller->getRequest()->getPost());
 
@@ -38,8 +47,8 @@ Util::displayForm($form);
 
 if ($controller->getRequest()->isPost() && $form->isValid()) {
 
-    $type      = 'Form';
-    $classname = $form->get('classname')->getValue();
+    $type              = $form->get('type')->getValue();
+    $classname         = $form->get('classname')->getValue();
 
     $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
@@ -49,9 +58,10 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
         'classname'         => $form->get('module')->getValue() . '\\Form\\' . $classname . $type,
         'name'              => ($type == 'Fieldset' ? 'fieldset' : '') . str_replace('\\', '', $classname),
         'useHydrator'       => $form->get('useHydrator')->getValue(),
-        'useServiceLocator' => false,
         'generateTrait'     => $form->get('generateTrait')->getValue(),
         'generateInterface' => $form->get('generateInterface')->getValue(),
+        'generateFactory'   => $form->get('generateFactory')->getValue(),
+        'useGetter'         => $form->get('useGetter')->getValue(),
     ], [
         'Class' => [
             'template'   => 'OseForm',

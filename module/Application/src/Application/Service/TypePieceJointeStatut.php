@@ -81,8 +81,8 @@ class TypePieceJointeStatut extends AbstractEntityService
           AND ((COALESCE(tpjs.annee_fin_id,99999) >= :ddeb) OR (COALESCE(tpjs.annee_debut_id,0) <= :dfin) )
         ";
 
-        $ddeb = $entity->getAnneeDebut()->getId() ? $entity->getAnneeDebut()->getId() : 0;
-        $dfin = $entity->getAnneeFin()->getId() ? $entity->getAnneeFin()->getId() : 99999;
+        $ddeb = $entity->getAnneeDebut() ? $entity->getAnneeDebut()->getId() : 0;
+        $dfin = $entity->getAnneeFin() ? $entity->getAnneeFin()->getId() : 99999;
 
        if ($dfin < $ddeb){
             throw new \Exception('L\'année de fin ne peut être antérieure à l\'année de début'.$dfin.':'.$ddeb);
@@ -97,7 +97,7 @@ class TypePieceJointeStatut extends AbstractEntityService
         ];
         $res=$this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
         //$no = ($res['cc'] > 0);
-            var_dump($res);
+
        /* if ($no){
             throw new \Exception('La règle de gestion de pièce justificative ne peut pas être appliquée, car elle en chevauche une autre');
         }*/

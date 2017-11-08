@@ -3,7 +3,6 @@
 namespace Application\Service\Factory;
 
 use Application\Constants;
-use Application\Service\ContextService;
 use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
 use Application\Service\PlafondService;
 
@@ -27,9 +26,7 @@ class PlafondServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $service = new PlafondService;
-        $service->setServiceLocator($container);
         $service->setEntityManager($container->get(Constants::BDD));
-        $service->setServiceContext($container->get(ContextService::class));
 
         return $service;
     }

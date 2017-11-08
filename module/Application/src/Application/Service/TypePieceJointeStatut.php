@@ -24,6 +24,8 @@ class TypePieceJointeStatut extends AbstractEntityService
         return TypePieceJointeStatutEntity::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -34,36 +36,47 @@ class TypePieceJointeStatut extends AbstractEntityService
         return 'tpjs';
     }
 
+
+
     /**
      * Retourne la liste des enregistrements correspondant aux statut intervenant spécifié.
      *
      * @param StatutIntervenantEntity $statut
-     * @param QueryBuilder|null $queryBuilder
+     * @param QueryBuilder|null       $queryBuilder
+     *
      * @return QueryBuilder
      */
     public function finderByStatutIntervenant(StatutIntervenantEntity $statut, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.statut = :statut")->setParameter('statut', $statut);
+
         return $qb;
     }
+
+
 
     /**
      * Retourne la liste des enregistrements correspondant au témoin de premier recrutement spécifié.
      *
-     * @param bool $premierRecrutement
+     * @param bool              $premierRecrutement
      * @param QueryBuilder|null $queryBuilder
+     *
      * @return QueryBuilder
      */
     public function finderByPremierRecrutement($premierRecrutement, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.premierRecrutement = :flag")->setParameter('flag', $premierRecrutement);
+
         return $qb;
     }
 
+
+
     /**
      * @param TypePieceJointeStatutEntity $entity
+     *
      * @return TypePieceJointeStatutEntity
      */
     public function save($entity)
@@ -84,39 +97,42 @@ class TypePieceJointeStatut extends AbstractEntityService
         $ddeb = $entity->getAnneeDebut() ? $entity->getAnneeDebut()->getId() : 0;
         $dfin = $entity->getAnneeFin() ? $entity->getAnneeFin()->getId() : 99999;
 
-       if ($dfin < $ddeb){
-            throw new \Exception('L\'année de fin ne peut être antérieure à l\'année de début'.$dfin.':'.$ddeb);
+        if ($dfin < $ddeb) {
+            throw new \Exception('L\'année de fin ne peut être antérieure à l\'année de début' . $dfin . ':' . $ddeb);
         }
 
         $params = [
             'statutIntervenant' => $entity->getStatutIntervenant()->getId(),
-            'typePieceJointe' => $entity->getTypePieceJointe()->getId(),
-            'ddeb'   => $ddeb,
-            'dfin'   => $dfin,
-            'tpjsId' => (int)$entity->getId()
+            'typePieceJointe'   => $entity->getTypePieceJointe()->getId(),
+            'ddeb'              => $ddeb,
+            'dfin'              => $dfin,
+            'tpjsId'            => (int)$entity->getId(),
         ];
-        $res=$this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
+        $res    = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
         //$no = ($res['cc'] > 0);
 
-       /* if ($no){
-            throw new \Exception('La règle de gestion de pièce justificative ne peut pas être appliquée, car elle en chevauche une autre');
-        }*/
+        /* if ($no){
+             throw new \Exception('La règle de gestion de pièce justificative ne peut pas être appliquée, car elle en chevauche une autre');
+         }*/
 
         return parent::save($entity);
     }
+
 
 
     /**
      * Retourne la liste des enregistrements.
      *
      * @param QueryBuilder|null $queryBuilder
-     * @param string|null $alias
+     * @param string|null       $alias
+     *
      * @return TypePieceJointeStatutEntity[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
+
         return parent::getList($qb, $alias);
     }
 }

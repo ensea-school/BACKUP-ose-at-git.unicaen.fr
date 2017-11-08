@@ -35,6 +35,8 @@ class PieceJointeController extends AbstractController
     use TypePieceJointeStatutAwareTrait;
     use WorkflowServiceAwareTrait;
 
+
+
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs
@@ -280,10 +282,10 @@ class PieceJointeController extends AbstractController
 
         $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
-        $typesPiecesJointes = $this->getServiceTypePieceJointe()->getList();
-        $statuts = $this->getServiceStatutIntervenant()->getList();
+        $typesPiecesJointes  = $this->getServiceTypePieceJointe()->getList();
+        $statuts             = $this->getServiceStatutIntervenant()->getList();
         $statutsIntervenants = [];
-        foreach( $statuts as $statut ){
+        foreach ($statuts as $statut) {
             $statutsIntervenants[$statut->getTypeIntervenant()->getId()][] = $statut;
         }
 
@@ -291,7 +293,7 @@ class PieceJointeController extends AbstractController
         SELECT
           tpjs, adeb, afin
         FROM
-          ".\Application\Entity\Db\TypePieceJointeStatut::class." tpjs
+          " . \Application\Entity\Db\TypePieceJointeStatut::class . " tpjs
           LEFT JOIN tpjs.anneeDebut adeb
           LEFT JOIN tpjs.anneeFin afin
         WHERE
@@ -299,13 +301,13 @@ class PieceJointeController extends AbstractController
         "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
 
         /* @var $tpjss TypePieceJointeStatut[] */
-        $tpjss = $this->em()->createQuery($dql)->getResult();
+        $tpjss                     = $this->em()->createQuery($dql)->getResult();
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
             $typesPiecesJointesStatuts[$tpjs->getTypePieceJointe()->getId()][$tpjs->getStatutIntervenant()->getId()] = $tpjs;
         }
 
-        return compact('typesPiecesJointes','statutsIntervenants', 'typesPiecesJointesStatuts');
+        return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts');
     }
 
 
@@ -377,9 +379,9 @@ class PieceJointeController extends AbstractController
 
         $form = $this->getFormModifierTypePieceJointeStatut();
         if (empty($tpjs)) {
-            $title = 'Nouveau paramètre de gestion de pièce justificative';
-            $tpjs = $this->getServiceTypePieceJointeStatut()->newEntity();
-            $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
+            $title             = 'Nouveau paramètre de gestion de pièce justificative';
+            $tpjs              = $this->getServiceTypePieceJointeStatut()->newEntity();
+            $typePieceJointe   = $this->getEvent()->getParam('typePieceJointe');
             $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
             $tpjs->setTypePieceJointe($typePieceJointe);
             $tpjs->setStatutIntervenant($statutIntervenant);
@@ -399,7 +401,7 @@ class PieceJointeController extends AbstractController
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                     $form->get('id')->setValue($tpjs->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
+                    $e = DbException::translate($e);
                     $this->flashMessenger()->addErrorMessage($e->getMessage());
                 }
             }
@@ -447,6 +449,7 @@ class PieceJointeController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }
+
         return new MessengerViewModel();
     }
 

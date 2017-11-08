@@ -3,7 +3,6 @@
 namespace <namespace>;
 
 use Application\Constants;
-use Application\Service\ContextService;
 use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
 use <targetFullClass>;
 
@@ -27,9 +26,7 @@ class <class>
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $<variable> = new <targetClass>;
-        $<variable>->setServiceLocator($container);
         $<variable>->setEntityManager($container->get(Constants::BDD));
-        $<variable>->setServiceContext($container->get(ContextService::class));
 
         return $<variable>;
     }

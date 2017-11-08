@@ -2,6 +2,7 @@
 
 namespace Application\Mouchard;
 
+use Application\Service\ContextService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -22,7 +23,7 @@ class MouchardCompleterContextFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $mouchardCompleterContext = new MouchardCompleterContext();
-        $mouchardCompleterContext->setServiceContext( $serviceLocator->get('ApplicationContext'));
+        $mouchardCompleterContext->setServiceContext( $serviceLocator->get(ContextService::class));
 
         return $mouchardCompleterContext;
     }

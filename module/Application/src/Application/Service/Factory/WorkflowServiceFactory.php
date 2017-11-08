@@ -2,6 +2,7 @@
 
 namespace Application\Service\Factory;
 
+use Application\Service\ContextService;
 use Application\Service\WorkflowService;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\ServiceManager\FactoryInterface;
@@ -18,7 +19,7 @@ class WorkflowServiceFactory implements FactoryInterface
         );
 
         $service->setServiceContext(
-            $serviceLocator->get('ApplicationContext')
+            $serviceLocator->get(ContextService::class)
         );
 
         $service->setServiceAuthorize(

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $title string
+ * @var $plafonds PlafondApplication[]
+ */
+
+use Application\Entity\Db\PlafondApplication;
+use Application\Provider\Privilege\Privileges;
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTION_EDITION));
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+
+if ($canEdit){
+    echo $this->tag('a', [
+       'class' => 'btn btn-primary ajax-modal',
+       'href' => $this->url('plafond/saisir'),
+    ])->html('<span class="glyphicon glyphicon-plus"></span> Nouvelle règle de gestion de plafond');
+}

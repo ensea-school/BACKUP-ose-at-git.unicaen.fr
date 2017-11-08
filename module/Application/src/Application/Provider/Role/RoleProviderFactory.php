@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Role;
 
+use Application\Service\ContextService;
 use InvalidArgumentException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -48,7 +49,7 @@ class RoleProviderFactory implements FactoryInterface
             ->setServicePersonnel($sl->get('applicationPersonnel'))
             ->setServiceIntervenant($sl->get('applicationIntervenant'))
             ->setServiceStatutIntervenant($sl->get('applicationStatutIntervenant'))
-            ->setServiceContext($sl->get('applicationContext'))
+            ->setServiceContext($sl->get(ContextService::class))
             ->setPrivilegeProvider($sl->get('UnicaenAuth\Privilege\PrivilegeProvider'))
             ->setStructureSelectionnee($this->getServiceContext()->getStructure(true));
 

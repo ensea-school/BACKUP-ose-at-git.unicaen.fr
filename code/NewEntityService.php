@@ -42,6 +42,9 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
             'entity'   => $entity,
             'alias'    => $form->get('alias')->getValue(),
         ],
+        'Factory' => [
+            'template' => 'EntityServiceFactory'
+        ],
     ]);
 
     ?>

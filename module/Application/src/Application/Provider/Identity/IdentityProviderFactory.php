@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Identity;
 
+use Application\Service\ContextService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +27,7 @@ class IdentityProviderFactory implements FactoryInterface
         $identityProvider->setEntityManager( $serviceLocator->get(\Application\Constants::BDD) );
         $identityProvider->setServiceIntervenant($serviceLocator->get('applicationIntervenant'));
         $identityProvider->setServicePersonnel($serviceLocator->get('applicationPersonnel'));
-        $identityProvider->setServiceContext($serviceLocator->get('applicationContext'));
+        $identityProvider->setServiceContext($serviceLocator->get(ContextService::class));
 
         return $identityProvider;
     }

@@ -9,6 +9,7 @@
 
 namespace Application;
 
+use Application\Service\ContextService;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -18,7 +19,11 @@ use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Zend\Stdlib\Glob;
 use Zend\Config\Factory as ConfigFactory;
 
-include_once(__DIR__.'/src/Application/functions.php');
+include_once(__DIR__ . '/src/Application/functions.php');
+
+
+
+
 
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
@@ -63,25 +68,49 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
      */
     public function injectRouteEntitiesInEvent(MvcEvent $e)
     {
-        $smPrefix = 'Application';
-        $sm       = $e->getApplication()->getServiceManager();
-        $params   = $e->getRouteMatch()->getParams();
+        $sm     = $e->getApplication()->getServiceManager();
+        $params = $e->getRouteMatch()->getParams();
 
         foreach ($params as $name => $value) {
-            if ('intervenant' === $name) {
-                $value = $sm->get($smPrefix . ucfirst($name))->getBySourceCode($value);
-                $e->setParam($name, $value);
-            }elseif('typeAgrementCode' === $name){
-                $value = $sm->get('applicationTypeAgrement')->getByCode($value);
-                $e->setParam('typeAgrement', $value);
-            } elseif ($sm->has($smPrefix . $name)) { // Si un service est associé à l'entité
-                $service = $sm->get($smPrefix . ucfirst($name));
-                if ($service instanceof Service\AbstractEntityService) {
-                    $value = $sm->get($smPrefix . ucfirst($name))->get($value);
-                    $e->setParam($name, $value);
+            $entityService = $this->getEntityService($sm, $name);
+
+            if ($entityService instanceof Service\AbstractEntityService) {
+                switch ($name) {
+                    case 'intervenant':
+                        $entity = $entityService->getBySourceCode($value);
+                        $e->setParam($name, $entity);
+                    break;
+                    case 'typeAgrementCode':
+                        $entity = $entityService->getByCode($value);
+                        $e->setParam('typeAgrement', $entity);
+                    break;
+                    default:
+                        $entity = $entityService->get($value);
+                        $e->setParam($name, $entity);
                 }
             }
         }
+    }
+
+
+
+    private function getEntityService(ServiceLocatorInterface $serviceLocator, $paramName)
+    {
+        if ('typeAgrementCode' === $paramName) {
+            $paramName = 'typeAgrement';
+        }
+
+        $serviceName = 'Application\\Service\\' . ucfirst($paramName) . 'Service';
+        if ($serviceLocator->has($serviceName)) {
+            return $serviceLocator->get($serviceName);
+        }
+
+        $serviceName = 'Application' . ucfirst($paramName);
+        if ($serviceLocator->has($serviceName)) {
+            return $serviceLocator->get($serviceName);
+        }
+
+        return null;
     }
 
 
@@ -94,7 +123,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
      */
     public function checkRouteParams(MvcEvent $e)
     {
-        $role       = $e->getApplication()->getServiceManager()->get('ApplicationContext')->getSelectedIdentityRole();
+        $role       = $e->getApplication()->getServiceManager()->get(ContextService::class)->getSelectedIdentityRole();
         $routeMatch = $e->getRouteMatch();
         if ($role && $intervenant = $role->getIntervenant()) {
             if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $intervenant->getRouteParam()) {

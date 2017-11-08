@@ -18,7 +18,7 @@ use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Context extends AbstractService
+class ContextService extends AbstractService
 {
     use Traits\EtablissementAwareTrait;
     use Traits\AnneeAwareTrait;
@@ -157,7 +157,7 @@ class Context extends AbstractService
     /**
      * @param \Application\Entity\Db\Personnel $personnel
      *
-     * @return Context
+     * @return ContextService
      */
     public function setPersonnel($personnel)
     {
@@ -207,7 +207,7 @@ class Context extends AbstractService
     /**
      * @param \Application\Entity\Db\Intervenant $intervenant
      *
-     * @return Context
+     * @return ContextService
      */
     public function setIntervenant($intervenant)
     {

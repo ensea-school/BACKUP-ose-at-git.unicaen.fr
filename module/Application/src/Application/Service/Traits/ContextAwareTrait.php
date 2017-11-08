@@ -2,7 +2,7 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Context;
+use Application\Service\ContextService;
 use Application\Module;
 use RuntimeException;
 
@@ -14,18 +14,18 @@ use RuntimeException;
 trait ContextAwareTrait
 {
     /**
-     * @var Context
+     * @var ContextService
      */
     private $serviceContext;
 
 
 
     /**
-     * @param Context $serviceContext
+     * @param ContextService $serviceContext
      *
      * @return self
      */
-    public function setServiceContext(Context $serviceContext)
+    public function setServiceContext(ContextService $serviceContext)
     {
         $this->serviceContext = $serviceContext;
 
@@ -35,7 +35,7 @@ trait ContextAwareTrait
 
 
     /**
-     * @return Context
+     * @return ContextService
      * @throws RuntimeException
      */
     public function getServiceContext()
@@ -53,7 +53,7 @@ trait ContextAwareTrait
                 }
             }
             if (!$serviceLocator) return null;
-            $this->serviceContext = $serviceLocator->get('ApplicationContext');
+            $this->serviceContext = $serviceLocator->get(ContextService::class);
         }
 
         return $this->serviceContext;

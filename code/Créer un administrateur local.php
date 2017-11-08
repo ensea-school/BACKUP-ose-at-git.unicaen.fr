@@ -1,13 +1,15 @@
 <?php
 
+use Application\Service\ContextService;
+
 function creerAdmin($sl, array $admin)
 {
 
     /** @var \Doctrine\ORM\EntityManager $em */
     $em = $sl->get(\Application\Constants::BDD);
 
-    /** @var \Application\Service\Context $serviceContext */
-    $serviceContext = $sl->get('applicationContext');
+    /** @var \Application\Service\ContextService $serviceContext */
+    $serviceContext = $sl->get(ContextService::class);
 
     /** @var \Application\Service\Source $serviceSource */
     $serviceSource = $sl->get('applicationSource');

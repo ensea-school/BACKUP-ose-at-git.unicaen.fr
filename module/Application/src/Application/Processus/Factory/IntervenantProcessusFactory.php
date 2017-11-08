@@ -4,6 +4,7 @@ namespace Application\Processus\Factory;
 
 
 use Application\Processus\IntervenantProcessus;
+use Application\Service\ContextService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -27,7 +28,7 @@ class IntervenantProcessusFactory implements FactoryInterface
         $processus = new IntervenantProcessus;
 
         $processus->setEntityManager($serviceLocator->get(\Application\Constants::BDD));
-        $processus->setServiceContext($serviceLocator->get('applicationContext'));
+        $processus->setServiceContext($serviceLocator->get(ContextService::class));
 
         return $processus;
     }

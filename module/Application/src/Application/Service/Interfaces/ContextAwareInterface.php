@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Context;
+use Application\Service\ContextService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface ContextAwareInterface
 {
     /**
-     * @param Context $serviceContext
+     * @param ContextService $serviceContext
+     *
      * @return self
      */
-    public function setServiceContext( Context $serviceContext );
+    public function setServiceContext(ContextService $serviceContext );
 
 
 

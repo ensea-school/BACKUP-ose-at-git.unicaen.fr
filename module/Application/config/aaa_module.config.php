@@ -29,8 +29,8 @@ return [
         'configuration' => [
             'orm_default' => [
                 'string_functions' => [
-                    'CONVERT'       => ORM\Query\Functions\Convert::class,
-                    'REPLACE'       => ORM\Query\Functions\Replace::class,
+                    'CONVERT' => ORM\Query\Functions\Convert::class,
+                    'REPLACE' => ORM\Query\Functions\Replace::class,
                 ],
                 'filters'          => [
                     'historique' => ORM\Filter\HistoriqueFilter::class,
@@ -131,7 +131,7 @@ return [
     'service_manager'    => [
         'invokables' => [
             'ApplicationAnnee'              => Service\Annee::class,
-            'ApplicationContext'            => Service\Context::class,
+            Service\ContextService::class   => Service\ContextService::class,
             'ApplicationLocalContext'       => Service\LocalContext::class,
             'ApplicationParametres'         => Service\Parametres::class,
             'ApplicationUtilisateur'        => Service\Utilisateur::class,

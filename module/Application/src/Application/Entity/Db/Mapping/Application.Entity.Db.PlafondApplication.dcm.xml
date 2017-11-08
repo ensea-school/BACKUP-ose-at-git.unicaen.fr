@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Application\Entity\Db\PlafondApplication" table="PLAFOND_APPLICATION">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+        </id>
+        <many-to-one field="plafond" target-entity="Application\Entity\Db\Plafond">
+            <join-columns>
+                <join-column name="PLAFOND_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="plafondEtat" target-entity="Application\Entity\Db\PlafondEtat">
+            <join-columns>
+                <join-column name="PLAFOND_ETAT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+            <join-columns>
+                <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="anneeDebut" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="anneeFin" target-entity="Application\Entity\Db\Annee">
+            <join-columns>
+                <join-column name="ANNEE_FIN_ID" referenced-column-name="ID"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

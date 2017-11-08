@@ -21,6 +21,14 @@
     <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="false"/>
     <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
     <field name="seuilHetd" type="integer" column="SEUIL_HETD" nullable="true"/>
+    <field name="changementRIB" type="boolean" column="CHANGEMENT_RIB" nullable="false"/>
+    <field name="fc" type="boolean" column="FC" nullable="false"/>
+    <many-to-one field="anneeDebut" target-entity="Application\Entity\Db\Annee">
+      <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>
+    </many-to-one>
+    <many-to-one field="anneeFin" target-entity="Application\Entity\Db\Annee">
+      <join-column name="ANNEE_FIN_ID" referenced-column-name="ID"/>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -36,12 +44,12 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="type" target-entity="Application\Entity\Db\TypePieceJointe">
+    <many-to-one field="typePieceJointe" target-entity="Application\Entity\Db\TypePieceJointe">
       <join-columns>
         <join-column name="TYPE_PIECE_JOINTE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+    <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
       <join-columns>
         <join-column name="STATUT_INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>

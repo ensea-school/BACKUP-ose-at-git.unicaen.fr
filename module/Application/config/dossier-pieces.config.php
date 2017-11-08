@@ -274,9 +274,18 @@ return [
                     'modifier-type-piece-jointe-statut' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statutIntervenant/:premierRecrutement',
+                            'route'    => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statutIntervenant[/:typePieceJointeStatut]',
                             'defaults' => [
                                 'action' => 'modifier-type-piece-jointe-statut',
+                            ],
+                        ],
+                    ],
+                    'delete-type-piece-jointe-statut' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/delete-type-piece-jointe-statut/:typePieceJointeStatut',
+                            'defaults' => [
+                                'action' => 'delete-type-piece-jointe-statut',
                             ],
                         ],
                     ],
@@ -387,7 +396,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['modifier-type-piece-jointe-statut'],
+                    'action'     => ['modifier-type-piece-jointe-statut','delete-type-piece-jointe-statut'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                 ],
                 [
@@ -496,6 +505,7 @@ return [
         'invokables' => [
             'IntervenantDossier'    => Form\Intervenant\Dossier::class,
             'typePieceJointeSaisie' => Form\PieceJointe\TypePieceJointeSaisieForm::class,
+            'modifierTypePieceJointeStatut' => Form\PieceJointe\ModifierTypePieceJointeStatutForm::class,
         ],
     ],
 ];

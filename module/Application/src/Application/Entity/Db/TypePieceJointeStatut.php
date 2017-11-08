@@ -6,6 +6,7 @@ use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
+
 /**
  * TypePieceJointeStatut
  */
@@ -27,12 +28,12 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     /**
      * @var \Application\Entity\Db\TypePieceJointe
      */
-    private $type;
+    private $typePieceJointe;
 
     /**
      * @var \Application\Entity\Db\StatutIntervenant
      */
-    private $statut;
+    private $statutIntervenant;
 
     /**
      * @var float
@@ -41,23 +42,26 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      */
     private $seuilHetd;
 
+    /**
+     * @var Annee
+     */
+    private $anneeDebut;
+
+    /**
+     * @var Annee
+     */
+    private $anneeFin;
 
 
     /**
-     *
-     * @return string
+     * @var boolean
      */
-    public function __toString()
-    {
-        return sprintf("Id=%s, Statut=%s, TypePJ=%s, Oblig=%d, 1erRecrut=%d, Seuil=%s",
-            $this->getId(),
-            sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
-            sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
-            $this->getObligatoire(),
-            $this->getPremierRecrutement(),
-            $this->getSeuilHeures() ?: "Aucun");
-    }
+    private $fc;
 
+    /**
+     * @var boolean
+     */
+    private $changementRIB;
 
 
     /**
@@ -147,15 +151,15 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
     /**
-     * Set type
+     * Set typePieceJointe
      *
-     * @param \Application\Entity\Db\TypePieceJointe $type
+     * @param \Application\Entity\Db\TypePieceJointe $typePieceJointe
      *
      * @return TypePieceJointeStatut
      */
-    public function setType(\Application\Entity\Db\TypePieceJointe $type = null)
+    public function setTypePieceJointe(\Application\Entity\Db\TypePieceJointe $typePieceJointe = null)
     {
-        $this->type = $type;
+        $this->typePieceJointe = $typePieceJointe;
 
         return $this;
     }
@@ -163,13 +167,13 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
 
 
     /**
-     * Get type
+     * Get typePieceJointe
      *
      * @return \Application\Entity\Db\TypePieceJointe
      */
-    public function getType()
+    public function getTypePieceJointe()
     {
-        return $this->type;
+        return $this->typePieceJointe;
     }
 
 
@@ -177,13 +181,13 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
     /**
      * Set statutIntervenant
      *
-     * @param \Application\Entity\Db\StatutIntervenant $statut
+     * @param \Application\Entity\Db\StatutIntervenant $statutIntervenant
      *
      * @return TypePieceJointeStatut
      */
-    public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
+    public function setStatutIntervenant(\Application\Entity\Db\StatutIntervenant $statutIntervenant = null)
     {
-        $this->statut = $statut;
+        $this->statutIntervenant = $statutIntervenant;
 
         return $this;
     }
@@ -195,34 +199,127 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface
      *
      * @return \Application\Entity\Db\StatutIntervenant
      */
-    public function getStatut()
+    public function getStatutIntervenant()
     {
-        return $this->statut;
+        return $this->statutIntervenant;
+    }
+
+    /**
+     * @return Annee
+     */
+    public function getAnneeDebut()
+    {
+        return $this->anneeDebut;
     }
 
 
 
     /**
-     * Redéfiniton pour gestion du cas particulier du RIB.
+     * @param Annee $anneeDebut
      *
-     * @todo Comment appeler la méthode getObligatoireToString() du trait ?
+     * @return TypePieceJointeStatut
      */
-    public function getObligatoireToString($totalHeuresReellesIntervenant)
+    public function setAnneeDebut(Annee $anneeDebut = null)
     {
-        if ($this->isObligatoire($totalHeuresReellesIntervenant)) {
-            $seuilHETD   = $this->getSeuilHeures();
-            $obligatoire = "À fournir obligatoirement";
-            $obligatoire .= $this->isSeuilHeuresDepasse($totalHeuresReellesIntervenant) ?
-                " car le <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total d'heures réelles</abbr> > {$seuilHETD}h" :
-                null;
+        $this->anneeDebut = $anneeDebut;
 
-            return $obligatoire;
-        }
-
-        if ($this->getType()->getCode() === TypePieceJointe::RIB) {
-            return "À fournir en cas de changement";
-        }
-
-        return "Facultatif";
+        return $this;
     }
+
+
+
+    /**
+     * @return Annee
+     */
+    public function getAnneeFin()
+    {
+        return $this->anneeFin;
+    }
+
+
+
+    /**
+     * @param Annee $anneeFin
+     *
+     * @return * TypePieceJointeStatut
+     */
+    public function setAnneeFin(Annee $anneeFin = null)
+    {
+        $this->anneeFin = $anneeFin;
+
+        return $this;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function getFC()
+    {
+        if (!isset($this->fc)) return false;
+        return $this->fc;
+    }
+
+
+
+    /**
+     * @param boolean $fC
+     *
+     * * @return * TypePieceJointeStatut
+     */
+    public function setFC( $fc = null)
+    {
+        $this->fc = $fc;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $changementRIB
+     *
+     * * @return * TypePieceJointeStatut
+     */
+    public function setChangementRIB( $changementRIB = null)
+    {
+        $this->changementRIB=$changementRIB;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getChangementRIB()
+    {
+        if (!isset($this->changementRIB)) return false;
+        return $this->changementRIB;
+    }
+
+    public function __toString()
+    {
+        $txt=$this->getObligatoire() ? 'Obl' : 'Fac';
+        if ($this->getSeuilHeures()) $txt.=  ' >' .$this->getSeuilHeures();
+        if ($this->getPremierRecrutement()) $txt.=' PR ';
+        if ($this->getFC()) $txt.=' FC ';
+        if ($this->getChangementRIB()) $txt.=' RIB';
+        return $txt;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        $t = [];
+        $t[] = $this->getObligatoire() ? 'Pièce obligatoire' : 'Pièce facultative';
+        if ($this->getSeuilHeures()) $t[] = 'À partir de ' .$this->getSeuilHeures().' heures';
+        if ($this->getPremierRecrutement()) $t[] = 'Uniquement en cas de premier recrutement';
+        if ($this->getFC()) $t[] = 'Uniquement avec des enseignements en Formation Continue';
+        if ($this->getChangementRIB()) $t[] = 'Uniquement si le RIB a changé';
+        if ($this->getAnneeDebut()) $t[] = 'Actif à partir de '.$this->getAnneeDebut();
+        if ($this->getAnneeFin()) $t[] = 'Actif jusqu\'à'.$this->getAnneeFin();
+        return implode( "\n", $t);
+    }
+
 }

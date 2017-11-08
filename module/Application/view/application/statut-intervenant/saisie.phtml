@@ -1,0 +1,142 @@
+<?php
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\FonctionReferentiel\FonctionReferentielSaisieForm
+ */
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->form()->openTag($form); ?>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('type-intervenant')); ?>
+            </div>
+            <div class="col-md-6">
+                <?php echo $this->formControlGroup($form->get('libelle')); ?>
+            </div>
+        <div class="col-md-3">
+            <?php echo $this->formControlGroup($form->get('source-code')); ?>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('fonction-e-c')); ?>
+            </div>
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('TEM-ATV')); ?>
+            </div>
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('TEM-BIATSS')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('service-statutaire')); ?>
+            </div>
+            <div class="col-md-3">
+                <br>
+                <?php echo $this->formControlGroup($form->get('depassement')); ?>
+            </div>
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('plafond-referentiel')); ?>
+            </div>
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('maximum-HETD')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <br>
+                <?php echo $this->formControlGroup($form->get('ordre')); ?>
+            </div>
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('plafond-h-h-c')); ?>
+            </div>
+            <div class="col-md-3">
+                <?php echo $this->formControlGroup($form->get('plafond-h-c')); ?>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('non-autorise')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-saisir-referentiel')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-saisir-service')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-avoir-contrat')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-saisir-dossier')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-saisir-motif-non-paiement')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-cloturer-saisie')); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('depassement-sdshc')); ?>
+    </div>
+</div>
+<?php echo $this->formSubmit($form->get('submit')); ?>
+<?php echo $this->formControlGroup($form->get('security')); ?>
+<?php echo $this->form()->closeTag(); ?>
+<script type="text/javascript">
+    $(function () {
+        defCond();
+        affCond();
+    });
+
+    function defCond() {
+        var conds = ['depassement', 'non-autorise', 'peut-avoir-contrat'];
+        var i;
+        var obj;
+        for (i = 0; i < conds.length; i++) {
+            obj = document.getElementsByName(conds[i]);
+            obj[1].onchange = function () {
+                affCond();
+            }
+        }
+    }
+
+    function affCond() {
+        var typeConds = [true, false, true];
+        var conds = ['depassement', 'non-autorise', 'peut-avoir-contrat'];
+        var complConds = [['plafond-referentiel'], ['peut-saisir-referentiel', 'peut-saisir-service', 'peut-choisir-dans-dossier'], ['peut-saisir-dossier']];
+        var listComp;
+        var obj;
+        var i, j;
+        for (i = 0; i < conds.length; i++) {
+            listComp = complConds[i];
+            for (j = 0; j < listComp.length; j++) {
+                obj = document.getElementsByName(listComp[j]);
+                obj = obj[obj.length - 1];
+                console.log(listComp[j]);
+                if (document.getElementsByName(conds[i])[1].checked) {
+                    if (typeConds[i]) obj.disabled = false; else obj.disabled = true;
+                    console.log('oui');
+                }
+                else {
+                    if (typeConds[i]) obj.disabled = true; else obj.disabled = false;
+                    console.log('nothing!');
+                }
+            }
+        }
+    }
+</script>

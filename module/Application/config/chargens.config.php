@@ -224,8 +224,8 @@ return [
                                 'visible'     => false,
                             ],
                             'depassement'    => [
-                                'label'       => "Dépassement des charges par les services au format CSV (pour tableur)",
-                                'description' => "Permet de récupérer les données liées aux dépassement des heures de service par rapport aux charges d'enseignement",
+                                'label'       => "Rapprochement des charges par rapport aux services (format CSV pour tableur)",
+                                'description' => "Permet de récupérer les données liées aux rapprochement des heures de service par rapport aux charges d'enseignement",
                                 'route'       => 'chargens/depassement',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'depassement'),
                                 'visible'     => false,

@@ -3,7 +3,6 @@
 namespace Application\Entity\Db\Indicateur;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Indicateur;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Doctrine\ORM\QueryBuilder;
@@ -56,7 +55,7 @@ abstract class AbstractIndicateur
         return $this->annee;
     }
 
-    
+
 
     /**
      * @return Intervenant
@@ -104,14 +103,14 @@ abstract class AbstractIndicateur
 
     /**
      * Retourne les détails concernant l'indicateur
-     * 
+     *
      * @return string|null
      */
     public function getDetails()
     {
         return null;
     }
-    
+
 
 
     /**

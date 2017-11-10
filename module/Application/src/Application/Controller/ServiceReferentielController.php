@@ -17,7 +17,7 @@ use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Application\Exception\DbException;
 use Application\Entity\Service\Recherche;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -28,7 +28,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
  */
 class ServiceReferentielController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
     use ServiceAwareTrait;
     use ServiceReferentielAwareTrait;

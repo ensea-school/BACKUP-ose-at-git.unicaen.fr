@@ -6,7 +6,7 @@ use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Pays as PaysEntity;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementAwareTrait;
 use Application\Service\Traits\PaysAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
@@ -27,13 +27,13 @@ use Zend\Validator\Date as DateValidator;
  */
 class DossierFieldset extends AbstractFieldset
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StatutIntervenantAwareTrait;
     use PaysAwareTrait;
     use DepartementAwareTrait;
 
     static private $franceId;
-    
+
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
@@ -41,13 +41,13 @@ class DossierFieldset extends AbstractFieldset
     public function init()
     {
         $hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
-        
+
         $this
                 ->setObject(new DossierEntity())
                 ->setHydrator($hydrator)
                 ->addElements();
     }
-    
+
     /**
      * @return self
      */
@@ -332,7 +332,7 @@ class DossierFieldset extends AbstractFieldset
         $paysNaissanceId       = (int) $this->get('paysNaissance')->getValue();
         $numeroInseeProvisoire = (bool) $this->get('numeroInseeEstProvisoire')->getValue();
         $statutSelect          = $this->get('statut'); /* @var $statutSelect StatutSelect */
-        
+
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
 
@@ -374,7 +374,7 @@ class DossierFieldset extends AbstractFieldset
                 'required' => true,
                 'validators' => array(
                     new NumeroINSEEValidator([
-                        'provisoire' => $numeroInseeProvisoire, 
+                        'provisoire' => $numeroInseeProvisoire,
                         'france_id'  => self::$franceId,
                         'service'    => $this->getServiceDepartement(),
                     ]),
@@ -434,7 +434,7 @@ class PaysSelect extends EntitySelect
     public function __construct($name = null, $options = array())
     {
         parent::__construct($name, $options);
-        
+
         $this->proxy = new PaysProxy();
     }
 }
@@ -446,12 +446,12 @@ class PaysProxy extends Proxy
     protected function loadValueOptions()
     {
         parent::loadValueOptions();
-        
+
         foreach ($this->valueOptions as $key => $value) {
             $id        = $value['value'];
             $pays      = $this->objects[$id];
             $estFrance = PaysEntity::CODE_FRANCE === $pays->getSourceCode();
-            
+
             $this->valueOptions[$key]['attributes'] = [
                 'class'      => "pays" . ($estFrance ? " france" : null),
                 'data-debut' => $pays->getValiditeDebut()->format('d/m/Y'),
@@ -459,24 +459,24 @@ class PaysProxy extends Proxy
             ];
         }
     }
-    
+
     protected function loadObjects()
     {
         parent::loadObjects();
-        
+
         // reformattage du tableau de données : id => Pays
         $pays = [];
         foreach ($this->objects as $p) {
             $pays[$p->getId()] = $p;
         }
-        
+
         $this->objects = $pays;
     }
 }
 
 /**
  * Select d'entités StatutIntervenant, avec proxy dédié.
- * 
+ *
  * @method StatutIntervenantProxy getProxy() Description
  */
 class StatutSelect extends EntitySelect
@@ -484,14 +484,14 @@ class StatutSelect extends EntitySelect
     public function __construct($name = null, $options = array())
     {
         parent::__construct($name, $options);
-        
+
         $this->proxy = new StatutIntervenantProxy();
     }
 }
 /**
- * Proxy pour le select d'entités StatutIntervenant : 
+ * Proxy pour le select d'entités StatutIntervenant :
  * - customisation des attributs HTML des <option> ;
- * - suppression des statuts à écarter ; 
+ * - suppression des statuts à écarter ;
  * - fourniture du validateur.
  */
 class StatutIntervenantProxy extends Proxy
@@ -499,21 +499,21 @@ class StatutIntervenantProxy extends Proxy
     protected function loadValueOptions()
     {
         parent::loadValueOptions();
-        
+
         foreach ($this->valueOptions as $key => $value) {
             $id     = $value['value'];
             $statut = $this->objects[$id];
-            
+
             $this->valueOptions[$key]['attributes'] = [
                 'class' => $statut->getSourceCode(),
             ];
         }
     }
-    
+
     protected function loadObjects()
     {
         parent::loadObjects();
-        
+
         // reformattage du tableau de données : id => Statut
         $pays = [];
         foreach ($this->objects as $o) {
@@ -523,46 +523,46 @@ class StatutIntervenantProxy extends Proxy
             }
             $pays[$o->getId()] = $o;
         }
-        
+
         $this->objects = $pays;
     }
-    
+
     /**
      * @var StatutIntervenantEntity[]
      */
     private $statutsToRemove = [];
-    
+
     /**
      * Statuts à écarter.
-     * 
-     * @param StatutIntervenantEntity[] $statuts 
+     *
+     * @param StatutIntervenantEntity[] $statuts
      * @return self
      */
     public function setStatutsToRemove(array $statuts)
     {
         $this->statutsToRemove = [];
-        
+
         foreach ($statuts as $statut) {
             if (! $statut instanceof StatutIntervenantEntity) {
                 throw new LogicException("Les statuts à écarter doivent être spécifiés sous forme d'objets.");
             }
             $this->statutsToRemove[$statut->getId()] = $statut;
         }
-        
+
         $this->objects = []; // force objects reload
-        
+
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @return StatutIntervenantValidator
      */
     public function getValidator()
     {
         $v = new StatutIntervenantValidator();
         $v->setStatutsInterdits($this->statutsToRemove);
-        
+
         return $v;
     }
 }

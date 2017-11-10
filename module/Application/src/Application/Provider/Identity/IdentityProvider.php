@@ -4,7 +4,7 @@ namespace Application\Provider\Identity;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -23,7 +23,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use SessionContainerTrait;
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var array

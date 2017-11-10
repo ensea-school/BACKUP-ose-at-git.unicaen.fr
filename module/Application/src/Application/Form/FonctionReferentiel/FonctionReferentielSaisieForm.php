@@ -7,7 +7,7 @@ use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  * Description of FonctionReferentielSaisieForm
@@ -18,7 +18,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 {
     use DomaineFonctionnelAwareTrait;
     use StructureAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     public function init()
     {

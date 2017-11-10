@@ -4,7 +4,7 @@ namespace Application\Provider\Role;
 
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -30,7 +30,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use IntervenantAwareTrait;
     use PersonnelAwareTrait;
     use PrivilegeProviderAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var array

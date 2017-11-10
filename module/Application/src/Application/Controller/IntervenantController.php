@@ -21,7 +21,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -34,7 +34,7 @@ use Zend\View\Model\ViewModel;
 class IntervenantController extends AbstractController
 {
     use WorkflowServiceAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use IntervenantAwareTrait;
     use TypeHeuresAwareTrait;
     use HeuresCompFormAwareTrait;

@@ -8,7 +8,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -22,7 +22,7 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use VolumeHoraireAwareTrait;
     use ServiceAwareTrait;
     use SaisieAwareTrait;

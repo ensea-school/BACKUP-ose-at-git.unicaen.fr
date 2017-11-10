@@ -5,7 +5,7 @@ namespace Application\View\Helper\Paiement;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
@@ -27,7 +27,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractViewHelper
 {
     use DomaineFonctionnelAwareTrait;
     use TypeHeuresAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     private $servicesAPayer = [];
 

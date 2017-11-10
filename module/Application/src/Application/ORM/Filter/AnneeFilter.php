@@ -2,7 +2,7 @@
 
 namespace Application\ORM\Filter;
 
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
 use Application\Entity\Db\Annee;
 
@@ -13,7 +13,7 @@ use Application\Entity\Db\Annee;
  */
 class AnneeFilter extends AbstractFilter
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     protected $enabledEntities = [];
 

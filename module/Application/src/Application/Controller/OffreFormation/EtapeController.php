@@ -9,7 +9,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeFormation;
 use Application\Form\OffreFormation\TauxMixite\Traits\TauxMixiteFormAwareTrait;
 use Application\Form\OffreFormation\Traits\EtapeSaisieAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
@@ -21,7 +21,7 @@ use Application\Exception\DbException;
  */
 class EtapeController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ElementPedagogiqueAwareTrait;
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;

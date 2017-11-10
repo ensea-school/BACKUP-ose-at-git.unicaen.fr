@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\CampagneSaisie;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  * Description of CampagneSaisieService
@@ -19,7 +19,7 @@ use Application\Service\Traits\ContextAwareTrait;
  */
 class CampagneSaisieService extends AbstractEntityService
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 

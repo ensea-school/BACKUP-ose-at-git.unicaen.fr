@@ -18,7 +18,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Element\Checkbox;
 use Zend\View\Model\ViewModel;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  * Opérations sur les agréments.
@@ -31,7 +31,7 @@ class AgrementController extends AbstractController
     use AgrementAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use SaisieAwareTrait;
     use StructureAwareTrait;
     use WorkflowServiceAwareTrait;

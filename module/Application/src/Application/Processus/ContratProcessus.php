@@ -10,7 +10,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeContratAwareTrait;
@@ -27,7 +27,7 @@ use Application\Service\Traits\VolumeHoraireAwareTrait;
  */
 class ContratProcessus extends AbstractProcessus
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ContratAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;

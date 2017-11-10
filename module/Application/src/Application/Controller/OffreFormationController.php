@@ -8,7 +8,7 @@ use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
 use Application\Entity\NiveauEtape;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
@@ -25,7 +25,7 @@ use Zend\Session\Container;
  */
 class OffreFormationController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
     use StructureAwareTrait;
     use ElementPedagogiqueAwareTrait;

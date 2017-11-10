@@ -2,7 +2,7 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\TypePieceJointeStatut;
+use Application\Service\TypePieceJointeStatutService;
 use Application\Module;
 use RuntimeException;
 
@@ -14,7 +14,7 @@ use RuntimeException;
 trait TypePieceJointeStatutAwareTrait
 {
     /**
-     * @var TypePieceJointeStatut
+     * @var TypePieceJointeStatutService
      */
     private $serviceTypePieceJointeStatut;
 
@@ -23,10 +23,11 @@ trait TypePieceJointeStatutAwareTrait
 
 
     /**
-     * @param TypePieceJointeStatut $serviceTypePieceJointeStatut
+     * @param TypePieceJointeStatutService $serviceTypePieceJointeStatut
+     *
      * @return self
      */
-    public function setServiceTypePieceJointeStatut( TypePieceJointeStatut $serviceTypePieceJointeStatut )
+    public function setServiceTypePieceJointeStatut(TypePieceJointeStatutService $serviceTypePieceJointeStatut )
     {
         $this->serviceTypePieceJointeStatut = $serviceTypePieceJointeStatut;
         return $this;
@@ -35,7 +36,7 @@ trait TypePieceJointeStatutAwareTrait
 
 
     /**
-     * @return TypePieceJointeStatut
+     * @return TypePieceJointeStatutService
      * @throws RuntimeException
      */
     public function getServiceTypePieceJointeStatut()
@@ -52,7 +53,7 @@ trait TypePieceJointeStatutAwareTrait
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
         }
-        $this->serviceTypePieceJointeStatut = $serviceLocator->get('ApplicationTypePieceJointeStatut');
+        $this->serviceTypePieceJointeStatut = $serviceLocator->get(TypePieceJointeStatutService::class);
         }
         return $this->serviceTypePieceJointeStatut;
     }

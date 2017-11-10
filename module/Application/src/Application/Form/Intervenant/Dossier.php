@@ -5,7 +5,7 @@ namespace Application\Form\Intervenant;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
@@ -20,7 +20,7 @@ use Zend\Form\Element\Csrf;
 class Dossier extends AbstractForm
 {
     use StatutIntervenantAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use DossierAwareTrait;
     use ServiceServiceAwareTrait;
 

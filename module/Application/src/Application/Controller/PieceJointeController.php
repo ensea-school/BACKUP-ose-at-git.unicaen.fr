@@ -17,7 +17,7 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 
 /**
@@ -26,7 +26,7 @@ use Application\Service\Traits\ContextAwareTrait;
  */
 class PieceJointeController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use PieceJointeAwareTrait;
     use StatutIntervenantAwareTrait;
     use TypePieceJointeSaisieFormAwareTrait;
@@ -336,35 +336,12 @@ class PieceJointeController extends AbstractController
         $form = $this->getFormTypePieceJointeSaisie();
         if (empty($typePieceJointe)) {
             $title = 'Création d\'un nouveau type de pièce jointe';
-            try {
-                $typePieceJointe = $this->getServiceTypePieceJointe()->newEntity();
-                $typePieceJointe->setOrdre(9999);
-            } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
-            }
-            if ($typePieceJointe) {
-                $form->setObject($typePieceJointe);
-            }
+            $typePieceJointe = $this->getServiceTypePieceJointe()->newEntity();
+            $typePieceJointe->setOrdre(9999);
         } else {
             $title = 'Édition du type de pièce jointe';
-            $form->bind($typePieceJointe);
         }
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                try {
-                    $this->getServiceTypePieceJointe()->save($typePieceJointe);
-                    $form->get('id')->setValue($typePieceJointe->getId()); // transmet le nouvel ID
-                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-                } catch (\Exception $e) {
-                    $e = DbException::translate($e);
-                    $this->flashMessenger()->addErrorMessage($e->getMessage());
-                }
-            }
-        }
+        $form->bindRequestSave($typePieceJointe, $this->getRequest(),$this->getServiceTypePieceJointe() );
 
         return compact('form', 'title');
     }
@@ -374,7 +351,6 @@ class PieceJointeController extends AbstractController
     public function modifierTypePieceJointeStatutAction()
     {
         /* @var $tpjs TypePieceJointeStatut */
-        /* @var $form ModifierTypePieceJointeStatutForm */
         $tpjs = $this->getEvent()->getParam('typePieceJointeStatut'); // $tpjs1 pour existence sur supprimer
 
         $form = $this->getFormModifierTypePieceJointeStatut();
@@ -386,26 +362,11 @@ class PieceJointeController extends AbstractController
             $tpjs->setTypePieceJointe($typePieceJointe);
             $tpjs->setStatutIntervenant($statutIntervenant);
             $tpjs->setObligatoire(true);
-            $form->bind($tpjs);
         } else {
             $title = 'Édition du paramètre de gestion de pièce justificative';
-            $form->bind($tpjs);
         }
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                try {
-                    $this->getServiceTypePieceJointeStatut()->save($tpjs);
-                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-                    $form->get('id')->setValue($tpjs->getId()); // transmet le nouvel ID
-                } catch (\Exception $e) {
-                    $e = DbException::translate($e);
-                    $this->flashMessenger()->addErrorMessage($e->getMessage());
-                }
-            }
-        }
+        $form->buildAnnees($tpjs);
+        $form->bindRequestSave($tpjs, $this->getRequest(), $this->getServiceTypePieceJointeStatut());
 
         return compact('form', 'title');
     }

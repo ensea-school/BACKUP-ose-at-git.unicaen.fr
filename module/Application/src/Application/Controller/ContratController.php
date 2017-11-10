@@ -19,7 +19,7 @@ use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Constants;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
@@ -38,7 +38,7 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  */
 class ContratController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ContratAwareTrait;
     use ServiceServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;

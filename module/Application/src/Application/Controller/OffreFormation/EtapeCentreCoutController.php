@@ -7,7 +7,7 @@ use Application\Entity\Db\Etape;
 use Application\Form\OffreFormation\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use RuntimeException;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  *
@@ -17,7 +17,7 @@ use Application\Service\Traits\ContextAwareTrait;
 class EtapeCentreCoutController extends AbstractController
 {
     use ElementPedagogiqueAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use EtapeCentreCoutFormAwareTrait;
 
 

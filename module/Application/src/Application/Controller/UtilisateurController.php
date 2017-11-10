@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Acl\Role;
 use UnicaenAuth\Controller\UtilisateurController as BaseController;
 
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 
 /**
@@ -15,7 +15,7 @@ use Application\Service\Traits\StructureAwareTrait;
  */
 class UtilisateurController extends BaseController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StructureAwareTrait;
 
 

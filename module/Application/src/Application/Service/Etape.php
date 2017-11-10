@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
@@ -26,7 +26,7 @@ class Etape extends AbstractEntityService
     use TypeFormationAwareTrait;
     use GroupeTypeFormationAwareTrait;
     use StructureAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 

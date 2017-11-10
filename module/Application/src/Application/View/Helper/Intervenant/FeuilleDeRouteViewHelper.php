@@ -8,7 +8,7 @@ use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\WfDepBloquante;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\Util;
@@ -24,7 +24,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
 {
     use WorkflowServiceAwareTrait;
     use IntervenantAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 

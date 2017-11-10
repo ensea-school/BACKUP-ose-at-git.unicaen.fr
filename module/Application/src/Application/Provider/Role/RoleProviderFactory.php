@@ -15,7 +15,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class RoleProviderFactory implements FactoryInterface
 {
     use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait;
+        \Application\Service\Traits\ContextServiceAwareTrait;
 
 
 

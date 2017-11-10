@@ -2,7 +2,7 @@
 
 namespace Application\ORM\Filter;
 
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
 
 /**
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\ClassMetaData;
  */
 class HistoriqueFilter extends AbstractFilter
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     protected $enabledEntities = [];
 

@@ -6,7 +6,7 @@ use Application\Assertion\ChargensAssertion;
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Db\Scenario;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 
@@ -21,7 +21,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ScenarioService extends AbstractEntityService
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use BddConnecteurAwareTrait;
 
 

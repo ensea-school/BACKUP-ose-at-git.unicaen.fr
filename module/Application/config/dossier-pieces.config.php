@@ -492,7 +492,7 @@ return [
             'ApplicationDossier'               => Service\Dossier::class,
             'ApplicationPieceJointe'           => Service\PieceJointe::class,
             'ApplicationTypePieceJointe'       => Service\TypePieceJointe::class,
-            'ApplicationTypePieceJointeStatut' => Service\TypePieceJointeStatut::class,
+            Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,
             'assertionDossierPieces'           => Assertion\DossierPiecesAssertion::class,
         ],
     ],

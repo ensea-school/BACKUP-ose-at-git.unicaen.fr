@@ -3,7 +3,7 @@
 namespace Application\Form\OffreFormation;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -17,7 +17,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class EtapeSaisie extends AbstractForm
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
     use StructureAwareTrait;
     use DomaineFonctionnelAwareTrait;

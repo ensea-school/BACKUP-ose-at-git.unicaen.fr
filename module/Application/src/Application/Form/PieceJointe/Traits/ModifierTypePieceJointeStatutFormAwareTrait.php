@@ -33,7 +33,7 @@ trait ModifierTypePieceJointeStatutFormAwareTrait
     /**
      * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
      *
-     * @return ModfifierTypePieceJointeStatutForm
+     * @return ModifierTypePieceJointeStatutForm
      * @throws RuntimeException
      */
     public function getFormModifierTypePieceJointeStatut()

@@ -4,7 +4,7 @@ namespace Application\Form\Droits;
 
 use Application\Entity\Db\Role;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -23,7 +23,7 @@ class AffectationForm extends AbstractForm
     use StructureAwareTrait;
     use PersonnelAwareTrait;
     use RoleAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
     public function init()

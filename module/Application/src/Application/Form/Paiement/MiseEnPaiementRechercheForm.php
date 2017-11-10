@@ -4,7 +4,7 @@ namespace Application\Form\Paiement;
 
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -20,7 +20,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 class MiseEnPaiementRechercheForm extends AbstractForm
 {
     use TypeIntervenantAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      *

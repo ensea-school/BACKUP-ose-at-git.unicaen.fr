@@ -6,7 +6,7 @@ use Application\Acl\Role;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -20,7 +20,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class ChargensAssertion extends AbstractAssertion
 {
     use ScenarioServiceAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     const SCENARIO_EDITION = 'scenario-edition';
 

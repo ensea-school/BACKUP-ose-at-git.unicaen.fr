@@ -15,7 +15,7 @@ use Zend\Mvc\Router\RouteMatch;
 class AppLinkFactory implements FactoryInterface
 {
     use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\ContextServiceAwareTrait,
         \Application\Service\Traits\AnneeAwareTrait
     ;
 
@@ -36,7 +36,7 @@ class AppLinkFactory implements FactoryInterface
 
         $helper->setAnnees( $this->getServiceAnnee()->getChoixAnnees() );
         $helper->setAnnee( $this->getServiceContext()->getAnnee() );
-        
+
         if ($match instanceof RouteMatch) {
             $helper->setRouteMatch($match);
         }

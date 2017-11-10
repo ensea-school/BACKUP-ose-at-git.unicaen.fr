@@ -4,7 +4,7 @@ namespace Application\Processus;
 
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Service\Recherche;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 
@@ -15,7 +15,7 @@ use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
  */
 class ServiceReferentielProcessus extends AbstractProcessus
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ServiceReferentielAwareTrait;
     use VolumeHoraireReferentielAwareTrait;
 

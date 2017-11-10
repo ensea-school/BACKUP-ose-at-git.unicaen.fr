@@ -18,7 +18,7 @@ class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwar
 {
     use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
-    use Traits\ContextAwareTrait;
+    use Traits\ContextServiceAwareTrait;
 
     /**
      *

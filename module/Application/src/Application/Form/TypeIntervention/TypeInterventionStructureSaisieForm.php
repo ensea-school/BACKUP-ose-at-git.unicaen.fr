@@ -7,7 +7,7 @@ use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -21,7 +21,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
     use StructureAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use AnneeAwareTrait;
 
 

@@ -90,7 +90,7 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
                         $e = DbException::translate($e);
                         $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
                     }
-                } else {
+                } elseif($saveFnc instanceof \Closure) {
                     try {
                         $saveFnc($entity);
                     } catch (\Exception $e) {

@@ -6,7 +6,7 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -20,7 +20,7 @@ use UnicaenApp\Util;
  */
 class FiltreForm extends AbstractForm
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StructureAwareTrait;
     use EtapeAwareTrait;
     use ScenarioServiceAwareTrait;

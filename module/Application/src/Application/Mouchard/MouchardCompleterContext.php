@@ -2,7 +2,7 @@
 
 namespace Application\Mouchard;
 
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\Mouchard\MouchardCompleterInterface;
 use UnicaenApp\Mouchard\MouchardMessage;
 
@@ -14,7 +14,7 @@ use UnicaenApp\Mouchard\MouchardMessage;
  */
 class MouchardCompleterContext implements MouchardCompleterInterface
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @return $this

@@ -10,7 +10,7 @@ use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -28,7 +28,7 @@ use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
  */
 class SeuilChargeService extends AbstractEntityService
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StructureAwareTrait;
     use ScenarioServiceAwareTrait;
     use GroupeTypeFormationAwareTrait;

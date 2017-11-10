@@ -10,7 +10,7 @@ use Application\Entity\Db\Scenario;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\TypeHeures;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use BjyAuthorize\Service\Authorize;
@@ -20,7 +20,7 @@ class ChargensProvider
 {
     use BddConnecteurAwareTrait;
     use SourceAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StructureAwareTrait;
     use TypeHeuresAwareTrait;
     use TableauBordServiceAwareTrait;

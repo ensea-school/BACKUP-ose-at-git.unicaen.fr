@@ -24,7 +24,7 @@ use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
@@ -45,7 +45,7 @@ use Application\Service\Traits\PeriodeAwareTrait;
 class ServiceController extends AbstractController
 {
     use ServiceProcessusAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ServiceAwareTrait;
     use VolumeHoraireAwareTrait;
     use ElementPedagogiqueAwareTrait;

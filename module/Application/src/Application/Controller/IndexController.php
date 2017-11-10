@@ -13,7 +13,7 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\ContextServiceAwareTrait;
     use \Application\Service\Traits\AnneeAwareTrait;
     use IntervenantAwareTrait;
     use UserContextServiceAwareTrait;

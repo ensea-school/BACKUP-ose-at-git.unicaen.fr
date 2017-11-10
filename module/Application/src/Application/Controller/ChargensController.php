@@ -11,7 +11,7 @@ use Application\Form\Chargens\Traits\ScenarioFiltreFormAwareTrait;
 use Application\Form\Chargens\Traits\ScenarioFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\SeuilChargeServiceAwareTrait;
@@ -32,7 +32,7 @@ use Zend\View\Model\ViewModel;
 class ChargensController extends AbstractController
 {
     use ChargensProviderAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StructureAwareTrait;
     use EtapeAwareTrait;
     use ScenarioServiceAwareTrait;

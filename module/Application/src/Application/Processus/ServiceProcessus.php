@@ -4,7 +4,7 @@ namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Service\Recherche;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
@@ -20,7 +20,7 @@ use Application\Service\Traits\VolumeHoraireAwareTrait;
  */
 class ServiceProcessus extends AbstractProcessus
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ServiceServiceAwareTrait;
     use VolumeHoraireAwareTrait;
     use ElementPedagogiqueAwareTrait;

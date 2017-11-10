@@ -5,18 +5,18 @@ namespace Application\View\Helper;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
 
 /**
- * 
+ *
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
 {
     use ServiceLocatorAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use StructureAwareTrait;
 
 
@@ -35,7 +35,7 @@ class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
         $service
                 ->setServiceStructure($this->getServiceStructure())
                 ->setStructure($this->getServiceContext()->getStructure());
-        
+
         return $service;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\TypePieceJointeStatut;
+use Application\Service\TypePieceJointeStatutService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface TypePieceJointeStatutAwareInterface
 {
     /**
-     * @param TypePieceJointeStatut $serviceTypePieceJointeStatut
+     * @param TypePieceJointeStatutService $serviceTypePieceJointeStatut
+     *
      * @return self
      */
-    public function setServiceTypePieceJointeStatut( TypePieceJointeStatut $serviceTypePieceJointeStatut );
+    public function setServiceTypePieceJointeStatut(TypePieceJointeStatutService $serviceTypePieceJointeStatut );
 
 
 

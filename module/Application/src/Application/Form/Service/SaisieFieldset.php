@@ -6,7 +6,7 @@ use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Service;
 use Application\Form\AbstractFieldset;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
@@ -29,7 +29,7 @@ use Application\Service\Traits\EtablissementAwareTrait;
  */
 class SaisieFieldset extends AbstractFieldset
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;
@@ -258,7 +258,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareIn
 {
 
     use ServiceLocatorAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use IntervenantAwareTrait;
     use ElementPedagogiqueAwareTrait;
     use EtablissementAwareTrait;

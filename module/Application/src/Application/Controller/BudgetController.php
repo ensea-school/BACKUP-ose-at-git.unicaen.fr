@@ -8,7 +8,7 @@ use Application\Form\Budget\Traits\DotationSaisieFormAwareTrait;
 use Application\Service\Traits\AnneeAwareTrait;
 use Application\Service\Traits\FormuleResultatAwareTrait;
 use Application\Entity\Db\TypeRessource;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -28,7 +28,7 @@ use Application\Form\Budget\Traits\TypeDotationSaisieFormAwareTrait;
 class BudgetController extends AbstractController
 {
     use StructureAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use TypeRessourceServiceAwareTrait;
     use DotationServiceAwareTrait;
     use FormuleResultatAwareTrait;
@@ -346,9 +346,9 @@ class BudgetController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             TypeDotation::class,
         ]);
-        
+
         $typeDotations = $this->getServiceTypeDotation()->getList();
-        
+
         return compact('typeDotations');
     }
 
@@ -364,7 +364,7 @@ class BudgetController extends AbstractController
         } else {
             $title = 'Édition d\'un type de dotation';
         }
-        
+
         $form->bindRequestSave($typeDotation,$this->getRequest(),function(TypeDotation $td){
             try {
                 $this->getServiceTypeDotation()->save($td);

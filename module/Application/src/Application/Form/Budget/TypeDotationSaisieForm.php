@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeDotationServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenImport\Entity\Db\Source;
@@ -20,7 +20,7 @@ use UnicaenImport\Entity\Db\Source;
     class TypeDotationSaisieForm extends AbstractForm
     {
         use TypeDotationServiceAwareTrait;
-        use ContextAwareTrait;
+        use ContextServiceAwareTrait;
         use TypeRessourceServiceAwareTrait;
 
         public function init()
@@ -55,7 +55,7 @@ use UnicaenImport\Entity\Db\Source;
                 ],
                 'type' => 'Select',
             ]);
-            
+
             $this->add([
                 'name' => 'submit',
                 'type' => 'Submit',

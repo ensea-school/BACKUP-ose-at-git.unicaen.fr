@@ -7,11 +7,11 @@ use Application\Module;
 use RuntimeException;
 
 /**
- * Description of ContextAwareTrait
+ * Description of ContextServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait ContextAwareTrait
+trait ContextServiceAwareTrait
 {
     /**
      * @var ContextService

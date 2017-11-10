@@ -8,7 +8,7 @@ use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\WorkflowEtape;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
@@ -19,7 +19,7 @@ use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
  */
 class WorkflowService extends AbstractService
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use AuthorizeServiceAwareTrait;
     use TableauBordServiceAwareTrait;
 

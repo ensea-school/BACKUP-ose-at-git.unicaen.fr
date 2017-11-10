@@ -9,7 +9,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Exception\DbException;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
@@ -24,7 +24,7 @@ use Zend\View\Model\ViewModel;
 
 class DossierController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ServiceAwareTrait;
     use DossierAwareTrait;
     use WorkflowServiceAwareTrait;

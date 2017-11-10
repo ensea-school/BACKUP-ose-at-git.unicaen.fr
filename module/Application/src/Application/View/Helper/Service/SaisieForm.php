@@ -7,7 +7,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
 use Application\View\Helper\AbstractViewHelper;
-use \Application\Service\Traits\ContextAwareTrait;
+use \Application\Service\Traits\ContextServiceAwareTrait;
 use \Application\Service\Traits\ServiceAwareTrait;
 use \Application\Service\Traits\PeriodeAwareTrait;
 use \Application\Service\Traits\TypeInterventionAwareTrait;
@@ -22,7 +22,7 @@ use \Application\Service\Traits\EtatVolumeHoraireAwareTrait;
  */
 class SaisieForm extends AbstractViewHelper
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ServiceAwareTrait;
     use PeriodeAwareTrait;
     use TypeInterventionAwareTrait;

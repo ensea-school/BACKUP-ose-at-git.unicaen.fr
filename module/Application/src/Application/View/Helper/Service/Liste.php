@@ -4,7 +4,7 @@ namespace Application\View\Helper\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
@@ -23,7 +23,7 @@ use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeH
 class Liste extends AbstractViewHelper
 {
     use TypeVolumeHoraireAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use ServiceAwareTrait;
     use TypeInterventionAwareTrait;
     use ServiceTypeVolumeHoraireAwareTrait;

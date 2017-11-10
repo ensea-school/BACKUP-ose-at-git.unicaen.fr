@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtapeDep;
 use Application\Exception\DbException;
 use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WfEtapeAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -23,7 +23,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
  */
 class WorkflowController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use WfEtapeDepServiceAwareTrait;
     use DependanceFormAwareTrait;
     use WorkflowServiceAwareTrait;

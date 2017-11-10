@@ -12,7 +12,7 @@ use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeModulateurAwareTrait;
 use Application\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 class modulateurController extends AbstractController
 {
@@ -21,7 +21,7 @@ class modulateurController extends AbstractController
     use ModulateurSaisieFormAwareTrait;
     use TypeModulateurSaisieFormAwareTrait;
     use TypeModulateurStructureServiceAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 
@@ -44,7 +44,7 @@ class modulateurController extends AbstractController
         $typeModulateurs = $this->getServiceTypeModulateur()->getList();
         $typeModulateurStructures = $this->getServiceTypeModulateurStructure()->getList();
 
-        
+
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $structure   = $role->getStructure();
 

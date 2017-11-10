@@ -8,7 +8,7 @@ use Application\Entity\Db\Structure;
 use Application\Processus\Traits\IndicateurProcessusAwareTrait;
 use Application\Entity\Db\Indicateur;
 use Application\Service\Traits\AffectationAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -35,7 +35,7 @@ class IndicateurController extends AbstractController
 {
     use IndicateurServiceAwareTrait;
     use IntervenantAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use NotificationIndicateurAwareTrait;
     use AffectationAwareTrait;
     use IndicateurProcessusAwareTrait;
@@ -353,7 +353,7 @@ class IndicateurController extends AbstractController
  */
 class IndicateurIntervenantsMailer
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
     /**
      * @var AbstractController

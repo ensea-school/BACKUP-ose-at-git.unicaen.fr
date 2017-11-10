@@ -6,7 +6,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 
 /**
@@ -16,7 +16,7 @@ use Application\Service\Traits\TypeIntervenantAwareTrait;
  */
 class StatutIntervenantSaisieForm extends AbstractForm
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use TypeIntervenantAwareTrait;
 
     public function init()
@@ -394,7 +394,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             ],
             'ordre' => [
                 'required' => true,
-            ], 
+            ],
             'depassement-sdshc' => [
                 'required' => true,
             ],
@@ -477,7 +477,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'plafond-h-h-c' => $object->getPlafondHcHorsRemuFc(),
             'plafond-h-c' => $object->getPlafondHcRemuFc(),
             'maximum-HETD' => $object->getMaximumHETD(),
-            'ordre' => $object->getOrdre(), 
+            'ordre' => $object->getOrdre(),
             'depassement-sdshc' => $object->getDepassementSDSHC(),
         ];
 

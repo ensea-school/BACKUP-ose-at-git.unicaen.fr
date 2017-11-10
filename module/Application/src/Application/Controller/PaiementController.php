@@ -13,7 +13,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Form\Paiement\Traits\MiseEnPaiementFormAwareTrait;
 use Application\Form\Paiement\Traits\MiseEnPaiementRechercheFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
@@ -36,7 +36,7 @@ use Application\Entity\Paiement\MiseEnPaiementRecherche;
  */
 class PaiementController extends AbstractController
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;
     use StructureAwareTrait;

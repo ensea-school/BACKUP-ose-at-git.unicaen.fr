@@ -4,7 +4,7 @@ namespace Application\Form\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -23,7 +23,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use SessionContainerTrait;
     use ElementPedagogiqueAwareTrait;
 

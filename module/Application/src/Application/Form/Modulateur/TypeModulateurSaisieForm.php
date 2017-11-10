@@ -5,7 +5,7 @@ namespace Application\Form\modulateur;
 use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurAwareTrait;
 
 /**
@@ -15,7 +15,7 @@ use Application\Service\Traits\TypeModulateurAwareTrait;
  */
 class typeModulateurSaisieForm extends AbstractForm
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
     use TypeModulateurAwareTrait;
 
 

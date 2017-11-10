@@ -6,7 +6,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Traits\ServiceAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -16,7 +16,7 @@ use Application\Service\Traits\ContextAwareTrait;
 class Ligne extends AbstractViewHelper
 {
     use ServiceAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
     /**

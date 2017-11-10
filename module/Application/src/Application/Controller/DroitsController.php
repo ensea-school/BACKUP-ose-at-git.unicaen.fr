@@ -6,7 +6,7 @@ use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Service\Traits\AffectationAwareTrait;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
@@ -35,7 +35,7 @@ class DroitsController extends AbstractController
     use SourceAwareTrait;
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 

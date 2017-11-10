@@ -8,7 +8,7 @@ use Application\Entity\Db\TblService;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\IntervenantSuppressionData;
 use Application\Processus\Intervenant\SuppressionDataProcessus;
-use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenApp\Util;
 
 
@@ -19,7 +19,7 @@ use UnicaenApp\Util;
  */
 class IntervenantProcessus extends AbstractProcessus
 {
-    use ContextAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 

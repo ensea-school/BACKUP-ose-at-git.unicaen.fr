@@ -80,7 +80,6 @@ function creerAdmin($sl, array $admin)
 }
 
 $admins = [
-
 ];
 
 foreach ($admins as $admin) {

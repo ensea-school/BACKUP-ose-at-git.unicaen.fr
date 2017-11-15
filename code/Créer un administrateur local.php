@@ -21,9 +21,11 @@ function creerAdmin($sl, array $admin)
     $login      = $admin['login'];
     $bcrypt     = new Zend\Crypt\Password\Bcrypt();
     $motdepasse = $bcrypt->create($admin['motdepasse']);
+    $role       = isset($admin['role']) ? $admin['role'] : 'administrateur';
+    $structure  = isset($admin['structure']) ? $admin['structure'] : 'C68';
 
-    $structure = $em->getRepository(\Application\Entity\Db\Structure::class)->findOneBy(['sourceCode' => 'C68'])->getId();
-    $role      = $em->getRepository(\Application\Entity\Db\Role::class)->findOneBy(['code' => 'administrateur'])->getId();
+    $structure = $em->getRepository(\Application\Entity\Db\Structure::class)->findOneBy(['sourceCode' => $structure])->getId();
+    $role      = $em->getRepository(\Application\Entity\Db\Role::class)->findOneBy(['code' => $role])->getId();
     $civilite  = $em->getRepository(\Application\Entity\Db\Civilite::class)->findOneBy(['libelleLong' => $admin['civilite']])->getId();
 
     $source      = $serviceSource->getOse()->getId();

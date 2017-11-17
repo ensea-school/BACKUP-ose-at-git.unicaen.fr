@@ -17,7 +17,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -38,7 +38,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use TypeIntervenantAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
@@ -155,15 +155,15 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
         $this->add([
             'name'       => 'structure-aff',
             'options'    => [
-                'label'                     => "Structure d'affectation:",
+                'label'                     => "StructureService d'affectation:",
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "Structure gestionnaire de l'enseignement",
+                    'title' => "StructureService gestionnaire de l'enseignement",
                 ],
             ],
             'attributes' => [
-                'title' => "Structure gestionnaire de l'enseignement",
+                'title' => "StructureService gestionnaire de l'enseignement",
                 'class' => 'input-sm',
             ],
             'type'       => 'Select',

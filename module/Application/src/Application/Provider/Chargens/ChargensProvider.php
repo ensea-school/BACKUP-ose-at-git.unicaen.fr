@@ -11,7 +11,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\TypeHeures;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeHeuresAwareTrait;
 use BjyAuthorize\Service\Authorize;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
@@ -19,7 +19,7 @@ use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 class ChargensProvider
 {
     use BddConnecteurAwareTrait;
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
     use ContextServiceAwareTrait;
     use StructureAwareTrait;
     use TypeHeuresAwareTrait;

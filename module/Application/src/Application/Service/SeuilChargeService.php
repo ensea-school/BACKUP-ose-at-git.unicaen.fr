@@ -5,13 +5,13 @@ namespace Application\Service;
 use Application\Entity\Db\GroupeTypeFormation as GroupeTypeFormationEntity;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
@@ -29,7 +29,7 @@ use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 class SeuilChargeService extends AbstractEntityService
 {
     use ContextServiceAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ScenarioServiceAwareTrait;
     use GroupeTypeFormationAwareTrait;
     use TypeInterventionAwareTrait;
@@ -67,7 +67,7 @@ class SeuilChargeService extends AbstractEntityService
 
     /**
      * @param Scenario|integer                       $scenario
-     * @param StructureEntity|integer|null           $structure
+     * @param Structure|integer|null           $structure
      * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
      * @param TypeInterventionEntity|integer         $typeIntervention
      *
@@ -93,7 +93,7 @@ class SeuilChargeService extends AbstractEntityService
 
     /**
      * @param Scenario|integer                       $scenario
-     * @param StructureEntity|integer|null           $structure
+     * @param Structure|integer|null           $structure
      * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
      * @param TypeInterventionEntity|integer         $typeIntervention
      * @param integer|null                           $dedoublement
@@ -112,7 +112,7 @@ class SeuilChargeService extends AbstractEntityService
             if (!$scenario instanceof Scenario) {
                 $scenario = $this->getServiceScenario()->get($scenario);
             }
-            if (!$structure instanceof StructureEntity) {
+            if (!$structure instanceof Structure) {
                 $structure = $this->getServiceStructure()->get($structure);
             }
             if (!$groupeTypeFormation instanceof GroupeTypeFormationEntity) {

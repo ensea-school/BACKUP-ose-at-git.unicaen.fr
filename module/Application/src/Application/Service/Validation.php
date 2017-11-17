@@ -6,7 +6,7 @@ use Application\Entity\Db\Contrat as ContratEntity;
 use Application\Entity\Db\Dossier as DossierEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
@@ -191,11 +191,11 @@ class Validation extends AbstractEntityService
     /**
      * @param TypeValidationEntity $typeValidation
      * @param IntervenantEntity    $intervenant
-     * @param StructureEntity|null $structure
+     * @param Structure|null $structure
      *
      * @return array
      */
-    public function lister(TypeValidationEntity $typeValidation, IntervenantEntity $intervenant, StructureEntity $structure = null)
+    public function lister(TypeValidationEntity $typeValidation, IntervenantEntity $intervenant, Structure $structure = null)
     {
         $dql = "
         SELECT

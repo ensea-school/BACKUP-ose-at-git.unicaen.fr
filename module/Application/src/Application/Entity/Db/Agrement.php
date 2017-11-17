@@ -8,7 +8,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
- * Agrement
+ * AgrementService
  */
 class Agrement implements HistoriqueAwareInterface, ResourceInterface
 {
@@ -216,7 +216,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getResourceId()
     {
-        return 'Agrement';
+        return 'AgrementService';
     }
 
 

@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Discipline as DisciplineEntity;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Traits\SessionContainerTrait;
 
@@ -15,7 +15,7 @@ use UnicaenApp\Traits\SessionContainerTrait;
 class DisciplineService extends AbstractEntityService
 {
     use SessionContainerTrait;
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
 
 

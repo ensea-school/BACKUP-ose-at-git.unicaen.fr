@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Affectation;
+use Application\Service\AffectationService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface AffectationAwareInterface
 {
     /**
-     * @param Affectation $serviceAffectation
+     * @param AffectationService $serviceAffectation
+     *
      * @return self
      */
-    public function setServiceAffectation( Affectation $serviceAffectation );
+    public function setServiceAffectation(AffectationService $serviceAffectation );
 
 
 

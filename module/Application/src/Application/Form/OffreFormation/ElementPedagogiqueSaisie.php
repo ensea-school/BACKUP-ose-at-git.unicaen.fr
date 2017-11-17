@@ -8,7 +8,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -21,7 +21,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
     use LocalContextAwareTrait;
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
 
 
 
@@ -136,7 +136,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label' => 'Structure',
+                'label' => 'StructureService',
             ],
             'attributes' => [
                 'class' => 'selectpicker',
@@ -246,7 +246,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
 {
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
 
 
 

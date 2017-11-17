@@ -292,32 +292,32 @@ return [
                 'allow' => [
                     [
                         'privileges' => Privileges::ODF_ELEMENT_EDITION,
-                        'resources'  => ['ElementPedagogique', 'Structure'],
+                        'resources'  => ['ElementPedagogique', 'StructureService'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
                         'privileges' => Privileges::ODF_ETAPE_EDITION,
-                        'resources'  => ['Etape', 'Structure'],
+                        'resources'  => ['Etape', 'StructureService'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
                         'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
-                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp'],
+                        'resources'  => ['Etape', 'StructureService', 'ElementPedagogique', 'CentreCoutEp'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
                         'privileges' => Privileges::ODF_MODULATEURS_EDITION,
-                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'ElementModulateur'],
+                        'resources'  => ['Etape', 'StructureService', 'ElementPedagogique', 'ElementModulateur'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
                         'privileges' => Privileges::ODF_TAUX_MIXITE_EDITION,
-                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique'],
+                        'resources'  => ['Etape', 'StructureService', 'ElementPedagogique'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                     [
                         'privileges' => Privileges::ODF_ELEMENT_VH_EDITION,
-                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique','VolumeHoraireEns','TypeIntervention'],
+                        'resources'  => ['Etape', 'StructureService', 'ElementPedagogique','VolumeHoraireEns','TypeIntervention'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                 ],

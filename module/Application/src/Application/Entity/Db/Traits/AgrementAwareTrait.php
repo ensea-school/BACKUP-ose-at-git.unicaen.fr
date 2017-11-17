@@ -5,7 +5,7 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Agrement;
 
 /**
- * Description of AgrementAwareTrait
+ * Description of AgrementServiceAwareTrait
  *
  * @author UnicaenCode
  */

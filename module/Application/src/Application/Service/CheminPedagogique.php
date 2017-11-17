@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\Service;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 
 /**
  * Description of CheminPedagogique
@@ -10,7 +10,7 @@ use Application\Service\Traits\SourceAwareTrait;
  */
 class CheminPedagogique extends AbstractEntityService
 {
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -28,7 +28,7 @@ class CheminPedagogique extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias() 
+    public function getAlias()
     {
         return 'cp';
     }

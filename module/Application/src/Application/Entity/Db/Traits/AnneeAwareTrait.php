@@ -5,7 +5,7 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Annee;
 
 /**
- * Description of AnneeAwareTrait
+ * Description of AnneeServiceAwareTrait
  *
  * @author UnicaenCode
  */

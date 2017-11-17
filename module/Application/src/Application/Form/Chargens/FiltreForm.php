@@ -9,7 +9,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 
 
@@ -21,7 +21,7 @@ use UnicaenApp\Util;
 class FiltreForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use EtapeAwareTrait;
     use ScenarioServiceAwareTrait;
 
@@ -72,7 +72,7 @@ class FiltreForm extends AbstractForm
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "Structure gestionnaire de la formation",
+                    'title' => "StructureService gestionnaire de la formation",
                 ],
                 'value_options'             => Util::collectionAsOptions($this->structures),
             ],

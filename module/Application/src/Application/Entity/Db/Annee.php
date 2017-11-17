@@ -3,7 +3,7 @@
 namespace Application\Entity\Db;
 
 /**
- * Annee
+ * AnneeService
  */
 class Annee
 {

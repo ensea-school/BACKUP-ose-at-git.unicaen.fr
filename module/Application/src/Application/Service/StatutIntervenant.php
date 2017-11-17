@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -12,7 +12,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class StatutIntervenant extends AbstractEntityService
 {
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
     /**
      * retourne la classe des entités
      *

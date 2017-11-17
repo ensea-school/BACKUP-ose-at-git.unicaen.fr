@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Agrement;
+use Application\Service\AgrementService;
 
 /**
- * Description of AgrementAwareTrait
+ * Description of AgrementServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait AgrementAwareTrait
+trait AgrementServiceAwareTrait
 {
     /**
-     * @var Agrement
+     * @var AgrementService
      */
     private $serviceAgrement;
 
 
 
     /**
-     * @param Agrement $serviceAgrement
+     * @param AgrementService $serviceAgrement
      *
      * @return self
      */
-    public function setServiceAgrement(Agrement $serviceAgrement)
+    public function setServiceAgrement(AgrementService $serviceAgrement)
     {
         $this->serviceAgrement = $serviceAgrement;
 
@@ -33,12 +33,12 @@ trait AgrementAwareTrait
 
 
     /**
-     * @return Agrement
+     * @return AgrementService
      */
     public function getServiceAgrement()
     {
         if (empty($this->serviceAgrement)) {
-            $this->serviceAgrement = \Application::$container->get('ApplicationAgrement');
+            $this->serviceAgrement = \Application::$container->get(AgrementService::class);
         }
 
         return $this->serviceAgrement;

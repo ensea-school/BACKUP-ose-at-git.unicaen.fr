@@ -9,7 +9,7 @@ use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Service;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
@@ -25,7 +25,7 @@ use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
@@ -49,7 +49,7 @@ class ServiceService extends AbstractEntityService
     use ElementPedagogiqueAwareTrait;
     use EtapeAwareTrait;
     use IntervenantAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use TypeInterventionAwareTrait;
     use EtatVolumeHoraireAwareTrait;
     use TypeVolumeHoraireAwareTrait;
@@ -455,12 +455,12 @@ class ServiceService extends AbstractEntityService
      * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée;
      * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée;
      *
-     * @param StructureEntity   $structure
+     * @param Structure   $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByComposante(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByComposante(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
@@ -488,12 +488,12 @@ class ServiceService extends AbstractEntityService
     /**
      * Utile pour la recherche de services
      *
-     * @param StructureEntity   $structure
+     * @param Structure   $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByStructureAff(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructureAff(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
@@ -511,12 +511,12 @@ class ServiceService extends AbstractEntityService
     /**
      * Utile pour la recherche de services
      *
-     * @param StructureEntity   $structure
+     * @param Structure   $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByStructureEns(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructureEns(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
@@ -828,7 +828,7 @@ class ServiceService extends AbstractEntityService
         if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(structure_aff_id = -1 OR structure_aff_id = ' . $c8->getId() . ')';
         if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(structure_ens_id = -1 OR structure_ens_id = ' . $c9->getId() . ')';
 
-        if ($options['composante'] instanceof StructureEntity) {
+        if ($options['composante'] instanceof Structure) {
             $id                       = (int)$options['composante']->getId();
             $conditions['composante'] = "(structure_aff_id = -1 OR structure_aff_id = $id OR structure_ens_id = -1 OR structure_ens_id = $id)";
         }
@@ -987,9 +987,9 @@ class ServiceService extends AbstractEntityService
             'intervenant-discipline-libelle' => 'Discipline intervenant',
             'heures-service-statutaire'      => 'Service statutaire',
             'heures-service-du-modifie'      => 'Modification de service du',
-            'service-structure-aff-libelle'  => 'Structure d\'affectation',
+            'service-structure-aff-libelle'  => 'StructureService d\'affectation',
 
-            'service-structure-ens-libelle' => 'Structure d\'enseignement',
+            'service-structure-ens-libelle' => 'StructureService d\'enseignement',
             'groupe-type-formation-libelle' => 'Groupe de type de formation',
             'type-formation-libelle'        => 'Type de formation',
             'etape-niveau'                  => 'Niveau',
@@ -1004,7 +1004,7 @@ class ServiceService extends AbstractEntityService
             'element-taux-fa'               => 'Taux FA',
             'commentaires'                  => 'Commentaires',
             'element-ponderation-compl'     => 'Majoration',
-            'element-source-libelle'        => 'Source enseignement',
+            'element-source-libelle'        => 'SourceService enseignement',
             'periode-libelle'               => 'Période',
             'heures-non-payees'             => 'Heures non payées',
         ];

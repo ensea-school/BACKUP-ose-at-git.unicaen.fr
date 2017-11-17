@@ -5,7 +5,7 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Affectation;
 
 /**
- * Description of AffectationAwareTrait
+ * Description of AffectationServiceAwareTrait
  *
  * @author UnicaenCode
  */

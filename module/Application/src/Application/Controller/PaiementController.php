@@ -21,7 +21,7 @@ use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\ServiceAPayerAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -39,7 +39,7 @@ class PaiementController extends AbstractController
     use ContextServiceAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use PersonnelAwareTrait;
     use PeriodeAwareTrait;
     use MiseEnPaiementAwareTrait;

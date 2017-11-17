@@ -66,11 +66,11 @@ class Liste extends AbstractViewHelper
         ],
         'structure-aff'       => [
             'visibility' => false,
-            'head-text'  => "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>",
+            'head-text'  => "<th title=\"StructureService d'appartenance de l'intervenant\">StructureService d'affectation</th>",
         ],
         'structure-ens'       => [
             'visibility' => true,
-            'head-text'  => "<th title=\"Structure gestionnaire de l'enseignement\">Composante d'enseignement</th>",
+            'head-text'  => "<th title=\"StructureService gestionnaire de l'enseignement\">Composante d'enseignement</th>",
         ],
         'formation'           => [
             'visibility' => true,

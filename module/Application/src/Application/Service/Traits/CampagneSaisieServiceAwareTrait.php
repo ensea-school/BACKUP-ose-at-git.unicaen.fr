@@ -38,7 +38,7 @@ trait CampagneSaisieServiceAwareTrait
     public function getServiceCampagneSaisie()
     {
         if (empty($this->serviceCampagneSaisie)) {
-            $this->serviceCampagneSaisie = \Application::$container->get('applicationCampagneSaisie');
+            $this->serviceCampagneSaisie = \Application::$container->get(CampagneSaisieService::class);
         }
 
         return $this->serviceCampagneSaisie;

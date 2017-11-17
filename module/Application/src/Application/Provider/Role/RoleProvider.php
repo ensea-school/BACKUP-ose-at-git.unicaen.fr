@@ -3,7 +3,7 @@
 namespace Application\Provider\Role;
 
 use Application\Entity\Db\Affectation;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
@@ -43,7 +43,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     protected $roles;
 
     /**
-     * @var StructureEntity
+     * @var Structure
      */
     protected $structureSelectionnee;
 
@@ -213,7 +213,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
 
-    public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)
+    public function setStructureSelectionnee(Structure $structureSelectionnee = null)
     {
         $this->structureSelectionnee = $structureSelectionnee;
 

@@ -3,9 +3,9 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode as PeriodeEntity;
-use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantService;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
@@ -68,11 +68,11 @@ class Intervenant extends AbstractEntityService
     /**
      *
      * @param string      $sourceCode
-     * @param AnneeEntity $annee
+     * @param Annee $annee
      *
      * @return IntervenantEntity
      */
-    public function getBySourceCode($sourceCode, AnneeEntity $annee = null, $autoImport = true)
+    public function getBySourceCode($sourceCode, Annee $annee = null, $autoImport = true)
     {
         if (null == $sourceCode) return null;
 
@@ -117,7 +117,7 @@ class Intervenant extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement(StructureEntity $structure = null, PeriodeEntity $periode = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement(Structure $structure = null, PeriodeEntity $periode = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 

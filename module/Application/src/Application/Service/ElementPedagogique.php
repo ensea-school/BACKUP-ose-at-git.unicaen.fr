@@ -6,11 +6,11 @@ use Application\Entity\Db\ElementTauxRegimes;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CheminPedagogiqueAwareTrait;
 use Application\Service\Traits\ElementModulateurAwareTrait;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
-use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\Annee;
 
 /**
  * Description of ElementPedagogique
@@ -21,7 +21,7 @@ class ElementPedagogique extends AbstractEntityService
 {
     use CheminPedagogiqueAwareTrait;
     use ElementModulateurAwareTrait;
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
 
 
@@ -57,7 +57,7 @@ class ElementPedagogique extends AbstractEntityService
      * <p>Paramètres possibles :</p>
      * <i>term</i>         : Texte recherché<br />
      * <i>limit</i>        : Nombre de résultats maxi<br />
-     * <i>structure</i>    : Structure concernée sous forme d'une entité<br />
+     * <i>structure</i>    : StructureService concernée sous forme d'une entité<br />
      * <i>niveau</i>       : Niveau, i.e. CONCAT(gtf.libelle_court, e.niveau), ex: L1, M2<br />
      * <i>etape</i>        : Etape concernée sous forme d'une entité<br />
      * <i>element</i>      : Élément concerné sous forme d'une entité<br />
@@ -165,11 +165,11 @@ where rang = 1
     /**
      *
      * @param string      $sourceCode
-     * @param AnneeEntity $annee
+     * @param Annee $annee
      *
      * @return ElementPedagogiqueEntity
      */
-    public function getBySourceCode($sourceCode, AnneeEntity $annee = null)
+    public function getBySourceCode($sourceCode, Annee $annee = null)
     {
         if (null == $sourceCode) return null;
 

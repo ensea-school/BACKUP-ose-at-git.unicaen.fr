@@ -4,11 +4,11 @@ namespace Application\Form\TypeIntervention;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use UnicaenApp\Util;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -20,9 +20,9 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 class TypeInterventionStructureSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionStructureAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
 
@@ -40,7 +40,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label' => 'Structure',
+                'label' => 'StructureService',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -138,9 +138,9 @@ class TypeInterventionStructureHydrator implements HydratorInterface
 {
     use TypeInterventionStructureServiceAwareTrait;
     use TypeInterventionAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use EntityManagerAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
 

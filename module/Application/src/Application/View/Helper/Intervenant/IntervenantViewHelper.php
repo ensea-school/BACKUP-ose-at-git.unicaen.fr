@@ -100,7 +100,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
         if ($entity->getHistoDestruction()) {
             $msg = 'Cet intervenant a été supprimé de OSE le '.$entity->getHistoDestruction()->format(Constants::DATE_FORMAT).'.';
 
-            if ($entity->getSource()->getCode() !== \Application\Service\Source::CODE_SOURCE_OSE){
+            if ($entity->getSource()->getCode() !== \Application\Service\SourceService::CODE_SOURCE_OSE){
                 $msg .= ' Sa fiche ne remonte plus depuis l\'application '.$entity->getSource().'.';
             }
 

@@ -123,7 +123,7 @@ return [
                 'allow' => [
                     [
                         'privileges' => Privileges::MODULATEUR_VISUALISATION,
-                        'resources' => ['TypeModulateur', 'Structure'],
+                        'resources' => ['TypeModulateur', 'StructureService'],
                         'assertion' => 'assertionModulateur',
                     ],
                 ],

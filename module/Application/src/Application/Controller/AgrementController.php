@@ -9,10 +9,11 @@ use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\TypeAgrement;
 use Application\Form\Agrement\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\AgrementAwareTrait;
+use Application\Service\AgrementService;
+use Application\Service\Traits\AgrementServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
@@ -28,12 +29,12 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 class AgrementController extends AbstractController
 {
     use TblAgrementServiceAwareTrait;
-    use AgrementAwareTrait;
+    use AgrementServiceAwareTrait;
     use IntervenantAwareTrait;
     use ServiceAwareTrait;
     use ContextServiceAwareTrait;
     use SaisieAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 
@@ -97,7 +98,7 @@ class AgrementController extends AbstractController
         $qb = $this->getServiceTblAgrement()->finderByTypeAgrement($typeAgrement);
         $this->getServiceTblAgrement()->finderByIntervenant($intervenant, $qb);
 
-        $this->getServiceTblAgrement()->leftJoin('applicationAgrement', $qb, 'agrement', true);
+        $this->getServiceTblAgrement()->leftJoin(AgrementService::class, $qb, 'agrement', true);
 
         $tas = $this->getServiceTblAgrement()->getList($qb);
         /* @var $tas TblAgrement[] */

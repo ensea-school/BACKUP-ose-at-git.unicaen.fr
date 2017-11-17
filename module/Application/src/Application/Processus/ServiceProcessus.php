@@ -9,7 +9,7 @@ use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 
 
@@ -24,7 +24,7 @@ class ServiceProcessus extends AbstractProcessus
     use ServiceServiceAwareTrait;
     use VolumeHoraireAwareTrait;
     use ElementPedagogiqueAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
 

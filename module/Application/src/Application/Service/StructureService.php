@@ -8,21 +8,21 @@ use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
-use Application\Entity\Db\Structure as EntityStructure;
+use Application\Entity\Db\Structure;
 
 
 /**
- * Description of Structure
+ * Description of StructureService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
- * @method EntityStructure get($id)
- * @method EntityStructure[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method EntityStructure newEntity()
+ * @method Structure get($id)
+ * @method Structure[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Structure newEntity()
  */
-class Structure extends AbstractEntityService
+class StructureService extends AbstractEntityService
 {
-    use Traits\AffectationAwareTrait;
+    use Traits\AffectationServiceAwareTrait;
     use ServiceAwareTrait;
     use IntervenantAwareTrait;
     use MiseEnPaiementAwareTrait;
@@ -38,7 +38,7 @@ class Structure extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return EntityStructure::class;
+        return Structure::class;
     }
 
 
@@ -58,7 +58,7 @@ class Structure extends AbstractEntityService
     /**
      * Retourne la structure racine (i.e. qui n'a pas de structure parente).
      *
-     * @return EntityStructure
+     * @return Structure
      */
     public function getRacine()
     {
@@ -74,13 +74,13 @@ class Structure extends AbstractEntityService
      * Sinon, on recherche les personnes ayant un rôle spécifique dans la structure, en remontant la hiérarchie
      * des structures mères tant que personne n'est trouvé (et si demandé).
      *
-     * @param \Application\Entity\Db\Structure $structure          Structure concernée
+     * @param \Application\Entity\Db\Structure $structure          StructureService concernée
      * @param boolean                          $remonterStructures Remonter les structures mères tant que personne n'est
      *                                                             trouvé ?
      *
      * @return string[] mail => nom
      */
-    public function getMailsContact(EntityStructure $structure, $remonterStructures = true)
+    public function getMailsContact(Structure $structure, $remonterStructures = true)
     {
         if ($structure->getContactPj()) {
             return [$structure->getContactPj()];
@@ -151,7 +151,7 @@ class Structure extends AbstractEntityService
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByStructure(EntityStructure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 

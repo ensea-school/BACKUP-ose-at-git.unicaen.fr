@@ -15,7 +15,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\SeuilChargeServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\CsvModel;
@@ -33,7 +33,7 @@ class ChargensController extends AbstractController
 {
     use ChargensProviderAwareTrait;
     use ContextServiceAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use EtapeAwareTrait;
     use ScenarioServiceAwareTrait;
     use FiltreFormAwareTrait;
@@ -461,8 +461,8 @@ class ChargensController extends AbstractController
             'intervenant_statut_libelle'    => 'Statut intervenant',
             'intervenant_type_code'         => 'Type d\'intervenant (Code)',
             'intervenant_type_libelle'      => 'Type d\'intervenant',
-            'structure_aff_libelle'         => 'Structure d\'affectation',
-            'structure_ens_libelle'         => 'Structure d\'enseignement',
+            'structure_aff_libelle'         => 'StructureService d\'affectation',
+            'structure_ens_libelle'         => 'StructureService d\'enseignement',
             'groupe_type_formation_libelle' => 'Groupe de type de formation',
             'type_formation_libelle'        => 'Type de formation',
             'etape_niveau'                  => 'Niveau',
@@ -473,7 +473,7 @@ class ChargensController extends AbstractController
             'element_taux_fi'               => 'Taux FI',
             'element_taux_fc'               => 'Taux FC',
             'element_taux_fa'               => 'Taux FA',
-            'element_source_libelle'        => 'Source enseignement',
+            'element_source_libelle'        => 'SourceService enseignement',
             'periode'                       => 'Période',
             'type_intervention_code'        => 'Type d\'intervention',
             'heures_service'                => 'Heures (service)',

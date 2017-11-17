@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Agrement;
+use Application\Service\AgrementService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface AgrementAwareInterface
 {
     /**
-     * @param Agrement $serviceAgrement
+     * @param AgrementService $serviceAgrement
+     *
      * @return self
      */
-    public function setServiceAgrement( Agrement $serviceAgrement );
+    public function setServiceAgrement(AgrementService $serviceAgrement );
 
 
 

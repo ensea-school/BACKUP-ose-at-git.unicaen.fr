@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\TypeDotation;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -15,8 +15,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class TypeDotationService extends AbstractEntityService
 {
-    use SourceAwareTrait;
-    
+    use SourceServiceAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -28,8 +28,8 @@ class TypeDotationService extends AbstractEntityService
         return \Application\Entity\Db\TypeDotation::class;
     }
 
-    
-    
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -82,7 +82,7 @@ class TypeDotationService extends AbstractEntityService
      */
     public function save($entity){
         $entity->setSource($this->getServiceSource()->getOse());
-        
+
         return parent::save($entity);
     }
 }

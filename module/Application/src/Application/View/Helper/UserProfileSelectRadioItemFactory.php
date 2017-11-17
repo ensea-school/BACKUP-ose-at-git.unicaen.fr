@@ -6,7 +6,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 
 /**
  *
@@ -17,7 +17,7 @@ class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
 {
     use ServiceLocatorAwareTrait;
     use ContextServiceAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
 
 
     /**

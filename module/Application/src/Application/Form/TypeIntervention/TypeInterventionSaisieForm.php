@@ -7,7 +7,7 @@ use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use UnicaenApp\Util;
 
 /**
@@ -18,7 +18,7 @@ use UnicaenApp\Util;
 class TypeInterventionSaisieForm extends AbstractForm
 {
     use \Application\Entity\Db\Traits\TypeInterventionAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
     public function init()
     {
@@ -180,7 +180,7 @@ class TypeInterventionSaisieForm extends AbstractForm
 class TypeInterventionHydrator implements HydratorInterface
 {
     use TypeInterventionAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

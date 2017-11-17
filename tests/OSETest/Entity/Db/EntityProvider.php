@@ -328,7 +328,7 @@ class EntityProvider
     }
 
     /**
-     * Retourne à chaque appel une nouvelle instance de Structure persistée.
+     * Retourne à chaque appel une nouvelle instance de StructureService persistée.
      *
      * @return Structure
      */
@@ -347,7 +347,7 @@ class EntityProvider
      * Recherche et retourne la structure racine, i.e. qui n'a aucun structure mère.
      *
      * @return Structure
-     * @throws RuntimeException Structure racine introuvable
+     * @throws RuntimeException StructureService racine introuvable
      */
     public function getStructureRacine()
     {
@@ -357,7 +357,7 @@ class EntityProvider
 
         $this->structureRacine = $this->getEntityManager()->getRepository("Application\Entity\Db\Structure")->findOneByParente(null);
         if (!$this->structureRacine) {
-            throw new RuntimeException("Structure racine introuvable.");
+            throw new RuntimeException("StructureService racine introuvable.");
         }
 
         return $this->structureRacine;
@@ -365,8 +365,8 @@ class EntityProvider
 
     /**
      * Retourne :
-     * - soit une Structure d'enseignement quelconque ;
-     * - soit à chaque appel une nouvelle instance de Structure d'enseignement persistée.
+     * - soit une StructureService d'enseignement quelconque ;
+     * - soit à chaque appel une nouvelle instance de StructureService d'enseignement persistée.
      *
      * @param boolean $quelconque
      * @return Structure
@@ -380,7 +380,7 @@ class EntityProvider
                         ->andWhere("ts.enseignement = 1");
                 $this->structureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
                 if (!$this->structureEns) {
-                    throw new RuntimeException("Structure d'enseignement quelconque introuvable.");
+                    throw new RuntimeException("StructureService d'enseignement quelconque introuvable.");
                 }
             }
 
@@ -801,7 +801,7 @@ class EntityProvider
     }
 
     /**
-     * Retourne à chaque appel une nouvelle instance d'Agrement persistée.
+     * Retourne à chaque appel une nouvelle instance d'AgrementService persistée.
      *
      * @param TypeAgrement $type
      * @param Intervenant $intervenant

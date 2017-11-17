@@ -7,13 +7,13 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\FonctionReferentielAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 
 
@@ -26,7 +26,7 @@ use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 class ServiceReferentiel extends AbstractEntityService
 {
     use IntervenantAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use FonctionReferentielAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
@@ -134,7 +134,7 @@ class ServiceReferentiel extends AbstractEntityService
      *
      * @param IntervenantEntity         $intervenant
      * @param FonctionReferentielEntity $fonction
-     * @param StructureEntity           $structure
+     * @param Structure           $structure
      * @param string                    $commentaires
      *
      * @return null|\Application\Entity\Db\ServiceReferentiel
@@ -142,7 +142,7 @@ class ServiceReferentiel extends AbstractEntityService
     public function getBy(
         IntervenantEntity $intervenant,
         FonctionReferentielEntity $fonction,
-        StructureEntity $structure,
+        Structure $structure,
         $commentaires=null
     )
     {
@@ -368,7 +368,7 @@ class ServiceReferentiel extends AbstractEntityService
         $qb = $this->select(['id', 'fonction', 'structure', 'commentaires']);
         //@formatter:off
         $this->join('applicationFonctionReferentiel',   $qb, 'fonctionReferentiel',     true);
-        $this->Join('applicationStructure',             $qb, 'structure',               true);
+        $this->Join(StructureService::class,             $qb, 'structure',               true);
         $this->Join($sVolumeHoraireReferentiel,         $qb, 'volumeHoraireReferentiel',true);
         //@formatter:on
 

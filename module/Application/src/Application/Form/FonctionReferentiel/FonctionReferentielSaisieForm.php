@@ -4,7 +4,7 @@ namespace Application\Form\FonctionReferentiel;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -17,7 +17,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 class FonctionReferentielSaisieForm extends AbstractForm
 {
     use DomaineFonctionnelAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     public function init()
@@ -72,7 +72,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
         $this->add([
             'name' => 'structure',
             'options' => [
-                'label' => 'Structure',
+                'label' => 'StructureService',
             ],
             'attributes' => [
                 'class' => 'selectpicker',
@@ -154,7 +154,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 class FonctionReferentielHydrator implements HydratorInterface
 {
     use DomaineFonctionnelAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

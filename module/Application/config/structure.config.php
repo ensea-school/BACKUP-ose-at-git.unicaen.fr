@@ -3,28 +3,28 @@
 namespace Application;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'structure' => [
-                'type' => 'Literal',
-                'options' => [
-                    'route' => '/structure',
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/structure',
                     'defaults' => [
-                       '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Structure',
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller'    => 'StructureService',
                         'action'        => 'index',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    'modifier' => [
+                'child_routes'  => [
+                    'modifier'  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/modifier/:id',
+                            'route'       => '/modifier/:id',
                             'constraints' => [
                                 'id' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'modifier',
                             ],
                         ],
@@ -38,15 +38,15 @@ return [
                             ],
                         ],
                     ],
-                    'default' => [
+                    'default'   => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:action[/:id]',
+                            'route'       => '/:action[/:id]',
                             'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'index',
                             ],
                         ],
@@ -55,25 +55,25 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
                     'structure' => [
-                        'label'    => 'Structures',
-                        'title'    => "Gestion des structures",
-                        'route'    => 'structure',
-                        'visible'  => false,
-                        'params' => [
+                        'label'   => 'Structures',
+                        'title'   => "Gestion des structures",
+                        'route'   => 'structure',
+                        'visible' => false,
+                        'params'  => [
                             'action' => 'index',
                         ],
-                        'pages' => [
+                        'pages'   => [
                             'voir' => [
-                                'label'  => "Voir",
-                                'title'  => "Voir une structure",
-                                'route'  => 'structure',
+                                'label'   => "Voir",
+                                'title'   => "Voir une structure",
+                                'route'   => 'structure',
                                 'visible' => false,
-                                'pages' => [],
+                                'pages'   => [],
                             ],
                         ],
                     ],
@@ -81,42 +81,42 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
-        'guards' => [
+    'bjyauthorize'    => [
+        'guards'             => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Structure',
-                    'action' => ['voir', 'apercevoir'],
-                    'roles' => ['user']
+                    'action'     => ['voir', 'apercevoir'],
+                    'roles'      => ['user'],
                 ],
                 [
                     'controller' => 'Application\Controller\Structure',
-                    'action' => ['index', 'choisir', 'recherche'],
-                    'roles' => ['user']
+                    'action'     => ['index', 'choisir', 'recherche'],
+                    'roles'      => ['user'],
                 ],
             ],
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'Structure' => [],
+                'StructureService' => [],
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Application\Controller\Structure'   => Controller\StructureController::class,
+            'Application\Controller\Structure' => Controller\StructureController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPersonnel'       => Service\Personnel::class,
-            'ApplicationStructure'       => Service\Structure::class,
-            'ApplicationTypeStructure'   => Service\TypeStructure::class,
-        ]
+            'ApplicationPersonnel'          => Service\Personnel::class,
+            Service\StructureService::class => Service\StructureService::class,
+            'ApplicationTypeStructure'      => Service\TypeStructure::class,
+        ],
     ],
-    'view_helpers' => [
+    'view_helpers'    => [
         'invokables' => [
-            'structure'         => View\Helper\StructureViewHelper::class,
+            'structure' => View\Helper\StructureViewHelper::class,
         ],
     ],
 ];

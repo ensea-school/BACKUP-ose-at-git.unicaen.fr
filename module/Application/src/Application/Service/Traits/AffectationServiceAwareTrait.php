@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Affectation;
+use Application\Service\AffectationService;
 
 /**
- * Description of AffectationAwareTrait
+ * Description of AffectationServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait AffectationAwareTrait
+trait AffectationServiceAwareTrait
 {
     /**
-     * @var Affectation
+     * @var AffectationService
      */
     private $serviceAffectation;
 
 
 
     /**
-     * @param Affectation $serviceAffectation
+     * @param AffectationService $serviceAffectation
      *
      * @return self
      */
-    public function setServiceAffectation(Affectation $serviceAffectation)
+    public function setServiceAffectation(AffectationService $serviceAffectation)
     {
         $this->serviceAffectation = $serviceAffectation;
 
@@ -33,12 +33,12 @@ trait AffectationAwareTrait
 
 
     /**
-     * @return Affectation
+     * @return AffectationService
      */
     public function getServiceAffectation()
     {
         if (empty($this->serviceAffectation)) {
-            $this->serviceAffectation = \Application::$container->get('ApplicationAffectation');
+            $this->serviceAffectation = \Application::$container->get(AffectationService::class);
         }
 
         return $this->serviceAffectation;

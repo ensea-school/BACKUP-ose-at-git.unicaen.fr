@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Form;
 use UnicaenApp\Util;
@@ -20,7 +20,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class AffectationForm extends AbstractForm
 {
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use PersonnelAwareTrait;
     use RoleAwareTrait;
     use ContextServiceAwareTrait;
@@ -82,7 +82,7 @@ class AffectationForm extends AbstractForm
             'type' => 'Select',
             'name' => 'structure',
             'options' => [
-                'label' => 'Structure',
+                'label' => 'StructureService',
                 'value_options' => Util::collectionAsOptions($structures)
             ],
         ] );
@@ -127,7 +127,7 @@ class AffectationForm extends AbstractForm
 
 class AffectationFormHydrator implements HydratorInterface
 {
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use RoleAwareTrait;
     use PersonnelAwareTrait;
 

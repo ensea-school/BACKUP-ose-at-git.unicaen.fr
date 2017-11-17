@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\CentreCoutEp as CentreCoutEpEntity;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 
 /**
@@ -14,7 +14,7 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  */
 class CentreCoutEp extends AbstractEntityService
 {
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      * retourne la classe des entités

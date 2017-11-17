@@ -14,7 +14,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
-use Application\Service\Traits\AgrementAwareTrait;
+use Application\Service\Traits\AgrementServiceAwareTrait;
 use Application\Service\Traits\ContratAwareTrait;
 use Application\Service\Traits\DbEventServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
@@ -41,7 +41,7 @@ class SuppressionDataProcessus
     use MiseEnPaiementAwareTrait;
     use FichierServiceAwareTrait;
     use PieceJointeAwareTrait;
-    use AgrementAwareTrait;
+    use AgrementServiceAwareTrait;
     use VolumeHoraireAwareTrait;
     use VolumeHoraireReferentielAwareTrait;
     use ServiceServiceAwareTrait;
@@ -176,8 +176,8 @@ class SuppressionDataProcessus
         }
 
         /* Agréments */
-        if (isset($entities['Agrement'])) {
-            foreach ($entities['Agrement'] as $v) {
+        if (isset($entities['AgrementService'])) {
+            foreach ($entities['AgrementService'] as $v) {
                 $this->getServiceAgrement()->delete($v->getEntity(), false);
             }
         }

@@ -6,11 +6,10 @@ use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Zend\Session\Container;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
-use Application\Entity\Db\Structure as EntityStructure;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Etape as EntityEtape;
 use Application\Entity\NiveauEtape as EntityNiveauEtape;
 use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
@@ -24,7 +23,7 @@ use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
 class LocalContext extends AbstractService
 {
     use IntervenantAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use EtapeAwareTrait;
     use ElementPedagogiqueAwareTrait;
     use NiveauEtapeAwareTrait;
@@ -38,7 +37,7 @@ class LocalContext extends AbstractService
     protected $intervenant;
 
     /**
-     * @var EntityStructure
+     * @var Structure
      */
     protected $structure;
 
@@ -77,13 +76,13 @@ class LocalContext extends AbstractService
 
 
     /**
-     * @return EntityStructure
+     * @return Structure
      */
     public function getStructure()
     {
         if (empty($this->structure)) {
             $this->structure = $this->getSessionContainer()->structure;
-            if ($this->structure && !$this->structure instanceof EntityStructure) {
+            if ($this->structure && !$this->structure instanceof Structure) {
                 $this->structure = $this->getServiceStructure()->get($this->structure);
             }
         }
@@ -162,11 +161,11 @@ class LocalContext extends AbstractService
 
     /**
      *
-     * @param EntityStructure $structure
+     * @param Structure $structure
      *
      * @return self
      */
-    public function setStructure(EntityStructure $structure = null)
+    public function setStructure(Structure $structure = null)
     {
         $this->structure                        = $structure;
         $this->getSessionContainer()->structure = $structure ? $structure->getId() : null;

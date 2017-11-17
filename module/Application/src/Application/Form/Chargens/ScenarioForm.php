@@ -5,7 +5,7 @@ namespace Application\Form\Chargens;
 use Application\Entity\Db\Scenario;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -18,7 +18,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class ScenarioForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
 
     /**
      * @var Structure[]
@@ -58,7 +58,7 @@ class ScenarioForm extends AbstractForm
                 'empty_option'              => "- Aucune -",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "Structure gestionnaire de l'enseignement",
+                    'title' => "StructureService gestionnaire de l'enseignement",
                 ],
                 'value_options'             => Util::collectionAsOptions($this->structures),
             ],
@@ -119,7 +119,7 @@ class ScenarioForm extends AbstractForm
 
 class ScenarioFormHydrator implements HydratorInterface
 {
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
 
 
 

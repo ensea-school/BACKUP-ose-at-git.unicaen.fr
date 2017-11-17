@@ -13,7 +13,7 @@ use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Session\Container;
 
@@ -27,7 +27,7 @@ class OffreFormationController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ElementPedagogiqueAwareTrait;
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;

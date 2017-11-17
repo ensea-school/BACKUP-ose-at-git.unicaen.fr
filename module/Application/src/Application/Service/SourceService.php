@@ -6,11 +6,11 @@ use Doctrine\ORM\QueryBuilder;
 use UnicaenImport\Entity\Db\Source as SourceEntity;
 
 /**
- * Description of Source
+ * Description of SourceService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Source extends AbstractEntityService
+class SourceService extends AbstractEntityService
 {
     const CODE_SOURCE_OSE     = 'OSE';
     const CODE_SOURCE_TEST    = 'Test';

@@ -33,7 +33,7 @@ use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 
@@ -54,7 +54,7 @@ class ServiceController extends AbstractController
     use IntervenantAwareTrait;
     use ServiceReferentielAwareTrait;
     use EtatVolumeHoraireAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use EtapeAwareTrait;
     use PeriodeAwareTrait;
     use LocalContextAwareTrait;

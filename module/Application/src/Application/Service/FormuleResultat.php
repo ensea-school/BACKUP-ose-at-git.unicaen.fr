@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\Service;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 
 /**
  * Description of FormuleResultat
@@ -40,12 +40,12 @@ class FormuleResultat extends AbstractEntityService
      * Retourne le volume d'heures prévisionnelles faites pour une structure donnée, en année universitaire (par défaut)
      * ou bien par année civile en appliquant la règle des 4/10 / 6/10.
      *
-     * @param StructureEntity $structure
+     * @param Structure $structure
      *
      * @return float
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function getTotalPrevisionnelValide(StructureEntity $structure = null)
+    public function getTotalPrevisionnelValide(Structure $structure = null)
     {
         if (!$structure) return $this->getTotalPrevisionnelValideWS(); // on ByPasse!!!
 

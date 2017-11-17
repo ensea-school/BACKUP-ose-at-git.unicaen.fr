@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Indicateur;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 
 
 /**
@@ -87,9 +87,9 @@ class IndicateurService extends AbstractEntityService
 
     /**
      * @param integer|Indicateur   $indicateur Indicateur concerné
-     * @param StructureEntity|null $structure
+     * @param Structure|null $structure
      */
-    public function getCount(Indicateur $indicateur, StructureEntity $structure = null)
+    public function getCount(Indicateur $indicateur, Structure $structure = null)
     {
         $key = $indicateur->getNumero().'_'.($structure ? $structure->getId() : '0');
 
@@ -110,7 +110,7 @@ class IndicateurService extends AbstractEntityService
      *
      * @return Indicateur\AbstractIndicateur[]
      */
-    public function getResult(Indicateur $indicateur, StructureEntity $structure = null)
+    public function getResult(Indicateur $indicateur, Structure $structure = null)
     {
         $qb = $this->getBaseQueryBuilder($indicateur, $structure);
 

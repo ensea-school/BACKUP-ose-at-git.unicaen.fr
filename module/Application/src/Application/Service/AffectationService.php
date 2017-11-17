@@ -3,18 +3,18 @@
 namespace Application\Service;
 
 use Application\Acl\Role as RoleAcl;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Affectation as EntityAffectation;
+use Application\Entity\Db\Affectation;
 
 /**
- * Description of Affectation
+ * Description of AffectationService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Affectation extends AbstractEntityService
+class AffectationService extends AbstractEntityService
 {
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -24,7 +24,7 @@ class Affectation extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return EntityAffectation::class;
+        return Affectation::class;
     }
 
     /**
@@ -40,7 +40,7 @@ class Affectation extends AbstractEntityService
     /**
      * Sauvegarde une entité
      *
-     * @param EntityAffectation $entity
+     * @param Affectation $entity
      * @throws \RuntimeException
      * @return mixed
      */
@@ -61,7 +61,7 @@ class Affectation extends AbstractEntityService
     /**
      * @param RoleAcl|null $role
      *
-     * @return null|EntityAffectation
+     * @return null|Affectation
      */
     public function getByRole( RoleAcl $role = null )
     {
@@ -72,7 +72,7 @@ class Affectation extends AbstractEntityService
         if (!$role->getPersonnel()) return null;
 
         $this->getEntityManager()->getFilters()->enable('historique')->init([
-            EntityAffectation::class,
+            Affectation::class,
         ]);
 
         return $this->getRepo()->findOneBy([

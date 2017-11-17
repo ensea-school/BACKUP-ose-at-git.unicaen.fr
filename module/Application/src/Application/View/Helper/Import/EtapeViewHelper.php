@@ -9,16 +9,16 @@ use UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne;
  */
 class EtapeViewHelper extends DifferentielLigne
 {
-    use \Application\Service\Traits\StructureAwareTrait;
+    use \Application\Service\Traits\StructureServiceAwareTrait;
 
     public function getColumnDetails($column, $value)
     {
         switch( $column ){
             case 'STRUCTURE_ID':
                 if (null === $value){
-                    return '<span class="text-danger">Structure non identifiée</span>';
+                    return '<span class="text-danger">StructureService non identifiée</span>';
                 }else{
-                    $column = 'Structure';
+                    $column = 'StructureService';
                     $value = $this->getServiceStructure()->get($value);
                     return parent::getColumnDetails($column, $value);
                 }

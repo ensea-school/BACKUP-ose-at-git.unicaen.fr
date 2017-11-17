@@ -2,7 +2,7 @@
 
 namespace Application\Form;
 
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\UtilisateurAwareTrait;
@@ -17,7 +17,7 @@ use UnicaenApp\Util;
  */
 class ParametresForm extends AbstractForm
 {
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use UtilisateurAwareTrait;
     use ScenarioServiceAwareTrait;

@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Constants;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
+use Application\Service\StructureService;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Zend\View\Model\JsonModel;
 
@@ -59,7 +60,7 @@ class RechercheController extends AbstractController
         }
 
         $qb = $this->getServicePersonnel()->finderByTerm($term);
-        $this->getServicePersonnel()->join('applicationStructure', $qb, 'structure');
+        $this->getServicePersonnel()->join(StructureService::class, $qb, 'structure');
         $personnels = $this->getServicePersonnel()->getList($qb);
 
         $result = [];

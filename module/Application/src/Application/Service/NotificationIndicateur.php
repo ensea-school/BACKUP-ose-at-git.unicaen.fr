@@ -2,10 +2,10 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Affectation as AffectationEntity;
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
-use Application\Service\Traits\AffectationAwareTrait;
+use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
 use LogicException;
 use DateTime;
@@ -23,7 +23,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class NotificationIndicateur extends AbstractEntityService
 {
-    use AffectationAwareTrait;
+    use AffectationServiceAwareTrait;
     use IndicateurServiceAwareTrait;
 
     /**
@@ -67,7 +67,7 @@ class NotificationIndicateur extends AbstractEntityService
      * @param string $frequence
      * @return NotificationIndicateurEntity
      */
-    public function abonner(IndicateurEntity $indicateur, $frequence=null, $inHome=false, AffectationEntity $affectation = null)
+    public function abonner(IndicateurEntity $indicateur, $frequence=null, $inHome=false, Affectation $affectation = null)
     {
         if ($frequence && !array_key_exists($frequence, NotificationIndicateurEntity::$frequences)) {
             throw new LogicException("Fréquence spécifiée inconnue: $frequence.");

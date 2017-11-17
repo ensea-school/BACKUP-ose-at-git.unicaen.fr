@@ -20,46 +20,46 @@ return [
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'controller' => 'Agrement',
+                                'controller' => 'AgrementService',
                                 'action'     => 'index',
                             ],
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'conseil-academique'    => [
+                            'conseil-academique' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/conseil-academique',
-                                    'defaults'    => [
-                                        'action' => 'lister',
+                                    'route'    => '/conseil-academique',
+                                    'defaults' => [
+                                        'action'           => 'lister',
                                         'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
                                     ],
                                 ],
                             ],
-                            'conseil-restreint'    => [
+                            'conseil-restreint'  => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/conseil-restreint',
-                                    'defaults'    => [
-                                        'action' => 'lister',
+                                    'route'    => '/conseil-restreint',
+                                    'defaults' => [
+                                        'action'           => 'lister',
                                         'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
                                     ],
                                 ],
                             ],
-                            'ajouter'  => [
+                            'ajouter'            => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/:typeAgrement/ajouter[/:structure]',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
-                                        'structure' => '[0-9]*',
+                                        'structure'    => '[0-9]*',
                                     ],
                                     'defaults'    => [
                                         'action' => 'saisir',
                                     ],
                                 ],
                             ],
-                            'voir'     => [
+                            'voir'               => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/voir/:agrement',
@@ -71,7 +71,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'saisir' => [
+                            'saisir'             => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/saisir/[:agrement]',
@@ -83,7 +83,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'supprimer' => [
+                            'supprimer'          => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/supprimer/[:agrement]',
@@ -106,37 +106,37 @@ return [
                         'options'       => [
                             'route'    => '/agrement',
                             'defaults' => [
-                                'controller' => 'Agrement',
+                                'controller' => 'AgrementService',
                                 'action'     => 'index',
                             ],
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'conseil-academique'    => [
+                            'conseil-academique' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/conseil-academique',
-                                    'defaults'    => [
-                                        'action' => 'saisir-lot',
+                                    'route'    => '/conseil-academique',
+                                    'defaults' => [
+                                        'action'           => 'saisir-lot',
                                         'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_ACADEMIQUE,
                                     ],
                                 ],
                             ],
-                            'conseil-restreint'    => [
+                            'conseil-restreint'  => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/conseil-restreint',
-                                    'defaults'    => [
-                                        'action' => 'saisir-lot',
+                                    'route'    => '/conseil-restreint',
+                                    'defaults' => [
+                                        'action'           => 'saisir-lot',
                                         'typeAgrementCode' => TypeAgrement::CODE_CONSEIL_RESTREINT,
                                     ],
                                 ],
                             ],
-                            'export-csv' => [
+                            'export-csv'         => [
                                 'type'    => 'Literal',
                                 'options' => [
-                                    'route'       => '/export-csv',
-                                    'defaults'    => [
+                                    'route'    => '/export-csv',
+                                    'defaults' => [
                                         'action' => 'export-csv',
                                     ],
                                 ],
@@ -207,7 +207,7 @@ return [
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
                                         'visible'     => 'AssertionAgrement',
                                     ],
-                                    'export-csv' => [
+                                    'export-csv'         => [
                                         'label'       => 'Export CSV',
                                         'description' => 'Export CSV des agrément donnés ou en attente',
                                         'title'       => 'Export CSV',
@@ -249,12 +249,12 @@ return [
                     'controller' => 'Application\Controller\Agrement',
                     'action'     => ['export-csv'],
                     'privileges' => [
-                        Privileges::AGREMENT_EXPORT_CSV
+                        Privileges::AGREMENT_EXPORT_CSV,
                     ],
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',
-                    'action' => ['supprimer'],
+                    'action'     => ['supprimer'],
                     'privileges' => [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
@@ -265,8 +265,8 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'Agrement'    => [],
-                'TblAgrement' => [],
+                'AgrementService' => [],
+                'TblAgrement'     => [],
             ],
         ],
         'rule_providers'     => [
@@ -277,9 +277,9 @@ return [
                             Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
                             Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
                             Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
-                            Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION
+                            Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
                         ],
-                        'resources'  => ['TblAgrement', 'Agrement', 'Structure'],
+                        'resources'  => ['TblAgrement', 'AgrementService', 'StructureService'],
                         'assertion'  => 'AssertionAgrement',
                     ],
                 ],
@@ -293,7 +293,7 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationAgrement'           => Service\Agrement::class,
+            Service\AgrementService::class  => Service\AgrementService::class,
             'ApplicationTblAgrement'        => Service\TblAgrementService::class,
             'ApplicationTypeAgrement'       => Service\TypeAgrement::class,
             'ApplicationTypeAgrementStatut' => Service\TypeAgrementStatut::class,

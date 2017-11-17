@@ -8,7 +8,7 @@ use Zend\View\HelperPluginManager;
 use Zend\Console\Console;
 use Zend\Mvc\Router\RouteMatch;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 
 /**
  * Description of AppLinkFactory
@@ -18,7 +18,7 @@ use Application\Service\Traits\AnneeAwareTrait;
 class AppLinkFactory implements FactoryInterface
 {
     use ContextServiceAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
     /**

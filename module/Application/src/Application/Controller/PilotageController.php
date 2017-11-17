@@ -32,7 +32,7 @@ class PilotageController extends AbstractController
             'Année',
             'État',
             'Type d\'heures',
-            'Structure',
+            'StructureService',
             'Intervenant (type)',
             'Intervenant (code)',
             'Intervenant',

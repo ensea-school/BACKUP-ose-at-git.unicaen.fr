@@ -4,8 +4,8 @@ namespace Application\Service;
 
 use Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
-use Application\Entity\Db\Annee as AnneeEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
@@ -21,10 +21,10 @@ use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 class ContextService extends AbstractService
 {
     use Traits\EtablissementAwareTrait;
-    use Traits\AnneeAwareTrait;
+    use Traits\AnneeServiceAwareTrait;
     use Traits\IntervenantAwareTrait;
     use Traits\ParametresAwareTrait;
-    use Traits\StructureAwareTrait;
+    use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
     use PersonnelAwareTrait;
@@ -43,7 +43,7 @@ class ContextService extends AbstractService
     protected $etablissement;
 
     /**
-     * @var AnneeEntity
+     * @var Annee
      */
     protected $annee;
 
@@ -58,12 +58,12 @@ class ContextService extends AbstractService
     protected $intervenant = false;
 
     /**
-     * @var AnneeEntity
+     * @var Annee
      */
     protected $anneePrecedente;
 
     /**
-     * @var AnneeEntity
+     * @var Annee
      */
     protected $anneeSuivante;
 
@@ -73,7 +73,7 @@ class ContextService extends AbstractService
     protected $dateObservation;
 
     /**
-     * @var StructureEntity
+     * @var Structure
      */
     protected $structure;
 
@@ -263,7 +263,7 @@ class ContextService extends AbstractService
      * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ;
      * - ou sinon celle spécifiée dans les paramètres de l'appli.
      *
-     * @return AnneeEntity
+     * @return Annee
      */
     public function getAnnee()
     {
@@ -286,7 +286,7 @@ class ContextService extends AbstractService
      *
      * @param int $x Entier supérieur ou égal à zéro
      *
-     * @return AnneeEntity
+     * @return Annee
      */
     public function getAnneeNmoins($x)
     {
@@ -297,7 +297,7 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return AnneeEntity
+     * @return Annee
      */
     public function getAnneePrecedente()
     {
@@ -312,7 +312,7 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return AnneeEntity
+     * @return Annee
      */
     public function getAnneeSuivante()
     {
@@ -327,12 +327,12 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @param AnneeEntity $annee
+     * @param Annee $annee
      * @param boolean     $updateParametres
      *
      * @return self
      */
-    public function setAnnee(AnneeEntity $annee, $updateParametres = false)
+    public function setAnnee(Annee $annee, $updateParametres = false)
     {
         $this->annee                        = $annee;
         $this->getSessionContainer()->annee = $annee->getId();
@@ -382,7 +382,7 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return StructureEntity
+     * @return Structure
      */
     public function getStructure($initializing = false)
     {
@@ -410,14 +410,14 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @param StructureEntity $structure
+     * @param Structure $structure
      * @param boolean         $updateParametres
      *
      * @return self
      */
     public function setStructure($structure)
     {
-        if ($structure instanceof StructureEntity) {
+        if ($structure instanceof Structure) {
             $this->structure                        = $structure;
             $this->getSessionContainer()->structure = $structure->getId();
         } else {
@@ -436,11 +436,11 @@ class ContextService extends AbstractService
      * On considère que s'il existe des intervenants pour l'année spécifiée, alors
      * l'application était opérationnelle.
      *
-     * @param AnneeEntity $annee
+     * @param Annee $annee
      *
      * @return boolean
      */
-    public function applicationExists(AnneeEntity $annee)
+    public function applicationExists(Annee $annee)
     {
         $sql = "
         SELECT

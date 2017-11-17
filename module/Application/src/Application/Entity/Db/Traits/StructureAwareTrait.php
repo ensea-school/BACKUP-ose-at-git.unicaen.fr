@@ -5,7 +5,7 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Structure;
 
 /**
- * Description of StructureAwareTrait
+ * Description of StructureServiceAwareTrait
  *
  * @author UnicaenCode
  */

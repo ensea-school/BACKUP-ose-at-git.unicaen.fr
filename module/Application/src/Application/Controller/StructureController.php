@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
 class StructureController extends AbstractController
 {
     use \Application\Service\Traits\ContextServiceAwareTrait;
-    use \Application\Service\Traits\StructureAwareTrait;
+    use \Application\Service\Traits\StructureServiceAwareTrait;
 
 
 
@@ -83,10 +83,10 @@ class StructureController extends AbstractController
             throw new LogicException("Aucun identifiant de structure spécifié.");
         }
         if (!($structure = $this->getServiceStructure()->get($id))) {
-            throw new RuntimeException("Structure '$id' spécifiée introuvable.");
+            throw new RuntimeException("StructureService '$id' spécifiée introuvable.");
         }
 
-        $title = "Structure";
+        $title = "StructureService";
         return compact('structure', 'title');
     }
 

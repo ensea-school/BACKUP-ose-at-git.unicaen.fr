@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Annee;
+use Application\Service\AnneeService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface AnneeAwareInterface
 {
     /**
-     * @param Annee $serviceAnnee
+     * @param AnneeService $serviceAnnee
+     *
      * @return self
      */
-    public function setServiceAnnee( Annee $serviceAnnee );
+    public function setServiceAnnee(AnneeService $serviceAnnee );
 
 
 

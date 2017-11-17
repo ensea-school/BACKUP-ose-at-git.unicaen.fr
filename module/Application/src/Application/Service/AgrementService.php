@@ -3,17 +3,17 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Agrement as AgrementEntity;
-use Application\Entity\Db\Annee as AnneeEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Agrement;
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Structure;
 
 
 /**
- * Description of Agrement
+ * Description of AgrementService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Agrement extends AbstractEntityService
+class AgrementService extends AbstractEntityService
 {
 
     /**
@@ -24,7 +24,7 @@ class Agrement extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return AgrementEntity::class;
+        return Agrement::class;
     }
 
 
@@ -44,7 +44,7 @@ class Agrement extends AbstractEntityService
     /**
      * Sauvegarde une entité
      *
-     * @param AgrementEntity $entity
+     * @param Agrement $entity
      *
      * @throws \RuntimeException
      * @return mixed
@@ -80,7 +80,7 @@ class Agrement extends AbstractEntityService
 
 
 
-    public function getExportCsvData(AnneeEntity $annee, StructureEntity $structure = null)
+    public function getExportCsvData(Annee $annee, Structure $structure = null)
     {
         $params = ['annee' => $annee->getId()];
 
@@ -94,7 +94,7 @@ class Agrement extends AbstractEntityService
         $res  = [
             'head' => [
                 'annee'                        => 'Année',
-                'structure-libelle'            => 'Structure d\'affectation',
+                'structure-libelle'            => 'StructureService d\'affectation',
                 'intervenant-code'             => 'Code intervenant',
                 'intervenant-nom-usuel'        => 'Nom usuel',
                 'intervenant-nom-patronymique' => 'Nom patronymique',

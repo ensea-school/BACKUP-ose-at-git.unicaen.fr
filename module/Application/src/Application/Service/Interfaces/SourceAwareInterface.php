@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Source;
+use Application\Service\SourceService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface SourceAwareInterface
 {
     /**
-     * @param Source $serviceSource
+     * @param SourceService $serviceSource
+     *
      * @return self
      */
-    public function setServiceSource( Source $serviceSource );
+    public function setServiceSource(SourceService $serviceSource );
 
 
 

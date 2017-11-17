@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutAwareTrait;
 use Zend\Form\Element\Csrf;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use UnicaenApp\Util;
 
@@ -19,7 +19,7 @@ use UnicaenApp\Util;
  */
 class ModifierTypePieceJointeStatutForm extends AbstractForm
 {
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
     use ContextServiceAwareTrait;
     use TypePieceJointeStatutAwareTrait;
 
@@ -228,7 +228,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 
 class TypePieceJointeStatutHydrator implements HydratorInterface
 {
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
 

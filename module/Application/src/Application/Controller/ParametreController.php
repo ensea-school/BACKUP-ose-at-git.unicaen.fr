@@ -6,7 +6,7 @@ use Application\Form\CampagneSaisieFieldset;
 use Application\Form\Traits\CampagneSaisieFormAwareTrait;
 use Application\Form\Traits\ParametresFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtablissementAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
@@ -27,7 +27,7 @@ class ParametreController extends AbstractController
     use ParametresAwareTrait;
     use EtablissementAwareTrait;
     use PersonnelAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
     use TypeIntervenantAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use CampagneSaisieServiceAwareTrait;
@@ -103,7 +103,7 @@ class ParametreController extends AbstractController
                             $this->getServiceCampagneSaisie()->save($campagne);
                         }
                     });
-                } 
+                }
             }
         }
 

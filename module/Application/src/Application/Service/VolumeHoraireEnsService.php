@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\VolumeHoraireEns;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 
@@ -18,7 +18,7 @@ use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
  */
 class VolumeHoraireEnsService extends AbstractEntityService
 {
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
 
 

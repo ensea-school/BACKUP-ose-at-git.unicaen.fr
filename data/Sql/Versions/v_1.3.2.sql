@@ -2,7 +2,7 @@
 -- *          à faire AVANT avoir mis à jour le code source            * --
 -- ********************************************************************* --
 
-BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END; 
+BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END;
 /
 
 
@@ -27,7 +27,7 @@ ALTER TABLE "OSE"."NOTIFICATION_INDICATEUR" MODIFY ("FREQUENCE" NUMBER(*,0));
 --Nouveau TABLE
 --FORMULE_RESULTAT_VH
 ---------------------------
-  CREATE TABLE "OSE"."FORMULE_RESULTAT_VH" 
+  CREATE TABLE "OSE"."FORMULE_RESULTAT_VH"
    (	"ID" NUMBER(*,0) NOT NULL ENABLE,
 	"FORMULE_RESULTAT_ID" NUMBER(*,0) NOT NULL ENABLE,
 	"VOLUME_HORAIRE_ID" NUMBER(*,0) NOT NULL ENABLE,
@@ -46,10 +46,10 @@ ALTER TABLE "OSE"."NOTIFICATION_INDICATEUR" MODIFY ("FREQUENCE" NUMBER(*,0));
 --Modifié VIEW
 --V_TMP_WF
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_TMP_WF" 
+CREATE OR REPLACE FORCE VIEW "OSE"."V_TMP_WF"
  ( "ID", "SOURCE_CODE", "NB_COMP", "NB_AGREM"
-  )  AS 
-  WITH 
+  )  AS
+  WITH
   composantes_enseign AS (
       -- composantes d'enseignement par intervenant
       SELECT DISTINCT i.ID, i.source_code, s.structure_ens_id
@@ -64,17 +64,17 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_TMP_WF"
       FROM agrement A
       INNER JOIN type_agrement ta ON A.type_agrement_id = ta.ID AND (ta.histo_destructeur_id IS NULL)
       INNER JOIN intervenant i ON A.intervenant_id = i.ID AND (i.histo_destructeur_id IS NULL)
-      INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id 
-          AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL) 
+      INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id
+          AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL)
       WHERE A.histo_destructeur_id IS NULL
       AND ta.code = 'CONSEIL_RESTREINT'
-  ), 
+  ),
   v_agrement AS (
     -- nombres de composantes d'enseignement et d'agrément obligatoires fournis par intervenant
-    SELECT DISTINCT i.ID, i.source_code, 
-      ( select count(*) from COMPOSANTES_ENSEIGN ce where ce.id = i.id ) nb_comp, 
+    SELECT DISTINCT i.ID, i.source_code,
+      ( select count(*) from COMPOSANTES_ENSEIGN ce where ce.id = i.id ) nb_comp,
       ( select count(*) from AGREMENTS_OBLIG_EXIST ao where ao.id = i.id ) nb_agrem
-    FROM intervenant i 
+    FROM intervenant i
     WHERE i.histo_destructeur_id IS NULL
   )
   SELECT "ID","SOURCE_CODE","NB_COMP","NB_AGREM"
@@ -87,10 +87,10 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_TMP_WF"
 --Nouveau VIEW
 --V_RECAP_SERVICE_PREVIS
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_RECAP_SERVICE_PREVIS" 
+CREATE OR REPLACE FORCE VIEW "OSE"."V_RECAP_SERVICE_PREVIS"
  ( "ID", "INTERVENANT_ID", "NOM_USUEL", "SOURCE_CODE", "ANNEE_ID", "SERVICE_STATUTAIRE", "MODIF_SERVICE", "LIBELLE_STRUCTURE", "CODE_EP", "LIBELLE_EP", "HAS_MODULATEUR", "NON_PAYABLE", "CODE_PERIODE", "ORDRE_PERIODE", "CODE_TI", "ORDRE_TI", "HEURES"
-  )  AS 
-  select 
+  )  AS
+  select
   vh.id,
   i.id intervenant_id,
   i.nom_usuel,
@@ -122,7 +122,7 @@ join type_intervention ti on vh.type_intervention_id = ti.id and ti.histo_destru
 left join v_formule_service fs on fs.id = s.id and (fs.ponderation_service_compl <> 1 or fs.ponderation_service_du <> 1) -- NB: fs.id est l'id du service
 left join v_formule_service_modifie fsm on fsm.intervenant_id = i.id and fsm.annee_id = s.annee_id
 where vh.histo_destructeur_id is null
-group by 
+group by
   vh.id,
   i.id,
   i.nom_usuel,
@@ -139,13 +139,13 @@ group by
   p.ordre,
   ti.code,
   ti.ordre;
-  
+
 /
 ---------------------------
 --Modifié PACKAGE
 --OSE_DIVERS
 ---------------------------
-CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS 
+CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS
 
   FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC;
 
@@ -162,7 +162,7 @@ CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS
   FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC;
 
   FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB;
-  
+
   FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC;
 
   FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE DEFAULT NULL, date_obs DATE DEFAULT SYSDATE ) RETURN NUMERIC;
@@ -172,9 +172,9 @@ CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS
   FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC;
 
   FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-  
+
   FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-  
+
   FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
 
   FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC;
@@ -264,7 +264,7 @@ FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUM
   RESULTAT NUMERIC;
 BEGIN
   IF structure_testee = structure_cible THEN RETURN 1; END IF;
-  
+
   select count(*) into resultat
   from structure
   WHERE structure.id = structure_testee
@@ -330,7 +330,7 @@ BEGIN
     ba := fa;
     nt := bi + bc + ba;
   END IF;
-  
+
   IF nt = 0 THEN -- toujours au cas ou...
     bi := 1;
     bc := 0;
@@ -369,7 +369,7 @@ BEGIN
   CALCUL_TAUX( eff_fi, eff_fc, eff_fa, fi, fc, fa, ri, rc, ra, arrondi );
   RETURN ri;
 END;
-  
+
 FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
   ri FLOAT;
   rc FLOAT;
@@ -378,7 +378,7 @@ BEGIN
   CALCUL_TAUX( eff_fi, eff_fc, eff_fa, fi, fc, fa, ri, rc, ra, arrondi );
   RETURN rc;
 END;
-  
+
 FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
   ri FLOAT;
   rc FLOAT;
@@ -402,14 +402,14 @@ END;
 
 END OSE_DIVERS;
 /
-  
+
 ---------------------------
 --Modifié VIEW
 --V_NIVEAU_FORMATION
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_NIVEAU_FORMATION" 
+CREATE OR REPLACE FORCE VIEW "OSE"."V_NIVEAU_FORMATION"
  ( "ID", "CODE", "LIBELLE_LONG", "NIVEAU", "GROUPE_TYPE_FORMATION_ID"
-  )  AS 
+  )  AS
   SELECT DISTINCT
   ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, e.niveau ) id,
   gtf.libelle_court || e.niveau code,
@@ -425,41 +425,41 @@ WHERE
   AND ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, e.niveau ) IS NOT NULL
 ORDER BY
   gtf.libelle_long, e.niveau;
-  
+
 ---------------------------
 --Nouveau VIEW
 --ADRESSE_INTERVENANT_PRINC
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."ADRESSE_INTERVENANT_PRINC" 
+CREATE OR REPLACE FORCE VIEW "OSE"."ADRESSE_INTERVENANT_PRINC"
  ( "ID", "INTERVENANT_ID", "PRINCIPALE", "TEL_DOMICILE", "MENTION_COMPLEMENTAIRE", "BATIMENT", "NO_VOIE", "NOM_VOIE", "LOCALITE", "CODE_POSTAL", "VILLE", "PAYS_CODE_INSEE", "PAYS_LIBELLE", "SOURCE_ID", "SOURCE_CODE", "VALIDITE_DEBUT", "VALIDITE_FIN", "HISTO_CREATION", "HISTO_CREATEUR_ID", "HISTO_MODIFICATION", "HISTO_MODIFICATEUR_ID", "HISTO_DESTRUCTION", "HISTO_DESTRUCTEUR_ID", "TO_STRING"
-  )  AS 
-  select 
+  )  AS
+  select
     a."ID",a."INTERVENANT_ID",a."PRINCIPALE",a."TEL_DOMICILE",a."MENTION_COMPLEMENTAIRE",a."BATIMENT",a."NO_VOIE",a."NOM_VOIE",a."LOCALITE",a."CODE_POSTAL",a."VILLE",a."PAYS_CODE_INSEE",a."PAYS_LIBELLE",a."SOURCE_ID",a."SOURCE_CODE",a."VALIDITE_DEBUT",a."VALIDITE_FIN",a."HISTO_CREATION",a."HISTO_CREATEUR_ID",a."HISTO_MODIFICATION",a."HISTO_MODIFICATEUR_ID",a."HISTO_DESTRUCTION",a."HISTO_DESTRUCTEUR_ID",
     -- concaténation des éléments non null séparés par ', '
     trim(trim(',' from replace(', ' || nvl(a.no_voie,'#') || ', ' || nvl(a.nom_voie,'#') || ', ' || nvl(a.batiment,'#') || ', ' || nvl(a.mention_complementaire,'#'), ', #', ''))) ||
     -- saut de ligne complet
-    chr(13) || chr(10) || 
+    chr(13) || chr(10) ||
     -- concaténation des éléments non null séparés par ', '
     trim(trim(',' from replace(', ' || nvl(a.localite,'#') || ', ' || nvl(a.code_postal,'#') || ', ' || nvl(a.ville,'#') || ', ' || nvl(a.pays_libelle,'#'), ', #', ''))) to_string
   from adresse_intervenant a
   where id in (
     -- on ne retient que l'adresse principale si elle existe ou sinon la première adresse trouvée
-    select id 
+    select id
     from (
       -- attribution d'un rang par intervenant aux adresses pour avoir la principale (éventuelle) en n°1
       select id, dense_rank() over(partition by intervenant_id order by principale desc) rang from adresse_intervenant
-    ) 
+    )
     where rang = 1
   );
-  
+
 ---------------------------
 --Nouveau VIEW
 --V_INDIC_DIFF_DOSSIER
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_INDIC_DIFF_DOSSIER" 
+CREATE OR REPLACE FORCE VIEW "OSE"."V_INDIC_DIFF_DOSSIER"
  ( "ID", "NOM_USUEL", "ADRESSE_DOSSIER", "ADRESSE_IMPORT", "RIB_DOSSIER", "RIB_IMPORT", "NOM_USUEL_DOSSIER", "NOM_USUEL_IMPORT", "PRENOM_DOSSIER", "PRENOM_IMPORT"
-  )  AS 
-  select 
+  )  AS
+  select
     i.id,
     i.nom_usuel,
     case when d.adresse <> a.to_string                                              then d.adresse                            else null end adresse_dossier,
@@ -478,11 +478,11 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_INDIC_DIFF_DOSSIER"
 --Nouveau VIEW
 --V_BERTRAND
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_BERTRAND" 
+CREATE OR REPLACE FORCE VIEW "OSE"."V_BERTRAND"
  ( "INTERVENANT_ID", "SOURCE_CODE", "NOM_USUEL", "LIBELLE_STR", "CODE_EP", "LIBELLE_EP", "HAS_MODULATEUR", "CODE_PERIODE", "CODE_TI", "PAYABLE", "HEURES", "GROUPING_EP", "GROUPING_PERIODE", "GROUPING_PAYABLE", "GROUPING_ID"
-  )  AS 
+  )  AS
   with tmp as (
-  select 
+  select
     i.id intervenant_id,
     i.source_code,
     i.nom_usuel,
@@ -508,7 +508,7 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_BERTRAND"
   left join v_formule_service_modifie fsm on fsm.intervenant_id = i.id and fsm.annee_id = s.annee_id
   where vh.histo_destructeur_id is null
 )
-select 
+select
   intervenant_id,
   source_code,
   nom_usuel,
@@ -520,20 +520,20 @@ select
   code_ti,
   /*decode(grouping(payable), 1, 'Total payable ou non', payable) as*/ payable,
   sum(heures) heures,
-  grouping(libelle_ep) as grouping_ep, 
-  grouping(code_periode) as grouping_periode, 
+  grouping(libelle_ep) as grouping_ep,
+  grouping(code_periode) as grouping_periode,
   grouping(payable) as grouping_payable,
   grouping_id(libelle_str, libelle_ep, code_periode, payable) as grouping_id
 from tmp
 --where source_code = '3948'
 group by intervenant_id, source_code, nom_usuel, code_ti, cube(libelle_str, (code_ep, libelle_ep, has_modulateur), code_periode, payable)
-having 
+having
 --  grouping_id(libelle_ep, code_periode, payable) in (0,5,7) equivaut aux 3 lignes suivantes :
   grouping(libelle_str) = 0 and grouping(libelle_ep) = 0 and grouping(code_periode) = 0 and grouping(payable) = 0 or -- totaux détails (grouping_id = 0)
   grouping(libelle_str) = 0 and grouping(libelle_ep) = 1 and grouping(code_periode) = 0 and grouping(payable) = 1 or -- totaux tout EP et payable confondus (grouping_id = 5)
   grouping(libelle_str) = 0 and grouping(libelle_ep) = 1 and grouping(code_periode) = 1 and grouping(payable) = 1 or -- totaux tout EP, période et payable confondus (grouping_id = 7)
-  grouping(libelle_str) = 1 and grouping(libelle_ep) = 1 and grouping(code_periode) = 1 and grouping(payable) = 1    -- totaux tout Structure, EP, période et payable confondus (grouping_id = 15)
-order by 
+  grouping(libelle_str) = 1 and grouping(libelle_ep) = 1 and grouping(code_periode) = 1 and grouping(payable) = 1    -- totaux tout StructureService, EP, période et payable confondus (grouping_id = 15)
+order by
   nom_usuel, libelle_str, code_periode, libelle_ep, libelle_ep, code_ti, payable desc;
 ---------------------------
 --Modifié TRIGGER
@@ -558,7 +558,7 @@ END;
 BEGIN
   service_id := CASE WHEN deleting THEN :OLD.service_id ELSE :NEW.service_id END;
   SELECT s.intervenant_id into intervenant_id from service s where id = service_id;
-  ose_workflow.add_intervenant_to_update (intervenant_id); 
+  ose_workflow.add_intervenant_to_update (intervenant_id);
 END;
 /
 ---------------------------
@@ -579,7 +579,7 @@ END;
   AFTER INSERT OR DELETE OR UPDATE ON "OSE"."SERVICE"
   REFERENCING FOR EACH ROW
   BEGIN
-  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
+  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END);
 END;
 /
 ---------------------------
@@ -600,12 +600,12 @@ END;
         raise_application_error(-20101, 'Il est impossible d''associer un motif de non paiement à un intervenant vacataire ou BIATSS.');
       END IF;
     END IF;
-    
+
     IF :NEW.motif_non_paiement_id IS NOT NULL AND :NEW.contrat_id IS NOT NULL THEN
       raise_application_error(-20101, 'Les heures ayant un motif de non paiement ne peuvent faire l''objet d''une contractualisation');
     END IF;
 
-    modified := 
+    modified :=
       NVL(:NEW.id,0) <> NVL(:OLD.id,0)
       OR NVL(:NEW.type_volume_horaire_id,0) <> NVL(:OLD.type_volume_horaire_id,0)
       OR NVL(:NEW.service_id,0) <> NVL(:OLD.service_id,0)
@@ -617,7 +617,7 @@ END;
       OR NVL(:NEW.histo_createur_id,0) <> NVL(:OLD.histo_createur_id,0)
       OR NVL(:NEW.histo_destruction,SYSDATE) <> NVL(:OLD.histo_destruction,SYSDATE)
       OR NVL(:NEW.histo_destructeur_id,0) <> NVL(:OLD.histo_destructeur_id,0);
-    
+
     SELECT
       COUNT(*)
     INTO
@@ -628,7 +628,7 @@ END;
     WHERE
       V.HISTO_DESTRUCTION IS NULL
       AND vvh.VOLUME_HORAIRE_ID  = :NEW.ID;
-      
+
     IF modified AND 0 <> has_validation THEN
       raise_application_error(-20101, 'Il est impossible de modifier des heures déjà validées.');
     END IF;
@@ -648,27 +648,27 @@ END;
 --Modifié PACKAGE
 --OSE_FORMULE
 ---------------------------
-CREATE OR REPLACE PACKAGE "OSE"."OSE_FORMULE" AS 
+CREATE OR REPLACE PACKAGE "OSE"."OSE_FORMULE" AS
 
   TYPE t_intervenant IS RECORD (
     structure_id              NUMERIC,
     heures_service_statutaire FLOAT   DEFAULT 0,
     heures_service_modifie    FLOAT   DEFAULT 0
   );
-  
+
   TYPE t_type_etat_vh IS RECORD (
     type_volume_horaire_id    NUMERIC,
     etat_volume_horaire_id    NUMERIC
   );
   TYPE t_lst_type_etat_vh   IS TABLE OF t_type_etat_vh INDEX BY PLS_INTEGER;
-  
+
   TYPE t_referentiel IS RECORD (
     id                        NUMERIC,
     structure_id              NUMERIC,
     heures                    FLOAT   DEFAULT 0
   );
   TYPE t_lst_referentiel      IS TABLE OF t_referentiel INDEX BY PLS_INTEGER;
-  
+
   TYPE t_service IS RECORD (
     id                        NUMERIC,
     taux_fi                   FLOAT   DEFAULT 1,
@@ -680,7 +680,7 @@ CREATE OR REPLACE PACKAGE "OSE"."OSE_FORMULE" AS
     structure_ens_id          NUMERIC
   );
   TYPE t_lst_service          IS TABLE OF t_service INDEX BY PLS_INTEGER;
-  
+
   TYPE t_volume_horaire IS RECORD (
     id                        NUMERIC,
     service_id                NUMERIC,
@@ -704,13 +704,13 @@ CREATE OR REPLACE PACKAGE "OSE"."OSE_FORMULE" AS
 
   FUNCTION NOUVEAU_RESULTAT RETURN formule_resultat%rowtype;
   FUNCTION ENREGISTRER_RESULTAT( fr formule_resultat%rowtype ) RETURN NUMERIC;
-  
+
   FUNCTION NOUVEAU_RESULTAT_SERVICE RETURN formule_resultat_service%rowtype;
   FUNCTION ENREGISTRER_RESULTAT_SERVICE( fs formule_resultat_service%rowtype ) RETURN NUMERIC;
-  
+
   FUNCTION NOUVEAU_RESULTAT_VH RETURN formule_resultat_vh%rowtype;
   FUNCTION ENREGISTRER_RESULTAT_VH( fvh formule_resultat_vh%rowtype ) RETURN NUMERIC;
-  
+
   FUNCTION NOUVEAU_RESULTAT_REF RETURN formule_resultat_referentiel%rowtype;
   FUNCTION ENREGISTRER_RESULTAT_REF( fr formule_resultat_referentiel%rowtype ) RETURN NUMERIC;
 
@@ -735,14 +735,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
    */
   PROCEDURE Add_Intervenant_To_Update (p_intervenant_id NUMERIC)
   IS
-  BEGIN 
+  BEGIN
     MERGE INTO wf_tmp_intervenant t USING dual ON (t.intervenant_id = p_intervenant_id) WHEN NOT MATCHED THEN INSERT (INTERVENANT_ID) VALUES (p_intervenant_id);
   END;
-  
+
   /**
    * Parcours des intervenants dont il faut regénérer la progression dans le workflow
    */
-  PROCEDURE Update_Intervenants_Etapes 
+  PROCEDURE Update_Intervenants_Etapes
   IS
   BEGIN
     FOR ti IN (SELECT distinct * FROM wf_tmp_intervenant) LOOP
@@ -750,14 +750,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     END LOOP;
     DELETE FROM wf_tmp_intervenant;
   END;
-  
+
   /**
    * Regénère la progression dans le workflow de tous les intervenants dont le statut autorise la saisie de service.
    */
-  PROCEDURE Update_All_Intervenants_Etapes 
+  PROCEDURE Update_All_Intervenants_Etapes
   IS
-    CURSOR intervenant_cur IS 
-      SELECT i.* FROM intervenant i 
+    CURSOR intervenant_cur IS
+      SELECT i.* FROM intervenant i
       JOIN statut_intervenant si ON si.id = i.statut_id AND si.histo_destruction IS NULL AND si.peut_saisir_service = 1
       WHERE i.histo_destruction IS NULL;
   BEGIN
@@ -767,11 +767,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
       ose_workflow.Update_Intervenant_Etapes(intervenant_rec.id);
     END LOOP;
   END;
-  
+
   /**
    * Regénère la progression complète dans le workflow d'un intervenant.
    */
-  PROCEDURE Update_Intervenant_Etapes (p_intervenant_id NUMERIC) 
+  PROCEDURE Update_Intervenant_Etapes (p_intervenant_id NUMERIC)
   IS
     structures_ids T_LIST_STRUCTURE_ID;
     structure_id NUMERIC;
@@ -786,7 +786,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     -- RAZ progression.
     --
     DELETE FROM wf_intervenant_etape ie WHERE ie.intervenant_id = p_intervenant_id;
-        
+
     --
     -- Parcours des étapes.
     --
@@ -799,7 +799,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
       inner join wf_etape ed on ed.id = ee.depart_etape_id
       inner join wf_etape ea on ea.id = ee.arrivee_etape_id
       where ea.code <> 'FIN'
-      connect by ee.depart_etape_id = prior ee.arrivee_etape_id 
+      connect by ee.depart_etape_id = prior ee.arrivee_etape_id
       start with ed.code = 'DEBUT'
       --UNION
       --select e.* from wf_etape e where e.code = 'FIN'
@@ -815,10 +815,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
         EXECUTE IMMEDIATE 'BEGIN :res := ' || etape_rec.PERTIN_FUNC || '(:1); END;' USING OUT pertinente, p_intervenant_id;
         --DBMS_OUTPUT.put_line (etape_rec.libelle || ' --> ' || etape_rec.PERTIN_FUNC || ' returned ' || pertinente);
       END IF;
-      IF pertinente = 0 THEN 
+      IF pertinente = 0 THEN
         CONTINUE;
       END IF;
-      
+
       --
       -- La règle (fonction) de franchissement prend 2 arguments : l'id de l'intervenant (null interdit) et l'id de la structure (null accepté).
       -- Cette règle sera exécutée une fois avec un id de structure null (ce qui se traduit par "peu importe la structure"), puis
@@ -832,17 +832,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
       IF etape_rec.STRUCTURE_DEPENDANT = 1 THEN
         ose_workflow.fetch_structures_ens_ids(p_intervenant_id, structures_ids);
       END IF;
-      
+
       --
-      -- Dans la progression de l'intervenant, une même étape peut figurer plusieurs fois : une fois avec un id de structure null 
-      -- (ce qui se traduit par "peu importe la structure") + autant de fois qu'il existe de structures d'enseignement dans le cas où 
+      -- Dans la progression de l'intervenant, une même étape peut figurer plusieurs fois : une fois avec un id de structure null
+      -- (ce qui se traduit par "peu importe la structure") + autant de fois qu'il existe de structures d'enseignement dans le cas où
       -- l'étape est déclinable par structure.
       --
       FOR i IN 0 .. structures_ids.COUNT - 1
       LOOP
         structure_id := structures_ids(i);
         --DBMS_OUTPUT.put_line (etape_rec.libelle || ' : structures_ids('||i||') := ' || structure_id);
-        
+
         --
         -- Interrogation de la règle de franchissement de l'étape.
         --
@@ -852,14 +852,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           EXECUTE IMMEDIATE 'BEGIN :res := ' || etape_rec.FRANCH_FUNC || '(:1, :2); END;' USING OUT franchie, p_intervenant_id, structure_id;
           --DBMS_OUTPUT.put_line (etape_rec.FRANCH_FUNC || ' returned ' || franchie);
         END IF;
-                        
+
         atteignable := 1;
-        
+
         --
         -- Si l'étape courante n'a pas encore été trouvée.
         --
-        IF courante_trouvee = 0 THEN 
-          IF franchie = 1 THEN 
+        IF courante_trouvee = 0 THEN
+          IF franchie = 1 THEN
             courante := 0;
           ELSE
             -- l'étape marquée "courante" est la 1ère étape non franchie
@@ -870,7 +870,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
         -- Si l'étape courante a été trouvée et que l'on se situe dessus.
         --
         ELSIF courante_trouvee = etape_rec.id THEN
-          IF franchie = 1 THEN 
+          IF franchie = 1 THEN
             courante := 0;
           ELSE
             courante := 1;
@@ -882,19 +882,19 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           courante := 0;
           atteignable := 0;
         END IF;
-                        
+
         --
         -- Ecriture dans la table.
         --
-        INSERT INTO wf_intervenant_etape (id, intervenant_id, etape_id, structure_id, courante, franchie, atteignable, ordre) 
+        INSERT INTO wf_intervenant_etape (id, intervenant_id, etape_id, structure_id, courante, franchie, atteignable, ordre)
           SELECT wf_intervenant_etape_id_seq.nextval, p_intervenant_id, etape_rec.id, structure_id, courante, franchie, atteignable, ordre FROM DUAL;
-        
+
         ordre := ordre + 1;
       END LOOP;
-      
+
     END LOOP;
   END;
-  
+
   /**
    *
    */
@@ -904,17 +904,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   BEGIN
     i := structures_ids.COUNT;
     FOR d IN (
-      SELECT distinct structure_ens_id FROM service s 
+      SELECT distinct structure_ens_id FROM service s
       WHERE s.intervenant_id = p_intervenant_id AND S.ANNEE_ID = OSE_PARAMETRE.GET_ANNEE() AND S.HISTO_DESTRUCTION IS NULL
     ) LOOP
       structures_ids(i) := d.structure_ens_id;
       i := i + 1;
     END LOOP;
   END;
-  
-  
+
+
   /******************** Règles métiers de pertinence et de franchissement des étapes ********************/
-  
+
   /**
    *
    */
@@ -922,12 +922,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT si.peut_saisir_dossier INTO res FROM statut_intervenant si 
-    JOIN intervenant i ON i.statut_id = si.id 
+    SELECT si.peut_saisir_dossier INTO res FROM statut_intervenant si
+    JOIN intervenant i ON i.statut_id = si.id
     WHERE i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
@@ -935,12 +935,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT si.peut_saisir_service INTO res FROM statut_intervenant si 
-    JOIN intervenant i ON i.statut_id = si.id 
+    SELECT si.peut_saisir_service INTO res FROM statut_intervenant si
+    JOIN intervenant i ON i.statut_id = si.id
     WHERE i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
@@ -949,20 +949,20 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     res NUMERIC;
   BEGIN
     IF p_structure_id IS NULL THEN
-      SELECT count(*) INTO res FROM service s 
+      SELECT count(*) INTO res FROM service s
       JOIN element_pedagogique ep on ep.id = s.element_pedagogique_id AND ep.histo_destruction IS NULL
       JOIN etape e ON e.id = ep.etape_id AND e.histo_destruction IS NULL
       WHERE s.intervenant_id = p_intervenant_id AND s.annee_id = ose_parametre.get_annee();
     ELSE
-      SELECT count(*) INTO res FROM service s 
-      JOIN element_pedagogique ep on ep.id = s.element_pedagogique_id 
+      SELECT count(*) INTO res FROM service s
+      JOIN element_pedagogique ep on ep.id = s.element_pedagogique_id
       JOIN etape e ON e.id = ep.etape_id
       WHERE s.intervenant_id = p_intervenant_id AND s.annee_id = ose_parametre.get_annee()
       AND s.structure_ens_id = p_structure_id;
     END IF;
     RETURN CASE WHEN res > 0 THEN 1 ELSE 0 END;
   END;
-  
+
   /**
    *
    */
@@ -970,11 +970,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT si.peut_saisir_referentiel INTO res FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id 
+    SELECT si.peut_saisir_referentiel INTO res FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id
     WHERE i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
@@ -982,13 +982,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT count(*) INTO res FROM type_piece_jointe_statut tpjs 
-    JOIN statut_intervenant si on tpjs.statut_intervenant_id = si.id 
+    SELECT count(*) INTO res FROM type_piece_jointe_statut tpjs
+    JOIN statut_intervenant si on tpjs.statut_intervenant_id = si.id
     JOIN intervenant i ON i.statut_id = si.id
     WHERE i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
@@ -996,15 +996,15 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT count(*) INTO res FROM type_agrement_statut tas 
+    SELECT count(*) INTO res FROM type_agrement_statut tas
     JOIN type_agrement ta ON ta.id = tas.type_agrement_id AND ta.code = 'CONSEIL_RESTREINT'
     JOIN statut_intervenant si on tas.statut_intervenant_id = si.id
     JOIN intervenant i ON i.statut_id = si.id
-    WHERE tas.PREMIER_RECRUTEMENT = i.PREMIER_RECRUTEMENT AND tas.OBLIGATOIRE = 1 
+    WHERE tas.PREMIER_RECRUTEMENT = i.PREMIER_RECRUTEMENT AND tas.OBLIGATOIRE = 1
     AND i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
@@ -1012,15 +1012,15 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT count(*) INTO res FROM type_agrement_statut tas 
+    SELECT count(*) INTO res FROM type_agrement_statut tas
     JOIN type_agrement ta ON ta.id = tas.type_agrement_id AND ta.code = 'CONSEIL_ACADEMIQUE'
     JOIN statut_intervenant si on tas.statut_intervenant_id = si.id
     JOIN intervenant i ON i.statut_id = si.id
-    WHERE tas.PREMIER_RECRUTEMENT = i.PREMIER_RECRUTEMENT AND tas.OBLIGATOIRE = 1 
+    WHERE tas.PREMIER_RECRUTEMENT = i.PREMIER_RECRUTEMENT AND tas.OBLIGATOIRE = 1
     AND i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
@@ -1028,18 +1028,18 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT si.peut_avoir_contrat INTO res FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id 
+    SELECT si.peut_avoir_contrat INTO res FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id
     WHERE i.id = p_intervenant_id;
     RETURN res;
   END;
-  
+
   /**
    *
    */
   FUNCTION service_valide (p_intervenant_id NUMERIC, p_structure_id NUMERIC DEFAULT NULL) RETURN NUMERIC
   IS
-    CURSOR service_cur IS 
-      SELECT s.* FROM service s 
+    CURSOR service_cur IS
+      SELECT s.* FROM service s
       JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
       JOIN v_volume_horaire_etat vhe ON vhe.volume_horaire_id = vh.id
       JOIN etat_volume_horaire evh ON evh.id = vhe.etat_volume_horaire_id AND evh.ordre >= ( SELECT min(ordre) FROM etat_volume_horaire WHERE code = 'valide' )
@@ -1047,16 +1047,16 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
       JOIN etape e ON e.id = ep.etape_id AND e.histo_destruction IS NULL
       WHERE s.intervenant_id = p_intervenant_id AND s.annee_id = ose_parametre.get_annee();
 --    -- autre version : sans utilisation de la vue v_volume_horaire_etat
---    CURSOR service_cur IS 
---      SELECT s.* FROM service s 
+--    CURSOR service_cur IS
+--      SELECT s.* FROM service s
 --      JOIN element_pedagogique ep on ep.id = s.element_pedagogique_id AND ep.histo_destruction IS NULL
 --      JOIN etape e ON e.id = ep.etape_id AND e.histo_destruction IS NULL
 --      JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
 --      JOIN VALIDATION_VOL_HORAIRE vvh on VVH.VOLUME_HORAIRE_ID = vh.id
 --      JOIN validation v on VVH.VALIDATION_ID = v.id AND V.HISTO_DESTRUCTION is null
 --      WHERE s.intervenant_id = p_intervenant_id AND s.annee_id = ose_parametre.get_annee();
---    CURSOR service_cur IS 
---      SELECT s.* FROM service s 
+--    CURSOR service_cur IS
+--      SELECT s.* FROM service s
 --      JOIN volume_horaire vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL
 --      JOIN v_volume_horaire_etat vhe ON vhe.volume_horaire_id = vh.id
 --      JOIN etat_volume_horaire evh ON evh.id = vhe.etat_volume_horaire_id AND evh.ordre < ( SELECT min(ordre) FROM etat_volume_horaire WHERE code = 'valide' )
@@ -1107,9 +1107,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT count(*) INTO res FROM validation v 
-    JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code = 'DONNEES_PERSO_PAR_COMP' 
-    WHERE v.histo_destruction IS NULL 
+    SELECT count(*) INTO res FROM validation v
+    JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code = 'DONNEES_PERSO_PAR_COMP'
+    WHERE v.histo_destruction IS NULL
     AND v.intervenant_id = p_intervenant_id;
     RETURN res;
   END;
@@ -1121,9 +1121,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT count(*) INTO res FROM validation v 
-    JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code = 'REFERENTIEL' 
-    WHERE v.histo_destruction IS NULL 
+    SELECT count(*) INTO res FROM validation v
+    JOIN type_validation tv ON tv.id = v.type_validation_id AND tv.code = 'REFERENTIEL'
+    WHERE v.histo_destruction IS NULL
     AND v.intervenant_id = p_intervenant_id;
     RETURN res;
   END;
@@ -1136,7 +1136,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     res NUMERIC;
   BEGIN
     SELECT count(*) INTO res FROM (
-      WITH 
+      WITH
       ATTENDU_OBLIGATOIRE AS (
           -- nombres de pj OBLIGATOIRES pour chaque intervenant
           SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0) TOTAL_HEURES, count(tpjs.id) NB /*+ materialize */
@@ -1144,12 +1144,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
-          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL)
           LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
           WHERE tpjs.OBLIGATOIRE = 1
           AND (tpjs.SEUIL_HETD IS NULL OR COALESCE(vheures.TOTAL_HEURES, 0) >= tpjs.SEUIL_HETD)
           GROUP BY I.ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0)
-      ), 
+      ),
       FOURNI_OBLIGATOIRE AS (
           -- nombres de pj OBLIGATOIRES FOURNIES par chaque intervenant
           SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjAttendu.ID) NB /*+ materialize */
@@ -1157,7 +1157,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
-          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN TYPE_PIECE_JOINTE tpjAttendu ON tpjs.TYPE_PIECE_JOINTE_ID = tpjAttendu.ID AND (tpjAttendu.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN PIECE_JOINTE pj ON d.ID = pj.DOSSIER_ID AND (pj.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN pj.VALIDITE_DEBUT AND COALESCE(pj.VALIDITE_FIN, SYSDATE))
           INNER JOIN TYPE_PIECE_JOINTE tpjFourni ON pj.TYPE_PIECE_JOINTE_ID = tpjFourni.ID AND (tpjFourni.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN tpjFourni.VALIDITE_DEBUT AND COALESCE(tpjFourni.VALIDITE_FIN, SYSDATE))
@@ -1168,7 +1168,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           -- %s
           AND pj.VALIDATION_ID IS NOT NULL -- %s
           GROUP BY I.ID, I.SOURCE_CODE
-      ), 
+      ),
       ATTENDU_FACULTATIF AS (
           -- nombres de pj FACULTATIVES pour chaque intervenant
           SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0) TOTAL_HEURES, count(tpjs.id) NB /*+ materialize */
@@ -1176,11 +1176,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
-          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL)
           LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
           WHERE (tpjs.OBLIGATOIRE = 0 OR tpjs.OBLIGATOIRE = 1 AND tpjs.SEUIL_HETD IS NOT NULL AND COALESCE(vheures.TOTAL_HEURES, 0) < tpjs.SEUIL_HETD)
           GROUP BY I.ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0)
-      ), 
+      ),
       FOURNI_FACULTATIF AS (
           -- nombres de pj FACULTATIVES FOURNIES par chaque intervenant
           SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjAttendu.ID) NB /*+ materialize */
@@ -1188,7 +1188,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
-          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+          INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN TYPE_PIECE_JOINTE tpjAttendu ON tpjs.TYPE_PIECE_JOINTE_ID = tpjAttendu.ID AND (tpjAttendu.HISTO_DESTRUCTEUR_ID IS NULL)
           INNER JOIN PIECE_JOINTE pj ON d.ID = pj.DOSSIER_ID AND (pj.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN pj.VALIDITE_DEBUT AND COALESCE(pj.VALIDITE_FIN, SYSDATE))
           INNER JOIN TYPE_PIECE_JOINTE tpjFourni ON pj.TYPE_PIECE_JOINTE_ID = tpjFourni.ID AND (tpjFourni.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN tpjFourni.VALIDITE_DEBUT AND COALESCE(tpjFourni.VALIDITE_FIN, SYSDATE))
@@ -1197,14 +1197,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           AND tpjFourni.ID = tpjAttendu.ID
           GROUP BY I.ID, I.SOURCE_CODE
       )
-      SELECT 
-          COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) ID, 
-          COALESCE(AO.SOURCE_CODE, AF.SOURCE_CODE)       SOURCE_CODE, 
-          COALESCE(AO.TOTAL_HEURES, AF.TOTAL_HEURES)     TOTAL_HEURES, 
-          COALESCE(AO.NB, 0)                             NB_PJ_OBLIG_ATTENDU, 
-          COALESCE(FO.NB, 0)                             NB_PJ_OBLIG_FOURNI, 
-          COALESCE(AF.NB, 0)                             NB_PJ_FACUL_ATTENDU, 
-          COALESCE(FF.NB, 0)                             NB_PJ_FACUL_FOURNI 
+      SELECT
+          COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) ID,
+          COALESCE(AO.SOURCE_CODE, AF.SOURCE_CODE)       SOURCE_CODE,
+          COALESCE(AO.TOTAL_HEURES, AF.TOTAL_HEURES)     TOTAL_HEURES,
+          COALESCE(AO.NB, 0)                             NB_PJ_OBLIG_ATTENDU,
+          COALESCE(FO.NB, 0)                             NB_PJ_OBLIG_FOURNI,
+          COALESCE(AF.NB, 0)                             NB_PJ_FACUL_ATTENDU,
+          COALESCE(FF.NB, 0)                             NB_PJ_FACUL_FOURNI
       FROM            ATTENDU_OBLIGATOIRE AO
       FULL OUTER JOIN ATTENDU_FACULTATIF  AF ON AF.INTERVENANT_ID = AO.INTERVENANT_ID
       LEFT JOIN       FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = AO.INTERVENANT_ID
@@ -1212,7 +1212,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
       WHERE COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) = p_intervenant_id
     )
     WHERE NB_PJ_OBLIG_ATTENDU <= NB_PJ_OBLIG_FOURNI;
-    
+
     RETURN res;
   END;
 
@@ -1224,7 +1224,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     res NUMERIC;
     code VARCHAR2(64) := 'CONSEIL_RESTREINT';
   BEGIN
-    WITH 
+    WITH
     composantes_enseign AS (
         -- composantes d'enseignement par intervenant
         SELECT DISTINCT i.ID, i.source_code, s.structure_ens_id
@@ -1240,18 +1240,18 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
         FROM agrement A
         INNER JOIN type_agrement ta ON A.type_agrement_id = ta.ID AND (ta.histo_destructeur_id IS NULL)
         INNER JOIN intervenant i ON A.intervenant_id = i.ID AND (i.histo_destructeur_id IS NULL)
-        INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id 
-            AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL) 
+        INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id
+            AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL)
         WHERE A.histo_destructeur_id IS NULL
         AND ta.code = code
         AND (p_structure_id IS NULL OR p_structure_id IS NOT NULL AND A.structure_id = p_structure_id)
-    ), 
+    ),
     v_agrement AS (
       -- nombres de composantes d'enseignement et d'agrément obligatoires fournis par intervenant
-      SELECT DISTINCT i.ID, i.source_code, 
-        ( select count(*) from COMPOSANTES_ENSEIGN ce where ce.id = i.id ) nb_comp, 
+      SELECT DISTINCT i.ID, i.source_code,
+        ( select count(*) from COMPOSANTES_ENSEIGN ce where ce.id = i.id ) nb_comp,
         ( select count(*) from AGREMENTS_OBLIG_EXIST ao where ao.id = i.id ) nb_agrem
-      FROM intervenant i 
+      FROM intervenant i
       WHERE i.histo_destructeur_id IS NULL
     )
     SELECT COUNT(*) INTO res
@@ -1259,12 +1259,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     WHERE (
       -- si aucune structure précise n'est spécifiée, on ne retient que les intervenants qui ont au moins un d'agrément CR
       p_structure_id IS NULL AND nb_agrem > 0
-      OR 
+      OR
       -- si une structure précise est spécifiée, on ne retient que les intervenants qui ont (au moins) autant d'agréments CR que de composantes d'enseignement
-      p_structure_id IS NOT NULL AND v.nb_comp <= nb_agrem 
-    ) 
+      p_structure_id IS NOT NULL AND v.nb_comp <= nb_agrem
+    )
     AND v.id = p_intervenant_id ;
-    
+
     RETURN res;
   END;
 
@@ -1276,30 +1276,30 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
     res NUMERIC;
     v_code VARCHAR2(64) := 'CONSEIL_ACADEMIQUE';
   BEGIN
-    WITH 
+    WITH
     agrements_oblig_exist AS (
         -- agréments obligatoires obtenus par intervenant et structure
         SELECT i.ID, i.source_code, A.type_agrement_id, A.ID agrement_id, A.structure_id
         FROM agrement A
         INNER JOIN type_agrement ta ON A.type_agrement_id = ta.ID AND (ta.histo_destructeur_id IS NULL)
         INNER JOIN intervenant i ON A.intervenant_id = i.ID AND (i.histo_destructeur_id IS NULL)
-        INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id 
-            AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL) 
+        INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id
+            AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL)
         WHERE A.histo_destructeur_id IS NULL
         AND ta.code = v_code
-    ), 
+    ),
     v_agrement AS (
       -- nombres d'agrément obligatoires fournis par intervenant
-      SELECT DISTINCT i.ID, i.source_code, 
+      SELECT DISTINCT i.ID, i.source_code,
         ( select count(*) from AGREMENTS_OBLIG_EXIST ao where ao.id = i.id ) nb_agrem
-      FROM intervenant i 
+      FROM intervenant i
       WHERE i.histo_destructeur_id IS NULL
     )
     SELECT COUNT(*) INTO res
     FROM v_agrement v
     WHERE nb_agrem > 0
     AND v.id = p_intervenant_id ;
-    
+
     RETURN res;
   END;
 
@@ -1310,14 +1310,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   IS
     res NUMERIC;
   BEGIN
-    SELECT count(*) INTO res 
+    SELECT count(*) INTO res
     FROM contrat c
     JOIN validation v ON c.validation_id = v.id AND v.histo_destruction IS NULL
-    WHERE c.HISTO_DESTRUCTION IS NULL 
+    WHERE c.HISTO_DESTRUCTION IS NULL
     AND c.intervenant_id = p_intervenant_id
-    AND (p_structure_id IS NULL OR p_structure_id IS NOT NULL AND c.STRUCTURE_ID = p_structure_id) 
+    AND (p_structure_id IS NULL OR p_structure_id IS NOT NULL AND c.STRUCTURE_ID = p_structure_id)
     AND ROWNUM = 1;
-    
+
     RETURN res;
   END;
 
@@ -1334,7 +1334,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     valeurs t_valeurs,
     total_service t_valeurs,
     total   FLOAT
-  );  
+  );
   TYPE t_tableaux         IS TABLE OF t_tableau                       INDEX BY PLS_INTEGER;
 
   t                     t_tableaux;
@@ -1348,10 +1348,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     tab t_tableau;
   BEGIN
     tab := t(tab_index);
-  
+
     ose_test.echo( 'Intervenant id = ' || resultat.intervenant_id );
     ose_test.echo( 'Tableau numéro ' || tab_index );
-    
+
     id := ose_formule.d_service.FIRST;
     LOOP EXIT WHEN id IS NULL;
       dbms_output.put( 'Service id=' || lpad(id,6,' ') || ' Total=' || lpad(tab.total_service(id),10,' ') || ', data = ' );
@@ -1360,17 +1360,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       LOOP EXIT WHEN id2 IS NULL;
         IF ose_formule.d_volume_horaire(id2).type_volume_horaire_id = resultat.type_volume_horaire_id
         AND ose_formule.d_volume_horaire(id2).etat_volume_horaire_ordre >= resultat.etat_volume_horaire_id AND ose_formule.d_volume_horaire(id2).service_id = id THEN
-          
+
           dbms_output.put( lpad(tab.valeurs(id2),10,' ') || ' | ' );
-          
+
         END IF;
       id2 := ose_formule.d_volume_horaire.NEXT(id2);
       END LOOP;
       dbms_output.new_line;
       id := ose_formule.d_service.NEXT(id);
     END LOOP;
-    
-    
+
+
     ose_test.echo( 'TOTAL = ' || LPAD(tab.total, 10, ' ') );
   END;
 
@@ -1390,7 +1390,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-  
+
     IF NVL(s.structure_ens_id,0) <> NVL(s.structure_aff_id,0) AND s.taux_fc < 1 THEN
       RETURN vh.heures;
     ELSE
@@ -1402,7 +1402,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-  
+
     IF NVL(s.structure_ens_id,0) = NVL(s.structure_aff_id,0) AND s.taux_fc = 1 THEN
       RETURN vh.heures;
     ELSE
@@ -1414,13 +1414,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-  
+
     IF NVL(s.structure_ens_id,0) <> NVL(s.structure_aff_id,0) AND s.taux_fc = 1 THEN
       RETURN vh.heures;
     ELSE
       RETURN 0;
     END IF;
-  END;  
+  END;
 
   FUNCTION C_15( fr ose_formule.t_referentiel ) RETURN FLOAT IS
   BEGIN
@@ -1458,12 +1458,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
   BEGIN
     RETURN t(12).valeurs(vh.id) * vh.taux_service_du;
   END;
-  
+
   FUNCTION C_23( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
     RETURN t(13).valeurs(vh.id) * vh.taux_service_du;
   END;
-  
+
   FUNCTION C_24( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
     RETURN t(14).valeurs(vh.id) * vh.taux_service_du;
@@ -1473,12 +1473,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
   BEGIN
     RETURN t(15).valeurs( fr.id );
   END;
-  
+
   FUNCTION C_26( fr ose_formule.t_referentiel ) RETURN FLOAT IS
   BEGIN
     RETURN t(16).valeurs( fr.id );
   END;
-  
+
   FUNCTION C_27( fr ose_formule.t_referentiel ) RETURN FLOAT IS
   BEGIN
     RETURN t(17).valeurs( fr.id );
@@ -1503,7 +1503,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
   BEGIN
     RETURN GREATEST( service_restant_du(33) - t(24).total, 0 );
   END;
-  
+
   FUNCTION C_35 RETURN FLOAT IS
   BEGIN
     RETURN GREATEST( service_restant_du(34) - t(25).total, 0 );
@@ -1536,7 +1536,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN 0;
     END IF;
   END;
-  
+
   FUNCTION C_43( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
     IF t(23).total > 0 THEN
@@ -1545,7 +1545,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN 0;
     END IF;
   END;
-  
+
   FUNCTION C_44( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
     IF t(24).total > 0 THEN
@@ -1572,7 +1572,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN 0;
     END IF;
   END;
-  
+
   FUNCTION C_47( fr ose_formule.t_referentiel ) RETURN FLOAT IS
   BEGIN
     IF t(27).total > 0 THEN
@@ -1611,11 +1611,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
   BEGIN
     RETURN LEAST( service_restant_du(35), t(26).total ) * t(46).valeurs(fr.id);
   END;
-  
+
   FUNCTION C_57( fr ose_formule.t_referentiel ) RETURN FLOAT IS
   BEGIN
     RETURN LEAST( service_restant_du(36), t(27).total ) * t(47).valeurs(fr.id);
-  END;  
+  END;
 
   FUNCTION C_61( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
@@ -1733,7 +1733,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN 1 - t(66).valeurs(fr.id);
     END IF;
   END;
-  
+
   FUNCTION C_77( fr ose_formule.t_referentiel ) RETURN FLOAT IS
   BEGIN
     IF service_restant_du(37) > 0 THEN
@@ -1742,7 +1742,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN 1 - t(67).valeurs(fr.id);
     END IF;
   END;
-  
+
   FUNCTION C_81( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
     RETURN t(11).valeurs(vh.id) * vh.taux_service_compl * t(71).valeurs(vh.id);
@@ -1757,7 +1757,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
   BEGIN
     RETURN t(13).valeurs(vh.id) * vh.taux_service_compl * t(73).valeurs(vh.id);
   END;
-  
+
   FUNCTION C_84( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
   BEGIN
     RETURN t(14).valeurs(vh.id) * vh.taux_service_compl * t(74).valeurs(vh.id);
@@ -1789,7 +1789,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN t(83).valeurs(vh.id);
     END IF;
   END;
-  
+
   FUNCTION C_94( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
     s  ose_formule.t_service;
   BEGIN
@@ -1799,14 +1799,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
       RETURN t(84).valeurs(vh.id) * s.ponderation_service_compl;
     ELSE
       RETURN t(84).valeurs(vh.id);
-    END IF;    
+    END IF;
   END;
 
   FUNCTION C_101( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-    
+
     RETURN t(81).valeurs(vh.id) * ( s.taux_fi + s.taux_fa );
   END;
 
@@ -1814,23 +1814,23 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-    
+
     RETURN t(82).valeurs(vh.id) * ( s.taux_fi + s.taux_fa );
   END;
-  
+
   FUNCTION C_103( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-    
+
     RETURN (t(93).valeurs(vh.id) + t(81).valeurs(vh.id)) * s.taux_fc;
   END;
-  
+
   FUNCTION C_104( vh ose_formule.t_volume_horaire ) RETURN FLOAT IS
     s  ose_formule.t_service;
   BEGIN
     s  := ose_formule.d_service( vh.service_id );
-    
+
     RETURN (t(94).valeurs(vh.id) + t(82).valeurs(vh.id)) * s.taux_fc;
   END;
 
@@ -1968,7 +1968,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     LOOP EXIT WHEN id IS NULL;
       IF
         ose_formule.d_volume_horaire(id).type_volume_horaire_id = P_CALCUL_RESULTAT_V2.TYPE_VOLUME_HORAIRE_ID
-        AND ose_formule.d_volume_horaire(id).etat_volume_horaire_ordre >= EVH_ORDRE 
+        AND ose_formule.d_volume_horaire(id).etat_volume_horaire_ordre >= EVH_ORDRE
       THEN
         resultat.service := resultat.service + ose_formule.d_volume_horaire( id ).heures;
       END IF;
@@ -1990,7 +1990,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
                    93,  94,
         101, 102, 103, 104
       ) THEN
-        t(current_tableau).total := 0;      
+        t(current_tableau).total := 0;
         id2 := ose_formule.d_service.FIRST;
         LOOP EXIT WHEN id2 IS NULL;
           t(current_tableau).total_service(id2) := 0;
@@ -2000,13 +2000,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
         LOOP EXIT WHEN id IS NULL;
           IF
             ose_formule.d_volume_horaire(id).type_volume_horaire_id = P_CALCUL_RESULTAT_V2.TYPE_VOLUME_HORAIRE_ID
-            AND ose_formule.d_volume_horaire(id).etat_volume_horaire_ordre >= EVH_ORDRE 
+            AND ose_formule.d_volume_horaire(id).etat_volume_horaire_ordre >= EVH_ORDRE
           THEN
             CALCUL_VOLUME_HORAIRE( current_tableau, id );
           END IF;
           id := ose_formule.d_volume_horaire.NEXT(id);
         END LOOP;
-        
+
       ELSIF current_tableau IN ( -- calcul des services restants dus
         31, 32, 33, 34, 35, 36, 37
       ) THEN
@@ -2082,7 +2082,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
     LOOP EXIT WHEN id IS NULL;
       IF
         ose_formule.d_volume_horaire(id).type_volume_horaire_id = CALCUL_RESULTAT_V2.TYPE_VOLUME_HORAIRE_ID
-        AND ose_formule.d_volume_horaire(id).etat_volume_horaire_ordre >= EVH_ORDRE 
+        AND ose_formule.d_volume_horaire(id).etat_volume_horaire_ordre >= EVH_ORDRE
       THEN
         res_vh := ose_formule.nouveau_resultat_vh;
         res_vh.formule_resultat_id := resultat.id;
@@ -2094,7 +2094,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."UNICAEN_OSE_FORMULE" AS
         res_vh.service_assure      := res_vh.heures_service + res_vh.heures_compl_fi + res_vh.heures_compl_fa + res_vh.heures_compl_fc;
         dev_null := ose_formule.ENREGISTRER_RESULTAT_VH( res_vh );
       END IF;
-      id := ose_formule.d_volume_horaire.NEXT(id); 
+      id := ose_formule.d_volume_horaire.NEXT(id);
     END LOOP;
 
     -- répartition des résultats par service référentiel
@@ -2150,13 +2150,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
           frm.INTERVENANT_ID                = DEMANDE_CALCUL.INTERVENANT_ID
       AND frm.ANNEE_ID                      = DEMANDE_CALCUL.ANNEE_ID
     )
-    WHEN NOT MATCHED THEN INSERT ( 
+    WHEN NOT MATCHED THEN INSERT (
       ID,
-      INTERVENANT_ID, 
+      INTERVENANT_ID,
       ANNEE_ID
     ) VALUES (
       FORMULE_RESULTAT_MAJ_ID_SEQ.NEXTVAL,
-      DEMANDE_CALCUL.INTERVENANT_ID, 
+      DEMANDE_CALCUL.INTERVENANT_ID,
       DEMANDE_CALCUL.ANNEE_ID
     );
   END;
@@ -2188,16 +2188,16 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     a_id := OSE_PARAMETRE.GET_ANNEE;
     FOR mp IN (
       SELECT DISTINCT
-        intervenant_id 
-      FROM 
+        intervenant_id
+      FROM
         service s
         JOIN intervenant i ON i.id = s.intervenant_id AND 1 = ose_divers.comprise_entre( i.histo_creation, i.histo_destruction, ose_formule.get_date_obs )
       WHERE
         1 = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction, ose_formule.get_date_obs )
         AND s.annee_id = a_id
-        
+
       UNION
-      
+
       SELECT DISTINCT
         intervenant_id
       FROM
@@ -2253,14 +2253,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     id NUMERIC;
   BEGIN
     MERGE INTO formule_resultat tfr USING dual ON (
-    
+
           tfr.intervenant_id         = fr.intervenant_id
       AND tfr.annee_id               = fr.annee_id
       AND tfr.type_volume_horaire_id = fr.type_volume_horaire_id
       AND tfr.etat_volume_horaire_id = fr.etat_volume_horaire_id
-      
+
     ) WHEN MATCHED THEN UPDATE SET
-    
+
       service_du                     = fr.service_du,
       enseignements                  = fr.enseignements,
       service                        = fr.service,
@@ -2275,9 +2275,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       sous_service                   = fr.sous_service,
       a_payer                        = fr.a_payer,
       to_delete                      = 0
-      
+
     WHEN NOT MATCHED THEN INSERT (
-    
+
       ID,
       INTERVENANT_ID,
       ANNEE_ID,
@@ -2297,9 +2297,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       SOUS_SERVICE,
       A_PAYER,
       TO_DELETE
-      
+
     ) VALUES (
-    
+
       FORMULE_RESULTAT_ID_SEQ.NEXTVAL,
       fr.intervenant_id,
       fr.annee_id,
@@ -2319,9 +2319,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       fr.sous_service,
       fr.a_payer,
       0
-      
+
     );
-    
+
     SELECT id INTO id FROM formule_resultat tfr WHERE
           tfr.intervenant_id         = fr.intervenant_id
       AND tfr.annee_id               = fr.annee_id
@@ -2345,28 +2345,28 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     fs.heures_compl_fc     := 0;
     RETURN fs;
   END;
-  
+
 
 
   FUNCTION ENREGISTRER_RESULTAT_SERVICE( fs formule_resultat_service%rowtype ) RETURN NUMERIC IS
     id NUMERIC;
   BEGIN
     MERGE INTO formule_resultat_service tfs USING dual ON (
-    
+
           tfs.formule_resultat_id    = fs.formule_resultat_id
       AND tfs.service_id             = fs.service_id
 
     ) WHEN MATCHED THEN UPDATE SET
-    
+
       service_assure                 = fs.service_assure,
       heures_service                 = fs.heures_service,
       heures_compl_fi                = fs.heures_compl_fi,
       heures_compl_fa                = fs.heures_compl_fa,
       heures_compl_fc                = fs.heures_compl_fc,
       TO_DELETE                      = 0
-      
+
     WHEN NOT MATCHED THEN INSERT (
-    
+
       ID,
       FORMULE_RESULTAT_ID,
       SERVICE_ID,
@@ -2388,16 +2388,16 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       fs.heures_compl_fa,
       fs.heures_compl_fc,
       0
-      
+
     );
-    
+
     SELECT id INTO id FROM formule_resultat_service tfs WHERE
           tfs.formule_resultat_id    = fs.formule_resultat_id
       AND tfs.service_id             = fs.service_id;
     RETURN id;
   END;
-  
-  
+
+
   FUNCTION NOUVEAU_RESULTAT_VH RETURN formule_resultat_vh%rowtype IS
     fvh formule_resultat_vh%rowtype;
   BEGIN
@@ -2411,28 +2411,28 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     fvh.heures_compl_fc     := 0;
     RETURN fvh;
   END;
-  
+
 
 
   FUNCTION ENREGISTRER_RESULTAT_VH( fvh formule_resultat_vh%rowtype ) RETURN NUMERIC IS
     id NUMERIC;
   BEGIN
     MERGE INTO formule_resultat_vh tfvh USING dual ON (
-    
+
           tfvh.formule_resultat_id    = fvh.formule_resultat_id
       AND tfvh.volume_horaire_id      = fvh.volume_horaire_id
 
     ) WHEN MATCHED THEN UPDATE SET
-    
+
       service_assure                 = fvh.service_assure,
       heures_service                 = fvh.heures_service,
       heures_compl_fi                = fvh.heures_compl_fi,
       heures_compl_fa                = fvh.heures_compl_fa,
       heures_compl_fc                = fvh.heures_compl_fc,
       TO_DELETE                      = 0
-      
+
     WHEN NOT MATCHED THEN INSERT (
-    
+
       ID,
       FORMULE_RESULTAT_ID,
       VOLUME_HORAIRE_ID,
@@ -2454,16 +2454,16 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       fvh.heures_compl_fa,
       fvh.heures_compl_fc,
       0
-      
+
     );
-    
+
     SELECT id INTO id FROM formule_resultat_vh tfvh WHERE
           tfvh.formule_resultat_id    = fvh.formule_resultat_id
       AND tfvh.volume_horaire_id      = fvh.volume_horaire_id;
     RETURN id;
   END;
-  
-  
+
+
   FUNCTION NOUVEAU_RESULTAT_REF RETURN formule_resultat_referentiel%rowtype IS
     fr formule_resultat_referentiel%rowtype;
   BEGIN
@@ -2475,9 +2475,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     fr.heures_compl_referentiel := 0;
     RETURN fr;
   END;
-  
-  
-  
+
+
+
   FUNCTION ENREGISTRER_RESULTAT_REF( fr formule_resultat_referentiel%rowtype ) RETURN NUMERIC IS
     id NUMERIC;
   BEGIN
@@ -2518,11 +2518,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     SELECT id INTO id FROM formule_resultat_referentiel tfr WHERE
           tfr.formule_resultat_id    = fr.formule_resultat_id
       AND tfr.service_referentiel_id = fr.service_referentiel_id;
-      
+
     RETURN id;
   END;
-  
-  
+
+
   PROCEDURE POPULATE_INTERVENANT( INTERVENANT_ID NUMERIC, ANNEE_ID NUMERIC, d_intervenant OUT t_intervenant ) IS
   BEGIN
 
@@ -2546,12 +2546,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     WHERE
       fsm.intervenant_id = POPULATE_INTERVENANT.INTERVENANT_ID
       AND fsm.annee_id   = POPULATE_INTERVENANT.ANNEE_ID;
-  
+
   EXCEPTION WHEN NO_DATA_FOUND THEN
     d_intervenant.structure_id := null;
     d_intervenant.heures_service_statutaire := null;
   END;
-  
+
 
   PROCEDURE POPULATE_REFERENTIEL( INTERVENANT_ID NUMERIC, ANNEE_ID NUMERIC, d_referentiel OUT t_lst_referentiel ) IS
     i PLS_INTEGER;
@@ -2581,10 +2581,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
 --      ose_test.echo('id = ' || i );
       ose_test.echo('structure_id = ' || liste_referentiel( i ).structure_id );
       ose_test.echo('heures = ' || liste_referentiel( i ).heures );
-  
+
       i := liste_referentiel.NEXT(i);
     END LOOP;*/
-    
+
   END;
 
 
@@ -2654,7 +2654,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
 
   PROCEDURE POPULATE_TYPE_ETAT_VH( d_volume_horaire t_lst_volume_horaire, d_type_etat_vh OUT t_lst_type_etat_vh ) IS
     TYPE t_ordres IS TABLE OF NUMERIC INDEX BY PLS_INTEGER;
-  
+
     ordres_found t_ordres;
     ordres_exists t_ordres;
     type_volume_horaire_id PLS_INTEGER;
@@ -2683,7 +2683,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       END IF;
       id := d_volume_horaire.NEXT(id);
     END LOOP;
-    
+
     -- peuplement des t_lst_type_etat_vh
     type_volume_horaire_id := ordres_found.FIRST;
     LOOP EXIT WHEN type_volume_horaire_id IS NULL;
@@ -2695,10 +2695,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
         END IF;
         etat_volume_horaire_ordre := ordres_exists.NEXT(etat_volume_horaire_ordre);
       END LOOP;
-      
+
       type_volume_horaire_id := ordres_found.NEXT(type_volume_horaire_id);
     END LOOP;
-    
+
   END;
 
 
@@ -2736,11 +2736,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
       id := d_type_etat_vh.FIRST;
       LOOP EXIT WHEN id IS NULL;
         -- délégation du calcul à la formule choisie (à des fins de paramétrage)
-        EXECUTE IMMEDIATE 
+        EXECUTE IMMEDIATE
           'BEGIN ' || package_name || '.' || function_name || '( :1, :2, :3, :4 ); END;'
         USING
           INTERVENANT_ID, ANNEE_ID, d_type_etat_vh(id).type_volume_horaire_id, d_type_etat_vh(id).etat_volume_horaire_id;
-  
+
         id := d_type_etat_vh.NEXT(id);
       END LOOP;
     END IF;
@@ -2764,9 +2764,9 @@ BEGIN OSE_FORMULE.CALCULER_TOUT; END;
 --Nouveau VIEW
 --V_TBL_SERVICE
 ---------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_TBL_SERVICE" 
+CREATE OR REPLACE FORCE VIEW "OSE"."V_TBL_SERVICE"
  ( "ID", "SERVICE_ID", "INTERVENANT_ID", "TYPE_INTERVENANT_ID", "ANNEE_ID", "TYPE_VOLUME_HORAIRE_ID", "ETAT_VOLUME_HORAIRE_ID", "ETABLISSEMENT_ID", "STRUCTURE_AFF_ID", "STRUCTURE_ENS_ID", "NIVEAU_FORMATION_ID", "ETAPE_ID", "ELEMENT_PEDAGOGIQUE_ID", "PERIODE_ID", "TYPE_INTERVENTION_ID", "INTERVENANT_CODE", "INTERVENANT_NOM", "INTERVENANT_STATUT_LIBELLE", "INTERVENANT_TYPE_CODE", "INTERVENANT_TYPE_LIBELLE", "SERVICE_STRUCTURE_AFF_LIBELLE", "SERVICE_STRUCTURE_ENS_LIBELLE", "ETABLISSEMENT_LIBELLE", "ETAPE_CODE", "ETAPE_LIBELLE", "ELEMENT_CODE", "ELEMENT_LIBELLE", "COMMENTAIRES", "PERIODE_LIBELLE", "ELEMENT_PONDERATION_COMPL", "ELEMENT_SOURCE_LIBELLE", "HEURES", "HEURES_REF", "HEURES_NON_PAYEES", "HEURES_SERVICE_STATUTAIRE", "HEURES_SERVICE_DU_MODIFIE", "HETD", "HETD_SOLDE"
-  )  AS 
+  )  AS
   WITH t AS ( SELECT
   'vh_' || vh.id                    id,
   s.id                              service_id,
@@ -2780,7 +2780,7 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_TBL_SERVICE"
   s.structure_ens_id                structure_ens_id,
   vh.periode_id                     periode_id,
   vh.type_intervention_id           type_intervention_id,
-  
+
   vh.heures                         heures,
   0                                 heures_non_payees,
   0                                 heures_ref,
@@ -2809,14 +2809,14 @@ SELECT
   s.structure_ens_id                structure_ens_id,
   vh.periode_id                     periode_id,
   vh.type_intervention_id           type_intervention_id,
-  
+
   vh.heures                         heures,
   1                                 heures_non_payees,
   0                                 heures_ref,
   0                                 hetd,
   fr.heures_solde                   hetd_solde,
   null                              commentaires
-  
+
 FROM
   volume_horaire                  vh
   JOIN service                     s ON s.id = vh.service_id
@@ -2842,14 +2842,14 @@ SELECT
   sr.structure_id                   structure_ens_id,
   NULL                              periode_id,
   NULL                              type_intervention_id,
-  
+
   0                                 heures,
   0                                 heures_non_payees,
   sr.heures                         heures_ref,
   frr.service_assure                hetd,
   fr.heures_solde                   hetd_solde,
   sr.commentaires                   commentaires
-  
+
 FROM
   formule_resultat_referentiel   frr
   JOIN formule_resultat           fr ON fr.id = frr.formule_resultat_id
@@ -2859,7 +2859,7 @@ SELECT
   t.id                            id,
   t.service_id                    service_id,
   i.id                            intervenant_id,
-  ti.id                           type_intervenant_id,  
+  ti.id                           type_intervenant_id,
   t.annee_id                      annee_id,
   t.type_volume_horaire_id        type_volume_horaire_id,
   t.etat_volume_horaire_id        etat_volume_horaire_id,
@@ -2871,7 +2871,7 @@ SELECT
   ep.id                           element_pedagogique_id,
   t.periode_id                    periode_id,
   t.type_intervention_id          type_intervention_id,
-  
+
   i.source_code                   intervenant_code,
   i.nom_usuel || ' ' || i.prenom  intervenant_nom,
   si.libelle                      intervenant_statut_libelle,
@@ -2889,7 +2889,7 @@ SELECT
   p.libelle_court                 periode_libelle,
   CASE WHEN fs.ponderation_service_compl = 1 THEN NULL ELSE fs.ponderation_service_compl END element_ponderation_compl,
   src.libelle                     element_source_libelle,
-  
+
   t.heures                        heures,
   t.heures_ref                    heures_ref,
   t.heures_non_payees             heures_non_payees,
@@ -2901,8 +2901,8 @@ SELECT
 FROM
   t
   JOIN intervenant                        i ON i.id    = t.intervenant_id AND ose_divers.comprise_entre(  i.histo_creation,  i.histo_destruction ) = 1
-  JOIN statut_intervenant                si ON si.id   = i.statut_id            
-  JOIN type_intervenant                  ti ON ti.id   = si.type_intervenant_id 
+  JOIN statut_intervenant                si ON si.id   = i.statut_id
+  JOIN type_intervenant                  ti ON ti.id   = si.type_intervenant_id
   JOIN etablissement                   etab ON etab.id = t.etablissement_id
   LEFT JOIN structure                  saff ON saff.id = NVL(t.structure_aff_id, i.structure_id) AND ti.code = 'P'
   LEFT JOIN structure                  sens ON sens.id = t.structure_ens_id
@@ -2922,5 +2922,5 @@ FROM
 -- ********************************************************************* --
 
 
-BEGIN DBMS_SCHEDULER.enable(name=>'"OSE"."OSE_SRC_SYNC"'); END; 
+BEGIN DBMS_SCHEDULER.enable(name=>'"OSE"."OSE_SRC_SYNC"'); END;
 /

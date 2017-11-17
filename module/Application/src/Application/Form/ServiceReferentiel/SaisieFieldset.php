@@ -7,7 +7,7 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use Zend\Filter\PregReplace;
@@ -29,7 +29,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 {
     use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use FonctionReferentielAwareTrait;
     use EntityManagerAwareTrait;
 
@@ -70,10 +70,10 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label' => "Structure :",
+                'label' => "StructureService :",
             ],
             'attributes' => [
-                'title' => "Structure concernée",
+                'title' => "StructureService concernée",
                 'class' => 'fonction-referentiel fonction-referentiel-structure input-sm',
             ],
             'type'       => 'Select',
@@ -216,7 +216,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             return null;
         }
 
-        // recherche de la Structure sélectionnée
+        // recherche de la StructureService sélectionnée
         $structures      = $this->getStructures();
         $value           = $this->get('structure')->getValue();
         $structureSaisie = isset($structures[$value]) ? $structures[$value] : null;
@@ -238,7 +238,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             $callback = function () use ($structureSaisie, $structureFonction) {
                 return $structureSaisie === $structureFonction;
             };
-            $message  = sprintf("Structure obligatoire : '%s'", $structureFonction);
+            $message  = sprintf("StructureService obligatoire : '%s'", $structureFonction);
         }
 
         $v = new Callback($callback);

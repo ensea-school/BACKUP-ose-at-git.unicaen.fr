@@ -5,19 +5,19 @@ namespace Application\Controller;
 use Application\Entity\Db\Dotation;
 use Application\Entity\Db\Structure;
 use Application\Form\Budget\Traits\DotationSaisieFormAwareTrait;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\FormuleResultatAwareTrait;
 use Application\Entity\Db\TypeRessource;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Form\Element\Select;
 use Application\Entity\Db\TypeDotation;
 use Application\Service\Traits\TypeDotationServiceAwareTrait;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Exception\DbException;
 use Application\Form\Budget\Traits\TypeDotationSaisieFormAwareTrait;
 
@@ -27,17 +27,17 @@ use Application\Form\Budget\Traits\TypeDotationSaisieFormAwareTrait;
  */
 class BudgetController extends AbstractController
 {
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
     use TypeRessourceServiceAwareTrait;
     use DotationServiceAwareTrait;
     use FormuleResultatAwareTrait;
     use DotationSaisieFormAwareTrait;
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
     use MiseEnPaiementAwareTrait;
     use TypeDotationServiceAwareTrait;
     use TypeDotationSaisieFormAwareTrait;
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
 
 
 
@@ -269,9 +269,9 @@ class BudgetController extends AbstractController
             'intervenant-grade-libelle'      => 'Grade',
             'intervenant-discipline-code'    => 'Discipline intervenant (Code)',
             'intervenant-discipline-libelle' => 'Discipline intervenant',
-            'service-structure-aff-libelle'  => 'Structure d\'affectation',
+            'service-structure-aff-libelle'  => 'StructureService d\'affectation',
 
-            'service-structure-ens-libelle' => 'Structure d\'enseignement',
+            'service-structure-ens-libelle' => 'StructureService d\'enseignement',
             'groupe-type-formation-libelle' => 'Groupe de type de formation',
             'type-formation-libelle'        => 'Type de formation',
             'etape-niveau'                  => 'Niveau',
@@ -285,7 +285,7 @@ class BudgetController extends AbstractController
             'element-taux-fc'               => 'Taux FC',
             'element-taux-fa'               => 'Taux FA',
             'commentaires'                  => 'Commentaires',
-            'element-source-libelle'        => 'Source enseignement',
+            'element-source-libelle'        => 'SourceService enseignement',
 
             'type-ressource-libelle'      => 'Enveloppe',
             'centre-couts-code'           => 'Centre de coûts ou EOTP (code)',

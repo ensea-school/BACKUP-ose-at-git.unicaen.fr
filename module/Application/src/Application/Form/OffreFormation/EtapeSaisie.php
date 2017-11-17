@@ -6,7 +6,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -19,7 +19,7 @@ class EtapeSaisie extends AbstractForm
 {
     use ContextServiceAwareTrait;
     use LocalContextAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use TypeFormationAwareTrait;
 
@@ -89,7 +89,7 @@ class EtapeSaisie extends AbstractForm
         $this->add([
             'name'    => 'structure',
             'options' => [
-                'label' => 'Structure',
+                'label' => 'StructureService',
             ],
             'attributes' => [
                 'class' => 'selectpicker',
@@ -257,7 +257,7 @@ class EtapeSaisie extends AbstractForm
  */
 class EtapeSaisieHydrator implements HydratorInterface
 {
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use TypeFormationAwareTrait;
 

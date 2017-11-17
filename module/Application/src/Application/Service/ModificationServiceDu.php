@@ -3,8 +3,8 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Annee as AnneeEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\Structure;
 
 
 /**
@@ -87,7 +87,7 @@ class ModificationServiceDu extends AbstractEntityService
 
 
 
-    public function getExportCsvData(AnneeEntity $annee, StructureEntity $structure = null)
+    public function getExportCsvData(Annee $annee, Structure $structure = null)
     {
         $params = ['annee' => $annee->getId()];
 
@@ -101,7 +101,7 @@ class ModificationServiceDu extends AbstractEntityService
         $res  = [
             'head' => [
                 'annee'                          => 'Année',
-                'structure-libelle'              => 'Structure d\'affectation',
+                'structure-libelle'              => 'StructureService d\'affectation',
                 'intervenant-code'               => 'Code intervenant',
                 'intervenant-nom-usuel'          => 'Nom usuel',
                 'intervenant-nom-patronymique'   => 'Nom patronymique',

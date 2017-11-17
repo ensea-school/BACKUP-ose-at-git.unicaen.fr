@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -214,7 +214,7 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
 {
     use IntervenantAwareTrait;
     use PeriodeAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use TypeIntervenantAwareTrait;
 
 

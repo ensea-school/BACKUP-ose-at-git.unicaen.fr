@@ -64,7 +64,7 @@ class EtapeViewHelper extends AbstractViewHelper
         $vars = [
             "Code {$entity->getSource()->getLibelle()}" => $entity->getSourceCode(),
             "Libellé"                                   => $entity->getLibelle(),
-            "Structure"                                 => $entity->getStructure(),
+            "StructureService"                                 => $entity->getStructure(),
             "Type de formation"                         => $entity->getTypeFormation(),
             "Niveau"                                    => $entity->getNiveau(),
             "Spécif. échanges"                          => $entity->getSpecifiqueEchanges() ? 'Oui' : 'Non',

@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Annee;
+use Application\Service\AnneeService;
 
 /**
- * Description of AnneeAwareTrait
+ * Description of AnneeServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait AnneeAwareTrait
+trait AnneeServiceAwareTrait
 {
     /**
-     * @var Annee
+     * @var AnneeService
      */
     private $serviceAnnee;
 
 
 
     /**
-     * @param Annee $serviceAnnee
+     * @param AnneeService $serviceAnnee
      *
      * @return self
      */
-    public function setServiceAnnee(Annee $serviceAnnee)
+    public function setServiceAnnee(AnneeService $serviceAnnee)
     {
         $this->serviceAnnee = $serviceAnnee;
 
@@ -33,12 +33,12 @@ trait AnneeAwareTrait
 
 
     /**
-     * @return Annee
+     * @return AnneeService
      */
     public function getServiceAnnee()
     {
         if (empty($this->serviceAnnee)) {
-            $this->serviceAnnee = \Application::$container->get('ApplicationAnnee');
+            $this->serviceAnnee = \Application::$container->get(AnneeService::class);
         }
 
         return $this->serviceAnnee;

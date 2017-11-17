@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode as PeriodeEntity;
 
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -118,7 +118,7 @@ class Periode extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement(StructureEntity $structure = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement(Structure $structure = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 

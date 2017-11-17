@@ -14,7 +14,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
- * Structure
+ * StructureService
  */
 class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
 {
@@ -496,7 +496,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      */
     public function getResourceId()
     {
-        return 'Structure';
+        return 'StructureService';
     }
 
 

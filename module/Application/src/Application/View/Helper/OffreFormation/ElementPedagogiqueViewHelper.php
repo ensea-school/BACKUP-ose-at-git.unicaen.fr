@@ -62,7 +62,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
         $vars = [
             "Code {$entity->getSource()->getLibelle()}"                => $entity->getSourceCode(),
             "Libellé"                                                  => $entity->getLibelle(),
-            "Structure"                                                => $entity->getStructure(),
+            "StructureService"                                                => $entity->getStructure(),
             "Discipline"                                               => $entity->getDiscipline(),
             "Période d'enseignement"                                   => $entity->getPeriode(),
             "<span title=\"Formation ouverte à distance\">FOAD</span>" => (bool)$entity->getTauxFoad() ? "Oui" : "Non",

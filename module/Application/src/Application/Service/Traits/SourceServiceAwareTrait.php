@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Source;
+use Application\Service\SourceService;
 
 /**
- * Description of SourceAwareTrait
+ * Description of SourceServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait SourceAwareTrait
+trait SourceServiceAwareTrait
 {
     /**
-     * @var Source
+     * @var SourceService
      */
     private $serviceSource;
 
 
 
     /**
-     * @param Source $serviceSource
+     * @param SourceService $serviceSource
      *
      * @return self
      */
-    public function setServiceSource(Source $serviceSource)
+    public function setServiceSource(SourceService $serviceSource)
     {
         $this->serviceSource = $serviceSource;
 
@@ -33,12 +33,12 @@ trait SourceAwareTrait
 
 
     /**
-     * @return Source
+     * @return SourceService
      */
     public function getServiceSource()
     {
         if (empty($this->serviceSource)) {
-            $this->serviceSource = \Application::$container->get('ApplicationSource');
+            $this->serviceSource = \Application::$container->get(SourceService::class);
         }
 
         return $this->serviceSource;

@@ -305,7 +305,7 @@ class NotificationIndicateur
     {
         $infos = "Abonnement : " . $this->getDateAbonnement()->format(Constants::DATETIME_FORMAT);
 
-        $infos .= "<br />Structure : " . ($this->getAffectation()->getStructure() ?: "aucune");
+        $infos .= "<br />StructureService : " . ($this->getAffectation()->getStructure() ?: "aucune");
 
         if (($dernNotif = $this->getDateDernNotif())) {
             $infos .= "<br />Dernière notification : " . $dernNotif->format(Constants::DATETIME_FORMAT);

@@ -9,7 +9,7 @@ use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 
 /**
- * Affectation
+ * AffectationService
  */
 class Affectation implements HistoriqueAwareInterface, ImportAwareInterface
 {

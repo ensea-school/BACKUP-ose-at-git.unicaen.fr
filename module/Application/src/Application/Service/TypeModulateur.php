@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\TypeModulateur as TypeModulateurEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Doctrine\ORM\QueryBuilder;
 
@@ -54,12 +54,12 @@ class TypeModulateur extends AbstractEntityService
     /**
      * Ne récupère que les types de modulateurs associés à une structure donnée
      *
-     * @param StructureEntity $structure
+     * @param Structure $structure
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param type $alias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderByStructure(StructureEntity $structure, QueryBuilder $qb=null, $alias=null)
+    public function finderByStructure(Structure $structure, QueryBuilder $qb=null, $alias=null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 

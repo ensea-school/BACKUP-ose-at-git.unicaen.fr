@@ -6,7 +6,7 @@ use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Service\Traits\CentreCoutAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
@@ -102,7 +102,7 @@ class MiseEnPaiement extends AbstractEntityService
 
 
 
-    public function finderByStructure(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByStructure(Structure $structure, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -185,7 +185,7 @@ class MiseEnPaiement extends AbstractEntityService
             $conditions['intervenant_id'] = 'intervenant_id IN (' . implode(',', $iIdList) . ')';
         }
 
-        if ($options['composante'] instanceof StructureEntity) {
+        if ($options['composante'] instanceof Structure) {
             $conditions['composante'] = "structure_id = " . (int)$options['composante']->getId();
         }
 
@@ -295,7 +295,7 @@ class MiseEnPaiement extends AbstractEntityService
             $conditions['intervenant_id'] = 'intervenant_id IN (' . implode(',', $iIdList) . ')';
         }
 
-        if ($options['composante'] instanceof StructureEntity) {
+        if ($options['composante'] instanceof Structure) {
             $conditions['composante'] = "structure_id = " . (int)$options['composante']->getId();
         }
 
@@ -377,7 +377,7 @@ class MiseEnPaiement extends AbstractEntityService
             $conditions['intervenant_id'] = 'intervenant_id IN (' . implode(',', $iIdList) . ')';
         }
 
-        if ($options['composante'] instanceof StructureEntity) {
+        if ($options['composante'] instanceof Structure) {
             $conditions['composante'] = "structure_id = " . (int)$options['composante']->getId();
         }
 
@@ -461,7 +461,7 @@ class MiseEnPaiement extends AbstractEntityService
      *
      * @return array
      */
-    public function getTableauBord(StructureEntity $structure = null)
+    public function getTableauBord(Structure $structure = null)
     {
         $annee = $this->getServiceContext()->getAnnee();
         $data  = [];
@@ -540,12 +540,12 @@ class MiseEnPaiement extends AbstractEntityService
      * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
      * et pour l'année courante
      *
-     * Format de retour : [Structure.id][TypeRessource.id] = (float)Heures
+     * Format de retour : [StructureService.id][TypeRessource.id] = (float)Heures
      *                 ou [TypeRessource.id] = (float)Heures
      *
      * Si la structure n'est pas spécifiée alors on retourne le tableau pour chaque structure.
      *
-     * @param StructureEntity|null $structure
+     * @param Structure|null $structure
      *
      * @return array
      * @throws \Doctrine\DBAL\DBALException
@@ -555,7 +555,7 @@ class MiseEnPaiement extends AbstractEntityService
         if (empty($structure)) return $this->getTblLiquidationMS();
         if (is_array($structure)) return $this->getTblLiquidationMS($structure);
 
-        if (! $structure instanceof StructureEntity){
+        if (! $structure instanceof Structure){
             throw new RuntimeException('La structure fournie n\'est pas uns entité');
         }
 
@@ -657,12 +657,12 @@ class MiseEnPaiement extends AbstractEntityService
 
     /**
      *
-     * @param StructureEntity                      $structure
+     * @param Structure                      $structure
      * @param \Application\Entity\Db\Intervenant[] $intervenants
      * @param PeriodeEntity                        $periodePaiement
      * @param \DateTime                            $dateMiseEnPaiement
      */
-    public function mettreEnPaiement(StructureEntity $structure, $intervenants, PeriodeEntity $periodePaiement, \DateTime $dateMiseEnPaiement)
+    public function mettreEnPaiement(Structure $structure, $intervenants, PeriodeEntity $periodePaiement, \DateTime $dateMiseEnPaiement)
     {
         list($qb, $alias) = $this->initQuery();
         $this->finderByEtat(MiseEnPaiementEntity::A_METTRE_EN_PAIEMENT, $qb);

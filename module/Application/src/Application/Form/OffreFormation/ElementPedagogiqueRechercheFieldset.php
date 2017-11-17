@@ -64,12 +64,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "Structure gestionnaire de l'enseignement",
+                    'title' => "StructureService gestionnaire de l'enseignement",
                 ],
             ],
             'attributes' => [
                 'id'               => 'structure',
-                'title'            => "Structure gestionnaire de l'enseignement",
+                'title'            => "StructureService gestionnaire de l'enseignement",
                 'class'            => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
                 'data-width'       => "100%",
                 'data-live-search' => "true",

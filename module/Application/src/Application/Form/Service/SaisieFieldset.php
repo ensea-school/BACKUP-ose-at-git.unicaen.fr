@@ -10,7 +10,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
@@ -33,7 +33,7 @@ class SaisieFieldset extends AbstractFieldset
     use LocalContextAwareTrait;
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
     use AuthorizeServiceAwareTrait;
 

@@ -250,7 +250,7 @@ return [
                             Privileges::BUDGET_EDITION_ENGAGEMENT_COMPOSANTE,
                             Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT,
                         ],
-                        'resources'  => ['Dotation', 'Structure', 'TypeRessource'],
+                        'resources'  => ['Dotation', 'StructureService', 'TypeRessource'],
                         'assertion'  => 'assertionBudget',
                     ],
                 ],

@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Dotation;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeRessource;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use Application\Util;
@@ -84,7 +84,7 @@ class DotationService extends AbstractEntityService
 
 
 
-    public function getDotations(StructureEntity $structure)
+    public function getDotations(Structure $structure)
     {
         $annee = $this->getServiceContext()->getAnnee();
         $ac1    = $annee->getId();

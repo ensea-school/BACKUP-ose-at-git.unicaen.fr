@@ -86,7 +86,7 @@ class Asset
         $e
                 ->setEtablissement($etablissement)
                 ->setLibelleCourt(uniqid('TEST '))
-                ->setLibelleLong(uniqid('Structure de test'))
+                ->setLibelleLong(uniqid('StructureService de test'))
                 ->setNiveau(2)
                 ->setType($typeStructure)
                 ->setParente($parente)

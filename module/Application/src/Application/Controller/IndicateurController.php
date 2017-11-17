@@ -7,7 +7,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Processus\Traits\IndicateurProcessusAwareTrait;
 use Application\Entity\Db\Indicateur;
-use Application\Service\Traits\AffectationAwareTrait;
+use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
@@ -38,7 +38,7 @@ class IndicateurController extends AbstractController
     use IntervenantAwareTrait;
     use ContextServiceAwareTrait;
     use NotificationIndicateurAwareTrait;
-    use AffectationAwareTrait;
+    use AffectationServiceAwareTrait;
     use IndicateurProcessusAwareTrait;
     use DossierAwareTrait;
     use TypeVolumeHoraireAwareTrait;

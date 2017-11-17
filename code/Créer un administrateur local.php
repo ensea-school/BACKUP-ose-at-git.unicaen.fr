@@ -1,6 +1,7 @@
 <?php
 
 use Application\Service\ContextService;
+use Application\Service\SourceService;
 
 function creerAdmin($sl, array $admin)
 {
@@ -11,8 +12,8 @@ function creerAdmin($sl, array $admin)
     /** @var \Application\Service\ContextService $serviceContext */
     $serviceContext = $sl->get(ContextService::class);
 
-    /** @var \Application\Service\Source $serviceSource */
-    $serviceSource = $sl->get('applicationSource');
+    /** @var \Application\Service\SourceService $serviceSource */
+    $serviceSource = $sl->get(SourceService::class);
 
 
     $nom        = $admin['nom'];

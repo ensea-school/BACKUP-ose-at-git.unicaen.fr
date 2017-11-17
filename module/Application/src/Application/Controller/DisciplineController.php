@@ -6,7 +6,7 @@ use Application\Entity\Db\Discipline;
 use Application\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
-use Application\Service\Traits\SourceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Exception\DbException;
 
 
@@ -18,7 +18,7 @@ use Application\Exception\DbException;
 class DisciplineController extends AbstractController
 {
     use DisciplineServiceAwareTrait;
-    use SourceAwareTrait;
+    use SourceServiceAwareTrait;
     use DisciplineFormAwareTrait;
     use ParametresAwareTrait;
 

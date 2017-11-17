@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
@@ -14,7 +14,7 @@ use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
  */
 class TypePieceJointeStatutService extends AbstractEntityService
 {
-    use AnneeAwareTrait;
+    use AnneeServiceAwareTrait;
 
     /**
      * retourne la classe des entités

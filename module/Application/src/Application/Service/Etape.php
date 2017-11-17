@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
@@ -21,11 +21,11 @@ use Application\Entity\Db\Etape as EtapeEntity;
 class Etape extends AbstractEntityService
 {
     use Traits\LocalContextAwareTrait;
-    use Traits\SourceAwareTrait;
+    use Traits\SourceServiceAwareTrait;
     use Traits\ElementModulateurAwareTrait;
     use TypeFormationAwareTrait;
     use GroupeTypeFormationAwareTrait;
-    use StructureAwareTrait;
+    use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
 
 

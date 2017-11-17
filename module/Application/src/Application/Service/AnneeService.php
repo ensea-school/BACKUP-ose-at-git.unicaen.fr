@@ -4,18 +4,18 @@ namespace Application\Service;
 
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\Annee;
 
 /**
- * Description of Annee
+ * Description of AnneeService
  *
- * @method AnneeEntity get($id)
- * @method AnneeEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method AnneeEntity newEntity()
+ * @method Annee get($id)
+ * @method Annee[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Annee newEntity()
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Annee extends AbstractEntityService
+class AnneeService extends AbstractEntityService
 {
     use SessionContainerTrait;
 
@@ -27,7 +27,7 @@ class Annee extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return AnneeEntity::class;
+        return Annee::class;
     }
 
 
@@ -47,12 +47,12 @@ class Annee extends AbstractEntityService
     /**
      * Retourne l'année N - x.
      *
-     * @param AnneeEntity $annee Année de référence
+     * @param Annee $annee Année de référence
      * @param int         $x     Entier supérieur ou égal à zéro
      *
-     * @return AnneeEntity
+     * @return Annee
      */
-    public function getNmoins(AnneeEntity $annee, $x)
+    public function getNmoins(Annee $annee, $x)
     {
         return $this->get($annee->getId() - (int)$x);
     }
@@ -61,11 +61,11 @@ class Annee extends AbstractEntityService
 
     /**
      *
-     * @param AnneeEntity $annee
+     * @param Annee $annee
      *
-     * @return AnneeEntity
+     * @return Annee
      */
-    public function getPrecedente(AnneeEntity $annee)
+    public function getPrecedente(Annee $annee)
     {
         return $this->get($annee->getId() - 1);
     }
@@ -74,11 +74,11 @@ class Annee extends AbstractEntityService
 
     /**
      *
-     * @param AnneeEntity $annee
+     * @param Annee $annee
      *
-     * @return AnneeEntity
+     * @return Annee
      */
-    public function getSuivante(AnneeEntity $annee)
+    public function getSuivante(Annee $annee)
     {
         return $this->get($annee->getId() + 1);
     }

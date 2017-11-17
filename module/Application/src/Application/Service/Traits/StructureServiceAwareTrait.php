@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Structure;
+use Application\Service\StructureService;
 
 /**
- * Description of StructureAwareTrait
+ * Description of StructureServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait StructureAwareTrait
+trait StructureServiceAwareTrait
 {
     /**
-     * @var Structure
+     * @var StructureService
      */
     private $serviceStructure;
 
 
 
     /**
-     * @param Structure $serviceStructure
+     * @param StructureService $serviceStructure
      *
      * @return self
      */
-    public function setServiceStructure(Structure $serviceStructure)
+    public function setServiceStructure(StructureService $serviceStructure)
     {
         $this->serviceStructure = $serviceStructure;
 
@@ -33,12 +33,12 @@ trait StructureAwareTrait
 
 
     /**
-     * @return Structure
+     * @return StructureService
      */
     public function getServiceStructure()
     {
         if (empty($this->serviceStructure)) {
-            $this->serviceStructure = \Application::$container->get('ApplicationStructure');
+            $this->serviceStructure = \Application::$container->get(StructureService::class);
         }
 
         return $this->serviceStructure;

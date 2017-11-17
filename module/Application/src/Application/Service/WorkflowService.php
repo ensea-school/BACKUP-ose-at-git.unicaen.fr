@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblWorkflow;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
@@ -30,7 +30,7 @@ class WorkflowService extends AbstractService
 
 
 
-    protected function prepareEtapeParams($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    protected function prepareEtapeParams($etape, IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         switch (true) {
             case $etape === WfEtape::CURRENT || empty($etape):
@@ -77,11 +77,11 @@ class WorkflowService extends AbstractService
     /**
      * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                   $intervenant
-     * @param StructureEntity|null                     $structure
+     * @param Structure|null                           $structure
      *
      * @return WorkflowEtape
      */
-    public function getEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getEtape($etape, IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -102,11 +102,11 @@ class WorkflowService extends AbstractService
     /**
      * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                   $intervenant
-     * @param StructureEntity|null                     $structure
+     * @param Structure|null                           $structure
      *
      * @return WorkflowEtape
      */
-    public function getNextEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getNextEtape($etape, IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -129,11 +129,11 @@ class WorkflowService extends AbstractService
     /**
      * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                   $intervenant
-     * @param StructureEntity|null                     $structure
+     * @param Structure|null                           $structure
      *
      * @return WorkflowEtape
      */
-    public function getPreviousAccessibleEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getPreviousAccessibleEtape($etape, IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -156,11 +156,11 @@ class WorkflowService extends AbstractService
     /**
      * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
      * @param IntervenantEntity|null                   $intervenant
-     * @param StructureEntity|null                     $structure
+     * @param Structure|null                           $structure
      *
      * @return WorkflowEtape
      */
-    public function getNextAccessibleEtape($etape, IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getNextAccessibleEtape($etape, IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         list($etapeCode, $intervenant, $structure) = $this->prepareEtapeParams($etape, $intervenant, $structure);
 
@@ -198,11 +198,11 @@ class WorkflowService extends AbstractService
 
     /**
      * @param IntervenantEntity|null $intervenant
-     * @param StructureEntity|null   $structure
+     * @param Structure|null         $structure
      *
      * @return WorkflowEtape|null
      */
-    public function getEtapeCourante(IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getEtapeCourante(IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         $fdr = $this->getFeuilleDeRoute($intervenant, $structure);
 
@@ -218,11 +218,11 @@ class WorkflowService extends AbstractService
     /**
      *
      * @param IntervenantEntity|null $intervenant
-     * @param StructureEntity|null   $structure
+     * @param Structure|null         $structure
      *
      * @return WorkflowEtape[]
      */
-    public function getFeuilleDeRoute(IntervenantEntity $intervenant = null, StructureEntity $structure = null)
+    public function getFeuilleDeRoute(IntervenantEntity $intervenant = null, Structure $structure = null)
     {
         if (!$intervenant || !$structure) {
             /* Filtrage en fonction du contexte */
@@ -284,7 +284,7 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param array $tableauxBords
+     * @param array                                        $tableauxBords
      * @param IntervenantEntity|IntervenantEntity[]|string $intervenant
      */
     public function calculerTableauxBord($tableauxBords = [], $intervenant)
@@ -319,19 +319,19 @@ class WorkflowService extends AbstractService
 
         foreach ($deps as $dep => $null) {
             if (isset($tbls[$dep])) {
-                if (is_array($intervenant)){
+                if (is_array($intervenant)) {
                     $params = 'INTERVENANT_ID IN (';
-                    $c = 0;
-                    foreach( $intervenant as $i ){
+                    $c      = 0;
+                    foreach ($intervenant as $i) {
                         $c++;
                         if ($c > 1) $params .= ',';
                         $params .= $i->getId();
                     }
                     $params .= ')';
-                }elseif($intervenant instanceof \Application\Entity\Db\Intervenant){
+                } elseif ($intervenant instanceof \Application\Entity\Db\Intervenant) {
                     $params = ['intervenant_id' => $intervenant->getId()];
-                }else{
-                    $params = 'INTERVENANT_ID IN ('.$intervenant.')';
+                } else {
+                    $params = 'INTERVENANT_ID IN (' . $intervenant . ')';
                 }
 
                 $this->getServiceTableauBord()->calculer(
@@ -400,7 +400,7 @@ class WorkflowService extends AbstractService
      *
      * @return TblWorkflow[]
      */
-    protected function getEtapes(IntervenantEntity $intervenant, StructureEntity $structure = null)
+    protected function getEtapes(IntervenantEntity $intervenant, Structure $structure = null)
     {
 
         $dql = "

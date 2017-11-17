@@ -7,10 +7,10 @@ use Application\Entity\Db\PlafondApplication;
 use Application\Entity\Db\PlafondEtat;
 use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\AnneeAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PlafondEtatServiceAwareTrait;
-use Application\Service\Traits\StructureAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -22,8 +22,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class PlafondApplicationForm extends AbstractForm
 {
-    use StructureAwareTrait;
-    use AnneeAwareTrait;
+    use StructureServiceAwareTrait;
+    use AnneeServiceAwareTrait;
     use PlafondEtatServiceAwareTrait;
     use ContextServiceAwareTrait;
 
@@ -53,7 +53,7 @@ class PlafondApplicationForm extends AbstractForm
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label'         => 'Structure',
+                'label'         => 'StructureService',
                 'empty_option'  => "Valable pour tout l'établissement",
                 'value_options' => Util::collectionAsOptions($this->getStructures()),
             ],
@@ -158,8 +158,8 @@ class PlafondApplicationForm extends AbstractForm
 
 class PlafondApplicationFormHydrator implements HydratorInterface
 {
-    use StructureAwareTrait;
-    use AnneeAwareTrait;
+    use StructureServiceAwareTrait;
+    use AnneeServiceAwareTrait;
     use PlafondEtatServiceAwareTrait;
 
 

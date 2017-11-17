@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Structure;
+use Application\Service\StructureService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface StructureAwareInterface
 {
     /**
-     * @param Structure $serviceStructure
+     * @param StructureService $serviceStructure
+     *
      * @return self
      */
-    public function setServiceStructure( Structure $serviceStructure );
+    public function setServiceStructure(StructureService $serviceStructure );
 
 
 

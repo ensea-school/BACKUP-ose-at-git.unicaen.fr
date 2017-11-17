@@ -20,7 +20,7 @@ return [
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'controller' => 'AgrementService',
+                                'controller' => 'Agrement',
                                 'action'     => 'index',
                             ],
                         ],
@@ -106,7 +106,7 @@ return [
                         'options'       => [
                             'route'    => '/agrement',
                             'defaults' => [
-                                'controller' => 'AgrementService',
+                                'controller' => 'Agrement',
                                 'action'     => 'index',
                             ],
                         ],
@@ -265,7 +265,7 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'AgrementService' => [],
+                'Agrement' => [],
                 'TblAgrement'     => [],
             ],
         ],
@@ -279,7 +279,7 @@ return [
                             Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
                             Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
                         ],
-                        'resources'  => ['TblAgrement', 'AgrementService', 'StructureService'],
+                        'resources'  => ['TblAgrement', 'Agrement', 'Structure'],
                         'assertion'  => 'AssertionAgrement',
                     ],
                 ],

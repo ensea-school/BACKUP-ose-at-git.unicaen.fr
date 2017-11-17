@@ -216,7 +216,7 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getResourceId()
     {
-        return 'AgrementService';
+        return 'Agrement';
     }
 
 

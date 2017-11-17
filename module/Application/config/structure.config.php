@@ -11,7 +11,7 @@ return [
                     'route'    => '/structure',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'StructureService',
+                        'controller'    => 'Structure',
                         'action'        => 'index',
                     ],
                 ],
@@ -98,7 +98,7 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'StructureService' => [],
+                'Structure' => [],
             ],
         ],
     ],

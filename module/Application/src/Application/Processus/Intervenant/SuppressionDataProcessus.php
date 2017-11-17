@@ -176,8 +176,8 @@ class SuppressionDataProcessus
         }
 
         /* Agréments */
-        if (isset($entities['AgrementService'])) {
-            foreach ($entities['AgrementService'] as $v) {
+        if (isset($entities['Agrement'])) {
+            foreach ($entities['Agrement'] as $v) {
                 $this->getServiceAgrement()->delete($v->getEntity(), false);
             }
         }

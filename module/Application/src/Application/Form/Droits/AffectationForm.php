@@ -82,7 +82,7 @@ class AffectationForm extends AbstractForm
             'type' => 'Select',
             'name' => 'structure',
             'options' => [
-                'label' => 'StructureService',
+                'label' => 'Structure',
                 'value_options' => Util::collectionAsOptions($structures)
             ],
         ] );

@@ -53,7 +53,7 @@ class PlafondApplicationForm extends AbstractForm
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label'         => 'StructureService',
+                'label'         => 'Structure',
                 'empty_option'  => "Valable pour tout l'établissement",
                 'value_options' => Util::collectionAsOptions($this->getStructures()),
             ],

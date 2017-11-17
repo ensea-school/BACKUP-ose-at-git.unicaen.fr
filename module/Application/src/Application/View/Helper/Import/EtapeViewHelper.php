@@ -18,7 +18,7 @@ class EtapeViewHelper extends DifferentielLigne
                 if (null === $value){
                     return '<span class="text-danger">StructureService non identifiée</span>';
                 }else{
-                    $column = 'StructureService';
+                    $column = 'Structure';
                     $value = $this->getServiceStructure()->get($value);
                     return parent::getColumnDetails($column, $value);
                 }

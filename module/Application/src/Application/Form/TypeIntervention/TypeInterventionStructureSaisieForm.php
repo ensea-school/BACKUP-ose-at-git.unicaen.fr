@@ -40,7 +40,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label' => 'StructureService',
+                'label' => 'Structure',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',

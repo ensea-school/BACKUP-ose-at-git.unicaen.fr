@@ -41,10 +41,10 @@ trait PlafondApplicationFormAwareTrait
      */
     public function getFormPlafondPlafondApplication()
     {
-        if (empty($this->serviceIndicateur)) {
-            $this->serviceIndicateur = \Application::$container->get(PlafondApplicationForm::class);
+        if (!empty($this->formPlafondPlafondApplication)) {
+            return $this->formPlafondPlafondApplication;
         }
 
-        return $this->formPlafondPlafondApplication;
+        return \Application::$container->get('FormElementManager')->get(PlafondApplicationForm::class);
     }
 }

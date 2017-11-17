@@ -496,7 +496,7 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      */
     public function getResourceId()
     {
-        return 'StructureService';
+        return 'Structure';
     }
 
 

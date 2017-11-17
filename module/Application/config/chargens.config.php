@@ -331,7 +331,7 @@ return [
                 'allow' => [
                     [
                         'privileges' => ChargensAssertion::SCENARIO_EDITION,
-                        'resources'  => ['Scenario', 'StructureService'],
+                        'resources'  => ['Scenario', 'Structure'],
                         'assertion'  => 'AssertionChargens',
                     ],
                     [
@@ -339,7 +339,7 @@ return [
                             Privileges::CHARGENS_SEUIL_ETABLISSEMENT_EDITION,
                             Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION,
                         ],
-                        'resources'  => ['StructureService'],
+                        'resources'  => ['Structure'],
                         'assertion'  => 'AssertionChargens',
                     ],
                 ],

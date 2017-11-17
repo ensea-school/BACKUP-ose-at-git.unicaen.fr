@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\PilotageServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 
@@ -32,7 +31,7 @@ class PilotageController extends AbstractController
             'Année',
             'État',
             'Type d\'heures',
-            'StructureService',
+            'Structure',
             'Intervenant (type)',
             'Intervenant (code)',
             'Intervenant',

@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Modulateur;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ModulateurAwareTrait
@@ -20,15 +18,15 @@ trait ModulateurAwareTrait
 
 
 
-
-
     /**
      * @param Modulateur $serviceModulateur
+     *
      * @return self
      */
-    public function setServiceModulateur( Modulateur $serviceModulateur )
+    public function setServiceModulateur(Modulateur $serviceModulateur)
     {
         $this->serviceModulateur = $serviceModulateur;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ModulateurAwareTrait
 
     /**
      * @return Modulateur
-     * @throws RuntimeException
      */
     public function getServiceModulateur()
     {
-        if (empty($this->serviceModulateur)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceModulateur)) {
+            $this->serviceModulateur = \Application::$container->get('ApplicationModulateur');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceModulateur = $serviceLocator->get('ApplicationModulateur');
-        }
         return $this->serviceModulateur;
     }
 }

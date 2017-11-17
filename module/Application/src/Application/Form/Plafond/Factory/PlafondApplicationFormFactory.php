@@ -2,11 +2,8 @@
 
 namespace Application\Form\Plafond\Factory;
 
-use Application\Service\PlafondEtatService;
-use Application\Service\PlafondService;
 use Zend\Form\FormElementManager as ContainerInterface;
 use Application\Form\Plafond\PlafondApplicationForm;
-
 
 
 /**
@@ -29,10 +26,6 @@ class PlafondApplicationFormFactory
         $container = $container->getServiceLocator();
 
         $form = new PlafondApplicationForm;
-        $form->setServiceStructure($container->get('ApplicationStructure'));
-        $form->setServiceAnnee($container->get('ApplicationAnnee'));
-        $form->setServicePlafond($container->get(PlafondService::class));
-        $form->setServicePlafondEtat($container->get(PlafondEtatService::class));
 
         return $form;
     }

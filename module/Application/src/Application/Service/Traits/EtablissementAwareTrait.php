@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Etablissement;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of EtablissementAwareTrait
@@ -20,15 +18,15 @@ trait EtablissementAwareTrait
 
 
 
-
-
     /**
      * @param Etablissement $serviceEtablissement
+     *
      * @return self
      */
-    public function setServiceEtablissement( Etablissement $serviceEtablissement )
+    public function setServiceEtablissement(Etablissement $serviceEtablissement)
     {
         $this->serviceEtablissement = $serviceEtablissement;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait EtablissementAwareTrait
 
     /**
      * @return Etablissement
-     * @throws RuntimeException
      */
     public function getServiceEtablissement()
     {
-        if (empty($this->serviceEtablissement)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceEtablissement)) {
+            $this->serviceEtablissement = \Application::$container->get('ApplicationEtablissement');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceEtablissement = $serviceLocator->get('ApplicationEtablissement');
-        }
         return $this->serviceEtablissement;
     }
 }

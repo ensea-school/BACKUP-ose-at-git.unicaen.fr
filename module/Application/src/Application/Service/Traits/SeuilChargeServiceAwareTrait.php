@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\SeuilChargeService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of SeuilChargeServiceAwareTrait
@@ -20,15 +18,15 @@ trait SeuilChargeServiceAwareTrait
 
 
 
-
-
     /**
      * @param SeuilChargeService $serviceSeuilCharge
+     *
      * @return self
      */
-    public function setServiceSeuilCharge( SeuilChargeService $serviceSeuilCharge )
+    public function setServiceSeuilCharge(SeuilChargeService $serviceSeuilCharge)
     {
         $this->serviceSeuilCharge = $serviceSeuilCharge;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait SeuilChargeServiceAwareTrait
 
     /**
      * @return SeuilChargeService
-     * @throws RuntimeException
      */
     public function getServiceSeuilCharge()
     {
-        if (empty($this->serviceSeuilCharge)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->serviceSeuilCharge = $serviceLocator->get('applicationSeuilCharge');
+        if (empty($this->serviceSeuilCharge)) {
+            $this->serviceSeuilCharge = \Application::$container->get('applicationSeuilCharge');
         }
+
         return $this->serviceSeuilCharge;
     }
 }

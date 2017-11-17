@@ -77,7 +77,7 @@ class Util
      */
     static public function routeToControllerAction($route)
     {
-        $serviceLocator = Module::$serviceLocator;
+        $serviceLocator = \Application::$container;
         if (!$serviceLocator) throw new \LogicException('Le serviceLocator n\'est pas accessible!!!');
 
         if (!array_key_exists($route, self::$rcaCache)) {

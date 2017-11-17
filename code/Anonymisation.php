@@ -896,7 +896,7 @@ FROM
   intervenant i
   JOIN civilite c ON c.id = i.civilite_id
 ";
-$em  = $controller->getServiceLocator()->get(\Application\Constants::BDD);
+$em  = $sl->get(\Application\Constants::BDD);
 $res = $em->getConnection()->executeQuery($i)->fetchAll();
 foreach ($res as $r) {
     $code = $r['SOURCE_CODE'];

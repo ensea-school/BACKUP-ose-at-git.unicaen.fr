@@ -56,8 +56,6 @@ class SaisieFieldset extends AbstractFieldset
         $this->etablissement = $this->getServiceContext()->getEtablissement();
 
         $hydrator = new SaisieFieldsetHydrator();
-        $hydrator->setServiceLocator($this->getServiceLocator()); // Actuel...
-        //$hydrator->setServiceContext($this->getServiceContext()); // pour plus tard éventuellement...
 
         $this->setName('service')
             ->setHydrator($hydrator)
@@ -254,10 +252,8 @@ class SaisieFieldset extends AbstractFieldset
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareInterface
+class SaisieFieldsetHydrator implements HydratorInterface
 {
-
-    use ServiceLocatorAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantAwareTrait;
     use ElementPedagogiqueAwareTrait;

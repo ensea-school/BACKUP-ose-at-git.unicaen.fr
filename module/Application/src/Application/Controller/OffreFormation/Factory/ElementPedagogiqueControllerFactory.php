@@ -2,10 +2,8 @@
 
 namespace Application\Controller\OffreFormation\Factory;
 
-use Application\Form\OffreFormation\VolumeHoraireEnsForm;
 use Zend\Mvc\Controller\ControllerManager as ContainerInterface;
 use Application\Controller\OffreFormation\ElementPedagogiqueController;
-
 
 
 /**
@@ -28,8 +26,6 @@ class ElementPedagogiqueControllerFactory
         $container = $container->getServiceLocator();
 
         $controller = new ElementPedagogiqueController;
-        $controller->setServiceLocator($container);
-        $controller->setFormOffreFormationVolumeHoraireEns($container->get('FormElementManager')->get(VolumeHoraireEnsForm::class));
 
         return $controller;
     }

@@ -5,12 +5,14 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\PlafondAwareTrait;
 use Application\Entity\Db\Traits\PlafondEtatAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
  * PlafondApplication
  */
 class PlafondApplication
 {
+    use TypeVolumeHoraireAwareTrait;
     use StructureAwareTrait;
     use PlafondAwareTrait;
     use PlafondEtatAwareTrait;

@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\MiseEnPaiementIntervenantStructure;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of MiseEnPaiementIntervenantStructureAwareTrait
@@ -20,15 +18,15 @@ trait MiseEnPaiementIntervenantStructureAwareTrait
 
 
 
-
-
     /**
      * @param MiseEnPaiementIntervenantStructure $serviceMiseEnPaiementIntervenantStructure
+     *
      * @return self
      */
-    public function setServiceMiseEnPaiementIntervenantStructure( MiseEnPaiementIntervenantStructure $serviceMiseEnPaiementIntervenantStructure )
+    public function setServiceMiseEnPaiementIntervenantStructure(MiseEnPaiementIntervenantStructure $serviceMiseEnPaiementIntervenantStructure)
     {
         $this->serviceMiseEnPaiementIntervenantStructure = $serviceMiseEnPaiementIntervenantStructure;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait MiseEnPaiementIntervenantStructureAwareTrait
 
     /**
      * @return MiseEnPaiementIntervenantStructure
-     * @throws RuntimeException
      */
     public function getServiceMiseEnPaiementIntervenantStructure()
     {
-        if (empty($this->serviceMiseEnPaiementIntervenantStructure)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceMiseEnPaiementIntervenantStructure)) {
+            $this->serviceMiseEnPaiementIntervenantStructure = \Application::$container->get('ApplicationMiseEnPaiementIntervenantStructure');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceMiseEnPaiementIntervenantStructure = $serviceLocator->get('ApplicationMiseEnPaiementIntervenantStructure');
-        }
         return $this->serviceMiseEnPaiementIntervenantStructure;
     }
 }

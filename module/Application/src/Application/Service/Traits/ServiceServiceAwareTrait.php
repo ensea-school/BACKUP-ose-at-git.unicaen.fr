@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\ServiceService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ServiceServiceAwareTrait
@@ -20,15 +18,15 @@ trait ServiceServiceAwareTrait
 
 
 
-
-
     /**
      * @param ServiceService $serviceService
+     *
      * @return self
      */
-    public function setServiceService( ServiceService $serviceService )
+    public function setServiceService(ServiceService $serviceService)
     {
         $this->serviceService = $serviceService;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ServiceServiceAwareTrait
 
     /**
      * @return ServiceService
-     * @throws RuntimeException
      */
     public function getServiceService()
     {
-        if (empty($this->serviceService)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceService)) {
+            $this->serviceService = \Application::$container->get('ApplicationService');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceService = $serviceLocator->get('ApplicationService');
-        }
         return $this->serviceService;
     }
 }

@@ -3,7 +3,6 @@
 namespace Application\Form\OffreFormation\Traits;
 
 use Application\Form\OffreFormation\VolumeHoraireEnsForm;
-use RuntimeException;
 
 /**
  * Description of VolumeHoraireEnsFormAwareTrait
@@ -24,7 +23,7 @@ trait VolumeHoraireEnsFormAwareTrait
      *
      * @return self
      */
-    public function setFormOffreFormationVolumeHoraireEns( VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns )
+    public function setFormOffreFormationVolumeHoraireEns(VolumeHoraireEnsForm $formOffreFormationVolumeHoraireEns)
     {
         $this->formOffreFormationVolumeHoraireEns = $formOffreFormationVolumeHoraireEns;
 
@@ -37,10 +36,13 @@ trait VolumeHoraireEnsFormAwareTrait
      * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
      *
      * @return VolumeHoraireEnsForm
-     * @throws RuntimeException
      */
     public function getFormOffreFormationVolumeHoraireEns()
     {
-        return $this->formOffreFormationVolumeHoraireEns;
+        if (!empty($this->formOffreFormationVolumeHoraireEns)) {
+            return $this->formOffreFormationVolumeHoraireEns;
+        }
+
+        return \Application::$container->get('FormElementManager')->get(VolumeHoraireEnsForm::class);
     }
 }

@@ -3,8 +3,6 @@
 namespace Application\Processus\Traits;
 
 use Application\Processus\ServiceReferentielProcessus;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ServiceReferentielProcessusAwareTrait
@@ -20,15 +18,15 @@ trait ServiceReferentielProcessusAwareTrait
 
 
 
-
-
     /**
      * @param ServiceReferentielProcessus $processusServiceReferentiel
+     *
      * @return self
      */
-    public function setProcessusServiceReferentiel( ServiceReferentielProcessus $processusServiceReferentiel )
+    public function setProcessusServiceReferentiel(ServiceReferentielProcessus $processusServiceReferentiel)
     {
         $this->processusServiceReferentiel = $processusServiceReferentiel;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ServiceReferentielProcessusAwareTrait
 
     /**
      * @return ServiceReferentielProcessus
-     * @throws RuntimeException
      */
     public function getProcessusServiceReferentiel()
     {
-        if (empty($this->processusServiceReferentiel)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->processusServiceReferentiel = $serviceLocator->get('processusServiceReferentiel');
+        if (empty($this->processusServiceReferentiel)) {
+            $this->processusServiceReferentiel = \Application::$container->get('processusServiceReferentiel');
         }
+
         return $this->processusServiceReferentiel;
     }
 }

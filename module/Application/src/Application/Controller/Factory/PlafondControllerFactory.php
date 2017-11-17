@@ -29,8 +29,6 @@ class PlafondControllerFactory
         $container = $container->getServiceLocator();
 
         $controller = new PlafondController;
-        $controller->setServicePlafondApplication($container->get(PlafondApplicationService::class));
-        $controller->setFormPlafondPlafondApplication($container->get('FormElementManager')->get(PlafondApplicationForm::class));
 
         return $controller;
     }

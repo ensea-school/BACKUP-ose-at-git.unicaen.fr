@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\TypePieceJointeStatutService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of TypePieceJointeStatutAwareTrait
@@ -20,16 +18,15 @@ trait TypePieceJointeStatutAwareTrait
 
 
 
-
-
     /**
      * @param TypePieceJointeStatutService $serviceTypePieceJointeStatut
      *
      * @return self
      */
-    public function setServiceTypePieceJointeStatut(TypePieceJointeStatutService $serviceTypePieceJointeStatut )
+    public function setServiceTypePieceJointeStatut(TypePieceJointeStatutService $serviceTypePieceJointeStatut)
     {
         $this->serviceTypePieceJointeStatut = $serviceTypePieceJointeStatut;
+
         return $this;
     }
 
@@ -37,24 +34,13 @@ trait TypePieceJointeStatutAwareTrait
 
     /**
      * @return TypePieceJointeStatutService
-     * @throws RuntimeException
      */
     public function getServiceTypePieceJointeStatut()
     {
-        if (empty($this->serviceTypePieceJointeStatut)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceTypePieceJointeStatut)) {
+            $this->serviceTypePieceJointeStatut = \Application::$container->get(TypePieceJointeStatutService::class);
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceTypePieceJointeStatut = $serviceLocator->get(TypePieceJointeStatutService::class);
-        }
         return $this->serviceTypePieceJointeStatut;
     }
 }

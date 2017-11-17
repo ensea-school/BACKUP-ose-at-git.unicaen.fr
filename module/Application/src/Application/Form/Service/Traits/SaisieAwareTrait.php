@@ -3,8 +3,6 @@
 namespace Application\Form\Service\Traits;
 
 use Application\Form\Service\Saisie;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of SaisieAwareTrait
@@ -20,15 +18,15 @@ trait SaisieAwareTrait
 
 
 
-
-
     /**
      * @param Saisie $formServiceSaisie
+     *
      * @return self
      */
-    public function setFormServiceSaisie( Saisie $formServiceSaisie )
+    public function setFormServiceSaisie(Saisie $formServiceSaisie)
     {
         $this->formServiceSaisie = $formServiceSaisie;
+
         return $this;
     }
 
@@ -38,25 +36,13 @@ trait SaisieAwareTrait
      * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
      *
      * @return Saisie
-     * @throws RuntimeException
      */
     public function getFormServiceSaisie()
     {
-        if (!empty($this->formServiceSaisie)){
+        if (!empty($this->formServiceSaisie)) {
             return $this->formServiceSaisie;
         }
 
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
-
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        return $serviceLocator->get('FormElementManager')->get('ServiceSaisie');
+        return \Application::$container->get('FormElementManager')->get('ServiceSaisie');
     }
 }

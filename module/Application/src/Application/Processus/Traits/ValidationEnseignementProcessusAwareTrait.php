@@ -3,8 +3,6 @@
 namespace Application\Processus\Traits;
 
 use Application\Processus\ValidationEnseignementProcessus;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ValidationEnseignementProcessusAwareTrait
@@ -20,15 +18,15 @@ trait ValidationEnseignementProcessusAwareTrait
 
 
 
-
-
     /**
      * @param ValidationEnseignementProcessus $processusValidationEnseignement
+     *
      * @return self
      */
-    public function setProcessusValidationEnseignement( ValidationEnseignementProcessus $processusValidationEnseignement )
+    public function setProcessusValidationEnseignement(ValidationEnseignementProcessus $processusValidationEnseignement)
     {
         $this->processusValidationEnseignement = $processusValidationEnseignement;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ValidationEnseignementProcessusAwareTrait
 
     /**
      * @return ValidationEnseignementProcessus
-     * @throws RuntimeException
      */
     public function getProcessusValidationEnseignement()
     {
-        if (empty($this->processusValidationEnseignement)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->processusValidationEnseignement)) {
+            $this->processusValidationEnseignement = \Application::$container->get('processusValidationEnseignement');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->processusValidationEnseignement = $serviceLocator->get('processusValidationEnseignement');
-        }
         return $this->processusValidationEnseignement;
     }
 }

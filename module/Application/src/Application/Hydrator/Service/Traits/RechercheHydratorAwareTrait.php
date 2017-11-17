@@ -3,8 +3,6 @@
 namespace Application\Hydrator\Service\Traits;
 
 use Application\Hydrator\Service\RechercheHydrator;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of RechercheHydratorAwareTrait
@@ -20,15 +18,15 @@ trait RechercheHydratorAwareTrait
 
 
 
-
-
     /**
      * @param RechercheHydrator $hydratorServiceRecherche
+     *
      * @return self
      */
-    public function setHydratorServiceRecherche( RechercheHydrator $hydratorServiceRecherche )
+    public function setHydratorServiceRecherche(RechercheHydrator $hydratorServiceRecherche)
     {
         $this->hydratorServiceRecherche = $hydratorServiceRecherche;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait RechercheHydratorAwareTrait
 
     /**
      * @return RechercheHydrator
-     * @throws RuntimeException
      */
     public function getHydratorServiceRecherche()
     {
-        if (empty($this->hydratorServiceRecherche)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->hydratorServiceRecherche)) {
+            $this->hydratorServiceRecherche = \Application::$container->get('HydratorManager')->get('serviceRecherche');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->hydratorServiceRecherche = $serviceLocator->get('HydratorManager')->get('serviceRecherche');
-        }
         return $this->hydratorServiceRecherche;
     }
 }

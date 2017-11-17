@@ -3,7 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\PlafondApplicationService;
-use Application\Module;
 
 /**
  * Description of PlafondApplicationServiceAwareTrait
@@ -38,7 +37,7 @@ trait PlafondApplicationServiceAwareTrait
     public function getServicePlafondApplication() : PlafondApplicationService
     {
         if (!$this->servicePlafondApplication){
-            $this->servicePlafondApplication = Module::$serviceLocator->get(PlafondApplicationService::class);
+            $this->servicePlafondApplication = \Application::$container->get(PlafondApplicationService::class);
         }
 
         return $this->servicePlafondApplication;

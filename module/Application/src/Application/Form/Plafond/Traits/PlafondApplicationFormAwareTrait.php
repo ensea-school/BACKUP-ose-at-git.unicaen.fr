@@ -24,7 +24,7 @@ trait PlafondApplicationFormAwareTrait
      *
      * @return self
      */
-    public function setFormPlafondPlafondApplication( PlafondApplicationForm $formPlafondPlafondApplication )
+    public function setFormPlafondPlafondApplication(PlafondApplicationForm $formPlafondPlafondApplication)
     {
         $this->formPlafondPlafondApplication = $formPlafondPlafondApplication;
 
@@ -41,6 +41,10 @@ trait PlafondApplicationFormAwareTrait
      */
     public function getFormPlafondPlafondApplication()
     {
+        if (empty($this->serviceIndicateur)) {
+            $this->serviceIndicateur = \Application::$container->get(PlafondApplicationForm::class);
+        }
+
         return $this->formPlafondPlafondApplication;
     }
 }

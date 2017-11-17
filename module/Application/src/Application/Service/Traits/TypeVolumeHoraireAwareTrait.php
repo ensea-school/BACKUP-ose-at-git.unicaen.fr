@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\TypeVolumeHoraire;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of TypeVolumeHoraireAwareTrait
@@ -20,15 +18,15 @@ trait TypeVolumeHoraireAwareTrait
 
 
 
-
-
     /**
      * @param TypeVolumeHoraire $serviceTypeVolumeHoraire
+     *
      * @return self
      */
-    public function setServiceTypeVolumeHoraire( TypeVolumeHoraire $serviceTypeVolumeHoraire )
+    public function setServiceTypeVolumeHoraire(TypeVolumeHoraire $serviceTypeVolumeHoraire)
     {
         $this->serviceTypeVolumeHoraire = $serviceTypeVolumeHoraire;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait TypeVolumeHoraireAwareTrait
 
     /**
      * @return TypeVolumeHoraire
-     * @throws RuntimeException
      */
     public function getServiceTypeVolumeHoraire()
     {
-        if (empty($this->serviceTypeVolumeHoraire)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceTypeVolumeHoraire)) {
+            $this->serviceTypeVolumeHoraire = \Application::$container->get('ApplicationTypeVolumeHoraire');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceTypeVolumeHoraire = $serviceLocator->get('ApplicationTypeVolumeHoraire');
-        }
         return $this->serviceTypeVolumeHoraire;
     }
 }

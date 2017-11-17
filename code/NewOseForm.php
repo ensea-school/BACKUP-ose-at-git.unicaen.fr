@@ -4,10 +4,12 @@ use UnicaenCode\Form\ElementMaker;
 use UnicaenCode\Util;
 
 /**
- * @var $this       \Zend\View\Renderer\PhpRenderer
+ * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
  * @var $viewName   string
+ * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
+
 
 ?>
     <h1>Création d'un nouveau formulaire</h1>
@@ -50,7 +52,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
     $type              = $form->get('type')->getValue();
     $classname         = $form->get('classname')->getValue();
 
-    $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
+    $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
     $params = $sCodeGenerator->generateFormParams([

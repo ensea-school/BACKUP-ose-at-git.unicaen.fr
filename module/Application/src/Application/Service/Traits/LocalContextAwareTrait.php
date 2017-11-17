@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\LocalContext;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of LocalContextAwareTrait
@@ -20,15 +18,15 @@ trait LocalContextAwareTrait
 
 
 
-
-
     /**
      * @param LocalContext $serviceLocalContext
+     *
      * @return self
      */
-    public function setServiceLocalContext( LocalContext $serviceLocalContext )
+    public function setServiceLocalContext(LocalContext $serviceLocalContext)
     {
         $this->serviceLocalContext = $serviceLocalContext;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait LocalContextAwareTrait
 
     /**
      * @return LocalContext
-     * @throws RuntimeException
      */
     public function getServiceLocalContext()
     {
-        if (empty($this->serviceLocalContext)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceLocalContext)) {
+            $this->serviceLocalContext = \Application::$container->get('ApplicationLocalContext');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceLocalContext = $serviceLocator->get('ApplicationLocalContext');
-        }
         return $this->serviceLocalContext;
     }
 }

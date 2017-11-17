@@ -17,8 +17,6 @@ class DossierControllerFactory
      */
     public function __invoke(ControllerManager $controllerManager)
     {
-        $sl = $controllerManager->getServiceLocator();
-
         $controller = new DossierController();
 
         return $controller;

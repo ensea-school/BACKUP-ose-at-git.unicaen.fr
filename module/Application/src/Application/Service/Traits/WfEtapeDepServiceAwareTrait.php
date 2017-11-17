@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\WfEtapeDepService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of WfEtapeDepServiceAwareTrait
@@ -20,15 +18,15 @@ trait WfEtapeDepServiceAwareTrait
 
 
 
-
-
     /**
      * @param WfEtapeDepService $serviceWfEtapeDep
+     *
      * @return self
      */
-    public function setServiceWfEtapeDep( WfEtapeDepService $serviceWfEtapeDep )
+    public function setServiceWfEtapeDep(WfEtapeDepService $serviceWfEtapeDep)
     {
         $this->serviceWfEtapeDep = $serviceWfEtapeDep;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait WfEtapeDepServiceAwareTrait
 
     /**
      * @return WfEtapeDepService
-     * @throws RuntimeException
      */
     public function getServiceWfEtapeDep()
     {
-        if (empty($this->serviceWfEtapeDep)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->serviceWfEtapeDep = $serviceLocator->get('applicationWfEtapeDep');
+        if (empty($this->serviceWfEtapeDep)) {
+            $this->serviceWfEtapeDep = \Application::$container->get('applicationWfEtapeDep');
         }
+
         return $this->serviceWfEtapeDep;
     }
 }

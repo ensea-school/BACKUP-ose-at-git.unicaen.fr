@@ -3,7 +3,6 @@
 namespace <namespace>;
 
 use <targetFullClass>;
-use Application\Module;
 
 /**
  * Description of <class>
@@ -38,7 +37,7 @@ trait <class>
     public function get<method>() : <targetClass>
     {
         if (!$this-><variable>){
-            $this-><variable> = Module::$serviceLocator->get(<targetClass>::class);
+            $this-><variable> = \Application::$container->get(<targetClass>::class);
         }
 
         return $this-><variable>;

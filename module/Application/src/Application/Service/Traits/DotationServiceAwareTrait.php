@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\DotationService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of DotationServiceAwareTrait
@@ -20,15 +18,15 @@ trait DotationServiceAwareTrait
 
 
 
-
-
     /**
      * @param DotationService $serviceDotation
+     *
      * @return self
      */
-    public function setServiceDotation( DotationService $serviceDotation )
+    public function setServiceDotation(DotationService $serviceDotation)
     {
         $this->serviceDotation = $serviceDotation;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait DotationServiceAwareTrait
 
     /**
      * @return DotationService
-     * @throws RuntimeException
      */
     public function getServiceDotation()
     {
-        if (empty($this->serviceDotation)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceDotation)) {
+            $this->serviceDotation = \Application::$container->get('applicationDotation');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceDotation = $serviceLocator->get('applicationDotation');
-        }
         return $this->serviceDotation;
     }
 }

@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\FormuleResultatServiceService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of FormuleResultatServiceServiceAwareTrait
@@ -20,15 +18,15 @@ trait FormuleResultatServiceServiceAwareTrait
 
 
 
-
-
     /**
      * @param FormuleResultatServiceService $serviceFormuleResultatService
+     *
      * @return self
      */
-    public function setServiceFormuleResultatService( FormuleResultatServiceService $serviceFormuleResultatService )
+    public function setServiceFormuleResultatService(FormuleResultatServiceService $serviceFormuleResultatService)
     {
         $this->serviceFormuleResultatService = $serviceFormuleResultatService;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait FormuleResultatServiceServiceAwareTrait
 
     /**
      * @return FormuleResultatServiceService
-     * @throws RuntimeException
      */
     public function getServiceFormuleResultatService()
     {
-        if (empty($this->serviceFormuleResultatService)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceFormuleResultatService)) {
+            $this->serviceFormuleResultatService = \Application::$container->get('ApplicationFormuleResultatService');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceFormuleResultatService = $serviceLocator->get('ApplicationFormuleResultatService');
-        }
         return $this->serviceFormuleResultatService;
     }
 }

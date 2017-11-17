@@ -3,7 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\PlafondEtatService;
-use Application\Module;
 
 /**
  * Description of PlafondEtatServiceAwareTrait
@@ -38,7 +37,7 @@ trait PlafondEtatServiceAwareTrait
     public function getServicePlafondEtat() : PlafondEtatService
     {
         if (!$this->servicePlafondEtat){
-            $this->servicePlafondEtat = Module::$serviceLocator->get(PlafondEtatService::class);
+            $this->servicePlafondEtat = \Application::$container->get(PlafondEtatService::class);
         }
 
         return $this->servicePlafondEtat;

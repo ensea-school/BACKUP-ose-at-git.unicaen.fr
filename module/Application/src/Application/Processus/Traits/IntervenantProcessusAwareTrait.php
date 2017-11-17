@@ -3,8 +3,6 @@
 namespace Application\Processus\Traits;
 
 use Application\Processus\IntervenantProcessus;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of IntervenantProcessusAwareTrait
@@ -20,15 +18,15 @@ trait IntervenantProcessusAwareTrait
 
 
 
-
-
     /**
      * @param IntervenantProcessus $processusIntervenant
+     *
      * @return self
      */
-    public function setProcessusIntervenant( IntervenantProcessus $processusIntervenant )
+    public function setProcessusIntervenant(IntervenantProcessus $processusIntervenant)
     {
         $this->processusIntervenant = $processusIntervenant;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait IntervenantProcessusAwareTrait
 
     /**
      * @return IntervenantProcessus
-     * @throws RuntimeException
      */
     public function getProcessusIntervenant()
     {
-        if (empty($this->processusIntervenant)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->processusIntervenant = $serviceLocator->get(IntervenantProcessus::class);
+        if (empty($this->processusIntervenant)) {
+            $this->processusIntervenant = \Application::$container->get(IntervenantProcessus::class);
         }
+
         return $this->processusIntervenant;
     }
 }

@@ -3,8 +3,6 @@
 namespace Application\Processus\Traits;
 
 use Application\Processus\ContratProcessus;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ContratProcessusAwareTrait
@@ -20,15 +18,15 @@ trait ContratProcessusAwareTrait
 
 
 
-
-
     /**
      * @param ContratProcessus $processusContrat
+     *
      * @return self
      */
-    public function setProcessusContrat( ContratProcessus $processusContrat )
+    public function setProcessusContrat(ContratProcessus $processusContrat)
     {
         $this->processusContrat = $processusContrat;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ContratProcessusAwareTrait
 
     /**
      * @return ContratProcessus
-     * @throws RuntimeException
      */
     public function getProcessusContrat()
     {
-        if (empty($this->processusContrat)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->processusContrat = $serviceLocator->get('processusContrat');
+        if (empty($this->processusContrat)) {
+            $this->processusContrat = \Application::$container->get('processusContrat');
         }
+
         return $this->processusContrat;
     }
 }

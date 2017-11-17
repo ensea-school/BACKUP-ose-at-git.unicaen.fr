@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\TypeValidation;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of TypeValidationAwareTrait
@@ -20,15 +18,15 @@ trait TypeValidationAwareTrait
 
 
 
-
-
     /**
      * @param TypeValidation $serviceTypeValidation
+     *
      * @return self
      */
-    public function setServiceTypeValidation( TypeValidation $serviceTypeValidation )
+    public function setServiceTypeValidation(TypeValidation $serviceTypeValidation)
     {
         $this->serviceTypeValidation = $serviceTypeValidation;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait TypeValidationAwareTrait
 
     /**
      * @return TypeValidation
-     * @throws RuntimeException
      */
     public function getServiceTypeValidation()
     {
-        if (empty($this->serviceTypeValidation)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceTypeValidation)) {
+            $this->serviceTypeValidation = \Application::$container->get('ApplicationTypeValidation');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceTypeValidation = $serviceLocator->get('ApplicationTypeValidation');
-        }
         return $this->serviceTypeValidation;
     }
 }

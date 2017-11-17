@@ -3,8 +3,6 @@
 namespace Application\Form\Intervenant\Traits;
 
 use Application\Form\Intervenant\HeuresCompForm;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of HeuresCompFormAwareTrait
@@ -20,15 +18,15 @@ trait HeuresCompFormAwareTrait
 
 
 
-
-
     /**
      * @param HeuresCompForm $formIntervenantHeuresComp
+     *
      * @return self
      */
-    public function setFormIntervenantHeuresComp( HeuresCompForm $formIntervenantHeuresComp )
+    public function setFormIntervenantHeuresComp(HeuresCompForm $formIntervenantHeuresComp)
     {
         $this->formIntervenantHeuresComp = $formIntervenantHeuresComp;
+
         return $this;
     }
 
@@ -38,25 +36,13 @@ trait HeuresCompFormAwareTrait
      * Retourne un nouveau formulaire ou fieldset systématiquement, sauf si ce dernier a été fourni manuellement.
      *
      * @return HeuresCompForm
-     * @throws RuntimeException
      */
     public function getFormIntervenantHeuresComp()
     {
-        if (!empty($this->formIntervenantHeuresComp)){
+        if (!empty($this->formIntervenantHeuresComp)) {
             return $this->formIntervenantHeuresComp;
         }
 
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
-
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        return $serviceLocator->get('FormElementManager')->get('IntervenantHeuresCompForm');
+        return \Application::$container->get('FormElementManager')->get('IntervenantHeuresCompForm');
     }
 }

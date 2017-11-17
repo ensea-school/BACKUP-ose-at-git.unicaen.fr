@@ -4,9 +4,10 @@ use UnicaenCode\Form\ElementMaker;
 use UnicaenCode\Util;
 
 /**
- * @var $this       \Zend\View\Renderer\PhpRenderer
+ * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
  * @var $viewName   string
+ * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
 ?>
@@ -29,7 +30,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
 
     $entity = $form->get('entity')->getValue();
 
-    $sCodeGenerator = $controller->getServiceLocator()->get('UnicaenCode\CodeGenerator');
+    $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
     $params = $sCodeGenerator->generateServiceParams([

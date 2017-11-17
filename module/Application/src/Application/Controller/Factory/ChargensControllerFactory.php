@@ -4,7 +4,6 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\ChargensController;
 use Zend\Mvc\Controller\ControllerManager;
-use Application\Service\ContextService;
 
 class ChargensControllerFactory
 {
@@ -17,14 +16,7 @@ class ChargensControllerFactory
      */
     public function __invoke(ControllerManager $controllerManager)
     {
-        $sl = $controllerManager->getServiceLocator();
-
         $controller = new ChargensController();
-
-        $controller->setProviderChargens($sl->get('chargens'));
-        //$controller->setServiceContext($sl->get(ContextService::class));
-        //$controller->setServiceStructure($sl->get('ApplicationStructure'));
-        //$controller->setServiceEtape($sl->get('ApplicationEtape'));
 
         return $controller;
     }

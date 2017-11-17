@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Personnel;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of PersonnelAwareTrait
@@ -20,15 +18,15 @@ trait PersonnelAwareTrait
 
 
 
-
-
     /**
      * @param Personnel $servicePersonnel
+     *
      * @return self
      */
-    public function setServicePersonnel( Personnel $servicePersonnel )
+    public function setServicePersonnel(Personnel $servicePersonnel)
     {
         $this->servicePersonnel = $servicePersonnel;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait PersonnelAwareTrait
 
     /**
      * @return Personnel
-     * @throws RuntimeException
      */
     public function getServicePersonnel()
     {
-        if (empty($this->servicePersonnel)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->servicePersonnel)) {
+            $this->servicePersonnel = \Application::$container->get('ApplicationPersonnel');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->servicePersonnel = $serviceLocator->get('ApplicationPersonnel');
-        }
         return $this->servicePersonnel;
     }
 }

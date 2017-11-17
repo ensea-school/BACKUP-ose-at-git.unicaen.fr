@@ -3,7 +3,6 @@
 namespace <namespace>;
 
 use <targetFullClass>;
-use Application\Module;
 
 /**
  * Description of <class>
@@ -44,7 +43,7 @@ trait <class>
         if ($this-><variable>){
             return $this-><variable>;
         }else{
-            return Module::$serviceLocator->get('FormElementManager')->get(<targetClass>::class);
+            return \Application::$container->get('FormElementManager')->get(<targetClass>::class);
         }
     }
 <endif useGetter>

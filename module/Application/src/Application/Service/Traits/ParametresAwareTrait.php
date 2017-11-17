@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Parametres;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ParametresAwareTrait
@@ -20,15 +18,15 @@ trait ParametresAwareTrait
 
 
 
-
-
     /**
      * @param Parametres $serviceParametres
+     *
      * @return self
      */
-    public function setServiceParametres( Parametres $serviceParametres )
+    public function setServiceParametres(Parametres $serviceParametres)
     {
         $this->serviceParametres = $serviceParametres;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ParametresAwareTrait
 
     /**
      * @return Parametres
-     * @throws RuntimeException
      */
     public function getServiceParametres()
     {
-        if (empty($this->serviceParametres)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceParametres)) {
+            $this->serviceParametres = \Application::$container->get('ApplicationParametres');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceParametres = $serviceLocator->get('ApplicationParametres');
-        }
         return $this->serviceParametres;
     }
 }

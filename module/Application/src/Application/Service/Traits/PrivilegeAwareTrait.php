@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Privilege;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of PrivilegeAwareTrait
@@ -20,15 +18,15 @@ trait PrivilegeAwareTrait
 
 
 
-
-
     /**
      * @param Privilege $servicePrivilege
+     *
      * @return self
      */
-    public function setServicePrivilege( Privilege $servicePrivilege )
+    public function setServicePrivilege(Privilege $servicePrivilege)
     {
         $this->servicePrivilege = $servicePrivilege;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait PrivilegeAwareTrait
 
     /**
      * @return Privilege
-     * @throws RuntimeException
      */
     public function getServicePrivilege()
     {
-        if (empty($this->servicePrivilege)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->servicePrivilege)) {
+            $this->servicePrivilege = \Application::$container->get('ApplicationPrivilege');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->servicePrivilege = $serviceLocator->get('ApplicationPrivilege');
-        }
         return $this->servicePrivilege;
     }
 }

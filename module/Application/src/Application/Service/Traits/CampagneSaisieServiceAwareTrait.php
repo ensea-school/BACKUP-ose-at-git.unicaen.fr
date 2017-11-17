@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\CampagneSaisieService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of CampagneSaisieServiceAwareTrait
@@ -20,15 +18,15 @@ trait CampagneSaisieServiceAwareTrait
 
 
 
-
-
     /**
      * @param CampagneSaisieService $serviceCampagneSaisie
+     *
      * @return self
      */
-    public function setServiceCampagneSaisie( CampagneSaisieService $serviceCampagneSaisie )
+    public function setServiceCampagneSaisie(CampagneSaisieService $serviceCampagneSaisie)
     {
         $this->serviceCampagneSaisie = $serviceCampagneSaisie;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait CampagneSaisieServiceAwareTrait
 
     /**
      * @return CampagneSaisieService
-     * @throws RuntimeException
      */
     public function getServiceCampagneSaisie()
     {
-        if (empty($this->serviceCampagneSaisie)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->serviceCampagneSaisie = $serviceLocator->get('applicationCampagneSaisie');
+        if (empty($this->serviceCampagneSaisie)) {
+            $this->serviceCampagneSaisie = \Application::$container->get('applicationCampagneSaisie');
         }
+
         return $this->serviceCampagneSaisie;
     }
 }

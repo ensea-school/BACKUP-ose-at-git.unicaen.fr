@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Pays;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of PaysAwareTrait
@@ -20,15 +18,15 @@ trait PaysAwareTrait
 
 
 
-
-
     /**
      * @param Pays $servicePays
+     *
      * @return self
      */
-    public function setServicePays( Pays $servicePays )
+    public function setServicePays(Pays $servicePays)
     {
         $this->servicePays = $servicePays;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait PaysAwareTrait
 
     /**
      * @return Pays
-     * @throws RuntimeException
      */
     public function getServicePays()
     {
-        if (empty($this->servicePays)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->servicePays)) {
+            $this->servicePays = \Application::$container->get('ApplicationPays');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->servicePays = $serviceLocator->get('ApplicationPays');
-        }
         return $this->servicePays;
     }
 }

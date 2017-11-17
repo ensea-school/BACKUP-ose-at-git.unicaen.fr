@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\FormuleServiceModifie;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of FormuleServiceModifieAwareTrait
@@ -20,15 +18,15 @@ trait FormuleServiceModifieAwareTrait
 
 
 
-
-
     /**
      * @param FormuleServiceModifie $serviceFormuleServiceModifie
+     *
      * @return self
      */
-    public function setServiceFormuleServiceModifie( FormuleServiceModifie $serviceFormuleServiceModifie )
+    public function setServiceFormuleServiceModifie(FormuleServiceModifie $serviceFormuleServiceModifie)
     {
         $this->serviceFormuleServiceModifie = $serviceFormuleServiceModifie;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait FormuleServiceModifieAwareTrait
 
     /**
      * @return FormuleServiceModifie
-     * @throws RuntimeException
      */
     public function getServiceFormuleServiceModifie()
     {
-        if (empty($this->serviceFormuleServiceModifie)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceFormuleServiceModifie)) {
+            $this->serviceFormuleServiceModifie = \Application::$container->get('ApplicationFormuleServiceModifie');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceFormuleServiceModifie = $serviceLocator->get('ApplicationFormuleServiceModifie');
-        }
         return $this->serviceFormuleServiceModifie;
     }
 }

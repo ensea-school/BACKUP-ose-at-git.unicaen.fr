@@ -3,7 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\VolumeHoraireReferentiel;
-use Application\Module;
 use RuntimeException;
 
 /**
@@ -20,15 +19,15 @@ trait VolumeHoraireReferentielAwareTrait
 
 
 
-
-
     /**
      * @param VolumeHoraireReferentiel $serviceVolumeHoraireReferentiel
+     *
      * @return self
      */
-    public function setServiceVolumeHoraireReferentiel( VolumeHoraireReferentiel $serviceVolumeHoraireReferentiel )
+    public function setServiceVolumeHoraireReferentiel(VolumeHoraireReferentiel $serviceVolumeHoraireReferentiel)
     {
         $this->serviceVolumeHoraireReferentiel = $serviceVolumeHoraireReferentiel;
+
         return $this;
     }
 
@@ -36,24 +35,13 @@ trait VolumeHoraireReferentielAwareTrait
 
     /**
      * @return VolumeHoraireReferentiel
-     * @throws RuntimeException
      */
     public function getServiceVolumeHoraireReferentiel()
     {
-        if (empty($this->serviceVolumeHoraireReferentiel)){
-        $serviceLocator = Module::$serviceLocator;
-        if (! $serviceLocator) {
-            if (!method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-            }
+        if (empty($this->serviceVolumeHoraireReferentiel)) {
+            $this->serviceVolumeHoraireReferentiel = \Application::$container->get('ApplicationVolumeHoraireReferentiel');
+        }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
-            }
-        }
-        $this->serviceVolumeHoraireReferentiel = $serviceLocator->get('ApplicationVolumeHoraireReferentiel');
-        }
         return $this->serviceVolumeHoraireReferentiel;
     }
 }

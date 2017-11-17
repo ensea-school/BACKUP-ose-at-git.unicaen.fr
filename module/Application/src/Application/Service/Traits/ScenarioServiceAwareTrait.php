@@ -3,8 +3,6 @@
 namespace Application\Service\Traits;
 
 use Application\Service\ScenarioService;
-use Application\Module;
-use RuntimeException;
 
 /**
  * Description of ScenarioServiceAwareTrait
@@ -20,15 +18,15 @@ trait ScenarioServiceAwareTrait
 
 
 
-
-
     /**
      * @param ScenarioService $serviceScenario
+     *
      * @return self
      */
-    public function setServiceScenario( ScenarioService $serviceScenario )
+    public function setServiceScenario(ScenarioService $serviceScenario)
     {
         $this->serviceScenario = $serviceScenario;
+
         return $this;
     }
 
@@ -36,24 +34,13 @@ trait ScenarioServiceAwareTrait
 
     /**
      * @return ScenarioService
-     * @throws RuntimeException
      */
     public function getServiceScenario()
     {
-        if (empty($this->serviceScenario)){
-            $serviceLocator = Module::$serviceLocator;
-            if (! $serviceLocator) {
-                if (!method_exists($this, 'getServiceLocator')) {
-                    throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
-                }
-
-                $serviceLocator = $this->getServiceLocator();
-                if (method_exists($serviceLocator, 'getServiceLocator')) {
-                    $serviceLocator = $serviceLocator->getServiceLocator();
-                }
-            }
-            $this->serviceScenario = $serviceLocator->get('applicationScenario');
+        if (empty($this->serviceScenario)) {
+            $this->serviceScenario = \Application::$container->get('applicationScenario');
         }
+
         return $this->serviceScenario;
     }
 }

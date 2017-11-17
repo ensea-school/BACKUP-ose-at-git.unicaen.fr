@@ -29,6 +29,11 @@ class Periode extends AbstractEntityService
      */
     protected $enseignement;
 
+    /**
+     * @var PeriodeEntity[]
+     */
+    private $cache;
+
 
 
     /**
@@ -52,6 +57,23 @@ class Periode extends AbstractEntityService
     public function getAlias()
     {
         return 'per';
+    }
+
+
+
+    /**
+     *
+     * @param string $code
+     *
+     * @return PeriodeEntity
+     */
+    public function getByCode($code)
+    {
+        if (!isset($this->cache[$code])) {
+            $this->cache[$code] = $this->getRepo()->findOneBy(['code' => $code]);
+        }
+
+        return $this->cache[$code];
     }
 
 

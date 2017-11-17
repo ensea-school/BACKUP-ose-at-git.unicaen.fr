@@ -14,6 +14,7 @@ use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
+use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use Zend\View\Renderer\PhpRenderer;
@@ -41,6 +42,7 @@ class IndicateurController extends AbstractController
     use IndicateurProcessusAwareTrait;
     use DossierAwareTrait;
     use TypeVolumeHoraireAwareTrait;
+    use PeriodeAwareTrait;
 
     /**
      * @var TreeRouteStack
@@ -306,11 +308,14 @@ class IndicateurController extends AbstractController
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
+        $periodeCode = $this->params()->fromRoute('periode-code');
+        $periode = $this->getServicePeriode()->getByCode($periodeCode);
+
         if (!$intervenant){
             throw new \Exception('Un intervenant doit être spécifié');
         }
 
-        $params = compact('typeVolumeHoraire','intervenant');
+        $params = compact('typeVolumeHoraire','periode', 'intervenant');
         if ($structure = $this->getServiceContext()->getStructure()){
             $params['structure'] = $structure->getId();
             $sFilter = ' AND idc.structure = :structure';
@@ -329,6 +334,7 @@ class IndicateurController extends AbstractController
         WHERE
           idc.intervenant = :intervenant
           AND idc.typeVolumeHoraire = :typeVolumeHoraire
+          AND (idc.periode = :periode OR idc.periode IS NULL)
           $sFilter
         ORDER BY
           s.libelleCourt, ep.libelle, ti.ordre

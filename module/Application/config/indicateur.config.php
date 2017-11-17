@@ -77,12 +77,32 @@ return [
                             ],
                         ],
                         'child_routes' => [
-                            'prevu'   => [
+                            'prevu' => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/prevu',
                                     'defaults' => [
                                         'type-volume-horaire-code' => 'PREVU',
+                                    ],
+                                ],
+                                'child_routes' => [
+                                    's1'   => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/s1',
+                                            'defaults' => [
+                                                'periode-code' => 'S1',
+                                            ],
+                                        ],
+                                    ],
+                                    's2'   => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/s2',
+                                            'defaults' => [
+                                                'periode-code' => 'S2',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
@@ -92,6 +112,26 @@ return [
                                     'route'    => '/realise',
                                     'defaults' => [
                                         'type-volume-horaire-code' => 'REALISE',
+                                    ],
+                                ],
+                                'child_routes' => [
+                                    's1'   => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/s1',
+                                            'defaults' => [
+                                                'periode-code' => 'S1',
+                                            ],
+                                        ],
+                                    ],
+                                    's2'   => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/s2',
+                                            'defaults' => [
+                                                'periode-code' => 'S2',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],

@@ -9,7 +9,6 @@ use Application\Service\Traits\TypePieceJointeStatutAwareTrait;
 use Zend\Form\Element\Csrf;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use UnicaenApp\Util;
 
 
 /**

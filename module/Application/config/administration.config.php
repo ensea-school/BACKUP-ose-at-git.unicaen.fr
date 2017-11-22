@@ -58,6 +58,7 @@ return [
                         Privileges::REFERENTIEL_ADMIN_VISUALISATION,
                         Privileges::TYPE_INTERVENTION_VISUALISATION,
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
+                        Privileges::PLAFONDS_GESTION_VISUALISATION,
                     ],
                     'assertion'  => 'AssertionGestion',
                 ],

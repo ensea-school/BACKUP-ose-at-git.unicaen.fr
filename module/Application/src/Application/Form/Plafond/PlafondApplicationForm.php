@@ -2,15 +2,13 @@
 
 namespace Application\Form\Plafond;
 
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\PlafondApplication;
 use Application\Entity\Db\PlafondEtat;
-use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\PlafondApplicationServiceAwareTrait;
 use Application\Service\Traits\PlafondEtatServiceAwareTrait;
-use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -22,20 +20,31 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class PlafondApplicationForm extends AbstractForm
 {
-    use StructureServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use PlafondEtatServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use PlafondApplicationServiceAwareTrait;
 
 
 
     public function init()
     {
+        $this->setAttribute('action', $this->getCurrentUrl());
+
         $hydrator = new PlafondApplicationFormHydrator;
         $hydrator->setServiceAnnee($this->getServiceAnnee());
         $hydrator->setServicePlafondEtat($this->getServicePlafondEtat());
-        $hydrator->setServiceStructure($this->getServiceStructure());
         $this->setHydrator($hydrator);
+
+        $this->add([
+            'type' => 'Hidden',
+            'name' => 'plafond',
+        ]);
+
+        $this->add([
+            'type' => 'Hidden',
+            'name' => 'typeVolumeHoraire',
+        ]);
 
         $this->add([
             'name'       => 'plafondEtat',
@@ -51,25 +60,9 @@ class PlafondApplicationForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'       => 'structure',
-            'options'    => [
-                'label'         => 'Structure',
-                'empty_option'  => "Valable pour tout l'établissement",
-                'value_options' => Util::collectionAsOptions($this->getStructures()),
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
-        ]);
-
-        $this->add([
             'name'       => 'anneeDebut',
             'options'    => [
                 'label'         => 'Année de début',
-                'empty_option'  => "Aucune",
-                'value_options' => Util::collectionAsOptions($this->getAnnees()),
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -82,8 +75,6 @@ class PlafondApplicationForm extends AbstractForm
             'name'       => 'anneeFin',
             'options'    => [
                 'label'         => 'Année de fin',
-                'empty_option'  => "Aucune",
-                'value_options' => Util::collectionAsOptions($this->getAnnees()),
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -115,24 +106,57 @@ class PlafondApplicationForm extends AbstractForm
 
 
     /**
-     * @return Structure[]
+     * @param PlafondApplication $papp
+     *
+     * @return $this
      */
-    protected function getStructures()
+    public function buildAnnees(PlafondApplication $papp)
     {
-        $qb = $this->getServiceStructure()->finderByHistorique();
-        $this->getServiceStructure()->finderByEnseignement($qb);
+        /* Limitations des années de début */
+        $derniereAnneeDebut = $this->getServicePlafondApplication()->derniereAnneeDebut($papp);
+        if ($derniereAnneeDebut) {
+            $this->get('anneeDebut')->setValueOptions($this->getAnnees($derniereAnneeDebut, null));
+            if (!$papp->getId()) {
+                $papp->setAnneeDebut($this->getServiceAnnee()->getSuivante($derniereAnneeDebut));
+            }
+        } else {
+            $this->get('anneeDebut')->setValueOptions($this->getAnnees(null, null));
+            $this->get('anneeDebut')->setEmptyOption('Pas de limite');
+        }
 
-        return $this->getServiceStructure()->getList($qb);
+
+        /* Limitations des années de fin */
+        $premiereAnneeFin = $this->getServicePlafondApplication()->premiereAnneeFin($papp);
+        if ($premiereAnneeFin) {
+            $this->get('anneeFin')->setValueOptions($this->getAnnees(null, $premiereAnneeFin));
+            if (!$papp->getId()) {
+                $papp->setAnneeFin($this->getServiceAnnee()->getPrecedente($premiereAnneeFin));
+            }
+        } else {
+            $this->get('anneeFin')->setValueOptions($this->getAnnees(null, null));
+            $this->get('anneeFin')->setEmptyOption('Pas de limite');
+        }
+
+        return $this;
     }
 
 
 
-    /**
-     * @return Annee[]
-     */
-    protected function getAnnees()
+    private function getAnnees($min, $max)
     {
-        return $this->getServiceAnnee()->getList();
+        $annee = $this->getServiceContext()->getAnnee()->getId();
+        $as    = $this->getServiceAnnee()->getList();
+
+        $annees = [];
+        foreach ($as as $ak => $av) {
+            if ($ak >= $annee - 10 && $ak <= $annee + 10) {
+                if ((!$min || $ak > $min->getId()) && (!$max || $ak < $max->getId())) {
+                    $annees[$ak] = $av->getLibelle();
+                }
+            }
+        }
+
+        return $annees;
     }
 
 
@@ -146,7 +170,11 @@ class PlafondApplicationForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            /* Filtres et validateurs */
+            'plafondEtat'       => ['required' => true],
+            'anneeDebut'        => ['required' => false],
+            'anneeFin'          => ['required' => false],
+            'plafond'           => ['required' => true],
+            'typeVolumeHoraire' => ['required' => true],
         ];
     }
 
@@ -158,14 +186,13 @@ class PlafondApplicationForm extends AbstractForm
 
 class PlafondApplicationFormHydrator implements HydratorInterface
 {
-    use StructureServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use PlafondEtatServiceAwareTrait;
 
 
 
     /**
-     * @param  array             $data
+     * @param array              $data
      * @param PlafondApplication $object
      *
      * @return object
@@ -173,12 +200,10 @@ class PlafondApplicationFormHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $plafondEtat = $this->getServicePlafondEtat()->get($data['plafondEtat']);
-        $structure = isset($data['structure']) && $data['structure'] ? $this->getServiceStructure()->get($data['structure']) : null;
-        $anneeDebut = isset($data['anneeDebut']) && $data['anneeDebut'] ? $this->getServiceAnnee()->get($data['anneeDebut']) : null;
-        $anneeFin = isset($data['anneeFin']) && $data['anneeFin'] ? $this->getServiceAnnee()->get($data['anneeFin']) : null;
+        $anneeDebut  = isset($data['anneeDebut']) && $data['anneeDebut'] ? $this->getServiceAnnee()->get($data['anneeDebut']) : null;
+        $anneeFin    = isset($data['anneeFin']) && $data['anneeFin'] ? $this->getServiceAnnee()->get($data['anneeFin']) : null;
 
         $object->setPlafondEtat($plafondEtat);
-        $object->setStructure($structure);
         $object->setAnneeDebut($anneeDebut);
         $object->setAnneeFin($anneeFin);
 
@@ -195,10 +220,11 @@ class PlafondApplicationFormHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'plafondEtat' => $object->getPlafondEtat()->getId(),
-            'structure'   => $object->getStructure() ? $object->getStructure()->getId() : null,
-            'anneeDebut'  => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
-            'anneeFin'    => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
+            'plafondEtat'       => $object->getPlafondEtat() ? $object->getPlafondEtat()->getId() : null,
+            'anneeDebut'        => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
+            'anneeFin'          => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
+            'plafond'           => $object->getPlafond()->getId(),
+            'typeVolumeHoraire' => $object->getTypeVolumeHoraire()->getId(),
         ];
 
         return $data;

@@ -8,7 +8,12 @@ use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 /**
  * Description of TypeVolumeHoraire
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ *
+ * @method TypeVolumeHoraireEntity get($id)
+ * @method TypeVolumeHoraireEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method TypeVolumeHoraireEntity newEntity()
+ *
  */
 class TypeVolumeHoraire extends AbstractEntityService
 {

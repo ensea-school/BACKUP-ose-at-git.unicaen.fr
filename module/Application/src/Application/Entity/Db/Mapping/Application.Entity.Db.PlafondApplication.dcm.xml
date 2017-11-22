@@ -21,11 +21,6 @@
                 <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-            <join-columns>
-                <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-            </join-columns>
-        </many-to-one>
         <many-to-one field="anneeDebut" target-entity="Application\Entity\Db\Annee">
             <join-columns>
                 <join-column name="ANNEE_DEBUT_ID" referenced-column-name="ID"/>

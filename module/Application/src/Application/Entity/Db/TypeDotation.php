@@ -72,7 +72,7 @@ class TypeDotation implements HistoriqueAwareInterface, ImportAwareInterface
     }
 
 
-    
+
     public function isDotationInitiale()
     {
         return $this->getSourceCode() == self::CODE_DOTATION_INITIALE;

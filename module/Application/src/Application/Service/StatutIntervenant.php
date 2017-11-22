@@ -50,11 +50,11 @@ class StatutIntervenant extends AbstractEntityService
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
-     * @return \Application\Entity\Db\TypeDotation
+     * @return \Application\Entity\Db\StatutIntervenant
      */
     public function newEntity()
     {
-        /** @var TypeDotation $entity */
+        /** @var \Application\Entity\Db\StatutIntervenant $entity */
         $entity = parent::newEntity();
 
         // toutes les entités créées ont OSE pour source!!

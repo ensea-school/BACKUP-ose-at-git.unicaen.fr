@@ -1,88 +1,57 @@
-WITH validite ( no_individu, fin ) AS (
+SELECT * FROM
+(
   SELECT
-    no_individu,
-    MAX( fin )
-    --CASE WHEN MAX( fin ) = to_date('12/12/9999','DD/MM/YYYY') THEN NULL ELSE MAX( fin ) END fin
+    'contrat'                                          categorie,
+    ca.no_dossier_pers                                 code,
+    ct.c_type_contrat_trav                             contrat,
+    null                                               type_population,
+    ca.d_deb_contrat_trav                              date_deb, 
+    COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav) date_fin,
+    CASE WHEN
+      SYSDATE BETWEEN ca.d_deb_contrat_trav-1 AND COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav,SYSDATE)+1
+    THEN 1 ELSE 0 END                                                actuel
   FROM
-    (SELECT
-      ch.no_individu no_individu,
-      COALESCE( ch.d_fin_str_trav, to_date('12/12/9999','DD/MM/YYYY') ) fin
-    FROM
-      chercheur@harpprod ch
-    WHERE
-      SYSDATE BETWEEN COALESCE(ch.d_deb_str_trav, SYSDATE) AND COALESCE(ch.d_fin_str_trav + 6*31, SYSDATE)
-    UNION SELECT
-      a.no_dossier_pers no_individu,
-      COALESCE( a.d_fin_affectation, to_date('12/12/9999','DD/MM/YYYY') ) fin
-    FROM
-      affectation@harpprod a
-    WHERE
-      SYSDATE BETWEEN COALESCE(a.d_deb_affectation, SYSDATE) AND COALESCE(a.d_fin_affectation + 6*31, SYSDATE)
-    UNION SELECT
-      ar.no_dossier_pers no_individu,
-      COALESCE( ar.d_fin_affe_rech, to_date('12/12/9999','DD/MM/YYYY') ) fin
-    FROM
-      affectation_recherche@harpprod ar
-    WHERE
-      SYSDATE BETWEEN COALESCE(ar.d_deb_affe_rech, SYSDATE) AND COALESCE(ar.d_fin_affe_rech + 6*31, SYSDATE)
-  )
-  GROUP BY
-    no_individu
-)
-SELECT DISTINCT
-  initcap(individu.nom_usuel)                     nom_usuel,
-  initcap(individu.nom_patronymique)              nom_patronymique,
-  initcap(individu.prenom)                        prenom,
-  --si.source_code                                  statut_code,
-  ltrim(TO_CHAR(individu.no_individu,'99999999')) code,
-  CASE WHEN ch.no_individu IS NOT NULL AND SYSDATE BETWEEN COALESCE(ch.d_deb_str_trav, SYSDATE) AND COALESCE(ch.d_fin_str_trav + 6*31, SYSDATE) THEN 1 ELSE 0 END chercheur,
-  ch.d_deb_str_trav chercheur_deb,
-  ch.d_fin_str_trav chercheur_fin,
+    contrat_avenant@harpprod ca
+    JOIN contrat_travail@harpprod ct ON ct.no_dossier_pers = ca.no_dossier_pers AND ct.no_contrat_travail = ca.no_contrat_travail
+  WHERE
+    SYSDATE BETWEEN ca.d_deb_contrat_trav-184 AND COALESCE(ca.d_fin_execution,ca.d_fin_contrat_trav,SYSDATE)+184
   
-  CASE WHEN a.no_dossier_pers IS NOT NULL AND SYSDATE BETWEEN COALESCE(a.d_deb_affectation, SYSDATE) AND COALESCE(a.d_fin_affectation + 6*31, SYSDATE) THEN 1 ELSE 0 END affectation,
-  a.d_deb_affectation affectation_deb,
-  a.d_fin_affectation affectation_fin,
+  UNION ALL
   
-  CASE WHEN ar.no_dossier_pers IS NOT NULL AND SYSDATE BETWEEN COALESCE(ar.d_deb_affe_rech, SYSDATE) AND COALESCE(ar.d_fin_affe_rech + 6*31, SYSDATE) THEN 1 ELSE 0 END aff_rech,
-  ar.d_deb_affe_rech aff_rech_deb,
-  ar.d_fin_affe_rech aff_rech_fin,
-  ct.c_type_contrat_trav,
-  c.c_type_population,
-  validite.fin
-FROM
-            individu@harpprod           individu
-  LEFT JOIN                             validite           ON validite.no_individu           = individu.no_individu
-  LEFT JOIN contrat_avenant@harpprod    ca                 ON ca.no_dossier_pers             = individu.no_individu AND 1 = ose_divers.comprise_entre( ca.d_deb_contrat_trav, NVL(ca.d_fin_execution,ca.d_fin_contrat_trav), TRUNC(validite.fin), 1 )
-  LEFT JOIN contrat_travail@harpprod    ct                 ON ct.no_dossier_pers             = ca.no_dossier_pers AND ct.no_contrat_travail = ca.no_contrat_travail
-  LEFT JOIN affectation@harpprod        a                  ON a.no_dossier_pers              = individu.no_individu AND 1 = ose_divers.comprise_entre( a.d_deb_affectation, a.d_fin_affectation, TRUNC(validite.fin), 1 )
-  LEFT JOIN carriere@harpprod           c                  ON c.no_dossier_pers              = a.no_dossier_pers AND c.no_seq_carriere = a.no_seq_carriere
-/*  LEFT JOIN statut_intervenant          si                 ON 1 = ose_divers.comprise_entre( si.histo_creation, si.histo_destruction ) AND si.source_code = CASE 
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('MC','MA')                THEN 'ASS_MI_TPS'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('AT')                     THEN 'ATER'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('AX')                     THEN 'ATER_MI_TPS'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('DO')                     THEN 'DOCTOR'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('GI','PN','ED')           THEN 'ENS_CONTRACT'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('LT','LB')                THEN 'LECTEUR'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('MB','MP')                THEN 'MAITRE_LANG'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('PT')                     THEN 'HOSPITALO_UNIV'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('C3','CA','CB','CD','CS','HA','HD','HS','MA','S3','SX','SW','SY','SZ','VA') THEN 'BIATSS'
-         WHEN ca.no_dossier_pers IS NOT NULL AND ct.c_type_contrat_trav IN ('CU','AH','CG','MM','PM','IN','DN','ET') THEN 'NON_AUTORISE'
-
-         WHEN c.c_type_population IN ('DA','OA','DC')                THEN 'ENS_2ND_DEG'
-         WHEN c.c_type_population IN ('SA')                          THEN 'ENS_CH'
-         WHEN c.c_type_population IN ('AA','AC','BA','IA','MA')      THEN 'BIATSS'
-         WHEN c.c_type_population IN ('MG','SB')                     THEN 'HOSPITALO_UNIV'
-
-                                                                     ELSE 'AUTRES' END*/
-  LEFT JOIN chercheur@harpprod          ch                 ON ch.no_individu                 = individu.no_individu
-  LEFT JOIN affectation_recherche@harpprod ar              ON ar.no_dossier_pers             = individu.no_individu
+  SELECT
+    'affectation'                          categorie,
+    a.no_dossier_pers                      code,
+    null                                   contrat,
+    c.c_type_population                    type_population,
+    a.d_deb_affectation                    date_deb, 
+    a.d_fin_affectation                    date_fin,
+    CASE WHEN
+      SYSDATE BETWEEN a.d_deb_affectation-1 AND COALESCE(a.d_fin_affectation,SYSDATE)+1
+    THEN 1 ELSE 0 END                                                actuel
+  FROM
+    affectation@harpprod a
+    LEFT JOIN carriere@harpprod c ON c.no_dossier_pers = a.no_dossier_pers AND c.no_seq_carriere = a.no_seq_carriere
+  WHERE
+    SYSDATE BETWEEN a.d_deb_affectation-184 AND COALESCE(a.d_fin_affectation,SYSDATE)+184
+    
+  UNION ALL
+    
+  SELECT
+    'chercheur'                          categorie,
+    ch.no_individu                       code,
+    null                                 contrat,
+    null                                 type_population,
+    ch.d_deb_str_trav                    date_deb, 
+    ch.d_fin_str_trav                    date_fin,
+    CASE WHEN
+      SYSDATE BETWEEN ch.d_deb_str_trav-1 AND COALESCE(ch.d_fin_str_trav,SYSDATE)+1
+    THEN 1 ELSE 0 END                                                actuel
+  FROM
+    chercheur@harpprod ch 
+  WHERE 
+    SYSDATE BETWEEN ch.d_deb_str_trav-184 AND COALESCE(ch.d_fin_str_trav,SYSDATE)+184
+) i
 WHERE
- individu.no_individu = 1593
--- individu.nom_usuel like 'Aubry%';
- ;
- 
- 
- select * from carriere@harpprod c  where c.no_dossier_pers = 1593;
- select * from affectation@harpprod a where a.no_dossier_pers = 1593;
- 
- SELECT * from individu@harpprod where nom_usuel like 'ROGUES%'
+  1=1
+  AND i.code = 103451
+  

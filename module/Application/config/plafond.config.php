@@ -81,7 +81,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Plafond',
-                    'action'     => ['saisir','supprimer'],
+                    'action'     => ['saisir', 'supprimer'],
                     'privileges' => Privileges::PLAFONDS_GESTION_EDITION,
                 ],
             ],
@@ -95,11 +95,11 @@ return [
     'service_manager' => [
         'factories' => [
             Service\PlafondApplicationService::class => Service\Factory\PlafondApplicationServiceFactory::class,
-            Service\PlafondService::class => Service\Factory\PlafondServiceFactory::class,
-            Service\PlafondEtatService::class => Service\Factory\PlafondEtatServiceFactory::class,
+            Service\PlafondService::class            => Service\Factory\PlafondServiceFactory::class,
+            Service\PlafondEtatService::class        => Service\Factory\PlafondEtatServiceFactory::class,
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'factories' => [
             Form\Plafond\PlafondApplicationForm::class => Form\Plafond\Factory\PlafondApplicationFormFactory::class,
         ],

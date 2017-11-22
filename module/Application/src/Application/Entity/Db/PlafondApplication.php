@@ -4,7 +4,6 @@ namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\PlafondAwareTrait;
 use Application\Entity\Db\Traits\PlafondEtatAwareTrait;
-use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
@@ -13,7 +12,6 @@ use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 class PlafondApplication
 {
     use TypeVolumeHoraireAwareTrait;
-    use StructureAwareTrait;
     use PlafondAwareTrait;
     use PlafondEtatAwareTrait;
 
@@ -88,6 +86,19 @@ class PlafondApplication
         $this->anneeFin = $anneeFin;
 
         return $this;
+    }
+
+
+
+    /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    public function __toString()
+    {
+        return (string)$this->getPlafondEtat();
     }
 
 }

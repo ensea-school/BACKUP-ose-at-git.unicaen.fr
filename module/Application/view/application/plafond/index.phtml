@@ -1,24 +1,71 @@
 <?php
 
-/**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $title string
- * @var $plafonds PlafondApplication[]
- */
-
+use Application\Entity\Db\Plafond;
 use Application\Entity\Db\PlafondApplication;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this                 \Application\View\Renderer\PhpRenderer
+ * @var $title                string
+ * @var $plafonds             Plafond[]
+ * @var $typesVolumesHoraires TypeVolumeHoraire[]
+ * @var $regles               PlafondApplication[][]
+ */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTION_EDITION));
 
 ?>
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php
+<table class="table table-condensed table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Plafond</th>
+        <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
+            <th><?php echo $typeVolumeHoraire ?></th>
+        <?php endforeach; ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($plafonds as $plafond): ?>
+        <tr>
+            <td style="width:50%"><?php echo $plafond ?></td>
+            <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
+                <td style="text-align:center;width:25%"><?php
 
-if ($canEdit){
-    echo $this->tag('a', [
-       'class' => 'btn btn-primary ajax-modal',
-       'href' => $this->url('plafond/saisir'),
-    ])->html('<span class="glyphicon glyphicon-plus"></span> Nouvelle règle de gestion de plafond');
-}
+                    $regle = isset($regles[$plafond->getId()][$typeVolumeHoraire->getId()]) ? $regles[$plafond->getId()][$typeVolumeHoraire->getId()] : null;
+
+                    if ($regle) {
+                        if ($canEdit) {
+                            $url = $this->url('plafond/saisir', [
+                                'plafondApplication' => $regle->getId(),
+                            ]);
+                            echo $this->tag('a', [
+                                'class'      => 'pop-ajax',
+                                'href'       => $url,
+                                'data-submit-reload' => 'true',
+                            ])->html((string)$regle);
+                        } else {
+                            echo (string)$regle;
+                        }
+                    } else {
+                        if ($canEdit) {
+                            $url = $this->url('plafond/saisir', [], ['query' => [
+                                'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+                                'plafond'           => $plafond->getId(),
+                            ]]);
+                            echo $this->tag('a', [
+                                'class'      => 'pop-ajax',
+                                'href'       => $url,
+                                'data-submit-reload' => 'true',
+                            ])->html('Aucun');
+                        }
+                    }
+
+                    ?></td>
+            <?php endforeach; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

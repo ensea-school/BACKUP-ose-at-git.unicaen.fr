@@ -68,20 +68,6 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'type' => 'Checkbox',
         ]);
         $this->add([
-            'name' => 'fonction-e-c',
-            'options' => [
-                'label' => '<abbr title="fonction enseignement complémentaire">Ens Chercheur</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "fonction enseignement complémentaire",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
             'name' => 'non-autorise',
             'options' => [
                 'label' => '<abbr title="non autorisé">Non autorisé</abbr>',
@@ -353,9 +339,6 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'depassement' => [
                 'required' => true,
             ],
-            'fonction-e-c' => [
-                'required' => true,
-            ],
             'non-autorise' => [
                 'required' => true,
             ],
@@ -422,7 +405,6 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setPlafondReferentiel(isset($data['plafond-referentiel']) ? $data['plafond-referentiel']:0);
         $object->setDepassement($data['depassement']);
         $object->setServiceStatutaire($data['service-statutaire']);
-        $object->setFonctionEC($data['fonction-e-c']);
         if (array_key_exists('type-intervenant', $data)) {
             $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($data['type-intervenant']));
         }
@@ -462,7 +444,6 @@ class StatutIntervenantHydrator implements HydratorInterface
             'service-statutaire' => $object->getServiceStatutaire(),
             'plafond-referentiel' => $object->getPlafondReferentiel(),
             'depassement' => $object->getDepassement(),
-            'fonction-e-c' => $object->getFonctionEC(),
             'non-autorise' => $object->getNonAutorise(),
             'peut-saisir-service' => $object->getPeutSaisirService(),
             'peut-saisir-referentiel' => $object->getPeutSaisirReferentiel(),

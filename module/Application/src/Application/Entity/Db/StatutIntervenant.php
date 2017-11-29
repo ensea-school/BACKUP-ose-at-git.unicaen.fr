@@ -63,11 +63,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     protected $depassement;
 
     /**
-     * @var boolean
-     */
-    protected $fonctionEC;
-
-    /**
      * @var string
      */
     protected $libelle;
@@ -491,34 +486,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     public function getDepassement()
     {
         return $this->depassement;
-    }
-
-
-
-    /**
-     * Set fonctionEC
-     *
-     * @param boolean $fonctionEC
-     *
-     * @return StatutIntervenant
-     */
-    public function setFonctionEC($fonctionEC)
-    {
-        $this->fonctionEC = $fonctionEC;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get fonctionEC
-     *
-     * @return boolean
-     */
-    public function getFonctionEC()
-    {
-        return $this->fonctionEC;
     }
 
 

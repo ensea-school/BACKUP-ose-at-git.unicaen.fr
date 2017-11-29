@@ -105,7 +105,6 @@ class Asset
                 ->setTypeIntervenant($typeIntervenant)
                 ->setServiceStatutaire(100)
                 ->setDepassement(false)
-                ->setFonctionEC(true)
                 ->setMaximumHETD(0)
                 ->setNonAutorise(false)
                 ->setPeutChoisirDansDossier(true)

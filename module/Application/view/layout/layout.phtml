@@ -3,15 +3,15 @@
 <head>
     <!-- Meta -->
     <meta charset="utf-8">
-    <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')
+    <?php
+    echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')
         ->appendName('description', '')
-        ->appendHttpEquiv("X-UA-Compatible", "IE=edge,chrome=1") ?>
+        ->appendHttpEquiv("X-UA-Compatible", "IE=edge,chrome=1");
 
-    <!-- Title -->
-    <?php echo $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(false) ?>
+    echo $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(false);
 
-    <!-- Links -->
-    <?php echo $this->headLink() ?>
+    echo $this->headLink()
+    ?>
 
     <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-194x194.png" sizes="194x194">
@@ -31,9 +31,6 @@
 </head>
 
 <body class="<?php echo getenv('APPLICATION_ENV') ?: 'development' ?>" data-base-url="<?php echo $this->url('home') ?>">
-<!--[if lt IE 7]>
-<p class="chromeframe">Vous utilisez un navigateur internet hors d'âge. Veuillez le mettre à jour, svp.</p>
-<![endif]-->
 <div id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">

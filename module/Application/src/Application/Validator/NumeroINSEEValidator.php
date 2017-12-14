@@ -23,7 +23,10 @@ class NumeroINSEEValidator extends NumeroINSEE
     const MSG_DEPT     = 'msgDepartement';
 
     protected $franceId;
+
     protected $service;
+
+
 
     public function __construct($options = null)
     {
@@ -38,7 +41,7 @@ class NumeroINSEEValidator extends NumeroINSEE
             throw new LogicException("Paramètre 'france_id' introuvable.");
         }
 
-        $this->franceId = (int) $options['france_id'];
+        $this->franceId = (int)$options['france_id'];
 
         if (!isset($options['service'])) {
             throw new LogicException("Paramètre 'service' introuvable.");
@@ -49,27 +52,31 @@ class NumeroINSEEValidator extends NumeroINSEE
         parent::__construct($options);
     }
 
+
+
     public function isValid($value, $context = null)
     {
-        if (! parent::isValid($value)) {
+        if (!parent::isValid($value)) {
             return false;
         }
 
-        if (! $this->isValidSexe($value, $context)) {
+        if (!$this->isValidSexe($value, $context)) {
             return false;
         }
-        if (! $this->isValidAnnee($value, $context)) {
+        if (!$this->isValidAnnee($value, $context)) {
             return false;
         }
-        if (! $this->isValidMois($value, $context)) {
+        if (!$this->isValidMois($value, $context)) {
             return false;
         }
-        if (! $this->isValidDepartement($value, $context)) {
+        if (!$this->isValidDepartement($value, $context)) {
             return false;
         }
 
         return true;
     }
+
+
 
     private function isValidSexe($value, $context)
     {
@@ -77,7 +84,7 @@ class NumeroINSEEValidator extends NumeroINSEE
             return true;
         }
 
-        $civiliteId = (int) $context['civilite'];
+        $civiliteId = (int)$context['civilite'];
 
         $sexeToCivilite = [
             // numéro saisi => id civilité OSE
@@ -87,15 +94,18 @@ class NumeroINSEEValidator extends NumeroINSEE
             4 => 1, // personne étrangère de sexe féminin en cours d'immatriculation en France  => madame
         ];
 
-        $sexe = (int) substr($value, 0, 1);
+        $sexe = (int)substr($value, 0, 1);
 
-        if (! array_key_exists($sexe, $sexeToCivilite) || $civiliteId !== $sexeToCivilite[$sexe]) {
+        if (!array_key_exists($sexe, $sexeToCivilite) || $civiliteId !== $sexeToCivilite[$sexe]) {
             $this->error(self::MSG_CIVILITE);
+
             return false;
         }
 
         return true;
     }
+
+
 
     private function isValidAnnee($value, $context)
     {
@@ -103,16 +113,19 @@ class NumeroINSEEValidator extends NumeroINSEE
             return true;
         }
 
-        $dateNaissance   = $context['dateNaissance'];
+        $dateNaissance = $context['dateNaissance'];
         list(, , $annee) = explode('/', $dateNaissance);
 
         if (substr($annee, -2) !== substr($value, 1, 2)) {
             $this->error(self::MSG_ANNEE);
+
             return false;
         }
 
         return true;
     }
+
+
 
     private function isValidMois($value, $context)
     {
@@ -120,16 +133,27 @@ class NumeroINSEEValidator extends NumeroINSEE
             return true;
         }
 
-        $dateNaissance  = $context['dateNaissance'];
-        list(, $mois, ) = explode('/', $dateNaissance);
+        $dateNaissance = $context['dateNaissance'];
+        list(, $mois,) = explode('/', $dateNaissance);
 
-        if ((int) $mois !== (int) substr($value, 3, 2)) {
+        $moisInsee = (int)substr($value, 3, 2);
+
+        if ($this->hasCodeDepartementEtranger($value)) {
+            if ($moisInsee == 20 || $moisInsee == 99 || ($moisInsee > 30 && $moisInsee < 42) || ($moisInsee > 50 && $moisInsee < 99)) {
+                return true;
+            }
+        }
+
+        if ((int)$mois !== $moisInsee) {
             $this->error(self::MSG_MOIS);
+
             return false;
         }
 
         return true;
     }
+
+
 
     private function isValidDepartement($value, $context)
     {
@@ -137,18 +161,17 @@ class NumeroINSEEValidator extends NumeroINSEE
             return true;
         }
 
-        $paysNaissance = (int) $context['paysNaissance'];
+        $paysNaissance = (int)$context['paysNaissance'];
         $estNeEnFrance = $paysNaissance === $this->getOption('france_id');
 
         if ($estNeEnFrance) {
             // on doit avoir un code département français valide
-            if (! $this->isValidDepartementFrance($value, $context)) {
+            if (!$this->isValidDepartementFrance($value, $context)) {
                 return false;
             }
-        }
-        else {
+        } else {
             // on doit avoir un code pays étranger valide
-            if (! $this->isValidDepartementHorsFrance($value)) {
+            if (!$this->isValidDepartementHorsFrance($value)) {
                 return false;
             }
         }
@@ -156,47 +179,57 @@ class NumeroINSEEValidator extends NumeroINSEE
         return true;
     }
 
+
+
     private function isValidDepartementHorsFrance($value)
     {
-        if (! $this->hasCodeDepartementEtranger($value)) {
+        if (!$this->hasCodeDepartementEtranger($value)) {
             $this->error(self::MSG_DEPT);
+
             return false;
         }
 
         return true;
     }
+
+
 
     private function isValidDepartementFrance($value, $context)
     {
         if (empty($context['departementNaissance'])) {
             return true;
         }
-        $departementNaissance = $this->service->get($context['departementNaissance'], true); /* @var $departementNaissance DepartementEntity */
+        $departementNaissance = $this->service->get($context['departementNaissance'], true);
+        /* @var $departementNaissance DepartementEntity */
 
         // Si on trouve un code de département en métropole ou outre-mer valide,
         // on vérifie qu'il est cohérent avec le code du département de naissance saisi
         if (
-                ($d = $this->getDepartementEnMetropoleValide($value))
-                ||
-                ($d = $this->getDepartementOutreMerValide($value))
+            ($d = $this->getDepartementEnMetropoleValide($value))
+            ||
+            ($d = $this->getDepartementOutreMerValide($value))
         ) {
             if ($d !== $departementNaissance->getCode()) {
                 $this->error(self::MSG_DEPT);
+
                 return false;
             }
-        }
-        // Sinon, le code département n'est pas valide
+        } // Sinon, le code département n'est pas valide
         else {
             $this->error(self::MSG_DEPT);
+
             return false;
         }
 
         return true;
     }
 
+
+
     /**
      *
      * @param string $value
+     *
      * @return int|string|null
      */
     private function getDepartementEnMetropoleValide($value)
@@ -204,23 +237,25 @@ class NumeroINSEEValidator extends NumeroINSEE
         $departement = substr($value, 5, 2);
 
         if (is_numeric($departement)) {
-            $d = (int) $departement;
+            $d = (int)$departement;
             if (1 <= $d && $d <= 95) {
-                return '0'.(string)$departement;
+                return '0' . (string)$departement;
             }
-        }
-        else {
+        } else {
             if (in_array($departement, ["2A", "2B"])) {
-                return '0'.$departement;
+                return '0' . $departement;
             }
         }
 
         return null;
     }
 
+
+
     /**
      *
      * @param string $value
+     *
      * @return int|null
      */
     private function getDepartementOutreMerValide($value)
@@ -228,7 +263,7 @@ class NumeroINSEEValidator extends NumeroINSEE
         $departement = substr($value, 5, 3);
 
         if (is_numeric($departement)) {
-            $d = (int) $departement;
+            $d = (int)$departement;
             if (970 <= $d && $d <= 989) {
                 return $departement;
             }
@@ -237,10 +272,13 @@ class NumeroINSEEValidator extends NumeroINSEE
         return null;
     }
 
+
+
     /**
      * Teste si un numéro INSEE possède le code département de naissance associé à un pays étranger.
      *
      * @param string Numéro INSEE à tester
+     *
      * @return bool
      */
     static public function hasCodeDepartementEtranger($value)

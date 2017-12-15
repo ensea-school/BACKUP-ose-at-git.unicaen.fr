@@ -157,7 +157,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
                 /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                if ($service->getElementPedagogique() && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())){
+                if ($vh->getHeures() > 0 && $service->getElementPedagogique() && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())){
                     throw new \Exception('Des heures sont saisies sur au moins un type d\'intervention ('.$vh->getTypeIntervention().') non approprié. Veuillez modifier le service avant de pouvoir le valider.');
                 }
             }

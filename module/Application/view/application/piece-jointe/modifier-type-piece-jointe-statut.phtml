@@ -1,9 +1,16 @@
 <?php
 
+use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\TypePieceJointe;
 use Application\Provider\Privilege\Privileges;
+use Application\Form\PieceJointe\ModifierTypePieceJointeStatutForm;
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this                \Application\View\Renderer\PhpRenderer
+ * @var $title               string
+ * @var $form                ModifierTypePieceJointeStatutForm
+ * @var $typePieceJointe     TypePieceJointe
+ * @var $statutIntervenant   StatutIntervenant
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
@@ -15,56 +22,57 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
     <div class="row">
         <div class="col-md-12">
-            <?php echo $this->formControlGroup($form->get('premier-recrutement')); ?>
+            <?= $this->formControlGroup($form->get('premier-recrutement')); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <?php echo $this->formControlGroup($form->get('typePieceJointe')); ?>
+            <?= $this->formControlGroup($form->get('typePieceJointe')); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <?php echo $this->formControlGroup($form->get('changement-rib')); ?>
+            <?= $this->formControlGroup($form->get('changement-rib')); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <?php echo $this->formControlGroup($form->get('fc')); ?>
+            <?= $this->formControlGroup($form->get('fc')); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <?php echo $this->formControlGroup($form->get('seuil-hetd')); ?>
+            <?= $this->formControlGroup($form->get('seuil-hetd')); ?>
         </div>
         <div class=col-md-4>
-            <?php echo $this->formControlGroup($form->get('annee-debut')); ?>
+            <?= $this->formControlGroup($form->get('annee-debut')); ?>
         </div>
         <div class=col-md-4>
-            <?php echo $this->formControlGroup($form->get('annee-fin')); ?>
+            <?= $this->formControlGroup($form->get('annee-fin')); ?>
         </div>
     </div>
 
-            <?php
-            echo $this->formSubmit($form->get('submit'));
-            ?>
+<?= $this->formSubmit($form->get('submit')); ?>
 
-        <?php if (($canEdit) && ($form->getObject()->getId())){ ?>
+<?php if (($canEdit) && ($form->getObject()->getId())) : ?>
 
-        <a class="pop-ajax btn btn-danger"
-           href="<?php echo $this->url('piece-jointe/delete-type-piece-jointe-statut', ['typePieceJointeStatut' => $form->getObject()->getId()]) ?>"
-           title="Supprimer le type de piece jointe"
-           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-           data-confirm="true"
-           data-confirm-button="Oui"
-           data-cancel-button="Non"
-           data-submit-reload="true"
-        >
-            Supprimer
-        </a>
+    <a class="pop-ajax btn btn-danger"
+       href="<?= $this->url('piece-jointe/delete-type-piece-jointe-statut', ['typePieceJointeStatut' => $form->getObject()->getId()]) ?>"
+       title="Supprimer le type de piece jointe"
+       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+       data-confirm="true"
+       data-confirm-button="Oui"
+       data-cancel-button="Non"
+       data-submit-reload="true"
+    >Supprimer</a>
 
-    <?php } ?>
-<?php
+    <a class="btn btn-default"
+       href= <?= $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statutIntervenant' => $statutIntervenant->getId()]) ?>
+       class="ajax-modal"
+       data-event="event-update-tpjs"
+    >Ajouter une autre règle</a>
+<?php endif;
+
 echo $this->formRow($form->get('security'));
 echo $this->formHidden($form->get('id'));
 echo $this->form()->closeTag();

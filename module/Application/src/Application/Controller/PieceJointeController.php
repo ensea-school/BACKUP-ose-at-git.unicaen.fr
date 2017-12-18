@@ -304,7 +304,13 @@ class PieceJointeController extends AbstractController
         $tpjss                     = $this->em()->createQuery($dql)->getResult();
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
-            $typesPiecesJointesStatuts[$tpjs->getTypePieceJointe()->getId()][$tpjs->getStatutIntervenant()->getId()] = $tpjs;
+            $tpjID = $tpjs->getTypePieceJointe()->getId();
+            $siId = $tpjs->getStatutIntervenant()->getId();
+
+            if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])){
+                $typesPiecesJointesStatuts[$tpjID][$siId] = [];
+            }
+            $typesPiecesJointesStatuts[$tpjID][$siId][] = $tpjs;
         }
 
         return compact('typesPiecesJointes', 'statutsIntervenants', 'typesPiecesJointesStatuts');
@@ -364,11 +370,13 @@ class PieceJointeController extends AbstractController
             $tpjs->setObligatoire(true);
         } else {
             $title = 'Édition du paramètre de gestion de pièce justificative';
+            $typePieceJointe   = $tpjs->getTypePieceJointe();
+            $statutIntervenant = $tpjs->getStatutIntervenant();
         }
         $form->buildAnnees($tpjs);
         $form->bindRequestSave($tpjs, $this->getRequest(), $this->getServiceTypePieceJointeStatut());
 
-        return compact('form', 'title');
+        return compact('form', 'title', 'typePieceJointe', 'statutIntervenant');
     }
 
 

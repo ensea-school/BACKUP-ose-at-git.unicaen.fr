@@ -8,12 +8,11 @@ use Application\Provider\Privilege\Privileges;
 /**
  * @var $typesPiecesJointes        TypePieceJointe[]
  * @var $statutsIntervenants       StatutIntervenant[][]
- * @var $typesPiecesJointesStatuts TypePieceJointeStatut[][]
+ * @var $typesPiecesJointesStatuts TypePieceJointeStatut[][][]
  */
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION));
-$i       = 0;
-$j       = 0;
+
 ?>
 
     <style>
@@ -26,12 +25,16 @@ $j       = 0;
         }
 
         .tpjs {
-            line-height: 1.1em;
+            line-height: 1em;
             font-size: 8pt;
         }
 
         .notpjs {
 
+        }
+
+        .pj-ou {
+            font-weight: bold;
         }
     </style>
 
@@ -127,83 +130,48 @@ $j       = 0;
 
 <?php $this->headTitle()->append($title = "Pièces justificatives attendues par statut d'intervenant") ?>
 
-    <h1 class="page-header"><?php echo $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
 
     <table id="tblTpjs" class="table-bordered table-condensed table-header table-header-rotated" style="width:1121px">
         <thead>
         <tr>
             <th class="rotate-45 si" data-si=""><span>&nbsp;</span></th>
-            <?php foreach ($statutsIntervenants as $typeId => $statuts): foreach ($statuts as $statut): $i++;
+            <?php $i = 0; foreach ($statutsIntervenants as $statuts): foreach ($statuts as $statut): $i++;
 
                 ?>
-                <th class="rotate-45 si" data-si="<?php $statut->getLibelle() ?>">
-                    <div id="<?php echo 'th' . $i ?>"><span><?php echo $statut; ?></span></div>
+                <th class="rotate-45 si <?= $i==1 ? 'first' : '' ?>" data-si="<?php $statut->getLibelle() ?>">
+                    <div id="<?= 'th' . $i ?>"><span><?= $statut; ?></span></div>
                 </th>
             <?php endforeach; endforeach; ?>
         </tr>
         <tr>
             <th><span>&nbsp;</span></th>
-            <?php foreach ($statutsIntervenants as $typeId => $statuts): ?>
-                <th colspan="<?php echo count($statuts) ?>"><?php echo reset($statuts)->getTypeIntervenant() ?></th>
+            <?php foreach ($statutsIntervenants as $statuts): ?>
+                <th colspan="<?= count($statuts) ?>"><?= reset($statuts)->getTypeIntervenant() ?></th>
             <?php endforeach; ?>
         </tr>
         </thead>
 
         <tbody class="triables">
-        <?php $i = 0;
-        $j       = 0;
-        foreach ($typesPiecesJointes as $typePieceJointe): $j++; ?>
-            <tr class="champ-triable" data-id="<?php echo $typePieceJointe->getId() ?>">
-                <th>
-                    <?php echo $typePieceJointe ?>
-                    <?php if ($canEdit): ?>
-                        <span class="pull-right">
-                            <span class="glyphicon glyphicon-move"
-                                  title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>&nbsp;
-                            <a class="pop-ajax" data-event="type-piece-jointe-saisie"
-                               href="<?php echo $this->url('piece-jointe/type-piece-jointe-saisie', ['typePieceJointe' => $typePieceJointe->getId()]) ?>"
-                               title="Modifier le type de pièce jointe"
-                               data-submit-reload="true">
-                                <span class="glyphicon pull-right glyphicon-edit"></span></a>
-                            <a class="pop-ajax"
-                               href="<?php echo $this->url('piece-jointe/type-piece-jointe-delete', ['typePieceJointe' => $typePieceJointe->getId()]) ?>"
-                               title="Supprimer le type de piece jointe"
-                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                               data-confirm="true"
-                               data-confirm-button="Oui"
-                               data-cancel-button="Non"
-                               data-submit-reload="true"
-                            ><span style="padding-right: 8px" class="glyphicon pull-right glyphicon-trash"></span>
-                            </a>
-                        </span>
-                    <?php endif; ?>
-                </th>
-                <?php foreach ($statutsIntervenants as $typeId => $statuts): foreach ($statuts as $statut): $i++;
-                    $tpjs = isset($typesPiecesJointesStatuts[$typePieceJointe->getId()][$statut->getId()]) ? $typesPiecesJointesStatuts[$typePieceJointe->getId()][$statut->getId()] : null;
-                    $url  = $this->url('piece-jointe/modifier-type-piece-jointe-statut', ['typePieceJointe' => $typePieceJointe->getId(), 'statutIntervenant' => $statut->getId(), 'typePieceJointeStatut' => $tpjs ? $tpjs->getId() : null]);
-                    ?>
-                    <td onmouseover="sourisHover(<?php echo $i . ',' . $j ?>)"
-                        class="<?php echo ($tpjs) ? 'tpjs' : 'notpjs' ?>">
-                        <?php if ($canEdit): ?>
-                            <a
-                                    class="ajax-modal"
-                                    data-event="event-update-tpjs"
-                                    href="<?php echo $url ?>>"
-                                    title="<?php echo $tpjs ? $tpjs->getTitle() : 'Pas de pièce justificative demandée' ?>"
-                            ><?php echo $tpjs ? $tpjs : '-' ?></a>
-                        <?php else: ?>
-                            <span title="<?php echo $tpjs ? $tpjs->getTitle() : 'Pas de pièce justificative demandée' ?>"><?php echo $tpjs ? $tpjs : '-' ?></span>
-                        <?php endif; ?>
-                    </td>
-                <?php endforeach; endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
+        <?php
+        $j = 0;
+        foreach ($typesPiecesJointes as $typePieceJointe) {
+            $j++;
+            echo $this->partial('partial/tpjs-ligne', [
+                'canEdit'             => $canEdit,
+                'statutsIntervenants' => $statutsIntervenants,
+                'typePieceJointe'     => $typePieceJointe,
+                'tpjss'               => isset($typesPiecesJointesStatuts[$typePieceJointe->getId()]) ? $typesPiecesJointesStatuts[$typePieceJointe->getId()] : [],
+                'j'                   => $j,
+            ]);
+        }
+        ?>
         </tbody>
     </table>
-<br />
+    <br/>
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-submit-reload="true"
-       href="<?php echo $this->url('piece-jointe/type-piece-jointe-saisie') ?>"
+       href="<?= $this->url('piece-jointe/type-piece-jointe-saisie') ?>"
        title="Ajouter un type de pièce jointe"><span class="glyphicon glyphicon-edit"></span>
         Ajouter un type de pièce jointe</a>
     <script>
@@ -214,4 +182,4 @@ $j       = 0;
             });
         });
     </script>
-<?php endif;
+<?php endif; ?>

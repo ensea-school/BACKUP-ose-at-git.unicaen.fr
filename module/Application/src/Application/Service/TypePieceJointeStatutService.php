@@ -156,41 +156,11 @@ class TypePieceJointeStatutService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $sql = "
-        SELECT 
-          count(*) cc
-        FROM 
-          type_piece_jointe_statut tpjs
-        WHERE
-          tpjs.histo_destruction IS NULL
-          AND tpjs.statut_intervenant_id = :statutIntervenant
-          AND tpjs.type_piece_jointe_id = :typePieceJointe
-          AND tpjs.id <> :tpjsId
-          AND (
-               :ddeb BETWEEN COALESCE(tpjs.annee_debut_id,0) AND COALESCE(tpjs.annee_fin_id,99999)
-            OR :dfin BETWEEN COALESCE(tpjs.annee_debut_id,0) AND COALESCE(tpjs.annee_fin_id,99999)
-          )
-        ";
-
         $ddeb = $entity->getAnneeDebut() ? $entity->getAnneeDebut()->getId() : 0;
         $dfin = $entity->getAnneeFin() ? $entity->getAnneeFin()->getId() : 99999;
 
         if ($dfin < $ddeb) {
             throw new \Exception('L\'année de fin ne peut être antérieure à l\'année de début');
-        }
-
-        $params = [
-            'statutIntervenant' => $entity->getStatutIntervenant()->getId(),
-            'typePieceJointe'   => $entity->getTypePieceJointe()->getId(),
-            'ddeb'              => $ddeb,
-            'dfin'              => $dfin,
-            'tpjsId'            => (int)$entity->getId(),
-        ];
-        $res    = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
-        $no = ($res['CC'] > 0);
-
-        if ($no){
-             throw new \Exception('La règle de gestion de pièce justificative ne peut pas être appliquée, car elle en chevauche une autre');
         }
 
         return parent::save($entity);

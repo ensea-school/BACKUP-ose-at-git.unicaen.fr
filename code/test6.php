@@ -7,15 +7,18 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Controller\PlafondController;
-use Doctrine\ORM\EntityManager;
+use Application\Entity\Db\ElementPedagogique;
 
-$paf = new PlafondController();
+$sl->get('applicationelementpedagogique')->getEntityManager()->getFilters()->enable('historique')->init([
+    \Application\Entity\Db\VolumeHoraireEns::class,
+]);
 
-var_dump($sl->has(EntityManager::class));
 
-\UnicaenApp\Util::topChrono();
-for( $i = 0; $i < 1; $i++ ){
-    \Application\Util::injectFromTraits($sl,$paf);
+/** @var ElementPedagogique $ep */
+$ep = $sl->get('applicationelementpedagogique')->get(45791);
+
+$vhes = $ep->getVolumeHoraireEns();
+
+foreach( $vhes as $vhe ){
+    var_dump($vhe->getId() );
 }
-echo \UnicaenApp\Util::topChrono();

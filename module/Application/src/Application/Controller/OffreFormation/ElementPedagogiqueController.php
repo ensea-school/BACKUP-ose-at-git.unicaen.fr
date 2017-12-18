@@ -212,7 +212,7 @@ class ElementPedagogiqueController extends AbstractController
                 $vhe = $existsVhes[$typeIntervention->getId()];
             }
 
-            if ($this->isAllowed($vhe, Privileges::ODF_ELEMENT_VH_EDITION)) {
+            if ($this->getRequest()->isPost() && $this->isAllowed($vhe, Privileges::ODF_ELEMENT_VH_EDITION)) {
                 if (isset($saisie[$vhe->getTypeIntervention()->getId()]['heures'])) {
                     $heures = FloatFromString::run($saisie[$vhe->getTypeIntervention()->getId()]['heures']);
                 } else {

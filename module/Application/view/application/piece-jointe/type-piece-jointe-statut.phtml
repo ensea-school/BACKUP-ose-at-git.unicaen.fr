@@ -170,7 +170,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
     </table>
     <br/>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-submit-reload="true"
+    <a class="btn btn-primary pop-ajax" data-submit-reload="true"
        href="<?= $this->url('piece-jointe/type-piece-jointe-saisie') ?>"
        title="Ajouter un type de pièce jointe"><span class="glyphicon glyphicon-edit"></span>
         Ajouter un type de pièce jointe</a>

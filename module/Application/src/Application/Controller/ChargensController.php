@@ -379,7 +379,7 @@ class ChargensController extends AbstractController
             'periode'            => 'Période',
             'discipline-code'    => 'Discipline (code)',
             'discipline-libelle' => 'Discipline (libellé)',
-            'type-heures'        => 'Type d\'heures',
+            'type-heures'        => 'Régime d\'inscription',
             'type-intervention'  => 'Type d\'intervention',
 
             'seuil-ouverture'    => 'Seuil d\'ouverture',

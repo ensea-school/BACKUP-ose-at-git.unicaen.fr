@@ -16,13 +16,13 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
     <?php if ($filtre): ?>
         <div class="row div-filtre chargens-filtre">
             <div class="col-md-2 div-structure">
-                <?php echo $this->formSelect($filtre->get('structure')) ?>
+                <?= $this->formSelect($filtre->get('structure')) ?>
             </div>
             <div class="col-md-7 div-etape">
-                <?php echo $this->formSelect($filtre->get('etape')) ?>
+                <?= $this->formSelect($filtre->get('etape')) ?>
             </div>
             <div class="col-md-3 div-scenario">
-                <?php echo $this->formSelect($filtre->get('scenario')) ?>
+                <?= $this->formSelect($filtre->get('scenario')) ?>
             </div>
         </div>
     <?php endif; ?>
@@ -89,12 +89,12 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
 
             <div class="row">
                 <?php foreach ($typeHeures as $tid => $tval): ?>
-                    <div class="col-md-<?php echo floor(12 / count($typeHeures)) ?>">
+                    <div class="col-md-<?= floor(12 / count($typeHeures)) ?>">
                         <div class="input-group">
-                            <input type="number" class="form-control" min="0" placeholder="<?php echo $tval ?>"
-                                   id="effectifs-<?php echo $tid ?>"
-                                   aria-describedby="add-effectifs-<?php echo $tid ?>">
-                            <span class="input-group-addon" id="add-effectifs-<?php echo $tid ?>"><?php echo $tval ?></span>
+                            <input type="number" class="form-control" min="0" placeholder="<?= $tval ?>"
+                                   id="effectifs-<?= $tid ?>"
+                                   aria-describedby="add-effectifs-<?= $tid ?>">
+                            <span class="input-group-addon" id="add-effectifs-<?= $tid ?>"><?= $tval ?></span>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -111,18 +111,18 @@ $canCopy = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SCENA
         </thead>
         <tbody>
         <?php foreach ($typeInterventions as $tid => $tval): ?>
-            <tr class="seuil" id="seuil-<?php echo $tid ?>">
-                <th style="width:20%"><?php echo $tval ?></th>
+            <tr class="seuil" id="seuil-<?= $tid ?>">
+                <th style="width:20%"><?= $tval ?></th>
                 <td>
-                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-ouverture-<?php echo $tid ?>"/>
+                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-ouverture-<?= $tid ?>"/>
                 </td>
                 <td>
-                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-dedoublement-<?php echo $tid ?>"/>
+                    <input type="number" class="form-control" placeholder="Aucun" min="0" id="seuil-dedoublement-<?= $tid ?>"/>
                 </td>
                 <td>
                     <div class="input-group seuil-assiduite">
-                        <input type="number" class="form-control" min="0" aria-describedby="pseuil-assiduite-<?php echo $tid ?>" placeholder="100" id="seuil-assiduite-<?php echo $tid ?>"/>
-                        <span class="input-group-addon" id="pseuil-assiduite-<?php echo $tid ?>">%</span>
+                        <input type="number" class="form-control" min="0" aria-describedby="pseuil-assiduite-<?= $tid ?>" placeholder="100" id="seuil-assiduite-<?= $tid ?>"/>
+                        <span class="input-group-addon" id="pseuil-assiduite-<?= $tid ?>">%</span>
                     </div>
                 </td>
             </tr>

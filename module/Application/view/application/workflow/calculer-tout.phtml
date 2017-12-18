@@ -15,27 +15,27 @@ $divId = uniqid('di-');
     <?php if ($error): ?>
 
         <div class="alert alert-danger" role="alert">
-            <?php echo $error ?>
+            <?= $error ?>
         </div>
-        
+
     <?php else: ?>
 
         <div class="alert alert-success" role="alert">
             Calcul du workflow achevé.
         </div>
-        
+
     <?php endif; ?>
 
 <?php else: ?>
 
-    <div id="<?php echo $divId ?>" data-url="<?php echo $this->url('workflow/calculer-tout', [], ['query' => ['action' => '1']]) ?>">
-        <img src="<?php echo $this->basePath().'/images/wait.gif' ?>" alt="Attente..."/>
+    <div id="<?= $divId ?>" data-url="<?= $this->url('workflow/calculer-tout', [], ['query' => ['action' => '1']]) ?>">
+        <img src="<?= $this->basePath().'/images/wait.gif' ?>" alt="Attente..."/>
         <div>En cours de calcul... Merci de patienter.</div>
     </div>
     <script>
 
         $(function(){
-            $("#<?php echo $divId?>").refresh();
+            $("#<?= $divId?>").refresh();
         });
 
     </script>

@@ -14,7 +14,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
 
 ?>
 
-<h1 class="page-header"><?php echo sprintf("Agrément par %s <small>%s</small>", $typeAgrement->toString(true), $intervenant) ?></h1>
+<h1 class="page-header"><?= sprintf("Agrément par %s <small>%s</small>", $typeAgrement->toString(true), $intervenant) ?></h1>
 
 <?php if (!empty($data)): ?>
     <table class="table table-bordered table-hover">
@@ -29,7 +29,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
         <?php foreach ($data as $d): extract($d); ?>
             <tr>
                 <?php if ($needStructure): ?>
-                    <td class="structure"><?php echo $ta->getStructure() ?></td>
+                    <td class="structure"><?= $ta->getStructure() ?></td>
                 <?php endif; ?>
                 <td class="agrement">
                     <?php
@@ -44,7 +44,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
                     <td>
                         <?php if ($actionUrl): ?>
                             <a class="btn btn-primary pop-ajax" data-submit-reload="true" data-min-width="13em" data-placement="left"
-                               href="<?php echo $actionUrl ?>"><?php echo $actionLabel ?></a>
+                               href="<?= $actionUrl ?>"><?= $actionLabel ?></a>
                         <?php endif; ?>
                     </td>
                 <?php endif; ?>
@@ -60,4 +60,4 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Agrément $type
 
 
     <hr/>
-    <?php echo $this->feuillederoute($intervenant)->renderNav($typeAgrement->getCode()); ?>
+    <?= $this->feuillederoute($intervenant)->renderNav($typeAgrement->getCode()); ?>

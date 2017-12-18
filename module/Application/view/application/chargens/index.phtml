@@ -9,7 +9,7 @@ $title = "Charges d'enseignement";
 $this->headTitle()->append($title);
 
 ?>
-    <h1 class="page-header"><?php echo $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
 <?php
 
 echo $this->navigation('navigation')->menuContextuel()->setPartial('application/chargens/menu');

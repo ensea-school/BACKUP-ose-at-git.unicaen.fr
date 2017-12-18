@@ -33,7 +33,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
 </style>
 
 <?php foreach ($etapes as $etape): ?>
-    <h2><?php echo $etape->getLibelleAutres() ?></h2>
+    <h2><?= $etape->getLibelleAutres() ?></h2>
     <div class="dependances">
     <?php if (isset($deps[$etape->getId()])): ?>
         <table class="table table-bordered">
@@ -51,20 +51,20 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
                 <tr<?php if(!$d->getActive()) echo ' class="inactive" title="Dépendance désactivée"' ?>>
                     <td>
                         <?php if ($canEdit): ?>
-                            <a href="<?php echo $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>"
+                            <a href="<?= $this->url('workflow/dependances/saisie', ['wfEtapeDep' => $d->getId()]) ?>"
                                class="ajax-modal" data-event="dependances-saisie"><span
                                     class="glyphicon glyphicon-edit"></span></a>
-                            <a href="<?php echo $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>"
+                            <a href="<?= $this->url('workflow/dependances/suppression', ['wfEtapeDep' => $d->getId()]) ?>"
                                class="ajax-modal" data-event="dependances-suppression"><span
                                     class="glyphicon glyphicon-trash"></span></a>
                         <?php endif; ?>
-                        <?php echo $d->getEtapePrec()->getLibelleAutres() ?>
+                        <?= $d->getEtapePrec()->getLibelleAutres() ?>
                     </td>
-                    <td class="attrib"><?php echo $d->getLocale() ? $ok : '' ?></td>
-                    <td class="attrib"><?php echo $d->getIntegrale() ? $ok : '' ?></td>
-                    <td class="attrib"><?php echo $d->getObligatoire() ? $ok : '' ?></td>
-                    <td class="attrib"><?php echo $d->getPartielle() ? $ok : '' ?></td>
-                    <td class="attrib"><?php echo $d->getTypeIntervenant() ? $d->getTypeIntervenant() : 'Tous' ?></td>
+                    <td class="attrib"><?= $d->getLocale() ? $ok : '' ?></td>
+                    <td class="attrib"><?= $d->getIntegrale() ? $ok : '' ?></td>
+                    <td class="attrib"><?= $d->getObligatoire() ? $ok : '' ?></td>
+                    <td class="attrib"><?= $d->getPartielle() ? $ok : '' ?></td>
+                    <td class="attrib"><?= $d->getTypeIntervenant() ? $d->getTypeIntervenant() : 'Tous' ?></td>
                 </tr>
 
             <?php endforeach; ?>
@@ -75,7 +75,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
         <div class="alert alert-warning">Pas de dépendance</div>
     <?php endif; ?>
     <?php if ($canEdit): ?>
-        <a href="<?php echo $this->url('workflow/dependances/saisie', [], ['query' => ['etapeSuivante' => $etape->getId()]]) ?>" class="btn btn-primary btn-xs ajax-modal"
+        <a href="<?= $this->url('workflow/dependances/saisie', [], ['query' => ['etapeSuivante' => $etape->getId()]]) ?>" class="btn btn-primary btn-xs ajax-modal"
            data-event="dependances-saisie"><span class="glyphicon glyphicon-plus"></span> Ajouter une dépendance</a>
     <?php endif; ?>
     </div>
@@ -83,9 +83,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::WORKFLOW_DEPEN
 <br />
 <hr />
 <?php if ($canEdit): ?>
-    <a href="<?php echo $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal"
+    <a href="<?= $this->url('workflow/dependances/saisie') ?>" class="btn btn-primary ajax-modal"
        data-event="dependances-saisie"><span class="glyphicon glyphicon-plus"></span> Ajouter une dépendance</a>
-    <a href="<?php echo $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span
+    <a href="<?= $this->url('workflow/calculer-tout') ?>" class="btn btn-default ajax-modal"><span
             class="fa fa-cogs"></span> Recalculer le Workflow</a>
 <?php endif; ?>
 <script type="text/javascript">

@@ -13,7 +13,7 @@ use Application\Entity\Db\Intervenant;
 $servicesUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()]);
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 
 <table class="table table-bordered table-condensed table-srt">
     <tr>
@@ -25,16 +25,16 @@ $servicesUrl = $this->url('intervenant/services', ['intervenant' => $intervenant
 
     <?php foreach ($idcs as $idc): ?>
         <tr>
-            <td><?php echo $this->structure($idc->getStructure())->renderLink() ?></td>
-            <td><?php echo $this->elementPedagogique($idc->getElementPedagogique())->renderLink() ?></td>
-            <td><?php echo $idc->getTypeIntervention() ?></td>
-            <td><?php echo floatToString($idc->getHeures()) ?></td>
+            <td><?= $this->structure($idc->getStructure())->renderLink() ?></td>
+            <td><?= $this->elementPedagogique($idc->getElementPedagogique())->renderLink() ?></td>
+            <td><?= $idc->getTypeIntervention() ?></td>
+            <td><?= floatToString($idc->getHeures()) ?></td>
         </tr>
     <?php endforeach; ?>
 </table>
 <button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fa fa-undo" aria-hidden="true"></i>
     Retour à l'indicateur
 </button>
-<a class="btn btn-primary" href="<?php echo $servicesUrl ?>"><i class="glyphicon glyphicon-th-list" aria-hidden="true"></i>
+<a class="btn btn-primary" href="<?= $servicesUrl ?>"><i class="glyphicon glyphicon-th-list" aria-hidden="true"></i>
     Voir la fiche de services de l'intervenant
 </a>

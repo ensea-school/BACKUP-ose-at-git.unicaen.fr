@@ -6,22 +6,22 @@
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->form()->openTag($form); ?>
-<?php echo $this->formControlGroup($form->get('type-intervention')) ?>
+<?= $this->formControlGroup($form->get('type-intervention')) ?>
 
 <div class="row">
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($form->get('structure')) ?>
+        <?= $this->formControlGroup($form->get('structure')) ?>
     </div>
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($form->get('visible')) ?>
+        <?= $this->formControlGroup($form->get('visible')) ?>
     </div>
 </div>
 <div class="row">
     <div class="col-md-4">
-        <?php echo $this->formControlGroup($form->get('annee-debut')) ?>
+        <?= $this->formControlGroup($form->get('annee-debut')) ?>
     </div>
     <div class="col-md-4">
-        <?php echo $this->formControlGroup($form->get('annee-fin')) ?>
+        <?= $this->formControlGroup($form->get('annee-fin')) ?>
     </div>
 </div>
 
@@ -30,4 +30,3 @@ echo $this->formSubmit($form->get('submit'));
 echo $this->formControlGroup($form->get('security'));
 echo $this->form()->closeTag();
 ?>
- 

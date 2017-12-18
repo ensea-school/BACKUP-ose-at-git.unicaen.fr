@@ -32,7 +32,7 @@ if (!$notification->getAffectation()->getStructure()) {
 
 ?>
 
-<h1><?php echo $notification->getIndicateur()->getLibelle($notification->getAffectation()->getStructure()) ?></h1>
+<h1><?= $notification->getIndicateur()->getLibelle($notification->getAffectation()->getStructure()) ?></h1>
 <?php if ($hasStructure): ?>
     <table border="1" style="border-collapse: collapse">
         <thead>
@@ -47,14 +47,14 @@ if (!$notification->getAffectation()->getStructure()) {
         <tbody>
         <?php foreach ($result as $r): ?>
             <tr>
-                <td><?php echo $r->getStructure() ?></td>
+                <td><?= $r->getStructure() ?></td>
                 <td>
-                    <a href="<?php echo $this->url($notification->getIndicateur()->getRoute(), $r->getUrlParams(), ['force_canonical' => true]) ?>">
-                        <?php echo $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
+                    <a href="<?= $this->url($notification->getIndicateur()->getRoute(), $r->getUrlParams(), ['force_canonical' => true]) ?>">
+                        <?= $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
                     </a>
                 </td>
                 <?php if ($hasDetails): ?>
-                    <td><?php echo $r->getDetails() ?></td>
+                    <td><?= $r->getDetails() ?></td>
                 <?php endif; ?>
             </tr>
         <?php endforeach; ?>
@@ -64,11 +64,11 @@ if (!$notification->getAffectation()->getStructure()) {
     <ul>
         <?php foreach ($result as $r): ?>
             <li>
-                <a href="<?php echo $this->url($notification->getIndicateur()->getRoute(), $r->getUrlParams(), ['force_canonical' => true]) ?>">
-                    <?php echo $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
+                <a href="<?= $this->url($notification->getIndicateur()->getRoute(), $r->getUrlParams(), ['force_canonical' => true]) ?>">
+                    <?= $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
                 </a>
                 <?php if ($r->getDetails()): ?>
-                    <?php echo $r->getDetails() ?>
+                    <?= $r->getDetails() ?>
                 <?php endif; ?>
             </li>
         <?php endforeach; ?>
@@ -78,8 +78,8 @@ if (!$notification->getAffectation()->getStructure()) {
 
 <p>
     Vous vous êtes abonné(e) à cet indicateur
-    le <?php echo $notification->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br/>
-    <a href="<?php echo $this->url('indicateur', [], ['force_canonical' => true]) ?>"
+    le <?= $notification->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br/>
+    <a href="<?= $this->url('indicateur', [], ['force_canonical' => true]) ?>"
        title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à des
         indicateurs</a>
 </p>

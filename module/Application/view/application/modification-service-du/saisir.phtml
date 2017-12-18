@@ -1,8 +1,8 @@
 <?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Modification de service dû") ?>
 
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
+<?= $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <style>
     form.modification-service-du .form-group {
@@ -81,7 +81,7 @@ echo $this->form()->closeTag();
 ?>
 
 <script>
-    var formId = "<?php echo $form->getAttribute('id') ?>";
+    var formId = "<?= $form->getAttribute('id') ?>";
     var form = $("#" + formId);
 
     $("body").on('click', "#" + formId + " button.modification-service-du-ajouter", function ()

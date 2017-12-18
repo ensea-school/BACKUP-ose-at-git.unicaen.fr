@@ -28,28 +28,28 @@
 
     <?php if ($iEP !== 'total'): ?>
     <tr>
-        <td><?php echo $ep['intervenant-nom'] ?></td>
-        <td style="white-space: nowrap"><?php echo $ep['intervenant-numero-insee'] ?></td>
-        <td><?php echo $ep['centre-cout-code'] ?></td>
-        <td><?php echo $ep['domaine-fonctionnel-libelle'] ?></td>
-        <td class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['hetd']) : '' ?></td>
-        <td class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($ep['hetd-pourc']) : '' ?></td>
-        <td class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($ep['hetd-montant']) : '' ?></td>
-        <td class="nombre"><?php echo $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($ep['rem-fc-d714']) ?></td>
-        <td class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['exercice-aa']) : '' ?></td>
-        <td class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['exercice-ac']) : '' ?></td>
+        <td><?= $ep['intervenant-nom'] ?></td>
+        <td style="white-space: nowrap"><?= $ep['intervenant-numero-insee'] ?></td>
+        <td><?= $ep['centre-cout-code'] ?></td>
+        <td><?= $ep['domaine-fonctionnel-libelle'] ?></td>
+        <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['hetd']) : '' ?></td>
+        <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($ep['hetd-pourc']) : '' ?></td>
+        <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($ep['hetd-montant']) : '' ?></td>
+        <td class="nombre"><?= $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($ep['rem-fc-d714']) ?></td>
+        <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['exercice-aa']) : '' ?></td>
+        <td class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($ep['exercice-ac']) : '' ?></td>
     </tr>
     <?php endif; ?>
     <?php endforeach; ?>
     <?php if (count($lep) > 1 ): ?>
     <tr>
-        <th colspan="4" style="text-align: right">Sous-total <?php echo $hetdRem == 'hetd' ? 'HC' : 'rém. FC D714.60' ?></th>
-        <th class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['hetd']) : '' ?></th>
-        <th class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($lep['total']['hetd-pourc']) : '' ?></th>
-        <th class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($lep['total']['hetd-montant']) : '' ?></th>
-        <th class="nombre"><?php echo $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($lep['total']['rem-fc-d714']) ?></th>
-        <th class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-aa']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-aa-montant']) ?></th>
-        <th class="nombre"><?php echo $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-ac']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-ac-montant']) ?></th>
+        <th colspan="4" style="text-align: right">Sous-total <?= $hetdRem == 'hetd' ? 'HC' : 'rém. FC D714.60' ?></th>
+        <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['hetd']) : '' ?></th>
+        <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedPourcentage($lep['total']['hetd-pourc']) : '' ?></th>
+        <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedEuros($lep['total']['hetd-montant']) : '' ?></th>
+        <th class="nombre"><?= $hetdRem == 'hetd' ? '' : \UnicaenApp\Util::formattedEuros($lep['total']['rem-fc-d714']) ?></th>
+        <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-aa']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-aa-montant']) ?></th>
+        <th class="nombre"><?= $hetdRem == 'hetd' ? \UnicaenApp\Util::formattedNumber($lep['total']['exercice-ac']) : \UnicaenApp\Util::formattedEuros($lep['total']['exercice-ac-montant']) ?></th>
     </tr>
     <?php endif; ?>
     <?php endforeach; ?>
@@ -58,13 +58,13 @@
 <?php if ($hasFoot): ?>
 <tfoot class="tfoot bg-info">
     <tr>
-        <td colspan="4"><?php echo (count($etatPaiement)-1) ?> intervenant(s)</td>
-        <td class="nombre"><?php echo \UnicaenApp\Util::formattedNumber($etatPaiement['total']['hetd']) ?></td>
+        <td colspan="4"><?= (count($etatPaiement)-1) ?> intervenant(s)</td>
+        <td class="nombre"><?= \UnicaenApp\Util::formattedNumber($etatPaiement['total']['hetd']) ?></td>
         <td>&nbsp;</td>
-        <td class="nombre"><?php echo \UnicaenApp\Util::formattedEuros($etatPaiement['total']['hetd-montant']) ?></td>
-        <td class="nombre"><?php echo \UnicaenApp\Util::formattedEuros($etatPaiement['total']['rem-fc-d714']) ?></td>
-        <td class="nombre"><?php echo \UnicaenApp\Util::formattedEuros($etatPaiement['total']['exercice-aa-montant']) ?></td>
-        <td class="nombre"><?php echo \UnicaenApp\Util::formattedEuros($etatPaiement['total']['exercice-ac-montant']) ?></td>
+        <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['hetd-montant']) ?></td>
+        <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['rem-fc-d714']) ?></td>
+        <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['exercice-aa-montant']) ?></td>
+        <td class="nombre"><?= \UnicaenApp\Util::formattedEuros($etatPaiement['total']['exercice-ac-montant']) ?></td>
     </tr>
 </tfoot>
 <?php endif; ?>

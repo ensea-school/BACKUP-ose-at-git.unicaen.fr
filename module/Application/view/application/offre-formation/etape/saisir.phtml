@@ -1,4 +1,4 @@
-<?php echo $this->form()->openTag($form->prepare()); ?>
+<?= $this->form()->openTag($form->prepare()); ?>
 
 <?php
 if ($errors) {
@@ -57,7 +57,7 @@ echo $this->form()->closeTag();
 ?>
 
 <script>
-    var pertinencesNiveau = <?php echo \Zend\Json\Json::encode($form->getPertinencesNiveau()) ?>;
+    var pertinencesNiveau = <?= \Zend\Json\Json::encode($form->getPertinencesNiveau()) ?>;
     $(function() {
         $("select[name=type-formation]")
                 .change(function() {

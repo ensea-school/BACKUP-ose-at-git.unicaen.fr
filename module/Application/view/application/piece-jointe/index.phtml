@@ -23,11 +23,11 @@ $infosUrl = $this->url('piece-jointe/intervenant/infos', ['intervenant' => $inte
 $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->getRouteParam()], ['query' => ['menu' => 1]] );
 
 ?>
-    <h1 class="page-header"><?php echo $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
 
     <div class="piece-jointe">
-        <div class="infos" data-url="<?php echo $infosUrl ?>">
-            <?php echo $this->partial('application/piece-jointe/infos', compact('messages')); ?>
+        <div class="infos" data-url="<?= $infosUrl ?>">
+            <?= $this->partial('application/piece-jointe/infos', compact('messages')); ?>
         </div>
         <?php
 
@@ -87,7 +87,7 @@ $menuUrl = $this->url('intervenant/services', ['intervenant' => $intervenant->ge
                 'validation-change': function ()
                 {
                     // chargement du menu pour faire apparaître ou disparaitre les liens de validation
-                    $('#sidebar').load('<?php echo $menuUrl; ?>');
+                    $('#sidebar').load('<?= $menuUrl; ?>');
                 },
             });
 

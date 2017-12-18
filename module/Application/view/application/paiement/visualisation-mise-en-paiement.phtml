@@ -10,7 +10,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paieme
 
 ?>
     <h1 class="page-header">Mises en paiement
-        <small><?php echo $intervenant ?></small>
+        <small><?= $intervenant ?></small>
     </h1>
 <?php
 
@@ -158,27 +158,27 @@ foreach( $data as $d ){
 <table class="table table-bordered table-condensed" style="width:30em">
     <tr>
         <th>Heures à payer <abbr title="Heures équivalent TD">(HETD)</abbr></th>
-        <td colspan="2" style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-a-payer']) ?></td>
+        <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-a-payer']) ?></td>
     </tr>
     <tr>
         <th><abbr title="Demandes émanant de la composante">Demandes de paiement</abbr> <abbr title="Heures équivalent TD">(HETD)</abbr></th>
-        <td colspan="2" style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-demandees']) ?></td>
+        <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-demandees']) ?></td>
     </tr>
     <tr>
-        <th rowspan="<?php echo count($total['heures-payees']) ?>">Mises en paiement <abbr title="Heures équivalent TD">(HETD)</abbr></th>
+        <th rowspan="<?= count($total['heures-payees']) ?>">Mises en paiement <abbr title="Heures équivalent TD">(HETD)</abbr></th>
     </tr>
     <?php foreach( $periodes as $pid => $periode ): if (isset($total['heures-payees'][$pid])): ?>
     <tr>
-        <td><?php echo $periode ?></td>
-        <td style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-payees'][$pid]) ?></td>
+        <td><?= $periode ?></td>
+        <td style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-payees'][$pid]) ?></td>
     </tr>
     <?php endif; endforeach; ?>
     <tr>
         <th>Mises en paiement (total <abbr title="Heures équivalent TD">HETD</abbr>)</th>
-        <td colspan="2" style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-payees']['total']) ?></td>
+        <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-payees']['total']) ?></td>
     </tr>
     <tr>
         <th>Restant à payer <abbr title="Heures équivalent TD">(HETD)</abbr></th>
-        <td colspan="2" style="text-align:right"><?php echo \UnicaenApp\Util::formattedNumber($total['heures-a-payer']-$total['heures-payees']['total']) ?></td>
+        <td colspan="2" style="text-align:right"><?= \UnicaenApp\Util::formattedNumber($total['heures-a-payer']-$total['heures-payees']['total']) ?></td>
     </tr>
 </table>

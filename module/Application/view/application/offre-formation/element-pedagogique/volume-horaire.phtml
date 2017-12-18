@@ -23,7 +23,7 @@ $canSave = false;
     }
 
 </style>
-<?php echo $this->form()->openTag($form); ?>
+<?= $this->form()->openTag($form); ?>
 <table class="table table-bordered table-condensed table-hover edition-volume-horaire-ens" style="margin-top: 2px">
     <thead>
     <tr>
@@ -48,10 +48,10 @@ $canSave = false;
 
         ?>
         <tr>
-            <td><abbr title="<?php echo $vhe->getTypeIntervention()->getLibelle() ?>"><?php echo $vhe->getTypeIntervention() ?></abbr></td>
-            <td><?php echo $heures ?></td>
-            <td><?php echo $groupes ?></td>
-            <td class="source"><?php echo $vhe->getId() ? $vhe->getSource() : 'Non existant' ?></td>
+            <td><abbr title="<?= $vhe->getTypeIntervention()->getLibelle() ?>"><?= $vhe->getTypeIntervention() ?></abbr></td>
+            <td><?= $heures ?></td>
+            <td><?= $groupes ?></td>
+            <td class="source"><?= $vhe->getId() ? $vhe->getSource() : 'Non existant' ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

@@ -26,12 +26,12 @@ $rechercheForm->get('exporter-csv-etat')->setValue('Extraction pour tableur (CSV
 $this->headTitle()->append($title);
 
 ?>
-<h1><?php echo $title ?></h1>
-<div class="panel panel-default filter" data-etat="<?php echo $etat ?>">
+<h1><?= $title ?></h1>
+<div class="panel panel-default filter" data-etat="<?= $etat ?>">
 
     <div class="panel-heading">Filtres</div>
     <div class="panel-body">
-        <?php echo $this->form()->openTag($rechercheForm->prepare()); ?>
+        <?= $this->form()->openTag($rechercheForm->prepare()); ?>
         <?php
 
         echo $this->formControlGroup($rechercheForm->get('type-intervenant'));
@@ -82,6 +82,6 @@ if (! empty($etatPaiement)){
             'intervenants'=> implode( ',', $rechercheForm->get('intervenants')->getValue() )
         ]);
 
-        ?><a href="<?php echo $url ?>" data-event="mise-en-paiement-form-submit" data-url-redirect="<?php echo $this->url(null, [], [], true) ?>" class="btn btn-primary ajax-modal">Mise en paiement</a><?php
+        ?><a href="<?= $url ?>" data-event="mise-en-paiement-form-submit" data-url-redirect="<?= $this->url(null, [], [], true) ?>" class="btn btn-primary ajax-modal">Mise en paiement</a><?php
     }
 }

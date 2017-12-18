@@ -14,17 +14,17 @@ $canEdit = $this->isAllowed($typeAgrement, $typeAgrement->getPrivilegeEdition())
 
 $tid = uniqid('agrements-lot-');
 ?>
-    <h1 class="page-header"><?php echo $title ?></h1>
-    <?php echo $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
+    <h1 class="page-header"><?= $title ?></h1>
+    <?= $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
 
 <?php if (!empty($data)): ?>
-    <?php echo $this->form()->openTag($form->prepare()); ?>
+    <?= $this->form()->openTag($form->prepare()); ?>
     <div class="col-sm-8">
         <div class="alert alert-info">Voici la liste des intervenants dont les agréments sont en attente :</div>
     <?php if ($needAction): ?>
         <label>Cochez les intervenants à impacter :</label>
     <?php endif; ?>
-    <table id="<?php echo $tid ?>" class="table table-bordered table-hover" style="margin-bottom:1px">
+    <table id="<?= $tid ?>" class="table table-bordered table-hover" style="margin-bottom:1px">
         <thead>
         <tr>
             <?php if ($needStructure): ?>
@@ -39,7 +39,7 @@ $tid = uniqid('agrements-lot-');
         <?php foreach ($data as $d): extract($d); ?>
             <tr>
                 <?php if ($needStructure): ?>
-                    <td class="structure"><?php echo $wie->getStructure() ?></td>
+                    <td class="structure"><?= $wie->getStructure() ?></td>
                 <?php endif; ?>
                 <td class="intervenant">
                     <?php
@@ -48,7 +48,7 @@ $tid = uniqid('agrements-lot-');
                 </td>
                 <?php if ($needAction): ?>
                     <td style="text-align:center">
-                        <?php echo $checkbox ? $this->formCheckbox($checkbox) : ''; ?>
+                        <?= $checkbox ? $this->formCheckbox($checkbox) : ''; ?>
                     </td>
                 <?php endif; ?>
             </tr>
@@ -57,8 +57,8 @@ $tid = uniqid('agrements-lot-');
     </table>
     <?php if ($needAction): ?>
         <div style="text-align:right">
-            <button class="btn btn-default btn-xs" type="button" onclick="$('#<?php echo $tid ?> :checkbox').prop('checked', true);">Tout sélectionner</button>
-            <button class="btn btn-default btn-xs" type="button" onclick="$('#<?php echo $tid ?> :checkbox').prop('checked', false);">Ne rien sélectionner</button>
+            <button class="btn btn-default btn-xs" type="button" onclick="$('#<?= $tid ?> :checkbox').prop('checked', true);">Tout sélectionner</button>
+            <button class="btn btn-default btn-xs" type="button" onclick="$('#<?= $tid ?> :checkbox').prop('checked', false);">Ne rien sélectionner</button>
         </div>
     <?php endif; ?>
     </div>

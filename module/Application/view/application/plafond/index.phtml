@@ -16,21 +16,21 @@ use Application\Provider\Privilege\Privileges;
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTION_EDITION));
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 
 <table class="table table-condensed table-hover table-bordered">
     <thead>
     <tr>
         <th>Plafond</th>
         <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
-            <th><?php echo $typeVolumeHoraire ?></th>
+            <th><?= $typeVolumeHoraire ?></th>
         <?php endforeach; ?>
     </tr>
     </thead>
     <tbody>
     <?php foreach ($plafonds as $plafond): ?>
         <tr>
-            <td style="width:50%"><?php echo $plafond ?></td>
+            <td style="width:50%"><?= $plafond ?></td>
             <?php foreach ($typesVolumesHoraires as $typeVolumeHoraire): ?>
                 <td style="text-align:center;width:25%"><?php
 

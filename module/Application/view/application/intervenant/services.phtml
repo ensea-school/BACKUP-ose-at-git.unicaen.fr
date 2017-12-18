@@ -38,7 +38,7 @@ $title .= ' <small>' . $intervenant . '</small>';
 
 
 ?>
-    <h1 class="page-header"><?php echo $title; ?></h1>
+    <h1 class="page-header"><?= $title; ?></h1>
 <?php
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -88,8 +88,8 @@ echo $formuleTotauxHetd;
 ?>
 
     <hr/>
-    <div id="feuille-de-route-btn-next" data-url="<?php echo $btnNextUrl ?>">
-        <?php echo $this->feuillederoute($intervenant)->renderNav($nextEtape); ?>
+    <div id="feuille-de-route-btn-next" data-url="<?= $btnNextUrl ?>">
+        <?= $this->feuillederoute($intervenant)->renderNav($nextEtape); ?>
     </div>
 
 <?php if ($services !== false || $servicesReferentiel !== false): ?>
@@ -105,7 +105,7 @@ echo $formuleTotauxHetd;
                 'heures-change-exists': function ()
                 {
                     // chargement du menu pour faire apparaître ou disparaitre les liens de validation
-                    $('#sidebar').load('<?php echo $menuUrl; ?>');
+                    $('#sidebar').load('<?= $menuUrl; ?>');
 
                     // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
                     $('#feuille-de-route-btn-next').refresh();
@@ -125,7 +125,7 @@ echo $formuleTotauxHetd;
                 'heures-change-exists': function ()
                 {
                     // chargement du menu pour faire apparaître ou disparaitre les liens de validation
-                    $('#sidebar').load('<?php echo $menuUrl; ?>');
+                    $('#sidebar').load('<?= $menuUrl; ?>');
 
                     // rafraichissement du bouton de la feuille de route pour pointer vers la prochaine bonne étape
                     $('#feuille-de-route-btn-next').refresh();

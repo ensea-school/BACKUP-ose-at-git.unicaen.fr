@@ -55,7 +55,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
     $sCodeGenerator->generateFiles($params);
     ?>
     <div class="alert alert-info">Les fichiers sont récupérables dans le
-        dossier <?php echo $sCodeGenerator->getOutputDir() ?></div>
+        dossier <?= $sCodeGenerator->getOutputDir() ?></div>
 
     <h3>Etape 3 : Déclaration dans le fichier de configuration</h3>
     <?php $sCodeGenerator->generateFile($params['Config'], false); ?>

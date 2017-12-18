@@ -23,19 +23,19 @@ $canEdit = $this->isAllowed( Privileges::getResourceId(Privileges::BUDGET_TYPE_D
     <?php foreach ($typeDotations as $elt) {
         ?>
         <tr>
-            <td><?php echo $elt->getLibelle() ?></td>
-            <td><?php echo $elt->getSourceCode() ?></td>
-            <td><?php echo $elt->getTypeRessource() ?></td>
+            <td><?= $elt->getLibelle() ?></td>
+            <td><?= $elt->getSourceCode() ?></td>
+            <td><?= $elt->getTypeRessource() ?></td>
             <td style="text-align:center;">
                     <?php if ($elt->getSource()->getImportable() || !$canEdit): ?>
-                        <?php echo $elt->getSource() ?>
+                        <?= $elt->getSource() ?>
                     <?php else: ?>
                         <a class="ajax-modal" data-event="type-dotation-saisie"
-                           href="<?php echo $this->url('budget/type-dotation-saisie', ['typeDotation' => $elt->getId()]) ?>"
+                           href="<?= $this->url('budget/type-dotation-saisie', ['typeDotation' => $elt->getId()]) ?>"
                            title="Modifier le type de dotation">
                             <span class="glyphicon glyphicon-edit"></span></a>
                         <a class="pop-ajax"  data-event="type-dotation-saisie"
-                           href="<?php echo $this->url('budget/type-dotation-delete', ['typeDotation' => $elt->getId()]) ?>"
+                           href="<?= $this->url('budget/type-dotation-delete', ['typeDotation' => $elt->getId()]) ?>"
                            title="Supprimer le type de dotation"
                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                            data-confirm="true"
@@ -52,7 +52,7 @@ $canEdit = $this->isAllowed( Privileges::getResourceId(Privileges::BUDGET_TYPE_D
 </table>
 <?php if ($canEdit): ?>
 <a class="btn btn-primary ajax-modal" data-event="type-dotation-saisie"
-   href="<?php echo $this->url('budget/type-dotation-saisie') ?>"
+   href="<?= $this->url('budget/type-dotation-saisie') ?>"
    title="Ajouter un type de dotation">
     <span class="glyphicon glyphicon-edit"></span>
     Ajouter un type de dotation</a>

@@ -9,7 +9,7 @@
 ?>
     <h1 class="page-header">Paramètres généraux</h1>
 
-<?php echo $this->form()->openTag($form); ?>
+<?= $this->form()->openTag($form); ?>
 
 <div class="well">
 
@@ -20,10 +20,10 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('annee')); ?>
+                    <?= $this->formControlGroup($form->get('annee')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('annee_import')); ?>
+                    <?= $this->formControlGroup($form->get('annee_import')); ?>
                 </div>
             </div>
         </div>
@@ -36,18 +36,18 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('contrat_civilite_president')); ?>
+                    <?= $this->formControlGroup($form->get('contrat_civilite_president')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('contrat_etablissement')); ?>
+                    <?= $this->formControlGroup($form->get('contrat_etablissement')); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('contrat_etablissement_represente')); ?>
+                    <?= $this->formControlGroup($form->get('contrat_etablissement_represente')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('contrat_lieu_signature')); ?>
+                    <?= $this->formControlGroup($form->get('contrat_lieu_signature')); ?>
                 </div>
             </div>
         </div>
@@ -60,18 +60,18 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('export_pdf_services_signature_1')); ?>
+                    <?= $this->formControlGroup($form->get('export_pdf_services_signature_1')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('export_pdf_services_signature_2')); ?>
+                    <?= $this->formControlGroup($form->get('export_pdf_services_signature_2')); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('export_pdf_services_signataire_1')); ?>
+                    <?= $this->formControlGroup($form->get('export_pdf_services_signataire_1')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('export_pdf_services_signataire_2')); ?>
+                    <?= $this->formControlGroup($form->get('export_pdf_services_signataire_2')); ?>
                 </div>
             </div>
         </div>
@@ -84,18 +84,18 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('discipline_codes_corresp_1_libelle')); ?>
+                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_1_libelle')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('discipline_codes_corresp_2_libelle')); ?>
+                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_2_libelle')); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('discipline_codes_corresp_3_libelle')); ?>
+                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_3_libelle')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('discipline_codes_corresp_4_libelle')); ?>
+                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_4_libelle')); ?>
                 </div>
             </div>
         </div>
@@ -108,10 +108,10 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('formule_package_name')); ?>
+                    <?= $this->formControlGroup($form->get('formule_package_name')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('formule_function_name')); ?>
+                    <?= $this->formControlGroup($form->get('formule_function_name')); ?>
                 </div>
             </div>
         </div>
@@ -124,18 +124,18 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('winpaie_carte')); ?>
+                    <?= $this->formControlGroup($form->get('winpaie_carte')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('winpaie_mc')); ?>
+                    <?= $this->formControlGroup($form->get('winpaie_mc')); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('winpaie_retenue')); ?>
+                    <?= $this->formControlGroup($form->get('winpaie_retenue')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('winpaie_sens')); ?>
+                    <?= $this->formControlGroup($form->get('winpaie_sens')); ?>
                 </div>
             </div>
         </div>
@@ -148,23 +148,23 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('directeur_ressources_humaines_id')); ?>
+                    <?= $this->formControlGroup($form->get('directeur_ressources_humaines_id')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('domaine_fonctionnel_ens_ext')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('etablissement')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('oseuser')); ?>
+                    <?= $this->formControlGroup($form->get('domaine_fonctionnel_ens_ext')); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $this->formControlGroup($form->get('scenario_charges_services')); ?>
+                    <?= $this->formControlGroup($form->get('etablissement')); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($form->get('oseuser')); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($form->get('scenario_charges_services')); ?>
                 </div>
             </div>
         </div>

@@ -30,8 +30,8 @@ foreach($result as $r ){
 echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de mail!!
 
 ?>
-<h1 class="page-header"><?php echo $indicateur->getLibelle() ?>
-    <small><?php echo $indicateur ?></small>
+<h1 class="page-header"><?= $indicateur->getLibelle() ?>
+    <small><?= $indicateur ?></small>
 </h1>
 
 <div style="margin:1em">
@@ -54,18 +54,18 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
             <?php foreach ($result as $r): ?>
                 <tr>
                     <?php if ($mailUrl): ?>
-                    <th class="cc"><input type="checkbox" checked="checked" value="<?php echo $r->getIntervenant()->getId() ?>"
+                    <th class="cc"><input type="checkbox" checked="checked" value="<?= $r->getIntervenant()->getId() ?>"
                                           class="indic-intervenant"/></th>
                     <?php endif; ?>
-                    <td><?php echo $r->getStructure() ?></td>
+                    <td><?= $r->getStructure() ?></td>
                     <td>
-                        <a href="<?php echo $this->url($indicateur->getRoute(), $r->getUrlParams()) ?>">
-                            <?php echo $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
+                        <a href="<?= $this->url($indicateur->getRoute(), $r->getUrlParams()) ?>">
+                            <?= $r->getIntervenant() . ' <small>(n°' . $r->getIntervenant()->getCode() . ')</small>' ?>
                         </a>
                     </td>
                     <?php if ($hasDetails): ?>
                         <td>
-                        <?php echo $r->getDetails() ?>
+                        <?= $r->getDetails() ?>
                         </td>
                     <?php endif; ?>
                 </tr>
@@ -75,7 +75,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
         <small><a href="javascript:cocherTout()">Cocher tout</a> / <a href="javascript:decocherTout()">Décocher tout</a></small>
     </div>
 
-    <a class="btn btn-default" href="<?php echo $this->url('indicateur'); ?>">
+    <a class="btn btn-default" href="<?= $this->url('indicateur'); ?>">
         <i class="fa fa-undo" aria-hidden="true"></i>
         Retour à la liste des indicateurs
     </a>
@@ -98,7 +98,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger(); // pour les envois de 
     }
 
     function envoiMail(){
-        var url = <?php echo json_encode( $mailUrl ) ?>;
+        var url = <?= json_encode( $mailUrl ) ?>;
         var ids = '';
         $(".indic-intervenant:checked").each(function(){
 

@@ -8,12 +8,12 @@
  */
 
 ?>
-<div id="s<?php echo $referentiel ? 'r' : '' ?>-horodatage" data-url="<?php echo $this->url('service/horodatage', [
+<div id="s<?= $referentiel ? 'r' : '' ?>-horodatage" data-url="<?= $this->url('service/horodatage', [
         'intervenant'       => $intervenant->getRouteParam(),
         'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
         'referentiel'       => $referentiel,
     ]); ?>">
-        <?php echo $this->partial('application/service/horodatage', [
+        <?= $this->partial('application/service/horodatage', [
             'intervenant'       => $intervenant,
             'typeVolumeHoraire' => $typeVolumeHoraire,
             'referentiel'       => $referentiel,

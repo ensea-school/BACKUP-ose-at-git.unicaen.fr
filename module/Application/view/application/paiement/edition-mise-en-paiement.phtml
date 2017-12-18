@@ -10,7 +10,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paieme
 
 ?>
 <h1 class="page-header">Annulation de mises en paiement
-    <small><?php echo $intervenant ?></small>
+    <small><?= $intervenant ?></small>
 </h1>
 <form method="post" id="mepform">
 <table class="table table-bordered table-condensed table-extra-condensed table-hover table-sort">
@@ -42,8 +42,8 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paieme
         }
         ?>
         <tr>
-            <td style="text-align:center;vertical-align:middle"><?php echo $this->formCheckbox(new \Zend\Form\Element\Checkbox('mep['.$paiement->getId().']')) ?></td>
-            <td><?php echo $this->structure($composante)->renderLink() ?></td>
+            <td style="text-align:center;vertical-align:middle"><?= $this->formCheckbox(new \Zend\Form\Element\Checkbox('mep['.$paiement->getId().']')) ?></td>
+            <td><?= $this->structure($composante)->renderLink() ?></td>
             <td><?php
                 if ($service){
                     if ($service->getElementPedagogique()){
@@ -60,11 +60,11 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paieme
                     echo $this->fonctionReferentiel($serviceReferentiel->getFonction())->renderLink();
                 }
             ?></td>
-            <td><?php echo $paiement->getCentreCout() ?></td>
-            <td><?php echo $paiement->getDomaineFonctionnel() ?></td>
-            <td data-order="<?php echo $paiement->getPeriodePaiement() ? $paiement->getPeriodePaiement()->getOrdre() : 999999999 ?>"><?php echo $paiement->getPeriodePaiement() ? $paiement->getPeriodePaiement()->getLibelleAnnuel($intervenant->getAnnee()) : '<i>Simple demande</i>' ?></td>
-            <td><?php echo $paiement->getTypeHeures() ?></td>
-            <td><?php echo \UnicaenApp\Util::formattedNumber($paiement->getHeures()) ?></td>
+            <td><?= $paiement->getCentreCout() ?></td>
+            <td><?= $paiement->getDomaineFonctionnel() ?></td>
+            <td data-order="<?= $paiement->getPeriodePaiement() ? $paiement->getPeriodePaiement()->getOrdre() : 999999999 ?>"><?= $paiement->getPeriodePaiement() ? $paiement->getPeriodePaiement()->getLibelleAnnuel($intervenant->getAnnee()) : '<i>Simple demande</i>' ?></td>
+            <td><?= $paiement->getTypeHeures() ?></td>
+            <td><?= \UnicaenApp\Util::formattedNumber($paiement->getHeures()) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -79,14 +79,14 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Mises en paieme
             <div class='alert alert-warning'>
             <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 Attention : Retirer les mises en paiement ne signifie pas qu'elles sont supprimées. Elles ne sont remises qu'à l'état de simples demandes de mises en paiement.
-                Pour les supprimer définitivement, il convient de retirer également les <a class='no-intranavigation' href='<?php echo $this->url('intervenant/mise-en-paiement/demande', ['intervenant' => $intervenant->getRouteParam()]) ?>'>demandes de mises en paiement</a>.
+                Pour les supprimer définitivement, il convient de retirer également les <a class='no-intranavigation' href='<?= $this->url('intervenant/mise-en-paiement/demande', ['intervenant' => $intervenant->getRouteParam()]) ?>'>demandes de mises en paiement</a>.
             </div>
             <div style='text-align:right'>
             <button type='button' class='btn btn-default pop-ajax-hide'>Non</button>
             <button type='button' class='btn btn-primary' onclick='enregistrer()'>Oui</button></div>"
     ><span class="glyphicon glyphicon-trash"></span> Annuler les mises en paiement</button>
 </div>
-<?php echo $this->form()->closeTag() ?>
+<?= $this->form()->closeTag() ?>
 <script type="text/javascript">
 
     function enregistrer(){

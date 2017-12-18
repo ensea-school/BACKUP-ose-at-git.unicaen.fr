@@ -10,30 +10,30 @@
 echo $this->form()->openTag($this->form->setAttribute('id','mail-form'));
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 
 <div class="row">
     <div class="col-md-8">
-        <?php echo $this->formControlGroup($this->form->get('from')->setLabel("Expéditeur du mail")->setAttribute('disabled', 'disabled')) ?>
+        <?= $this->formControlGroup($this->form->get('from')->setLabel("Expéditeur du mail")->setAttribute('disabled', 'disabled')) ?>
     </div>
     <div class="col-md-4">
-        <?php echo $this->formControlGroup($this->form->get('nombre')->setLabel("Nombre de mails à envoyer")->setAttribute('disabled', 'disabled')) ?>
+        <?= $this->formControlGroup($this->form->get('nombre')->setLabel("Nombre de mails à envoyer")->setAttribute('disabled', 'disabled')) ?>
     </div>
 </div>
-<?php echo $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
-<?php echo $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
+<?= $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
+<?= $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
 <button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fa fa-undo" aria-hidden="true"></i>
     Retour à l'indicateur
 </button>
 <button class="btn btn-primary" type="submit"><span class='glyphicon glyphicon-send'></span> Envoyer</button>
-<?php echo $this->formHidden($form->get('intervenants')) . $this->form()->closeTag(); ?>
+<?= $this->formHidden($form->get('intervenants')) . $this->form()->closeTag(); ?>
 
 <script type="text/javascript">
     $(function ()
     {
-        var selector = "textarea#<?php echo $this->form->get('body')->getAttribute('id') ?>";
-        var form = $("form#<?php echo $this->form->getAttribute('id') ?>");
-        var message = "Êtes-vous sûr(e) de vouloir envoyer ce message aux intervenants (<?php echo $count ?>) ?";
+        var selector = "textarea#<?= $this->form->get('body')->getAttribute('id') ?>";
+        var form = $("form#<?= $this->form->getAttribute('id') ?>");
+        var message = "Êtes-vous sûr(e) de vouloir envoyer ce message aux intervenants (<?= $count ?>) ?";
 
         installEditor(selector, form);
 

@@ -28,7 +28,7 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
     </div>
 
     <a
-        href="<?php echo $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
+        href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
         class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
         data-title="Clôture des services réalisés"
         data-content="
@@ -46,12 +46,12 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
 <?php elseif (!$isSelf && !$isCloture): ?>
 
     <a
-        href="<?php echo $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
+        href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
         class="pop-ajax btn-cloturer-saisie btn btn-lg btn-info"
         data-title="Clôture des services réalisés"
         data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>
-            <p>Confirmez-vous vouloir clôturer les services réalisés de <?php echo $cloture->getIntervenant() ?>
+            <p>Confirmez-vous vouloir clôturer les services réalisés de <?= $cloture->getIntervenant() ?>
             quelle que soit la composante d'intervention ?</p>
         "
         data-confirm="true"
@@ -64,10 +64,10 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
 
     <div class="alert alert-success">
         <span class="glyphicon glyphicon-off pull-left" style="font-size: 48pt;margin-right:.2em"></span>
-        <p>La saisie du service réalisé a été clôturée par <?php echo $cloture->getHistoModificateur() ?>
-            le <?php echo $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
+        <p>La saisie du service réalisé a été clôturée par <?= $cloture->getHistoModificateur() ?>
+            le <?= $cloture->getHistoModification()->format(Application\Constants::DATETIME_FORMAT) ?>.</p>
         <?php if (!$canEditAfter): ?>
-            <p><strong>Vous ne pouvez donc plus modifier <?php echo $isSelf ? 'vos' : 'les' ?> données.</strong></p>
+            <p><strong>Vous ne pouvez donc plus modifier <?= $isSelf ? 'vos' : 'les' ?> données.</strong></p>
         <?php else: ?>
             <?php if ($cloture->getIntervenant()->hasMiseEnPaiement()): ?>
                 <p><strong>Vous ne pouvez plus modifier le service réalisé car outre la clôture de saisie,
@@ -79,7 +79,7 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
         <?php endif; ?>
         <?php if ($canDecloturer): ?>
             <a
-                href="<?php echo $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
+                href="<?= $this->url('intervenant/cloturer', ['intervenant' => $cloture->getIntervenant()->getRouteParam()]) ?>"
                 class="pop-ajax btn-decloturer-saisie btn btn-danger"
                 data-content="
             <p class='lead text-danger'><strong>Attention!</strong></p>

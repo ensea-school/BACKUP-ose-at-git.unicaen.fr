@@ -1,4 +1,4 @@
-<?php echo $this->doctype(); ?>
+<?= $this->doctype(); ?>
 <html lang="fr">
 <head>
     <!-- Meta -->
@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-16x16.png" sizes="16x16">
 
     <!-- Scripts -->
-    <?php echo $this->headScript(); ?>
+    <?= $this->headScript(); ?>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,7 +30,7 @@
     <![endif]-->
 </head>
 
-<body class="<?php echo getenv('APPLICATION_ENV') ?: 'development' ?>" data-base-url="<?php echo $this->url('home') ?>">
+<body class="<?= getenv('APPLICATION_ENV') ?: 'development' ?>" data-base-url="<?= $this->url('home') ?>">
 <div id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -40,12 +40,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <?php echo $this->appLink($this->appInfos()->nom) ?>
+            <?= $this->appLink($this->appInfos()->nom) ?>
         </div>
         <div class="navbar-collapse bs-navbar-collapse collapse">
-            <?php echo $this->navigation()->menuPrincipal('navigation'); ?>
+            <?= $this->navigation()->menuPrincipal('navigation'); ?>
             <p class="navbar-text navbar-right">
-                <?php echo $this->appConnection(); ?>
+                <?= $this->appConnection(); ?>
             </p>
         </div><!--/.nav-collapse -->
     </div>
@@ -55,19 +55,19 @@
     <?php if (($menuSecondaire = $this->navigation()->menuSecondaire('navigation')->render())): ?>
         <div class="row">
             <div id="sidebar" class="col-xs-6 col-md-2" role="navigation">
-                <?php echo $menuSecondaire; ?>
+                <?= $menuSecondaire; ?>
             </div>
             <div id="content" class="col-xs-12 col-md-10">
-                <?php echo $this->content; ?>
+                <?= $this->content; ?>
             </div>
         </div>
     <?php else: ?>
-        <?php echo $this->content; ?>
+        <?= $this->content; ?>
     <?php endif; ?>
 </div>
 
 <div id="footer" class="container">
-    <?php echo $this->navigation()->menuPiedDePage('navigation'); ?>
+    <?= $this->navigation()->menuPiedDePage('navigation'); ?>
 </div>
 
 <a href="#" class="scrollup" title="Remonter en haut de cette page">
@@ -75,7 +75,7 @@
 </a>
 
 <!-- Scripts -->
-<?php echo $this->inlineScript(); ?>
+<?= $this->inlineScript(); ?>
 
 </body>
 </html>

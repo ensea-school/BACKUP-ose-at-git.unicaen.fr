@@ -22,9 +22,9 @@ if ($services['non-contractualises']) {
 
 ?>
 
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 
-<?php echo $this->messenger() ?>
+<?= $this->messenger() ?>
 
 <style>
     th.structure, td.structure {
@@ -59,13 +59,13 @@ if ($services['non-contractualises']) {
                 $canCreer = $this->isAllowed($contrat, Privileges::CONTRAT_CREATION);
                 ?>
                 <tr>
-                    <td><?php echo $structure ?></td>
+                    <td><?= $structure ?></td>
                     <td>
                         <?php if ($canCreer): ?>
                             <a class="btn btn-primary"
-                               href="<?php echo $this->url('contrat/creer', ['intervenant' => $intervenant->getRouteParam(), 'structure' => $structure->getId()]); ?>">
+                               href="<?= $this->url('contrat/creer', ['intervenant' => $intervenant->getRouteParam(), 'structure' => $structure->getId()]); ?>">
                                 <span class="glyphicon glyphicon-file"></span> Créer un
-                                projet <?php echo $hasContrat ? 'd\'avenant' : 'de contrat' ?>
+                                projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                             </a>
                         <?php else:
                             echo $this->feuillederoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
@@ -73,14 +73,14 @@ if ($services['non-contractualises']) {
                         <p>
                             Enseignements (validés) non contractualisés :<br/>
                             <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
-                                      href="#details-enseignements-structure-<?php echo $sid ?>"
+                                      href="#details-enseignements-structure-<?= $sid ?>"
                                       role="button"
-                                      aria-expanded="true" aria-controls="details-enseignements-structure-<?php echo $sid ?>"
+                                      aria-expanded="true" aria-controls="details-enseignements-structure-<?= $sid ?>"
                                       data-toggle="collapse"
                                 >Afficher/masquer</a></small>
                         </p>
-                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>" id="details-enseignements-structure-<?php echo $sid ?>">
-                            <?php echo $this->serviceListe($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
+                        <div class="collapse <?php if ($canCreer): ?>in<?php endif; ?>" id="details-enseignements-structure-<?= $sid ?>">
+                            <?= $this->serviceListe($servicesNC)->setReadonly(true)->setColumnVisibility('structure-ens', false)->render(); ?>
                         </div>
                     </td>
                 </tr>
@@ -91,7 +91,7 @@ if ($services['non-contractualises']) {
     <h2>Contrats et avenants</h2>
     <?php foreach ($contrats as $contrat): ?>
 
-        <?php echo $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()]]) ?>
+        <?= $this->partial('application/contrat/partial/contrat', ['contrat' => $contrat, 'services' => $services['contractualises'][$contrat->getId()]]) ?>
 
     <?php endforeach; ?>
     </div>
@@ -100,7 +100,7 @@ if ($services['non-contractualises']) {
 <?php endif; ?>
 
 <hr/>
-<?php echo $this->feuillederoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?= $this->feuillederoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
     $("body").on("event-contrat-suppr event-contrat-validation event-validation-suppr event-saisie-retour-suppr", function (event, data)

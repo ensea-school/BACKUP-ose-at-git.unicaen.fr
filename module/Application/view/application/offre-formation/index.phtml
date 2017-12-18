@@ -103,7 +103,7 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
 
 <?php ?>
 
-<h1 class="page-header">Offre de formation <?php echo $structure ? '<small>' . $structure . '</small>' : null ?></h1>
+<h1 class="page-header">Offre de formation <?= $structure ? '<small>' . $structure . '</small>' : null ?></h1>
 
 <div class="row">
 
@@ -125,7 +125,7 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                     $("body").on("change", "select.struct", function (event) {
                         $("*").css('cursor', 'wait');
                         var id = $(this).val();
-                        var url = '<?php echo $this->url('of', [], ['query' => ['structure' => '__structure__']]) ?>';
+                        var url = '<?= $this->url('of', [], ['query' => ['structure' => '__structure__']]) ?>';
                         $(location).attr('href', url.replace('__structure__', id));
                     });
                 </script>
@@ -142,12 +142,12 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                 <ul class="list-group">
                     <?php foreach ($niveauxItems as $ni): ?>
                         <?php if (($niveau === $ni['niveau']) || ($niveau && $ni['niveau'] && $niveau->getId() === $ni['niveau']->getId())): ?>
-                            <li class="list-group-item active"><strong><?php echo $ni['label'] ?></strong></li>
+                            <li class="list-group-item active"><strong><?= $ni['label'] ?></strong></li>
                         <?php else: ?>
                             <li class="list-group-item">
                                 <a class="niveau"
                                    title="Cliquez pour afficher les formations et les enseignements de ce niveau"
-                                   href="<?php echo $ni['url'] ?>"><?php echo $ni['label'] ?></a>
+                                   href="<?= $ni['url'] ?>"><?= $ni['label'] ?></a>
                             </li>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -174,12 +174,12 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                     <?php foreach ($etapesItems as $ei): ?>
                         <?php if ($etape === $ei['etape']): ?>
                             <li class="list-group-item active">
-                            <strong><?php echo $ei['label'] ?></strong>
+                            <strong><?= $ei['label'] ?></strong>
                         <?php else: ?>
                             <li class="list-group-item">
                             <a class="etape<?php if ($ei['orpheline']) echo ' text-danger'; ?>"
                                title="Cliquez pour afficher les enseignements de cette formation"
-                               href="<?php echo $ei['url'] ?>"><?php echo $ei['label'] ?></a>
+                               href="<?= $ei['url'] ?>"><?= $ei['label'] ?></a>
                         <?php endif; ?>
                         <?php
                         if ($canViewEtape && $ei['etape']) {
@@ -204,7 +204,7 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
 
         <?php if (null === $elements): ?>
 
-            <p><?php echo $this->messenger()->setMessage("Sélectionnez une structure...", 'info') ?></p>
+            <p><?= $this->messenger()->setMessage("Sélectionnez une structure...", 'info') ?></p>
 
         <?php else: ?>
 
@@ -212,7 +212,7 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
             <div class="element-rech panel panel-default">
                 <div class="panel-heading" style="margin-bottom:1em">
                     <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
-                    Enseignements <?php echo $compl ?>
+                    Enseignements <?= $compl ?>
                     <!--------------- Bouton d'ajout d'élément pédagogique --------------->
                     <?php
                     if ($canEditElement) {
@@ -229,7 +229,7 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                         $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
 
                         ?>
-                            <a class="pull-right btn btn-default btn-xs" href="<?php echo $urlExportOf ?>">
+                            <a class="pull-right btn btn-default btn-xs" href="<?= $urlExportOf ?>">
                                 <span class="glyphicon glyphicon-export"></span> Télécharger (CSV)
                             </a>
                         <?php
@@ -259,14 +259,14 @@ $canEditElement = $this->isAllowed($structure, Privileges::ODF_ELEMENT_EDITION);
                     </thead>
                     <tbody>
                     <?php foreach ($elements as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
-                        <tr id="<?php echo $ep->getId() ?>">
-                            <td><?php echo $ep->getEtape()->getNiveauToString() ?></td>
-                            <td class="etape"><?php echo $this->etape($ep->getEtape())->renderLink() ?></td>
-                            <td class="element"><?php echo $ep->getCode() ?></td>
-                            <td class="element"><?php echo $this->elementPedagogique($ep)->renderLink($ep->getLibelle()) ?></td>
-                            <td class="periode"><?php echo $ep->getPeriode() ?: "" ?></td>
-                            <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
-                            <td><?php echo $ep->getRegimesInscription(true) ?></td>
+                        <tr id="<?= $ep->getId() ?>">
+                            <td><?= $ep->getEtape()->getNiveauToString() ?></td>
+                            <td class="etape"><?= $this->etape($ep->getEtape())->renderLink() ?></td>
+                            <td class="element"><?= $ep->getCode() ?></td>
+                            <td class="element"><?= $this->elementPedagogique($ep)->renderLink($ep->getLibelle()) ?></td>
+                            <td class="periode"><?= $ep->getPeriode() ?: "" ?></td>
+                            <td><?= (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
+                            <td><?= $ep->getRegimesInscription(true) ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

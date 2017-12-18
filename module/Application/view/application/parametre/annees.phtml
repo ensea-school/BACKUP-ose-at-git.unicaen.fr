@@ -16,7 +16,7 @@ $annees = array_chunk($annees, 10);
         <?php foreach ($al as $annee): ?>
 
             <div style="margin:5px">
-                <button type="button" data-id="<?php echo $annee->getId() ?>" class="btn btn-annee <?php echo $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?php echo $annee ?></button>
+                <button type="button" data-id="<?= $annee->getId() ?>" class="btn btn-annee <?= $annee->isActive() ? 'btn-info active' : 'btn-default' ?>"><?= $annee ?></button>
             </div>
 
         <?php endforeach; ?>
@@ -41,7 +41,7 @@ $annees = array_chunk($annees, 10);
             isActive = true;
         }
 
-        $.post( <?php echo var_export( $this->url('parametres/annees'), true) ?>, {annee: anneeId}, function(data) {
+        $.post( <?= var_export( $this->url('parametres/annees'), true) ?>, {annee: anneeId}, function(data) {
             alertFlash(data.message, data.status, 5000);
         });
 

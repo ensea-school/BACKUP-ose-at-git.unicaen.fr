@@ -16,7 +16,7 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
 <div id="navbar">
     <h1 class="title">OSE</h1>
     <p class="info">
-        REMOTE_ADDR=<?php echo $remoteAddr; ?>, HTTP_X_FORWARDED_FOR=<?php echo $forwarded; ?>
+        REMOTE_ADDR=<?= $remoteAddr; ?>, HTTP_X_FORWARDED_FOR=<?= $forwarded; ?>
     </p>
 </div>
 
@@ -25,7 +25,7 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
         <h1>OSE
             <small>Organisation des Services d'Enseignement</small>
         </h1>
-        <p class="lead"><?php echo \Application::$maintenanceText ?></p>
+        <p class="lead"><?= \Application::$maintenanceText ?></p>
 
 </div>
 <style>

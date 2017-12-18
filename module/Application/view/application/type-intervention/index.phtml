@@ -76,13 +76,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     <tbody class="triables">
     <tr></tr>
     <?php foreach ($typesInterventions as $ti): ?>
-    <tr class="champ-triable" data-id="<?php echo $ti->getId() ?>">
+    <tr class="champ-triable" data-id="<?= $ti->getId() ?>">
         <td>
-            <?php echo $ti->getCode() ?>&nbsp;
+            <?= $ti->getCode() ?>&nbsp;
         </td>
-        <td><?php echo $ti->getLibelle() ?></td>
-        <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdService()) ?></td>
-        <td style="text-align:right;"><?php echo Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
+        <td><?= $ti->getLibelle() ?></td>
+        <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdService()) ?></td>
+        <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
         <td>
             <?php
             if (($ti->getAnneeDebut()) || ($ti->getAnneeFin())) {
@@ -108,11 +108,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             ?>
         </td>
         <td style="text-align:left;">
-        <?php echo($ti->isVisible() ? 'Visible' : 'Caché');
+        <?=($ti->isVisible() ? 'Visible' : 'Caché');
         if ($canEdit) {
             ?>
             <a class="btn btn-default btn-xs ajax-modal" data-event="type-intervention-saisie" style="float:right"
-               href="<?php echo $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
+               href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
                title="Ajouter un type d'intervention pour une structure">
                 Ajouter une exception</a>
         <?php }
@@ -123,7 +123,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                 if ($saut == 1) echo '<br><br><table class="table table-bordered table-condensed table-extra-condensed">'
                 ?>
                 <tr>
-                    <td><?php echo($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
+                    <td><?=($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
                     <td>
                         <?php
                         if (($tis->getAnneeDebut()) || ($tis->getAnneeFin())) {
@@ -140,10 +140,10 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                         ?>
                         <td style="width: 50px;">
                             <a class="ajax-modal" data-event="type-intervention-saisie"
-                               href="<?php echo $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>">
+                               href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>">
                                 <span class="glyphicon glyphicon-edit"></span></a>
                             <a class="pop-ajax" data-event="type-intervention-saisie"
-                               href="<?php echo $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"
+                               href="<?= $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"
                                title="Supprimer le type d'intervention"
                                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                data-confirm="true" data-confirm-button="Oui"
@@ -163,11 +163,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     <span class="glyphicon glyphicon-move"
                           title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>
                 <a class="ajax-modal" data-event="type-intervention-saisie"
-                   href="<?php echo $this->url('type-intervention/saisie', ['typeIntervention' => $ti->getId()]) ?>"
+                   href="<?= $this->url('type-intervention/saisie', ['typeIntervention' => $ti->getId()]) ?>"
                    title="Modifier le type d'intervention">
                     <span class="glyphicon glyphicon-edit"></span></a>
                 <a class="pop-ajax"
-                   href="<?php echo $this->url('type-intervention/delete', ['typeIntervention' => $ti->getId()]) ?>"
+                   href="<?= $this->url('type-intervention/delete', ['typeIntervention' => $ti->getId()]) ?>"
                    title="Supprimer le type d'intervention"
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true"
@@ -185,7 +185,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
 </table>
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="type-intervention-saisie"
-       href="<?php echo $this->url('type-intervention/saisie') ?>"
+       href="<?= $this->url('type-intervention/saisie') ?>"
        title="Ajouter un type d'intervention">
         <span class="glyphicon glyphicon-plus"></span>
         Ajouter un type d'intervention</a>

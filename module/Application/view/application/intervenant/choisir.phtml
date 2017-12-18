@@ -1,15 +1,15 @@
 <?php $this->headTitle($this->title) ?>
 
-<h1 class="page-header"><?php echo $this->title ?></h1>
+<h1 class="page-header"><?= $this->title ?></h1>
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
+<?= $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <?php $form->prepare(); ?>
 
-<?php echo $this->form()->openTag($form) ?> 
-<?php echo $this->formControlGroup($form->get('interv')); ?>
+<?= $this->form()->openTag($form) ?>
+<?= $this->formControlGroup($form->get('interv')); ?>
 <input class="btn btn-primary" type="submit" value="Choisir" name="submit">
-<?php echo $this->form()->closeTag() ?> 
+<?= $this->form()->closeTag() ?>
 
 <hr />
 
@@ -17,11 +17,11 @@
 <h3>Vos recherches récentes :</h3>
 <ul>
     <?php foreach($recents as $data): ?>
-    <li><a class="choisir-recent" 
-                   data-id="<?php echo $data['sourceCode'] ?>" 
-                   data-label="<?php echo $data['nom'] ?>" 
-                   title="Cliquez pour choisir cet intervenant" 
-                   href="#"><?php echo $data['nom'] ?></a></li>
+    <li><a class="choisir-recent"
+                   data-id="<?= $data['sourceCode'] ?>"
+                   data-label="<?= $data['nom'] ?>"
+                   title="Cliquez pour choisir cet intervenant"
+                   href="#"><?= $data['nom'] ?></a></li>
     <?php endforeach; ?>
 </ul>
 <?php endif; ?>
@@ -32,9 +32,9 @@
         var intervId    = $("input[name='interv[id]']", form);
         var intervLabel = $("input[name='interv[label]']", form);
         var submit      = $("input[type=submit]", form);
-        
+
         intervLabel.tooltip({ placement: 'bottom' }).focus();
-        
+
         $("a.choisir-recent").click(function() {
             intervId.val($(this).data('id'));
             submit.click();

@@ -7,19 +7,19 @@
 
 ?>
 <h1 class="page-header">Saisie de l'agrément</h1>
-<?php echo $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
+<?= $this->messenger()->setCurrentMessagesFromFlashMessenger() ?>
 
 <?php
 echo $this->form()->openTag($form);
 ?>
 <div class="row">
     <div class="col-md-12">
-        <?php echo $this->formControlGroup($form->get('dateDecision')); ?>
+        <?= $this->formControlGroup($form->get('dateDecision')); ?>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
-        <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
+        <?= $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
     </div>
     <div class="col-md-6">
         <a class="btn btn-default pop-ajax-hide">Annuler</a>

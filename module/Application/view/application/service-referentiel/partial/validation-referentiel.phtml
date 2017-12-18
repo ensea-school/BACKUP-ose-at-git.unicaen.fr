@@ -31,9 +31,9 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
 
 ?>
 
-<div class="validation panel panel-<?php echo $validation->getId() ? 'success' : 'default' ?>" id="<?php echo $id ?>">
+<div class="validation panel panel-<?= $validation->getId() ? 'success' : 'default' ?>" id="<?= $id ?>">
     <div class="panel-heading panel-heading-h3">
-        <h3><?php echo $validation->getId() ? 'Validation ' : 'Référentiel ' ?><?php echo $structure ?></h3>
+        <h3><?= $validation->getId() ? 'Validation ' : 'Référentiel ' ?><?= $structure ?></h3>
     </div>
     <div class="panel-body">
         <!-- Informations -->
@@ -41,23 +41,23 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
         <?php if ($validation->getId()): ?>
             <ul style="list-style-type: none">
                 <li><span class="glyphicon glyphicon-thumbs-up"></span> Validé
-                    le <?php echo $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
-                    par <?php echo $this->utilisateur($validation->getHistoCreateur()) ?></li>
+                    le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
+                    par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
             </ul>
         <?php endif; ?>
 
         <!-- Enseignements concernés -->
         <a title="Cliquez pour afficher/masquer le référentiel concerné"
-           href="#details-referentiel-<?php echo $id ?>"
+           href="#details-referentiel-<?= $id ?>"
            role="button"
            aria-expanded="false"
-           aria-controls="details-referentiel-<?php echo $id ?>"
+           aria-controls="details-referentiel-<?= $id ?>"
            data-toggle="collapse"
         >Référentiel concerné
             <small>(cliquez pour afficher/cacher)</small>
         </a>
-        <div class="collapse <?php echo $validation->getId() ? '' : 'in' ?>" id="details-referentiel-<?php echo $id ?>">
-            <?php echo $this->serviceReferentielListe($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
+        <div class="collapse <?= $validation->getId() ? '' : 'in' ?>" id="details-referentiel-<?= $id ?>">
+            <?= $this->serviceReferentielListe($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
         </div>
 
     </div>
@@ -67,7 +67,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <!-- Actions -->
             <?php if ($validerUrl): ?>
                 <a
-                    href="<?php echo $validerUrl ?>"
+                    href="<?= $validerUrl ?>"
                     class="validation-delete btn btn-primary btn-primary pop-ajax"
                     data-submit-reload="true"
                     data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette validation ?</p>"
@@ -78,7 +78,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <?php endif; ?>
             <?php if ($devaliderUrl): ?>
                 <a
-                    href="<?php echo $devaliderUrl ?>"
+                    href="<?= $devaliderUrl ?>"
                     class="validation-delete btn btn-primary btn-danger pop-ajax"
                     data-submit-reload="true"
                     data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"

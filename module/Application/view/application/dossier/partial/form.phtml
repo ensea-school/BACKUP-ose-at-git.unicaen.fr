@@ -26,55 +26,55 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
     }
 </style>
 
-<?php echo $this->form()->openTag($form) ?>
+<?= $this->form()->openTag($form) ?>
 <div class="row">
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($dossier->get('nomUsuel')); ?>
-        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')); ?>
-        <?php echo $this->formControlGroup($dossier->get('prenom')); ?>
-        <?php echo $this->formControlGroup($dossier->get('civilite')); ?>
-        <?php echo $this->formControlGroup($dossier->get('dateNaissance')); ?>
-        <?php echo $this->formControlGroup($dossier->get('paysNaissance')); ?>
-        <?php echo $this->formControlGroup($dossier->get('departementNaissance')); ?>
-        <?php echo $this->formControlGroup($dossier->get('villeNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('nomUsuel')); ?>
+        <?= $this->formControlGroup($dossier->get('nomPatronymique')); ?>
+        <?= $this->formControlGroup($dossier->get('prenom')); ?>
+        <?= $this->formControlGroup($dossier->get('civilite')); ?>
+        <?= $this->formControlGroup($dossier->get('dateNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('paysNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('departementNaissance')); ?>
+        <?= $this->formControlGroup($dossier->get('villeNaissance')); ?>
     </div>
     <div class="col-md-4">
-        <?php echo $this->formControlGroup($dossier->get('numeroInsee')); ?>
-        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')); ?>
-        <?php echo $this->formControlGroup($dossier->get('adresse')); ?>
-        <?php echo $this->formControlGroup($dossier->get('email')); ?>
+        <?= $this->formControlGroup($dossier->get('numeroInsee')); ?>
+        <?= $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')); ?>
+        <?= $this->formControlGroup($dossier->get('adresse')); ?>
+        <?= $this->formControlGroup($dossier->get('email')); ?>
         <?php if ($dossier->has('emailPerso')) {
             echo $this->formControlGroup($dossier->get('emailPerso'));
         } ?>
-        <?php echo $this->formControlGroup($dossier->get('telephone')); ?>
+        <?= $this->formControlGroup($dossier->get('telephone')); ?>
     </div>
     <div class="col-md-5">
         <fieldset class="rib">
-            <legend><?php echo $dossier->get('rib')->getLabel() ?></legend>
-            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')); ?></div>
-            <?php echo $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
+            <legend><?= $dossier->get('rib')->getLabel() ?></legend>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('rib')->get('bic')); ?></div>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('rib')->get('iban')); ?></div>
+            <?= $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
         </fieldset>
         <?php if ($dossier->has('premierRecrutement')) {
             echo $this->formControlGroup($dossier->get('premierRecrutement'));
         } ?>
         <div class="statut">
-            <?php echo $this->formControlGroup($dossier->get('statut')); ?>
+            <?= $this->formControlGroup($dossier->get('statut')); ?>
         </div>
 
-        <?php echo $this->formHidden($dossier->get('id')); ?>
+        <?= $this->formHidden($dossier->get('id')); ?>
 
-        <?php echo $this->formHidden($this->form->get('security')); ?>
+        <?= $this->formHidden($this->form->get('security')); ?>
 
         <hr/>
         <?php if (!$form->isReadOnly()): ?>
-            <?php echo $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
+            <?= $this->formSubmit($this->form->get('enregistrer')->setAttribute('class', 'btn btn-primary')) ?>
         <?php endif ?>
 
         <!-- actions de validation du dossier -->
         <?php if ($canValider): ?>
             <a class="valider-dossier btn btn-success pop-ajax"
-               href="<?php echo $this->url('intervenant/dossier/valider', [], [], true) ?>"
+               href="<?= $this->url('intervenant/dossier/valider', [], [], true) ?>"
                title="Valider les données personnelles"
                data-content="Confirmez-vous cette validation ?"
                data-confirm="true"
@@ -89,7 +89,7 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
         <!-- actions de dévalidation du dossier -->
         <?php if ($canDevalider): ?>
             <a class="devalider-dossier btn btn-danger pop-ajax"
-               href="<?php echo $this->url('intervenant/dossier/devalider', [], [], true) ?>"
+               href="<?= $this->url('intervenant/dossier/devalider', [], [], true) ?>"
                title="Dévalider les données personnelles"
                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"
                data-confirm="true"
@@ -104,7 +104,7 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
         <!-- actions de suppression du dossier -->
         <?php if ($canSupprimer): ?>
             <a class="supprimer-dossier btn btn-danger pop-ajax"
-               href="<?php echo $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
+               href="<?= $this->url('intervenant/dossier/supprimer', [], [], true) ?>"
                title="Suppression des données personnelles"
                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous la suppression de toutes les données personnelles ?</p>"
                data-confirm="true"
@@ -117,7 +117,7 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
         <?php endif ?>
     </div>
 </div>
-<?php echo $this->form()->closeTag() ?>
+<?= $this->form()->closeTag() ?>
 
 
 <?php
@@ -126,11 +126,11 @@ if ($dossierEntity->getId()) {
 }
 ?>
 
-<script type="text/javascript" src="<?php echo $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>
+<script type="text/javascript" src="<?= $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>
 
 <script type="text/javascript">
     $(function () {
-        var readonly = <?php echo $form->isReadOnly() ? 'true' : 'false' ?>;
+        var readonly = <?= $form->isReadOnly() ? 'true' : 'false' ?>;
 
         managePaysNaissance();
         manageDepartementNaissance();

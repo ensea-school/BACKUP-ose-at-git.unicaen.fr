@@ -8,7 +8,7 @@
 use Application\Form\Plafond\PlafondApplicationForm;
 
 ?>
-    <h1 class="page-header"><?php echo $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
 <?php
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -18,11 +18,11 @@ echo $this->formHidden($form->get('plafond'));
 echo $this->formHidden($form->get('typeVolumeHoraire'));
 ?>
     <div class="row">
-        <div class="col-md-12"><?php echo $this->formControlGroup($form->get('plafondEtat')); ?></div>
+        <div class="col-md-12"><?= $this->formControlGroup($form->get('plafondEtat')); ?></div>
     </div>
     <div class="row">
-        <div class="col-md-6"><?php echo $this->formControlGroup($form->get('anneeDebut')); ?></div>
-        <div class="col-md-6"><?php echo $this->formControlGroup($form->get('anneeFin')); ?></div>
+        <div class="col-md-6"><?= $this->formControlGroup($form->get('anneeDebut')); ?></div>
+        <div class="col-md-6"><?= $this->formControlGroup($form->get('anneeFin')); ?></div>
     </div>
 <?php
 echo $this->formRow($form->get('submit'));

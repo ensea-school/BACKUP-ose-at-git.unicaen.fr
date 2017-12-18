@@ -16,6 +16,6 @@ $nombre = count($intervenants);
         default: echo $nombre.' intervenants trouvés';
     }
     ?></div>
-    <?php echo $this->partial('liste', compact('intervenants')); ?>
+    <?= $this->partial('liste', compact('intervenants')); ?>
 
 <?php endif; ?>

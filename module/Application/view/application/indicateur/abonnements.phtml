@@ -25,16 +25,16 @@ if (empty($indicateurs)): ?>
     <?php foreach ($indicateurs as $indicateur):
         $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
         ?>
-        <tr class="indicateur" id="<?php echo $indicateur->getId() ?>">
+        <tr class="indicateur" id="<?= $indicateur->getId() ?>">
 
-            <td class="categorie"><?php echo $indicateur->getType() ?></td>
-            <td class="numero"><?php echo $indicateur->getNumero() ?></td>
+            <td class="categorie"><?= $indicateur->getType() ?></td>
+            <td class="numero"><?= $indicateur->getNumero() ?></td>
             <td class="intitule">
                 <?php if ($indicateur->getCount()): ?>
-                    <a href="<?php echo $urlResult ?>"
-                       title="Cliquez pour vous rendre à la page concernée"><?php echo $indicateur->getLibelle() ?></a>
+                    <a href="<?= $urlResult ?>"
+                       title="Cliquez pour vous rendre à la page concernée"><?= $indicateur->getLibelle() ?></a>
                 <?php else: ?>
-                    <?php echo $indicateur->getLibelle() ?>
+                    <?= $indicateur->getLibelle() ?>
                 <?php endif ?>
             </td>
 

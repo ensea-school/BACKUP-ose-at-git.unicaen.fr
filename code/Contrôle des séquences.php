@@ -36,14 +36,14 @@ if ($tableToModif && isset($tables[$tableToModif]) && !empty($tables[$tableToMod
         </thead>
         <tbody>
         <?php foreach ($tables as $table => $d): extract($d); ?>
-            <tr<?php echo $probleme ? ' class="bg-danger"' : '' ?>>
-                <td><?php echo $table ?></td>
-                <td><?php echo $sequence ?></td>
-                <td><?php echo $seqVal ?></td>
-                <td><?php echo $maxId ?></td>
+            <tr<?= $probleme ? ' class="bg-danger"' : '' ?>>
+                <td><?= $table ?></td>
+                <td><?= $sequence ?></td>
+                <td><?= $seqVal ?></td>
+                <td><?= $maxId ?></td>
                 <td>
                     <?php if (!empty($sql)): ?>
-                        <button class="btn btn-default btn-maj-seq" data-table="<?php echo $table ?>">MAJ séquence</button>
+                        <button class="btn btn-default btn-maj-seq" data-table="<?= $table ?>">MAJ séquence</button>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -64,7 +64,7 @@ if ($tableToModif && isset($tables[$tableToModif]) && !empty($tables[$tableToMod
 
         function majSeq(table)
         {
-            var url = '<?php echo $_SERVER['REQUEST_URI'] ?>';
+            var url = '<?= $_SERVER['REQUEST_URI'] ?>';
 
             $.post(url, {"table-to-modif": table}, function (data)
             {

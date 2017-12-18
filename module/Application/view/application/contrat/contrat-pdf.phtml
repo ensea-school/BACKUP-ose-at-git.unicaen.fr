@@ -48,31 +48,31 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 <h1 class="titre">
     <?php if ($estUnAvenant): ?>
         Avenant au contrat de travail initial modifiant le volume horaire initial
-        de recrutement en qualité <?php echo $qualiteIntervenant ?>
+        de recrutement en qualité <?= $qualiteIntervenant ?>
     <?php else: ?>
-        Contrat de travail <?php echo $qualiteIntervenant ?>
+        Contrat de travail <?= $qualiteIntervenant ?>
     <?php endif ?>
 </h1>
 
 <p>Entre d'une part :</p>
 <p class="partie">
-    <span class="etab"><?php echo $etablissement ?></span>, <?php echo $etablissementRepresente ?>
+    <span class="etab"><?= $etablissement ?></span>, <?= $etablissementRepresente ?>
 </p>
 
 <p>et d'autre part :</p>
 <p class="partie">
-    <span class="intervenant"><?php echo $nomIntervenant ?></span>, né<?php echo $e ?> le <?php echo $dateNaissance ?><br />
+    <span class="intervenant"><?= $nomIntervenant ?></span>, né<?= $e ?> le <?= $dateNaissance ?><br />
 </p>
 <table class="partie">
     <tr>
         <td class="demeurant">Demeurant</td>
-        <td><?php echo $adresseIntervenant ?></td>
+        <td><?= $adresseIntervenant ?></td>
     </tr>
 </table>
 <table class="partie">
     <tr>
         <td class="insee">N° INSEE</td>
-        <td><?php echo $numeroINSEE ?></td>
+        <td><?= $numeroINSEE ?></td>
     </tr>
 </table>
 
@@ -90,25 +90,25 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 
     <?php if ($estUnAvenant): ?>
 
-        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dt>Article <?= $noArticle++ ?> :</dt>
         <dd>
-            <p>Le contrat de travail initial de <?php echo $nomCompletIntervenant ?> est <?php echo $contratIniModif ? "modifié" : "complété" ?> comme suit :</p>
-            <div class="services"><?php echo $servicesToString ?></div>
+            <p>Le contrat de travail initial de <?= $nomCompletIntervenant ?> est <?= $contratIniModif ? "modifié" : "complété" ?> comme suit :</p>
+            <div class="services"><?= $servicesToString ?></div>
         </dd>
 
     <?php else: ?>
 
-        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dt>Article <?= $noArticle++ ?> :</dt>
         <dd>
-            <p><?php echo $nomCompletIntervenant ?> est recruté<?php echo $e ?> pour l'année universitaire <?php echo $annee ?> en qualité
-            <?php echo $qualiteIntervenant ?>.</p>
+            <p><?= $nomCompletIntervenant ?> est recruté<?= $e ?> pour l'année universitaire <?= $annee ?> en qualité
+            <?= $qualiteIntervenant ?>.</p>
         </dd>
 
-        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dt>Article <?= $noArticle++ ?> :</dt>
         <dd>
-            <p>L'intéressé<?php echo $e ?> est chargé<?php echo $e ?> d'assurer les heures effectives d'enseignement suivantes :</p>
-            <div class="services"><?php echo $servicesToString ?></div>
-            <p>L'intéressé<?php echo $e ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
+            <p>L'intéressé<?= $e ?> est chargé<?= $e ?> d'assurer les heures effectives d'enseignement suivantes :</p>
+            <div class="services"><?= $servicesToString ?></div>
+            <p>L'intéressé<?= $e ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
         </dd>
 
     <?php endif ?>
@@ -117,24 +117,24 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 
 <p style="page-break-inside: avoid;">
     <dl class="articles">
-        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dt>Article <?= $noArticle++ ?> :</dt>
         <dd>
-            <p>L'intéressé<?php echo $e ?> sera rémunéré<?php echo $e ?> au taux horaire en vigueur pour les travaux dirigés fixé par arrêté publié au Journal Officiel, soit <?php echo \UnicaenApp\Util::formattedFloat($tauxHoraire->getValeur(), \NumberFormatter::DECIMAL, 2) ?> euros depuis le <?php echo $tauxHoraire->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>.</p>
-            <p>L'intéressé<?php echo $e ?> est autorisé<?php echo $e ?>, le cas échéant, à percevoir une rémunération
+            <p>L'intéressé<?= $e ?> sera rémunéré<?= $e ?> au taux horaire en vigueur pour les travaux dirigés fixé par arrêté publié au Journal Officiel, soit <?= \UnicaenApp\Util::formattedFloat($tauxHoraire->getValeur(), \NumberFormatter::DECIMAL, 2) ?> euros depuis le <?= $tauxHoraire->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>.</p>
+            <p>L'intéressé<?= $e ?> est autorisé<?= $e ?>, le cas échéant, à percevoir une rémunération
             de formation continue fondée sur l'article D714-60 du code de l'Éducation, dans les conditions et selon les modalités de calcul
             approuvées par le conseil d'administration de l'université.</p>
             <p>Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.</p>
-            <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $e ?> entraîne un abattement correspondant aux heures non faites.</p>
+            <p>Une inexécution partielle du service imputable à l'intéressé<?= $e ?> entraîne un abattement correspondant aux heures non faites.</p>
         </dd>
     </dl>
 </p>
 
-<p class="fait">Fait à <?php echo $lieuSignature ?>, le <?php echo $dateSignature ?></p>
+<p class="fait">Fait à <?= $lieuSignature ?>, le <?= $dateSignature ?></p>
 
 <table class="signatures">
     <tr>
-        <td>Signature de l'intéressé<?php echo $e ?><br /><?php echo $nomIntervenant ?></td>
-        <td>Pour <?php echo $civilitePresident ?>, par délégation :</td>
+        <td>Signature de l'intéressé<?= $e ?><br /><?= $nomIntervenant ?></td>
+        <td>Pour <?= $civilitePresident ?>, par délégation :</td>
     </tr>
     <tr>
         <td><br /><br /><br /><br /></td>
@@ -144,4 +144,4 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 
 <p class="attention">Attention : Si le contrat n'est pas retourné signé, aucun service ne sera mis en paiement.</p>
 
-<p class="renvoyer"><?php echo $mentionRetourner ?></p>
+<p class="renvoyer"><?= $mentionRetourner ?></p>

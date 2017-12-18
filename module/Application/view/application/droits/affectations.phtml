@@ -28,7 +28,7 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
     <tr>
     <?php foreach( $head as $id => $label ): ?>
         <th style="white-space: nowrap">
-            <?php echo $label ?>
+            <?= $label ?>
         </th>
     <?php endforeach; ?>
     </tr>
@@ -49,13 +49,13 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
             echo $str;
         ?></td>
         <?php endif; ?>
-        <td><?php echo $affectation->getRole() ?></td>
-        <td><?php echo $affectation->getPersonnel() ?></td>
+        <td><?= $affectation->getRole() ?></td>
+        <td><?= $affectation->getPersonnel() ?></td>
         <td style="text-align: center;width:1%;white-space: nowrap"><?php
             if (! $affectation->getSource()->getImportable() && $canEdit){
                 ?>
-                <a href="<?php echo $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><span class="glyphicon glyphicon-edit"></span></a>
-                <a href="<?php echo $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><span class="glyphicon glyphicon-remove"></span></a>
+                <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><span class="glyphicon glyphicon-edit"></span></a>
+                <a href="<?= $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><span class="glyphicon glyphicon-remove"></span></a>
                 <?php
             }else{
                 echo $affectation->getSource();
@@ -66,9 +66,9 @@ $ajoutUrl = $this->url( 'droits/affectations/edition' );
 </tbody>
 </table>
 <?php if ($canEdit): // droits ?>
-    <a href="<?php echo $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="affectation-edition">Ajout d'une nouvelle affectation</a>
+    <a href="<?= $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="affectation-edition">Ajout d'une nouvelle affectation</a>
 <?php endif; ?>
-<?php echo $this->modalAjaxDialog('affectations-edition-suppression'); ?>
+<?= $this->modalAjaxDialog('affectations-edition-suppression'); ?>
 <script type="text/javascript">
     $(function() {
         $("body").on("affectation-edition", function(event, data) {

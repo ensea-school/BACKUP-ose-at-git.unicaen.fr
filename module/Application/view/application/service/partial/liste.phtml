@@ -1,7 +1,7 @@
 <?php
 /**
- * Liste des services toute simple. 
- * 
+ * Liste des services toute simple.
+ *
  * Inclue le total des heures par enseignement et le total global.
  */
 
@@ -31,16 +31,16 @@ $totalHeures = 0.0;
     </thead>
     <tbody>
         <?php foreach ($this->services as $service): /* @var $service \Application\Entity\Db\Service */ ?>
-        <?php 
+        <?php
         $heures = $service->getVolumeHoraireListe()->getHeures();
         $totalHeures += $heures;
         ?>
         <tr>
-            <td><?php echo $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null ?></td>
-            <td><?php echo $service->getElementPedagogique()->getSourceCode() ?></td>
-            <td><?php echo $service->getElementPedagogique()->getLibelle() ?></td>
+            <td><?= $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null ?></td>
+            <td><?= $service->getElementPedagogique()->getSourceCode() ?></td>
+            <td><?= $service->getElementPedagogique()->getLibelle() ?></td>
             <td class="heures">
-                <?php echo \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2) ?>
+                <?= \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2) ?>
             </td>
         </tr>
         <?php endforeach ?>
@@ -51,7 +51,7 @@ $totalHeures = 0.0;
             <td></td>
             <td class="heures heures-total">Total :</td>
             <td class="heures heures-total">
-                <?php echo \UnicaenApp\Util::formattedFloat($totalHeures, \NumberFormatter::DECIMAL, 2) ?>
+                <?= \UnicaenApp\Util::formattedFloat($totalHeures, \NumberFormatter::DECIMAL, 2) ?>
             </td>
         </tr>
     </tfoot>

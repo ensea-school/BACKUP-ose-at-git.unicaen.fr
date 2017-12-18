@@ -140,11 +140,11 @@
             <table>
                 <tr>
                     <td>Composante d'affectation</td>
-                    <td><?php echo $structure ? $structure : 'Toutes' ?></td>
+                    <td><?= $structure ? $structure : 'Toutes' ?></td>
                 </tr>
                 <tr>
                     <td>Type d'intervenant</td>
-                    <td><?php echo $typeIntervenant ? $typeIntervenant : 'Tous' ?></td>
+                    <td><?= $typeIntervenant ? $typeIntervenant : 'Tous' ?></td>
                 </tr>
             </table>
         </td>
@@ -205,21 +205,21 @@
             }
             ?>
             <tr>
-                <td class="c1"><?php echo $s == 1 ? $di['nom'] : '' ?></td>
-                <td class="c2"><?php echo $s == 1 ? $di['statut'] : '' ?></td>
-                <td class="c3"><?php echo $s == 1 ? $di['grade'] : '' ?></td>
-                <td class="c4"><?php echo $ls['structure'] != $ds['structure'] ? $ds['structure'] : '' ?></td>
-                <td class="c5"><?php echo $ls['type-formation'] != $ds['type-formation'] ? $ds['type-formation'] : '' ?></td>
-                <td class="c6"><?php echo $ls['formation'] != $ds['formation'] ? $ds['formation'] : '' ?></td>
-                <td class="c7"><?php echo $ls['enseignement'] != $ds['enseignement'] ? $ds['enseignement'] : '' ?></td>
+                <td class="c1"><?= $s == 1 ? $di['nom'] : '' ?></td>
+                <td class="c2"><?= $s == 1 ? $di['statut'] : '' ?></td>
+                <td class="c3"><?= $s == 1 ? $di['grade'] : '' ?></td>
+                <td class="c4"><?= $ls['structure'] != $ds['structure'] ? $ds['structure'] : '' ?></td>
+                <td class="c5"><?= $ls['type-formation'] != $ds['type-formation'] ? $ds['type-formation'] : '' ?></td>
+                <td class="c6"><?= $ls['formation'] != $ds['formation'] ? $ds['formation'] : '' ?></td>
+                <td class="c7"><?= $ls['enseignement'] != $ds['enseignement'] ? $ds['enseignement'] : '' ?></td>
 
                 <td class="c8"></td>
                 <td class="c9"></td>
-                <td class="c10"><?php echo \UnicaenApp\Util::formattedFloat($ds['fi']) ?></td>
-                <td class="c11"><?php echo \UnicaenApp\Util::formattedFloat($ds['fa']) ?></td>
-                <td class="c12"><?php echo \UnicaenApp\Util::formattedFloat($ds['fc']) ?></td>
-                <td class="c13"><?php echo \UnicaenApp\Util::formattedFloat($ds['referentiel']) ?></td>
-                <td class="c14"><?php echo \UnicaenApp\Util::formattedFloat($ds['total']) ?></td>
+                <td class="c10"><?= \UnicaenApp\Util::formattedFloat($ds['fi']) ?></td>
+                <td class="c11"><?= \UnicaenApp\Util::formattedFloat($ds['fa']) ?></td>
+                <td class="c12"><?= \UnicaenApp\Util::formattedFloat($ds['fc']) ?></td>
+                <td class="c13"><?= \UnicaenApp\Util::formattedFloat($ds['referentiel']) ?></td>
+                <td class="c14"><?= \UnicaenApp\Util::formattedFloat($ds['total']) ?></td>
                 <td class="c15"></td>
             </tr>
             <?php
@@ -228,7 +228,7 @@
 
         endforeach; ?>
         <tr class="total">
-            <td class="c1">Total <?php echo $di['nom'] ?></td>
+            <td class="c1">Total <?= $di['nom'] ?></td>
             <td class="c2"></td>
             <td class="c3"></td>
             <td class="c4"></td>
@@ -236,14 +236,14 @@
             <td class="c6"></td>
             <td class="c7"></td>
 
-            <td class="c8"><?php echo \UnicaenApp\Util::formattedFloat($di['service-du']) ?></td>
-            <td class="c9"><?php echo \UnicaenApp\Util::formattedFloat($di['modif-service-du']) ?></td>
-            <td class="c10"><?php echo \UnicaenApp\Util::formattedFloat($di['fi']) ?></td>
-            <td class="c11"><?php echo \UnicaenApp\Util::formattedFloat($di['fa']) ?></td>
-            <td class="c12"><?php echo \UnicaenApp\Util::formattedFloat($di['fc']) ?></td>
-            <td class="c13"><?php echo \UnicaenApp\Util::formattedFloat($di['referentiel']) ?></td>
-            <td class="c14"><?php echo \UnicaenApp\Util::formattedFloat($di['total']) ?></td>
-            <td class="<?php echo ($di['solde'] < 0) ? 'solde_negatif' : 'c15' ?>"><?php echo \UnicaenApp\Util::formattedFloat($di['solde']) ?></td>
+            <td class="c8"><?= \UnicaenApp\Util::formattedFloat($di['service-du']) ?></td>
+            <td class="c9"><?= \UnicaenApp\Util::formattedFloat($di['modif-service-du']) ?></td>
+            <td class="c10"><?= \UnicaenApp\Util::formattedFloat($di['fi']) ?></td>
+            <td class="c11"><?= \UnicaenApp\Util::formattedFloat($di['fa']) ?></td>
+            <td class="c12"><?= \UnicaenApp\Util::formattedFloat($di['fc']) ?></td>
+            <td class="c13"><?= \UnicaenApp\Util::formattedFloat($di['referentiel']) ?></td>
+            <td class="c14"><?= \UnicaenApp\Util::formattedFloat($di['total']) ?></td>
+            <td class="<?= ($di['solde'] < 0) ? 'solde_negatif' : 'c15' ?>"><?= \UnicaenApp\Util::formattedFloat($di['solde']) ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -259,11 +259,11 @@
 
         <td class="c8"></td>
         <td class="c9"></td>
-        <td class="c10"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['fi']) ?></td>
-        <td class="c11"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['fa']) ?></td>
-        <td class="c12"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['fc']) ?></td>
-        <td class="c13"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['referentiel']) ?></td>
-        <td class="c14"><?php echo \UnicaenApp\Util::formattedFloat($data['total']['total']) ?></td>
+        <td class="c10"><?= \UnicaenApp\Util::formattedFloat($data['total']['fi']) ?></td>
+        <td class="c11"><?= \UnicaenApp\Util::formattedFloat($data['total']['fa']) ?></td>
+        <td class="c12"><?= \UnicaenApp\Util::formattedFloat($data['total']['fc']) ?></td>
+        <td class="c13"><?= \UnicaenApp\Util::formattedFloat($data['total']['referentiel']) ?></td>
+        <td class="c14"><?= \UnicaenApp\Util::formattedFloat($data['total']['total']) ?></td>
         <td class="c15"></td>
     </tr>
     </tfoot>
@@ -275,10 +275,10 @@
         <td class="sign-cell">
             <table class="signature">
                 <tr>
-                    <td class="signature-titre"><?php echo $signature1 ?></td>
+                    <td class="signature-titre"><?= $signature1 ?></td>
                 </tr>
                 <tr>
-                    <td class="signature-personne"><?php echo nl2br($signataire1) ?></td>
+                    <td class="signature-personne"><?= nl2br($signataire1) ?></td>
                 </tr>
                 <tr>
                     <td>Date :</td>
@@ -297,10 +297,10 @@
         <td class="sign-cell">
             <table class="signature">
                 <tr>
-                    <td class="signature-titre"><?php echo $signature2 ?></td>
+                    <td class="signature-titre"><?= $signature2 ?></td>
                 </tr>
                 <tr>
-                    <td class="signature-personne"><?php echo nl2br($signataire2) ?></td>
+                    <td class="signature-personne"><?= nl2br($signataire2) ?></td>
                 </tr>
                 <tr>
                     <td>Date :</td>

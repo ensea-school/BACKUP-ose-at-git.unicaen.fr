@@ -44,10 +44,10 @@ $inHome->setUncheckedValue('0');
 $noAbo = new NotificationIndicateur();
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 <?php foreach ($indics as $categorie => $cIndics): ?>
     <div class="panel panel-default indicateurs">
-        <div class="panel-heading"><?php echo $categorie ?></div>
+        <div class="panel-heading"><?= $categorie ?></div>
         <table class="table table-bordered table-condensed">
             <thead>
             <tr>
@@ -67,32 +67,32 @@ $noAbo = new NotificationIndicateur();
                 $urlResult = $this->url('indicateur/result', ['indicateur' => $indicateur->getId()]);
 
                 ?>
-                <tr class="indicateur" id="<?php echo $indicateur->getId() ?>"
-                    data-url="<?php echo $urlAbonner ?>">
+                <tr class="indicateur" id="<?= $indicateur->getId() ?>"
+                    data-url="<?= $urlAbonner ?>">
 
                     <td class="numero">
-                        <?php echo $indicateur->getNumero() ?>
+                        <?= $indicateur->getNumero() ?>
                     </td>
 
                     <td class="intitule">
                         <?php if ($indicateur->getCount()): ?>
-                            <a href="<?php echo $urlResult ?>"
-                               title="Cliquez pour vous rendre à la page concernée"><?php echo $indicateur->getLibelle() ?></a>
+                            <a href="<?= $urlResult ?>"
+                               title="Cliquez pour vous rendre à la page concernée"><?= $indicateur->getLibelle() ?></a>
                         <?php else: ?>
-                            <?php echo $indicateur->getLibelle() ?>
+                            <?= $indicateur->getLibelle() ?>
                         <?php endif ?>
                     </td>
 
                     <?php if ($showAbonnements): ?>
                         <td class="page-accueil">
-                            <?php echo $this->formcheckbox($inHome->setValue($abonnement->getInHome())); ?>
+                            <?= $this->formcheckbox($inHome->setValue($abonnement->getInHome())); ?>
                         </td>
                         <td class="notification">
-                            <?php echo $this->formSelect($notif->setValue($abonnement->getFrequence())); ?>
+                            <?= $this->formSelect($notif->setValue($abonnement->getFrequence())); ?>
                             <span class="indicateur-info glyphicon glyphicon-info-sign" aria-hidden="true"
                                   data-toggle="tooltip" data-placement="auto" data-html="true"
-                                  title="<?php echo $abonnement->getFrequence() ? $abonnement->getExtraInfos() : '' ?>"
-                                  style="<?php echo $abonnement->getFrequence() ? '' : 'display: none' ?>"></span>
+                                  title="<?= $abonnement->getFrequence() ? $abonnement->getExtraInfos() : '' ?>"
+                                  style="<?= $abonnement->getFrequence() ? '' : 'display: none' ?>"></span>
                         </td>
                     <?php endif ?>
                 </tr>

@@ -31,32 +31,32 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
 
 ?>
 
-<div class="validation panel panel-<?php echo $validation->getId() ? 'success' : 'default' ?>" id="<?php echo $id ?>">
+<div class="validation panel panel-<?= $validation->getId() ? 'success' : 'default' ?>" id="<?= $id ?>">
     <div class="panel-heading panel-heading-h3">
-        <h3><?php echo $validation->getId() ? 'Validation ' : 'Enseignements ' ?><?php echo $structure ?></h3>
+        <h3><?= $validation->getId() ? 'Validation ' : 'Enseignements ' ?><?= $structure ?></h3>
     </div>
     <div class="panel-body">
         <!-- Informations -->
         <?php if ($validation->getId()): ?>
             <ul style="list-style-type: none">
                 <li><span class="glyphicon glyphicon-thumbs-up"></span> Validé
-                    le <?php echo $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
-                    par <?php echo $this->utilisateur($validation->getHistoCreateur()) ?></li>
+                    le <?= $validation->getHistoCreation()->format(\Application\Constants::DATE_FORMAT) ?>
+                    par <?= $this->utilisateur($validation->getHistoCreateur()) ?></li>
             </ul>
         <?php endif; ?>
 
         <!-- Enseignements concernés -->
         <a title="Cliquez pour afficher/masquer les enseignements concernés"
-           href="#details-enseignements-<?php echo $id ?>"
+           href="#details-enseignements-<?= $id ?>"
            role="button"
            aria-expanded="false"
-           aria-controls="details-enseignements-<?php echo $id ?>"
+           aria-controls="details-enseignements-<?= $id ?>"
            data-toggle="collapse"
         >Enseignements concernés
             <small>(cliquez pour afficher/cacher)</small>
         </a>
-        <div class="collapse <?php echo $validation->getId() ? '' : 'in' ?>" id="details-enseignements-<?php echo $id ?>">
-            <?php echo $this->serviceListe($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
+        <div class="collapse <?= $validation->getId() ? '' : 'in' ?>" id="details-enseignements-<?= $id ?>">
+            <?= $this->serviceListe($services)->setTypeVolumeHoraire($typeVolumeHoraire)->setReadonly(true)->render(); ?>
         </div>
 
     </div>
@@ -66,7 +66,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <!-- Actions -->
             <?php if ($validerUrl): ?>
                 <a
-                    href="<?php echo $validerUrl ?>"
+                    href="<?= $validerUrl ?>"
                     class="validation-delete btn btn-primary btn-primary pop-ajax"
                     data-submit-reload="true"
                     data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette validation ?</p>"
@@ -77,7 +77,7 @@ $id = $validation->getId() ? 'validation-' . $validation->getId() : 'structure-'
             <?php endif; ?>
             <?php if ($devaliderUrl): ?>
                 <a
-                    href="<?php echo $devaliderUrl ?>"
+                    href="<?= $devaliderUrl ?>"
                     class="validation-delete btn btn-primary btn-danger pop-ajax"
                     data-submit-reload="true"
                     data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette dévalidation ?</p>"

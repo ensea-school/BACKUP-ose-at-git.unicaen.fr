@@ -18,10 +18,10 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>
 <?php if ($form): ?>
-    <?php echo $this->form()->openTag($form->prepare()); ?>
+    <?= $this->form()->openTag($form->prepare()); ?>
     <div class="row">
         <div class="col-md-12">
-            <?php echo $this->formcontrolgroup($form->get('libelle')); ?>
+            <?= $this->formcontrolgroup($form->get('libelle')); ?>
         </div>
     </div>
 
@@ -34,26 +34,26 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            <?php echo $this->formcontrolgroup($form->get('anneeCivile')); ?>
+            <?= $this->formcontrolgroup($form->get('anneeCivile')); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <?php echo $this->formcontrolgroup($form->get('annee1')); ?>
+            <?= $this->formcontrolgroup($form->get('annee1')); ?>
         </div>
         <div class="col-md-6">
-            <?php echo $this->formcontrolgroup($form->get('annee2')); ?>
+            <?= $this->formcontrolgroup($form->get('annee2')); ?>
         </div>
     </div>
-    <?php echo $this->formRow($form->get('submit')); ?>
-    <?php echo $this->form()->closeTag(); ?>
+    <?= $this->formRow($form->get('submit')); ?>
+    <?= $this->form()->closeTag(); ?>
     <script>
 
         formSaisieDotationUpdateAnneeCivile();
 
         function formSaisieDotationUpdateAnneeCivile()
         {
-            var form = $('#<?php echo $fid ?>'),
+            var form = $('#<?= $fid ?>'),
                 annee1 = form.find('input[name="annee1"]'),
                 annee2 = form.find('input[name="annee2"]'),
                 anneeCivile = form.find('input[name="anneeCivile"]'),

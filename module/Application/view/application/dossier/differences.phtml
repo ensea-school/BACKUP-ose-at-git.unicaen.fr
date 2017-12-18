@@ -18,13 +18,13 @@ if ($canPurge) {
 }
 
 ?>
-    <h1 class="page-header"><?php echo $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
 
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>Données concernées</th>
-            <th>Données importées de <?php echo $intervenant->getSource() ?></th>
+            <th>Données importées de <?= $intervenant->getSource() ?></th>
             <th>Données personnelles saisies</th>
             <th>Horodatage</th>
         </tr>
@@ -33,21 +33,21 @@ if ($canPurge) {
 
         <?php foreach ($differences as $difference): ?>
             <tr>
-                <td><?php echo $difference->getAttrName() ?></td>
+                <td><?= $difference->getAttrName() ?></td>
                 <td>
-                    <pre><?php echo $difference->getAttrOldValue() ?></pre>
+                    <pre><?= $difference->getAttrOldValue() ?></pre>
                     <div class="pull-right">
-                        <small>Source: <?php echo $difference->getAttrOldSourceName() ?></small>
+                        <small>Source: <?= $difference->getAttrOldSourceName() ?></small>
                     </div>
                 </td>
                 <td>
-                    <pre><?php echo $difference->getAttrNewValue() ?></pre>
+                    <pre><?= $difference->getAttrNewValue() ?></pre>
                     <div class="pull-right">
-                        <small>Source: <?php echo $difference->getAttrNewSourceName() ?></small>
+                        <small>Source: <?= $difference->getAttrNewSourceName() ?></small>
                     </div>
                 </td>
                 <td>
-                    <?php echo sprintf("Le %s <br>par %s",
+                    <?= sprintf("Le %s <br>par %s",
                         $difference->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT),
                         $difference->getHistoModificateur()) ?>
                 </td>
@@ -62,12 +62,12 @@ if ($canPurge) {
     </a>
 
     <a class="btn btn-warning"
-       href="<?php echo $this->url('intervenant/dossier', ['intervenant' => $intervenant->getRouteParam()]) ?>"
-    >Voir les données personnelles de <?php echo $intervenant ?></a>
+       href="<?= $this->url('intervenant/dossier', ['intervenant' => $intervenant->getRouteParam()]) ?>"
+    >Voir les données personnelles de <?= $intervenant ?></a>
 
 <?php if ($canPurge): ?>
 
-    <a href="<?php echo $urlPurge ?>"
+    <a href="<?= $urlPurge ?>"
        class="btn btn-danger pop-ajax"
        data-submit-event="event-purger-indic"
        data-confirm="true"

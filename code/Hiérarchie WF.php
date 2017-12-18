@@ -41,10 +41,10 @@ function renderEtape(\Application\Entity\Db\WfEtape $etape, $deps, $etapes)
 {
     ?>
     <div style="margin-left:3em;border-left:1px #ddd solid">
-        <?php echo $etape->getCode() ?>
+        <?= $etape->getCode() ?>
         <?php if (isset($deps[$etape->getId()])) {
             foreach ($deps[$etape->getId()] as $dep): ?>
-                <?php echo renderEtape($etapes[$dep], $deps, $etapes) ?>
+                <?= renderEtape($etapes[$dep], $deps, $etapes) ?>
             <?php endforeach;
         } ?>
     </div>

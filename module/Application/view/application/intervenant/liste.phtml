@@ -16,15 +16,15 @@
     <tbody class="table-hover">
     <?php foreach($intervenants as $sourceCode => $intervenant): ?>
     <tr>
-        <td style="white-space: nowrap"><a href="<?php echo $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
+        <td style="white-space: nowrap"><a href="<?= $this->url('intervenant/voir', ['intervenant' => $sourceCode]); ?>">
                 <span class="glyphicon glyphicon-eye-open"></span> Fiche
             </a></td>
-        <td><?php echo $intervenant['civilite'] ?></td>
-        <td><?php echo $intervenant['nom'] ?></td>
-        <td><?php echo $intervenant['prenom'] ?></td>
-        <td><?php echo $intervenant['structure'] ?></td>
-        <td><?php echo $intervenant['date-naissance']->format(\Application\Constants::DATE_FORMAT) ?></td>
-        <td><?php echo $intervenant['numero-personnel'] ?></td>
+        <td><?= $intervenant['civilite'] ?></td>
+        <td><?= $intervenant['nom'] ?></td>
+        <td><?= $intervenant['prenom'] ?></td>
+        <td><?= $intervenant['structure'] ?></td>
+        <td><?= $intervenant['date-naissance']->format(\Application\Constants::DATE_FORMAT) ?></td>
+        <td><?= $intervenant['numero-personnel'] ?></td>
     </tr>
     </tbody>
     <?php endforeach; ?>

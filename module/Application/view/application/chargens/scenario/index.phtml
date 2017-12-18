@@ -20,7 +20,7 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
 
 
 ?>
-    <h1 class="page-header"><?php echo $title ?></h1>
+    <h1 class="page-header"><?= $title ?></h1>
     <table class="table table-bordered table-sort">
         <thead>
         <tr>
@@ -39,19 +39,19 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
 
             ?>
             <tr>
-                <td><?php echo $scenario->getLibelle(); ?></td>
-                <td style="text-align:center"><?php echo $scenario->getTypeString() ?></td>
-                <td><?php echo $this->structure($scenario->getStructure())->renderLink(); ?></td>
+                <td><?= $scenario->getLibelle(); ?></td>
+                <td style="text-align:center"><?= $scenario->getTypeString() ?></td>
+                <td><?= $this->structure($scenario->getStructure())->renderLink(); ?></td>
                 <?php if ($canEdit): ?>
                     <td style="text-align: center">
                         <?php if ($canEditScenario): ?>
                             <a class="pop-ajax" data-submit-reload="true"
-                               href="<?php echo $this->url('chargens/scenario/saisir', ['scenario' => $scenario->getId()]) ?>"
+                               href="<?= $this->url('chargens/scenario/saisir', ['scenario' => $scenario->getId()]) ?>"
                                title="Modifier le scénario"><span class="glyphicon glyphicon-edit"></span></a>
                         <?php endif; ?>
                         <?php if ($canCopy): ?>
                             <a class="pop-ajax" data-submit-reload="true"
-                               href="<?php echo $this->url('chargens/scenario/dupliquer', ['scenario' => $scenario->getId()]) ?>"
+                               href="<?= $this->url('chargens/scenario/dupliquer', ['scenario' => $scenario->getId()]) ?>"
                                title="Dupliquer le scénario"><span class="glyphicon glyphicon-copy"></span></a>
                         <?php endif; ?>
                         <?php if ($canEditScenario): ?>
@@ -61,7 +61,7 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
                                data-confirm-button="Oui"
                                data-cancel-button="Non"
                                data-submit-reload="true"
-                               href="<?php echo $this->url('chargens/scenario/supprimer', ['scenario' => $scenario->getId()]) ?>"
+                               href="<?= $this->url('chargens/scenario/supprimer', ['scenario' => $scenario->getId()]) ?>"
                                title="Supprimer le scénario"><span class="glyphicon glyphicon-remove"></span></a>
                         <?php endif; ?>
                     </td>
@@ -72,10 +72,10 @@ $canEdit = $canEditLocal || $canCopy || $canEditEtab;
     </table>
 <?php if ($canEditLocal): ?>
     <a class="btn btn-primary pop-ajax" data-submit-reload="true"
-       href="<?php echo $this->url('chargens/scenario/saisir'); ?>"><span class="glyphicon glyphicon-plus"></span> Ajout d'un
+       href="<?= $this->url('chargens/scenario/saisir'); ?>"><span class="glyphicon glyphicon-plus"></span> Ajout d'un
         nouveau scenario local</a>
 <?php endif; ?>
-<a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
+<a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
     <i class="fa fa-undo" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>

@@ -16,11 +16,11 @@ $canEditEtab = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION));
 
 ?>
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?= $title ?></h1>
 
 <div class="chargens-filtre">
     <label>Scénario : </label>
-    <?php echo $this->formSelect($filtre->get('scenario')) ?>
+    <?= $this->formSelect($filtre->get('scenario')) ?>
     <button class="btn btn-default" type="button" onclick="changeScenario()"><span class="glyphicon glyphicon-expand"></span> Afficher</button>
 </div>
 <br />
@@ -30,8 +30,8 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-h3">
                 <h3>
-                    <?php echo $structure['libelle'] ?>
-                    <span class="pull-right" style="font-size:80%" id="heures-<?php echo $sid ?>"></span>
+                    <?= $structure['libelle'] ?>
+                    <span class="pull-right" style="font-size:80%" id="heures-<?= $sid ?>"></span>
                 </h3>
             </div>
             <table class="table table-hover table-bordered seuils-dedoublement">
@@ -40,14 +40,14 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
                     <th style="width:30%">Type de formation</th>
                     <?php foreach ($structure['types-interventions'] as $tiid => $typeIntervention): ?>
                         <th style="width:10em"
-                            title="<?php echo $typeIntervention['libelle'] ?>"><?php echo $typeIntervention['code'] ?></th>
+                            title="<?= $typeIntervention['libelle'] ?>"><?= $typeIntervention['code'] ?></th>
                     <?php endforeach; ?>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($structure['groupes-type-formations'] as $gtfid => $gtfLibelle): ?>
-                    <tr id="seuil-gtf-<?php echo $gtfid ?>">
-                        <td><?php echo $gtfLibelle; ?></td>
+                    <tr id="seuil-gtf-<?= $gtfid ?>">
+                        <td><?= $gtfLibelle; ?></td>
                         <?php foreach ($structure['types-interventions'] as $tiid => $typeIntervention): ?>
                             <td style="text-align:center">
                                 <?php
@@ -80,7 +80,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
     <?php endforeach;
 } ?>
 
-<a class="btn btn-default" href="<?php echo $this->url('chargens'); ?>">
+<a class="btn btn-default" href="<?= $this->url('chargens'); ?>">
     <i class="fa fa-undo" aria-hidden="true"></i>
     Retour au menu des charges d'enseignement
 </a>
@@ -88,7 +88,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 
     function changementSeuil(element)
     {
-        var url = "<?php echo $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
+        var url = "<?= $scenario ? $this->url('chargens/seuil/modifier', ['scenario' => $scenario->getId()]) : null ?>";
         var params = $(element).data();
         params.dedoublement = $(element).val();
 
@@ -105,7 +105,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 
     function seuilCalcHeures()
     {
-        var url = "<?php echo $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>";
+        var url = "<?= $scenario ? $this->url('chargens/seuil/calc-heures', ['scenario' => $scenario->getId()]) : null ?>";
 
         $.post(url, {}, function (data)
         {
@@ -123,7 +123,7 @@ $canEditcomp = $this->isAllowed(Privileges::getResourceId(Privileges::CHARGENS_S
 
     function changeScenario()
     {
-        var url = "<?php echo $this->url('chargens/seuil') ?>";
+        var url = "<?= $this->url('chargens/seuil') ?>";
 
         location.href = url + '/' + $(".chargens-filtre #scenario").val();
     }

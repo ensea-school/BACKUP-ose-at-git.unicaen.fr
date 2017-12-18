@@ -77,7 +77,7 @@ echo "Nombre de noeuds = " . $nbChoix . '<br />';
         <th rowspan="2" style="width:5em">Choix min</th>
         <th rowspan="2" style="width:5em">Choix max</th>
         <?php foreach ($noeuds as $poids): ?>
-            <th colspan="2">Noeud de poids = <?php echo $poids ?></th>
+            <th colspan="2">Noeud de poids = <?= $poids ?></th>
         <?php endforeach; ?>
         <th style="width:5em" rowspan="2">Tot Eff.</th>
     </tr>
@@ -95,18 +95,18 @@ echo "Nombre de noeuds = " . $nbChoix . '<br />';
 
             ?>
             <tr>
-                <th><?php echo $choixMin ?></th>
-                <th><?php echo $choixMax ?></th>
+                <th><?= $choixMin ?></th>
+                <th><?= $choixMax ?></th>
                 <?php foreach ($noeuds as $poids):
 
                     $coef = calc($choixMin, $choixMax, $poids, $maxPoids, $totalPoids, $nbChoix);
                     $eff  = $coef * $effectifs;
                     $totEff += $eff;
                     ?>
-                    <td><?php echo $coef ?></td>
-                    <td><?php echo $eff ?></td>
+                    <td><?= $coef ?></td>
+                    <td><?= $eff ?></td>
                 <?php endforeach; ?>
-                <td><?php echo $totEff ?></td>
+                <td><?= $totEff ?></td>
             </tr>
 
         <?php }

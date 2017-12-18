@@ -26,23 +26,23 @@ foreach ($typeModulateurs as $tm) {
     if ($this->isAllowed($tm,Privileges::MODULATEUR_VISUALISATION)) { ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="panel-title"><?php echo $tm->getCode() ?>
-                    <span style="position:absolute; left: 300px"><?php echo $tm->getLibelle() ?></span>
+                <div class="panel-title"><?= $tm->getCode() ?>
+                    <span style="position:absolute; left: 300px"><?= $tm->getLibelle() ?></span>
                 <span style="position:absolute; right: 50px;">
 
         <?php if ($canEdit): ?>
             <a class="ajax-modal" data-event="modulateur-saisie"
-               href="<?php echo $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId()]) ?>"
+               href="<?= $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId()]) ?>"
                title="Ajouter un modulateur">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
         <?php endif ?>
                     <a class="ajax-modal" data-event="modulateur-saisie"
-                       href="<?php echo $this->url('modulateur/type-modulateur-saisie', ['typeModulateur' => $tm->getId()]) ?>"
+                       href="<?= $this->url('modulateur/type-modulateur-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                        title="Modifier le type de modulateur">
                         <span class="glyphicon glyphicon-edit"></span></a>
         <a class="pop-ajax"
-           href="<?php echo $this->url('modulateur/type-modulateur-delete', ['typeModulateur' => $tm->getId()]) ?>"
+           href="<?= $this->url('modulateur/type-modulateur-delete', ['typeModulateur' => $tm->getId()]) ?>"
            title="Supprimer le type de modulateur"
            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
            data-confirm="true"
@@ -60,15 +60,15 @@ foreach ($typeModulateurs as $tm) {
                     <div class="col-md-3">
                         <div class="row">
                             <div class="col-md-9">Publique :</div>
-                            <div class="col-md-3"><?php echo affBooleen($tm->getPublique()) ?></div>
+                            <div class="col-md-3"><?= affBooleen($tm->getPublique()) ?></div>
                         </div>
                         <div class="row">
                             <div class="col-md-9">Obligatoire :</div>
-                            <div class="col-md-3"><?php echo affBooleen($tm->getObligatoire()) ?></div>
+                            <div class="col-md-3"><?= affBooleen($tm->getObligatoire()) ?></div>
                         </div>
                         <div class="row">
                             <div class="col-md-9">Saisie par ens:</div>
-                            <div class="col-md-3"><?php echo affBooleen($tm->getSaisieParEnseignant()) ?></div>
+                            <div class="col-md-3"><?= affBooleen($tm->getSaisieParEnseignant()) ?></div>
                         </div>
                     </div>
                     <div class="col-md-9">
@@ -86,18 +86,18 @@ foreach ($typeModulateurs as $tm) {
                             <?php foreach ($modulateurs as $modu) {
                                 if ($tm->getId() == $modu->getTypeModulateur()->getId()) { ?>
                                     <tr>
-                                        <td><?php echo $modu->getCode() ?></td>
-                                        <td><?php echo $modu->getLibelle() ?></td>
-                                        <td><?php echo Util::formattedNumber($modu->getPonderationServiceDu()) ?></td>
-                                        <td><?php echo Util::formattedNumber($modu->getPonderationServiceCompl()) ?></td>
+                                        <td><?= $modu->getCode() ?></td>
+                                        <td><?= $modu->getLibelle() ?></td>
+                                        <td><?= Util::formattedNumber($modu->getPonderationServiceDu()) ?></td>
+                                        <td><?= Util::formattedNumber($modu->getPonderationServiceCompl()) ?></td>
                                         <?php if ($canEdit) { ?>
                                             <td style="text-align:center;width:1px;white-space: nowrap">
                                                 <a class="ajax-modal" data-event="modulateur-saisie"
-                                                   href="<?php echo $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId(), 'modulateur' => $modu->getId()]) ?>"
+                                                   href="<?= $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId(), 'modulateur' => $modu->getId()]) ?>"
                                                    title="Modifier le modulateur">
                                                     <span class="glyphicon glyphicon-edit"></span></a>
                                                 <a class="pop-ajax"
-                                                   href="<?php echo $this->url('modulateur/delete', ['modulateur' => $modu->getId()]) ?>"
+                                                   href="<?= $this->url('modulateur/delete', ['modulateur' => $modu->getId()]) ?>"
                                                    title="Supprimer le modulateur"
                                                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                                    data-confirm="true"
@@ -125,7 +125,7 @@ foreach ($typeModulateurs as $tm) {
 } ?>
     <?php if (($canEdit) && (!$structure)) : ?>
 <a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
-   href="<?php echo $this->url('modulateur/type-modulateur-saisie', []) ?>"
+   href="<?= $this->url('modulateur/type-modulateur-saisie', []) ?>"
    title="Ajouter un type de modulateur">
     <span class="glyphicon glyphicon-edit"></span>
     Ajouter un type de modulateur</a>

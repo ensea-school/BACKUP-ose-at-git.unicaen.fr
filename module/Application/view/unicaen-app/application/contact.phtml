@@ -1,6 +1,6 @@
 <?php $this->headTitle()->append($title = "Contact") ?>
 
-<h1><?php echo $this->translate($title); ?></h1>
+<h1><?= $this->translate($title); ?></h1>
 
 <h3>Intervenants</h3>
     Contactez votre composante ou bien écrivez à :
@@ -13,7 +13,7 @@
     };
     $contacts = array_map($callback, $contacts);
     ?>
-    <?php echo $this->htmlList($contacts, false, null, false) ?>
+    <?= $this->htmlList($contacts, false, null, false) ?>
 
 
 <h3>Gestionnaires</h3>
@@ -27,4 +27,4 @@
     };
     $contacts = array_map($callback, $contacts);
     ?>
-    <?php echo $this->htmlList($contacts, false, null, false) ?>
+    <?= $this->htmlList($contacts, false, null, false) ?>

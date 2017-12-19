@@ -71,10 +71,9 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
                 <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getServiceDu()) ?></td></tr>
             <?php endif; ?>
 
-            <tr><th>Service assuré</th>
-                <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getTotal()) ?></td></tr>
-
-            <?php if ($fr->getIntervenant()->estPermanent()): ?>
+            <?php if ($fr->getHeuresService() > 0): ?>
+                <tr><th>Service assuré</th>
+                    <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresService()) ?></td></tr>
 
                 <?php if ($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi() > 0): ?>
                 <tr><th style="padding-left:5em">Dont enseignements</th>
@@ -90,10 +89,8 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
 
             <?php if ($fr->getHeuresCompl() > 0) : ?>
 
-                <?php if ($fr->getIntervenant()->estPermanent()): ?>
-                <tr><th>Heures complémentaires</th>
+                <tr><th><?= ($fr->getServiceDu() > 0) ? 'Heures complémentaires' : 'Service assuré'  ?></th>
                     <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresCompl()) ?></td></tr>
-                <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFi() > 0): ?>
                 <tr><th style="padding-left:5em">Dont <abbr title="Formation initiale">FI</abbr></th>

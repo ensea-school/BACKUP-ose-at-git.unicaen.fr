@@ -55,6 +55,8 @@ trait FormuleResultatTypesHeuresTrait
      */
     private $total = 0.0;
 
+
+
     /**
      * Get heuresServiceFi
      *
@@ -64,6 +66,8 @@ trait FormuleResultatTypesHeuresTrait
     {
         return $this->heuresServiceFi;
     }
+
+
 
     /**
      * Get heuresServiceFa
@@ -75,6 +79,8 @@ trait FormuleResultatTypesHeuresTrait
         return $this->heuresServiceFa;
     }
 
+
+
     /**
      * Get heuresServiceFc
      *
@@ -84,6 +90,8 @@ trait FormuleResultatTypesHeuresTrait
     {
         return $this->heuresServiceFc;
     }
+
+
 
     /**
      * Get heuresServiceReferentiel
@@ -95,6 +103,8 @@ trait FormuleResultatTypesHeuresTrait
         return $this->heuresServiceReferentiel;
     }
 
+
+
     /**
      * Get heuresComplFi
      *
@@ -104,6 +114,8 @@ trait FormuleResultatTypesHeuresTrait
     {
         return $this->heuresComplFi;
     }
+
+
 
     /**
      * Get heuresComplFa
@@ -115,6 +127,8 @@ trait FormuleResultatTypesHeuresTrait
         return $this->heuresComplFa;
     }
 
+
+
     /**
      * Get heuresComplFc
      *
@@ -124,6 +138,8 @@ trait FormuleResultatTypesHeuresTrait
     {
         return $this->heuresComplFc;
     }
+
+
 
     /**
      * Get heuresComplFcMajorees
@@ -135,6 +151,8 @@ trait FormuleResultatTypesHeuresTrait
         return $this->heuresComplFcMajorees;
     }
 
+
+
     /**
      * Get heuresComplReferentiel
      *
@@ -144,6 +162,8 @@ trait FormuleResultatTypesHeuresTrait
     {
         return $this->heuresComplReferentiel;
     }
+
+
 
     /**
      * Get total
@@ -155,37 +175,59 @@ trait FormuleResultatTypesHeuresTrait
         return $this->total;
     }
 
+
+
     /**
      *
-     * @param TypeHeures $typeHeures
+     * @param TypeHeures|null $typeHeures
+     *
      * @return float
      * @throws \RuntimeException
      */
-    public function getHeuresService( TypeHeures $typeHeures )
+    public function getHeuresService(TypeHeures $typeHeures = null)
     {
-        switch( $typeHeures->getCode() ){
-            case TypeHeures::FI: return $this->getHeuresServiceFi();
-            case TypeHeures::FA: return $this->getHeuresServiceFa();
-            case TypeHeures::FC: return $this->getHeuresServiceFc();
-            case TypeHeures::REFERENTIEL: return $this->getHeuresServiceReferentiel();
+        if (null === $typeHeures) {
+            return $this->getHeuresServiceFi()
+                + $this->getHeuresServiceFa()
+                + $this->getHeuresServiceFc()
+                + $this->getHeuresServiceReferentiel();
+        }
+
+        switch ($typeHeures->getCode()) {
+            case TypeHeures::FI:
+                return $this->getHeuresServiceFi();
+            case TypeHeures::FA:
+                return $this->getHeuresServiceFa();
+            case TypeHeures::FC:
+                return $this->getHeuresServiceFc();
+            case TypeHeures::REFERENTIEL:
+                return $this->getHeuresServiceReferentiel();
         }
         throw new \RuntimeException('Type d\'heures inconnu ou non pris en charge');
     }
 
+
+
     /**
      *
      * @param TypeHeures $typeHeures
+     *
      * @return float
      * @throws \RuntimeException
      */
-    public function getHeuresCompl( TypeHeures $typeHeures )
+    public function getHeuresCompl(TypeHeures $typeHeures)
     {
-        switch( $typeHeures->getCode() ){
-            case TypeHeures::FI: return $this->getHeuresComplFi();
-            case TypeHeures::FA: return $this->getHeuresComplFa();
-            case TypeHeures::FC: return $this->getHeuresComplFc();
-            case TypeHeures::FC_MAJOREES: return $this->getHeuresComplFcMajorees();
-            case TypeHeures::REFERENTIEL: return $this->getHeuresComplReferentiel();
+        switch ($typeHeures->getCode()) {
+            case TypeHeures::FI:
+                return $this->getHeuresComplFi();
+            case TypeHeures::FA:
+                return $this->getHeuresComplFa();
+            case TypeHeures::FC:
+                return $this->getHeuresComplFc();
+            case TypeHeures::FC_MAJOREES:
+                return $this->getHeuresComplFcMajorees();
+            case TypeHeures::REFERENTIEL:
+                return $this->getHeuresComplReferentiel();
         }
         throw new \RuntimeException('Type d\'heures inconnu ou non pris en charge');
     }

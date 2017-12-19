@@ -30,6 +30,13 @@ class PlafondService extends AbstractEntityService
 
 
 
+    public function controle()
+    {
+
+    }
+
+
+
     /**
      * Retourne l'alias d'entité courante
      *

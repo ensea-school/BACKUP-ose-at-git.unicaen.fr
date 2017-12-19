@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
@@ -28,7 +28,7 @@ class Liste extends AbstractViewHelper
     use TypeInterventionAwareTrait;
     use ServiceTypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
 
     /**

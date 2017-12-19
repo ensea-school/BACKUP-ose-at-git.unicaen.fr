@@ -14,7 +14,7 @@ use Application\Entity\Db\Structure;
  */
 class ModificationServiceDu extends AbstractEntityService
 {
-    use Traits\IntervenantAwareTrait;
+    use Traits\IntervenantServiceAwareTrait;
 
 
 

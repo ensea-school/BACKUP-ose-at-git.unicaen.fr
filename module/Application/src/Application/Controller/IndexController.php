@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 use Application\Acl\Role;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
 use Zend\View\Model\ViewModel;
 
@@ -15,7 +15,7 @@ class IndexController extends AbstractController
 {
     use \Application\Service\Traits\ContextServiceAwareTrait;
     use \Application\Service\Traits\AnneeServiceAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use UserContextServiceAwareTrait;
 
 

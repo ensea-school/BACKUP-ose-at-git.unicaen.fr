@@ -4,7 +4,7 @@ namespace Application\Form\Workflow;
 
 use Application\Entity\Db\WfEtapeDep;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\WfEtapeAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -18,7 +18,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class DependanceForm extends AbstractForm
 {
     use WfEtapeAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
 
 
 
@@ -200,7 +200,7 @@ class DependanceForm extends AbstractForm
 class DependanceFormHydrator implements HydratorInterface
 {
     use WfEtapeAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
 
 
 

@@ -8,7 +8,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
 use Zend\Form\Element\Csrf;
 
@@ -19,7 +19,7 @@ use Zend\Form\Element\Csrf;
  */
 class Dossier extends AbstractForm
 {
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
     use DossierAwareTrait;
     use ServiceServiceAwareTrait;

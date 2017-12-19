@@ -5,7 +5,7 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\Intervenant;
 
 /**
- * Description of IntervenantAwareTrait
+ * Description of IntervenantServiceAwareTrait
  *
  * @author UnicaenCode
  */

@@ -5,11 +5,11 @@ namespace Application\Service\Traits;
 use Application\Service\CentreCout;
 
 /**
- * Description of CentreCoutAwareTrait
+ * Description of CentreCoutServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait CentreCoutAwareTrait
+trait CentreCoutServiceAwareTrait
 {
     /**
      * @var CentreCout

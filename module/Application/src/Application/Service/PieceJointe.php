@@ -8,7 +8,7 @@ use Application\Service\Traits\ValidationAwareTrait;
 use Application\Entity\Db\TypePieceJointe as TypePieceJointeEntity;
 use Application\Entity\Db\PieceJointe as PieceJointeEntity;
 use Application\Entity\Db\Fichier as FichierEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use BjyAuthorize\Exception\UnAuthorizedException;
 
@@ -56,12 +56,12 @@ class PieceJointe extends AbstractEntityService
 
 
     /**
-     * @param IntervenantEntity     $intervenant
+     * @param Intervenant     $intervenant
      * @param TypePieceJointeEntity $type
      *
      * @return PieceJointeEntity
      */
-    public function getByType(IntervenantEntity $intervenant, TypePieceJointeEntity $type)
+    public function getByType(Intervenant $intervenant, TypePieceJointeEntity $type)
     {
         $qb = $this->finderByType($type);
         $this->finderByHistorique($qb);
@@ -75,11 +75,11 @@ class PieceJointe extends AbstractEntityService
     /**
      * Retourne la liste des types de pièces jointes demandées
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      * @return TypePieceJointeEntity[]
      */
-    public function getTypesPiecesDemandees(IntervenantEntity $intervenant)
+    public function getTypesPiecesDemandees(Intervenant $intervenant)
     {
         $dql  = "
         SELECT
@@ -112,11 +112,11 @@ class PieceJointe extends AbstractEntityService
 
 
     /**
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      * @return float
      */
-    public function getHeuresPourSeuil(IntervenantEntity $intervenant)
+    public function getHeuresPourSeuil(Intervenant $intervenant)
     {
         if (!isset($this->hps[$intervenant->getId()])) {
             $this->getTypesPiecesDemandees($intervenant);
@@ -128,11 +128,11 @@ class PieceJointe extends AbstractEntityService
 
 
     /**
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      * @return \Application\Entity\Db\PieceJointe[]
      */
-    public function getPiecesFournies(IntervenantEntity $intervenant)
+    public function getPiecesFournies(Intervenant $intervenant)
     {
         $dql = "
         SELECT
@@ -225,7 +225,7 @@ class PieceJointe extends AbstractEntityService
      *
      * @return PieceJointeEntity[]
      */
-    public function ajouterFichiers($files, IntervenantEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
+    public function ajouterFichiers($files, Intervenant $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
     {
         if (!$files) {
             throw new \LogicException("Aucune donnée sur les fichiers spécifiée.");

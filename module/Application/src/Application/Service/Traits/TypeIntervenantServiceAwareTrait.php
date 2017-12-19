@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\TypeIntervenant;
+use Application\Service\TypeIntervenantService;
 
 /**
- * Description of TypeIntervenantAwareTrait
+ * Description of TypeIntervenantServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait TypeIntervenantAwareTrait
+trait TypeIntervenantServiceAwareTrait
 {
     /**
-     * @var TypeIntervenant
+     * @var TypeIntervenantService
      */
     private $serviceTypeIntervenant;
 
 
 
     /**
-     * @param TypeIntervenant $serviceTypeIntervenant
+     * @param TypeIntervenantService $serviceTypeIntervenant
      *
      * @return self
      */
-    public function setServiceTypeIntervenant(TypeIntervenant $serviceTypeIntervenant)
+    public function setServiceTypeIntervenant(TypeIntervenantService $serviceTypeIntervenant)
     {
         $this->serviceTypeIntervenant = $serviceTypeIntervenant;
 
@@ -33,7 +33,7 @@ trait TypeIntervenantAwareTrait
 
 
     /**
-     * @return TypeIntervenant
+     * @return TypeIntervenantService
      */
     public function getServiceTypeIntervenant()
     {

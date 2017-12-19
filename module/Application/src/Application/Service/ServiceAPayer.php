@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
@@ -22,11 +22,11 @@ class ServiceAPayer extends AbstractService
 
     /**
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      * @return ServiceAPayerInterface[]
      */
-    public function getListByIntervenant(IntervenantEntity $intervenant)
+    public function getListByIntervenant(Intervenant $intervenant)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();

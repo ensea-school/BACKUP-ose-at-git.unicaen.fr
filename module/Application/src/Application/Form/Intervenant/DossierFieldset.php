@@ -9,7 +9,7 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementAwareTrait;
 use Application\Service\Traits\PaysAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\NumeroINSEEValidator;
 use Application\Validator\PaysNaissanceValidator;
@@ -28,7 +28,7 @@ use Zend\Validator\Date as DateValidator;
 class DossierFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use PaysAwareTrait;
     use DepartementAwareTrait;
 

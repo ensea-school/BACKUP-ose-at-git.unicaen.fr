@@ -4,11 +4,11 @@ namespace Application\Service;
 
 use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
 use Application\Entity\Db\ServiceAPayerInterface;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode as PeriodeEntity;
-use Application\Service\Traits\CentreCoutAwareTrait;
+use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceReferentielAwareTrait;
 use Application\Service\Traits\FormuleResultatServiceServiceAwareTrait;
@@ -25,9 +25,9 @@ use Doctrine\ORM\QueryBuilder;
  */
 class MiseEnPaiement extends AbstractEntityService
 {
-    use Traits\IntervenantAwareTrait;
+    use Traits\IntervenantServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureAwareTrait;
-    use CentreCoutAwareTrait;
+    use CentreCoutServiceAwareTrait;
     use DomaineFonctionnelAwareTrait;
     use TypeHeuresAwareTrait;
     use FormuleResultatServiceServiceAwareTrait;
@@ -85,7 +85,7 @@ class MiseEnPaiement extends AbstractEntityService
 
 
 
-    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 

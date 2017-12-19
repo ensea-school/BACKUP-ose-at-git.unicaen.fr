@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 
 /**
@@ -12,7 +12,7 @@ use Application\View\Helper\AbstractViewHelper;
  */
 class Resume extends AbstractViewHelper
 {
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
 
     /**
      * Filtre de données

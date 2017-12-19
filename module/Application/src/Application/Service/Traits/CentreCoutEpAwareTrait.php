@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\CentreCoutEp;
+use Application\Service\CentreCoutEpService;
 
 /**
- * Description of CentreCoutEpAwareTrait
+ * Description of CentreCoutEpServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait CentreCoutEpAwareTrait
+trait CentreCoutEpServiceAwareTrait
 {
     /**
-     * @var CentreCoutEp
+     * @var CentreCoutEpService
      */
     private $serviceCentreCoutEp;
 
 
 
     /**
-     * @param CentreCoutEp $serviceCentreCoutEp
+     * @param CentreCoutEpService $serviceCentreCoutEp
      *
      * @return self
      */
-    public function setServiceCentreCoutEp(CentreCoutEp $serviceCentreCoutEp)
+    public function setServiceCentreCoutEp(CentreCoutEpService $serviceCentreCoutEp)
     {
         $this->serviceCentreCoutEp = $serviceCentreCoutEp;
 
@@ -33,7 +33,7 @@ trait CentreCoutEpAwareTrait
 
 
     /**
-     * @return CentreCoutEp
+     * @return CentreCoutEpService
      */
     public function getServiceCentreCoutEp()
     {

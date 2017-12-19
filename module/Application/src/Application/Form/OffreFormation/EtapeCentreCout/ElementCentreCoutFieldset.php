@@ -4,8 +4,8 @@ namespace Application\Form\OffreFormation\EtapeCentreCout;
 
 use Application\Entity\Db\CentreCout;
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\CentreCoutAwareTrait;
-use Application\Service\Traits\CentreCoutEpAwareTrait;
+use Application\Service\Traits\CentreCoutServiceAwareTrait;
+use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\TypeHeures;
 use RuntimeException;
@@ -20,8 +20,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class ElementCentreCoutFieldset extends AbstractFieldset
 {
-    use CentreCoutAwareTrait;
-    use CentreCoutEpAwareTrait;
+    use CentreCoutServiceAwareTrait;
+    use CentreCoutEpServiceAwareTrait;
 
     /**
      * element pédagogique associé
@@ -195,8 +195,8 @@ class ElementCentreCoutFieldset extends AbstractFieldset
 
 class ElementCentreCoutFieldsetHydrator implements HydratorInterface
 {
-    use CentreCoutAwareTrait;
-    use CentreCoutEpAwareTrait;
+    use CentreCoutServiceAwareTrait;
+    use CentreCoutEpServiceAwareTrait;
 
 
 

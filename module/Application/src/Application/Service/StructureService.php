@@ -2,7 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Intervenant;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
@@ -24,7 +25,7 @@ class StructureService extends AbstractEntityService
 {
     use Traits\AffectationServiceAwareTrait;
     use ServiceAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use MiseEnPaiementAwareTrait;
     use MiseEnPaiementIntervenantStructureAwareTrait;
 
@@ -262,9 +263,9 @@ class StructureService extends AbstractEntityService
     /**
      * Fetch des structures d'enseignement distinctes d'un intervenant.
      *
-     * @param \Application\Service\IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      */
-    public function getListStructuresEnseignIntervenant(IntervenantEntity $intervenant)
+    public function getListStructuresEnseignIntervenant(Intervenant $intervenant)
     {
         $serviceService = $this->getServiceService();
 

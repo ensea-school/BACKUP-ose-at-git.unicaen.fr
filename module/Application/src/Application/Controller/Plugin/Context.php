@@ -2,7 +2,7 @@
 
 namespace Application\Controller\Plugin;
 
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\Mvc\Controller\Plugin\Params;
 use LogicException;
@@ -23,7 +23,7 @@ use RuntimeException;
 class Context extends Params
 {
     use EntityManagerAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
 
     /**
      * @var bool

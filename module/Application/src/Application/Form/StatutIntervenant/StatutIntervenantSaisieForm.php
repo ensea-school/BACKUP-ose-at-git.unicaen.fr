@@ -3,11 +3,11 @@
 namespace Application\Form\StatutIntervenant;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 
 /**
  * Description of StatutIntervenantSaisieForm
@@ -17,7 +17,7 @@ use Application\Service\Traits\TypeIntervenantAwareTrait;
 class StatutIntervenantSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
 
     public function init()
     {
@@ -389,7 +389,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
 class StatutIntervenantHydrator implements HydratorInterface
 {
 
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

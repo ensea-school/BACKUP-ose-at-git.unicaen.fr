@@ -9,7 +9,7 @@ use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset;
 use Application\Form\OffreFormation\EtapeCentreCout\Traits\ElementCentreCoutFieldsetAwareTrait;
-use Application\Service\Traits\CentreCoutAwareTrait;
+use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use RuntimeException;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Form\Element\Select;
@@ -22,7 +22,7 @@ use Zend\Form\Element\Select;
  */
 class EtapeCentreCoutForm extends AbstractForm
 {
-    use CentreCoutAwareTrait;
+    use CentreCoutServiceAwareTrait;
     use ElementCentreCoutFieldsetAwareTrait;
 
     /**

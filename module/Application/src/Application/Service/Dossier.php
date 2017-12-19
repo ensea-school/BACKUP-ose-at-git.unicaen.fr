@@ -3,11 +3,11 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Dossier as DossierEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 
 /**
@@ -21,7 +21,7 @@ use Application\Service\Traits\ValidationAwareTrait;
  */
 class Dossier extends AbstractEntityService
 {
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use ValidationAwareTrait;
 
     /**
@@ -57,11 +57,11 @@ class Dossier extends AbstractEntityService
 
 
     /**
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      * @return DossierEntity|null
      */
-    public function getByIntervenant(IntervenantEntity $intervenant)
+    public function getByIntervenant(Intervenant $intervenant)
     {
         if (isset($this->dcache[$intervenant->getId()])){
             return $this->dcache[$intervenant->getId()];
@@ -107,7 +107,7 @@ class Dossier extends AbstractEntityService
      *
      * @return Intervenant Intervenant de l'année précédente
      */
-    public function intervenantVacataireAnneesPrecedentes(IntervenantEntity $intervenant, $x = 1)
+    public function intervenantVacataireAnneesPrecedentes(Intervenant $intervenant, $x = 1)
     {
         $sourceCode = $intervenant->getSourceCode();
 
@@ -128,11 +128,11 @@ class Dossier extends AbstractEntityService
     /**
      * Retourne la validation d'un dossier d'intervenant
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      * @return ValidationEntity
      */
-    public function getValidation(IntervenantEntity $intervenant)
+    public function getValidation(Intervenant $intervenant)
     {
         $validation        = null;
         $serviceValidation = $this->getServiceValidation();
@@ -152,12 +152,12 @@ class Dossier extends AbstractEntityService
     /**
      * Suppression (historisation) de l'historique des modifications sur les données perso d'un intervenant.
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      * @param UtilisateurEntity $destructeur
      *
      * @return $this
      */
-    public function purgerDonneesPersoModif(IntervenantEntity $intervenant, UtilisateurEntity $destructeur)
+    public function purgerDonneesPersoModif(Intervenant $intervenant, UtilisateurEntity $destructeur)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->update(\Application\Entity\Db\IndicModifDossier::class, 't')

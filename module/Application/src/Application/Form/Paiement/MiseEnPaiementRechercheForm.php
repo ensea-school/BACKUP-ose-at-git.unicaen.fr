@@ -5,10 +5,10 @@ namespace Application\Form\Paiement;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -18,7 +18,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class MiseEnPaiementRechercheForm extends AbstractForm
 {
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     /**
@@ -212,10 +212,10 @@ class MiseEnPaiementRechercheForm extends AbstractForm
  */
 class MiseEnPaiementRechercheFormHydrator implements HydratorInterface
 {
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use PeriodeAwareTrait;
     use StructureServiceAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
 
 
 

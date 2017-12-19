@@ -10,7 +10,7 @@ use Application\Service\Traits\ModificationServiceDuAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\DBAL\DBALException;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use RuntimeException;
 use UnicaenApp\View\Model\CsvModel;
 
@@ -22,7 +22,7 @@ use UnicaenApp\View\Model\CsvModel;
 class ModificationServiceDuController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use ModificationServiceDuFormAwareTrait;
     use ModificationServiceDuAwareTrait;
     use WorkflowServiceAwareTrait;

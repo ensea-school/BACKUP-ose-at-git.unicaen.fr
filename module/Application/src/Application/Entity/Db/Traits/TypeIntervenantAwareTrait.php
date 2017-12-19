@@ -5,7 +5,7 @@ namespace Application\Entity\Db\Traits;
 use Application\Entity\Db\TypeIntervenant;
 
 /**
- * Description of TypeIntervenantAwareTrait
+ * Description of TypeIntervenantServiceAwareTrait
  *
  * @author UnicaenCode
  */

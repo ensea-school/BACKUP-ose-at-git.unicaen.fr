@@ -474,11 +474,11 @@ return [
             Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class
         ],
         'invokables' => [
-            'ApplicationIntervenant'                => Service\Intervenant::class,
+            'ApplicationIntervenant'                => Service\IntervenantService::class,
             'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
             'ApplicationCivilite'                   => Service\Civilite::class,
-            'ApplicationStatutIntervenant'          => Service\StatutIntervenant::class,
-            'ApplicationTypeIntervenant'            => Service\TypeIntervenant::class,
+            'ApplicationStatutIntervenant'          => Service\StatutIntervenantService::class,
+            'ApplicationTypeIntervenant'            => Service\TypeIntervenantService::class,
             'assertionIntervenant'                  => Assertion\IntervenantAssertion::class,
             'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
         ],

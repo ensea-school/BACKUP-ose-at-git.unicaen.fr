@@ -3,14 +3,14 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\StatutIntervenant;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Exception\DbException;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class StatutIntervenantController extends AbstractController
 {
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use StatutIntervenantSaisieFormAwareTrait;
 
     public function indexAction()

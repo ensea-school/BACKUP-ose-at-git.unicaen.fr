@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode as PeriodeEntity;
 use Application\Entity\Db\Annee;
@@ -10,7 +10,7 @@ use Application\Entity\Db\TypeIntervenant as TypeIntervenantService;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
@@ -23,9 +23,9 @@ use UnicaenImport\Service\Traits\QueryGeneratorServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Intervenant extends AbstractEntityService
+class IntervenantService extends AbstractEntityService
 {
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use ImportProcessusAwareTrait;
     use QueryGeneratorServiceAwareTrait;
     use MiseEnPaiementAwareTrait;
@@ -42,7 +42,7 @@ class Intervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return IntervenantEntity::class;
+        return Intervenant::class;
     }
 
 
@@ -50,11 +50,11 @@ class Intervenant extends AbstractEntityService
     /**
      * Retourne l'intervenant de l'année précédente
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
-     * @return IntervenantEntity
+     * @return Intervenant
      */
-    public function getPrecedent(IntervenantEntity $intervenant)
+    public function getPrecedent(Intervenant $intervenant)
     {
         return $this->getBySourceCode(
             $intervenant->getSourceCode(),
@@ -70,7 +70,7 @@ class Intervenant extends AbstractEntityService
      * @param string      $sourceCode
      * @param Annee $annee
      *
-     * @return IntervenantEntity
+     * @return Intervenant
      */
     public function getBySourceCode($sourceCode, Annee $annee = null, $autoImport = true)
     {
@@ -141,10 +141,10 @@ class Intervenant extends AbstractEntityService
     /**
      * Sauvegarde une entité
      *
-     * @param IntervenantEntity $entity
+     * @param Intervenant $entity
      *
      * @throws \RuntimeException
-     * @return IntervenantEntity
+     * @return Intervenant
      */
     public function save($entity)
     {
@@ -202,7 +202,7 @@ class Intervenant extends AbstractEntityService
     /**
      * Supprime (historise par défaut) le service spécifié.
      *
-     * @param IntervenantEntity $entity Entité à détruire
+     * @param Intervenant $entity Entité à détruire
      * @param bool  $softDelete
      *
      * @return self

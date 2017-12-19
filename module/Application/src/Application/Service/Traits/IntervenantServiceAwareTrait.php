@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Intervenant;
+use Application\Service\IntervenantService;
 
 /**
- * Description of IntervenantAwareTrait
+ * Description of IntervenantServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait IntervenantAwareTrait
+trait IntervenantServiceAwareTrait
 {
     /**
-     * @var Intervenant
+     * @var IntervenantService
      */
     private $serviceIntervenant;
 
 
 
     /**
-     * @param Intervenant $serviceIntervenant
+     * @param IntervenantService $serviceIntervenant
      *
      * @return self
      */
-    public function setServiceIntervenant(Intervenant $serviceIntervenant)
+    public function setServiceIntervenant(IntervenantService $serviceIntervenant)
     {
         $this->serviceIntervenant = $serviceIntervenant;
 
@@ -33,7 +33,7 @@ trait IntervenantAwareTrait
 
 
     /**
-     * @return Intervenant
+     * @return IntervenantService
      */
     public function getServiceIntervenant()
     {

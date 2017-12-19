@@ -11,7 +11,7 @@ use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
 use Application\Service\Traits\PeriodeAwareTrait;
@@ -35,7 +35,7 @@ use Zend\View\Model\ViewModel;
 class IndicateurController extends AbstractController
 {
     use IndicateurServiceAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
     use NotificationIndicateurAwareTrait;
     use AffectationServiceAwareTrait;

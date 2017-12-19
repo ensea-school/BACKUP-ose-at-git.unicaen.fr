@@ -6,12 +6,12 @@ use Application\Entity\Db\FonctionReferentiel as FonctionReferentielEntity;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\FonctionReferentielAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
@@ -25,7 +25,7 @@ use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
  */
 class ServiceReferentiel extends AbstractEntityService
 {
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
     use FonctionReferentielAwareTrait;
     use TypeVolumeHoraireAwareTrait;
@@ -132,7 +132,7 @@ class ServiceReferentiel extends AbstractEntityService
     /**
      * Retourne un service unique selon ses critères précis
      *
-     * @param IntervenantEntity         $intervenant
+     * @param Intervenant         $intervenant
      * @param FonctionReferentielEntity $fonction
      * @param Structure           $structure
      * @param string                    $commentaires
@@ -140,7 +140,7 @@ class ServiceReferentiel extends AbstractEntityService
      * @return null|\Application\Entity\Db\ServiceReferentiel
      */
     public function getBy(
-        IntervenantEntity $intervenant,
+        Intervenant $intervenant,
         FonctionReferentielEntity $fonction,
         Structure $structure,
         $commentaires=null
@@ -318,10 +318,10 @@ class ServiceReferentiel extends AbstractEntityService
      * Prend les services d'un intervenant, année n-1, et reporte ces services (et les volumes horaires associés)
      * sur l'année n
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      */
-    public function setPrevusFromPrevus(IntervenantEntity $intervenant)
+    public function setPrevusFromPrevus(Intervenant $intervenant)
     {
         $old = $this->getPrevusFromPrevusData($intervenant);
 
@@ -352,7 +352,7 @@ class ServiceReferentiel extends AbstractEntityService
 
 
 
-    public function getPrevusFromPrevusData(IntervenantEntity $intervenant)
+    public function getPrevusFromPrevusData(Intervenant $intervenant)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $evhValide = $this->getServiceEtatVolumeHoraire()->getSaisi();

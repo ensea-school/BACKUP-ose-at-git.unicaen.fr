@@ -30,7 +30,7 @@ use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -51,7 +51,7 @@ class ServiceController extends AbstractController
     use ElementPedagogiqueAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use TypeInterventionAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use ServiceReferentielAwareTrait;
     use EtatVolumeHoraireAwareTrait;
     use StructureServiceAwareTrait;

@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\StatutIntervenant;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
@@ -10,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class StatutIntervenant extends AbstractEntityService
+class StatutIntervenantService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
     /**
@@ -21,7 +22,7 @@ class StatutIntervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\StatutIntervenant::class;
+        return StatutIntervenant::class;
     }
 
     /**
@@ -38,7 +39,7 @@ class StatutIntervenant extends AbstractEntityService
      *
      * @param QueryBuilder|null $queryBuilder
      * @param string|null $alias
-     * @return \Application\Entity\Db\StatutIntervenant[]
+     * @return StatutIntervenant[]
      */
     public function getList( QueryBuilder $qb=null, $alias=null )
     {
@@ -50,11 +51,11 @@ class StatutIntervenant extends AbstractEntityService
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
-     * @return \Application\Entity\Db\StatutIntervenant
+     * @return StatutIntervenant
      */
     public function newEntity()
     {
-        /** @var \Application\Entity\Db\StatutIntervenant $entity */
+        /** @var StatutIntervenant $entity */
         $entity = parent::newEntity();
 
         // toutes les entités créées ont OSE pour source!!

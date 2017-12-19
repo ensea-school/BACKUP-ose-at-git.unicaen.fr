@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -22,7 +22,7 @@ use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
  */
 class LocalContext extends AbstractService
 {
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
     use EtapeAwareTrait;
     use ElementPedagogiqueAwareTrait;

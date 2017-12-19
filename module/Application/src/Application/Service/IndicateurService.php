@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Indicateur;
 use Application\Entity\Db\Structure;
@@ -21,7 +21,7 @@ class IndicateurService extends AbstractEntityService
 {
     protected $countCache = [];
 
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
 
 
 

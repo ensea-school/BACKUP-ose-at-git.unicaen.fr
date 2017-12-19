@@ -258,7 +258,7 @@ return [
             'ApplicationMiseEnPaiementIntervenantStructure' => Service\MiseEnPaiementIntervenantStructure::class,
             'ApplicationTypeHeures'                         => Service\TypeHeures::class,
             'ApplicationCentreCout'                         => Service\CentreCout::class,
-            'ApplicationCentreCoutEp'                       => Service\CentreCoutEp::class,
+            'ApplicationCentreCoutEp'                       => Service\CentreCoutEpService::class,
             'assertionPaiement'                             => Assertion\PaiementAssertion::class,
         ],
     ],

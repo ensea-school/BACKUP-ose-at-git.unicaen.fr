@@ -8,11 +8,11 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 
 /**
- * Description of CentreCoutEp
+ * Description of CentreCoutEpService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class CentreCoutEp extends AbstractEntityService
+class CentreCoutEpService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
 

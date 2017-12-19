@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Contrat as ContratEntity;
 use Application\Entity\Db\Dossier as DossierEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
@@ -72,12 +72,12 @@ class Validation extends AbstractEntityService
 
     /**
      *
-     * @param IntervenantEntity            $intervenant
+     * @param Intervenant            $intervenant
      * @param TypeVolumeHoraireEntity|null $tvh
      *
      * @return ValidationEntity|null
      */
-    public function getValidationClotureServices(IntervenantEntity $intervenant)
+    public function getValidationClotureServices(Intervenant $intervenant)
     {
         $tv = $this->getServiceTypeValidation()->getByCode(TypeValidationEntity::CODE_CLOTURE_REALISE);
 
@@ -190,12 +190,12 @@ class Validation extends AbstractEntityService
 
     /**
      * @param TypeValidationEntity $typeValidation
-     * @param IntervenantEntity    $intervenant
+     * @param Intervenant    $intervenant
      * @param Structure|null $structure
      *
      * @return array
      */
-    public function lister(TypeValidationEntity $typeValidation, IntervenantEntity $intervenant, Structure $structure = null)
+    public function lister(TypeValidationEntity $typeValidation, Intervenant $intervenant, Structure $structure = null)
     {
         $dql = "
         SELECT

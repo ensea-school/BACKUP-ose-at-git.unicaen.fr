@@ -9,7 +9,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Exception\DbException;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\PieceJointeAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutAwareTrait;
 use Application\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
@@ -28,7 +28,7 @@ class PieceJointeController extends AbstractController
 {
     use ContextServiceAwareTrait;
     use PieceJointeAwareTrait;
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use TypePieceJointeSaisieFormAwareTrait;
     use ModifierTypePieceJointeStatutFormAwareTrait;
     use TypePieceJointeAwareTrait;

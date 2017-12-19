@@ -17,7 +17,7 @@ use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtablissementAwareTrait;
 
@@ -255,7 +255,7 @@ class SaisieFieldset extends AbstractFieldset
 class SaisieFieldsetHydrator implements HydratorInterface
 {
     use ContextServiceAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use ElementPedagogiqueAwareTrait;
     use EtablissementAwareTrait;
 

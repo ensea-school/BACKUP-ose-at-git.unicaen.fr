@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode as PeriodeEntity;
 
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +19,7 @@ use Doctrine\ORM\QueryBuilder;
 class Periode extends AbstractEntityService
 {
     use MiseEnPaiementAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureAwareTrait;
 
     /**

@@ -396,26 +396,6 @@ class EntityProvider
         return $structureEns;
     }
 
-    /**
-     * Recherche et retourne le TypeIntervenant permanent ou extérieur.
-     *
-     * @param boolean $permanent
-     * @return TypeIntervenant
-     */
-    public function getTypeIntervenant($permanent = true)
-    {
-        $code = $permanent ? TypeIntervenant::CODE_PERMANENT : TypeIntervenant::CODE_EXTERIEUR;
-
-        if (null === $this->typesIntervenant[$code]) {
-            $type = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervenant')->findOneByCode($code);
-            if (!$type) {
-                throw new RuntimeException(sprintf("Type d'intervenant '%s' introuvable.", $code));
-            }
-            $this->typesIntervenant[$code] = $type;
-        }
-
-        return $this->typesIntervenant[$code];
-    }
 
     /**
      * Retourne à chaque appel une nouvelle instance de StatutIntervenant persistée.

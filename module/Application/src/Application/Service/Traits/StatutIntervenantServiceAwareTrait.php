@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\StatutIntervenant;
+use Application\Service\StatutIntervenantService;
 
 /**
- * Description of StatutIntervenantAwareTrait
+ * Description of StatutIntervenantServiceAwareTrait
  *
  * @author UnicaenCode
  */
-trait StatutIntervenantAwareTrait
+trait StatutIntervenantServiceAwareTrait
 {
     /**
-     * @var StatutIntervenant
+     * @var StatutIntervenantService
      */
     private $serviceStatutIntervenant;
 
 
 
     /**
-     * @param StatutIntervenant $serviceStatutIntervenant
+     * @param StatutIntervenantService $serviceStatutIntervenant
      *
      * @return self
      */
-    public function setServiceStatutIntervenant(StatutIntervenant $serviceStatutIntervenant)
+    public function setServiceStatutIntervenant(StatutIntervenantService $serviceStatutIntervenant)
     {
         $this->serviceStatutIntervenant = $serviceStatutIntervenant;
 
@@ -33,7 +33,7 @@ trait StatutIntervenantAwareTrait
 
 
     /**
-     * @return StatutIntervenant
+     * @return StatutIntervenantService
      */
     public function getServiceStatutIntervenant()
     {

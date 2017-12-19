@@ -12,9 +12,9 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Privilege\PrivilegeProviderAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Acl\Role;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 
 /**
  * Fournisseur des rôles utilisateurs de l'application :
@@ -25,9 +25,9 @@ use Application\Service\Traits\IntervenantAwareTrait;
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use SessionContainerTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use PersonnelAwareTrait;
     use PrivilegeProviderAwareTrait;
     use ContextServiceAwareTrait;

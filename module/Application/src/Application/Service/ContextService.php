@@ -7,7 +7,7 @@ use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
@@ -22,13 +22,13 @@ class ContextService extends AbstractService
 {
     use Traits\EtablissementAwareTrait;
     use Traits\AnneeServiceAwareTrait;
-    use Traits\IntervenantAwareTrait;
+    use Traits\IntervenantServiceAwareTrait;
     use Traits\ParametresAwareTrait;
     use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
     use PersonnelAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
 
     /**
      * selectedIdentityRole

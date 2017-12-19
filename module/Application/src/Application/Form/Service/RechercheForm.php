@@ -15,10 +15,10 @@ use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -39,11 +39,11 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
     use StructureServiceAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use EtatVolumeHoraireAwareTrait;
     use AuthorizeServiceAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use NiveauEtapeAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
 
@@ -255,7 +255,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
 class RechercheFormHydrator implements HydratorInterface
 {
     use EntityManagerAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use NiveauEtapeAwareTrait;
 
 

@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 
 /**
  * Description of DbEventService
@@ -31,7 +31,7 @@ class DbEventService extends AbstractService {
 
 
 
-    public function forcerCalculer( IntervenantEntity $intervenant )
+    public function forcerCalculer( Intervenant $intervenant )
     {
         $iid = (int)$intervenant->getId();
 

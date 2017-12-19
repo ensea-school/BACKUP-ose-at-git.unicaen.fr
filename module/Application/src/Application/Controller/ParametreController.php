@@ -11,7 +11,7 @@ use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtablissementAwareTrait;
 use Application\Service\Traits\ParametresAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Zend\View\Model\JsonModel;
 
@@ -28,7 +28,7 @@ class ParametreController extends AbstractController
     use EtablissementAwareTrait;
     use PersonnelAwareTrait;
     use AnneeServiceAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use CampagneSaisieServiceAwareTrait;
     use CampagneSaisieFormAwareTrait;

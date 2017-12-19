@@ -10,7 +10,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
 use Application\Service\Traits\RoleAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
@@ -27,7 +27,7 @@ use Application\Exception\DbException;
 class DroitsController extends AbstractController
 {
     use RoleAwareTrait;
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use PrivilegeServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use StructureServiceAwareTrait;

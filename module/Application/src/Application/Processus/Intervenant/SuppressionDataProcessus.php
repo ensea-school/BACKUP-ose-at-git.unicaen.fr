@@ -46,7 +46,7 @@ class SuppressionDataProcessus
     use VolumeHoraireReferentielAwareTrait;
     use ServiceServiceAwareTrait;
     use ServiceReferentielAwareTrait;
-    use \Application\Service\Traits\IntervenantAwareTrait;
+    use \Application\Service\Traits\IntervenantServiceAwareTrait;
     use ContratAwareTrait;
     use DbEventServiceAwareTrait;
 

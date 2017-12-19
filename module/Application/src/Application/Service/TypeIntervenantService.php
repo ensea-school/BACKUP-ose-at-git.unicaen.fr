@@ -2,14 +2,14 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeIntervenant;
 
 /**
- * Description of TypeIntervenant
+ * Description of TypeIntervenantService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TypeIntervenant extends AbstractEntityService
+class TypeIntervenantService extends AbstractEntityService
 {
 
     /**
@@ -20,27 +20,27 @@ class TypeIntervenant extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return TypeIntervenantEntity::class;
+        return TypeIntervenant::class;
     }
 
     /**
      * Retourne le type d'intervenant Permanent
      *
-     * @return TypeIntervenantEntity
+     * @return TypeIntervenant
      */
     public function getPermanent()
     {
-        return $this->getRepo()->findOneBy(['code' => TypeIntervenantEntity::CODE_PERMANENT]);
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenant::CODE_PERMANENT]);
     }
 
     /**
      * Retourne le type d'intervenant Extérieur
      *
-     * @return TypeIntervenantEntity
+     * @return TypeIntervenant
      */
     public function getExterieur()
     {
-        return $this->getRepo()->findOneBy(['code' => TypeIntervenantEntity::CODE_EXTERIEUR]);
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenant::CODE_EXTERIEUR]);
     }
 
     /**
@@ -55,7 +55,7 @@ class TypeIntervenant extends AbstractEntityService
     /**
      *
      * @param string $code
-     * @return TypeIntervenantEntity
+     * @return TypeIntervenant
      */
     public function getByCode( $code )
     {

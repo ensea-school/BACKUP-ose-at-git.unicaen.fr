@@ -7,7 +7,7 @@ use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 use Application\Entity\Db\VolumeHoraire as VolumeHoraireEntity;
 
@@ -111,12 +111,12 @@ class VolumeHoraire extends AbstractEntityService
     /**
      * Recherche par intervenant concerné.
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      * @param QueryBuilder|null $qb
      *
      * @return QueryBuilder
      */
-    public function finderByIntervenant(IntervenantEntity $intervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByIntervenant(Intervenant $intervenant, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 

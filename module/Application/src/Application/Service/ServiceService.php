@@ -6,12 +6,12 @@ use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Application\Entity\Db\Etablissement as EtablissementEntity;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\NiveauEtape as NiveauEtapeEntity;
@@ -21,12 +21,12 @@ use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\PeriodeAwareTrait;
-use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantAwareTrait;
+use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
@@ -48,18 +48,18 @@ class ServiceService extends AbstractEntityService
 {
     use ElementPedagogiqueAwareTrait;
     use EtapeAwareTrait;
-    use IntervenantAwareTrait;
+    use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
     use TypeInterventionAwareTrait;
     use EtatVolumeHoraireAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use VolumeHoraireAwareTrait;
-    use TypeIntervenantAwareTrait;
+    use TypeIntervenantServiceAwareTrait;
     use PeriodeAwareTrait;
     use LocalContextAwareTrait;
     use RechercheHydratorAwareTrait;
     use ValidationAwareTrait;
-    use StatutIntervenantAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
 
     /**
      *
@@ -202,14 +202,14 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne un service unique selon ses critères précis
      *
-     * @param IntervenantEntity        $intervenant
+     * @param Intervenant        $intervenant
      * @param ElementPedagogiqueEntity $elementPedagogique
      * @param EtablissementEntity      $etablissement
      *
      * @return null|ServiceEntity
      */
     public function getBy(
-        IntervenantEntity $intervenant,
+        Intervenant $intervenant,
         $elementPedagogique,
         EtablissementEntity $etablissement
     )
@@ -558,12 +558,12 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param TypeIntervenantEntity $typeIntervenant
+     * @param TypeIntervenant $typeIntervenant
      * @param QueryBuilder|null     $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeIntervenant(TypeIntervenant $typeIntervenant = null, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($typeIntervenant) {
@@ -580,10 +580,10 @@ class ServiceService extends AbstractEntityService
      * Prend les services d'un intervenant, année n-1, et reporte ces services (et les volumes horaires associés)
      * sur l'année n
      *
-     * @param IntervenantEntity $intervenant
+     * @param Intervenant $intervenant
      *
      */
-    public function setPrevusFromPrevus(IntervenantEntity $intervenant, $plafondControl = true)
+    public function setPrevusFromPrevus(Intervenant $intervenant, $plafondControl = true)
     {
         $old               = $this->getPrevusFromPrevusData($intervenant);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -620,7 +620,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function getPrevusFromPrevusData(IntervenantEntity $intervenant)
+    public function getPrevusFromPrevusData(Intervenant $intervenant)
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
@@ -1278,10 +1278,10 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne le total HETD des enseignements (réalisés et validés) d'un intervenant.
      *
-     * @prama IntervenantEntity $intervenant
+     * @prama Intervenant $intervenant
      * @return float
      */
-    public function getTotalHetdIntervenant(IntervenantEntity $intervenant)
+    public function getTotalHetdIntervenant(Intervenant $intervenant)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
@@ -1296,12 +1296,12 @@ class ServiceService extends AbstractEntityService
     /**
      * Contrôle du plafond des heures FC (D714-60) après saisie.
      *
-     * @param IntervenantEntity       $intervenant
+     * @param Intervenant       $intervenant
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      *
      * @return $this
      */
-    public function controlePlafondFcMaj(IntervenantEntity $intervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    public function controlePlafondFcMaj(Intervenant $intervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
     {
         $intervenantId = (int)$intervenant->getId();
         $tvhId         = (int)$typeVolumeHoraire->getId();

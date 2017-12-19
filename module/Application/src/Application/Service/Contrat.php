@@ -10,7 +10,7 @@ use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Contrat as ContratEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Fichier as FichierEntity;
 
 
@@ -131,7 +131,7 @@ class Contrat extends AbstractEntityService
      *
      * @return int
      */
-    public function getNextNumeroAvenant(IntervenantEntity $intervenant, $avenantsValidesSeulement = true)
+    public function getNextNumeroAvenant(Intervenant $intervenant, $avenantsValidesSeulement = true)
     {
         $qb = $this->finderByIntervenant($intervenant);
         $qb = $this->finderByTypeContrat($this->getServiceTypeContrat()->getAvenant(), $qb);

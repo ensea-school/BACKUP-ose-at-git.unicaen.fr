@@ -24,8 +24,8 @@ SELECT
 FROM (
 
             
-            SELECT 'plafonds' c, 'gestion-visualisation' p, 'Gestion (visualisation)' l FROM dual
-            union SELECT 'plafonds' c, 'gestion-edition' p, 'Gestion (édition)' l FROM dual
+            SELECT 'modif-service-du' c, 'gestion-visualisation' p, 'Gestion (visualisation)' l FROM dual
+            union SELECT 'modif-service-du' c, 'gestion-edition' p, 'Gestion (édition)' l FROM dual
       --UNION SELECT 'modulateur' c, 'edition' p, 'Édition' l FROM dual
       --UNION SELECT 'chargens' c, 'formation-choix-edition' p, 'Édition des formations (choix liens)' l FROM dual
 /*      UNION SELECT 'chargens' c, 'seuil-etablissement-edition' p, 'Édition des seuil (établissement)' l FROM dual

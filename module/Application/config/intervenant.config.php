@@ -474,7 +474,7 @@ return [
             Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class
         ],
         'invokables' => [
-            'ApplicationIntervenant'                => Service\IntervenantService::class,
+            Service\IntervenantService::class       => Service\IntervenantService::class,
             'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
             'ApplicationCivilite'                   => Service\Civilite::class,
             'ApplicationStatutIntervenant'          => Service\StatutIntervenantService::class,

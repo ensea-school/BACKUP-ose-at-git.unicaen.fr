@@ -25,7 +25,6 @@ class IdentityProviderFactory implements FactoryInterface
         $identityProvider = new IdentityProvider;
 
         $identityProvider->setEntityManager( $serviceLocator->get(\Application\Constants::BDD) );
-        $identityProvider->setServiceIntervenant($serviceLocator->get('applicationIntervenant'));
         $identityProvider->setServicePersonnel($serviceLocator->get('applicationPersonnel'));
         $identityProvider->setServiceContext($serviceLocator->get(ContextService::class));
 

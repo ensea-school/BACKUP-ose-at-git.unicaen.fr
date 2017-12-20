@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Plafond;
 
 /**
@@ -30,8 +31,12 @@ class PlafondService extends AbstractEntityService
 
 
 
-    public function controle()
+    public function controle( Intervenant $intervenant )
     {
+        $sql = file_get_contents('data/Query/plafond.sql');
+        $sql = str_replace( '/*i.id*/', 'AND i.id = '.$intervenant->getId(), $sql);
+
+        $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
 
     }
 

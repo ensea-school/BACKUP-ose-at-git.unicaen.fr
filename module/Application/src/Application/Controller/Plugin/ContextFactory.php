@@ -2,6 +2,7 @@
 
 namespace Application\Controller\Plugin;
 
+use Application\Service\IntervenantService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +27,6 @@ class ContextFactory implements FactoryInterface
         $context = new Context();
 
         $context->setEntityManager( $sl->get(\Application\Constants::BDD) );
-        $context->setServiceIntervenant( $sl->get('applicationIntervenant') );
 
         return $context;
     }

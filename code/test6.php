@@ -7,18 +7,19 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Entity\Db\ElementPedagogique;
+use Application\Service\IntervenantService;
+use Application\Service\PlafondService;
 
 $sl->get('applicationelementpedagogique')->getEntityManager()->getFilters()->enable('historique')->init([
     \Application\Entity\Db\VolumeHoraireEns::class,
 ]);
 
 
-/** @var ElementPedagogique $ep */
-$ep = $sl->get('applicationelementpedagogique')->get(45791);
+/** @var PlafondService $ps */
+$ps = $sl->get(PlafondService::class);
 
-$vhes = $ep->getVolumeHoraireEns();
 
-foreach( $vhes as $vhe ){
-    var_dump($vhe->getId() );
-}
+/** @var IntervenantService $is */
+$is = $sl->get(IntervenantService::class);
+
+$ps->controle($is->get(26823));

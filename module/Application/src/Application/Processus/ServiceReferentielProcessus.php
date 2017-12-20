@@ -4,6 +4,7 @@ namespace Application\Processus;
 
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Service\Recherche;
+use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
@@ -38,7 +39,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
         $qb = $serviceReferentiel->initQuery()[0];
 
         $serviceReferentiel
-            ->join('applicationIntervenant', $qb, 'intervenant', ['id', 'nomUsuel', 'prenom', 'sourceCode'])
+            ->join(IntervenantService::class, $qb, 'intervenant', ['id', 'nomUsuel', 'prenom', 'sourceCode'])
             ->join($volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures']);
 
         $volumeHoraireReferentielService->leftJoin('applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);

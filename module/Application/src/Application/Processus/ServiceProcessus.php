@@ -4,6 +4,7 @@ namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Service\Recherche;
+use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
@@ -56,7 +57,7 @@ class ServiceProcessus extends AbstractProcessus
 
         //@formatter:off
         $service
-            ->join(     'applicationIntervenant',       $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
+            ->join(     IntervenantService::class,      $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
             ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
             ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures'] );
 

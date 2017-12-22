@@ -1,3 +1,5 @@
 config/autoload/*.local.php
 vendor
 composer.lock
+data/cache
+data/DoctrineORMModule

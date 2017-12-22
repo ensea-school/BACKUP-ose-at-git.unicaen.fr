@@ -882,10 +882,9 @@ $intervenants = [];
 $i   = "
 SELECT distinct
   i.source_code,
-  CASE WHEN c.libelle_long = 'Monsieur' THEN 'M' ELSE 'F' END civ
+  CASE WHEN i.z_civilite_id = 'M.' THEN 'M' ELSE 'F' END civ
 FROM
   mv_intervenant_demo i
-  JOIN civilite c ON c.id = i.civilite_id
 
 UNION
 

@@ -5,8 +5,8 @@ END;
 
 CREATE TABLE MV_INTERVENANT_DEMO
 (
-  ANNEE_CREATION NUMBER 
-, CIVILITE_ID NUMBER(*, 0) NOT NULL 
+  CODE VARCHAR2(9 CHAR) 
+, Z_CIVILITE_ID VARCHAR2(3 CHAR) 
 , NOM_USUEL VARCHAR2(120 BYTE) 
 , PRENOM VARCHAR2(60 BYTE) 
 , NOM_PATRONYMIQUE VARCHAR2(120 BYTE) 
@@ -19,10 +19,8 @@ CREATE TABLE MV_INTERVENANT_DEMO
 , TEL_PRO VARCHAR2(33 BYTE) 
 , TEL_MOBILE VARCHAR2(60 BYTE) 
 , EMAIL VARCHAR2(4000 BYTE) 
-, STATUT_ID NUMBER(*, 0) 
-, STATUT_CODE VARCHAR2(100 CHAR) 
+, Z_STATUT_ID VARCHAR2(14 CHAR) 
 , Z_STRUCTURE_ID VARCHAR2(4000 CHAR) 
-, SOURCE_ID NUMBER(*, 0) NOT NULL 
 , SOURCE_CODE VARCHAR2(9 CHAR) 
 , NUMERO_INSEE VARCHAR2(39 BYTE) 
 , NUMERO_INSEE_CLE VARCHAR2(40 CHAR) 
@@ -30,24 +28,21 @@ CREATE TABLE MV_INTERVENANT_DEMO
 , IBAN VARCHAR2(108 BYTE) 
 , BIC VARCHAR2(36 BYTE) 
 , Z_GRADE_ID VARCHAR2(4000 CHAR) 
-, ORDRE NUMBER 
-, MIN_ORDRE NUMBER 
 , Z_DISCIPLINE_ID_CNU VARCHAR2(6 BYTE) 
 , Z_DISCIPLINE_ID_SOUS_CNU VARCHAR2(6 BYTE) 
 , Z_DISCIPLINE_ID_SPE_CNU VARCHAR2(9 BYTE) 
 , Z_DISCIPLINE_ID_DIS2DEG VARCHAR2(15 BYTE) 
 , CRITERE_RECHERCHE VARCHAR2(4000 CHAR) 
-, CONSTRAINT "MV_INTERVENANT_DEMO_PK" PRIMARY KEY ("SOURCE_CODE", "ORDRE")
+, DATE_FIN DATE 
 ); 
   
 insert into MV_INTERVENANT_DEMO select * from mv_intervenant;
   
-  
-  
 CREATE OR REPLACE VIEW SRC_INTERVENANT AS 
 WITH srci as (
 SELECT
-  i.civilite_id,
+  i.code,
+  c.id civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   COALESCE(i.date_naissance,TO_DATE('2099-01-01','YYYY-MM-DD')) date_naissance,
   pnaiss.id pays_naissance_id,
@@ -55,24 +50,29 @@ SELECT
   i.ville_naissance_code_insee,  i.ville_naissance_libelle,
   pnat.id pays_nationalite_id,
   i.tel_pro, i.tel_mobile, i.email,
-  i.statut_id, i.statut_code,
+  si.id statut_id, si.source_code statut_code,
   NVL(s.structure_niv2_id,s.id) structure_id,
-  i.source_id, i.source_code,
+  src.id source_id, i.source_code,
   i.numero_insee, i.numero_insee_cle, i.numero_insee_provisoire,
   i.iban, i.bic,
   g.id grade_id,
   NVL( d.id, d99.id ) discipline_id,
-  i.critere_recherche
+  i.critere_recherche,
+  COALESCE (si.ordre,99999) ordre,
+  MIN(COALESCE (si.ordre,99999)) OVER (PARTITION BY i.source_code) min_ordre
 FROM
-            mv_intervenant_demo  i
-       JOIN structure       s ON s.source_code = i.z_structure_id
+            mv_intervenant_demo i
+       JOIN source        src ON src.code = 'Harpege'
+  LEFT JOIN civilite        c ON c.libelle_court = i.z_civilite_id
+  LEFT JOIN structure       s ON s.source_code = i.z_structure_id
+  LEFT JOIN statut_intervenant si ON si.source_code = i.z_statut_id
   LEFT JOIN grade           g ON g.source_code = i.z_grade_id
   LEFT JOIN pays       pnaiss ON pnaiss.source_code = i.z_pays_naissance_id  
   LEFT JOIN pays         pnat ON pnat.source_code = i.z_pays_nationalite_id
   LEFT JOIN departement   dep ON dep.source_code = i.z_dep_naissance_id
   LEFT JOIN discipline d99 ON d99.source_code = '99'
   LEFT JOIN discipline d ON
-    1 = ose_divers.comprise_entre( d.histo_creation, d.histo_destruction )
+    d.histo_destruction IS NULL
     AND 1 = CASE WHEN -- si rien n'ac été défini
     
       COALESCE( i.z_discipline_id_cnu, i.z_discipline_id_sous_cnu, i.z_discipline_id_spe_cnu, i.z_discipline_id_dis2deg ) IS NULL
@@ -96,12 +96,10 @@ FROM
       AND ',' || NVL(d.CODES_CORRESP_4,'') || ',' LIKE  '%,' || i.z_discipline_id_dis2deg || ',%'
       
     THEN 1 ELSE 0 END END -- fin du test
-WHERE
-  i.ordre = i.min_ordre
 )
 SELECT
   null id,
-  i.source_code code, i.source_code supann_emp_id,
+  i.code code, i.code supann_emp_id,
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
@@ -126,13 +124,15 @@ FROM
   srci i
   LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee
   LEFT JOIN intervenant_saisie  isai ON isai.intervenant_id = i2.id
-  LEFT JOIN dossier               d  ON d.intervenant_id = i2.id
+  LEFT JOIN dossier               d  ON d.intervenant_id = i2.id AND d.histo_destruction IS NULL
+WHERE
+  i.ordre = i.min_ordre
 
 UNION ALL
 
 SELECT
   null id,
-  i.source_code code, i.source_code supann_emp_id,
+  i.code code, i.code supann_emp_id,
   i.civilite_id,
   i.nom_usuel, i.prenom, i.nom_patronymique,
   i.date_naissance,
@@ -153,11 +153,9 @@ SELECT
 FROM
   srci i
   LEFT JOIN intervenant           i2 ON i2.source_code = i.source_code AND i2.annee_id = unicaen_import.get_current_annee - 1
-  LEFT JOIN dossier               d  ON d.intervenant_id = i2.id AND 1 = ose_divers.comprise_entre( d.histo_creation, d.histo_destruction );
-
-  
-  
-  
+WHERE
+  i.ordre = i.min_ordre
+;
 
 
 
@@ -243,12 +241,10 @@ select * from fichier where id = 1;
 
 /
 begin
-ose_event.set_actif(true);
+  unicaen_tbl.ACTIV_TRIGGERS := true;
 end;
 /
 
-
-select * from mv_intervenant_demo;
 
 UPDATE mv_intervenant_demo SET
   --nom_usuel                   = ,
@@ -264,8 +260,8 @@ UPDATE mv_intervenant_demo SET
   tel_pro                     = NULL,
   tel_mobile                  = NULL,
   email                       = 'prenom.nom@unicaen.fr',
-  numero_insee                = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Monsieur') THEN '1000114789156' ELSE '2000114789156' END,
-  numero_insee_cle            = CASE WHEN civilite_id = (SELECT id FROM civilite WHERE libelle_long = 'Monsieur'  ) THEN '12'            ELSE '59'            END,
+  numero_insee                = CASE WHEN z_civilite_id = 'M.' THEN '1000114789156' ELSE '2000114789156' END,
+  numero_insee_cle            = CASE WHEN z_civilite_id = 'M.' THEN '12'            ELSE '59'            END,
   numero_insee_provisoire     = 0,
   iban                        = 'FR7630006000011234567890189',
   bic                         = 'AGRIFRPPXXX',

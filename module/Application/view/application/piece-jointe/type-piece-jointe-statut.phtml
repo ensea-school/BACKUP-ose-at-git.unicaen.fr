@@ -156,7 +156,6 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
         <?php
         $j = 0;
         foreach ($typesPiecesJointes as $typePieceJointe) {
-            $j++;
             echo $this->partial('partial/tpjs-ligne', [
                 'canEdit'             => $canEdit,
                 'statutsIntervenants' => $statutsIntervenants,
@@ -164,6 +163,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PIECE_JUSTIFIC
                 'tpjss'               => isset($typesPiecesJointesStatuts[$typePieceJointe->getId()]) ? $typesPiecesJointesStatuts[$typePieceJointe->getId()] : [],
                 'j'                   => $j,
             ]);
+            $j++;
         }
         ?>
         </tbody>

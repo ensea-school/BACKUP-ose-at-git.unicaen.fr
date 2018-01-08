@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\TypeAgrement;
+use Application\Service\TypeAgrementService;
 
 /**
  * Description of TypeAgrementAwareTrait
  *
  * @author UnicaenCode
  */
-trait TypeAgrementAwareTrait
+trait TypeAgrementServiceAwareTrait
 {
     /**
-     * @var TypeAgrement
+     * @var TypeAgrementService
      */
     private $serviceTypeAgrement;
 
 
 
     /**
-     * @param TypeAgrement $serviceTypeAgrement
+     * @param TypeAgrementService $serviceTypeAgrement
      *
      * @return self
      */
-    public function setServiceTypeAgrement(TypeAgrement $serviceTypeAgrement)
+    public function setServiceTypeAgrement(TypeAgrementService $serviceTypeAgrement)
     {
         $this->serviceTypeAgrement = $serviceTypeAgrement;
 
@@ -33,7 +33,7 @@ trait TypeAgrementAwareTrait
 
 
     /**
-     * @return TypeAgrement
+     * @return TypeAgrementService
      */
     public function getServiceTypeAgrement()
     {

@@ -11,8 +11,8 @@ use \Application\Service\Traits\ContextServiceAwareTrait;
 use \Application\Service\Traits\ServiceAwareTrait;
 use \Application\Service\Traits\PeriodeAwareTrait;
 use \Application\Service\Traits\TypeInterventionAwareTrait;
-use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
-use \Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use \Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use \Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 
 
 /**
@@ -26,8 +26,8 @@ class SaisieForm extends AbstractViewHelper
     use ServiceAwareTrait;
     use PeriodeAwareTrait;
     use TypeInterventionAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
 
     /**
      * @var Saisie

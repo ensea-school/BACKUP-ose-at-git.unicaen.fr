@@ -5,14 +5,14 @@ namespace Application\Service;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Application\Entity\Db\Etablissement as EtablissementEntity;
 use Application\Entity\Db\Etape as EtapeEntity;
-use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
@@ -28,10 +28,10 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Session\Container as SessionContainer;
 
@@ -51,8 +51,8 @@ class ServiceService extends AbstractEntityService
     use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
     use TypeInterventionAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
     use VolumeHoraireAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use PeriodeAwareTrait;
@@ -403,13 +403,13 @@ class ServiceService extends AbstractEntityService
 
     /**
      *
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param QueryBuilder            $qb
      * @param string                  $alias
      *
      * @return QueryBuilder
      */
-    public function finderByTypeVolumeHoraire(TypeVolumeHoraireEntity $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
@@ -426,13 +426,13 @@ class ServiceService extends AbstractEntityService
 
     /**
      *
-     * @param EtatVolumeHoraireEntity $etatVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumeHoraire
      * @param QueryBuilder            $qb
      * @param string                  $alias
      *
      * @return QueryBuilder
      */
-    public function finderByEtatVolumeHoraire(EtatVolumeHoraireEntity $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -1297,11 +1297,11 @@ class ServiceService extends AbstractEntityService
      * Contrôle du plafond des heures FC (D714-60) après saisie.
      *
      * @param Intervenant       $intervenant
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     * @param TypeVolumeHoraire $typeVolumeHoraire
      *
      * @return $this
      */
-    public function controlePlafondFcMaj(Intervenant $intervenant, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    public function controlePlafondFcMaj(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire)
     {
         $intervenantId = (int)$intervenant->getId();
         $tvhId         = (int)$typeVolumeHoraire->getId();
@@ -1317,9 +1317,9 @@ class ServiceService extends AbstractEntityService
     /**
      *
      * @param ServiceEntity[]         $services
-     * @param TypeVolumeHoraireEntity $typeVolumehoraire
+     * @param TypeVolumeHoraire $typeVolumehoraire
      */
-    public function setTypeVolumehoraire($services, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    public function setTypeVolumehoraire($services, TypeVolumeHoraire $typeVolumeHoraire)
     {
         foreach ($services as $service) {
             $service->setTypeVolumeHoraire($typeVolumeHoraire);

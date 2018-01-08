@@ -11,7 +11,7 @@ use Application\Service\Traits\ServiceReferentielAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
@@ -23,7 +23,7 @@ class Liste extends AbstractViewHelper
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
     use ServiceAwareTrait;
-    use ServiceTypeVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
     use ServiceReferentielAwareTrait;
     use LocalContextAwareTrait;
 

@@ -76,8 +76,8 @@ return [
             'ApplicationVolumeHoraire'            => Service\VolumeHoraire::class,
             'ApplicationVolumeHoraireEns'         => Service\VolumeHoraireEnsService::class,
             'ApplicationVolumeHoraireReferentiel' => Service\VolumeHoraireReferentiel::class,
-            'ApplicationTypeVolumeHoraire'        => Service\TypeVolumeHoraire::class,
-            'ApplicationEtatVolumeHoraire'        => Service\EtatVolumeHoraire::class,
+            'ApplicationTypeVolumeHoraire'        => Service\TypeVolumeHoraireService::class,
+            'ApplicationEtatVolumeHoraire'        => Service\EtatVolumeHoraireService::class,
         ],
     ],
     'view_helpers'    => [

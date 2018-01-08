@@ -2,28 +2,28 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\EtatVolumeHoraire;
+use Application\Service\EtatVolumeHoraireService;
 
 /**
  * Description of EtatVolumeHoraireAwareTrait
  *
  * @author UnicaenCode
  */
-trait EtatVolumeHoraireAwareTrait
+trait EtatVolumeHoraireServiceAwareTrait
 {
     /**
-     * @var EtatVolumeHoraire
+     * @var EtatVolumeHoraireService
      */
     private $serviceEtatVolumeHoraire;
 
 
 
     /**
-     * @param EtatVolumeHoraire $serviceEtatVolumeHoraire
+     * @param EtatVolumeHoraireService $serviceEtatVolumeHoraire
      *
      * @return self
      */
-    public function setServiceEtatVolumeHoraire(EtatVolumeHoraire $serviceEtatVolumeHoraire)
+    public function setServiceEtatVolumeHoraire(EtatVolumeHoraireService $serviceEtatVolumeHoraire)
     {
         $this->serviceEtatVolumeHoraire = $serviceEtatVolumeHoraire;
 
@@ -33,7 +33,7 @@ trait EtatVolumeHoraireAwareTrait
 
 
     /**
-     * @return EtatVolumeHoraire
+     * @return EtatVolumeHoraireService
      */
     public function getServiceEtatVolumeHoraire()
     {

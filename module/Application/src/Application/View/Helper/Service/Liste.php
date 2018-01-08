@@ -5,7 +5,7 @@ namespace Application\View\Helper\Service;
 use Application\Entity\Db\Intervenant;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionAwareTrait;
@@ -13,7 +13,7 @@ use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait as ServiceTypeVolumeHoraireAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
@@ -27,7 +27,7 @@ class Liste extends AbstractViewHelper
     use ServiceAwareTrait;
     use TypeInterventionAwareTrait;
     use ServiceTypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
 

@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Service\Traits\FichierServiceAwareTrait;
 use Application\Service\Traits\TypeContratAwareTrait;
 use Application\Service\Traits\TypeValidationAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -24,7 +24,7 @@ class Contrat extends AbstractEntityService
     use TypeValidationAwareTrait;
     use TypeContratAwareTrait;
     use VolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
     use FichierServiceAwareTrait;
 
 

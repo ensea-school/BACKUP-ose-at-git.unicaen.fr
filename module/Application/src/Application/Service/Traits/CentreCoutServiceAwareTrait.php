@@ -2,7 +2,7 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\CentreCout;
+use Application\Service\CentreCoutService;
 
 /**
  * Description of CentreCoutServiceAwareTrait
@@ -12,18 +12,18 @@ use Application\Service\CentreCout;
 trait CentreCoutServiceAwareTrait
 {
     /**
-     * @var CentreCout
+     * @var CentreCoutService
      */
     private $serviceCentreCout;
 
 
 
     /**
-     * @param CentreCout $serviceCentreCout
+     * @param CentreCoutService $serviceCentreCout
      *
      * @return self
      */
-    public function setServiceCentreCout(CentreCout $serviceCentreCout)
+    public function setServiceCentreCout(CentreCoutService $serviceCentreCout)
     {
         $this->serviceCentreCout = $serviceCentreCout;
 
@@ -33,7 +33,7 @@ trait CentreCoutServiceAwareTrait
 
 
     /**
-     * @return CentreCout
+     * @return CentreCoutService
      */
     public function getServiceCentreCout()
     {

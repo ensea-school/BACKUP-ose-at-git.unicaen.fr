@@ -9,7 +9,6 @@ use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Service\Traits\ContratAwareTrait;
 use Application\Service\Traits\MiseEnPaiementAwareTrait;
 use RuntimeException;
@@ -24,7 +23,7 @@ use Doctrine\ORM\QueryBuilder;
 class Validation extends AbstractEntityService
 {
     use Traits\TypeValidationAwareTrait;
-    use Traits\TypeVolumeHoraireAwareTrait;
+    use Traits\TypeVolumeHoraireServiceAwareTrait;
     use MiseEnPaiementAwareTrait;
     use ContratAwareTrait;
 
@@ -73,7 +72,7 @@ class Validation extends AbstractEntityService
     /**
      *
      * @param Intervenant            $intervenant
-     * @param TypeVolumeHoraireEntity|null $tvh
+     * @param TypeVolumeHoraire|null $tvh
      *
      * @return ValidationEntity|null
      */

@@ -4,8 +4,8 @@ namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceAPayerInterface;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
 
 /**
@@ -15,8 +15,8 @@ use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
  */
 class ServiceAPayer extends AbstractService
 {
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
 
 
 

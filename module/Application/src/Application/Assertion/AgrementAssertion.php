@@ -11,7 +11,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Resource\WorkflowResource;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
-use Application\Service\Traits\TypeAgrementAwareTrait;
+use Application\Service\Traits\TypeAgrementServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -24,7 +24,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class AgrementAssertion extends AbstractAssertion
 {
-    use TypeAgrementAwareTrait;
+    use TypeAgrementServiceAwareTrait;
     use TblAgrementServiceAwareTrait;
 
 

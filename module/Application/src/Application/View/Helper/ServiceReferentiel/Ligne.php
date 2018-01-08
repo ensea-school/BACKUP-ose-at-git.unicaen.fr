@@ -3,8 +3,8 @@
 namespace Application\View\Helper\ServiceReferentiel;
 
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
@@ -18,8 +18,8 @@ use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
 class Ligne extends AbstractViewHelper
 {
     use ServiceReferentielAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
 
     /**
      * @var Liste

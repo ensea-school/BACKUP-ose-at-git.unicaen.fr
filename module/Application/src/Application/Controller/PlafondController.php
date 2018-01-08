@@ -8,7 +8,7 @@ use Application\Form\Plafond\Traits\PlafondApplicationFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PlafondApplicationServiceAwareTrait;
 use Application\Service\Traits\PlafondServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 
@@ -22,7 +22,7 @@ class PlafondController extends AbstractController
     use PlafondApplicationServiceAwareTrait;
     use PlafondApplicationFormAwareTrait;
     use PlafondServiceAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
     use ContextServiceAwareTrait;
 
 

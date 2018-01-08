@@ -10,7 +10,7 @@ use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TypeAgrement extends AbstractEntityService
+class TypeAgrementService extends AbstractEntityService
 {
 
     /**

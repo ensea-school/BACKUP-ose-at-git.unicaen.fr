@@ -13,7 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class CentreCout extends AbstractEntityService
+class CentreCoutService extends AbstractEntityService
 {
     use TypeHeuresAwareTrait;
 

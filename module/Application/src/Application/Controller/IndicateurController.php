@@ -15,7 +15,7 @@ use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\NotificationIndicateurAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
 use Application\Service\Traits\PeriodeAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use Zend\View\Renderer\PhpRenderer;
 use Exception;
@@ -41,7 +41,7 @@ class IndicateurController extends AbstractController
     use AffectationServiceAwareTrait;
     use IndicateurProcessusAwareTrait;
     use DossierAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
     use PeriodeAwareTrait;
 
     /**

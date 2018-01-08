@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\RegleStructureValidation;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 
 /**
@@ -45,12 +45,12 @@ class RegleStructureValidationService extends AbstractEntityService
 
 
     /**
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param Intervenant       $intervenant
      *
      * @return RegleStructureValidation
      */
-    public function getBy(TypeVolumeHoraireEntity $typeVolumeHoraire, Intervenant $intervenant)
+    public function getBy(TypeVolumeHoraire $typeVolumeHoraire, Intervenant $intervenant)
     {
         $typeIntervenant = $intervenant->getStatut()->getTypeIntervenant();
 

@@ -4,17 +4,17 @@ namespace Application\Service;
 
 use Application\Entity\Db\FonctionReferentiel as FonctionReferentielEntity;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeVolumeHoraire;
 
 
 /**
@@ -28,8 +28,8 @@ class ServiceReferentiel extends AbstractEntityService
     use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
     use FonctionReferentielAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
     use VolumeHoraireReferentielAwareTrait;
 
 
@@ -110,13 +110,13 @@ class ServiceReferentiel extends AbstractEntityService
 
     /**
      *
-     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
-     * @param QueryBuilder            $qb
-     * @param string                  $alias
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param QueryBuilder      $qb
+     * @param string            $alias
      *
      * @return QueryBuilder
      */
-    public function finderByTypeVolumeHoraire(TypeVolumeHoraireEntity $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($typeVolumeHoraire) {
@@ -132,9 +132,9 @@ class ServiceReferentiel extends AbstractEntityService
     /**
      * Retourne un service unique selon ses critères précis
      *
-     * @param Intervenant         $intervenant
+     * @param Intervenant               $intervenant
      * @param FonctionReferentielEntity $fonction
-     * @param Structure           $structure
+     * @param Structure                 $structure
      * @param string                    $commentaires
      *
      * @return null|\Application\Entity\Db\ServiceReferentiel
@@ -143,7 +143,7 @@ class ServiceReferentiel extends AbstractEntityService
         Intervenant $intervenant,
         FonctionReferentielEntity $fonction,
         Structure $structure,
-        $commentaires=null
+        $commentaires = null
     )
     {
         $result = $this->getRepo()->findBy([
@@ -165,6 +165,7 @@ class ServiceReferentiel extends AbstractEntityService
         }
 
         /* Sinon ne retourne rien */
+
         return null;
     }
 
@@ -192,9 +193,9 @@ class ServiceReferentiel extends AbstractEntityService
     /**
      *
      * @param ServiceReferentielEntity[] $servicesReferentiels
-     * @param TypeVolumeHoraireEntity    $typeVolumeHoraire
+     * @param TypeVolumeHoraire          $typeVolumeHoraire
      */
-    public function setTypeVolumeHoraire($servicesReferentiels, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    public function setTypeVolumeHoraire($servicesReferentiels, TypeVolumeHoraire $typeVolumeHoraire)
     {
         foreach ($servicesReferentiels as $serviceReferentiel) {
             $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
@@ -287,7 +288,7 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function delete($entity, $softDelete = true)
     {
-        if ($softDelete){
+        if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireReferentielListe();
             $vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
         }
@@ -299,7 +300,7 @@ class ServiceReferentiel extends AbstractEntityService
             if ($volumeHoraire->getRemove() || !$volumeHoraire->estNonHistorise()) {
                 $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire, $softDelete);
                 $vhrl->removeElement($volumeHoraire);
-            } elseif($volumeHoraire->getId()) {
+            } elseif ($volumeHoraire->getId()) {
                 $delete = false;
                 $this->getServiceVolumeHoraireReferentiel()->save($volumeHoraire);
             }
@@ -334,7 +335,7 @@ class ServiceReferentiel extends AbstractEntityService
                 $service->setFonction($o['fonction']);
                 $service->setStructure($o['structure']);
                 $service->setCommentaires($o['commentaires']);
-                $service->setTypeVolumeHoraire( $o['type-volume-horaire'] );
+                $service->setTypeVolumeHoraire($o['type-volume-horaire']);
             }
             $volumeHoraire = $this->getServiceVolumeHoraireReferentiel()->newEntity();
             //@formatter:off

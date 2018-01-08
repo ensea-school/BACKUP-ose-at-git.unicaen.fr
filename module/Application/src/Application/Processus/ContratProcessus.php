@@ -12,10 +12,10 @@ use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ContratAwareTrait;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\TypeContratAwareTrait;
 use Application\Service\Traits\TypeValidationAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\VolumeHoraireAwareTrait;
 
@@ -29,8 +29,8 @@ class ContratProcessus extends AbstractProcessus
 {
     use ContextServiceAwareTrait;
     use ContratAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
     use TypeContratAwareTrait;
     use TypeValidationAwareTrait;
     use VolumeHoraireAwareTrait;

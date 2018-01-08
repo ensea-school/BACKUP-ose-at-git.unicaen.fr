@@ -3,17 +3,17 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
+use Application\Entity\Db\EtatVolumeHoraire;
 
 /**
  * Description of EtatVolumeHoraire
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtatVolumeHoraire extends AbstractEntityService
+class EtatVolumeHoraireService extends AbstractEntityService
 {
     /**
-     * @var EtatVolumeHoraireEntity[]
+     * @var EtatVolumeHoraire[]
      */
     private $cache;
 
@@ -27,7 +27,7 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return EtatVolumeHoraireEntity::class;
+        return EtatVolumeHoraire::class;
     }
 
 
@@ -58,11 +58,11 @@ class EtatVolumeHoraire extends AbstractEntityService
     /**
      * Retourne l'état "Saisi"
      *
-     * @return EtatVolumeHoraireEntity
+     * @return EtatVolumeHoraire
      */
     public function getSaisi()
     {
-        return $this->getByCode(EtatVolumeHoraireEntity::CODE_SAISI);
+        return $this->getByCode(EtatVolumeHoraire::CODE_SAISI);
     }
 
 
@@ -70,11 +70,11 @@ class EtatVolumeHoraire extends AbstractEntityService
     /**
      * Retourne l'état "Validé"
      *
-     * @return EtatVolumeHoraireEntity
+     * @return EtatVolumeHoraire
      */
     public function getValide()
     {
-        return $this->getByCode(EtatVolumeHoraireEntity::CODE_VALIDE);
+        return $this->getByCode(EtatVolumeHoraire::CODE_VALIDE);
     }
 
 
@@ -82,11 +82,11 @@ class EtatVolumeHoraire extends AbstractEntityService
     /**
      * Retourne l'état "Contrat édité"
      *
-     * @return EtatVolumeHoraireEntity
+     * @return EtatVolumeHoraire
      */
     public function getContratEdite()
     {
-        return $this->getByCode(EtatVolumeHoraireEntity::CODE_CONTRAT_EDITE);
+        return $this->getByCode(EtatVolumeHoraire::CODE_CONTRAT_EDITE);
     }
 
 
@@ -94,11 +94,11 @@ class EtatVolumeHoraire extends AbstractEntityService
     /**
      * Retourne l'état "Contrat signé"
      *
-     * @return EtatVolumeHoraireEntity
+     * @return EtatVolumeHoraire
      */
     public function getContratSigne()
     {
-        return $this->getByCode(EtatVolumeHoraireEntity::CODE_CONTRAT_SIGNE);
+        return $this->getByCode(EtatVolumeHoraire::CODE_CONTRAT_SIGNE);
     }
 
 

@@ -3,8 +3,8 @@
 namespace Application\Form\Intervenant;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Zend\Form\Element\Select;
 
 
@@ -15,8 +15,8 @@ use Zend\Form\Element\Select;
  */
 class HeuresCompForm extends AbstractForm
 {
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
 
     /**
      *

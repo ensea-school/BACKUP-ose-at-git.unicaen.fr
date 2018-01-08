@@ -16,7 +16,7 @@ use Application\Service\Traits\TypeValidationAwareTrait;
 use Application\Service\Traits\ValidationAwareTrait;
 use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
 /**
  * Description of PaiementAssertion
@@ -29,7 +29,7 @@ class PaiementAssertion extends AbstractAssertion
     use ValidationAwareTrait;
     use ServiceAwareTrait;
     use ServiceReferentielAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 

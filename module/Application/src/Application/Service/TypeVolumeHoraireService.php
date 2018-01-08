@@ -3,23 +3,23 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Description of TypeVolumeHoraire
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  *
- * @method TypeVolumeHoraireEntity get($id)
- * @method TypeVolumeHoraireEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
- * @method TypeVolumeHoraireEntity newEntity()
+ * @method TypeVolumeHoraire get($id)
+ * @method TypeVolumeHoraire[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method TypeVolumeHoraire newEntity()
  *
  */
-class TypeVolumeHoraire extends AbstractEntityService
+class TypeVolumeHoraireService extends AbstractEntityService
 {
 
     /**
-     * @var TypeVolumeHoraireEntity[]
+     * @var TypeVolumeHoraire[]
      */
     private $cache;
 
@@ -33,7 +33,7 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return TypeVolumeHoraireEntity::class;
+        return TypeVolumeHoraire::class;
     }
 
 
@@ -53,11 +53,11 @@ class TypeVolumeHoraire extends AbstractEntityService
     /**
      * Retourne le type de volume horaire "Prévu"
      *
-     * @return TypeVolumeHoraireEntity
+     * @return TypeVolumeHoraire
      */
     public function getPrevu()
     {
-        return $this->getByCode(TypeVolumeHoraireEntity::CODE_PREVU);
+        return $this->getByCode(TypeVolumeHoraire::CODE_PREVU);
     }
 
 
@@ -65,11 +65,11 @@ class TypeVolumeHoraire extends AbstractEntityService
     /**
      * Retourne le type de volume horaire "Réalisé"
      *
-     * @return TypeVolumeHoraireEntity
+     * @return TypeVolumeHoraire
      */
     public function getRealise()
     {
-        return $this->getByCode(TypeVolumeHoraireEntity::CODE_REALISE);
+        return $this->getByCode(TypeVolumeHoraire::CODE_REALISE);
     }
 
 
@@ -78,7 +78,7 @@ class TypeVolumeHoraire extends AbstractEntityService
      *
      * @param string $code
      *
-     * @return TypeVolumeHoraireEntity
+     * @return TypeVolumeHoraire
      */
     public function getByCode($code)
     {

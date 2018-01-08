@@ -295,7 +295,7 @@ return [
         'invokables' => [
             Service\AgrementService::class  => Service\AgrementService::class,
             'ApplicationTblAgrement'        => Service\TblAgrementService::class,
-            'ApplicationTypeAgrement'       => Service\TypeAgrement::class,
+            'ApplicationTypeAgrement'       => Service\TypeAgrementService::class,
             'ApplicationTypeAgrementStatut' => Service\TypeAgrementStatut::class,
             'AssertionAgrement'             => Assertion\AgrementAssertion::class,
         ],

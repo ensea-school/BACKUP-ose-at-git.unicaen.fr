@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
-use Application\Service\Traits\EtatVolumeHoraireAwareTrait;
-use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
-use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
+use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -14,8 +14,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class VolumeHoraireReferentiel extends AbstractEntityService
 {
-    use TypeVolumeHoraireAwareTrait;
-    use EtatVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireServiceAwareTrait;
+    use EtatVolumeHoraireServiceAwareTrait;
 
 
 
@@ -61,13 +61,13 @@ class VolumeHoraireReferentiel extends AbstractEntityService
 
     /**
      *
-     * @param EtatVolumeHoraireEntity $etatVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumeHoraire
      * @param QueryBuilder            $qb
      * @param string                  $alias
      *
      * @return QueryBuilder
      */
-    public function finderByEtatVolumeHoraire(EtatVolumeHoraireEntity $etatVolumeHoraire = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {
@@ -85,13 +85,13 @@ class VolumeHoraireReferentiel extends AbstractEntityService
 
     /**
      *
-     * @param EtatVolumeHoraireEntity $etatVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumeHoraire
      * @param QueryBuilder            $qb
      * @param string                  $alias
      *
      * @return QueryBuilder
      */
-    public function finderByStrictEtatVolumeHoraire(EtatVolumeHoraireEntity $etatVolumeHoraire = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByStrictEtatVolumeHoraire(EtatVolumeHoraire $etatVolumeHoraire = null, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($etatVolumeHoraire) {

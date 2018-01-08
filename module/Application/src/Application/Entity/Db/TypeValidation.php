@@ -1,16 +1,13 @@
 <?php
 
 namespace Application\Entity\Db;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
+
 
 /**
  * TypeValidation
  */
-class TypeValidation implements HistoriqueAwareInterface
+class TypeValidation
 {
-    use HistoriqueAwareTrait;
-
     const CODE_DONNEES_PERSO   = 'DONNEES_PERSO_PAR_COMP';
     const CODE_ENSEIGNEMENT    = 'SERVICES_PAR_COMP';
     const CODE_REFERENTIEL     = 'REFERENTIEL';

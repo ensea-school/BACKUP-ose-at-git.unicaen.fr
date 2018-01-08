@@ -45,6 +45,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
                                 'class'      => 'pop-ajax',
                                 'href'       => $url,
                                 'data-submit-reload' => 'true',
+                                'data-min-width' => '400px',
                             ])->html((string)$regle);
                         } else {
                             echo (string)$regle;
@@ -59,6 +60,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::PLAFONDS_GESTI
                                 'class'      => 'pop-ajax',
                                 'href'       => $url,
                                 'data-submit-reload' => 'true',
+                                'data-min-width' => '400px',
                             ])->html('Aucun');
                         }
                     }

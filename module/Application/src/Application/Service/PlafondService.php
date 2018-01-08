@@ -33,11 +33,20 @@ class PlafondService extends AbstractEntityService
 
     public function controle( Intervenant $intervenant )
     {
-        $sql = file_get_contents('data/Query/plafond.sql');
-        $sql = str_replace( '/*i.id*/', 'AND i.id = '.$intervenant->getId(), $sql);
+        $sqlp = file_get_contents('data/Query/plafond.sql');
+        $sqlp = str_replace( '/*i.id*/', 'AND i.id = '.$intervenant->getId(), $sql);
+
+        $sql = "
+        SELECT 
+          * 
+        FROM 
+          ($sqlp) t 
+          JOIN plafond p ON p.id = t.plafond_id 
+          JOIN type_volume_horaire tvh ON tvh.id = t.type_volume_horaire_id
+        ";
 
         $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
-
+var_dump($res);
     }
 
 

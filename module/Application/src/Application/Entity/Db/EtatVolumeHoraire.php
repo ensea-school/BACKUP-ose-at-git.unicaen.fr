@@ -2,16 +2,11 @@
 
 namespace Application\Entity\Db;
 
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
-
 /**
  * EtatVolumeHoraire
  */
-class EtatVolumeHoraire implements HistoriqueAwareInterface
+class EtatVolumeHoraire
 {
-    use HistoriqueAwareTrait;
-
     const CODE_SAISI         = 'saisi';
     const CODE_VALIDE        = 'valide';
     const CODE_CONTRAT_EDITE = 'contrat-edite';

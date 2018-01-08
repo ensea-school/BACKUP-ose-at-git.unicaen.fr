@@ -1,15 +1,12 @@
 <?php
 
 namespace Application\Entity\Db;
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * TypeVolumeHoraire
  */
-class TypeVolumeHoraire implements HistoriqueAwareInterface
+class TypeVolumeHoraire
 {
-    use HistoriqueAwareTrait;
 
     const CODE_PREVU   = 'PREVU';
     const CODE_REALISE = 'REALISE';

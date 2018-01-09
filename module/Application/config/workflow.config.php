@@ -14,8 +14,7 @@ return [
                 'options'       => [
                     'route'    => '/workflow',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Workflow',
+                        'controller'    => 'Application\Controller\Workflow',
                         'action'        => 'index',
                     ],
                 ],
@@ -66,7 +65,7 @@ return [
                             ],
                         ],
                     ],
-                    'feuille-de-route-refresh' => [
+                    'feuille-de-route-refresh'  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/feuille-de-route-refresh/:intervenant',
@@ -160,7 +159,7 @@ return [
                 'allow' => [
                     [
                         'resources' => ['WorkflowResource', 'WorkflowEtape'],
-                        'assertion' => 'assertionWorkflow',
+                        'assertion' => Assertion\WorkflowAssertion::class,
                     ],
                 ],
             ],
@@ -173,17 +172,17 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'applicationWfEtapeDep' => Service\WfEtapeDepService::class,
-            'applicationWfEtape'    => Service\WfEtape::class,
-            'assertionWorkflow'     => Assertion\WorkflowAssertion::class,
+            Service\WfEtapeDepService::class   => Service\WfEtapeDepService::class,
+            Service\WfEtapeService::class      => Service\WfEtapeService::class,
+            Assertion\WorkflowAssertion::class => Assertion\WorkflowAssertion::class,
         ],
-        'factories' => [
-            'workflow'              => Service\Factory\WorkflowServiceFactory::class,
+        'factories'  => [
+            Service\WorkflowService::class => Service\Factory\WorkflowServiceFactory::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'workflowDependance' => Form\Workflow\DependanceForm::class,
+            Form\Workflow\DependanceForm::class => Form\Workflow\DependanceForm::class,
         ],
     ],
     'view_helpers'    => [

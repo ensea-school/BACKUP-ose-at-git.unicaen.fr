@@ -4,7 +4,7 @@ namespace Application\Processus;
 
 use Application\Entity\Db\NotificationIndicateur;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\NotificationIndicateurAwareTrait;
+use Application\Service\Traits\NotificationIndicateurServiceAwareTrait;
 use Zend\View\Renderer\PhpRenderer;
 use UnicaenApp\Controller\Plugin\Mail;
 use Zend\Mime\Part as MimePart;
@@ -20,7 +20,7 @@ use Zend\Mime\Message as MimeMessage;
  */
 class IndicateurProcessus extends AbstractProcessus
 {
-    use NotificationIndicateurAwareTrait;
+    use NotificationIndicateurServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     /**

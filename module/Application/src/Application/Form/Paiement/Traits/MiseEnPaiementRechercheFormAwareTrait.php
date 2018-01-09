@@ -43,6 +43,6 @@ trait MiseEnPaiementRechercheFormAwareTrait
             return $this->formPaiementMiseEnPaiementRecherche;
         }
 
-        return \Application::$container->get('FormElementManager')->get('PaiementMiseEnPaiementRechercheForm');
+        return \Application::$container->get('FormElementManager')->get(MiseEnPaiementRechercheForm::class);
     }
 }

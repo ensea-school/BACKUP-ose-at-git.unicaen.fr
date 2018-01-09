@@ -8,10 +8,10 @@ use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Exception\DbException;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
-use Application\Service\Traits\PieceJointeAwareTrait;
+use Application\Service\Traits\PieceJointeServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
-use Application\Service\Traits\TypePieceJointeAwareTrait;
-use Application\Service\Traits\TypePieceJointeStatutAwareTrait;
+use Application\Service\Traits\TypePieceJointeServiceAwareTrait;
+use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Application\Form\PieceJointe\Traits\TypePieceJointeSaisieFormAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -27,12 +27,12 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 class PieceJointeController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use PieceJointeAwareTrait;
+    use PieceJointeServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
     use TypePieceJointeSaisieFormAwareTrait;
     use ModifierTypePieceJointeStatutFormAwareTrait;
-    use TypePieceJointeAwareTrait;
-    use TypePieceJointeStatutAwareTrait;
+    use TypePieceJointeServiceAwareTrait;
+    use TypePieceJointeStatutServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 

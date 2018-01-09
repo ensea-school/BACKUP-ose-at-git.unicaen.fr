@@ -75,9 +75,9 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                   $intervenant
-     * @param Structure|null                           $structure
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
      */
@@ -100,9 +100,9 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                   $intervenant
-     * @param Structure|null                           $structure
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
      */
@@ -127,9 +127,9 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                   $intervenant
-     * @param Structure|null                           $structure
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
      */
@@ -154,9 +154,9 @@ class WorkflowService extends AbstractService
 
 
     /**
-     * @param WfEtape|WorkflowEtape|TblWorkflow|string $etape
-     * @param Intervenant|null                   $intervenant
-     * @param Structure|null                           $structure
+     * @param WfEtapeService|WorkflowEtape|TblWorkflow|string $etape
+     * @param Intervenant|null                                $intervenant
+     * @param Structure|null                                  $structure
      *
      * @return WorkflowEtape
      */

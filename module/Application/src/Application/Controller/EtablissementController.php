@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
 class EtablissementController extends AbstractController
 {
     use \Application\Service\Traits\ContextServiceAwareTrait;
-    use \Application\Service\Traits\EtablissementAwareTrait;
+    use \Application\Service\Traits\EtablissementServiceAwareTrait;
 
 
     public function indexAction()

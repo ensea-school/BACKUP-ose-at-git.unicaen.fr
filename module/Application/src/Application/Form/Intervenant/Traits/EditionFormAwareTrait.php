@@ -43,6 +43,6 @@ trait EditionFormAwareTrait
             return $this->formIntervenantEdition;
         }
 
-        return \Application::$container->get('FormElementManager')->get('IntervenantEditionForm');
+        return \Application::$container->get('FormElementManager')->get(EditionForm::class);
     }
 }

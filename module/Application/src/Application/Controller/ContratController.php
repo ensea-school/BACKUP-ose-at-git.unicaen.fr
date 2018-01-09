@@ -12,10 +12,10 @@ use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ContratAwareTrait;
-use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\ContratServiceAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ParametresAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
@@ -39,15 +39,15 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 class ContratController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use ContratAwareTrait;
+    use ContratServiceAwareTrait;
     use ServiceServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use ContratRetourAwareTrait;
-    use ParametresAwareTrait;
+    use ParametresServiceAwareTrait;
     use ContratProcessusAwareTrait;
     use TauxHoraireHETDServiceAwareTrait;
-    use DossierAwareTrait;
+    use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 

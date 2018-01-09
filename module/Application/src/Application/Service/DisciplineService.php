@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Discipline as DisciplineEntity;
+use Application\Entity\Db\Discipline;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -27,7 +27,7 @@ class DisciplineService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return DisciplineEntity::class;
+        return Discipline::class;
     }
 
 

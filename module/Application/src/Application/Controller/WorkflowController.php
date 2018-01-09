@@ -7,7 +7,7 @@ use Application\Entity\Db\WfEtapeDep;
 use Application\Exception\DbException;
 use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\WfEtapeAwareTrait;
+use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exception\LogicException;
@@ -27,7 +27,7 @@ class WorkflowController extends AbstractController
     use WfEtapeDepServiceAwareTrait;
     use DependanceFormAwareTrait;
     use WorkflowServiceAwareTrait;
-    use WfEtapeAwareTrait;
+    use WfEtapeServiceAwareTrait;
 
 
 

@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\TypeModulateurStructure as Entity;
+use Application\Entity\Db\TypeModulateurStructure;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
 
 /**
@@ -14,7 +14,7 @@ use TypeModulateurStructureServiceAwareTrait;
     /**
      * Liste des types de modulateur par structure
      *
-     * @var Entity[]
+     * @var TypeModulateurStructure[]
      */
     protected $typesModulateurStructure;
 
@@ -28,7 +28,7 @@ use TypeModulateurStructureServiceAwareTrait;
      */
     public function getEntityClass()
     {
-        return Entity::class;
+        return TypeModulateurStructure::class;
     }
 
 
@@ -42,5 +42,5 @@ use TypeModulateurStructureServiceAwareTrait;
     {
         return 'tmd';
     }
-    
+
 }

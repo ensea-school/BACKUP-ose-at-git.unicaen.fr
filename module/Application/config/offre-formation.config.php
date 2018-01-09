@@ -14,9 +14,8 @@ return [
                 'options'       => [
                     'route'    => '/offre-de-formation',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'OffreFormation',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\OffreFormation',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -40,12 +39,12 @@ return [
                             'route'    => '/element',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller'    => 'ElementPedagogique',
+                                'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                             ],
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'voir'        => [
+                            'voir'           => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/voir/:elementPedagogique',
@@ -53,14 +52,14 @@ return [
                                     'defaults'    => ['action' => 'voir'],
                                 ],
                             ],
-                            'ajouter'     => [
+                            'ajouter'        => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'    => '/ajouter',
                                     'defaults' => ['action' => 'saisir'],
                                 ],
                             ],
-                            'modifier'    => [
+                            'modifier'       => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/modifier/:elementPedagogique',
@@ -68,7 +67,7 @@ return [
                                     'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
-                            'supprimer'   => [
+                            'supprimer'      => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/supprimer/:elementPedagogique',
@@ -76,14 +75,14 @@ return [
                                     'defaults'    => ['action' => 'supprimer'],
                                 ],
                             ],
-                            'search'      => [
+                            'search'         => [
                                 'type'    => 'Literal',
                                 'options' => [
                                     'route'    => '/search',
                                     'defaults' => ['action' => 'search'],
                                 ],
                             ],
-                            'get-periode' => [
+                            'get-periode'    => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/get-periode/:elementPedagogique',
@@ -91,7 +90,7 @@ return [
                                     'defaults'    => ['action' => 'getPeriode'],
                                 ],
                             ],
-                            'volume-horaire'   => [
+                            'volume-horaire' => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/volume-horaire/:elementPedagogique',
@@ -99,7 +98,7 @@ return [
                                         'elementPedagogique' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action'     => 'volume-horaire',
+                                        'action' => 'volume-horaire',
                                     ],
                                 ],
                             ],
@@ -111,7 +110,7 @@ return [
                             'route'    => '/etape',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller'    => 'Etape',
+                                'controller' => 'Application\Controller\OffreFormation\Etape',
                             ],
                         ],
                         'may_terminate' => false,
@@ -153,9 +152,8 @@ return [
                                     'route'       => '/modulateurs/:etape',
                                     'constraints' => ['etape' => '[0-9]*'],
                                     'defaults'    => [
-                                        '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                        'controller'    => 'Modulateur',
-                                        'action'        => 'saisir',
+                                        'controller' => 'Application\Controller\OffreFormation\Modulateur',
+                                        'action'     => 'saisir',
                                     ],
                                 ],
                             ],
@@ -167,7 +165,7 @@ return [
                                         'etape' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'controller' => 'EtapeCentreCout',
+                                        'controller' => 'Application\Controller\OffreFormation\EtapeCentreCout',
                                         'action'     => 'saisir',
                                     ],
                                 ],
@@ -180,7 +178,7 @@ return [
                                         'etape' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'controller' => 'Etape',
+                                        'controller' => 'Application\Controller\OffreFormation\Etape',
                                         'action'     => 'taux-mixite',
                                     ],
                                 ],
@@ -279,7 +277,7 @@ return [
             ],
         ],
         'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
+            \BjyAuthorize\Provider\Resource\Config::class => [
                 'ElementPedagogique' => [],
                 'Etape'              => [],
                 'CentreCoutEp'       => [],
@@ -293,32 +291,32 @@ return [
                     [
                         'privileges' => Privileges::ODF_ELEMENT_EDITION,
                         'resources'  => ['ElementPedagogique', 'Structure'],
-                        'assertion'  => 'AssertionOffreDeFormation',
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ODF_ETAPE_EDITION,
                         'resources'  => ['Etape', 'Structure'],
-                        'assertion'  => 'AssertionOffreDeFormation',
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp'],
-                        'assertion'  => 'AssertionOffreDeFormation',
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ODF_MODULATEURS_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'ElementModulateur'],
-                        'assertion'  => 'AssertionOffreDeFormation',
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ODF_TAUX_MIXITE_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique'],
-                        'assertion'  => 'AssertionOffreDeFormation',
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ODF_ELEMENT_VH_EDITION,
-                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique','VolumeHoraireEns','TypeIntervention'],
-                        'assertion'  => 'AssertionOffreDeFormation',
+                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'VolumeHoraireEns', 'TypeIntervention'],
+                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
                 ],
             ],
@@ -326,44 +324,44 @@ return [
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\OffreFormation'                    => Controller\OffreFormationController::class,
-            'Application\Controller\OffreFormation\Etape'              => Controller\OffreFormation\EtapeController::class,
-            'Application\Controller\OffreFormation\Modulateur'         => Controller\OffreFormation\ModulateurController::class,
-            'Application\Controller\OffreFormation\EtapeCentreCout'    => Controller\OffreFormation\EtapeCentreCoutController::class,
+            'Application\Controller\OffreFormation'                 => Controller\OffreFormationController::class,
+            'Application\Controller\OffreFormation\Etape'           => Controller\OffreFormation\EtapeController::class,
+            'Application\Controller\OffreFormation\Modulateur'      => Controller\OffreFormation\ModulateurController::class,
+            'Application\Controller\OffreFormation\EtapeCentreCout' => Controller\OffreFormation\EtapeCentreCoutController::class,
         ],
-        'factories' => [
+        'factories'  => [
             'Application\Controller\OffreFormation\ElementPedagogique' => Controller\OffreFormation\Factory\ElementPedagogiqueControllerFactory::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationElementPedagogique'  => Service\ElementPedagogique::class,
-            'ApplicationCheminPedagogique'   => Service\CheminPedagogique::class,
-            'ApplicationEtape'               => Service\Etape::class,
-            'ApplicationTypeFormation'       => Service\TypeFormation::class,
-            'ApplicationGroupeTypeFormation' => Service\GroupeTypeFormation::class,
-            'ApplicationNiveauEtape'         => Service\NiveauEtape::class,
-            'ApplicationNiveauFormation'     => Service\NiveauFormation::class,
-            'ApplicationModulateur'          => Service\Modulateur::class,
-            'ApplicationElementModulateur'   => Service\ElementModulateur::class,
-            'ApplicationTypeModulateur'      => Service\TypeModulateur::class,
-            'ApplicationDomaineFonctionnel'  => Service\DomaineFonctionnel::class,
-            'AssertionOffreDeFormation'      => Assertion\OffreDeFormationAssertion::class,
+            Service\ElementPedagogiqueService::class   => Service\ElementPedagogiqueService::class,
+            Service\CheminPedagogiqueService::class    => Service\CheminPedagogiqueService::class,
+            Service\EtapeService::class                => Service\EtapeService::class,
+            Service\TypeFormationService::class        => Service\TypeFormationService::class,
+            Service\GroupeTypeFormationService::class  => Service\GroupeTypeFormationService::class,
+            Service\NiveauEtapeService::class          => Service\NiveauEtapeService::class,
+            Service\NiveauFormationService::class      => Service\NiveauFormationService::class,
+            Service\ModulateurService::class           => Service\ModulateurService::class,
+            Service\ElementModulateurService::class    => Service\ElementModulateurService::class,
+            Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
+            Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
+            Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'FormElementPedagogiqueRechercheFieldset'                => Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class,
-            'EtapeSaisie'                                            => Form\OffreFormation\EtapeSaisie::class,
-            'ElementPedagogiqueSaisie'                               => Form\OffreFormation\ElementPedagogiqueSaisie::class,
-            'EtapeModulateursSaisie'                                 => Form\OffreFormation\EtapeModulateursSaisie::class,
-            'ElementModulateursFieldset'                             => Form\OffreFormation\ElementModulateursFieldset::class,
-            'EtapeCentreCoutForm'                                    => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
-            'ElementCentreCoutFieldset'                              => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,
-            Form\OffreFormation\TauxMixite\TauxMixiteForm::class     => Form\OffreFormation\TauxMixite\TauxMixiteForm::class,
-            Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
+            Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class       => Form\OffreFormation\ElementPedagogiqueRechercheFieldset::class,
+            Form\OffreFormation\EtapeSaisie::class                               => Form\OffreFormation\EtapeSaisie::class,
+            Form\OffreFormation\ElementPedagogiqueSaisie::class                  => Form\OffreFormation\ElementPedagogiqueSaisie::class,
+            Form\OffreFormation\EtapeModulateursSaisie::class                    => Form\OffreFormation\EtapeModulateursSaisie::class,
+            Form\OffreFormation\ElementModulateursFieldset::class                => Form\OffreFormation\ElementModulateursFieldset::class,
+            Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class       => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
+            Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,
+            Form\OffreFormation\TauxMixite\TauxMixiteForm::class                 => Form\OffreFormation\TauxMixite\TauxMixiteForm::class,
+            Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class             => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
         ],
-        'factories' => [
+        'factories'  => [
             Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
         ],
     ],
@@ -380,5 +378,4 @@ return [
             'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
     ],
-
 ];

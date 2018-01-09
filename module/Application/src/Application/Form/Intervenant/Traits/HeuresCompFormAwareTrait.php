@@ -43,6 +43,6 @@ trait HeuresCompFormAwareTrait
             return $this->formIntervenantHeuresComp;
         }
 
-        return \Application::$container->get('FormElementManager')->get('IntervenantHeuresCompForm');
+        return \Application::$container->get('FormElementManager')->get(HeuresCompForm::class);
     }
 }

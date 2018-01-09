@@ -4,7 +4,7 @@ namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\EtapeModulateursSaisie;
 use Zend\View\Helper\AbstractHelper;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Zend\Form\Element\Select;
 
 /**
@@ -14,7 +14,7 @@ use Zend\Form\Element\Select;
  */
 class EtapeModulateursSaisieForm extends AbstractHelper
 {
-    use ElementPedagogiqueAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
     /**
      * @var Saisie

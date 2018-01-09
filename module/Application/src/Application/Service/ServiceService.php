@@ -2,35 +2,33 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
-use Application\Entity\Db\Etablissement as EtablissementEntity;
-use Application\Entity\Db\Etape as EtapeEntity;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etablissement;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
+use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\VolumeHoraire;
-use Application\Entity\NiveauEtape as NiveauEtapeEntity;
+use Application\Entity\NiveauEtape;
 use Application\Entity\Service\Recherche;
 use Application\Form\Service\RechercheHydrator;
 use Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
-use Application\Service\Traits\VolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Session\Container as SessionContainer;
@@ -40,25 +38,25 @@ use Zend\Session\Container as SessionContainer;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  *
- * @method ServiceEntity get($id)
- * @method ServiceEntity[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Service get($id)
+ * @method Service[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
  *
  */
 class ServiceService extends AbstractEntityService
 {
-    use ElementPedagogiqueAwareTrait;
-    use EtapeAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
+    use EtapeServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
-    use VolumeHoraireAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
-    use PeriodeAwareTrait;
-    use LocalContextAwareTrait;
+    use PeriodeServiceAwareTrait;
+    use LocalContextServiceAwareTrait;
     use RechercheHydratorAwareTrait;
-    use ValidationAwareTrait;
+    use ValidationServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
 
     /**
@@ -83,7 +81,7 @@ class ServiceService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return ServiceEntity::class;
+        return Service::class;
     }
 
 
@@ -103,7 +101,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne une nouvelle entité de la classe donnée
      *
-     * @return ServiceEntity
+     * @return Service
      */
     public function newEntity()
     {
@@ -202,16 +200,16 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne un service unique selon ses critères précis
      *
-     * @param Intervenant        $intervenant
-     * @param ElementPedagogiqueEntity $elementPedagogique
-     * @param EtablissementEntity      $etablissement
+     * @param Intervenant              $intervenant
+     * @param ElementPedagogique $elementPedagogique
+     * @param Etablissement      $etablissement
      *
-     * @return null|ServiceEntity
+     * @return null|Service
      */
     public function getBy(
         Intervenant $intervenant,
         $elementPedagogique,
-        EtablissementEntity $etablissement
+        Etablissement $etablissement
     )
     {
         $result = $this->getRepo()->findBy([
@@ -239,10 +237,10 @@ class ServiceService extends AbstractEntityService
     /**
      * Sauvegarde une entité
      *
-     * @param ServiceEntity $entity
+     * @param Service $entity
      *
      * @throws Exception
-     * @return ServiceEntity
+     * @return Service
      */
     public function save($entity, $plafondControl = true)
     {
@@ -335,7 +333,7 @@ class ServiceService extends AbstractEntityService
         $vhl = $entity->getVolumeHoraire();
 
         $delete = true;
-        /** @var VolumeHoraire $volumeHoraire */
+        /** @var VolumeHoraireService $volumeHoraire */
         foreach ($vhl as $volumeHoraire) {
             if ($volumeHoraire->getRemove() || !$volumeHoraire->estNonHistorise()) {
                 $this->getServiceVolumeHoraire()->delete($volumeHoraire, $softDelete);
@@ -358,12 +356,12 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param EtapeEntity       $etape
+     * @param Etape       $etape
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByEtape(EtapeEntity $etape, QueryBuilder $qb = null, $alias = null)
+    public function finderByEtape(Etape $etape, QueryBuilder $qb = null, $alias = null)
     {
         $serviceElement = $this->getServiceElementPedagogique();
 
@@ -379,12 +377,12 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param EtapeEntity       $etape
+     * @param Etape       $etape
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByNiveauEtape(NiveauEtapeEntity $niveauEtape, QueryBuilder $qb = null, $alias = null)
+    public function finderByNiveauEtape(NiveauEtape $niveauEtape, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if ($niveauEtape && $niveauEtape->getId() !== '-') {
@@ -404,8 +402,8 @@ class ServiceService extends AbstractEntityService
     /**
      *
      * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param QueryBuilder            $qb
-     * @param string                  $alias
+     * @param QueryBuilder      $qb
+     * @param string            $alias
      *
      * @return QueryBuilder
      */
@@ -427,8 +425,8 @@ class ServiceService extends AbstractEntityService
     /**
      *
      * @param EtatVolumeHoraire $etatVolumeHoraire
-     * @param QueryBuilder            $qb
-     * @param string                  $alias
+     * @param QueryBuilder      $qb
+     * @param string            $alias
      *
      * @return QueryBuilder
      */
@@ -455,7 +453,7 @@ class ServiceService extends AbstractEntityService
      * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée;
      * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée;
      *
-     * @param Structure   $structure
+     * @param Structure         $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -488,7 +486,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Utile pour la recherche de services
      *
-     * @param Structure   $structure
+     * @param Structure         $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -511,7 +509,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Utile pour la recherche de services
      *
-     * @param Structure   $structure
+     * @param Structure         $structure
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -558,8 +556,8 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param TypeIntervenant $typeIntervenant
-     * @param QueryBuilder|null     $queryBuilder
+     * @param TypeIntervenant   $typeIntervenant
+     * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
@@ -635,11 +633,11 @@ class ServiceService extends AbstractEntityService
 
         $qb = $this->select(['id', 'elementPedagogique', 'etablissement']);
         //@formatter:off
-        $this->join(    'applicationEtablissement',                     $qb, 'etablissement',           true);//['id', 'sourceCode']);
-        $this->leftJoin('applicationElementPedagogique',                $qb, 'elementPedagogique',      true);//['id', 'sourceCode']);
+        $this->join(    EtablissementService::class,                     $qb, 'etablissement',           true);//['id', 'sourceCode']);
+        $this->leftJoin(ElementPedagogiqueService::class,                $qb, 'elementPedagogique',      true);//['id', 'sourceCode']);
         $this->leftJoin($sVolumeHoraire,                                $qb, 'volumeHoraire',           true);//['id', 'periode', 'typeIntervention', 'heures']);
-        $sVolumeHoraire->leftJoin('applicationPeriode',                 $qb, 'periode',                 true);//['id']);
-        $sVolumeHoraire->leftJoin('applicationTypeIntervention',        $qb, 'typeIntervention',        true);//['id']);
+        $sVolumeHoraire->leftJoin(PeriodeService::class,                 $qb, 'periode',                 true);//['id']);
+        $sVolumeHoraire->leftJoin(TypeInterventionService::class,        $qb, 'typeIntervention',        true);//['id']);
         //@formatter:on
 
         $this->finderByHistorique($qb);
@@ -685,7 +683,7 @@ class ServiceService extends AbstractEntityService
                     /* @var $periode \Application\Entity\Db\Periode */
                     if (empty($newPeriode) || $periode === $newPeriode) { // pas de mauvaise période!!!
                         foreach ($typesIntervention as $typeIntervention) {
-                            /* @var $typeIntervention TypeIntervention */
+                            /* @var $typeIntervention TypeInterventionService */
                             $heures = $vhl->setPeriode($periode)->setTypeIntervention($typeIntervention)->getHeures();
                             if ($heures > 0) {
                                 $o['heures'][] = [
@@ -722,7 +720,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function setRealisesFromPrevus(ServiceEntity $service, $plafondControl = true)
+    public function setRealisesFromPrevus(Service $service, $plafondControl = true)
     {
         $prevus = $service
             ->getVolumeHoraireListe()->getChild()
@@ -1081,11 +1079,11 @@ class ServiceService extends AbstractEntityService
         $data  = [
             'intervenants' => [],
             'total'        => [
-                'fi'               => 0,
-                'fa'               => 0,
-                'fc'               => 0,
-                'referentiel'      => 0,
-                'total'            => 0,
+                'fi'          => 0,
+                'fa'          => 0,
+                'fc'          => 0,
+                'referentiel' => 0,
+                'total'       => 0,
             ],
         ];
 
@@ -1185,7 +1183,7 @@ class ServiceService extends AbstractEntityService
         $lim = 7000;
 
         if ($count > $lim) {
-            die('La génération du fichier est impossible : trop de données ( '.$count.' lignes pour '.$lim.' autorisées) sont remontées. Merci de placer un filtre (composante, type d\'intervenant, etc)');
+            die('La génération du fichier est impossible : trop de données ( ' . $count . ' lignes pour ' . $lim . ' autorisées) sont remontées. Merci de placer un filtre (composante, type d\'intervenant, etc)');
         }
 
         return $data;
@@ -1200,7 +1198,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return boolean
      */
-    protected function isLocal(ServiceEntity $service)
+    protected function isLocal(Service $service)
     {
         if (!$service->getEtablissement()) return true; // par défaut
         if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
@@ -1217,7 +1215,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return \Application\Entity\Db\Periode
      */
-    public function getPeriode(ServiceEntity $service)
+    public function getPeriode(Service $service)
     {
         if (!$this->isLocal($service)) return null;
         if (!$service->getElementPedagogique()) return null;
@@ -1233,7 +1231,7 @@ class ServiceService extends AbstractEntityService
      *
      * @return \Application\Entity\Db\Periode[]
      */
-    public function getPeriodes(ServiceEntity $service)
+    public function getPeriodes(Service $service)
     {
         $p = $this->getPeriode($service);
         if (null === $p) {
@@ -1248,16 +1246,16 @@ class ServiceService extends AbstractEntityService
 
     /**
      *
-     * @param ServiceEntity|ServiceEntity[] $services
+     * @param Service|Service[] $services
      *
-     * @return TypeInterventionEntity[]
+     * @return TypeIntervention[]
      */
     public function getTypesIntervention($services)
     {
-        if ($services instanceof ServiceEntity) $services = [$services];
+        if ($services instanceof Service) $services = [$services];
         $typesIntervention = [];
         foreach ($services as $service) {
-            if (!$service instanceof ServiceEntity) {
+            if (!$service instanceof Service) {
                 throw new \LogicException('Seules des entités Service doivent être passées en paramètre');
             }
             if ($ep = $service->getElementPedagogique()) {
@@ -1316,7 +1314,7 @@ class ServiceService extends AbstractEntityService
 
     /**
      *
-     * @param ServiceEntity[]         $services
+     * @param Service[]   $services
      * @param TypeVolumeHoraire $typeVolumehoraire
      */
     public function setTypeVolumehoraire($services, TypeVolumeHoraire $typeVolumeHoraire)

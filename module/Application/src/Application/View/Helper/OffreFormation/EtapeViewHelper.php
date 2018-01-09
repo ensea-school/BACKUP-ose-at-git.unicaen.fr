@@ -5,7 +5,7 @@ namespace Application\View\Helper\OffreFormation;
 use Application\Entity\Db\Etape as Entity;
 use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait as ServiceEtapeAwareTrait;
 use Application\Util;
 use Application\View\Helper\AbstractViewHelper;
 

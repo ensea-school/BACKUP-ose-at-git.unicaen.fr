@@ -38,7 +38,7 @@ trait ContratProcessusAwareTrait
     public function getProcessusContrat()
     {
         if (empty($this->processusContrat)) {
-            $this->processusContrat = \Application::$container->get('processusContrat');
+            $this->processusContrat = \Application::$container->get(ContratProcessus::class);
         }
 
         return $this->processusContrat;

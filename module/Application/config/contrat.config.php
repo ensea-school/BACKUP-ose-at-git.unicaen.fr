@@ -15,8 +15,7 @@ return [
                 'options'       => [
                     'route'    => '/contrat',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Contrat',
+                        'controller'    => 'Application\Controller\Contrat',
                         'action'        => 'index',
                     ],
                 ],
@@ -155,7 +154,7 @@ return [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['index'],
                     'privileges' => Privileges::CONTRAT_VISUALISATION,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -166,37 +165,37 @@ return [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['creer'],
                     'privileges' => Privileges::CONTRAT_CREATION,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['supprimer'],
                     'privileges' => Privileges::CONTRAT_SUPPRESSION,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['valider'],
                     'privileges' => Privileges::CONTRAT_VALIDATION,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['devalider'],
                     'privileges' => Privileges::CONTRAT_DEVALIDATION,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['deposer-fichier', 'supprimer-fichier'],
                     'privileges' => Privileges::CONTRAT_DEPOT_RETOUR_SIGNE,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => ['saisir-retour'],
                     'privileges' => Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
-                    'assertion'  => 'assertionContrat',
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
             ],
         ],
@@ -222,7 +221,7 @@ return [
                             ContratAssertion::PRIV_SUPPRIMER_FICHIER,
                         ],
                         'resources'  => 'Contrat',
-                        'assertion'  => 'assertionContrat',
+                        'assertion'  => Assertion\ContratAssertion::class,
                     ],
                 ],
             ],
@@ -235,10 +234,10 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationContrat'          => Service\Contrat::class,
-            'ApplicationTypeContrat'      => Service\TypeContrat::class,
-            'assertionContrat'            => Assertion\ContratAssertion::class,
-            'processusContrat'            => Processus\ContratProcessus::class,
+            Service\ContratService::class     => Service\ContratService::class,
+            Service\TypeContratService::class => Service\TypeContratService::class,
+            Assertion\ContratAssertion::class => Assertion\ContratAssertion::class,
+            Processus\ContratProcessus::class => Processus\ContratProcessus::class,
         ],
     ],
     'view_helpers'    => [
@@ -247,8 +246,8 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'contratValivation' => Form\Intervenant\ContratValidation::class,
-            'contratRetour'     => Form\Intervenant\ContratRetour::class,
+            Form\Intervenant\ContratValidation::class => Form\Intervenant\ContratValidation::class, /** @todo à supprimer ? */
+            Form\Intervenant\ContratRetour::class     => Form\Intervenant\ContratRetour::class,
         ],
     ],
 ];

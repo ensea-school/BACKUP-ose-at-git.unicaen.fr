@@ -5,8 +5,8 @@ namespace Application\Form\Droits;
 use Application\Entity\Db\Role;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PersonnelAwareTrait;
-use Application\Service\Traits\RoleAwareTrait;
+use Application\Service\Traits\PersonnelServiceAwareTrait;
+use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Form;
@@ -21,8 +21,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class AffectationForm extends AbstractForm
 {
     use StructureServiceAwareTrait;
-    use PersonnelAwareTrait;
-    use RoleAwareTrait;
+    use PersonnelServiceAwareTrait;
+    use RoleServiceAwareTrait;
     use ContextServiceAwareTrait;
 
 
@@ -128,8 +128,8 @@ class AffectationForm extends AbstractForm
 class AffectationFormHydrator implements HydratorInterface
 {
     use StructureServiceAwareTrait;
-    use RoleAwareTrait;
-    use PersonnelAwareTrait;
+    use RoleServiceAwareTrait;
+    use PersonnelServiceAwareTrait;
 
     /**
      * @param  array $data

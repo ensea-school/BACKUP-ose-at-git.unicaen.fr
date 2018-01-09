@@ -43,6 +43,6 @@ trait DossierAwareTrait
             return $this->formIntervenantDossier;
         }
 
-        return \Application::$container->get('FormElementManager')->get('IntervenantDossier');
+        return \Application::$container->get('FormElementManager')->get(Dossier::class);
     }
 }

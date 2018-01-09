@@ -9,10 +9,10 @@ use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
 use Application\Entity\NiveauEtape;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\NiveauEtapeAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Session\Container;
@@ -26,11 +26,11 @@ use Zend\Session\Container;
 class OffreFormationController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use LocalContextAwareTrait;
+    use LocalContextServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use ElementPedagogiqueAwareTrait;
-    use EtapeAwareTrait;
-    use NiveauEtapeAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
+    use EtapeServiceAwareTrait;
+    use NiveauEtapeServiceAwareTrait;
 
     /**
      * @var Container

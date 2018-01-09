@@ -15,18 +15,18 @@ use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\AgrementServiceAwareTrait;
-use Application\Service\Traits\ContratAwareTrait;
+use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\DbEventServiceAwareTrait;
-use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
-use Application\Service\Traits\MiseEnPaiementAwareTrait;
-use Application\Service\Traits\ModificationServiceDuAwareTrait;
-use Application\Service\Traits\PieceJointeAwareTrait;
-use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
+use Application\Service\Traits\ModificationServiceDuServiceAwareTrait;
+use Application\Service\Traits\PieceJointeServiceAwareTrait;
+use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
-use Application\Service\Traits\VolumeHoraireAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
 
 
 class SuppressionDataProcessus
@@ -35,19 +35,19 @@ class SuppressionDataProcessus
     private static $instance;
 
     use IntervenantAwareTrait;
-    use DossierAwareTrait;
-    use ModificationServiceDuAwareTrait;
-    use ValidationAwareTrait;
-    use MiseEnPaiementAwareTrait;
+    use DossierServiceAwareTrait;
+    use ModificationServiceDuServiceAwareTrait;
+    use ValidationServiceAwareTrait;
+    use MiseEnPaiementServiceAwareTrait;
     use FichierServiceAwareTrait;
-    use PieceJointeAwareTrait;
+    use PieceJointeServiceAwareTrait;
     use AgrementServiceAwareTrait;
-    use VolumeHoraireAwareTrait;
-    use VolumeHoraireReferentielAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
+    use VolumeHoraireReferentielServiceAwareTrait;
     use ServiceServiceAwareTrait;
-    use ServiceReferentielAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
     use \Application\Service\Traits\IntervenantServiceAwareTrait;
-    use ContratAwareTrait;
+    use ContratServiceAwareTrait;
     use DbEventServiceAwareTrait;
 
     /**
@@ -104,9 +104,6 @@ class SuppressionDataProcessus
                 }
             }
         }
-
-
-        $this->getServiceDbEvent()->stopManager();
 
         /* Mises en paiement */
         if (isset($entities['MiseEnPaiement'])) {
@@ -209,9 +206,6 @@ class SuppressionDataProcessus
                 $this->getServiceIntervenant()->delete($v->getEntity(), false);
             }
         }
-
-        $this->getServiceDbEvent()->startManager();
-        $this->getServiceDbEvent()->forcerCalculer($this->getIntervenant());
 
         if (in_array($isd->getAbsoluteId(), $ids)) {
             return null;

@@ -11,13 +11,13 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ContratAwareTrait;
+use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\TypeContratAwareTrait;
-use Application\Service\Traits\TypeValidationAwareTrait;
+use Application\Service\Traits\TypeContratServiceAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
-use Application\Service\Traits\VolumeHoraireAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 
 
 /**
@@ -28,13 +28,13 @@ use Application\Service\Traits\VolumeHoraireAwareTrait;
 class ContratProcessus extends AbstractProcessus
 {
     use ContextServiceAwareTrait;
-    use ContratAwareTrait;
+    use ContratServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
-    use TypeContratAwareTrait;
-    use TypeValidationAwareTrait;
-    use VolumeHoraireAwareTrait;
-    use ValidationAwareTrait;
+    use TypeContratServiceAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
 

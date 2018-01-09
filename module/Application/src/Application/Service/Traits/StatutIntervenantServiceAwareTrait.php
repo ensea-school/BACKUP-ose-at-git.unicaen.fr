@@ -38,7 +38,7 @@ trait StatutIntervenantServiceAwareTrait
     public function getServiceStatutIntervenant()
     {
         if (empty($this->serviceStatutIntervenant)) {
-            $this->serviceStatutIntervenant = \Application::$container->get('ApplicationStatutIntervenant');
+            $this->serviceStatutIntervenant = \Application::$container->get(StatutIntervenantService::class);
         }
 
         return $this->serviceStatutIntervenant;

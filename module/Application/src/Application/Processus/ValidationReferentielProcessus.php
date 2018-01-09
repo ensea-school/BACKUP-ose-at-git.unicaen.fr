@@ -7,8 +7,8 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\TblValidationReferentiel;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
-use Application\Service\Traits\TypeValidationAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
 
 
 /**
@@ -18,8 +18,8 @@ use Application\Service\Traits\ValidationAwareTrait;
  */
 class ValidationReferentielProcessus extends AbstractProcessus
 {
-    use TypeValidationAwareTrait;
-    use ValidationAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
 

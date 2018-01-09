@@ -9,7 +9,7 @@
  * @var $dossier          Dossier
  */
 
-$dossierEntity = $dossier;
+$Dossier = $dossier;
 
 $form->prepare();
 $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
@@ -121,8 +121,8 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
 
 
 <?php
-if ($dossierEntity->getId()) {
-    echo $this->historique($dossierEntity);
+if ($Dossier->getId()) {
+    echo $this->historique($Dossier);
 }
 ?>
 

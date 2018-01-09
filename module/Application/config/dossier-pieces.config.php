@@ -19,7 +19,7 @@ return [
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'controller' => Controller\DossierController::class,
+                                'controller' => 'Application\Controller\Dossier',
                                 'action'     => 'index',
                             ],
                         ],
@@ -79,8 +79,7 @@ return [
                 'options'       => [
                     'route'    => '/piece-jointe',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'PieceJointe',
+                        'controller'    => 'Application\Controller\PieceJointe',
                     ],
                 ],
                 'may_terminate' => true,
@@ -280,7 +279,7 @@ return [
                             ],
                         ],
                     ],
-                    'delete-type-piece-jointe-statut' => [
+                    'delete-type-piece-jointe-statut'   => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'    => '/delete-type-piece-jointe-statut/:typePieceJointeStatut',
@@ -297,7 +296,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'intervenant' => [
+                    'intervenant'    => [
                         'pages' => [
                             'dossier'               => [
                                 'label'        => "Données personnelles",
@@ -307,7 +306,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget'   => true,
-                                'resource'     => PrivilegeController::getResourceId(Controller\DossierController::class, 'index'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Dossier', 'index'),
                                 'order'        => 5,
                             ],
                             'pieces-jointes-saisie' => [
@@ -323,7 +322,7 @@ return [
                             ],
                         ],
                     ],
-                    'administration'     => [
+                    'administration' => [
                         'pages' => [
                             'dossier-pj' => [
                                 'icon'         => 'glyphicon glyphicon-file',
@@ -354,35 +353,35 @@ return [
             PrivilegeController::class => [
                 /* Dossier */
                 [
-                    'controller' => Controller\DossierController::class,
+                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['index'],
                     'privileges' => [Privileges::DOSSIER_VISUALISATION],
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
-                    'controller' => Controller\DossierController::class,
+                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['differences'],
                     'privileges' => [Privileges::DOSSIER_DIFFERENCES],
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
-                    'controller' => Controller\DossierController::class,
+                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['purger-differences'],
                     'privileges' => [Privileges::DOSSIER_PURGER_DIFFERENCES],
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
-                    'controller' => Controller\DossierController::class,
+                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['valider'],
                     'privileges' => [Privileges::DOSSIER_VALIDATION],
                 ],
                 [
-                    'controller' => Controller\DossierController::class,
+                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['devalider'],
                     'privileges' => [Privileges::DOSSIER_DEVALIDATION],
                 ],
                 [
-                    'controller' => Controller\DossierController::class,
+                    'controller' => 'Application\Controller\Dossier',
                     'action'     => ['supprimer'],
                     'privileges' => [Privileges::DOSSIER_SUPPRESSION],
                 ],
@@ -396,7 +395,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => ['modifier-type-piece-jointe-statut','delete-type-piece-jointe-statut'],
+                    'action'     => ['modifier-type-piece-jointe-statut', 'delete-type-piece-jointe-statut'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_GESTION_EDITION,
                 ],
                 [
@@ -424,7 +423,7 @@ return [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['index'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_VISUALISATION,
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
@@ -440,19 +439,19 @@ return [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['televerser', 'supprimer'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_EDITION,
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['valider'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_VALIDATION,
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => ['devalider'],
                     'privileges' => Privileges::PIECE_JUSTIFICATIVE_DEVALIDATION,
-                    'assertion'  => 'assertionDossierPieces',
+                    'assertion'  => Assertion\DossierPiecesAssertion::class,
                 ],
             ],
         ],
@@ -472,15 +471,15 @@ return [
                             Privileges::PIECE_JUSTIFICATIVE_EDITION,
                         ],
                         'resources'  => ['PieceJointe', 'Intervenant'],
-                        'assertion'  => 'assertionDossierPieces',
+                        'assertion'  => Assertion\DossierPiecesAssertion::class,
                     ],
                 ],
             ],
         ],
     ],
     'controllers'     => [
-        'factories' => [
-            Controller\DossierController::class     => Controller\Factory\DossierControllerFactory::class,
+        'factories'  => [
+            'Application\Controller\Dossier' => Controller\Factory\DossierControllerFactory::class,
         ],
         'invokables' => [
             'Application\Controller\PieceJointe' => Controller\PieceJointeController::class,
@@ -488,12 +487,12 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'applicationTblPieceJointe'        => Service\TblPieceJointeService::class,
-            'ApplicationDossier'               => Service\Dossier::class,
-            'ApplicationPieceJointe'           => Service\PieceJointe::class,
-            'ApplicationTypePieceJointe'       => Service\TypePieceJointe::class,
+            Service\TblPieceJointeService::class        => Service\TblPieceJointeService::class,
+            Service\DossierService::class               => Service\DossierService::class,
+            Service\PieceJointeService::class           => Service\PieceJointeService::class,
+            Service\TypePieceJointeService::class       => Service\TypePieceJointeService::class,
             Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,
-            'assertionDossierPieces'           => Assertion\DossierPiecesAssertion::class,
+            Assertion\DossierPiecesAssertion::class     => Assertion\DossierPiecesAssertion::class,
         ],
     ],
     'view_helpers'    => [
@@ -503,9 +502,9 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'IntervenantDossier'    => Form\Intervenant\Dossier::class,
-            'typePieceJointeSaisie' => Form\PieceJointe\TypePieceJointeSaisieForm::class,
-            'modifierTypePieceJointeStatut' => Form\PieceJointe\ModifierTypePieceJointeStatutForm::class,
+            Form\Intervenant\Dossier::class                           => Form\Intervenant\Dossier::class,
+            Form\PieceJointe\TypePieceJointeSaisieForm::class         => Form\PieceJointe\TypePieceJointeSaisieForm::class,
+            Form\PieceJointe\ModifierTypePieceJointeStatutForm::class => Form\PieceJointe\ModifierTypePieceJointeStatutForm::class,
         ],
     ],
 ];

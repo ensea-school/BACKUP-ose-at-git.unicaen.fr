@@ -10,8 +10,7 @@ return [
                 'options'       => [
                     'route'    => '/structure',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Structure',
+                        'controller'    => 'Application\Controller\Structure',
                         'action'        => 'index',
                     ],
                 ],
@@ -109,9 +108,9 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPersonnel'          => Service\Personnel::class,
-            Service\StructureService::class => Service\StructureService::class,
-            'ApplicationTypeStructure'      => Service\TypeStructure::class,
+            Service\PersonnelService::class     => Service\PersonnelService::class,
+            Service\StructureService::class     => Service\StructureService::class,
+            Service\TypeStructureService::class => Service\TypeStructureService::class,
         ],
     ],
     'view_helpers'    => [

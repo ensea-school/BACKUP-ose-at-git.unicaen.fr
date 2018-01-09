@@ -6,7 +6,7 @@ use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 
@@ -18,7 +18,7 @@ use Application\Filter\StringFromFloat;
 class modulateurSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use TypeModulateurAwareTrait;
+    use TypeModulateurServiceAwareTrait;
 
 
 
@@ -134,7 +134,7 @@ class modulateurSaisieForm extends AbstractForm
 
 class modulateurHydrator implements HydratorInterface
 {
-    use TypeModulateurAwareTrait;
+    use TypeModulateurServiceAwareTrait;
 
 
 

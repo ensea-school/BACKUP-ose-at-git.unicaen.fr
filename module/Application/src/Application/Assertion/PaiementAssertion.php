@@ -12,10 +12,9 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Application\Service\Traits\TypeValidationAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\TypeValidationServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
+use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 
 /**
@@ -25,10 +24,9 @@ use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
  */
 class PaiementAssertion extends AbstractAssertion
 {
-    use TypeValidationAwareTrait;
-    use ValidationAwareTrait;
-    use ServiceAwareTrait;
-    use ServiceReferentielAwareTrait;
+    use TypeValidationServiceAwareTrait;
+    use ValidationServiceAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 

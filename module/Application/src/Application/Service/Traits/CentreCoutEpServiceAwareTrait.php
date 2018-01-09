@@ -38,7 +38,7 @@ trait CentreCoutEpServiceAwareTrait
     public function getServiceCentreCoutEp()
     {
         if (empty($this->serviceCentreCoutEp)) {
-            $this->serviceCentreCoutEp = \Application::$container->get('ApplicationCentreCoutEp');
+            $this->serviceCentreCoutEp = \Application::$container->get(CentreCoutEpService::class);
         }
 
         return $this->serviceCentreCoutEp;

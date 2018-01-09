@@ -13,8 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/droits',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Droits',
+                        'controller'    => 'Application\Controller\Droits',
                         'action'        => 'index',
                     ],
                 ],
@@ -224,13 +223,13 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPerimetre' => Service\Perimetre::class,
+            Service\PerimetreService::class => Service\PerimetreService::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'DroitsRoleForm'        => Form\Droits\RoleForm::class,
-            'DroitsAffectationForm' => Form\Droits\AffectationForm::class,
+            Form\Droits\RoleForm::class        => Form\Droits\RoleForm::class,
+            Form\Droits\AffectationForm::class => Form\Droits\AffectationForm::class,
         ],
     ],
 ];

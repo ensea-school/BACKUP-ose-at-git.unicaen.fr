@@ -4,10 +4,11 @@ namespace Application\Processus;
 
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Service\Recherche;
+use Application\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielAwareTrait;
-use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
+use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
 
 /**
  * Description of ServiceReferentielProcessus
@@ -17,8 +18,8 @@ use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 class ServiceReferentielProcessus extends AbstractProcessus
 {
     use ContextServiceAwareTrait;
-    use ServiceReferentielAwareTrait;
-    use VolumeHoraireReferentielAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
+    use VolumeHoraireReferentielServiceAwareTrait;
 
 
 
@@ -42,7 +43,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
             ->join(IntervenantService::class, $qb, 'intervenant', ['id', 'nomUsuel', 'prenom', 'sourceCode'])
             ->join($volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures']);
 
-        $volumeHoraireReferentielService->leftJoin('applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
+        $volumeHoraireReferentielService->leftJoin(EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
 
         $serviceReferentiel->finderByContext($qb);
         $serviceReferentiel->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);

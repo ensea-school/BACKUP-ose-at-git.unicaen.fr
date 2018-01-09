@@ -4,12 +4,12 @@ namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Periode as PeriodeEntity;
+use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantService;
+use Application\Entity\Db\TypeIntervenant;
 use Application\Filter\StringFromFloat;
-use Application\Service\Traits\MiseEnPaiementAwareTrait;
-use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
+use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
+use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
@@ -28,8 +28,8 @@ class IntervenantService extends AbstractEntityService
     use StatutIntervenantServiceAwareTrait;
     use ImportProcessusAwareTrait;
     use QueryGeneratorServiceAwareTrait;
-    use MiseEnPaiementAwareTrait;
-    use MiseEnPaiementIntervenantStructureAwareTrait;
+    use MiseEnPaiementServiceAwareTrait;
+    use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 
@@ -117,7 +117,7 @@ class IntervenantService extends AbstractEntityService
 
 
 
-    public function finderByMiseEnPaiement(Structure $structure = null, PeriodeEntity $periode = null, QueryBuilder $qb = null, $alias = null)
+    public function finderByMiseEnPaiement(Structure $structure = null, Periode $periode = null, QueryBuilder $qb = null, $alias = null)
     {
         $serviceMIS = $this->getServiceMiseEnPaiementIntervenantStructure();
 
@@ -180,13 +180,13 @@ class IntervenantService extends AbstractEntityService
     /**
      * Filtre par le type d'intervenant
      *
-     * @param TypeIntervenantService   $typeIntervenant Type de l'intervenant
+     * @param TypeIntervenant   $typeIntervenant Type de l'intervenant
      * @param QueryBuilder|null $queryBuilder
      * @param string|null       $alias
      *
      * @return QueryBuilder
      */
-    public function finderByType(TypeIntervenantService $typeIntervenant, QueryBuilder $qb = null, $alias = null)
+    public function finderByType(TypeIntervenant $typeIntervenant, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $sStatut = $this->getServiceStatutIntervenant();

@@ -4,7 +4,7 @@ namespace Application\Controller\OffreFormation;
 
 use Application\Controller\AbstractController;
 use Application\Form\OffreFormation\Traits\EtapeModulateursSaisieAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Exception\DbException;
 
 /**
@@ -14,7 +14,7 @@ use Application\Exception\DbException;
  */
 class ModulateurController extends AbstractController
 {
-    use EtapeAwareTrait;
+    use EtapeServiceAwareTrait;
     use EtapeModulateursSaisieAwareTrait;
 
 

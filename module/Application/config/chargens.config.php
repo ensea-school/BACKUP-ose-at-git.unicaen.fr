@@ -15,8 +15,7 @@ return [
                 'options'       => [
                     'route'    => '/chargens',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Chargens',
+                        'controller'    => 'Application\Controller\Chargens',
                         'action'        => 'INDEX',
                     ],
                 ],
@@ -195,35 +194,35 @@ return [
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Chargens', 'index'),
                         'order'    => 5,
                         'pages'    => [
-                            'scenario'  => [
+                            'scenario'    => [
                                 'label'       => "Gestion des scénarios",
                                 'description' => "Permet de créer, dupliquer ou supprimer des scénarios",
                                 'route'       => 'chargens/scenario',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'scenario'),
                                 'visible'     => false,
                             ],
-                            'seuil'     => [
+                            'seuil'       => [
                                 'label'       => "Gestion des seuils de dédoublement",
                                 'description' => "Permet de spécifier des seuils de dédoublement qui s'appliqueront à toutes les formations concernées",
                                 'route'       => 'chargens/seuil',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'seuil'),
                                 'visible'     => false,
                             ],
-                            'formation' => [
+                            'formation'   => [
                                 'label'       => "Paramétrage des formations",
                                 'description' => "Permet de configurer de manière fine les formations (définition des taux d'assiduite, seuils, effectifs...)",
                                 'route'       => 'chargens/formation',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'formation'),
                                 'visible'     => false,
                             ],
-                            'export'    => [
+                            'export'      => [
                                 'label'       => "Export des charges d'enseignement (CSV)",
                                 'description' => "Produit un fichier qui comporte l'ensemble des données concernant les charges d'enseignement",
                                 'route'       => 'chargens/export',
                                 'resource'    => PrivilegeController::getResourceId('Application\Controller\Chargens', 'export'),
                                 'visible'     => false,
                             ],
-                            'depassement'    => [
+                            'depassement' => [
                                 'label'       => "Rapprochement des charges et des services d'enseignement (CSV)",
                                 'description' => "Produit un fichier qui rapproche les services d'enseignement saisis et les charges d'enseignement calculées",
                                 'route'       => 'chargens/depassement',
@@ -263,7 +262,7 @@ return [
                         Privileges::CHARGENS_SCENARIO_COMPOSANTE_EDITION,
                         Privileges::CHARGENS_SCENARIO_ETABLISSEMENT_EDITION,
                     ],
-                    'assertion'  => 'assertionChargens',
+                    'assertion'  => Assertion\ChargensAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Chargens',
@@ -332,7 +331,7 @@ return [
                     [
                         'privileges' => ChargensAssertion::SCENARIO_EDITION,
                         'resources'  => ['Scenario', 'Structure'],
-                        'assertion'  => 'AssertionChargens',
+                        'assertion'  => Assertion\ChargensAssertion::class,
                     ],
                     [
                         'privileges' => [
@@ -340,7 +339,7 @@ return [
                             Privileges::CHARGENS_SEUIL_COMPOSANTE_EDITION,
                         ],
                         'resources'  => ['Structure'],
-                        'assertion'  => 'AssertionChargens',
+                        'assertion'  => Assertion\ChargensAssertion::class,
                     ],
                 ],
             ],
@@ -356,12 +355,12 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'applicationScenario' => Service\ScenarioService::class,
-            'assertionChargens'   => Assertion\ChargensAssertion::class,
+            Service\ScenarioService::class     => Service\ScenarioService::class,
+            Assertion\ChargensAssertion::class => Assertion\ChargensAssertion::class,
         ],
         'factories'  => [
-            'applicationSeuilCharge' => Service\Factory\SeuilChargeServiceFactory::class,
-            'chargens'               => Provider\Chargens\ChargensProviderFactory::class,
+            Service\Factory\SeuilChargeServiceFactory::class => Service\Factory\SeuilChargeServiceFactory::class,
+            Provider\Chargens\ChargensProvider::class        => Provider\Chargens\ChargensProviderFactory::class,
         ],
     ],
     'view_helpers'    => [
@@ -371,10 +370,10 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'chargensFiltre'              => Form\Chargens\FiltreForm::class,
-            'chargensScenarioFiltre'      => Form\Chargens\ScenarioFiltreForm::class,
-            'chargensDuplicationScenario' => Form\Chargens\DuplicationScenarioForm::class,
-            'chargensScenario'            => Form\Chargens\ScenarioForm::class,
+            Form\Chargens\FiltreForm::class              => Form\Chargens\FiltreForm::class,
+            Form\Chargens\ScenarioFiltreForm::class      => Form\Chargens\ScenarioFiltreForm::class,
+            Form\Chargens\DuplicationScenarioForm::class => Form\Chargens\DuplicationScenarioForm::class,
+            Form\Chargens\ScenarioForm::class            => Form\Chargens\ScenarioForm::class,
         ],
     ],
 ];

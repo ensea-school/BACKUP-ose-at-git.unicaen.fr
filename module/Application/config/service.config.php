@@ -14,8 +14,7 @@ return [
                 'options'       => [
                     'route'    => '/service',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Service',
+                        'controller'    => 'Application\Controller\Service',
                         'action'        => 'index',
                     ],
                 ],
@@ -168,8 +167,7 @@ return [
                 'options'       => [
                     'route'    => '/referentiel',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'ServiceReferentiel',
+                        'controller'    => 'Application\Controller\ServiceReferentiel',
                     ],
                 ],
                 'may_terminate' => false,
@@ -271,7 +269,7 @@ return [
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
@@ -280,7 +278,7 @@ return [
                         Privileges::ENSEIGNEMENT_EDITION,
                         Privileges::REFERENTIEL_EDITION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
@@ -288,7 +286,7 @@ return [
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
@@ -326,7 +324,7 @@ return [
                     'privileges' => [
                         Privileges::REFERENTIEL_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\ServiceReferentiel',
@@ -334,7 +332,7 @@ return [
                     'privileges' => [
                         Privileges::REFERENTIEL_EDITION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\ServiceReferentiel',
@@ -342,7 +340,7 @@ return [
                     'privileges' => [
                         Privileges::REFERENTIEL_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\ServiceReferentiel',
@@ -375,7 +373,7 @@ return [
                         Privileges::ENSEIGNEMENT_VISUALISATION,
                         Privileges::REFERENTIEL_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
             ],
             'BjyAuthorize\Guard\Controller' => [
@@ -383,7 +381,7 @@ return [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['cloturer-saisie'],
                     'roles'      => ['user'],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
             ],
         ],
@@ -403,24 +401,24 @@ return [
                             Privileges::ENSEIGNEMENT_EDITION,
                         ],
                         'resources'  => ['Service', 'Intervenant'],
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ENSEIGNEMENT_VALIDATION,
                         'resources'  => 'Validation',
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::ENSEIGNEMENT_DEVALIDATION,
                         'resources'  => 'Validation',
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => [
                             Privileges::ENSEIGNEMENT_EXTERIEUR,
                         ],
                         'resources'  => ['Intervenant', 'Service'],
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => [
@@ -428,7 +426,7 @@ return [
                             Privileges::MOTIF_NON_PAIEMENT_EDITION,
                         ],
                         'resources'  => 'Intervenant',
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
 
                     /* Référentiel */
@@ -438,17 +436,17 @@ return [
                             Privileges::REFERENTIEL_EDITION,
                         ],
                         'resources'  => ['ServiceReferentiel', 'Intervenant'],
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::REFERENTIEL_VALIDATION,
                         'resources'  => 'Validation',
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                     [
                         'privileges' => Privileges::REFERENTIEL_DEVALIDATION,
                         'resources'  => 'Validation',
-                        'assertion'  => 'assertionService',
+                        'assertion'  => Assertion\ServiceAssertion::class,
                     ],
                 ],
             ],
@@ -462,30 +460,30 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationService'                 => Service\ServiceService::class,
-            'ApplicationServiceReferentiel'      => Service\ServiceReferentiel::class,
-            'ApplicationFonctionReferentiel'     => Service\FonctionReferentiel::class,
-            'ApplicationPeriode'                 => Service\Periode::class,
-            'ApplicationMotifNonPaiement'        => Service\MotifNonPaiement::class,
-            'ApplicationModificationServiceDu'   => Service\ModificationServiceDu::class,
-            Service\CampagneSaisieService::class => Service\CampagneSaisieService::class,
-            'assertionService'                   => Assertion\ServiceAssertion::class,
-            'processusService'                   => Processus\ServiceProcessus::class,
-            'processusServiceReferentiel'        => Processus\ServiceReferentielProcessus::class,
+            Service\ServiceService::class                => Service\ServiceService::class,
+            Service\ServiceReferentielService::class     => Service\ServiceReferentielService::class,
+            Service\FonctionReferentielService::class    => Service\FonctionReferentielService::class,
+            Service\PeriodeService::class                => Service\PeriodeService::class,
+            Service\MotifNonPaiementService::class       => Service\MotifNonPaiementService::class,
+            Service\ModificationServiceDuService::class  => Service\ModificationServiceDuService::class,
+            Service\CampagneSaisieService::class         => Service\CampagneSaisieService::class,
+            Assertion\ServiceAssertion::class            => Assertion\ServiceAssertion::class,
+            Processus\ServiceProcessus::class            => Processus\ServiceProcessus::class,
+            Processus\ServiceReferentielProcessus::class => Processus\ServiceReferentielProcessus::class,
         ],
     ],
     'hydrators'       => [
         'invokables' => [
-            'serviceRecherche' => Hydrator\Service\RechercheHydrator::class,
+            Hydrator\Service\RechercheHydrator::class => Hydrator\Service\RechercheHydrator::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'ServiceSaisie'                    => Form\Service\Saisie::class,
-            'ServiceSaisieFieldset'            => Form\Service\SaisieFieldset::class,
-            'ServiceReferentielSaisie'         => Form\ServiceReferentiel\Saisie::class,
-            'ServiceReferentielSaisieFieldset' => Form\ServiceReferentiel\SaisieFieldset::class,
-            'ServiceRechercheForm'             => Form\Service\RechercheForm::class,
+            Form\Service\Saisie::class                    => Form\Service\Saisie::class,
+            Form\Service\SaisieFieldset::class            => Form\Service\SaisieFieldset::class,
+            Form\ServiceReferentiel\Saisie::class         => Form\ServiceReferentiel\Saisie::class,
+            Form\ServiceReferentiel\SaisieFieldset::class => Form\ServiceReferentiel\SaisieFieldset::class,
+            Form\Service\RechercheForm::class             => Form\Service\RechercheForm::class,
         ],
     ],
     'view_helpers'    => [

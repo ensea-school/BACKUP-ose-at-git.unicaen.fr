@@ -38,7 +38,7 @@ trait FichierServiceAwareTrait
     public function getServiceFichier()
     {
         if (empty($this->serviceFichier)) {
-            $this->serviceFichier = \Application::$container->get('applicationFichier');
+            $this->serviceFichier = \Application::$container->get(FichierService::class);
         }
 
         return $this->serviceFichier;

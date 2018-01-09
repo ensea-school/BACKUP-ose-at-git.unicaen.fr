@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ModificationServiceDu;
 use Application\Form\Intervenant\Traits\ModificationServiceDuFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ModificationServiceDuAwareTrait;
+use Application\Service\Traits\ModificationServiceDuServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use Doctrine\DBAL\DBALException;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -24,7 +24,7 @@ class ModificationServiceDuController extends AbstractController
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ModificationServiceDuFormAwareTrait;
-    use ModificationServiceDuAwareTrait;
+    use ModificationServiceDuServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 

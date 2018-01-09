@@ -3,7 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\ElementModulateursFieldset;
-use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 
 
@@ -14,7 +14,7 @@ use Application\View\Helper\AbstractViewHelper;
  */
 class ElementModulateursSaisieFieldset extends AbstractViewHelper
 {
-    use TypeModulateurAwareTrait;
+    use TypeModulateurServiceAwareTrait;
 
     /**
      * @var Saisie

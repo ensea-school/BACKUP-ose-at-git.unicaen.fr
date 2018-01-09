@@ -3,21 +3,21 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Modulateur;
-use Application\Service\Traits\ModulateurAwareTrait;
+use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Application\Entity\Db\TypeModulateurStructure;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
 use Application\Entity\Db\TypeModulateur;
 use Application\Exception\DbException;
 use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 class modulateurController extends AbstractController
 {
-    use ModulateurAwareTrait;
-    use TypeModulateurAwareTrait;
+    use ModulateurServiceAwareTrait;
+    use TypeModulateurServiceAwareTrait;
     use ModulateurSaisieFormAwareTrait;
     use TypeModulateurSaisieFormAwareTrait;
     use TypeModulateurStructureServiceAwareTrait;

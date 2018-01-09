@@ -12,7 +12,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\AgrementService;
 use Application\Service\Traits\AgrementServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TblAgrementServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -31,7 +31,7 @@ class AgrementController extends AbstractController
     use TblAgrementServiceAwareTrait;
     use AgrementServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use ServiceAwareTrait;
+    use ServiceServiceAwareTrait;
     use ContextServiceAwareTrait;
     use SaisieAwareTrait;
     use StructureServiceAwareTrait;

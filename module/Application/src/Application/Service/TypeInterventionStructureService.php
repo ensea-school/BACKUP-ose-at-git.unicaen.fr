@@ -2,8 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\TypeInterventionStructure as Entity;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Entity\Db\TypeInterventionStructure;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 
 /**
  * Description of TypeInterventionStructureService
@@ -13,12 +13,12 @@ use Application\Service\Traits\TypeInterventionAwareTrait;
  */
 class TypeInterventionStructureService extends AbstractEntityService
 {
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
 
     /**
      * Liste des types d'intervention
      *
-     * @var Entity[]
+     * @var TypeInterventionStructure[]
      */
     protected $typesInterventionStructure;
 
@@ -32,7 +32,7 @@ class TypeInterventionStructureService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return Entity::class;
+        return TypeInterventionStructure::class;
     }
 
 

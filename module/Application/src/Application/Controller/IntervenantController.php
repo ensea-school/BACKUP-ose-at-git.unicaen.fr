@@ -14,16 +14,16 @@ use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use LogicException;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeHeuresAwareTrait;
+use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\View\Model\ViewModel;
 
@@ -36,7 +36,7 @@ class IntervenantController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use TypeHeuresAwareTrait;
+    use TypeHeuresServiceAwareTrait;
     use HeuresCompFormAwareTrait;
     use SessionContainerTrait;
     use EditionFormAwareTrait;
@@ -45,9 +45,9 @@ class IntervenantController extends AbstractController
     use IntervenantProcessusAwareTrait;
     use ServiceProcessusAwareTrait;
     use ServiceReferentielProcessusAwareTrait;
-    use LocalContextAwareTrait;
+    use LocalContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
-    use ValidationAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
 

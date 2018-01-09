@@ -105,11 +105,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             return $serviceLocator->get($serviceName);
         }
 
-        $serviceName = 'Application' . ucfirst($paramName);
-        if ($serviceLocator->has($serviceName)) {
-            return $serviceLocator->get($serviceName);
-        }
-
         return null;
     }
 

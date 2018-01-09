@@ -38,7 +38,7 @@ trait FormuleServiceServiceAwareTrait
     public function getServiceFormuleService()
     {
         if (empty($this->serviceFormuleService)) {
-            $this->serviceFormuleService = \Application::$container->get('ApplicationFormuleService');
+            $this->serviceFormuleService = \Application::$container->get(FormuleServiceService::class);
         }
 
         return $this->serviceFormuleService;

@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\NumeroINSEEValidator;
@@ -21,7 +21,7 @@ class Dossier extends AbstractForm
 {
     use StatutIntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
-    use DossierAwareTrait;
+    use DossierServiceAwareTrait;
     use ServiceServiceAwareTrait;
 
     protected $dossierFieldset;

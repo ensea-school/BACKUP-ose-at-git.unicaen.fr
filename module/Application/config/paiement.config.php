@@ -16,9 +16,8 @@ return [
                 'options'       => [
                     'route'    => '/paiement',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Paiement',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Paiement',
+                        'action'     => 'index',
                     ],
                 ],
                 'child_routes'  => [
@@ -87,7 +86,7 @@ return [
                 'pages' => [
                     'intervenant' => [
                         'pages' => [
-                            'demande-mise-en-paiement' => [
+                            'demande-mise-en-paiement'       => [
                                 'label'               => "Demande de mise en paiement",
                                 'title'               => "Demande de mise en paiement",
                                 'route'               => 'intervenant/mise-en-paiement/demande',
@@ -97,7 +96,7 @@ return [
                                 'withtarget'          => true,
                                 'workflow-etape-code' => WfEtape::CODE_DEMANDE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'demandeMiseEnPaiement'),
-                                'visible'             => 'assertionPaiement',
+                                'visible'             => Assertion\PaiementAssertion::class,
                                 'order'               => 16,
                             ],
                             'visualisation-mise-en-paiement' => [
@@ -110,26 +109,26 @@ return [
                                 'withtarget'          => true,
                                 'workflow-etape-code' => WfEtape::CODE_SAISIE_MEP,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'visualisationMiseEnPaiement'),
-                                'visible'             => 'assertionPaiement',
+                                'visible'             => Assertion\PaiementAssertion::class,
                                 'order'               => 17,
                             ],
-                            'edition-mise-en-paiement' => [
-                                'label'               => "Annulation de mises en paiement",
-                                'title'               => "Annulation de mises en paiement",
-                                'route'               => 'intervenant/mise-en-paiement/edition',
-                                'paramsInject'        => [
+                            'edition-mise-en-paiement'       => [
+                                'label'        => "Annulation de mises en paiement",
+                                'title'        => "Annulation de mises en paiement",
+                                'route'        => 'intervenant/mise-en-paiement/edition',
+                                'paramsInject' => [
                                     'intervenant',
                                 ],
-                                'withtarget'          => true,
-                                'resource'            => PrivilegeController::getResourceId('Application\Controller\Paiement', 'editionMiseEnPaiement'),
-                                'visible'             => 'assertionPaiement',
-                                'order'               => 18,
+                                'withtarget'   => true,
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Paiement', 'editionMiseEnPaiement'),
+                                'visible'      => Assertion\PaiementAssertion::class,
+                                'order'        => 18,
                             ],
                         ],
                     ],
-                    'gestion' => [
+                    'gestion'     => [
                         'pages' => [
-                            'paiement'    => [
+                            'paiement' => [
                                 'label'        => "Paiement",
                                 'title'        => "Paiement",
                                 'route'        => 'paiement',
@@ -186,7 +185,7 @@ return [
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     ],
-                    'assertion'  => 'assertionPaiement',
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
@@ -195,7 +194,7 @@ return [
                         Privileges::MISE_EN_PAIEMENT_DEMANDE,
                         Privileges::MISE_EN_PAIEMENT_VISUALISATION_INTERVENANT,
                     ],
-                    'assertion'  => 'assertionPaiement',
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
@@ -203,7 +202,7 @@ return [
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_EDITION,
                     ],
-                    'assertion'  => 'assertionPaiement',
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
@@ -211,13 +210,13 @@ return [
                     'privileges' => [
                         Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION,
                     ],
-                    'assertion'  => 'assertionPaiement',
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['miseEnPaiement'],
                     'privileges' => [Privileges::MISE_EN_PAIEMENT_VISUALISATION_GESTION],
-                    'assertion'  => 'assertionPaiement',
+                    'assertion'  => Assertion\PaiementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
@@ -245,7 +244,7 @@ return [
                     [
                         'privileges' => Privileges::MISE_EN_PAIEMENT_DEMANDE,
                         'resources'  => 'MiseEnPaiement',
-                        'assertion'  => 'assertionPaiement',
+                        'assertion'  => Assertion\PaiementAssertion::class,
                     ],
                 ],
             ],
@@ -253,13 +252,13 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationServiceAPayer'                      => Service\ServiceAPayer::class,
-            'ApplicationMiseEnPaiement'                     => Service\MiseEnPaiement::class,
-            'ApplicationMiseEnPaiementIntervenantStructure' => Service\MiseEnPaiementIntervenantStructure::class,
-            'ApplicationTypeHeures'                         => Service\TypeHeures::class,
-            'ApplicationCentreCout'                         => Service\CentreCoutService::class,
-            'ApplicationCentreCoutEp'                       => Service\CentreCoutEpService::class,
-            'assertionPaiement'                             => Assertion\PaiementAssertion::class,
+            Service\ServiceAPayerService::class                      => Service\ServiceAPayerService::class,
+            Service\MiseEnPaiementService::class                     => Service\MiseEnPaiementService::class,
+            Service\MiseEnPaiementIntervenantStructureService::class => Service\MiseEnPaiementIntervenantStructureService::class,
+            Service\TypeHeuresService::class                         => Service\TypeHeuresService::class,
+            Service\CentreCoutService::class                         => Service\CentreCoutService::class,
+            Service\CentreCoutEpService::class                       => Service\CentreCoutEpService::class,
+            Assertion\PaiementAssertion::class                       => Assertion\PaiementAssertion::class,
         ],
     ],
     'view_helpers'    => [
@@ -270,8 +269,8 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'PaiementMiseEnPaiementForm'          => Form\Paiement\MiseEnPaiementForm::class,
-            'PaiementMiseEnPaiementRechercheForm' => Form\Paiement\MiseEnPaiementRechercheForm::class,
+            Form\Paiement\MiseEnPaiementForm::class          => Form\Paiement\MiseEnPaiementForm::class,
+            Form\Paiement\MiseEnPaiementRechercheForm::class => Form\Paiement\MiseEnPaiementRechercheForm::class,
         ],
     ],
     'controllers'     => [

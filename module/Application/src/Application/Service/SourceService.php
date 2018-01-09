@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use UnicaenImport\Entity\Db\Source as SourceEntity;
+use UnicaenImport\Entity\Db\Source;
 
 /**
  * Description of SourceService
@@ -23,7 +23,7 @@ class SourceService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \UnicaenImport\Entity\Db\Source::class;
+        return Source::class;
     }
 
     /**
@@ -39,7 +39,7 @@ class SourceService extends AbstractEntityService
     /**
      * Retourne l'entité source OSE
      *
-     * @return SourceEntity
+     * @return Source
      */
     public function getOse()
     {
@@ -49,7 +49,7 @@ class SourceService extends AbstractEntityService
     /**
      * Retourne l'entité de test OSE
      *
-     * @return SourceEntity
+     * @return Source
      */
     public function getTest()
     {

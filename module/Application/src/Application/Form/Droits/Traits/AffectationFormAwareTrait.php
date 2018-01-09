@@ -43,6 +43,6 @@ trait AffectationFormAwareTrait
             return $this->formDroitsAffectation;
         }
 
-        return \Application::$container->get('FormElementManager')->get('DroitsAffectationForm');
+        return \Application::$container->get('FormElementManager')->get(AffectationForm::class);
     }
 }

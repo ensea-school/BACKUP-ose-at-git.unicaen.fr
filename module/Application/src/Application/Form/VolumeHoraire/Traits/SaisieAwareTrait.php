@@ -43,6 +43,6 @@ trait SaisieAwareTrait
             return $this->formVolumeHoraireSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get('VolumeHoraireSaisie');
+        return \Application::$container->get('FormElementManager')->get(Saisie::class);
     }
 }

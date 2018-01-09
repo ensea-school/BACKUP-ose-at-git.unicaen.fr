@@ -3,7 +3,7 @@
 namespace Application\Entity\Db;
 
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Application\Service\DomaineFonctionnel as DomaineFonctionnelService;
+use Application\Service\DomaineFonctionnelService as DomaineFonctionnelService;
 
 /**
  * FormuleResultatService

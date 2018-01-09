@@ -45,6 +45,6 @@ trait ScenarioFiltreFormAwareTrait
 
         $serviceLocator = \Application::$container;
 
-        return \Application::$container->get('FormElementManager')->get('ChargensScenarioFiltre');
+        return \Application::$container->get('FormElementManager')->get(ScenarioFiltreForm::class);
     }
 }

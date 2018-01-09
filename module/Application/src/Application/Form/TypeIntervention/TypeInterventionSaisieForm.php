@@ -2,7 +2,7 @@
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
@@ -179,7 +179,7 @@ class TypeInterventionSaisieForm extends AbstractForm
 
 class TypeInterventionHydrator implements HydratorInterface
 {
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use AnneeServiceAwareTrait;
 
     /**

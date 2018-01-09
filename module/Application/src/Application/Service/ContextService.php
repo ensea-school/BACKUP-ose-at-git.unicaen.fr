@@ -3,12 +3,12 @@
 namespace Application\Service;
 
 use Application\Acl\Role;
-use Application\Entity\Db\Etablissement as EntityEtablissement;
+use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\Utilisateur as UtilisateurEntity;
+use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\PersonnelAwareTrait;
+use Application\Service\Traits\PersonnelServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
@@ -20,25 +20,25 @@ use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
  */
 class ContextService extends AbstractService
 {
-    use Traits\EtablissementAwareTrait;
+    use Traits\EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
     use Traits\IntervenantServiceAwareTrait;
-    use Traits\ParametresAwareTrait;
+    use Traits\ParametresServiceAwareTrait;
     use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
-    use PersonnelAwareTrait;
+    use PersonnelServiceAwareTrait;
     use IntervenantServiceAwareTrait;
 
     /**
      * selectedIdentityRole
      *
-     * @var Role
+     * @var RoleService
      */
     protected $selectedIdentityRole;
 
     /**
-     * @var EntityEtablissement
+     * @var Etablissement
      */
     protected $etablissement;
 
@@ -80,7 +80,7 @@ class ContextService extends AbstractService
     /**
      * parametres
      *
-     * @var Parametres
+     * @var ParametresService
      */
     protected $parametres;
 
@@ -88,7 +88,7 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return Role
+     * @return RoleService
      */
     public function getSelectedIdentityRole()
     {
@@ -107,7 +107,7 @@ class ContextService extends AbstractService
 
 
     /**
-     * @return UtilisateurEntity|null
+     * @return Utilisateur|null
      */
     public function getUtilisateur()
     {
@@ -220,7 +220,7 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return EntityEtablissement
+     * @return Etablissement
      */
     public function getEtablissement()
     {
@@ -239,12 +239,12 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @param EntityEtablissement $etablissement
+     * @param Etablissement $etablissement
      * @param boolean             $updateParametres
      *
      * @return self
      */
-    public function setEtablissement(EntityEtablissement $etablissement, $updateParametres = false)
+    public function setEtablissement(Etablissement $etablissement, $updateParametres = false)
     {
         $this->etablissement                        = $etablissement;
         $this->getSessionContainer()->etablissement = $etablissement->getId();

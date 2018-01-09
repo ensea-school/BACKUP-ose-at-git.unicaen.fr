@@ -43,6 +43,6 @@ trait SaisieFieldsetAwareTrait
             return $this->fieldsetServiceSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get('ServiceSaisieFieldset');
+        return \Application::$container->get('FormElementManager')->get(SaisieFieldset::class);
     }
 }

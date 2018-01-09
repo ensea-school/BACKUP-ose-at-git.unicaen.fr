@@ -44,6 +44,6 @@ trait DependanceFormAwareTrait
             return $this->formWorkflowDependance;
         }
 
-        return \Application::$container->get('FormElementManager')->get('WorkflowDependance');
+        return \Application::$container->get('FormElementManager')->get(DependanceForm::class);
     }
 }

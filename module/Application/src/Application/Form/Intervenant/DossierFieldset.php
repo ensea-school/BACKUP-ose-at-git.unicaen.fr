@@ -2,13 +2,13 @@
 
 namespace Application\Form\Intervenant;
 
-use Application\Entity\Db\Dossier as DossierEntity;
+use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Pays as PaysEntity;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DepartementAwareTrait;
-use Application\Service\Traits\PaysAwareTrait;
+use Application\Service\Traits\DepartementServiceAwareTrait;
+use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\NumeroINSEEValidator;
@@ -29,8 +29,8 @@ class DossierFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
-    use PaysAwareTrait;
-    use DepartementAwareTrait;
+    use PaysServiceAwareTrait;
+    use DepartementServiceAwareTrait;
 
     static private $franceId;
 
@@ -43,7 +43,7 @@ class DossierFieldset extends AbstractFieldset
         $hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
 
         $this
-                ->setObject(new DossierEntity())
+                ->setObject(new Dossier())
                 ->setHydrator($hydrator)
                 ->addElements();
     }

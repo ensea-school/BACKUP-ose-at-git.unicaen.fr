@@ -1,7 +1,7 @@
 <?php
 namespace Application\Form\Intervenant;
 
-use Application\Entity\Db\Dossier as DossierEntity;
+use Application\Entity\Db\Dossier as Dossier;
 use Application\Constants;
 use DateTime;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
@@ -16,7 +16,7 @@ class DossierFieldsetDoctrineHydrator extends DoctrineObject
      * Hydrate $object with the provided $data.
      *
      * @param  array $data
-     * @param  DossierEntity $dossier
+     * @param  Dossier $dossier
      * @return object
      */
     public function hydrate(array $data, $dossier)
@@ -35,7 +35,7 @@ class DossierFieldsetDoctrineHydrator extends DoctrineObject
     /**
      * Extract values from an object
      *
-     * @param  DossierEntity $dossier
+     * @param  Dossier $dossier
      * @return array
      */
     public function extract($dossier)

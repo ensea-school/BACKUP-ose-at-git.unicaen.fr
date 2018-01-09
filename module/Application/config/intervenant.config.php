@@ -15,8 +15,7 @@ return [
                 'options'       => [
                     'route'    => '/intervenant',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Intervenant',
+                        'controller'    => 'Application\Controller\Intervenant',
                         'action'        => 'index',
                     ],
                 ],
@@ -112,7 +111,7 @@ return [
                         'options' => [
                             'route'    => '/:intervenant/modification-service-du',
                             'defaults' => [
-                                'controller' => 'ModificationServiceDu',
+                                'controller' => 'Application\Controller\ModificationServiceDu',
                                 'action'     => 'saisir',
                             ],
                         ],
@@ -214,7 +213,7 @@ return [
                         'options' => [
                             'route'    => '/:intervenant/contrat',
                             'defaults' => [
-                                'controller' => 'Contrat',
+                                'controller' => 'Application\Controller\Contrat',
                                 'action'     => 'index',
                             ],
                         ],
@@ -226,8 +225,7 @@ return [
                 'options'      => [
                     'route'    => '/modification-service-du',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'ModificationServiceDu',
+                        'controller'    => 'Application\Controller\ModificationServiceDu',
                     ],
                 ],
                 'child_routes' => [
@@ -324,7 +322,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE,
                                 'withtarget'          => true,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services'),
-                                'visible'             => 'assertionService',
+                                'visible'             => Assertion\ServiceAssertion::class,
                                 'order'               => 6,
                             ],
                             'contrat'                 => [
@@ -348,7 +346,7 @@ return [
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_SAISIE_REALISE,
                                 'withtarget'          => true,
                                 'resource'            => PrivilegeController::getResourceId('Application\Controller\Intervenant', 'services'),
-                                'visible'             => 'assertionService',
+                                'visible'             => Assertion\ServiceAssertion::class,
                                 'order'               => 13,
                             ],
                         ],
@@ -381,7 +379,7 @@ return [
                         Privileges::ENSEIGNEMENT_VISUALISATION,
                         Privileges::REFERENTIEL_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -403,7 +401,7 @@ return [
                     'privileges' => [
                         Privileges::MODIF_SERVICE_DU_VISUALISATION,
                     ],
-                    'assertion'  => 'ModificationServiceDuAssertion',
+                    'assertion'  => Assertion\ModificationServiceDuAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\ModificationServiceDu',
@@ -426,7 +424,7 @@ return [
                         Privileges::CLOTURE_CLOTURE,
                         Privileges::CLOTURE_REOUVERTURE,
                     ],
-                    'assertion'  => 'assertionIntervenant',
+                    'assertion'  => Assertion\IntervenantAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
@@ -449,7 +447,7 @@ return [
                     [
                         'privileges' => Privileges::MODIF_SERVICE_DU_EDITION,
                         'resources'  => 'Intervenant',
-                        'assertion'  => 'ModificationServiceDuAssertion',
+                        'assertion'  => Assertion\ModificationServiceDuAssertion::class,
                     ],
                     [
                         'privileges' => [
@@ -457,7 +455,7 @@ return [
                             Privileges::CLOTURE_REOUVERTURE,
                         ],
                         'resources'  => ['Validation', 'Intervenant'],
-                        'assertion'  => 'assertionIntervenant',
+                        'assertion'  => Assertion\IntervenantAssertion::class,
                     ],
                 ],
             ],
@@ -470,17 +468,17 @@ return [
         ],
     ],
     'service_manager' => [
-        'factories' => [
-            Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class
+        'factories'  => [
+            Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
         ],
         'invokables' => [
-            Service\IntervenantService::class       => Service\IntervenantService::class,
-            'ApplicationMotifModificationServiceDu' => Service\MotifModificationServiceDu::class,
-            'ApplicationCivilite'                   => Service\Civilite::class,
-            'ApplicationStatutIntervenant'          => Service\StatutIntervenantService::class,
-            'ApplicationTypeIntervenant'            => Service\TypeIntervenantService::class,
-            'assertionIntervenant'                  => Assertion\IntervenantAssertion::class,
-            'ModificationServiceDuAssertion'        => Assertion\ModificationServiceDuAssertion::class,
+            Service\IntervenantService::class                => Service\IntervenantService::class,
+            Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
+            Service\CiviliteService::class                   => Service\CiviliteService::class,
+            Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,
+            Service\TypeIntervenantService::class            => Service\TypeIntervenantService::class,
+            Assertion\IntervenantAssertion::class            => Assertion\IntervenantAssertion::class,
+            Assertion\ModificationServiceDuAssertion::class  => Assertion\ModificationServiceDuAssertion::class,
         ],
     ],
     'view_helpers'    => [
@@ -492,11 +490,11 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'IntervenantEditionForm'                        => Form\Intervenant\EditionForm::class,
-            'IntervenantHeuresCompForm'                     => Form\Intervenant\HeuresCompForm::class,
-            'IntervenantModificationServiceDuForm'          => Form\Intervenant\ModificationServiceDuForm::class,
-            'IntervenantModificationServiceDuFieldset'      => Form\Intervenant\ModificationServiceDuFieldset::class,
-            'IntervenantMotifModificationServiceDuFieldset' => Form\Intervenant\MotifModificationServiceDuFieldset::class,
+            Form\Intervenant\EditionForm::class                        => Form\Intervenant\EditionForm::class,
+            Form\Intervenant\HeuresCompForm::class                     => Form\Intervenant\HeuresCompForm::class,
+            Form\Intervenant\ModificationServiceDuForm::class          => Form\Intervenant\ModificationServiceDuForm::class,
+            Form\Intervenant\ModificationServiceDuFieldset::class      => Form\Intervenant\ModificationServiceDuFieldset::class,
+            Form\Intervenant\MotifModificationServiceDuFieldset::class => Form\Intervenant\MotifModificationServiceDuFieldset::class,
         ],
     ],
 ];

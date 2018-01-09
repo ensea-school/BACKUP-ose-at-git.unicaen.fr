@@ -13,8 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/plafond',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Plafond',
+                        'controller'    => 'Application\Controller\Plafond',
                         'action'        => 'index',
                     ],
                 ],

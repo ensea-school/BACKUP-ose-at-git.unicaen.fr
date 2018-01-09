@@ -5,8 +5,8 @@ namespace Application\Form\ServiceReferentiel;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\FonctionReferentielAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -28,9 +28,9 @@ use UnicaenApp\Service\EntityManagerAwaretrait;
 class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInterface
 {
     use ContextServiceAwareTrait;
-    use LocalContextAwareTrait;
+    use LocalContextServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use FonctionReferentielAwareTrait;
+    use FonctionReferentielServiceAwareTrait;
     use EntityManagerAwareTrait;
 
 

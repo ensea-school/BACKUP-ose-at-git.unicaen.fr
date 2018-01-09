@@ -7,7 +7,7 @@ use Application\Entity\Db\Service;
 use Application\Form\AbstractForm;
 use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -20,7 +20,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class Saisie extends AbstractForm
 {
-    use PeriodeAwareTrait;
+    use PeriodeServiceAwareTrait;
     use SaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;
 
@@ -131,7 +131,7 @@ class Saisie extends AbstractForm
  */
 class SaisieHydrator implements HydratorInterface
 {
-    use PeriodeAwareTrait;
+    use PeriodeServiceAwareTrait;
 
 
 

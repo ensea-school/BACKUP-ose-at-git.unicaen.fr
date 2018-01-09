@@ -43,6 +43,6 @@ trait TypeDotationSaisieFormAwareTrait
             return $this->formTypeDotationSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get('TypeDotationSaisie');
+        return \Application::$container->get('FormElementManager')->get(TypeDotationSaisieForm::class);
     }
 }

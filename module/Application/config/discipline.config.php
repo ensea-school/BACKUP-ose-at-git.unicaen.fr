@@ -13,8 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/discipline',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Discipline',
+                        'controller'    => 'Application\Controller\Discipline',
                         'action'        => 'index',
                     ],
                 ],
@@ -118,12 +117,12 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationDiscipline' => Service\DisciplineService::class,
+            Service\DisciplineService::class => Service\DisciplineService::class,
         ],
     ],
     'form_elements'   => [
         'invokables' => [
-            'DisciplineForm' => Form\DisciplineForm::class,
+            Form\DisciplineForm::class => Form\DisciplineForm::class,
         ],
     ],
 ];

@@ -38,7 +38,7 @@ trait RechercheHydratorAwareTrait
     public function getHydratorServiceRecherche()
     {
         if (empty($this->hydratorServiceRecherche)) {
-            $this->hydratorServiceRecherche = \Application::$container->get('HydratorManager')->get('serviceRecherche');
+            $this->hydratorServiceRecherche = \Application::$container->get('HydratorManager')->get(RechercheHydrator::class);
         }
 
         return $this->hydratorServiceRecherche;

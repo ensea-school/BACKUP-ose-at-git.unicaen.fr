@@ -38,7 +38,7 @@ trait IndicateurServiceAwareTrait
     public function getServiceIndicateur()
     {
         if (empty($this->serviceIndicateur)) {
-            $this->serviceIndicateur = \Application::$container->get('applicationIndicateur');
+            $this->serviceIndicateur = \Application::$container->get(IndicateurService::class);
         }
 
         return $this->serviceIndicateur;

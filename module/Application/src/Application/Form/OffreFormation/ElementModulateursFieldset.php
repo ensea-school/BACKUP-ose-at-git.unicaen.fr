@@ -4,9 +4,9 @@ namespace Application\Form\OffreFormation;
 
 use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\ElementModulateurAwareTrait;
-use Application\Service\Traits\ModulateurAwareTrait;
-use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\Service\Traits\ElementModulateurServiceAwareTrait;
+use Application\Service\Traits\ModulateurServiceAwareTrait;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Zend\Form\Element\Select;
 use Application\Entity\Db\ElementPedagogique;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -19,9 +19,9 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class ElementModulateursFieldset extends AbstractFieldset
 {
     use ElementPedagogiqueAwareTrait;
-    use TypeModulateurAwareTrait;
-    use ElementModulateurAwareTrait;
-    use ModulateurAwareTrait;
+    use TypeModulateurServiceAwareTrait;
+    use ElementModulateurServiceAwareTrait;
+    use ModulateurServiceAwareTrait;
 
     /**
      * nombre de modulateurs total
@@ -161,8 +161,8 @@ class ElementModulateursFieldset extends AbstractFieldset
  */
 class ElementModulateursHydrator implements HydratorInterface
 {
-    use ElementModulateurAwareTrait;
-    use ModulateurAwareTrait;
+    use ElementModulateurServiceAwareTrait;
+    use ModulateurServiceAwareTrait;
 
 
 

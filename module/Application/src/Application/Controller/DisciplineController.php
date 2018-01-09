@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\Discipline;
 use Application\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
-use Application\Service\Traits\ParametresAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Exception\DbException;
 
@@ -20,7 +20,7 @@ class DisciplineController extends AbstractController
     use DisciplineServiceAwareTrait;
     use SourceServiceAwareTrait;
     use DisciplineFormAwareTrait;
-    use ParametresAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
 

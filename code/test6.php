@@ -7,10 +7,11 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
+use Application\Service\ElementPedagogiqueService;
 use Application\Service\IntervenantService;
 use Application\Service\PlafondService;
 
-$sl->get('applicationelementpedagogique')->getEntityManager()->getFilters()->enable('historique')->init([
+$sl->get(ElementPedagogiqueService::class)->getEntityManager()->getFilters()->enable('historique')->init([
     \Application\Entity\Db\VolumeHoraireEns::class,
 ]);
 

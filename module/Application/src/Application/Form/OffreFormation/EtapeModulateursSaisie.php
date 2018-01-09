@@ -4,9 +4,9 @@ namespace Application\Form\OffreFormation;
 
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
-use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Entity\Db\Etape;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -16,8 +16,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class EtapeModulateursSaisie extends AbstractForm
 {
-    use TypeModulateurAwareTrait;
-    use ElementPedagogiqueAwareTrait;
+    use TypeModulateurServiceAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
     use ElementModulateursFieldsetAwareTrait;
 
     /**
@@ -164,7 +164,7 @@ class EtapeModulateursSaisie extends AbstractForm
  */
 class EtapeModulateursHydrator implements HydratorInterface
 {
-    use ElementPedagogiqueAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

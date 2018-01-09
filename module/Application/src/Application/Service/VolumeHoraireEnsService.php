@@ -4,8 +4,8 @@ namespace Application\Service;
 
 use Application\Entity\Db\VolumeHoraireEns;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
-use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\TypeIntervention;
 
 
 /**
@@ -52,7 +52,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
      *
      * @return \Application\Entity\Db\VolumeHoraireEns
      */
-    public function newEntity(ElementPedagogiqueEntity $elementPedagogique = null, TypeInterventionEntity $typeIntervention = null)
+    public function newEntity(ElementPedagogique $elementPedagogique = null, TypeIntervention $typeIntervention = null)
     {
         /** @var VolumeHoraireEns $entity */
         $entity = parent::newEntity();

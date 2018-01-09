@@ -38,7 +38,7 @@ trait ServiceServiceAwareTrait
     public function getServiceService()
     {
         if (empty($this->serviceService)) {
-            $this->serviceService = \Application::$container->get('ApplicationService');
+            $this->serviceService = \Application::$container->get(ServiceService::class);
         }
 
         return $this->serviceService;

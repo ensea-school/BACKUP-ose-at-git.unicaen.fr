@@ -5,9 +5,8 @@ namespace Application\View\Helper\ServiceReferentiel;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
@@ -22,10 +21,9 @@ class Liste extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
     use TypeVolumeHoraireAwareTrait;
-    use ServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
-    use ServiceReferentielAwareTrait;
-    use LocalContextAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
+    use LocalContextServiceAwareTrait;
 
     /**
      *

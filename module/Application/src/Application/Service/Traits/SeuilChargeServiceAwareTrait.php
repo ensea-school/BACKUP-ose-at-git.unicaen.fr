@@ -38,7 +38,7 @@ trait SeuilChargeServiceAwareTrait
     public function getServiceSeuilCharge()
     {
         if (empty($this->serviceSeuilCharge)) {
-            $this->serviceSeuilCharge = \Application::$container->get('applicationSeuilCharge');
+            $this->serviceSeuilCharge = \Application::$container->get(SeuilChargeService::class);
         }
 
         return $this->serviceSeuilCharge;

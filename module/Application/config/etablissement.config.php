@@ -3,28 +3,27 @@
 namespace Application;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'etablissement' => [
-                'type' => 'Literal',
-                'options' => [
-                    'route' => '/etablissement',
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/etablissement',
                     'defaults' => [
-                       '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'etablissement',
+                        'controller'    => 'Application\Controller\Etablissement',
                         'action'        => 'index',
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    'modifier' => [
+                'child_routes'  => [
+                    'modifier'  => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/modifier/:id',
+                            'route'       => '/modifier/:id',
                             'constraints' => [
                                 'id' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'modifier',
                             ],
                         ],
@@ -38,15 +37,15 @@ return [
                             ],
                         ],
                     ],
-                    'default' => [
+                    'default'   => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:action[/:id]',
+                            'route'       => '/:action[/:id]',
                             'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'index',
                             ],
                         ],
@@ -55,29 +54,29 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
+    'bjyauthorize'    => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Etablissement',
-                    'action' => ['index', 'choisir', 'recherche', 'voir', 'apercevoir'],
-                    'roles' => ['user']],
+                    'action'     => ['index', 'choisir', 'recherche', 'voir', 'apercevoir'],
+                    'roles'      => ['user']],
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Application\Controller\Etablissement'   => Controller\EtablissementController::class,
+            'Application\Controller\Etablissement' => Controller\EtablissementController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationEtablissement'       => Service\Etablissement::class,
-        ]
+            Service\EtablissementService::class => Service\EtablissementService::class,
+        ],
     ],
-    'view_helpers' => [
+    'view_helpers'    => [
         'invokables' => [
-            'etablissement'     => View\Helper\EtablissementViewHelper::class,
+            'etablissement' => View\Helper\EtablissementViewHelper::class,
         ],
     ],
 ];

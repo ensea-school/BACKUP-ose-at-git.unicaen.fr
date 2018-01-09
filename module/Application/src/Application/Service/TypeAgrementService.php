@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
+use Application\Entity\Db\TypeAgrement;
 
 /**
  * Description of TypeAgrement
@@ -21,7 +21,7 @@ class TypeAgrementService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return TypeAgrementEntity::class;
+        return TypeAgrement::class;
     }
 
     /**
@@ -41,7 +41,7 @@ class TypeAgrementService extends AbstractEntityService
      * Retourne null si le code est null
      *
      * @param string $code
-     * @return TypeAgrementEntity
+     * @return TypeAgrement
      */
     public function getByCode($code)
     {

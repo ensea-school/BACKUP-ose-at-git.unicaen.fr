@@ -13,8 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/volume-horaire',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'VolumeHoraire',
+                        'controller'    => 'Application\Controller\VolumeHoraire',
                         'action'        => 'index',
                     ],
                 ],
@@ -61,7 +60,7 @@ return [
                     'controller' => 'Application\Controller\VolumeHoraire',
                     'action'     => ['saisie'],
                     'privileges' => Privileges::ENSEIGNEMENT_EDITION,
-                    'assertion'  => 'assertionService',
+                    'assertion'  => Assertion\ServiceAssertion::class,
                 ],
             ],
         ],
@@ -73,11 +72,11 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationVolumeHoraire'            => Service\VolumeHoraire::class,
-            'ApplicationVolumeHoraireEns'         => Service\VolumeHoraireEnsService::class,
-            'ApplicationVolumeHoraireReferentiel' => Service\VolumeHoraireReferentiel::class,
-            'ApplicationTypeVolumeHoraire'        => Service\TypeVolumeHoraireService::class,
-            'ApplicationEtatVolumeHoraire'        => Service\EtatVolumeHoraireService::class,
+            Service\VolumeHoraireService::class            => Service\VolumeHoraireService::class,
+            Service\VolumeHoraireEnsService::class         => Service\VolumeHoraireEnsService::class,
+            Service\VolumeHoraireReferentielService::class => Service\VolumeHoraireReferentielService::class,
+            Service\TypeVolumeHoraireService::class        => Service\TypeVolumeHoraireService::class,
+            Service\EtatVolumeHoraireService::class        => Service\EtatVolumeHoraireService::class,
         ],
     ],
     'view_helpers'    => [
@@ -87,8 +86,8 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'VolumeHoraireSaisie'                 => Form\VolumeHoraire\Saisie::class,
-            'VolumeHoraireSaisieMultipleFieldset' => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
+            Form\VolumeHoraire\Saisie::class                 => Form\VolumeHoraire\Saisie::class,
+            Form\VolumeHoraire\SaisieMultipleFieldset::class => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
         ],
     ],
 ];

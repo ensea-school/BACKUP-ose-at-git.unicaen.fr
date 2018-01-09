@@ -3,7 +3,7 @@
 namespace Application\Form\Droits;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\PerimetreAwareTrait;
+use Application\Service\Traits\PerimetreServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -14,7 +14,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class RoleForm extends AbstractForm
 {
-    use PerimetreAwareTrait;
+    use PerimetreServiceAwareTrait;
 
 
 
@@ -109,7 +109,7 @@ class RoleForm extends AbstractForm
 
 class RoleFormHydrator implements HydratorInterface
 {
-    use PerimetreAwareTrait;
+    use PerimetreServiceAwareTrait;
 
 
 

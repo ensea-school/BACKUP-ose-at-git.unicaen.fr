@@ -43,6 +43,6 @@ trait RechercheFormAwareTrait
             return $this->formServiceRecherche;
         }
 
-        return \Application::$container->get('FormElementManager')->get('ServiceRechercheForm');
+        return \Application::$container->get('FormElementManager')->get(RechercheForm::class);
     }
 }

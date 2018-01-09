@@ -2,12 +2,10 @@
 
 namespace Application\Service;
 
-use Application\Assertion\ChargensAssertion;
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Connecteur\Bdd\BddConnecteurAwareTrait;
 use Application\Entity\Db\Scenario;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 
 /**

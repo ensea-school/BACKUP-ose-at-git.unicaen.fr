@@ -6,7 +6,7 @@ use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\PersonnelAwareTrait;
+use Application\Service\Traits\PersonnelServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
@@ -22,7 +22,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use EntityManagerAwareTrait;
     use SessionContainerTrait;
     use IntervenantServiceAwareTrait;
-    use PersonnelAwareTrait;
+    use PersonnelServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     /**

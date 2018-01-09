@@ -5,7 +5,7 @@ namespace Application\Form\VolumeHoraire;
 use Application\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
 use Application\Form\AbstractFieldset;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Zend\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -23,7 +23,7 @@ use Application\Entity\Db\Service;
  */
 class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAwareInterface
 {
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use EntityManagerAwareTrait;
 
     /**
@@ -109,13 +109,13 @@ class SaisieMultipleFieldset extends AbstractFieldset implements EntityManagerAw
 class SaisieMultipleHydrator implements HydratorInterface
 {
     use EntityManagerAwaretrait;
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
 
 
 
     /**
      *
-     * @return \Application\Service\TypeIntervention[]
+     * @return \Application\Service\TypeInterventionService[]
      */
     public function getTypesInterventions(Service $service)
     {

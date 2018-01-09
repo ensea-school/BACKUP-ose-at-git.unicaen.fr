@@ -38,7 +38,7 @@ trait ValidationReferentielProcessusAwareTrait
     public function getProcessusValidationReferentiel()
     {
         if (empty($this->processusValidationReferentiel)) {
-            $this->processusValidationReferentiel = \Application::$container->get('processusValidationReferentiel');
+            $this->processusValidationReferentiel = \Application::$container->get(ValidationReferentielProcessus::class);
         }
 
         return $this->processusValidationReferentiel;

@@ -43,6 +43,6 @@ trait ContratRetourAwareTrait
             return $this->formIntervenantContratRetour;
         }
 
-        return \Application::$container->get('FormElementManager')->get('contratRetour');
+        return \Application::$container->get('FormElementManager')->get(ContratRetour::class);
     }
 }

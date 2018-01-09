@@ -2,7 +2,7 @@
 
 namespace Application\Form;
 
-use Application\Service\Traits\ParametresAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -12,7 +12,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class DisciplineForm extends AbstractForm
 {
-    use ParametresAwareTrait;
+    use ParametresServiceAwareTrait;
 
 
 

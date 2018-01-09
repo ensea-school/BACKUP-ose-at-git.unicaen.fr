@@ -36,7 +36,7 @@ class WfEtapeDepService extends AbstractEntityService
      * @return string
      */
     public function getAlias(){
-        return 'ApplicationWfEtapeDep';
+        return 'wfed';
     }
 
 }

@@ -38,7 +38,7 @@ trait ValidationEnseignementProcessusAwareTrait
     public function getProcessusValidationEnseignement()
     {
         if (empty($this->processusValidationEnseignement)) {
-            $this->processusValidationEnseignement = \Application::$container->get('processusValidationEnseignement');
+            $this->processusValidationEnseignement = \Application::$container->get(ValidationEnseignementProcessus::class);
         }
 
         return $this->processusValidationEnseignement;

@@ -38,7 +38,7 @@ trait VolumeHoraireEnsServiceAwareTrait
     public function getServiceVolumeHoraireEns()
     {
         if (empty($this->serviceVolumeHoraireEns)) {
-            $this->serviceVolumeHoraireEns = \Application::$container->get('ApplicationVolumeHoraireEns');
+            $this->serviceVolumeHoraireEns = \Application::$container->get(VolumeHoraireEnsService::class);
         }
 
         return $this->serviceVolumeHoraireEns;

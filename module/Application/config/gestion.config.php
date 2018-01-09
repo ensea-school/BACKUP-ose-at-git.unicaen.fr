@@ -8,13 +8,12 @@ use UnicaenAuth\Guard\PrivilegeController;
 return [
     'router'          => [
         'routes' => [
-            'gestion'    => [
+            'gestion' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/gestion',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Gestion',
+                        'controller'    => 'Application\Controller\Gestion',
                         'action'        => 'index',
                     ],
                 ],
@@ -53,19 +52,19 @@ return [
                         Privileges::BUDGET_VISUALISATION,
                         Privileges::INDICATEUR_VISUALISATION,
                     ],
-                    'assertion'  => 'AssertionGestion',
+                    'assertion'  => Assertion\GestionAssertion::class,
                 ],
             ],
         ],
     ],
     'controllers'     => [
         'invokables' => [
-            'Application\Controller\Gestion'    => Controller\GestionController::class,
+            'Application\Controller\Gestion' => Controller\GestionController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'AssertionGestion'      => Assertion\GestionAssertion::class,
+            Assertion\GestionAssertion::class => Assertion\GestionAssertion::class,
         ],
     ],
 ];

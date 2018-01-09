@@ -4,10 +4,10 @@ namespace Application\Form\OffreFormation;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DomaineFonctionnelAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeFormationAwareTrait;
+use Application\Service\Traits\TypeFormationServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -18,10 +18,10 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class EtapeSaisie extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use LocalContextAwareTrait;
+    use LocalContextServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use DomaineFonctionnelAwareTrait;
-    use TypeFormationAwareTrait;
+    use DomaineFonctionnelServiceAwareTrait;
+    use TypeFormationServiceAwareTrait;
 
     private $typesFormation;
 
@@ -258,8 +258,8 @@ class EtapeSaisie extends AbstractForm
 class EtapeSaisieHydrator implements HydratorInterface
 {
     use StructureServiceAwareTrait;
-    use DomaineFonctionnelAwareTrait;
-    use TypeFormationAwareTrait;
+    use DomaineFonctionnelServiceAwareTrait;
+    use TypeFormationServiceAwareTrait;
 
 
 

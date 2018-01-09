@@ -3,7 +3,7 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Structure;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeInterventionStructure;
 use Application\Form\TypeIntervention\Traits\TypeInterventionSaisieFormAwareTrait;
@@ -13,7 +13,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 
 class TypeInterventionController extends AbstractController
 {
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use TypeInterventionStructureServiceAwareTrait;
     use TypeInterventionSaisieFormAwareTrait;
     use TypeInterventionStructureSaisieFormAwareTrait;

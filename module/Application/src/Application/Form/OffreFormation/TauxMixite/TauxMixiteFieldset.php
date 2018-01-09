@@ -19,7 +19,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class TauxMixiteFieldset extends AbstractFieldset
 {
     use ElementPedagogiqueAwareTrait;
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 
 
 
@@ -117,7 +117,7 @@ class TauxMixiteFieldset extends AbstractFieldset
 
 class TauxMixiteFieldsetHydrator implements HydratorInterface
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 
 
 

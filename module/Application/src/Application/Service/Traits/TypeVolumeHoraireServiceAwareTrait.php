@@ -38,7 +38,7 @@ trait TypeVolumeHoraireServiceAwareTrait
     public function getServiceTypeVolumeHoraire()
     {
         if (empty($this->serviceTypeVolumeHoraire)) {
-            $this->serviceTypeVolumeHoraire = \Application::$container->get('ApplicationTypeVolumeHoraire');
+            $this->serviceTypeVolumeHoraire = \Application::$container->get(TypeVolumeHoraireService::class);
         }
 
         return $this->serviceTypeVolumeHoraire;

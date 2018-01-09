@@ -8,9 +8,9 @@ use Application\Form\Traits\ParametresFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
-use Application\Service\Traits\EtablissementAwareTrait;
-use Application\Service\Traits\ParametresAwareTrait;
-use Application\Service\Traits\PersonnelAwareTrait;
+use Application\Service\Traits\EtablissementServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
+use Application\Service\Traits\PersonnelServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Zend\View\Model\JsonModel;
@@ -24,9 +24,9 @@ use Zend\View\Model\JsonModel;
 class ParametreController extends AbstractController
 {
     use ParametresFormAwareTrait;
-    use ParametresAwareTrait;
-    use EtablissementAwareTrait;
-    use PersonnelAwareTrait;
+    use ParametresServiceAwareTrait;
+    use EtablissementServiceAwareTrait;
+    use PersonnelServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;

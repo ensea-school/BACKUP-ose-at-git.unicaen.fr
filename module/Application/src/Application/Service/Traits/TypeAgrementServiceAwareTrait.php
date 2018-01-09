@@ -38,7 +38,7 @@ trait TypeAgrementServiceAwareTrait
     public function getServiceTypeAgrement()
     {
         if (empty($this->serviceTypeAgrement)) {
-            $this->serviceTypeAgrement = \Application::$container->get('ApplicationTypeAgrement');
+            $this->serviceTypeAgrement = \Application::$container->get(TypeAgrementService::class);
         }
 
         return $this->serviceTypeAgrement;

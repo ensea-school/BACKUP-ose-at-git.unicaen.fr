@@ -12,7 +12,7 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\TypeHeures;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Service\Traits\TypeHeuresAwareTrait;
+use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use BjyAuthorize\Service\Authorize;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
@@ -22,7 +22,7 @@ class ChargensProvider
     use SourceServiceAwareTrait;
     use ContextServiceAwareTrait;
     use StructureAwareTrait;
-    use TypeHeuresAwareTrait;
+    use TypeHeuresServiceAwareTrait;
     use TableauBordServiceAwareTrait;
 
     /**

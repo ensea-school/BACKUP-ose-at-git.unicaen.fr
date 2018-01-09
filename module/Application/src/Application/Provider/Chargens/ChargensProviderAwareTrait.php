@@ -27,7 +27,7 @@ trait ChargensProviderAwareTrait {
     public function getProviderChargens()
     {
         if (!$this->providerChargens){
-            $this->providerChargens = \Application::$container->get('chargens');
+            $this->providerChargens = \Application::$container->get(ChargensProvider::class);
         }
         return $this->providerChargens;
     }

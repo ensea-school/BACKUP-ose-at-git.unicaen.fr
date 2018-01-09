@@ -3,7 +3,7 @@
 namespace Application\Form\FonctionReferentiel;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\DomaineFonctionnelAwareTrait;
+use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -16,7 +16,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
  */
 class FonctionReferentielSaisieForm extends AbstractForm
 {
-    use DomaineFonctionnelAwareTrait;
+    use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
 
@@ -153,7 +153,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
 class FonctionReferentielHydrator implements HydratorInterface
 {
-    use DomaineFonctionnelAwareTrait;
+    use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
 
     /**

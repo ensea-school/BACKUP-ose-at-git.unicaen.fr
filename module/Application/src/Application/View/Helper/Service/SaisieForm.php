@@ -8,9 +8,8 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Service\Saisie;
 use Application\View\Helper\AbstractViewHelper;
 use \Application\Service\Traits\ContextServiceAwareTrait;
-use \Application\Service\Traits\ServiceAwareTrait;
-use \Application\Service\Traits\PeriodeAwareTrait;
-use \Application\Service\Traits\TypeInterventionAwareTrait;
+use \Application\Service\Traits\PeriodeServiceAwareTrait;
+use \Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use \Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use \Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 
@@ -23,9 +22,8 @@ use \Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 class SaisieForm extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
-    use ServiceAwareTrait;
-    use PeriodeAwareTrait;
-    use TypeInterventionAwareTrait;
+    use PeriodeServiceAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
 

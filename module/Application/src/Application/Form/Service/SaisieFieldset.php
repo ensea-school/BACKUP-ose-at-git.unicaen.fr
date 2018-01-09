@@ -7,9 +7,9 @@ use Application\Entity\Db\Service;
 use Application\Form\AbstractFieldset;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\NiveauEtapeAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
@@ -18,8 +18,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
-use Application\Service\Traits\EtablissementAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use Application\Service\Traits\EtablissementServiceAwareTrait;
 
 
 /**
@@ -30,9 +30,9 @@ use Application\Service\Traits\EtablissementAwareTrait;
 class SaisieFieldset extends AbstractFieldset
 {
     use ContextServiceAwareTrait;
-    use LocalContextAwareTrait;
-    use EtapeAwareTrait;
-    use NiveauEtapeAwareTrait;
+    use LocalContextServiceAwareTrait;
+    use EtapeServiceAwareTrait;
+    use NiveauEtapeServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ElementPedagogiqueRechercheFieldsetAwareTrait;
     use AuthorizeServiceAwareTrait;
@@ -256,8 +256,8 @@ class SaisieFieldsetHydrator implements HydratorInterface
 {
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use ElementPedagogiqueAwareTrait;
-    use EtablissementAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
+    use EtablissementServiceAwareTrait;
 
 
 

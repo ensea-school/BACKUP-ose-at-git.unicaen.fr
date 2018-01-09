@@ -38,7 +38,7 @@ trait WfEtapeDepServiceAwareTrait
     public function getServiceWfEtapeDep()
     {
         if (empty($this->serviceWfEtapeDep)) {
-            $this->serviceWfEtapeDep = \Application::$container->get('applicationWfEtapeDep');
+            $this->serviceWfEtapeDep = \Application::$container->get(WfEtapeDepService::class);
         }
 
         return $this->serviceWfEtapeDep;

@@ -2,7 +2,7 @@
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Form\Element\Csrf;
@@ -137,7 +137,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
 class TypeInterventionStructureHydrator implements HydratorInterface
 {
     use TypeInterventionStructureServiceAwareTrait;
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use StructureServiceAwareTrait;
     use EntityManagerAwareTrait;
     use AnneeServiceAwareTrait;

@@ -3,12 +3,12 @@
 namespace Application\Filter;
 
 use Application\Entity\Db\Intervenant;
-use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Zend\Filter\AbstractFilter;
 
 class IntervenantEmailFormatter extends AbstractFilter
 {
-    use DossierAwareTrait;
+    use DossierServiceAwareTrait;
 
     private $intervenantsWithNoEmail = [];
 

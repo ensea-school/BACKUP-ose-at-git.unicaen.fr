@@ -11,8 +11,8 @@ use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\ParametresAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exporter\Pdf;
@@ -24,17 +24,17 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\ServiceReferentielAwareTrait;
+use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 
 /**
  * Description of ServiceController
@@ -45,23 +45,23 @@ class ServiceController extends AbstractController
 {
     use ServiceProcessusAwareTrait;
     use ContextServiceAwareTrait;
-    use ServiceAwareTrait;
-    use VolumeHoraireAwareTrait;
-    use ElementPedagogiqueAwareTrait;
+    use ServiceServiceAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use ServiceReferentielAwareTrait;
+    use ServiceReferentielServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use EtapeAwareTrait;
-    use PeriodeAwareTrait;
-    use LocalContextAwareTrait;
+    use EtapeServiceAwareTrait;
+    use PeriodeServiceAwareTrait;
+    use LocalContextServiceAwareTrait;
     use SaisieAwareTrait;
     use RechercheFormAwareTrait;
     use ValidationEnseignementProcessusAwareTrait;
     use RegleStructureValidationServiceAwareTrait;
-    use ParametresAwareTrait;
+    use ParametresServiceAwareTrait;
     use WorkflowServiceAwareTrait;
 
 

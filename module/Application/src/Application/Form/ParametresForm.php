@@ -3,9 +3,9 @@
 namespace Application\Form;
 
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Application\Service\Traits\DomaineFonctionnelAwareTrait;
+use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
-use Application\Service\Traits\UtilisateurAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
 
@@ -18,8 +18,8 @@ use UnicaenApp\Util;
 class ParametresForm extends AbstractForm
 {
     use AnneeServiceAwareTrait;
-    use DomaineFonctionnelAwareTrait;
-    use UtilisateurAwareTrait;
+    use DomaineFonctionnelServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
     use ScenarioServiceAwareTrait;
 
     public function init()

@@ -6,15 +6,14 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
-    'router'          => [
+    'router'        => [
         'routes' => [
             'fonction-referentiel' => [
                 'type'          => 'Segment',
                 'options'       => [
                     'route'    => '/fonction-referentiel',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'FonctionReferentiel',
+                        'controller'    => 'Application\Controller\FonctionReferentiel',
                         'action'        => 'index',
                     ],
                 ],
@@ -50,7 +49,7 @@ return [
             ],
         ],
     ],
-    'navigation'      => [
+    'navigation'    => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -71,7 +70,7 @@ return [
             ],
         ],
     ],
-    'bjyauthorize'    => [
+    'bjyauthorize'  => [
         'guards' => [
             PrivilegeController::class => [
                 [
@@ -87,16 +86,14 @@ return [
             ],
         ],
     ],
-    'service_manager' => [
-    ],
-    'controllers'     => [
+    'controllers'   => [
         'invokables' => [
             'Application\Controller\FonctionReferentiel' => Controller\FonctionReferentielController::class,
         ],
     ],
-    'form_elements'   => [
+    'form_elements' => [
         'invokables' => [
-            'fonctionReferentielSaisie' => Form\FonctionReferentiel\FonctionReferentielSaisieForm::class,
+            Form\FonctionReferentiel\FonctionReferentielSaisieForm::class => Form\FonctionReferentiel\FonctionReferentielSaisieForm::class,
         ],
     ],
 ];

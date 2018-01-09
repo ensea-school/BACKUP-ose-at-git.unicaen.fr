@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\CentreCout as CentreCoutEntity;
-use Application\Entity\Db\TypeHeures as TypeHeuresEntity;
-use Application\Service\Traits\TypeHeuresAwareTrait;
+use Application\Entity\Db\CentreCout;
+use Application\Entity\Db\TypeHeures;
+use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -15,7 +15,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class CentreCoutService extends AbstractEntityService
 {
-    use TypeHeuresAwareTrait;
+    use TypeHeuresServiceAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -24,7 +24,7 @@ class CentreCoutService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return CentreCoutEntity::class;
+        return CentreCout::class;
     }
 
     /**
@@ -40,12 +40,12 @@ class CentreCoutService extends AbstractEntityService
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param TypeHeuresEntity  $typeHeures
+     * @param TypeHeures  $typeHeures
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
      */
-    public function finderByTypeHeures(TypeHeuresEntity $typeHeures, QueryBuilder $qb = null, $alias = null)
+    public function finderByTypeHeures(TypeHeures $typeHeures, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
@@ -63,7 +63,7 @@ class CentreCoutService extends AbstractEntityService
      *
      * NB: la liste en entrée doit être triées par code parent (éventuel) PUIS par code.
      *
-     * @param CentreCoutEntity[] $centresCouts
+     * @param CentreCout[] $centresCouts
      */
     public function formatCentresCouts($centresCouts)
     {

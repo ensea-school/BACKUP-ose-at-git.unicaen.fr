@@ -4,7 +4,7 @@ namespace Application\Form\Paiement;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 
 
 /**
@@ -15,7 +15,7 @@ use Application\Service\Traits\PeriodeAwareTrait;
 class MiseEnPaiementForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use PeriodeAwareTrait;
+    use PeriodeServiceAwareTrait;
 
 
 

@@ -7,8 +7,8 @@ use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PersonnelAwareTrait;
-use Application\Service\Traits\RoleAwareTrait;
+use Application\Service\Traits\PersonnelServiceAwareTrait;
+use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -26,12 +26,12 @@ use Application\Exception\DbException;
  */
 class DroitsController extends AbstractController
 {
-    use RoleAwareTrait;
+    use RoleServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
     use PrivilegeServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use PersonnelAwareTrait;
+    use PersonnelServiceAwareTrait;
     use SourceServiceAwareTrait;
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;

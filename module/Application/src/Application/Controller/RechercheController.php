@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Constants;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\StructureService;
-use Application\Service\Traits\PersonnelAwareTrait;
+use Application\Service\Traits\PersonnelServiceAwareTrait;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
  */
 class RechercheController extends AbstractController
 {
-    use PersonnelAwareTrait;
+    use PersonnelServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
 
 

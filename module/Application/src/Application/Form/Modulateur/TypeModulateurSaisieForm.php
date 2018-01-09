@@ -6,7 +6,7 @@ use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypeModulateurAwareTrait;
+use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 
 /**
  * Description of typeModulateurSaisieForm
@@ -16,7 +16,7 @@ use Application\Service\Traits\TypeModulateurAwareTrait;
 class typeModulateurSaisieForm extends AbstractForm
 {
     use ContextServiceAwareTrait;
-    use TypeModulateurAwareTrait;
+    use TypeModulateurServiceAwareTrait;
 
 
 
@@ -108,7 +108,7 @@ class typeModulateurSaisieForm extends AbstractForm
 
 class typeModulateurHydrator implements HydratorInterface
 {
-    use TypeModulateurAwareTrait;
+    use TypeModulateurServiceAwareTrait;
 
 
 

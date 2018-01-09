@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Mouchard\MouchardCompleterContextFactory;
+use Application\Provider\Role\RoleProvider;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
@@ -72,8 +73,7 @@ return [
                 'options'       => [
                     'route'    => '/application',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
+                        'controller'    => 'Application\Controller\Index',
                         'action'        => 'index',
                     ],
                 ],
@@ -95,10 +95,10 @@ return [
         ],
     ],
     'bjyauthorize'       => [
-        'identity_provider' => 'ApplicationIdentityProvider',
+        'identity_provider' => Provider\Identity\IdentityProvider::class,
 
         'role_providers'     => [
-            'ApplicationRoleProvider' => [
+            Provider\Role\RoleProvider::class => [
                 Acl\Role::class,
             ],
         ],
@@ -122,7 +122,7 @@ return [
                     [
                         'roles'     => ['user'],
                         'resources' => 'Information',
-                        'assertion' => 'assertionInformation',
+                        'assertion' => Assertion\InformationAssertion::class,
                     ],
                 ],
             ],
@@ -130,27 +130,26 @@ return [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class       => Service\AnneeService::class,
-            Service\ContextService::class     => Service\ContextService::class,
-            'ApplicationLocalContext'         => Service\LocalContext::class,
-            'ApplicationParametres'           => Service\Parametres::class,
-            'ApplicationUtilisateur'          => Service\Utilisateur::class,
-            'ApplicationTypeIntervention'     => Service\TypeIntervention::class,
-            Service\SourceService::class      => Service\SourceService::class,
-            Service\AffectationService::class => Service\AffectationService::class,
-            'ApplicationRole'                 => Service\Role::class,
-            'ApplicationPays'                 => Service\Pays::class,
-            'ApplicationDepartement'          => Service\Departement::class,
-            'applicationFichier'              => Service\FichierService::class,
-            'applicationTauxHoraireHETD'      => Service\TauxHoraireHETDService::class,
-            'dbEvent'                         => Service\DbEventService::class,
-            'UnicaenAuth\Service\Privilege'   => Service\PrivilegeService::class,
-            'assertionInformation'            => Assertion\InformationAssertion::class,
+            Service\AnneeService::class            => Service\AnneeService::class,
+            Service\ContextService::class          => Service\ContextService::class,
+            Service\LocalContextService::class     => Service\LocalContextService::class,
+            Service\ParametresService::class       => Service\ParametresService::class,
+            Service\UtilisateurService::class      => Service\UtilisateurService::class,
+            Service\TypeInterventionService::class => Service\TypeInterventionService::class,
+            Service\SourceService::class           => Service\SourceService::class,
+            Service\AffectationService::class      => Service\AffectationService::class,
+            Service\RoleService::class             => Service\RoleService::class,
+            Service\PaysService::class             => Service\PaysService::class,
+            Service\DepartementService::class      => Service\DepartementService::class,
+            Service\FichierService::class          => Service\FichierService::class,
+            Service\TauxHoraireHETDService::class  => Service\TauxHoraireHETDService::class,
+            'UnicaenAuth\Service\Privilege'        => Service\PrivilegeService::class,
+            Assertion\InformationAssertion::class  => Assertion\InformationAssertion::class,
         ],
         'factories'  => [
             'navigation'                  => Service\NavigationFactoryFactory::class,
-            'ApplicationRoleProvider'     => Provider\Role\RoleProviderFactory::class,
-            'ApplicationIdentityProvider' => Provider\Identity\IdentityProviderFactory::class,
+            Provider\Role\RoleProvider::class     => Provider\Role\RoleProviderFactory::class,
+            Provider\Identity\IdentityProvider::class => Provider\Identity\IdentityProviderFactory::class,
             'MouchardCompleterContext'    => MouchardCompleterContextFactory::class,
         ],
     ],

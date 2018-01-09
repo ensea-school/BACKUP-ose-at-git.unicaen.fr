@@ -5,7 +5,7 @@ namespace Application\Form\VolumeHoraire;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\MotifNonPaiementAwareTrait;
+use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
 use Zend\Form\Element\Hidden;
 
 /**
@@ -14,7 +14,7 @@ use Zend\Form\Element\Hidden;
  */
 class Saisie extends AbstractForm
 {
-    use MotifNonPaiementAwareTrait;
+    use MotifNonPaiementServiceAwareTrait;
 
     /**
      * @var boolean

@@ -2,17 +2,17 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\GroupeTypeFormation as GroupeTypeFormationEntity;
+use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\Scenario;
 use Application\Entity\Db\SeuilCharge;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
+use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\GroupeTypeFormationAwareTrait;
+use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenTbl\Service\Traits\TableauBordServiceAwareTrait;
 
@@ -31,8 +31,8 @@ class SeuilChargeService extends AbstractEntityService
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ScenarioServiceAwareTrait;
-    use GroupeTypeFormationAwareTrait;
-    use TypeInterventionAwareTrait;
+    use GroupeTypeFormationServiceAwareTrait;
+    use TypeInterventionServiceAwareTrait;
     use TableauBordServiceAwareTrait;
 
 
@@ -68,8 +68,8 @@ class SeuilChargeService extends AbstractEntityService
     /**
      * @param Scenario|integer                       $scenario
      * @param Structure|integer|null           $structure
-     * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
-     * @param TypeInterventionEntity|integer         $typeIntervention
+     * @param GroupeTypeFormation|integer|null $groupeTypeFormation
+     * @param TypeIntervention|integer         $typeIntervention
      *
      * @return SeuilCharge|null
      */
@@ -94,8 +94,8 @@ class SeuilChargeService extends AbstractEntityService
     /**
      * @param Scenario|integer                       $scenario
      * @param Structure|integer|null           $structure
-     * @param GroupeTypeFormationEntity|integer|null $groupeTypeFormation
-     * @param TypeInterventionEntity|integer         $typeIntervention
+     * @param GroupeTypeFormation|integer|null $groupeTypeFormation
+     * @param TypeIntervention|integer         $typeIntervention
      * @param integer|null                           $dedoublement
      *
      * @return self
@@ -115,10 +115,10 @@ class SeuilChargeService extends AbstractEntityService
             if (!$structure instanceof Structure) {
                 $structure = $this->getServiceStructure()->get($structure);
             }
-            if (!$groupeTypeFormation instanceof GroupeTypeFormationEntity) {
+            if (!$groupeTypeFormation instanceof GroupeTypeFormation) {
                 $groupeTypeFormation = $this->getServiceGroupeTypeFormation()->get($groupeTypeFormation);
             }
-            if (!$typeIntervention instanceof TypeInterventionEntity) {
+            if (!$typeIntervention instanceof TypeIntervention) {
                 $typeIntervention = $this->getServiceTypeIntervention()->get($typeIntervention);
             }
 

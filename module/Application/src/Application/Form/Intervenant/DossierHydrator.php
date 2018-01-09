@@ -1,10 +1,10 @@
 <?php
 namespace Application\Form\Intervenant;
 
-use Application\Entity\Db\Dossier as DossierEntity;
+use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
-use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -13,7 +13,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class DossierHydrator implements HydratorInterface
 {
-    use DossierAwareTrait;
+    use DossierServiceAwareTrait;
 
     /**
      *
@@ -33,7 +33,7 @@ class DossierHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $intervenant)
     {
-        $dossier = $data['dossier']; /* @var $dossier DossierEntity */
+        $dossier = $data['dossier']; /* @var $dossier Dossier */
 
         if (!$dossier->getStatut() && $this->getDefaultStatut()) {
             $dossier->setStatut($this->getDefaultStatut());

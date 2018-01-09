@@ -13,8 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/administration',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Administration',
+                        'controller'    => 'Application\Controller\Administration',
                         'action'        => 'index',
                     ],
                 ],
@@ -60,7 +59,7 @@ return [
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
                         Privileges::PLAFONDS_GESTION_VISUALISATION,
                     ],
-                    'assertion'  => 'AssertionGestion',
+                    'assertion'  => Assertion\GestionAssertion::class,
                 ],
             ],
         ],

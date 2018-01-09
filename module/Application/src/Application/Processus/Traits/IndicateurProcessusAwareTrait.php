@@ -38,7 +38,7 @@ trait IndicateurProcessusAwareTrait
     public function getProcessusIndicateur()
     {
         if (empty($this->processusIndicateur)) {
-            $this->processusIndicateur = \Application::$container->get('processusIndicateur');
+            $this->processusIndicateur = \Application::$container->get(IndicateurProcessus::class);
         }
 
         return $this->processusIndicateur;

@@ -38,7 +38,7 @@ trait ServiceProcessusAwareTrait
     public function getProcessusService()
     {
         if (empty($this->processusService)) {
-            $this->processusService = \Application::$container->get('processusService');
+            $this->processusService = \Application::$container->get(ServiceProcessus::class);
         }
 
         return $this->processusService;

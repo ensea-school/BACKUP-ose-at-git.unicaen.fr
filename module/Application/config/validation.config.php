@@ -24,7 +24,7 @@ return [
                                 'options'       => [
                                     'route'    => '/service',
                                     'defaults' => [
-                                        'controller' => 'Service',
+                                        'controller' => 'Application\Controller\Service',
                                     ],
                                 ],
                                 'may_terminate' => false,
@@ -81,7 +81,7 @@ return [
                                 'options'       => [
                                     'route'    => '/referentiel',
                                     'defaults' => [
-                                        'controller' => 'ServiceReferentiel',
+                                        'controller' => 'Application\Controller\ServiceReferentiel',
                                     ],
                                 ],
                                 'may_terminate' => false,
@@ -155,8 +155,8 @@ return [
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION,
                                 'withtarget'          => true,
-                                'visible'             => 'assertionService',
-                                'order'        => 8,
+                                'visible'             => Assertion\ServiceAssertion::class,
+                                'order'               => 8,
                             ],
                             'validation-referentiel-prevu'   => [
                                 'label'               => "Validation du référentiel prévisionnel",
@@ -167,8 +167,8 @@ return [
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION,
                                 'withtarget'          => true,
-                                'visible'             => 'assertionService',
-                                'order'        => 9,
+                                'visible'             => Assertion\ServiceAssertion::class,
+                                'order'               => 9,
                             ],
                             'validation-service-realise'     => [
                                 'label'               => "Validation des enseignements réalisés",
@@ -179,8 +179,8 @@ return [
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_SERVICE_VALIDATION_REALISE,
                                 'withtarget'          => true,
-                                'visible'             => 'assertionService',
-                                'order'        => 14,
+                                'visible'             => Assertion\ServiceAssertion::class,
+                                'order'               => 14,
                             ],
                             'validation-referentiel-realise' => [
                                 'label'               => "Validation du référentiel réalisé",
@@ -191,8 +191,8 @@ return [
                                 ],
                                 'workflow-etape-code' => WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE,
                                 'withtarget'          => true,
-                                'visible'             => 'assertionService',
-                                'order'        => 15,
+                                'visible'             => Assertion\ServiceAssertion::class,
+                                'order'               => 15,
                             ],
                         ],
                     ],
@@ -211,11 +211,11 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'ApplicationTypeValidation'       => Service\TypeValidation::class,
-            'ApplicationValidation'           => Service\Validation::class,
-            'applicationRegleStructureValidation' => Service\RegleStructureValidationService::class,
-            'processusValidationEnseignement' => Processus\ValidationEnseignementProcessus::class,
-            'processusValidationReferentiel'  => Processus\ValidationReferentielProcessus::class,
+            Service\TypeValidationService::class             => Service\TypeValidationService::class,
+            Service\ValidationService::class                 => Service\ValidationService::class,
+            Service\RegleStructureValidationService::class   => Service\RegleStructureValidationService::class,
+            Processus\ValidationEnseignementProcessus::class => Processus\ValidationEnseignementProcessus::class,
+            Processus\ValidationReferentielProcessus::class  => Processus\ValidationReferentielProcessus::class,
         ],
     ],
 ];

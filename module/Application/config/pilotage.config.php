@@ -14,8 +14,7 @@ return [
                 'options'       => [
                     'route'    => '/pilotage',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Pilotage',
+                        'controller'    => 'Application\Controller\Pilotage',
                         'action'        => 'index',
                     ],
                 ],
@@ -87,7 +86,7 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationPilotage' => Service\PilotageService::class,
+            Service\PilotageService::class => Service\PilotageService::class,
         ],
     ],
     'controllers'     => [

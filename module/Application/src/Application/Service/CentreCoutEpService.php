@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\CentreCoutEp as CentreCoutEpEntity;
+use Application\Entity\Db\CentreCoutEp;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
@@ -23,7 +23,7 @@ class CentreCoutEpService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return CentreCoutEpEntity::class;
+        return CentreCoutEp::class;
     }
 
     /**
@@ -55,9 +55,9 @@ class CentreCoutEpService extends AbstractEntityService
     /**
      * Sauvegarde un centre de coûts
      *
-     * @param CentreCoutEpEntity $entity
+     * @param CentreCoutEp $entity
      * @throws \RuntimeException
-     * @return CentreCoutEpEntity
+     * @return CentreCoutEp
      */
     public function save($entity)
     {

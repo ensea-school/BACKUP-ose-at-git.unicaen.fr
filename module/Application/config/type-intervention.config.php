@@ -13,9 +13,8 @@ return [
                 'options'       => [
                     'route'    => '/type-intervention',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'TypeIntervention',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\TypeIntervention',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -46,7 +45,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-intervention-trier'           => [
+                    'type-intervention-trier'            => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'      => '/type-intervention-trier',
@@ -116,7 +115,7 @@ return [
                 'TypeIntervention' => [],
             ],
         ],
-        'guards' => [
+        'guards'             => [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
@@ -125,7 +124,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
-                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete','type-intervention-trier'],
+                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete', 'type-intervention-trier'],
                     'privileges' => [Privileges::TYPE_INTERVENTION_EDITION],
                 ],
             ],
@@ -133,7 +132,7 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'applicationTypeInterventionStructure' => Service\TypeInterventionStructureService::class,
+            Service\TypeInterventionStructureService::class => Service\TypeInterventionStructureService::class,
         ],
     ],
     'controllers'     => [
@@ -143,8 +142,8 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'typeInterventionSaisie'          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
-            'typeInterventionStructureSaisie' => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
+            Form\TypeIntervention\TypeInterventionSaisieForm::class          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
+            Form\TypeIntervention\TypeInterventionStructureSaisieForm::class => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
         ],
     ],
 ];

@@ -7,7 +7,6 @@ use Application\Entity\VolumeHoraireReferentielListe;
 use Application\Form\ServiceReferentiel\SaisieFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use UnicaenApp\Util;
@@ -21,7 +20,6 @@ use Application\Form\ServiceReferentiel\Saisie as SaisieForm;
 class FormSaisie extends AbstractViewHelper
 {
     use ContextServiceAwareTrait;
-    use ServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
 

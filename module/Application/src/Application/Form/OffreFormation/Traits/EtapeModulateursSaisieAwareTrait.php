@@ -43,6 +43,6 @@ trait EtapeModulateursSaisieAwareTrait
             return $this->formOffreFormationEtapeModulateursSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get('EtapeModulateursSaisie');
+        return \Application::$container->get('FormElementManager')->get(EtapeModulateursSaisie::class);
     }
 }

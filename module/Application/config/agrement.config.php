@@ -20,7 +20,7 @@ return [
                                 'intervenant' => '[0-9]*',
                             ],
                             'defaults'    => [
-                                'controller' => 'Agrement',
+                                'controller' => 'Application\Controller\Agrement',
                                 'action'     => 'index',
                             ],
                         ],
@@ -106,7 +106,7 @@ return [
                         'options'       => [
                             'route'    => '/agrement',
                             'defaults' => [
-                                'controller' => 'Agrement',
+                                'controller' => 'Application\Controller\Agrement',
                                 'action'     => 'index',
                             ],
                         ],
@@ -162,7 +162,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
-                                'visible'      => 'AssertionAgrement',
+                                'visible'      => Assertion\InformationAssertion::class,
                                 'order'        => 10,
                             ],
                             'agrement-conseil-academique' => [
@@ -174,7 +174,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
-                                'visible'      => 'AssertionAgrement',
+                                'visible'      => Assertion\InformationAssertion::class,
                                 'order'        => 11,
                             ],
                         ],
@@ -187,7 +187,7 @@ return [
                                 'icon'         => 'fa fa-tags',
                                 'route'        => 'gestion/agrement',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'index'),
-                                'visible'      => 'AssertionAgrement',
+                                'visible'      => Assertion\InformationAssertion::class,
                                 'order'        => 50,
                                 'border-color' => '#E1AC5A',
                                 'pages'        => [
@@ -197,7 +197,7 @@ return [
                                         'title'       => 'Conseil restreint',
                                         'route'       => 'gestion/agrement/conseil-restreint',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
-                                        'visible'     => 'AssertionAgrement',
+                                        'visible'     => Assertion\InformationAssertion::class,
                                     ],
                                     'conseil-academique' => [
                                         'label'       => 'Conseil académique',
@@ -205,7 +205,7 @@ return [
                                         'title'       => 'Conseil académique',
                                         'route'       => 'gestion/agrement/conseil-academique',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
-                                        'visible'     => 'AssertionAgrement',
+                                        'visible'     => Assertion\InformationAssertion::class,
                                     ],
                                     'export-csv'         => [
                                         'label'       => 'Export CSV',
@@ -232,7 +232,7 @@ return [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
                     ],
-                    'assertion'  => 'AssertionAgrement',
+                    'assertion'  => Assertion\InformationAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',
@@ -243,7 +243,7 @@ return [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
                     ],
-                    'assertion'  => 'AssertionAgrement',
+                    'assertion'  => Assertion\InformationAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',
@@ -259,14 +259,14 @@ return [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
                     ],
-                    'assertion'  => 'AssertionAgrement',
+                    'assertion'  => Assertion\InformationAssertion::class,
                 ],
             ],
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'Agrement' => [],
-                'TblAgrement'     => [],
+                'Agrement'    => [],
+                'TblAgrement' => [],
             ],
         ],
         'rule_providers'     => [
@@ -280,7 +280,7 @@ return [
                             Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
                         ],
                         'resources'  => ['TblAgrement', 'Agrement', 'Structure'],
-                        'assertion'  => 'AssertionAgrement',
+                        'assertion'  => Assertion\InformationAssertion::class,
                     ],
                 ],
             ],
@@ -293,11 +293,11 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\AgrementService::class  => Service\AgrementService::class,
-            'ApplicationTblAgrement'        => Service\TblAgrementService::class,
-            'ApplicationTypeAgrement'       => Service\TypeAgrementService::class,
-            'ApplicationTypeAgrementStatut' => Service\TypeAgrementStatut::class,
-            'AssertionAgrement'             => Assertion\AgrementAssertion::class,
+            Service\AgrementService::class           => Service\AgrementService::class,
+            Service\TblAgrementService::class        => Service\TblAgrementService::class,
+            Service\TypeAgrementService::class       => Service\TypeAgrementService::class,
+            Service\TypeAgrementStatutService::class => Service\TypeAgrementStatutService::class,
+            Assertion\InformationAssertion::class                      => Assertion\AgrementAssertion::class,
         ],
     ],
     'view_helpers'    => [
@@ -307,7 +307,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'AgrementSaisieForm' => Form\Agrement\Saisie::class,
+            Form\Agrement\Saisie::class => Form\Agrement\Saisie::class,
         ],
     ],
 ];

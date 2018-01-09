@@ -38,7 +38,7 @@ trait TauxHoraireHETDServiceAwareTrait
     public function getServiceTauxHoraireHETD()
     {
         if (empty($this->serviceTauxHoraireHETD)) {
-            $this->serviceTauxHoraireHETD = \Application::$container->get('applicationTauxHoraireHETD');
+            $this->serviceTauxHoraireHETD = \Application::$container->get(TauxHoraireHETDService::class);
         }
 
         return $this->serviceTauxHoraireHETD;

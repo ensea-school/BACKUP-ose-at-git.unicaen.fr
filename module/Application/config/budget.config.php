@@ -15,13 +15,12 @@ return [
                 'options'       => [
                     'route'    => '/budget',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Budget',
+                        'controller'    => 'Application\Controller\Budget',
                         'action'        => 'index',
                     ],
                 ],
                 'child_routes'  => [
-                    'engagements-liquidation'      => [
+                    'engagements-liquidation' => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
@@ -34,7 +33,7 @@ return [
                             ],
                         ],
                     ],
-                    'tableau-de-bord'     => [
+                    'tableau-de-bord'         => [
                         'type'          => 'Literal',
                         'may_terminate' => true,
                         'options'       => [
@@ -44,7 +43,7 @@ return [
                             ],
                         ],
                     ],
-                    'export'          => [
+                    'export'                  => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
@@ -57,7 +56,7 @@ return [
                             ],
                         ],
                     ],
-                    'get-json'        => [
+                    'get-json'                => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
@@ -70,7 +69,7 @@ return [
                             ],
                         ],
                     ],
-                    'saisie-dotation' => [
+                    'saisie-dotation'         => [
                         'type'          => 'Segment',
                         'may_terminate' => true,
                         'options'       => [
@@ -87,39 +86,39 @@ return [
                             ],
                         ],
                     ],
-                    'type-dotation' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/type-dotation',
+                    'type-dotation'           => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-dotation',
                             'constraints' => [
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'type-dotation',
                             ],
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-dotation-saisie' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/type-dotation-saisie[/:typeDotation]',
+                    'type-dotation-saisie'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-dotation-saisie[/:typeDotation]',
                             'constraints' => [
                                 'typeDotation' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'type-dotation-saisie',
                             ],
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-dotation-delete' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/type-dotation-delete/:typeDotation',
+                    'type-dotation-delete'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-dotation-delete/:typeDotation',
                             'constraints' => [
                                 'typeDotation' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'type-dotation-delete',
                             ],
                         ],
@@ -143,31 +142,31 @@ return [
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Budget', 'index'),
                                 'order'        => 30,
                                 'border-color' => '#EB4995',
-                                'pages' => [
-                                    'tableau-de-bord' => [
+                                'pages'        => [
+                                    'tableau-de-bord'         => [
                                         'label'    => 'Tableau de bord',
                                         'title'    => 'Tableau de bord',
                                         'route'    => 'budget/tableau-de-bord',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'tableau-de-bord'),
                                     ],
-                                    'engagements-liquidation'  => [
+                                    'engagements-liquidation' => [
                                         'label'    => 'Engagements & liquidation',
                                         'title'    => 'Engagements & liquidation',
                                         'route'    => 'budget/engagements-liquidation',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'engagements-liquidation'),
                                     ],
-                                    'export'      => [
+                                    'export'                  => [
                                         'label'    => 'Export des données de paiement (CSV)',
                                         'title'    => 'Export des données de paiement (CSV)',
                                         'route'    => 'budget/export',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'export'),
                                     ],
-                                    'type-dotation' => [
-                                        'label' => 'Types de dotation',
-                                        'title' => 'Types de dotations',
-                                        'route' => 'budget/type-dotation',
+                                    'type-dotation'           => [
+                                        'label'      => 'Types de dotation',
+                                        'title'      => 'Types de dotations',
+                                        'route'      => 'budget/type-dotation',
                                         'withtarget' => true,
-                                        'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'type-dotation'),
+                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Budget', 'type-dotation'),
                                     ],
                                 ],
                             ],
@@ -193,7 +192,7 @@ return [
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
                     ],
-                    'assertion'  => 'assertionBudget',
+                    'assertion'  => Assertion\BudgetAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Budget',
@@ -214,7 +213,7 @@ return [
                     'action'     => ['get-json'],
                     'privileges' => [
                         Privileges::BUDGET_VISUALISATION,
-                        Privileges::MISE_EN_PAIEMENT_DEMANDE
+                        Privileges::MISE_EN_PAIEMENT_DEMANDE,
                     ],
                 ],
                 [
@@ -227,12 +226,12 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Budget',
-                    'action' => ['type-dotation'],
+                    'action'     => ['type-dotation'],
                     'privileges' => [Privileges::BUDGET_TYPE_DOTATION_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\Budget',
-                    'action' => ['type-dotation-saisie','type-dotation-delete'],
+                    'action'     => ['type-dotation-saisie', 'type-dotation-delete'],
                     'privileges' => [Privileges::BUDGET_TYPE_DOTATION_EDITION],
                 ],
             ],
@@ -251,7 +250,7 @@ return [
                             Privileges::BUDGET_EDITION_ENGAGEMENT_ETABLISSEMENT,
                         ],
                         'resources'  => ['Dotation', 'Structure', 'TypeRessource'],
-                        'assertion'  => 'assertionBudget',
+                        'assertion'  => Assertion\BudgetAssertion::class,
                     ],
                 ],
             ],
@@ -259,16 +258,16 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'BudgetDotationSaisie' => Form\Budget\DotationSaisieForm::class,
-            'typeDotationSaisie' => Form\Budget\TypeDotationSaisieForm::class,
+            Form\Budget\DotationSaisieForm::class     => Form\Budget\DotationSaisieForm::class,
+            Form\Budget\TypeDotationSaisieForm::class => Form\Budget\TypeDotationSaisieForm::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'applicationTypeRessource' => Service\TypeRessourceService::class,
-            'applicationDotation'      => Service\DotationService::class,
-            'assertionBudget'          => Assertion\BudgetAssertion::class,
-            'ApplicationTypeDotation' => Service\TypeDotationService::class,
+            Service\TypeRessourceService::class => Service\TypeRessourceService::class,
+            Service\DotationService::class      => Service\DotationService::class,
+            Assertion\BudgetAssertion::class    => Assertion\BudgetAssertion::class,
+            Service\TypeDotationService::class  => Service\TypeDotationService::class,
         ],
     ],
     'controllers'     => [

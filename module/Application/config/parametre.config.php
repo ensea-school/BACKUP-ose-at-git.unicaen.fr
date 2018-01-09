@@ -15,9 +15,8 @@ return [
                 'options'       => [
                     'route'    => '/parametres',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Parametre',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Parametre',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -62,13 +61,13 @@ return [
                     'administration' => [
                         'pages' => [
                             'parametres' => [
-                                'icon'     => 'glyphicon glyphicon-wrench',
-                                'label'    => "Paramétrages",
-                                'route'    => 'parametres',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\Parametre', 'index'),
+                                'icon'         => 'glyphicon glyphicon-wrench',
+                                'label'        => "Paramétrages",
+                                'route'        => 'parametres',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Parametre', 'index'),
                                 'border-color' => '#9B9B9B',
-                                'order'    => 120,
-                                'pages'    => [
+                                'order'        => 120,
+                                'pages'        => [
                                     'annees'           => [
                                         'label'    => "Années",
                                         'route'    => 'parametres/annees',
@@ -138,8 +137,8 @@ return [
 
     'form_elements' => [
         'invokables' => [
-            'parametres'     => Form\ParametresForm::class,
-            'campagneSaisie' => Form\CampagneSaisieForm::class,
+            Form\ParametresForm::class     => Form\ParametresForm::class,
+            Form\CampagneSaisieForm::class => Form\CampagneSaisieForm::class,
         ],
     ],
 ];

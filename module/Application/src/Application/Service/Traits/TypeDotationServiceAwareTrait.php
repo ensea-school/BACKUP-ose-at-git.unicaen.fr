@@ -38,7 +38,7 @@ trait TypeDotationServiceAwareTrait
     public function getServiceTypeDotation()
     {
         if (empty($this->serviceTypeDotation)) {
-            $this->serviceTypeDotation = \Application::$container->get('ApplicationTypeDotation');
+            $this->serviceTypeDotation = \Application::$container->get(TypeDotationService::class);
         }
 
         return $this->serviceTypeDotation;

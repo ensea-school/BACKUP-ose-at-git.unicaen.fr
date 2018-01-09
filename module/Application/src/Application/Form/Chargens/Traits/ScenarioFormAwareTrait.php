@@ -43,6 +43,6 @@ trait ScenarioFormAwareTrait
             return $this->formChargensScenario;
         }
 
-        return \Application::$container->get('FormElementManager')->get('ChargensScenario');
+        return \Application::$container->get('FormElementManager')->get(ScenarioForm::class);
     }
 }

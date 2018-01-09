@@ -9,7 +9,7 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 
@@ -25,7 +25,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
     use EntityManagerAwareTrait;
     use ContextServiceAwareTrait;
     use SessionContainerTrait;
-    use ElementPedagogiqueAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
     protected $structureName    = 'structure';
 
@@ -360,7 +360,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
  */
 class ElementPedagogiqueRechercheHydrator implements HydratorInterface
 {
-    use ElementPedagogiqueAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

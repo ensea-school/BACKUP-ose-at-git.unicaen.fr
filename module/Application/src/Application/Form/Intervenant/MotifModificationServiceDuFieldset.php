@@ -16,7 +16,7 @@ use Application\Entity\Db\MotifModificationService;
  */
 class MotifModificationServiceDuFieldset extends AbstractFieldset
 {
-    use \Application\Service\Traits\MotifModificationServiceDuAwareTrait;
+    use \Application\Service\Traits\MotifModificationServiceDuServiceAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It

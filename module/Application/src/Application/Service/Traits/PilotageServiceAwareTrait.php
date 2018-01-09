@@ -38,7 +38,7 @@ trait PilotageServiceAwareTrait
     public function getServicePilotage()
     {
         if (empty($this->servicePilotage)) {
-            $this->servicePilotage = \Application::$container->get('ApplicationPilotage');
+            $this->servicePilotage = \Application::$container->get(PilotageService::class);
         }
 
         return $this->servicePilotage;

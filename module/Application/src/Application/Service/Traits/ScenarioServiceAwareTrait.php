@@ -38,7 +38,7 @@ trait ScenarioServiceAwareTrait
     public function getServiceScenario()
     {
         if (empty($this->serviceScenario)) {
-            $this->serviceScenario = \Application::$container->get('applicationScenario');
+            $this->serviceScenario = \Application::$container->get(ScenarioService::class);
         }
 
         return $this->serviceScenario;

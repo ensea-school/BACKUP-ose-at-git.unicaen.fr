@@ -5,17 +5,17 @@ namespace Application;
 return [
     'service_manager' => [
         'invokables' => [
-            'ApplicationFormuleIntervenant'                         => Service\FormuleIntervenant::class,
-            'ApplicationFormuleServiceModifie'                      => Service\FormuleServiceModifie::class,
-            'ApplicationFormuleService'                             => Service\FormuleServiceService::class,
-            'ApplicationFormuleServiceReferentiel'                  => Service\FormuleServiceReferentiel::class,
-            'ApplicationFormuleVolumeHoraire'                       => Service\FormuleVolumeHoraire::class,
-            'ApplicationFormuleVolumeHoraireReferentiel'            => Service\FormuleVolumeHoraireReferentiel::class,
-            'ApplicationFormuleResultat'                            => Service\FormuleResultat::class,
-            'ApplicationFormuleResultatService'                     => Service\FormuleResultatServiceService::class,
-            'ApplicationFormuleResultatServiceReferentiel'          => Service\FormuleResultatServiceReferentiel::class,
-            'ApplicationFormuleResultatVolumeHoraire'               => Service\FormuleResultatVolumeHoraire::class,
-            'ApplicationFormuleResultatVolumeHoraireReferentiel'    => Service\FormuleResultatVolumeHoraireReferentiel::class,
+            Service\FormuleIntervenantService::class                      => Service\FormuleIntervenantService::class,
+            Service\FormuleServiceModifieService::class                   => Service\FormuleServiceModifieService::class,
+            Service\FormuleServiceService::class                          => Service\FormuleServiceService::class,
+            Service\FormuleServiceReferentielService::class               => Service\FormuleServiceReferentielService::class,
+            Service\FormuleVolumeHoraireService::class                    => Service\FormuleVolumeHoraireService::class,
+            Service\FormuleVolumeHoraireReferentielService::class         => Service\FormuleVolumeHoraireReferentielService::class,
+            Service\FormuleResultatService::class                         => Service\FormuleResultatService::class,
+            Service\FormuleResultatServiceService::class                  => Service\FormuleResultatServiceService::class,
+            Service\FormuleResultatServiceReferentielService::class       => Service\FormuleResultatServiceReferentielService::class,
+            Service\FormuleResultatVolumeHoraireService::class            => Service\FormuleResultatVolumeHoraireService::class,
+            Service\FormuleResultatVolumeHoraireReferentielService::class => Service\FormuleResultatVolumeHoraireReferentielService::class,
         ],
     ],
 ];

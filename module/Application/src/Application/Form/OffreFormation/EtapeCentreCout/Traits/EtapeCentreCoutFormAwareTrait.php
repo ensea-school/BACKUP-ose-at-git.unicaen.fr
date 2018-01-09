@@ -43,6 +43,6 @@ trait EtapeCentreCoutFormAwareTrait
             return $this->formOffreFormationEtapeCentreCoutEtapeCentreCout;
         }
 
-        return \Application::$container->get('FormElementManager')->get('EtapeCentreCoutForm');
+        return \Application::$container->get('FormElementManager')->get(EtapeCentreCoutForm::class);
     }
 }

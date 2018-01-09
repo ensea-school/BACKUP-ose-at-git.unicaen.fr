@@ -10,9 +10,9 @@ use Application\Exception\DbException;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DossierAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use NumberFormatter;
@@ -25,10 +25,10 @@ use Zend\View\Model\ViewModel;
 class DossierController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use ServiceAwareTrait;
-    use DossierAwareTrait;
+    use ServiceServiceAwareTrait;
+    use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
-    use ValidationAwareTrait;
+    use ValidationServiceAwareTrait;
     use \Application\Form\Intervenant\Traits\DossierAwareTrait;
     use UserContextServiceAwareTrait;
 

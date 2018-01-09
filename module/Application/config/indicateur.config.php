@@ -77,16 +77,16 @@ return [
                             ],
                         ],
                         'child_routes' => [
-                            'prevu' => [
-                                'type'    => 'Literal',
-                                'options' => [
+                            'prevu'   => [
+                                'type'         => 'Literal',
+                                'options'      => [
                                     'route'    => '/prevu',
                                     'defaults' => [
                                         'type-volume-horaire-code' => 'PREVU',
                                     ],
                                 ],
                                 'child_routes' => [
-                                    's1'   => [
+                                    's1' => [
                                         'type'    => 'Literal',
                                         'options' => [
                                             'route'    => '/s1',
@@ -95,7 +95,7 @@ return [
                                             ],
                                         ],
                                     ],
-                                    's2'   => [
+                                    's2' => [
                                         'type'    => 'Literal',
                                         'options' => [
                                             'route'    => '/s2',
@@ -107,15 +107,15 @@ return [
                                 ],
                             ],
                             'realise' => [
-                                'type'    => 'Literal',
-                                'options' => [
+                                'type'         => 'Literal',
+                                'options'      => [
                                     'route'    => '/realise',
                                     'defaults' => [
                                         'type-volume-horaire-code' => 'REALISE',
                                     ],
                                 ],
                                 'child_routes' => [
-                                    's1'   => [
+                                    's1' => [
                                         'type'    => 'Literal',
                                         'options' => [
                                             'route'    => '/s1',
@@ -124,7 +124,7 @@ return [
                                             ],
                                         ],
                                     ],
-                                    's2'   => [
+                                    's2' => [
                                         'type'    => 'Literal',
                                         'options' => [
                                             'route'    => '/s2',
@@ -210,11 +210,11 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'applicationIndicateur'         => Service\IndicateurService::class,
-            'NotificationIndicateurService' => Service\NotificationIndicateur::class,
+            Service\IndicateurService::class             => Service\IndicateurService::class,
+            Service\NotificationIndicateurService::class => Service\NotificationIndicateurService::class,
         ],
         'factories'  => [
-            'processusIndicateur' => Processus\Factory\IndicateurProcessusFactory::class,
+            Processus\IndicateurProcessus::class => Processus\Factory\IndicateurProcessusFactory::class,
         ],
     ],
 ];

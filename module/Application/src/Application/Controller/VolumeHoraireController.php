@@ -4,13 +4,12 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
-use Application\Entity\Db\WfEtape;
 use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Application\Exception\DbException;
@@ -23,8 +22,8 @@ use Application\Exception\DbException;
 class VolumeHoraireController extends AbstractController
 {
     use ContextServiceAwareTrait;
-    use VolumeHoraireAwareTrait;
-    use ServiceAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
+    use ServiceServiceAwareTrait;
     use SaisieAwareTrait;
     use WorkflowServiceAwareTrait;
 

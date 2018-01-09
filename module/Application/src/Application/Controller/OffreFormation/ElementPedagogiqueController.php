@@ -10,7 +10,7 @@ use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
 use Application\Exception\DbException;
 use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 
@@ -22,7 +22,7 @@ use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
  */
 class ElementPedagogiqueController extends AbstractController
 {
-    use ElementPedagogiqueAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
     use ContextServiceAwareTrait;
     use ElementPedagogiqueSaisieAwareTrait;
     use VolumeHoraireEnsFormAwareTrait;

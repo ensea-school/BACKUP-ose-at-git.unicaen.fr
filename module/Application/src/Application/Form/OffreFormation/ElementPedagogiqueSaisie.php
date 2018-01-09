@@ -5,9 +5,9 @@ namespace Application\Form\OffreFormation;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
-use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\LocalContextServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -18,9 +18,9 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class ElementPedagogiqueSaisie extends AbstractForm
 {
-    use LocalContextAwareTrait;
-    use EtapeAwareTrait;
-    use PeriodeAwareTrait;
+    use LocalContextServiceAwareTrait;
+    use EtapeServiceAwareTrait;
+    use PeriodeServiceAwareTrait;
     use StructureServiceAwareTrait;
 
 
@@ -244,8 +244,8 @@ class ElementPedagogiqueSaisie extends AbstractForm
  */
 class ElementPedagogiqueSaisieHydrator implements HydratorInterface
 {
-    use EtapeAwareTrait;
-    use PeriodeAwareTrait;
+    use EtapeServiceAwareTrait;
+    use PeriodeServiceAwareTrait;
     use StructureServiceAwareTrait;
 
 

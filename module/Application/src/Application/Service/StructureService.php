@@ -4,9 +4,9 @@ namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\MiseEnPaiementAwareTrait;
-use Application\Service\Traits\MiseEnPaiementIntervenantStructureAwareTrait;
-use Application\Service\Traits\ServiceAwareTrait;
+use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
+use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
+use Application\Service\Traits\ServiceServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
 use Application\Entity\Db\Structure;
@@ -24,10 +24,10 @@ use Application\Entity\Db\Structure;
 class StructureService extends AbstractEntityService
 {
     use Traits\AffectationServiceAwareTrait;
-    use ServiceAwareTrait;
+    use ServiceServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use MiseEnPaiementAwareTrait;
-    use MiseEnPaiementIntervenantStructureAwareTrait;
+    use MiseEnPaiementServiceAwareTrait;
+    use MiseEnPaiementIntervenantStructureServiceAwareTrait;
 
 
 

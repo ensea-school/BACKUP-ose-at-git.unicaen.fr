@@ -38,7 +38,7 @@ trait TblPieceJointeServiceAwareTrait
     public function getServiceTblPieceJointe()
     {
         if (empty($this->serviceTblPieceJointe)) {
-            $this->serviceTblPieceJointe = \Application::$container->get('applicationTblPieceJointe');
+            $this->serviceTblPieceJointe = \Application::$container->get(TblPieceJointeService::class);
         }
 
         return $this->serviceTblPieceJointe;

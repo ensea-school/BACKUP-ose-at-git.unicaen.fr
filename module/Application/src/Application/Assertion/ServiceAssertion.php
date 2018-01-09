@@ -13,7 +13,7 @@ use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ValidationAwareTrait;
+use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -29,7 +29,7 @@ class ServiceAssertion extends AbstractAssertion
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
-    use ValidationAwareTrait;
+    use ValidationServiceAwareTrait;
 
 
 

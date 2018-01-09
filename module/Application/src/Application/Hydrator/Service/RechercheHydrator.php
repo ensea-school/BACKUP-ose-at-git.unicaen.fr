@@ -8,7 +8,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Service\Traits\NiveauEtapeAwareTrait;
+use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -25,7 +25,7 @@ class RechercheHydrator implements HydratorInterface, EntityManagerAwareInterfac
 {
     use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
-    use NiveauEtapeAwareTrait;
+    use NiveauEtapeServiceAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.

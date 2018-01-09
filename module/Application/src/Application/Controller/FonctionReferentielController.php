@@ -3,14 +3,14 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\FonctionReferentiel;
-use Application\Service\Traits\FonctionReferentielAwareTrait;
+use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Exception\DbException;
 use Application\Form\FonctionReferentiel\Traits\FonctionReferentielSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 class FonctionReferentielController extends AbstractController
 {
-    use FonctionReferentielAwareTrait;
+    use FonctionReferentielServiceAwareTrait;
     use FonctionReferentielSaisieFormAwareTrait;
 
 

@@ -43,7 +43,7 @@ trait StatutIntervenantSaisieFormAwareTrait
             return $this->formStatutIntervenantSaisie;
         }
 
-        return \Application::$container->get('FormElementManager')->get('StatutIntervenantSaisie');
+        return \Application::$container->get('FormElementManager')->get(StatutIntervenantSaisieForm::class);
     }
 }
 

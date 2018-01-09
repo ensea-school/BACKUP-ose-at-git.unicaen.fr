@@ -5,7 +5,7 @@ namespace Application\View\Helper\VolumeHoraire;
 use Application\Entity\Db\MotifNonPaiement;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ServiceServiceAwareTrait;
-use Application\Service\Traits\TypeInterventionAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
 use Application\Entity\VolumeHoraireListe;
 use Application\Entity\Db\TypeIntervention;
@@ -19,7 +19,7 @@ use Application\Entity\Db\TypeIntervention;
 class Liste extends AbstractViewHelper
 {
     use ServiceServiceAwareTrait;
-    use TypeInterventionAwareTrait;
+    use TypeInterventionServiceAwareTrait;
 
     /**
      * @var VolumeHoraireListe

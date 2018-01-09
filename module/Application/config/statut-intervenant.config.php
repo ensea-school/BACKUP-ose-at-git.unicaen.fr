@@ -13,8 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/statut-intervenant',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'StatutIntervenant',
+                        'controller'    => 'Application\Controller\StatutIntervenant',
                         'action'        => 'index',
                     ],
                 ],
@@ -96,7 +95,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            'statutIntervenantSaisie' => Form\StatutIntervenant\StatutIntervenantSaisieForm::class,
+            Form\StatutIntervenant\StatutIntervenantSaisieForm::class => Form\StatutIntervenant\StatutIntervenantSaisieForm::class,
         ],
     ],
 ];

@@ -12,7 +12,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Service\WorkflowService;
 
 /** @var WorkflowService $w */
-$w = $sl->get('workflow');
+$w = $sl->get(WorkflowService::class);
 
 $i = new Intervenant();
 

@@ -12,7 +12,7 @@ use Application\Form\Chargens\Traits\ScenarioFormAwareTrait;
 use Application\Provider\Chargens\ChargensProviderAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\SeuilChargeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -34,7 +34,7 @@ class ChargensController extends AbstractController
     use ChargensProviderAwareTrait;
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use EtapeAwareTrait;
+    use EtapeServiceAwareTrait;
     use ScenarioServiceAwareTrait;
     use FiltreFormAwareTrait;
     use ScenarioFiltreFormAwareTrait;

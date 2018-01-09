@@ -4,14 +4,17 @@ namespace Application\Processus;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Service\Recherche;
+use Application\Service\EtatVolumeHoraireService;
 use Application\Service\IntervenantService;
+use Application\Service\MotifNonPaiementService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\ElementPedagogiqueAwareTrait;
-use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
+use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireAwareTrait;
+use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
+use Application\Service\TypeInterventionService;
 
 
 /**
@@ -23,11 +26,11 @@ class ServiceProcessus extends AbstractProcessus
 {
     use ContextServiceAwareTrait;
     use ServiceServiceAwareTrait;
-    use VolumeHoraireAwareTrait;
-    use ElementPedagogiqueAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
+    use ElementPedagogiqueServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use EtapeAwareTrait;
-    use PeriodeAwareTrait;
+    use EtapeServiceAwareTrait;
+    use PeriodeServiceAwareTrait;
 
 
 
@@ -65,11 +68,11 @@ class ServiceProcessus extends AbstractProcessus
             ->leftJoin( $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
             ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
             ->leftJoin( $periodeService,                $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
-            ->leftJoin( 'applicationTypeIntervention',  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
+            ->leftJoin( TypeInterventionService::class,  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
 
         $volumeHoraireService
-            ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] )
-            ->leftJoin( 'applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraire',   ['id','code','libelle','ordre'] );
+            ->leftJoin( MotifNonPaiementService::class,  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] )
+            ->leftJoin( EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraire',   ['id','code','libelle','ordre'] );
 
         //@formatter:on
 

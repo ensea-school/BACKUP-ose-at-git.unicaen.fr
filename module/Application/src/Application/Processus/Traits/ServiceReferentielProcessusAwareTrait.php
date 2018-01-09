@@ -38,7 +38,7 @@ trait ServiceReferentielProcessusAwareTrait
     public function getProcessusServiceReferentiel()
     {
         if (empty($this->processusServiceReferentiel)) {
-            $this->processusServiceReferentiel = \Application::$container->get('processusServiceReferentiel');
+            $this->processusServiceReferentiel = \Application::$container->get(ServiceReferentielProcessus::class);
         }
 
         return $this->processusServiceReferentiel;

@@ -5,7 +5,7 @@ namespace Application\Form\PieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\TypePieceJointeStatutAwareTrait;
+use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -20,7 +20,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
 {
     use AnneeServiceAwareTrait;
     use ContextServiceAwareTrait;
-    use TypePieceJointeStatutAwareTrait;
+    use TypePieceJointeStatutServiceAwareTrait;
 
 
 

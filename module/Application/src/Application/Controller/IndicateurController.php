@@ -9,12 +9,12 @@ use Application\Processus\Traits\IndicateurProcessusAwareTrait;
 use Application\Entity\Db\Indicateur;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\DossierAwareTrait;
+use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\IndicateurServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\NotificationIndicateurAwareTrait;
+use Application\Service\Traits\NotificationIndicateurServiceAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
-use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use Zend\View\Renderer\PhpRenderer;
@@ -37,12 +37,12 @@ class IndicateurController extends AbstractController
     use IndicateurServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
-    use NotificationIndicateurAwareTrait;
+    use NotificationIndicateurServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use IndicateurProcessusAwareTrait;
-    use DossierAwareTrait;
+    use DossierServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
-    use PeriodeAwareTrait;
+    use PeriodeServiceAwareTrait;
 
     /**
      * @var TreeRouteStack

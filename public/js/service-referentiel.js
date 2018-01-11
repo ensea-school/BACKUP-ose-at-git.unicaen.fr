@@ -145,29 +145,29 @@ $.widget("ose.serviceReferentielListe", {
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) {
                 event.div.modal('hide'); // ferme la fenêtre modale
-                for (i in data) {
-                    if (data[i].name == 'service[id]') {
-                        serviceId = data[i].value;
-                    }
+            }
+            for (i in data) {
+                if (data[i].name == 'service[id]') {
+                    serviceId = data[i].value;
                 }
-                if (serviceId) {
-                    that.onAfterSaisie(serviceId);
-                }
+            }
+            if (serviceId) {
+                that.onAfterSaisie(serviceId);
             }
         });
 
         $("body").on("service-referentiel-add-message", function (event, data)
         {
-            if ($("div .messenger, div .alert", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
+            if ($("div .messenger, div .alert", event.div).length ? false : true) {
                 event.div.modal('hide'); // ferme la fenêtre modale
-                for (i in data) {
-                    if (data[i].name == 'service[id]') {
-                        serviceId = data[i].value;
-                    }
+            }
+            for (i in data) {
+                if (data[i].name == 'service[id]') {
+                    serviceId = data[i].value;
                 }
-                if (serviceId) {
-                    that.onAfterSaisie(serviceId);
-                }
+            }
+            if (serviceId) {
+                that.onAfterSaisie(serviceId);
             }
         });
 

@@ -7,6 +7,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\Validation;
 use Application\Form\Service\Traits\RechercheFormAwareTrait;
 use Application\Form\Service\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
@@ -63,6 +64,7 @@ class ServiceController extends AbstractController
     use RegleStructureValidationServiceAwareTrait;
     use ParametresServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
 
 
@@ -187,9 +189,9 @@ class ServiceController extends AbstractController
             'data'            => $this->getServiceService()->getExportPdfData($recherche),
         ];
 
-        $tprevrel = lcfirst((string)$recherche->getTypeVolumeHoraire()).'s';
-        $tannee = $this->getServiceContext()->getAnnee();
-        $title = "État des services $tprevrel au titre de l'année universitaire $tannee";
+        $tprevrel = lcfirst((string)$recherche->getTypeVolumeHoraire()) . 's';
+        $tannee   = $this->getServiceContext()->getAnnee();
+        $title    = "État des services $tprevrel au titre de l'année universitaire $tannee";
 
         $exp = $this->pdf()
             ->setOrientationPaysage(true)
@@ -197,7 +199,7 @@ class ServiceController extends AbstractController
             ->setHeaderTitle($title)
             ->setMarginBottom(25)
             ->setMarginTop(25);
-        $exp->setFooterTitle($recherche->getTypeVolumeHoraire().' '.$recherche->getEtatVolumeHoraire());
+        $exp->setFooterTitle($recherche->getTypeVolumeHoraire() . ' ' . $recherche->getEtatVolumeHoraire());
         $exp->addBodyScript('application/service/export-pdf.phtml', false, $variables);
         $exp->getMpdf()->packTableData = true;
         //$exp->getMpdf()->simpleTables = true;
@@ -381,7 +383,7 @@ class ServiceController extends AbstractController
         if ($services) {
             $services = explode(',', $services);
             foreach ($services as $sid) {
-                $service = $this->getServiceService()->get($sid);
+                $service                                           = $this->getServiceService()->get($sid);
                 $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
                 $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
@@ -394,7 +396,7 @@ class ServiceController extends AbstractController
             }
         }
 
-        foreach( $intervenants as $id => $intervenant ){
+        foreach ($intervenants as $id => $intervenant) {
             $this->updateTableauxBord($intervenant);
         }
 
@@ -423,6 +425,7 @@ class ServiceController extends AbstractController
         }
 
         if ($this->getRequest()->isPost()) {
+            $this->getProcessusPlafond()->beginTransaction();
             try {
                 $this->getServiceService()->delete($service);
                 $this->updateTableauxBord($service->getIntervenant());
@@ -431,6 +434,7 @@ class ServiceController extends AbstractController
                 $e = DbException::translate($e);
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
         }
 
         return new MessengerViewModel;
@@ -482,6 +486,7 @@ class ServiceController extends AbstractController
                 $form->setData($request->getPost());
                 $form->saveToContext();
                 if ($form->isValid()) {
+                    $this->getProcessusPlafond()->beginTransaction();
                     try {
                         $entity = $service->save($entity->setIntervenant($intervenant));
                         $this->updateTableauxBord($intervenant);
@@ -490,6 +495,7 @@ class ServiceController extends AbstractController
                         $e = DbException::translate($e);
                         $this->flashMessenger()->addErrorMessage($e->getMessage());
                     }
+                    $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
                 } else {
                     $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
                 }
@@ -513,7 +519,7 @@ class ServiceController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
 
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
@@ -631,15 +637,15 @@ class ServiceController extends AbstractController
 
 
 
-    private function updateTableauxBord(Intervenant $intervenant, $validation=false)
+    private function updateTableauxBord(Intervenant $intervenant, $validation = false)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
-            'validation_enseignement'
+            'validation_enseignement',
         ], $intervenant);
 
-        if (!$validation){
-            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie','service','piece_jointe_fournie'], $intervenant);
+        if (!$validation) {
+            $this->getServiceWorkflow()->calculerTableauxBord(['service_saisie', 'service', 'piece_jointe_fournie'], $intervenant);
         }
     }
 }

@@ -1,10 +1,13 @@
 SELECT
   p.id plafond_id,
+  p.libelle plafond_libelle,
   b.type_volume_horaire_id,
+  tvh.libelle type_volume_horaire_libelle,
   b.annee_id,
   b.intervenant_id,
   b.plafond,
-  b.heures
+  b.heures,
+  pe.code plafond_etat_code
 FROM
 (
 -- Montant maximal par intervenant de la prime D714-60 du code de l'éducation
@@ -111,7 +114,7 @@ SELECT
   si.plafond_hc_hors_remu_fc          plafond,
   fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel heures
 FROM
-       intervenant                i 
+       intervenant                i
   JOIN statut_intervenant        si ON si.id = i.statut_id
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id
 WHERE
@@ -120,8 +123,9 @@ WHERE
 
 ) b
 
-  JOIN plafond              p ON p.code = b.plafond_code
-  JOIN plafond_application pa ON pa.plafond_id = p.id AND pa.type_volume_horaire_id = b.type_volume_horaire_id AND b.annee_id BETWEEN COALESCE(pa.annee_debut_id,b.annee_id) AND COALESCE(pa.annee_fin_id,b.annee_id)
-  JOIN plafond_etat        pe ON pe.id = pa.plafond_etat_id
+  JOIN plafond               p ON p.code = b.plafond_code
+  JOIN plafond_application  pa ON pa.plafond_id = p.id AND pa.type_volume_horaire_id = b.type_volume_horaire_id AND b.annee_id BETWEEN COALESCE(pa.annee_debut_id,b.annee_id) AND COALESCE(pa.annee_fin_id,b.annee_id)
+  JOIN plafond_etat         pe ON pe.id = pa.plafond_etat_id
+  JOIN type_volume_horaire tvh ON tvh.id = b.type_volume_horaire_id
 WHERE
   pe.code IN ('bloquant','informatif')

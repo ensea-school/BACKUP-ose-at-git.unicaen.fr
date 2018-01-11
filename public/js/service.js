@@ -6,8 +6,7 @@ $.widget("ose.serviceListe", {
     totaux: {},
     total: 0,
 
-    showHideTypesIntervention: function ()
-    {
+    showHideTypesIntervention: function () {
         var count = 0;
         for (var i in this.totaux) {
             if (this.totaux[i] != 0) {
@@ -31,14 +30,12 @@ $.widget("ose.serviceListe", {
 
 
 
-    calculTotaux: function ()
-    {
+    calculTotaux: function () {
         var that = this;
         this.totaux = {};
         this.total = 0;
 
-        this.element.find("table.service tr.service-ligne td.type-intervention").each(function ()
-        {
+        this.element.find("table.service tr.service-ligne td.type-intervention").each(function () {
             var typeInterventionCode = $(this).data('type-intervention-code');
             var value = $(this).data('value');
 
@@ -58,8 +55,7 @@ $.widget("ose.serviceListe", {
 
 
 
-    showHideDetails: function (serviceId, action)
-    {
+    showHideDetails: function (serviceId, action) {
         var tr = this.element.find("#service-" + serviceId + "-volume-horaire-tr");
         var button = this.element.find("#service-" + serviceId + "-ligne td.actions .service-details-button");
         if (undefined === action) {
@@ -80,11 +76,9 @@ $.widget("ose.serviceListe", {
 
 
 
-    showAllDetails: function ()
-    {
+    showAllDetails: function () {
         var that = this;
-        this.element.find(".service-ligne").each(function ()
-        {
+        this.element.find(".service-ligne").each(function () {
             if ($(this).is(':visible')) {
                 that.showHideDetails($(this).data('id'), 'show');
             }
@@ -93,11 +87,9 @@ $.widget("ose.serviceListe", {
 
 
 
-    hideAllDetails: function ()
-    {
+    hideAllDetails: function () {
         var that = this;
-        this.element.find(".service-ligne").each(function ()
-        {
+        this.element.find(".service-ligne").each(function () {
             if ($(this).is(':visible')) {
                 that.showHideDetails($(this).data('id'), 'hide');
             }
@@ -106,15 +98,13 @@ $.widget("ose.serviceListe", {
 
 
 
-    hasHeures: function ()
-    {
+    hasHeures: function () {
         return this.total > 0;
     },
 
 
 
-    onAfterChange: function ()
-    {
+    onAfterChange: function () {
         var exHasHeures = this.hasHeures();
         var exHeures = this.total;
 
@@ -134,8 +124,7 @@ $.widget("ose.serviceListe", {
 
 
 
-    onAfterSaisie: function (serviceId)
-    {
+    onAfterSaisie: function (serviceId) {
         var that = this;
         if (that.element.find("#service-" + serviceId + "-ligne").length) { // simple modification
             that.element.find("#service-" + serviceId + "-ligne").refresh({
@@ -149,8 +138,7 @@ $.widget("ose.serviceListe", {
                 'details': 1,
                 params: that.params
             });
-            $.get(url, function (data)
-            {
+            $.get(url, function (data) {
                 that.element.find("table:first > tbody:last").append(data);
                 that.onAfterChange();
             });
@@ -159,8 +147,7 @@ $.widget("ose.serviceListe", {
 
 
 
-    onAfterDelete: function (serviceId)
-    {
+    onAfterDelete: function (serviceId) {
         if (this.params['in-realise']) { // si on est dans les services réalisés alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
             this.onAfterSaisie(serviceId);
         } else {
@@ -172,20 +159,17 @@ $.widget("ose.serviceListe", {
 
 
 
-    setRealisesFromPrevus: function ()
-    {
+    setRealisesFromPrevus: function () {
         var services = '';
         var that = this;
-        this.element.find("table.service tr.service-ligne").each(function ()
-        {
+        this.element.find("table.service tr.service-ligne").each(function () {
             if (services != '') services += ',';
             services += $(this).data('id');
         });
         $.get(
             Url("service/constatation"),
             {services: services},
-            function (data)
-            {
+            function (data) {
                 if (data != 'OK') {
                     that.element.find("#prevu-to-realise-modal").modal('hide');
                     that.element.find("#prevu-to-realise-modal").after('<div style="margin-top:.5em">' + data + '</div>');
@@ -198,15 +182,13 @@ $.widget("ose.serviceListe", {
 
 
 
-    setPrevusFromPrevus: function ()
-    {
+    setPrevusFromPrevus: function () {
         var that = this;
         that.element.find('#prevu-to-prevu-attente').show();
         $.get(
             Url("service/initialisation/" + this.getElementPrevuToPrevu().data('intervenant')),
             {},
-            function (data)
-            {
+            function (data) {
                 if (data != 'OK') {
                     that.element.find("#prevu-to-prevu-modal").modal('hide');
                     that.element.find("#prevu-to-prevu-modal").after('<div style="margin-top:.5em">' + data + '</div>');
@@ -219,24 +201,21 @@ $.widget("ose.serviceListe", {
 
 
 
-    init2: function ()
-    {
+    init2: function () {
         var that = this;
         this.element.find(".service-details-button").off();
-        this.element.find(".service-details-button").on('click', function ()
-        {
+        this.element.find(".service-details-button").on('click', function () {
             that.showHideDetails($(this).parents('.service-ligne').data('id'));
         });
 
-        this.element.find("table.service tr.service-ligne").each(function ()
-        {
+        this.element.find("table.service tr.service-ligne").each(function () {
             var id = $(this).data('id');
             var totalHeures = 0;
-            $(this).find('td.heures').each(function(){
+            $(this).find('td.heures').each(function () {
                 totalHeures += $(this).data('value');
             });
 
-            if (totalHeures = 0){
+            if (totalHeures = 0) {
                 $(this).hide();
                 that.element.find("table.service tr#service-" + id + "-volume-horaire-tr").hide();
             } else {
@@ -245,8 +224,7 @@ $.widget("ose.serviceListe", {
         });
 
         this.element.find('.service-delete').popAjax({
-            submit: function (event, popAjax)
-            {
+            submit: function (event, popAjax) {
                 if (!popAjax.errorsInContent()) {
                     var serviceId = popAjax.element.parents('tr.service-ligne').data('id');
                     popAjax.hide();
@@ -260,8 +238,7 @@ $.widget("ose.serviceListe", {
 
 
 
-    _create: function ()
-    {
+    _create: function () {
         var that = this;
 
         this.params = this.element.data('params');
@@ -272,37 +249,37 @@ $.widget("ose.serviceListe", {
         this.getElementPrevuToPrevu().on('click', function () { that.setPrevusFromPrevus(); });
         this.init2();
 
-        $("body").on("service-modify-message", function (event, data)
-        {
+        $("body").on("service-modify-message", function (event, data) {
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) {
                 event.div.modal('hide'); // ferme la fenêtre modale
-                for (i in data) {
-                    if (data[i].name == 'service[id]') {
-                        serviceId = data[i].value;
-                    }
-                }
-                if (serviceId) {
-                    that.onAfterSaisie(serviceId);
+            }
+            for (i in data) {
+                if (data[i].name == 'service[id]') {
+                    serviceId = data[i].value;
                 }
             }
+            if (serviceId) {
+                that.onAfterSaisie(serviceId);
+            }
+
         });
 
-        $("body").on("service-add-message", function (event, data)
-        {
+        $("body").on("service-add-message", function (event, data) {
             var thatId = event.a.parents('div.service-liste').attr('id');
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) { // si aucune erreur n'a été rencontrée
                 event.div.modal('hide'); // ferme la fenêtre modale
-                for (i in data) {
-                    if (data[i].name == 'service[id]') {
-                        serviceId = data[i].value;
-                    }
-                }
-                if (serviceId) {
-                    that.onAfterSaisie(serviceId);
+            }
+            for (i in data) {
+                if (data[i].name == 'service[id]') {
+                    serviceId = data[i].value;
                 }
             }
+            if (serviceId) {
+                that.onAfterSaisie(serviceId);
+            }
+
         });
 
         $("body").tooltip({
@@ -311,8 +288,7 @@ $.widget("ose.serviceListe", {
             title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
         });
 
-        $("body").on('save-volume-horaire', function (event, data)
-        {
+        $("body").on('save-volume-horaire', function (event, data) {
             var thatId = event.a.parents('div.service-liste').attr('id');
             var serviceId = event.a.data('service');
             event.a.popover('hide');
@@ -328,14 +304,11 @@ $.widget("ose.serviceListe", {
 
 
 
-
-
 $.widget("ose.serviceForm", {
 
     updating: false,
 
-    onInterneExterneChange: function ()
-    {
+    onInterneExterneChange: function () {
         if ('service-interne' == this.getInterneExterne()) {
             this.element.find('#element-externe').hide();
             this.getElementEtablissementId().val('');
@@ -350,8 +323,7 @@ $.widget("ose.serviceForm", {
         this.updateVolumesHoraires();
     },
 
-    updateVolumesHoraires: function ()
-    {
+    updateVolumesHoraires: function () {
         var that = this;
 
         this.updating = true;
@@ -360,16 +332,14 @@ $.widget("ose.serviceForm", {
             element: this.getElementElementPedagogiqueId().val(),
             etablissement: this.getElementEtablissementId().val(),
             'type-volume-horaire': this.getElementTypeVolumeHoraire().val()
-        }, function ()
-        {
+        }, function () {
             that.getElementVolumesHoraires().find('input.form-control').val('0');
             that.updating = false;
             that.initVolumesHoraires();
         });
     },
 
-    updateVolumesHorairesSaisie: function ()
-    {
+    updateVolumesHorairesSaisie: function () {
         /* Volumes horaires en lecture seule si c'est en cours de mise à jour */
         var readOnly = this.updating;
 
@@ -387,49 +357,41 @@ $.widget("ose.serviceForm", {
         this.getElementVolumesHoraires().find('button.prevu-to-realise').prop('disabled', readOnly);
     },
 
-    prevuToRealise: function (periode)
-    {
+    prevuToRealise: function (periode) {
         var that = this;
 
-        this.element.find("div.periode#" + periode + " input.form-control").each(function ()
-        {
+        this.element.find("div.periode#" + periode + " input.form-control").each(function () {
             var id = $(this).attr('name').replace(periode + '[', 'prev-').replace(']', '');
             var value = that.element.find("div.periode#" + periode + " #" + id).data('heures');
             $(this).val(value);
         });
     },
 
-    _create: function ()
-    {
+    _create: function () {
         var that = this;
 
         /* Détection de changement d'état du radio interne-externe */
-        this.getElementInterneExterne().on('change', function ()
-        {
+        this.getElementInterneExterne().on('change', function () {
             that.onInterneExterneChange();
         });
 
         /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
-        this.getElementElementPedagogiqueId().on("autocompleteselect", function ()
-        {
+        this.getElementElementPedagogiqueId().on("autocompleteselect", function () {
             that.updateVolumesHoraires();
         });
 
-        this.getElementElementPedagogiqueId().on("change", function ()
-        {
+        this.getElementElementPedagogiqueId().on("change", function () {
             that.updateVolumesHoraires();
         });
 
         this.initVolumesHoraires();
     },
 
-    initVolumesHoraires: function ()
-    {
+    initVolumesHoraires: function () {
         var that = this;
 
         /* Détection de click sur les boutons prévu => réalisé */
-        this.element.find("button.prevu-to-realise").on('click', function ()
-        {
+        this.element.find("button.prevu-to-realise").on('click', function () {
             var periode = $(this).parents('div.periode').attr('id');
             that.prevuToRealise(periode);
         });
@@ -437,8 +399,7 @@ $.widget("ose.serviceForm", {
         this.updateVolumesHorairesSaisie();
     },
 
-    getInterneExterne: function ()
-    {
+    getInterneExterne: function () {
         var result = this.element.find('input[name="service\\[interne-externe\\]"]:checked').val();
         return result == undefined ? 'service-interne' : result;
     },
@@ -457,21 +418,17 @@ $.widget("ose.serviceForm", {
 
 
 
-
-
 $.widget("ose.serviceFiltres", {
 
-    _create: function ()
-    {
+    _create: function () {
         var that = this;
 
-        this.getElementStructureAff().change(function(){ that.changeIntervenant(); });
-        this.getElementTypeIntervenant().change(function(){ that.changeIntervenant(); });
+        this.getElementStructureAff().change(function () { that.changeIntervenant(); });
+        this.getElementTypeIntervenant().change(function () { that.changeIntervenant(); });
         this.changeIntervenant();
     },
 
-    changeIntervenant: function ()
-    {
+    changeIntervenant: function () {
         var url = this.getElementIntervenant().autocomplete("option", "source");
         var pi = url.indexOf('?');
 
@@ -479,10 +436,10 @@ $.widget("ose.serviceFiltres", {
             url = url.substring(0, pi);
         }
         url += '?' + $.param({
-                typeIntervenant: this.getElementTypeIntervenantSelected().val(),
-                structure: this.getElementStructureAff().val(),
-                'having-services': 1
-            });
+            typeIntervenant: this.getElementTypeIntervenantSelected().val(),
+            structure: this.getElementStructureAff().val(),
+            'having-services': 1
+        });
         this.getElementIntervenant().autocomplete("option", "source", url);
 
         if (this.getElementTypeIntervenantSelected().val() !== undefined && this.getElementTypeIntervenantSelected().data('intervenant-exterieur-id') == this.getElementTypeIntervenantSelected().val()) {

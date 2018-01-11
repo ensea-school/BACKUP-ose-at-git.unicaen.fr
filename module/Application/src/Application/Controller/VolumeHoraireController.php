@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
@@ -26,6 +27,7 @@ class VolumeHoraireController extends AbstractController
     use ServiceServiceAwareTrait;
     use SaisieAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
     public function listeAction()
     {
@@ -100,8 +102,10 @@ class VolumeHoraireController extends AbstractController
         if ($request->isPost()){
             if ($form->isValid()){
                 try{
+                    $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceService()->save($service);
                     $this->updateTableauxBord($service->getIntervenant());
+                    $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumehoraire);
                 }catch(\Exception $e){
                     $e = DbException::translate($e);
                     $errors[] = $e->getMessage();

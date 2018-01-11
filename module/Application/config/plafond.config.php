@@ -13,8 +13,8 @@ return [
                 'options'       => [
                     'route'    => '/plafond',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Plafond',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Plafond',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -96,6 +96,7 @@ return [
             Service\PlafondApplicationService::class => Service\Factory\PlafondApplicationServiceFactory::class,
             Service\PlafondService::class            => Service\Factory\PlafondServiceFactory::class,
             Service\PlafondEtatService::class        => Service\Factory\PlafondEtatServiceFactory::class,
+            Processus\PlafondProcessus::class        => Processus\Factory\PlafondProcessusFactory::class,
         ],
     ],
     'form_elements'   => [

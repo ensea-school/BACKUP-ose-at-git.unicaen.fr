@@ -9,6 +9,7 @@ use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
+use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -48,6 +49,7 @@ class IntervenantController extends AbstractController
     use LocalContextServiceAwareTrait;
     use CampagneSaisieServiceAwareTrait;
     use ValidationServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
 
 
@@ -140,6 +142,8 @@ class IntervenantController extends AbstractController
 
         $typeVolumeHoraire = $this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraire);
+
+        $this->getProcessusPlafond()->controle($intervenant, $typeVolumeHoraire);
 
         $campagneSaisie = $this->getServiceCampagneSaisie()->getBy($intervenant->getStatut()->getTypeIntervenant(), $typeVolumeHoraire);
         if (!$campagneSaisie->estOuverte()) {

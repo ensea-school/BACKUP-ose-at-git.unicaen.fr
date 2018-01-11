@@ -242,7 +242,7 @@ class ServiceService extends AbstractEntityService
      * @throws Exception
      * @return Service
      */
-    public function save($entity, $plafondControl = true)
+    public function save($entity)
     {
         $tvhs = [];
 
@@ -297,11 +297,6 @@ class ServiceService extends AbstractEntityService
         } catch (Exception $e) {
             $this->getEntityManager()->getConnection()->rollBack();
             throw $e;
-        }
-        if ($plafondControl) {
-            foreach ($tvhs as $typeVolumeHoraire) {
-                $this->controlePlafondFcMaj($entity->getIntervenant(), $typeVolumeHoraire);
-            }
         }
 
         return $result;
@@ -581,7 +576,7 @@ class ServiceService extends AbstractEntityService
      * @param Intervenant $intervenant
      *
      */
-    public function setPrevusFromPrevus(Intervenant $intervenant, $plafondControl = true)
+    public function setPrevusFromPrevus(Intervenant $intervenant)
     {
         $old               = $this->getPrevusFromPrevusData($intervenant);
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
@@ -610,9 +605,6 @@ class ServiceService extends AbstractEntityService
             $service->setHistoDestruction(null);
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
             $this->save($service, false);
-        }
-        if ($plafondControl) {
-            $this->controlePlafondFcMaj($intervenant, $typeVolumeHoraire);
         }
     }
 
@@ -720,7 +712,7 @@ class ServiceService extends AbstractEntityService
 
 
 
-    public function setRealisesFromPrevus(Service $service, $plafondControl = true)
+    public function setRealisesFromPrevus(Service $service)
     {
         $prevus = $service
             ->getVolumeHoraireListe()->getChild()
@@ -745,7 +737,7 @@ class ServiceService extends AbstractEntityService
                 $realises->setHeures($prevus->getHeures());
             }
         }
-        $this->save($service, $plafondControl);
+        $this->save($service);
     }
 
 
@@ -1287,27 +1279,6 @@ class ServiceService extends AbstractEntityService
         $fr = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
-    }
-
-
-
-    /**
-     * Contrôle du plafond des heures FC (D714-60) après saisie.
-     *
-     * @param Intervenant       $intervenant
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return $this
-     */
-    public function controlePlafondFcMaj(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire)
-    {
-        $intervenantId = (int)$intervenant->getId();
-        $tvhId         = (int)$typeVolumeHoraire->getId();
-
-        $sql = "BEGIN ose_service.controle_plafond_fc_maj($intervenantId,$tvhId); END;";
-        $this->getEntityManager()->getConnection()->exec($sql);
-
-        return $this;
     }
 
 

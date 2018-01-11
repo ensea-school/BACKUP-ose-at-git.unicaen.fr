@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Form\ServiceReferentiel\Traits\SaisieAwareTrait;
+use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Processus\Traits\ValidationReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -40,6 +41,7 @@ class ServiceReferentielController extends AbstractController
     use ServiceReferentielProcessusAwareTrait;
     use ValidationReferentielProcessusAwareTrait;
     use WorkflowServiceAwareTrait;
+    use PlafondProcessusAwareTrait;
 
 
 
@@ -146,6 +148,7 @@ class ServiceReferentielController extends AbstractController
             $form->setData($request->getPost());
             $form->saveToContext();
             if ($form->isValid()) {
+                $this->getProcessusPlafond()->beginTransaction();
                 try {
                     $entity->setIntervenant($intervenant); // car après $form->isValid(), $entity->getIntervenant() === null
                     $entity = $service->save($entity);
@@ -155,6 +158,7 @@ class ServiceReferentielController extends AbstractController
                     $e = DbException::translate($e);
                     $this->flashMessenger()->addErrorMessage($e->getMessage());
                 }
+                $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }
@@ -239,6 +243,7 @@ class ServiceReferentielController extends AbstractController
             throw new \LogicException("Cette opération n'est pas autorisée.");
         }
         if ($this->getRequest()->isPost()) {
+            $this->getProcessusPlafond()->beginTransaction();
             try {
                 $this->getServiceServiceReferentiel()->delete($service);
                 $this->updateTableauxBord($service->getIntervenant());
@@ -247,6 +252,7 @@ class ServiceReferentielController extends AbstractController
                 $e = DbException::translate($e);
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
+            $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
         }
 
         return new MessengerViewModel;

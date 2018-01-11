@@ -4,6 +4,8 @@ namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Plafond;
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\PlafondDepassement;
 
 /**
  * Description of PlafondService
@@ -24,29 +26,49 @@ class PlafondService extends AbstractEntityService
      * @return string
      * @throws RuntimeException
      */
-    public function getEntityClass()
+    public function getEntityClass() : string
     {
         return Plafond::class;
     }
 
 
 
-    public function controle( Intervenant $intervenant )
+    /**
+     * @param Intervenant       $intervenant
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     *
+     * @return PlafondDepassement[]
+     */
+    public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire) : array
     {
-        $sqlp = file_get_contents('data/Query/plafond.sql');
-        $sqlp = str_replace( '/*i.id*/', 'AND i.id = '.$intervenant->getId(), $sql);
+        $sql = file_get_contents('data/Query/plafond.sql');
+        $sql = str_replace('/*i.id*/', 'AND i.id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
 
-        $sql = "
-        SELECT 
-          * 
-        FROM 
-          ($sqlp) t 
-          JOIN plafond p ON p.id = t.plafond_id 
-          JOIN type_volume_horaire tvh ON tvh.id = t.type_volume_horaire_id
-        ";
+        $res          = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $depassements = [];
+        foreach ($res as $r) {
+            $depassements[] = $this->depassementFromArray($r);
+        }
 
-        $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
-var_dump($res);
+        return $depassements;
+    }
+
+
+
+    /**
+     * @param array $a
+     *
+     * @return PlafondDepassement
+     */
+    private function depassementFromArray(array $a) : PlafondDepassement
+    {
+        $depassement = new PlafondDepassement();
+        $depassement->setPlafondLibelle($a['PLAFOND_LIBELLE']);
+        if ($a['PLAFOND_ETAT_CODE'] == 'bloquant') $depassement->setBloquant(true);
+        $depassement->setPlafond($a['PLAFOND']);
+        $depassement->setHeures($a['HEURES']);
+
+        return $depassement;
     }
 
 
@@ -56,7 +78,8 @@ var_dump($res);
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias() : string
+    {
         return 'plafond';
     }
 

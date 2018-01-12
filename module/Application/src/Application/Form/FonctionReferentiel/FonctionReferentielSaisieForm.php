@@ -20,6 +20,8 @@ class FonctionReferentielSaisieForm extends AbstractForm
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
 
+
+
     public function init()
     {
         $hydrator = new FonctionReferentielHydrator();
@@ -28,65 +30,74 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name' => 'code',
-            'options' => [
+            'name'       => 'code',
+            'options'    => [
                 'label' => "Code",
             ],
             'attributes' => [
                 'id' => uniqid('code'),
             ],
-            'type' => 'Text',
+            'type'       => 'Text',
         ]);
         $this->add([
-            'name' => 'libelle-long',
+            'name'    => 'libelle-long',
             'options' => [
                 'label' => "Libelle Long",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'libelle-court',
+            'name'    => 'libelle-court',
             'options' => [
                 'label' => "Libelle Court",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'domaine-fonctionnel',
-            'options' => [
+            'name'       => 'domaine-fonctionnel',
+            'options'    => [
                 'label' => 'Domaine fonctionnel',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
-            'type' => 'Select',
+            'type'       => 'Select',
         ]);
         $this->add([
-            'name' => 'plafond',
+            'name'    => 'plafond',
             'options' => [
                 'label' => "Plafond",
             ],
-            'type' => 'Text',
+            'type'    => 'Text',
         ]);
         $this->add([
-            'name' => 'structure',
-            'options' => [
+            'name'       => 'structure',
+            'options'    => [
                 'label' => 'Structure',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
-            'type' => 'Select',
+            'type'       => 'Select',
         ]);
+
+        $this->add([
+            'name'    => 'etape-requise',
+            'options' => [
+                'label' => 'Formation à préciser',
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
         $this->add(new Csrf('security'));
         $this->add([
-            'name' => 'submit',
-            'type' => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ],
         ]);
         // peuplement liste des domaines fonctionnels
@@ -96,6 +107,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
         $this->get('structure')
             ->setEmptyOption("(Aucun)")
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
+
         return $this;
     }
 
@@ -103,7 +115,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
     public function getStructures()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        $role             = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
         if ($role->getStructure()) {
@@ -112,7 +124,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
         $structures = $serviceStructure->getList($qb);
 
-        $structures += $serviceStructure->getList( $serviceStructure->finderByNiveau(1) );
+        $structures += $serviceStructure->getList($serviceStructure->finderByNiveau(1));
 
         return $structures;
     }
@@ -128,22 +140,22 @@ class FonctionReferentielSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'code' => [
+            'code'                => [
                 'required' => false,
             ],
-            'libelle-long' => [
+            'libelle-long'        => [
                 'required' => true,
             ],
-            'libelle-court' => [
+            'libelle-court'       => [
                 'required' => true,
             ],
             'domaine-fonctionnel' => [
                 'required' => true,
             ],
-            'plafond' => [
+            'plafond'             => [
                 'required' => true,
             ],
-            'structure' => [
+            'structure'           => [
                 'required' => false,
             ],
         ];
@@ -151,15 +163,21 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
 }
 
+
+
+
+
 class FonctionReferentielHydrator implements HydratorInterface
 {
     use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
 
+
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
+     * @param  array                                      $data
      * @param  \Application\Entity\Db\FonctionReferentiel $object
      *
      * @return object
@@ -176,8 +194,12 @@ class FonctionReferentielHydrator implements HydratorInterface
         if (array_key_exists('structure', $data)) {
             $object->setStructure($this->getServiceStructure()->get($data['structure']));
         }
+
+        $object->setEtapeRequise($data['etape-requise']);
+
         return $object;
     }
+
 
 
     /**
@@ -190,13 +212,14 @@ class FonctionReferentielHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id' => $object->getId(),
-            'code' => $object->getCode(),
-            'libelle-court' => $object->getLibelleCourt(),
-            'libelle-long' => $object->getLibelleLong(),
+            'id'                  => $object->getId(),
+            'code'                => $object->getCode(),
+            'libelle-court'       => $object->getLibelleCourt(),
+            'libelle-long'        => $object->getLibelleLong(),
             'domaine-fonctionnel' => ($s = $object->getDomaineFonctionnel()) ? $s->getId() : null,
-            'plafond' => $object->getPlafond(),
+            'plafond'             => $object->getPlafond(),
             'structure'           => ($s = $object->getStructure()) ? $s->getId() : null,
+            'etape-requise'   => $object->isEtapeRequise(),
         ];
 
         return $data;

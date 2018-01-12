@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -47,6 +46,11 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      * @var DomaineFonctionnel
      */
     protected $domaineFonctionnel;
+
+    /**
+     * @var bool
+     */
+    protected $etapeRequise;
 
 
 
@@ -229,6 +233,30 @@ class FonctionReferentiel implements HistoriqueAwareInterface
 
 
     /**
+     * @return bool
+     */
+    public function isEtapeRequise(): bool
+    {
+        return $this->etapeRequise;
+    }
+
+
+
+    /**
+     * @param bool $etapeRequise
+     *
+     * @return FonctionReferentiel
+     */
+    public function setEtapeRequise(bool $etapeRequise): FonctionReferentiel
+    {
+        $this->etapeRequise = $etapeRequise;
+
+        return $this;
+    }
+
+
+
+    /**
      * Retourne la représentation littérale de cet objet.
      *
      * @return string
@@ -257,7 +285,7 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     function __debugInfo()
     {
         return [
-            'id' => $this->id,
+            'id'           => $this->id,
             'libelleCourt' => $this->libelleCourt,
         ];
     }

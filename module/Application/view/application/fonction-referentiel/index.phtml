@@ -21,6 +21,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
         <th>Domaine Fonctionnel</th>
         <th>Plafond</th>
         <th>Structure</th>
+        <th>Formation à préciser</th>
         <?php if ($canEdit) echo '<th>Actions</th>' ?>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
                 <td><?= $fr->getDomaineFonctionnel() ?></td>
                 <td><?= $fr->getPlafond() ?></td>
                 <td><?= $this->structure($fr->getStructure())->renderLink() ?></td>
+                <td style="text-align:center"><?php if ($fr->isEtapeRequise()): ?><span class="text-success glyphicon glyphicon-ok"></span><?php else: ?><span class="text-danger glyphicon glyphicon-remove"></span><?php endif; ?></td>
                 <?php if ($canEdit) { ?>
                     <td style="text-align:center;width:1px;white-space: nowrap">
                         <a class="ajax-modal" data-event="fonction-referentiel-saisie"

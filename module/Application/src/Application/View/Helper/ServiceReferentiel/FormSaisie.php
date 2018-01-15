@@ -87,7 +87,7 @@ class FormSaisie extends AbstractViewHelper
     %s
 </div>
 EOS;
-            $part .= sprintf(
+            $part     .= sprintf(
                 $template,
                 $this->getView()->formControlGroup($fservice->get('intervenant')));
         }
@@ -150,7 +150,7 @@ EOS;
     </div>
 </div>
 EOS;
-        $part .= sprintf(
+        $part     .= sprintf(
             $template,
             $this->getView()->formControlGroup($fservice->get('structure')),
             $this->getView()->formControlGroup($fservice->get('fonction')),
@@ -163,6 +163,10 @@ EOS;
     %s
 </div>
 EOS;
+        $part     .= sprintf(
+            $template,
+            $this->getView()->formControlGroup($fservice->get('formation')));
+
         $part .= sprintf(
             $template,
             $this->getView()->formControlGroup($fservice->get('commentaires')));
@@ -203,7 +207,7 @@ EOS;
         if ($isXmlHttpRequest) {
             // pour une requête AJAX on ne peut pas utilser le plugin "inlineScript"
             if (!static::$inlineJsAppended) {
-                $html .= PHP_EOL . "<script>" . PHP_EOL . $js . PHP_EOL . "</script>";
+                $html                     .= PHP_EOL . "<script>" . PHP_EOL . $js . PHP_EOL . "</script>";
                 static::$inlineJsAppended = true;
             }
         } else {

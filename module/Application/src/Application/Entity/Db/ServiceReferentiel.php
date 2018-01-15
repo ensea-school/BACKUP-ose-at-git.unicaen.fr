@@ -2,7 +2,10 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -15,11 +18,8 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
-
-    /**
-     * @var string
-     */
-    protected $commentaires;
+    use StructureAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
 
     /**
      * @var integer
@@ -27,21 +27,19 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var string
      */
-    protected $structure;
+    protected $commentaires;
+
+    /**
+     * @var string
+     */
+    protected $formation;
 
     /**
      * @var \Application\Entity\Db\FonctionReferentiel
      */
     protected $fonction;
-
-    /**
-     * Type de volume horaire
-     *
-     * @var TypeVolumeHoraire
-     */
-    protected $typeVolumeHoraire;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -117,27 +115,23 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return string
      */
-    public function getId()
+    public function getFormation()
     {
-        return $this->id;
+        return $this->formation;
     }
 
 
 
     /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param string $formation
      *
      * @return ServiceReferentiel
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setFormation($formation): ServiceReferentiel
     {
-        $this->structure = $structure;
+        $this->formation = $formation;
 
         return $this;
     }
@@ -145,13 +139,13 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Get structure
+     * Get id
      *
-     * @return \Application\Entity\Db\Structure
+     * @return integer
      */
-    public function getStructure()
+    public function getId()
     {
-        return $this->structure;
+        return $this->id;
     }
 
 
@@ -250,32 +244,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getFormuleServiceReferentiel()
     {
         return $this->formuleServiceReferentiel;
-    }
-
-
-
-    /**
-     *
-     * @return TypeVolumeHoraire
-     */
-    public function getTypeVolumeHoraire()
-    {
-        return $this->typeVolumeHoraire;
-    }
-
-
-
-    /**
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return self
-     */
-    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
     }
 
 

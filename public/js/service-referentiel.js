@@ -212,16 +212,12 @@ $.widget("ose.serviceReferentielListe", {
 
 
 
-
-
-
-
 $.widget("ose.serviceReferentielForm", {
 
     prevuToRealise: function ()
     {
         this.element.find("input.fonction-referentiel-heures", this.element).val(
-            Util.formattedHeures( this.element.find("#rappel-heures-prevu", this.element).data('heures'), false )
+            Util.formattedHeures(this.element.find("#rappel-heures-prevu", this.element).data('heures'), false)
         );
     },
 
@@ -230,9 +226,22 @@ $.widget("ose.serviceReferentielForm", {
     _create: function ()
     {
         var that = this;
+        var divFormation = this.element.find('.fonction-referentiel-formation').parent();
+
         this.element.find("button.referentiel-prevu-to-realise", this.element).on('click', function ()
         {
             that.prevuToRealise();
+        });
+
+        this.element.find('select.fonction-referentiel-fonction').change(function(){
+            var fonction = $(this).val();
+            if (fonction != undefined){
+                if (Util.inArray(fonction,that.element.data('fonctions')['etape-requise'])){
+                    divFormation.show();
+                }else{
+                    divFormation.hide();
+                }
+            }
         });
     }
 

@@ -226,23 +226,39 @@ $.widget("ose.serviceReferentielForm", {
     _create: function ()
     {
         var that = this;
-        var divFormation = this.element.find('.fonction-referentiel-formation').parent();
 
         this.element.find("button.referentiel-prevu-to-realise", this.element).on('click', function ()
         {
             that.prevuToRealise();
         });
 
-        this.element.find('select.fonction-referentiel-fonction').change(function(){
-            var fonction = $(this).val();
-            if (fonction != undefined){
-                if (Util.inArray(fonction,that.element.data('fonctions')['etape-requise'])){
-                    divFormation.show();
-                }else{
-                    divFormation.hide();
-                }
-            }
-        });
+        this.element.find('select.fonction-referentiel-fonction').change(function(){ that.majDisplayFormation(); });
+
+        that.majDisplayFormation();
+    },
+
+
+
+    majDisplayFormation: function()
+    {
+        var currentFonction = this.element.find('select.fonction-referentiel-fonction').val();
+        var aPreciser = this.element.data('fonctions')['etape-requise'];
+        var divFormation = this.getDivFormationElement();
+
+        if (Util.inArray(currentFonction,aPreciser)){
+            divFormation.show();
+        }else{
+            divFormation.hide();
+        }
+
+        return this;
+    },
+
+
+
+    getDivFormationElement: function()
+    {
+        return this.element.find('.fonction-referentiel-formation').parent();
     }
 
 })

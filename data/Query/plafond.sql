@@ -116,7 +116,8 @@ SELECT
 FROM
        intervenant                i
   JOIN statut_intervenant        si ON si.id = i.statut_id
-  JOIN formule_resultat          fr ON fr.intervenant_id = i.id
+  JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+  JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
 WHERE
   (fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel) > si.plafond_hc_hors_remu_fc
   /*i.id*/

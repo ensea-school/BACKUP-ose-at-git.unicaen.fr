@@ -880,7 +880,7 @@ class ServiceService extends AbstractEntityService
                 'type-formation-libelle'        => $d['TYPE_FORMATION_LIBELLE'],
                 'etape-niveau'                  => empty($d['ETAPE_NIVEAU']) ? null : (int)$d['ETAPE_NIVEAU'],
                 'etape-code'                    => $d['ETAPE_CODE'],
-                'etape-etablissement-libelle'   => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
+                'etape-etablissement-libelle'   => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['SERVICE_REF_FORMATION'] ? $d['SERVICE_REF_FORMATION'] : $d['ETABLISSEMENT_LIBELLE'],
                 'element-code'                  => $d['ELEMENT_CODE'],
                 'element-fonction-libelle'      => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
                 'element-discipline-code'       => $d['ELEMENT_DISCIPLINE_CODE'],

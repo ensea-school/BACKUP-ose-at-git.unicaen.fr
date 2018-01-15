@@ -2,7 +2,10 @@
 
 namespace Application\Form\ServiceReferentiel;
 
+use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\Structure;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
@@ -10,14 +13,14 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwaretrait;
+use UnicaenApp\Util;
 use Zend\Filter\PregReplace;
 use Zend\Validator\Callback;
-use Zend\Validator\LessThan;
 use Zend\Validator\NotEmpty;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use UnicaenApp\Service\EntityManagerAwaretrait;
 
 
 /**
@@ -33,6 +36,16 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
     use FonctionReferentielServiceAwareTrait;
     use EntityManagerAwareTrait;
 
+    /**
+     * @var Structure[]
+     */
+    protected $structures;
+
+    /**
+     * @var FonctionReferentiel[]
+     */
+    protected $fonctions;
+
 
 
     public function __construct($name = null, $options = [])
@@ -44,8 +57,9 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
     public function init()
     {
+
         $hydrator = new SaisieFieldsetHydrator();
-        $hydrator->setEntityManager( $this->getEntityManager() );
+        $hydrator->setEntityManager($this->getEntityManager());
 
         $this->setHydrator($hydrator)
             ->setAllowedObjectBindingClass(ServiceReferentiel::class);
@@ -70,13 +84,26 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
         $this->add([
             'name'       => 'structure',
             'options'    => [
-                'label' => "StructureService :",
+                'label' => "Composante ou Service :",
             ],
             'attributes' => [
-                'title' => "StructureService concernée",
-                'class' => 'fonction-referentiel fonction-referentiel-structure input-sm',
+                'title'            => "Structure / Service concernée",
+                'class'            => 'fonction-referentiel fonction-referentiel-structure input-sm selectpicker',
+                'data-live-search' => 'true',
             ],
             'type'       => 'Select',
+        ]);
+
+        $this->add([
+            'name'       => 'formation',
+            'options'    => [
+                'label' => "Formation correspondante :",
+            ],
+            'attributes' => [
+                'title' => "Formation correspondante",
+                'class' => 'fonction-referentiel fonction-referentiel-formation input-sm',
+            ],
+            'type'       => 'Textarea',
         ]);
 
         $this->add([
@@ -85,8 +112,9 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
                 'label' => "Fonction :",
             ],
             'attributes' => [
-                'title' => "Fonction référentielle",
-                'class' => 'fonction-referentiel fonction-referentiel-fonction input-sm',
+                'title'            => "Fonction référentielle",
+                'class'            => 'fonction-referentiel fonction-referentiel-fonction input-sm selectpicker',
+                'data-live-search' => 'true',
             ],
             'type'       => 'Select',
         ]);
@@ -97,7 +125,6 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
                 'label' => "Heures :",
             ],
             'attributes' => [
-                'value' => "0",
                 'title' => "Nombre d'heures",
                 'class' => 'fonction-referentiel fonction-referentiel-heures input-sm',
             ],
@@ -116,34 +143,16 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             'type'       => 'Textarea',
         ]);
 
-        // liste déroulante des structures
-        $options     = [];
-        $options[''] = "(Sélectionnez une structure...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
-        foreach ($this->getStructures() as $item) {
-            $options[$item->getId()] = "" . $item;
-        }
-        asort($options);
-        $this->get('structure')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une structure...)");
-
-        // liste déroulante des fonctions
-        $options     = [];
-        $options[''] = "(Sélectionnez une fonction...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
-        foreach ($this->getFonctions() as $item) {
-            $options[$item->getId()] = "" . $item;
-        }
-        $this->get('fonction')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une fonction...)");
+        $this->get('structure')->setValueOptions(Util::collectionAsOptions($this->getStructures()));//->setEmptyOption("(Sélectionnez une structure...)");
+        $this->get('fonction')->setValueOptions(Util::collectionAsOptions($this->getFonctions()));//->setEmptyOption("(Sélectionnez une fonction...)");
 
     }
 
 
 
-    protected $structures;
-
-
-
-    public function getStructures()
+    protected function getStructures()
     {
-        if (null === $this->structures) {
+        if (!$this->structures) {
             $qb = $this->getServiceStructure()->finderByEnseignement();
             $this->getServiceStructure()->finderByNiveau(2, $qb);
             $univ = $this->getServiceStructure()->getRacine();
@@ -156,13 +165,9 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
 
 
-    protected $fonctions;
-
-
-
     public function getFonctions()
     {
-        if (null === $this->fonctions) {
+        if (!$this->fonctions) {
             $this->fonctions = $this->getServiceFonctionReferentiel()->getList();
         }
 
@@ -250,28 +255,6 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
 
     /**
-     *
-     * @return LessThan|null
-     */
-    protected function getValidatorHeures()
-    {
-        // recherche de la FonctionReferentiel sélectionnée pour plafonner le nombre d'heures
-        $v         = null;
-        $fonctions = $this->getFonctions();
-        $id        = $this->get('fonction')->getValue();
-        $fonction  = isset($fonctions[$id]) ? $fonctions[$id] : null;
-
-        if ($fonction) {
-            $v = new LessThan(['max' => $max = (float)$fonction->getPlafond(), 'inclusive' => true]);
-            $v->setMessages([LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour cette fonction est de $max"]);
-        }
-
-        return $v;
-    }
-
-
-
-    /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
      *
@@ -319,20 +302,24 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
                     ['name' => 'Zend\Filter\StringTrim'],
                 ],
             ],
+            'formation'    => [
+                'required' => false,
+                'filters'  => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                ],
+            ],
         ];
 
         if (($validator = $this->getValidatorStructure())) {
             $specs['structure']['validators'][] = $validator;
         }
 
-        if (($validator = $this->getValidatorHeures())) {
-            $specs['heures']['validators'][] = $validator;
-        }
-
         return $specs;
     }
 
 }
+
+
 
 
 
@@ -345,25 +332,28 @@ class SaisieFieldsetHydrator implements HydratorInterface
 {
     use EntityManagerAwaretrait;
 
+
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
-     * @param  \Application\Entity\Db\ServiceReferentiel $object
+     * @param  array              $data
+     * @param  ServiceReferentiel $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $em = $this->getEntityManager();
 
-        $intervenant = isset($data['intervenant']['id']) ? (int) $data['intervenant']['id'] : null;
-        $object->setIntervenant($intervenant ? $em->getRepository(\Application\Entity\Db\Intervenant::class)->findOneBySourceCode($intervenant) : null );
+        $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
+        $object->setIntervenant($intervenant ? $em->getRepository(Intervenant::class)->findOneBySourceCode($intervenant) : null);
 
-        $structure = isset($data['structure']) ? (int) $data['structure'] : null;
-        $object->setStructure($structure ? $em->find(\Application\Entity\Db\Structure::class, $structure) : null );
+        $structure = isset($data['structure']) ? (int)$data['structure'] : null;
+        $object->setStructure($structure ? $em->find(Structure::class, $structure) : null);
 
-        $fonction = isset($data['fonction']) ? (int) $data['fonction'] : null;
-        $object->setFonction($fonction ? $em->find(\Application\Entity\Db\FonctionReferentiel::class, $fonction) : null );
+        $fonction = isset($data['fonction']) ? (int)$data['fonction'] : null;
+        $object->setFonction($fonction ? $em->find(FonctionReferentiel::class, $fonction) : null);
 
         $heures = isset($data['heures']) ? FloatFromString::run($data['heures']) : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);
@@ -371,13 +361,19 @@ class SaisieFieldsetHydrator implements HydratorInterface
         $commentaires = isset($data['commentaires']) ? $data['commentaires'] : null;
         $object->setCommentaires($commentaires);
 
+        $formation = isset($data['formation']) ? $data['formation'] : null;
+        $object->setFormation($formation);
+
         return $object;
     }
+
+
 
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\ServiceReferentiel $object
+     * @param  ServiceReferentiel $object
+     *
      * @return array
      */
     public function extract($object)
@@ -391,30 +387,28 @@ class SaisieFieldsetHydrator implements HydratorInterface
         if ($object->getIntervenant()) {
             $data['intervenant'] = [
                 'id'    => $object->getIntervenant()->getRouteParam(),
-                'label' => (string) $object->getIntervenant()
+                'label' => (string)$object->getIntervenant(),
             ];
-        }
-        else {
+        } else {
             $data['intervenant'] = null;
         }
 
         if ($object->getStructure()) {
             $data['structure'] = $object->getStructure()->getId();
-        }
-        else {
+        } else {
             $data['structure'] = null;
         }
 
         if ($object->getFonction()) {
             $data['fonction'] = $object->getFonction()->getId();
-        }
-        else {
+        } else {
             $data['fonction'] = null;
         }
 
         $data['heures'] = StringFromFloat::run($object->getVolumeHoraireReferentielListe()->getHeures());
 
         $data['commentaires'] = $object->getCommentaires();
+        $data['formation']    = $object->getFormation();
 
         return $data;
     }

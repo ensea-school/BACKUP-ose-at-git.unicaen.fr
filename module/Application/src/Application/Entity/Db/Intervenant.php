@@ -1842,42 +1842,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Détermine simplement si l'intervenant dépasse le plafond de la rému D714-60
-     *
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     *
-     * @return float
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function hasDeplacementPlafondFcMaj(TypeVolumeHoraire $typeVolumeHoraire)
-    {
-        $sql    = "
-        SELECT 
-          SUM(plafond) RES
-        FROM 
-          v_plafond_fc_maj p
-          JOIN etat_volume_horaire evh ON evh.id = p.etat_volume_horaire_id 
-        WHERE 
-          intervenant_id = :intervenant 
-          AND type_volume_horaire_id = :typeVolumeHoraire 
-          AND heures > plafond
-          AND evh.code = 'saisi'
-          AND rownum = 1
-        ";
-        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, [
-            'intervenant'       => $this->getId(),
-            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
-        ])->fetchAll();
-
-        $result = $result[0]['RES'];
-        if (!$result) return null;
-
-        return (float)$result;
-    }
-
-
-
-    /**
      * Injects responsible ObjectManager and the ClassMetadata into this persistent object.
      *
      * @param ObjectManager $objectManager

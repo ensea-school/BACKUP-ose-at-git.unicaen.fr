@@ -53,8 +53,6 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
     {
         $fr = $this->getFormuleResultat();
 
-        $plafond = $this->getFormuleResultat()->getIntervenant()->hasDeplacementPlafondFcMaj($this->getFormuleResultat()->getTypeVolumeHoraire());
-
         $attrs = [
             'id'        => 'formule-totaux-hetd',
             'data-url'  => $this->getRefreshUrl()
@@ -108,7 +106,7 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFcMajorees() > 0): ?>
-                <tr<?= $plafond ? ' class="bg-danger"' : '' ?>><th style="padding-left:5em">Dont <abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">rémunération FC D714-60</abbr></th>
+                <tr><th style="padding-left:5em">Dont <abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">rémunération FC D714-60</abbr></th>
                     <td style="text-align: right"><?= \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFcMajorees()) ?></td></tr>
                 <?php endif; ?>
 
@@ -125,16 +123,6 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
 
             <?php endif; ?>
         </table>
-        <?php
-        if ($plafond){
-            echo $this->getView()->messenger()->renderMessage(
-                '<strong>Attention</strong> : le nombre d\'heures de formation continue relevant '
-                .'de la rémunération au titre de l\'article D714-60 dépasse le plafond autorisé qui est de '
-                .\UnicaenApp\Util::formattedNumber($plafond).' HETD.'
-                , \UnicaenApp\View\Helper\Messenger::ERROR);
-
-        }
-        ?>
         </div>
         <?php
         $result = ob_get_clean();

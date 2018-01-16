@@ -16,9 +16,6 @@ return [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/:intervenant/agrement',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Agrement',
                                 'action'     => 'index',

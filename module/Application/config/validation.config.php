@@ -13,9 +13,6 @@ return [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/:intervenant/validation',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [

@@ -26,7 +26,6 @@ return [
                         'options' => [
                             'route'       => '/:intervenant/creer/:structure',
                             'constraints' => [
-                                'intervenant' => '[0-9]*',
                                 'structure'   => '[0-9]*',
                             ],
                             'defaults'    => [

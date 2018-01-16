@@ -69,9 +69,6 @@ return [
                         'type'         => 'Segment',
                         'options'      => [
                             'route'       => '/depassement-charges/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
                             'defaults'    => [
                                 'action' => 'depassement-charges',
                             ],

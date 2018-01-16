@@ -72,9 +72,6 @@ return [
                             'defaults'    => [
                                 'action' => 'feuilleDeRouteRefresh',
                             ],
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
                         ],
                     ],
                     'feuille-de-route-btn-next' => [
@@ -86,7 +83,6 @@ return [
                             ],
                             'constraints' => [
                                 'wfEtapeCode' => '[a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
                             ],
                         ],
                     ],

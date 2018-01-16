@@ -61,7 +61,6 @@ return [
                         'options' => [
                             'route'       => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
                             'constraints' => [
-                                'intervenant'       => '[0-9]*',
                                 'typeVolumeHoraire' => '[0-9]*',
                                 'referentiel'       => '[0-9]*',
                             ],

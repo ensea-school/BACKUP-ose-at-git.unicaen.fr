@@ -15,9 +15,6 @@ return [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/:intervenant/dossier',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
                             'defaults'    => [
                                 'controller' => 'Application\Controller\Dossier',
                                 'action'     => 'index',
@@ -88,9 +85,6 @@ return [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/intervenant/:intervenant',
-                            'constraints' => [
-                                'intervenant' => '[0-9]*',
-                            ],
                             'defaults'    => [
                                 'action' => 'index',
                             ],

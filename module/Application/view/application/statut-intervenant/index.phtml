@@ -9,20 +9,6 @@ use Application\Provider\Privilege\Privileges;
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 
-function affBooleen($flg)
-{
-    // affiche booléen avec des glypheIcon
-    return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
-}
-
-function affParam($flag,$chaine,&$saut){
-    if ($flag) {
-        if ($saut) echo "<BR>";
-        $saut = 1;
-        echo $chaine;
-    }
-}
-
 ?>
 
 <style>
@@ -30,7 +16,7 @@ function affParam($flag,$chaine,&$saut){
         align: left;
     }
 
-    .champ-triable tr {
+    .champ-triable div {
         align: left;
     }
     .modal.in .modal-dialog {
@@ -40,193 +26,69 @@ function affParam($flag,$chaine,&$saut){
 </style>
 
 <script type="text/javascript">
-    /**
-     *
-     * @param i int
-     * @param j int
-     * position dans le tableau <colonne><ligne>
-     *     parcours tout le tableau
-     *     met le fond en blanc partout sauf sur l'intersection gauche/haut de la case de la souris dans la couleur #FCF8E3
-     */
-
-    function sourisHover(i, j) {
-        var k, l, n, m; // indices dans le tableau
-        var clr;
-        var objCell, objR, objP, objTb;
-        var objDiv;
-        //       ajuste(); // en incluant ajuste donne le width de la table
-        objP = document.getElementById('tblTi');
-        objTb = objP.children;
-        objR = objTb[0].children;
-        objCell = objR[0].children;
-        n = objCell.length - 1;
-        for (l = 1; l < n; l++) {
-            objDiv = document.getElementById('th' + l);
-            if (l == i) clr = "#FCF8E3";
-            else clr = "#FFFFFF";
-            objDiv.style.backgroundColor = clr;
-        }
-        objR = objTb[1].children;
-        m = objR.length;
-        // la colonne
-        for (k = 0; k < m; k++) {
-            objCell = objR[k].children;
-            n = objCell.length;
-            for (l = 0; l < n; l++) {
-                if ((k == j) && (l <= i)) clr = "#FCF8E3";
-                else if ((l == i) && (k <= j))  clr = "#FCF8E3";
-                else clr = "#FFFFFF";
-                objCell[l].style.backgroundColor = clr;
-            }
-        }
+    function injecte(element){
+        var ancre = '#c_' + $(element).data('id');
+        var ti = $(element).data('id');
+        adr="<?php echo $this->url('statut-intervenant/saisie') ?>" + "/"+ti;
+        $(ancre).load(adr);
     }
 
-    function ajuste() {
-        var i, n; // indice de ligne et nbe de colonnes
-        var ObjR, objCell, objDiv, objTb;
-        var taille;
-        objP = document.getElementById('tblTi');
-        objTb = objP.children;
-        objR = objTb[0].children;
-        objCell = objR[0].children;
-        n = objCell.length - 1;
-        taille = n * 10 + 10 + objCell[0].clientWidth; // padd 8+2 pour chaque bord * nbe de colonnnes
-        for (i = 1; i < n; i++) {
-            objDiv = document.getElementById('th' + i);
-            taille += objDiv.clientWidth;
-        }
-        alert(taille);
-    }
+        $(function () {
+            $(".triables").sortable({
+                handle: '.glyphicon-move',
+                axis: 'y',
+                update: function (event, ui) {
+                    var champsIds = '';
+                    ui.item.parent().find('div.champ-triable').each(function () {
+                        if (champsIds != '') champsIds += ',';
+                        console.log($(this)[0]['id']);
+                        champsIds += $(this)[0]['id'];
+                    });
+                    $.post(Url('statut-intervenant/statut-intervenant-trier'), {champsIds: champsIds}).done(function (res) {
+                        alertFlash(res.msg, 'success', 3000);
+                    });
+                }
+            });
+        });
 
 </script>
 
 <?php $this->headTitle()->append($title = "Gestion des types de statuts d'intervenants") ?>
 
-<h1 class="page-header"><?= $title ?></h1>
-
-<?php
-
-$tblRow = -1;
-$tblCol = 0; // indices dans le tableau ?>
-<table id="tblTi" class="table-bordered table-condensed table-header table-header-rotated"
-       style="width:1121px">
-    <thead>
-    <tr>
-        <th class="rotate-45 si">
-            <div>&nbsp;</div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Service statutaire" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Dépassement autorisé" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Plafond référentiel" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Maximum HETD" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "plafond HC hors rému FC" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "plafond HC rému FC" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Catégorie" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Type d'intervenant" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Source" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Code" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-        <th class="rotate-45 si" data-si="<?php $si = "Opérations permises" ?>">
-            <div id="<?= 'th' . $tblCol;
-            $tblCol++ ?>"><span><?= $si; ?></span></div>
-        </th>
-    </tr>
-    </thead>
-
-    <tbody class="triables">
-    <?php foreach ($statutsIntervenants as $ti):
-        $tblRow++;
-        $tblCol = 1; ?>
-        <tr data-id="<?= $ti->getId() ?>">
-            <td>
-                <?= $ti ?>
-                <?php if ($canEdit) { ?>
-                <div>
-                <a class="ajax-modal" data-event="statut-intervenant-saisie"
-                       href="<?= $this->url('statut-intervenant/saisie', ['statutIntervenant' => $ti->getId()]) ?>"
-                       title="Modifier le statut d'intervenant">
-                        <span class="glyphicon glyphicon-edit"></span></a>
-                    <a class="pop-ajax"
-                       href="<?= $this->url('statut-intervenant/delete', ['statutIntervenant' => $ti->getId()]) ?>"
-                       title="Supprimer le statut d'intervenant"
-                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                       data-confirm="true"
-                       data-confirm-button="Oui"
-                       data-cancel-button="Non"
-                       data-submit-reload="true"
-                       width="900px"
-                    >
-                        <span class="glyphicon glyphicon-remove"></span>
+<h1 class="page-header"><?php echo $title ?></h1>
+<div class="panel-group triables" id="bloc" role="tablist" aria-multiselectable="true">
+    <?php foreach ($statutsIntervenants as $ti){ ?>
+        <div class="champ-triable panel panel-default" id="<?php echo $ti->getId() ?>">
+            <div class="panel-heading" role="tab" id="<?php echo 'h_'.$ti->getId() ?>">
+                <h4 class="panel-title">
+                    <a role="button"
+                       data-toggle="collapse"
+                       href="#<?php echo 'c_'.$ti->getId() ?>"
+                       aria-expanded="false"
+                       aria-controls="<?php echo 'c_'.$ti->getId() ?>"
+                       data-id="<?php echo $ti->getId() ?>"
+                       onclick="injecte(this); ">
+                           <?php
+                           echo $ti->getLibelle();
+                           if ($canEdit) {
+                               echo '<span class="pull-right glyphicon glyphicon-move"';
+                                echo 'title = "Vous pouvez trier les champs en déplaçant les lignes" ></span >&nbsp';
+                               } ?>
                     </a>
-                    </div>
-                <?php } ?>
-            </td>
-            <td><?= $ti->getServiceStatutaire() ?></td>
-            <td><?= affBooleen($ti->getDepassement()) ?></td>
-            <td><?= $ti->getPlafondReferentiel() ?></td>
-            <td><?= $ti->getMaximumHETD() ?></td>
-            <td><?= $ti->getPlafondHcHorsRemuFc() ?></td>
-            <td><?= $ti->getPlafondHcRemuFc() ?></td>
-            <td><?php
-                if ($ti->getTemAtv()) echo "ATV";
-                if ($ti->getTemBiatss()) echo "Biatss"; ?></td>
-            <td><?= $ti->getTypeIntervenant() ?></td>
-            <td><?= $ti->getSource() ?></td>
-            <td><?php
-                $txt=$ti->getSourceCode();
-                echo substr($txt,0,10);
-                if (strlen($txt)>10) echo "<BR>".substr($txt,10); ?></td>
-            <td><?php $saut=0;
-                affParam($ti->getNonAutorise(),"Aucune",$saut) ?>
-            <?php affParam($ti->getPeutSaisirService(),"Saisie service",$saut)?>
-            <?php affParam($ti->getPeutChoisirDansDossier(),"Choix dans dossier",$saut)  ?>
-            <?php affParam($ti->getPeutSaisirDossier(),"Saisie dossier",$saut) ?>
-            <?php affParam($ti->getPeutSaisirReferentiel(),"Saisie référentiel",$saut) ?>
-            <?php affParam($ti->getDepassement(),"Saisie motif non paiement",$saut) ?>
-            <?php affParam($ti->getPeutAvoirContrat(),"Contrat",$saut) ?>
-            <?php affParam($ti->getDepassement(),"Dépassement",$saut) ?>
-            <?php affParam($ti->getPeutCloturerSaisie(),"Cloture de saisie",$saut) ?>
-            <?php affParam($ti->getPeutSaisirServiceExt(),"Saisie service ext.",$saut)?>
-                </td>
-            <?php $tblCol++; ?>
-        </tr>
-    <?php endforeach ?>
-    </tbody>
-</table>
+                </h4>
+            </div>
+            <div id="<?php echo 'c_'.$ti->getId() ?>" class="panel-collapse collapse intranavigator" role="tabpanel" aria-labelledby="<?php echo 'h_'.$ti->getId() ?>">
+                <div class="panel-body" data-statut-intervenant="<?php echo $ti->getId() ?>">
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+</div>
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="statut-intervenant-saisie"
        href="<?= $this->url('statut-intervenant/saisie') ?>"
-       title="Ajouter un statut d\'intervenant">
-        <span class="glyphicon glyphicon-edit"></span>
+       title="Ajouter un statut d'intervenant">
+        <span class="glyphicon glyphicon-plus"></span>
         Ajouter un statut d'intervenant</a>
 
     <script type="text/javascript">
@@ -236,4 +98,4 @@ $tblCol = 0; // indices dans le tableau ?>
             });
         });
     </script>
-<?php endif ?>
+<?php endif; ?>

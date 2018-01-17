@@ -35,6 +35,7 @@ class StatutIntervenantController extends AbstractController
         if (empty($statutIntervenant)) {
             //$title = 'Création d\'un nouveau statut d\'intervenant';
             $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
+            $statutIntervenant->setOrdre(9999);
         } else {
             $title = 'Édition d\'un statut d\'intervenant';
         }

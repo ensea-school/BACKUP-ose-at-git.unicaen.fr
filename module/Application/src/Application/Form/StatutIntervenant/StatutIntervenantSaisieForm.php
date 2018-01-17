@@ -141,6 +141,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'name'       => 'maximum-HETD',
             'options'    => [
                 'label' => "Plafond des HETD",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
                 'title' => "Nombre maximal d'heures de service (en équivalent TD) autorisées pour l'intervenant",
@@ -152,6 +153,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'name'       => 'plafond-referentiel',
             'options'    => [
                 'label' => "Plafond du référentiel",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
                 'title' => "Nombre maximal d'heures de référentiel autorisées pour l'intervenant",
@@ -164,6 +166,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'name'       => 'plafond-h-h-c',
             'options'    => [
                 'label' => "Plafond des HC (hors prime FC D714-60)",
+                'suffix' => 'HETD'
             ],
             'attributes' => [
                 'title' => "Nombre maximal d'heures complémentaires (hors heures relevant de la prime de formation continue au titre de l'article D714-60 du code de l'éducation)",
@@ -175,6 +178,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'name'       => 'plafond-h-c',
             'options'    => [
                 'label' => "Plafond prime FC D714-60",
+                'suffix' => '&euro;'
             ],
             'attributes' => [
                 'title' => "Montant maximal de la prime de formation continue relevant de l'article D714-60 du code de l'éducation",
@@ -208,6 +212,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
      */
     public function getInputFilterSpecification()
     {
+//echo '<script>console.log(\'phrase:'.FloatFromString::run($this->get('plafond-h-c')->getValue()).'\');<script>';
         return [
             'libelle'             => [
                 'required' => true,

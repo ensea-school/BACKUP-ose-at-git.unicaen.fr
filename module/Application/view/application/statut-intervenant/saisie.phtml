@@ -59,6 +59,7 @@ echo $this->form()->openTag($form); ?>
                 </div>
                 <div class="row temoins">
                     <?= $this->formControlGroup($form->get('non-autorise')); ?>
+                    <?= $this->formControlGroup($form->get('depassement')); ?>
                     <?= $this->formControlGroup($form->get('peut-saisir-referentiel')); ?>
                     <?= $this->formControlGroup($form->get('peut-saisir-service')); ?>
                     <?= $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
@@ -84,36 +85,11 @@ echo $this->form()->openTag($form); ?>
                 </div>
             </div>
             <div class="col-md-3">
-                <b>Service statutaire</b>
-                <div class="input-group">
-                    <input type="text" class="form-control" value="<?= $form->get('service-statutaire')->getValue() ?>" name="service-statutaire" id="service-statutaire"
-                           placeholder="Service statutaire" aria-describedby="basic-addon1">
-                    <span class="input-group-addon" id="basic-addon1">HETD</span>
-                </div><br>
-                <b>Plafond référentiel</b>
-                <div class="input-group">
-                    <input type="text" class="form-control" value="<?= $form->get('plafond-referentiel')->getValue() ?>" name="plafond-referentiel" id="plafond-referentiel"
-                           placeholder="Plafond référentiel" aria-describedby="basic-addon1">
-                    <span class="input-group-addon" id="basic-addon1">HETD</span>
-                </div><br>
-                <b>Maximum HETD</b>
-                <div class="input-group">
-                    <input type="text" class="form-control" value="<?= $form->get('maximum-HETD')->getValue() ?>" name="maximum-HETD" id="maximum-HETD"
-                           placeholder="Maximum HETD" aria-describedby="basic-addon1">
-                    <span class="input-group-addon" id="basic-addon1">HETD</span>
-                </div><br>
-                <b>Plafond hors heures complémentaires</b>
-                <div class="input-group">
-                    <input type="text" class="form-control" value="<?= $form->get('plafond-h-h-c')->getValue() ?>" name="plafond-h-h-c" id="plafond-h-h-c"
-                           placeholder="Plafond hors heures complémentaires" aria-describedby="basic-addon1">
-                    <span class="input-group-addon" id="basic-addon1">HETD</span>
-                </div><br>
-                <b>Plafond heures complémentaires</b>
-                <div class="input-group">
-                    <input type="text" class="form-control" value="<?= $form->get('plafond-h-c')->getValue() ?>" name="plafond-h-c" id="plafond-h-c"
-                           placeholder="Plafond heures complémentaires" aria-describedby="basic-addon1">
-                    <span class="input-group-addon" id="basic-addon1">&euro;</span>
-                </div><br>
+                <?= $this->formControlGroup($form->get('service-statutaire')); ?>
+                <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
+                <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
+                <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>
+                <?= $this->formControlGroup($form->get('plafond-h-c')); ?>
             </div>
         </div>
     </div>

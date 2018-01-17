@@ -1,142 +1,124 @@
 <?php
+use Application\Provider\Privilege\Privileges;
+
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $form  \Application\Form\FonctionReferentiel\FonctionReferentielSaisieForm
+ * @var $form  \Application\Form\StatutIntervenant\StatutIntervenantSaisieForm
  */
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 echo $this->form()->openTag($form); ?>
-<div class="panel panel-default">
+
+    <style>
+        .temoins {
+            margin-left: 0px;
+        }
+
+        .temoins .form-group {
+            margin-bottom: 1px;
+        }
+
+        .temoins .form-group .checkbox {
+            margin-top: 1px;
+            margin-bottom: 1px;
+        }
+
+        .atvb {
+            margin-top: 20px;
+        }
+
+        .hetd {
+            background-color: white;
+            vertical-align: bottom;
+            border-width: 0;
+        }
+
+    </style>
+    <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('type-intervenant')); ?>
+                    </div>
+                    <div class="col-md-8">
+                        <?= $this->formControlGroup($form->get('libelle')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('code')); ?>
+                    </div>
+                    <div class="col-md-2 atvb">
+                        <?= $this->formControlGroup($form->get('TEM-ATV')); ?>
+                    </div>
+                    <div class="col-md-4 atvb">
+                        <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>
+                    </div>
+                </div>
+                <div class="row temoins">
+                    <?= $this->formControlGroup($form->get('non-autorise')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-referentiel')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-service')); ?>
+                    <?= $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
+                    <?= $this->formControlGroup($form->get('peut-avoir-contrat')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-dossier')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-motif-non-paiement')); ?>
+                    <?= $this->formControlGroup($form->get('peut-cloturer-saisie')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
+                    <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
+                    <br/>
+                    <?= $this->formControlGroup($form->get('security')); ?>
+                    <?php if($canEdit) echo $this->formSubmit($form->get('submit')); ?>
+                    <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
+                        <a class="pop-ajax btn btn-danger" data-event="statut-intervenant-saisie"
+                                                                     href="<?php echo $this->url('statut-intervenant/delete', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
+                                                                     title="Supprimer le statut d'intervenant"
+                                                                     data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                                                     data-confirm="true" data-confirm-button="Oui"
+                                                                     data-cancel-button="Non"
+                                                                     data-submit-reload="true">
+                            <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+                    <?php } ?>
+                </div>
+            </div>
             <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('type-intervenant')); ?>
+                <b>Service statutaire</b>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="<?= $form->get('service-statutaire')->getValue() ?>" name="service-statutaire" id="service-statutaire"
+                           placeholder="Service statutaire" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1">HETD</span>
+                </div><br>
+                <b>Plafond référentiel</b>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="<?= $form->get('plafond-referentiel')->getValue() ?>" name="plafond-referentiel" id="plafond-referentiel"
+                           placeholder="Plafond référentiel" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1">HETD</span>
+                </div><br>
+                <b>Maximum HETD</b>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="<?= $form->get('maximum-HETD')->getValue() ?>" name="maximum-HETD" id="maximum-HETD"
+                           placeholder="Maximum HETD" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1">HETD</span>
+                </div><br>
+                <b>Plafond hors heures complémentaires</b>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="<?= $form->get('plafond-h-h-c')->getValue() ?>" name="plafond-h-h-c" id="plafond-h-h-c"
+                           placeholder="Plafond hors heures complémentaires" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1">HETD</span>
+                </div><br>
+                <b>Plafond heures complémentaires</b>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="<?= $form->get('plafond-h-c')->getValue() ?>" name="plafond-h-c" id="plafond-h-c"
+                           placeholder="Plafond heures complémentaires" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1">&euro;</span>
+                </div><br>
             </div>
-            <div class="col-md-6">
-                <?= $this->formControlGroup($form->get('libelle')); ?>
-            </div>
-        <div class="col-md-3">
-            <?= $this->formControlGroup($form->get('source-code')); ?>
         </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('fonction-e-c')); ?>
-            </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('TEM-ATV')); ?>
-            </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('service-statutaire')); ?>
-            </div>
-            <div class="col-md-3">
-                <br>
-                <?= $this->formControlGroup($form->get('depassement')); ?>
-            </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
-            </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <br>
-                <?= $this->formControlGroup($form->get('ordre')); ?>
-            </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>
-            </div>
-            <div class="col-md-3">
-                <?= $this->formControlGroup($form->get('plafond-h-c')); ?>
-        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('non-autorise')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-saisir-referentiel')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-saisir-service')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-avoir-contrat')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-saisir-dossier')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-saisir-motif-non-paiement')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-cloturer-saisie')); ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
-    </div>
-</div>
-<?= $this->formSubmit($form->get('submit')); ?>
-<?= $this->formControlGroup($form->get('security')); ?>
-<?= $this->form()->closeTag(); ?>
-<script type="text/javascript">
-    $(function () {
-        defCond();
-        affCond();
-    });
 
-    function defCond() {
-        var conds = ['depassement', 'non-autorise', 'peut-avoir-contrat'];
-        var i;
-        var obj;
-        for (i = 0; i < conds.length; i++) {
-            obj = document.getElementsByName(conds[i]);
-            obj[1].onchange = function () {
-                affCond();
-            }
-        }
-    }
 
-    function affCond() {
-        var typeConds = [true, false, true];
-        var conds = ['depassement', 'non-autorise', 'peut-avoir-contrat'];
-        var complConds = [['plafond-referentiel'], ['peut-saisir-referentiel', 'peut-saisir-service', 'peut-choisir-dans-dossier'], ['peut-saisir-dossier']];
-        var listComp;
-        var obj;
-        var i, j;
-        for (i = 0; i < conds.length; i++) {
-            listComp = complConds[i];
-            for (j = 0; j < listComp.length; j++) {
-                obj = document.getElementsByName(listComp[j]);
-                obj = obj[obj.length - 1];
-                console.log(listComp[j]);
-                if (document.getElementsByName(conds[i])[1].checked) {
-                    if (typeConds[i]) obj.disabled = false; else obj.disabled = true;
-                    console.log('oui');
-                }
-                else {
-                    if (typeConds[i]) obj.disabled = true; else obj.disabled = false;
-                    console.log('nothing!');
-                }
-            }
-        }
-    }
-</script>
+    <?php
+    echo $this->form()->closeTag();
+    echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

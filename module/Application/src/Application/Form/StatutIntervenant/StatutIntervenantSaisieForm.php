@@ -130,6 +130,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             'name'       => 'service-statutaire',
             'options'    => [
                 'label' => "Service statutaire",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
                 'title' => "Nombre d'heures équivalent TD relevant du service statutaire de l'intervenant",

@@ -204,8 +204,8 @@ return [
     'public_files'       => [
         'head_scripts'   => [
             '010_jquery'    => 'vendor/jquery-1.11.3.min.js',
-            '020_jqueryui'  => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
-            '019_bootstrap' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
+            '020_bootstrap' => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
+            '019_jquery'    => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
 
             //            '020_jqueryui' => 'vendor/jquery-ui-1.11.4/jquery-ui.min.js',
             //            '019_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',

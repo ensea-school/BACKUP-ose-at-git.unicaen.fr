@@ -13,6 +13,7 @@ return [
                 'options'       => [
                     'route'    => '/droits',
                     'defaults' => [
+                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Application\Controller\Droits',
                         'action'        => 'index',
                     ],

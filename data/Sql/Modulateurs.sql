@@ -29,56 +29,7 @@ UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 1', code = 'IAE_FC_1' WHERE code
 
 select * from type_modulateur;
 
-INSERT INTO   TYPE_MODULATEUR  (
-    ID,
-    CODE,
-    LIBELLE,
-    PUBLIQUE,
-    OBLIGATOIRE,
-    SAISIE_PAR_ENSEIGNANT,
-    --VALIDITE_DEBUT,
-    --VALIDITE_FIN,
-    --HISTO_CREATION,
-    HISTO_CREATEUR_ID,
-    --HISTO_MODIFICATION,
-    HISTO_MODIFICATEUR_ID
-    --HISTO_DESTRUCTION,
-    --HISTO_DESTRUCTEUR_ID
-  )
-  VALUES  (
-    TYPE_MODULATEUR_id_seq.nextval,
-    'STAPS_FC',
-    'Formation continue',
-    0,
-    1,
-    0,
-    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
-    (SELECT id FROM utilisateur WHERE username = 'lecluse')
-  );
   
-INSERT INTO MODULATEUR
-  (
-    ID,
-    CODE,
-    LIBELLE,
-    TYPE_MODULATEUR_ID,
-    PONDERATION_SERVICE_DU,
-    PONDERATION_SERVICE_COMPL,
-    --HISTO_CREATION,
-    HISTO_CREATEUR_ID,
-    --HISTO_MODIFICATION,
-    HISTO_MODIFICATEUR_ID
-  )
-  VALUES
-  (
-    modulateur_id_seq.nextval,
-    'STAPS_FC_4',
-    'Niveau 4',
-    (SELECT id FROM type_modulateur WHERE code = 'STAPS_FC'),
-    1, 1.92,
-    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
-    (SELECT id FROM utilisateur WHERE username = 'lecluse')
-  );
   
 INSERT INTO   TYPE_MODULATEUR_STRUCTURE  (
     ID,
@@ -93,10 +44,10 @@ INSERT INTO   TYPE_MODULATEUR_STRUCTURE  (
   )
   VALUES  (
     TYPE_MODULATEUR_STRUCTU_ID_SEQ.nextval,
-    (SELECT id FROM type_modulateur WHERE code = 'STAPS_FC'),
-    (SELECT id FROM structure WHERE source_code = 'U14'),
+    (SELECT id FROM type_modulateur WHERE code = 'ESPE_FC'),
+    (SELECT id FROM structure WHERE source_code = 'E01'),
     (SELECT id FROM utilisateur WHERE username = 'lecluse'),
     (SELECT id FROM utilisateur WHERE username = 'lecluse')
   );
   
-  select  * from structure where libelle_court like '%STAPS%';
+  select  * from structure where libelle_court like '%ESPE%';

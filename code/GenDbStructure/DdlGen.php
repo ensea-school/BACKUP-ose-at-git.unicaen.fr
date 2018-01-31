@@ -242,15 +242,12 @@ class DdlGen
             USER_OBJECTS
           WHERE
             object_type = 'PACKAGE'
+            AND object_name NOT LIKE '%_AUTOGEN_PROCS_%'
           ORDER BY
             object_name
         ";
         $this->addDdlQuery(self::PACKAGES, $q, function ($name, $ddl) {
             $res = trim(substr($ddl, 0, strpos($ddl, 'CREATE OR REPLACE PACKAGE BODY')));
-
-            if ($name == 'UNICAEN_IMPORT') {
-                return $this->delAutoGenPackageCode($res);
-            }
 
             return $res;
         });
@@ -296,16 +293,11 @@ class DdlGen
             USER_OBJECTS
           WHERE
             object_type = 'PACKAGE'
+            AND object_name NOT LIKE '%_AUTOGEN_PROCS_%'
           ORDER BY
             object_name
         ";
-        $this->addDdlQuery(self::PACKAGES_BODIES, $q, function ($name, $ddl) {
-            if ($name == 'UNICAEN_IMPORT') {
-                return $this->delAutoGenPackageCode($ddl);
-            }
-
-            return $ddl;
-        });
+        $this->addDdlQuery(self::PACKAGES_BODIES, $q);
 
 
         $q = "SELECT

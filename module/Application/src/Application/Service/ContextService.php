@@ -22,7 +22,6 @@ class ContextService extends AbstractService
 {
     use Traits\EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
-    use Traits\IntervenantServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
     use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;

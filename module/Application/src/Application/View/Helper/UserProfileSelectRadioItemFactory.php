@@ -4,7 +4,6 @@ namespace Application\View\Helper;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 
@@ -15,7 +14,6 @@ use Application\Service\Traits\StructureServiceAwareTrait;
  */
 class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
 {
-    use ServiceLocatorAwareTrait;
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
 
@@ -28,8 +26,8 @@ class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
      */
     public function createService(ServiceLocatorInterface $helperPluginManager)
     {
-        $this->setServiceLocator( $helperPluginManager->getServiceLocator() );
-        $userContextService = $this->getServiceLocator()->get('AuthUserContext');
+        $container = $helperPluginManager->getServiceLocator();
+        $userContextService = $container->get('AuthUserContext');
 
         $service = new UserProfileSelectRadioItem($userContextService);
         $service

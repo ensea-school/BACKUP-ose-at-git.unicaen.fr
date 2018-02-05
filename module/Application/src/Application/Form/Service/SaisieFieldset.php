@@ -14,12 +14,10 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
 use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

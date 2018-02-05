@@ -5,6 +5,7 @@ namespace Application\Provider\Role;
 use Application\Service\ContextService;
 use Application\Service\PersonnelService;
 use Application\Service\StatutIntervenantService;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use InvalidArgumentException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -16,8 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class RoleProviderFactory implements FactoryInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextServiceAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 
@@ -30,11 +30,8 @@ class RoleProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $sl = $serviceLocator;
-        $this->setServiceLocator($serviceLocator);
-
-        $config = $this->getServiceLocator()->get('BjyAuthorize\Config');
-        $em     = $this->getServiceLocator()->get(\Application\Constants::BDD);
+        $config = $serviceLocator->get('BjyAuthorize\Config');
+        $em     = $serviceLocator->get(\Application\Constants::BDD);
         /* @var $em \Doctrine\ORM\EntityManager */
 
         if (!isset($config['role_providers'][RoleProvider::class])) {
@@ -48,10 +45,10 @@ class RoleProviderFactory implements FactoryInterface
         $roleProvider = new RoleProvider($providerConfig);
         $roleProvider
             ->setEntityManager($em)
-            ->setServicePersonnel($sl->get(PersonnelService::class))
-            ->setServiceStatutIntervenant($sl->get(StatutIntervenantService::class))
-            ->setServiceContext($sl->get(ContextService::class))
-            ->setPrivilegeProvider($sl->get('UnicaenAuth\Privilege\PrivilegeProvider'))
+            ->setServicePersonnel($serviceLocator->get(PersonnelService::class))
+            ->setServiceStatutIntervenant($serviceLocator->get(StatutIntervenantService::class))
+            ->setServiceContext($serviceLocator->get(ContextService::class))
+            ->setPrivilegeProvider($serviceLocator->get('UnicaenAuth\Privilege\PrivilegeProvider'))
             ->setStructureSelectionnee($this->getServiceContext()->getStructure(true));
 
         return $roleProvider;

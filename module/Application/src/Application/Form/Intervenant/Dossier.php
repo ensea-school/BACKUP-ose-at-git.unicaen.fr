@@ -44,9 +44,7 @@ class Dossier extends AbstractForm
         $this->setHydrator($hydrator);
 
         $this->dossierFieldset = new DossierFieldset('dossier');
-        $this->dossierFieldset
-            ->setServiceLocator($this->getServiceLocator())
-            ->init();
+        $this->dossierFieldset->init();
 
         $this->setAttribute('id', 'dossier');
 

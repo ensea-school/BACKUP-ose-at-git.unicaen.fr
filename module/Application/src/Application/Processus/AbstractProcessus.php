@@ -2,8 +2,6 @@
 
 namespace Application\Processus;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -12,9 +10,8 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class AbstractProcessus implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
+class AbstractProcessus implements EntityManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
 
 
@@ -24,7 +21,7 @@ class AbstractProcessus implements ServiceLocatorAwareInterface, EntityManagerAw
      */
     public function getAuthorize()
     {
-        return $this->getServiceLocator()->get('BjyAuthorize\Service\Authorize');
+        return \Application::$container->get('BjyAuthorize\Service\Authorize');
     }
 
 }

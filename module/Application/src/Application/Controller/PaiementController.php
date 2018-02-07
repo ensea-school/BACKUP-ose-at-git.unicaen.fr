@@ -18,11 +18,11 @@ use Application\Service\Traits\DotationServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use Application\Service\Traits\ServiceAPayerServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Zend\Json\Json;
@@ -38,7 +38,7 @@ class PaiementController extends AbstractController
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use ServiceAPayerServiceAwareTrait;
@@ -420,7 +420,7 @@ class PaiementController extends AbstractController
             ->setMarginBottom(25)
             ->setMarginTop(25 + ($periode ? 5 : 0));
 
-        $drh = $this->getServicePersonnel()->getDrh();
+        $drh = $this->getServiceUtilisateur()->getDrh();
 
         $variables = compact('typeIntervenant', 'structure', 'periode', 'etatPaiement', 'drh', 'etat');
         $exp->addBodyScript('application/paiement/etat-paiement-pdf.phtml', true, $variables, 1);

@@ -452,7 +452,7 @@ class WorkflowService extends AbstractService
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
-        $url = $this->getServiceLocator()->get('viewhelpermanager')->get('url');
+        $url = \Application::$container->get('viewhelpermanager')->get('url');
 
         /* @var $url \Zend\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

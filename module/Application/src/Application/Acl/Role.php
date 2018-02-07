@@ -4,7 +4,6 @@ namespace Application\Acl;
 
 use UnicaenAuth\Acl\NamedRole;
 use Application\Entity\Db\Traits\StructureAwareTrait;
-use Application\Entity\Db\Traits\PersonnelAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\PerimetreAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -17,7 +16,6 @@ use UnicaenAuth\Entity\Db\Privilege;
 class Role extends NamedRole
 {
     use StructureAwareTrait;
-    use PersonnelAwareTrait;
     use IntervenantAwareTrait;
     use PerimetreAwareTrait;
 

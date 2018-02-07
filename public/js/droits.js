@@ -214,7 +214,7 @@ $.widget("ose.droitsTbl", {
  */
 $.widget("ose.affectationForm", {
 
-    onPersonnelChange: function (item)
+    onUtilisateurChange: function (item)
     {
         this.getElementStructure().val(item.structure);
     },
@@ -236,7 +236,7 @@ $.widget("ose.affectationForm", {
     {
         var that = this;
         this.getElementRole().on('change', function () { that.updateStructureVisibility() });
-        this.getElementPersonnel().on("change", function (e, item) { that.onPersonnelChange(item); });
+        this.getElementUtilisateur().on("change", function (e, item) { that.onUtilisateurChange(item); });
         this.updateStructureVisibility();
     },
 
@@ -244,7 +244,7 @@ $.widget("ose.affectationForm", {
 
     //@formatter:off
     getRolesMustHaveStructure   : function () { return this.element.data('roles-must-have-structure'); },
-    getElementPersonnel         : function () { return this.element.find('input[name="personnel\\[id\\]"]'); },
+    getElementUtilisateur         : function () { return this.element.find('input[name="utilisateur\\[id\\]"]'); },
     getElementRole              : function () { return this.element.find('select[name="role"]'); },
     getElementStructure         : function () { return this.element.find('select[name="structure"]'); }
     //@formatter:on

@@ -15,8 +15,8 @@ return [
                 'options'       => [
                     'route'    => '/intervenant',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Intervenant',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Intervenant',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -225,7 +225,7 @@ return [
                 'options'      => [
                     'route'    => '/modification-service-du',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\ModificationServiceDu',
+                        'controller' => 'Application\Controller\ModificationServiceDu',
                     ],
                 ],
                 'child_routes' => [
@@ -469,10 +469,10 @@ return [
     ],
     'service_manager' => [
         'factories'  => [
+            Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
             Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
         ],
         'invokables' => [
-            Service\IntervenantService::class                => Service\IntervenantService::class,
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
             Service\CiviliteService::class                   => Service\CiviliteService::class,
             Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,

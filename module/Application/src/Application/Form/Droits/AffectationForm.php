@@ -5,11 +5,10 @@ namespace Application\Form\Droits;
 use Application\Entity\Db\Role;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
-use Zend\Form;
 use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -21,86 +20,90 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class AffectationForm extends AbstractForm
 {
     use StructureServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
     use RoleServiceAwareTrait;
     use ContextServiceAwareTrait;
+
 
 
     public function init()
     {
         $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
 
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
         $hydrator = new AffectationFormHydrator;
         $this->setHydrator($hydrator);
-        $hydrator->setServicePersonnel  ($this->getServicePersonnel());
-        $hydrator->setServiceRole       ($this->getServiceRole()     );
-        $hydrator->setServiceStructure  ($this->getServiceStructure());
+        $hydrator->setServiceUtilisateur($this->getServiceUtilisateur());
+        $hydrator->setServiceRole($this->getServiceRole());
+        $hydrator->setServiceStructure($this->getServiceStructure());
 
         $roles = $this->getServiceRole()->getList();
 
         $rolesMustHaveStructure = [];
-        foreach ($roles as $role) { /* @var $role Role */
-            if ($role->getPerimetre()->isComposante()){
+        foreach ($roles as $role) {
+            /* @var $role Role */
+            if ($role->getPerimetre()->isComposante()) {
                 $rolesMustHaveStructure[] = $role->getId();
             }
-            if ($structure && $role->getPerimetre()->isEtablissement()){
+            if ($structure && $role->getPerimetre()->isEtablissement()) {
                 unset($roles[$role->getId()]);
             }
         }
 
         $this->setAttribute('data-roles-must-have-structure', json_encode($rolesMustHaveStructure));
-        $this->setAttribute('class','affectation-form');
+        $this->setAttribute('class', 'affectation-form');
 
         $qb = $this->getServiceStructure()->finderByEnseignement();
         $this->getServiceStructure()->finderByNiveau(2, $qb);
-        if ($structure){
+        if ($structure) {
             $this->getServiceStructure()->finderById($structure->getId(), $qb);
         }
-        $structures = $this->getServiceStructure()->getList( $qb );
+        $structures = $this->getServiceStructure()->getList($qb);
 
-        $personnel = new SearchAndSelect('personnel');
-        $personnel ->setRequired(true)
+        $utilisateur = new SearchAndSelect('utilisateur');
+        $utilisateur->setRequired(true)
             ->setSelectionRequired(true)
             ->setAutocompleteSource(
-                $this->getUrl('recherche', ['action' => 'personnelFind'])
+                $this->getUrl('recherche', ['action' => 'utilisateurFind'])
             )
-            ->setLabel("Personnel")
+            ->setLabel("Utilisateur")
             ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-        $this->add($personnel);
+        $this->add($utilisateur);
 
-        $this->add( [
-            'type' => 'Select',
-            'name' => 'role',
+        $this->add([
+            'type'    => 'Select',
+            'name'    => 'role',
             'options' => [
-                'label' => 'Rôle',
-                'value_options' => Util::collectionAsOptions($roles)
+                'label'         => 'Rôle',
+                'value_options' => Util::collectionAsOptions($roles),
             ],
-        ] );
+        ]);
 
-        $this->add( [
-            'type' => 'Select',
-            'name' => 'structure',
+        $this->add([
+            'type'    => 'Select',
+            'name'    => 'structure',
             'options' => [
-                'label' => 'Structure',
-                'value_options' => Util::collectionAsOptions($structures)
+                'label'         => 'Structure',
+                'value_options' => Util::collectionAsOptions($structures),
             ],
-        ] );
+        ]);
 
-        $this->add( [
+        $this->add([
             'name' => 'id',
-            'type' => 'Hidden'
-        ] );
+            'type' => 'Hidden',
+        ]);
 
         $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => [
-                'value'  => 'Enregistrer',
-                'class'  => 'btn btn-primary',
+                'value' => 'Enregistrer',
+                'class' => 'btn btn-primary',
             ],
         ]);
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -111,13 +114,13 @@ class AffectationForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'personnel' => [
+            'utilisateur' => [
                 'required' => true,
             ],
-            'role' => [
+            'role'        => [
                 'required' => true,
             ],
-            'structure' => [
+            'structure'   => [
                 'required' => false,
             ],
         ];
@@ -125,29 +128,40 @@ class AffectationForm extends AbstractForm
 }
 
 
+
+
+
 class AffectationFormHydrator implements HydratorInterface
 {
     use StructureServiceAwareTrait;
     use RoleServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
+
+
 
     /**
-     * @param  array $data
+     * @param  array                              $data
      * @param  \Application\Entity\Db\Affectation $object
+     *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
-        $personnel = isset($data['personnel']['id']) ? (int)$data['personnel']['id'] : null;
+        $utilisateur = isset($data['utilisateur']['id']) ? $data['utilisateur']['id'] : null;
+        $structure = isset($data['structure']) ? (int)$data['structure'] : null;
 
-        $object->setPersonnel( $this->getServicePersonnel() ->get($personnel) );
-        $object->setRole     ( $this->getServiceRole()      ->get($data['role']     ) );
-        $object->setStructure( $this->getServiceStructure() ->get($data['structure']) );
+        $object->setUtilisateur($this->getServiceUtilisateur()->getByUsername($utilisateur));
+        $object->setRole($this->getServiceRole()->get($data['role']));
+        $object->setStructure($this->getServiceStructure()->get($structure));
+
         return $object;
     }
 
+
+
     /**
      * @param  \Application\Entity\Db\Affectation $object
+     *
      * @return array
      */
     public function extract($object)
@@ -156,18 +170,18 @@ class AffectationFormHydrator implements HydratorInterface
             'id' => $object->getId(),
         ];
 
-        if ($personnel = $object->getPersonnel()){
-            $data['personnel'] = [
-                'id'    => $personnel->getId(),
-                'label' => (string)$personnel
+        if ($utilisateur = $object->getUtilisateur()) {
+            $data['utilisateur'] = [
+                'id'    => $utilisateur->getUsername(),
+                'label' => (string)$utilisateur,
             ];
         }
 
-        if ($role = $object->getRole()){
+        if ($role = $object->getRole()) {
             $data['role'] = $role->getId();
         }
 
-        if ($structure = $object->getStructure()){
+        if ($structure = $object->getStructure()) {
             $data['structure'] = $structure->getId();
         }
 

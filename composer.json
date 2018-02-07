@@ -8,20 +8,14 @@
         }
     ],
     "require": {
-        "unicaen/unicaen-app":                  "dev-trunk as 1.2.4",
-        "unicaen/unicaen-auth":                 "dev-trunk as 1.1.3",
-        "zendframework/zend-code":              "2.4.*",
+        "unicaen/unicaen-app":                  "dev-trunk",
+        "unicaen/unicaen-auth":                 "dev-trunk",
+        "zendframework/zend-code":              "^2.4",
         "bjyoungblood/bjy-authorize":           "dev-master",
         "zf-commons/zfc-user":                  "0.1.3",
-        "zendframework/zend-file":              ">=2.3",
-        "mpdf/mpdf":                            "v6.1.3",
-        "unicaen/unicaen-code":                 "dev-trunk as 1.0.1",
-        "unicaen/unicaen-import":               "dev-trunk as 1.0.6",
+        "zendframework/zend-file":              "^2.4",
+        "unicaen/unicaen-code":                 "dev-trunk",
+        "unicaen/unicaen-import":               "dev-trunk",
         "unicaen/unicaen-tbl":                  "dev-trunk"
-    },
-    "require-dev": {
-        "zendframework/zend-test":              ">=2.3",
-        "phpunit/PHPUnit":                      ">=3.7",
-        "zendframework/zend-developer-tools":   ">=1.0"
     }
 }

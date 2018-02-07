@@ -5,14 +5,13 @@
       <index name="IDX_61FC67DE59860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_61FC67DE7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_61FC67DE63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_61FC67DEB16F9F85" columns="PERSONNEL_ID"/>
       <index name="IDX_61FC67DEE9B3446E" columns="SOURCE_ID"/>
       <index name="IDX_61FC67DE884B0F7B" columns="STRUCTURE_ID"/>
       <index name="IDX_61FC67DEC2443469" columns="ROLE_ID"/>
     </indexes>
     <unique-constraints>
       <unique-constraint name="affectation_source_un" columns="SOURCE_CODE"/>
-      <unique-constraint name="affectation_un" columns="STRUCTURE_ID,PERSONNEL_ID,ROLE_ID"/>
+      <unique-constraint name="affectation_un" columns="STRUCTURE_ID,UTILISATEUR_ID,ROLE_ID"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -36,9 +35,9 @@
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
+    <many-to-one field="utilisateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
+        <join-column name="UTILISATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">

@@ -119,10 +119,10 @@ class NotificationIndicateurService extends AbstractEntityService
     public function getNotifications($force = false)
     {
         $qb = $this->getRepo()->createQueryBuilder("ni")
-            ->select("ni, i, a, p, s")
+            ->select("ni, i, a, u, s")
             ->join('ni.indicateur', 'i')
             ->join('ni.affectation', 'a')
-            ->join('a.personnel', 'p')
+            ->join('a.utilisateur', 'u')
             ->leftJoin('a.structure', 's')
 
             ->andWhere('ni.frequence IS NOT NULL')

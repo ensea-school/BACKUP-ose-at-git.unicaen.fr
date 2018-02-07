@@ -8,13 +8,10 @@ use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 
-abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface, InputFilterProviderInterface
+abstract class AbstractForm extends Form implements InputFilterProviderInterface
 {
-    use ServiceLocatorAwareTrait;
 
     /**
      * @var FlashMessenger
@@ -42,7 +39,7 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
+        $url = \Application::$container->get('viewhelpermanager')->get('url');
 
         /* @var $url \Zend\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);
@@ -183,7 +180,7 @@ abstract class AbstractForm extends Form implements ServiceLocatorAwareInterface
     private function getControllerPluginFlashMessenger()
     {
         if (!$this->controllerPluginFlashMessenger) {
-            $this->controllerPluginFlashMessenger = $this->getServiceLocator()->getServiceLocator()->get('ControllerPluginManager')->get('flashMessenger');
+            $this->controllerPluginFlashMessenger = \Application::$container->get('ControllerPluginManager')->get('flashMessenger');
         }
 
         return $this->controllerPluginFlashMessenger;

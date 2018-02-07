@@ -3,20 +3,18 @@ select
   a.id a_id,
   r.code role,
   s.libelle_court structure,
-  p.nom_usuel nom,
-  p.prenom prenom,
+  u.displayname utilisateur,
   src.libelle source,
   a.id,
   a.source_code
 from
   affectation a
-  JOIN personnel p ON p.id = a.personnel_id AND p.histo_destruction IS NULL
+  JOIN utilisateur u ON u.id = a.utilisateur_id
   JOIN role r ON r.id = a.role_id AND r.histo_destruction IS NULL
   JOIN source src ON src.id = a.source_id
   LEFT JOIN structure s ON s.id = a.structure_id AND s.histo_destruction IS NULL
 WHERE
   a.histo_destruction IS NULL
-  AND p.id = 219
   --AND s.source_code IN ('12')
   --AND src.code = 'OSE'
 ORDER BY
@@ -41,14 +39,14 @@ INSERT INTO affectation (
     PERSONNEL_ID,
     ROLE_ID,
     SOURCE_CODE,
-    ID, SOURCE_ID, 
+    ID, SOURCE_ID,
     HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
     null,--(SELECT ID FROM structure WHERE source_code = 'U01'),
     (SELECT ID FROM personnel WHERE source_code ='5178'),
     (SELECT ID FROM ROLE WHERE code = 'superviseur-etablissement'),
     'laurent-test',
-    affectation_ID_SEQ.NEXTVAL, (SELECT id FROM source WHERE code='OSE'), 
+    affectation_ID_SEQ.NEXTVAL, (SELECT id FROM source WHERE code='OSE'),
     (select id from utilisateur where username='lecluse'), (select id from utilisateur where username='lecluse') -- laurent
 );
 
@@ -59,7 +57,7 @@ delete from role where source_code = 'gestionnaire-composante-3157';
 
 
 
-SELECT 
+SELECT
   z_structure_id,
   z_personnel_id,
   z_type_id,
@@ -70,9 +68,9 @@ SELECT
 FROM ( SELECT
     ifs.c_structure z_structure_id,
     ifs.no_dossier_pers z_personnel_id,
-    CASE 
-      when fs.lc_fonction IN ('_D30a','_D30b','_D30c','_D30d','_D30e') then 
-        CASE 
+    CASE
+      when fs.lc_fonction IN ('_D30a','_D30b','_D30c','_D30d','_D30e') then
+        CASE
           WHEN s.lc_structure = 'DRH' THEN 'responsable-drh'
           ELSE 'directeur-composante'
         END

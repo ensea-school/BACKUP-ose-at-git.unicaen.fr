@@ -15,7 +15,6 @@ use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
-use UnicaenImport\Service\Traits\QueryGeneratorServiceAwareTrait;
 
 
 /**
@@ -27,7 +26,6 @@ class IntervenantService extends AbstractEntityService
 {
     use StatutIntervenantServiceAwareTrait;
     use ImportProcessusAwareTrait;
-    use QueryGeneratorServiceAwareTrait;
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
@@ -66,9 +64,39 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
+     * Retourne les identifiants des données concernés
      *
-     * @param string      $sourceCode
-     * @param Annee $annee
+     * @param string|string[]|null $sourceCode
+     * @param integer|null         $anneeId
+     *
+     * @return integer[]|null
+     */
+    public function getIdFromSourceCode($sourceCode, $anneeId = null)
+    {
+        if (empty($sourceCode)) return null;
+
+        $sql = 'SELECT ID FROM INTERVENANT WHERE SOURCE_CODE IN (:sourceCode)';
+        if ($anneeId) {
+            $sql .= ' AND ANNEE_ID = ' . (string)(int)$anneeId;
+        }
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery(
+            $sql,
+            ['sourceCode' => (array)$sourceCode],
+            ['sourceCode' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+        );
+        if ($r = $stmt->fetch()) {
+            return (int)$r['ID'];
+        } else {
+            return null;
+        }
+    }
+
+
+
+    /**
+     *
+     * @param string $sourceCode
+     * @param Annee  $annee
      *
      * @return Intervenant
      */
@@ -88,15 +116,15 @@ class IntervenantService extends AbstractEntityService
             $ip = $this->getProcessusImport();
 
             $ip->execMaj('INTERVENANT', 'SOURCE_CODE', $sourceCode, $ip::A_INSERT);
-            $id = $this->getServiceQueryGenerator()->getIdFromSourceCode('INTERVENANT', $sourceCode, $annee->getId());
+            $id = $this->getIdFromSourceCode($sourceCode, $annee->getId());
             if (!empty($id)) {
                 $ip->execMaj('ADRESSE_INTERVENANT', 'INTERVENANT_ID', $id, $ip::A_ALL);
                 $ip->execMaj('AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $id, $ip::A_ALL);
             }
 
             $result = $repo->findOneBy($findParams); // on retente
-            if ($result){
-                $this->getServiceWorkflow()->calculerTableauxBord(null,$result);
+            if ($result) {
+                $this->getServiceWorkflow()->calculerTableauxBord(null, $result);
             }
         }
 
@@ -203,7 +231,7 @@ class IntervenantService extends AbstractEntityService
      * Supprime (historise par défaut) le service spécifié.
      *
      * @param Intervenant $entity Entité à détruire
-     * @param bool  $softDelete
+     * @param bool        $softDelete
      *
      * @return self
      */
@@ -254,7 +282,7 @@ class IntervenantService extends AbstractEntityService
                   AND histo_destruction IS NOT NULL";
             }
 
-            foreach( $sqls as $sql ){
+            foreach ($sqls as $sql) {
                 $this->getEntityManager()->getConnection()->executeQuery($sql);
             }
         }

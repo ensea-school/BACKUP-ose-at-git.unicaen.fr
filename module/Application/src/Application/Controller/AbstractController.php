@@ -25,7 +25,6 @@ abstract class AbstractController extends AbstractActionController
     protected function makeFormSupprimer($saveFnc)
     {
         $form = new \Application\Form\Supprimer('supprimer');
-        $form->setServiceLocator($this->getServiceLocator()->get('formElementManager'));
         $form->init();
 
         if ($this->getRequest()->isPost()) {
@@ -48,7 +47,7 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function em()
     {
-        return $this->getServiceLocator()->get(\Application\Constants::BDD);
+        return \Application::$container->get(\Application\Constants::BDD);
     }
 
 
@@ -58,6 +57,6 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function pdf()
     {
-        return new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
+        return new Pdf(\Application::$container->get('view_manager')->getRenderer());
     }
 }

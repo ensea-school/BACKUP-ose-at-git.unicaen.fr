@@ -3,16 +3,9 @@
 namespace Application\Form;
 
 use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-abstract class AbstractFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
+abstract class AbstractFieldset extends Fieldset implements InputFilterProviderInterface
 {
-    use ServiceLocatorAwareTrait;
-
-
-
     /**
      * Generates a url given the name of a route.
      *
@@ -27,7 +20,7 @@ abstract class AbstractFieldset extends Fieldset implements ServiceLocatorAwareI
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
-        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
+        $url = \Application::$container->get('viewhelpermanager')->get('url');
 
         /* @var $url \Zend\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

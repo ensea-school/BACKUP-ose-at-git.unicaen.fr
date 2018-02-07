@@ -81,10 +81,10 @@ echo $this->form()->openTag($form); ?>
                                                                      data-cancel-button="Non"
                                                                      data-submit-reload="true">
                             <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
-                        <a class="pop-ajax btn btn-warning" data-event="statut-intervenant-clone"
+                        <a class="ajax-modal btn btn-warning" data-event="statut-intervenant-clone"
                            href="<?php echo $this->url('statut-intervenant/clone', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
-                           title="Cloner le statut d'intervenant">
-                            <span class="glyphicon glyphicon-repeat"></span> Cloner</a>
+                           title="Duppliquer le statut d'intervenant">
+                            <span class="glyphicon glyphicon-repeat"></span> Duppliquer</a>
                     <?php } ?>
                 </div>
             </div>
@@ -107,7 +107,7 @@ echo $this->form()->openTag($form); ?>
                 $(function () {
                     $("body").on("statut-intervenant-clone", function (event, data) {
                         console.log('toto');
-                        window.location.reload(../statut-intervenant);
+                       window.location.reload();
                     });
                 });
         </script>

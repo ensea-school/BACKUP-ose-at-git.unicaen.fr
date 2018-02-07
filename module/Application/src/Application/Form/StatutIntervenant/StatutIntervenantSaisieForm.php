@@ -358,9 +358,11 @@ class StatutIntervenantHydrator implements HydratorInterface
         $data = [
             'id'                             => $object->getId(),
             'libelle'                        => $object->getLibelle(),
-            'depasement'                     => $object->getDepassement(),
+            'depassement'                     => $object->getDepassement(),
             'service-statutaire'             => StringFromFloat::run($object->getServiceStatutaire()),
             'plafond-referentiel'            => StringFromFloat::run($object->getPlafondReferentiel()),
+            'peut-choisir-dans-dossier' => $object->getPeutChoisirDansDossier(),
+            'peut-saisir-dossier' => $object->getPeutSaisirDossier(),
             'non-autorise'                   => $object->getNonAutorise(),
             'peut-saisir-service'            => $object->getPeutSaisirService(),
             'peut-saisir-referentiel'        => $object->getPeutSaisirReferentiel(),

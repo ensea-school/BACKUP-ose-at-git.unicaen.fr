@@ -1,7 +1,100 @@
 <?php
 
-/**
-* @var $this \Application\View\Renderer\PhpRenderer
-* @var $messages array
-*/
+use Application\Provider\Privilege\Privileges;
 
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  \Application\Form\StatutIntervenant\StatutIntervenantSaisieForm
+ */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
+echo $this->form()->openTag($form); ?>
+
+<style>
+    .temoins {
+        margin-left: 0px;
+    }
+
+    .temoins .form-group {
+        margin-bottom: 1px;
+    }
+
+    .temoins .form-group .checkbox {
+        margin-top: 1px;
+        margin-bottom: 1px;
+    }
+
+    .atvb {
+        margin-top: 20px;
+    }
+
+    .hetd {
+        background-color: white;
+        vertical-align: bottom;
+        border-width: 0;
+    }
+
+</style>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('type-intervenant')); ?>
+                    </div>
+                    <div class="col-md-8">
+                        <?= $this->formControlGroup($form->get('libelle')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?= $this->formControlGroup($form->get('code')); ?>
+                    </div>
+                    <div class="col-md-2 atvb">
+                        <?= $this->formControlGroup($form->get('TEM-ATV')); ?>
+                    </div>
+                    <div class="col-md-4 atvb">
+                        <?= $this->formControlGroup($form->get('TEM-BIATSS')); ?>
+                    </div>
+                </div>
+                <div class="row temoins">
+                    <?= $this->formControlGroup($form->get('non-autorise')); ?>
+                    <?= $this->formControlGroup($form->get('depassement')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-referentiel')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-service')); ?>
+                    <?= $this->formControlGroup($form->get('peut-choisir-dans-dossier')); ?>
+                    <?= $this->formControlGroup($form->get('peut-avoir-contrat')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-dossier')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-motif-non-paiement')); ?>
+                    <?= $this->formControlGroup($form->get('peut-cloturer-saisie')); ?>
+                    <?= $this->formControlGroup($form->get('peut-saisir-service-ext')); ?>
+                    <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
+                    <br/>
+                    <?= $this->formControlGroup($form->get('security')); ?>
+                    <?= $this->formSubmit($form->get('submit')); ?>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <?= $this->formControlGroup($form->get('service-statutaire')); ?>
+                <?= $this->formControlGroup($form->get('plafond-referentiel')); ?>
+                <?= $this->formControlGroup($form->get('maximum-HETD')); ?>
+                <?= $this->formControlGroup($form->get('plafond-h-h-c')); ?>
+                <?= $this->formControlGroup($form->get('plafond-h-c')); ?>
+            </div>
+        </div>
+    </div>
+
+
+    <?php
+    echo $this->form()->closeTag();
+    echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+    ?>
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("statut-intervenant-clone", function (event, data) {
+                console.log('toto');
+                window.location.reload();
+            });
+        });
+    </script>

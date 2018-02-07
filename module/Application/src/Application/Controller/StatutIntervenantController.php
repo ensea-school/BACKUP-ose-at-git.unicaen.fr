@@ -107,12 +107,12 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
         $form = $this->getFormStatutIntervenantSaisie();
         if (empty($statutIntervenant)) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $si->getId());
+            $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $statutIntervenant->getId());
             return;
         }
-        $title = 'Clonage d\'un statut d\'intervenant';
+        $title = 'Dupplication d\'un statut d\'intervenant';
         $statutIntervenantNew = $this->getServiceStatutIntervenant()->newEntity();
-        $statutIntervenantNew->setLibelle($statutIntervenant->getLibelle().'N');
+        $statutIntervenantNew->setLibelle($statutIntervenant->getLibelle());
         $statutIntervenantNew->setDepassement($statutIntervenant->getDepassement());
         $statutIntervenantNew->setPlafondReferentiel($statutIntervenant->getPlafondReferentiel());
         $statutIntervenantNew->setServiceStatutaire($statutIntervenant->getServiceStatutaire());
@@ -134,15 +134,24 @@ class StatutIntervenantController extends AbstractController
         $statutIntervenantNew->setMaximumHETD($statutIntervenant->getMaximumHETD());
         $statutIntervenantNew->setDepassementSDSHC($statutIntervenant->getDepassementSDSHC());
         $statutIntervenantNew->setOrdre($statutIntervenant->getOrdre());
-        $statutIntervenantNew->setSourceCode($statutIntervenant->getSourceCode().'_'.time());
-        try {
-            $this->getServiceStatutIntervenant()->save($statutIntervenantNew);
-            $this->flashMessenger()->addSuccessMessage('Élément duppliqué');
-        } catch (\Exception $e) {
-            $e = DbException::translate($e);
-            $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $statutIntervenantNew->getId());
+        $statutIntervenantNew->setSourceCode($statutIntervenant->getSourceCode());
+        $form->bind($statutIntervenantNew);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                try {
+                    $this->getServiceStatutIntervenant()->save($statutIntervenantNew);
+                    $form->get('id')->setValue($statutIntervenantNew->getId()); // transmet le nouvel ID
+                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+                } catch (\Exception $e) {
+                    $e        = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }
         }
-        return new MessengerViewModel(compact('statutIntervenant'));
+
+        return compact('form', 'title');
     }
 }
 

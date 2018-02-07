@@ -1,0 +1,60 @@
+<?php
+
+namespace Application\Connecteur\Factory;
+
+use Application\Connecteur\LdapConnecteur;
+use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+
+
+/**
+ * Description of LdapConnecteurFactory
+ *
+ * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
+ */
+class LdapConnecteurFactory
+{
+
+    /**
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param array|null         $options
+     *
+     * @return LdapConnecteur
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
+    {
+        $serviceUserContext = $container->get('UnicaenAuth\Service\UserContext');
+        $mapperStructure    = $container->get('ldap_structure_mapper');
+        $mapperPeople       = $container->get('ldap_people_mapper');
+        $mapperUser         = $container->get('zfcuser_user_mapper');
+
+        $service = new LdapConnecteur(
+            $serviceUserContext,
+            $mapperStructure,
+            $mapperPeople,
+            $mapperUser
+        );
+
+
+        $config = $container->get('Config');
+        if (isset($config['unicaen-app']['ldap']['utilisateur'])){
+            $configLdapUtilisateur = $config['unicaen-app']['ldap']['utilisateur'];
+        }else{
+            $configLdapUtilisateur = [];
+        }
+
+        if (isset($configLdapUtilisateur['LOGIN'])){
+            $service->setUtilisateurLogin( $configLdapUtilisateur['LOGIN'] );
+        }
+
+        if (isset($configLdapUtilisateur['FILTER'])){
+            $service->setUtilisateurFiltre( $configLdapUtilisateur['FILTER'] );
+        }
+
+        if (isset($configLdapUtilisateur['CODE'])){
+            $service->setUtilisateurCode( $configLdapUtilisateur['CODE'] );
+        }
+
+        return $service;
+    }
+}

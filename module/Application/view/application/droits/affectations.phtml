@@ -1,82 +1,85 @@
 <?php
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this         \Application\View\Renderer\PhpRenderer
  * @var $affectations Application\Entity\Db\Affectation[]
- * @var $structure \Application\Entity\Db\Structure
+ * @var $structure    \Application\Entity\Db\Structure
  */
 
 use Application\Provider\Privilege\Privileges;
 
 $head = [
-    'structure' => 'Structure',
-    'role'      => 'Rôle',
-    'personnel' => 'Personnel',
-    'source'    => '<abbr title="SourceService de données">Src</abbr>/Actions',
+    'structure'   => 'Structure',
+    'role'        => 'Rôle',
+    'utilisateur' => 'Utilisateur',
+    'source'      => '<abbr title="SourceService de données">Src</abbr>/Actions',
 ];
 
 if ($structure) unset($head['structure']);
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_AFFECTATION_EDITION));
-$ajoutUrl = $this->url( 'droits/affectations/edition' );
+$canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_AFFECTATION_EDITION));
+$ajoutUrl = $this->url('droits/affectations/edition');
 
 ?>
 <h1 class="page-header">Gestion des affectations</h1>
 
 <table class="table table-bordered table-condensed table-sort">
-<thead>
+    <thead>
     <tr>
-    <?php foreach( $head as $id => $label ): ?>
-        <th style="white-space: nowrap">
-            <?= $label ?>
-        </th>
-    <?php endforeach; ?>
+        <?php foreach ($head as $id => $label): ?>
+            <th style="white-space: nowrap">
+                <?= $label ?>
+            </th>
+        <?php endforeach; ?>
     </tr>
-</thead>
-<tbody>
-<?php foreach( $affectations as $affectation ):
-    $editionUrl     = $this->url( 'droits/affectations/edition',     ['affectation' => $affectation->getId()] );
-    $suppressionUrl = $this->url( 'droits/affectations/suppression', ['affectation' => $affectation->getId()] );
-?>
-    <tr>
-        <?php if (!$structure): ?>
+    </thead>
+    <tbody>
+    <?php foreach ($affectations as $affectation):
+        $editionUrl = $this->url('droits/affectations/edition', ['affectation' => $affectation->getId()]);
+        $suppressionUrl = $this->url('droits/affectations/suppression', ['affectation' => $affectation->getId()]);
+        ?>
+        <tr>
+            <?php if (!$structure): ?>
 
-        <td><?php
-            $str = (string)$affectation->getStructure();
-            if ('' == $str){
-                $str = '<span class="bg-info">&Eacute;tablissement</span>';
-            }
-            echo $str;
-        ?></td>
-        <?php endif; ?>
-        <td><?= $affectation->getRole() ?></td>
-        <td><?= $affectation->getPersonnel() ?></td>
-        <td style="text-align: center;width:1%;white-space: nowrap"><?php
-            if (! $affectation->getSource()->getImportable() && $canEdit){
-                ?>
-                <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><span class="glyphicon glyphicon-edit"></span></a>
-                <a href="<?= $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><span class="glyphicon glyphicon-remove"></span></a>
-                <?php
-            }else{
-                echo $affectation->getSource();
-            }
-        ?></td>
-    </tr>
-<?php endforeach; ?>
-</tbody>
+                <td><?php
+                    $str = (string)$affectation->getStructure();
+                    if ('' == $str) {
+                        $str = '<span class="bg-info">&Eacute;tablissement</span>';
+                    }
+                    echo $str;
+                    ?></td>
+            <?php endif; ?>
+            <td><?= $affectation->getRole() ?></td>
+            <td><?= $affectation->getUtilisateur() ?></td>
+            <td style="text-align: center;width:1%;white-space: nowrap"><?php
+                if (!$affectation->getSource()->getImportable() && $canEdit) {
+                    ?>
+                    <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="affectation-edition"><span
+                                class="glyphicon glyphicon-edit"></span></a>
+                    <a href="<?= $suppressionUrl; ?>" class="pop-ajax" data-submit-reload="1"><span
+                                class="glyphicon glyphicon-remove"></span></a>
+                    <?php
+                } else {
+                    echo $affectation->getSource();
+                }
+                ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
 </table>
 <?php if ($canEdit): // droits ?>
-    <a href="<?= $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="affectation-edition">Ajout d'une nouvelle affectation</a>
+    <a href="<?= $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="affectation-edition">Ajout d'une nouvelle
+        affectation</a>
 <?php endif; ?>
 <?= $this->modalAjaxDialog('affectations-edition-suppression'); ?>
 <script type="text/javascript">
-    $(function() {
-        $("body").on("affectation-edition", function(event, data) {
+    $(function () {
+        $("body").on("affectation-edition", function (event, data) {
             alertFlash("L'action a bien été prise en compte", 'success');
             window.location.reload();
         });
 
-        $("body").on("affectation-suppression", function(event, data) {
+        $("body").on("affectation-suppression", function (event, data) {
             window.location.reload();
         });
     });

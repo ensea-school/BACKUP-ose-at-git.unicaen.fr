@@ -7,12 +7,12 @@ use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Application\Entity\Db\StatutIntervenant;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -31,7 +31,7 @@ class DroitsController extends AbstractController
     use PrivilegeServiceAwareTrait;
     use AffectationServiceAwareTrait;
     use StructureServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
     use SourceServiceAwareTrait;
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
@@ -230,7 +230,7 @@ class DroitsController extends AbstractController
         list($qb, $alias) = $serviceAffectations->initQuery();
 
         $serviceAffectations->join($this->getServiceRole(), $qb, 'role', true);
-        $serviceAffectations->join($this->getServicePersonnel(), $qb, 'personnel', true);
+        $serviceAffectations->join($this->getServiceUtilisateur(), $qb, 'utilisateur', true);
         $serviceAffectations->join($this->getServiceSource(), $qb, 'source', true);
         $serviceAffectations->leftJoin($this->getServiceStructure(), $qb, 'structure', true);
         $serviceAffectations->finderByHistorique($qb);

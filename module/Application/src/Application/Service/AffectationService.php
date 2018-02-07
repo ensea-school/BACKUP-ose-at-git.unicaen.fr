@@ -65,20 +65,22 @@ class AffectationService extends AbstractEntityService
      */
     public function getByRole( RoleAcl $role = null )
     {
+        $context = $this->getServiceContext();
+
         if (!$role){
             $role = $this->getServiceContext()->getSelectedIdentityRole();
         }
 
-        if (!$role->getPersonnel()) return null;
+        if (!$context->getUtilisateur()) return null;
 
         $this->getEntityManager()->getFilters()->enable('historique')->init([
             Affectation::class,
         ]);
 
         return $this->getRepo()->findOneBy([
-            'personnel' => $role->getPersonnel(),
+            'utilisateur' => $context->getUtilisateur(),
             'role'      => $role->getDbRole(),
-            'structure' => $role->getStructure(),
+            'structure' => $context->getStructure(),
         ]);
     }
 

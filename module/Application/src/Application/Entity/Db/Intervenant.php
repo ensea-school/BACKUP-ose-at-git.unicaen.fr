@@ -34,9 +34,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     protected $code;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $supannEmpId;
+    protected $utilisateurCode;
 
     /**
      * @var \DateTime
@@ -304,23 +304,23 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSupannEmpId()
+    public function getUtilisateurCode()
     {
-        return $this->supannEmpId;
+        return $this->utilisateurCode;
     }
 
 
 
     /**
-     * @param string $supannEmpId
+     * @param string|null $utilisateurCode
      *
      * @return Intervenant
      */
-    public function setSupannEmpId($supannEmpId)
+    public function setUtilisateurCode($utilisateurCode)
     {
-        $this->supannEmpId = $supannEmpId;
+        $this->utilisateurCode = $utilisateurCode;
 
         return $this;
     }

@@ -30,7 +30,7 @@ class IndexController extends AbstractController
 
         $view = new ViewModel([
             'annee' => $this->getServiceContext()->getAnnee(),
-            'role'  => $role,
+            'context'  => $this->getServiceContext(),
         ]);
 
         if ($role && $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_VISUALISATION))) {

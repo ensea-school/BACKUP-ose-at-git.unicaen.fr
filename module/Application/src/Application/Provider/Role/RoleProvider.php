@@ -5,7 +5,6 @@ namespace Application\Provider\Role;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
@@ -28,7 +27,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use StatutIntervenantServiceAwareTrait;
     use SessionContainerTrait;
     use IntervenantServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
     use PrivilegeProviderAwareTrait;
     use ContextServiceAwareTrait;
 
@@ -106,9 +104,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $roles[$r->getRoleId()] = $r;
 
         $intervenant = $this->getServiceContext()->getIntervenant();
-        $personnel   = $this->getServiceContext()->getPersonnel();
-
-        /* Rôles du personnel */
+        $utilisateur = $this->getServiceContext()->getUtilisateur();
 
         // chargement des rôles métiers
 
@@ -118,11 +114,11 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         FROM
             Application\Entity\Db\Role r
             JOIN r.perimetre p
-            LEFT JOIN r.affectation a WITH a.histoDestruction IS NULL AND a.personnel = :personnel
+            LEFT JOIN r.affectation a WITH a.histoDestruction IS NULL AND a.utilisateur = :utilisateur
             LEFT JOIN a.structure s
         WHERE
             r.histoDestruction IS NULL'
-        )->setParameter('personnel', $personnel);
+        )->setParameter('utilisateur', $utilisateur);
 
         $result          = $query->getResult();
         $rolesPrivileges = $this->getRolesPrivileges();
@@ -140,7 +136,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             }
             /* @var $role Role */
             $role->setDbRole($dbRole);
-            $role->setPersonnel($personnel);
             $role->setPerimetre($dbRole->getPerimetre());
 
             // Si le rôle est de périmètre établissement, alors il se peut que l'on veuille zoomer sur une composante en particulier...
@@ -162,7 +157,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                             $affRole->initPrivileges($rolesPrivileges[$roleId]);
                         }
                         $affRole->setDbRole($dbRole);
-                        $affRole->setPersonnel($personnel);
                         $affRole->setStructure($structure);
                         $roles[$affRoleId] = $affRole;
                     }

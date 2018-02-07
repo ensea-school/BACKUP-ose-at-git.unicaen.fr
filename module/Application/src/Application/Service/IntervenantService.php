@@ -71,18 +71,18 @@ class IntervenantService extends AbstractEntityService
      *
      * @return integer[]|null
      */
-    public function getIdFromSourceCode($sourceCode, $anneeId = null)
+    protected function getId($column, $value, $anneeId = null)
     {
         if (empty($sourceCode)) return null;
 
-        $sql = 'SELECT ID FROM INTERVENANT WHERE SOURCE_CODE IN (:sourceCode)';
+        $sql = 'SELECT ID FROM INTERVENANT WHERE '.$column.' IN (:value)';
         if ($anneeId) {
             $sql .= ' AND ANNEE_ID = ' . (string)(int)$anneeId;
         }
         $stmt = $this->getEntityManager()->getConnection()->executeQuery(
             $sql,
-            ['sourceCode' => (array)$sourceCode],
-            ['sourceCode' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+            ['value' => (array)$value],
+            ['value' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
         );
         if ($r = $stmt->fetch()) {
             return (int)$r['ID'];
@@ -100,23 +100,23 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant
      */
-    public function getBySourceCode($sourceCode, Annee $annee = null, $autoImport = true)
+    public function getBy($attribute, $column, $value, Annee $annee = null, $autoImport = true)
     {
-        if (null == $sourceCode) return null;
+        if (null == $value) return null;
 
         if (!$annee) {
             $annee = $this->getServiceContext()->getAnnee();
         }
 
-        $findParams = ['sourceCode' => (string)$sourceCode, 'annee' => $annee->getId()];
+        $findParams = [$attribute => (string)$value, 'annee' => $annee->getId()];
         $repo       = $this->getRepo();
 
         $result = $repo->findOneBy($findParams);
         if (!$result && $autoImport) {
             $ip = $this->getProcessusImport();
 
-            $ip->execMaj('INTERVENANT', 'SOURCE_CODE', $sourceCode, $ip::A_INSERT);
-            $id = $this->getIdFromSourceCode($sourceCode, $annee->getId());
+            $ip->execMaj('INTERVENANT', $column, $value, $ip::A_INSERT);
+            $id = $this->getId($column, $value, $annee->getId());
             if (!empty($id)) {
                 $ip->execMaj('ADRESSE_INTERVENANT', 'INTERVENANT_ID', $id, $ip::A_ALL);
                 $ip->execMaj('AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $id, $ip::A_ALL);
@@ -129,6 +129,34 @@ class IntervenantService extends AbstractEntityService
         }
 
         return $result;
+    }
+
+
+
+    /**
+     *
+     * @param string $sourceCode
+     * @param Annee  $annee
+     *
+     * @return Intervenant|null
+     */
+    public function getBySourceCode($sourceCode, Annee $annee = null, $autoImport = true)
+    {
+        return $this->getBy('sourceCode', 'SOURCE_CODE', $sourceCode, $annee, $autoImport);
+    }
+
+
+
+    /**
+     *
+     * @param string $sourceCode
+     * @param Annee  $annee
+     *
+     * @return Intervenant|null
+     */
+    public function getByUtilisateurCode($utilisateurCode, Annee $annee = null, $autoImport = true)
+    {
+        return $this->getBy('utilisateurCode', 'UTILISATEUR_CODE', $utilisateurCode, $annee, $autoImport);
     }
 
 

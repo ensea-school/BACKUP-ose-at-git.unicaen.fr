@@ -1,4 +1,5 @@
 <?php
+
 use Application\Provider\Privilege\Privileges;
 
 /**
@@ -9,32 +10,32 @@ use Application\Provider\Privilege\Privileges;
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_STATUT_EDITION));
 echo $this->form()->openTag($form); ?>
 
-    <style>
-        .temoins {
-            margin-left: 0px;
-        }
+<style>
+    .temoins {
+        margin-left: 0px;
+    }
 
-        .temoins .form-group {
-            margin-bottom: 1px;
-        }
+    .temoins .form-group {
+        margin-bottom: 1px;
+    }
 
-        .temoins .form-group .checkbox {
-            margin-top: 1px;
-            margin-bottom: 1px;
-        }
+    .temoins .form-group .checkbox {
+        margin-top: 1px;
+        margin-bottom: 1px;
+    }
 
-        .atvb {
-            margin-top: 20px;
-        }
+    .atvb {
+        margin-top: 20px;
+    }
 
-        .hetd {
-            background-color: white;
-            vertical-align: bottom;
-            border-width: 0;
-        }
+    .hetd {
+        background-color: white;
+        vertical-align: bottom;
+        border-width: 0;
+    }
 
-    </style>
-    <div class="panel panel-default">
+</style>
+<div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
             <div class="col-md-9">
@@ -71,21 +72,7 @@ echo $this->form()->openTag($form); ?>
                     <?= $this->formControlGroup($form->get('depassement-sdshc')); ?>
                     <br/>
                     <?= $this->formControlGroup($form->get('security')); ?>
-                    <?php if($canEdit) echo $this->formSubmit($form->get('submit')); ?>
-                    <?php if (($canEdit) && ($form->get('id')->getValue())) { ?>
-                        <a class="pop-ajax btn btn-danger" data-event="statut-intervenant-clone"
-                                                                     href="<?php echo $this->url('statut-intervenant/delete', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
-                                                                     title="Supprimer le statut d'intervenant"
-                                                                     data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                                                                     data-confirm="true" data-confirm-button="Oui"
-                                                                     data-cancel-button="Non"
-                                                                     data-submit-reload="true">
-                            <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
-                        <a class="ajax-modal btn btn-warning" data-event="statut-intervenant-clone"
-                           href="<?php echo $this->url('statut-intervenant/clone', ['statutIntervenant' => $form->get('id')->getValue()]) ?>"
-                           title="Duppliquer le statut d'intervenant">
-                            <span class="glyphicon glyphicon-repeat"></span> Duppliquer</a>
-                    <?php } ?>
+                    <?= $this->formSubmit($form->get('submit')); ?>
                 </div>
             </div>
             <div class="col-md-3">
@@ -103,11 +90,11 @@ echo $this->form()->openTag($form); ?>
     echo $this->form()->closeTag();
     echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     ?>
-            <script type="text/javascript">
-                $(function () {
-                    $("body").on("statut-intervenant-clone", function (event, data) {
-                        console.log('toto');
-                       window.location.reload();
-                    });
-                });
-        </script>
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("statut-intervenant-clone", function (event, data) {
+                console.log('toto');
+                window.location.reload();
+            });
+        });
+    </script>

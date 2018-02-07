@@ -3,12 +3,12 @@
 namespace Application\Service;
 
 use Application\Acl\Role;
+use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use DateTime;
 use UnicaenAuth\Service\Traits\UserContextServiceAwareTrait;
@@ -22,13 +22,13 @@ class ContextService extends AbstractService
 {
     use Traits\EtablissementServiceAwareTrait;
     use Traits\AnneeServiceAwareTrait;
-    use Traits\IntervenantServiceAwareTrait;
     use Traits\ParametresServiceAwareTrait;
     use Traits\StructureServiceAwareTrait;
     use SessionContainerTrait;
     use UserContextServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
     use IntervenantServiceAwareTrait;
+    use LdapConnecteurAwareTrait;
+
 
     /**
      * selectedIdentityRole
@@ -46,11 +46,6 @@ class ContextService extends AbstractService
      * @var Annee
      */
     protected $annee;
-
-    /**
-     * @var \Application\Entity\Db\Personnel
-     */
-    protected $personnel = false;
 
     /**
      * @var \Application\Entity\Db\Intervenant
@@ -111,59 +106,7 @@ class ContextService extends AbstractService
      */
     public function getUtilisateur()
     {
-        $authUserContext = $this->getServiceUserContext();
-
-        return $authUserContext->getDbUser();
-    }
-
-
-
-    /**
-     * @return \Application\Entity\Db\Personnel
-     */
-    public function getPersonnel()
-    {
-        if (false === $this->personnel || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
-            $this->personnel = $this->findPersonnel();
-        }
-
-        return $this->personnel;
-    }
-
-
-
-    /**
-     * @return \Application\Entity\Db\Personnel|null
-     */
-    public function findPersonnel()
-    {
-        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
-            $utilisateurCode = (integer)$ldapUser->getSupannEmpId();
-        } elseif (($dbUser = $this->getServiceUserContext()->getDbUser()) && 'ldap' != $dbUser->getPassword()) {
-            $utilisateurCode = 'utilisateur-id-'.$dbUser->getId();
-        } else {
-            $utilisateurCode = null;
-        }
-
-        if ($utilisateurCode){
-            return $this->getServicePersonnel()->getBySourceCode($utilisateurCode);
-        }else{
-            return null;
-        }
-    }
-
-
-
-    /**
-     * @param \Application\Entity\Db\Personnel $personnel
-     *
-     * @return ContextService
-     */
-    public function setPersonnel($personnel)
-    {
-        $this->personnel = $personnel;
-
-        return $this;
+        return $this->getConnecteurLdap()->getUtilisateurCourant();
     }
 
 
@@ -174,32 +117,11 @@ class ContextService extends AbstractService
     public function getIntervenant()
     {
         if (false === $this->intervenant || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
-            $this->intervenant = $this->findIntervenant();
+            $utilisateurCode = $this->getConnecteurLdap()->getUtilisateurCourantCode();
+            $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
         }
 
         return $this->intervenant;
-    }
-
-
-
-    /**
-     * @return \Application\Entity\Db\Intervenant|null
-     */
-    public function findIntervenant()
-    {
-        if ($ldapUser = $this->getServiceUserContext()->getLdapUser()) {
-            $utilisateurCode = (integer)$ldapUser->getSupannEmpId();
-        } elseif (($dbUser = $this->getServiceUserContext()->getDbUser()) && 'ldap' != $dbUser->getPassword()) {
-            $utilisateurCode = 'utilisateur-id-'.$dbUser->getId();
-        } else {
-            $utilisateurCode = null;
-        }
-
-        if ($utilisateurCode){
-            return $this->getServiceIntervenant()->getBySourceCode($utilisateurCode);
-        }else{
-            return null;
-        }
     }
 
 

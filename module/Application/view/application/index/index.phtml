@@ -1,8 +1,9 @@
 <?php
 /* @var $this Application\View\Renderer\PhpRenderer */
-/* @var $role \Application\Acl\Role */
+/* @var $context ContextService */
 
 use Application\Provider\Privilege\Privileges;
+use Application\Service\ContextService;
 
 $this->headTitle("Accueil");
 echo $this->messenger()->addMessagesFromFlashMessenger();
@@ -18,9 +19,9 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
         <p class="lead">Année <?= $annee ?>.</p>
 
         <?php
-        if ($role) {
+        if ($context->getUtilisateur()) {
 
-            if ($intervenant = $role->getIntervenant()) {
+            if ($intervenant = $context->getIntervenant()) {
                 if ($intervenant->getStatut()->getNonAutorise()) {
 
                     ?><p>
@@ -38,12 +39,12 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
                         )
                     );
                 }
-            } elseif ($role->getStructure()) {
+            } elseif ($context->getStructure()) {
 
                 $url   = $this->url('service/resume');
                 $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
                 ?><p><a class="btn btn-primary btn-large" href="<?= $url ?>"><?= $label ?></a></p><?php
-            } elseif (!$role->getPersonnel()) {
+            } elseif ($context->getUtilisateur()->getAffectation()->count() == 0) {
                 ?>
                 <div class="alert alert-danger" role="alert">
                     Vous n'êtes pas autorisé(e) à vous connecter à OSE avec ce compte. Nous vous prions de vous rapprocher de
@@ -84,6 +85,6 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
 
     <!----------------------------- Feuille de route --------------------------->
 <?php
-if ($role && $intervenant = $role->getIntervenant()) {
+if ($intervenant = $context->getIntervenant()) {
     echo $this->feuillederoute($intervenant);
 }

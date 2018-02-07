@@ -16,9 +16,9 @@ use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\AgrementServiceAwareTrait;
 use Application\Service\Traits\ContratServiceAwareTrait;
-use Application\Service\Traits\DbEventServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\FichierServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\ModificationServiceDuServiceAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
@@ -46,9 +46,8 @@ class SuppressionDataProcessus
     use VolumeHoraireReferentielServiceAwareTrait;
     use ServiceServiceAwareTrait;
     use ServiceReferentielServiceAwareTrait;
-    use \Application\Service\Traits\IntervenantServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
     use ContratServiceAwareTrait;
-    use DbEventServiceAwareTrait;
 
     /**
      * @var IntervenantSuppressionData

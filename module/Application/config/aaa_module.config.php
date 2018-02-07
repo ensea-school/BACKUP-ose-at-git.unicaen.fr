@@ -3,7 +3,6 @@
 namespace Application;
 
 use Application\Mouchard\MouchardCompleterContextFactory;
-use Application\Provider\Role\RoleProvider;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
 return [
@@ -73,8 +72,8 @@ return [
                 'options'       => [
                     'route'    => '/application',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Index',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -131,7 +130,6 @@ return [
     'service_manager'    => [
         'invokables' => [
             Service\AnneeService::class            => Service\AnneeService::class,
-            Service\ContextService::class          => Service\ContextService::class,
             Service\LocalContextService::class     => Service\LocalContextService::class,
             Service\ParametresService::class       => Service\ParametresService::class,
             Service\UtilisateurService::class      => Service\UtilisateurService::class,
@@ -147,10 +145,12 @@ return [
             Assertion\InformationAssertion::class  => Assertion\InformationAssertion::class,
         ],
         'factories'  => [
-            'navigation'                  => Service\NavigationFactoryFactory::class,
-            Provider\Role\RoleProvider::class     => Provider\Role\RoleProviderFactory::class,
+            'navigation'                              => Service\NavigationFactoryFactory::class,
+            Provider\Role\RoleProvider::class         => Provider\Role\RoleProviderFactory::class,
             Provider\Identity\IdentityProvider::class => Provider\Identity\IdentityProviderFactory::class,
-            'MouchardCompleterContext'    => MouchardCompleterContextFactory::class,
+            Service\ContextService::class             => Service\Factory\ContextServiceFactory::class,
+            'MouchardCompleterContext'                => MouchardCompleterContextFactory::class,
+            Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
         ],
     ],
     'view_helpers'       => [

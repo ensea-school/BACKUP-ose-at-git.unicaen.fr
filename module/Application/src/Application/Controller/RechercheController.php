@@ -2,10 +2,10 @@
 
 namespace Application\Controller;
 
+use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Constants;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\StructureService;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
  */
 class RechercheController extends AbstractController
 {
-    use PersonnelServiceAwareTrait;
+    use LdapConnecteurAwareTrait;
     use IntervenantProcessusAwareTrait;
 
 
@@ -49,29 +49,14 @@ class RechercheController extends AbstractController
 
 
 
-    public function personnelFindAction()
+    public function utilisateurFindAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Personnel::class,
-        ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel([]);
         }
 
-        $qb = $this->getServicePersonnel()->finderByTerm($term);
-        $this->getServicePersonnel()->join(StructureService::class, $qb, 'structure');
-        $personnels = $this->getServicePersonnel()->getList($qb);
-
-        $result = [];
-        foreach ($personnels as $personnel) {
-            $result[$personnel->getId()] = [
-                'id'        => $personnel->getId(),
-                'label'     => (string)$personnel,
-                'structure' => $personnel->getStructure()->getId(),
-                'template'  => $personnel . ' <small class="bg-info">n° ' . $personnel->getSourceCode() . ', ' . $personnel->getStructure() . '</small>',
-            ];
-        };
+        $result = @$this->getConnecteurLdap()->rechercheUtilisateurs($term);
 
         return new JsonModel($result);
     }

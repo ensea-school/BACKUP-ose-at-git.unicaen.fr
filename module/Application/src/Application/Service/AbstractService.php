@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -14,9 +12,8 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
+class AbstractService implements EntityManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
     use Traits\ContextServiceAwareTrait;
 
@@ -26,7 +23,7 @@ class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwar
      */
     public function getAuthorize()
     {
-        return $this->getServiceLocator()->get('BjyAuthorize\Service\Authorize');
+        return \Application::$container->get('BjyAuthorize\Service\Authorize');
     }
 
 }

@@ -21,7 +21,7 @@
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="code" type="string" column="CODE" length="60" nullable="false"/>
-        <field name="supannEmpId" type="string" column="SUPANN_EMP_ID" length="60" nullable="false"/>
+        <field name="utilisateurCode" type="string" column="UTILISATEUR_CODE" length="60" nullable="false"/>
         <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="false"/>
         <field name="email" type="string" column="EMAIL" length="255" nullable="true"/>
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>

@@ -3,11 +3,15 @@
 namespace Application\Form\StatutIntervenant;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
+use Zend\Form\Element\Checkbox;
 use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Number;
+use Zend\Form\Element\Select;
+use Zend\Form\Element\Text;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 
 /**
  * Description of StatutIntervenantSaisieForm
@@ -16,8 +20,9 @@ use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
  */
 class StatutIntervenantSaisieForm extends AbstractForm
 {
-    use ContextServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
+
+
 
     public function init()
     {
@@ -25,289 +30,170 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());
+
+        $cases = [
+            'non-autorise'                   => "Intervenant non autorisé à figurer dans OSE",
+            "depassement"                    => "Dépassement autorisé du service statutaire",
+            'peut-saisir-service'            => "Possibilité d'avoir des services d'enseignement",
+            'peut-choisir-dans-dossier'      => "Ce statut pourra être choisi dans le dossier de l'intervenant",
+            'peut-saisir-dossier'            => "L'intervenant a un dossier personnel",
+            'peut-saisir-referentiel'        => "Possibilité d'avoir des heures de référentiel",
+            'peut-saisir-motif-non-paiement' => "Possibilité d'avoir des heures non payables (justifiées par un motif de non paiement)",
+            'peut-avoir-contrat'             => "Possibilité d'éditer un contrat ou un avenant",
+            'peut-cloturer-saisie'           => "Active la clôture de saisie des heures de service réalisées",
+            'peut-saisir-service-ext'        => "Possibilité de saisir des services d'enseignement sur d'autres établissements",
+            'depassement-sdshc'              => "Le dépassement du service dû ne doit pas donner lieu à des heures complémentaires",
+        ];
+
+        foreach ($cases as $key => $label) {
+            $this->add([
+                'name'    => $key,
+                'options' => [
+                    'label'              => $label,
+                    'use_hidden_element' => true,
+                ],
+                'type'    => 'Checkbox',
+            ]);
+        }
+
         $this->add([
-            'name' => 'libelle',
-            'options' => [
-                'label' => "Libelle",
+            'name'       => 'id',
+            'options'    => [
+                'label' => "id",
             ],
             'attributes' => [
             ],
-            'type' => 'Text',
+            'type'       => 'Hidden',
         ]);
+
         $this->add([
-            'name' => 'service-statutaire',
-            'options' => [
+            'name'       => 'TEM-ATV',
+            'options'    => [
+                'label'              => '<abbr title="Définit si ce statut est propre aux ATV (Attaché Temporaire Vacataire)">ATV</abbr>',
+                'label_options'      => [
+                    'disable_html_escape' => true,
+                ],
+                'use_hidden_element' => true,
+            ],
+            'attributes' => [
+                'title' => 'ATV',
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'       => 'TEM-BIATSS',
+            'options'    => [
+                'label'              => '<abbr title="Définit si ce statut est propre aux BIATSS">BIATSS</abbr>',
+                'label_options'      => [
+                    'disable_html_escape' => true,
+                ],
+                'use_hidden_element' => true,
+            ],
+            'attributes' => [
+                'title' => 'BIATSS',
+            ],
+            'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'       => 'type-intervenant',
+            'options'    => [
+                'label' => 'Type d\'intervenant',
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Select',
+        ]);
+
+        $this->add([
+            'name'       => 'libelle',
+            'options'    => [
+                'label' => "Libellé",
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
+            'name'       => 'code',
+            'options'    => [
+                'label' => "Code",
+            ],
+            'attributes' => [
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
+            'name'       => 'service-statutaire',
+            'options'    => [
                 'label' => "Service statutaire",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
+                'title' => "Nombre d'heures équivalent TD relevant du service statutaire de l'intervenant",
             ],
-            'type' => 'Number',
+            'type'       => 'Text',
         ]);
 
         $this->add([
-            'name' => 'plafond-referentiel',
-            'options' => [
-                'label' => "Plafond référentiel",
+            'name'       => 'maximum-HETD',
+            'options'    => [
+                'label' => "Plafond des HETD",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
+                'title' => "Nombre maximal d'heures de service (en équivalent TD) autorisées pour l'intervenant",
             ],
-            'type' => 'Text',
-        ]);
-        $this->add([
-            'name' => 'depassement',
-            'options' => [
-                'label' => '<abbr title="Définit si la dépassement est autorisé">Dépassement</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "Définit si la dépassement est autorisé",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'non-autorise',
-            'options' => [
-                'label' => '<abbr title="non autorisé">Non autorisé</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "non autorisé",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-saisir-service',
-            'options' => [
-                'label' => '<abbr title="Peut saisir service">Peut saisir service</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "Peut saisir service",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-choisir-dans-dossier',
-            'options' => [
-                'label' => '<abbr title="Peut choisir dans dossier">Peut choisir dans dossier</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "Peut choisir dans dossier",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-saisir-dossier',
-            'options' => [
-                'label' => '<abbr title="Peut saisir dossier">Peut saisir dossier</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "Peut saisir dossier",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-saisir-referentiel',
-            'options' => [
-                'label' => '<abbr title="peut saisir référentiel">Peut saisir référentiel</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "peut saisir référentiel",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-saisir-motif-non-paiement',
-            'options' => [
-                'label' => '<abbr title="Peut saisir motif non paiement">Peut saisir motif non paiement</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "Peut saisir non paiement",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-avoir-contrat',
-            'options' => [
-                'label' => '<abbr title="peut avoir contrat">Peut avoir contrat</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "peut avoir contrat",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-cloturer-saisie',
-            'options' => [
-                'label' => '<abbr title="peut cloturer saisie">Peut cloturer saisie</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "peut cloturer saisie",
-            ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'peut-saisir-service-ext',
-            'options' => [
-                'label' => '<abbr title="peut saisir ext">Peut saisir service ext</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "peut saisir service ext",
-            ],
-            'type' => 'Checkbox',
+            'type'       => 'Text',
         ]);
 
         $this->add([
-            'name' => 'TEM-ATV',
-            'options' => [
-                'label' => '<abbr title="ATV">ATV</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
+            'name'       => 'plafond-referentiel',
+            'options'    => [
+                'label' => "Plafond du référentiel",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
-                'title' => "ATV",
+                'title' => "Nombre maximal d'heures de référentiel autorisées pour l'intervenant",
             ],
-            'type' => 'Checkbox',
+            'type'       => 'Text',
         ]);
+
+
         $this->add([
-            'name' => 'depassement-sdshc',
-            'options' => [
-                'label' => '<abbr title="depassement service du sans hc">depassement service du sans hc</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
+            'name'       => 'plafond-h-h-c',
+            'options'    => [
+                'label' => "Plafond des HC (hors prime FC D714-60)",
+                'suffix' => 'HETD'
             ],
             'attributes' => [
-                'title' => "depassement service du sans hc",
+                'title' => "Nombre maximal d'heures complémentaires (hors heures relevant de la prime de formation continue au titre de l'article D714-60 du code de l'éducation)",
             ],
-            'type' => 'Checkbox',
-        ]);
-        $this->add([
-            'name' => 'TEM-BIATSS',
-            'options' => [
-                'label' => '<abbr title="BIATSS">BIATSS</abbr>',
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
-                'use_hidden_element' => true,
-            ],
-            'attributes' => [
-                'title' => "BIATSS",
-            ],
-            'type' => 'Checkbox',
+            'type'       => 'Text',
         ]);
 
         $this->add([
-            'name' => 'service-statutaire',
-            'options' => [
-                'label' => "Service statutaire",
+            'name'       => 'plafond-h-c',
+            'options'    => [
+                'label' => "Plafond prime FC D714-60",
+                'suffix' => '&euro;'
             ],
             'attributes' => [
+                'title' => "Montant maximal de la prime de formation continue relevant de l'article D714-60 du code de l'éducation",
             ],
-            'type' => 'Number',
-        ]);
-        $this->add([
-            'name' => 'type-intervenant',
-            'options' => [
-                'label' => 'type d\'intervenant',
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Select',
-        ]);
-        $this->add([
-            'name' => 'source-code',
-            'options' => [
-                'label' => "code",
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Text',
+            'type'       => 'Text',
         ]);
 
-        $this->add([
-            'name' => 'plafond-h-h-c',
-            'options' => [
-                'label' => "Plafond hors contrat hors heure compl.",
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Number',
-        ]);
-        $this->add([
-            'name' => 'plafond-h-c',
-            'options' => [
-                'label' => "Plafond hors contrat heure compl.",
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Number',
-        ]);
-        $this->add([
-            'name' => 'maximum-HETD',
-            'options' => [
-                'label' => "Maximum HETD",
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Number',
-        ]);
-        $this->add([
-            'name' => 'ordre',
-            'options' => [
-                'label' => "Ordre",
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Number',
-        ]);
         $this->add(new Csrf('security'));
         $this->add([
-            'name' => 'submit',
-            'type' => 'Submit',
+            'name'       => 'submit',
+            'type'       => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ],
         ]);
         // peuplement liste des types d'intervenants
@@ -316,6 +202,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
 
         return $this;
     }
+
 
 
     /**
@@ -327,74 +214,103 @@ class StatutIntervenantSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'libelle' => [
+            'libelle'             => [
                 'required' => true,
             ],
-            'service-statutaire' => [
+            'type-intervenant'    => [
                 'required' => true,
+            ],
+            'code'                => [
+                'required' => true,
+            ],
+            'plafond-h-c'         => [
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
+            ],
+            'plafond-h-h-c'       => [
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
+            ],
+            'service-statutaire'  => [
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
             ],
             'plafond-referentiel' => [
-                'required' => false,
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
             ],
-            'depassement' => [
-                'required' => true,
-            ],
-            'non-autorise' => [
-                'required' => true,
-            ],
-            'peut-saisir-service' => [
-                'required' => true,
-            ],
-            'peut-saisir-service-ext' => [
-                'required' => true,
-            ],
-            'peut-choisir-dans-dossier' => [
-                'required' => true,
-            ],
-            'peut-saisir-dossier' => [
-                'required' => true,
-            ],
-            'peut-saisir-referentiel' => [
-                'required' => true,
-            ],
-            'peut-saisir-motif-non-paiement' => [
-                'required' => true,
-            ],
-            'peut-avoir-contrat' => [
-                'required' => true,
-            ],
-            'peut-cloturer-saisie' => [
-                'required' => true,
-            ],
-            'TEM-ATV' => [
-                'required' => true,
-            ],
-            'TEM-BIATSS' => [
-                'required' => true,
-            ],
-            'maximum-HETD' => [
-                'required' => true,
-            ],
-            'ordre' => [
-                'required' => true,
-            ],
-            'depassement-sdshc' => [
-                'required' => true,
+            'maximum-HETD'        => [
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
             ],
         ];
     }
 
+
+
+    public function readOnly()
+    {
+        /** @var $element \Zend\Form\Element */
+        foreach ($this->getElements() as $element) {
+            switch (get_class($element)) {
+                case Number::class:
+                case Text::class:
+                    $element->setAttribute('readonly', true);
+                break;
+                case Select::class:
+                case Checkbox::class:
+                    $element->setAttribute('disabled', true);
+                break;
+            }
+        }
+    }
 }
+
+
+
+
 
 class StatutIntervenantHydrator implements HydratorInterface
 {
 
     use TypeIntervenantServiceAwareTrait;
 
+
+
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array $data
+     * @param  array                                    $data
      * @param  \Application\Entity\Db\StatutIntervenant $object
      *
      * @return object
@@ -402,9 +318,9 @@ class StatutIntervenantHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $object->setLibelle($data['libelle']);
-        $object->setPlafondReferentiel(isset($data['plafond-referentiel']) ? $data['plafond-referentiel']:0);
         $object->setDepassement($data['depassement']);
-        $object->setServiceStatutaire($data['service-statutaire']);
+        $object->setPlafondReferentiel(isset($data['plafond-referentiel']) ? FloatFromString::run($data['plafond-referentiel']) : 0);
+        $object->setServiceStatutaire(FloatFromString::run($data['service-statutaire']));
         if (array_key_exists('type-intervenant', $data)) {
             $object->setTypeIntervenant($this->getServiceTypeIntervenant()->get($data['type-intervenant']));
         }
@@ -418,15 +334,16 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setPeutSaisirServiceExt($data['peut-saisir-service-ext']);
         $object->setTemAtv($data['TEM-ATV']);
         $object->setTemBiatss($data['TEM-BIATSS']);
-        $object->setSourceCode($data['source-code']);
-        $object->setPlafondHcHorsRemuFc($data['plafond-h-h-c']);
-        $object->setPlafondHcRemuFc($data['plafond-h-c']);
+        $object->setSourceCode($data['code']);
+        $object->setPlafondHcHorsRemuFc(FloatFromString::run($data['plafond-h-h-c']));
+        $object->setPlafondHcRemuFc(FloatFromString::run($data['plafond-h-c']));
         $object->setPeutChoisirDansDossier($data['peut-choisir-dans-dossier']);
-        $object->setMaximumHETD($data['maximum-HETD']);
-        $object->setOrdre($data['ordre']);
+        $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
+
         return $object;
     }
+
 
 
     /**
@@ -439,27 +356,28 @@ class StatutIntervenantHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id' => $object->getId(),
-            'libelle' => $object->getLibelle(),
-            'service-statutaire' => $object->getServiceStatutaire(),
-            'plafond-referentiel' => $object->getPlafondReferentiel(),
-            'depassement' => $object->getDepassement(),
-            'non-autorise' => $object->getNonAutorise(),
-            'peut-saisir-service' => $object->getPeutSaisirService(),
-            'peut-saisir-referentiel' => $object->getPeutSaisirReferentiel(),
+            'id'                             => $object->getId(),
+            'libelle'                        => $object->getLibelle(),
+            'depassement'                     => $object->getDepassement(),
+            'service-statutaire'             => StringFromFloat::run($object->getServiceStatutaire()),
+            'plafond-referentiel'            => StringFromFloat::run($object->getPlafondReferentiel()),
+            'peut-choisir-dans-dossier' => $object->getPeutChoisirDansDossier(),
+            'peut-saisir-dossier' => $object->getPeutSaisirDossier(),
+            'non-autorise'                   => $object->getNonAutorise(),
+            'peut-saisir-service'            => $object->getPeutSaisirService(),
+            'peut-saisir-referentiel'        => $object->getPeutSaisirReferentiel(),
             'peut-saisir-motif-non-paiement' => $object->getPeutSaisirMotifNonPaiement(),
-            'peut-avoir-contrat' => $object->getPeutAvoirContrat(),
-            'peut-cloturer-saisie' => $object->getPeutCloturerSaisie(),
-            'peut-saisir-service-ext' => $object->getPeutSaisirServiceExt(),
-            'TEM-ATV' => $object->getTemAtv(),
-            'TEM-BIATSS' => $object->getTemBiatss(),
-            'type-intervenant' => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
-            'source-code' => $object->getSourceCode(),
-            'plafond-h-h-c' => $object->getPlafondHcHorsRemuFc(),
-            'plafond-h-c' => $object->getPlafondHcRemuFc(),
-            'maximum-HETD' => $object->getMaximumHETD(),
-            'ordre' => $object->getOrdre(),
-            'depassement-sdshc' => $object->getDepassementSDSHC(),
+            'peut-avoir-contrat'             => $object->getPeutAvoirContrat(),
+            'peut-cloturer-saisie'           => $object->getPeutCloturerSaisie(),
+            'peut-saisir-service-ext'        => $object->getPeutSaisirServiceExt(),
+            'TEM-ATV'                        => $object->getTemAtv(),
+            'TEM-BIATSS'                     => $object->getTemBiatss(),
+            'type-intervenant'               => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
+            'code'                           => $object->getSourceCode(),
+            'plafond-h-h-c'                  => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
+            'plafond-h-c'                    => $object->getPlafondHcRemuFc(),
+            'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
+            'depassement-sdshc'              => $object->getDepassementSDSHC(),
         ];
 
         return $data;

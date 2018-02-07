@@ -108,7 +108,6 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\PersonnelService::class     => Service\PersonnelService::class,
             Service\StructureService::class     => Service\StructureService::class,
             Service\TypeStructureService::class => Service\TypeStructureService::class,
         ],

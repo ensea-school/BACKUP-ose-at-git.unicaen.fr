@@ -201,7 +201,7 @@ EOS;
     {
         $js = $this->getJavascript();
 
-        $request          = $this->getView()->getHelperPluginManager()->getServiceLocator()->get('request');
+        $request          = \Application::$container->get('request');
         $isXmlHttpRequest = $request->isXmlHttpRequest();
 
         if ($isXmlHttpRequest) {

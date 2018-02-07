@@ -33,7 +33,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
 
         $cases = [
             'non-autorise'                   => "Intervenant non autorisé à figurer dans OSE",
-            "depassement"                    => "Dépassement autorisé",
+            "depassement"                    => "Dépassement autorisé du service statutaire",
             'peut-saisir-service'            => "Possibilité d'avoir des services d'enseignement",
             'peut-choisir-dans-dossier'      => "Ce statut pourra être choisi dans le dossier de l'intervenant",
             'peut-saisir-dossier'            => "Les intervenants ont un dossier",
@@ -213,7 +213,6 @@ class StatutIntervenantSaisieForm extends AbstractForm
      */
     public function getInputFilterSpecification()
     {
-//echo '<script>console.log(\'phrase:'.FloatFromString::run($this->get('plafond-h-c')->getValue()).'\');<script>';
         return [
             'libelle'             => [
                 'required' => true,

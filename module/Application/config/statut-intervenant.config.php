@@ -61,6 +61,19 @@ return [
                         ],
                         'may_terminate' => 'true',
                     ],
+                    'clone' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/clone/:statutIntervenant',
+                            'constraints' => [
+                                'statutIntervenant' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'clone',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -96,7 +109,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\StatutIntervenant',
-                    'action'     => ['delete','statut-intervenant-trier'],
+                    'action'     => ['delete','statut-intervenant-trier','clone'],
                     'privileges' => [Privileges::INTERVENANT_STATUT_EDITION],
                 ],
             ],

@@ -24,6 +24,8 @@ class ContextServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
+        $config =
+
         $service = new ContextService();
         $service->setServiceUserContext($container->get('UnicaenAuth\Service\UserContext'));
 

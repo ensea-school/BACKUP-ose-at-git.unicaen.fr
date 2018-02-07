@@ -98,7 +98,7 @@ class IndicateurProcessus extends AbstractProcessus
                 strip_tags($notification->getIndicateur()->getLibelle($structure))
             ))
             ->setBody($body)
-            ->addTo($notification->getAffectation()->getPersonnel()->getEmail(), (string)$notification->getAffectation()->getPersonnel());
+            ->addTo($notification->getAffectation()->getUtilisateur()->getEmail(), (string)$notification->getAffectation()->getUtilisateur());
 
         return $message;
     }

@@ -7,6 +7,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Processus\Traits\IndicateurProcessusAwareTrait;
 use Application\Entity\Db\Indicateur;
+use Application\Service\ContextService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
@@ -420,7 +421,10 @@ class IndicateurIntervenantsMailer
 
     public function getFrom()
     {
-        $from = $this->controller->getServiceContext()->getSelectedIdentityRole()->getPersonnel()->getEmail();
+        /** @var ContextService $context */
+        $context = $this->controller->getServiceContext();
+
+        $from = $context->getUtilisateur()->getEmail();
 
         return $from;
     }
@@ -429,9 +433,12 @@ class IndicateurIntervenantsMailer
 
     public function getDefaultSubject()
     {
+        /** @var ContextService $context */
+        $context = $this->controller->getServiceContext();
+
         $subject = sprintf("%s %s : %s",
             $this->controller->appInfos()->getNom(),
-            $this->controller->getServiceContext()->getAnnee(),
+            $context->getAnnee(),
             strip_tags($this->indicateur->getType())
         );
 
@@ -442,13 +449,14 @@ class IndicateurIntervenantsMailer
 
     public function getDefaultBody()
     {
-        $role     = $this->controller->getServiceContext()->getSelectedIdentityRole();
+        /** @var ContextService $context */
+        $context = $this->controller->getServiceContext();
 
         // corps au format HTML
         $html = $this->renderer->render('application/indicateur/mail/intervenants', [
             'phrase'    => $this->indicateur->getMessage(),
-            'signature' => $role->getPersonnel(),
-            'structure' => $role->getStructure(),
+            'signature' => $context->getUtilisateur(),
+            'structure' => $context->getStructure(),
         ]);
 
         return $html;

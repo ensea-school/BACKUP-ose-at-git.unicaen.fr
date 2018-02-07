@@ -6,7 +6,6 @@ use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\PersonnelServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
@@ -22,7 +21,6 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use EntityManagerAwareTrait;
     use SessionContainerTrait;
     use IntervenantServiceAwareTrait;
-    use PersonnelServiceAwareTrait;
     use ContextServiceAwareTrait;
 
     /**
@@ -59,8 +57,8 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */
-            if ($personnel = $this->getServiceContext()->getPersonnel()) {
-                foreach ($personnel->getAffectation() as $affectation) {
+            if ($utilisateur = $this->getServiceContext()->getUtilisateur()) {
+                foreach ($utilisateur->getAffectation() as $affectation) {
                     /* @var $affectation Affectation */
                     $roleId = $affectation->getRole()->getCode();
                     if ($structure = $affectation->getStructure()) {

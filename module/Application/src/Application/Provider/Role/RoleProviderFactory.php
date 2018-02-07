@@ -3,7 +3,6 @@
 namespace Application\Provider\Role;
 
 use Application\Service\ContextService;
-use Application\Service\PersonnelService;
 use Application\Service\StatutIntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use InvalidArgumentException;
@@ -45,7 +44,6 @@ class RoleProviderFactory implements FactoryInterface
         $roleProvider = new RoleProvider($providerConfig);
         $roleProvider
             ->setEntityManager($em)
-            ->setServicePersonnel($serviceLocator->get(PersonnelService::class))
             ->setServiceStatutIntervenant($serviceLocator->get(StatutIntervenantService::class))
             ->setServiceContext($serviceLocator->get(ContextService::class))
             ->setPrivilegeProvider($serviceLocator->get('UnicaenAuth\Privilege\PrivilegeProvider'))

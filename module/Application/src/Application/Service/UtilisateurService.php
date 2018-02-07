@@ -2,6 +2,10 @@
 
 namespace Application\Service;
 
+use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
+use Application\Entity\Db\Utilisateur;
+use Application\Service\Traits\ParametresServiceAwareTrait;
+
 /**
  * Description of Utilisateur
  *
@@ -9,6 +13,10 @@ namespace Application\Service;
  */
 class UtilisateurService extends AbstractEntityService
 {
+    use ParametresServiceAwareTrait;
+    use LdapConnecteurAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -18,8 +26,10 @@ class UtilisateurService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\Utilisateur::class;
+        return Utilisateur::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
@@ -29,5 +39,31 @@ class UtilisateurService extends AbstractEntityService
     public function getAlias()
     {
         return 'utilisateur';
+    }
+
+
+
+    /**
+     * Retourne le directeur des ressources humaines, s'il est défini.
+     *
+     * @return Utilisateur
+     */
+    public function getDrh()
+    {
+        $drh = $this->getServiceParametres()->get('directeur_ressources_humaines_id');
+
+        return $this->getByUsername($drh);
+    }
+
+
+
+    /**
+     * @param $username
+     *
+     * @return Utilisateur
+     */
+    public function getByUsername($username)
+    {
+        return $this->getConnecteurLdap()->getUtilisateur($username);
     }
 }

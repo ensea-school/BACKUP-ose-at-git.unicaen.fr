@@ -150,6 +150,7 @@ return [
             Provider\Identity\IdentityProvider::class => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class             => Service\Factory\ContextServiceFactory::class,
             'MouchardCompleterContext'                => MouchardCompleterContextFactory::class,
+            Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
         ],
     ],
     'view_helpers'       => [

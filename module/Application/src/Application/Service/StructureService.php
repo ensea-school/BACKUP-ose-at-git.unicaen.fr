@@ -69,59 +69,6 @@ class StructureService extends AbstractEntityService
 
 
     /**
-     * Recherche les adresses mails de contact d'une structure.
-     *
-     * Si une adresse de contact est spécifiée pour cette structure dans la table, on retourne cette adresse.
-     * Sinon, on recherche les personnes ayant un rôle spécifique dans la structure, en remontant la hiérarchie
-     * des structures mères tant que personne n'est trouvé (et si demandé).
-     *
-     * @param \Application\Entity\Db\Structure $structure          StructureService concernée
-     * @param boolean                          $remonterStructures Remonter les structures mères tant que personne n'est
-     *                                                             trouvé ?
-     *
-     * @return string[] mail => nom
-     */
-    public function getMailsContact(Structure $structure, $remonterStructures = true)
-    {
-        if ($structure->getContactPj()) {
-            return [$structure->getContactPj()];
-        }
-
-        $serviceAffectation = $this->getServiceAffectation();
-
-        $str = $structure;
-
-        // recherche des rôles dans la structure, en remontant la hiérarchie des structures si besoin et demandé
-        do {
-            // recherche de "gestionnaires"
-            $qb = $serviceAffectation->finderByRole(\Application\Entity\Db\Role::CODE_GESTIONNAIRE_COMPOSANTE);
-            $serviceAffectation->finderByStructure($str, $qb);
-            $roles = $serviceAffectation->getList($qb);
-
-            // recherche de "responsables"
-            $qb = $serviceAffectation->finderByRole(\Application\Entity\Db\Role::CODE_RESPONSABLE_COMPOSANTE);
-            $serviceAffectation->finderByStructure($str, $qb);
-            $roles += $serviceAffectation->getList($qb);
-
-            // on grimpe la hiérarchie des structures
-            $str = $str->getParente();
-        } while ($remonterStructures && !count($roles) && $str);
-
-        // mise en forme du résultat
-        $contacts = [];
-        foreach ($roles as $role) {
-            /* @var $role \Application\Entity\Db\Role */
-            $mail            = $role->getPersonnel()->getEmail();
-            $name            = $role->getPersonnel()->getNomUsuel() . ' ' . $role->getPersonnel()->getPrenom();
-            $contacts[$mail] = $name;
-        }
-
-        return $contacts;
-    }
-
-
-
-    /**
      * Si un rôle est spécifié, retourne la liste des structures pour lesquelles ce rôle est autorisé à officier.
      * Si <code>true</code> est spécifié, retourne la liste des structures associées à des rôles.
      *

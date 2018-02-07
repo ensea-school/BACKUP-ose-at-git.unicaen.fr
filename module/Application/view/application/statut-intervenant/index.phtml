@@ -56,6 +56,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
 <?php $this->headTitle()->append($title = "Gestion des types de statuts d'intervenants") ?>
 
 <h1 class="page-header"><?php echo $title ?></h1>
+
+<div class="alert alert-info">Un intervenant ne peut avoir qu'un seul statut dans OSE. Celui de rang plus élevé lui sera donné prioritairement en cas de doute.</div>
+
 <div class="panel-group triables" id="bloc" role="tablist" aria-multiselectable="true">
     <?php foreach ($statutsIntervenants as $ti){ ?>
         <div class="champ-triable panel panel-default" id="<?php echo $ti->getId() ?>">
@@ -69,7 +72,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::INTERVENANT_ST
                        data-id="<?php echo $ti->getId() ?>"
                        onclick="injecte(this); ">
                            <?php
-                           echo $ti->getLibelle();
+                           echo '<span class="badge">'.$ti->getTypeIntervenant()->getLibelle().'</span> '.$ti->getLibelle();
                            if ($canEdit) {
                                echo '<span class="pull-right glyphicon glyphicon-move"';
                                 echo 'title = "Vous pouvez trier les champs en déplaçant les lignes" ></span >&nbsp';

@@ -36,7 +36,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
             "depassement"                    => "Dépassement autorisé du service statutaire",
             'peut-saisir-service'            => "Possibilité d'avoir des services d'enseignement",
             'peut-choisir-dans-dossier'      => "Ce statut pourra être choisi dans le dossier de l'intervenant",
-            'peut-saisir-dossier'            => "Les intervenants ont un dossier",
+            'peut-saisir-dossier'            => "L'intervenant a un dossier personnel",
             'peut-saisir-referentiel'        => "Possibilité d'avoir des heures de référentiel",
             'peut-saisir-motif-non-paiement' => "Possibilité d'avoir des heures non payables (justifiées par un motif de non paiement)",
             'peut-avoir-contrat'             => "Possibilité d'éditer un contrat ou un avenant",

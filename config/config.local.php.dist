@@ -1,0 +1,138 @@
+<?php
+
+return [
+    /* Paramètres généraux */
+    'global' => [
+        /* Accès en mode HTTP ou HTTPS */
+        'scheme'           => 'http',
+
+        /* Adresse d'accès à OSE (sans mentionner http://, par exemple ose.unicaen.fr) */
+        'domain'           => 'ose.unicaen.fr',
+
+        /* Affichage complet des erreurs (false en production) */
+        'affichageErreurs' => true,
+    ],
+
+
+    /* Liens divers */
+    'liens'  => [
+        /* Mail d'assistance OSE de votre établissement */
+        'contactAssistance'      => 'assistance-ose@unicaen.fr',
+
+        /* Page web des mentions légales de votre établissement */
+        'mentionsLegales'        => "http://gest.unicaen.fr/acces-direct/mentions-legales/",
+
+        /* Page web mentionnant vos règles "informatique et liberté" */
+        'informatiqueEtLibertes' => "http://gest.unicaen.fr/acces-direct/informatique-et-libertes/",
+    ],
+
+
+    /* Base de données */
+    'bdd'    => [
+        /* IP ou nom DNS du serveur de base de données */
+        'host'            => 'xxx.unicaen.fr',
+
+        /* Port d'accès au serveur */
+        'port'            => 9999,
+
+        /* Nom de la base de données */
+        'dbname'          => 'dbname',
+
+        /* Nom d'utilisateur */
+        'username'        => 'ose',
+
+        /* Mot de passe */
+        'password'        => 'password',
+
+        /* Générer systématiquement les proxies de la base de données (utile uniquement en mode développement) */
+        'generateProxies' => true,
+
+    ],
+
+
+    /* Configuration LDAP */
+    'ldap'   => [
+        /* IP ou nom DNS de la machine hébergeant le serveur LDAP */
+        'host'                         => 'ldap.unicaen.fr',
+
+        /* UID d'accès au serveur (format uid=nom_utilisateur,ou=system,dc=mon_dc,dc=fr*/
+        'username'                     => "uid=xxx,ou=system,dc=unicaen,dc=fr",
+
+        /* Mot de passe de l'utilisateur système */
+        'password'                     => 'password',
+
+        /* DN par défaut */
+        'baseDn'                       => 'ou=people,dc=unicaen,dc=fr',
+
+        /* Port d'accès au serveur */
+        'port'                         => 389,
+
+        /* bindRequiresDn */
+        'bindRequiresDn'               => true,
+
+        /* Attribut LDAP correspondant au LOGIN de l'utilisateur */
+        'loginAttribute'               => 'supannAliasLogin',
+
+        /* Code de l'utilisateur.
+         * à rappchcher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
+        'utilisateurCode'              => 'supannEmpId',
+
+        /* Filtre pour la recherche d'utilisateurs */
+        'utilisateurFiltre'            => '(eduPersonAffiliation=member)(!(eduPersonAffiliation=student))',
+
+        /* DN des utilisateurs */
+        'utilisateursBaseDN'           => 'ou=people,dc=unicaen,dc=fr',
+
+        /* DN des utilisateurs désactivés (si besoin) */
+        'utilisateursDesactivesBaseDN' => 'ou=deactivated,dc=unicaen,dc=fr',
+
+        /* DN pour les groupes d'utilisateurs */
+        'groupsBaseDN'                 => 'ou=groups,dc=unicaen,dc=fr',
+
+        /* DN pour les structures présentes dans le LDAP (si besoin) */
+        'structuresBaseDN'             => 'ou=structures,dc=unicaen,dc=fr',
+
+        /* Attribut correspondant au code de la structure */
+        'structureCode'                => 'supannCodeEntite',
+    ],
+
+
+    /* Envoi de mails */
+    'mail'   => [
+        /* IP ou nom DNS du serveur SMTP */
+        'smtpHost'       => 'smtp.xxx.fr',
+
+        /* Port du serveur SMTP (généralement, 25) */
+        'smtpPort'       => 25,
+
+        /* Mails utilisés pour la redirection.
+         * Fournir sous forme de tableau, CURRENT_USER enverra les mails à l'utilisateur connecté qui a déclenché l'action) */
+        'redirection'    => ['mail@mon-domaine.fr'],
+
+        /* Envoi de mail activé ou non (OUI en production, normalement) */
+        'envoiDesactive' => false,
+    ],
+
+
+    /* CAS */
+    'cas'    => [
+        /* Détermine si OSE est cassifiée ou pas */
+        'actif'   => false,
+
+        /* IP ou nom DNS du serveur CAS */
+        'host'    => 'cas.xxx.fr',
+
+        /* Port */
+        'port'    => 443,
+
+        /* Version du serveur CAS */
+        'version' => '2.0',
+
+        /* URI éventuelle */
+        'uri'     => '',
+
+        /* Mode débogage (pour les tests uniquement) */
+        'debug'   => false,
+    ],
+
+];

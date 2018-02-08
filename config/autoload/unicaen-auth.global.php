@@ -1,10 +1,7 @@
 <?php
-/**
- * UnicaenAuth Global Configuration
- *
- * If you have a ./config/autoload/ directory set up for your project, you can
- * drop this config file in it and change the values as you wish.
- */
+
+$config = require __dir__ . '/../config.local.php';
+
 $settings = [
     /**
      * Flag indiquant si l'utilisateur authenitifié avec succès via l'annuaire LDAP doit
@@ -16,12 +13,23 @@ $settings = [
      * Allows users to register through the website.
      * Accepted values: boolean true or false
      */
-    'enable_registration' => false,
+    'enable_registration'        => false,
 
     'enable_privileges' => true,
 
     'entity_manager_name' => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
+
 ];
+
+if ($config['cas']['actif']) {
+    $settings['cas']['connection']['default']['params'] = [
+        'hostname' => $config['cas']['host'],
+        'port'     => $config['cas']['port'],
+        'version'  => $config['cas']['version'],
+        'uri'      => $config['cas']['uri'],
+        'debug'    => $config['cas']['debug'],
+    ];
+}
 
 $config = [
     'unicaen-auth' => $settings,

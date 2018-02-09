@@ -53,11 +53,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\TypeStructure
-     */
-    protected $type;
-
-    /**
      * @var \Application\Entity\Db\Etablissement
      */
     protected $etablissement;
@@ -249,34 +244,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\TypeStructure $type
-     *
-     * @return Structure
-     */
-    public function setType(\Application\Entity\Db\TypeStructure $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\TypeStructure
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
 

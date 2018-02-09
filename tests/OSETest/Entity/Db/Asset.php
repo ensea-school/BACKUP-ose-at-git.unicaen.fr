@@ -13,7 +13,6 @@ use Application\Entity\Db\RegimeSecu;
 use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Entity\Db\TypeStructure;
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
@@ -72,15 +71,7 @@ class Asset
         return $e;
     }
 
-    static public function newTypeStructure()
-    {
-        $e = new TypeStructure();
-        $e->setLibelle('Type de test');
-
-        return $e;
-    }
-
-    static public function newStructure(TypeStructure $typeStructure, Etablissement $etablissement, Structure $parente)
+    static public function newStructure(Etablissement $etablissement, Structure $parente)
     {
         $e = new Structure();
         $e
@@ -88,7 +79,6 @@ class Asset
                 ->setLibelleCourt(uniqid('TEST '))
                 ->setLibelleLong(uniqid('StructureService de test'))
                 ->setNiveau(2)
-                ->setType($typeStructure)
                 ->setParente($parente)
                 ->setParenteNiv2($e)
                 ->setSource(static::getSource())

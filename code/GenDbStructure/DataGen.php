@@ -2,12 +2,14 @@
 
 namespace GenDbStructure;
 
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\EntityManager;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 class DataGen
 {
     use EntityManagerAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      * @var array
@@ -17,23 +19,28 @@ class DataGen
     protected $breaks = false;
 
     protected $tablesSel  = [
-        //'AFFECTATION'                  => "source_code = 'local-aff-1-1'",
+        'AFFECTATION'                  => "source_code = 'local-aff-admin'",
         'ANNEE'                        => '',
         'CATEGORIE_PRIVILEGE'          => '',
+        'CC_ACTIVITE'                  => '',
         'CIVILITE'                     => '',
+        'DEPARTEMENT'                  => '',
         'DISCIPLINE'                   => '',
         'DOMAINE_FONCTIONNEL'          => "source_code = '000'",
+        'ETABLISSEMENT'                => '',
         'ETAT_VOLUME_HORAIRE'          => '',
         'FONCTION_REFERENTIEL'         => '',
+        'GRADE'                        => '',
         'GROUPE'                       => '',
+        'IMPORT_TABLES'                => '',
         'INDICATEUR'                   => '',
         'MESSAGE'                      => '',
         'MOTIF_MODIFICATION_SERVICE'   => '',
         'MOTIF_NON_PAIEMENT'           => '',
         'PARAMETRE'                    => '',
+        'PAYS'                         => '',
         'PERIMETRE'                    => '',
         'PERIODE'                      => '',
-        //'PERSONNEL'                    => "source_code = 'utilisateur-id-1'",
         'PLAFOND'                      => '',
         'PLAFOND_ETAT'                 => '',
         'PRIVILEGE'                    => '',
@@ -44,13 +51,12 @@ class DataGen
         'SOURCE'                       => "code='OSE'",
         'STATUT_INTERVENANT'           => '',
         'STATUT_PRIVILEGE'             => '',
-        //'STRUCTURE'                    => "source_code='UNIV'",
         'TAUX_HORAIRE_HETD'            => '',
         'TBL'                          => '',
         'TYPE_AGREMENT'                => '',
         'TYPE_AGREMENT_STATUT'         => '',
         'TYPE_CONTRAT'                 => '',
-        'TYPE_DOTATION'                => '',
+        'TYPE_DOTATION'                => "SOURCE_CODE IN ('dotation-initiale','dotation-complementaire','abondement')",
         'TYPE_HEURES'                  => '',
         'TYPE_INTERVENANT'             => '',
         'TYPE_INTERVENTION'            => "code IN ('CM','TD','TP','Stage','Projet','Mémoire')",

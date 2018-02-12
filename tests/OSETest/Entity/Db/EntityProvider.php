@@ -285,13 +285,7 @@ class EntityProvider
      */
     public function getStructure()
     {
-        $structure = Asset::newStructure($this->getEtablissement(), $this->getStructureRacine());
-
-        $this->getEntityManager()->persist($structure);
-
-        $this->newEntities->push($structure);
-
-        return $structure;
+        return null;
     }
 
     /**
@@ -338,7 +332,7 @@ class EntityProvider
             return $this->structureEns;
         }
 
-        $structureEns = Asset::newStructure($this->getEtablissement(), $this->getStructureRacine());
+        $structureEns = Asset::newStructure();
 
         $this->getEntityManager()->persist($structureEns);
 

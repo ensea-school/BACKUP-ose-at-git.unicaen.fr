@@ -71,16 +71,12 @@ class Asset
         return $e;
     }
 
-    static public function newStructure(Etablissement $etablissement, Structure $parente)
+    static public function newStructure()
     {
         $e = new Structure();
         $e
-                ->setEtablissement($etablissement)
                 ->setLibelleCourt(uniqid('TEST '))
                 ->setLibelleLong(uniqid('StructureService de test'))
-                ->setNiveau(2)
-                ->setParente($parente)
-                ->setParenteNiv2($e)
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
 
@@ -188,7 +184,6 @@ class Asset
         $e = new Service();
         $e
                 ->setElementPedagogique($elementPedagogique)
-                ->setEtablissement($intervenant->getStructure()->getEtablissement())
                 ->setIntervenant($intervenant)
                 ->setTypeVolumeHoraire($typeVolumeHoraire);
 

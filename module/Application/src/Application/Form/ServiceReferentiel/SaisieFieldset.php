@@ -154,7 +154,6 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
     {
         if (!$this->structures) {
             $qb = $this->getServiceStructure()->finderByEnseignement();
-            $this->getServiceStructure()->finderByNiveau(2, $qb);
             $univ = $this->getServiceStructure()->getRacine();
 
             $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);

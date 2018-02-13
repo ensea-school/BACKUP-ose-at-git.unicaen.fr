@@ -27,6 +27,8 @@ use Zend\Form\Element\Select;
 use Zend\Form\Element\Hidden;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Form\ElementInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 
@@ -35,8 +37,9 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
+class RechercheForm extends AbstractForm implements EntityManagerAwareInterface, ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
     use StructureServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
@@ -148,9 +151,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
         $this->add($typeIntervenant);
 
         $structures = $this->getServiceStructure()->getList(
-            $this->getServiceStructure()->finderByEnseignement(
-                $this->getServiceStructure()->finderByNiveau(2)
-            )
+            $this->getServiceStructure()->finderByEnseignement()
         );
         $this->add([
             'name'       => 'structure-aff',

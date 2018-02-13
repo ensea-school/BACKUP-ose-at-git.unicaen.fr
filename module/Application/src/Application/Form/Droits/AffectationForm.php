@@ -54,7 +54,6 @@ class AffectationForm extends AbstractForm
         $this->setAttribute('class', 'affectation-form');
 
         $qb = $this->getServiceStructure()->finderByEnseignement();
-        $this->getServiceStructure()->finderByNiveau(2, $qb);
         if ($structure) {
             $this->getServiceStructure()->finderById($structure->getId(), $qb);
         }

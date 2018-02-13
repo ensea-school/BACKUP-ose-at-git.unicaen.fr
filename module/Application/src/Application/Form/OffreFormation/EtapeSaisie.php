@@ -127,7 +127,7 @@ class EtapeSaisie extends AbstractForm
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
+        $qb               = $serviceStructure->finderByEnseignement();
         if ($structure = $role->getStructure()) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }

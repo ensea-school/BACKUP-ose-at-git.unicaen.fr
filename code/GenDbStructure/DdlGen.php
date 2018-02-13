@@ -65,6 +65,20 @@ class DdlGen
             $this->makeDdlQueries();
         }
 
+        $this->ddlQueries[self::VIEWS]['SRC_INTERVENANT'] = "CREATE OR REPLACE VIEW src_intervenant AS 
+SELECT
+  null source_code,
+  null nom_usuel,
+  null nom_patronymique,
+  null prenom,
+  null date_naissance,
+  null critere_recherche,
+  null structure_id,
+  null civilite_id,
+  null annee_id
+FROM
+  dual;";
+
         return $this->ddlQueries;
     }
 

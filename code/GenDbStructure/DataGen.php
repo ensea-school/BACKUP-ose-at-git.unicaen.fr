@@ -24,13 +24,14 @@ class DataGen
         'CATEGORIE_PRIVILEGE'          => '',
         'CC_ACTIVITE'                  => '',
         'CIVILITE'                     => '',
+        'CORPS'                        => '',
         'DEPARTEMENT'                  => '',
         'DISCIPLINE'                   => '',
         'DOMAINE_FONCTIONNEL'          => "source_code = '000'",
         'ETABLISSEMENT'                => '',
         'ETAT_VOLUME_HORAIRE'          => '',
         'FONCTION_REFERENTIEL'         => '',
-        'GRADE'                        => '',
+        'GRADE'                        => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
         'GROUPE'                       => '',
         'IMPORT_TABLES'                => '',
         'INDICATEUR'                   => '',
@@ -50,7 +51,7 @@ class DataGen
         'SCENARIO'                     => 'structure_id IS NULL',
         'SOURCE'                       => "code='OSE'",
         'STATUT_INTERVENANT'           => '',
-        'STATUT_PRIVILEGE'             => '',
+        'STATUT_PRIVILEGE'             => 'statut_id IN (SELECT si.id FROM statut_intervenant si WHERE si.histo_destruction IS NULL)',
         'TAUX_HORAIRE_HETD'            => '',
         'TBL'                          => '',
         'TYPE_AGREMENT'                => '',
@@ -318,13 +319,13 @@ class DataGen
             return "(SELECT id FROM domaine_fonctionnel WHERE source_code = ''000'')";
         }
 
-        if ('STRUCTURE_ID' == $column){
-            return "(SELECT id FROM structure WHERE source_code = ''UNIV'')";
-        }
-
         if ('PRIVILEGE_ID' == $column){
             $cppSql = "SELECT cp.code || '-' || p.code FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE p.id = privilege_id";
             return "(SELECT p.id FROM privilege p JOIN categorie_privilege cp ON p.categorie_id = cp.id WHERE cp.code || ''-'' || p.code = ''' ||($cppSql)|| ''')";
+        }
+
+        if ('ROLE_ID' == $column && $table == 'AFFECTATION'){
+            return "(SELECT id FROM role WHERE code = ''administrateur'')";
         }
 
 

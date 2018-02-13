@@ -65,20 +65,6 @@ class DdlGen
             $this->makeDdlQueries();
         }
 
-        $this->ddlQueries[self::VIEWS]['SRC_INTERVENANT'] = "CREATE OR REPLACE VIEW src_intervenant AS 
-SELECT
-  null source_code,
-  null nom_usuel,
-  null nom_patronymique,
-  null prenom,
-  null date_naissance,
-  null critere_recherche,
-  null structure_id,
-  null civilite_id,
-  null annee_id
-FROM
-  dual;";
-
         return $this->ddlQueries;
     }
 
@@ -121,6 +107,20 @@ FROM
                 }
             }
         }
+
+        $this->ddl[self::VIEWS]['SRC_INTERVENANT'] = "CREATE OR REPLACE VIEW src_intervenant AS 
+SELECT
+  null source_code,
+  null nom_usuel,
+  null nom_patronymique,
+  null prenom,
+  null date_naissance,
+  null critere_recherche,
+  null structure_id,
+  null civilite_id,
+  null annee_id
+FROM
+  dual;";
     }
 
 
@@ -150,6 +150,8 @@ FROM
         $this->makeDdl($types);
 
         $content = $this->comment1('DDL de la base de données OSE');
+
+        $content .= "\nSET DEFINE OFF;\n\n\n";
 
         foreach ($this->ddl as $type => $query) {
             $content .= $this->comment1($type);

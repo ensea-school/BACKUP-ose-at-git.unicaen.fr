@@ -1,136 +1,252 @@
 <?php
 
-use Application\Service\ContextService;
-use Application\Service\SourceService;
-use Application\Service\WorkflowService;
+use Application\Entity\Db\Utilisateur;
+use Application\Service\Traits\AffectationServiceAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
-function creerAdmin($sl, array $admin)
+
+class LocalUser
 {
+    /**
+     * @var string
+     */
+    public $login;
 
-    /** @var \Doctrine\ORM\EntityManager $em */
-    $em = $sl->get(\Application\Constants::BDD);
+    /**
+     * @var string
+     */
+    public $civilite = 'Monsieur';
 
-    /** @var \Application\Service\ContextService $serviceContext */
-    $serviceContext = $sl->get(ContextService::class);
+    /**
+     * @var string
+     */
+    public $nom;
 
-    /** @var \Application\Service\SourceService $serviceSource */
-    $serviceSource = $sl->get(SourceService::class);
+    /**
+     * @var string
+     */
+    public $prenom;
 
-    /** @var \Application\Service\WorkflowService $serviceWorkflow */
-    $serviceWorkflow = $sl->get(WorkflowService::class);
+    /**
+     * @var string
+     */
+    public $mail = 'ne-pas-repondre@unicaen.fr';
+
+    /**
+     * @var string
+     */
+    public $motDePasse;
+
+    /**
+     * @var string
+     */
+    public $role = 'administrateur';
+
+    /**
+     * @var string
+     */
+    public $statut;
+
+    /**
+     * @var string
+     */
+    public $structure = 'C68'; // DSI Unicaen
 
 
-    $nom        = $admin['nom'];
-    $prenom     = $admin['prenom'];
-    $mail       = isset($admin['mail']) ? $admin['mail'] : 'ne-pas-repondre@unicaen.fr';
-    $login      = $admin['login'];
-    $bcrypt     = new Zend\Crypt\Password\Bcrypt();
-    $motdepasse = $bcrypt->create($admin['motdepasse']);
-    $role       = isset($admin['role']) ? $admin['role'] : 'administrateur';
-    $statut     = isset($admin['statut']) ? $admin['statut'] : null;
-    $structure  = isset($admin['structure']) ? $admin['structure'] : 'C68';
 
-    $structure = $em->getRepository(\Application\Entity\Db\Structure::class)->findOneBy(['sourceCode' => $structure])->getId();
-    if ($statut) {
-        $statut = $em->getRepository(\Application\Entity\Db\StatutIntervenant::class)->findOneBy(['sourceCode' => $statut])->getId();
-        $role   = null;
-    } else {
-        $role = $em->getRepository(\Application\Entity\Db\Role::class)->findOneBy(['code' => $role])->getId();
-    }
-    $civilite = $em->getRepository(\Application\Entity\Db\Civilite::class)->findOneBy(['libelleLong' => $admin['civilite']])->getId();
+    static public function createFromArray(array $array)
+    {
+        $lu = new self();
+        if (isset($array['login'])) $lu->login = $array['login'];
+        if (isset($array['civilite'])) $lu->civilite = $array['civilite'];
+        if (isset($array['nom'])) $lu->nom = $array['nom'];
+        if (isset($array['prenom'])) $lu->prenom = $array['prenom'];
+        if (isset($array['mail'])) $lu->mail = $array['mail'];
+        if (isset($array['motdepasse'])) $lu->motDePasse = $array['motdepasse'];
+        if (isset($array['role'])) $lu->role = $array['role'];
+        if (isset($array['statut'])) $lu->statut = $array['statut'];
+        if (isset($array['structure'])) $lu->structure = $array['structure'];
 
-    $source      = $serviceSource->getOse()->getId();
-    $utilisateur = $serviceContext->getUtilisateur()->getId();
-    $pays = $em->getRepository(\Application\Entity\Db\Pays::class)->findOneBy(['libelleCourt' => 'FRANCE'])->getId();
-
-    $uid = $em->getConnection()->fetchAssoc('SELECT utilisateur_id_seq.nextval UTILID FROM dual');
-    $uid = (int)$uid['UTILID'];
-
-    $em->getConnection()->insert('utilisateur', [
-        'id'           => $uid,
-        'username'     => $login,
-        'password'     => $motdepasse,
-        'display_name' => $nom . ' ' . $prenom,
-        'email'        => $mail,
-        'state'        => 1,
-    ]);
-
-    if ($role) {
-
-        $pid = $em->getConnection()->fetchAssoc('SELECT personnel_id_seq.nextval PERSID FROM dual');
-        $pid = (int)$pid['PERSID'];
-
-        $em->getConnection()->insert('personnel', [
-            'id'                    => $pid,
-            'civilite_id'           => $civilite,
-            'nom_usuel'             => $nom,
-            'prenom'                => $prenom,
-            'nom_patronymique'      => $nom,
-            'email'                 => $mail,
-            'structure_id'          => $structure,
-            'source_id'             => $source,
-            'source_code'           => 'utilisateur-id-' . $uid,
-            'histo_creation'        => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
-            'histo_createur_id'     => $utilisateur,
-            'histo_modification'    => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
-            'histo_modificateur_id' => $utilisateur,
-            'code'                  => 'utilisateur-id-' . $uid,
-        ]);
-
-        $aid = $em->getConnection()->fetchAssoc('SELECT affectation_id_seq.nextval AFFID FROM dual');
-        $aid = (int)$aid['AFFID'];
-        $em->getConnection()->insert('affectation', [
-            'id'                    => $aid,
-            'personnel_id'          => $pid,
-            'role_id'               => $role,
-            'source_id'             => $source,
-            'source_code'           => 'local-aff-' . $pid . '-' . $role,
-            'histo_creation'        => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
-            'histo_createur_id'     => $utilisateur,
-            'histo_modification'    => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
-            'histo_modificateur_id' => $utilisateur,
-        ]);
+        return $lu;
     }
 
-    if ($statut) {
-        $iid = $em->getConnection()->fetchAssoc('SELECT intervenant_id_seq.nextval INTID FROM dual');
-        $iid = (int)$iid['INTID'];
 
-        $em->getConnection()->insert('intervenant', [
-            'id'                         => $iid,
-            'civilite_id'                => $civilite,
-            'nom_usuel'                  => $nom,
-            'prenom'                     => $prenom,
-            'nom_patronymique'           => $nom,
-            'date_naissance'             => $em->getConnection()->convertToDatabaseValue(\DateTime::createFromFormat('Y-m-d', '1980-09-27'), 'datetime'),
-            'ville_naissance_code_insee' => 76540,
-            'email'                      => $mail,
-            'statut_id'                  => $statut,
-            'structure_id'               => $structure,
-            'source_id'                  => $source,
-            'source_code'                => 'utilisateur-id-' . $uid,
-            'code'                       => 'utilisateur-id-' . $uid,
-            'supann_emp_id'              => 'utilisateur-id-' . $uid,
-            'annee_id'                   => $serviceContext->getAnnee()->getId(),
-            'pays_naissance_id'          => $pays, // France
-            'histo_creation'             => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
-            'histo_createur_id'          => $utilisateur,
-            'histo_modification'         => $em->getConnection()->convertToDatabaseValue(new \DateTime(), 'datetime'),
-            'histo_modificateur_id'      => $utilisateur,
-        ]);
 
-        $intervenant = $em->getRepository(\Application\Entity\Db\Intervenant::class)->find($iid);
-        $serviceWorkflow->calculerTableauxBord(null,$intervenant);
+    public function html()
+    {
+        $url = 'https://ose.unicaen.fr/demo';
+
+        ?>
+        <table class="table table-bordered table-condensed" style="border:1;">
+            <tr>
+                <th>Nom prénom</th>
+                <td><?= $this->nom.' '.$this->prenom ?></td>
+            </tr>
+            <tr>
+                <th>Login</th>
+                <td><?= $this->login ?></td>
+            </tr>
+            <tr>
+                <th>Mot de passe</th>
+                <td><?= $this->motDePasse ?></td>
+            </tr>
+            <tr>
+                <th>URL d'accès à OSE démo</th>
+                <td><a href="<?= $url ?>"><?= $url ?></a></td>
+            </tr>
+        </table><br />
+        <?php
     }
 }
 
-$admins = [
 
 
 
 
+class LocalUserMaker
+{
+    use EntityManagerAwareTrait;
+    use ContextServiceAwareTrait;
+    use SourceServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
+    use AffectationServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
+
+
+
+    public function creer(LocalUser $localUser)
+    {
+        $utilisateur = new Utilisateur();
+        $utilisateur->setDisplayName($localUser->nom . ' ' . $localUser->prenom);
+        $utilisateur->setEmail($localUser->mail);
+        $utilisateur->setUsername($localUser->login);
+        $utilisateur->setPassword($localUser->motDePasse, true);
+        $utilisateur->setState(1);
+
+        $this->getServiceUtilisateur()->save($utilisateur);
+
+        if ($localUser->role) {
+            $this->creerAffectation($localUser, $utilisateur);
+        }
+
+        if ($localUser->statut) {
+            $utilisateur->setCode(999999 + $utilisateur->getId());
+            $this->getServiceUtilisateur()->save($utilisateur);
+            $this->creerIntervenant($localUser, $utilisateur);
+        }
+    }
+
+
+
+    private function creerAffectation(LocalUser $localUser, Utilisateur $utilisateur)
+    {
+        $affectation = $this->getServiceAffectation()->newEntity();
+        $affectation->setUtilisateur($utilisateur);
+        $affectation->setSourceCode('local-aff-'.$utilisateur->getUsername());
+
+        $role = $this->getEntity('Role','code',$localUser->role);
+        $affectation->setRole($role);
+
+        $this->getServiceAffectation()->save($affectation);
+    }
+
+
+
+    private function creerIntervenant(LocalUser $localUser, Utilisateur $utilisateur)
+    {
+        $intervenant = $this->getServiceIntervenant()->newEntity();
+
+        $civilite = $this->getEntity('Civilite', 'libelleLong', $localUser->civilite);
+        $intervenant->setCivilite($civilite);
+        $intervenant->setNomUsuel($localUser->nom);
+        $intervenant->setNomPatronymique($localUser->nom);
+        $intervenant->setPrenom($localUser->prenom);
+
+        $dateNaissance = \DateTime::createFromFormat('Y-m-d', '1980-09-27');
+        $intervenant->setDateNaissance($dateNaissance);
+        $intervenant->setVilleNaissanceCodeInsee(76540);
+        $intervenant->setEmail($localUser->mail);
+
+        $statut = $this->getEntity('StatutIntervenant', 'sourceCode', $localUser->statut);
+        $intervenant->setStatut($statut);
+
+        $structure = $this->getEntity('Structure', 'sourceCode', $localUser->structure);
+        $intervenant->setStructure($structure);
+        $intervenant->setSourceCode($utilisateur->getCode());
+        $intervenant->setCode($utilisateur->getCode());
+        $intervenant->setUtilisateurCode($utilisateur->getCode());
+        $intervenant->setAnnee($this->getServiceContext()->getAnnee());
+
+        $france = $this->getEntity('Pays', 'libelleCourt', 'FRANCE');
+        $intervenant->setPaysNaissance($france);
+
+        $this->getServiceIntervenant()->save($intervenant);
+
+        $this->getServiceWorkflow()->calculerTableauxBord(null, $intervenant);
+    }
+
+
+
+    private function getEntity($class, $attribute, $value)
+    {
+        $entityClass = "Application\\Entity\\Db\\$class";
+        $repo = $this->getEntityManager()->getRepository($entityClass);
+
+        return $repo->findOneBy([$attribute => $value]);
+    }
+}
+
+$lum = new LocalUserMaker();
+$lum->setEntityManager($sl->get(\Application\Constants::BDD));
+
+if (isset($_POST['lud'])){
+    eval($_POST['lud']);
+}else{
+    $utilisateurs = [];
+}
+
+$default = "
+\$utilisateurs = [
+    [
+        'civilite'   => 'Madame', // ou Monsieur
+        'nom'        => '',
+        'prenom'     => '',
+        'login'      => '',
+        'motdepasse' => '',
+        //'mail'       => '',
+        //'statut'     => '',
+        'role'       => 'administrateur',
+        //'structure'  => 'U10', // IAE = U10 pour l'exemple
+    ],
 ];
+";
 
-foreach ($admins as $admin) {
-    creerAdmin($sl, $admin);
+if (!empty($utilisateurs)){
+    echo '<h1>Utilisateurs créés</h1>';
+
+    foreach ($utilisateurs as $utilisateur) {
+        $localUser = LocalUser::createFromArray($utilisateur);
+
+        $lum->creer($localUser);
+        echo '<div class="row"><div class="col-md-8 col-md-offset-2">';
+        $localUser->html();
+        echo '</div></div>';
+    }
 }
+
+?>
+<h1>Création de comptes utilisateurs</h1>
+<form method="post">
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <pre><textarea id="lud" name="lud" class="form-control" rows="30"><?= $default ?></textarea></pre>
+        <button type="submit" class="btn btn-primary" id="luc">Créer les utilisateurs</button>
+    </div>
+</div>
+</form>

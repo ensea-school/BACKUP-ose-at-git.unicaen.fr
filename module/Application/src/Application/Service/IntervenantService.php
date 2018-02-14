@@ -10,6 +10,7 @@ use Application\Entity\Db\TypeIntervenant;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
@@ -21,6 +22,10 @@ use UnicaenImport\Processus\Traits\ImportProcessusAwareTrait;
  * Description of Intervenant
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method Intervenant get($id)
+ * @method Intervenant[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Intervenant newEntity()
  */
 class IntervenantService extends AbstractEntityService
 {
@@ -29,6 +34,7 @@ class IntervenantService extends AbstractEntityService
     use MiseEnPaiementServiceAwareTrait;
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use SourceServiceAwareTrait;
 
 
 
@@ -210,6 +216,10 @@ class IntervenantService extends AbstractEntityService
                 'Le montant annuel de la rémunération FC D714-60 dépasse le plafond autorisé qui est de '
                 . StringFromFloat::run($plafondHcRemuFc) . ' €.'
             );
+        }
+
+        if (!$entity->getSource()){
+            $entity->setSource($this->getServiceSource()->getOse());
         }
 
         return parent::save($entity);

@@ -750,6 +750,8 @@ $.widget("ose.chargens", {
         var that = this;
         var $ = go.GraphObject.make;
 
+        go.licenseKey = "73ff44e0b11c28c702d95d76423d38f919a42a63c98449a30c0416f6ef086c46729cec7059c19bc6d5a846fd182dc08ddac76028c01e553eb03887d811e4d1f8b23123b01d00178bf15474c09dfd2aa9a82d70f7c2e120a68a788ee0fbae96cc5ae8a18449d81eb828780f2e5561af4e";
+
         var highlightColor = "#00A1FF";
 
         var yellowGradient = [

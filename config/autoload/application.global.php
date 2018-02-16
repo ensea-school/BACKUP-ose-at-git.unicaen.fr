@@ -1,8 +1,8 @@
 <?php
 
-$config = require __dir__ . '/../config.local.php';
+$localConfig = require(__DIR__ . '/application.local.php');
 
-if ($config['global']['affichageErreurs']) {
+if ($localConfig['global']['affichageErreurs']) {
     error_reporting(E_ALL);
 }
 putenv("NLS_LANGUAGE=FRENCH");
@@ -13,11 +13,11 @@ return [
         'connection'    => [
             'orm_default' => [
                 'params' => [
-                    'host'     => $config['bdd']['host'],
-                    'port'     => $config['bdd']['port'],
-                    'dbname'   => $config['bdd']['dbname'],
-                    'user'     => $config['bdd']['username'],
-                    'password' => $config['bdd']['password'],
+                    'host'     => $localConfig['bdd']['host'],
+                    'port'     => $localConfig['bdd']['port'],
+                    'dbname'   => $localConfig['bdd']['dbname'],
+                    'user'     => $localConfig['bdd']['username'],
+                    'password' => $localConfig['bdd']['password'],
                     'charset'  => 'AL32UTF8',
                 ],
             ],
@@ -28,17 +28,17 @@ return [
                 //                'query_cache'      => 'array',
                 'result_cache'     => 'array',
                 'hydration_cache'  => 'array',
-                'generate_proxies' => $config['bdd']['generateProxies'],
+                'generate_proxies' => $localConfig['bdd']['generateProxies'],
             ],
         ],
     ],
     'view_manager' => [
-        'display_not_found_reason' => $config['global']['affichageErreurs'],
-        'display_exceptions'       => $config['global']['affichageErreurs'],
+        'display_not_found_reason' => $localConfig['global']['affichageErreurs'],
+        'display_exceptions'       => $localConfig['global']['affichageErreurs'],
     ],
     'cli_config'   => [
-        'scheme' => $config['global']['scheme'],
-        'domain' => $config['global']['domain'],
+        'scheme' => $localConfig['global']['scheme'],
+        'domain' => $localConfig['global']['domain'],
     ],
 
 ];

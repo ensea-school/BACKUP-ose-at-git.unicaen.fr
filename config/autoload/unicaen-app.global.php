@@ -1,6 +1,6 @@
 <?php
 
-$config = require __dir__ . '/../config.local.php';
+$localConfig = require(__DIR__ . '/application.local.php');
 
 return [
     'unicaen-app' => [
@@ -13,9 +13,9 @@ return [
             'desc'                   => "Organisation des Services d'Enseignement",
             'version'                => "6.1",
             'date'                   => "20/12/2017",
-            'contact'                => ['mail' => $config['liens']['contactAssistance']],
-            'mentionsLegales'        => $config['liens']['mentionsLegales'],
-            'informatiqueEtLibertes' => $config['liens']['informatiqueEtLibertes'],
+            'contact'                => ['mail' => $localConfig['liens']['contactAssistance']],
+            'mentionsLegales'        => $localConfig['liens']['mentionsLegales'],
+            'informatiqueEtLibertes' => $localConfig['liens']['informatiqueEtLibertes'],
         ],
 
         /**
@@ -27,33 +27,33 @@ return [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => $config['ldap']['host'],
-                        'username'            => $config['ldap']['username'],
-                        'password'            => $config['ldap']['password'],
-                        'baseDn'              => $config['ldap']['baseDn'],
-                        'bindRequiresDn'      => $config['ldap']['bindRequiresDn'],
-                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . $config['ldap']['loginAttribute'] . "=%s))",
-                        'port'                => $config['ldap']['port'],
+                        'host'                => $localConfig['ldap']['host'],
+                        'username'            => $localConfig['ldap']['username'],
+                        'password'            => $localConfig['ldap']['password'],
+                        'baseDn'              => $localConfig['ldap']['baseDn'],
+                        'bindRequiresDn'      => $localConfig['ldap']['bindRequiresDn'],
+                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . $localConfig['ldap']['loginAttribute'] . "=%s))",
+                        'port'                => $localConfig['ldap']['port'],
                     ],
                 ],
             ],
             'dn'          => [
-                'UTILISATEURS_BASE_DN'            => $config['ldap']['utilisateursBaseDN'],
-                'UTILISATEURS_DESACTIVES_BASE_DN' => $config['ldap']['utilisateursDesactivesBaseDN'],
-                'GROUPS_BASE_DN'                  => $config['ldap']['groupsBaseDN'],
-                'STRUCTURES_BASE_DN'              => $config['ldap']['structuresBaseDN'],
+                'UTILISATEURS_BASE_DN'            => $localConfig['ldap']['utilisateursBaseDN'],
+                'UTILISATEURS_DESACTIVES_BASE_DN' => $localConfig['ldap']['utilisateursDesactivesBaseDN'],
+                'GROUPS_BASE_DN'                  => $localConfig['ldap']['groupsBaseDN'],
+                'STRUCTURES_BASE_DN'              => $localConfig['ldap']['structuresBaseDN'],
             ],
             'filters'     => [
-                'LOGIN_FILTER'                 => '(' . $config['ldap']['loginAttribute'] . '=%s)',
-                'LOGIN_OR_NAME_FILTER'         => '(|(' . $config['ldap']['loginAttribute'] . '=%s)(cn=%s*))',
+                'LOGIN_FILTER'                 => '(' . $localConfig['ldap']['loginAttribute'] . '=%s)',
+                'LOGIN_OR_NAME_FILTER'         => '(|(' . $localConfig['ldap']['loginAttribute'] . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
-                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . $config['ldap']['structureCode'] . '=%s)',
-                'NO_INDIVIDU_FILTER'           => '(' . $config['ldap']['utilisateurCode'] . '=%08s)',
+                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . $localConfig['ldap']['structureCode'] . '=%s)',
+                'NO_INDIVIDU_FILTER'           => '(' . $localConfig['ldap']['utilisateurCode'] . '=%08s)',
             ],
             'utilisateur' => [
-                'LOGIN'  => $config['ldap']['loginAttribute'],
-                'FILTER' => $config['ldap']['utilisateurFiltre'],
-                'CODE'   => $config['ldap']['utilisateurCode'],
+                'LOGIN'  => $localConfig['ldap']['loginAttribute'],
+                'FILTER' => $localConfig['ldap']['utilisateurFiltre'],
+                'CODE'   => $localConfig['ldap']['utilisateurCode'],
             ],
         ],
 
@@ -63,13 +63,13 @@ return [
         'mail' => [
             // transport des mails
             'transport_options' => [
-                'host' => $config['mail']['smtpHost'],
-                'port' => $config['mail']['smtpPort'],
+                'host' => $localConfig['mail']['smtpHost'],
+                'port' => $localConfig['mail']['smtpPort'],
             ],
             // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
-            'redirect_to'       => $config['mail']['redirection'],
+            'redirect_to'       => $localConfig['mail']['redirection'],
             // désactivation totale de l'envoi de mail par l'application
-            'do_not_send'       => $config['mail']['envoiDesactive'],
+            'do_not_send'       => $localConfig['mail']['envoiDesactive'],
         ],
     ],
 ];

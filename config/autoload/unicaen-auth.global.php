@@ -1,6 +1,6 @@
 <?php
 
-$config = require __dir__ . '/../config.local.php';
+$localConfig = require(__DIR__ . '/application.local.php');
 
 $settings = [
     /**
@@ -21,17 +21,17 @@ $settings = [
 
 ];
 
-if ($config['cas']['actif']) {
+if ($localConfig['cas']['actif']) {
     $settings['cas']['connection']['default']['params'] = [
-        'hostname' => $config['cas']['host'],
-        'port'     => $config['cas']['port'],
-        'version'  => $config['cas']['version'],
-        'uri'      => $config['cas']['uri'],
-        'debug'    => $config['cas']['debug'],
+        'hostname' => $localConfig['cas']['host'],
+        'port'     => $localConfig['cas']['port'],
+        'version'  => $localConfig['cas']['version'],
+        'uri'      => $localConfig['cas']['uri'],
+        'debug'    => $localConfig['cas']['debug'],
     ];
 }
 
-$config = [
+$localConfig = [
     'unicaen-auth' => $settings,
     'bjyauthorize' => [
         /* this module uses a meta-role that inherits from any roles that should
@@ -121,4 +121,4 @@ if ($settings['enable_privileges']) {
     $privileges = [];
 }
 
-return array_merge_recursive($config, $privileges);
+return array_merge_recursive($localConfig, $privileges);

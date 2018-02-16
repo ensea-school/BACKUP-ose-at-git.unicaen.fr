@@ -1,5 +1,4 @@
 config/autoload/*.local.php
-config/config.local.php
 vendor
 composer.lock
 data/cache

@@ -12,7 +12,6 @@ use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Structure;
-use Application\Entity\Db\TypeStructure;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\VolumeHoraire;
@@ -34,7 +33,6 @@ use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\Contrat;
 use Application\Entity\Db\TypeContrat;
-use Common\ORM\Event\Listeners\HistoriqueListener;
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
 use LogicException;
@@ -70,11 +68,6 @@ class EntityProvider
     private $civilite;
 
     /**
-     * @var TypeStructure
-     */
-    private $typeStructure;
-
-    /**
      * @var Structure
      */
     private $structureRacine;
@@ -98,11 +91,6 @@ class EntityProvider
      * @var TypeContrat[]
      */
     private $typesContrat;
-
-    /**
-     * @var TypeStructure
-     */
-    private $typeStructureEns;
 
     /**
      * @var TypeValidation[]
@@ -291,56 +279,13 @@ class EntityProvider
     }
 
     /**
-     * Recherche et retourne le premier TypeStructure trouvé.
-     *
-     * @return TypeStructure
-     */
-    public function getTypeStructure()
-    {
-        if (null === $this->typeStructure) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeStructure')->createQueryBuilder("ts");
-            $this->typeStructure = $qb->getQuery()->setMaxResults(1)->getSingleResult();
-            if (!$this->typeStructure) {
-                throw new RuntimeException("Aucun type de structure trouvé.");
-            }
-        }
-
-        return $this->typeStructure;
-    }
-
-    /**
-     * Recherche et retourne un TypeStructure *enseignement* quelconque.
-     *
-     * @return TypeStructure
-     */
-    public function getTypeStructureEns()
-    {
-        if (null === $this->typeStructureEns) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeStructure')->createQueryBuilder("ts")
-                    ->andWhere("ts.enseignement = 1");
-            $this->typeStructureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
-            if (!$this->typeStructureEns) {
-                throw new RuntimeException("TypeStructure enseignement quelconque introuvable.");
-            }
-        }
-
-        return $this->typeStructureEns;
-    }
-
-    /**
      * Retourne à chaque appel une nouvelle instance de StructureService persistée.
      *
      * @return Structure
      */
     public function getStructure()
     {
-        $structure = Asset::newStructure($this->getTypeStructure(), $this->getEtablissement(), $this->getStructureRacine());
-
-        $this->getEntityManager()->persist($structure);
-
-        $this->newEntities->push($structure);
-
-        return $structure;
+        return null;
     }
 
     /**
@@ -387,7 +332,7 @@ class EntityProvider
             return $this->structureEns;
         }
 
-        $structureEns = Asset::newStructure($this->getTypeStructureByCode(), $this->getEtablissement(), $this->getStructureRacine());
+        $structureEns = Asset::newStructure();
 
         $this->getEntityManager()->persist($structureEns);
 

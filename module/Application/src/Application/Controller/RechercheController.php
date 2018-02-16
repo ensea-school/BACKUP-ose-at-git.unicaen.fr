@@ -2,10 +2,9 @@
 
 namespace Application\Controller;
 
-use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Constants;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
-use Application\Service\StructureService;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -14,7 +13,7 @@ use Zend\View\Model\JsonModel;
  */
 class RechercheController extends AbstractController
 {
-    use LdapConnecteurAwareTrait;
+    use UtilisateurServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
 
 
@@ -56,7 +55,7 @@ class RechercheController extends AbstractController
             return new JsonModel([]);
         }
 
-        $result = @$this->getConnecteurLdap()->rechercheUtilisateurs($term);
+        $result = $this->getServiceUtilisateur()->rechercheUtilisateurs($term);
 
         return new JsonModel($result);
     }

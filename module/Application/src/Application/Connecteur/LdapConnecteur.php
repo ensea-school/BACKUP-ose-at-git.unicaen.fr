@@ -92,8 +92,9 @@ class LdapConnecteur extends AbstractService
             /* @var $foundUsers People[] */
 
             foreach ($foundUsers as $ldapPeople) {
-                $result[] = [
-                    'id'    => $ldapPeople->getData(strtolower($this->getUtilisateurLogin())),
+                $id = $ldapPeople->getData(strtolower($this->getUtilisateurLogin()));
+                $result[$id] = [
+                    'id'    => $id,
                     'label' => $ldapPeople->getCn(),
                     'extra' => " - " . implode(" - ", [
                             current($ldapPeople->getAffectationsAdmin($this->mapperStructure, true)),
@@ -102,7 +103,7 @@ class LdapConnecteur extends AbstractService
             }
         }
 
-        return array_values($result);
+        return $result;
     }
 
 

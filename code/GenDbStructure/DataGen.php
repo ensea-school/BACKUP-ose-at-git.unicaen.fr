@@ -2,12 +2,16 @@
 
 namespace GenDbStructure;
 
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Doctrine\ORM\EntityManager;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 class DataGen
 {
     use EntityManagerAwareTrait;
+    use SourceServiceAwareTrait;
+
+    const OSE_USER = 'oseappli';
 
     /**
      * @var array
@@ -17,23 +21,29 @@ class DataGen
     protected $breaks = false;
 
     protected $tablesSel  = [
-        //'AFFECTATION'                  => "source_code = 'local-aff-1-1'",
+        'AFFECTATION'                  => "source_code = 'local-aff-admin'",
         'ANNEE'                        => '',
         'CATEGORIE_PRIVILEGE'          => '',
+        'CC_ACTIVITE'                  => '',
         'CIVILITE'                     => '',
+        'CORPS'                        => '',
+        'DEPARTEMENT'                  => '',
         'DISCIPLINE'                   => '',
-        'DOMAINE_FONCTIONNEL'          => "source_code = '000'",
+        'DOMAINE_FONCTIONNEL'          => '',
+        'ETABLISSEMENT'                => '',
         'ETAT_VOLUME_HORAIRE'          => '',
         'FONCTION_REFERENTIEL'         => '',
+        'GRADE'                        => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
         'GROUPE'                       => '',
+        'IMPORT_TABLES'                => '',
         'INDICATEUR'                   => '',
         'MESSAGE'                      => '',
         'MOTIF_MODIFICATION_SERVICE'   => '',
         'MOTIF_NON_PAIEMENT'           => '',
         'PARAMETRE'                    => '',
+        'PAYS'                         => '',
         'PERIMETRE'                    => '',
         'PERIODE'                      => '',
-        //'PERSONNEL'                    => "source_code = 'utilisateur-id-1'",
         'PLAFOND'                      => '',
         'PLAFOND_ETAT'                 => '',
         'PRIVILEGE'                    => '',
@@ -43,14 +53,13 @@ class DataGen
         'SCENARIO'                     => 'structure_id IS NULL',
         'SOURCE'                       => "code='OSE'",
         'STATUT_INTERVENANT'           => '',
-        'STATUT_PRIVILEGE'             => '',
-        //'STRUCTURE'                    => "source_code='UNIV'",
+        'STATUT_PRIVILEGE'             => 'statut_id IN (SELECT si.id FROM statut_intervenant si WHERE si.histo_destruction IS NULL)',
         'TAUX_HORAIRE_HETD'            => '',
         'TBL'                          => '',
         'TYPE_AGREMENT'                => '',
         'TYPE_AGREMENT_STATUT'         => '',
         'TYPE_CONTRAT'                 => '',
-        'TYPE_DOTATION'                => '',
+        'TYPE_DOTATION'                => "SOURCE_CODE IN ('dotation-initiale','dotation-complementaire','abondement')",
         'TYPE_HEURES'                  => '',
         'TYPE_INTERVENANT'             => '',
         'TYPE_INTERVENTION'            => "code IN ('CM','TD','TP','Stage','Projet','Mémoire')",
@@ -60,7 +69,7 @@ class DataGen
         'TYPE_STRUCTURE'               => '',
         'TYPE_VALIDATION'              => '',
         'TYPE_VOLUME_HORAIRE'          => '',
-        'UTILISATEUR'                  => "username = 'admin'",
+        'UTILISATEUR'                  => "username = '".self::OSE_USER."'",
         'WF_ETAPE'                     => '',
         'WF_ETAPE_DEP'                 => '',
     ];
@@ -308,17 +317,13 @@ class DataGen
             return 'TYPE_HEURES_ID_SEQ.CURRVAL';
         }
 
-        if ('DOMAINE_FONCTIONNEL_ID' == $column){
-            return "(SELECT id FROM domaine_fonctionnel WHERE source_code = ''000'')";
-        }
-
-        if ('STRUCTURE_ID' == $column){
-            return "(SELECT id FROM structure WHERE source_code = ''UNIV'')";
-        }
-
         if ('PRIVILEGE_ID' == $column){
             $cppSql = "SELECT cp.code || '-' || p.code FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE p.id = privilege_id";
             return "(SELECT p.id FROM privilege p JOIN categorie_privilege cp ON p.categorie_id = cp.id WHERE cp.code || ''-'' || p.code = ''' ||($cppSql)|| ''')";
+        }
+
+        if ('ROLE_ID' == $column && $table == 'AFFECTATION'){
+            return "(SELECT id FROM role WHERE code = ''administrateur'')";
         }
 
 

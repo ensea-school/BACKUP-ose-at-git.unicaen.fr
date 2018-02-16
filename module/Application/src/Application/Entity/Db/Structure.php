@@ -38,11 +38,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     protected $libelleLong;
 
     /**
-     * @var integer
-     */
-    protected $niveau;
-
-    /**
      * @var string
      */
     protected $contactPj;
@@ -51,21 +46,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\TypeStructure
-     */
-    protected $type;
-
-    /**
-     * @var \Application\Entity\Db\Etablissement
-     */
-    protected $etablissement;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $parente;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -186,34 +166,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
     /**
-     * Set niveau
-     *
-     * @param integer $niveau
-     *
-     * @return Structure
-     */
-    public function setNiveau($niveau)
-    {
-        $this->niveau = $niveau;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get niveau
-     *
-     * @return integer
-     */
-    public function getNiveau()
-    {
-        return $this->niveau;
-    }
-
-
-
-    /**
      * Set contactPj
      *
      * @param string $contactPj
@@ -249,90 +201,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\TypeStructure $type
-     *
-     * @return Structure
-     */
-    public function setType(\Application\Entity\Db\TypeStructure $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\TypeStructure
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-
-
-    /**
-     * Set etablissement
-     *
-     * @param \Application\Entity\Db\Etablissement $etablissement
-     *
-     * @return Structure
-     */
-    public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
-    {
-        $this->etablissement = $etablissement;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get etablissement
-     *
-     * @return \Application\Entity\Db\Etablissement
-     */
-    public function getEtablissement()
-    {
-        return $this->etablissement;
-    }
-
-
-
-    /**
-     * Set parente
-     *
-     * @param \Application\Entity\Db\Structure $parente
-     *
-     * @return Structure
-     */
-    public function setParente(\Application\Entity\Db\Structure $parente = null)
-    {
-        $this->parente = $parente;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get parente
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getParente()
-    {
-        return $this->parente;
     }
 
 

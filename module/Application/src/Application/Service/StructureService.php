@@ -180,7 +180,6 @@ class StructureService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere('('.$alias.'.enseignement = 1 OR EXISTS (SELECT ep FROM Application\Entity\Db\ElementPedagogique ep WHERE ep.structure = ' . $alias . '))');
-        $this->finderByNiveau(2, $qb, $alias);
 
         return $qb;
     }

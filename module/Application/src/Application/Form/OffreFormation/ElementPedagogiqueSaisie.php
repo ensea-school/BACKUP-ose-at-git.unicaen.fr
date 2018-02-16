@@ -175,7 +175,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
 
         // peuplement liste des structures
         $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
+        $qb               = $serviceStructure->finderByEnseignement();
         $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
         if ($structure = $localContext->getStructure()) {
             $this->get('structure')->setValue($structure->getId());

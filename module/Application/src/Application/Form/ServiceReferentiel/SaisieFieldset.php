@@ -154,7 +154,6 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
     {
         if (!$this->structures) {
             $qb = $this->getServiceStructure()->finderByEnseignement();
-            $this->getServiceStructure()->finderByNiveau(2, $qb);
             $univ = $this->getServiceStructure()->getRacine();
 
             $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);
@@ -235,7 +234,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
         // si aucune structure n'est associée à la fonction, on vérifie simplement que la structure sélectionnée est de niveau 2
         if (!$structureFonction) {
             $callback = function () use ($structureSaisie) {
-                return $structureSaisie->getNiveau() === 2;
+                return true;
             };
             $message  = "Composante d'enseignement requise";
         } // si une structure est associée à la fonction, la structure sélectionnée soit être celle-là

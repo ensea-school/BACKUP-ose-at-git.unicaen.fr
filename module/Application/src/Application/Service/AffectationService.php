@@ -11,6 +11,10 @@ use Application\Entity\Db\Affectation;
  * Description of AffectationService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method Affectation get($id)
+ * @method Affectation[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Affectation newEntity()
  */
 class AffectationService extends AbstractEntityService
 {

@@ -15,8 +15,8 @@ return [
                 'options'       => [
                     'route'    => '/chargens',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Chargens',
-                        'action'        => 'INDEX',
+                        'controller' => 'Application\Controller\Chargens',
+                        'action'     => 'INDEX',
                     ],
                 ],
                 'child_routes'  => [
@@ -359,8 +359,8 @@ return [
             Assertion\ChargensAssertion::class => Assertion\ChargensAssertion::class,
         ],
         'factories'  => [
-            Service\Factory\SeuilChargeServiceFactory::class => Service\Factory\SeuilChargeServiceFactory::class,
-            Provider\Chargens\ChargensProvider::class        => Provider\Chargens\ChargensProviderFactory::class,
+            Service\SeuilChargeService::class         => Service\Factory\SeuilChargeServiceFactory::class,
+            Provider\Chargens\ChargensProvider::class => Provider\Chargens\ChargensProviderFactory::class,
         ],
     ],
     'view_helpers'    => [

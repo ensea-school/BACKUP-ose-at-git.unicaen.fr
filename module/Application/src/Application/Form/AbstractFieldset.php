@@ -3,6 +3,7 @@
 namespace Application\Form;
 
 use Zend\Form\Fieldset;
+use Zend\InputFilter\InputFilterProviderInterface;
 
 abstract class AbstractFieldset extends Fieldset implements InputFilterProviderInterface
 {

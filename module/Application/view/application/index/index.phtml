@@ -10,6 +10,9 @@ echo $this->messenger()->addMessagesFromFlashMessenger();
 
 $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 
+$intervenant = $context->getIntervenant();
+$onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()->getDbRole());
+
 ?>
     <div class="jumbotron">
         <h1><span class="appname"><span class="c1">O</span><span class="c2">S</span><span class="c3">E</span></span>
@@ -21,7 +24,7 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
         <?php
         if ($context->getUtilisateur()) {
 
-            if ($intervenant = $context->getIntervenant()) {
+            if ($onlyIntervenant) {
                 if ($intervenant->getStatut()->getNonAutorise()) {
 
                     ?><p>
@@ -85,6 +88,6 @@ $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_A
 
     <!----------------------------- Feuille de route --------------------------->
 <?php
-if ($intervenant = $context->getIntervenant()) {
+if ($onlyIntervenant) {
     echo $this->feuillederoute($intervenant);
 }

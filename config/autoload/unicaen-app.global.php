@@ -48,6 +48,7 @@ return [
                 'LOGIN_OR_NAME_FILTER'         => '(|(' . $config['ldap']['loginAttribute'] . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
                 'FILTER_STRUCTURE_CODE_ENTITE' => '(' . $config['ldap']['structureCode'] . '=%s)',
+                'NO_INDIVIDU_FILTER'           => '(' . $config['ldap']['utilisateurCode'] . '=%08s)',
             ],
             'utilisateur' => [
                 'LOGIN'  => $config['ldap']['loginAttribute'],

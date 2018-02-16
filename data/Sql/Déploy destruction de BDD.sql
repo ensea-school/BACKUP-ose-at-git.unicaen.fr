@@ -26,4 +26,18 @@ FROM ALL_TABLES WHERE owner='DEPLOY'
 -- répétition pour ne rien oublier!!!
 UNION SELECT 'DROP TABLE ' || table_name || ';' dsql
 FROM ALL_TABLES WHERE owner='DEPLOY'
-;
+
+-- jobs
+--UNION SELECT '
+--/
+--BEGIN
+--    DBMS_SCHEDULER.DROP_JOB(job_name => ''MAJ_ALL_TBL'', defer => false, force => true);
+--    DBMS_SCHEDULER.DROP_JOB(job_name => ''OSE_CHARGENS_CALCUL_EFFECTIFS'', defer => false, force => true);
+--    DBMS_SCHEDULER.DROP_JOB(job_name => ''OSE_FORMULE_REFRESH'', defer => false, force => true);
+--    DBMS_SCHEDULER.DROP_JOB(job_name => ''OSE_SRC_SYNC'', defer => false, force => true);
+--    DBMS_SCHEDULER.DROP_JOB(job_name => ''PURGE_EM_NON_FC'', defer => false, force => true);
+--END;
+--' dsql
+--FROM dual
+--;
+

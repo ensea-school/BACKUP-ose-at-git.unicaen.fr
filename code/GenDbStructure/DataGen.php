@@ -11,6 +11,8 @@ class DataGen
     use EntityManagerAwareTrait;
     use SourceServiceAwareTrait;
 
+    const OSE_USER = 'oseappli';
+
     /**
      * @var array
      */
@@ -27,7 +29,7 @@ class DataGen
         'CORPS'                        => '',
         'DEPARTEMENT'                  => '',
         'DISCIPLINE'                   => '',
-        'DOMAINE_FONCTIONNEL'          => "source_code = '000'",
+        'DOMAINE_FONCTIONNEL'          => '',
         'ETABLISSEMENT'                => '',
         'ETAT_VOLUME_HORAIRE'          => '',
         'FONCTION_REFERENTIEL'         => '',
@@ -67,7 +69,7 @@ class DataGen
         'TYPE_STRUCTURE'               => '',
         'TYPE_VALIDATION'              => '',
         'TYPE_VOLUME_HORAIRE'          => '',
-        'UTILISATEUR'                  => "username = 'admin'",
+        'UTILISATEUR'                  => "username = '".self::OSE_USER."'",
         'WF_ETAPE'                     => '',
         'WF_ETAPE_DEP'                 => '',
     ];
@@ -313,10 +315,6 @@ class DataGen
 
         if ('TYPE_HEURES_ELEMENT_ID' == $column && 'TYPE_HEURES' == $table){
             return 'TYPE_HEURES_ID_SEQ.CURRVAL';
-        }
-
-        if ('DOMAINE_FONCTIONNEL_ID' == $column){
-            return "(SELECT id FROM domaine_fonctionnel WHERE source_code = ''000'')";
         }
 
         if ('PRIVILEGE_ID' == $column){

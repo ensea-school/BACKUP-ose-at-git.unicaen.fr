@@ -1,5 +1,6 @@
 <?php
 /* @var $this Application\View\Renderer\PhpRenderer */
+
 /* @var $context ContextService */
 
 use Application\Provider\Privilege\Privileges;
@@ -10,7 +11,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger();
 
 $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 
-$intervenant = $context->getIntervenant();
+$intervenant     = $context->getIntervenant();
 $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()->getDbRole());
 
 ?>
@@ -30,15 +31,15 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                     ?><p>
                     <div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div></p><?php
                 } else {
-                    echo $this->tag('div')->html( $this->feuillederoute($intervenant)->renderCurrentBtn() );
+                    echo $this->tag('div')->html($this->feuillederoute($intervenant)->renderCurrentBtn());
 
                     /* Guide à télécharger... */
                     $guideType = $intervenant->getStatut()->estVacataire() ? 'guide_ose_vacataire' : 'guide_ose_permanent';
-                    $guideUrl = $this->basePath().'/doc/intervenant/'.$guideType.'.pdf';
+                    $guideUrl  = $this->basePath() . '/doc/intervenant/' . $guideType . '.pdf';
                     echo $this->tag('div', ['class' => 'alert alert-info', 'style' => 'margin-top:1em', 'role' => 'alert'])->html(
                         'Un guide d\'utilisation de OSE vous est proposé. Vous pouvez le télécharger en suivant le lien ci-contre : '
-                        .$this->tag('a', ['href' => $guideUrl])->html(
-                            $this->tag('span', ['class' => 'glyphicon glyphicon-book'])->openClose().' Guide d\'utilisation'
+                        . $this->tag('a', ['href' => $guideUrl])->html(
+                            $this->tag('span', ['class' => 'glyphicon glyphicon-book'])->openClose() . ' Guide d\'utilisation'
                         )
                     );
                 }

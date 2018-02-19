@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -108,6 +109,8 @@ class Dossier implements HistoriqueAwareInterface
      */
     protected $villeNaissance;
 
+
+
     /**
      *
      */
@@ -116,10 +119,13 @@ class Dossier implements HistoriqueAwareInterface
         $this->pieceJointe = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+
     /**
      * Set adresse
      *
      * @param string $adresse
+     *
      * @return Dossier
      */
     public function setAdresse($adresse)
@@ -128,6 +134,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get adresse
@@ -139,10 +147,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->adresse;
     }
 
+
+
     /**
      * Set civilite
      *
      * @param Civilite $civilite
+     *
      * @return Dossier
      */
     public function setCivilite(Civilite $civilite)
@@ -151,6 +162,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get civilite
@@ -162,10 +175,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->civilite;
     }
 
+
+
     /**
      * Set email
      *
      * @param string $email
+     *
      * @return Dossier
      */
     public function setEmail($email)
@@ -174,6 +190,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get email
@@ -185,10 +203,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->email;
     }
 
+
+
     /**
      * Set emailPerso
      *
      * @param string $emailPerso
+     *
      * @return Dossier
      */
     public function setEmailPerso($emailPerso)
@@ -197,6 +218,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get emailPerso
@@ -208,10 +231,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->emailPerso;
     }
 
+
+
     /**
      * Set telephone
      *
      * @param string $telephone
+     *
      * @return Dossier
      */
     public function setTelephone($telephone)
@@ -220,6 +246,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get telephone
@@ -231,10 +259,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->telephone;
     }
 
+
+
     /**
      * Set nomPatronymique
      *
      * @param string $nomPatronymique
+     *
      * @return Dossier
      */
     public function setNomPatronymique($nomPatronymique)
@@ -243,6 +274,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get nomPatronymique
@@ -254,10 +287,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->nomPatronymique;
     }
 
+
+
     /**
      * Set nomUsuel
      *
      * @param string $nomUsuel
+     *
      * @return Dossier
      */
     public function setNomUsuel($nomUsuel)
@@ -266,6 +302,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get nomUsuel
@@ -277,10 +315,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->nomUsuel;
     }
 
+
+
     /**
      * Set numeroInsee
      *
      * @param string $numeroInsee
+     *
      * @return Dossier
      */
     public function setNumeroInsee($numeroInsee)
@@ -289,6 +330,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get numeroInsee
@@ -300,10 +343,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->numeroInsee;
     }
 
+
+
     /**
      * Set numeroInseeEstProvisoire
      *
      * @param boolean $numeroInseeEstProvisoire
+     *
      * @return Dossier
      */
     public function setNumeroInseeEstProvisoire($numeroInseeEstProvisoire)
@@ -312,6 +358,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get numeroInseeEstProvisoire
@@ -323,10 +371,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->numeroInseeEstProvisoire;
     }
 
+
+
     /**
      * Set prenom
      *
      * @param string $prenom
+     *
      * @return Dossier
      */
     public function setPrenom($prenom)
@@ -335,6 +386,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get prenom
@@ -346,10 +399,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->prenom;
     }
 
+
+
     /**
      * Set rib
      *
      * @param string $rib
+     *
      * @return Dossier
      */
     public function setRib($rib)
@@ -358,6 +414,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get rib
@@ -369,10 +427,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->rib;
     }
 
+
+
     /**
      * Set statut
      *
      * @param StatutIntervenant $statut
+     *
      * @return Dossier
      */
     public function setStatut(StatutIntervenant $statut = null)
@@ -381,6 +442,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get statut
@@ -392,10 +455,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->statut;
     }
 
+
+
     /**
      * Set premierRecrutement
      *
      * @param boolean $premierRecrutement
+     *
      * @return Dossier
      */
     public function setPremierRecrutement($premierRecrutement)
@@ -404,6 +470,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get premierRecrutement
@@ -415,6 +483,8 @@ class Dossier implements HistoriqueAwareInterface
         return $this->premierRecrutement;
     }
 
+
+
     /**
      * Get id
      *
@@ -425,6 +495,8 @@ class Dossier implements HistoriqueAwareInterface
         return $this->id;
     }
 
+
+
     /**
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -433,6 +505,8 @@ class Dossier implements HistoriqueAwareInterface
     {
         return $this->pieceJointe;
     }
+
+
 
     /**
      *
@@ -445,9 +519,12 @@ class Dossier implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      *
      * @param PieceJointe $pieceJointe
+     *
      * @return self
      */
     public function removePieceJointe(PieceJointe $pieceJointe)
@@ -457,20 +534,27 @@ class Dossier implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Set dateNaissance
      *
      * @param \DateTime $dateNaissance
+     *
      * @return self
      */
     public function setDateNaissance($dateNaissance)
     {
-        $dateNaissance->setTime(0, 0, 0);
+        if ($dateNaissance) {
+            $dateNaissance->setTime(0, 0, 0);
+        }
 
         $this->dateNaissance = $dateNaissance;
 
         return $this;
     }
+
+
 
     /**
      * Get dateNaissance
@@ -482,10 +566,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->dateNaissance;
     }
 
+
+
     /**
      * Set paysNaissance
      *
      * @param Pays $paysNaissance
+     *
      * @return self
      */
     public function setPaysNaissance($paysNaissance)
@@ -494,6 +581,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get paysNaissance
@@ -505,10 +594,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->paysNaissance;
     }
 
+
+
     /**
      * Set departementNaissance
      *
      * @param Departement $departementNaissance
+     *
      * @return self
      */
     public function setDepartementNaissance($departementNaissance)
@@ -517,6 +609,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get departementNaissance
@@ -528,10 +622,13 @@ class Dossier implements HistoriqueAwareInterface
         return $this->departementNaissance;
     }
 
+
+
     /**
      * Set villeNaissance
      *
      * @param string $villeNaissance
+     *
      * @return self
      */
     public function setVilleNaissance($villeNaissance)
@@ -540,6 +637,8 @@ class Dossier implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get villeNaissance
@@ -551,29 +650,32 @@ class Dossier implements HistoriqueAwareInterface
         return $this->villeNaissance;
     }
 
+
+
     /**
      *
      * @param \Application\Entity\Db\Intervenant $intervenant
+     *
      * @return \Application\Entity\Db\Dossier
      */
     public function fromIntervenant(Intervenant $intervenant)
     {
         $this
-                ->setIntervenant($intervenant)
-                ->setNomUsuel($intervenant->getNomUsuel())
-                ->setNomPatronymique($intervenant->getNomPatronymique())
-                ->setPrenom($intervenant->getPrenom())
-                ->setCivilite($intervenant->getCivilite())
-                ->setDateNaissance($intervenant->getDateNaissance())
-                ->setPaysNaissance($intervenant->getPaysNaissance())
-                ->setDepartementNaissance($intervenant->getDepNaissance())
-                ->setVilleNaissance($intervenant->getVilleNaissanceLibelle())
-                ->setNumeroInsee($intervenant->getNumeroInsee() . $intervenant->getNumeroInseeCle())
-                ->setAdresse((string) $intervenant->getAdressePrincipale())
-                ->setEmail($intervenant->getEmail())
-                ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
-                ->setStatut($intervenant->getStatut())
-                ->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()));
+            ->setIntervenant($intervenant)
+            ->setNomUsuel($intervenant->getNomUsuel())
+            ->setNomPatronymique($intervenant->getNomPatronymique())
+            ->setPrenom($intervenant->getPrenom())
+            ->setCivilite($intervenant->getCivilite())
+            ->setDateNaissance($intervenant->getDateNaissance())
+            ->setPaysNaissance($intervenant->getPaysNaissance())
+            ->setDepartementNaissance($intervenant->getDepNaissance())
+            ->setVilleNaissance($intervenant->getVilleNaissanceLibelle())
+            ->setNumeroInsee($intervenant->getNumeroInsee() . $intervenant->getNumeroInseeCle())
+            ->setAdresse((string)$intervenant->getAdressePrincipale())
+            ->setEmail($intervenant->getEmail())
+            ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
+            ->setStatut($intervenant->getStatut())
+            ->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()));
 
         return $this;
     }

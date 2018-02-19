@@ -4,3 +4,4 @@ composer.lock
 data/cache
 data/DoctrineORMModule
 .idea
+deploy.log

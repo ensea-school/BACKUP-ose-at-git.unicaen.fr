@@ -210,14 +210,6 @@ class IntervenantService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $plafondHcRemuFc = $entity->getStatut()->getPlafondHcRemuFc();
-        if ($entity->getMontantIndemniteFc() > $plafondHcRemuFc) {
-            throw new \RuntimeException(
-                'Le montant annuel de la rémunération FC D714-60 dépasse le plafond autorisé qui est de '
-                . StringFromFloat::run($plafondHcRemuFc) . ' €.'
-            );
-        }
-
         if (!$entity->getSource()){
             $entity->setSource($this->getServiceSource()->getOse());
         }

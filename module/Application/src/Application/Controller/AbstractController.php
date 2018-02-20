@@ -57,6 +57,11 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function pdf()
     {
+        $pdfPath = getcwd().'/data/cache/mpdf/';
+        if (!file_exists($pdfPath)){
+            mkdir($pdfPath);
+        }
+        define('_MPDF_TTFONTDATAPATH', $pdfPath);
         return new Pdf(\Application::$container->get('view_manager')->getRenderer());
     }
 }

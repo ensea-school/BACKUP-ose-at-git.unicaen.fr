@@ -29,6 +29,7 @@ return [
                 'result_cache'     => 'array',
                 'hydration_cache'  => 'array',
                 'generate_proxies' => $localConfig['bdd']['generateProxies'],
+                'proxy_dir'        => 'data/cache/DoctrineProxy',
             ],
         ],
     ],

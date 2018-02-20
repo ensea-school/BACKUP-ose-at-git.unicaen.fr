@@ -5,6 +5,10 @@
         {
             "type": "composer",
             "url": "https://dev.unicaen.fr/packagist"
+        },
+        {
+            "type": "vcs",
+            "url": "https://git.unicaen.fr/dsi/lib/unicaen-auth"
         }
     ],
     "require": {

@@ -320,8 +320,7 @@ return [
                         'pages' => [
                             'dossier-pj' => [
                                 'icon'         => 'glyphicon glyphicon-file',
-                                'label'        => "Dossier et pièces justificatives",
-                                'title'        => "Dossier et pièces justificatives",
+                                'label'        => "Dossiers et pièces justificatives",
                                 'route'        => 'piece-jointe/configuration',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\PieceJointe', 'configuration'),
                                 'order'        => 90,

@@ -95,8 +95,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'type-intervention' => [
-                                'label'        => 'Type d\'intervention',
-                                'title'        => 'Type d\'intervention',
+                                'label'        => 'Types d\'interventions',
                                 'icon'         => 'fa  fa-commenting',
                                 'route'        => 'type-intervention',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\TypeIntervention', 'index'),

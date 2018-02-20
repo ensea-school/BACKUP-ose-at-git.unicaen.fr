@@ -16,7 +16,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'unicaen-tbl' => [
-                                'label'    => 'Tableaux de bord',
+                                'label'    => 'Tableaux de bord internes de calcul intermédiaire',
                                 'order'    => 1,
                                 'route'    => 'unicaen-tbl',
                                 'resource' => PrivilegeController::getResourceId(AdminController::class, 'index'),

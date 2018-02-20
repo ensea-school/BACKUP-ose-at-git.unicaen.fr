@@ -6,12 +6,12 @@
 
 use Application\Provider\Privilege\Privileges;
 
-$this->headTitle()->append("Gestion du référentiel fonctionnel");
+$this->headTitle()->append("Référentiel fonctions");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_ADMIN_EDITION));
 
 ?>
-    <h1 class="page-header">Gestion du référentiel fonctionnel</h1>
+    <h1 class="page-header">Référentiel fonctions</h1>
 
     <table class="table table-bordered table-sort">
         <thead>

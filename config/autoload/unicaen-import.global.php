@@ -22,7 +22,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'import' => [
-                                'label'    => 'Import',
+                                'label'    => 'Synchronisation',
                                 'order'    => 1,
                                 'route'    => 'import',
                                 'resource' => PrivilegeController::getResourceId('Import\Controller\Import', 'index'),

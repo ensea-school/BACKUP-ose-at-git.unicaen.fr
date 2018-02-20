@@ -85,8 +85,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'statut-intervenant' => [
-                                'label'        => 'Statuts Intervenants',
-                                'title'        => 'Satuts Intervenants',
+                                'label'        => 'Statuts des intervenants',
                                 'icon'         => 'fa fa-graduation-cap',
                                 'route'        => 'statut-intervenant',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\StatutIntervenant', 'index'),

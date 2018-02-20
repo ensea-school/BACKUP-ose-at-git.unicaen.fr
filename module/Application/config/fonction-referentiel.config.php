@@ -56,8 +56,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'fonction-referentiel' => [
-                                'label'        => 'Fonctions référentiel',
-                                'title'        => 'Fonctions référentiel',
+                                'label'        => 'Référentiel fonctions',
                                 'icon'         => 'fa fa-graduation-cap',
                                 'route'        => 'fonction-referentiel',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\FonctionReferentiel', 'index'),

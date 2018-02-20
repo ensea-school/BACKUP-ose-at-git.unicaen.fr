@@ -1,6 +1,17 @@
 <?php
 
+/**
+ * @var $this       \Application\View\Renderer\PhpRenderer
+ * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $viewName   string
+ * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ */
+
+
+use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Utilisateur;
+use Application\Service\RoleService;
+use Application\Service\StatutIntervenantService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
@@ -8,6 +19,7 @@ use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use Application\Entity\Db\Role;
 
 
 class LocalUser
@@ -211,7 +223,7 @@ if (isset($_POST['lud'])){
     $utilisateurs = [];
 }
 
-$default = "
+$default = $utilisateurs ? $_POST['lud'] : "
 \$utilisateurs = [
     [
         'civilite'   => 'Madame', // ou Monsieur
@@ -228,25 +240,55 @@ $default = "
 ";
 
 if (!empty($utilisateurs)){
-    echo '<h1>Utilisateurs créés</h1>';
+    $lum->getEntityManager()->getConnection()->beginTransaction();
+    try {
+        echo '<h1>Utilisateurs créés</h1>';
+        foreach ($utilisateurs as $utilisateur) {
+            $localUser = LocalUser::createFromArray($utilisateur);
 
-    foreach ($utilisateurs as $utilisateur) {
-        $localUser = LocalUser::createFromArray($utilisateur);
-
-        $lum->creer($localUser);
-        echo '<div class="row"><div class="col-md-8 col-md-offset-2">';
-        $localUser->html();
-        echo '</div></div>';
+            $lum->creer($localUser);
+            echo '<div class="row"><div class="col-md-8 col-md-offset-2">';
+            $localUser->html();
+            echo '</div></div>';
+        }
+        $lum->getEntityManager()->getConnection()->commit();
+    }catch(\EXception $e){
+        $lum->getEntityManager()->getConnection()->rollBack();
+        echo $this->messenger()->addMessage($e->getMessage(), 'danger');
     }
+
 }
 
 ?>
 <h1>Création de comptes utilisateurs</h1>
 <form method="post">
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-7">
         <pre><textarea id="lud" name="lud" class="form-control" rows="30"><?= $default ?></textarea></pre>
         <button type="submit" class="btn btn-primary" id="luc">Créer les utilisateurs</button>
+    </div>
+    <div class="col-md-5" style="font-size:8pt">
+        <h2>Statuts</h2>
+        <?php
+        /** @var StatutIntervenant[] $statuts */
+        $statuts = $sl->get(StatutIntervenantService::class)->getList();
+           echo '<table class="table table-bordered table-condensed table-extra-condensed">';
+           foreach( $statuts as $statut ){
+               echo '<tr><td>'.$statut->getSourceCode().'</td><td>'.$statut->getLibelle().'</td></tr>';
+           }
+           echo '</table>';
+        ?>
+
+        <h2>Rôles</h2>
+        <?php
+        /** @var Role[] $roles */
+        $roles = $sl->get(RoleService::class)->getList();
+        echo '<table class="table table-bordered table-condensed table-extra-condensed">';
+        foreach( $roles as $role ){
+            echo '<tr><td>'.$role->getCode().'</td><td>'.$role->getLibelle().'</td></tr>';
+        }
+        echo '</table>';
+        ?>
     </div>
 </div>
 </form>

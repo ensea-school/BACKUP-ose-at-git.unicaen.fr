@@ -50,6 +50,17 @@ class StatutIntervenant extends AbstractEntityService
     }
 
     /**
+     * @return int
+     */
+    public function fetchMaxOrdre()
+    {
+        $sql = 'SELECT MAX(ordre) max_ordre FROM statut_intervenant WHERE histo_destruction IS NULL';
+
+        $res = $this->getEntityManager()->getConnection()->fetchColumn($sql);
+        return (int)$res;
+    }
+
+    /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
      * @return \Application\Entity\Db\TypeDotation

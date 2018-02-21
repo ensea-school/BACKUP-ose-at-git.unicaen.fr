@@ -375,7 +375,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'type-intervenant'               => ($s = $object->getTypeIntervenant()) ? $s->getId() : null,
             'code'                           => $object->getSourceCode(),
             'plafond-h-h-c'                  => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
-            'plafond-h-c'                    => $object->getPlafondHcRemuFc(),
+            'plafond-h-c'                    => StringFromFloat::run($object->getPlafondHcRemuFc()),
             'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
             'depassement-sdshc'              => $object->getDepassementSDSHC(),
         ];

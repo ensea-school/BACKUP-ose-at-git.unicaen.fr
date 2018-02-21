@@ -36,8 +36,14 @@ class StatutIntervenantController extends AbstractController
         $form = $this->getFormStatutIntervenantSaisie();
         if (empty($statutIntervenant)) {
             //$title = 'Création d\'un nouveau statut d\'intervenant';
+            $tblSi=$this->getServiceStatutIntervenant()->getList();
+            $ordre=0;
+            foreach($tblSi as $eltSi){
+                if ($eltSi->getOrdre() > $ordre) $ordre=$eltSi->getOrdre();
+            }
+            $ordre++;
             $statutIntervenant = $this->getServiceStatutIntervenant()->newEntity();
-            $statutIntervenant->setOrdre(9999);
+            $statutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre()+1);
         } else {
             $title = 'Édition d\'un statut d\'intervenant';
         }
@@ -111,30 +117,10 @@ class StatutIntervenantController extends AbstractController
             return;
         }
         $title = 'Dupplication d\'un statut d\'intervenant';
-        $statutIntervenantNew = $this->getServiceStatutIntervenant()->newEntity();
-        $statutIntervenantNew->setLibelle($statutIntervenant->getLibelle());
-        $statutIntervenantNew->setDepassement($statutIntervenant->getDepassement());
-        $statutIntervenantNew->setPlafondReferentiel($statutIntervenant->getPlafondReferentiel());
-        $statutIntervenantNew->setServiceStatutaire($statutIntervenant->getServiceStatutaire());
-        $statutIntervenantNew->setTypeIntervenant($this->getServiceTypeIntervenant()->get($statutIntervenant->getTypeIntervenant()->getId()));
-        $statutIntervenantNew->setNonAutorise($statutIntervenant->getNonAutorise());
-        $statutIntervenantNew->setPeutSaisirService($statutIntervenant->getPeutSaisirService());
-        $statutIntervenantNew->setPeutSaisirDossier($statutIntervenant->getPeutSaisirDossier());
-        $statutIntervenantNew->setPeutSaisirReferentiel($statutIntervenant->getPeutSaisirReferentiel());
-        $statutIntervenantNew->setPeutSaisirMotifNonPaiement($statutIntervenant->getPeutSaisirMotifNonPaiement());
-        $statutIntervenantNew->setPeutAvoirContrat($statutIntervenant->getPeutAvoirContrat());
-        $statutIntervenantNew->setPeutCloturerSaisie($statutIntervenant->getPeutCloturerSaisie());
-        $statutIntervenantNew->setPeutSaisirServiceExt($statutIntervenant->getPeutSaisirServiceExt());
-        $statutIntervenantNew->setTemAtv($statutIntervenant->getTemAtv());
-        $statutIntervenantNew->setTemBiatss($statutIntervenant->getTemBiatss());
-        $statutIntervenantNew->setSourceCode($statutIntervenant->getSourceCode());
-        $statutIntervenantNew->setPlafondHcHorsRemuFc($statutIntervenant->getPlafondHcHorsRemuFc());
-        $statutIntervenantNew->setPlafondHcRemuFc($statutIntervenant->getPlafondHcRemuFc());
-        $statutIntervenantNew->setPeutChoisirDansDossier($statutIntervenant->getPeutChoisirDansDossier());
-        $statutIntervenantNew->setMaximumHETD($statutIntervenant->getMaximumHETD());
-        $statutIntervenantNew->setDepassementSDSHC($statutIntervenant->getDepassementSDSHC());
-        $statutIntervenantNew->setOrdre($statutIntervenant->getOrdre());
-        $statutIntervenantNew->setSourceCode($statutIntervenant->getSourceCode());
+        $statutIntervenantNew = clone $statutIntervenant;
+        $i=$this->getServiceStatutIntervenant()->fetchMaxOrdre()+1;
+        $statutIntervenantNew->setOrdre($i+1);
+        //$statutIntervenantNew->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre()+1);
         $form->bind($statutIntervenantNew);
         $request = $this->getRequest();
         if ($request->isPost()) {

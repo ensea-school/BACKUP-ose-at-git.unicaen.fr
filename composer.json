@@ -8,7 +8,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://git.unicaen.fr/dsi/lib/unicaen-auth"
+            "url": "https://git.unicaen.fr/lib/unicaen-auth"
         }
     ],
     "require": {

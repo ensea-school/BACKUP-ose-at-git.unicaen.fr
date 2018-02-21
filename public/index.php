@@ -23,10 +23,7 @@ class Application
     ";
 
     public static $maintenanceWhiteList = [
-        ['127.0.0.1'], // localhost
-        ['10.26.24.16'], // Olivier
-        ['10.26.4.17'], // Laurent
-        ['10.26.24.39'], // Anthony
+
     ];
 
 
@@ -44,19 +41,20 @@ class Application
 
     private static function startContainerAndListeners()
     {
-        $configuration = require 'config/application.config.php';
+        if (file_exists('config/autoload/application.local.php')) {
+            $configuration = require 'config/application.config.php';
 
-        $smConfig        = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
-        self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig($smConfig));
-        self::$container->setService('ApplicationConfig', $configuration);
-        self::$container->get('ModuleManager')->loadModules();
+            $smConfig        = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
+            self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig($smConfig));
+            self::$container->setService('ApplicationConfig', $configuration);
+            self::$container->get('ModuleManager')->loadModules();
 
-        $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
-        $config                     = self::$container->get('Config');
-        $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
+            $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
+            $config                     = self::$container->get('Config');
+            $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
 
-        $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
-
+            $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
+        }
         $modeInstallation = isset($config['global']['modeInstallation']) ? $config['global']['modeInstallation'] : true;
 
         if ($modeInstallation){

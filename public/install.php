@@ -16,13 +16,14 @@
 
 <div id="contenu">
 
-    <h1>Contrôle des dépendences</h1>
+    <h1>Contrôle des dépendances</h1>
     <p class="lead">
-
         <?php
 
         use Application\Connecteur\LdapConnecteur;
         use Application\Constants;
+        use Application\Entity\Db\Utilisateur;
+        use Application\Service\UtilisateurService;
         use Doctrine\ORM\EntityManager;
 
         $installateur = new Installateur();
@@ -30,8 +31,37 @@
 
         ?>
     </p>
-
 </div>
+<?php if (!$installateur->stop): ?>
+    <div id="contenu">
+
+        <h1>Changer le mot de passe de l'utilisateur OSE</h1>
+        <p class="lead">
+        <p class="mdp-warning">Le mot de passe doit faire au moins 8 caractères. Veillez à choisir un mot de passe
+            suffisemment
+            complexe, car l'utilisateur
+            ose est par défaut administrateur de l'application.</p>
+        <?php $installateur->changementMotDePasse() ?>
+        <form method="post">
+            <table>
+                <tr>
+                    <td><label for="mdp1">Mot de passe :</label></td>
+                    <td><input type="password" name="mdp1" style="width:35em"/></td>
+                </tr>
+                <tr>
+                    <td><label for="mdp2">Veuillez répéter la saisie :</label></td>
+                    <td><input type="password" name="mdp2" style="width:35em"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit">Changer le mot de passe</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        </p>
+    </div>
+<?php endif; ?>
 <style>
 
     body {
@@ -108,6 +138,35 @@
         background-color: lightpink;
     }
 
+    .mdp-warning {
+        background-color: lightgoldenrodyellow;
+        border: 1px goldenrod solid;
+        border-radius: 6px;
+        padding: 10px;
+    }
+
+    .mdp-error {
+        background-color: lightpink;
+        border: 1px red solid;
+        border-radius: 6px;
+        padding: 10px;
+    }
+
+    .mdp-success {
+        background-color: lightgreen;
+        border: 1px green solid;
+        border-radius: 6px;
+        padding: 10px;
+    }
+
+    b.username {
+        background-color: yellow;
+        padding-left:1em;
+        padding-right:1em;
+        border: 1px darkgoldenrod solid;
+        font-family: "Courier New", Courier, monospace;
+    }
+
 </style>
 </body>
 </html>
@@ -119,19 +178,24 @@
 
 class Installateur
 {
-    private $stop = false;
+    public $stop = false;
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
 
 
 
     private function makeTests()
     {
         return [
-            'Configuration d\'Apache'                        => [
+            'Configuration d\'Apache' => [
                 'Réécriture d\'URL activée' => function () {
                     return in_array('mod_rewrite', apache_get_modules()) ? true : 'Non activée';
                 },
             ],
-            'Modules PHP nécessaires'                        => [
+            'Modules PHP nécessaires' => [
                 'Curl'                 => function () {
                     return in_array('curl', get_loaded_extensions()) ? true : 'Non installé';
                 },
@@ -163,18 +227,18 @@ class Installateur
                     return in_array('oci8', get_loaded_extensions()) ? true : 'Non installé';
                 },
             ],
-            'Environnement'                                  => [
+            'Environnement'           => [
                 'Droit d\'écriture sur le dossier data/cache' => function () {
                     $cacheDir = __DIR__ . '/../data/cache';
 
-                    return file_exists($cacheDir) ? true : 'Répertoire ' . $cacheDir . ' non trouvé';
+                    return is_writable($cacheDir) ? true : 'Répertoire data/cache non accessible en écriture';
                 },
                 'Présence d\'UnoConv'                         => function () {
                     return substr(shell_exec('unoconv --version'), 0, 7) == 'unoconv' ? true : 'Commande "unoconv" introuvable';
                 },
             ],
-            'Configuration' => [
-                'Fichier de configuration local' => function () {
+            'Configuration'           => [
+                'Fichier de configuration local'  => function () {
                     $configFile = __DIR__ . '/../config/autoload/application.local.php';
                     if (!file_exists($configFile)) {
                         $this->stop = true;
@@ -184,34 +248,29 @@ class Installateur
 
                     return true;
                 },
-                'Accès à la base de données' => function () {
-                    $container = Application::$container;
+                'Accès à la base de données'      => function () {
+                    $this->getEntityManager()->beginTransaction();
+                    $this->getEntityManager()->rollback();
 
-                    /** @var EntityManager $entityManager */
-                    $entityManager = $container->get(Constants::BDD);
+                    return true;
+                },
+                'Recherche de l\'utilisateur OSE' => function () {
+                    /** @var UtilisateurService $serviceUtilisateur */
+                    $serviceUtilisateur = Application::$container->get(UtilisateurService::class);
 
-                    try{
-                        $entityManager->beginTransaction();
+                    if ($serviceUtilisateur->getOse() instanceof Utilisateur) {
                         return true;
-                    }catch(\Exception $e){
-                        $this->stop = true;
-                        return $e->getMessage();
+                    } else {
+                        return 'Utilisateur OSE introuvable';
                     }
                 },
-                'Accès au serveur LDAP' => function(){
-                    $container = Application::$container;
-
+                'Accès au serveur LDAP'           => function () {
                     /** @var LdapConnecteur $ldap */
-                    $ldap = $container->get(LdapConnecteur::class);
+                    $ldap = Application::$container->get(LdapConnecteur::class);
+                    @$ldap->rechercheUtilisateurs('e');
 
-                    try{
-                        @$ldap->rechercheUtilisateurs('e');
-                        return true;
-                    }catch(\Exception $e){
-                        $this->stop = true;
-                        return $e->getMessage();
-                    }
-                }
+                    return true;
+                },
             ],
         ];
     }
@@ -228,12 +287,73 @@ class Installateur
                 if ($this->stop) {
                     $r = 'Test impossible';
                 } else {
-                    $r = $res();
+                    try {
+                        $r = $res();
+                    } catch (\Exception $e) {
+                        $this->stop = true;
+                        $r          = $e->getMessage();
+                    }
                 }
 
                 echo '<tr class="' . ($r === true ? 'passed' : 'error') . '"><td class="test">' . $test . '</td><td class="res">' . ($r === true ? 'OK' : $r) . '</td></tr>';
             }
             echo '</table>';
         }
+    }
+
+
+
+    public function changementMotDePasse()
+    {
+        $error = null;
+        $mdp1  = isset($_POST['mdp1']) ? $_POST['mdp1'] : null;
+        $mdp2  = isset($_POST['mdp2']) ? $_POST['mdp2'] : null;
+
+        if ($mdp1 && $mdp2) {
+            if ($mdp1 != $mdp2) {
+                $error = 'Les deux mots de passe saisis diffèrent.';
+            }
+            if (strlen($mdp1) < 8) {
+                $error = 'Le mot de passe doit faire au moins 8 caractères';
+            }
+            if (!$error) {
+                try {
+                    $oseUser = $this->updPwd($mdp1);
+                } catch (\Exception $e) {
+                    $error = $e->getMessage();
+                }
+            }
+
+            if ($error) {
+                echo '<p class="mdp-error">' . $error . '</p>';
+            } else {
+                echo '<p class="mdp-success">Le mot de passe de l\'utilisateur OSE a été réinitialisé avec succès.<br />Pour rappel, le login de l\'utilisateur OSE est <b class="username">'.$oseUser->getUsername().'</b></p>';
+            }
+        }
+    }
+
+
+
+    private function updPwd($password)
+    {
+        /** @var UtilisateurService $serviceUtilisateur */
+        $serviceUtilisateur = Application::$container->get(UtilisateurService::class);
+        $ose                = $serviceUtilisateur->getOse();
+
+        $ose->setPassword($password, true);
+        $serviceUtilisateur->save($ose);
+
+        return $ose;
+    }
+
+
+
+    protected function getEntityManager(): EntityManager
+    {
+        if (!$this->entityManager) {
+            $this->entityManager = Application::$container->get(Constants::BDD);
+        }
+
+        return $this->entityManager;
     }
 }

@@ -59,6 +59,20 @@ class UtilisateurService extends AbstractEntityService
 
 
     /**
+     * Retourne l'utilisateur OSE
+     *
+     * @return Utilisateur
+     */
+    public function getOse()
+    {
+        $oseUserId = $this->getServiceParametres()->get('oseuser');
+
+        return $this->get($oseUserId);
+    }
+
+
+
+    /**
      * @param $username
      *
      * @return Utilisateur

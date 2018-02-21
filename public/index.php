@@ -57,7 +57,20 @@ class Application
 
         $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
 
+        $modeInstallation = isset($config['global']['modeInstallation']) ? $config['global']['modeInstallation'] : true;
+
+        if ($modeInstallation){
+            return null;
+        }
+
         return self::$container->get('Application')->bootstrap($listeners);
+    }
+
+
+
+    private static function installation()
+    {
+        require 'install.php';
     }
 
 
@@ -93,8 +106,11 @@ class Application
     {
         self::init();
         if (!self::maintenance()) {
-            $applicationModule = self::startContainerAndListeners();
-            $applicationModule->run();
+            if ($applicationModule = self::startContainerAndListeners()){
+                $applicationModule->run();
+            }else{
+                self::installation();
+            }
         }
     }
 }

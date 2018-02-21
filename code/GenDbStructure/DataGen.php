@@ -326,6 +326,10 @@ class DataGen
             return "(SELECT id FROM role WHERE code = ''administrateur'')";
         }
 
+        if ('USERNAME' == $column && $table == 'UTILISATEUR'){
+            return "''x''";
+        }
+
 
 
         if ($def['constraint_table']) {

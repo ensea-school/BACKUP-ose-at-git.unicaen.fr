@@ -1,6 +1,8 @@
 <?php
 
-if (Application::getConfig('global','affichageErreurs')) {
+$localConfig = require(__DIR__ . '/application.local.php');
+
+if ($localConfig['global']['affichageErreurs']) {
     error_reporting(E_ALL);
 }
 putenv("NLS_LANGUAGE=FRENCH");
@@ -11,11 +13,11 @@ return [
         'connection'    => [
             'orm_default' => [
                 'params' => [
-                    'host'     => Application::getConfig('bdd','host'),
-                    'port'     => Application::getConfig('bdd','port'),
-                    'dbname'   => Application::getConfig('bdd','dbname'),
-                    'user'     => Application::getConfig('bdd','username'),
-                    'password' => Application::getConfig('bdd','password'),
+                    'host'     => $localConfig['bdd']['host'],
+                    'port'     => $localConfig['bdd']['port'],
+                    'dbname'   => $localConfig['bdd']['dbname'],
+                    'user'     => $localConfig['bdd']['username'],
+                    'password' => $localConfig['bdd']['password'],
                     'charset'  => 'AL32UTF8',
                 ],
             ],
@@ -26,18 +28,18 @@ return [
                 //                'query_cache'      => 'array',
                 'result_cache'     => 'array',
                 'hydration_cache'  => 'array',
-                'generate_proxies' => Application::getConfig('bdd','generateProxies'),
+                'generate_proxies' => $localConfig['bdd']['generateProxies'],
                 'proxy_dir'        => 'data/cache/DoctrineProxy',
             ],
         ],
     ],
     'view_manager' => [
-        'display_not_found_reason' => Application::getConfig('global','affichageErreurs'),
-        'display_exceptions'       => Application::getConfig('global','affichageErreurs'),
+        'display_not_found_reason' => $localConfig['global']['affichageErreurs'],
+        'display_exceptions'       => $localConfig['global']['affichageErreurs'],
     ],
     'cli_config'   => [
-        'scheme' => Application::getConfig('global','scheme'),
-        'domain' => Application::getConfig('global','domain'),
+        'scheme' => $localConfig['global']['scheme'],
+        'domain' => $localConfig['global']['domain'],
     ],
 
 ];

@@ -5,6 +5,7 @@ namespace Application\Form\OffreFormation;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
+use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
@@ -22,6 +23,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
     use EtapeServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use StructureServiceAwareTrait;
+    use DisciplineServiceAwareTrait;
 
 
 
@@ -39,7 +41,7 @@ class ElementPedagogiqueSaisie extends AbstractForm
         $this->setHydrator($hydrator);
 
         $this->setAttribute('class', 'element-pedagogique-saisie');
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
             'name'       => 'etape',
@@ -47,8 +49,8 @@ class ElementPedagogiqueSaisie extends AbstractForm
                 'label' => 'Formation',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
             'type'       => 'Select',
         ]);
@@ -59,6 +61,18 @@ class ElementPedagogiqueSaisie extends AbstractForm
                 'label' => 'Code',
             ],
             'type'    => 'Text',
+        ]);
+
+        $this->add([
+            'name'       => 'discipline',
+            'options'    => [
+                'label' => 'Discipline',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -139,8 +153,8 @@ class ElementPedagogiqueSaisie extends AbstractForm
                 'label' => 'Structure',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
             'type'       => 'Select',
         ]);
@@ -168,6 +182,14 @@ class ElementPedagogiqueSaisie extends AbstractForm
             $this->get('etape')->setValue($etape->getId());
         }
 
+        $this->get('discipline')->setValueOptions(
+            \UnicaenApp\Util::collectionAsOptions(
+                $this->getServiceDiscipline()->getList(
+                    $this->getServiceDiscipline()->finderByHistorique()
+                )
+            )
+        );
+
         // peuplement liste des périodes
         $this->get('periode')
             ->setEmptyOption("")
@@ -193,40 +215,43 @@ class ElementPedagogiqueSaisie extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'taux-foad'   => [
+            'taux-foad'  => [
                 'required' => true,
             ],
-            'taux-fc'     => [
-                'required' => true,
-                'filters'  => [
-                    ['name' => FloatFromString::class],
-                ],
-            ],
-            'taux-fi'     => [
+            'taux-fc'    => [
                 'required' => true,
                 'filters'  => [
                     ['name' => FloatFromString::class],
                 ],
             ],
-            'taux-fa'     => [
+            'taux-fi'    => [
                 'required' => true,
                 'filters'  => [
                     ['name' => FloatFromString::class],
                 ],
             ],
-            'code' => [
+            'taux-fa'    => [
+                'required' => true,
+                'filters'  => [
+                    ['name' => FloatFromString::class],
+                ],
+            ],
+            'code'       => [
                 'required' => true,
             ],
-            'libelle'     => [
+            'discipline' => [
                 'required' => true,
             ],
-            'periode'     => [
+            'libelle'    => [
+                'required' => true,
+            ],
+            'periode'    => [
                 'required' => false,
             ],
-            'etape'       => [
+            'etape'      => [
                 'required' => true,
             ],
-            'structure'   => [
+            'structure'  => [
                 'required' => true,
             ],
         ];
@@ -247,6 +272,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     use EtapeServiceAwareTrait;
     use PeriodeServiceAwareTrait;
     use StructureServiceAwareTrait;
+    use DisciplineServiceAwareTrait;
 
 
 
@@ -261,6 +287,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $object->setCode($data['code']);
+        $object->setDiscipline($this->getServiceDiscipline()->get($data['discipline']));
         $object->setSourceCode($data['code']);
         $object->setLibelle($data['libelle']);
         $object->setEtape($this->getServiceEtape()->get($data['etape']));
@@ -289,16 +316,17 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'etape'       => ($e = $object->getEtape()) ? $e->getId() : null,
-            'code'        => $object->getCode(),
-            'libelle'     => $object->getLibelle(),
-            'id'          => $object->getId(),
-            'periode'     => ($p = $object->getPeriode()) ? $p->getId() : null,
-            'taux-foad'   => $object->getTauxFoad(),
-            'structure'   => ($s = $object->getStructure()) ? $s->getId() : null,
-            'taux-fc'     => StringFromFloat::run($object->getTauxFc() * 100),
-            'taux-fi'     => StringFromFloat::run($object->getTauxFi() * 100),
-            'taux-fa'     => StringFromFloat::run($object->getTauxFa() * 100),
+            'etape'      => ($e = $object->getEtape()) ? $e->getId() : null,
+            'code'       => $object->getCode(),
+            'discipline' => $object->getDiscipline() ? $object->getDiscipline()->getId() : null,
+            'libelle'    => $object->getLibelle(),
+            'id'         => $object->getId(),
+            'periode'    => ($p = $object->getPeriode()) ? $p->getId() : null,
+            'taux-foad'  => $object->getTauxFoad(),
+            'structure'  => ($s = $object->getStructure()) ? $s->getId() : null,
+            'taux-fc'    => StringFromFloat::run($object->getTauxFc() * 100),
+            'taux-fi'    => StringFromFloat::run($object->getTauxFi() * 100),
+            'taux-fa'    => StringFromFloat::run($object->getTauxFa() * 100),
         ];
 
         return $data;

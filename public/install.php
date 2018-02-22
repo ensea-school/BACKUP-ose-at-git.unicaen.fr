@@ -33,6 +33,7 @@
     </p>
 </div>
 <?php if (!$installateur->stop): ?>
+
     <div id="contenu">
 
         <h1>Changer le mot de passe de l'utilisateur OSE</h1>
@@ -59,6 +60,14 @@
                 </tr>
             </table>
         </form>
+        </p>
+    </div>
+
+    <div id="contenu">
+        <h1>Installation OK!</h1>
+        <p class="lead">
+            Pour sortir du mode installation, veuillez passer à <i>false</i> la valeur <i>global/modeInstallation</i> de votre fichier de configuration
+            <i><?= Application::LOCAL_APPLICATION_CONFIG_FILE ?></i>.
         </p>
     </div>
 <?php endif; ?>
@@ -252,7 +261,6 @@ class Installateur
                     return true;
                 },
                 'Scheme' => function () {
-                    $config = require(__DIR__ . '/../config/autoload/application.local.php');
                     $value = $_SERVER['REQUEST_SCHEME'];
 
                     if (!Application::getConfig('global','scheme', null)){
@@ -276,6 +284,23 @@ class Installateur
 
                     return true;
                 },
+                'Test d\'existance des structures de données' => function(){
+                    $sql = 'SELECT table_name FROM USER_TABLES where table_name IN (\'INTERVENANT\',\'UTILISATEUR\',\'CIVILITE\',\'ELEMENT_PEDAGOGIQUE\',\'SERVICE\') ORDER BY table_name';
+                    $tables = '-';
+                    $res = Application::$container->get(Constants::BDD)->getConnection()->fetchAll($sql);
+
+                    foreach( $res as $r ){
+                        $tables .= $r['TABLE_NAME'].'-';
+                    }
+
+                    if ($tables != '-CIVILITE-ELEMENT_PEDAGOGIQUE-INTERVENANT-SERVICE-UTILISATEUR-'){
+                        $this->mustInitBdd = true;
+                        throw new \Exception('Base de données non initialisée. '
+                            .'Merci de lancer le script de création des structures de données présent dans <i>data/Déploiement/ose-ddl.sql</i>');
+                    }
+
+                    return true;
+                },
                 'Recherche de l\'utilisateur OSE' => function () {
                     /** @var UtilisateurService $serviceUtilisateur */
                     $serviceUtilisateur = Application::$container->get(UtilisateurService::class);
@@ -283,13 +308,13 @@ class Installateur
                     if ($serviceUtilisateur->getOse() instanceof Utilisateur) {
                         return true;
                     } else {
-                        return 'Utilisateur OSE introuvable';
+                        throw new \Exception('Utilisateur OSE introuvable');
                     }
                 },
                 'Accès au serveur LDAP'           => function () {
                     /** @var LdapConnecteur $ldap */
                     $ldap = Application::$container->get(LdapConnecteur::class);
-                    @$ldap->rechercheUtilisateurs('e');
+                    @$ldap->rechercheUtilisateurs('utilisateur_introuvable');
 
                     return true;
                 },

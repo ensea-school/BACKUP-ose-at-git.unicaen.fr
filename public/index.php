@@ -1,5 +1,9 @@
 <?php
 
+
+
+
+
 class Application
 {
     const LOCAL_APPLICATION_CONFIG_FILE = 'config/application.local.php';
@@ -12,12 +16,12 @@ class Application
     /**
      * @var bool
      */
-    public static $maintenance          = false;
+    public static $maintenance = false;
 
     /**
      * @var string
      */
-    public static $maintenanceText      = 'OSE est actuellement en maintenance. Veuillez nous excuser pour ce déagrément.';
+    public static $maintenanceText = 'OSE est actuellement en maintenance. Veuillez nous excuser pour ce déagrément.';
 
     /**
      * @var array
@@ -27,9 +31,9 @@ class Application
     /**
      * Configuration locale de l'application
      *
-     * @var bool|array
+     * @var array
      */
-    private static $config = false;
+    private static $config;
 
 
 
@@ -39,25 +43,23 @@ class Application
         define('REQUEST_MICROTIME', microtime(true));
         chdir(dirname(__DIR__));
 
+        if (file_exists(self::LOCAL_APPLICATION_CONFIG_FILE)) {
+            self::$config = require(self::LOCAL_APPLICATION_CONFIG_FILE);
+        } else {
+            self::$config = null;
+        }
+
         require 'init_autoloader.php';
     }
 
 
 
-    public static function getConfig($section=null, $key = null, $default=null)
+    public static function getConfig($section = null, $key = null, $default = null)
     {
-        if (false === self::$config){
-            if (file_exists(self::LOCAL_APPLICATION_CONFIG_FILE)) {
-                self::$config = require(self::LOCAL_APPLICATION_CONFIG_FILE);
-            }else{
-                self::$config = null;
-            }
-        }
-
-        if (self::$config && $section && $key){
-            if (isset(self::$config[$section][$key])){
+        if (self::$config && $section && $key) {
+            if (isset(self::$config[$section][$key])) {
                 return self::$config[$section][$key];
-            }else{
+            } else {
                 return $default;
             }
         }
@@ -69,46 +71,32 @@ class Application
 
     private static function startContainerAndListeners()
     {
-        if (null !== self::getConfig()){
-            $configuration = require 'config/application.config.php';
+        if (null === self::getConfig()) return null;
+        $configuration = require 'config/application.config.php';
 
-            $smConfig        = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
-            self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig($smConfig));
-            self::$container->setService('ApplicationConfig', $configuration);
-            self::$container->get('ModuleManager')->loadModules();
+        $smConfig        = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
+        self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig($smConfig));
+        self::$container->setService('ApplicationConfig', $configuration);
+        self::$container->get('ModuleManager')->loadModules();
 
-            $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
-            $config                     = self::$container->get('Config');
-            $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
+        $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
+        $config                     = self::$container->get('Config');
+        $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
 
-            $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
-        }
-        $modeInstallation = self::getConfig('global','modeInstallation', true);
+        $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
 
-        if ($modeInstallation){
-            return null;
-        }
-
-        return self::$container->get('Application')->bootstrap($listeners);
+        return $listeners;
     }
 
 
 
-    private static function installation()
+    private static function inMaintenance()
     {
-        require 'install.php';
-    }
+        $maintenance = self::getConfig('maintenance', 'modeMaintenance', false);
 
+        if (!$maintenance) return false;
 
-
-    private static function maintenance()
-    {
-        if (!self::getConfig('maintenance','modeMaintenance', true)){
-            return false;
-        }
-
-        $whiteList = self::getConfig('maintenance','whiteList',[]);
-        self::$maintenanceText = self::getConfig('maintenance', 'messageInfo');
+        $whiteList             = self::getConfig('maintenance', 'whiteList', []);
 
         if (php_sapi_name() === 'cli') {
             exit(0);
@@ -122,13 +110,7 @@ class Application
             }
             if ($passed) break;
         }
-        if (!$passed) {
-            include 'maintenance.php';
-
-            return true;
-        }
-
-        return false;
+        return !$passed;
     }
 
 
@@ -136,15 +118,23 @@ class Application
     public static function run()
     {
         self::init();
-        if (!self::maintenance()) {
-            if ($applicationModule = self::startContainerAndListeners()){
-                $applicationModule->run();
+
+        if (self::inMaintenance()){
+            self::$maintenanceText = self::getConfig('maintenance', 'messageInfo');
+            require 'maintenance.php';
+        }else{
+            $listeners = self::startContainerAndListeners();
+
+            if (($listeners === null) || self::getConfig('global', 'modeInstallation', true)){
+                require 'install.php';
             }else{
-                self::installation();
+                self::$container->get('Application')->bootstrap($listeners)->run();
             }
         }
     }
 }
+
+
 
 
 

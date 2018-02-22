@@ -238,7 +238,6 @@ return [
     'Application\Entity\Db\Traits\VServiceValideAwareTrait'                                              => __DIR__ . '/src/Application/Entity/Db/Traits/VServiceValideAwareTrait.php',
     'Application\Entity\Db\Traits\FormuleResultatServiceReferentielAwareTrait'                           => __DIR__ . '/src/Application/Entity/Db/Traits/FormuleResultatServiceReferentielAwareTrait.php',
     'Application\Entity\Db\Traits\CiviliteAwareTrait'                                                    => __DIR__ . '/src/Application/Entity/Db/Traits/CiviliteAwareTrait.php',
-    'Application\Entity\Db\Traits\StatutIntervenantAwareTrait'                                           => __DIR__ . '/src/Application/Entity/Db/Traits/StatutIntervenantAwareTrait.php',
     'Application\Entity\Db\Traits\VIndicAttenteDemandeMepAwareTrait'                                     => __DIR__ . '/src/Application/Entity/Db/Traits/VIndicAttenteDemandeMepAwareTrait.php',
     'Application\Entity\Db\Traits\AdresseIntervenantAwareTrait'                                          => __DIR__ . '/src/Application/Entity/Db/Traits/AdresseIntervenantAwareTrait.php',
     'Application\Entity\Db\Traits\CentreCoutEpAwareTrait'                                                => __DIR__ . '/src/Application/Entity/Db/Traits/CentreCoutEpAwareTrait.php',

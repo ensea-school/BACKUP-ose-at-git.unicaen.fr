@@ -206,6 +206,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
         return $this;
     }
 
+
+
     /**
      * @return boolean
      */
@@ -643,6 +645,20 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
 
 
     /**
+     * @param int $id
+     *
+     * @return StatutIntervenant
+     */
+    public function setId($id): StatutIntervenant
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+
+
+    /**
      * Set typeIntervenant
      *
      * @param \Application\Entity\Db\TypeIntervenant $typeIntervenant
@@ -790,8 +806,10 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
             $privilege = $privilege->getFullCode();
         }
         $privileges = $this->getPrivilege();
-        if ($privileges) foreach ($privileges as $priv) {
-            if ($priv->getFullCode() === $privilege) return true;
+        if ($privileges) {
+            foreach ($privileges as $priv) {
+                if ($priv->getFullCode() === $privilege) return true;
+            }
         }
 
         return false;
@@ -853,6 +871,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     }
 
 
+
     /**
      * @return boolean
      */
@@ -876,22 +895,22 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     }
 
 
-    /**
-     * @since PHP 5.6.0
-     * This method is called by var_dump() when dumping an object to get the properties that should be shown.
-     * If the method isn't defined on an object, then all public, protected and private properties will be shown.
-     *
-     * @return array
-     * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
-     */
-    function __debugInfo()
-    {
-        return [
-            'id'         => $this->id,
-            'sourceCode' => $this->sourceCode,
-            'libelle'    => $this->libelle,
-            'type'       => $this->typeIntervenant ? $this->typeIntervenant->getLibelle() : null,
-        ];
-    }
 
+    public function dupliquer()
+    {
+        $new = new StatutIntervenant();
+        $methods = get_class_methods($this);
+        foreach( $methods as $method ){
+            $setMethod = 'set'.substr($method, 3);
+            if (0 === strpos($method, 'get') && in_array($setMethod, $methods)){
+                $new->$setMethod($this->$method());
+            }
+        }
+        $new->setId(null);
+        $uid = uniqid();
+        $new->setSourceCode( $this->getSourceCode().'_'.$uid);
+        $new->setLibelle($this->getLibelle().' (Copie '.$uid.')');
+
+        return $new;
+    }
 }

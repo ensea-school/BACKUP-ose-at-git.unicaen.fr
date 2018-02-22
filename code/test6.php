@@ -7,14 +7,13 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Processus\PlafondProcessus;
-use Application\Service\ElementPedagogiqueService;
-use Application\Service\IntervenantService;
-use Application\Service\PlafondService;
-use Application\Service\TypeVolumeHoraireService;
+use Application\Service\StatutIntervenantService;
 
-/** @var PlafondProcessus $pp */
-$pp = $sl->get(PlafondProcessus::class);
-echo 'test2';
+$si = $sl->get(StatutIntervenantService::class);
 
-var_dump($pp );
+$s = $si->get(19);
+
+
+$ns = $s->dupliquer();
+
+var_dump($ns);

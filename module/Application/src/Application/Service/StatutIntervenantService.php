@@ -14,6 +14,9 @@ use Doctrine\ORM\QueryBuilder;
 class StatutIntervenantService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
+
+
+
     /**
      * retourne la classe des entités
      *
@@ -25,27 +28,32 @@ class StatutIntervenantService extends AbstractEntityService
         return StatutIntervenant::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'si';
     }
 
+
+
     /**
-     * Retourne la liste des étapes
+     * @param QueryBuilder|null $qb
+     * @param null              $alias
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @param string|null $alias
-     * @return StatutIntervenant[]
+     * @return QueryBuilder
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->orderBy("$alias.ordre");
-        return parent::getList($qb, $alias);
+        $qb->addOrderBy("$alias.ordre");
+
+        return $qb;
     }
 
 
@@ -53,15 +61,15 @@ class StatutIntervenantService extends AbstractEntityService
     /**
      * @return int
      */
-    public function fetchMaxOrdre(): integer
+    public function fetchMaxOrdre(): int
     {
         $sql = 'SELECT MAX(ordre) max_ordre FROM statut_intervenant WHERE histo_destruction IS NULL';
 
-        $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [0]);
-        var_dump($res);
+        $res = $this->getEntityManager()->getConnection()->fetchColumn($sql, [], 0);
 
         return (int)$res;
     }
+
 
 
     /**

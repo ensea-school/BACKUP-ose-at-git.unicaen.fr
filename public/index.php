@@ -1,11 +1,9 @@
 <?php
 
-
-
-
-
 class Application
 {
+    const LOCAL_APPLICATION_CONFIG_FILE = 'config/application.local.php';
+
     /**
      * @var Zend\ServiceManager\ServiceLocatorInterface
      */
@@ -16,15 +14,22 @@ class Application
      */
     public static $maintenance          = false;
 
-    public static $maintenanceText      = "
-    Ose est actuellement en cours de mise à jour. 
-    L'opération devrait être terminée dans l'après-midi. 
-    Veuillez nous excuser pour ce déagrément.
-    ";
+    /**
+     * @var string
+     */
+    public static $maintenanceText      = 'OSE est actuellement en maintenance. Veuillez nous excuser pour ce déagrément.';
 
-    public static $maintenanceWhiteList = [
+    /**
+     * @var array
+     */
+    public static $maintenanceWhiteList = [];
 
-    ];
+    /**
+     * Configuration locale de l'application
+     *
+     * @var bool|array
+     */
+    private static $config = false;
 
 
 
@@ -39,9 +44,32 @@ class Application
 
 
 
+    public static function getConfig($section=null, $key = null, $default=null)
+    {
+        if (false === self::$config){
+            if (file_exists(self::LOCAL_APPLICATION_CONFIG_FILE)) {
+                self::$config = require(self::LOCAL_APPLICATION_CONFIG_FILE);
+            }else{
+                self::$config = null;
+            }
+        }
+
+        if (self::$config && $section && $key){
+            if (isset(self::$config[$section][$key])){
+                return self::$config[$section][$key];
+            }else{
+                return $default;
+            }
+        }
+
+        return self::$config;
+    }
+
+
+
     private static function startContainerAndListeners()
     {
-        if (file_exists('config/autoload/application.local.php')) {
+        if (null !== self::getConfig()){
             $configuration = require 'config/application.config.php';
 
             $smConfig        = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
@@ -55,7 +83,7 @@ class Application
 
             $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
         }
-        $modeInstallation = isset($config['global']['modeInstallation']) ? $config['global']['modeInstallation'] : true;
+        $modeInstallation = self::getConfig('global','modeInstallation', true);
 
         if ($modeInstallation){
             return null;
@@ -75,14 +103,19 @@ class Application
 
     private static function maintenance()
     {
-        if (!self::$maintenance) return false;
+        if (!self::getConfig('maintenance','modeMaintenance', true)){
+            return false;
+        }
+
+        $whiteList = self::getConfig('maintenance','whiteList',[]);
+        self::$maintenanceText = self::getConfig('maintenance', 'messageInfo');
 
         if (php_sapi_name() === 'cli') {
             exit(0);
         }
 
         $passed = false;
-        foreach (self::$maintenanceWhiteList as $ip) {
+        foreach ($whiteList as $ip) {
             $passed = $ip[0] === $_SERVER['REMOTE_ADDR'];
             if ($passed && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $passed = isset($ip[1]) && $ip[1] === $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -112,8 +145,6 @@ class Application
         }
     }
 }
-
-
 
 
 

@@ -21,7 +21,7 @@ class DataGen
     protected $breaks = false;
 
     protected $tablesSel  = [
-        'AFFECTATION'                  => "source_code = 'local-aff-admin'",
+        'AFFECTATION'                  => "utilisateur_id IN (SELECT id FROM utilisateur WHERE username='".self::OSE_USER."')",
         'ANNEE'                        => '',
         'CATEGORIE_PRIVILEGE'          => '',
         'CC_ACTIVITE'                  => '',
@@ -195,6 +195,10 @@ class DataGen
             'ID',
         ];
 
+        if ('UTILISATEUR' == $tableName){
+            return 'USERNAME';
+        }
+
         $def = $this->getTablesInfo($tableName);
 
         foreach ($codesCols as $col) {
@@ -326,7 +330,7 @@ class DataGen
             return "(SELECT id FROM role WHERE code = ''administrateur'')";
         }
 
-        if ('USERNAME' == $column && $table == 'UTILISATEUR'){
+        if ('PASSWORD' == $column && $table == 'UTILISATEUR'){
             return "''x''";
         }
 

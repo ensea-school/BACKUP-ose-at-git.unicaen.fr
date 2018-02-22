@@ -4,13 +4,29 @@ return [
     /* Paramètres généraux */
     'global' => [
         /* Accès en mode HTTP ou HTTPS */
-        'scheme'           => 'http',
+        'scheme'           => '',
 
-        /* Adresse d'accès à OSE (sans mentionner http://, par exemple ose.unicaen.fr) */
-        'domain'           => 'ose.unicaen.fr',
+        /* Adresse d'accès à OSE (par exemple ose.unicaen.fr)
+         * Correspond à l'url à entrer pour accéder à la page d'accueil de OSE, sans http:// ou https:// */
+        'domain'           => '',
 
         /* Affichage complet des erreurs (false en production) */
         'affichageErreurs' => true,
+    ],
+
+
+    /* Configuration du mode maintenance */
+    'maintenance' => [
+        /* Détermine si le mode maintenante est activé ou non */
+        'modeMaintenance' => false,
+
+        /* Message précisant pourquoi l'application est en maintenance */
+        'messageInfo'  => 'OSE est actuellement en cours de mise à jour. Veuillez nous excuser pour ce déagrément.',
+
+        /* Liste blanche d'adresses IP pouvant accéder à l'application, même en mode maintenance */
+        'whiteList'    => [
+            ['127.0.0.1'], // localhost
+        ],
     ],
 
 

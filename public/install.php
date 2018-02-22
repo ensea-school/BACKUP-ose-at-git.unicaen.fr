@@ -167,6 +167,10 @@
         font-family: "Courier New", Courier, monospace;
     }
 
+    span.val {
+        font-family: "Courier New", Courier, monospace;
+    }
+
 </style>
 </body>
 </html>
@@ -239,11 +243,29 @@ class Installateur
             ],
             'Configuration'           => [
                 'Fichier de configuration local'  => function () {
-                    $configFile = __DIR__ . '/../config/autoload/application.local.php';
-                    if (!file_exists($configFile)) {
+                    if (!Application::getConfig()) {
                         $this->stop = true;
 
-                        return '<abbr title="Renommez config/autoload/application.local.php.dist en config/autoload/application.local.php">Fichier introuvable</abbr>';
+                        return '<abbr title="Renommez '.Application::LOCAL_APPLICATION_CONFIG_FILE.'.dist en '.Application::LOCAL_APPLICATION_CONFIG_FILE.'">Fichier introuvable</abbr>';
+                    }
+
+                    return true;
+                },
+                'Scheme' => function () {
+                    $config = require(__DIR__ . '/../config/autoload/application.local.php');
+                    $value = $_SERVER['REQUEST_SCHEME'];
+
+                    if (!Application::getConfig('global','scheme', null)){
+                        return 'La variable globale "scheme" n\'est pas configurée. Y placer la valeur <span class="val">'.$value.'</span>';
+                    }
+
+                    return true;
+                },
+                'Domain' => function () {
+                    $value = $_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0, -10);
+
+                    if (!Application::getConfig('global','domain', null)){
+                        return 'La variable globale "domain" n\'est pas configurée. Y placer la valeur <span class="val">'.$value.'</span>';
                     }
 
                     return true;

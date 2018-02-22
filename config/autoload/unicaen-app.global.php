@@ -9,8 +9,8 @@ return [
         'app_infos'              => [
             'nom'                    => "OSE",
             'desc'                   => "Organisation des Services d'Enseignement",
-            'version'                => "6.1",
-            'date'                   => "20/12/2017",
+            'version'                => "6.2",
+            'date'                   => "22/02/2018",
             'contact'                => ['mail' => Application::getConfig('liens','contactAssistance')],
             'mentionsLegales'        => Application::getConfig('liens','mentionsLegales'),
             'informatiqueEtLibertes' => Application::getConfig('liens','informatiqueEtLibertes'),

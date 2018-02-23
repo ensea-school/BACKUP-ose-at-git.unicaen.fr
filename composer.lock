@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "13d52325996eb6c6485d7183491b61ea",
+    "content-hash": "ed73dada32dafd1e26301a6f39b94207",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1452,7 +1452,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@860"
+                "reference": "/trunk/@862"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1495,7 +1495,7 @@
                 ]
             },
             "description": "Module commun aux applis ZF2 de l'UCBN",
-            "time": "2018-02-19T12:26:28+00:00"
+            "time": "2018-02-22T09:53:05+00:00"
         },
         {
             "name": "unicaen/unicaen-auth",

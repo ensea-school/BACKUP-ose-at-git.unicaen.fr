@@ -21,7 +21,7 @@ class LigneFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $helper = new Ligne();
-        $helper->setServiceLocator($serviceLocator);
+
         return $helper;
     }
 }

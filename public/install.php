@@ -67,7 +67,7 @@
         <h1>Installation OK!</h1>
         <p class="lead">
             Pour sortir du mode installation, veuillez passer à <i>false</i> la valeur <i>global/modeInstallation</i> de votre fichier de configuration
-            <i><?= Application::LOCAL_APPLICATION_CONFIG_FILE ?></i>.
+            <i><?= AppConfig::LOCAL_APPLICATION_CONFIG_FILE ?></i>.
         </p>
     </div>
 <?php endif; ?>
@@ -252,10 +252,10 @@ class Installateur
             ],
             'Configuration'           => [
                 'Fichier de configuration local'  => function () {
-                    if (!Application::getConfig()) {
+                    if (!AppConfig::get()) {
                         $this->stop = true;
 
-                        return '<abbr title="Renommez '.Application::LOCAL_APPLICATION_CONFIG_FILE.'.dist en '.Application::LOCAL_APPLICATION_CONFIG_FILE.'">Fichier introuvable</abbr>';
+                        return '<abbr title="Renommez '.AppConfig::LOCAL_APPLICATION_CONFIG_FILE.'.dist en '.AppConfig::LOCAL_APPLICATION_CONFIG_FILE.'">Fichier introuvable</abbr>';
                     }
 
                     return true;
@@ -263,7 +263,7 @@ class Installateur
                 'Scheme' => function () {
                     $value = $_SERVER['REQUEST_SCHEME'];
 
-                    if (!Application::getConfig('global','scheme', null)){
+                    if (!AppConfig::get('global','scheme', null)){
                         return 'La variable globale "scheme" n\'est pas configurée. Y placer la valeur <span class="val">'.$value.'</span>';
                     }
 
@@ -272,7 +272,7 @@ class Installateur
                 'Domain' => function () {
                     $value = $_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0, -10);
 
-                    if (!Application::getConfig('global','domain', null)){
+                    if (!AppConfig::get('global','domain', null)){
                         return 'La variable globale "domain" n\'est pas configurée. Y placer la valeur <span class="val">'.$value.'</span>';
                     }
 

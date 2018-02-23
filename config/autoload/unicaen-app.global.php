@@ -11,9 +11,9 @@ return [
             'desc'                   => "Organisation des Services d'Enseignement",
             'version'                => "6.2",
             'date'                   => "22/02/2018",
-            'contact'                => ['mail' => Application::getConfig('liens','contactAssistance')],
-            'mentionsLegales'        => Application::getConfig('liens','mentionsLegales'),
-            'informatiqueEtLibertes' => Application::getConfig('liens','informatiqueEtLibertes'),
+            'contact'                => ['mail' => AppConfig::get('liens','contactAssistance')],
+            'mentionsLegales'        => AppConfig::get('liens','mentionsLegales'),
+            'informatiqueEtLibertes' => AppConfig::get('liens','informatiqueEtLibertes'),
         ],
 
         /**
@@ -25,33 +25,33 @@ return [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => Application::getConfig('ldap','host'),
-                        'username'            => Application::getConfig('ldap','username'),
-                        'password'            => Application::getConfig('ldap','password'),
-                        'baseDn'              => Application::getConfig('ldap','baseDn'),
-                        'bindRequiresDn'      => Application::getConfig('ldap','bindRequiresDn'),
-                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . Application::getConfig('ldap','loginAttribute') . "=%s))",
-                        'port'                => Application::getConfig('ldap','port'),
+                        'host'                => AppConfig::get('ldap','host'),
+                        'username'            => AppConfig::get('ldap','username'),
+                        'password'            => AppConfig::get('ldap','password'),
+                        'baseDn'              => AppConfig::get('ldap','baseDn'),
+                        'bindRequiresDn'      => AppConfig::get('ldap','bindRequiresDn'),
+                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . AppConfig::get('ldap','loginAttribute') . "=%s))",
+                        'port'                => AppConfig::get('ldap','port'),
                     ],
                 ],
             ],
             'dn'          => [
-                'UTILISATEURS_BASE_DN'            => Application::getConfig('ldap','utilisateursBaseDN'),
-                'UTILISATEURS_DESACTIVES_BASE_DN' => Application::getConfig('ldap','utilisateursDesactivesBaseDN'),
-                'GROUPS_BASE_DN'                  => Application::getConfig('ldap','groupsBaseDN'),
-                'STRUCTURES_BASE_DN'              => Application::getConfig('ldap','structuresBaseDN'),
+                'UTILISATEURS_BASE_DN'            => AppConfig::get('ldap','utilisateursBaseDN'),
+                'UTILISATEURS_DESACTIVES_BASE_DN' => AppConfig::get('ldap','utilisateursDesactivesBaseDN'),
+                'GROUPS_BASE_DN'                  => AppConfig::get('ldap','groupsBaseDN'),
+                'STRUCTURES_BASE_DN'              => AppConfig::get('ldap','structuresBaseDN'),
             ],
             'filters'     => [
-                'LOGIN_FILTER'                 => '(' . Application::getConfig('ldap','loginAttribute') . '=%s)',
-                'LOGIN_OR_NAME_FILTER'         => '(|(' . Application::getConfig('ldap','loginAttribute') . '=%s)(cn=%s*))',
+                'LOGIN_FILTER'                 => '(' . AppConfig::get('ldap','loginAttribute') . '=%s)',
+                'LOGIN_OR_NAME_FILTER'         => '(|(' . AppConfig::get('ldap','loginAttribute') . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
-                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . Application::getConfig('ldap','structureCode') . '=%s)',
-                'NO_INDIVIDU_FILTER'           => '(' . Application::getConfig('ldap','utilisateurCode') . '=%08s)',
+                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . AppConfig::get('ldap','structureCode') . '=%s)',
+                'NO_INDIVIDU_FILTER'           => '(' . AppConfig::get('ldap','utilisateurCode') . '=%08s)',
             ],
             'utilisateur' => [
-                'LOGIN'  => Application::getConfig('ldap','loginAttribute'),
-                'FILTER' => Application::getConfig('ldap','utilisateurFiltre'),
-                'CODE'   => Application::getConfig('ldap','utilisateurCode'),
+                'LOGIN'  => AppConfig::get('ldap','loginAttribute'),
+                'FILTER' => AppConfig::get('ldap','utilisateurFiltre'),
+                'CODE'   => AppConfig::get('ldap','utilisateurCode'),
             ],
         ],
 
@@ -61,13 +61,13 @@ return [
         'mail' => [
             // transport des mails
             'transport_options' => [
-                'host' => Application::getConfig('mail','smtpHost'),
-                'port' => Application::getConfig('mail','smtpPort'),
+                'host' => AppConfig::get('mail','smtpHost'),
+                'port' => AppConfig::get('mail','smtpPort'),
             ],
             // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
-            'redirect_to'       => Application::getConfig('mail','redirection'),
+            'redirect_to'       => AppConfig::get('mail','redirection'),
             // désactivation totale de l'envoi de mail par l'application
-            'do_not_send'       => Application::getConfig('mail','envoiDesactive'),
+            'do_not_send'       => AppConfig::get('mail','envoiDesactive'),
         ],
     ],
 ];

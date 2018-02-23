@@ -6,8 +6,6 @@
 
 class Application
 {
-    const LOCAL_APPLICATION_CONFIG_FILE = 'config/application.local.php';
-
     /**
      * @var Zend\ServiceManager\ServiceLocatorInterface
      */
@@ -28,79 +26,34 @@ class Application
      */
     public static $maintenanceWhiteList = [];
 
-    /**
-     * Configuration locale de l'application
-     *
-     * @var array
-     */
-    private static $config;
 
 
-
-    private static function init()
+    public static function init()
     {
         \Locale::setDefault('fr_FR');
         define('REQUEST_MICROTIME', microtime(true));
         chdir(dirname(__DIR__));
 
-        if (file_exists(self::LOCAL_APPLICATION_CONFIG_FILE)) {
-            self::$config = require(self::LOCAL_APPLICATION_CONFIG_FILE);
-        } else {
-            self::$config = null;
-        }
-
         require 'init_autoloader.php';
+        require 'config/application.config.php';
     }
 
 
 
-    public static function getConfig($section = null, $key = null, $default = null)
+    private static function startContainer()
     {
-        if (self::$config && $section && $key) {
-            if (isset(self::$config[$section][$key])) {
-                return self::$config[$section][$key];
-            } else {
-                return $default;
-            }
-        }
-
-        return self::$config;
-    }
-
-
-
-    private static function startContainerAndListeners()
-    {
-        if (null === self::getConfig()) return null;
-        $configuration = require 'config/application.config.php';
-
-        $smConfig        = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
-        self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig($smConfig));
-        self::$container->setService('ApplicationConfig', $configuration);
+        self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig([]));
+        self::$container->setService('ApplicationConfig', AppConfig::getGlobal());
         self::$container->get('ModuleManager')->loadModules();
-
-        $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
-        $config                     = self::$container->get('Config');
-        $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
-
-        $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
-
-        return $listeners;
     }
 
 
 
     private static function inMaintenance()
     {
-        $maintenance = self::getConfig('maintenance', 'modeMaintenance', false);
+        if (!AppConfig::get('maintenance', 'modeMaintenance', false)) return false;
 
-        if (!$maintenance) return false;
-
-        $whiteList             = self::getConfig('maintenance', 'whiteList', []);
-
-        if (php_sapi_name() === 'cli') {
-            exit(0);
-        }
+        $whiteList = AppConfig::get('maintenance', 'whiteList', []);
 
         $passed = false;
         foreach ($whiteList as $ip) {
@@ -110,6 +63,7 @@ class Application
             }
             if ($passed) break;
         }
+
         return !$passed;
     }
 
@@ -117,18 +71,24 @@ class Application
 
     public static function run()
     {
-        self::init();
+        if (self::inMaintenance()) {
+            self::$maintenanceText = AppConfig::get('maintenance', 'messageInfo');
+            if (php_sapi_name() !== 'cli') {
+                require 'maintenance.php';
+            }
+        } else {
+            self::startContainer();
 
-        if (self::inMaintenance()){
-            self::$maintenanceText = self::getConfig('maintenance', 'messageInfo');
-            require 'maintenance.php';
-        }else{
-            $listeners = self::startContainerAndListeners();
+            if (AppConfig::get('global','affichageErreurs')) {
+                error_reporting(E_ALL);
+            }
+            putenv("NLS_LANGUAGE=FRENCH");
 
-            if (($listeners === null) || self::getConfig('global', 'modeInstallation', true)){
+
+            if (AppConfig::get('global', 'modeInstallation', true)) {
                 require 'install.php';
-            }else{
-                self::$container->get('Application')->bootstrap($listeners)->run();
+            } else {
+                self::$container->get('Application')->bootstrap([])->run();
             }
         }
     }
@@ -138,4 +98,5 @@ class Application
 
 
 
+Application::init();
 Application::run();

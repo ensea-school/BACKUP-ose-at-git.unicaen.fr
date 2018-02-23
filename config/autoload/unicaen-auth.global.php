@@ -19,13 +19,13 @@ $settings = [
 
 ];
 
-if (Application::getConfig('cas', 'actif')) {
+if (AppConfig::get('cas', 'actif')) {
     $settings['cas']['connection']['default']['params'] = [
-        'hostname' => Application::getConfig('cas', 'host'),
-        'port'     => Application::getConfig('cas', 'port'),
-        'version'  => Application::getConfig('cas', 'version'),
-        'uri'      => Application::getConfig('cas', 'uri'),
-        'debug'    => Application::getConfig('cas', 'debug'),
+        'hostname' => AppConfig::get('cas', 'host'),
+        'port'     => AppConfig::get('cas', 'port'),
+        'version'  => AppConfig::get('cas', 'version'),
+        'uri'      => AppConfig::get('cas', 'uri'),
+        'debug'    => AppConfig::get('cas', 'debug'),
     ];
 }
 

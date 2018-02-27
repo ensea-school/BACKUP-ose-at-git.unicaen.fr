@@ -66,7 +66,8 @@
     <div id="contenu">
         <h1>Installation OK!</h1>
         <p class="lead">
-            Pour sortir du mode installation, veuillez passer à <i>false</i> la valeur <i>global/modeInstallation</i> de votre fichier de configuration
+            Pour sortir du mode installation, veuillez passer à <i>false</i> la valeur <i>global/modeInstallation</i> de votre
+            fichier de configuration
             <i><?= AppConfig::LOCAL_APPLICATION_CONFIG_FILE ?></i>.
         </p>
     </div>
@@ -143,6 +144,10 @@
         background-color: lightgreen;
     }
 
+    table.test tr.warning td.res {
+        background-color: papayawhip;
+    }
+
     table.test tr.error td.res {
         background-color: lightpink;
     }
@@ -170,8 +175,8 @@
 
     b.username {
         background-color: yellow;
-        padding-left:1em;
-        padding-right:1em;
+        padding-left: 1em;
+        padding-right: 1em;
         border: 1px darkgoldenrod solid;
         font-family: "Courier New", Courier, monospace;
     }
@@ -183,7 +188,10 @@
 </style>
 </body>
 </html>
-<?php die();
+<?php
+
+
+die();
 
 
 
@@ -203,9 +211,30 @@ class Installateur
     private function makeTests()
     {
         return [
+            'Environnement'           => [
+                'Lecture de la configuration globale'         => function () {
+                    if (!class_exists('AppConfig')){
+                        throw new \Exception('AppConfig non trouvé.');
+                    }else{
+                        return true;
+                    }
+                },
+                'Droit d\'écriture sur le dossier data/cache' => function () {
+                    $cacheDir = __DIR__ . '/../data/cache';
+
+                    return is_writable($cacheDir) ? true : 'Répertoire data/cache non accessible en écriture';
+                },
+                'Présence d\'UnoConv'                         => function () {
+                    return substr(shell_exec('unoconv --version'), 0, 7) == 'unoconv' ? true : 'Commande "unoconv" introuvable';
+                },
+            ],
             'Configuration d\'Apache' => [
                 'Réécriture d\'URL activée' => function () {
-                    return in_array('mod_rewrite', apache_get_modules()) ? true : 'Non activée';
+                    if (function_exists('apache_get_modules')) {
+                        return in_array('mod_rewrite', apache_get_modules()) ? true : 'Non activée';
+                    } else {
+                        return '!Test non réalisable. PHP n\'est probablement pas lancé en tant que module Apache';
+                    }
                 },
             ],
             'Modules PHP nécessaires' => [
@@ -240,68 +269,59 @@ class Installateur
                     return in_array('oci8', get_loaded_extensions()) ? true : 'Non installé';
                 },
             ],
-            'Environnement'           => [
-                'Droit d\'écriture sur le dossier data/cache' => function () {
-                    $cacheDir = __DIR__ . '/../data/cache';
-
-                    return is_writable($cacheDir) ? true : 'Répertoire data/cache non accessible en écriture';
-                },
-                'Présence d\'UnoConv'                         => function () {
-                    return substr(shell_exec('unoconv --version'), 0, 7) == 'unoconv' ? true : 'Commande "unoconv" introuvable';
-                },
-            ],
             'Configuration'           => [
-                'Fichier de configuration local'  => function () {
+                'Fichier de configuration local'              => function () {
                     if (!AppConfig::get()) {
                         $this->stop = true;
 
-                        return '<abbr title="Renommez '.AppConfig::LOCAL_APPLICATION_CONFIG_FILE.'.dist en '.AppConfig::LOCAL_APPLICATION_CONFIG_FILE.'">Fichier introuvable</abbr>';
+                        return '<abbr title="Renommez ' . AppConfig::LOCAL_APPLICATION_CONFIG_FILE . '.dist en ' . AppConfig::LOCAL_APPLICATION_CONFIG_FILE . '">Fichier introuvable</abbr>';
                     }
 
                     return true;
                 },
-                'Scheme' => function () {
-                    $value = $_SERVER['REQUEST_SCHEME'];
+                'Scheme'                                      => function () {
+                    $value = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http</span> ou <span class="val">https';
 
-                    if (!AppConfig::get('global','scheme', null)){
-                        return 'La variable globale "scheme" n\'est pas configurée. Y placer la valeur <span class="val">'.$value.'</span>';
+                    if (!AppConfig::get('global', 'scheme', null)) {
+                        return 'La variable globale "scheme" n\'est pas configurée. Y placer la valeur <span class="val">' . $value . '</span>';
                     }
 
                     return true;
                 },
-                'Domain' => function () {
-                    $value = $_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0, -10);
+                'Domain'                                      => function () {
+                    $value = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '')
+                            . substr(isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '', 0, -10);
 
-                    if (!AppConfig::get('global','domain', null)){
-                        return 'La variable globale "domain" n\'est pas configurée. Y placer la valeur <span class="val">'.$value.'</span>';
+                    if (!AppConfig::get('global', 'domain', null)) {
+                        return 'La variable globale "domain" n\'est pas configurée. Y placer la valeur <span class="val">' . $value . '</span>';
                     }
 
                     return true;
                 },
-                'Accès à la base de données'      => function () {
+                'Accès à la base de données'                  => function () {
                     $this->getEntityManager()->beginTransaction();
                     $this->getEntityManager()->rollback();
 
                     return true;
                 },
-                'Test d\'existance des structures de données' => function(){
-                    $sql = 'SELECT table_name FROM USER_TABLES where table_name IN (\'INTERVENANT\',\'UTILISATEUR\',\'CIVILITE\',\'ELEMENT_PEDAGOGIQUE\',\'SERVICE\') ORDER BY table_name';
+                'Test d\'existance des structures de données' => function () {
+                    $sql    = 'SELECT table_name FROM USER_TABLES where table_name IN (\'INTERVENANT\',\'UTILISATEUR\',\'CIVILITE\',\'ELEMENT_PEDAGOGIQUE\',\'SERVICE\') ORDER BY table_name';
                     $tables = '-';
-                    $res = Application::$container->get(Constants::BDD)->getConnection()->fetchAll($sql);
+                    $res    = Application::$container->get(Constants::BDD)->getConnection()->fetchAll($sql);
 
-                    foreach( $res as $r ){
-                        $tables .= $r['TABLE_NAME'].'-';
+                    foreach ($res as $r) {
+                        $tables .= $r['TABLE_NAME'] . '-';
                     }
 
-                    if ($tables != '-CIVILITE-ELEMENT_PEDAGOGIQUE-INTERVENANT-SERVICE-UTILISATEUR-'){
+                    if ($tables != '-CIVILITE-ELEMENT_PEDAGOGIQUE-INTERVENANT-SERVICE-UTILISATEUR-') {
                         $this->mustInitBdd = true;
                         throw new \Exception('Base de données non initialisée. '
-                            .'Merci de lancer le script de création des structures de données présent dans <i>data/Déploiement/ose-ddl.sql</i>');
+                            . 'Merci de lancer le script de création des structures de données présent dans <i>data/Déploiement/ose-ddl.sql</i>');
                     }
 
                     return true;
                 },
-                'Recherche de l\'utilisateur OSE' => function () {
+                'Recherche de l\'utilisateur OSE'             => function () {
                     /** @var UtilisateurService $serviceUtilisateur */
                     $serviceUtilisateur = Application::$container->get(UtilisateurService::class);
 
@@ -311,7 +331,7 @@ class Installateur
                         throw new \Exception('Utilisateur OSE introuvable');
                     }
                 },
-                'Accès au serveur LDAP'           => function () {
+                'Accès au serveur LDAP'                       => function () {
                     /** @var LdapConnecteur $ldap */
                     $ldap = Application::$container->get(LdapConnecteur::class);
                     @$ldap->rechercheUtilisateurs('utilisateur_introuvable');
@@ -326,6 +346,11 @@ class Installateur
 
     public function affTests()
     {
+        /* Au besoin, on supprime le cache de onfiguration */
+        if (file_exists('data/cache/module-config-cache.php')){
+            unlink('data/cache/module-config-cache.php');
+        }
+
         $tests = $this->makeTests();
         foreach ($tests as $cat => $ts) {
             echo '<h2>' . $cat . '</h2>';
@@ -342,7 +367,18 @@ class Installateur
                     }
                 }
 
-                echo '<tr class="' . ($r === true ? 'passed' : 'error') . '"><td class="test">' . $test . '</td><td class="res">' . ($r === true ? 'OK' : $r) . '</td></tr>';
+                $class = 'passed';
+                if ($r !== true){
+
+                    if ($r !== true && 0 ===strpos($r, '!')){
+                        $r = substr( $r, 1);
+                        $class = 'warning';
+                    }else{
+                        $class='error';
+                    }
+                }
+
+                echo '<tr class="' . $class . '"><td class="test">' . $test . '</td><td class="res">' . ($r === true ? 'OK' : $r) . '</td></tr>';
             }
             echo '</table>';
         }
@@ -374,7 +410,9 @@ class Installateur
             if ($error) {
                 echo '<p class="mdp-error">' . $error . '</p>';
             } else {
-                echo '<p class="mdp-success">Le mot de passe de l\'utilisateur OSE a été réinitialisé avec succès.<br />Pour rappel, le login de l\'utilisateur OSE est <b class="username">'.$oseUser->getUsername().'</b></p>';
+                echo '<p class="mdp-success">Le mot de passe de l\'utilisateur OSE a été réinitialisé avec succès.<br />Pour rappel, le login de l\'utilisateur OSE est <b class="username">' . $oseUser->getUsername() . '</b>
+Une fois que vous vous serez connecté, je vous invite à nommer un ou plusieurs administrateurs de l\'application.
+(page Administration / Droits d\'accès / Affectations).</p>';
             }
         }
     }

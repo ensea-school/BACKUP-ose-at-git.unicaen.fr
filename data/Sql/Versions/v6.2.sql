@@ -9812,6 +9812,12 @@ Insert into IMPORT_TABLES (TABLE_NAME,SYNC_FILTRE,SYNC_ENABLED) values ('CENTRE_
 Insert into IMPORT_TABLES (TABLE_NAME,SYNC_FILTRE,SYNC_ENABLED) values ('AFFECTATION',null,'0');
 Insert into IMPORT_TABLES (TABLE_NAME,SYNC_FILTRE,SYNC_ENABLED) values ('ADRESSE_STRUCTURE',null,'0');
 
+Insert into PLAFOND_ETAT (ID,CODE,LIBELLE) values (plafond_etat_id_seq.nextval,'desactive','Désactivé');
+Insert into PLAFOND_ETAT (ID,CODE,LIBELLE) values (plafond_etat_id_seq.nextval,'informatif','Informatif');
+Insert into PLAFOND_ETAT (ID,CODE,LIBELLE) values (plafond_etat_id_seq.nextval,'bloquant','Bloquant');
+
+-- revoir les paramètres (interface de gestion des paramètres)
+
 update intervenant set utilisateur_code = lpad(code, 8, '0');
 
 

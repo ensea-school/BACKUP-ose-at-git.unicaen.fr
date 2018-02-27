@@ -109,20 +109,6 @@ class DdlGen
             }
         }
 
-        $this->ddl[self::VIEWS]['SRC_INTERVENANT'] = "CREATE OR REPLACE VIEW src_intervenant AS 
-SELECT
-  null source_code,
-  null nom_usuel,
-  null nom_patronymique,
-  null prenom,
-  null date_naissance,
-  null critere_recherche,
-  null structure_id,
-  null civilite_id,
-  null annee_id
-FROM
-  dual;";
-
         $this->ddl[self::JOBS] = [];
 
         $this->ddl[self::JOBS]['OSE_CHARGENS_CALCUL_EFFECTIFS'] = "BEGIN

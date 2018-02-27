@@ -61,18 +61,22 @@ class IntervenantProcessus extends AbstractProcessus
         $orc = implode(' OR ', $orc);
         $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
 
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-
         $intervenants = [];
-        while ($r = $stmt->fetch()) {
-            $intervenants[$r['SOURCE_CODE']] = [
-                'civilite'         => $r['CIVILITE'],
-                'nom'              => $r['NOM_USUEL'],
-                'prenom'           => $r['PRENOM'],
-                'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
-                'structure'        => $r['STRUCTURE'],
-                'numero-personnel' => $r['SOURCE_CODE'],
-            ];
+
+        try {
+            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+            while ($r = $stmt->fetch()) {
+                $intervenants[$r['SOURCE_CODE']] = [
+                    'civilite'         => $r['CIVILITE'],
+                    'nom'              => $r['NOM_USUEL'],
+                    'prenom'           => $r['PRENOM'],
+                    'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
+                    'structure'        => $r['STRUCTURE'],
+                    'numero-personnel' => $r['SOURCE_CODE'],
+                ];
+            }
+        }catch(\Exception $e){
+            // à traiter si la vue source intervenant n'existe pas!!
         }
 
         return $intervenants;

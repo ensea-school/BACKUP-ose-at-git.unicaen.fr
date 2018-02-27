@@ -11,7 +11,7 @@ $annees = array_chunk($annees, 10);
 ?>
 <h1 class="page-header">Gestion des années</h1>
 
-<?php foreach ($annees as $al): ?>
+<?php foreach ($annees as $al): if ($al->getId() > 2013): ?>
     <div style="float:left;margin:2em">
         <?php foreach ($al as $annee): ?>
 
@@ -21,7 +21,7 @@ $annees = array_chunk($annees, 10);
 
         <?php endforeach; ?>
     </div>
-<?php endforeach; ?>
+<?php endif; endforeach; ?>
 <script>
 
     $('.btn-annee').click(function(){

@@ -76,28 +76,36 @@ foreach ($typeModulateurs as $tm) {
                             <br>
                         </div>
                         <table class="table table-condensed table-extra-condensed">
-                        <?php foreach ($typeModulateurStructures as $tms) {
-                            if ($tms->getTypeModulateur()->getId() == $tm->getId()) { ?>
-                                <tr>
-                                        <td><div class="col-md-9"><?= $tms->getStructure()->getLibelleCourt() ?></div></td>
+                            <?php foreach ($typeModulateurStructures as $tms) {
+                                if ($tms->getTypeModulateur()->getId() == $tm->getId()) { ?>
+                                    <tr>
+                                        <?php $title = '';
+                                        if ($tms->getAnneeDebut()) $title = "de " . $tms->getAnneeDebut() . " ";
+                                        if ($tms->getAnneeFin()) $title .= "jusqu'à " . $tms->getAnneeFin(); ?>
+                                        <td>
+                                            <div
+                                                <?php if ($title) echo 'title="' . $title . '" '; ?>
+                                                    class="col-md-9">
+                                                <?= $tms->getStructure()->getLibelleCourt() ?></div>
+                                        </td>
                                         <td><a class="ajax-modal" data-event="modulateur-saisie"
-                                           href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
-                                           title="Modifier une structure d\'un type de modulateur ">
-                                            <span class="glyphicon glyphicon-edit"></span></a>
-                                        <a class="pop-ajax"
-                                           href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
-                                           title="Supprimer la structure d\'un type de modulateur"
-                                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                                           data-confirm="true"
-                                           data-confirm-button="Oui"
-                                           data-cancel-button="Non"
-                                           data-submit-reload="true"
-                                        >
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </a>
+                                               href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
+                                               title="Modifier une structure d\'un type de modulateur ">
+                                                <span class="glyphicon glyphicon-edit"></span></a>
+                                            <a class="pop-ajax"
+                                               href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
+                                               title="Supprimer la structure d\'un type de modulateur"
+                                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                               data-confirm="true"
+                                               data-confirm-button="Oui"
+                                               data-cancel-button="Non"
+                                               data-submit-reload="true"
+                                            >
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
                                     </tr>
-                            <?php }
-                        } ?>
+                                <?php }
+                            } ?>
                         </table>
                         <a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
                            href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"

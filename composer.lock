@@ -1559,7 +1559,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "fd5125db9525b121b5a950e9e12721a9ab6027f4"
+                "reference": "ec1e41a0f10538308fda52910b8ef9b714bbeb12"
             },
             "require": {
                 "unicaen/auth": "^1.2 || dev-master",
@@ -1579,7 +1579,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2018-02-27T08:40:13+00:00"
+            "time": "2018-02-27T14:35:23+00:00"
         },
         {
             "name": "unicaen/oracle",
@@ -1615,7 +1615,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "adec2e86fbfc92236dc5f0eafcafa073070520c3"
+                "reference": "eebc66e459c0d1ae651601e2dd52738e60f19dbd"
             },
             "require": {
                 "unicaen/app": "^1.3 || dev-trunk"
@@ -1634,7 +1634,7 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2018-02-27T09:35:50+00:00"
+            "time": "2018-02-27T14:28:39+00:00"
         },
         {
             "name": "zendframework/zend-authentication",

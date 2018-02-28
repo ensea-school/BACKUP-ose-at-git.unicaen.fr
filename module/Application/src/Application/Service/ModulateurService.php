@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Modulateur;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\TypeModulateurStructure;
 use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -102,4 +103,5 @@ class ModulateurService extends AbstractEntityService
 
         return $this->all;
     }
+
 }

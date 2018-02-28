@@ -1,5 +1,7 @@
 <?php
 
+$localConfig = require(__DIR__ . '/application.local.php');
+
 $settings = [
     /**
      * Flag indiquant si l'utilisateur authenitifié avec succès via l'annuaire LDAP doit
@@ -19,13 +21,13 @@ $settings = [
 
 ];
 
-if (AppConfig::get('cas', 'actif')) {
+if ($localConfig['cas']['actif']) {
     $settings['cas']['connection']['default']['params'] = [
-        'hostname' => AppConfig::get('cas', 'host'),
-        'port'     => AppConfig::get('cas', 'port'),
-        'version'  => AppConfig::get('cas', 'version'),
-        'uri'      => AppConfig::get('cas', 'uri'),
-        'debug'    => AppConfig::get('cas', 'debug'),
+        'hostname' => $localConfig['cas']['host'],
+        'port'     => $localConfig['cas']['port'],
+        'version'  => $localConfig['cas']['version'],
+        'uri'      => $localConfig['cas']['uri'],
+        'debug'    => $localConfig['cas']['debug'],
     ];
 }
 

@@ -1,8 +1,8 @@
 <?php
 
 namespace Application\Controller;
-
 use Application\Entity\Db\Modulateur;
+use Application\Form\Modulateur\Traits\TypeModulateurStrctureSaisieFormAwareTrait;
 use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Application\Entity\Db\TypeModulateurStructure;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
@@ -12,7 +12,9 @@ use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
+use Application\Form\Modulateur\Traits\TypeModulateurStructureSaisieFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 
 class modulateurController extends AbstractController
 {
@@ -20,8 +22,10 @@ class modulateurController extends AbstractController
     use TypeModulateurServiceAwareTrait;
     use ModulateurSaisieFormAwareTrait;
     use TypeModulateurSaisieFormAwareTrait;
+    use TypeModulateurStructureSaisieFormAwareTrait;
     use TypeModulateurStructureServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use StructureServiceAwareTrait;
 
 
 
@@ -125,7 +129,44 @@ class modulateurController extends AbstractController
         return compact('form', 'title');
     }
 
+    public function typeModulateurStructureSaisieAction(){
+        /* @var $typeModulateur typeModulateur */
+        /* @var $typeModulateurStructure typeModulateurStructure */
+        $typeModulateur = $this->getEvent()->getParam('typeModulateur');
+        $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
 
+        $form = $this->getFormTypeModulateurStructureSaisie();
+        if (empty($typeModulateurStructure)) {
+            $title          = 'Création d\'un nouveau Type de Modulateur';
+            $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity();
+            $typeModulateurStructure->setTypeModulateur($typeModulateur);
+        } else {
+            $title = 'Édition d\'une structure d\'un Type de Modulateur';
+        }
+
+        $form->bindRequestSave($typeModulateurStructure, $this->getRequest(), function (TypeModulateurStructure $tms) {
+            try {
+                $this->getServiceTypeModulateurStructure()->save($tms);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tms->getId());
+            }
+        });
+
+        return compact('form', 'title');
+    }
+
+    public function typeModulateurStructureDeleteAction(){
+        $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
+        try {
+            $this->getServiceTypeModulateurStructure()->delete($typeModulateurStructure);
+            $this->flashMessenger()->addSuccessMessage("Structure supprimée avec succès pour ce type de modulateur.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        }
+        return new MessengerViewModel(compact('typeModulateurStructure'));
+    }
 
     public function typeModulateurDeleteAction()
     {

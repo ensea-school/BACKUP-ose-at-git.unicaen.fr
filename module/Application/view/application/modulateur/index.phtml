@@ -1,13 +1,15 @@
 <?php
-/**
- * @var $this            \Application\View\Renderer\PhpRenderer
- * @var $modulateurs     \Application\Entity\Db\modulateur[]
- * @var $typeModulateurs \Application\Entity\Db\typeModulateur[]
- */
 
 use Application\Provider\Privilege\Privileges;
-use Application\Entity\Db\TypeModulateur;
+use Application\Entity\Db\TypeModulateurStructure;
 use UnicaenApp\Util;
+
+/**
+ * @var $this                      \Application\View\Renderer\PhpRenderer
+ * @var $modulateurs               \Application\Entity\Db\modulateur[]
+ * @var $typeModulateurs           \Application\Entity\Db\typeModulateur[]
+ * @var $typeModulateurStructures  \Application\Entity\Db\typeModulateurStructure[]
+ */
 
 function affBooleen($flg)
 {
@@ -15,20 +17,20 @@ function affBooleen($flg)
     return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
 }
 
-$this->headTitle()->append("Modulateurs des taux horaires");
+$this->headTitle()->append("Gestion des modulateurs");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MODULATEUR_EDITION));
 
 ?>
-<h1 class="page-header">Modulateurs des taux horaires</h1>
+<h1 class="page-header">Gestion des modulateurs</h1>
 <?php
 foreach ($typeModulateurs as $tm) {
-    if ($this->isAllowed($tm,Privileges::MODULATEUR_VISUALISATION)) { ?>
+    if ($this->isAllowed($tm, Privileges::MODULATEUR_VISUALISATION)) { ?>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title"><?= $tm->getCode() ?>
                     <span style="position:absolute; left: 300px"><?= $tm->getLibelle() ?></span>
-                <span style="position:absolute; right: 50px;">
+                    <span style="position:absolute; right: 50px;">
 
         <?php if ($canEdit): ?>
             <a class="ajax-modal" data-event="modulateur-saisie"
@@ -37,9 +39,9 @@ foreach ($typeModulateurs as $tm) {
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
         <?php endif ?>
-                    <a class="ajax-modal" data-event="modulateur-saisie"
-                       href="<?= $this->url('modulateur/type-modulateur-saisie', ['typeModulateur' => $tm->getId()]) ?>"
-                       title="Modifier le type de modulateur">
+                        <a class="ajax-modal" data-event="modulateur-saisie"
+                           href="<?= $this->url('modulateur/type-modulateur-saisie', ['typeModulateur' => $tm->getId()]) ?>"
+                           title="Modifier le type de modulateur">
                         <span class="glyphicon glyphicon-edit"></span></a>
         <a class="pop-ajax"
            href="<?= $this->url('modulateur/type-modulateur-delete', ['typeModulateur' => $tm->getId()]) ?>"
@@ -70,6 +72,38 @@ foreach ($typeModulateurs as $tm) {
                             <div class="col-md-9">Saisie par ens:</div>
                             <div class="col-md-3"><?= affBooleen($tm->getSaisieParEnseignant()) ?></div>
                         </div>
+                        <div class="row">
+                            <br>
+                        </div>
+                        <table class="table table-condensed table-extra-condensed">
+                        <?php foreach ($typeModulateurStructures as $tms) {
+                            if ($tms->getTypeModulateur()->getId() == $tm->getId()) { ?>
+                                <tr>
+                                        <td><div class="col-md-9"><?= $tms->getStructure()->getLibelleCourt() ?></div></td>
+                                        <td><a class="ajax-modal" data-event="modulateur-saisie"
+                                           href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
+                                           title="Modifier une structure d\'un type de modulateur ">
+                                            <span class="glyphicon glyphicon-edit"></span></a>
+                                        <a class="pop-ajax"
+                                           href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
+                                           title="Supprimer la structure d\'un type de modulateur"
+                                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                           data-confirm="true"
+                                           data-confirm-button="Oui"
+                                           data-cancel-button="Non"
+                                           data-submit-reload="true"
+                                        >
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </tr>
+                            <?php }
+                        } ?>
+                        </table>
+                        <a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
+                           href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
+                           title="Ajouter une structure au type de modulateur">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Ajouter une structure</a>
                     </div>
                     <div class="col-md-9">
                         <table class="table table-bordered">
@@ -123,12 +157,12 @@ foreach ($typeModulateurs as $tm) {
         <?php
     }
 } ?>
-    <?php if (($canEdit) && (!$structure)) : ?>
-<a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
-   href="<?= $this->url('modulateur/type-modulateur-saisie', []) ?>"
-   title="Ajouter un type de modulateur">
-    <span class="glyphicon glyphicon-edit"></span>
-    Ajouter un type de modulateur</a>
+<?php if (($canEdit) && (!$structure)) : ?>
+    <a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
+       href="<?= $this->url('modulateur/type-modulateur-saisie', []) ?>"
+       title="Ajouter un type de modulateur">
+        <span class="glyphicon glyphicon-edit"></span>
+        Ajouter un type de modulateur</a>
     <script type="text/javascript">
         $(function () {
             $("body").on("modulateur-saisie", function (event, data) {

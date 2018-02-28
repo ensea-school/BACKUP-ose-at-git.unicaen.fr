@@ -1,5 +1,7 @@
 <?php
 
+$localConfig = require(__DIR__ . '/application.local.php');
+
 return [
     'unicaen-app' => [
 
@@ -9,11 +11,11 @@ return [
         'app_infos'              => [
             'nom'                    => "OSE",
             'desc'                   => "Organisation des Services d'Enseignement",
-            'version'                => "6.2",
-            'date'                   => "22/02/2018",
-            'contact'                => ['mail' => AppConfig::get('liens','contactAssistance')],
-            'mentionsLegales'        => AppConfig::get('liens','mentionsLegales'),
-            'informatiqueEtLibertes' => AppConfig::get('liens','informatiqueEtLibertes'),
+            'version'                => "6.1",
+            'date'                   => "20/12/2017",
+            'contact'                => ['mail' => $localConfig['liens']['contactAssistance']],
+            'mentionsLegales'        => $localConfig['liens']['mentionsLegales'],
+            'informatiqueEtLibertes' => $localConfig['liens']['informatiqueEtLibertes'],
         ],
 
         /**
@@ -25,33 +27,33 @@ return [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => AppConfig::get('ldap','host'),
-                        'username'            => AppConfig::get('ldap','username'),
-                        'password'            => AppConfig::get('ldap','password'),
-                        'baseDn'              => AppConfig::get('ldap','baseDn'),
-                        'bindRequiresDn'      => AppConfig::get('ldap','bindRequiresDn'),
-                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . AppConfig::get('ldap','loginAttribute') . "=%s))",
-                        'port'                => AppConfig::get('ldap','port'),
+                        'host'                => $localConfig['ldap']['host'],
+                        'username'            => $localConfig['ldap']['username'],
+                        'password'            => $localConfig['ldap']['password'],
+                        'baseDn'              => $localConfig['ldap']['baseDn'],
+                        'bindRequiresDn'      => $localConfig['ldap']['bindRequiresDn'],
+                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . $localConfig['ldap']['loginAttribute'] . "=%s))",
+                        'port'                => $localConfig['ldap']['port'],
                     ],
                 ],
             ],
             'dn'          => [
-                'UTILISATEURS_BASE_DN'            => AppConfig::get('ldap','utilisateursBaseDN'),
-                'UTILISATEURS_DESACTIVES_BASE_DN' => AppConfig::get('ldap','utilisateursDesactivesBaseDN'),
-                'GROUPS_BASE_DN'                  => AppConfig::get('ldap','groupsBaseDN'),
-                'STRUCTURES_BASE_DN'              => AppConfig::get('ldap','structuresBaseDN'),
+                'UTILISATEURS_BASE_DN'            => $localConfig['ldap']['utilisateursBaseDN'],
+                'UTILISATEURS_DESACTIVES_BASE_DN' => $localConfig['ldap']['utilisateursDesactivesBaseDN'],
+                'GROUPS_BASE_DN'                  => $localConfig['ldap']['groupsBaseDN'],
+                'STRUCTURES_BASE_DN'              => $localConfig['ldap']['structuresBaseDN'],
             ],
             'filters'     => [
-                'LOGIN_FILTER'                 => '(' . AppConfig::get('ldap','loginAttribute') . '=%s)',
-                'LOGIN_OR_NAME_FILTER'         => '(|(' . AppConfig::get('ldap','loginAttribute') . '=%s)(cn=%s*))',
+                'LOGIN_FILTER'                 => '(' . $localConfig['ldap']['loginAttribute'] . '=%s)',
+                'LOGIN_OR_NAME_FILTER'         => '(|(' . $localConfig['ldap']['loginAttribute'] . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
-                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . AppConfig::get('ldap','structureCode') . '=%s)',
-                'NO_INDIVIDU_FILTER'           => '(' . AppConfig::get('ldap','utilisateurCode') . '=%08s)',
+                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . $localConfig['ldap']['structureCode'] . '=%s)',
+                'NO_INDIVIDU_FILTER'           => '(' . $localConfig['ldap']['utilisateurCode'] . '=%08s)',
             ],
             'utilisateur' => [
-                'LOGIN'  => AppConfig::get('ldap','loginAttribute'),
-                'FILTER' => AppConfig::get('ldap','utilisateurFiltre'),
-                'CODE'   => AppConfig::get('ldap','utilisateurCode'),
+                'LOGIN'  => $localConfig['ldap']['loginAttribute'],
+                'FILTER' => $localConfig['ldap']['utilisateurFiltre'],
+                'CODE'   => $localConfig['ldap']['utilisateurCode'],
             ],
         ],
 
@@ -61,13 +63,13 @@ return [
         'mail' => [
             // transport des mails
             'transport_options' => [
-                'host' => AppConfig::get('mail','smtpHost'),
-                'port' => AppConfig::get('mail','smtpPort'),
+                'host' => $localConfig['mail']['smtpHost'],
+                'port' => $localConfig['mail']['smtpPort'],
             ],
             // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
-            'redirect_to'       => AppConfig::get('mail','redirection'),
+            'redirect_to'       => $localConfig['mail']['redirection'],
             // désactivation totale de l'envoi de mail par l'application
-            'do_not_send'       => AppConfig::get('mail','envoiDesactive'),
+            'do_not_send'       => $localConfig['mail']['envoiDesactive'],
         ],
     ],
 ];

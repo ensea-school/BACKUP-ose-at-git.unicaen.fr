@@ -79,7 +79,6 @@ return [
                         'label'    => AppConfig::get('etablissement','nom'),
                         'title'    => AppConfig::get('etablissement','logoDescription'),
                         'uri'      => AppConfig::get('etablissement','logoUri'),
-                        'class'    => 'etab',
                     ],
                 ],
             ],

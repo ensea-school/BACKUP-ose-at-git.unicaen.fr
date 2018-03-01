@@ -5,7 +5,7 @@ namespace Application;
 use Application\Mouchard\MouchardCompleterContextFactory;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
-return [
+$config = [
     'doctrine'           => [
         'connection'    => [
             'orm_default' => [
@@ -234,8 +234,13 @@ return [
             '116_' => 'css/agrement.css',
             '118_' => 'css/acceuil.css',
             '120_' => 'css/callout.css',
-
             '121_' => 'css/piece-jointe.css',
         ],
     ],
 ];
+
+if ($customCss = \AppConfig::get('etablissement', 'css')){
+    $config['public_files']['stylesheets']['999_'] = $customCss;
+}
+
+return $config;

@@ -11,9 +11,9 @@ return [
             'desc'                   => "Organisation des Services d'Enseignement",
             'version'                => "6.2.2",
             'date'                   => "28/02/2018",
-            'contact'                => ['mail' => AppConfig::get('liens','contactAssistance')],
-            'mentionsLegales'        => AppConfig::get('liens','mentionsLegales'),
-            'informatiqueEtLibertes' => AppConfig::get('liens','informatiqueEtLibertes'),
+            'contact'                => ['mail' => AppConfig::get('etablissement','contactAssistance')],
+            'mentionsLegales'        => AppConfig::get('etablissement','mentionsLegales'),
+            'informatiqueEtLibertes' => AppConfig::get('etablissement','informatiqueEtLibertes'),
         ],
 
         /**
@@ -68,6 +68,21 @@ return [
             'redirect_to'       => AppConfig::get('mail','redirection'),
             // désactivation totale de l'envoi de mail par l'application
             'do_not_send'       => AppConfig::get('mail','envoiDesactive'),
+        ],
+    ],
+
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'etab' => [
+                        'label'    => AppConfig::get('etablissement','nom'),
+                        'title'    => AppConfig::get('etablissement','logoDescription'),
+                        'uri'      => AppConfig::get('etablissement','logoUri'),
+                        'class'    => 'etab',
+                    ],
+                ],
+            ],
         ],
     ],
 ];

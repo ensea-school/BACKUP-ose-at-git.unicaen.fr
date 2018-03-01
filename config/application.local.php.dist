@@ -33,8 +33,20 @@ return [
     ],
 
 
-    /* Liens divers */
-    'liens'  => [
+    /* Personnalisation de OSE pour votre établissement */
+    'etablissement' => [
+        /* Nom de l'établissement */
+        'nom'                    => 'Université de Caen Normandie',
+
+        /* Description du logo de l'établissement */
+        'logoDescription'        => 'Page d\'accueil du site de l\'Université de Caen Normandie',
+
+        /* URI du logo de l'établissement */
+        'logoUri'                => 'http://www.unicaen.fr',
+
+        /* Message de bienvenue (sur la page d'accueil) */
+        'messageBienvenue'       => 'Bienvenue dans l\'application de saisie des enseignements de l\'université de Caen Normandie.',
+
         /* Mail d'assistance OSE de votre établissement */
         'contactAssistance'      => 'assistance-ose@unicaen.fr',
 
@@ -43,6 +55,9 @@ return [
 
         /* Page web mentionnant vos règles "informatique et liberté" */
         'informatiqueEtLibertes' => "http://gest.unicaen.fr/acces-direct/informatique-et-libertes/",
+
+        /* URL de votre propre feuille de style pour personnaliser OSE */
+        'css'                    => null,
     ],
 
 
@@ -65,7 +80,6 @@ return [
 
         /* Générer systématiquement les proxies de la base de données (utile uniquement en mode développement) */
         'generateProxies' => true,
-
     ],
 
 

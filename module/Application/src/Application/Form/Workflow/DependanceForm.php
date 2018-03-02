@@ -50,7 +50,7 @@ class DependanceForm extends AbstractForm
         $this->add([
             'name'       => 'etape-precedante',
             'options'    => [
-                'label'         => 'Etape précédante',
+                'label'         => 'Etape précédente',
                 'value_options' => Util::collectionAsOptions($etapes),
             ],
             'attributes' => [
@@ -114,7 +114,7 @@ class DependanceForm extends AbstractForm
         $this->add([
             'name'       => 'obligatoire',
             'options'    => [
-                'label'              => '<abbr title="Quelque chose doit obligatoirement avoir été fait dans l\'étape précédante">Obligatoire</abbr>',
+                'label'              => '<abbr title="Quelque chose doit obligatoirement avoir été fait dans l\'étape précédente">Obligatoire</abbr>',
                 'label_options'      => [
                     'disable_html_escape' => true,
                 ],
@@ -123,7 +123,7 @@ class DependanceForm extends AbstractForm
                 'unchecked_value'    => 'false',
             ],
             'attributes' => [
-                'title' => "La dépendance impose à l'étape précédante d'être franchie à plus de 0%",
+                'title' => "La dépendance impose à l'étape précédente d'être franchie à plus de 0%",
             ],
             'type'       => 'Checkbox',
         ]);

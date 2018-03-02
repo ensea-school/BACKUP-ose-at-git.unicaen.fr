@@ -1,10 +1,11 @@
 <?php
 
-/**
- * @var $this       \Application\View\Renderer\PhpRenderer
- * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
- */
+use Unicaen\OpenDocument\Document;
 
-cv
+$r = new Document('/home/laurent/Contrat.odt');
+
+$m = $r->getMeta();
+
+var_dump($m);
+
+var_dump($m->getUserDefined('testUD'));

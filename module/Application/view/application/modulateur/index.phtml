@@ -11,6 +11,7 @@ use UnicaenApp\Util;
  * @var $typeModulateurStructures  \Application\Entity\Db\typeModulateurStructure[]
  */
 
+
 function affBooleen($flg)
 {
     // affiche booléen avec des glypheIcon
@@ -20,6 +21,8 @@ function affBooleen($flg)
 $this->headTitle()->append("Gestion des modulateurs");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MODULATEUR_EDITION));
+
+$anneeId=$annee->getId();
 
 ?>
 <h1 class="page-header">Gestion des modulateurs</h1>
@@ -38,7 +41,6 @@ foreach ($typeModulateurs as $tm) {
                title="Ajouter un modulateur">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
-        <?php endif ?>
                         <a class="ajax-modal" data-event="modulateur-saisie"
                            href="<?= $this->url('modulateur/type-modulateur-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                            title="Modifier le type de modulateur">
@@ -54,7 +56,8 @@ foreach ($typeModulateurs as $tm) {
         >
             <span class="glyphicon glyphicon-remove"></span>
         </a>
-                </span>
+        <?php endif ?>
+                    </span>
                 </div>
             </div>
             <div class="panel-body">
@@ -75,20 +78,29 @@ foreach ($typeModulateurs as $tm) {
                         <div class="row">
                             <br>
                         </div>
-                        <table class="table table-condensed table-extra-condensed">
-                            <?php foreach ($typeModulateurStructures as $tms) {
-                                if ($tms->getTypeModulateur()->getId() == $tm->getId()) { ?>
+                        <table class="table table-bordered table-condensed table-extra-condensed" style="margin-bottom:2px">
+                            <?php $existTMS=0; // 1 --> ajout d'une structure interdite
+                            foreach ($typeModulateurStructures as $tms) {
+                                $ok=($tms->getTypeModulateur() == $tm);
+                                if ($ok && $tms->getAnneeDebut()){
+                                    if ($tms->getAnneeDebut()->getId() > $anneeId) $ok=false;
+                                }
+                                if ($ok && $tms->getAnneeFin()){
+                                    if ($tms->getAnneeFin()->getId() < $anneeId) $ok=false;
+                                }
+                                if ($ok) {
+                                    $existTMS=1; ?>
                                     <tr>
                                         <?php $title = '';
-                                        if ($tms->getAnneeDebut()) $title = "de " . $tms->getAnneeDebut() . " ";
+                                        if ($tms->getAnneeDebut()) $title = "À partir de " . $tms->getAnneeDebut() . " ";
                                         if ($tms->getAnneeFin()) $title .= "jusqu'à " . $tms->getAnneeFin(); ?>
                                         <td>
-                                            <div
-                                                <?php if ($title) echo 'title="' . $title . '" '; ?>
-                                                    class="col-md-9">
-                                                <?= $tms->getStructure()->getLibelleCourt() ?></div>
+
+                                                <span <?= $title ? 'title="' . $title . '"'  : '' ?>>
+                                                <?= $tms->getStructure()->getLibelleCourt() ?></span>
                                         </td>
-                                        <td><a class="ajax-modal" data-event="modulateur-saisie"
+                                    <?php if ($canEdit): ?>
+                                        <td style="width:1%; white-space:nowrap"><a class="ajax-modal" data-event="modulateur-saisie"
                                                href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
                                                title="Modifier une structure d\'un type de modulateur ">
                                                 <span class="glyphicon glyphicon-edit"></span></a>
@@ -103,15 +115,18 @@ foreach ($typeModulateurs as $tm) {
                                             >
                                                 <span class="glyphicon glyphicon-remove"></span>
                                             </a>
+                                            <?php endif ?>
                                     </tr>
                                 <?php }
                             } ?>
                         </table>
-                        <a class="btn btn-primary ajax-modal" data-event="modulateur-saisie"
+                        <?php if (($canEdit) && !($existTMS)) : ?>
+                        <a class="btn btn-xs btn-primary ajax-modal" style="width:100%" data-event="modulateur-saisie"
                            href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                            title="Ajouter une structure au type de modulateur">
                             <span class="glyphicon glyphicon-edit"></span>
-                            Ajouter une structure</a>
+                            Associer une composante</a>
+                        <?php endif ?>
                     </div>
                     <div class="col-md-9">
                         <table class="table table-bordered">

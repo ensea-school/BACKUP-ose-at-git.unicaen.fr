@@ -52,7 +52,9 @@ class modulateurController extends AbstractController
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $structure   = $role->getStructure();
 
-        return compact('modulateurs', 'typeModulateurs','typeModulateurStructures','structure');
+        $annee=$this->getServiceContext()->getAnnee();
+
+        return compact('modulateurs', 'typeModulateurs','typeModulateurStructures','structure','annee');
     }
 
 

@@ -46,7 +46,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
         $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch',
             function (\Zend\Mvc\MvcEvent $e) {
-                if ($e->getRequest()->isXmlHttpRequest()) {
+                if ($e->getRequest() instanceof \Zend\Http\Request && $e->getRequest()->isXmlHttpRequest()) {
                     $e->getTarget()->layout('application/ajax-layout.phtml');
                 }
             }
@@ -161,8 +161,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             "Notifications",
             'notifier indicateurs [--force]' => "Notification par mail des personnes abonnées à des indicateurs",
             ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
-            ['--requestUriHost', "Obligatoire", "Exemples: \"/ose.unicaen.fr\", \"/test.unicaen.fr/ose\"."],
-            ['--requestUriScheme', "Facultatif", "Exemples: \"http\" (par défaut), \"https\"."],
         ];
     }
 

@@ -73,6 +73,9 @@ class AppConfig
 
         if ('development' == $env) {
             $modules[] = 'ZendDeveloperTools';
+        }
+
+        if (\Zend\Console\Console::isConsole() || 'development' == $env){
             $modules[] = 'UnicaenCode';
         }
 

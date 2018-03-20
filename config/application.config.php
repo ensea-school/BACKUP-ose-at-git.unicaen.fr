@@ -52,7 +52,7 @@ class AppConfig
 
     public static function getEnv()
     {
-        return getenv('APPLICATION_ENV') ?: 'production';
+        return getenv('APPLICATION_ENV') ?: 'dev';
     }
 
 

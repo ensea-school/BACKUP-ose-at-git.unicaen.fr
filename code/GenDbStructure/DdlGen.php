@@ -382,6 +382,9 @@ END;
             AND i.index_name NOT LIKE 'MV_%'
             AND i.index_name NOT LIKE 'UNICAEN_%'
             AND c.constraint_name IS NULL
+            AND c.constraint_name NOT IN (
+            'TBL_PJD_UN_IDX','TBL_PJF_UN_IDX','TBL_SERVICE_REFERENTIEL_UN_IDX','TBL_SERVICE_SAISIE_UN_IDX'
+            )
           ORDER BY
             i.index_name
         ";

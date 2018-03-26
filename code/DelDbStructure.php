@@ -11,7 +11,7 @@ use Application\Constants;
 use Doctrine\ORM\EntityManager;
 use UnicaenCode\Console;
 
-if (!in_array('bdd=deploy', $_SERVER['argv'])) {
+if (!isset($_SERVER['argv']) || !in_array('bdd=deploy', $_SERVER['argv'])) {
     Console::println("Attention : l'opération DOIT se dérouler sur la base de déploiement!!\n", null, Console::BG_RED);
     die();
 }

@@ -2,6 +2,8 @@
 
 namespace Application\Validator;
 
+use Application\Service\Traits\CiviliteServiceAwareTrait;
+use Application\Service\Traits\DepartementServiceAwareTrait;
 use LogicException;
 use UnicaenApp\Validator\NumeroINSEE;
 
@@ -17,14 +19,15 @@ use UnicaenApp\Validator\NumeroINSEE;
  */
 class NumeroINSEEValidator extends NumeroINSEE
 {
+    use DepartementServiceAwareTrait;
+    use CiviliteServiceAwareTrait;
+
     const MSG_CIVILITE = 'msgCivilite';
     const MSG_ANNEE    = 'msgAnnee';
     const MSG_MOIS     = 'msgMois';
     const MSG_DEPT     = 'msgDepartement';
 
     protected $franceId;
-
-    protected $service;
 
 
 
@@ -43,11 +46,16 @@ class NumeroINSEEValidator extends NumeroINSEE
 
         $this->franceId = (int)$options['france_id'];
 
-        if (!isset($options['service'])) {
-            throw new LogicException("Paramètre 'service' introuvable.");
+        if (!isset($options['serviceDepartement'])) {
+            throw new LogicException("Service Département non fourni.");
         }
 
-        $this->service = $options['service'];
+        if (!isset($options['serviceCivilite'])) {
+            throw new LogicException("Service Civilité non fourni.");
+        }
+
+        $this->setServiceDepartement($options['serviceDepartement']);
+        $this->setServiceCivilite($options['serviceCivilite']);
 
         parent::__construct($options);
     }
@@ -84,19 +92,17 @@ class NumeroINSEEValidator extends NumeroINSEE
             return true;
         }
 
-        $civiliteId = (int)$context['civilite'];
+        $civilite = $this->getServiceCivilite()->get((int)$context['civilite']);
 
-        $sexeToCivilite = [
-            // numéro saisi => id civilité OSE
-            1 => 2, // homme                                                                    => monsieur
-            2 => 1, // femme                                                                    => madame
-            3 => 2, // personne étrangère de sexe masculin en cours d'immatriculation en France => monsieur
-            4 => 1, // personne étrangère de sexe féminin en cours d'immatriculation en France  => madame
-        ];
+        if ($civilite->estUneFemme()) {
+            $sexes = [2, 4]; // femme, personne étrangère de sexe féminin en cours d'immatriculation en France
+        } else {
+            $sexes = [1, 3]; // homme, personne étrangère de sexe masculin en cours d'immatriculation en France
+        }
 
         $sexe = (int)substr($value, 0, 1);
 
-        if (!array_key_exists($sexe, $sexeToCivilite) || $civiliteId !== $sexeToCivilite[$sexe]) {
+        if (!in_array($sexe, $sexes)) {
             $this->error(self::MSG_CIVILITE);
 
             return false;
@@ -162,7 +168,7 @@ class NumeroINSEEValidator extends NumeroINSEE
         }
 
         $paysNaissance = (int)$context['paysNaissance'];
-        $estNeEnFrance = $paysNaissance === $this->getOption('france_id');
+        $estNeEnFrance = $paysNaissance === $this->franceId;
 
         if ($estNeEnFrance) {
             // on doit avoir un code département français valide
@@ -199,7 +205,7 @@ class NumeroINSEEValidator extends NumeroINSEE
         if (empty($context['departementNaissance'])) {
             return true;
         }
-        $departementNaissance = $this->service->get($context['departementNaissance'], true);
+        $departementNaissance = $this->getServiceDepartement()->get($context['departementNaissance'], true);
         /* @var $departementNaissance DepartementEntity */
 
         // Si on trouve un code de département en métropole ou outre-mer valide,

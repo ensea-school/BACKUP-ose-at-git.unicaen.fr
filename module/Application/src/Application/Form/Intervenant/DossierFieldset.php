@@ -6,6 +6,7 @@ use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Pays as PaysEntity;
 use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 use Application\Form\AbstractFieldset;
+use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
@@ -31,8 +32,11 @@ class DossierFieldset extends AbstractFieldset
     use StatutIntervenantServiceAwareTrait;
     use PaysServiceAwareTrait;
     use DepartementServiceAwareTrait;
+    use CiviliteServiceAwareTrait;
 
     static private $franceId;
+
+
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -43,10 +47,12 @@ class DossierFieldset extends AbstractFieldset
         $hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
 
         $this
-                ->setObject(new Dossier())
-                ->setHydrator($hydrator)
-                ->addElements();
+            ->setObject(new Dossier())
+            ->setHydrator($hydrator)
+            ->addElements();
     }
+
+
 
     /**
      * @return self
@@ -58,7 +64,7 @@ class DossierFieldset extends AbstractFieldset
          */
         $this->add([
             'name' => 'id',
-            'type' => 'Hidden'
+            'type' => 'Hidden',
         ]);
 
         /**
@@ -69,7 +75,7 @@ class DossierFieldset extends AbstractFieldset
             'options' => [
                 'label' => 'Nom usuel',
             ],
-            'type'    => 'Text'
+            'type'    => 'Text',
         ]);
 
         /**
@@ -80,7 +86,7 @@ class DossierFieldset extends AbstractFieldset
             'options' => [
                 'label' => 'Nom de naissance',
             ],
-            'type'    => 'Text'
+            'type'    => 'Text',
         ]);
 
         /**
@@ -91,7 +97,7 @@ class DossierFieldset extends AbstractFieldset
             'options' => [
                 'label' => 'Prénom',
             ],
-            'type'    => 'Text'
+            'type'    => 'Text',
         ]);
 
         /**
@@ -102,9 +108,9 @@ class DossierFieldset extends AbstractFieldset
             'empty_option' => "(Sélectionnez une civilité...)",
         ]);
         $civilite->getProxy()
-                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
-                ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass(\Application\Entity\Db\Civilite::class);
+            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
+            ->setObjectManager($this->getServiceContext()->getEntityManager())
+            ->setTargetClass(\Application\Entity\Db\Civilite::class);
         $this->add($civilite);
 
 
@@ -113,16 +119,16 @@ class DossierFieldset extends AbstractFieldset
          */
         $this->add([
             'name'       => 'dateNaissance',
-            'options'    => array(
+            'options'    => [
                 'label'         => 'Date de naissance',
-                'label_options' => array(
-                    'disable_html_escape' => true
-                ),
-            ),
-            'attributes' => array(
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
+            ],
+            'attributes' => [
                 'placeholder' => "jj/mm/aaaa",
-            ),
-            'type'  => 'UnicaenApp\Form\Element\Date',
+            ],
+            'type'       => 'UnicaenApp\Form\Element\Date',
         ]);
 
         /**
@@ -130,12 +136,12 @@ class DossierFieldset extends AbstractFieldset
          */
         $paysSelect = new PaysSelect('paysNaissance', [
             'label'        => 'Pays de naissance',
-            'empty_option' => "(Sélectionnez un pays...)"
+            'empty_option' => "(Sélectionnez un pays...)",
         ]);
         $paysSelect->getProxy()
-                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
-                ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass(\Application\Entity\Db\Pays::class);
+            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
+            ->setObjectManager($this->getServiceContext()->getEntityManager())
+            ->setTargetClass(\Application\Entity\Db\Pays::class);
         foreach ($paysSelect->getProxy()->getObjects() as $p) {
             $estFrance = PaysEntity::CODE_FRANCE === $p->getSourceCode();
             if ($estFrance) {
@@ -150,24 +156,24 @@ class DossierFieldset extends AbstractFieldset
          */
         $departementSelect = new EntitySelect('departementNaissance', [
             'label'        => 'Département de naissance',
-            'empty_option' => "(Sélectionnez un département...)"
+            'empty_option' => "(Sélectionnez un département...)",
         ]);
         $departementSelect->getProxy()
-                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['sourceCode' => 'ASC']]])
-                ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass(\Application\Entity\Db\Departement::class);
+            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['sourceCode' => 'ASC']]])
+            ->setObjectManager($this->getServiceContext()->getEntityManager())
+            ->setTargetClass(\Application\Entity\Db\Departement::class);
         $this->add($departementSelect);
 
         /**
          * Ville de naissance
          */
-        $this->add(array(
+        $this->add([
             'name'    => 'villeNaissance',
-            'options' => array(
+            'options' => [
                 'label' => 'Ville de naissance',
-            ),
-            'type'    => 'Text'
-        ));
+            ],
+            'type'    => 'Text',
+        ]);
 
         /**
          * Numéro INSEE
@@ -180,7 +186,7 @@ class DossierFieldset extends AbstractFieldset
                 'checked_value'      => 1,
                 'unchecked_value'    => 0,
                 'label_options'      => [
-                    'disable_html_escape' => true
+                    'disable_html_escape' => true,
                 ],
             ],
             'attributes' => [
@@ -197,7 +203,7 @@ class DossierFieldset extends AbstractFieldset
             'options'    => [
                 'label'         => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire',
                 'label_options' => [
-                    'disable_html_escape' => true
+                    'disable_html_escape' => true,
                 ],
             ],
             'attributes' => [
@@ -212,9 +218,9 @@ class DossierFieldset extends AbstractFieldset
             'name'       => 'adresse',
             'options'    => [
                 'label'         => 'Adresse postale <em>en France</em>',
-                'label_options' => array(
-                    'disable_html_escape' => true
-                ),
+                'label_options' => [
+                    'disable_html_escape' => true,
+                ],
             ],
             'attributes' => [
                 'rows' => 5,
@@ -231,7 +237,7 @@ class DossierFieldset extends AbstractFieldset
                 'label' => 'Adresse mail établissement',
             ],
             'attributes' => [
-                'readonly' => true
+                'readonly' => true,
             ],
             'type'       => 'Text',
         ]);
@@ -246,7 +252,7 @@ class DossierFieldset extends AbstractFieldset
             ],
             'attributes' => [
                 'info_icon' => "Si vous renseignez une adresse mail perso, celle-ci sera uttilisée pour vous contacter.",
-                'readonly' => false
+                'readonly'  => false,
             ],
             'type'       => 'Text',
         ]);
@@ -281,7 +287,7 @@ class DossierFieldset extends AbstractFieldset
         /**
          * 1er recrutement
          */
-        $annee = ((int) $this->getServiceContext()->getAnnee()->getDateDebut()->format('Y')) - 2;
+        $annee = ((int)$this->getServiceContext()->getAnnee()->getDateDebut()->format('Y')) - 2;
         $etabl = $this->getServiceContext()->getEtablissement();
         $this->add([
             'name'       => 'premierRecrutement',
@@ -289,9 +295,9 @@ class DossierFieldset extends AbstractFieldset
                 'empty_option'  => "(Sélectionnez...)",
                 'label'         => "Avez-vous exercé une activité rémunérée à l'$etabl depuis le 01/09/$annee ?",
                 'value_options' => [ // ATTENTION! La logique de la question s'est inversée !
-                    '0' => "Oui",    //   "Oui, j'ai déjà enseigné"   <=> premierRecrutement = 0
-                    '1' => "Non",    //   "Non, je n'ai pas enseigné" <=> premierRecrutement = 1
-                 ],
+                                     '0' => "Oui",    //   "Oui, j'ai déjà enseigné"   <=> premierRecrutement = 0
+                                     '1' => "Non",    //   "Non, je n'ai pas enseigné" <=> premierRecrutement = 1
+                ],
             ],
             'attributes' => [
             ],
@@ -307,19 +313,21 @@ class DossierFieldset extends AbstractFieldset
             'value'        => '',
         ]);
         $statut->getProxy()
-                ->setFindMethod([
-                    'name'   => 'findBy',
-                    'params' => [
-                        'criteria' => ['peutChoisirDansDossier' => true],
-                        'orderBy'  => ['ordre' => 'ASC'],
-                    ],
-                ])
-                ->setObjectManager($this->getServiceContext()->getEntityManager())
-                ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
+            ->setFindMethod([
+                'name'   => 'findBy',
+                'params' => [
+                    'criteria' => ['peutChoisirDansDossier' => true],
+                    'orderBy'  => ['ordre' => 'ASC'],
+                ],
+            ])
+            ->setObjectManager($this->getServiceContext()->getEntityManager())
+            ->setTargetClass(\Application\Entity\Db\StatutIntervenant::class);
         $this->add($statut);
 
         return $this;
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -329,93 +337,95 @@ class DossierFieldset extends AbstractFieldset
      */
     public function getInputFilterSpecification()
     {
-        $paysNaissanceId       = (int) $this->get('paysNaissance')->getValue();
-        $numeroInseeProvisoire = (bool) $this->get('numeroInseeEstProvisoire')->getValue();
-        $statutSelect          = $this->get('statut'); /* @var $statutSelect StatutSelect */
+        $paysNaissanceId       = (int)$this->get('paysNaissance')->getValue();
+        $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
+        $statutSelect          = $this->get('statut');
+        /* @var $statutSelect StatutSelect */
 
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
 
         $spec = [
-            'nomUsuel' => [
+            'nomUsuel'             => [
                 'required' => true,
             ],
-            'nomPatronymique' => [
+            'nomPatronymique'      => [
                 'required' => true,
             ],
-            'prenom' => [
+            'prenom'               => [
                 'required' => true,
             ],
-            'civilite' => [
+            'civilite'             => [
                 'required' => true,
             ],
-            'dateNaissance' => array(
-                'required' => true,
-                'validators' => array(
-                    new DateValidator(array('format' => Constants::DATE_FORMAT)),
-                ),
-            ),
-            'paysNaissance' => array(
-                'required' => true,
-                'validators' => array(
+            'dateNaissance'        => [
+                'required'   => true,
+                'validators' => [
+                    new DateValidator(['format' => Constants::DATE_FORMAT]),
+                ],
+            ],
+            'paysNaissance'        => [
+                'required'   => true,
+                'validators' => [
                     new PaysNaissanceValidator(['service' => $this->getServicePays()]),
-                ),
-            ),
-            'departementNaissance' => array(
-                'required' => $departementRequired,
-                'validators' => array(
+                ],
+            ],
+            'departementNaissance' => [
+                'required'   => $departementRequired,
+                'validators' => [
                     new DepartementNaissanceValidator(['france_id' => self::$franceId]),
-                ),
-            ),
-            'villeNaissance' => array(
+                ],
+            ],
+            'villeNaissance'       => [
                 'required' => true,
-            ),
-            'numeroInsee' => array(
-                'required' => true,
-                'validators' => array(
+            ],
+            'numeroInsee'          => [
+                'required'   => true,
+                'validators' => [
                     new NumeroINSEEValidator([
-                        'provisoire' => $numeroInseeProvisoire,
-                        'france_id'  => self::$franceId,
-                        'service'    => $this->getServiceDepartement(),
+                        'provisoire'         => $numeroInseeProvisoire,
+                        'france_id'          => self::$franceId,
+                        'serviceDepartement' => $this->getServiceDepartement(),
+                        'serviceCivilite'    => $this->getServiceCivilite(),
                     ]),
-                ),
-            ),
-            'adresse' => [
+                ],
+            ],
+            'adresse'              => [
                 'required' => true,
             ],
-            'email' => [
-                'required' => true,
-                'filters' => [
+            'email'                => [
+                'required'   => true,
+                'filters'    => [
                     ['name' => 'StringTrim'],
                 ],
                 'validators' => [
-                    ['name' => 'EmailAddress']
+                    ['name' => 'EmailAddress'],
                 ],
             ],
-            'emailPerso' => [
-                'required' => false,
-                'filters' => [
+            'emailPerso'           => [
+                'required'   => false,
+                'filters'    => [
                     ['name' => 'StringTrim'],
                 ],
                 'validators' => [
-                    ['name' => 'EmailAddress']
+                    ['name' => 'EmailAddress'],
                 ],
             ],
-            'telephone' => [
-                'required' => true,
-                'filters' => [
+            'telephone'            => [
+                'required'   => true,
+                'filters'    => [
                     ['name' => 'StringTrim'],
                 ],
                 'validators' => [
 //                    new \Zend\I18n\Validator\PhoneNumber(), // les formats de numéros ne tolèrent pas le 0 de tête!!
                 ],
             ],
-            'premierRecrutement' => [
+            'premierRecrutement'   => [
                 'required' => $this->has('premierRecrutement'),
             ],
-            'statut' => [
-                'required' => true,
-                'validators' =>  [
+            'statut'               => [
+                'required'   => true,
+                'validators' => [
                     $statutSelect->getProxy()->getValidator(),
                 ],
             ],
@@ -426,18 +436,26 @@ class DossierFieldset extends AbstractFieldset
 }
 
 
+
+
+
 /**
  * Select d'entités Pays, avec proxy dédié.
  */
 class PaysSelect extends EntitySelect
 {
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         parent::__construct($name, $options);
 
         $this->proxy = new PaysProxy();
     }
 }
+
+
+
+
+
 /**
  * Proxy pour le select d'entités Pays : customisation des attributs HTML des <option>.
  */
@@ -460,6 +478,8 @@ class PaysProxy extends Proxy
         }
     }
 
+
+
     protected function loadObjects()
     {
         parent::loadObjects();
@@ -474,6 +494,10 @@ class PaysProxy extends Proxy
     }
 }
 
+
+
+
+
 /**
  * Select d'entités StatutIntervenant, avec proxy dédié.
  *
@@ -481,13 +505,18 @@ class PaysProxy extends Proxy
  */
 class StatutSelect extends EntitySelect
 {
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         parent::__construct($name, $options);
 
         $this->proxy = new StatutIntervenantProxy();
     }
 }
+
+
+
+
+
 /**
  * Proxy pour le select d'entités StatutIntervenant :
  * - customisation des attributs HTML des <option> ;
@@ -510,6 +539,8 @@ class StatutIntervenantProxy extends Proxy
         }
     }
 
+
+
     protected function loadObjects()
     {
         parent::loadObjects();
@@ -527,15 +558,20 @@ class StatutIntervenantProxy extends Proxy
         $this->objects = $pays;
     }
 
+
+
     /**
      * @var StatutIntervenantEntity[]
      */
     private $statutsToRemove = [];
 
+
+
     /**
      * Statuts à écarter.
      *
      * @param StatutIntervenantEntity[] $statuts
+     *
      * @return self
      */
     public function setStatutsToRemove(array $statuts)
@@ -543,7 +579,7 @@ class StatutIntervenantProxy extends Proxy
         $this->statutsToRemove = [];
 
         foreach ($statuts as $statut) {
-            if (! $statut instanceof StatutIntervenantEntity) {
+            if (!$statut instanceof StatutIntervenantEntity) {
                 throw new LogicException("Les statuts à écarter doivent être spécifiés sous forme d'objets.");
             }
             $this->statutsToRemove[$statut->getId()] = $statut;
@@ -553,6 +589,8 @@ class StatutIntervenantProxy extends Proxy
 
         return $this;
     }
+
+
 
     /**
      *

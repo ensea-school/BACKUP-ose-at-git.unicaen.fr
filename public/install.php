@@ -265,6 +265,9 @@ class Installateur
                 'ZIP'                  => function () {
                     return in_array('zip', get_loaded_extensions()) ? true : 'Non installé';
                 },
+                'BCMath'               => function () {
+                    return in_array('bcmath', get_loaded_extensions()) ? true : 'Non installé';
+                },
                 'OCI8 (Pilote Oracle)' => function () {
                     return in_array('oci8', get_loaded_extensions()) ? true : 'Non installé';
                 },

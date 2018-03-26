@@ -321,6 +321,7 @@ END;
             AND view_name NOT LIKE 'V_DIFF_%'
             AND view_name NOT LIKE 'V_SYMPA_%'
             AND view_name NOT LIKE 'V_UNICAEN_%'
+            AND view_name NOT LIKE 'V_TYPE_INTERVENTION_REGLE_EP'
           ORDER BY
             view_name
         ";

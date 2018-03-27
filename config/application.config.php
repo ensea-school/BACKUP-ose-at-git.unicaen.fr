@@ -26,11 +26,18 @@ class AppConfig
 
     public static function init()
     {
-        if (file_exists(self::LOCAL_APPLICATION_CONFIG_FILE)) {
+        if (self::hasLocalConfig()) {
             self::$config = require(self::LOCAL_APPLICATION_CONFIG_FILE);
         } else {
-            self::$config = null;
+            self::$config = ['global' => ['modeInstallation' => true]];
         }
+    }
+
+
+
+    public static function hasLocalConfig(): bool
+    {
+        return file_exists(self::LOCAL_APPLICATION_CONFIG_FILE);
     }
 
 

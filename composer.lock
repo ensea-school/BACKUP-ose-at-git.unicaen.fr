@@ -1452,7 +1452,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "d219814ed0bd7eb01e0b41136dd03950569a7f4c"
+                "reference": "589ef1b2344804bfb90082eb73405c2dd186b447"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1495,7 +1495,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2018-03-15T15:14:58+00:00"
+            "time": "2018-03-21T08:44:30+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -1503,7 +1503,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "cb28b5103bc35cbc55cdb04a27680ded749031f9"
+                "reference": "c89fb672ac642da21630b8eff4cafd54aa07049f"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1525,7 +1525,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2018-03-19T09:01:16+00:00"
+            "time": "2018-03-26T14:42:50+00:00"
         },
         {
             "name": "unicaen/code",
@@ -1533,7 +1533,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "dde81b69ef731144104cb3a51344611ba93d2cf2"
+                "reference": "b31f1857684c45c78c60c8e14dc72ad73e363819"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -1551,7 +1551,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2018-03-16T08:25:28+00:00"
+            "time": "2018-03-20T15:11:11+00:00"
         },
         {
             "name": "unicaen/import",

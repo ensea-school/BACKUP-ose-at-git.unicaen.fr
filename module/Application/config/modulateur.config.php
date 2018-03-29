@@ -127,10 +127,10 @@ return [
         'guards'             => [
             PrivilegeController::class => [
                 [
+
                     'controller' => 'Application\Controller\Modulateur',
                     'action'     => ['index'],
                     'privileges' => [Privileges::MODULATEUR_VISUALISATION],
-                    'assertion'  => Assertion\ModulateurAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Modulateur',

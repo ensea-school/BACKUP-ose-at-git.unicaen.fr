@@ -96,7 +96,7 @@ class ElementPedagogiqueService extends AbstractEntityService
 
         $whereContext = [];
         if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-            $whereContext[]      = 's.structure_niv2_id = :structure';
+            $whereContext[]      = 's.id = :structure';
             $params['structure'] = $filters['structure']->getId();
         }
         if (isset($filters['niveau']) && $filters['niveau']) {

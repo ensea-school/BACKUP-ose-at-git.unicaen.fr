@@ -69,6 +69,14 @@ function update(Console $c, OseAdmin $oa)
         "php composer.phar install",
     ]);
 
+    // Néttoyage des caches et mise à jour des proxies
+    $c->exec([
+        "cd $osedir",
+        "rm -R data/cache/*",
+        "php vendor/bin/doctrine-module orm:generate-proxies",
+    ]);
+
+
     // Conclusion
     $c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
     $c->println("Il reste encore votre base de données à mettre à jour.");

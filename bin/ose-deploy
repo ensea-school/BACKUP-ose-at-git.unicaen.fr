@@ -90,6 +90,13 @@ $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
 $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
 $c->passthru("cd $osedir;php composer.phar install");
 
+// Génération des proxies pour l'ORM Doctrine
+$c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
+$c->exec([
+    "cd $osedir",
+    "php vendor/bin/doctrine-module orm:generate-proxies",
+]);
+
 // Mise en place des tâches CRON...
 
 

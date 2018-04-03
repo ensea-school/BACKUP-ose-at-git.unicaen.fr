@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fcf364565552167bfe396556f0fee35",
+    "content-hash": "6da2cfcc99bdc140e00167d9ea4ce7cb",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1284,16 +1284,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.6",
+            "version": "v3.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "9b1071f86e79e1999b3d3675d2e0e7684268b9bc"
+                "reference": "9cf7c2271cfb89ef9727db1b740ca77be57bf9d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/9b1071f86e79e1999b3d3675d2e0e7684268b9bc",
-                "reference": "9b1071f86e79e1999b3d3675d2e0e7684268b9bc",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/9cf7c2271cfb89ef9727db1b740ca77be57bf9d7",
+                "reference": "9cf7c2271cfb89ef9727db1b740ca77be57bf9d7",
                 "shasum": ""
             },
             "require": {
@@ -1336,7 +1336,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-02-28T21:49:22+00:00"
+            "time": "2018-04-03T05:22:50+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1399,16 +1399,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.36",
+            "version": "v2.8.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "756f614c5061729ea245ac6717231f7e3bfb74f9"
+                "reference": "c2fc900ee54e1e44aa956eae8ba041a5347ba93c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/756f614c5061729ea245ac6717231f7e3bfb74f9",
-                "reference": "756f614c5061729ea245ac6717231f7e3bfb74f9",
+                "url": "https://api.github.com/repos/symfony/process/zipball/c2fc900ee54e1e44aa956eae8ba041a5347ba93c",
+                "reference": "c2fc900ee54e1e44aa956eae8ba041a5347ba93c",
                 "shasum": ""
             },
             "require": {
@@ -1444,15 +1444,15 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-02-12T17:44:58+00:00"
+            "time": "2018-03-19T21:11:56+00:00"
         },
         {
             "name": "unicaen/app",
-            "version": "dev-master",
+            "version": "1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "589ef1b2344804bfb90082eb73405c2dd186b447"
+                "reference": "845dd41da189fdd5e39f6d2d882e05b77a16c5dc"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1495,15 +1495,15 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2018-03-21T08:44:30+00:00"
+            "time": "2018-03-28T08:06:13+00:00"
         },
         {
             "name": "unicaen/auth",
-            "version": "dev-master",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "c89fb672ac642da21630b8eff4cafd54aa07049f"
+                "reference": "8615a5a03664977d26691a60e35131b12ba0b752"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1525,11 +1525,11 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2018-03-26T14:42:50+00:00"
+            "time": "2018-03-19T13:36:48+00:00"
         },
         {
             "name": "unicaen/code",
-            "version": "dev-master",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
@@ -1555,11 +1555,11 @@
         },
         {
             "name": "unicaen/import",
-            "version": "dev-master",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "ec1e41a0f10538308fda52910b8ef9b714bbeb12"
+                "reference": "a8f1c91b436138a0bf22226bb9c20335f0aa73aa"
             },
             "require": {
                 "unicaen/auth": "^1.2 || dev-master",
@@ -1579,7 +1579,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2018-02-27T14:35:23+00:00"
+            "time": "2018-02-27T08:40:13+00:00"
         },
         {
             "name": "unicaen/oracle",
@@ -1611,11 +1611,11 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "dev-master",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "b6e44ef6fb34563debc3c22d0dc32bf7d3daa98b"
+                "reference": "8fcb7ab01d002c1f61a91cc57bd8b0492459a83e"
             },
             "require": {
                 "unicaen/app": "^1.3 || dev-trunk"
@@ -1634,7 +1634,7 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2018-03-02T10:27:16+00:00"
+            "time": "2018-02-27T09:35:50+00:00"
         },
         {
             "name": "zendframework/zend-authentication",
@@ -3958,22 +3958,10 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [
-        {
-            "alias": "1.3.6",
-            "alias_normalized": "1.3.6.0",
-            "version": "9999999-dev",
-            "package": "unicaen/app"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "unicaen/app": 20,
-        "unicaen/auth": 20,
-        "bjyoungblood/bjy-authorize": 20,
-        "unicaen/code": 20,
-        "unicaen/import": 20,
-        "unicaen/tbl": 20
+        "bjyoungblood/bjy-authorize": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

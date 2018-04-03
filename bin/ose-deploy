@@ -1,0 +1,342 @@
+#!/usr/bin/env php
+<?php
+
+$c  = new Console();
+$od = new OseDeploy($c);
+
+$c->printMainTitle("Déploiement de OSE", 13);
+
+// Mise en place de la clé SSH
+$c->println("\nMise en place de la clé SSH vers le GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
+$c->println("L'accès au serveur Gitlab doit se faire par SSH.");
+$c->print("Voulez-vous créer une clé SSH pour accéder au serveur Gitlab hébergeant OSE ? (o/n, n par défaut) ");
+$needKey = $c->getInput();
+if (in_array($needKey, ["o", "O"])) {
+    $c->println("Génération de la clé SSH...");
+    $c->print("Veuillez préciser l'adresse mail du compte utilisé pour accéder au Gitlab de OSE: ");
+    $gitlabMail = $c->getInput();
+    $c->passthru("ssh-keygen -t rsa -C $gitlabMail -b 4096");
+
+    $c->println("Intégrez ensuite votre clé SSH dans Gitlab. Ensuite, appuyez sur \"Entrée\" pour continuer...");
+    $c->getInput();
+    if ($od->gitlabIsReachable()) {
+        $c->println("Votre clé SSH a bien été déployée et est fonctionnelle.", $c::COLOR_LIGHT_GREEN);
+    } else {
+        $c->printDie("L'accès par SSH au serveur GitLab de OSE ne fonctionne pas. Merci de déployer par vous-même une clé, car vous en aurez besoin pour la suite de la procédure.");
+    }
+} else {
+    if (!$od->gitlabIsReachable()) {
+        $c->printDie("L'accès par SSH au serveur GitLab de OSE ne fonctionne pas. Merci de déployer par vous-même une clé, car vous en aurez besoin pour la suite de la procédure.");
+    }
+}
+
+
+// Création du dossier
+$c->println("\nCréation du dossier et initialisation de GIT", $c::COLOR_LIGHT_CYAN);
+$c->print("Veuillez indiquer un nouveau répertoire où implanter OSE: ");
+$osedir = $c->getInput();
+
+if (file_exists($osedir)){
+    $c->printDie("Le répertoire $osedir existe déjà. Merci d'en spécifier un nouveau.");
+}
+
+$c->exec([
+    "mkdir $osedir",
+    "cd $osedir",
+    "git init",
+    "git remote add origin " . $od::OSE_ORIGIN,
+    "git fetch --all --tags --prune",
+]);
+
+
+
+// Choix de la version
+$c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+$c->println("Voici la liste des versions de OSE disponibles:");
+$tags = $od->getTags();
+foreach ($tags as $tag) {
+    $c->println($tag);
+}
+$ok = false;
+while (!$ok) {
+    $c->print("Veuillez choisir une version à déployer: ");
+    $version = $c->getInput();
+    if ($od->tagIsValid($version)) {
+        $ok = true;
+    } else {
+        $c->println("$version n'est pas dans la liste des versions disponibles.");
+    }
+}
+
+
+// Récupération des sources
+$c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
+$c->exec([
+    "cd $osedir",
+    "git checkout tags/$version",
+    "mkdir data/cache",
+    "chmod 777 data/cache",
+    //"chmod +7 bin/ose",
+]);
+$od->writeVersion($osedir, $version);
+
+
+
+// Récupération de Composer
+$c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
+$c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
+
+// Récupération des dépendances
+$c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
+$c->passthru("cd $osedir;php composer.phar install");
+
+// Mise en place des tâches CRON...
+
+
+// Conclusion
+$c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
+$c->println("Il reste encore six étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+$c->println(" 1 - Configurez votre serveur Apache");
+$c->println(" 2 - Initialisez la base de données de OSE avec le script prévu à cet effet");
+$c->println(" 3 - Mettez en place la configuration locale de l'application");
+$c->println(" 4 - Une fois bien connecté, configurez vos connecteurs en vous appuyant\n     le cas échéant sur ceux qui vous sont fournis");
+$c->println(" 5 - Mettez en place les tâches CRON et les JOBS Oracle nécessaires (envoi de mails pour les infdicateurs, Synchronisatio automatique, etc.");
+$c->println(" 6 - Paramétrez l'application pour l'adapter à vos besoins");
+$c->println('');
+$c->println("Vous trouverez plus d'informations dans la procédure d'installation située dans\n$osedir/data/Déploiement/Procédure d'installation.pdf");
+$c->println("OSE possède également un guide de l'administrateur pour vous aider à configurer l'application");
+$c->println('');
+
+
+
+
+/************************************************************
+ *                      Classes utiles                      *
+ ************************************************************/
+class OseDeploy
+{
+    const OSE_ORIGIN = 'git@git.unicaen.fr:dsi/OSE.git';
+
+    /**
+     * @var Console
+     */
+    protected $console;
+
+    /**
+     * @var array
+     */
+    private $tags = false;
+
+
+
+    /**
+     * OseDeploy constructor.
+     *
+     * @param Console $console
+     */
+    public function __construct(Console $console)
+    {
+        $this->console = $console;
+    }
+
+
+
+    public function gitlabIsReachable(): bool
+    {
+        $gitCheck = $this->console->exec("git ls-remote --heads " . self::OSE_ORIGIN, false);
+
+        return (false !== strpos(implode(' ', $gitCheck), 'heads/master'));
+    }
+
+
+
+    public function getTags(): array
+    {
+        if (false === $this->tags) {
+            $this->tags = [];
+
+            $ts = $this->console->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
+            foreach ($ts as $tag) {
+                $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
+            }
+        }
+
+        return $this->tags;
+    }
+
+
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function tagIsValid(string $tag): bool
+    {
+        return in_array($tag, $this->getTags());
+    }
+
+
+
+    public function currentVersion(string $osedir): string
+    {
+        $vf = $this->getVersionFile($osedir);
+        if (!file_exists($vf)) {
+            return 'inconnue';
+        }
+
+        return file_get_contents($vf);
+    }
+
+
+
+    public function writeVersion(string $osedir, string $version)
+    {
+        $vf = $this->getVersionFile($osedir);
+        file_put_contents($vf, $version);
+    }
+
+
+
+    private function getVersionFile(string $osedir): string
+    {
+        if ('/' == substr($osedir, -1)) {
+            return $osedir . 'VERSION';
+        } else {
+            return $osedir . '/VERSION';
+        }
+    }
+}
+
+
+
+
+
+class Console
+{
+    const COLOR_BLACK        = '0;30';
+    const COLOR_DARK_GRAY    = '1;30';
+    const COLOR_BLUE         = '0;34';
+    const COLOR_LIGHT_BLUE   = '1;34';
+    const COLOR_GREEN        = '0;32';
+    const COLOR_LIGHT_GREEN  = '1;32';
+    const COLOR_CYAN         = '0;36';
+    const COLOR_LIGHT_CYAN   = '1;36';
+    const COLOR_RED          = '0;31';
+    const COLOR_LIGHT_RED    = '1;31';
+    const COLOR_PURPLE       = '0;35';
+    const COLOR_LIGHT_PURPLE = '1;35';
+    const COLOR_BROWN        = '0;33';
+    const COLOR_YELLOW       = '1;33';
+    const COLOR_LIGHT_GRAY   = '0;37';
+    const COLOR_WHITE        = '1;37';
+
+    const BG_BLACK      = '40';
+    const BG_RED        = '41';
+    const BG_GREEN      = '42';
+    const BG_YELLOW     = '43';
+    const BG_BLUE       = '44';
+    const BG_MAGENTA    = '45';
+    const BG_CYAN       = '46';
+    const BG_LIGHT_GRAY = '47';
+
+
+
+    public function printMainTitle($title, $spaces = 1)
+    {
+        $pstr = str_repeat(' ', $spaces);
+        $t    = $pstr . $title . $pstr;
+
+        $len = mb_strlen($t);
+
+        echo '╔' . str_repeat('═', $len) . "╗\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo "║" . $t . "║\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo '╚' . str_repeat('═', $len) . "╝\n\n";
+    }
+
+
+
+    public function print($text, $color = null, $bgColor = null)
+    {
+        if ($bgColor) $bgColor = ';' . $bgColor;
+
+        if (!$color && !$bgColor) {
+            echo $text;
+        } else {
+            echo "\e[$color$bgColor" . "m$text\e[0m";
+        }
+    }
+
+
+
+    public function println($text, $color = null, $bgColor = null)
+    {
+        $this->print($text, $color, $bgColor);
+        echo "\n";
+    }
+
+
+
+    public function gestExitCode($code)
+    {
+        if (0 == $code) return;
+
+        $this->printDie("Une erreur ($code) est survenue. Le script est stoppé");
+    }
+
+
+
+    public function printDie($text)
+    {
+        $this->println($text, self::COLOR_LIGHT_RED);
+        $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
+        die("\n");
+    }
+
+
+
+    public function getInput()
+    {
+        return trim(fgets(STDIN));
+    }
+
+
+
+    public function exec($command, $autoDisplay = true)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        exec($command, $output, $return);
+        if ($autoDisplay) {
+            echo implode("\n", $output) . "\n";
+        }
+        $this->gestExitCode($return);
+
+        return $output;
+    }
+
+
+
+    public function passthru($command)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        passthru($command, $returnVar);
+        $this->gestExitCode($returnVar);
+
+        return $returnVar;
+    }
+
+
+
+    public function strPad($input, $padLength = null, $padString = ' ')
+    {
+        return utf8_encode(str_pad(utf8_decode($input), $padLength, $padString));
+    }
+}

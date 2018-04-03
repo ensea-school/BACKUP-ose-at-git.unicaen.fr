@@ -31,15 +31,15 @@ Les spécifications sont les suivantes :
 * un tablespace temporaire de 2 Go minimum
 * encodage en UTF-8, Oracle Enterprise Edition 11.2.0.3 (ou +)
 
-# Installation de l'archive
+# Installation des fichiers
 
-Cette page mentionne toutes les étapes à réaliser pour pouvoir installer OSE.
-Vous devrez auparavant récupérer l'archive de OSE.
+L'installation se fait en récupérant les sources directement depuis le déôt GitLab de l'Université de Caen.
+Un script a été conçu pour automatiser cette opération.
 
-Dézippez l’Archive de OSE vers le répertoire de votre choix (par exemple /var/www/ose).
-
-Donner les droits d’écriture à l’utilisateur Apache (www-data sous Debian) au dossier suivant :
-data/cache
+Exécutez la commande suivante sur votre serveur :
+```bash
+wget https://ose.unicaen.fr/deploiement/ose-deploy && php ose-deploy
+```
 
 # Configuration d'Apache
 ## Avec un VirtualHost

@@ -74,6 +74,7 @@ function update(Console $c, OseAdmin $oa)
         "cd $osedir",
         "rm -R data/cache/*",
         "php vendor/bin/doctrine-module orm:generate-proxies",
+        "chmod -R 777 data/cache/DoctrineProxy",
     ]);
 
 

@@ -95,6 +95,7 @@ $c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CY
 $c->exec([
     "cd $osedir",
     "php vendor/bin/doctrine-module orm:generate-proxies",
+    "chmod -R 777 data/cache/DoctrineProxy",
 ]);
 
 // Mise en place des tâches CRON...

@@ -76,7 +76,7 @@ $c->exec([
     "git checkout tags/$version",
     "mkdir data/cache",
     "chmod 777 data/cache",
-    //"chmod +7 bin/ose",
+    "chmod +7 bin/ose",
 ]);
 $od->writeVersion($osedir, $version);
 

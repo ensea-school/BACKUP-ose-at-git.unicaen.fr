@@ -23,7 +23,7 @@ switch ($action) {
 
 function update(Console $c, OseAdmin $oa)
 {
-    $osedir = "/var/www/ose/deploy";//dirname(__DIR__);
+    $osedir = dirname(__DIR__);
 
     // Choix de la version
     $c->println("Mise à jour de OSE");

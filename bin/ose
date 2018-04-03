@@ -72,7 +72,7 @@ function update(Console $c, OseAdmin $oa)
     // Néttoyage des caches et mise à jour des proxies
     $c->exec([
         "cd $osedir",
-        "rm -R data/cache/*",
+        "rm -Rf data/cache/*",
         "php vendor/bin/doctrine-module orm:generate-proxies",
         "chmod -R 777 data/cache/DoctrineProxy",
     ]);

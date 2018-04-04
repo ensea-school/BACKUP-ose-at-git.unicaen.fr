@@ -16,8 +16,9 @@ if (in_array($needKey, ["o", "O"])) {
     $c->print("Veuillez préciser l'adresse mail du compte utilisé pour accéder au Gitlab de OSE: ");
     $gitlabMail = $c->getInput();
     $c->passthru("ssh-keygen -t rsa -C $gitlabMail -b 4096");
-
-    $c->println("Intégrez ensuite votre clé SSH dans Gitlab. Ensuite, appuyez sur \"Entrée\" pour continuer...");
+    $c->println("Intégrez ensuite votre clé SSH dans Gitlab.");
+    $c->println("Le serveur GitLab est accessible à l'adresse suivante : https://git.unicaen.fr/dsi/OSE");
+    $c->println("Ensuite, appuyez sur \"Entrée\" pour continuer...");
     $c->getInput();
     if ($od->gitlabIsReachable()) {
         $c->println("Votre clé SSH a bien été déployée et est fonctionnelle.", $c::COLOR_LIGHT_GREEN);
@@ -96,9 +97,10 @@ $c->exec([
     "cd $osedir",
     "php vendor/bin/doctrine-module orm:generate-proxies",
     "chmod -R 777 data/cache/DoctrineProxy",
+    "cp config/application.local.php.dist config/application.local.php",
 ]);
 
-// Mise en place des tâches CRON...
+// Mise en place des tâches CRON ??
 
 
 // Conclusion
@@ -111,7 +113,7 @@ $c->println(" 4 - Une fois bien connecté, configurez vos connecteurs en vous ap
 $c->println(" 5 - Mettez en place les tâches CRON et les JOBS Oracle nécessaires (envoi de mails pour les infdicateurs, Synchronisatio automatique, etc.");
 $c->println(" 6 - Paramétrez l'application pour l'adapter à vos besoins");
 $c->println('');
-$c->println("Vous trouverez plus d'informations dans la procédure d'installation située dans\n$osedir/data/Déploiement/Procédure d'installation.pdf");
+$c->println("Pour la suite, merci de vous reporter sur la procédure d'installation de OSE (https://ose.unicaen.fr/deploiement/install)");
 $c->println("OSE possède également un guide de l'administrateur pour vous aider à configurer l'application");
 $c->println('');
 
@@ -301,6 +303,21 @@ class Console
         $this->println($text, self::COLOR_LIGHT_RED);
         $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
         die("\n");
+    }
+
+
+
+    public function getArg($index=null)
+    {
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
+
+        if (null === $index) return $args;
+
+        if (isset($args[$index])){
+            return $args[$index];
+        }else{
+            return null;
+        }
     }
 
 

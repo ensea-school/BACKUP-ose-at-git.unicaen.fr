@@ -6,7 +6,7 @@ $oa = new OseAdmin($c);
 
 $c->printMainTitle("OSE", 15);
 
-$action = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : '';
+$action = $c->getArg(1);
 
 switch ($action) {
     case 'update':
@@ -15,10 +15,16 @@ switch ($action) {
     case 'notifier-indicateurs':
         $oa->exec('notifier indicateurs');
     break;
+    case 'migration':
+        $oldVersion = $c->getArg(2);
+        $version = $c->getArg(3);
+        /* Action à effectuer */
+    break;
     default:
         help($c, $oa);
     break;
 }
+
 
 
 function update(Console $c, OseAdmin $oa)
@@ -35,8 +41,10 @@ function update(Console $c, OseAdmin $oa)
         "git fetch --all --tags --prune",
     ], false);
 
+    $oldVersion = $oa->currentVersion($osedir);
+
     $c->println("Sélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-    $c->println("La version actuellement installée est la ".$oa->currentVersion($osedir));
+    $c->println("La version actuellement installée est la ".$oldVersion);
     $c->println("Voici la liste des versions de OSE disponibles:");
     $tags = $oa->getTags();
     foreach ($tags as $tag) {
@@ -69,14 +77,14 @@ function update(Console $c, OseAdmin $oa)
         "php composer.phar install",
     ]);
 
-    // Néttoyage des caches et mise à jour des proxies
+    // Néttoyage des caches et mise à jour des proxies, lancement du script de migration éventuel
     $c->exec([
         "cd $osedir",
         "rm -Rf data/cache/*",
         "php vendor/bin/doctrine-module orm:generate-proxies",
         "chmod -R 777 data/cache/DoctrineProxy",
+        "php bin/ose migration $oldVersion $version"
     ]);
-
 
     // Conclusion
     $c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
@@ -84,6 +92,7 @@ function update(Console $c, OseAdmin $oa)
     $c->println("N'oubliez pas de sortir du mode maintenance!");
     $c->println('');
 }
+
 
 
 function help(Console $c, OseAdmin $oa)
@@ -287,6 +296,21 @@ class Console
         $this->println($text, self::COLOR_LIGHT_RED);
         $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
         die("\n");
+    }
+
+
+
+    public function getArg($index=null)
+    {
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
+
+        if (null === $index) return $args;
+
+        if (isset($args[$index])){
+            return $args[$index];
+        }else{
+            return null;
+        }
     }
 
 

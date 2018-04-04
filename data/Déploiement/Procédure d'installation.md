@@ -3,27 +3,30 @@
 Installer sur une distribution GNU/Linux - Debian 9 (Stretch) de préférence.
 
 Dépendances requises :
+
+* git
+* wget
 * Apache 2 avec le module de réécriture d'URL (*rewrite*) activé
 * PHP7 avec les modules suivants :
- * cli
- * curl
- * intl
- * json
- * ldap
- * bcmath
- * mbstring
- * mcrypt
- * opcache
- * xml
- * zip
- * OCI8 (pilote pour Oracle).
-
-OSE utilise **UnoConv** pour créer des fichiers PDF à partir de documents au format LibreOffice. **UnoConv** devra donc être installé sur le serveur. Il en existe un paquet intégré à Debian.
+    * cli
+    * curl
+    * intl
+    * json
+    * ldap
+    * bcmath
+    * mbstring
+    * mcrypt
+    * opcache
+    * xml
+    * zip
+    * OCI8 (pilote pour Oracle).
+* unoconv (OSE utilise **UnoConv** pour créer des fichiers PDF à partir de documents au format LibreOffice. **UnoConv** devra donc être installé sur le serveur. Il en existe un paquet intégré à Debian.)
 
 Le mode installation de OSE liste toutes les dépendances nécessaires et teste leur présence sur votre serveur.
 
 ## Base de données
 Les spécifications sont les suivantes :
+
 * 4 CPU virtuels
 * 2 Go de RAM minimum par base de données
 * tablespace de 9 Go (pour 3 années d'utilisation)
@@ -33,7 +36,7 @@ Les spécifications sont les suivantes :
 
 # Installation des fichiers
 
-L'installation se fait en récupérant les sources directement depuis le déôt GitLab de l'Université de Caen.
+L'installation se fait en récupérant les sources directement depuis le dépôt GitLab de l'Université de Caen.
 Un script a été conçu pour automatiser cette opération.
 
 Exécutez la commande suivante sur votre serveur :
@@ -181,6 +184,7 @@ Renommez-le en application.local.php, puis éditez-le pour le personnaliser.
 Allez ensuite sur OSE. Par défaut, le mode installation est activé.
 
 Ce mode vous permettra de :
+
 *  vérifier que toutes les dépendances nécessaires au bon fonctionnement de l'application sont satisfaites
 *  contrôler que les paramètres de configuration que vous avez choisi fonctionnent correctement
 *  Choisir ou changer le mot de passe de l'utilisateur `oseappli`, qui est administrateur de l'application.
@@ -199,7 +203,7 @@ En voici la commande :
 ######################
 # Notifications par mail des personnes abonnées à des indicateurs.
 # Exécution du script du lundi au vendredi,chaque heure de 7h à 1h :
-0 5-17 * * 1-5   root    /usr/bin/php /var/www/OSE/public/index.php notifier indicateurs --requestUriHost=/ose.unicaen.fr 1> /tmp/oselog 2>&1
+0 5-17 * * 1-5   root    /usr/bin/php /var/www/OSE/bin/ose notifier-indicateurs 1> /tmp/oselog 2>&1
 ```
 
 OSE est maintenant installé.

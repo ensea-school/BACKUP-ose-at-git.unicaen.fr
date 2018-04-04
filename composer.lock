@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "48133f41725ab3f265c5db754fa09e0e",
+    "content-hash": "c1e6aa6153e1ff3733619c6b124ce82e",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1529,11 +1529,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "b31f1857684c45c78c60c8e14dc72ad73e363819"
+                "reference": "2890c341e174c6212b873e10649d7603a2f0abd4"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -1551,7 +1551,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2018-03-20T15:11:11+00:00"
+            "time": "2018-04-04T14:06:04+00:00"
         },
         {
             "name": "unicaen/import",

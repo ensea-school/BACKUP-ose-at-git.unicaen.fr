@@ -1,7 +1,7 @@
 # Procédure de mise à jour
 
 ## Mode maintenance
-Placez OSE en mode maintenance. Dans le fichier `config/application.config.php` :
+Placez OSE en mode maintenance. Dans le fichier `config.local.php` :
 
 * `maintenance/modeMaintenance` doit passer à `true`.
 * `maintenance/messageInfo` peut être personnalisé pour informer les utilisateurs.
@@ -17,12 +17,12 @@ exécutez les requêtes dans SQL Developer pour mettre à jour la base de donné
 
 ## Tests
 
-Le fichier `CHANGELOG` recense les changements apportés par les nouvelles versions de l'application.
+Le fichier `data/Déploiement/Changements.pdf` recense les changements apportés par les différentes versions de l'application.
 Vous êtes invité à tester prioritairement ces changements.
 
 ## Passage en production
 
-Sortez du mode maintenance. Dans le fichier `config/application.config.php` :
+Sortez du mode maintenance. Dans le fichier `config.local.php` :
 
 * `maintenance/modeMaintenance` doit passer à `false`.
 

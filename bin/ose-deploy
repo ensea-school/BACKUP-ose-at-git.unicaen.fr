@@ -97,7 +97,7 @@ $c->exec([
     "cd $osedir",
     "php vendor/bin/doctrine-module orm:generate-proxies",
     "chmod -R 777 data/cache/DoctrineProxy",
-    "cp config/application.local.php.dist config/application.local.php",
+    "cp config/application.local.php.dist config.local.php",
 ]);
 
 // Mise en place des tâches CRON ??

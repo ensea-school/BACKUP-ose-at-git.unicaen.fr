@@ -177,8 +177,7 @@ END;
 ```
 
 # Configuration technique
-Dans le dossier config de OSE se trouve le fichier application.local.php.dist.
-Renommez-le en application.local.php, puis éditez-le pour le personnaliser.
+Personnalisez le fichier `config.local.php` pour adapter OSE à votre établissement.
 
 # Mode installation
 Allez ensuite sur OSE. Par défaut, le mode installation est activé.
@@ -189,7 +188,7 @@ Ce mode vous permettra de :
 *  contrôler que les paramètres de configuration que vous avez choisi fonctionnent correctement
 *  Choisir ou changer le mot de passe de l'utilisateur `oseappli`, qui est administrateur de l'application.
 
-Une fois cette étape terminée, il convient de passer OSE en mode production. Cela se fait dans le fichier de configuration config/application.local.php, en positionnant à `false` `global/modeInstallation`.
+Une fois cette étape terminée, il convient de passer OSE en mode production. Cela se fait dans le fichier de configuration `config.local.php`, en positionnant à `false` `global/modeInstallation`.
 
 # Mise en place de la tâche CRON
 Une tâche CRON doit être lancée sur votre serveur régulièrement.

@@ -36,10 +36,12 @@ Supprimez complètement le répertoire OSE.
 * Procédez à une nouvelle installation (procédure ici : https://ose.unicaen.fr/deploiement/install).
 Si vous déployez au même endroit qu'avant, la configuration d'Apache ne devra pas être modifiée.
 
-* Réintégrez votre fichier de configuration locale dans `config/application.local.php`.
+* Réintégrez votre fichier de configuration locale.
+Attention : **ce dernier a changé d'emplacement**. De `config/application.local.php` il est devenu `config.local.php`.
+Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **racine** du répertoire OSE!!
 
-* Le fichier de configuration locale (`config/application.local.php`) doit être modifié.
+* Le fichier de configuration locale (`config.local.php`) doit être modifié.
   La rubrique `'liens'` (Liens divers) n'a plus d'utilité et doit être supprimée.
-  
+
   A sa place, copiez-collez dans votre fichier la rubrique `'etablissement'` en provenance 
   du fichier `config/application.local.dist`, puis personnalisez-là.

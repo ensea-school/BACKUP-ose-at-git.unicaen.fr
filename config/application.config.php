@@ -6,7 +6,7 @@
 
 class AppConfig
 {
-    const LOCAL_APPLICATION_CONFIG_FILE = 'config/application.local.php';
+    const LOCAL_APPLICATION_CONFIG_FILE = 'config.local.php';
 
     /**
      * Configuration locale de l'application

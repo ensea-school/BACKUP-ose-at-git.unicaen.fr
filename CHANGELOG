@@ -12,6 +12,11 @@
 
 * Connecteurs : les disciplines remontent aussi pour les intervenants ayant une fin d'affectation en cours d'année.
 
+* Correction de bug empêchant l'affichage de l'interface d'administration des années.
+
+* Correction de bug à l'installation : toutes les tables étaent considérées par défaut comme
+synchronisées, ce qui n'était pas le cas.
+
 ## Nouveautés
 
 * Personnalisation : vous pouvez maintenant adapter entièrement l'interface de OSE 

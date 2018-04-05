@@ -334,6 +334,10 @@ class DataGen
             return "''x''";
         }
 
+        if ('IMPORT_TABLES' == $table && 'SYNC_ENABLED' == $column){
+            return '0';
+        }
+
 
 
         if ($def['constraint_table']) {

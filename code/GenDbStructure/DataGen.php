@@ -18,60 +18,60 @@ class DataGen
      */
     protected $tablesInfo = [];
 
-    protected $breaks = false;
+    protected $breaks     = false;
 
     protected $tablesSel  = [
-        'AFFECTATION'                  => "utilisateur_id IN (SELECT id FROM utilisateur WHERE username='".self::OSE_USER."')",
-        'ANNEE'                        => '',
-        'CATEGORIE_PRIVILEGE'          => '',
-        'CC_ACTIVITE'                  => '',
-        'CIVILITE'                     => '',
-        'CORPS'                        => '',
-        'DEPARTEMENT'                  => '',
-        'DISCIPLINE'                   => '',
-        'DOMAINE_FONCTIONNEL'          => '',
-        'ETABLISSEMENT'                => '',
-        'ETAT_VOLUME_HORAIRE'          => '',
-        'FONCTION_REFERENTIEL'         => '',
-        'GRADE'                        => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
-        'GROUPE'                       => '',
-        'IMPORT_TABLES'                => '',
-        'INDICATEUR'                   => '',
-        'MESSAGE'                      => '',
-        'MOTIF_MODIFICATION_SERVICE'   => '',
-        'MOTIF_NON_PAIEMENT'           => '',
-        'PARAMETRE'                    => '',
-        'PAYS'                         => '',
-        'PERIMETRE'                    => '',
-        'PERIODE'                      => '',
-        'PLAFOND'                      => '',
-        'PLAFOND_ETAT'                 => '',
-        'PRIVILEGE'                    => '',
-        'REGLE_STRUCTURE_VALIDATION'   => '',
-        'ROLE'                         => '',
-        'ROLE_PRIVILEGE'               => '',
-        'SCENARIO'                     => 'structure_id IS NULL',
-        'SOURCE'                       => "code='OSE'",
-        'STATUT_INTERVENANT'           => '',
-        'STATUT_PRIVILEGE'             => 'statut_id IN (SELECT si.id FROM statut_intervenant si WHERE si.histo_destruction IS NULL)',
-        'TAUX_HORAIRE_HETD'            => '',
-        'TBL'                          => '',
-        'TYPE_AGREMENT'                => '',
-        'TYPE_AGREMENT_STATUT'         => '',
-        'TYPE_CONTRAT'                 => '',
-        'TYPE_DOTATION'                => "SOURCE_CODE IN ('dotation-initiale','dotation-complementaire','abondement')",
-        'TYPE_HEURES'                  => '',
-        'TYPE_INTERVENANT'             => '',
-        'TYPE_INTERVENTION'            => "code IN ('CM','TD','TP','Stage','Projet','Mémoire')",
-        'TYPE_PIECE_JOINTE'            => '',
-        'TYPE_PIECE_JOINTE_STATUT'     => '',
-        'TYPE_RESSOURCE'               => '',
-        'TYPE_STRUCTURE'               => '',
-        'TYPE_VALIDATION'              => '',
-        'TYPE_VOLUME_HORAIRE'          => '',
-        'UTILISATEUR'                  => "username = '".self::OSE_USER."'",
-        'WF_ETAPE'                     => '',
-        'WF_ETAPE_DEP'                 => '',
+        'AFFECTATION'                => "utilisateur_id IN (SELECT id FROM utilisateur WHERE username='" . self::OSE_USER . "')",
+        'ANNEE'                      => '',
+        'CATEGORIE_PRIVILEGE'        => '',
+        'CC_ACTIVITE'                => '',
+        'CIVILITE'                   => '',
+        'CORPS'                      => '',
+        'DEPARTEMENT'                => '',
+        'DISCIPLINE'                 => '',
+        'DOMAINE_FONCTIONNEL'        => '',
+        'ETABLISSEMENT'              => '',
+        'ETAT_VOLUME_HORAIRE'        => '',
+        'FONCTION_REFERENTIEL'       => '',
+        'GRADE'                      => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
+        'GROUPE'                     => '',
+        'IMPORT_TABLES'              => '',
+        'INDICATEUR'                 => '',
+        'MESSAGE'                    => '',
+        'MOTIF_MODIFICATION_SERVICE' => '',
+        'MOTIF_NON_PAIEMENT'         => '',
+        'PARAMETRE'                  => '',
+        'PAYS'                       => '',
+        'PERIMETRE'                  => '',
+        'PERIODE'                    => '',
+        'PLAFOND'                    => '',
+        'PLAFOND_ETAT'               => '',
+        'PRIVILEGE'                  => '',
+        'REGLE_STRUCTURE_VALIDATION' => '',
+        'ROLE'                       => '',
+        'ROLE_PRIVILEGE'             => '',
+        'SCENARIO'                   => 'structure_id IS NULL',
+        'SOURCE'                     => "code='OSE'",
+        'STATUT_INTERVENANT'         => '',
+        'STATUT_PRIVILEGE'           => 'statut_id IN (SELECT si.id FROM statut_intervenant si WHERE si.histo_destruction IS NULL)',
+        'TAUX_HORAIRE_HETD'          => '',
+        'TBL'                        => '',
+        'TYPE_AGREMENT'              => '',
+        'TYPE_AGREMENT_STATUT'       => '',
+        'TYPE_CONTRAT'               => '',
+        'TYPE_DOTATION'              => "SOURCE_CODE IN ('dotation-initiale','dotation-complementaire','abondement')",
+        'TYPE_HEURES'                => '',
+        'TYPE_INTERVENANT'           => '',
+        'TYPE_INTERVENTION'          => "code IN ('CM','TD','TP','Stage','Projet','Mémoire')",
+        'TYPE_PIECE_JOINTE'          => '',
+        'TYPE_PIECE_JOINTE_STATUT'   => '',
+        'TYPE_RESSOURCE'             => '',
+        'TYPE_STRUCTURE'             => '',
+        'TYPE_VALIDATION'            => '',
+        'TYPE_VOLUME_HORAIRE'        => '',
+        'UTILISATEUR'                => "username = '" . self::OSE_USER . "'",
+        'WF_ETAPE'                   => '',
+        'WF_ETAPE_DEP'               => '',
     ];
 
 
@@ -195,7 +195,7 @@ class DataGen
             'ID',
         ];
 
-        if ('UTILISATEUR' == $tableName){
+        if ('UTILISATEUR' == $tableName) {
             return 'USERNAME';
         }
 
@@ -313,31 +313,31 @@ class DataGen
             return substr($table, 0, 23) . '_ID_SEQ.NEXTVAL';
         }
 
-        if ('SOURCE_ID' == $column){
+        if ('SOURCE_ID' == $column) {
             return "(SELECT id FROM source WHERE code = ''OSE'')";
         }
 
-        if ('TYPE_HEURES_ELEMENT_ID' == $column && 'TYPE_HEURES' == $table){
+        if ('TYPE_HEURES_ELEMENT_ID' == $column && 'TYPE_HEURES' == $table) {
             return 'TYPE_HEURES_ID_SEQ.CURRVAL';
         }
 
-        if ('PRIVILEGE_ID' == $column){
+        if ('PRIVILEGE_ID' == $column) {
             $cppSql = "SELECT cp.code || '-' || p.code FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE p.id = privilege_id";
+
             return "(SELECT p.id FROM privilege p JOIN categorie_privilege cp ON p.categorie_id = cp.id WHERE cp.code || ''-'' || p.code = ''' ||($cppSql)|| ''')";
         }
 
-        if ('ROLE_ID' == $column && $table == 'AFFECTATION'){
+        if ('ROLE_ID' == $column && $table == 'AFFECTATION') {
             return "(SELECT id FROM role WHERE code = ''administrateur'')";
         }
 
-        if ('PASSWORD' == $column && $table == 'UTILISATEUR'){
+        if ('PASSWORD' == $column && $table == 'UTILISATEUR') {
             return "''x''";
         }
 
-        if ('IMPORT_TABLES' == $table && 'SYNC_ENABLED' == $column){
+        if ('IMPORT_TABLES' == $table && 'SYNC_ENABLED' == $column) {
             return '0';
         }
-
 
 
         if ($def['constraint_table']) {

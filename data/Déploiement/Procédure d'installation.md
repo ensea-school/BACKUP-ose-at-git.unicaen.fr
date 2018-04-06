@@ -1,3 +1,13 @@
+---
+title: "Procédure d'installation de OSE"
+author: Laurent Lécluse - DSI - Unicaen
+titlepage: true
+titlepage-color: 06386e
+titlepage-text-color: ffffff
+titlepage-rule-color: ffffff
+titlepage-rule-height: 1
+...
+
 # Prérequis
 ## Serveur Web
 Installer sur une distribution GNU/Linux - Debian 9 (Stretch) de préférence.
@@ -190,11 +200,27 @@ Ce mode vous permettra de :
 
 Une fois cette étape terminée, il convient de passer OSE en mode production. Cela se fait dans le fichier de configuration `config.local.php`, en positionnant à `false` `global/modeInstallation`.
 
-# Mise en place de la tâche CRON
-Une tâche CRON doit être lancée sur votre serveur régulièrement.
+# Mise en place des tâches CRON
+Des tâches CRON doivent être lancée sur votre serveur régulièrement.
 Elle sert à envoyer les notifications par mail pour les indicateurs à ceux qui se sont abonnés.
 
-En voici la commande :
+Dans tous les cas, c'est le script de OSE qui sera appelé.
+Le script est situé dans le répertoire de OSE, `bin/ose`.
+Il est suivi de l'action à exécuter, puis éventuellement de paramètres.
+
+Exemple d'utilisation pour lancer une tâche de synchronisation appelée `principal`:
+```bash
+/usr/bin/php /var/www/ose/bin/ose synchronisation principal
+```
+
+| Usage                 | Fréquence             | Action de script      |
+| --------------------- | --------------------- | --------------------- |
+| Indicateurs : envoi des notifications par mail | Les jours de semaine entre 5h et 17h | notifier-indicateurs |
+| Synchronisation : Mise en place d'un job pour l'import des données. Plusieurs jobs pourront être créés au besoin | Tous les quarts d'heures entre 7h et 21h sauf le dimanche | synchronisation  |  
+
+Voici un exemple de crontab :
+
+
 
 ```cron
 ###################### 
@@ -202,7 +228,8 @@ En voici la commande :
 ######################
 # Notifications par mail des personnes abonnées à des indicateurs.
 # Exécution du script du lundi au vendredi,chaque heure de 7h à 1h :
-0 5-17 * * 1-5   root    /usr/bin/php /var/www/OSE/bin/ose notifier-indicateurs 1> /tmp/oselog 2>&1
+0 5-17 * * 1-5   root    /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs 1> /tmp/oselog 2>&1
+*/15 7-21 * * 1-6 php    /usr/bin/php /var/www/ose/bin/ose synchronisation job1 1> /tmp/oselog 2>&1
 ```
 
 OSE est maintenant installé.

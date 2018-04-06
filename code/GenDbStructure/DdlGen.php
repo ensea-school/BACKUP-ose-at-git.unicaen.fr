@@ -355,14 +355,7 @@ END;
           ORDER BY
             object_name
         ";
-        $this->addDdlQuery(self::PACKAGES_BODIES, $q, function($name,$ddl){
-            if ($name == 'OSE_IMPORT'){
-                $ddl = str_replace('-- SYNC COMMENT', '/*', $ddl);
-                $ddl = str_replace('-- END SYNC COMMENT', '*/', $ddl);
-            }
-
-            return $ddl;
-        });
+        $this->addDdlQuery(self::PACKAGES_BODIES, $q);
 
 
         $q = "SELECT

@@ -128,48 +128,6 @@ Un script d'initialisation vous est fourni (répertoire data/Déploiement/ose-dd
 Attention à bien veiller à ce que les accents soient correctement traités.
 Les caractères du fichier sont en **UTF8**.
 
-En plus de cale, des Jobs Oracle sont à créer pour effectuer une série de tâches.
-Certaines données ont en effet besoin d'être mis à jour périodiquement.
-A vous d'adapter les périodicités à vos besoins.
-
-```sql
-
-/
-
-BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'OSE_FORMULE_REFRESH',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_FORMULE.CALCULER_TOUT',
-    number_of_arguments => 1,
-    start_date => TO_TIMESTAMP_TZ('2014-12-09 10:25:17.032495000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYDAY=MON,TUE,WED,THU,FRI,SAT,SUN;BYHOUR=5;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Recalcul général de la formule de calcul'
-  );
-END;
-
-/
-
-BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'MAJ_ALL_TBL',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_DIVERS.CALCULER_TABLEAUX_BORD',
-    number_of_arguments => 0,
-    start_date => TO_TIMESTAMP_TZ('2017-11-06 16:03:22.734108000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYHOUR=2,14;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Mise à jour de tous les tableaux de bord (hors formule de calcul)'
-  );
-END;
-/
-```
-
 # Configuration technique
 Personnalisez le fichier `config.local.php` pour adapter OSE à votre établissement.
 
@@ -185,12 +143,14 @@ Ce mode vous permettra de :
 Une fois cette étape terminée, il convient de passer OSE en mode production. Cela se fait dans le fichier de configuration `config.local.php`, en positionnant à `false` `global/modeInstallation`.
 
 # Mise en place des tâches CRON
-Des tâches CRON doivent être lancée sur votre serveur régulièrement.
-Elle sert à envoyer les notifications par mail pour les indicateurs à ceux qui se sont abonnés.
+Des tâches CRON doivent être lancée sur votre serveur régulièrement pour mettre à jour certaines données
+ou réaliser des actions.
+
+Ces tâches n'ont pas besoin d'être lancées régulièrement sur un serveur de pré-production.
 
 Dans tous les cas, c'est le script de OSE qui sera appelé.
 Le script est situé dans le répertoire de OSE, `bin/ose`.
-Il est suivi de l'action à exécuter, puis éventuellement de paramètres.
+Il est suivi de l'action à exécuter, puis éventuellement de paramètres à préciser.
 
 Exemple d'utilisation pour lancer une tâche de synchronisation appelée `principal`:
 ```bash
@@ -202,6 +162,8 @@ Exemple d'utilisation pour lancer une tâche de synchronisation appelée `princi
 | Indicateurs : envoi des notifications par mail | Les jours de semaine entre 5h et 17h | notifier-indicateurs |
 | Synchronisation : Mise en place d'un job pour l'import des données. Plusieurs jobs pourront être créés au besoin | Tous les quarts d'heures entre 7h et 21h sauf le dimanche | synchronisation `<Nom du job>` |  
 | Calcul des effectifs du module Charges | une fois par jour, à 20h tous les jours sauf le dimanche. | chargens-calcul-effectifs |
+| Calcul des tableaux de bord | Deux fois par jour sauf le dimanche (Calcul LONG) | calcul-tableaux-bord |
+| Calcul des heures complémentaires à l'aide de la formule (calcul LONG) | Les lundi et jeudi à 3h | formule-calcul |
 
 Après la commande, on ajoute `1> /tmp/oselog 2>&1` pour loguer le résultat dans le fichier`/tmp/oselog`.
 A adapter le cas échéant.
@@ -210,9 +172,11 @@ Voici un exemple de crontab :
 
 ```cron
 # m  h    dom mon dow command
-0    5-17 *   *   1-5 /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs 1> /tmp/oselog 2>&1
-*/15 7-21 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose synchronisation job1 1> /tmp/oselog 2>&1
+0    5-17 *   *   1-5 /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs      1> /tmp/oselog 2>&1
+*/15 7-21 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose synchronisation job1      1> /tmp/oselog 2>&1
 0      20 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose chargens-calcul-effectifs 1> /tmp/oselog 2>&1
+0    6,14 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose calcul-tableaux-bord      1> /tmp/oselog 2>&1
+0       3 *   *   1,4 /usr/bin/php /var/www/ose/bin/ose formule-calcul            1> /tmp/oselog 2>&1
 ```
 
 OSE est maintenant installé.

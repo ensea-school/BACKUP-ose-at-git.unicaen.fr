@@ -66,5 +66,7 @@ Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **rac
     * notifier-indicateurs
     * synchronisation
     * chargens-calcul-effectifs
- 
+    * calcul-tableaux-bord
+    * formule-calcul
+
 Pour cela, se référer à la procédure d'installation de OSE.

@@ -90,6 +90,21 @@ BEGIN
                                 force => true);
 END;
 /
-
+-- Suppression du JOB OSE_FORMULE_REFRESH
+BEGIN
+    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_FORMULE_REFRESH"',
+                                defer => false,
+                                force => true);
+END;
+/
+-- Suppression du JOB OSE_WF_REFRESH
+BEGIN
+    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_WF_REFRESH"',
+                                defer => false,
+                                force => true);
+END;
+/
 
 drop package "OSE"."OSE_IMPORT";
+
+/

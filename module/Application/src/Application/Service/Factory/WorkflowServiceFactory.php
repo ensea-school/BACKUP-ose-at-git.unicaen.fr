@@ -5,6 +5,7 @@ namespace Application\Service\Factory;
 use Application\Service\ContextService;
 use Application\Service\WorkflowService;
 use UnicaenTbl\Service\TableauBordService;
+use Zend\Console\Console;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -22,9 +23,11 @@ class WorkflowServiceFactory implements FactoryInterface
             $serviceLocator->get(ContextService::class)
         );
 
-        $service->setServiceAuthorize(
-            $serviceLocator->get('BjyAuthorize\Service\Authorize')
-        );
+        if (!Console::isConsole()) {
+            $service->setServiceAuthorize(
+                $serviceLocator->get('BjyAuthorize\Service\Authorize')
+            );
+        }
 
         return $service;
     }

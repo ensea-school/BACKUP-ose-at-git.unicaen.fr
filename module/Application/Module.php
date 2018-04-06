@@ -163,6 +163,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
             "Charges d'enseignement",
             'chargens-calc-effectifs' => "Calcul des effectifs du module Charges",
+            "Tableaux de bord",
+            'calcul-tableaux-bord' => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
+            "Formule de calcul",
+            'formule-calcul' => "Calcul de toutes les heures complémentaires à l'aide de la formule",
         ];
     }
 

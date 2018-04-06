@@ -108,41 +108,6 @@ class DdlGen
                 }
             }
         }
-
-        $this->ddl[self::JOBS] = [];
-
-        $this->ddl[self::JOBS]['OSE_FORMULE_REFRESH'] = "BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'OSE_FORMULE_REFRESH',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_FORMULE.CALCULER_TOUT',
-    number_of_arguments => 1,
-    start_date => TO_TIMESTAMP_TZ('2014-12-09 10:25:17.032495000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYDAY=MON,TUE,WED,THU,FRI,SAT,SUN;BYHOUR=5;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Recalcul général de la formule de calcul'
-  );
-END;
-/";
-
-        $this->ddl[self::JOBS]['MAJ_ALL_TBL'] = "BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'MAJ_ALL_TBL',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_DIVERS.CALCULER_TABLEAUX_BORD',
-    number_of_arguments => 0,
-    start_date => TO_TIMESTAMP_TZ('2017-11-06 16:03:22.734108000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYHOUR=2,14;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Mise à jour de tous les tableaux de bord (hors formule de calcul)'
-  );
-END;
-/";
-
     }
 
 

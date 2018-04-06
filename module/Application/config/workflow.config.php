@@ -90,6 +90,23 @@ return [
             ],
         ],
     ],
+
+    'console' => [
+        'router' => [
+            'routes' => [
+                'workflow-calcul-tbls' => [
+                    'options' => [
+                        'route'    => 'calcul-tableaux-bord',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Workflow',
+                            'action'     => 'calcul-tableaux-bord',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'navigation'      => [
         'default' => [
             'home' => [

@@ -133,22 +133,6 @@ Certaines données ont en effet besoin d'être mis à jour périodiquement.
 A vous d'adapter les périodicités à vos besoins.
 
 ```sql
-/
-
-BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'OSE_CHARGENS_CALCUL_EFFECTIFS',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_CHARGENS.CALC_ALL_EFFECTIFS',
-    number_of_arguments => 0,
-    start_date => TO_TIMESTAMP_TZ('2017-04-27 17:04:05.788458000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYHOUR=20;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Calcul général des effectifs des charges d''enseignement'
-  );
-END;
 
 /
 
@@ -216,20 +200,19 @@ Exemple d'utilisation pour lancer une tâche de synchronisation appelée `princi
 | Usage                 | Fréquence             | Action de script      |
 | --------------------- | --------------------- | --------------------- |
 | Indicateurs : envoi des notifications par mail | Les jours de semaine entre 5h et 17h | notifier-indicateurs |
-| Synchronisation : Mise en place d'un job pour l'import des données. Plusieurs jobs pourront être créés au besoin | Tous les quarts d'heures entre 7h et 21h sauf le dimanche | synchronisation  |  
+| Synchronisation : Mise en place d'un job pour l'import des données. Plusieurs jobs pourront être créés au besoin | Tous les quarts d'heures entre 7h et 21h sauf le dimanche | synchronisation `<Nom du job>` |  
+| Calcul des effectifs du module Charges | une fois par jour, à 20h tous les jours sauf le dimanche. | chargens-calcul-effectifs |
+
+Après la commande, on ajoute `1> /tmp/oselog 2>&1` pour loguer le résultat dans le fichier`/tmp/oselog`.
+A adapter le cas échéant.
 
 Voici un exemple de crontab :
 
-
-
 ```cron
-###################### 
-#         OSE        #
-######################
-# Notifications par mail des personnes abonnées à des indicateurs.
-# Exécution du script du lundi au vendredi,chaque heure de 7h à 1h :
-0 5-17 * * 1-5   root    /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs 1> /tmp/oselog 2>&1
-*/15 7-21 * * 1-6 php    /usr/bin/php /var/www/ose/bin/ose synchronisation job1 1> /tmp/oselog 2>&1
+# m  h    dom mon dow command
+0    5-17 *   *   1-5 /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs 1> /tmp/oselog 2>&1
+*/15 7-21 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose synchronisation job1 1> /tmp/oselog 2>&1
+0      20 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose chargens-calcul-effectifs 1> /tmp/oselog 2>&1
 ```
 
 OSE est maintenant installé.

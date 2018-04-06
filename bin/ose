@@ -24,6 +24,9 @@ switch ($action) {
         $job = $c->getArg(2);
         $oa->exec('UnicaenImport SyncJob '.$job);
     break;
+    case 'chargens-calcul-effectifs':
+        $oa->exec('chargens-calcul-effectifs');
+    break;
     default:
         help($c, $oa);
     break;
@@ -104,6 +107,8 @@ function help(Console $c, OseAdmin $oa)
     $c->println('Actions possibles :');
     $c->println(" - update               : Mise à jour de l'application");
     $c->println(" - notifier-indicateurs : Envoi des mails relatifs aux indicateurs");
+    $c->println(" - synchronisation <job> : Effectue la synchronisation des données pour le <job> transmis");
+    $c->println(" - chargens-calcul-effectifs : Calcul des effectifs du module Charges");
 }
 
 

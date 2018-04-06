@@ -342,6 +342,13 @@ class ChargensController extends AbstractController
 
 
 
+    public function calculEffectifsAction()
+    {
+        $this->getProviderChargens()->calculEffectifs();
+    }
+
+
+
     public function exportCsvAction()
     {
         /** @var Scenario $scenario */

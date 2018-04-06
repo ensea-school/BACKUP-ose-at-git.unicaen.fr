@@ -161,6 +161,8 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             "Notifications",
             'notifier indicateurs [--force]' => "Notification par mail des personnes abonnées à des indicateurs",
             ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
+            "Charges d'enseignement",
+            'chargens-calc-effectifs' => "Calcul des effectifs du module Charges",
         ];
     }
 

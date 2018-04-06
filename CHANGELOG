@@ -1,3 +1,8 @@
+---
+title: "Changement intervenus sur OSE"
+author: Laurent Lécluse - DSI - Unicaen
+...
+
 #OSE 6.3 
 
 ## Corrections de bugs
@@ -29,6 +34,8 @@ Le déploiement de OSE se fait désormais directement à partir de sa plateforme
 
 * Nouvelle procédure de mise à jour à partir de GitLab.
 
+* Suppression des anciens Jobs Oracle et remplacement par des tâches CRON
+
 ## Procédure de mise à jour
 
 * Sauvegardez votre fichier de configuration local (`config/application.local.php`)
@@ -40,6 +47,7 @@ Supprimez complètement le répertoire OSE.
 
 * Procédez à une nouvelle installation (procédure ici : https://ose.unicaen.fr/deploiement/install).
 Si vous déployez au même endroit qu'avant, la configuration d'Apache ne devra pas être modifiée.
+La base de données n'a pas non plus besoin d'être réinstallée.
 
 * Réintégrez votre fichier de configuration locale.
 Attention : **ce dernier a changé d'emplacement**. De `config/application.local.php` il est devenu `config.local.php`.
@@ -50,3 +58,13 @@ Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **rac
 
   A sa place, copiez-collez dans votre fichier la rubrique `'etablissement'` en provenance 
   du fichier `config/application.local.dist`, puis personnalisez-là.
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/06.3.sql`
+
+* Créez les tâches CRON suivantes si elles n'existent pas déjà :
+    * notifier-indicateurs
+    * synchronisation
+    * chargens-calcul-effectifs
+ 
+Pour cela, se référer à la procédure d'installation de OSE.

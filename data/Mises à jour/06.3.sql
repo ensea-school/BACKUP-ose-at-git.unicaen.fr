@@ -83,5 +83,13 @@ BEGIN
                                 force => true);
 END;
 /
+-- Suppression du JOB OSE_CHARGENS_CALCUL_EFFECTIFS
+BEGIN
+    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_CHARGENS_CALCUL_EFFECTIFS"',
+                                defer => false,
+                                force => true);
+END;
+/
+
 
 drop package "OSE"."OSE_IMPORT";

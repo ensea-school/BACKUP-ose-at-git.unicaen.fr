@@ -111,22 +111,6 @@ class DdlGen
 
         $this->ddl[self::JOBS] = [];
 
-        $this->ddl[self::JOBS]['OSE_CHARGENS_CALCUL_EFFECTIFS'] = "BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'OSE_CHARGENS_CALCUL_EFFECTIFS',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_CHARGENS.CALC_ALL_EFFECTIFS',
-    number_of_arguments => 0,
-    start_date => TO_TIMESTAMP_TZ('2017-04-27 17:04:05.788458000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYHOUR=20;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Calcul général des effectifs des charges d''enseignement'
-  );
-END;
-/";
-
         $this->ddl[self::JOBS]['OSE_FORMULE_REFRESH'] = "BEGIN
   DBMS_SCHEDULER.CREATE_JOB (
       job_name => 'OSE_FORMULE_REFRESH',

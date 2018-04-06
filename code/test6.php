@@ -6,3 +6,13 @@
  * @var $viewName   string
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
+
+use UnicaenImport\Processus\ImportProcessus;
+
+
+/** @var ImportProcessus $ip */
+$ip = $sl->get(ImportProcessus::class);
+
+
+
+$ip->syncJob('test1');

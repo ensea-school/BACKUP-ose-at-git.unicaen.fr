@@ -157,6 +157,16 @@ class ChargensProvider
 
 
     /**
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public function calculEffectifs()
+    {
+        return $this->getBdd()->execPlsql('OSE_CHARGENS.CALC_ALL_EFFECTIFS;');
+    }
+
+
+
+    /**
      * @param Etape $etape
      *
      * @return Noeud

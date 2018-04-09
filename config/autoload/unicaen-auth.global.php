@@ -19,6 +19,24 @@ $settings = [
 
     'entity_manager_name' => 'doctrine.entitymanager.orm_default', // nom du gestionnaire d'entités à utiliser
 
+    /**
+     * Classes représentant les entités rôle et privilège.
+     * - Entité rôle      : héritant de \UnicaenAuth\Entity\Db\AbstractRole      ou implémentant \UnicaenAuth\Entity\Db\RoleInterface.
+     * - Entité privilège : héritant de \UnicaenAuth\Entity\Db\AbstractPrivilege ou implémentant \UnicaenAuth\Entity\Db\PrivilegeInterface.
+     *
+     * Valeurs par défaut :
+     * - 'role_entity_class'      : 'UnicaenAuth\Entity\Db\Role'
+     * - 'privilege_entity_class' : 'UnicaenAuth\Entity\Db\Privilege'
+     */
+    'role_entity_class'      => 'UnicaenAuth\Entity\Db\Role',
+    'privilege_entity_class' => 'UnicaenAuth\Entity\Db\Privilege',
+
+    /**
+     * Activation ou non de l'authentification Shibboleth.
+     */
+    'shibboleth' => [
+        'enable' => false,
+    ],
 ];
 
 if ($localConfig['cas']['actif']) {

@@ -9,6 +9,10 @@ use Application\Entity\Db\Civilite;
  * Description of Civilite
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method Civilite get($id)
+ * @method Civilite[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method Civilite newEntity()
  */
 class CiviliteService extends AbstractEntityService
 {
@@ -24,26 +28,31 @@ class CiviliteService extends AbstractEntityService
         return Civilite::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'c';
     }
 
+
+
     /**
-     * Retourne la liste des étapes
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @param string|null $alias
-     * @return \Application\Entity\Db\Civilite[]
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.libelleCourt", "DESC");
-        return parent::getList($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb->orderBy($alias . '.libelleCourt', 'DESC');
+
+        return $qb;
     }
 }

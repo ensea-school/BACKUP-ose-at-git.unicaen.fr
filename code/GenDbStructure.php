@@ -21,13 +21,12 @@ $dg = new \GenDbStructure\DdlGen($em);
 
 $ddl = '';
 $ddl = $dg->getDdl();
-echo "<pre>$ddl</pre>";
-//$sCodeGenerator->generateToFile('ose-ddl.sql', $ddl);
-
 
 $de = new \GenDbStructure\DataGen($em);
 $data = $de->getDdlData();
 
-echo "<pre>$data</pre>";
+if (!isset($filename)) {
+    $filename = false;
+}
 
-$sCodeGenerator->generateToFile('ose-ddl.sql', $ddl.$data);
+$sCodeGenerator->generateToFile($filename ?: 'ose-ddl.sql', $ddl.$data, (bool)$filename);

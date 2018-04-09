@@ -219,6 +219,13 @@ class Installateur
                         return true;
                     }
                 },
+                'Mise en place du fichier de configuration local' => function () {
+                    if (!AppConfig::hasLocalConfig()){
+                        throw new \Exception('Configuration locale (fichier application.local.php) introuvable');
+                    }else{
+                        return true;
+                    }
+                },
                 'Droit d\'écriture sur le dossier data/cache' => function () {
                     $cacheDir = __DIR__ . '/../data/cache';
 
@@ -264,6 +271,9 @@ class Installateur
                 },
                 'ZIP'                  => function () {
                     return in_array('zip', get_loaded_extensions()) ? true : 'Non installé';
+                },
+                'BCMath'               => function () {
+                    return in_array('bcmath', get_loaded_extensions()) ? true : 'Non installé';
                 },
                 'OCI8 (Pilote Oracle)' => function () {
                     return in_array('oci8', get_loaded_extensions()) ? true : 'Non installé';

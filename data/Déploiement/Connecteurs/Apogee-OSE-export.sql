@@ -6,6 +6,8 @@
 --
 delete from ose_volume_horaire_ens
 ;
+delete from ose_element_effectifs
+;
 delete from ose_element_pedagogique
 ;
 delete from ose_chemin_pedagogique
@@ -104,7 +106,7 @@ with
       -- Determiner si la notion de niveau a du sens pour le type de formation
       min (
         case gtf.pertinence_niveau
-          when 0 then null 
+          when 0 then null
           else vde.cod_sis_daa_min
           end
                             ) keep ( dense_rank first order by anu.cod_anu, vde.cod_etp, vde.cod_vrs_vet ) as niveau,
@@ -480,63 +482,56 @@ group by
 --
 -- Constatation des effectifs par annee par element pedagogique et par regime d inscription
 --
-merge into ose_element_effectifs eff
-  using (
-    select source_code as z_element_pedagogique_id,
-      cod_anu          as annee_id,
-      sum(effectif_FI) as effectif_FI,
-      sum(effectif_FA) as effectif_FA,
-      sum(effectif_FC) as effectif_FC
-    from (
-      select elp.source_code,
-        ice.cod_anu,
-        case when iae.cod_rge in ('1', '3')      then 1 else 0 end as effectif_FI,
-        case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
-        case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
-      from ose_element_pedagogique elp
-      join ind_contrat_elp ice   on  ice.cod_elp = elp.source_code
-                                 and ice.cod_anu = elp.annee_id
-      join ins_adm_etp iae       on  iae.cod_ind = ice.cod_ind
-                                 and iae.cod_anu = ice.cod_anu
-                                 and iae.cod_etp = ice.cod_etp
-                                 and iae.cod_vrs_vet = ice.cod_vrs_vet
-      where elp.annee_id in ( to_char(add_months(sysdate, -28), 'YYYY') , to_char(add_months(sysdate, -16), 'YYYY') , to_char(add_months(sysdate,  -4), 'YYYY') )
-        and ice.tem_prc_ice = 'N'
-        and iae.eta_iae = 'E'
-        and iae.eta_pmt_iae = 'P'
+insert into ose_element_effectifs
+with tmp_element_effectifs as (
+  select
+    elp.source_code,
+    ice.cod_anu,
+    case when iae.cod_rge in ('1', '3')      then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
+    case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
+  from ose_element_pedagogique elp
+  join ind_contrat_elp ice   on  ice.cod_elp = elp.source_code
+                             and ice.cod_anu = elp.annee_id
+  join ins_adm_etp iae       on  iae.cod_ind = ice.cod_ind
+                             and iae.cod_anu = ice.cod_anu
+                             and iae.cod_etp = ice.cod_etp
+                             and iae.cod_vrs_vet = ice.cod_vrs_vet
+  where elp.annee_id in ( to_char(add_months(sysdate, -28), 'YYYY') , to_char(add_months(sysdate, -16), 'YYYY') , to_char(add_months(sysdate,  -4), 'YYYY') )
+    and ice.tem_prc_ice = 'N'
+    and iae.eta_iae = 'E'
+    and iae.eta_pmt_iae = 'P'
 -- Ajout des effectifs des elements portes
-      union all
-      select elp.source_code,
-        ice.cod_anu,
-        case when iae.cod_rge in ('1', '3')      then 1 else 0 end as effectif_FI,
-        case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
-        case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
-      from ose_element_pedagogique elp
-      join elp_porteur_porte epo on  epo.cod_elp_porteur = elp.source_code
-                                 and epo.cod_anu = elp.annee_id
-      join ind_contrat_elp ice   on  ice.cod_elp = epo.cod_elp_porte
-                                 and ice.cod_anu = epo.cod_anu
-      join ins_adm_etp iae       on  iae.cod_ind = ice.cod_ind
-                                 and iae.cod_anu = ice.cod_anu
-                                 and iae.cod_etp = ice.cod_etp
-                                 and iae.cod_vrs_vet = ice.cod_vrs_vet
-      where elp.annee_id in ( to_char(add_months(sysdate, -28), 'YYYY') , to_char(add_months(sysdate, -16), 'YYYY') , to_char(add_months(sysdate,  -4), 'YYYY') )
-        and ice.tem_prc_ice = 'N'
-        and iae.eta_iae = 'E'
-        and iae.eta_pmt_iae = 'P'
-      )
-    group by source_code,
-      cod_anu
-    ) tmp
-  on (eff.z_element_pedagogique_id = tmp.z_element_pedagogique_id and eff.annee_id = tmp.annee_id)
-  when matched then
-    update set
-      eff.effectif_FI = tmp.effectif_FI,
-      eff.effectif_FA = tmp.effectif_FA,
-      eff.effectif_FC = tmp.effectif_FC
-  when not matched then
-    insert (z_element_pedagogique_id, annee_id, effectif_FI, effectif_FA, effectif_FC)
-    values (tmp.z_element_pedagogique_id, tmp.annee_id, tmp.effectif_FI, tmp.effectif_FA, tmp.effectif_FC)
+  union all
+  select
+    elp.source_code,
+    ice.cod_anu,
+    case when iae.cod_rge in ('1', '3')      then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
+    case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
+  from ose_element_pedagogique elp
+  join elp_porteur_porte epo on  epo.cod_elp_porteur = elp.source_code
+                             and epo.cod_anu = elp.annee_id
+  join ind_contrat_elp ice   on  ice.cod_elp = epo.cod_elp_porte
+                             and ice.cod_anu = epo.cod_anu
+  join ins_adm_etp iae       on  iae.cod_ind = ice.cod_ind
+                             and iae.cod_anu = ice.cod_anu
+                             and iae.cod_etp = ice.cod_etp
+                             and iae.cod_vrs_vet = ice.cod_vrs_vet
+  where elp.annee_id in ( to_char(add_months(sysdate, -28), 'YYYY') , to_char(add_months(sysdate, -16), 'YYYY') , to_char(add_months(sysdate,  -4), 'YYYY') )
+    and ice.tem_prc_ice = 'N'
+    and iae.eta_iae = 'E'
+    and iae.eta_pmt_iae = 'P'
+  )
+select
+  source_code      as z_element_pedagogique_id,
+  cod_anu          as annee_id,
+  sum(effectif_FI) as effectif_FI,
+  sum(effectif_FA) as effectif_FA,
+  sum(effectif_FC) as effectif_FC
+from tmp_element_effectifs
+group by source_code,
+  cod_anu
 ;
 --
 -- Volumes horaires et nombre de groupes ouverts pour chaque enseignement, par type de groupe

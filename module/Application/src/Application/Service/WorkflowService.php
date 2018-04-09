@@ -284,6 +284,17 @@ class WorkflowService extends AbstractService
 
 
     /**
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function calculerTousTableauxBord()
+    {
+        return $this->getEntityManager()->getConnection()->exec('BEGIN OSE_DIVERS.CALCULER_TABLEAUX_BORD; END;');
+    }
+
+
+
+    /**
      * @param array                                        $tableauxBords
      * @param Intervenant|Intervenant[]|string $intervenant
      */

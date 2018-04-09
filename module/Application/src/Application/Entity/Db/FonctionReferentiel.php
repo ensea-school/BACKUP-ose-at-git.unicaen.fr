@@ -235,7 +235,7 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     /**
      * @return bool
      */
-    public function isEtapeRequise(): bool
+    public function isEtapeRequise()
     {
         return $this->etapeRequise;
     }
@@ -247,7 +247,7 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      *
      * @return FonctionReferentiel
      */
-    public function setEtapeRequise(bool $etapeRequise): FonctionReferentiel
+    public function setEtapeRequise($etapeRequise): FonctionReferentiel
     {
         $this->etapeRequise = $etapeRequise;
 

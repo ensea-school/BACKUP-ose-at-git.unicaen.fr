@@ -7,13 +7,12 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Service\StatutIntervenantService;
-
-$si = $sl->get(StatutIntervenantService::class);
-
-$s = $si->get(19);
+use UnicaenImport\Processus\ImportProcessus;
 
 
-$ns = $s->dupliquer();
+/** @var ImportProcessus $ip */
+$ip = $sl->get(ImportProcessus::class);
 
-var_dump($ns);
+
+
+$ip->syncJob('test1');

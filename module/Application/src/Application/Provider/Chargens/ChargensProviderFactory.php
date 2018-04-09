@@ -5,6 +5,7 @@ namespace Application\Provider\Chargens;
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Service\TypeHeuresService;
 use UnicaenTbl\Service\TableauBordService;
+use Zend\Console\Console;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -33,8 +34,10 @@ class ChargensProviderFactory implements FactoryInterface
         $chargensProvider = new ChargensProvider();
         $chargensProvider->setBdd($bdd);
 
-        $serviceAuthorize = $serviceLocator->get('BjyAuthorize\Service\Authorize');
-        $chargensProvider->setServiceAuthorize($serviceAuthorize);
+        if (!Console::isConsole()) {
+            $serviceAuthorize = $serviceLocator->get('BjyAuthorize\Service\Authorize');
+            $chargensProvider->setServiceAuthorize($serviceAuthorize);
+        }
 
         $chargensProvider->setServiceTypeHeures(
             $serviceLocator->get(TypeHeuresService::class)

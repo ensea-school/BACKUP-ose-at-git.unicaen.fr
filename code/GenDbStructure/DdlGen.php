@@ -108,57 +108,6 @@ class DdlGen
                 }
             }
         }
-
-        $this->ddl[self::JOBS] = [];
-
-        $this->ddl[self::JOBS]['OSE_CHARGENS_CALCUL_EFFECTIFS'] = "BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'OSE_CHARGENS_CALCUL_EFFECTIFS',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_CHARGENS.CALC_ALL_EFFECTIFS',
-    number_of_arguments => 0,
-    start_date => TO_TIMESTAMP_TZ('2017-04-27 17:04:05.788458000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYHOUR=20;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Calcul général des effectifs des charges d''enseignement'
-  );
-END;
-/";
-
-        $this->ddl[self::JOBS]['OSE_FORMULE_REFRESH'] = "BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'OSE_FORMULE_REFRESH',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_FORMULE.CALCULER_TOUT',
-    number_of_arguments => 1,
-    start_date => TO_TIMESTAMP_TZ('2014-12-09 10:25:17.032495000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYDAY=MON,TUE,WED,THU,FRI,SAT,SUN;BYHOUR=5;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Recalcul général de la formule de calcul'
-  );
-END;
-/";
-
-        $this->ddl[self::JOBS]['MAJ_ALL_TBL'] = "BEGIN
-  DBMS_SCHEDULER.CREATE_JOB (
-      job_name => 'MAJ_ALL_TBL',
-    job_type => 'STORED_PROCEDURE',
-    job_action => 'OSE_DIVERS.CALCULER_TABLEAUX_BORD',
-    number_of_arguments => 0,
-    start_date => TO_TIMESTAMP_TZ('2017-11-06 16:03:22.734108000 EUROPE/PARIS','YYYY-MM-DD HH24:MI:SS.FF TZR'),
-    repeat_interval => 'FREQ=DAILY;BYHOUR=2,14;BYMINUTE=0;BYSECOND=0',
-    end_date => NULL,
-    enabled => TRUE,
-    auto_drop => FALSE,
-    comments => 'Mise à jour de tous les tableaux de bord (hors formule de calcul)'
-  );
-END;
-/";
-
     }
 
 
@@ -321,6 +270,7 @@ END;
             AND view_name NOT LIKE 'V_DIFF_%'
             AND view_name NOT LIKE 'V_SYMPA_%'
             AND view_name NOT LIKE 'V_UNICAEN_%'
+            AND view_name NOT LIKE 'V_TYPE_INTERVENTION_REGLE_EP'
           ORDER BY
             view_name
         ";
@@ -382,6 +332,9 @@ END;
             AND i.index_name NOT LIKE 'MV_%'
             AND i.index_name NOT LIKE 'UNICAEN_%'
             AND c.constraint_name IS NULL
+            AND c.constraint_name NOT IN (
+            'TBL_PJD_UN_IDX','TBL_PJF_UN_IDX','TBL_SERVICE_REFERENTIEL_UN_IDX','TBL_SERVICE_SAISIE_UN_IDX'
+            )
           ORDER BY
             i.index_name
         ";

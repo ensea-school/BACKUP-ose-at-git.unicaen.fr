@@ -1,0 +1,72 @@
+---
+title: "Changement intervenus sur OSE"
+author: Laurent Lécluse - DSI - Unicaen
+...
+
+#OSE 6.3 
+
+## Corrections de bugs
+
+* Suppression de la vue `V_TYPE_INTERVENTION_REGLE_EP` qui ne compilait pas.
+
+* Ajout de la dépendance à BCMath (extension PHP à installer).
+
+* Correction de bug portant sur la validation du numéro INSEE dans les données personnelles.
+
+* Correction de bug portant sur la recherche d'intervenants (se produisant uniquement avec PHP 7.1).
+
+* Connecteurs : les disciplines remontent aussi pour les intervenants ayant une fin d'affectation en cours d'année.
+
+* Correction de bug empêchant l'affichage de l'interface d'administration des années.
+
+* Correction de bug à l'installation : toutes les tables étaent considérées par défaut comme
+synchronisées, ce qui n'était pas le cas.
+
+## Nouveautés
+
+* Personnalisation : vous pouvez maintenant adapter entièrement l'interface de OSE 
+à votre établissement (finies les références explicites à l'Université de Caen dans l'interface)
+L'apparence de l'application peut également être personnalisée en fournissant une URL qui
+pointe vers une feuille de style CSS propre à votre établissement.
+
+* Nouvelle procédure d'installation (https://ose.unicaen.fr/deploiement)
+Le déploiement de OSE se fait désormais directement à partir de sa plateforme GitLab.
+
+* Nouvelle procédure de mise à jour à partir de GitLab.
+
+* Suppression des anciens Jobs Oracle et remplacement par des tâches CRON
+
+## Procédure de mise à jour
+
+* Sauvegardez votre fichier de configuration local (`config/application.local.php`)
+dans un autre répertoire que celui de OSE.
+
+* Du fait de la mise en place d'une nouvelle procédure de mise à jour, l'application doit être
+réinstallée (uniquement les fichiers, pas la base de données). 
+Supprimez complètement le répertoire OSE.
+
+* Procédez à une nouvelle installation (procédure ici : https://ose.unicaen.fr/deploiement/install).
+Si vous déployez au même endroit qu'avant, la configuration d'Apache ne devra pas être modifiée.
+La base de données n'a pas non plus besoin d'être réinstallée.
+
+* Réintégrez votre fichier de configuration locale.
+Attention : **ce dernier a changé d'emplacement**. De `config/application.local.php` il est devenu `config.local.php`.
+Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **racine** du répertoire OSE!!
+
+* Le fichier de configuration locale (`config.local.php`) doit être modifié.
+  La rubrique `'liens'` (Liens divers) n'a plus d'utilité et doit être supprimée.
+
+  A sa place, copiez-collez dans votre fichier la rubrique `'etablissement'` en provenance 
+  du fichier `config/application.local.dist`, puis personnalisez-là.
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/06.3.sql`
+
+* Créez les tâches CRON suivantes si elles n'existent pas déjà :
+    * notifier-indicateurs
+    * synchronisation
+    * chargens-calcul-effectifs
+    * calcul-tableaux-bord
+    * formule-calcul
+
+Pour cela, se référer à la procédure d'installation de OSE.

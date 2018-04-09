@@ -7,7 +7,9 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\ContextService;
 
 $this->headTitle("Accueil");
-echo $this->messenger()->addMessagesFromFlashMessenger();
+echo $this->messenger()
+    ->addMessagesFromFlashMessenger() // affichage des messages des namespaces 'info', 'success', 'warning', 'error' comme d'hab
+    ->addMessagesFromFlashMessenger('UnicaenAuth/*'); // namespaces 'UnicaenAuth/info', 'UnicaenAuth/success', 'UnicaenAuth/warning', 'UnicaenAuth/error'
 
 $canAbonne = $this->isAllowed(Privileges::getResourceId(Privileges::INDICATEUR_ABONNEMENT));
 
@@ -19,7 +21,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
         <h1><span class="appname"><span class="c1">O</span><span class="c2">S</span><span class="c3">E</span></span>
             <small>Organisation des Services d'Enseignement</small>
         </h1>
-        <p class="lead">Bienvenue dans l'application de saisie des enseignements de l'université de Caen Normandie.</p>
+        <p class="lead"><?= AppConfig::get('etablissement', 'messageBienvenue') ?></p>
         <p class="lead">Année <?= $annee ?>.</p>
 
         <?php

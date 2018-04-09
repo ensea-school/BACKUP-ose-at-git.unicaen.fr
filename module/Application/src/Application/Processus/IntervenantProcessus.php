@@ -51,7 +51,7 @@ class IntervenantProcessus extends AbstractProcessus
                 $criCode = $cc;
             }
         }
-        $orc = '';
+        $orc = [];
         if ($sqlCri != '') {
             $orc[] = '(' . $sqlCri . ')';
         }

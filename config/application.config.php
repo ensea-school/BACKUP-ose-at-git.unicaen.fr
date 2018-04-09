@@ -6,7 +6,7 @@
 
 class AppConfig
 {
-    const LOCAL_APPLICATION_CONFIG_FILE = 'config/application.local.php';
+    const LOCAL_APPLICATION_CONFIG_FILE = 'config.local.php';
 
     /**
      * Configuration locale de l'application
@@ -26,11 +26,18 @@ class AppConfig
 
     public static function init()
     {
-        if (file_exists(self::LOCAL_APPLICATION_CONFIG_FILE)) {
+        if (self::hasLocalConfig()) {
             self::$config = require(self::LOCAL_APPLICATION_CONFIG_FILE);
         } else {
-            self::$config = null;
+            self::$config = ['global' => ['modeInstallation' => true]];
         }
+    }
+
+
+
+    public static function hasLocalConfig(): bool
+    {
+        return file_exists(self::LOCAL_APPLICATION_CONFIG_FILE);
     }
 
 
@@ -52,7 +59,7 @@ class AppConfig
 
     public static function getEnv()
     {
-        return getenv('APPLICATION_ENV') ?: 'production';
+        return getenv('APPLICATION_ENV') ?: 'dev';
     }
 
 
@@ -73,6 +80,9 @@ class AppConfig
 
         if ('development' == $env) {
             $modules[] = 'ZendDeveloperTools';
+        }
+
+        if (\Zend\Console\Console::isConsole() || 'development' == $env){
             $modules[] = 'UnicaenCode';
         }
 

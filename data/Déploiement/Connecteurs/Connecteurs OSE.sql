@@ -75,7 +75,7 @@
 -- ______________________________________
 --
 -- Vous êtes libres d'actualiser vos données comme vous le souhaitez. Attention toutefois à ne pas lancer de nouvelle
--- procédure de synchronisation avant d'avoir terminé la précédante. A Caen, les données sont actualisées tous les quarts d'heures.
+-- procédure de synchronisation avant d'avoir terminé la précédente. A Caen, les données sont actualisées tous les quarts d'heures.
 --
 -- Un package (OSE_IMPORT) pourra être adapté à vos besoins.
 -- Là, vous préciserez les vues matérialisées à mettre à jour, les procédure à lancer, etc.

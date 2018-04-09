@@ -1,0 +1,378 @@
+#!/usr/bin/env php
+<?php
+
+$c  = new Console();
+$oa = new OseAdmin($c);
+
+$c->printMainTitle("OSE", 15);
+
+$action = $c->getArg(1);
+
+switch ($action) {
+    case 'update':
+        update($c, $oa);
+    break;
+    case 'notifier-indicateurs':
+        $oa->exec('notifier indicateurs');
+    break;
+    case 'migration':
+        $oldVersion = $c->getArg(2);
+        $version = $c->getArg(3);
+        /* Action à effectuer */
+    break;
+    case 'synchronisation':
+        $job = $c->getArg(2);
+        $oa->exec('UnicaenImport SyncJob '.$job);
+    break;
+    case 'chargens-calcul-effectifs':
+        $oa->exec('chargens-calcul-effectifs');
+    break;
+    case 'calcul-tableaux-bord':
+        $oa->exec('calcul-tableaux-bord');
+    break;
+    case 'formule-calcul':
+        $oa->exec('formule-calcul');
+    break;
+    default:
+        help($c, $oa);
+    break;
+}
+
+
+
+function update(Console $c, OseAdmin $oa)
+{
+    $osedir = dirname(__DIR__);
+
+    // Choix de la version
+    $c->println("Mise à jour de OSE");
+    $c->println("Assurez-vous bien d'avoir mis OSE en mode maintenance avant de démarrer\n(pressez Entrée pour continuer)...");
+    $c->getInput();
+
+    $c->exec([
+        "cd $osedir",
+        "git fetch --all --tags --prune",
+    ], false);
+
+    $oldVersion = $oa->currentVersion($osedir);
+
+    $c->println("Sélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+    $c->println("La version actuellement installée est la ".$oldVersion);
+    $c->println("Voici la liste des versions de OSE disponibles:");
+    $tags = $oa->getTags();
+    foreach ($tags as $tag) {
+        $c->println($tag);
+    }
+    $ok = false;
+    while (!$ok) {
+        $c->print("Veuillez choisir une version à déployer: ");
+        $version = $c->getInput();
+        if ($oa->tagIsValid($version)) {
+            $ok = true;
+        } else {
+            $c->println("$version n'est pas dans la liste des versions disponibles.");
+        }
+    }
+
+    // Récupération des sources
+    $c->println("\nMise à jour des fichiers à partir de GIT", $c::COLOR_LIGHT_CYAN);
+    $c->passthru([
+        "cd $osedir",
+        "git checkout tags/$version",
+    ]);
+    $oa->writeVersion($osedir, $version);
+
+    // Récupération des dépendances
+    $c->println("\nMise à jour des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
+    $c->passthru([
+        "cd $osedir",
+        "php composer.phar self-update",
+        "php composer.phar install",
+    ]);
+
+    // Néttoyage des caches et mise à jour des proxies, lancement du script de migration éventuel
+    $c->exec([
+        "cd $osedir",
+        "rm -Rf data/cache/*",
+        "php vendor/bin/doctrine-module orm:generate-proxies",
+        "chmod -R 777 data/cache/DoctrineProxy",
+        "php bin/ose migration $oldVersion $version"
+    ]);
+
+    // Conclusion
+    $c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
+    $c->println("Il reste encore votre base de données à mettre à jour.");
+    $c->println("N'oubliez pas de sortir du mode maintenance!");
+    $c->println('');
+}
+
+
+
+function help(Console $c, OseAdmin $oa)
+{
+    $c->println('Actions possibles :');
+    $c->println(" - update               : Mise à jour de l'application");
+    $c->println(" - notifier-indicateurs : Envoi des mails relatifs aux indicateurs");
+    $c->println(" - synchronisation <job> : Effectue la synchronisation des données pour le <job> transmis");
+    $c->println(" - chargens-calcul-effectifs : Calcul des effectifs du module Charges");
+    $c->println(" - calcul-tableaux-bord : Recalcule tous les tableaux de bord de calculs itermédiaires");
+    $c->println(" - formule-calcul : Calcul de toutes les heures complémentaires à l'aide de la formule");
+
+}
+
+
+
+
+
+/************************************************************
+ *                      Classes utiles                      *
+ ************************************************************/
+class OseAdmin
+{
+    const OSE_ORIGIN = 'git@git.unicaen.fr:dsi/OSE.git';
+
+    /**
+     * @var Console
+     */
+    protected $console;
+
+    /**
+     * @var array
+     */
+    private $tags = false;
+
+
+
+    /**
+     * OseAdmin constructor.
+     *
+     * @param Console $console
+     */
+    public function __construct(Console $console)
+    {
+        $this->console = $console;
+    }
+
+
+
+    public function gitlabIsReachable(): bool
+    {
+        $gitCheck = $this->console->exec("git ls-remote --heads " . self::OSE_ORIGIN, false);
+
+        return (false !== strpos(implode(' ', $gitCheck), 'heads/master'));
+    }
+
+
+
+    public function getTags(): array
+    {
+        if (false === $this->tags) {
+            $this->tags = [];
+
+            $ts = $this->console->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
+            foreach ($ts as $tag) {
+                $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
+            }
+        }
+
+        return $this->tags;
+    }
+
+
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function tagIsValid(string $tag): bool
+    {
+        return in_array($tag, $this->getTags());
+    }
+
+
+
+    public function currentVersion(string $osedir): string
+    {
+        $vf = $this->getVersionFile($osedir);
+        if (!file_exists($vf)) {
+            return 'inconnue';
+        }
+
+        return file_get_contents($vf);
+    }
+
+
+
+    public function writeVersion(string $osedir, string $version)
+    {
+        $vf = $this->getVersionFile($osedir);
+        file_put_contents($vf, $version);
+    }
+
+
+
+    private function getVersionFile(string $osedir): string
+    {
+        if ('/' == substr($osedir, -1)) {
+            return $osedir . 'VERSION';
+        } else {
+            return $osedir . '/VERSION';
+        }
+    }
+
+
+
+    public function exec($args)
+    {
+        $this->console->exec("php ".dirname(__DIR__)."/public/index.php " . $args);
+    }
+}
+
+
+
+
+
+class Console
+{
+    const COLOR_BLACK        = '0;30';
+    const COLOR_DARK_GRAY    = '1;30';
+    const COLOR_BLUE         = '0;34';
+    const COLOR_LIGHT_BLUE   = '1;34';
+    const COLOR_GREEN        = '0;32';
+    const COLOR_LIGHT_GREEN  = '1;32';
+    const COLOR_CYAN         = '0;36';
+    const COLOR_LIGHT_CYAN   = '1;36';
+    const COLOR_RED          = '0;31';
+    const COLOR_LIGHT_RED    = '1;31';
+    const COLOR_PURPLE       = '0;35';
+    const COLOR_LIGHT_PURPLE = '1;35';
+    const COLOR_BROWN        = '0;33';
+    const COLOR_YELLOW       = '1;33';
+    const COLOR_LIGHT_GRAY   = '0;37';
+    const COLOR_WHITE        = '1;37';
+
+    const BG_BLACK      = '40';
+    const BG_RED        = '41';
+    const BG_GREEN      = '42';
+    const BG_YELLOW     = '43';
+    const BG_BLUE       = '44';
+    const BG_MAGENTA    = '45';
+    const BG_CYAN       = '46';
+    const BG_LIGHT_GRAY = '47';
+
+
+
+    public function printMainTitle($title, $spaces = 1)
+    {
+        $pstr = str_repeat(' ', $spaces);
+        $t    = $pstr . $title . $pstr;
+
+        $len = mb_strlen($t);
+
+        echo '╔' . str_repeat('═', $len) . "╗\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo "║" . $t . "║\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo '╚' . str_repeat('═', $len) . "╝\n\n";
+    }
+
+
+
+    public function print($text, $color = null, $bgColor = null)
+    {
+        if ($bgColor) $bgColor = ';' . $bgColor;
+
+        if (!$color && !$bgColor) {
+            echo $text;
+        } else {
+            echo "\e[$color$bgColor" . "m$text\e[0m";
+        }
+    }
+
+
+
+    public function println($text, $color = null, $bgColor = null)
+    {
+        $this->print($text, $color, $bgColor);
+        echo "\n";
+    }
+
+
+
+    public function gestExitCode($code)
+    {
+        if (0 == $code) return;
+
+        $this->printDie("Une erreur ($code) est survenue. Le script est stoppé");
+    }
+
+
+
+    public function printDie($text)
+    {
+        $this->println($text, self::COLOR_LIGHT_RED);
+        $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
+        die("\n");
+    }
+
+
+
+    public function getArg($index=null)
+    {
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
+
+        if (null === $index) return $args;
+
+        if (isset($args[$index])){
+            return $args[$index];
+        }else{
+            return null;
+        }
+    }
+
+
+
+    public function getInput()
+    {
+        return trim(fgets(STDIN));
+    }
+
+
+
+    public function exec($command, $autoDisplay = true)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        exec($command, $output, $return);
+        if ($autoDisplay) {
+            echo implode("\n", $output) . "\n";
+        }
+        $this->gestExitCode($return);
+
+        return $output;
+    }
+
+
+
+    public function passthru($command)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        passthru($command, $returnVar);
+        $this->gestExitCode($returnVar);
+
+        return $returnVar;
+    }
+
+
+
+    public function strPad($input, $padLength = null, $padString = ' ')
+    {
+        return utf8_encode(str_pad(utf8_decode($input), $padLength, $padString));
+    }
+}

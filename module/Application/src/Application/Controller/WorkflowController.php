@@ -143,6 +143,11 @@ class WorkflowController extends AbstractController
     }
 
 
+    public function calculTableauxBordAction()
+    {
+        $this->getServiceWorkflow()->calculerTousTableauxBord();
+    }
+
 
     public function feuilleDeRouteRefreshAction()
     {

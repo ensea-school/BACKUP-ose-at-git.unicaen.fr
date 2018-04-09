@@ -3,6 +3,30 @@
 namespace Application;
 
 return [
+
+    /* Déclaration du contrôleur */
+    'controllers'     => [
+        'factories' => [
+            'Application\Controller\Formule' => Controller\Factory\FormuleControllerFactory::class,
+        ],
+    ],
+
+    'console' => [
+        'router' => [
+            'routes' => [
+                'formule-calcul' => [
+                    'options' => [
+                        'route'    => 'formule-calcul',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Formule',
+                            'action'     => 'calculer-tout',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'service_manager' => [
         'invokables' => [
             Service\FormuleIntervenantService::class                      => Service\FormuleIntervenantService::class,

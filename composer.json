@@ -8,14 +8,15 @@
         }
     ],
     "require": {
-        "unicaen/app":                  "dev-master as 1.3.6",
-        "unicaen/auth":                 "dev-master",
+        "unicaen/app":                  "1.3.10",
+        "unicaen/auth":                 "1.2.6",
         "zendframework/zend-code":      "^2.4",
+        "zendframework/zend-text":      "^2.4",
         "bjyoungblood/bjy-authorize":   "dev-master",
         "zf-commons/zfc-user":          "0.1.3",
         "zendframework/zend-file":      "^2.4",
-        "unicaen/code":                 "dev-master",
-        "unicaen/import":               "dev-master",
-        "unicaen/tbl":                  "dev-master"
+        "unicaen/code":                 "1.1.5",
+        "unicaen/import":               "1.1.4",
+        "unicaen/tbl":                  "1.0.3"
     }
 }

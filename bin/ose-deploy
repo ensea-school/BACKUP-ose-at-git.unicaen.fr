@@ -6,6 +6,30 @@ $od = new OseDeploy($c);
 
 $c->printMainTitle("Déploiement de OSE", 13);
 
+$c->check([
+    'git'        => 'Gestionnaire de versions',
+    'php'        => 'Langage PHP',
+    'wget'       => 'Téléchargement en ligne de commande',
+    'ssh-keygen' => 'Générateur de clé SSH',
+    'unoconv'    => ['description' =>'Convertisseur OpenDocument vers PDF', 'facultatif' => true],
+]);
+
+if (!$od->checkPhpModules([
+    'curl'         => 'Curl',
+    'intl'         => 'Intl',
+    'json'         => 'Json',
+    'ldap'         => 'Ldap',
+    'mbstring'     => 'MbString',
+    'mcrypt'       => 'MCrypt',
+    'Zend OPcache' => 'Zend OPcache',
+    'xml'          => 'XML',
+    'zip'          => 'ZIP',
+    'bcmath'       => 'BCMath',
+    'oci8'         => 'OCI8 (Pilote Oracle)',
+])){
+    $c->printDie('Un ou plusieurs modules PHP sont manquants. Merci de les installer pour poursuivre l\'installation de OSE');
+};
+
 // Mise en place de la clé SSH
 $c->println("\nMise en place de la clé SSH vers le GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
 $c->println("L'accès au serveur Gitlab doit se faire par SSH.");
@@ -37,7 +61,7 @@ $c->println("\nCréation du dossier et initialisation de GIT", $c::COLOR_LIGHT_C
 $c->print("Veuillez indiquer un nouveau répertoire où implanter OSE: ");
 $osedir = $c->getInput();
 
-if (file_exists($osedir)){
+if (file_exists($osedir)) {
     $c->printDie("Le répertoire $osedir existe déjà. Merci d'en spécifier un nouveau.");
 }
 
@@ -48,7 +72,6 @@ $c->exec([
     "git remote add origin " . $od::OSE_ORIGIN,
     "git fetch --all --tags --prune",
 ]);
-
 
 
 // Choix de la version
@@ -80,7 +103,6 @@ $c->exec([
     "chmod +7 bin/ose",
 ]);
 $od->writeVersion($osedir, $version);
-
 
 
 // Récupération de Composer
@@ -120,6 +142,7 @@ $c->println('');
 
 
 
+
 /************************************************************
  *                      Classes utiles                      *
  ************************************************************/
@@ -147,6 +170,33 @@ class OseDeploy
     public function __construct(Console $console)
     {
         $this->console = $console;
+    }
+
+
+
+    public function checkPhpModules(array $modules)
+    {
+        $len = 60;
+        $result = true;
+
+        $this->console->println("Contrôle d'existance des modules PHP nécessaires", $this->console::COLOR_LIGHT_CYAN);
+        $this->console->println($this->console->strPad('Module PHP', $len) . "Résultat");
+        $this->console->println($this->console->strPad('----------', $len) . "--------");
+        foreach ($modules as $module => $description) {
+            $return = null;
+            $passed = in_array($module, get_loaded_extensions());
+
+            $this->console->print($this->console->strPad($description, $len));
+            if ($passed) {
+                $this->console->println('Module trouvé', $this->console::COLOR_LIGHT_GREEN);
+            } else {
+                $this->console->println('Module manquant', $this->console::COLOR_LIGHT_RED);
+            }
+
+            if (!$passed) $result = false;
+        }
+
+        return $result;
     }
 
 
@@ -252,6 +302,46 @@ class Console
 
 
 
+    public function check(array $prerequis)
+    {
+        $len = 60;
+        $res = true;
+
+        $this->println("Contrôle des prérequis à l'exécution du script", self::COLOR_LIGHT_CYAN);
+        $this->println($this->strPad('Commande (description éventuelle)', $len) . "Résultat");
+        $this->println($this->strPad('----------------------', $len) . "--------");
+        foreach ($prerequis as $command => $desc) {
+            if (is_array($desc)){
+                extract($desc);
+            }else{
+                $description = $desc;
+                $facultatif = false;
+            }
+
+            $return = null;
+            exec('command -v ' . $command, $null, $result);
+            $passed = ($result == 0);
+
+            $this->print($this->strPad($command . ($description ? " ($description)" : ''), $len));
+            if ($passed) {
+                $this->println('Commande trouvée', self::COLOR_LIGHT_GREEN);
+            } elseif($facultatif) {
+                $this->println('Manquante, facultative', self::COLOR_LIGHT_PURPLE);
+            }else{
+                $this->println('Commande manquante', self::COLOR_LIGHT_RED);
+                $res = false;
+            }
+        }
+
+        if (!$res){
+            $this->printDie('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
+        }
+
+        return $res;
+    }
+
+
+
     public function printMainTitle($title, $spaces = 1)
     {
         $pstr = str_repeat(' ', $spaces);
@@ -307,15 +397,15 @@ class Console
 
 
 
-    public function getArg($index=null)
+    public function getArg($index = null)
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
 
         if (null === $index) return $args;
 
-        if (isset($args[$index])){
+        if (isset($args[$index])) {
             return $args[$index];
-        }else{
+        } else {
             return null;
         }
     }

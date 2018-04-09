@@ -263,6 +263,46 @@ class Console
 
 
 
+    public function check(array $prerequis)
+    {
+        $len = 60;
+        $res = true;
+
+        $this->println("Contrôle des prérequis à l'exécution du script", self::COLOR_LIGHT_CYAN);
+        $this->println($this->strPad('Commande (description éventuelle)', $len) . "Résultat");
+        $this->println($this->strPad('----------------------', $len) . "--------");
+        foreach ($prerequis as $command => $desc) {
+            if (is_array($desc)){
+                extract($desc);
+            }else{
+                $description = $desc;
+                $facultatif = false;
+            }
+
+            $return = null;
+            exec('command -v ' . $command, $null, $result);
+            $passed = ($result == 0);
+
+            $this->print($this->strPad($command . ($description ? " ($description)" : ''), $len));
+            if ($passed) {
+                $this->println('Commande trouvée', self::COLOR_LIGHT_GREEN);
+            } elseif($facultatif) {
+                $this->println('Manquante, facultative', self::COLOR_LIGHT_PURPLE);
+            }else{
+                $this->println('Commande manquante', self::COLOR_LIGHT_RED);
+                $res = false;
+            }
+        }
+
+        if (!$res){
+            $this->printDie('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
+        }
+
+        return $res;
+    }
+
+
+
     public function printMainTitle($title, $spaces = 1)
     {
         $pstr = str_repeat(' ', $spaces);

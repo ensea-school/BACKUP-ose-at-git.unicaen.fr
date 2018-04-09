@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1e6aa6153e1ff3733619c6b124ce82e",
+    "content-hash": "2240de388921104d660f48e9ec3ec05a",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1284,7 +1284,7 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.7",
+            "version": "v3.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -1399,16 +1399,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.37",
+            "version": "v2.8.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "c2fc900ee54e1e44aa956eae8ba041a5347ba93c"
+                "reference": "ee2c91470ff262b1a00aec27875d38594aa87629"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/c2fc900ee54e1e44aa956eae8ba041a5347ba93c",
-                "reference": "c2fc900ee54e1e44aa956eae8ba041a5347ba93c",
+                "url": "https://api.github.com/repos/symfony/process/zipball/ee2c91470ff262b1a00aec27875d38594aa87629",
+                "reference": "ee2c91470ff262b1a00aec27875d38594aa87629",
                 "shasum": ""
             },
             "require": {
@@ -1444,7 +1444,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-03-19T21:11:56+00:00"
+            "time": "2018-04-03T05:20:27+00:00"
         },
         {
             "name": "unicaen/app",
@@ -1499,11 +1499,11 @@
         },
         {
             "name": "unicaen/auth",
-            "version": "1.2.0",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "8615a5a03664977d26691a60e35131b12ba0b752"
+                "reference": "1f7658396139734e9d4c0dfd46bd14011e2b5e8d"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1525,7 +1525,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2018-03-19T13:36:48+00:00"
+            "time": "2018-04-09T07:41:56+00:00"
         },
         {
             "name": "unicaen/code",

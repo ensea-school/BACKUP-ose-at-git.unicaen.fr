@@ -48,6 +48,8 @@ return [
                         Privileges::IMPORT_MAJ,
                         Privileges::IMPORT_TBL,
                         Privileges::IMPORT_VUES_PROCEDURES,
+                        Privileges::IMPORT_TABLES_VISUALISATION,
+                        Privileges::IMPORT_SOURCES_VISUALISATION,
                         Privileges::WORKFLOW_DEPENDANCES_VISUALISATION,
                         Privileges::DISCIPLINE_GESTION,
                         Privileges::DROIT_ROLE_VISUALISATION,

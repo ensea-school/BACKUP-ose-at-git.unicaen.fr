@@ -75,6 +75,10 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ENSEIGNEMENT_VISUALISATION                 = 'enseignement-visualisation';
     const IMPORT_ECARTS                              = 'import-ecarts';
     const IMPORT_MAJ                                 = 'import-maj';
+    const IMPORT_SOURCES_EDITION                     = 'import-sources-edition';
+    const IMPORT_SOURCES_VISUALISATION               = 'import-sources-visualisation';
+    const IMPORT_TABLES_EDITION                      = 'import-tables-edition';
+    const IMPORT_TABLES_VISUALISATION                = 'import-tables-visualisation';
     const IMPORT_TBL                                 = 'import-tbl';
     const IMPORT_VUES_PROCEDURES                     = 'import-vues-procedures';
     const INDICATEUR_ABONNEMENT                      = 'indicateur-abonnement';
@@ -100,6 +104,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MODIF_SERVICE_DU_ASSOCIATION               = 'modif-service-du-association';
     const MODIF_SERVICE_DU_EDITION                   = 'modif-service-du-edition';
     const MODIF_SERVICE_DU_EXPORT_CSV                = 'modif-service-du-export-csv';
+    const MODIF_SERVICE_DU_GESTION_EDITION           = 'modif-service-du-gestion-edition';
+    const MODIF_SERVICE_DU_GESTION_VISUALISATION     = 'modif-service-du-gestion-visualisation';
     const MODIF_SERVICE_DU_VISUALISATION             = 'modif-service-du-visualisation';
     const MODULATEUR_EDITION                         = 'modulateur-edition';
     const MODULATEUR_VISUALISATION                   = 'modulateur-visualisation';

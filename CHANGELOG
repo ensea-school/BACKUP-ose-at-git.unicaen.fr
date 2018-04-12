@@ -19,7 +19,7 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Correction de bug empêchant l'affichage de l'interface d'administration des années.
 
-* Correction de bug à l'installation : toutes les tables étaent considérées par défaut comme
+* Correction de bug à l'installation : toutes les tables étaient considérées par défaut comme
 synchronisées, ce qui n'était pas le cas.
 
 ## Nouveautés
@@ -57,7 +57,7 @@ Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **rac
   La rubrique `'liens'` (Liens divers) n'a plus d'utilité et doit être supprimée.
 
   A sa place, copiez-collez dans votre fichier la rubrique `'etablissement'` en provenance 
-  du fichier `config/application.local.dist`, puis personnalisez-là.
+  du fichier `config/application.local.dist`, puis personnalisez-la.
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/06.3.sql`

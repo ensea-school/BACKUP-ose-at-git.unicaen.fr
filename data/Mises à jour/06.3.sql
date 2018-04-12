@@ -108,3 +108,21 @@ END;
 drop package "OSE"."OSE_IMPORT";
 
 /
+
+INSERT INTO PRIVILEGE (
+  ID,
+  CATEGORIE_ID,
+  CODE,
+  LIBELLE,
+  ORDRE
+)
+SELECT
+  privilege_id_seq.nextval id,
+  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c ) CATEGORIE_ID,
+  t1.p CODE,
+  t1.l LIBELLE,
+  (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
+FROM (
+  SELECT 'import' c, 'tables-visualisation' p, 'Tables (visualisation)' l FROM dual
+  UNION SELECT 'import' c, 'tables-edition' p, 'Tables (édition)' l FROM dual
+) t1;

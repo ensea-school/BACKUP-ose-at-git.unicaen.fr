@@ -62,6 +62,11 @@ Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **rac
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/06.3.sql`
 
+* Modifiez votre configuration Apache pour ajouter la ligne suivante :
+`Alias /ose/vendor/unicaen/import	/var/www/ose/vendor/unicaen/import/public`
+`/ose/` et `/var/www/ose/` sont à adapter à votre configuration.
+Pour plus d'informations, merci de vous reporter à la [procédure d'installation](https://ose.unicaen.fr/deploiement/install.html).
+
 * Créez les tâches CRON suivantes si elles n'existent pas déjà :
     * notifier-indicateurs
     * synchronisation

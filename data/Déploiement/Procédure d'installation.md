@@ -65,7 +65,8 @@ A adapter à vos besoins.
 	ServerName ose.unicaen.fr
 	DocumentRoot /var/www/ose/public
 
-	Alias /vendor/unicaen/app /var/www/ose/vendor/unicaen/app/public
+	Alias /vendor/unicaen/app       /var/www/ose/vendor/unicaen/app/public
+	Alias /vendor/unicaen/import    /var/www/ose/vendor/unicaen/import/public
 
 	RewriteEngine On
 	RewriteBase /
@@ -94,8 +95,9 @@ A adapter à vos besoins.
 Exemple pris avec /var/www/ose en répertoire d'installation et /ose en Alias.
 A adapter à vos besoins.
 ```apache
-Alias /ose/vendor/unicaen/app	/var/www/ose/vendor/unicaen/app/public
-Alias /ose			/var/www/ose/public
+Alias /ose/vendor/unicaen/app	    /var/www/ose/vendor/unicaen/app/public
+Alias /ose/vendor/unicaen/import	/var/www/ose/vendor/unicaen/import/public
+Alias /ose			                /var/www/ose/public
 
 <Directory /var/www/ose/public>
 	Options Indexes FollowSymLinks MultiViews

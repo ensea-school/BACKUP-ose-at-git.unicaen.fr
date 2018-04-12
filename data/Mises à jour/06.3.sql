@@ -106,9 +106,11 @@ END;
 /
 
 drop package "OSE"."OSE_IMPORT";
+drop trigger "OSE"."TYPE_INTERVENTION_STRUCTURE_CK";
 
 /
 
+-- ajout de nouveaux privilèges
 INSERT INTO PRIVILEGE (
   ID,
   CATEGORIE_ID,
@@ -126,3 +128,26 @@ FROM (
   SELECT 'import' c, 'tables-visualisation' p, 'Tables (visualisation)' l FROM dual
   UNION SELECT 'import' c, 'tables-edition' p, 'Tables (édition)' l FROM dual
 ) t1;
+
+-- association des nouveaux privilèges aux administrateurs
+INSERT INTO role_privilege (
+  role_id, privilege_id
+) VALUES (
+  (SELECT id FROM role where code
+    = 'administrateur'
+  ),(
+  SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || '/' || p.code
+    = 'import/tables-visualisation'
+  )
+);
+
+INSERT INTO role_privilege (
+  role_id, privilege_id
+) VALUES (
+  (SELECT id FROM role where code
+    = 'administrateur'
+  ),(
+  SELECT p.id FROM privilege p JOIN categorie_privilege cp ON cp.id = p.categorie_id WHERE cp.code || '/' || p.code
+    = 'import/tables-edition'
+  )
+);

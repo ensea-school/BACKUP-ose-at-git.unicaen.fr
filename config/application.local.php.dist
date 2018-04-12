@@ -4,7 +4,7 @@ return [
     /* Paramètres généraux */
     'global' => [
         /* Détermine si l'installation de OSE est faite ou non. Pour pouvoir lancer OSE, positionnez à false */
-        'modeInstallation' => false,
+        'modeInstallation' => true,
 
         /* Accès en mode HTTP ou HTTPS */
         'scheme'           => '',
@@ -138,8 +138,13 @@ return [
         /* Port du serveur SMTP (généralement, 25) */
         'smtpPort'       => 25,
 
-        /* Mails utilisés pour la redirection.
-         * Fournir sous forme de tableau, CURRENT_USER enverra les mails à l'utilisateur connecté qui a déclenché l'action) */
+        /* Mails utilisés pour la redirection
+         * La redirection est utile uniquement en mode développement ou en test.
+         * Elle est utile pour éviter que des intervenants ne soient contactés lors de tests et qu'un admin ou un développeur
+         * reçoive le mail à sa place).
+         * Fournir sous forme de tableau, CURRENT_USER enverra les mails à l'utilisateur connecté qui a déclenché l'action)
+         * Pour ne pas activer la redirection des mails, laissez vide le tableau ('redirection' => [],).
+         */
         'redirection'    => ['mail@mon-domaine.fr'],
 
         /* Envoi de mail activé ou non (OUI en production, normalement) */

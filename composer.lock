@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "010fc8b356e5a3cca80f7b98ca93214e",
+    "content-hash": "d1c736056c2956117533af943f5a0618",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1555,11 +1555,11 @@
         },
         {
             "name": "unicaen/import",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "71a04d50be59564873988dcdb01a5c4208747c8d"
+                "reference": "c0b89c1d43c9f726dbd611af4fdfd2c9280963ab"
             },
             "require": {
                 "unicaen/auth": "^1.2 || dev-master",
@@ -1579,7 +1579,7 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2018-04-12T08:18:20+00:00"
+            "time": "2018-04-12T14:26:04+00:00"
         },
         {
             "name": "unicaen/oracle",

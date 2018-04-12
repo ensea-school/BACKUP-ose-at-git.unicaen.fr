@@ -25,6 +25,7 @@ if (!$od->checkPhpModules([
     'xml'          => 'XML',
     'zip'          => 'ZIP',
     'bcmath'       => 'BCMath',
+    'gd'           => 'GD',
     'oci8'         => 'OCI8 (Pilote Oracle)',
 ])){
     $c->printDie('Un ou plusieurs modules PHP sont manquants. Merci de les installer pour poursuivre l\'installation de OSE');

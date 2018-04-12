@@ -275,6 +275,9 @@ class Installateur
                 'BCMath'               => function () {
                     return in_array('bcmath', get_loaded_extensions()) ? true : 'Non installé';
                 },
+                'GD'               => function () {
+                    return in_array('gd', get_loaded_extensions()) ? true : 'Non installé';
+                },
                 'OCI8 (Pilote Oracle)' => function () {
                     return in_array('oci8', get_loaded_extensions()) ? true : 'Non installé';
                 },

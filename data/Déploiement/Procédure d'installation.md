@@ -29,6 +29,8 @@ Dépendances requises :
     * opcache
     * xml
     * zip
+    * bcmath
+    * gd
     * OCI8 (pilote pour Oracle).
 * unoconv (OSE utilise **UnoConv** pour créer des fichiers PDF à partir de documents au format LibreOffice. **UnoConv** devra donc être installé sur le serveur. Il en existe un paquet intégré à Debian.)
 

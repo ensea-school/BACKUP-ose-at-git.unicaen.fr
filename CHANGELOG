@@ -11,16 +11,19 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Ajout de la dépendance à BCMath (extension PHP à installer).
 
-* Correction de bug portant sur la validation du numéro INSEE dans les données personnelles.
+* Ajout de la dépendance à GD (extension PHP à installer).
 
-* Correction de bug portant sur la recherche d'intervenants (se produisant uniquement avec PHP 7.1).
+* La validation du numéro INSEE dans les données personnelles était incorrecte dans certains cas.
+
+* Recherche d'intervenants inopérante (se produisant uniquement avec PHP 7.1).
 
 * Connecteurs : les disciplines remontent aussi pour les intervenants ayant une fin d'affectation en cours d'année.
 
-* Correction de bug empêchant l'affichage de l'interface d'administration des années.
+* L'affichage de l'interface d'administration des années ne fonctionnait plus.
 
-* Correction de bug à l'installation : toutes les tables étaient considérées par défaut comme
-synchronisées, ce qui n'était pas le cas.
+* à l'installation : toutes les tables étaient considérées par défaut comme synchronisées, ce qui n'était pas le cas.
+
+* Dans l'export CSV des services, le libellé de formation n'apparaissait plus.
 
 ## Nouveautés
 

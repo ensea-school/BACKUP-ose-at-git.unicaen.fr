@@ -156,9 +156,9 @@ Dans tous les cas, c'est le script de OSE qui sera appelé.
 Le script est situé dans le répertoire de OSE, `bin/ose`.
 Il est suivi de l'action à exécuter, puis éventuellement de paramètres à préciser.
 
-Exemple d'utilisation pour lancer une tâche de synchronisation appelée `principal`:
+Exemple d'utilisation pour lancer une tâche de synchronisation appelée `synchro`:
 ```bash
-/usr/bin/php /var/www/ose/bin/ose synchronisation principal
+/usr/bin/php /var/www/ose/bin/ose synchronisation synchro
 ```
 
 | Usage                 | Fréquence             | Action de script      |
@@ -169,18 +169,18 @@ Exemple d'utilisation pour lancer une tâche de synchronisation appelée `princi
 | Calcul des tableaux de bord | Deux fois par jour sauf le dimanche (Calcul LONG) | calcul-tableaux-bord |
 | Calcul des heures complémentaires à l'aide de la formule (calcul LONG) | Les lundi et jeudi à 3h | formule-calcul |
 
-Après la commande, on ajoute `1> /tmp/oselog 2>&1` pour loguer le résultat dans le fichier`/tmp/oselog`.
+Après la commande, on ajoute `> /tmp/oselog 2>&1` pour loguer le résultat dans le fichier`/tmp/oselog`.
 A adapter le cas échéant.
 
 Voici un exemple de crontab :
 
 ```cron
 # m  h    dom mon dow command
-0    5-17 *   *   1-5 /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs      1> /tmp/oselog 2>&1
-*/15 7-21 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose synchronisation job1      1> /tmp/oselog 2>&1
-0      20 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose chargens-calcul-effectifs 1> /tmp/oselog 2>&1
-0    6,14 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose calcul-tableaux-bord      1> /tmp/oselog 2>&1
-0       3 *   *   1,4 /usr/bin/php /var/www/ose/bin/ose formule-calcul            1> /tmp/oselog 2>&1
+0    5-17 *   *   1-5 /usr/bin/php /var/www/ose/bin/ose notifier-indicateurs      > /tmp/oselog 2>&1
+*/15 7-21 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose synchronisation synchro   > /tmp/oselog 2>&1
+0      20 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose chargens-calcul-effectifs > /tmp/oselog 2>&1
+0    6,14 *   *   1-6 /usr/bin/php /var/www/ose/bin/ose calcul-tableaux-bord      > /tmp/oselog 2>&1
+0       3 *   *   1,4 /usr/bin/php /var/www/ose/bin/ose formule-calcul            > /tmp/oselog 2>&1
 ```
 
 OSE est maintenant installé.

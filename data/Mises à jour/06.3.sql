@@ -19,6 +19,72 @@ ALTER TABLE import_tables ADD (
   sync_hook_after   VARCHAR2(4000 CHAR)
 );
 
+UPDATE import_tables SET ordre = 1 WHERE table_name = 'PAYS';
+UPDATE import_tables SET ordre = 2 WHERE table_name = 'DEPARTEMENT';
+UPDATE import_tables SET ordre = 3 WHERE table_name = 'ETABLISSEMENT';
+UPDATE import_tables SET ordre = 4 WHERE table_name = 'STRUCTURE';
+UPDATE import_tables SET ordre = 5 WHERE table_name = 'ADRESSE_STRUCTURE';
+UPDATE import_tables SET ordre = 6 WHERE table_name = 'DOMAINE_FONCTIONNEL';
+UPDATE import_tables SET ordre = 7 WHERE table_name = 'CENTRE_COUT';
+UPDATE import_tables SET ordre = 8 WHERE table_name = 'CENTRE_COUT_STRUCTURE';
+UPDATE import_tables SET ordre = 9 WHERE table_name = 'AFFECTATION';
+UPDATE import_tables SET ordre = 10 WHERE table_name = 'CORPS';
+UPDATE import_tables SET ordre = 11 WHERE table_name = 'GRADE';
+UPDATE import_tables SET ordre = 12 WHERE table_name = 'INTERVENANT';
+UPDATE import_tables SET ordre = 13 WHERE table_name = 'AFFECTATION_RECHERCHE';
+UPDATE import_tables SET ordre = 14 WHERE table_name = 'ADRESSE_INTERVENANT';
+UPDATE import_tables SET ordre = 15 WHERE table_name = 'GROUPE_TYPE_FORMATION';
+UPDATE import_tables SET ordre = 16 WHERE table_name = 'TYPE_FORMATION';
+UPDATE import_tables SET ordre = 17 WHERE table_name = 'ETAPE';
+UPDATE import_tables SET ordre = 18 WHERE table_name = 'ELEMENT_PEDAGOGIQUE';
+UPDATE import_tables SET ordre = 19 WHERE table_name = 'EFFECTIFS';
+UPDATE import_tables SET ordre = 20 WHERE table_name = 'ELEMENT_TAUX_REGIMES';
+UPDATE import_tables SET ordre = 21 WHERE table_name = 'CHEMIN_PEDAGOGIQUE';
+UPDATE import_tables SET ordre = 22 WHERE table_name = 'VOLUME_HORAIRE_ENS';
+UPDATE import_tables SET ordre = 23 WHERE table_name = 'NOEUD';
+UPDATE import_tables SET ordre = 24 WHERE table_name = 'LIEN';
+UPDATE import_tables SET ordre = 25 WHERE table_name = 'SCENARIO_LIEN';
+UPDATE import_tables SET ordre = 26 WHERE table_name = 'TYPE_INTERVENTION_EP';
+UPDATE import_tables SET ordre = 27 WHERE table_name = 'TYPE_MODULATEUR_EP';
+
+UPDATE import_tables SET sync_job = 'synchro' WHERE table_name IN (
+'PAYS','DEPARTEMENT','ETABLISSEMENT','STRUCTURE','ADRESSE_STRUCTURE','DOMAINE_FONCTIONNEL','CENTRE_COUT',
+'CENTRE_COUT_STRUCTURE','AFFECTATION','CORPS','GRADE','INTERVENANT','AFFECTATION_RECHERCHE',
+'ADRESSE_INTERVENANT','GROUPE_TYPE_FORMATION','TYPE_FORMATION','ETAPE','ELEMENT_PEDAGOGIQUE','EFFECTIFS',
+'CHEMIN_PEDAGOGIQUE','VOLUME_HORAIRE_ENS','NOEUD','LIEN','SCENARIO_LIEN','TYPE_INTERVENTION_EP',
+'TYPE_MODULATEUR_EP');
+
+UPDATE IMPORT_TABLES SET SYNC_HOOK_BEFORE = 'UNICAEN_IMPORT.REFRESH_MV(''MV_AFFECTATION'');
+/* Import automatique des users des nouveaux directeurs */
+INSERT INTO utilisateur (
+  id, display_name, email, password, state, username
+)
+SELECT
+  utilisateur_id_seq.nextval id,
+  aff.*
+FROM
+  (SELECT DISTINCT display_name, email, password, state, username FROM mv_affectation) aff
+WHERE
+  username not in (select username from utilisateur);' WHERE table_name = 'AFFECTATION';
+
+UPDATE IMPORT_TABLES SET SYNC_FILTRE = 'WHERE (
+    IMPORT_ACTION IN (''delete'',''update'',''undelete'')
+    OR STATUT_ID IN (
+        SELECT si.id
+        FROM statut_intervenant si
+        JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
+        WHERE ti.code = ''P''
+    )
+)', SYNC_HOOK_BEFORE = 'UNICAEN_IMPORT.REFRESH_MV(''MV_UNICAEN_STRUCTURE_CODES'');
+UNICAEN_IMPORT.REFRESH_MV(''MV_INTERVENANT'');' WHERE table_name = 'INTERVENANT';
+
+UPDATE IMPORT_TABLES SET SYNC_FILTRE = 'WHERE INTERVENANT_ID IS NOT NULL' WHERE table_name IN ('AFFECTATION_RECHERCHE','ADRESSE_INTERVENANT');
+
+UPDATE IMPORT_TABLES SET SYNC_FILTRE = 'WHERE IMPORT_ACTION IN (''delete'',''insert'',''undelete'')' WHERE table_name = 'ELEMENT_TAUX_REGIMES';
+
+UPDATE IMPORT_TABLES SET SYNC_HOOK_AFTER = 'UNICAEN_IMPORT.REFRESH_MV(''TBL_NOEUD'');
+UNICAEN_TBL.CALCULER(''chargens'');' WHERE table_name = 'NOEUD';
+
 
 CREATE OR REPLACE FORCE VIEW "V_IMPORT_TAB_COLS" ("TABLE_NAME", "COLUMN_NAME", "DATA_TYPE", "LENGTH", "NULLABLE", "HAS_DEFAULT", "C_TABLE_NAME", "C_COLUMN_NAME", "IMPORT_ACTIF") AS
 WITH importable_tables (table_name )AS (
@@ -151,3 +217,103 @@ INSERT INTO role_privilege (
     = 'import/tables-edition'
   )
 );
+
+/
+
+create or replace PACKAGE UNICAEN_IMPORT AS
+
+  z__SYNC_FILRE__z CLOB DEFAULT '';
+  z__IGNORE_UPD_COLS__z CLOB DEFAULT '';
+
+  PROCEDURE set_current_user(p_current_user IN INTEGER);
+  FUNCTION get_current_user return INTEGER;
+
+  FUNCTION get_current_annee RETURN INTEGER;
+  PROCEDURE set_current_annee (p_current_annee INTEGER);
+
+  FUNCTION IN_COLUMN_LIST( VALEUR VARCHAR2, CHAMPS CLOB ) RETURN NUMERIC;
+  PROCEDURE REFRESH_MV( mview_name varchar2 );
+  PROCEDURE SYNC_LOG( message CLOB, table_name VARCHAR2 DEFAULT NULL, source_code VARCHAR2 DEFAULT NULL );
+
+  PROCEDURE SYNCHRONISATION( table_name VARCHAR2, SYNC_FILRE CLOB DEFAULT '', IGNORE_UPD_COLS CLOB DEFAULT '' );
+
+
+
+END UNICAEN_IMPORT;
+
+/
+
+create or replace PACKAGE BODY UNICAEN_IMPORT AS
+
+  v_current_user INTEGER;
+  v_current_annee INTEGER;
+
+
+
+  FUNCTION get_current_user RETURN INTEGER IS
+  BEGIN
+    IF v_current_user IS NULL THEN
+      v_current_user := OSE_PARAMETRE.GET_OSE_USER();
+    END IF;
+    RETURN v_current_user;
+  END get_current_user;
+
+  PROCEDURE set_current_user (p_current_user INTEGER) is
+  BEGIN
+    v_current_user := p_current_user;
+  END set_current_user;
+
+
+
+  FUNCTION get_current_annee RETURN INTEGER IS
+  BEGIN
+    IF v_current_annee IS NULL THEN
+      v_current_annee := OSE_PARAMETRE.GET_ANNEE_IMPORT();
+    END IF;
+    RETURN v_current_annee;
+  END get_current_annee;
+
+  PROCEDURE set_current_annee (p_current_annee INTEGER) IS
+  BEGIN
+    v_current_annee := p_current_annee;
+  END set_current_annee;
+
+
+
+  PROCEDURE SYNCHRONISATION( table_name VARCHAR2, SYNC_FILRE CLOB DEFAULT '', IGNORE_UPD_COLS CLOB DEFAULT '' ) IS
+    ok NUMERIC(1);
+  BEGIN
+    SELECT COUNT(*) INTO ok FROM import_tables it WHERE it.table_name = SYNCHRONISATION.table_name AND it.sync_enabled = 1 AND rownum = 1;
+
+    IF 1 = ok THEN
+      z__SYNC_FILRE__z      := SYNCHRONISATION.SYNC_FILRE;
+      z__IGNORE_UPD_COLS__z := SYNCHRONISATION.IGNORE_UPD_COLS;
+      EXECUTE IMMEDIATE 'BEGIN UNICAEN_IMPORT_AUTOGEN_PROCS__.' || table_name || '(); END;';
+    END IF;
+  END;
+
+
+
+  PROCEDURE REFRESH_MV( mview_name varchar2 ) IS
+  BEGIN
+    DBMS_MVIEW.REFRESH(mview_name, 'C');
+  EXCEPTION WHEN OTHERS THEN
+    SYNC_LOG( SQLERRM, mview_name );
+  END;
+
+
+
+  PROCEDURE SYNC_LOG( message CLOB, table_name VARCHAR2 DEFAULT NULL, source_code VARCHAR2 DEFAULT NULL ) IS
+  BEGIN
+    INSERT INTO SYNC_LOG("ID","DATE_SYNC","MESSAGE","TABLE_NAME","SOURCE_CODE") VALUES (SYNC_LOG_ID_SEQ.NEXTVAL, SYSDATE, message,table_name,source_code);
+  END SYNC_LOG;
+
+
+
+  FUNCTION IN_COLUMN_LIST( VALEUR VARCHAR2, CHAMPS CLOB ) RETURN NUMERIC IS
+  BEGIN
+    IF REGEXP_LIKE(CHAMPS, '(^|,)[ \t\r\n\v\f]*' || VALEUR || '[ \t\r\n\v\f]*(,|$)') THEN RETURN 1; END IF;
+    RETURN 0;
+  END;
+
+END UNICAEN_IMPORT;

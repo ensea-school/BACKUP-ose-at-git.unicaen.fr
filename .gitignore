@@ -5,6 +5,6 @@ data/cache/*
 .idea
 deploy.log
 VERSION
-public/vendor/unincaen/app
-public/vendor/unincaen/import
-public/vendor/unincaen/code
+public/vendor/unicaen/app
+public/vendor/unicaen/import
+public/vendor/unicaen/code

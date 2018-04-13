@@ -17,12 +17,12 @@ switch ($action) {
     break;
     case 'migration':
         $oldVersion = $c->getArg(2);
-        $version = $c->getArg(3);
+        $version    = $c->getArg(3);
         /* Action à effectuer */
     break;
     case 'synchronisation':
         $job = $c->getArg(2);
-        $oa->exec('UnicaenImport SyncJob '.$job);
+        $oa->exec('UnicaenImport SyncJob ' . $job);
     break;
     case 'chargens-calcul-effectifs':
         $oa->exec('chargens-calcul-effectifs');
@@ -33,11 +33,16 @@ switch ($action) {
     case 'formule-calcul':
         $oa->exec('formule-calcul');
     break;
+    case 'changement-mot-de-passe':
+        passwordChange($c, $oa);
+    break;
+    case 'maj-public-links':
+        majPublicLinks($c, $oa);
+    break;
     default:
         help($c, $oa);
     break;
 }
-
 
 
 function update(Console $c, OseAdmin $oa)
@@ -57,7 +62,7 @@ function update(Console $c, OseAdmin $oa)
     $oldVersion = $oa->currentVersion($osedir);
 
     $c->println("Sélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-    $c->println("La version actuellement installée est la ".$oldVersion);
+    $c->println("La version actuellement installée est la " . $oldVersion);
     $c->println("Voici la liste des versions de OSE disponibles:");
     $tags = $oa->getTags();
     foreach ($tags as $tag) {
@@ -96,8 +101,13 @@ function update(Console $c, OseAdmin $oa)
         "rm -Rf data/cache/*",
         "php vendor/bin/doctrine-module orm:generate-proxies",
         "chmod -R 777 data/cache/DoctrineProxy",
-        "php bin/ose migration $oldVersion $version"
+        "php bin/ose migration $oldVersion $version",
     ]);
+
+    // Mise à jour des liens vers les répertoires publics des dépendances
+    $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
+    $res = $oa->majUnicaenSymLinks($osedir);
+    $c->println($res ? 'Liens mis à jour' : 'Liens déjà à jour', $c::COLOR_LIGHT_GREEN);
 
     // Conclusion
     $c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
@@ -108,16 +118,64 @@ function update(Console $c, OseAdmin $oa)
 
 
 
+function passwordChange(Console $c, OseAdmin $oa)
+{
+    $c->println("Veuillez saisir un login :");
+    $login = $c->getInput();
+
+    $c->println("Veuillez maintenant saisir un mot de passe :");
+    $pwd1 = $c->getSilentInput();
+
+    $c->println("Veuillez saisir à nouveau le même mot de passe :");
+    $pwd2 = $c->getSilentInput();
+
+    if ($pwd1 <> $pwd2) {
+        $c->printDie('Les mots de passe saisis ne correspondent pas!');
+    }
+
+    $c->println('Application du changement de mot de pase ...');
+    $oa->exec("changement-mot-de-passe --utilisateur=$login --mot-de-passe=$pwd1");
+
+    $c->println('Mot de passe changé', $c::COLOR_LIGHT_GREEN);
+}
+
+
+
+function majPublicLinks(Console $c, OseAdmin $oa)
+{
+    $osedir = dirname(__DIR__);
+
+    $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
+
+    $res = $oa->majUnicaenSymLinks($osedir);
+
+    if ($res){
+        $c->println('Liens mis à jour', $c::COLOR_LIGHT_GREEN);
+    }else{
+        $c->println('Liens déjà à jour', $c::COLOR_LIGHT_GREEN);
+    }
+}
+
+
+
 function help(Console $c, OseAdmin $oa)
 {
-    $c->println('Actions possibles :');
-    $c->println(" - update               : Mise à jour de l'application");
-    $c->println(" - notifier-indicateurs : Envoi des mails relatifs aux indicateurs");
-    $c->println(" - synchronisation <job> : Effectue la synchronisation des données pour le <job> transmis");
-    $c->println(" - chargens-calcul-effectifs : Calcul des effectifs du module Charges");
-    $c->println(" - calcul-tableaux-bord : Recalcule tous les tableaux de bord de calculs itermédiaires");
-    $c->println(" - formule-calcul : Calcul de toutes les heures complémentaires à l'aide de la formule");
+    $actions = [
+        "update"                    => "Mise à jour de l'application",
+        "notifier-indicateurs"      => "Envoi des mails relatifs aux indicateurs",
+        "synchronisation"           => "<job> : Effectue la synchronisation des données pour le <job> transmis",
+        "chargens-calcul-effectifs" => "Calcul des effectifs du module Charges",
+        "calcul-tableaux-bord"      => "Recalcule tous les tableaux de bord de calculs itermédiaires",
+        "formule-calcul"            => "Calcul de toutes les heures complémentaires à l'aide de la formule",
+        "changement-mot-de-passe"   => "Changement de mot de passe (pour un utilisateur local uniquement)",
+        "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
+    ];
 
+    $c->println('Actions possibles :');
+    foreach ($actions as $a => $l) {
+        $c->print($a, $c::COLOR_BLACK, $c::BG_LIGHT_GRAY);
+        $c->println(" : " . $l);
+    }
 }
 
 
@@ -151,6 +209,49 @@ class OseAdmin
     public function __construct(Console $console)
     {
         $this->console = $console;
+    }
+
+
+
+    public function majUnicaenSymLinks($oseDir ): bool
+    {
+        if (substr($oseDir, -1) !== '/') {
+            $oseDir .= '/';
+        }
+
+        $publicDir  = $oseDir . 'public/vendor/unicaen/';
+        $unicaenDir = $oseDir . 'vendor/unicaen/';
+
+        $oldLibs = [];
+        $od      = array_filter(glob($publicDir . '*'), 'is_dir');
+        foreach ($od as $dir) {
+            $oldLibs[] = basename($dir);
+        }
+
+        $newLibs = [];
+        $nd      = array_filter(glob($unicaenDir . '*'), 'is_dir');
+        foreach ($nd as $dir) {
+            if (is_dir($dir . '/public')) {
+                $newLibs[] = basename($dir);
+            }
+        }
+
+        $deleteLibs = array_diff($oldLibs, $newLibs);
+        $createLibs = array_diff($newLibs, $oldLibs);
+
+        foreach ($deleteLibs as $lib) {
+            $command = "rm $publicDir$lib";
+            $this->console->print($command);
+            $this->console->exec($command);
+        }
+
+        foreach ($createLibs as $lib) {
+            $command = "ln -sf $unicaenDir$lib/public $publicDir$lib";
+            $this->console->print($command);
+            $this->console->exec($command);
+        }
+
+        return ! (empty($deleteLibs) && empty($createLibs));
     }
 
 
@@ -225,7 +326,7 @@ class OseAdmin
 
     public function exec($args)
     {
-        $this->console->exec("php ".dirname(__DIR__)."/public/index.php " . $args);
+        $this->console->exec("php " . dirname(__DIR__) . "/public/index.php " . $args);
     }
 }
 
@@ -272,11 +373,11 @@ class Console
         $this->println($this->strPad('Commande (description éventuelle)', $len) . "Résultat");
         $this->println($this->strPad('----------------------', $len) . "--------");
         foreach ($prerequis as $command => $desc) {
-            if (is_array($desc)){
+            if (is_array($desc)) {
                 extract($desc);
-            }else{
+            } else {
                 $description = $desc;
-                $facultatif = false;
+                $facultatif  = false;
             }
 
             $return = null;
@@ -286,15 +387,15 @@ class Console
             $this->print($this->strPad($command . ($description ? " ($description)" : ''), $len));
             if ($passed) {
                 $this->println('Commande trouvée', self::COLOR_LIGHT_GREEN);
-            } elseif($facultatif) {
+            } elseif ($facultatif) {
                 $this->println('Manquante, facultative', self::COLOR_LIGHT_PURPLE);
-            }else{
+            } else {
                 $this->println('Commande manquante', self::COLOR_LIGHT_RED);
                 $res = false;
             }
         }
 
-        if (!$res){
+        if (!$res) {
             $this->printDie('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
         }
 
@@ -358,15 +459,15 @@ class Console
 
 
 
-    public function getArg($index=null)
+    public function getArg($index = null)
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
 
         if (null === $index) return $args;
 
-        if (isset($args[$index])){
+        if (isset($args[$index])) {
             return $args[$index];
-        }else{
+        } else {
             return null;
         }
     }
@@ -376,6 +477,38 @@ class Console
     public function getInput()
     {
         return trim(fgets(STDIN));
+    }
+
+
+
+    public function getSilentInput()
+    {
+        if (preg_match('/^win/i', PHP_OS)) {
+            $vbscript = sys_get_temp_dir() . 'prompt_password.vbs';
+            file_put_contents(
+                $vbscript, 'wscript.echo(InputBox("'
+                . addslashes('')
+                . '", "", "password here"))');
+            $command  = "cscript //nologo " . escapeshellarg($vbscript);
+            $password = rtrim(shell_exec($command));
+            unlink($vbscript);
+
+            return $password;
+        } else {
+            $command = "/usr/bin/env bash -c 'echo OK'";
+            if (rtrim(shell_exec($command)) !== 'OK') {
+                trigger_error("Can't invoke bash");
+
+                return;
+            }
+            $command  = "/usr/bin/env bash -c 'read -s -p \""
+                . addslashes('')
+                . "\" mypassword && echo \$mypassword'";
+            $password = rtrim(shell_exec($command));
+            echo "\n";
+
+            return $password;
+        }
     }
 
 

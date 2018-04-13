@@ -32,27 +32,29 @@ if (!$od->checkPhpModules([
 };
 
 // Mise en place de la clé SSH
-$c->println("\nMise en place de la clé SSH vers le GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
-$c->println("L'accès au serveur Gitlab doit se faire par SSH.");
-$c->print("Voulez-vous créer une clé SSH pour accéder au serveur Gitlab hébergeant OSE ? (o/n, n par défaut) ");
-$needKey = $c->getInput();
-if (in_array($needKey, ["o", "O"])) {
-    $c->println("Génération de la clé SSH...");
-    $c->print("Veuillez préciser l'adresse mail du compte utilisé pour accéder au Gitlab de OSE: ");
-    $gitlabMail = $c->getInput();
-    $c->passthru("ssh-keygen -t rsa -C $gitlabMail -b 4096");
-    $c->println("Intégrez ensuite votre clé SSH dans Gitlab.");
-    $c->println("Le serveur GitLab est accessible à l'adresse suivante : https://git.unicaen.fr/dsi/OSE");
-    $c->println("Ensuite, appuyez sur \"Entrée\" pour continuer...");
-    $c->getInput();
-    if ($od->gitlabIsReachable()) {
-        $c->println("Votre clé SSH a bien été déployée et est fonctionnelle.", $c::COLOR_LIGHT_GREEN);
+if (!$od->gitlabIsReachable()) {
+    $c->println("\nMise en place de la clé SSH vers le GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
+    $c->println("L'accès au serveur Gitlab doit se faire par SSH.");
+    $c->print("Voulez-vous créer une clé SSH pour accéder au serveur Gitlab hébergeant OSE ? (o/n, n par défaut) ");
+    $needKey = $c->getInput();
+    if (in_array($needKey, ["o", "O"])) {
+        $c->println("Génération de la clé SSH...");
+        $c->print("Veuillez préciser l'adresse mail du compte utilisé pour accéder au Gitlab de OSE: ");
+        $gitlabMail = $c->getInput();
+        $c->passthru("ssh-keygen -t rsa -C $gitlabMail -b 4096");
+        $c->println("Intégrez ensuite votre clé SSH dans Gitlab.");
+        $c->println("Le serveur GitLab est accessible à l'adresse suivante : https://git.unicaen.fr/dsi/OSE");
+        $c->println("Ensuite, appuyez sur \"Entrée\" pour continuer...");
+        $c->getInput();
+        if ($od->gitlabIsReachable()) {
+            $c->println("Votre clé SSH a bien été déployée et est fonctionnelle.", $c::COLOR_LIGHT_GREEN);
+        } else {
+            $c->printDie("L'accès par SSH au serveur GitLab de OSE ne fonctionne pas. Merci de déployer par vous-même une clé, car vous en aurez besoin pour la suite de la procédure.");
+        }
     } else {
-        $c->printDie("L'accès par SSH au serveur GitLab de OSE ne fonctionne pas. Merci de déployer par vous-même une clé, car vous en aurez besoin pour la suite de la procédure.");
-    }
-} else {
-    if (!$od->gitlabIsReachable()) {
-        $c->printDie("L'accès par SSH au serveur GitLab de OSE ne fonctionne pas. Merci de déployer par vous-même une clé, car vous en aurez besoin pour la suite de la procédure.");
+        if (!$od->gitlabIsReachable()) {
+            $c->printDie("L'accès par SSH au serveur GitLab de OSE ne fonctionne pas. Merci de déployer par vous-même une clé, car vous en aurez besoin pour la suite de la procédure.");
+        }
     }
 }
 
@@ -123,6 +125,11 @@ $c->exec([
     "cp config/application.local.php.dist config.local.php",
 ]);
 
+// Mise à jour des liens vers les répertoires publics des dépendances
+$c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
+$od->majUnicaenSymLinks($osedir);
+$c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
+
 // Mise en place des tâches CRON ??
 
 
@@ -133,11 +140,10 @@ $c->println(" 1 - Configurez votre serveur Apache");
 $c->println(" 2 - Initialisez la base de données de OSE avec le script prévu à cet effet");
 $c->println(" 3 - Mettez en place la configuration locale de l'application");
 $c->println(" 4 - Une fois bien connecté, configurez vos connecteurs en vous appuyant\n     le cas échéant sur ceux qui vous sont fournis");
-$c->println(" 5 - Mettez en place les tâches CRON et les JOBS Oracle nécessaires (envoi de mails pour les infdicateurs, Synchronisatio automatique, etc.");
+$c->println(" 5 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
 $c->println(" 6 - Paramétrez l'application pour l'adapter à vos besoins");
 $c->println('');
-$c->println("Pour la suite, merci de vous reporter sur la procédure d'installation de OSE (https://ose.unicaen.fr/deploiement/install)");
-$c->println("OSE possède également un guide de l'administrateur pour vous aider à configurer l'application");
+$c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
 $c->println('');
 
 
@@ -171,6 +177,49 @@ class OseDeploy
     public function __construct(Console $console)
     {
         $this->console = $console;
+    }
+
+
+
+    public function majUnicaenSymLinks($oseDir ): bool
+    {
+        if (substr($oseDir, -1) !== '/') {
+            $oseDir .= '/';
+        }
+
+        $publicDir  = $oseDir . 'public/vendor/unicaen/';
+        $unicaenDir = $oseDir . 'vendor/unicaen/';
+
+        $oldLibs = [];
+        $od      = array_filter(glob($publicDir . '*'), 'is_dir');
+        foreach ($od as $dir) {
+            $oldLibs[] = basename($dir);
+        }
+
+        $newLibs = [];
+        $nd      = array_filter(glob($unicaenDir . '*'), 'is_dir');
+        foreach ($nd as $dir) {
+            if (is_dir($dir . '/public')) {
+                $newLibs[] = basename($dir);
+            }
+        }
+
+        $deleteLibs = array_diff($oldLibs, $newLibs);
+        $createLibs = array_diff($newLibs, $oldLibs);
+
+        foreach ($deleteLibs as $lib) {
+            $command = "rm $publicDir$lib";
+            $this->console->print($command);
+            $this->console->exec($command);
+        }
+
+        foreach ($createLibs as $lib) {
+            $command = "ln -sf $unicaenDir$lib/public $publicDir$lib";
+            $this->console->print($command);
+            $this->console->exec($command);
+        }
+
+        return ! (empty($deleteLibs) && empty($createLibs));
     }
 
 
@@ -312,11 +361,11 @@ class Console
         $this->println($this->strPad('Commande (description éventuelle)', $len) . "Résultat");
         $this->println($this->strPad('----------------------', $len) . "--------");
         foreach ($prerequis as $command => $desc) {
-            if (is_array($desc)){
+            if (is_array($desc)) {
                 extract($desc);
-            }else{
+            } else {
                 $description = $desc;
-                $facultatif = false;
+                $facultatif  = false;
             }
 
             $return = null;
@@ -326,15 +375,15 @@ class Console
             $this->print($this->strPad($command . ($description ? " ($description)" : ''), $len));
             if ($passed) {
                 $this->println('Commande trouvée', self::COLOR_LIGHT_GREEN);
-            } elseif($facultatif) {
+            } elseif ($facultatif) {
                 $this->println('Manquante, facultative', self::COLOR_LIGHT_PURPLE);
-            }else{
+            } else {
                 $this->println('Commande manquante', self::COLOR_LIGHT_RED);
                 $res = false;
             }
         }
 
-        if (!$res){
+        if (!$res) {
             $this->printDie('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
         }
 
@@ -416,6 +465,38 @@ class Console
     public function getInput()
     {
         return trim(fgets(STDIN));
+    }
+
+
+
+    public function getSilentInput()
+    {
+        if (preg_match('/^win/i', PHP_OS)) {
+            $vbscript = sys_get_temp_dir() . 'prompt_password.vbs';
+            file_put_contents(
+                $vbscript, 'wscript.echo(InputBox("'
+                . addslashes('')
+                . '", "", "password here"))');
+            $command  = "cscript //nologo " . escapeshellarg($vbscript);
+            $password = rtrim(shell_exec($command));
+            unlink($vbscript);
+
+            return $password;
+        } else {
+            $command = "/usr/bin/env bash -c 'echo OK'";
+            if (rtrim(shell_exec($command)) !== 'OK') {
+                trigger_error("Can't invoke bash");
+
+                return;
+            }
+            $command  = "/usr/bin/env bash -c 'read -s -p \""
+                . addslashes('')
+                . "\" mypassword && echo \$mypassword'";
+            $password = rtrim(shell_exec($command));
+            echo "\n";
+
+            return $password;
+        }
     }
 
 

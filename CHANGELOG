@@ -32,12 +32,16 @@ author: Laurent Lécluse - DSI - Unicaen
 L'apparence de l'application peut également être personnalisée en fournissant une URL qui
 pointe vers une feuille de style CSS propre à votre établissement.
 
+* Nouvel outil en ligne de comande permettant de piloter OSE ( `<dossier OSE>/bin/ose help` pour la liste des possibilités)
+
 * Nouvelle procédure d'installation (https://ose.unicaen.fr/deploiement)
 Le déploiement de OSE se fait désormais directement à partir de sa plateforme GitLab.
 
 * Nouvelle procédure de mise à jour à partir de GitLab.
 
 * Suppression des anciens Jobs Oracle et remplacement par des tâches CRON
+
+* Possibilité de changer le mot de passe d'un utilisateur local depuis la ligne de commande
 
 ## Procédure de mise à jour
 
@@ -65,9 +69,9 @@ Le fichier n'est donc plus placé dans le répertoire `config`, mais à la **rac
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/06.3.sql`
 
-* Modifiez votre configuration Apache pour ajouter la ligne suivante :
-`Alias /ose/vendor/unicaen/import	/var/www/ose/vendor/unicaen/import/public`
-`/ose/` et `/var/www/ose/` sont à adapter à votre configuration.
+* Modifiez votre configuration Apache pour supprimer la ligne suivante, qui n'est plus nécessaire :
+`Alias /ose/vendor/unicaen/app	/var/www/ose/vendor/unicaen/app/public`
+`/ose/` et `/var/www/ose/` sont à adapter selon votre configuration.
 Pour plus d'informations, merci de vous reporter à la [procédure d'installation](https://ose.unicaen.fr/deploiement/install.html).
 
 * Créez les tâches CRON suivantes si elles n'existent pas déjà :

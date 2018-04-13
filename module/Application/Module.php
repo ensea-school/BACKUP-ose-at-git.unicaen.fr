@@ -167,6 +167,9 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             'calcul-tableaux-bord' => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
             "Formule de calcul",
             'formule-calcul' => "Calcul de toutes les heures complémentaires à l'aide de la formule",
+
+            "Administration : Changement de mot de passe",
+            'changement-mot-de-passe' => "Paramètres : --utilisateur, --mot-de-passe",
         ];
     }
 

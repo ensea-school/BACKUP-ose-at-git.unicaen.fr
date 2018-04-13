@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
+
 
 /**
  * Description of AdministrationController
@@ -11,6 +13,9 @@ namespace Application\Controller;
  */
 class AdministrationController extends AbstractController
 {
+    use UtilisateurServiceAwareTrait;
+
+
 
     /**
      *
@@ -21,4 +26,19 @@ class AdministrationController extends AbstractController
         return [];
     }
 
+
+
+    public function changementMotDePasseAction()
+    {
+        $utilisateur = $this->getRequest()->getParam('utilisateur');
+        $motDePasse  = $this->getRequest()->getParam('mot-de-passe');
+
+        $userObject = $this->getServiceUtilisateur()->getByUsername($utilisateur);
+        if (!$userObject) {
+            throw new \Exception("Utilisateur $utilisateur non trouvé");
+        }
+
+        $userObject->setPassword($motDePasse, true);
+        $this->getServiceUtilisateur()->save($userObject);
+    }
 }

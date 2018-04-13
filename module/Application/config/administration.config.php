@@ -21,6 +21,23 @@ return [
             ],
         ],
     ],
+
+    'console' => [
+        'router' => [
+            'routes' => [
+                'changement-mot-de-passe' => [
+                    'options' => [
+                        'route'    => 'changement-mot-de-passe [--utilisateur=] [--mot-de-passe=]',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Administration',
+                            'action'     => 'changement-mot-de-passe',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'navigation'      => [
         'default' => [
             'home' => [

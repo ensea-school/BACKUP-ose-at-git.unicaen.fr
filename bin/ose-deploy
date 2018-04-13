@@ -181,23 +181,20 @@ class OseDeploy
 
 
 
-    public function majUnicaenSymLinks($oseDir ): bool
+    public function majUnicaenSymLinks($oseDir): bool
     {
         if (substr($oseDir, -1) !== '/') {
             $oseDir .= '/';
         }
 
-        $publicDir  = $oseDir . 'public/vendor/unicaen/';
-        $unicaenDir = $oseDir . 'vendor/unicaen/';
-
         $oldLibs = [];
-        $od      = array_filter(glob($publicDir . '*'), 'is_dir');
+        $od      = array_filter(glob($oseDir . 'public/vendor/unicaen/*'), 'is_dir');
         foreach ($od as $dir) {
             $oldLibs[] = basename($dir);
         }
 
         $newLibs = [];
-        $nd      = array_filter(glob($unicaenDir . '*'), 'is_dir');
+        $nd      = array_filter(glob($oseDir . 'vendor/unicaen/*'), 'is_dir');
         foreach ($nd as $dir) {
             if (is_dir($dir . '/public')) {
                 $newLibs[] = basename($dir);
@@ -208,19 +205,20 @@ class OseDeploy
         $createLibs = array_diff($newLibs, $oldLibs);
 
         foreach ($deleteLibs as $lib) {
-            $command = "rm $publicDir$lib";
+            $command = "rm $oseDir"."public/vendor/unicaen/$lib";
             $this->console->print($command);
             $this->console->exec($command);
         }
 
         foreach ($createLibs as $lib) {
-            $command = "ln -sf $unicaenDir$lib/public $publicDir$lib";
+            $command = "cd $oseDir/public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
             $this->console->print($command);
             $this->console->exec($command);
         }
 
-        return ! (empty($deleteLibs) && empty($createLibs));
+        return !(empty($deleteLibs) && empty($createLibs));
     }
+
 
 
 

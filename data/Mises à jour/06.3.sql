@@ -144,28 +144,28 @@ ORDER BY
 /
 -- Suppression du JOB OSE_SRC_SYNC => Synchro effectuée maintenant par CRON
 BEGIN
-    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_SRC_SYNC"',
+    DBMS_SCHEDULER.DROP_JOB(job_name => 'OSE_SRC_SYNC',
                                 defer => false,
                                 force => true);
 END;
 /
 -- Suppression du JOB OSE_CHARGENS_CALCUL_EFFECTIFS
 BEGIN
-    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_CHARGENS_CALCUL_EFFECTIFS"',
+    DBMS_SCHEDULER.DROP_JOB(job_name => 'OSE_CHARGENS_CALCUL_EFFECTIFS',
                                 defer => false,
                                 force => true);
 END;
 /
 -- Suppression du JOB OSE_FORMULE_REFRESH
 BEGIN
-    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_FORMULE_REFRESH"',
+    DBMS_SCHEDULER.DROP_JOB(job_name => 'OSE_FORMULE_REFRESH',
                                 defer => false,
                                 force => true);
 END;
 /
 -- Suppression du JOB OSE_WF_REFRESH
 BEGIN
-    DBMS_SCHEDULER.DROP_JOB(job_name => '"OSE"."OSE_WF_REFRESH"',
+    DBMS_SCHEDULER.DROP_JOB(job_name => 'OSE_WF_REFRESH',
                                 defer => false,
                                 force => true);
 END;

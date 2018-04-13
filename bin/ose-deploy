@@ -211,7 +211,7 @@ class OseDeploy
         }
 
         foreach ($createLibs as $lib) {
-            $command = "cd $oseDir/public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            $command = "cd $oseDir"."public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
             $this->console->print($command);
             $this->console->exec($command);
         }

@@ -1,7 +1,17 @@
 ---
-title: "Changement intervenus sur OSE"
+title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
+
+#OSE 6.3.1 (en développement)
+
+## Corrections de bugs
+
+* Suppression du bug empêchant de saisir des services référentiels si la structure "UNIV" n'existe pas.
+
+
+
+
 
 #OSE 6.3 
 

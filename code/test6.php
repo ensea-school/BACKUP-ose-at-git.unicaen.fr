@@ -7,12 +7,15 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use UnicaenImport\Processus\ImportProcessus;
+use UnicaenImport\Service\QueryGeneratorService;
 
 
-/** @var ImportProcessus $ip */
-$ip = $sl->get(ImportProcessus::class);
+/** @var QueryGeneratorService $qg */
+$qg = $sl->get(QueryGeneratorService::class);
+
+$sm = $qg->getEntityManager()->getConnection()->getSchemaManager();
 
 
+//$r = $qg->makeDiffView('VOLUME_HORAIRE_ENS');
 
-$ip->syncJob('test1');
+var_dump($sm->listViews());

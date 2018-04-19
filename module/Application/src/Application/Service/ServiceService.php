@@ -252,6 +252,9 @@ class ServiceService extends AbstractEntityService
 
             if (!$entity->getEtablissement()) {
                 $entity->setEtablissement($this->getServiceContext()->getEtablissement());
+                if (!$entity->getEtablissement()){
+                    throw new \LogicException('L\'établissement n\'est pas renseigné dans les paramétrages généraux de OSE');
+                }
             }
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);

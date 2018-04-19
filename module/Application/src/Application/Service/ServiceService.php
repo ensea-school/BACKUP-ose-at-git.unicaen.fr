@@ -283,9 +283,7 @@ class ServiceService extends AbstractEntityService
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
                 /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire */
-                if ($volumeHoraire->getTemPlafondFcMaj() !== 1) {
-                    $tvhs[] = $volumeHoraire->getTypeVolumeHoraire();
-                }
+                $tvhs[] = $volumeHoraire->getTypeVolumeHoraire();
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     $serviceVolumeHoraire->delete($volumeHoraire);

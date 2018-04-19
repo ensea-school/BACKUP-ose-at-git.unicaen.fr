@@ -200,18 +200,19 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
         if ($this->elementPedagogique !== $elementPedagogique){
             $this->elementPedagogique = $elementPedagogique;
             $this->changed = true;
-        }
 
-        if ($elementPedagogique) {
-            $vhl               = $this->getVolumeHoraireListe()->get();
-            $typesIntervention = $elementPedagogique->getTypeIntervention();       // liste des types d'intervention de l'EP
-            $periode           = $elementPedagogique->getPeriode();
-            foreach ($vhl as $vh) {
-                if (
-                    (!$typesIntervention->contains($vh->getTypeIntervention())) // types d'intervention devenus obsolètes
-                    || ($periode && $vh->getPeriode() != $periode)               // périodes devenues obsolètes
-                ) {
-                    $vh->setRemove(true); // Flag de demande de suppression du volume horaire lors de l'enregistrement de l'entité Service par son service Service
+            if ($elementPedagogique) {
+                $vhl               = $this->getVolumeHoraireListe()->get();
+                $typesIntervention = $elementPedagogique->getTypeIntervention();       // liste des types d'intervention de l'EP
+                $periode           = $elementPedagogique->getPeriode();
+                foreach ($vhl as $vh) {
+                    if (
+                        (!$typesIntervention->contains($vh->getTypeIntervention())) // types d'intervention devenus obsolètes
+                        || ($periode && $vh->getPeriode() != $periode)               // périodes devenues obsolètes
+
+                    ) {
+                        $vh->setRemove(true); // Flag de demande de suppression du volume horaire lors de l'enregistrement de l'entité Service par son service Service
+                    }
                 }
             }
         }

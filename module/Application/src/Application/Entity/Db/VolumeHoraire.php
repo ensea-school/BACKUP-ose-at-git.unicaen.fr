@@ -75,11 +75,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
      */
     private $formuleResultatVolumeHoraire;
 
-    /**
-     * @var integer
-     */
-    private $temPlafondFcMaj;
-
 
 
     /**
@@ -143,9 +138,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setHeures($heures)
     {
-        if ($heures > $this->heures){
-            $this->setTemPlafondFcMaj(2); // si augmentation alors on force...
-        }
         $this->heures = round($heures, 2);
 
         return $this;
@@ -214,9 +206,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
      */
     public function setMotifNonPaiement(\Application\Entity\Db\MotifNonPaiement $motifNonPaiement = null)
     {
-        if (!$this->motifNonPaiement && $motifNonPaiement){
-            $this->setTemPlafondFcMaj(2); // on force...
-        }
         $this->motifNonPaiement = $motifNonPaiement;
 
         return $this;
@@ -445,28 +434,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
     public function getUniqueFormuleResultatVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
         return $this->getFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire)->first();
-    }
-
-
-
-    /**
-     * @return int
-     */
-    public function getTemPlafondFcMaj()
-    {
-        return $this->temPlafondFcMaj;
-    }
-
-
-
-    /**
-     * @param int $temPlafondFcMaj
-     */
-    public function setTemPlafondFcMaj($temPlafondFcMaj)
-    {
-        $this->temPlafondFcMaj = $temPlafondFcMaj;
-
-        return $this;
     }
 
 

@@ -184,7 +184,7 @@ function help(Console $c, OseAdmin $oa)
  ************************************************************/
 class OseAdmin
 {
-    const OSE_ORIGIN = 'git@git.unicaen.fr:dsi/OSE.git';
+    const OSE_ORIGIN = 'git@git.unicaen.fr:open-source/OSE.git';
 
     /**
      * @var Console

@@ -9,7 +9,11 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Suppression du bug empêchant de saisir des services référentiels si la structure "UNIV" n'existe pas.
 
+* Correction de bug empêchant la modification d'heures de service déjà validés dans certains cas.
 
+## Procédure de mise à jour
+
+* Procédure habituelle : pas de changement en base de données
 
 
 

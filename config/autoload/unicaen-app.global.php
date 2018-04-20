@@ -5,7 +5,7 @@ if (file_exists($versionFile)){
 }else{
     $version = 'inconnue';
 }
-$dateVersion = '13/04/2018';
+$dateVersion = '20/04/2018';
 
 return [
     'unicaen-app' => [

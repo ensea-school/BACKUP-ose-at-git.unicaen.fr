@@ -15,17 +15,15 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * La notification gênante est supprimée lors du dépôt de pièces justificatives
 
-## Procédure de mise à jour
+## Notes de mise à jour
 
 * Si vous mettez à jour à partir de la version 6.3, pas de changement en base de données.
 Toutefois, le dépôt de OSE a changé. 
-Il faut donc mettre à jour votre configuration via ces deux étapes :
+Il faut donc mettre à jour votre configuration via ces trois étapes :
     1. Dans le dossier de OSE, exécutez en ligne de commande :
   `git remote set-url origin git@git.unicaen.fr:open-source/OSE.git`
-    2. Dans le fichier  bin/ose ligne 187, remplacez 
-  `const OSE_ORIGIN = 'git@git.unicaen.fr:dsi/OSE.git';`
-  par
-  `const OSE_ORIGIN = 'git@git.unicaen.fr:open-source/OSE.git';`
+    2. Puis `git checkout tags/6.3.1`
+    3. Suivez ensuite la procédure de [mise à jour](https://ose.unicaen.fr/deploiement/mise-a-jour.html) normale.
 
 * Si vous n'avez pas installé la version 6.3, alors merci d'installer la 6.3.1 avec la procédure de mise à jour indiquée pour la 6.3 (ci-dessous).
 N'oubliez pas d'exécuter les requêtes SQL de mise à jour (`data/Mises à jour/06.3.sql`)!
@@ -71,7 +69,7 @@ Le déploiement de OSE se fait désormais directement à partir de sa plateforme
 
 * Possibilité de changer le mot de passe d'un utilisateur local depuis la ligne de commande
 
-## Procédure de mise à jour
+## Notes de mise à jour
 
 * Sauvegardez votre fichier de configuration local (`config/application.local.php`)
 dans un autre répertoire que celui de OSE.

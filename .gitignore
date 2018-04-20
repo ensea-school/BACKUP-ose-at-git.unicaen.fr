@@ -8,3 +8,4 @@ VERSION
 public/vendor/unicaen/app
 public/vendor/unicaen/import
 public/vendor/unicaen/code
+composer.phar

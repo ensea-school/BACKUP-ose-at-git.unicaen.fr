@@ -39,6 +39,9 @@ switch ($action) {
     case 'maj-public-links':
         majPublicLinks($c, $oa);
     break;
+    case 'test':
+        test($c, $oa);
+    break;
     default:
         help($c, $oa);
     break;
@@ -192,6 +195,11 @@ class OseAdmin
     protected $console;
 
     /**
+     * @var Bdd
+     */
+    protected $bdd;
+
+    /**
      * @var array
      */
     private $tags = false;
@@ -234,13 +242,13 @@ class OseAdmin
         $createLibs = array_diff($newLibs, $oldLibs);
 
         foreach ($deleteLibs as $lib) {
-            $command = "rm $oseDir"."public/vendor/unicaen/$lib";
+            $command = "rm $oseDir" . "public/vendor/unicaen/$lib";
             $this->console->print($command);
             $this->console->exec($command);
         }
 
         foreach ($createLibs as $lib) {
-            $command = "cd $oseDir"."public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
             $this->console->print($command);
             $this->console->exec($command);
         }
@@ -322,6 +330,282 @@ class OseAdmin
     {
         $this->console->exec("php " . dirname(__DIR__) . "/public/index.php " . $args);
     }
+
+
+
+    public function getBdd(): Bdd
+    {
+        if (!$this->bdd) {
+            $this->bdd = $this->loadBdd();
+        }
+
+        return $this->bdd;
+    }
+
+
+
+    private function loadBdd()
+    {
+        require_once('../config/application.config.php');
+
+        $bdd = new Bdd;
+
+        $bdd->setHost(AppConfig::get('bdd', 'host'));
+        $bdd->setPort(AppConfig::get('bdd', 'port'));
+        $bdd->setDbname(AppConfig::get('bdd', 'dbname'));
+        $bdd->setUsername(AppConfig::get('bdd', 'username'));
+        $bdd->setPassword(AppConfig::get('bdd', 'password'));
+        $bdd->connect();
+
+        return $bdd;
+    }
+}
+
+
+
+
+
+class Bdd
+{
+    /**
+     * @var string
+     */
+    private $host;
+
+    /**
+     * @var integer
+     */
+    private $port;
+
+    /**
+     * @var string
+     */
+    private $dbname;
+
+    /**
+     * @var string
+     */
+    private $username;
+
+    /**
+     * @var string
+     */
+    private $password;
+
+    /**
+     * @var resource
+     */
+    private $connexion;
+
+
+
+    public function connect(): self
+    {
+        $cs = $this->getHost() . ':' . $this->getPort() . '/' . $this->getDbname();
+        $this->connexion = oci_connect($this->getUsername(), $this->password, $cs );
+        if (!$this->connexion) {
+            $e = oci_error();
+            throw new \Exception($e['message']);
+        }
+
+        return $this;
+    }
+
+
+
+    public function getVersion(): integer
+    {
+        return (int)$this->select('SELECT numero FROM version')[0]['NUMERO'];
+    }
+
+
+
+    public function setVersion(integer $version): self
+    {
+        $this->exec('DELETE FROM version');
+        $this->exec('INSERT INTO version (numero) VALUES (:version)', compact('version'));
+
+        return $this;
+    }
+
+
+
+    private function execStatement($sql, array $params = [])
+    {
+        $statement = oci_parse($this->connexion, $sql);
+
+        foreach( $params as $key => $val ){
+            ${$key} = $val;
+            oci_bind_by_name($statement, ':'.$key, ${$key}  );
+        }
+
+        if (false === @oci_execute($statement)){
+            $this->sendError($statement);
+        }
+
+        return $statement;
+    }
+
+
+
+    public function exec($sql, array $params = [])
+    {
+        $statement = $this->execStatement($sql, $params);
+        oci_free_statement($statement);
+
+        return true;
+    }
+
+
+
+    public function select( $sql, array $params = [])
+    {
+        $statement = $this->execStatement($sql, $params);
+        if(false === oci_fetch_all($statement, $res, 0, -1, OCI_FETCHSTATEMENT_BY_ROW)){
+            $this->sendError($statement);
+        }
+        oci_free_statement($statement);
+
+        return $res;
+    }
+
+
+
+    protected function sendError( $statement )
+    {
+        $error = oci_error($statement);
+        oci_free_statement($statement);
+        $msg = $error['message']." (offset ".$error['offset'].")";
+        throw new Exception($msg, $error['code']);
+    }
+
+
+
+    public function __destruct()
+    {
+        oci_close($this->connexion);
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+
+
+    /**
+     * @param string $host
+     *
+     * @return Bdd
+     */
+    public function setHost(string $host): Bdd
+    {
+        $this->host = $host;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getPort(): int
+    {
+        return $this->port;
+    }
+
+
+
+    /**
+     * @param int $port
+     *
+     * @return Bdd
+     */
+    public function setPort(int $port): Bdd
+    {
+        $this->port = $port;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDbname(): string
+    {
+        return $this->dbname;
+    }
+
+
+
+    /**
+     * @param string $dbname
+     *
+     * @return Bdd
+     */
+    public function setDbname(string $dbname): Bdd
+    {
+        $this->dbname = $dbname;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+
+
+    /**
+     * @param string $username
+     *
+     * @return Bdd
+     */
+    public function setUsername(string $username): Bdd
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+
+
+    /**
+     * @param string $password
+     *
+     * @return Bdd
+     */
+    public function setPassword(string $password): Bdd
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
 }
 
 

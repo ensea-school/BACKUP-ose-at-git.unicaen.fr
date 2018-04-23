@@ -6,7 +6,7 @@
 
 class AppConfig
 {
-    const LOCAL_APPLICATION_CONFIG_FILE = 'config.local.php';
+    const LOCAL_APPLICATION_CONFIG_FILE = __DIR__.'/../config.local.php';
 
     /**
      * Configuration locale de l'application
@@ -74,7 +74,7 @@ class AppConfig
             'Application',
         ];
 
-        if (!\Zend\Console\Console::isConsole()) {
+        if (!self::inConsole()) {
             array_unshift($modules, 'BjyAuthorize'); // ne charge BjyAuthorize QUE si on n'est pas en mode console
         }
 
@@ -82,7 +82,7 @@ class AppConfig
             $modules[] = 'ZendDeveloperTools';
         }
 
-        if (\Zend\Console\Console::isConsole() || 'development' == $env){
+        if (self::inConsole() || 'development' == $env){
             $modules[] = 'UnicaenCode';
         }
 
@@ -104,6 +104,17 @@ class AppConfig
                 'module_map_cache_enabled' => ('production' == $env),
             ],
         ];
+    }
+
+
+
+    private static function inConsole()
+    {
+        if (class_exists('Zend\Console\Console')){
+            return \Zend\Console\Console::isConsole();
+        }else{
+            return true;
+        }
     }
 
 

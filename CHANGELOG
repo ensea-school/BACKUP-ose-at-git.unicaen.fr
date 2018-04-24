@@ -3,6 +3,13 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
+#OSE 6.3.2 (en développement)
+
+## Corrections de bugs
+
+* Mise à jour des tableaux de bord lancée depuis le CRON plus fiable : si un tableau de bord plante, 
+les autres sont tout de même mis à jour.
+
 #OSE 6.3.1
 
 ## Corrections de bugs

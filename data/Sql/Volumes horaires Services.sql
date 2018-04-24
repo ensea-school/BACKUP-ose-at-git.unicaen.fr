@@ -31,9 +31,9 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.id=10344
---  AND s.id = 3208
-  AND vh.histo_destruction IS NULL
+  AND i.id=17147
+  --AND s.id = 84722
+  --AND vh.histo_destruction IS NULL
   AND tvh.code = 'PREVU'
   --AND contrat_id = 341
   --AND tvh.id = 2
@@ -46,13 +46,16 @@ order by
   
   select * from utilisateur where id in (3,234);
   
---INSERT INTO VALIDATION_VOL_HORAIRE (VALIDATION_ID,VOLUME_HORAIRE_ID) VALUES ( 42, 725 );
---DELETE FROM VALIDATION_VOL_HORAIRE WHERE VALIDATION_ID in (158,175) AND VOLUME_HORAIRE_ID in (634);
+INSERT INTO VALIDATION_VOL_HORAIRE (VALIDATION_ID,VOLUME_HORAIRE_ID) VALUES ( 101723, 239374 );
+DELETE FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID in (239374,244921,244923);
 
 SELECT COUNT(*) FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID = 187;
---DELETE FROM volume_horaire WHERE id IN (727);
---update volume_horaire set heures = 89 where id=29293;
---update volume_horaire set histo_destruction = null, histo_destructeur_id = null where id = 24883;
+DELETE FROM volume_horaire WHERE id IN (239374,244921,244923);
+update volume_horaire set heures = -6 where id=244923;
+update volume_horaire set histo_destruction = sysdate, histo_destructeur_id = 4 where id in (
+219902,
+233875
+);
 
 
 
@@ -85,3 +88,7 @@ where
   --AND validation_id is not null
 order by
   s_id, type_volume_horaire;
+
+/
+
+BEGIN UNICAEN_TBL.CALCULER('formule', UNICAEN_TBL.MAKE_PARAMS('intervenant_id',19711)); END;

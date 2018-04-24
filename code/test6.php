@@ -7,15 +7,11 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use UnicaenImport\Service\QueryGeneratorService;
+use Application\Service\WorkflowService;
 
 
-/** @var QueryGeneratorService $qg */
-$qg = $sl->get(QueryGeneratorService::class);
 
-$sm = $qg->getEntityManager()->getConnection()->getSchemaManager();
+/** @var WorkflowService $s */
+$s = $sl->get(WorkflowService::class);
 
-
-//$r = $qg->makeDiffView('VOLUME_HORAIRE_ENS');
-
-var_dump($sm->listViews());
+$s->calculerTousTableauxBord();

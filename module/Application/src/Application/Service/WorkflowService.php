@@ -289,7 +289,26 @@ class WorkflowService extends AbstractService
      */
     public function calculerTousTableauxBord()
     {
-        return $this->getEntityManager()->getConnection()->exec('BEGIN OSE_DIVERS.CALCULER_TABLEAUX_BORD; END;');
+        $sql = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
+        $tbls = $this->getEntityManager()->getConnection()->fetchAll($sql);
+        $errors = [];
+        foreach( $tbls as $tbl ){
+            $tbl = $tbl['TBL_NAME'];
+            $sql = 'BEGIN UNICAEN_TBL.CALCULER(\''.$tbl.'\'); END;';
+            try{
+                $this->getEntityManager()->getConnection()->exec($sql);
+                echo "Tableau de bord $tbl recalculé\n";
+            }catch(\Exception $e){
+                $errors[$tbl] = $e->getMessage();
+            }
+        }
+        if ($errors){
+            $msg = "Erreur de calcul sur des tableaux de bord : \n";
+            foreach( $errors as $tbl => $error){
+                $msg .= $tbl.' : '.$error."\n";
+            }
+            throw new Exception($msg);
+        }
     }
 
 

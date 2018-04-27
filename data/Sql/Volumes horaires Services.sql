@@ -31,7 +31,7 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.id=17147
+  AND i.id=16783
   --AND s.id = 84722
   --AND vh.histo_destruction IS NULL
   AND tvh.code = 'PREVU'

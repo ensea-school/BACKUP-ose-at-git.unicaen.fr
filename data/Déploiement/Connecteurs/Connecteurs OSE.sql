@@ -333,6 +333,17 @@ FROM
   LEFT JOIN structure@harpprod s4 ON s4.c_structure = s5.c_structure_pere AND s4.c_structure <> 'UNIV';
 
 
+-- Pour pouvoir associer des disciplines aux éléments pédagogiques dans OSE
+CREATE TABLE unicaen_element_discipline (
+  element_source_code      VARCHAR2(30 CHAR) NOT NULL,
+  discipline_source_code   VARCHAR2(30 CHAR) NOT NULL
+)
+LOGGING;
+
+ALTER TABLE unicaen_element_discipline
+  ADD CONSTRAINT unicaen_element_discipline_pk
+  PRIMARY KEY ( element_source_code, discipline_source_code );
+
 
 
 -- SRC_ADRESSE_INTERVENANT
@@ -903,7 +914,8 @@ FROM
   LEFT JOIN MV_UNICAEN_STRUCTURE_CODES          sc ON sc.c_structure    = ep.z_structure_id
   LEFT JOIN structure                          str ON str.source_code   = sc.c_structure_n2
   LEFT JOIN periode                            per ON per.libelle_court = ep.z_periode_id
-  LEFT JOIN discipline                         d99 ON d99.source_code   = '99';
+  LEFT JOIN unicaen_element_discipline         ued ON ued.element_source_code = ep.source_code
+  LEFT JOIN discipline                         d99 ON d99.source_code   = COALESCE( ued.discipline_source_code,'99');
 
 
 

@@ -38,7 +38,46 @@ class IntervenantProcessus extends AbstractProcessus
         $critere  = Util::reduce($critere);
         $criteres = explode('_', $critere);
 
-        $sql     = 'SELECT * FROM V_INTERVENANT_RECHERCHE WHERE rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
+        $sql     = '
+        WITH vrec AS (
+        SELECT
+          i.id,
+          i.source_code,
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          i.critere_recherche critere,
+          i.annee_id
+        FROM
+          intervenant i
+          JOIN structure s ON s.id = i.structure_id
+          JOIN civilite c ON c.id = i.civilite_id
+        WHERE
+          i.histo_destruction IS NULL
+          
+        UNION ALL
+        
+        SELECT
+          null id,
+          i.source_code,
+          i.nom_usuel,
+          i.nom_patronymique,
+          i.prenom,
+          i.date_naissance,
+          s.libelle_court structure,
+          c.libelle_long civilite,
+          i.critere_recherche critere,
+          i.annee_id
+        FROM
+          src_intervenant i
+          JOIN structure s ON s.id = i.structure_id
+          JOIN civilite c ON c.id = i.civilite_id
+        )
+        SELECT * FROM vrec WHERE 
+          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
         $sqlCri  = '';
         $criCode = 0;
 

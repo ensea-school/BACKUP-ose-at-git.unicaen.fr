@@ -9,6 +9,8 @@ ALTER TABLE version ADD CONSTRAINT version_pk PRIMARY KEY ( numero );
 
 INSERT INTO version(numero) VALUES (1);
 
+DROP VIEW V_INTERVENANT_RECHERCHE;
+
 /
 
 create or replace PACKAGE BODY       "OSE_FORMULE" AS

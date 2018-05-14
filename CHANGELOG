@@ -10,6 +10,8 @@ author: Laurent Lécluse - DSI - Unicaen
 * Mise à jour des tableaux de bord lancée depuis le CRON plus fiable : si un tableau de bord plante, 
 les autres sont tout de même mis à jour.
 
+* La personnalisation des liens informatique et libertés et mentions légales refonctionne
+
 #OSE 6.3.1
 
 ## Corrections de bugs

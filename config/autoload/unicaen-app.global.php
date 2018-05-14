@@ -87,6 +87,12 @@ return [
                         'title'    => AppConfig::get('etablissement','logoDescription'),
                         'uri'      => AppConfig::get('etablissement','logoUri'),
                     ],
+                    'mentions-legales'         => [
+                        'uri'      => AppConfig::get('etablissement','mentionsLegales'),
+                    ],
+                    'informatique-et-libertes' => [
+                        'uri'      => AppConfig::get('etablissement','informatiqueEtLibertes'),
+                    ],
                 ],
             ],
         ],

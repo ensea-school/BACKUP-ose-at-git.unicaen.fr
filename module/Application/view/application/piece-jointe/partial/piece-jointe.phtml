@@ -1,26 +1,34 @@
 <?php
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $tpj \Application\Entity\Db\TypePieceJointe
- * @var $pj \Application\Entity\Db\PieceJointe
- * @var $intervenant \Application\Entity\Db\Intervenant
- * @var $canEdit boolean
- * @var $canValider boolean
+ * @var $this         \Application\View\Renderer\PhpRenderer
+ * @var $tpj          \Application\Entity\Db\TypePieceJointe
+ * @var $pj           \Application\Entity\Db\PieceJointe
+ * @var $intervenant  \Application\Entity\Db\Intervenant
+ * @var $canEdit      boolean
+ * @var $canValider   boolean
  * @var $canDevalider boolean
- * @var $obligatoire boolean
+ * @var $obligatoire  boolean
  */
 
 $hasValidation = $pj && $pj->getValidation();
 
 $linksModelesDocs = null;
 if (($url = $tpj->getUrlModeleDoc())) {
-    $href             = $this->basePath($url);
+    if (0 === strpos($url, 'http://') || 0 === strpos($url, 'https://')) {
+//        $target = "_blank";
+        $href   = $url;
+    } else {
+//        $target = "_self";
+        $href   = $this->basePath($url);
+    }
+
     $fileName         = ltrim(strrchr($href, '/'), '/');
     $linksModelesDocs = $this->tag('a', [
-        'class' => 'modele-doc',
-        'title' => 'Cliquez pour télécharger le document à remplir',
-        'href'  => $href,
+        'class'  => 'modele-doc',
+        //'target' => $target,
+        'title'  => 'Cliquez pour télécharger le document à remplir',
+        'href'   => $href,
     ])->html(
         $this->tag('span', ['class' => 'glyphicon glyphicon-file'])->openClose() . " " . $fileName
     );
@@ -35,16 +43,16 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
 
 ?>
 <div
-    class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-<?= $tpj->getId() ?> panel panel-<?= $pj && $pj->getValidation() ? 'success' : 'default' ?> upload-container"
-    data-tpj="<?= $tpj->getId() ?>"
+        class="tpj <?= $obligatoire ? 'tpj-obligatoire ' : '' ?>tpj-<?= $tpj->getId() ?> panel panel-<?= $pj && $pj->getValidation() ? 'success' : 'default' ?> upload-container"
+        data-tpj="<?= $tpj->getId() ?>"
 >
     <div class="panel-heading panel-heading-h3">
         <h3>
             <?php if ((!$hasValidation && $canValider) || ($hasValidation && $canDevalider)): ?>
-            <div class="validation-bar pull-right"
-                 data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
-                <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
-            </div>
+                <div class="validation-bar pull-right"
+                     data-url="<?= $this->url('piece-jointe/intervenant/validation', ['typePieceJointe' => $tpj->getId()], [], true) ?>">
+                    <?= $this->partial('application/piece-jointe/validation', compact('pj')) ?>
+                </div>
             <?php endif; ?>
             <?= $type ?><br/>
         </h3>
@@ -66,7 +74,7 @@ $uploader = $this->uploader()->setUrl($this->url('piece-jointe/intervenant/fichi
                 <!-- formulaire éventuel de dépôt de PJ -->
                 <?php if ($canEdit): ?>
                     <?php
-                    $uploader->getForm()->setAttribute('style', 'display:'.(($pj && $pj->getValidation())? 'none' : 'block'));
+                    $uploader->getForm()->setAttribute('style', 'display:' . (($pj && $pj->getValidation()) ? 'none' : 'block'));
                     echo $uploader->renderForm();
                     ?>
                 <?php endif; ?>

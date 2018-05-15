@@ -18,10 +18,16 @@ les autres sont tout de même mis à jour.
 
 * Accès données personnelles : le dossier était accessible même si l'intervenant concerné ne devait pas avoir de dossier.
 
+* Données personnelles : les statuts supprimés étaient toujours disponibles au choix.
+
+## Nouveautés
+
+* Pièces justificatives : vous avez la possibilité de personnaliser les documents types à télécharger, y compris au moyen d'URLs.
+
 ## Notes de mise à jour
 
 * PHP 7.0.x est obligatoire. Les versions supérieures de PHP ne sont pas supportées pour le moment.
-* Une DeployKey générique est intégrée dans le script d'installation de OSE. Il n'est maintenantp plus nécessaire de 
+* Une DeployKey générique est intégrée dans le script d'installation de OSE. Il n'est maintenant plus nécessaire de 
 déployer une clé nominative sur un serveur.
 
 #OSE 6.3.1
@@ -46,7 +52,8 @@ Il faut donc mettre à jour votre configuration via ces trois étapes :
     2. Puis `git checkout tags/6.3.1`
     3. Suivez ensuite la procédure de [mise à jour](https://ose.unicaen.fr/deploiement/mise-a-jour.html) normale.
 
-* Si vous n'avez pas installé la version 6.3, alors merci d'installer la 6.3.1 avec la procédure de mise à jour indiquée pour la 6.3 (ci-dessous).
+* Si vous n'avez pas installé la version 6.3, alors merci d'installer la 6.3.1 avec la procédure de mise à jour 
+indiquée pour la 6.3 (ci-dessous).
 N'oubliez pas d'exécuter les requêtes SQL de mise à jour (`data/Mises à jour/06.3.sql`)!
 
 

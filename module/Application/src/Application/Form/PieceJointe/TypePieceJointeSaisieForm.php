@@ -43,6 +43,13 @@ class TypePieceJointeSaisieForm extends AbstractForm
             ],
             'type'       => 'Text',
         ]);
+        $this->add([
+            'name'       => 'urlModeleDoc',
+            'options'    => [
+                'label' => "Modèle",
+            ],
+            'type'       => 'Text',
+        ]);
 
         $this->add(new Csrf('security'));
 
@@ -57,7 +64,7 @@ class TypePieceJointeSaisieForm extends AbstractForm
 
         return $this;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -72,6 +79,9 @@ class TypePieceJointeSaisieForm extends AbstractForm
             ],
             'libelle' => [
                 'required' => true,
+            ],
+            'libelle' => [
+                'required' => false,
             ]
         ];
     }

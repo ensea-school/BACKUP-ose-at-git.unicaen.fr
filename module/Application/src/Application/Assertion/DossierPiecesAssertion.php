@@ -3,7 +3,6 @@
 namespace Application\Assertion;
 
 use Application\Acl\Role;
-use Application\Controller\DossierController;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
 use Application\Provider\Privilege\Privileges; // sous réserve que vous utilisiez les privilèges d'UnicaenAuth et que vous ayez généré votre fournisseur

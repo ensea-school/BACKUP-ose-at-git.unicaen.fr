@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Pays as PaysEntity;
+use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -540,7 +541,10 @@ class StatutIntervenantProxy extends Proxy
         // reformattage du tableau de données : id => Statut
         $pays = [];
         foreach ($this->objects as $o) {
-            $pays[$o->getId()] = $o;
+            /* @var $o StatutIntervenant */
+            if ($o->estNonHistorise()){
+                $pays[$o->getId()] = $o;
+            }
         }
 
         $this->objects = $pays;

@@ -43,7 +43,7 @@ class PlafondService extends AbstractEntityService
     {
         $sql = file_get_contents('data/Query/plafond.sql');
         $sql = str_replace('/*i.id*/', 'AND i.id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
-
+        $sql = preg_replace('/--(.*)\n/Uis', "\n", $sql) ;
         $res          = $this->getEntityManager()->getConnection()->fetchAll($sql);
         $depassements = [];
         foreach ($res as $r) {

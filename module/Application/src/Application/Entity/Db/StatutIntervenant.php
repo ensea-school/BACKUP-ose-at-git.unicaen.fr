@@ -17,9 +17,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
 
-    const SS_EMPLOI_NON_ETUD = 'SS_EMPLOI_NON_ETUD';
-    const NON_AUTORISE       = 'NON_AUTORISE';
-
 
 
     /**

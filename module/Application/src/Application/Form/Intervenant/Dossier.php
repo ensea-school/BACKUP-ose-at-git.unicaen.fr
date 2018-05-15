@@ -87,19 +87,6 @@ class Dossier extends AbstractForm
              * la question "Avez-vous exercé une activité..." est retirée puisque la réponse est forcément OUI.
              */
             $dossierFieldset->remove('premierRecrutement');
-        } elseif ($this->getServiceContext()->applicationExists($this->getServiceContext()->getAnneePrecedente())) {
-            /**
-             * Si l'intervenant n'est pas trouvé comme vacataire l'année précédente
-             * malgré que l'application était en service l'année précédente,
-             * alors on ne propose pas le statut "Sans emploi et non étudiant".
-             * En effet, le statut "Sans emploi et non étudiant" n'est pertinent que pour un intervenant
-             * ayant été vacataire l'année précédente (et ayant perdu son activité principale).
-             */
-            $statutSelect = $dossierFieldset->get('statut');
-            /* @var $statut \Application\Form\Intervenant\StatutSelect */
-            $statutSelect->getProxy()->setStatutsToRemove([
-                $this->getServiceStatutIntervenant()->getRepo()->findOneBySourceCode(StatutIntervenant::SS_EMPLOI_NON_ETUD),
-            ]);
         }
 
         /**

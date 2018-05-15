@@ -12,6 +12,16 @@ les autres sont tout de même mis à jour.
 
 * La personnalisation des liens informatique et libertés et mentions légales refonctionne
 
+* Correction définitive du bug de saisie du service référentiel
+
+* Accès données personnelles : correction d'un bug portant sur certains vacataires affichant une page d'erreur.
+
+## Notes de mise à jour
+
+* PHP 7.0.x est obligatoire. Les versions supérieures de PHP ne sont pas supportées pour le moment.
+* Une DeployKey générique est intégrée dans le script d'installation de OSE. Il n'est maintenantp plus nécessaire de 
+déployer une clé nominative sur un serveur.
+
 #OSE 6.3.1
 
 ## Corrections de bugs

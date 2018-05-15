@@ -4,7 +4,6 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Pays as PaysEntity;
-use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -14,9 +13,7 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\NumeroINSEEValidator;
 use Application\Validator\PaysNaissanceValidator;
-use Application\Validator\StatutIntervenantValidator;
 use Application\Constants;
-use LogicException;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineORMModule\Form\Element\EntitySelect;
 use Zend\Validator\Date as DateValidator;
@@ -339,8 +336,6 @@ class DossierFieldset extends AbstractFieldset
     {
         $paysNaissanceId       = (int)$this->get('paysNaissance')->getValue();
         $numeroInseeProvisoire = (bool)$this->get('numeroInseeEstProvisoire')->getValue();
-        $statutSelect          = $this->get('statut');
-        /* @var $statutSelect StatutSelect */
 
         // la sélection du département n'est obligatoire que si le pays sélectionné est la France
         $departementRequired = (self::$franceId === $paysNaissanceId);
@@ -425,9 +420,6 @@ class DossierFieldset extends AbstractFieldset
             ],
             'statut'               => [
                 'required'   => true,
-                'validators' => [
-                    $statutSelect->getProxy()->getValidator(),
-                ],
             ],
         ];
 
@@ -548,59 +540,9 @@ class StatutIntervenantProxy extends Proxy
         // reformattage du tableau de données : id => Statut
         $pays = [];
         foreach ($this->objects as $o) {
-            // suppression des statuts à écarter
-            if (in_array($o, $this->statutsToRemove)) {
-                continue;
-            }
             $pays[$o->getId()] = $o;
         }
 
         $this->objects = $pays;
-    }
-
-
-
-    /**
-     * @var StatutIntervenantEntity[]
-     */
-    private $statutsToRemove = [];
-
-
-
-    /**
-     * Statuts à écarter.
-     *
-     * @param StatutIntervenantEntity[] $statuts
-     *
-     * @return self
-     */
-    public function setStatutsToRemove(array $statuts)
-    {
-        $this->statutsToRemove = [];
-
-        foreach ($statuts as $statut) {
-            if (!$statut instanceof StatutIntervenantEntity) {
-                throw new LogicException("Les statuts à écarter doivent être spécifiés sous forme d'objets.");
-            }
-            $this->statutsToRemove[$statut->getId()] = $statut;
-        }
-
-        $this->objects = []; // force objects reload
-
-        return $this;
-    }
-
-
-
-    /**
-     *
-     * @return StatutIntervenantValidator
-     */
-    public function getValidator()
-    {
-        $v = new StatutIntervenantValidator();
-        $v->setStatutsInterdits($this->statutsToRemove);
-
-        return $v;
     }
 }

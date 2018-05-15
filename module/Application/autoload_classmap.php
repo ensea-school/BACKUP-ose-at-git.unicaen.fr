@@ -4,7 +4,6 @@ return [
     'Application\Module'                                                                                 => __DIR__ . '/Module.php',
     'Application\Validator\DepartementNaissanceValidator'                                                => __DIR__ . '/src/Application/Validator/DepartementNaissanceValidator.php',
     'Application\Validator\PaysNaissanceValidator'                                                       => __DIR__ . '/src/Application/Validator/PaysNaissanceValidator.php',
-    'Application\Validator\StatutIntervenantValidator'                                                   => __DIR__ . '/src/Application/Validator/StatutIntervenantValidator.php',
     'Application\Validator\NumeroINSEEValidator'                                                         => __DIR__ . '/src/Application/Validator/NumeroINSEEValidator.php',
     'Application\Interfaces\NiveauEtapeAwareInterface'                                                   => __DIR__ . '/src/Application/Interfaces/NiveauEtapeAwareInterface.php',
     'Application\Interfaces\ServiceAPayerAwareInterface'                                                 => __DIR__ . '/src/Application/Interfaces/ServiceAPayerAwareInterface.php',

@@ -16,6 +16,8 @@ les autres sont tout de même mis à jour.
 
 * Accès données personnelles : correction d'un bug portant sur certains vacataires affichant une page d'erreur.
 
+* Accès données personnelles : le dossier était accessible même si l'intervenant concerné ne devait pas avoir de dossier.
+
 ## Notes de mise à jour
 
 * PHP 7.0.x est obligatoire. Les versions supérieures de PHP ne sont pas supportées pour le moment.

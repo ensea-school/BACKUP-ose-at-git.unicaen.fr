@@ -35,7 +35,7 @@ class DossierPiecesAssertion extends AbstractAssertion
         $intervenant = $this->getMvcEvent()->getParam('intervenant');
 
         switch ($controller) {
-            case DossierController::class:
+            case "Application\Controller\Dossier":
                 switch ($action) {
                     case 'index':
                         if (!$this->assertPriv(Privileges::DOSSIER_VISUALISATION)) return false;

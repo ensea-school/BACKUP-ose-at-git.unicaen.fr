@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0650787c87b941797d1f4e117fc7145",
+    "content-hash": "d90beeafe1bfd7ca1d2bdded2c068f5b",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjyoungblood/BjyAuthorize.git",
-                "reference": "87e10dac52506fe36fa8676292d46a3dce92099d"
+                "reference": "e64a20b8bfc2edbc5998626be9f30a357e3d1204"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjyoungblood/BjyAuthorize/zipball/87e10dac52506fe36fa8676292d46a3dce92099d",
-                "reference": "87e10dac52506fe36fa8676292d46a3dce92099d",
+                "url": "https://api.github.com/repos/bjyoungblood/BjyAuthorize/zipball/e64a20b8bfc2edbc5998626be9f30a357e3d1204",
+                "reference": "e64a20b8bfc2edbc5998626be9f30a357e3d1204",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,8 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2015-07-25T21:11:49+00:00"
+            "abandoned": true,
+            "time": "2018-05-14T16:31:01+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -146,33 +147,37 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.6.2",
+            "version": "v1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "eb152c5100571c7a45470ff2a35095ab3f3b900b"
+                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/eb152c5100571c7a45470ff2a35095ab3f3b900b",
-                "reference": "eb152c5100571c7a45470ff2a35095ab3f3b900b",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
+                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.5|~7.0"
+                "php": "~7.1"
             },
             "conflict": {
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.0",
-                "predis/predis": "~1.0",
-                "satooshi/php-coveralls": "~0.6"
+                "alcaeus/mongo-php-adapter": "^1.1",
+                "mongodb/mongodb": "^1.1",
+                "phpunit/phpunit": "^5.7",
+                "predis/predis": "~1.0"
+            },
+            "suggest": {
+                "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6.x-dev"
+                    "dev-master": "1.7.x-dev"
                 }
             },
             "autoload": {
@@ -212,24 +217,24 @@
                 "cache",
                 "caching"
             ],
-            "time": "2017-07-22T12:49:21+00:00"
+            "time": "2017-08-25T07:02:50+00:00"
         },
         {
             "name": "doctrine/collections",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "1a4fb7e902202c33cce8c55989b945612943c2ba"
+                "reference": "a01ee38fcd999f34d9bfbcee59dbda5105449cbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/1a4fb7e902202c33cce8c55989b945612943c2ba",
-                "reference": "1a4fb7e902202c33cce8c55989b945612943c2ba",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/a01ee38fcd999f34d9bfbcee59dbda5105449cbf",
+                "reference": "a01ee38fcd999f34d9bfbcee59dbda5105449cbf",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6 || ^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "doctrine/coding-standard": "~0.1@dev",
@@ -279,7 +284,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2017-01-03T10:49:41+00:00"
+            "time": "2017-07-22T10:37:32+00:00"
         },
         {
             "name": "doctrine/common",
@@ -356,24 +361,26 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.13",
+            "version": "v2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "729340d8d1eec8f01bff708e12e449a3415af873"
+                "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/729340d8d1eec8f01bff708e12e449a3415af873",
-                "reference": "729340d8d1eec8f01bff708e12e449a3415af873",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/e3eed9b1facbb0ced3a0995244843a189e7d1b13",
+                "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": ">=2.4,<2.8-dev",
-                "php": ">=5.3.2"
+                "doctrine/common": "^2.7.1",
+                "ext-pdo": "*",
+                "php": "^7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.*",
+                "phpunit/phpunit": "^5.4.6",
+                "phpunit/phpunit-mock-objects": "!=3.2.4,!=3.2.5",
                 "symfony/console": "2.*||^3.0"
             },
             "suggest": {
@@ -385,7 +392,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "2.6.x-dev"
                 }
             },
             "autoload": {
@@ -423,7 +430,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-07-22T20:44:48+00:00"
+            "time": "2017-11-19T13:38:54+00:00"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -583,20 +590,20 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462"
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/5527a48b7313d15261292c149e55e26eae771b0a",
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.2"
@@ -604,7 +611,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -646,36 +653,36 @@
                 "singularize",
                 "string"
             ],
-            "time": "2017-07-22T12:18:28+00:00"
+            "time": "2018-01-09T20:05:19+00:00"
         },
         {
             "name": "doctrine/instantiator",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3,<8.0-DEV"
+                "php": "^7.1"
             },
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
                 "ext-pdo": "*",
                 "ext-phar": "*",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "~2.0"
+                "phpunit/phpunit": "^6.2.3",
+                "squizlabs/php_codesniffer": "^3.0.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -700,7 +707,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14T21:17:01+00:00"
+            "time": "2017-07-22T11:58:36+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -834,20 +841,20 @@
         },
         {
             "name": "easybook/geshi",
-            "version": "v1.0.8.18",
+            "version": "v1.0.8.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/easybook/geshi.git",
-                "reference": "4b06bfe8c6fbedd6aad0a0700d650f591386e287"
+                "reference": "b4df5fa84a44d4e12eff67263a701eac7e157241"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/easybook/geshi/zipball/4b06bfe8c6fbedd6aad0a0700d650f591386e287",
-                "reference": "4b06bfe8c6fbedd6aad0a0700d650f591386e287",
+                "url": "https://api.github.com/repos/easybook/geshi/zipball/b4df5fa84a44d4e12eff67263a701eac7e157241",
+                "reference": "b4df5fa84a44d4e12eff67263a701eac7e157241",
                 "shasum": ""
             },
             "require": {
-                "php": ">4.3.0"
+                "php": ">=5.0"
             },
             "type": "library",
             "autoload": {
@@ -876,7 +883,7 @@
                 "highlighter",
                 "syntax"
             ],
-            "time": "2016-10-05T07:15:42+00:00"
+            "time": "2018-04-20T18:19:44+00:00"
         },
         {
             "name": "jasig/phpcas",
@@ -1284,16 +1291,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.8",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "9cf7c2271cfb89ef9727db1b740ca77be57bf9d7"
+                "reference": "1b95888cfd996484527cb41e8952d9a5eaf7454f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/9cf7c2271cfb89ef9727db1b740ca77be57bf9d7",
-                "reference": "9cf7c2271cfb89ef9727db1b740ca77be57bf9d7",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/1b95888cfd996484527cb41e8952d9a5eaf7454f",
+                "reference": "1b95888cfd996484527cb41e8952d9a5eaf7454f",
                 "shasum": ""
             },
             "require": {
@@ -1336,20 +1343,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:22:50+00:00"
+            "time": "2018-04-30T16:53:52+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.7.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b"
+                "reference": "3296adf6a6454a050679cde90f95350ad604b171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/78be803ce01e55d3491c1397cf1c64beb9c1b63b",
-                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3296adf6a6454a050679cde90f95350ad604b171",
+                "reference": "3296adf6a6454a050679cde90f95350ad604b171",
                 "shasum": ""
             },
             "require": {
@@ -1361,7 +1368,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "1.8-dev"
                 }
             },
             "autoload": {
@@ -1395,11 +1402,11 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-01-30T19:27:44+00:00"
+            "time": "2018-04-26T10:06:28+00:00"
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.38",
+            "version": "v2.8.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -1448,11 +1455,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "1.3.10",
+            "version": "1.3.11",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "845dd41da189fdd5e39f6d2d882e05b77a16c5dc"
+                "reference": "e6527137d036ac0fe17dd438059a92c03e8f01eb"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1495,7 +1502,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2018-03-28T08:06:13+00:00"
+            "time": "2018-04-19T12:48:40+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -1583,11 +1590,11 @@
         },
         {
             "name": "unicaen/oracle",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/oracle.git",
-                "reference": "df0506113c7a21e91180dc2ffa63278c92bd4f88"
+                "reference": "859f408b39cd446b4ea87705f93cdd9eeddb9e11"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -1607,7 +1614,7 @@
                 ]
             },
             "description": "Bibliothèque utile lorsqu'on utilise un base de données Oracle",
-            "time": "2018-02-26T10:03:19+00:00"
+            "time": "2018-04-27T08:59:00+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -2027,35 +2034,34 @@
         },
         {
             "name": "zendframework/zend-debug",
-            "version": "2.5.1",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-debug.git",
-                "reference": "b6f9df59155391ca683c479a0d758f66ef73b3b3"
+                "reference": "cb423facd6f2e875a3cb44cf992b6bd1f5fd1a96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-debug/zipball/b6f9df59155391ca683c479a0d758f66ef73b3b3",
-                "reference": "b6f9df59155391ca683c479a0d758f66ef73b3b3",
+                "url": "https://api.github.com/repos/zendframework/zend-debug/zipball/cb423facd6f2e875a3cb44cf992b6bd1f5fd1a96",
+                "reference": "cb423facd6f2e875a3cb44cf992b6bd1f5fd1a96",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-escaper": "^2.0"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
-                "zendframework/zend-escaper": "2.*"
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5",
+                "zendframework/zend-coding-standard": "~1.0.0"
             },
             "suggest": {
-                "ext/xdebug": "XDebug, for better backtrace output",
-                "zendframework/zend-escaper": "To support escaped output"
+                "ext-xdebug": "XDebug, for better backtrace output"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev",
-                    "dev-develop": "2.6-dev"
+                    "dev-master": "2.6.x-dev",
+                    "dev-develop": "2.7.x-dev"
                 }
             },
             "autoload": {
@@ -2067,12 +2073,13 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-debug",
+            "description": "Safely dump debug information to HTML",
             "keywords": [
+                "ZendFramework",
                 "debug",
-                "zf2"
+                "zf"
             ],
-            "time": "2015-06-03T14:05:35+00:00"
+            "time": "2018-04-30T20:10:31+00:00"
         },
         {
             "name": "zendframework/zend-developer-tools",
@@ -3217,24 +3224,24 @@
         },
         {
             "name": "zendframework/zend-permissions-acl",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-permissions-acl.git",
-                "reference": "843bbd9c6f6d20b84dd0ce6c815d10397e98082b"
+                "reference": "c9568f4aee2887e43bf07769973f9686e8f61707"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-permissions-acl/zipball/843bbd9c6f6d20b84dd0ce6c815d10397e98082b",
-                "reference": "843bbd9c6f6d20b84dd0ce6c815d10397e98082b",
+                "url": "https://api.github.com/repos/zendframework/zend-permissions-acl/zipball/c9568f4aee2887e43bf07769973f9686e8f61707",
+                "reference": "c9568f4aee2887e43bf07769973f9686e8f61707",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5 || ^7.0"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5",
+                "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
             },
             "suggest": {
@@ -3243,8 +3250,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
+                    "dev-master": "2.7.x-dev",
+                    "dev-develop": "2.8.x-dev"
                 }
             },
             "autoload": {
@@ -3256,13 +3263,13 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "provides a lightweight and flexible access control list (ACL) implementation for privileges management",
-            "homepage": "https://github.com/zendframework/zend-permissions-acl",
+            "description": "Provides a lightweight and flexible access control list (ACL) implementation for privileges management",
             "keywords": [
+                "ZendFramework",
                 "acl",
-                "zf2"
+                "zf"
             ],
-            "time": "2016-02-03T21:46:45+00:00"
+            "time": "2018-05-01T21:53:20+00:00"
         },
         {
             "name": "zendframework/zend-serializer",
@@ -3691,6 +3698,7 @@
                 "version",
                 "zf2"
             ],
+            "abandoned": "ocramius/package-versions",
             "time": "2017-07-13T17:22:10+00:00"
         },
         {
@@ -3965,6 +3973,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": "^7.0"
+    },
     "platform-dev": []
 }

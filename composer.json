@@ -4,7 +4,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url" : "https://dev.unicaen.fr/packagist"
+            "url" : "https://gest.unicaen.fr/packagist"
         }
     ],
     "require"     : {

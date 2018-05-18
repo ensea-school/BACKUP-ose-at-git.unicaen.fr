@@ -5,14 +5,17 @@ namespace Application\Entity\Db;
 use Application\Entity\VolumeHoraireListe;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Service
  */
-class Service implements HistoriqueAwareInterface, ResourceInterface
+class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     const HORS_ETABLISSEMENT = "hors Établissement";
 

@@ -3,13 +3,16 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * VolumeHoraireReferentiel
  */
-class VolumeHoraireReferentiel implements HistoriqueAwareInterface
+class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var float

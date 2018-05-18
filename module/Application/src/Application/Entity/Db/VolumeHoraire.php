@@ -4,14 +4,17 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * VolumeHoraire
  */
-class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
+class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var float

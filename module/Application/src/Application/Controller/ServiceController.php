@@ -482,7 +482,6 @@ class ServiceController extends AbstractController
             if (!$this->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
                 $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
             } else {
-
                 $form->setData($request->getPost());
                 $form->saveToContext();
                 if ($form->isValid()) {

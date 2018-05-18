@@ -22,6 +22,7 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
@@ -58,6 +59,7 @@ class ServiceService extends AbstractEntityService
     use RechercheHydratorAwareTrait;
     use ValidationServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      *
@@ -244,8 +246,6 @@ class ServiceService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $tvhs = [];
-
         $this->getEntityManager()->getConnection()->beginTransaction();
         try {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -275,6 +275,22 @@ class ServiceService extends AbstractEntityService
                 $result = $serviceAllreadyExists;
             } else {
                 if ($entity->hasChanged()) {
+                    $sourceOse = $this->getServiceSource()->getOse();
+                    if (!$entity->getSource()){
+                        $entity->setSource($sourceOse);
+                    }
+                    if (!$entity->getSourceCode()){
+                        $entity->setSourceCode(uniqid('ose-'));
+                    }
+                    foreach( $entity->getVolumeHoraire() as $vh ){
+                        if (!$vh->getSource()){
+                            $vh->setSource($sourceOse);
+                        }
+                        if (!$vh->getSourceCode()){
+                            $vh->setSourceCode(uniqid('ose-'));
+                        }
+                    }
+
                     $result = parent::save($entity);
                     $entity->setChanged(false);
                 } else {
@@ -286,7 +302,6 @@ class ServiceService extends AbstractEntityService
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
                 /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire */
-                $tvhs[] = $volumeHoraire->getTypeVolumeHoraire();
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     $serviceVolumeHoraire->delete($volumeHoraire);

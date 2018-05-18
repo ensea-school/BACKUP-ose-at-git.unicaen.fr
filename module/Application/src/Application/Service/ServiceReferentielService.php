@@ -255,11 +255,20 @@ class ServiceReferentielService extends AbstractEntityService
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
             } else {
+                $sourceOse = $this->getServiceSource()->getOse();
                 if (!$entity->getSource()){
-                    $entity->setSource($this->getServiceSource()->getOse());
+                    $entity->setSource($sourceOse);
                 }
                 if (!$entity->getSourceCode()){
                     $entity->setSourceCode(uniqid('ose-'));
+                }
+                foreach( $entity->getVolumeHoraireReferentiel() as $vhr){
+                    if (!$vhr->getSource()){
+                        $vhr->setSource($sourceOse);
+                    }
+                    if (!$vhr->getSourceCode()){
+                        $vhr->setSourceCode(uniqid('ose-'));
+                    }
                 }
                 $result = parent::save($entity);
             }

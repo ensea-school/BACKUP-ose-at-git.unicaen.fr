@@ -78,6 +78,16 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
      */
     private $formuleResultatVolumeHoraire;
 
+    /**
+     * @var boolean
+     */
+    private $autoValidation = false;
+
+    /**
+     * @var \DateTime
+     */
+    protected $horaire;
+
 
 
     /**
@@ -445,4 +455,53 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     {
         return 'VolumeHoraire';
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param bool $autoValidation
+     *
+     * @return VolumeHoraire
+     */
+    public function setAutoValidation(bool $autoValidation): VolumeHoraire
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getHoraire()
+    {
+        return $this->horaire;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaire
+     *
+     * @return VolumeHoraireReferentiel
+     */
+    public function setHoraire($horaire): VolumeHoraireReferentiel
+    {
+        $this->horaire = $horaire;
+
+        return $this;
+    }
+
 }

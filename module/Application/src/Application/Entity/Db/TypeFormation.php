@@ -49,6 +49,11 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
      */
     protected $groupe;
 
+    /**
+     * @var bool
+     */
+    protected $serviceStatutaire = true;
+
 
 
     /**
@@ -144,4 +149,29 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
     {
         return $this->groupe;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isServiceStatutaire(): bool
+    {
+        return $this->serviceStatutaire;
+    }
+
+
+
+    /**
+     * @param bool $serviceStatutaire
+     *
+     * @return FonctionReferentiel
+     */
+    public function setServiceStatutaire(bool $serviceStatutaire): FonctionReferentiel
+    {
+        $this->serviceStatutaire = $serviceStatutaire;
+
+        return $this;
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -61,6 +62,16 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
      */
     private $formuleResultatVolumeHoraireReferentiel;
 
+    /**
+     * @var boolean
+     */
+    private $autoValidation = false;
+
+    /**
+     * @var \DateTime
+     */
+    protected $horaire;
+
 
 
     /**
@@ -103,7 +114,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
      */
     public function setHeures($heures)
     {
-        $this->heures = round($heures,2);
+        $this->heures = round($heures, 2);
 
         return $this;
     }
@@ -238,11 +249,13 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     public function hasValidation()
     {
         $validations = $this->getValidation();
-        foreach( $validations as $validation ){
+        foreach ($validations as $validation) {
             /* @var $validation Validation */
-            if ($validation->estNonHistorise())
+            if ($validation->estNonHistorise()) {
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -304,4 +317,54 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     {
         return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
+
+
+
+
+    /**
+     * @return bool
+     */
+    public function isAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param bool $autoValidation
+     *
+     * @return VolumeHoraire
+     */
+    public function setAutoValidation(bool $autoValidation): VolumeHoraire
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getHoraire()
+    {
+        return $this->horaire;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaire
+     *
+     * @return VolumeHoraireReferentiel
+     */
+    public function setHoraire($horaire): VolumeHoraireReferentiel
+    {
+        $this->horaire = $horaire;
+
+        return $this;
+    }
+
 }

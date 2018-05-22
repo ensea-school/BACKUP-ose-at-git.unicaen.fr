@@ -51,3 +51,27 @@ ALTER TABLE volume_horaire_ref MODIFY ( source_id NOT NULL );
 ALTER TABLE volume_horaire_ref MODIFY ( source_code NOT NULL );
 ALTER TABLE volume_horaire_ref ADD CONSTRAINT volume_horaire_ref_source_fk FOREIGN KEY ( source_id ) REFERENCES source ( id ) NOT DEFERRABLE;
 ALTER TABLE volume_horaire_ref ADD CONSTRAINT volume_horaire_ref_source_un UNIQUE ( source_code,histo_destruction );
+
+
+ALTER TABLE volume_horaire ADD (
+  auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
+  );
+ALTER TABLE volume_horaire_ref ADD (
+  auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
+  );
+
+ALTER TABLE volume_horaire ADD (
+  horaire   DATE
+  );
+
+ALTER TABLE volume_horaire_ref ADD (
+  horaire   DATE
+  );
+
+ALTER TABLE type_formation ADD (
+  service_statutaire   NUMBER(1) DEFAULT 1 NOT NULL
+  );
+
+ALTER TABLE fonction_referentiel ADD (
+  service_statutaire   NUMBER(1) DEFAULT 1 NOT NULL
+  );

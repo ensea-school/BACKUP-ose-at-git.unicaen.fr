@@ -3,6 +3,20 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
+#OSE 7.0 (en développement)
+
+## Corrections de bugs
+
+## Nouveautés
+
+* Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
+
+## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/07.0.sql`
+
+
 #OSE 6.3.2 (en développement)
 
 ## Corrections de bugs

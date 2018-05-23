@@ -36,6 +36,7 @@ class ValidationReferentielProcessus extends AbstractProcessus
           LEFT JOIN tvr.validation  v
         WHERE
           tvr.typeVolumeHoraire = :typeVolumeHoraire
+          AND tvr.autoValidation = false
           AND tvr.intervenant = :intervenant
           ".($structure ? 'AND tvr.structure = :structure' : '')."
         ORDER BY
@@ -86,6 +87,7 @@ class ValidationReferentielProcessus extends AbstractProcessus
         WHERE
           tvr.typeVolumeHoraire = :typeVolumeHoraire
           AND tvr.intervenant = :intervenant
+          AND vh.autoValidation = false
           AND " . ($validation->getId() ? "tvr.validation = :validation" : "tvr.validation IS NULL AND tvr.structure = :structure") . "
         ";
 

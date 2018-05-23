@@ -60,6 +60,14 @@ ALTER TABLE volume_horaire_ref ADD (
   auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
   );
 
+ALTER TABLE tbl_validation_enseignement ADD (
+  auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
+  );
+
+ALTER TABLE tbl_validation_referentiel ADD (
+  auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
+  );
+
 ALTER TABLE volume_horaire ADD (
   horaire   DATE
   );
@@ -75,3 +83,4 @@ ALTER TABLE type_formation ADD (
 ALTER TABLE fonction_referentiel ADD (
   service_statutaire   NUMBER(1) DEFAULT 1 NOT NULL
   );
+

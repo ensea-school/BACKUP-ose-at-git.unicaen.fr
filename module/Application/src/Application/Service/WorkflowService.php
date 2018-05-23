@@ -317,8 +317,10 @@ class WorkflowService extends AbstractService
      * @param array                                        $tableauxBords
      * @param Intervenant|Intervenant[]|string $intervenant
      */
-    public function calculerTableauxBord($tableauxBords = [], $intervenant)
+    public function calculerTableauxBord($tableauxBords = [], $intervenant): array
     {
+        $errors = [];
+
         $deps = [
             'formule'                 => ['agrement', 'paiement'],
             'piece_jointe_demande'    => ['piece_jointe'],
@@ -364,14 +366,18 @@ class WorkflowService extends AbstractService
                     $params = 'INTERVENANT_ID IN (' . $intervenant . ')';
                 }
 
-                $this->getServiceTableauBord()->calculer(
-                    $dep,
-                    $params
-                );
+                try {
+                    $this->getServiceTableauBord()->calculer(
+                        $dep,
+                        $params
+                    );
+                }catch(\Exception $e ){
+                    $errors[$dep] = $e;
+                }
             }
         }
 
-        return $this;
+        return $errors;
     }
 
 

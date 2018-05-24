@@ -224,7 +224,7 @@ class VolumeHoraireReferentielListe
                 if ($etatVolumeHoraire->getOrdre() < $this->etatVolumeHoraire->getOrdre()) return false;
             }
         }
-        if (false !== $this->validation) {
+        if (false !== $this->validation && !$volumeHoraire->isAutoValidation()) {
             $validation = $volumeHoraire->getValidation();
             if (true === $this->validation) {
                 if ($validation->isEmpty()) {

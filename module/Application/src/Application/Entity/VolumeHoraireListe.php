@@ -299,7 +299,7 @@ class VolumeHoraireListe
 
     /**
      * Détermine si un volume horaire répond aux critères de la liste ou non
-     * 
+     *
      * @param VolumeHoraire $volumeHoraire
      * @return boolean
      */
@@ -359,7 +359,7 @@ class VolumeHoraireListe
                 if ($contrat !== $this->contrat) return false;
             }
         }
-        if (false !== $this->validation){
+        if (false !== $this->validation && !$volumeHoraire->isAutoValidation()){
             $validation = $volumeHoraire->getValidation();
             if (true === $this->validation){
                 if ($validation->isEmpty()) return false;
@@ -393,7 +393,7 @@ class VolumeHoraireListe
 
     /**
      * Retourne le nombre de volumes horaires concernés par la liste
-     * 
+     *
      * @return integer
      */
     public function count()
@@ -403,7 +403,7 @@ class VolumeHoraireListe
 
     /**
      * Détermine si la liste est vide ou non
-     * 
+     *
      * @return boolean
      */
     public function isEmpty()
@@ -412,7 +412,7 @@ class VolumeHoraireListe
     }
 
     /**
-     * 
+     *
      * @return Periode[]
      */
     public function getPeriodes()
@@ -429,7 +429,7 @@ class VolumeHoraireListe
 
     /**
      * Détermine si, dans la liste des heures, des périodes non autorisées sont présentes
-     * 
+     *
      * @return boolean
      */
     public function hasForbiddenPeriodes()

@@ -248,6 +248,8 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
      */
     public function hasValidation()
     {
+        if ($this->isAutoValidation()) return true;
+
         $validations = $this->getValidation();
         foreach ($validations as $validation) {
             /* @var $validation Validation */

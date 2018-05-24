@@ -11,6 +11,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
 
+* Possibilité de définir des volumes horaires enseignement et référentiel comme auto-validés.
+
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :

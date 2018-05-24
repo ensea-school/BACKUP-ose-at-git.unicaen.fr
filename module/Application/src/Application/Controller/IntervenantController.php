@@ -216,6 +216,7 @@ class IntervenantController extends AbstractController
                 }
                 try {
                     $this->getServiceValidation()->delete($validation);
+                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
@@ -226,6 +227,7 @@ class IntervenantController extends AbstractController
                 }
                 try {
                     $this->getServiceValidation()->save($validation);
+                    $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());

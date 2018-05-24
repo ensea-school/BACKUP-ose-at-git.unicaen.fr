@@ -20,6 +20,8 @@ les autres sont tout de même mis à jour.
 
 * Données personnelles : les statuts supprimés étaient toujours disponibles au choix.
 
+* Clôture des services réalisés : les tableaux de bord se mettent à jour automatiquement, ce qui n'était pas le cas avant.
+
 ## Nouveautés
 
 * Pièces justificatives : vous avez la possibilité de personnaliser les documents types à télécharger, y compris au moyen d'URLs.

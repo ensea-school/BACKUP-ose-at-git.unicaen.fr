@@ -94,7 +94,6 @@ return [
     'Application\Entity\Db\Interfaces\DepartementAwareInterface'                                         => __DIR__ . '/src/Application/Entity/Db/Interfaces/DepartementAwareInterface.php',
     'Application\Entity\Db\Interfaces\GroupeTypeFormationAwareInterface'                                 => __DIR__ . '/src/Application/Entity/Db/Interfaces/GroupeTypeFormationAwareInterface.php',
     'Application\Entity\Db\Interfaces\ElementModulateurAwareInterface'                                   => __DIR__ . '/src/Application/Entity/Db/Interfaces/ElementModulateurAwareInterface.php',
-    'Application\Entity\Db\Interfaces\FormuleServiceAwareInterface'                                      => __DIR__ . '/src/Application/Entity/Db/Interfaces/FormuleServiceAwareInterface.php',
     'Application\Entity\Db\Interfaces\VIndicDiffDossierAwareInterface'                                   => __DIR__ . '/src/Application/Entity/Db/Interfaces/VIndicDiffDossierAwareInterface.php',
     'Application\Entity\Db\Interfaces\TypePieceJointeAwareInterface'                                     => __DIR__ . '/src/Application/Entity/Db/Interfaces/TypePieceJointeAwareInterface.php',
     'Application\Entity\Db\Interfaces\AdresseIntervenantAwareInterface'                                  => __DIR__ . '/src/Application/Entity/Db/Interfaces/AdresseIntervenantAwareInterface.php',

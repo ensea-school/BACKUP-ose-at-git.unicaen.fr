@@ -127,7 +127,7 @@ class IntervenantController extends AbstractController
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
@@ -294,7 +294,7 @@ class IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
 
@@ -339,15 +339,16 @@ class IntervenantController extends AbstractController
 
             if (!isset($data['referentiel'][$referentiel->getStructure()->getId()])) {
                 $data['referentiel'][$referentiel->getStructure()->getId()] = [
-                    'structure'  => $referentiel->getStructure(),
-                    'heures'     => 0,
-                    'hetd'       => 0,
-                    'hetd-compl' => 0,
+                    'structure'          => $referentiel->getStructure(),
+                    'heures'             => 0,
+                    'hetd'               => 0,
+                    'hetd-compl'         => 0,
+                    'service-statutaire' => $referentiel->isServiceStatutaire(),
                 ];
             }
-            $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures($typeVolumeHoraire, $etatVolumeHoraire);
-            $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr ? $frr->getHeuresServiceReferentiel() : 0;
+            $data['referentiel'][$referentiel->getStructure()->getId()]['heures']     += $referentiel->getHeures($typeVolumeHoraire, $etatVolumeHoraire);
+            $frr                                                                      = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd']       += $frr ? $frr->getHeuresServiceReferentiel() : 0;
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
         }
 
@@ -372,8 +373,8 @@ class IntervenantController extends AbstractController
                     ];
                 }
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
-                $hetd = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getTotal();
-                $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd'] += $hetd;
+                $hetd                                                              = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getTotal();
+                $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd']   += $hetd;
             }
 
             if ($totalHeures > 0) {
@@ -386,6 +387,7 @@ class IntervenantController extends AbstractController
                     'taux'                      => [],
                     'structure'                 => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique()->getStructure() : $service->getService()->getIntervenant()->getStructure(),
                     'ponderation-service-compl' => $service->getPonderationServiceCompl(),
+                    'service-statutaire'        => $service->isServiceStatutaire(),
                     'heures'                    => [],
                     'hetd'                      => [
                         'total' => 0,
@@ -475,30 +477,30 @@ class IntervenantController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
-        if ($intervenant){
+        if ($intervenant) {
             $data = $this->getProcessusIntervenant()->getSuppressionData($intervenant);
-        }else{
+        } else {
             $data = null;
         }
 
 
         $ids = $this->params()->fromPost('ids');
 
-        if ($ids){
+        if ($ids) {
             try {
                 if ($data) $data = $this->getProcessusIntervenant()->deleteRecursive($data, $ids);
-                if ($intervenant){
+                if ($intervenant) {
                     $this->getServiceWorkflow()->calculerTableauxBord(null, $intervenant);
                 }
-                if (!$data){
+                if (!$data) {
                     $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');
-                }else{
+                } else {
                     $this->flashMessenger()->addSuccessMessage('Données bien supprimées');
                 }
-            }catch(\Exception $e ){
+            } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
             }
-        }else{
+        } else {
             $this->flashMessenger()->addWarningMessage(
                 'Attention : La suppression d\'une fiche entraine la suppression de toutes les données associées pour l\'année en cours'
             );

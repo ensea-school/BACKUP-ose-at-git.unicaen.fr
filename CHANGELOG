@@ -13,6 +13,10 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Possibilité de définir des volumes horaires enseignement et référentiel comme auto-validés.
 
+* Possibilité de déterminer si les heures de service pour un type de formation donné peuvent être comptées dans le service statutaire ou non. 
+
+* Possibilité de déterminer si les heures pour une fonction référentielle donnée peuvent être comptées dans le service statutaire ou non.
+
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :

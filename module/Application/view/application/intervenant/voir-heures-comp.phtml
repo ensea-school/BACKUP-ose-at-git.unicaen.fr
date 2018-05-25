@@ -81,6 +81,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
 <tr>
     <th rowspan="4">Elément ou établissement</th>
     <th colspan="<?= count($data['th-taux']) ?>">Taux</th>
+    <th rowspan="4"><abbr title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut dans serv.</abbr></th>
     <?php if ($data['has-ponderation-service-compl']): ?>
     <th rowspan="4">Majoration FC</th>
     <?php endif; ?>
@@ -136,8 +137,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
             <?php endif; ?>
         </td>
         <?php endforeach; ?>
-
-
+        <td><?= $ls['service-statutaire'] ? 'Oui' : 'Non' ?></td>
         <?php if ($data['has-ponderation-service-compl']): ?>
             <td class="nombre">
                 <?= \UnicaenApp\Util::formattedNumber($ls['ponderation-service-compl'])?>
@@ -179,6 +179,7 @@ Aucun service.
         <th>Heures réelles</th>
         <th><abbr title="Heures Equivalent TD dans le service">HETD service</abbr></th>
         <th><abbr title="Heures Equivalent TD au-delà du service">HETD compl.</abbr></th>
+        <th><abbr title="Détermine si les heures peuvent être comptées dans le service statutaire de l'intervenant ou non">Peut dans serv.</abbr></th>
     </tr>
     <?php foreach( $data['referentiel'] as $ref ): ?>
     <tr>
@@ -186,6 +187,7 @@ Aucun service.
         <td class="nombre"><?= \UnicaenApp\Util::formattedNumber($ref['heures']) ?></td>
         <td class="nombre"><?= \UnicaenApp\Util::formattedNumber($ref['hetd']) ?></td>
         <td class="nombre"><?= \UnicaenApp\Util::formattedNumber($ref['hetd-compl']) ?></td>
+        <td><?= $ref['service-statutaire'] ? 'Oui' : 'Non' ?></td>
     </tr>
     <?php endforeach; ?>
 </table>

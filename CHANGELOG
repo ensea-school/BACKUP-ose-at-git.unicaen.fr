@@ -25,6 +25,8 @@ les autres sont tout de même mis à jour.
 * Lors de la déconnexion, lorsqu'on est cassifié, l'application met complètement fin à la session de 
 l'utilisateur, ce qui n'était pas le cas avant où on pouvais se reconnecter sans avoir à se ré-authentifier.
 
+* Correction de bug faisant planter la saisie d'un nouveau service depuis la page "Enseignements".
+
 ## Nouveautés
 
 * Pièces justificatives : vous avez la possibilité de personnaliser les documents types à télécharger, y compris au moyen d'URLs.

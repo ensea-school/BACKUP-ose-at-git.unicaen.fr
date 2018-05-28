@@ -183,6 +183,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface,
 
 
         $elementPedagogique = $this->getFieldsetOffreFormationElementPedagogiqueRecherche();
+        $elementPedagogique->setElementId('element-recherche');
         $elementPedagogique->setName('element-pedagogique');
         $elementPedagogique->setLabel('Enseignement :');
         $elementPedagogique->setNiveauEnabled(false);

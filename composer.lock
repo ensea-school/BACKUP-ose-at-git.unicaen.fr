@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ea2e25194307cc6302aa1e9a62a2e59",
+    "content-hash": "c90c54e542aaf13d31999f1a5963343b",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1500,11 +1500,11 @@
         },
         {
             "name": "unicaen/auth",
-            "version": "1.2.9",
+            "version": "1.2.11",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "345436e28c3543f5adb8a3133cb4f84da8df5683"
+                "reference": "009c34b26406a459480fca2945b5e0c2aba6cd27"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1526,7 +1526,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2018-05-28T13:19:03+00:00"
+            "time": "2018-05-30T14:25:48+00:00"
         },
         {
             "name": "unicaen/code",

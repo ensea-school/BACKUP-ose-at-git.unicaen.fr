@@ -495,9 +495,9 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     /**
      * @param \DateTime $horaire
      *
-     * @return VolumeHoraireReferentiel
+     * @return VolumeHoraire
      */
-    public function setHoraire($horaire): VolumeHoraireReferentiel
+    public function setHoraire($horaire): VolumeHoraire
     {
         $this->horaire = $horaire;
 

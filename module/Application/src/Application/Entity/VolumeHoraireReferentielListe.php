@@ -392,6 +392,11 @@ class VolumeHoraireReferentielListe
 
         $vhl = new VolumeHoraireReferentielListe($this->getService());
         /* Initialisation */
+        if ($this->horaire instanceof \DateTime){
+            $vhl->setHoraire($this->horaire);
+        }else{
+            $vhl->setHoraire(null);
+        }
         if ($this->typeVolumeHoraire instanceof TypeVolumeHoraire) {
             $vhl->setTypeVolumeHoraire($this->typeVolumeHoraire);
         } else {
@@ -409,6 +414,7 @@ class VolumeHoraireReferentielListe
             $volumeHoraire = new VolumeHoraireReferentiel();
             $volumeHoraire->setServiceReferentiel($vhl->getService());
             $volumeHoraire->setTypeVolumeHoraire($vhl->getTypeVolumeHoraire());
+            $volumeHoraire->setHoraire($vhl->getHoraire());
             $volumeHoraire->setHeures($saisieHeures);
             $this->getService()->addVolumeHoraireReferentiel($volumeHoraire);
         } else {

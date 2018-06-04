@@ -582,6 +582,11 @@ class VolumeHoraireListe
 
         $vhl = new VolumeHoraireListe( $this->getService() );
         /* Initialisation */
+        if ($this->horaire instanceof \DateTime){
+            $vhl->setHoraire($this->horaire);
+        }else{
+            $vhl->setHoraire(null);
+        }
         if ($this->typeVolumeHoraire instanceof TypeVolumeHoraire){
             $vhl->setTypeVolumeHoraire($this->typeVolumeHoraire);
         }else{
@@ -623,6 +628,7 @@ class VolumeHoraireListe
             $volumeHoraire->setPeriode( $vhl->getPeriode() );
             $volumeHoraire->setTypeIntervention( $vhl->getTypeIntervention() );
             $volumeHoraire->setMotifNonPaiement( false === $motifNonPaiement ? null : $motifNonPaiement ); // pas de motif de paiement par défaut
+            $volumeHoraire->setHoraire($vhl->getHoraire());
             $volumeHoraire->setHeures($newHeures);
             $this->getService()->addVolumeHoraire($volumeHoraire);
         }else{

@@ -39,6 +39,11 @@ class VolumeHoraireReferentielListe
     protected $validation = false;
 
     /**
+     * @var \DateTime|boolean
+     */
+    protected $horaire = false;
+
+    /**
      * @var bool
      */
     protected $filterByHistorique = true;
@@ -170,6 +175,30 @@ class VolumeHoraireReferentielListe
 
 
     /**
+     * @return bool|\DateTime
+     */
+    public function getHoraire()
+    {
+        return $this->horaire;
+    }
+
+
+
+    /**
+     * @param bool|\DateTime $horaire
+     *
+     * @return VolumeHoraireListe
+     */
+    public function setHoraire($horaire)
+    {
+        $this->horaire = $horaire;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return boolean
      */
     public function getFilterByHistorique()
@@ -240,8 +269,32 @@ class VolumeHoraireReferentielListe
                 }
             }
         }
+        if (false !== $this->horaire){
+            $horaire = $this->timestamp($volumeHoraire->getHoraire());
+            if (true === $this->horaire){
+                if (0 == $horaire) return false;
+            }else{
+                if ($horaire != $this->timestamp($this->horaire)) return false;
+            }
+        }
 
         return true;
+    }
+
+
+
+    /**
+     * @param DateTime|null $dateTime
+     *
+     * @return int
+     */
+    private function timestamp($dateTime): int
+    {
+        if ($dateTime instanceof \DateTime){
+            return $dateTime->getTimestamp();
+        }else{
+            return 0;
+        }
     }
 
 

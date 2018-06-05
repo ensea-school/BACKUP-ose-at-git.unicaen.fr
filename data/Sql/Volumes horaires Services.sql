@@ -9,9 +9,11 @@ select
   TVH.LIBELLE type_volume_horaire,
   p.libelle_long periode,
   TI.CODE type_intervention,
+  vh.horaire,
   vh.heures,
   vh.motif_non_paiement_id,
   vh.contrat_id,
+  src.code vh_source,
   vvh.validation_id,
   vh.histo_destruction vh_histo,
   s.histo_destruction s_histo,
@@ -24,6 +26,7 @@ from
   JOIN type_volume_horaire tvh on tvh.id = vh.TYPE_VOLUME_HORAIRE_ID
   JOIN periode p on p.id = vh.periode_id
   JOIN type_intervention ti on ti.id = vh.type_intervention_id
+  JOIN source src ON src.id = vh.source_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
   LEFT JOIN structure str ON str.id = ep.structure_id
   LEFT JOIN VALIDATION_VOL_HORAIRE vvh on VVH.VOLUME_HORAIRE_ID = vh.id
@@ -31,7 +34,7 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.id=16783
+  AND i.id=35691
   --AND s.id = 84722
   --AND vh.histo_destruction IS NULL
   AND tvh.code = 'PREVU'
@@ -48,17 +51,17 @@ order by
   
 INSERT INTO VALIDATION_VOL_HORAIRE (VALIDATION_ID,VOLUME_HORAIRE_ID) VALUES ( 101723, 239374 );
 DELETE FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID in (239374,244921,244923);
-
+update volume_horaire set source_id = 181 WHERE ID IN (30216);
 SELECT COUNT(*) FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID = 187;
-DELETE FROM volume_horaire WHERE id IN (239374,244921,244923);
+DELETE FROM volume_horaire WHERE id IN (30218);
 update volume_horaire set heures = -6 where id=244923;
 update volume_horaire set histo_destruction = sysdate, histo_destructeur_id = 4 where id in (
 219902,
 233875
 );
+select * from source;
 
-
-
+update volume_horaire set auto_validation = 1 where id = 30202;
 
 select
   i.id i_id,

@@ -7,6 +7,7 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\EtatVolumeHoraire;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use RuntimeException;
 use LogicException;
 
@@ -17,6 +18,8 @@ use LogicException;
  */
 class VolumeHoraireReferentielListe
 {
+    use SourceServiceAwareTrait;
+
     /**
      * @var ServiceReferentiel|boolean
      */
@@ -42,6 +45,11 @@ class VolumeHoraireReferentielListe
      * @var \DateTime|boolean
      */
     protected $horaire = false;
+
+    /**
+     * @var Source|boolean
+     */
+    protected $source = false;
 
     /**
      * @var bool
@@ -199,6 +207,30 @@ class VolumeHoraireReferentielListe
 
 
     /**
+     * @return Source|bool
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+
+
+    /**
+     * @param Source|bool $source
+     *
+     * @return VolumeHoraireReferentielListe
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return boolean
      */
     public function getFilterByHistorique()
@@ -236,13 +268,9 @@ class VolumeHoraireReferentielListe
         if (false !== $this->typeVolumeHoraire) {
             $typeVolumeHoraire = $volumeHoraire->getTypeVolumeHoraire();
             if (true === $this->typeVolumeHoraire) {
-                if (null === $typeVolumeHoraire) {
-                    return false;
-                }
+                if (null === $typeVolumeHoraire) return false;
             } else {
-                if ($typeVolumeHoraire !== $this->typeVolumeHoraire) {
-                    return false;
-                }
+                if ($typeVolumeHoraire !== $this->typeVolumeHoraire) return false;
             }
         }
         if (false !== $this->etatVolumeHoraire) {
@@ -269,12 +297,20 @@ class VolumeHoraireReferentielListe
                 }
             }
         }
-        if (false !== $this->horaire){
+        if (false !== $this->horaire) {
             $horaire = $this->timestamp($volumeHoraire->getHoraire());
-            if (true === $this->horaire){
+            if (true === $this->horaire) {
                 if (0 == $horaire) return false;
-            }else{
+            } else {
                 if ($horaire != $this->timestamp($this->horaire)) return false;
+            }
+        }
+        if (false !== $this->source) {
+            $source = $volumeHoraire->getSource();
+            if (true === $this->source) {
+                if (null === $source) return false;
+            } else {
+                if ($source !== $this->source) return false;
             }
         }
 
@@ -290,9 +326,9 @@ class VolumeHoraireReferentielListe
      */
     private function timestamp($dateTime): int
     {
-        if ($dateTime instanceof \DateTime){
+        if ($dateTime instanceof \DateTime) {
             return $dateTime->getTimestamp();
-        }else{
+        } else {
             return 0;
         }
     }
@@ -353,6 +389,8 @@ class VolumeHoraireReferentielListe
         $volumeHoraireListe->setTypeVolumeHoraire($this->typeVolumeHoraire);
         $volumeHoraireListe->setEtatVolumeHoraire($this->etatVolumeHoraire);
         $volumeHoraireListe->setValidation($this->validation);
+        $volumeHoraireListe->setHoraire($this->horaire);
+        $volumeHoraireListe->setSource($this->source);
 
         return $volumeHoraireListe;
     }
@@ -392,9 +430,9 @@ class VolumeHoraireReferentielListe
 
         $vhl = new VolumeHoraireReferentielListe($this->getService());
         /* Initialisation */
-        if ($this->horaire instanceof \DateTime){
+        if ($this->horaire instanceof \DateTime) {
             $vhl->setHoraire($this->horaire);
-        }else{
+        } else {
             $vhl->setHoraire(null);
         }
         if ($this->typeVolumeHoraire instanceof TypeVolumeHoraire) {
@@ -406,6 +444,7 @@ class VolumeHoraireReferentielListe
         $lastHeures = $vhl->getHeures();
         $newHeures  = $heures - $lastHeures;
         $vhl->setValidation(null); // On travaille sur les non validés
+        $vhl->setSource($this->getServiceSource()->getOse()); // On ne modifie que la source OSE!!
         if ($vhl->isEmpty()) {
             if (0 == $newHeures) {
                 return $this;
@@ -420,19 +459,19 @@ class VolumeHoraireReferentielListe
         } else {
             $soldeHeures = $newHeures;
             foreach ($vhl->get() as $volumeHoraire) {
-                if ($soldeHeures < 0 && $volumeHoraire->getHeures() > 0){
-                    if ($volumeHoraire->getHeures() + $soldeHeures > 0){
+                if ($soldeHeures < 0 && $volumeHoraire->getHeures() > 0) {
+                    if ($volumeHoraire->getHeures() + $soldeHeures > 0) {
                         // on retranche sur ce volume horaire, qui restera positif quand même
                         $volumeHoraire->setHeures($volumeHoraire->getHeures() + $soldeHeures);
                         $soldeHeures = 0;
-                    }else{
+                    } else {
                         // on supprime le VH et les heures restant à supprimer le seront sur d'autres VH ou bien dans une autre passe
                         $soldeHeures += $volumeHoraire->getHeures();
                         $volumeHoraire->setRemove(true);
                     }
-                }elseif($soldeHeures > 0){
+                } elseif ($soldeHeures > 0) {
                     // on met toutes les heures en plus sur ce volume horaire ! !
-                    $volumeHoraire->setHeures( $volumeHoraire->getHeures() + $soldeHeures );
+                    $volumeHoraire->setHeures($volumeHoraire->getHeures() + $soldeHeures);
                     $soldeHeures = 0;
                 }
 

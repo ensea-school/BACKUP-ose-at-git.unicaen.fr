@@ -73,6 +73,32 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'type-modulateur-structure-saisie' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-modulateur-structure-saisie/:typeModulateur',
+                            'constraints' => [
+                                'typeModulateur' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'type-modulateur-structure-saisie',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'type-modulateur-structure-delete' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/type-modulateur-structure-delete/:typeModulateurStructure',
+                            'constraints' => [
+                                'typeModulateurStructure' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'type-modulateur-structure-delete',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -106,7 +132,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Modulateur',
-                    'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete'],
+                    'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete','type-modulateur-structure-saisie','type-modulateur-structure-delete'],
                     'privileges' => [Privileges::MODULATEUR_EDITION],
                 ],
             ],
@@ -143,6 +169,7 @@ return [
         'invokables' => [
             Form\Modulateur\ModulateurSaisieForm::class     => Form\Modulateur\ModulateurSaisieForm::class,
             Form\Modulateur\TypeModulateurSaisieForm::class => Form\Modulateur\TypeModulateurSaisieForm::class,
+            Form\Modulateur\TypeModulateurStructureSaisieForm::class => Form\Modulateur\TypeModulateurStructureSaisieForm::class,
         ],
     ],
 ];

@@ -6,6 +6,7 @@ use Application\Acl\Role;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
@@ -165,6 +166,16 @@ class ContextService extends AbstractService
     public function getModaliteServices(): string
     {
         return $this->getServiceParametres()->get('modalite_services');
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isModaliteServicesSemestriel(): bool
+    {
+        return $this->getModaliteServices() == Parametre::SERVICES_MODALITE_SEMESTRIEL;
     }
 
 

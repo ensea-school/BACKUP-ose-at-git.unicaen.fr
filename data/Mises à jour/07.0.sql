@@ -56,6 +56,7 @@ ALTER TABLE volume_horaire_ref ADD CONSTRAINT volume_horaire_ref_source_un UNIQU
 ALTER TABLE volume_horaire ADD (
   auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
   );
+
 ALTER TABLE volume_horaire_ref ADD (
   auto_validation   NUMBER(1) DEFAULT 0 NOT NULL
   );
@@ -84,3 +85,22 @@ ALTER TABLE fonction_referentiel ADD (
   service_statutaire   NUMBER(1) DEFAULT 1 NOT NULL
   );
 
+INSERT INTO parametre (
+  id,
+  nom,
+  valeur,
+  description,
+  histo_creation,
+  histo_createur_id,
+  histo_modification,
+  histo_modificateur_id
+) VALUES (
+  parametre_id_seq.nextval,
+  'modalite_services',
+  'semestriel',
+  'Modalité de gestion des services',
+  sysdate,
+  (select id from utilisateur where username='oseappli'),
+  sysdate,
+  (select id from utilisateur where username='oseappli')
+);

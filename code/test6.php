@@ -7,8 +7,9 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Constants;
+use Application\Service\ContextService;
 
-$n = new \DateTime();
+/** @var ContextService $cs */
+$cs = $sl->get(ContextService::class);
 
-var_dump($n->getTimestamp());
+var_dump($cs->getModaliteServices());

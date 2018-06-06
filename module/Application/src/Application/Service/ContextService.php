@@ -160,6 +160,16 @@ class ContextService extends AbstractService
 
 
     /**
+     * @return string
+     */
+    public function getModaliteServices(): string
+    {
+        return $this->getServiceParametres()->get('modalite_services');
+    }
+
+
+
+    /**
      *
      * @param Etablissement $etablissement
      * @param boolean             $updateParametres

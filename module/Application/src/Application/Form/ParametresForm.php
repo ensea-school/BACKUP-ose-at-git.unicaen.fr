@@ -2,6 +2,7 @@
 
 namespace Application\Form;
 
+use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
@@ -249,6 +250,21 @@ class ParametresForm extends AbstractForm
             'attributes' => [
                 'class' => 'selectpicker',
                 'data-live-search' => 'true',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'modalite_services',
+            'options'    => [
+                'value_options' => [
+                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                ],
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
                 'data-size' => 20,
             ],
         ]);

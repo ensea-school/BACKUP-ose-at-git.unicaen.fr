@@ -3,9 +3,8 @@ $versionFile = dirname(dirname(__DIR__)).'/VERSION';
 if (file_exists($versionFile)){
     $version = file_get_contents($versionFile);
 }else{
-    $version = 'inconnue';
+    $version = AppConfig::getEnv().' (pas de numéro)';
 }
-$dateVersion = '31/05/2018';
 
 return [
     'unicaen-app' => [
@@ -17,7 +16,7 @@ return [
             'nom'                    => "OSE",
             'desc'                   => "Organisation des Services d'Enseignement",
             'version'                => $version,
-            'date'                   => $dateVersion,
+            'date'                   => '31/05/2018',
             'contact'                => ['mail' => AppConfig::get('etablissement','contactAssistance')],
             'mentionsLegales'        => AppConfig::get('etablissement','mentionsLegales'),
             'informatiqueEtLibertes' => AppConfig::get('etablissement','informatiqueEtLibertes'),

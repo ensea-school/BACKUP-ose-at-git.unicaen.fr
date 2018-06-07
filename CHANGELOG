@@ -17,11 +17,21 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Possibilité de déterminer si les heures pour une fonction référentielle donnée peuvent être comptées dans le service statutaire ou non.
 
+* Possibilité d'importer des heures d'enseignement depuis ADE.
+
+* Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut).
+
+* La page "Contact" est maintenant personnalisable.
+
+
+
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/07.0.sql`
 
+* Ajoutez un paramètre "contact" dans votre fichier de configuration de l'application, rubrique "global"
+pour pouvoir définir le contenu de votre page "contact" 
 
 #OSE 6.3.2
 

@@ -249,8 +249,8 @@ return [
             'home' => [
                 'pages' => [
                     'service' => [
-                        'label'    => 'Enseignements',
-                        'title'    => "Résumé des enseignements",
+                        'label'    => 'Services',
+                        'title'    => "Visualisation et export des services",
                         'route'    => 'service/resume',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
                     ],

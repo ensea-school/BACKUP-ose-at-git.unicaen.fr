@@ -7,6 +7,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Corrections de bugs
 
+* La page "Contact" est maintenant personnalisable.
+
 ## Nouveautés
 
 * Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
@@ -20,8 +22,6 @@ author: Laurent Lécluse - DSI - Unicaen
 * Possibilité d'importer des heures d'enseignement depuis ADE.
 
 * Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut).
-
-* La page "Contact" est maintenant personnalisable.
 
 
 

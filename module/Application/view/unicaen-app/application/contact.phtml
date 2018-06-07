@@ -2,29 +2,6 @@
 
 <h1><?= $this->translate($title); ?></h1>
 
-<h3>Intervenants</h3>
-    Contactez votre composante ou bien écrivez à :
-    <?php
-    $contacts = ["assistance-ose@unicaen.fr"];
-    $title = $this->translate("Cliquez pour rédiger un mail à destination de la liste d'échanges dédiée à l'assistance");
-    $v = new \Zend\Validator\EmailAddress();
-    $callback = function($value) use ($v, $title) {
-        return $v->isValid($value) ? sprintf('<a href="mailto:%s" title="%s">%s</a>', $value, $title, $value) : $value;
-    };
-    $contacts = array_map($callback, $contacts);
-    ?>
-    <?= $this->htmlList($contacts, false, null, false) ?>
+<?php
 
-
-<h3>Gestionnaires</h3>
-    Postez un message sur la liste d'échanges des gestionnaires :
-    <?php
-    $contacts = ["ose@liste.unicaen.fr"];
-    $title = $this->translate("Cliquez pour rédiger un mail à destination de la liste d'échanges des gestionnaires");
-    $v = new \Zend\Validator\EmailAddress();
-    $callback = function($value) use ($v, $title) {
-        return $v->isValid($value) ? sprintf('<a href="mailto:%s" title="%s">%s</a>', $value, $title, $value) : $value;
-    };
-    $contacts = array_map($callback, $contacts);
-    ?>
-    <?= $this->htmlList($contacts, false, null, false) ?>
+echo AppConfig::get('global','contact');

@@ -300,8 +300,14 @@ class Liste extends AbstractViewHelper
     {
         $ligneView = $this->getView()->serviceLigne($this, $service);
 
-        $volumeHoraireListe = $this->getView()->volumeHoraireListe($service->getVolumeHoraireListe());
-        /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\Liste */
+        if ($this->getServiceContext()->isModaliteServicesSemestriel()){
+            $volumeHoraireListe = $this->getView()->volumeHoraireListe($service->getVolumeHoraireListe());
+            /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\Liste */
+        }else{
+            $volumeHoraireListe = $this->getView()->volumeHoraireListeCalendaire($service->getVolumeHoraireListe());
+            /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\ListeCalendaire */
+        }
+
 
         $attribs = [
             'id'       => 'service-' . $service->getId() . '-ligne',

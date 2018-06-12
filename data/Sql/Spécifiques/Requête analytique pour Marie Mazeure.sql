@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW V_EXP_HETD_CENTRE_COUT AS
+--CREATE OR REPLACE VIEW V_EXP_HETD_CENTRE_COUT AS
 WITH t AS (
   SELECT
     tvh.id                              type_volume_horaire_id,
@@ -49,7 +49,7 @@ WITH t AS (
     LEFT JOIN type_formation             tf ON tf.id = e.type_formation_id
     LEFT JOIN groupe_type_formation     gtf ON gtf.id = tf.groupe_id
     LEFT JOIN mise_en_paiement          mep ON mep.formule_res_service_id = frs.id
-                                           AND 1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
+                                           AND mep.histo_destruction is null
 
     LEFT JOIN centre_cout                cc ON cc.id = MEP.CENTRE_COUT_ID
 
@@ -109,7 +109,7 @@ WITH t AS (
     LEFT JOIN type_formation             tf ON tf.id = e.type_formation_id
     LEFT JOIN groupe_type_formation     gtf ON gtf.id = tf.groupe_id
     LEFT JOIN mise_en_paiement          mep ON mep.formule_res_service_id = frs.id
-                                           AND 1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
+                                           AND mep.histo_destruction is null
   ) t WHERE ordre = 1 AND total_hetd > 0
 )
 SELECT

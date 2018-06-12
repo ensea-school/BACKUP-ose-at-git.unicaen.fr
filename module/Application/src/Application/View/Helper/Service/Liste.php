@@ -246,11 +246,7 @@ class Liste extends AbstractViewHelper
             $out .= '</div>';
             $out .= '</div>';
         } elseif ($this->prevuToPrevu){
-            $iPrec = $this->getServiceIntervenant()->getPrecedent($this->prevuToPrevu);
-            $tvh = $this->getServiceTypeVolumeHoraire()->getPrevu();
-            $evh = $this->getServiceEtatVolumeHoraire()->getValide();
-            $hasHeures = $iPrec ? $this->getProcessusIntervenant()->hasHeuresEnseignement($iPrec, $tvh, $evh ) : false;
-            if ($hasHeures) {
+            if ($this->getProcessusIntervenant()->service()->canPrevuToPrevu($this->prevuToPrevu )) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',
                     'data-toggle' => 'modal',

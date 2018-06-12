@@ -29,11 +29,8 @@ use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
 
 
-class SuppressionDataProcessus
+class SuppressionProcessus
 {
-
-    private static $instance;
-
     use IntervenantAwareTrait;
     use DossierServiceAwareTrait;
     use ModificationServiceDuServiceAwareTrait;
@@ -61,26 +58,18 @@ class SuppressionDataProcessus
 
 
 
-    public static function run(Intervenant $intervenant)
+    public function getData(Intervenant $intervenant)
     {
-        if (!self::$instance) {
-            self::$instance = new self;
-        }
+        $this->setIntervenant($intervenant);
 
-        self::$instance->setIntervenant($intervenant);
-
-        return self::$instance->makeData();
+        return $this->makeData();
     }
 
 
 
-    public static function delete(IntervenantSuppressionData $isd, array $ids)
+    public function deleteRecursive(IntervenantSuppressionData $isd, array $ids)
     {
-        if (!self::$instance) {
-            self::$instance = new self;
-        }
-
-        return self::$instance->deleteData($isd, $ids);
+        return $this->deleteData($isd, $ids);
     }
 
 

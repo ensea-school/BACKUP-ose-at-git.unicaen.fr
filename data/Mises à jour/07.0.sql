@@ -104,3 +104,15 @@ INSERT INTO parametre (
   sysdate,
   (select id from utilisateur where username='oseappli')
 );
+
+INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
+SELECT
+  privilege_id_seq.nextval id,
+  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c ) CATEGORIE_ID,
+  t1.p CODE,
+  t1.l LIBELLE,
+  (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
+FROM (
+       SELECT 'enseignement' c, 'import-intervenant-previsionnel-agenda' p, 'Import service prévisionnel depuis agenda' l FROM dual
+       UNION ALL SELECT 'enseignement' c, 'import-intervenant-realise-agenda' p, 'Import service réalisé depuis agenda' l FROM dual
+     ) t1;

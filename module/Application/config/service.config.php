@@ -279,6 +279,14 @@ return [
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
+                /*[
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['import-agenda'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_IMPORT_INTERVENANT_PREVISIONNEL_AGENDA,
+                    ],
+                    'assertion'  => Assertion\ServiceAssertion::class,
+                ],*/
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],

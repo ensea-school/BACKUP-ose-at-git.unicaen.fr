@@ -2,14 +2,9 @@
 
 namespace Application\Processus;
 
-use Application\Entity\Db\EtatVolumeHoraire;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\TblService;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\IntervenantSuppressionData;
-use Application\Processus\Intervenant\SuppressionDataProcessus;
-use Application\Service\Traits\ContextServiceAwareTrait;
-use UnicaenApp\Util;
+use Application\Processus\Intervenant\RechercheProcessus;
+use Application\Processus\Intervenant\SuppressionProcessus;
+use Application\Processus\Intervenant\ServiceProcessus as IntervenantServiceProcessus;
 
 
 /**
@@ -19,151 +14,54 @@ use UnicaenApp\Util;
  */
 class IntervenantProcessus extends AbstractProcessus
 {
-    use ContextServiceAwareTrait;
-
-
 
     /**
-     * @param string  $critere
-     * @param integer $limit
-     *
-     * @return array
+     * @var RechercheProcessus
      */
-    public function rechercher($critere, $limit = 50)
-    {
-        if (strlen($critere) < 2) return [];
-
-        $anneeId = (int)$this->getServiceContext()->getAnnee()->getId();
-
-        $critere  = Util::reduce($critere);
-        $criteres = explode('_', $critere);
-
-        $sql     = '
-        WITH vrec AS (
-        SELECT
-          i.id,
-          i.source_code,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          intervenant i
-          JOIN structure s ON s.id = i.structure_id
-          JOIN civilite c ON c.id = i.civilite_id
-        WHERE
-          i.histo_destruction IS NULL
-          
-        UNION ALL
-        
-        SELECT
-          null id,
-          i.source_code,
-          i.nom_usuel,
-          i.nom_patronymique,
-          i.prenom,
-          i.date_naissance,
-          s.libelle_court structure,
-          c.libelle_long civilite,
-          i.critere_recherche critere,
-          i.annee_id
-        FROM
-          src_intervenant i
-          JOIN structure s ON s.id = i.structure_id
-          JOIN civilite c ON c.id = i.civilite_id
-        )
-        SELECT * FROM vrec WHERE 
-          rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
-        $sqlCri  = '';
-        $criCode = 0;
-
-        foreach ($criteres as $c) {
-            $cc = (int)$c;
-            if (0 === $cc) {
-                if ($sqlCri != '') $sqlCri .= ' AND ';
-                $sqlCri .= 'critere LIKE q\'[%' . $c . '%]\'';
-            } else {
-                $criCode = $cc;
-            }
-        }
-        $orc = [];
-        if ($sqlCri != '') {
-            $orc[] = '(' . $sqlCri . ')';
-        }
-        if ($criCode) {
-            $orc[] = 'source_code LIKE \'%' . $criCode . '%\'';
-        }
-        $orc = implode(' OR ', $orc);
-        $sql .= ' AND (' . $orc . ') ORDER BY nom_usuel, prenom';
-
-        $intervenants = [];
-
-        try {
-            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-            while ($r = $stmt->fetch()) {
-                $intervenants[$r['SOURCE_CODE']] = [
-                    'civilite'         => $r['CIVILITE'],
-                    'nom'              => $r['NOM_USUEL'],
-                    'prenom'           => $r['PRENOM'],
-                    'date-naissance'   => new \DateTime($r['DATE_NAISSANCE']),
-                    'structure'        => $r['STRUCTURE'],
-                    'numero-personnel' => $r['SOURCE_CODE'],
-                ];
-            }
-        }catch(\Exception $e){
-            // à traiter si la vue source intervenant n'existe pas!!
-        }
-
-        return $intervenants;
-    }
-
-
+    protected $recherche;
 
     /**
-     * @param Intervenant       $intervenant
-     * @param TypeVolumeHoraire $typeVolumehoraire
-     * @param EtatVolumeHoraire $etatVolumeHoraire
-     *
-     * @return boolean
+     * @var SuppressionProcessus
      */
-    public function hasHeuresEnseignement(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+    protected $suppression;
+
+    /**
+     * @var IntervenantServiceProcessus
+     */
+    protected $service;
+
+
+
+    public function recherche(): RechercheProcessus
     {
-        $heuresCol = $etatVolumeHoraire->isValide() ? 'valide' : 'nbvh';
+        if (!$this->recherche) {
+            $this->recherche = new RechercheProcessus;
+            $this->recherche->setEntityManager($this->getEntityManager());
+        }
 
-        $dql = "
-        SELECT
-          s        
-        FROM
-          " . TblService::class . " s
-        WHERE
-            s.intervenant = :intervenant
-            AND s.typeVolumeHoraire = :typeVolumeHoraire
-            AND s.$heuresCol > 0
-        ";
-
-        $query = $this->getEntityManager()->createQuery($dql)->setMaxResults(1);
-        $query->setParameters(compact('intervenant', 'typeVolumeHoraire'));
-
-        $s = $query->getResult();
-
-        return count($s) > 0;
+        return $this->recherche;
     }
 
 
 
-    public function getSuppressionData(Intervenant $intervenant)
+    public function suppression(): SuppressionProcessus
     {
-        return SuppressionDataProcessus::run($intervenant);
+        if (!$this->suppression) {
+            $this->suppression = new SuppressionProcessus;
+        }
+
+        return $this->suppression;
     }
 
 
 
-    public function deleteRecursive(IntervenantSuppressionData $isd, array $ids)
+    public function service(): IntervenantServiceProcessus
     {
-        return SuppressionDataProcessus::delete($isd, $ids);
+        if (!$this->service) {
+            $this->service = new IntervenantServiceProcessus;
+            $this->service->setEntityManager($this->getEntityManager());
+        }
+
+        return $this->service;
     }
 }

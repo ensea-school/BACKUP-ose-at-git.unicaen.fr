@@ -8,13 +8,7 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   'Plafonds'
 );
 
-INSERT INTO PRIVILEGE (
-  ID,
-  CATEGORIE_ID,
-  CODE,
-  LIBELLE,
-  ORDRE
-)
+INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
 SELECT 
   privilege_id_seq.nextval id,
   (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c ) CATEGORIE_ID,
@@ -23,27 +17,12 @@ SELECT
   (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
 FROM (
 
-            
-            SELECT 'import' c, 'sources-visualisation' p, 'Sources (visualisation)' l FROM dual
-            union SELECT 'import' c, 'sources-edition' p, 'Sources (édition)' l FROM dual
-      --UNION SELECT 'modulateur' c, 'edition' p, 'Édition' l FROM dual
-      --UNION SELECT 'chargens' c, 'formation-choix-edition' p, 'Édition des formations (choix liens)' l FROM dual
-/*      UNION SELECT 'chargens' c, 'seuil-etablissement-edition' p, 'Édition des seuil (établissement)' l FROM dual
+            SELECT 'enseignement' c, 'import-intervenant-previsionnel-agenda' p, 'Import service prévisionnel depuis agenda' l FROM dual
+            UNION ALL SELECT 'enseignement' c, 'import-intervenant-realise-agenda' p, 'Import service réalisé depuis agenda' l FROM dual
 
-      UNION SELECT 'chargens' c, 'seuil-composante-visualisation' p, 'Visualisation des seuils (composantes)' l FROM dual
-      UNION SELECT 'chargens' c, 'seuil-composante-edition' p, 'Édition des seuil (composantes)' l FROM dual
-
-      UNION SELECT 'chargens' c, 'scenario-visualisation' p, 'Visualisation des scénarios' l FROM dual
-      UNION SELECT 'chargens' c, 'scenario-duplication' p, 'Duplication de scénario' l FROM dual
-      UNION SELECT 'chargens' c, 'scenario-composante-edition' p, 'Édition des scénarios (composantes)' l FROM dual
-
-      UNION SELECT 'chargens' c, 'formation-visualisation' p, 'Visualisation des formations' l FROM dual
-      UNION SELECT 'chargens' c, 'formation-effectifs-edition' p, 'Édition des formations (effectifs)' l FROM dual
-      UNION SELECT 'chargens' c, 'formation-assiduite-edition' p, 'Édition des formations (assiduité)' l FROM dual
-      UNION SELECT 'chargens' c, 'formation-seuils-edition' p, 'Édition des formations (seuils)' l FROM dual*/
 ) t1;
 
-delete from privilege where id = 123;
+delete from privilege where code = 'import-intervenant-agenda';
 
 /* Liste... */
 select

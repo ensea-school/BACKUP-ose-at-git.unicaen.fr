@@ -89,7 +89,7 @@ class IntervenantController extends AbstractController
         ]);
 
         $critere      = $this->params()->fromPost('critere');
-        $intervenants = $this->getProcessusIntervenant()->rechercher($critere, 21);
+        $intervenants = $this->getProcessusIntervenant()->recherche()->rechercher($critere, 21);
 
         return compact('intervenants');
     }
@@ -478,7 +478,7 @@ class IntervenantController extends AbstractController
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
         if ($intervenant) {
-            $data = $this->getProcessusIntervenant()->getSuppressionData($intervenant);
+            $data = $this->getProcessusIntervenant()->suppression()->getData($intervenant);
         } else {
             $data = null;
         }
@@ -488,7 +488,7 @@ class IntervenantController extends AbstractController
 
         if ($ids) {
             try {
-                if ($data) $data = $this->getProcessusIntervenant()->deleteRecursive($data, $ids);
+                if ($data) $data = $this->getProcessusIntervenant()->suppression()->deleteRecursive($data, $ids);
                 if ($intervenant) {
                     $this->getServiceWorkflow()->calculerTableauxBord(null, $intervenant);
                 }

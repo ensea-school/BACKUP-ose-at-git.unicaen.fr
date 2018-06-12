@@ -375,6 +375,16 @@ class ServiceController extends AbstractController
 
 
 
+    public function importAgendaPrevisionnelAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getServiceService()->setPrevusFromAgenda($intervenant);
+
+        return new MessengerViewModel();
+    }
+
+
+
     public function constatationAction()
     {
         $this->initFilters();

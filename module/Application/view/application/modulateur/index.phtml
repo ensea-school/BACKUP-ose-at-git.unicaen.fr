@@ -74,10 +74,20 @@ foreach ($typeModulateurs as $tm) {
                         <?php foreach ($typeModulateurStructures
 
                         as $tms) {
-                        if ($tm->getId() == $tms->getTypeModulateur()->getId()) { ?>
-                        <div class="row">
-                            <?= '<div class="col-md-9">' . $tms->getStructure()->getLibelleCourt() ?>
-                            <?php if ($canEdit) { ?>
+                        if ($tm->getId() == $tms->getTypeModulateur()->getId()) {
+                        if (($tms->getAnneeDebut()) || ($tms->getAnneeFin())) {
+                            if (!$tms->getAnneeDebut()) {
+                                $infoBulle = ' à ' . $tms->getAnneeFin();
+                            } else {
+                                if (!$tms->getAnneeFin()) {
+                                    $infoBulle = ' de ' . $tms->getAnneeDebut();
+                                } else $infoBulle = ' de ' . $tms->getAnneeDebut() . ' à ' . $tms->getAnneeFin();
+                            }
+                        } else $infoBulle = ''; ?>
+                        <div class="row" <?php echo ($infoBulle?'title="'.$infoBulle.'">':'>') ?>
+                            <?= '<div class="col-md-12" >' . $tms->getStructure()->getLibelleCourt();
+                            echo ($infoBulle?'<sup>*</sup>':'');
+                            if ($canEdit) { ?>
                             <a class="pop-ajax"
                                href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
                                title="Supprimer le type de modulateur pour la structure"

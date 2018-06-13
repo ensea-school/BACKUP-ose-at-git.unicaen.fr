@@ -94,6 +94,7 @@ ALTER TABLE fonction_referentiel ADD (
   service_statutaire   NUMBER(1) DEFAULT 1 NOT NULL
   );
 
+
 INSERT INTO parametre (
   id,
   nom,
@@ -105,9 +106,69 @@ INSERT INTO parametre (
   histo_modificateur_id
 ) VALUES (
   parametre_id_seq.nextval,
-  'modalite_services',
+  'modalite_services_prev_ens',
   'semestriel',
-  'Modalité de gestion des services',
+  'Modalité de gestion des services (prévisionnel, enseignements)',
+  sysdate,
+  (select id from utilisateur where username='oseappli'),
+  sysdate,
+  (select id from utilisateur where username='oseappli')
+);
+
+INSERT INTO parametre (
+  id,
+  nom,
+  valeur,
+  description,
+  histo_creation,
+  histo_createur_id,
+  histo_modification,
+  histo_modificateur_id
+) VALUES (
+  parametre_id_seq.nextval,
+  'modalite_services_real_ref',
+  'semestriel',
+  'Modalité de gestion des services (réalisé, référentiel)',
+  sysdate,
+  (select id from utilisateur where username='oseappli'),
+  sysdate,
+  (select id from utilisateur where username='oseappli')
+);
+
+INSERT INTO parametre (
+  id,
+  nom,
+  valeur,
+  description,
+  histo_creation,
+  histo_createur_id,
+  histo_modification,
+  histo_modificateur_id
+) VALUES (
+  parametre_id_seq.nextval,
+  'modalite_services_prev_ref',
+  'semestriel',
+  'Modalité de gestion des services (prévisionnel, référentiel)',
+  sysdate,
+  (select id from utilisateur where username='oseappli'),
+  sysdate,
+  (select id from utilisateur where username='oseappli')
+);
+
+INSERT INTO parametre (
+  id,
+  nom,
+  valeur,
+  description,
+  histo_creation,
+  histo_createur_id,
+  histo_modification,
+  histo_modificateur_id
+) VALUES (
+  parametre_id_seq.nextval,
+  'modalite_services_real_ens',
+  'semestriel',
+  'Modalité de gestion des services (réalisé, enseignements)',
   sysdate,
   (select id from utilisateur where username='oseappli'),
   sysdate,

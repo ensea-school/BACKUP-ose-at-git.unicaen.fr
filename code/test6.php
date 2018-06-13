@@ -12,4 +12,3 @@ use Application\Service\ContextService;
 /** @var ContextService $cs */
 $cs = $sl->get(ContextService::class);
 
-var_dump($cs->getModaliteServices());

@@ -175,6 +175,26 @@ INSERT INTO parametre (
   (select id from utilisateur where username='oseappli')
 );
 
+INSERT INTO parametre (
+  id,
+  nom,
+  valeur,
+  description,
+  histo_creation,
+  histo_createur_id,
+  histo_modification,
+  histo_modificateur_id
+) VALUES (
+  parametre_id_seq.nextval,
+  'pays_france',
+  null,
+  'Pays "France"',
+  sysdate,
+  (select id from utilisateur where username='oseappli'),
+  sysdate,
+  (select id from utilisateur where username='oseappli')
+);
+
 INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
 SELECT
   privilege_id_seq.nextval id,

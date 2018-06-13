@@ -7,8 +7,10 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Service\ContextService;
+use Application\Service\PaysService;
 
-/** @var ContextService $cs */
-$cs = $sl->get(ContextService::class);
+/** @var PaysService $cs */
+$cs = $sl->get(PaysService::class);
+
+
 

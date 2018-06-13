@@ -31,6 +31,30 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
+            <h3 class="panel-title">Services et référentiel</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($form->get('modalite_services_prev_ens')); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($form->get('modalite_services_prev_ref')); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($form->get('modalite_services_real_ens')); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $this->formControlGroup($form->get('modalite_services_real_ref')); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
             <h3 class="panel-title">Contrat</h3>
         </div>
         <div class="panel-body">
@@ -164,10 +188,10 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('scenario_charges_services')); ?>
+                    <?= $this->formControlGroup($form->get('pays_france')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('modalite_services')); ?>
+                    <?= $this->formControlGroup($form->get('scenario_charges_services')); ?>
                 </div>
             </div>
         </div>

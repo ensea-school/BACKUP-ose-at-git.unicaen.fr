@@ -21,9 +21,9 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Possibilité d'importer des heures d'enseignement depuis ADE.
 
-* Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut).
+* Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut) selon qu'on soit en prévisionnel ou en réalisé.
 
-
+* Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
 
 ## Notes de mise à jour
 

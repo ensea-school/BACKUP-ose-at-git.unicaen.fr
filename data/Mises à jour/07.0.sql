@@ -70,12 +70,21 @@ ALTER TABLE tbl_validation_referentiel ADD (
   );
 
 ALTER TABLE volume_horaire ADD (
-  horaire   DATE
+  horaire_debut   DATE
+  );
+
+ALTER TABLE volume_horaire ADD (
+  horaire_fin   DATE
   );
 
 ALTER TABLE volume_horaire_ref ADD (
-  horaire   DATE
+  horaire_debut   DATE
   );
+
+ALTER TABLE volume_horaire_ref ADD (
+  horaire_fin   DATE
+  );
+
 
 ALTER TABLE type_formation ADD (
   service_statutaire   NUMBER(1) DEFAULT 1 NOT NULL

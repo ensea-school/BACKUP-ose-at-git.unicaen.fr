@@ -86,8 +86,12 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     /**
      * @var \DateTime
      */
-    protected $horaire;
+    protected $horaireDebut;
 
+    /**
+     * @var \DateTime
+     */
+    protected $horaireFin;
 
 
     /**
@@ -485,23 +489,44 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     /**
      * @return \DateTime
      */
-    public function getHoraire()
+    public function getHoraireDebut()
     {
-        return $this->horaire;
+        return $this->horaireDebut;
     }
 
 
 
     /**
-     * @param \DateTime $horaire
+     * @param \DateTime $horaireDebut
      *
      * @return VolumeHoraire
      */
-    public function setHoraire($horaire): VolumeHoraire
+    public function setHoraireDebut($horaireDebut): VolumeHoraire
     {
-        $this->horaire = $horaire;
+        $this->horaireDebut = $horaireDebut;
 
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getHoraireFin()
+    {
+        return $this->horaireFin;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaireFin
+     *
+     * @return VolumeHoraire
+     */
+    public function setHoraireFin($horaireFin): VolumeHoraire
+    {
+        $this->horaireFin = $horaireFin;
+
+        return $this;
+    }
 }

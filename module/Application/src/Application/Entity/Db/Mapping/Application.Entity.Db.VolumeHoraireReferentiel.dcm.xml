@@ -75,6 +75,7 @@
             </options>
         </field>
 
-        <field name="horaire" type="datetime" column="HORAIRE" nullable="true"/>
+        <field name="horaireDebut" type="datetime" column="HORAIRE_DEBUT" nullable="true"/>
+        <field name="horaireFin" type="datetime" column="HORAIRE_FIN" nullable="true"/>
     </entity>
 </doctrine-mapping>

@@ -70,8 +70,12 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     /**
      * @var \DateTime
      */
-    protected $horaire;
+    protected $horaireDebut;
 
+    /**
+     * @var \DateTime
+     */
+    protected $horaireFin;
 
 
     /**
@@ -350,23 +354,44 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     /**
      * @return \DateTime
      */
-    public function getHoraire()
+    public function getHoraireDebut()
     {
-        return $this->horaire;
+        return $this->horaireDebut;
     }
 
 
 
     /**
-     * @param \DateTime $horaire
+     * @param \DateTime $horaireDebut
      *
      * @return VolumeHoraireReferentiel
      */
-    public function setHoraire($horaire): VolumeHoraireReferentiel
+    public function setHoraireDebut($horaireDebut): VolumeHoraireReferentiel
     {
-        $this->horaire = $horaire;
+        $this->horaireDebut = $horaireDebut;
 
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getHoraireFin()
+    {
+        return $this->horaireFin;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaireFin
+     *
+     * @return VolumeHoraireReferentiel
+     */
+    public function setHoraireFin($horaireFin): VolumeHoraireReferentiel
+    {
+        $this->horaireFin = $horaireFin;
+
+        return $this;
+    }
 }

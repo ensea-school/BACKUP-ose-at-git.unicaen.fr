@@ -44,7 +44,12 @@ class VolumeHoraireReferentielListe
     /**
      * @var \DateTime|boolean
      */
-    protected $horaire = false;
+    protected $horaireDebut = false;
+
+    /**
+     * @var \DateTime|boolean
+     */
+    protected $horaireFin = false;
 
     /**
      * @var Source|boolean
@@ -185,21 +190,45 @@ class VolumeHoraireReferentielListe
     /**
      * @return bool|\DateTime
      */
-    public function getHoraire()
+    public function getHoraireDebut()
     {
-        return $this->horaire;
+        return $this->horaireDebut;
     }
 
 
 
     /**
-     * @param bool|\DateTime $horaire
+     * @param bool|\DateTime $horaireDebut
      *
-     * @return VolumeHoraireListe
+     * @return VolumeHoraireReferentielListe
      */
-    public function setHoraire($horaire)
+    public function setHoraireDebut($horaireDebut)
     {
-        $this->horaire = $horaire;
+        $this->horaireDebut = $horaireDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool|\DateTime
+     */
+    public function getHoraireFin()
+    {
+        return $this->horaireFin;
+    }
+
+
+
+    /**
+     * @param bool|\DateTime $horaireFin
+     *
+     * @return VolumeHoraireReferentielListe
+     */
+    public function setHoraireFin($horaireFin)
+    {
+        $this->horaireFin = $horaireFin;
 
         return $this;
     }
@@ -297,12 +326,20 @@ class VolumeHoraireReferentielListe
                 }
             }
         }
-        if (false !== $this->horaire) {
-            $horaire = $this->timestamp($volumeHoraire->getHoraire());
-            if (true === $this->horaire) {
-                if (0 == $horaire) return false;
+        if (false !== $this->horaireDebut) {
+            $horaireDebut = $this->timestamp($volumeHoraire->getHoraireDebut());
+            if (true === $this->horaireDebut) {
+                if (0 == $horaireDebut) return false;
             } else {
-                if ($horaire != $this->timestamp($this->horaire)) return false;
+                if ($horaireDebut != $this->timestamp($this->horaireDebut)) return false;
+            }
+        }
+        if (false !== $this->horaireFin) {
+            $horaireFin = $this->timestamp($volumeHoraire->getHoraireFin());
+            if (true === $this->horaireFin) {
+                if (0 == $horaireFin) return false;
+            } else {
+                if ($horaireFin != $this->timestamp($this->horaireFin)) return false;
             }
         }
         if (false !== $this->source) {
@@ -389,7 +426,8 @@ class VolumeHoraireReferentielListe
         $volumeHoraireListe->setTypeVolumeHoraire($this->typeVolumeHoraire);
         $volumeHoraireListe->setEtatVolumeHoraire($this->etatVolumeHoraire);
         $volumeHoraireListe->setValidation($this->validation);
-        $volumeHoraireListe->setHoraire($this->horaire);
+        $volumeHoraireListe->setHoraireDebut($this->horaireDebut);
+        $volumeHoraireListe->setHoraireFin($this->horaireFin);
         $volumeHoraireListe->setSource($this->source);
 
         return $volumeHoraireListe;
@@ -430,10 +468,15 @@ class VolumeHoraireReferentielListe
 
         $vhl = new VolumeHoraireReferentielListe($this->getService());
         /* Initialisation */
-        if ($this->horaire instanceof \DateTime) {
-            $vhl->setHoraire($this->horaire);
+        if ($this->horaireDebut instanceof \DateTime) {
+            $vhl->setHoraireDebut($this->horaireDebut);
         } else {
-            $vhl->setHoraire(null);
+            $vhl->setHoraireDebut(null);
+        }
+        if ($this->horaireFin instanceof \DateTime) {
+            $vhl->setHoraireFin($this->horaireFin);
+        } else {
+            $vhl->setHoraireFin(null);
         }
         if ($this->typeVolumeHoraire instanceof TypeVolumeHoraire) {
             $vhl->setTypeVolumeHoraire($this->typeVolumeHoraire);
@@ -453,7 +496,8 @@ class VolumeHoraireReferentielListe
             $volumeHoraire = new VolumeHoraireReferentiel();
             $volumeHoraire->setServiceReferentiel($vhl->getService());
             $volumeHoraire->setTypeVolumeHoraire($vhl->getTypeVolumeHoraire());
-            $volumeHoraire->setHoraire($vhl->getHoraire());
+            $volumeHoraire->setHoraireDebut($vhl->getHoraireDebut());
+            $volumeHoraire->setHoraireFin($vhl->getHoraireFin());
             $volumeHoraire->setHeures($saisieHeures);
             $this->getService()->addVolumeHoraireReferentiel($volumeHoraire);
         } else {
@@ -525,6 +569,12 @@ class VolumeHoraireReferentielListe
         }
         if ($this->getValidation() instanceof Validation) {
             $result['validation'] = $this->getValidation()->getId();
+        }
+        if ($this->getHoraireDebut() instanceof \DateTime) {
+            $result['horaire-debut'] = $this->getHoraireDebut();
+        }
+        if ($this->getHoraireFin() instanceof \DateTime) {
+            $result['horaire-fin'] = $this->getHoraireFin();
         }
 
         return $result;

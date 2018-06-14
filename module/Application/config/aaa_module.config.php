@@ -165,15 +165,6 @@ $config = [
             'cartridge'       => View\Helper\CartridgeViewHelper::class,
         ],
     ],
-    'translator'         => [
-        'translation_file_patterns' => [
-            [
-                'type'     => 'gettext',
-                'base_dir' => __DIR__ . '/../language',
-                'pattern'  => '%s.mo',
-            ],
-        ],
-    ],
     'controllers'        => [
         'invokables' => [
             'Application\Controller\Index'       => Controller\IndexController::class,

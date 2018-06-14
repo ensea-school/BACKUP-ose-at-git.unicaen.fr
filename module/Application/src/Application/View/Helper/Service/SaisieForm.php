@@ -2,7 +2,6 @@
 
 namespace Application\View\Helper\Service;
 
-use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -130,7 +129,7 @@ class SaisieForm extends AbstractViewHelper
 
     public function renderVolumesHoraires()
     {
-        if (!$this->getServiceContext()->isModaliteServicesSemestriel()){
+        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->form->getTypeVolumeHoraire())){
             return null;
         }
         $res = '';

@@ -343,6 +343,7 @@ class ServiceController extends AbstractController
         }
         $service       = $this->getServiceService();
         $form          = $this->getFormServiceSaisie();
+        $form->setTypeVolumeHoraire($typeVolumeHoraire);
         $element       = $this->context()->elementPedagogiqueFromPost('element');
         $etablissement = $this->context()->etablissementFromPost();
 
@@ -464,6 +465,7 @@ class ServiceController extends AbstractController
         }
         $service = $this->getServiceService();
         $form    = $this->getFormServiceSaisie();
+        $form->setTypeVolumeHoraire($typeVolumeHoraire);
 
         $intervenant = $this->getServiceLocalContext()->getIntervenant();
 

@@ -187,7 +187,7 @@ class ContextService extends AbstractService
      */
     public function isModaliteServicesSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
     {
-        return $this->getModaliteServices() == Parametre::SERVICES_MODALITE_SEMESTRIEL;
+        return $this->getModaliteServices($typeVolumeHoraire) == Parametre::SERVICES_MODALITE_SEMESTRIEL;
     }
 
 

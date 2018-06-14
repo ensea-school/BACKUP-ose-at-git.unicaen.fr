@@ -17,7 +17,7 @@ return [
             'desc'                   => "Organisation des Services d'Enseignement",
             'version'                => $version,
             'date'                   => '31/05/2018',
-            'contact'                => ['mail' => AppConfig::get('etablissement','contactAssistance')],
+            'contact'                => ['mail' => null],
             'mentionsLegales'        => AppConfig::get('etablissement','mentionsLegales'),
             'informatiqueEtLibertes' => AppConfig::get('etablissement','informatiqueEtLibertes'),
         ],

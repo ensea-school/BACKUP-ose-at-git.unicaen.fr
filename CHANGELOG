@@ -30,8 +30,10 @@ author: Laurent Lécluse - DSI - Unicaen
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/07.0.sql`
 
-* Ajoutez un paramètre "contact" dans votre fichier de configuration de l'application, rubrique "global"
-pour pouvoir définir le contenu de votre page "contact" 
+* Ajoutez un paramètre "contact" dans votre fichier de configuration de l'application, rubrique "etablissement"
+pour pouvoir définir le contenu de votre page "contact"
+
+* Idem si vous voulez personnaliser l'icône de l'application (paramètre icones dans etablissement du fichier de config).
 
 #OSE 6.3.2
 

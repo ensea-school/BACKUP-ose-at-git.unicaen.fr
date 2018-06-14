@@ -307,7 +307,7 @@ class WorkflowService extends AbstractService
             foreach( $errors as $tbl => $error){
                 $msg .= $tbl.' : '.$error."\n";
             }
-            throw new Exception($msg);
+            throw new \Exception($msg);
         }
     }
 

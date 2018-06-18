@@ -1188,7 +1188,7 @@ class ServiceService extends AbstractEntityService
             $data['intervenants'][$iid]['services'][$sid]['total']       += $total;
         }
 
-        $lim = 7000;
+        $lim = 10000;
 
         if ($count > $lim) {
             die('La génération du fichier est impossible : trop de données ( ' . $count . ' lignes pour ' . $lim . ' autorisées) sont remontées. Merci de placer un filtre (composante, type d\'intervenant, etc)');

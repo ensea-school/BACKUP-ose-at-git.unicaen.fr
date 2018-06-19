@@ -135,8 +135,8 @@ class ServiceController extends AbstractController
         }
 
         if (!$intervenant) {
-            $this->rechercheAction();
-            $recherche = $this->getServiceService()->loadRecherche();
+            $rr = $this->rechercheAction();
+            $recherche = $rr['rechercheForm']->getObject();
         } else {
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
@@ -171,8 +171,8 @@ class ServiceController extends AbstractController
 
         $this->initFilters();
         if (!$intervenant) {
-            $this->rechercheAction();
-            $recherche = $this->getServiceService()->loadRecherche();
+            $rr = $this->rechercheAction();
+            $recherche = $rr['rechercheForm']->getObject();
         } else {
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
@@ -341,8 +341,8 @@ class ServiceController extends AbstractController
         } else {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
-        $service       = $this->getServiceService();
-        $form          = $this->getFormServiceSaisie();
+        $service = $this->getServiceService();
+        $form    = $this->getFormServiceSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
         $element       = $this->context()->elementPedagogiqueFromPost('element');
         $etablissement = $this->context()->etablissementFromPost();
@@ -458,16 +458,17 @@ class ServiceController extends AbstractController
         $this->initFilters();
         $id                = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
+        $intervenant = $this->context()->intervenantFromQuery('intervenant', $this->getServiceIntervenant()->get($this->params()->fromPost('intervenant-id')));
         if (empty($typeVolumeHoraire)) {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         } else {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get($typeVolumeHoraire);
         }
+
+
         $service = $this->getServiceService();
         $form    = $this->getFormServiceSaisie();
         $form->setTypeVolumeHoraire($typeVolumeHoraire);
-
-        $intervenant = $this->getServiceLocalContext()->getIntervenant();
 
         if ($id) {
             $entity = $service->get($id);
@@ -483,33 +484,30 @@ class ServiceController extends AbstractController
             $title = "Ajout d'enseignement";
         }
 
-        if ($intervenant) {
-            $form->get('service')->setCanSaisieExterieur($this->isAllowed($intervenant, Privileges::ENSEIGNEMENT_EXTERIEUR));
-        } else {
-            $form->get('service')->setCanSaisieExterieur($this->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXTERIEUR)));
-        }
+        $form->get('service')->setIntervenant($intervenant);
+        $form->get('service')->removeUnusedElements();
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            if (!$this->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
-                $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
-            } else {
-                $form->setData($request->getPost());
-                $form->saveToContext();
-                if ($form->isValid()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                if (!$this->isAllowed($entity, Privileges::ENSEIGNEMENT_EDITION)) {
+                    $this->flashMessenger()->addErrorMessage("Vous n'êtes pas autorisé à créer ou modifier ce service.");
+                } else {
+                    $form->saveToContext();
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
-                        $entity = $service->save($entity->setIntervenant($intervenant));
-                        $this->updateTableauxBord($intervenant);
+                        $entity = $service->save($entity);
+                        $this->updateTableauxBord($entity->getIntervenant());
                         $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                     } catch (\Exception $e) {
                         $e = DbException::translate($e);
                         $this->flashMessenger()->addErrorMessage($e->getMessage());
                     }
-                    $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
-                } else {
-                    $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
+                    $this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire);
                 }
+            } else {
+                $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }
         }
 

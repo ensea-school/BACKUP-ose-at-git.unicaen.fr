@@ -9,6 +9,10 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * La page "Contact" est maintenant personnalisable.
 
+* Le bug empêchant de saisir de nouveaux services depuis la page "Services" est résolu.
+
+* Les filtres portant sur l'export des services (CSV et PDF) refonctionnent.
+
 ## Nouveautés
 
 * Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)

@@ -1109,6 +1109,8 @@ class ServiceService extends AbstractEntityService
         if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(es.structure_aff_id = -1 OR es.structure_aff_id = ' . $c8->getId() . ')';
         if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(es.structure_ens_id = -1 OR es.structure_ens_id = ' . $c9->getId() . ')';
 
+        if ($c10 = $this->getServiceContext()->getStructure()) $conditions['structure_context_id'] = '(es.structure_ens_id = -1 OR es.structure_ens_id = ' . $c10->getId() . ' OR es.structure_aff_id = -1 OR es.structure_aff_id = ' . $c10->getId() . ')';
+
         $sql   = '
           SELECT 
             es.*, 

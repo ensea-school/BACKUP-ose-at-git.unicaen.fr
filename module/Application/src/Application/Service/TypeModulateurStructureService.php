@@ -10,7 +10,8 @@ use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
  */
 class TypeModulateurStructureService extends AbstractEntityService
 {
-use TypeModulateurStructureServiceAwareTrait;
+    use TypeModulateurStructureServiceAwareTrait;
+
     /**
      * Liste des types de modulateur par structure
      *
@@ -43,10 +44,26 @@ use TypeModulateurStructureServiceAwareTrait;
         return 'tmd';
     }
 
-    public function existe(TypeModulateurStructure $tms){
-    /* @var $tbltms typeModulateurStructure[] */
-    /* @var $elt typeModulateurStructure */
-    $dql = "
+
+
+    public function existe(TypeModulateurStructure $tms)
+    {
+        /* @var $tbltms typeModulateurStructure[] */
+        /* @var $elt typeModulateurStructure */
+        if (!$tms->getId()) {
+            $dql = "
+        SELECT
+          m
+        FROM
+          Application\Entity\Db\TypeModulateurStructure m
+        WHERE
+        m.histoDestruction IS NULL
+        AND m.typeModulateur = :typemodulateur
+        AND m.structure = :structure";
+
+            $query = $this->getEntityManager()->createQuery($dql);
+        } else {
+            $dql = "
         SELECT
           m
         FROM
@@ -57,21 +74,25 @@ use TypeModulateurStructureServiceAwareTrait;
         AND m.typeModulateur = :typemodulateur
         AND m.structure = :structure";
 
-    $query = $this->getEntityManager()->createQuery($dql);
-    $query->setParameter('id',$tms->getId());
-    $query->setParameter('typemodulateur',$tms->getTypeModulateur());
-    $query->setParameter('structure',$tms->getStructure());
-    $tbltms = $query->getResult();
-    // recherche de doublon
-    $ok = true;
-    foreach ($tbltms as $elt) {
-        if (((!$elt->getAnneeDebut()) or ($elt->getAnneeDebut()->getId() <= $tms->getAnneeFin()->getId())) and ((!$elt->getAnneeFin())
-                or ($elt->getAnneeFin()->getId() >= $tms->getAnneeDebut()->getId()))) {
-            $ok = false;
+            $query = $this->getEntityManager()->createQuery($dql);
+            $query->setParameter('id', $tms->getId());
         }
+        $query->setParameter('typemodulateur', $tms->getTypeModulateur());
+        $query->setParameter('structure', $tms->getStructure());
+        $tbltms = $query->getResult();
+        // recherche de doublon
+        $ok  = true;
+        foreach ($tbltms as $elt) {
+            if (((!$elt->getAnneeDebut()) or (!$tms->getAnneeFin()) or ($elt->getAnneeDebut()->getId() <= $tms->getAnneeFin()->getId())) and ((!$elt->getAnneeFin())
+                    or (!$tms->getAnneeDebut()) or ($elt->getAnneeFin()->getId() >= $tms->getAnneeDebut()->getId()))) {
+                $ok = false;
+            }
+        }
+
+        return $ok;
     }
-    return $ok;
-}
+
+
 
     /**
      * @param TypeModulateurStructure $entity

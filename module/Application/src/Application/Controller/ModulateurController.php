@@ -150,11 +150,16 @@ class modulateurController extends AbstractController
         /* @var $typeModulateurStructure typeModulateurStructure */
         /* @var $typeModulateur typeModulateur */
         $typeModulateur = $this->getEvent()->getParam('typeModulateur');
+        $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
 
         $form                    = $this->getFormTypeModulateurStructureSaisie();
-        $title                   = 'Création d\'un nouveau Type de Modulateur de Structure';
-        $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity()
-            ->setTypeModulateur($typeModulateur);
+        if (empty($typeModulateurStructure)) {
+            $title                   = 'Ajout d\'une structure pour le type de modulateur';
+            $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity()
+                ->setTypeModulateur($typeModulateur);
+        } else {
+            $title = 'Édition d\'une sructure pour le type de modulateur';
+        }
 
         $form->bindRequestSave($typeModulateurStructure, $this->getRequest(), function (typeModulateurStructure $tms) {
             try{

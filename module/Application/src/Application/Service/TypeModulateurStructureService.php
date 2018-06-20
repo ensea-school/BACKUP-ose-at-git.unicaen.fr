@@ -53,10 +53,12 @@ use TypeModulateurStructureServiceAwareTrait;
           Application\Entity\Db\TypeModulateurStructure m
         WHERE
         m.histoDestruction IS NULL
+        AND m.id != :id
         AND m.typeModulateur = :typemodulateur
         AND m.structure = :structure";
 
     $query = $this->getEntityManager()->createQuery($dql);
+    $query->setParameter('id',$tms->getId());
     $query->setParameter('typemodulateur',$tms->getTypeModulateur());
     $query->setParameter('structure',$tms->getStructure());
     $tbltms = $query->getResult();

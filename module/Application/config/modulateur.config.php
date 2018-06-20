@@ -76,9 +76,10 @@ return [
                     'type-modulateur-structure-saisie' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/type-modulateur-structure-saisie/:typeModulateur',
+                            'route'       => '/type-modulateur-structure-saisie/:typeModulateur[/:typeModulateurStructure]',
                             'constraints' => [
                                 'typeModulateur' => '[0-9]*',
+                                'typeModulateurStructure' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'type-modulateur-structure-saisie',

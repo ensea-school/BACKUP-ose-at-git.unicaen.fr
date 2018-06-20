@@ -42,6 +42,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
           LEFT JOIN tve.validation  v
         WHERE
           tve.typeVolumeHoraire = :typeVolumeHoraire
+          AND tve.autoValidation = false
           AND tve.intervenant = :intervenant
           " . ($structure ? 'AND tve.structure = :structure' : '') . "
         ORDER BY
@@ -91,6 +92,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
           LEFT JOIN tve.validation  v
         WHERE
           tve.typeVolumeHoraire = :typeVolumeHoraire
+          AND vh.autoValidation = false
           AND tve.intervenant = :intervenant
           AND " . ($validation->getId() ? "tve.validation = :validation" : "tve.validation IS NULL AND tve.structure = :structure") . "
         ";

@@ -129,6 +129,9 @@ class SaisieForm extends AbstractViewHelper
 
     public function renderVolumesHoraires()
     {
+        if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->form->getTypeVolumeHoraire())){
+            return null;
+        }
         $res = '';
         foreach ($this->getPeriodes() as $periode) {
             $res .= '<div class="periode" id="' . $periode->getCode() . '">';

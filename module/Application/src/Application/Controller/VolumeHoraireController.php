@@ -29,100 +29,106 @@ class VolumeHoraireController extends AbstractController
     use WorkflowServiceAwareTrait;
     use PlafondProcessusAwareTrait;
 
+
+
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\VolumeHoraire::class
+            \Application\Entity\Db\VolumeHoraire::class,
         ]);
         $service = $this->getEvent()->getParam('service');
-        /* @var $service Service  */
-        if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
+        /* @var $service Service */
+        if (!$service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
 
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
-        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
+        $readOnly = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
-        $volumeHoraireListe = $service->getVolumeHoraireListe()->setTypeVolumehoraire( $typeVolumeHoraire );
-        return compact('volumeHoraireListe', 'readOnly');
+        $volumeHoraireListe = $service->getVolumeHoraireListe()->setTypeVolumehoraire($typeVolumeHoraire);
+        $semestriel         = $this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire);
+
+        return compact('volumeHoraireListe', 'readOnly', 'semestriel');
     }
+
+
 
     public function saisieAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             \Application\Entity\Db\VolumeHoraire::class,
-            \Application\Entity\Db\MotifNonPaiement::class
+            \Application\Entity\Db\MotifNonPaiement::class,
         ]);
 
-        $service            = $this->context()->serviceFromRoute();
-        $typeVolumehoraire  = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
-        $periode            = $this->context()->periodeFromQueryPost();
-        $typeIntervention   = $this->context()->typeInterventionFromQueryPost('type-intervention');
-        $errors = [];
+        $service           = $this->context()->serviceFromRoute();
+        $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
+        $periode           = $this->context()->periodeFromQueryPost();
+        $typeIntervention  = $this->context()->typeInterventionFromQueryPost('type-intervention');
+        $errors            = [];
 
 
         $canViewMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
         $canEditMNP = $this->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
 
 
-        if ($canViewMNP){
+        if ($canViewMNP) {
             $tousMotifsNonPaiement = $this->params()->fromQuery('tous-motifs-non-paiement');
-            if ($tousMotifsNonPaiement == '1'){
-                $motifNonPaiement   = false;
-            }else{
-                $motifNonPaiement   = $this->context()->motifNonPaiementFromQueryPost('motif-non-paiement');
+            if ($tousMotifsNonPaiement == '1') {
+                $motifNonPaiement = false;
+            } else {
+                $motifNonPaiement = $this->context()->motifNonPaiementFromQueryPost('motif-non-paiement');
             }
             $ancienMotifNonPaiement = $this->context()->motifNonPaiementFromQueryPost('ancien-motif-non-paiement', $motifNonPaiement);
-        }else{
-            $motifNonPaiement   = false;
+        } else {
+            $motifNonPaiement       = false;
             $ancienMotifNonPaiement = false;
         }
 
 
-
         /* @var $service \Application\Entity\Db\Service */
-        $service->setTypeVolumeHoraire( $typeVolumehoraire );
+        $service->setTypeVolumeHoraire($typeVolumehoraire);
         $volumeHoraireList = $service->getVolumeHoraireListe($periode, $typeIntervention);
         $volumeHoraireList->setMotifNonPaiement($motifNonPaiement);
 
         $form = $this->getFormVolumeHoraireSaisie();
-        $form->setViewMNP( $canViewMNP );
-        $form->setEditMNP( $canEditMNP );
+        $form->setViewMNP($canViewMNP);
+        $form->setEditMNP($canEditMNP);
 
         $request = $this->getRequest();
-        if ($request->isPost()){
+        if ($request->isPost()) {
             $heures = StringFromFloat::run($request->getPost()['heures']);
-            try{
+            try {
                 $volumeHoraireList->setHeures($heures, $motifNonPaiement, $ancienMotifNonPaiement);
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
-        $form->bind( $volumeHoraireList );
-        if ($request->isPost()){
-            if ($form->isValid()){
-                try{
+        $form->bind($volumeHoraireList);
+        if ($request->isPost()) {
+            if ($form->isValid()) {
+                try {
                     $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceService()->save($service);
                     $this->updateTableauxBord($service->getIntervenant());
                     $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumehoraire);
-                }catch(\Exception $e){
-                    $e = DbException::translate($e);
+                } catch (\Exception $e) {
+                    $e        = DbException::translate($e);
                     $errors[] = $e->getMessage();
                 }
-            }else{
+            } else {
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
 
-        $terminal = $this->getRequest()->isXmlHttpRequest();
+        $terminal  = $this->getRequest()->isXmlHttpRequest();
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
-                ->setTemplate('application/volume-horaire/saisie')
-                ->setVariables(compact('form', 'errors', 'ancienMotifNonPaiement'));
+            ->setTemplate('application/volume-horaire/saisie')
+            ->setVariables(compact('form', 'errors', 'ancienMotifNonPaiement'));
         if ($terminal) {
             return $this->popoverInnerViewModel($viewModel, "Saisie d'heures d'enseignement", false);
         }
+
         return $viewModel;
     }
 
@@ -131,7 +137,7 @@ class VolumeHoraireController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
-            'formule','validation_enseignement','service','service_saisie','piece_jointe_fournie'
+            'formule', 'validation_enseignement', 'service', 'service_saisie', 'piece_jointe_fournie',
         ], $intervenant);
     }
 

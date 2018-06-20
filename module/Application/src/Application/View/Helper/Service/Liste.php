@@ -246,11 +246,7 @@ class Liste extends AbstractViewHelper
             $out .= '</div>';
             $out .= '</div>';
         } elseif ($this->prevuToPrevu){
-            $iPrec = $this->getServiceIntervenant()->getPrecedent($this->prevuToPrevu);
-            $tvh = $this->getServiceTypeVolumeHoraire()->getPrevu();
-            $evh = $this->getServiceEtatVolumeHoraire()->getValide();
-            $hasHeures = $iPrec ? $this->getProcessusIntervenant()->hasHeuresEnseignement($iPrec, $tvh, $evh ) : false;
-            if ($hasHeures) {
+            if ($this->getProcessusIntervenant()->service()->canPrevuToPrevu($this->prevuToPrevu )) {
                 $attribs = [
                     'class'       => 'btn btn-warning prevu-to-prevu-show',
                     'data-toggle' => 'modal',
@@ -300,8 +296,14 @@ class Liste extends AbstractViewHelper
     {
         $ligneView = $this->getView()->serviceLigne($this, $service);
 
-        $volumeHoraireListe = $this->getView()->volumeHoraireListe($service->getVolumeHoraireListe());
-        /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\Liste */
+        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())){
+            $volumeHoraireListe = $this->getView()->volumeHoraireListe($service->getVolumeHoraireListe());
+            /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\Liste */
+        }else{
+            $volumeHoraireListe = $this->getView()->volumeHoraireListeCalendaire($service->getVolumeHoraireListe());
+            /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\ListeCalendaire */
+        }
+
 
         $attribs = [
             'id'       => 'service-' . $service->getId() . '-ligne',

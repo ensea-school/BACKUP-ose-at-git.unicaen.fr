@@ -47,9 +47,6 @@ return [
         /* Message de bienvenue (sur la page d'accueil) */
         'messageBienvenue'       => 'Bienvenue dans l\'application de saisie des enseignements de l\'université de Caen Normandie.',
 
-        /* Mail d'assistance OSE de votre établissement */
-        'contactAssistance'      => 'assistance-ose@unicaen.fr',
-
         /* Page web des mentions légales de votre établissement */
         'mentionsLegales'        => "http://gest.unicaen.fr/acces-direct/mentions-legales/",
 
@@ -58,6 +55,49 @@ return [
 
         /* URL de votre propre feuille de style pour personnaliser OSE */
         'css'                    => null,
+
+        /* Contenu de la page de contacts */
+        'contact' => "<h3>Intervenants</h3>
+    Contactez votre composante ou bien écrivez à :
+        <ul>
+<li><a href=\"mailto:assistance-ose@unicaen.fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges dédiée à l'assistance\">assistance-ose@unicaen.fr</a></li>
+</ul>
+
+
+<h3>Gestionnaires</h3>
+    Postez un message sur la liste d'échanges des gestionnaires :
+        <ul>
+<li><a href=\"mailto:ose@liste.unicaen.fr\" title=\"Cliquez pour rédiger un mail à destination de la liste d'échanges des gestionnaires\">ose@liste.unicaen.fr</a></li>
+</ul>",
+
+        /* Icônes de l'application (affichées dans les onglets et en icône sur les smartphones */
+        'icons' => [
+            [
+                'type' => 'image/png',
+                'href' => '//www.unicaen.fr/images/favicon/favicon-16x16.png',
+                'sizes' => '16x16',
+            ],
+            [
+                'type' => 'image/png',
+                'href' => '//www.unicaen.fr/images/favicon/favicon-32x32.png',
+                'sizes' => '32x32',
+            ],
+            [
+                'type' => 'image/png',
+                'href' => '//www.unicaen.fr/images/favicon/favicon-96x96.png',
+                'sizes' => '96x96',
+            ],
+            [
+                'type' => 'image/png',
+                'href' => '//www.unicaen.fr/images/favicon/android-chrome-192x192.png',
+                'sizes' => '192x192',
+            ],
+            [
+                'type' => 'image/png',
+                'href' => '//www.unicaen.fr/images/favicon/favicon-194x194.png',
+                'sizes' => '194x194',
+            ],
+        ],
     ],
 
 

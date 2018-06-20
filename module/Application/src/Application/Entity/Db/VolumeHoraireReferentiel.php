@@ -1,15 +1,19 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * VolumeHoraireReferentiel
  */
-class VolumeHoraireReferentiel implements HistoriqueAwareInterface
+class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var float
@@ -58,6 +62,20 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
      */
     private $formuleResultatVolumeHoraireReferentiel;
 
+    /**
+     * @var boolean
+     */
+    private $autoValidation = false;
+
+    /**
+     * @var \DateTime
+     */
+    protected $horaireDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $horaireFin;
 
 
     /**
@@ -100,7 +118,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
      */
     public function setHeures($heures)
     {
-        $this->heures = round($heures,2);
+        $this->heures = round($heures, 2);
 
         return $this;
     }
@@ -234,12 +252,16 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
      */
     public function hasValidation()
     {
+        if ($this->isAutoValidation()) return true;
+
         $validations = $this->getValidation();
-        foreach( $validations as $validation ){
+        foreach ($validations as $validation) {
             /* @var $validation Validation */
-            if ($validation->estNonHistorise())
+            if ($validation->estNonHistorise()) {
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -300,5 +322,76 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
     public function getUniqueFormuleResultatVolumeHoraireReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
         return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
+    }
+
+
+
+
+    /**
+     * @return bool
+     */
+    public function isAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param bool $autoValidation
+     *
+     * @return VolumeHoraire
+     */
+    public function setAutoValidation(bool $autoValidation): VolumeHoraire
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getHoraireDebut()
+    {
+        return $this->horaireDebut;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaireDebut
+     *
+     * @return VolumeHoraireReferentiel
+     */
+    public function setHoraireDebut($horaireDebut): VolumeHoraireReferentiel
+    {
+        $this->horaireDebut = $horaireDebut;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getHoraireFin()
+    {
+        return $this->horaireFin;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaireFin
+     *
+     * @return VolumeHoraireReferentiel
+     */
+    public function setHoraireFin($horaireFin): VolumeHoraireReferentiel
+    {
+        $this->horaireFin = $horaireFin;
+
+        return $this;
     }
 }

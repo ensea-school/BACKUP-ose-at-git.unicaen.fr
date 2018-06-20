@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FormuleServiceReferentiel
  */
@@ -40,6 +38,13 @@ class FormuleServiceReferentiel
     private $formuleIntervenant;
 
     /**
+     * @var bool
+     */
+    private $serviceStatutaire = true;
+
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -47,77 +52,117 @@ class FormuleServiceReferentiel
         $this->formuleVolumeHoraireReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Get serviceReferentiel
      *
-     * @return \Application\Entity\Db\ServiceReferentiel 
+     * @return \Application\Entity\Db\ServiceReferentiel
      */
     public function getServiceReferentiel()
     {
         return $this->serviceReferentiel;
     }
 
+
+
     /**
      * Get formuleVolumeHoraireReferentiel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormuleVolumeHoraireReferentiel()
     {
         return $this->formuleVolumeHoraireReferentiel;
     }
 
-    public function getHeures(TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null)
+
+
+    public function getHeures(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null)
     {
         $heures = 0;
-        $vhs = $this->getFormuleVolumeHoraireReferentiel();
-        foreach( $vhs as $vh ){
+        $vhs    = $this->getFormuleVolumeHoraireReferentiel();
+        foreach ($vhs as $vh) {
             /* @var $vh FormuleVolumeHoraire */
             $ok = true;
             if ($ok && $typeVolumeHoraire !== null && $vh->getTypeVolumeHoraire() !== $typeVolumeHoraire) $ok = false;
             if ($ok && $etatVolumeHoraire !== null && $vh->getEtatVolumeHoraire() !== $etatVolumeHoraire) $ok = false;
-            if ($ok) $heures += $vh->getHeures ();
+            if ($ok) $heures += $vh->getHeures();
         }
+
         return $heures;
     }
+
+
 
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {
         return $this->intervenant;
     }
 
+
+
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getStructure()
     {
         return $this->structure;
     }
 
+
+
     /**
      * Get formuleIntervenant
      *
-     * @return \Application\Entity\Db\FormuleIntervenant 
+     * @return \Application\Entity\Db\FormuleIntervenant
      */
     public function getFormuleIntervenant()
     {
         return $this->formuleIntervenant;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isServiceStatutaire(): bool
+    {
+        return $this->serviceStatutaire;
+    }
+
+
+
+    /**
+     * @param bool $serviceStatutaire
+     *
+     * @return FormuleServiceReferentiel
+     */
+    public function setServiceStatutaire(bool $serviceStatutaire): FormuleServiceReferentiel
+    {
+        $this->serviceStatutaire = $serviceStatutaire;
+
+        return $this;
+    }
+
 }

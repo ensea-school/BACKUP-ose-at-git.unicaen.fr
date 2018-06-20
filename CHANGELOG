@@ -3,7 +3,43 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
-#OSE 6.3.2 (en développement)
+#OSE 7.0 (en développement)
+
+## Corrections de bugs
+
+* La page "Contact" est maintenant personnalisable.
+
+* Le bug empêchant de saisir de nouveaux services depuis la page "Services" est résolu.
+
+* Les filtres portant sur l'export des services (CSV et PDF) refonctionnent.
+
+## Nouveautés
+
+* Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
+
+* Possibilité de définir des volumes horaires enseignement et référentiel comme auto-validés.
+
+* Possibilité de déterminer si les heures de service pour un type de formation donné peuvent être comptées dans le service statutaire ou non. 
+
+* Possibilité de déterminer si les heures pour une fonction référentielle donnée peuvent être comptées dans le service statutaire ou non.
+
+* Possibilité d'importer des heures d'enseignement depuis ADE.
+
+* Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut) selon qu'on soit en prévisionnel ou en réalisé.
+
+* Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
+
+## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/07.0.sql`
+
+* Ajoutez un paramètre "contact" dans votre fichier de configuration de l'application, rubrique "etablissement"
+pour pouvoir définir le contenu de votre page "contact"
+
+* Idem si vous voulez personnaliser l'icône de l'application (paramètre icones dans etablissement du fichier de config).
+
+#OSE 6.3.2
 
 ## Corrections de bugs
 
@@ -19,6 +55,13 @@ les autres sont tout de même mis à jour.
 * Accès données personnelles : le dossier était accessible même si l'intervenant concerné ne devait pas avoir de dossier.
 
 * Données personnelles : les statuts supprimés étaient toujours disponibles au choix.
+
+* Clôture des services réalisés : les tableaux de bord se mettent à jour automatiquement, ce qui n'était pas le cas avant.
+
+* Lors de la déconnexion, lorsqu'on est cassifié, l'application met complètement fin à la session de 
+l'utilisateur, ce qui n'était pas le cas avant où on pouvais se reconnecter sans avoir à se ré-authentifier.
+
+* Correction de bug faisant planter la saisie d'un nouveau service depuis la page "Enseignements".
 
 ## Nouveautés
 

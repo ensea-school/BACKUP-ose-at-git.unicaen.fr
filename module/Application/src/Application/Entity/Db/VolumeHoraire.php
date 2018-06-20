@@ -4,14 +4,17 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * VolumeHoraire
  */
-class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
+class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var float
@@ -75,6 +78,20 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
      */
     private $formuleResultatVolumeHoraire;
 
+    /**
+     * @var boolean
+     */
+    private $autoValidation = false;
+
+    /**
+     * @var \DateTime
+     */
+    protected $horaireDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $horaireFin;
 
 
     /**
@@ -441,5 +458,75 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
     public function getResourceId()
     {
         return 'VolumeHoraire';
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param bool $autoValidation
+     *
+     * @return VolumeHoraire
+     */
+    public function setAutoValidation(bool $autoValidation): VolumeHoraire
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getHoraireDebut()
+    {
+        return $this->horaireDebut;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaireDebut
+     *
+     * @return VolumeHoraire
+     */
+    public function setHoraireDebut($horaireDebut): VolumeHoraire
+    {
+        $this->horaireDebut = $horaireDebut;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getHoraireFin()
+    {
+        return $this->horaireFin;
+    }
+
+
+
+    /**
+     * @param \DateTime $horaireFin
+     *
+     * @return VolumeHoraire
+     */
+    public function setHoraireFin($horaireFin): VolumeHoraire
+    {
+        $this->horaireFin = $horaireFin;
+
+        return $this;
     }
 }

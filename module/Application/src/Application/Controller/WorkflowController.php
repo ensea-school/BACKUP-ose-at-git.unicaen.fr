@@ -155,10 +155,16 @@ class WorkflowController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         if ($intervenant){
-            $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
+            $errors = $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
         }
 
-        $this->flashMessenger()->addSuccessMessage('Feuille de route actualisée.');
+        if (empty($errors)){
+            $this->flashMessenger()->addSuccessMessage('Feuille de route actualisée.');
+        }else{
+            foreach( $errors as $error){
+                $this->flashMessenger()->addErrorMessage($error->getMessage());
+            }
+        }
 
         return new MessengerViewModel();
     }

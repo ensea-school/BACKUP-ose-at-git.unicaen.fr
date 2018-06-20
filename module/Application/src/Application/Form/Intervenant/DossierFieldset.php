@@ -4,6 +4,7 @@ namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Pays as PaysEntity;
+use Application\Entity\Db\Pays;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
@@ -141,7 +142,7 @@ class DossierFieldset extends AbstractFieldset
             ->setObjectManager($this->getServiceContext()->getEntityManager())
             ->setTargetClass(\Application\Entity\Db\Pays::class);
         foreach ($paysSelect->getProxy()->getObjects() as $p) {
-            $estFrance = PaysEntity::CODE_FRANCE === $p->getSourceCode();
+            $estFrance = $this->getServicePays()->isFrance($p);
             if ($estFrance) {
                 self::$franceId = $p->getId();
             }
@@ -420,7 +421,7 @@ class DossierFieldset extends AbstractFieldset
                 'required' => $this->has('premierRecrutement'),
             ],
             'statut'               => [
-                'required'   => true,
+                'required' => true,
             ],
         ];
 
@@ -454,6 +455,10 @@ class PaysSelect extends EntitySelect
  */
 class PaysProxy extends Proxy
 {
+    use PaysServiceAwareTrait;
+
+
+
     protected function loadValueOptions()
     {
         parent::loadValueOptions();
@@ -461,7 +466,7 @@ class PaysProxy extends Proxy
         foreach ($this->valueOptions as $key => $value) {
             $id        = $value['value'];
             $pays      = $this->objects[$id];
-            $estFrance = PaysEntity::CODE_FRANCE === $pays->getSourceCode();
+            $estFrance = $this->getServicePays()->isFrance($pays);
 
             $this->valueOptions[$key]['attributes'] = [
                 'class'      => "pays" . ($estFrance ? " france" : null),
@@ -542,7 +547,7 @@ class StatutIntervenantProxy extends Proxy
         $pays = [];
         foreach ($this->objects as $o) {
             /* @var $o StatutIntervenant */
-            if ($o->estNonHistorise()){
+            if ($o->estNonHistorise()) {
                 $pays[$o->getId()] = $o;
             }
         }

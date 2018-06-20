@@ -41,7 +41,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
 
         $serviceReferentiel
             ->join(IntervenantService::class, $qb, 'intervenant', ['id', 'nomUsuel', 'prenom', 'sourceCode'])
-            ->join($volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures']);
+            ->join($volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures', 'autoValidation']);
 
         $volumeHoraireReferentielService->leftJoin(EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
 

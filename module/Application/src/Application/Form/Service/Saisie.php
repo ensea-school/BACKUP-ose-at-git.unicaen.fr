@@ -4,6 +4,7 @@ namespace Application\Form\Service;
 
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;
+use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
@@ -20,6 +21,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class Saisie extends AbstractForm
 {
+    use TypeVolumeHoraireAwareTrait;
     use PeriodeServiceAwareTrait;
     use SaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;

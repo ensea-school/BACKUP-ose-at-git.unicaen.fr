@@ -2,8 +2,10 @@
 
 namespace Application\Form;
 
+use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
@@ -21,6 +23,7 @@ class ParametresForm extends AbstractForm
     use DomaineFonctionnelServiceAwareTrait;
     use UtilisateurServiceAwareTrait;
     use ScenarioServiceAwareTrait;
+    use PaysServiceAwareTrait;
 
     public function init()
     {
@@ -249,6 +252,79 @@ class ParametresForm extends AbstractForm
             'attributes' => [
                 'class' => 'selectpicker',
                 'data-live-search' => 'true',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'pays_france',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServicePays()->getList($this->getServicePays()->finderByHistorique())),
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'modalite_services_prev_ens',
+            'options'    => [
+                'value_options' => [
+                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                ],
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'modalite_services_prev_ref',
+            'options'    => [
+                'value_options' => [
+                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                ],
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'modalite_services_real_ens',
+            'options'    => [
+                'value_options' => [
+                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                ],
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-size' => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'modalite_services_real_ref',
+            'options'    => [
+                'value_options' => [
+                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                ],
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
                 'data-size' => 20,
             ],
         ]);

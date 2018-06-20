@@ -249,8 +249,8 @@ return [
             'home' => [
                 'pages' => [
                     'service' => [
-                        'label'    => 'Enseignements',
-                        'title'    => "Résumé des enseignements",
+                        'label'    => 'Services',
+                        'title'    => "Visualisation et export des services",
                         'route'    => 'service/resume',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
                     ],
@@ -279,6 +279,14 @@ return [
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
+                /*[
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['import-agenda'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_IMPORT_INTERVENANT_PREVISIONNEL_AGENDA,
+                    ],
+                    'assertion'  => Assertion\ServiceAssertion::class,
+                ],*/
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],

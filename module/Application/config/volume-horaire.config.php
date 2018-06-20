@@ -13,8 +13,8 @@ return [
                 'options'       => [
                     'route'    => '/volume-horaire',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\VolumeHoraire',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\VolumeHoraire',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -81,7 +81,8 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'volumeHoraireListe' => View\Helper\VolumeHoraire\Liste::class,
+            'volumeHoraireListe'           => View\Helper\VolumeHoraire\Liste::class,
+            'volumeHoraireListeCalendaire' => View\Helper\VolumeHoraire\ListeCalendaire::class,
         ],
     ],
     'form_elements'   => [

@@ -33,6 +33,8 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
 
     protected $etapeName        = 'etape';
 
+    protected $elementId        = 'element';
+
     protected $structureEnabled = true;
 
     protected $niveauEnabled    = true;
@@ -145,7 +147,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
                 ],
             ],
             'attributes' => [
-                'id'    => 'element',
+                'id'    => $this->getElementId(),
                 'title' => "Saisissez 2 lettres au moins",
                 'class' => 'element-pedagogique element-pedagogique-element input-sm',
             ],
@@ -317,6 +319,31 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
     public function setEtapeEnabled($etapeEnabled = true)
     {
         $this->etapeEnabled = $etapeEnabled;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getElementId(): string
+    {
+        return $this->elementId;
+    }
+
+
+
+    /**
+     * @param string $elementId
+     *
+     * @return ElementPedagogiqueRechercheFieldset
+     */
+    public function setElementId(string $elementId): ElementPedagogiqueRechercheFieldset
+    {
+        $this->elementId = $elementId;
+        $this->get('element')->setAttribute('id', $elementId);
 
         return $this;
     }

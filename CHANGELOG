@@ -29,6 +29,12 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
 
+* Formulaire de saisie de services amélioré :
+    * Le choix de l'intervenant n'apparait plus lorsque  l'on se trouve déjà dans la fiche de l'intervenant
+    * La saisie des volumes horaires n'est affichée que lorsque c'est nécessaire (plus de liste de tous les types d'intervention affichés par défaut).
+    * Il est désormais possible de limiter les types d'intervention disponibles pour saisir des services à l'extérieur
+     (paramétrage possible depuis Administration/Types d'intervention)
+
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :

@@ -206,3 +206,9 @@ FROM (
        SELECT 'enseignement' c, 'import-intervenant-previsionnel-agenda' p, 'Import service prévisionnel depuis agenda' l FROM dual
        UNION ALL SELECT 'enseignement' c, 'import-intervenant-realise-agenda' p, 'Import service réalisé depuis agenda' l FROM dual
      ) t1;
+
+
+ALTER TABLE type_intervention ADD (
+  visible_exterieur   NUMBER(1) DEFAULT 1 NOT NULL
+  );
+UPDATE type_intervention SET visible_exterieur = 0 WHERE code NOT IN ('CM','TD','TP','Stage','Projet','Mémoire');

@@ -1,0 +1,17 @@
+<?php
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $nomms \Application\Entity\Db\nommaj[]
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("nomsouss");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::droitedition));
+
+?>
+    <h1 class="page-header">nomsouss</h1>
+
+    <table class="table table-bordered table-sort">
+        <thead>

@@ -1,0 +1,103 @@
+<?php
+
+namespace Application;
+
+use Application\Provider\Privilege\Privileges;
+use UnicaenAuth\Guard\PrivilegeController;
+
+return [
+    'router'          => [
+        'routes' => [
+            'nomtiret' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/nomtiret',
+                    'defaults' => [
+                        'controller'    => 'Application\Controller\nommaj',
+                        'action'        => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'delete'  => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/delete/:nomtiret',
+                            'constraints' => [
+                                'nomtiret' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'delete',
+                            ],
+                        ],
+                    ],
+                    'saisie' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/saisie/[:nomtiret]',
+                            'constraints' => [
+                                'nomtiret' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisie',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation'    => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'nomtiret' => [
+                                'label'        => 'nommaj',
+                                'icon'         => 'fa fa-graduation-cap',
+                                'route'        => 'nomtiret',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\nommaj', 'index'),
+                                'order'        => 80,
+                                'border-color' => '#BBCF55',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+	],
+    'bjyauthorize'    => [
+        'guards' => [
+            PrivilegeController::class => [
+                [
+                    'controller' => 'Application\Controller\nommaj',
+                    'action'     => ['index'],
+                    'privileges' => Privileges::droitvisualisation,
+                ],
+                [
+                    'controller' => 'Application\Controller\nommaj',
+                    'action'     => ['saisie','delete'],
+                    'privileges' => Privileges::droitedition,
+                ],
+            ],
+        ],
+    ],
+    'controllers'     => [
+        'invokables' => [
+            'Application\Controller\nommaj' => Controller\nommajController::class,
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
+            Service\nommajService::class            => Service\nommajService::class,
+        ],
+    ],
+    'view_helpers'    => [
+    ],
+    'form_elements'   => [
+        'invokables' => [
+            Form\nommaj\Saisie::class                 => Form\nommaj\Saisie::class,
+        ],
+    ],
+];

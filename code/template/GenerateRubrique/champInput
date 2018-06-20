@@ -1,0 +1,7 @@
+$this->add([
+            'name'    => 'champtiret',
+            'options' => [
+                'label' => "champphrase",
+            ],
+            'type'    => 'Text',
+        ]);

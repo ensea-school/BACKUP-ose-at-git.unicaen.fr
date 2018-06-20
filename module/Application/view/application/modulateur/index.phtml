@@ -88,7 +88,7 @@ foreach ($typeModulateurs as $tm) {
                                         <?php echo ($infoBulle ? '<abbr title="' . $infoBulle . '">' : '') . $tms->getStructure()->getLibelleCourt();
                                         echo($infoBulle ? '</abbr>' : '');
                                         if ($canEdit) { ?>
-                                            <a class="pop-ajax"
+                                            <a style="position:absolute; right: 20px;" pop-ajax"
                                                href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
                                                title="Supprimer le type de modulateur pour la structure"
                                                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
@@ -104,18 +104,14 @@ foreach ($typeModulateurs as $tm) {
                                 </tr>
                             <?php }
                         } ?>
+                        </table>
                         <?php if ($canEdit) { ?>
-                            <tr>
-                                <td>
-                                    <a class="ajax-modal" data-event="modulateur-saisie"
+                            <a class="ajax-modal" data-event="modulateur-saisie"
                                        href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
                                        title="Ajouter un type de modulateur pour une structure">
-                                        <button type="button" class="btn btn-primary">Ajouter</button>
+                                        <button type="button" class="btn-xs btn-primary">Ajouter</button>
                                     </a>
-                                </td>
-                            </tr>
                         <?php } ?>
-                        </table>
                     </div>
                     <div class="col-md-9">
                         <table class="table table-bordered">

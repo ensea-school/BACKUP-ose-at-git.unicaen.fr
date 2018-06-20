@@ -485,9 +485,11 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories' => [
+            Form\Service\SaisieFieldset::class            => Form\Service\Factory\SaisieFieldsetFactory::class,
+        ],
         'invokables' => [
             Form\Service\Saisie::class                    => Form\Service\Saisie::class,
-            Form\Service\SaisieFieldset::class            => Form\Service\SaisieFieldset::class,
             Form\ServiceReferentiel\Saisie::class         => Form\ServiceReferentiel\Saisie::class,
             Form\ServiceReferentiel\SaisieFieldset::class => Form\ServiceReferentiel\SaisieFieldset::class,
             Form\Service\RechercheForm::class             => Form\Service\RechercheForm::class,

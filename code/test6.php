@@ -7,10 +7,3 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Service\PaysService;
-
-/** @var PaysService $cs */
-$cs = $sl->get(PaysService::class);
-
-
-

@@ -3,6 +3,7 @@
 namespace Application\View\Helper\Service;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
@@ -28,6 +29,7 @@ class Liste extends AbstractViewHelper
     use EtatVolumeHoraireServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use IntervenantProcessusAwareTrait;
+    use IntervenantAwareTrait;
 
     /**
      *
@@ -148,7 +150,14 @@ class Liste extends AbstractViewHelper
 
     public function getAddUrl()
     {
-        return $this->getView()->url('service/saisie', [], ['query' => ['type-volume-horaire' => $this->getTypeVolumeHoraire()->getId()]]);
+        $params = [
+            'type-volume-horaire' => $this->getTypeVolumeHoraire()->getId(),
+        ];
+        if ($this->getIntervenant()){
+            $params['intervenant'] = $this->getIntervenant()->getRouteParam();
+        }
+
+        return $this->getView()->url('service/saisie', [], ['query' => $params]);
     }
 
 

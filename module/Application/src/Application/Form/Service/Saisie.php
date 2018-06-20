@@ -8,6 +8,7 @@ use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Form\AbstractForm;
 use Application\Form\Service\Traits\SaisieFieldsetAwareTrait;
 use Application\Form\VolumeHoraire\Traits\SaisieMultipleFieldsetAwareTrait;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
@@ -23,6 +24,7 @@ class Saisie extends AbstractForm
 {
     use TypeVolumeHoraireAwareTrait;
     use PeriodeServiceAwareTrait;
+    use ContextServiceAwareTrait;
     use SaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;
 
@@ -62,6 +64,9 @@ class Saisie extends AbstractForm
         if ($object instanceof Service && $object->getTypeVolumeHoraire()) {
             $this->get('type-volume-horaire')->setValue($object->getTypeVolumeHoraire()->getId());
         }
+        if ($object instanceof Service && $object->getIntervenant()) {
+            $this->get('intervenant')->setValue($object->getIntervenant()->getId());
+        }
 
         return parent::bind($object, $flags);
     }
@@ -77,16 +82,18 @@ class Saisie extends AbstractForm
         $hydrator->setServicePeriode($this->getServicePeriode());
         $this->setHydrator($hydrator);
 
-        // Product Fieldset
         $this->add($this->getFieldsetServiceSaisie());
 
-        foreach ($this->getPeriodes() as $periode) {
-            $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
-            $pf->setName($periode->getCode());
-            $this->add($pf);
+        // Product Fieldset
+        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())){
+            foreach ($this->getPeriodes() as $periode) {
+                $pf = $this->getFieldsetVolumeHoraireSaisieMultiple();
+                $pf->setName($periode->getCode());
+                $this->add($pf);
+            }
+            $this->add(new Hidden('type-volume-horaire'));
         }
-
-        $this->add(new Hidden('type-volume-horaire'));
+        $this->add(new Hidden('intervenant'));
 
         $this->add([
             'name'       => 'submit',

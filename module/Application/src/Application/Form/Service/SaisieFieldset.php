@@ -4,8 +4,10 @@ namespace Application\Form\Service;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Service;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Form\AbstractFieldset;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueRechercheFieldsetAwareTrait;
+use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
@@ -17,6 +19,7 @@ use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
+use Zend\Form\Element\Hidden;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 
@@ -27,6 +30,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  */
 class SaisieFieldset extends AbstractFieldset
 {
+    use IntervenantAwareTrait;
     use ContextServiceAwareTrait;
     use LocalContextServiceAwareTrait;
     use EtapeServiceAwareTrait;
@@ -41,11 +45,6 @@ class SaisieFieldset extends AbstractFieldset
      * @var Etablissement
      */
     protected $etablissement;
-
-    /**
-     * @var boolean
-     */
-    protected $canSaisieExterieur;
 
 
 
@@ -64,19 +63,15 @@ class SaisieFieldset extends AbstractFieldset
             'type' => 'Hidden',
         ]);
 
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if (!$role->getIntervenant()) {
-            $intervenant = new SearchAndSelect('intervenant');
-            $intervenant->setRequired(true)
-                ->setSelectionRequired(true)
-                ->setAutocompleteSource(
-                    $this->getUrl('recherche', ['action' => 'intervenantFind'])
-                )
-                ->setLabel("Intervenant :")
-                ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-            $this->add($intervenant);
-        }
+        $intervenant = new SearchAndSelect('intervenant');
+        $intervenant->setRequired(true)
+            ->setSelectionRequired(true)
+            ->setAutocompleteSource(
+                $this->getUrl('recherche', ['action' => 'intervenantFind'])
+            )
+            ->setLabel("Intervenant :")
+            ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
+        $this->add($intervenant);
 
         $this->add([
             'type'       => 'Radio',
@@ -212,31 +207,26 @@ class SaisieFieldset extends AbstractFieldset
 
 
 
-    /**
-     * @return boolean
-     */
-    public function getCanSaisieExterieur()
+    public function removeUnusedElements()
     {
-        return $this->canSaisieExterieur;
-    }
-
-
-
-    /**
-     * @param boolean $canSaisieExterieur
-     *
-     * @return SaisieFieldset
-     */
-    public function setCanSaisieExterieur($canSaisieExterieur)
-    {
-        $this->canSaisieExterieur = $canSaisieExterieur;
+        if ($this->getIntervenant()) {
+            $canSaisieExterieur = $this->getServiceAuthorize()->isAllowed($this->getIntervenant(), Privileges::ENSEIGNEMENT_EXTERIEUR);
+            $this->remove('intervenant');
+            $this->add([
+                'name' => 'intervenant-id',
+                'type' => 'Hidden',
+                'attributes' => [
+                    'value' => $this->getIntervenant()->getId(),
+                ],
+            ]);
+        } else {
+            $canSaisieExterieur = $this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXTERIEUR));
+        }
 
         if (!$canSaisieExterieur) {
             $this->remove('interne-externe');
             $this->remove('etablissement');
         }
-
-        return $this;
     }
 
 }
@@ -270,7 +260,9 @@ class SaisieFieldsetHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
-        $object->setIntervenant($intervenant ? $this->getServiceIntervenant()->getBySourceCode($intervenant) : null);
+        if ($intervenant){
+            $object->setIntervenant( $this->getServiceIntervenant()->getBySourceCode($intervenant));
+        }
 
         if (isset($data['element-pedagogique']) && $data['element-pedagogique'] instanceof ElementPedagogique) {
             $object->setElementPedagogique($data['element-pedagogique']);

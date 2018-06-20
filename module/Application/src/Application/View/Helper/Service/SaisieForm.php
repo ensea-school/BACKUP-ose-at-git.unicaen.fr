@@ -99,8 +99,11 @@ class SaisieForm extends AbstractViewHelper
         $fservice = $this->form->get('service');
 
         $res = $this->getView()->form()->openTag($this->form);
-        if (!$this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+        if ($fservice->has('intervenant')) {
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
+        }
+        if ($fservice->has('intervenant-id')) {
+            $res .= $this->getView()->formHidden($fservice->get('intervenant-id'));
         }
         if ($fservice->has('interne-externe')) {
             $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';

@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\TypeModulateur;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\TypeModulateurStructure;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -90,6 +91,25 @@ class TypeModulateurService extends AbstractEntityService
     }
 
     /**
+     * Retourne une entité à partir de son code
+     * Retourne null si le code est null
+     *
+     * @param string|string[] $code
+     * @return mixed|null
+     */
+    public function getById($id)
+    {
+        if(is_array($id)){
+            list($qb,$alias) = $this->initQuery();
+            $qb->andWhere($alias.'.id IN (:'.$alias.'_id)')->setParameter($alias.'_id', $id);
+            return $this->getList( $qb );
+        }elseif ($id){
+            return $this->getRepo()->findOneBy(['id' => $id]);
+        }else{
+            return null;
+        }
+    }
+    /**
      * Ne récupère que les types de modulateurs associés à un élément pédagogique donné
      *
      * @param ElementPedagogique $element
@@ -143,4 +163,5 @@ class TypeModulateurService extends AbstractEntityService
         }
         return $this->all;
     }
+
 }

@@ -12,6 +12,7 @@ use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Form\Modulateur\Traits\TypeModulateurSaisieFormAwareTrait;
+use Application\Form\Modulateur\Traits\TypeModulateurStructureSaisieFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 class modulateurController extends AbstractController
@@ -21,6 +22,7 @@ class modulateurController extends AbstractController
     use ModulateurSaisieFormAwareTrait;
     use TypeModulateurSaisieFormAwareTrait;
     use TypeModulateurStructureServiceAwareTrait;
+    use TypeModulateurStructureSaisieFormAwareTrait;
     use ContextServiceAwareTrait;
 
 
@@ -134,6 +136,49 @@ class modulateurController extends AbstractController
         try {
             $this->getServiceTypeModulateur()->delete($typeModulateur);
             $this->flashMessenger()->addSuccessMessage("Type de Modulateur supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        }
+
+        return new MessengerViewModel(compact('typeModulateur'));
+    }
+    public function typeModulateurStructureSaisieAction()
+    {
+        /* @var $typeModulateurStructure typeModulateurStructure */
+        /* @var $typeModulateur typeModulateur */
+        $typeModulateur = $this->getEvent()->getParam('typeModulateur');
+
+        $form = $this->getFormTypeModulateurStructureSaisie();
+  //      if (empty($typeModulateurStructure)) {
+            $title          = 'Création d\'un nouveau Type de Modulateur de Structure';
+            $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity()
+                ->setTypeModulateur($typeModulateur);
+            //    } else {
+            //$title = 'Édition d\'un Type de Modulateur pour une structure';
+        //}
+
+        $form->bindRequestSave($typeModulateurStructure, $this->getRequest(), function (typeModulateurStructure $tms) {
+            try {
+                $this->getServiceTypeModulateurStructure()->save($tms);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tms->getId().':'.$tms->getTypeModulateur());
+            }
+        });
+
+        return compact('form', 'title');
+    }
+
+
+
+    public function typeModulateurStructureDeleteAction()
+    {
+        /* @var $typeModulateurStructure typeModulateurStructure */
+        $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
+        try {
+            $this->getServiceTypeModulateurStructure()->delete($typeModulateurStructure);
+            $this->flashMessenger()->addSuccessMessage("Type de Modulateur de structure supprimé avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }

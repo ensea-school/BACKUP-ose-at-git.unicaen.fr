@@ -105,7 +105,7 @@ class SaisieFieldset extends AbstractFieldset
         $this->add([
             'name'    => 'description',
             'options' => [
-                'label' => 'Description',
+                'label' => 'Description :',
             ],
             'type'    => 'Text',
         ]);

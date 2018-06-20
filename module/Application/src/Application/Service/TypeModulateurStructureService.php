@@ -43,4 +43,45 @@ use TypeModulateurStructureServiceAwareTrait;
         return 'tmd';
     }
 
+    public function existe(TypeModulateurStructure $tms){
+    /* @var $tbltms typeModulateurStructure[] */
+    /* @var $elt typeModulateurStructure */
+    $dql = "
+        SELECT
+          m
+        FROM
+          Application\Entity\Db\TypeModulateurStructure m
+        WHERE
+        m.histoDestruction IS NULL
+        AND m.typeModulateur = :typemodulateur
+        AND m.structure = :structure";
+
+    $query = $this->getEntityManager()->createQuery($dql);
+    $query->setParameter('typemodulateur',$tms->getTypeModulateur());
+    $query->setParameter('structure',$tms->getStructure());
+    $tbltms = $query->getResult();
+    // recherche de doublon
+    $ok = true;
+    foreach ($tbltms as $elt) {
+        if (((!$elt->getAnneeDebut()) or ($elt->getAnneeDebut()->getId() <= $tms->getAnneeFin()->getId())) and ((!$elt->getAnneeFin())
+                or ($elt->getAnneeFin()->getId() >= $tms->getAnneeDebut()->getId()))) {
+            $ok = false;
+        }
+    }
+    return $ok;
+}
+
+    /**
+     * @param TypeModulateurStructure $entity
+     *
+     * @return TypeModulateurStructure
+     */
+    public function save($entity)
+    {
+        if (!$this->existe($entity)) {
+            throw new \Exception('Un élément est en doublon avec l\'ajout demandé!');
+        }
+
+        return parent::save($entity);
+    }
 }

@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\TypeModulateurStructure;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
-
+use Doctrine\ORM\QueryBuilder;
 /**
  * Description of TypeModulateurStructureService
  */
@@ -102,9 +102,17 @@ class TypeModulateurStructureService extends AbstractEntityService
     public function save($entity)
     {
         if (!$this->existe($entity)) {
-            throw new \Exception('Un élément est en doublon avec l\'ajout demandé!');
+            throw new \Exception('Une règle existe déjà pour cet intervalle d\'années choisi dans cette composante!');
         }
 
         return parent::save($entity);
+    }
+
+    public function getList( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.structure");
+        $qb->addOrderBy("$alias.anneeDebut");
+        return parent::getList($qb, $alias);
     }
 }

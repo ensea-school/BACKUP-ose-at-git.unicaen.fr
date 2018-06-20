@@ -249,7 +249,13 @@ class Ligne extends AbstractViewHelper
 
     protected function renderModifier()
     {
-        $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+        $query = [
+            'type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId(),
+        ];
+        if ($this->getListe()->getIntervenant()){
+            $query['intervenant'] = $this->getListe()->getIntervenant()->getRouteParam();
+        }
+        $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => $query]);
         return '<a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-pencil"></span></a>';
     }
 

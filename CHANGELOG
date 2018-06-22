@@ -13,6 +13,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Les filtres portant sur l'export des services (CSV et PDF) refonctionnent.
 
+* L'affichage des détails d'une composante (lorsqu'on clique sur son nom) a été réparé.
+
 ## Nouveautés
 
 * Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
@@ -34,6 +36,8 @@ author: Laurent Lécluse - DSI - Unicaen
     * La saisie des volumes horaires n'est affichée que lorsque c'est nécessaire (plus de liste de tous les types d'intervention affichés par défaut).
     * Il est désormais possible de limiter les types d'intervention disponibles pour saisir des services à l'extérieur
      (paramétrage possible depuis Administration/Types d'intervention)
+
+* Dans le module Charges, il est désormais possible de modifier/créer des scénarios de niveau établissement
 
 ## Notes de mise à jour
 

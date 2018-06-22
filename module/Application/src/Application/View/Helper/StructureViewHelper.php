@@ -60,7 +60,6 @@ class StructureViewHelper extends AbstractHelper
         $vars = [
             "Libellé long :"                          => $entity->getLibelleLong(),
             "Libellé court"                           => $entity->getLibelleCourt(),
-            "Type de structure"                       => $entity->getType()->getLibelle(),
             "N° {$entity->getSource()->getLibelle()}" => $entity->getCode(),
         ];
 

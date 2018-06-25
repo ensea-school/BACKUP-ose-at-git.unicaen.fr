@@ -19,7 +19,6 @@ use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
-use Zend\Form\Element\Hidden;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 

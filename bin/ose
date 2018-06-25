@@ -328,7 +328,7 @@ class OseAdmin
 
     public function exec($args)
     {
-        $this->console->exec("php " . dirname(__DIR__) . "/public/index.php " . $args);
+        $this->console->passthru("php " . dirname(__DIR__) . "/public/index.php " . $args);
     }
 
 

@@ -212,3 +212,21 @@ ALTER TABLE type_intervention ADD (
   visible_exterieur   NUMBER(1) DEFAULT 1 NOT NULL
   );
 UPDATE type_intervention SET visible_exterieur = 0 WHERE code NOT IN ('CM','TD','TP','Stage','Projet','Mémoire');
+
+update tbl set ordre =  1 where tbl_name = 'formule';
+update tbl set ordre =  2 where tbl_name = 'piece_jointe_demande';
+update tbl set ordre =  3 where tbl_name = 'piece_jointe_fournie';
+update tbl set ordre =  4 where tbl_name = 'agrement';
+update tbl set ordre =  5 where tbl_name = 'cloture_realise';
+update tbl set ordre =  6 where tbl_name = 'contrat';
+update tbl set ordre =  7 where tbl_name = 'dossier';
+update tbl set ordre =  8 where tbl_name = 'paiement';
+update tbl set ordre =  9 where tbl_name = 'piece_jointe';
+update tbl set ordre = 10 where tbl_name = 'service_saisie';
+update tbl set ordre = 11 where tbl_name = 'service_referentiel';
+update tbl set ordre = 12 where tbl_name = 'validation_enseignement';
+update tbl set ordre = 13 where tbl_name = 'validation_referentiel';
+update tbl set ordre = 14 where tbl_name = 'service';
+update tbl set ordre = 15 where tbl_name = 'workflow';
+update tbl set ordre = 16 where tbl_name = 'chargens_seuils_def';
+update tbl set ordre = 17 where tbl_name = 'chargens';

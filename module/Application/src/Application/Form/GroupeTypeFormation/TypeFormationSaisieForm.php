@@ -56,19 +56,6 @@ class TypeFormationSaisieForm extends AbstractForm
             ],
             'type'    => 'Text',
         ]);
-        $this->add([
-            'name'       => 'source',
-            'options'    => [
-                'label' => 'Source',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
-        ]);
-        $this->get('source')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceSource()->getList()));
 
         $this->add([
             'name'    => 'statutaire',
@@ -111,9 +98,6 @@ class TypeFormationSaisieForm extends AbstractForm
             'libelle-long' => [
                 'required' => true,
             ],
-            'source'       => [
-                'required' => true,
-            ],
             'statutaire'   => [
                 'required' => true,
             ],
@@ -148,9 +132,7 @@ class TypeFormationHydrator implements HydratorInterface
         $object->setLibelleCourt($data['libelle-court']);
         $object->setLibelleLong($data['libelle-long']);
         $object->setSourceCode($data['source-code']);
-        if (array_key_exists('source', $data)) {
-            $object->setSource($this->getServiceSource()->get($data['source']));
-        }
+        $object->setSource($this->getServiceSource()->getOse());
         $object->setServiceStatutaire($data['statutaire']=='true');
 
         return $object;

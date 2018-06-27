@@ -165,9 +165,9 @@ class TypeFormation implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @param bool $serviceStatutaire
      *
-     * @return FonctionReferentiel
+     * @return typeFormation
      */
-    public function setServiceStatutaire(bool $serviceStatutaire): FonctionReferentiel
+    public function setServiceStatutaire(bool $serviceStatutaire)
     {
         $this->serviceStatutaire = $serviceStatutaire;
 

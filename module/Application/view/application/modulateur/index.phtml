@@ -21,6 +21,12 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MODULATEUR_EDI
 
 ?>
 <h1 class="page-header">Modulateurs des taux horaires</h1>
+<style>
+    h3 {
+        margin: 0px;
+        margin-bottom: 0.1em;
+    }
+</style>
 <?php
 foreach ($typeModulateurs as $tm) {
     if ($this->isAllowed($tm, Privileges::MODULATEUR_VISUALISATION)) { ?>
@@ -58,6 +64,7 @@ foreach ($typeModulateurs as $tm) {
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-3">
+                        <h3>Règles</h3>
                         <div class="row">
                             <div class="col-md-9">Publique :</div>
                             <div class="col-md-3"><?= affBooleen($tm->getPublique()) ?></div>
@@ -70,55 +77,60 @@ foreach ($typeModulateurs as $tm) {
                             <div class="col-md-9">Saisie par ens:</div>
                             <div class="col-md-3"><?= affBooleen($tm->getSaisieParEnseignant()) ?></div>
                         </div>
-                        <table class="table table-bordered table-condensed">
-                        <?php foreach ($typeModulateurStructures
-                                       as $tms) { ?>
-                            <?php if ($tm->getId() == $tms->getTypeModulateur()->getId()) { ?>
-                                <tr>
-                                    <td>
-                                        <?php if (($tms->getAnneeDebut()) || ($tms->getAnneeFin())) {
-                                            if (!$tms->getAnneeDebut()) {
-                                                $infoBulle = ' à ' . $tms->getAnneeFin();
-                                            } else {
-                                                if (!$tms->getAnneeFin()) {
-                                                    $infoBulle = ' de ' . $tms->getAnneeDebut();
-                                                } else $infoBulle = ' de ' . $tms->getAnneeDebut() . ' à ' . $tms->getAnneeFin();
-                                            }
-                                        } else $infoBulle = ''; ?>
-                                        <?php echo ($infoBulle ? '<abbr title="' . $infoBulle . '">' : '') . $tms->getStructure()->getLibelleCourt();
-                                        echo($infoBulle ? '</abbr>' : '');
-                                        if ($canEdit) { ?>
-                                            <a style="position:absolute; right:36px; " class="ajax-modal" data-event="modulateur-saisie"
-                                               href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(),'typeModulateurStructure' => $tms->getId()]) ?>"
-                                               title="Ajouter un type de modulateur pour une structure">
-                                                <span class="glyphicon glyphicon-edit"></span>
-                                            </a>
-                                            <a style="position:absolute; right:20px; " class="pop-ajax"
-                                               href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
-                                               title="Supprimer le type de modulateur pour la structure"
-                                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                                               data-confirm="true"
-                                               data-confirm-button="Oui"
-                                               data-cancel-button="Non"
-                                               data-submit-reload="true"
-                                            >
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                            <?php }
-                        } ?>
+                        <br/>
+                        <h3>Composantes</h3>
+                        <table class="table table-bordered table-condensed table-extra-condensed"
+                               style="margin-top:0em; margin-bottom:.1em;">
+                            <?php foreach ($typeModulateurStructures
+                                           as $tms) { ?>
+                                <?php if ($tm->getId() == $tms->getTypeModulateur()->getId()) { ?>
+                                    <tr>
+                                        <td>
+                                            <?php if (($tms->getAnneeDebut()) || ($tms->getAnneeFin())) {
+                                                if (!$tms->getAnneeDebut()) {
+                                                    $infoBulle = ' à ' . $tms->getAnneeFin();
+                                                } else {
+                                                    if (!$tms->getAnneeFin()) {
+                                                        $infoBulle = ' de ' . $tms->getAnneeDebut();
+                                                    } else $infoBulle = ' de ' . $tms->getAnneeDebut() . ' à ' . $tms->getAnneeFin();
+                                                }
+                                            } else $infoBulle = ''; ?>
+                                            <?php echo ($infoBulle ? '<abbr title="' . $infoBulle . '">' : '') . $tms->getStructure()->getLibelleCourt();
+                                            echo($infoBulle ? '</abbr>' : '');
+                                            if ($canEdit) { ?>
+                                                <a style="position:absolute; right:36px; " class="ajax-modal"
+                                                   data-event="modulateur-saisie"
+                                                   href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId(), 'typeModulateurStructure' => $tms->getId()]) ?>"
+                                                   title="Ajouter un type de modulateur pour une structure">
+                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                </a>
+                                                <a style="position:absolute; right:20px; " class="pop-ajax"
+                                                   href="<?= $this->url('modulateur/type-modulateur-structure-delete', ['typeModulateurStructure' => $tms->getId()]) ?>"
+                                                   title="Supprimer le type de modulateur pour la structure"
+                                                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                                   data-confirm="true"
+                                                   data-confirm-button="Oui"
+                                                   data-cancel-button="Non"
+                                                   data-submit-reload="true"
+                                                >
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </a>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php }
+                            } ?>
                         </table>
                         <?php if ($canEdit) { ?>
                             <a class="ajax-modal" data-event="modulateur-saisie"
-                                       href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
-                                       title="Ajouter un type de modulateur pour une structure">
-                                        <button type="button" class="btn-xs btn-primary">Ajouter une structure</button>
-                                    </a>
+                               href="<?= $this->url('modulateur/type-modulateur-structure-saisie', ['typeModulateur' => $tm->getId()]) ?>"
+                               title="Ajouter un type de modulateur pour une structure">
+                                <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
+                            </a>
                         <?php } ?>
                     </div>
                     <div class="col-md-9">
+                        <h3>Taux</h3>
                         <table class="table table-bordered">
                             <thead>
                             <th>Code</th>

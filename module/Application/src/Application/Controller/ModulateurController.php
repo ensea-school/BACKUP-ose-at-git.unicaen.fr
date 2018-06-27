@@ -149,10 +149,10 @@ class modulateurController extends AbstractController
     {
         /* @var $typeModulateurStructure typeModulateurStructure */
         /* @var $typeModulateur typeModulateur */
-        $typeModulateur = $this->getEvent()->getParam('typeModulateur');
+        $typeModulateur          = $this->getEvent()->getParam('typeModulateur');
         $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
 
-        $form                    = $this->getFormTypeModulateurStructureSaisie();
+        $form = $this->getFormTypeModulateurStructureSaisie();
         if (empty($typeModulateurStructure)) {
             $title                   = 'Ajout d\'une structure pour le type de modulateur';
             $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity()
@@ -162,34 +162,32 @@ class modulateurController extends AbstractController
         }
 
         $form->bindRequestSave($typeModulateurStructure, $this->getRequest(), function (typeModulateurStructure $tms) {
-            try{
-            $this->getServiceTypeModulateurStructure()->save($tms);
-            $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-        } catch (\Exception $e) {
-        $e = DbException::translate($e);
-        $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tms->getId() . ':' . $tms->getTypeModulateur());
-    }
+            try {
+                $this->getServiceTypeModulateurStructure()->save($tms);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
         });
 
-return compact('form', 'title');
-}
-
-
-
-
-
-public
-function typeModulateurStructureDeleteAction()
-{
-    /* @var $typeModulateurStructure typeModulateurStructure */
-    $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
-    try {
-        $this->getServiceTypeModulateurStructure()->delete($typeModulateurStructure);
-        $this->flashMessenger()->addSuccessMessage("Type de Modulateur de structure supprimé avec succès.");
-    } catch (\Exception $e) {
-        $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        return compact('form', 'title');
     }
 
-    return new MessengerViewModel(compact('typeModulateur'));
-}
+
+
+    public
+    function typeModulateurStructureDeleteAction()
+    {
+        /* @var $typeModulateurStructure typeModulateurStructure */
+        $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
+        try {
+            $this->getServiceTypeModulateurStructure()->delete($typeModulateurStructure);
+            $this->flashMessenger()->addSuccessMessage("Type de Modulateur de structure supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        }
+
+        return new MessengerViewModel(compact('typeModulateur'));
+    }
 }

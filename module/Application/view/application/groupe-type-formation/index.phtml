@@ -1,0 +1,166 @@
+<?php
+/**
+ * @var $this                 \Application\View\Renderer\PhpRenderer
+ * @var $groupeTypeFormations \Application\Entity\Db\GroupeTypeFormation[]
+ */
+
+/* @var $groupeTypeFormations              \Application\Entity\Db\groupeTypeFormation[]
+ * @var $typeFormations          \Application\Entity\Db\typeFormation[]
+ */
+
+use Application\Provider\Privilege\Privileges;
+
+$this->headTitle()->append("Formations classées par type");
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_PRIVILEGE_VISUALISATION));
+
+?>
+<h1 class="page-header">Groupe de Types de Formations</h1>
+
+<?php foreach ($groupeTypeFormations
+
+as $fr) {
+$noActions = true;
+foreach ($typeFormations as $tf) {
+    if ($tf->getGroupe()->getId() == $fr->getId()) {
+        if ($fr->getSource()->getLibelle() == 'OSE') $noActions = false;
+    }
+}
+$nbCol = 6; ?>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title"><?= $fr->getLibelleLong() ?>
+            <span style="position:absolute; left: 400px"><?= $fr->getLibelleCourt() ?></span>
+            <?php if (($canEdit) && ($fr->getSource()->getLibelle() == 'OSE')) { ?>
+                <span style="position:absolute; right:50px; ">
+                <a class="ajax-modal" data-event="groupe-type-formation-saisie"
+                   href="<?= $this->url('groupe-type-formation/saisie', ['groupe-type-formation' => $fr->getId()]) ?>"
+                   title="Modifier la Groupe de Type de Formation">
+                    <span class="glyphicon glyphicon-edit"></span></a>
+                <a class="pop-ajax"
+                   href="<?= $this->url('groupe-type-formation/delete', ['groupe-type-formation' => $fr->getId()]) ?>"
+                   title="Supprimer la GroupeTypeFormation"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                   data-confirm="true"
+                   data-confirm-button="Oui"
+                   data-cancel-button="Non"
+                   data-submit-reload="true"
+                >
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
+                </span>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                Source:
+            </div>
+            <div class="col-md-1"><?= $fr->getSource() ?>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-3">
+                    Ordre:
+                </div>
+                <div class="col-md-1"><?= $fr->getOrdre() ?>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Niveau:
+                    </div>
+                    <div class="col-md-1"><?= $fr->getPertinenceNiveau() ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-9">
+            <h3 style="margin-top:0.3em; margin-bottom:-0.2em;">Types de formations dans le groupe</h3><br/>
+            <table class="table table-bordered table-condensed table-extra-condensed table-sort">
+                <thead>
+                <th>Libelle court</th>
+                <th>Libelle</th>
+                <th>Source</th>
+                <th>Source code</th>
+                <th>Service</th>
+                <?php if (($canEdit) && (!$noActions)) echo '<th>Actions</th>' ?>
+                </thead>
+                <tbody>
+                <?php foreach ($typeFormations
+
+                               as $tf) {
+                    if ($tf->getGroupe()->getId() == $fr->getId()) { ?>
+                        <tr>
+                        <td>
+                            <?= $tf->getLibelleCourt() ?>
+                        </td>
+                        <td>
+                            <?= $tf->getLibelleLong() ?>
+                        </td>
+                        <td>
+                            <?= $tf->getSource() ?>
+                        </td>
+                        <td>
+                            <?= $tf->getSourceCode() ?>
+                        </td>
+                        <td>
+                            <?php echo($tf->isServiceStatutaire() ? "Statutaire" : "non statutaire") ?>
+                        </td>
+                        <?php if (($canEdit) && ($tf->getSource()->getLibelle() == 'OSE')) { ?>
+                            <td style="text-align:center;width:1px;white-space: nowrap">
+                                <a class="ajax-modal" data-event="groupe-type-formation-saisie"
+                                   href="<?= $this->url('groupe-type-formation/type-formation-saisie', ['groupe-type-formation' => $fr->getId(), 'type-formation' => $tf->getId()]) ?>"
+                                   title="Modifier le Type de Formation">
+                                    <span class="glyphicon glyphicon-edit"></span></a>
+                                <a class="pop-ajax"
+                                   href="<?= $this->url('groupe-type-formation/type-formation-delete', ['type-formation' => $tf->getId()]) ?>"
+                                   title="Supprimer le Type de Formation"
+                                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                   data-confirm="true"
+                                   data-confirm-button="Oui"
+                                   data-cancel-button="Non"
+                                   data-submit-reload="true"
+                                >
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </td>
+                            </tr>
+                        <?php } elseif (!$noActions) echo '<td></td>' ?>
+                    <?php } ?>
+                <?php } ?>
+                </tbody>
+            </table>
+            <?php if (($canEdit) && ($fr->getSource()->getLibelle() == 'OSE')): ?>
+                <a class="btn btn-xs btn-primary ajax-modal" style="margin-top:0.5em; "
+                   data-event="groupe-type-formation-saisie"
+                   href="<?= $this->url('groupe-type-formation/type-formation-saisie', ['groupe-type-formation' => $fr->getId()]) ?>"
+                   title="Ajouter une type de formation">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    Ajouter un groupe de type de formation</a>
+            <?php endif ?>
+            </div>
+        </div>
+    </div>
+        </div>
+        <?php } ?>
+        <?php if ($canEdit): ?>
+            <a class="btn btn-primary ajax-modal" data-event="groupe-type-formation-saisie"
+               href="<?= $this->url('groupe-type-formation/saisie') ?>"
+               title="Ajouter un type de formation">
+                <span class="glyphicon glyphicon-edit"></span>
+                Ajouter un groupe de type de formation</a>
+
+            <script type="text/javascript">
+                $(function () {
+                    $("body").on("groupe-type-formation-saisie", function (event, data) {
+                        window.location.reload();
+                    });
+                });
+            </script>
+        <?php endif ?>

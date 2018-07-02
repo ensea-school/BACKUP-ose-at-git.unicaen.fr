@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ */
+
 $form->prepare();
 
 echo $this->form()->openTag($form);
@@ -20,7 +24,7 @@ echo $this->formHidden($form->get('type-volume-horaire'));
 echo $this->formHidden($form->get('periode'));
 echo $this->formHidden($form->get('type-intervention'));
 echo $this->formHidden($form->get('service'));
-echo $this->form()->closeTag().'<br />';
+echo $this->form()->closeTag();
 
 echo $this->formErrors( $form );
-if ($errors) echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();

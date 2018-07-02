@@ -205,7 +205,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
             $this->changed = true;
 
             if ($elementPedagogique) {
-                $vhl               = $this->getVolumeHoraireListe()->get();
+                $vhl               = $this->getVolumeHoraireListe()->getVolumeHoraires();
                 $typesIntervention = $elementPedagogique->getTypeIntervention();       // liste des types d'intervention de l'EP
                 $periode           = $elementPedagogique->getPeriode();
                 foreach ($vhl as $vh) {

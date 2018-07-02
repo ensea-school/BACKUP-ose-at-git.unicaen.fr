@@ -2,13 +2,14 @@
 
 namespace Application\View\Helper\VolumeHoraire;
 
-use Application\Entity\Db\MotifNonPaiement;
+use Application\Constants;
+use Application\Entity\Db\TypeIntervention;
+use Application\Entity\VolumeHoraireListe;
+use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\View\Helper\AbstractViewHelper;
-use Application\Entity\VolumeHoraireListe;
-use Application\Entity\Db\TypeIntervention;
 
 
 /**
@@ -142,110 +143,109 @@ class ListeCalendaire extends AbstractViewHelper
     public function render()
     {
         $this->hasForbiddenPeriodes = false;
-        $canViewMNP                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
-        $canEditMNP                 = $this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_EDITION);
+        $canViewMNP                 = false;//$this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEdit                    = true;
 
-        $out = '<table class="table table-condensed table-bordered volume-horaire">';
-        $out .= '<tr>';
-        $out .= "<th style=\"width:10%\">Période</th>\n";
-        foreach ($this->getTypesInterventions() as $ti) {
-            $out .= "<th style=\"width:1%\"><abbr title=\"" . $ti->getLibelle() . "\">" . $ti->getCode() . "</abbr></th>\n";
+        $filtres = [
+            VolumeHoraireListe::FILTRE_HORAIRE_DEBUT,
+            VolumeHoraireListe::FILTRE_HORAIRE_FIN,
+            VolumeHoraireListe::FILTRE_TYPE_INTERVENTION,
+            VolumeHoraireListe::FILTRE_PERIODE,
+        ];
+        if ($canViewMNP){
+            $filtres[] = VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT;
         }
-        if ($canViewMNP) {
-            $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
+
+        $out = '<table class="table table-condensed table-extra-condensed table-bordered volume-horaire">';
+        $out .= '<thead>';
+        $out .= '<tr>';
+        $out .= "<th style=\"width:10em\">Début</th>\n";
+        $out .= "<th style=\"width:4em\">Heures</th>\n";
+        $out .= "<th style=\"width:11em\">Mode</th>\n";
+        $out .= "<th style=\"width:10em\">Fin</th>\n";
+        $out .= "<th style=\"widt:6em\">Période</th>\n";
+        if ($canViewMNP){
+            $out .= "<th>Motif de non paiement</th>\n";
+        }
+        if ($canEdit){
+            $out .= "<th>&nbsp;</th>\n";
         }
         $out      .= "</tr>\n";
-        $periodes = $this->getPeriodes();
-        foreach ($periodes as $periode) {
-            $vhl               = $this->getVolumeHoraireListe()->setPeriode($periode)->setTypeIntervention(false);
-            $motifsNonPaiement = [];
-            if ($canViewMNP) {  // découpage par motif de non paiement
-                $motifsNonPaiement = $vhl->getMotifsNonPaiement();
-                if (!isset($motifsNonPaiement[0]) && !$canEditMNP) {
-                    $motifsNonPaiement = [0 => null] + $motifsNonPaiement;
-                }
-            }
-            if (empty($motifsNonPaiement)) {
-                $motifsNonPaiement = [0 => false];
-            }
-            foreach ($motifsNonPaiement as $motifNonPaiement) {
-                $readOnly         = $motifNonPaiement instanceof MotifNonPaiement && !$canEditMNP;
-                $forbiddenPeriode = false;
-                if (
-                    $this->getVolumeHoraireListe()->getService()
-                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()
-                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getPeriode()
-                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getPeriode() !== $periode
-                ) {
-                    $forbiddenPeriode           = true;
-                    $this->hasForbiddenPeriodes = true;
-                }
-                if ($forbiddenPeriode) {
-                    $out .= '<tr class="bg-danger">';
-                    $out .= "<td><abbr title=\"La période n'est pas conforme à l'enseignement\">" . $this->renderPeriode($periode) . "</abbr></td>\n";
-                } else {
-                    $out .= '<tr>';
-                    $out .= "<td>" . $this->renderPeriode($periode) . "</td>\n";
-                }
+        $out .= '</thead>';
+        $out .= '<body>';
 
-                foreach ($this->typesIntervention as $typeIntervention) {
-                    $vhl->setMotifNonPaiement($motifNonPaiement)
-                        ->setTypeIntervention($typeIntervention);
-                    if ($vhl->getHeures() == 0) {
-                        $class = "heures-empty";
-                    } else {
-                        $class = "heures-not-empty";
-                    }
-                    $out .= '<td style="text-align:right" class="' . $class . '">' . $this->renderHeures($vhl, $readOnly) . '</td>';
-                }
+        $vhls = $this->getVolumeHoraireListe()->getSousListes($filtres);
+        foreach( $vhls as $vhl ){
+            if ($vhl->getHeures() != 0) {
+                $out .= '<tr>';
+                $out .= "<td>" . $this->renderHoraire($vhl->getHoraireDebut()) . "</td>\n";
+                $out .= "<td>" . $this->renderHeures($vhl) ."</td>\n";
+                $out .= "<td>" . $this->renderTypeIntervention($vhl->getTypeIntervention()) ."</td>\n";
+                $out .= "<td>" . $this->renderHoraire($vhl->getHoraireFin()) . "</td>\n";
+                $out .= "<td>" . $vhl->getPeriode() . "</td>\n";
                 if ($canViewMNP) {
-                    $out .= "<td>" . $this->renderMotifNonPaiement($motifNonPaiement) . "</td>\n";
+                    $out .= "<td>" . $this->renderMotifNonPaiement($vhl->getMotifNonPaiement()) . "</td>\n";
+                }
+                if ($canEdit){
+                    $out .= "<td>".$this->renderActions($vhl)."</td>\n";
                 }
                 $out .= "</tr>\n";
             }
         }
-        $out .= '</table>' . "\n";
+        $out .= '</tbody>';
+        $out .= "</table>";
 
         return $out;
     }
 
 
 
-    protected function renderPeriode($periode)
+    private function renderActions(VolumeHoraireListe $volumeHoraireListe)
     {
-        if (!$periode) return "Indéterminée";
-        $out = (string)$periode;
+        $vhlph = new ListeFilterHydrator();
 
-        return $out;
+        $p1 = [
+            'service' => $volumeHoraireListe->getService()->getId(),
+        ];
+        $p2 = [
+            'query' => $vhlph->extract($volumeHoraireListe),
+        ];
+        if (false == $volumeHoraireListe->getMotifNonPaiement()){
+            $p2['query']['motif-non-paiement'] = 'all';
+        }
+
+        return $this->getView()->tag('a', [
+            'href' => $this->getView()->url('volume-horaire/saisie-calendaire', $p1, $p2),
+            'class' => 'ajax-modal',
+        ] )->html('<span class="glyphicon glyphicon-pencil"></span>');
     }
 
 
 
-    public function renderHeures(VolumeHoraireListe $volumeHoraireListe, $readOnly = false)
+    private function renderTypeIntervention(TypeIntervention $typeIntervention)
     {
-        $heures = $volumeHoraireListe->getHeures();
-        $heures = \UnicaenApp\Util::formattedNumber($heures);
-
-        $query = $volumeHoraireListe->filtersToArray();
-        if (false === $volumeHoraireListe->getMotifNonPaiement()) {
-            $query['tous-motifs-non-paiement'] = '1';
-        }
-        if ($readOnly || $this->getReadOnly()) {
-            return $heures;
-        } else {
-            $url = $this->getView()->url(
-                'volume-horaire/saisie',
-                ['service' => $volumeHoraireListe->getService()->getId()],
-                ['query' => $query]
-            );
-
-            return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"" . $volumeHoraireListe->getService()->getId() . "\" href=\"" . $url . "\" >$heures</a>";
-        }
+        return "<abbr title=\"".$typeIntervention->getLibelle()."\">".$typeIntervention->getCode()."</abbr>";
     }
 
 
 
-    protected function renderMotifNonPaiement($motifNonPaiement)
+    private function renderHoraire( $horaire )
+    {
+        if (!$horaire instanceof \DateTime) return null;
+
+        return $horaire->format(Constants::DATETIME_FORMAT);
+    }
+
+
+
+    private function renderHeures(VolumeHoraireListe $volumeHoraireListe)
+    {
+        return \UnicaenApp\Util::formattedNumber($volumeHoraireListe->getHeures());
+    }
+
+
+
+    private function renderMotifNonPaiement($motifNonPaiement)
     {
         if (!empty($motifNonPaiement)) {
             $out = $motifNonPaiement->getLibelleLong();
@@ -276,50 +276,6 @@ class ListeCalendaire extends AbstractViewHelper
         $this->typesIntervention  = null;
 
         return $this;
-    }
-
-
-
-    public function getTypesInterventions()
-    {
-        if (!$this->typesIntervention) {
-            if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()) {
-                $tis = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
-            } else {
-                $qb = $this->getServiceTypeIntervention()->finderByContext();
-                $this->getServiceTypeIntervention()->finderByHistorique($qb);
-                $tis = $this->getServiceTypeIntervention()->getList($qb);
-            }
-            $this->typesIntervention = [];
-            foreach ($tis as $ti) {
-                $this->typesIntervention[] = $ti;
-            }
-            uasort($this->typesIntervention, function ($a, $b) {
-                return $a->getordre() > $b->getOrdre();
-            });
-        }
-
-        return $this->typesIntervention;
-    }
-
-
-
-    public function getPeriodes()
-    {
-        $vhl = $this->getVolumeHoraireListe()->getChild()
-            ->setTypeIntervention(false)
-            ->setPeriode(false);
-
-        $periodes   = $this->getServiceService()->getPeriodes($vhl->getService());
-        $vhPeriodes = $vhl->getPeriodes();
-        foreach ($vhPeriodes as $periode) {
-            if (!isset($periodes[$periode->getId()])) $periodes[$periode->getId()] = $periode;
-        }
-        uasort($periodes, function ($a, $b) {
-            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
-        });
-
-        return $periodes;
     }
 
 }

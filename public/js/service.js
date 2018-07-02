@@ -288,10 +288,9 @@ $.widget("ose.serviceListe", {
             title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
         });
 
-        $("body").on('save-volume-horaire', function (event, data) {
-            var thatId = event.a.parents('div.service-liste').attr('id');
-            var serviceId = event.a.data('service');
-            event.a.popover('hide');
+        $("body").on('save-volume-horaire', function (event, popAjax) {
+            var serviceId = popAjax.element.data('service');
+            popAjax.hide();
             that.onAfterSaisie(serviceId);
         });
     },

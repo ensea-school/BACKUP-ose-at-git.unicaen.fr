@@ -2,8 +2,10 @@
 
 namespace Application\View\Helper\Service;
 
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
@@ -303,17 +305,10 @@ class Liste extends AbstractViewHelper
 
     public function renderLigne(Service $service, $details = false, $show = true)
     {
+        $tvhPrevu = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $evhSaisi = $this->getServiceEtatVolumeHoraire()->getSaisi();
+
         $ligneView = $this->getView()->serviceLigne($this, $service);
-
-        if ($this->getServiceContext()->isModaliteServicesSemestriel($this->getTypeVolumeHoraire())){
-            $volumeHoraireListe = $this->getView()->volumeHoraireListe($service->getVolumeHoraireListe());
-            /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\Liste */
-        }else{
-            $volumeHoraireListe = $this->getView()->volumeHoraireListeCalendaire($service->getVolumeHoraireListe());
-            /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\ListeCalendaire */
-        }
-
-
         $attribs = [
             'id'       => 'service-' . $service->getId() . '-ligne',
             'data-id'  => $service->getId(),
@@ -326,33 +321,56 @@ class Liste extends AbstractViewHelper
         $out .= '</tr>';
         $out .= '<tr class="volume-horaire" id="service-' . $service->getId() . '-volume-horaire-tr"' . ($details ? '' : ' style="display:none"') . '>';
         if ($this->isInRealise()) {
-            $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-' . $service->getId() . '-volume-horaire-td" colspan="999">';
+            $tvhRealise = $this->getServiceTypeVolumeHoraire()->getRealise();
+            $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
 
-            $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
-            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
-            $volumeHoraireListe->setReadOnly(true);
+            $vhlViewHelper = $this->getVhlViewHelper($service, $tvhPrevu, $evhValide);
+            $vhlViewHelper->setReadOnly(true);
+            $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-' . $service->getId() . '-volume-horaire-td" colspan="999">';
             $out .= '<div class="rappel-volume-horaire-prevu">';
-            $out .= sprintf('<div style="float:left;width:15%%"><h5>Prévisionnel<br />%s :</h5></div>', $etat);
-            $out .= '<div id="vhl-prev" style="width:85%" data-url="' . $volumeHoraireListe->getRefreshUrl() . '">' . $volumeHoraireListe->render() . '</div>';
+            $out .= sprintf('<div style="float:left;width:30%%"><h5>Prévisionnel %s :</h5></div>', $evhValide);
+            $out .= '<div id="vhl-prev" style="width:85%" data-url="' . $vhlViewHelper->getRefreshUrl() . '">' . $vhlViewHelper->render() . '</div>';
             $out .= '</div>';
 
-            $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
-            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
-            $volumeHoraireListe->setReadOnly($this->getReadOnly());
+            $vhlViewHelper = $this->getVhlViewHelper($service, $tvhRealise, $evhSaisi);
+            $vhlViewHelper->setReadOnly($this->getReadOnly());
             $out .= '<div style="float:left;width:15%"><h5>Réalisé :</h5></div>';
-            $out .= '<div id="vhl" style="width:85%" data-url="' . $volumeHoraireListe->getRefreshUrl() . '">' . $volumeHoraireListe->render() . '</div>';
+            $out .= '<div id="vhl" style="width:85%" data-url="' . $vhlViewHelper->getRefreshUrl() . '">' . $vhlViewHelper->render() . '</div>';
         } else {
-            $out .= '<td class="volume-horaire" style="padding-left:10em" id="service-' . $service->getId() . '-volume-horaire-td" colspan="999">';
-
-            $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
-            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $volumeHoraireListe = $this->getVhlViewHelper($service, $tvhPrevu, $evhSaisi);
             $volumeHoraireListe->setReadOnly($this->getReadOnly());
+            $out .= '<td class="volume-horaire" style="padding-left:10em" id="service-' . $service->getId() . '-volume-horaire-td" colspan="999">';
             $out .= '<div id="vhl" data-url="' . $volumeHoraireListe->getRefreshUrl() . '">' . $volumeHoraireListe->render() . '</div>';
         }
         $out .= '</td>';
         $out .= '</tr>';
 
         return $out;
+    }
+
+
+
+    /**
+     * @param Service $service
+     * @param         $typeVolumeHoraire
+     *
+     * @return \Application\View\Helper\VolumeHoraire\Liste|\Application\View\Helper\VolumeHoraire\ListeCalendaire
+     */
+    private function getVhlViewHelper(Service $service, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+    {
+        $volumeHoraireListe = $service->getVolumeHoraireListe();
+        $volumeHoraireListe->setTypeVolumeHoraire($typeVolumeHoraire);
+        $volumeHoraireListe->setEtatVolumeHoraire($etatVolumeHoraire);
+
+        if ($this->getServiceContext()->isModaliteServicesSemestriel($typeVolumeHoraire)){
+            $vhlvh = $this->getView()->volumeHoraireListe($volumeHoraireListe);
+            /* @var $vhlvh \Application\View\Helper\VolumeHoraire\Liste */
+        }else{
+            $vhlvh = $this->getView()->volumeHoraireListeCalendaire($volumeHoraireListe);
+            /* @var $vhlvh \Application\View\Helper\VolumeHoraire\ListeCalendaire */
+        }
+
+        return $vhlvh;
     }
 
 

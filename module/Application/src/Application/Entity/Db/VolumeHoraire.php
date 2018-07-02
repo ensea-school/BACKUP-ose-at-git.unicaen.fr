@@ -94,6 +94,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     protected $horaireFin;
 
 
+
     /**
      * Constructor
      */
@@ -387,7 +388,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
      *
      * @param \Application\Entity\Db\TypeValidation $type
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Validation[]
      */
     public function getValidation(TypeValidation $type = null)
     {
@@ -473,6 +474,25 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 
 
     /**
+     * Permet de savoir si ce volume horaire est validé ou non
+     *
+     * @return bool
+     */
+    public function isValide(): bool
+    {
+        if ($this->isAutoValidation()) return true;
+
+        $validations = $this->getValidation();
+        foreach ($validations as $validation) {
+            if ($validation->estNonHistorise()) return true;
+        }
+
+        return false;
+    }
+
+
+
+    /**
      * @param bool $autoValidation
      *
      * @return VolumeHoraire
@@ -507,6 +527,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 
         return $this;
     }
+
+
 
     /**
      * @return \DateTime

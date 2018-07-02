@@ -13,7 +13,7 @@ use Zend\Form\Element\Hidden;
  * Description of Saisie
  *
  */
-class Saisie extends AbstractForm
+class SaisieCalendaire extends AbstractForm
 {
     use MotifNonPaiementServiceAwareTrait;
 
@@ -34,11 +34,13 @@ class Saisie extends AbstractForm
      */
     public function init()
     {
-        $this->setAttributes([
-            'action' => $this->getCurrentUrl(),
-            'method' => 'post',
-            'class'  => 'volume-horaire',
-        ]);
+        $this->setAttribute('action', $this->getCurrentUrl());
+        $this->setAttribute('method', 'post')
+            ->setAttribute('class', 'volume-horaire')
+//                ->setHydrator(new ClassMethods(false))
+//                ->setInputFilter(new InputFilter())
+//                ->setPreferFormInputFilter(false)
+        ;
 
         $this->add([
             'name'       => 'heures',
@@ -107,9 +109,9 @@ class Saisie extends AbstractForm
     public function bind($object, $flags = 17)
     {
         /* @var $object \Application\Entity\VolumeHoraireListe */
+        $vhlph = new ListeFilterHydrator();
 
-        $vhlph           = new ListeFilterHydrator();
-        $data            = $vhlph->extractInts($object);
+        $data            = $vhlph->extract($object);
         $data['service'] = $object->getService()->getId();
         $data['heures']  = StringFromFloat::run($object->getHeures(), false);
 

@@ -210,4 +210,21 @@ class VolumeHoraireService extends AbstractEntityService
         return $qb;
     }
 
+
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null       $alias
+     *
+     * @return QueryBuilder
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.horaireDebut");
+        $qb->addOrderBy("$alias.horaireFin");
+
+        return $qb;
+    }
 }

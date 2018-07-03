@@ -1,11 +1,12 @@
 <?php
 
+use Application\Form\VolumeHoraire\SaisieCalendaire;
+
 /**
  * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $form SaisieCalendaire
+ * @var $title string
  */
 
-?>
-
-echo 'saisie calendaire...';
-<?php
-var_dump($data);
+echo $this->form($form);

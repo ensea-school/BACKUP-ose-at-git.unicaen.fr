@@ -204,12 +204,8 @@ class ListeCalendaire extends AbstractViewHelper
     {
         $vhlph = new ListeFilterHydrator();
 
-        $p1 = [
-            'service' => $volumeHoraireListe->getService()->getId(),
-        ];
-        $p2 = [
-            'query' => $vhlph->extract($volumeHoraireListe),
-        ];
+        $p1 = ['service' => $volumeHoraireListe->getService()->getId()];
+        $p2 = ['query' => $vhlph->extractInts($volumeHoraireListe)];
         if (false == $volumeHoraireListe->getMotifNonPaiement()){
             $p2['query']['motif-non-paiement'] = 'all';
         }

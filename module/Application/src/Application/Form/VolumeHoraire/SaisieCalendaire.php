@@ -37,10 +37,16 @@ class SaisieCalendaire extends AbstractForm
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->setAttribute('method', 'post')
             ->setAttribute('class', 'volume-horaire')
-//                ->setHydrator(new ClassMethods(false))
-//                ->setInputFilter(new InputFilter())
-//                ->setPreferFormInputFilter(false)
         ;
+
+        $this->add([
+            'type'       => 'UnicaenApp\Form\Element\DateTime',
+            'name'       => 'horaire-debut',
+            'options'    => [
+                'label'  => 'Horaire de début',
+            ],
+        ]);
+        $this->get('horaire-debut')->setIncludeTime(true);
 
         $this->add([
             'name'       => 'heures',

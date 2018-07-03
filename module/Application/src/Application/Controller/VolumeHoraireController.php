@@ -7,6 +7,7 @@ use Application\Entity\Db\Service;
 use Application\Entity\VolumeHoraireListe;
 use Application\Filter\StringFromFloat;
 use Application\Form\VolumeHoraire\Traits\SaisieAwareTrait;
+use Application\Form\VolumeHoraire\Traits\SaisieCalendaireAwareTrait;
 use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Processus\Traits\PlafondProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -30,6 +31,7 @@ class VolumeHoraireController extends AbstractController
     use SaisieAwareTrait;
     use WorkflowServiceAwareTrait;
     use PlafondProcessusAwareTrait;
+    use SaisieCalendaireAwareTrait;
 
 
 
@@ -122,8 +124,8 @@ class VolumeHoraireController extends AbstractController
 
     public function saisieCalendaireAction()
     {
-        $serviceId = $this->params()->fromRoute('service');
-        $service   = $this->getServiceService()->get($serviceId);
+        /** @var Service $service */
+        $service = $this->getEvent()->getParam('service');
 
         if (!$service) {
             throw new \Exception('Service non fourni');
@@ -132,9 +134,12 @@ class VolumeHoraireController extends AbstractController
         $volumeHoraireListe = new VolumeHoraireListe($service);
         $vhlph              = new ListeFilterHydrator();
         $vhlph->setEntityManager($this->em());
-        $vhlph->hydrate($this->params()->fromQuery(), $volumeHoraireListe);
+        $vhlph->hydrate($this->params()->fromQuery() + $this->params()->fromPost(), $volumeHoraireListe);
 
-        return compact('data');
+        $form  = $this->getFormVolumeHoraireSaisieCalendaire();
+        $title = "Modification d'une ligne de service";
+
+        return compact('title', 'form');
     }
 
 

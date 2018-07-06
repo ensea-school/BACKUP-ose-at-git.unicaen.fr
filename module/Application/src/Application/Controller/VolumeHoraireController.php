@@ -137,6 +137,16 @@ class VolumeHoraireController extends AbstractController
         $vhlph->hydrate($this->params()->fromQuery() + $this->params()->fromPost(), $volumeHoraireListe);
 
         $form  = $this->getFormVolumeHoraireSaisieCalendaire();
+        $form->bindRequestSave($volumeHoraireListe, $this->getRequest(), function(VolumeHoraireListe $vhl){
+            try {
+                //$this->getServiceTypeDotation()->save($td);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        });
+
         $title = "Modification d'une ligne de service";
 
         return compact('title', 'form');

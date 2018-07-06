@@ -7,27 +7,34 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Entity\VolumeHoraireListe;
-use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
-use Application\Service\ServiceService;
+use Zend\Form\Form;
 
-/** @var ServiceService $ss */
-$ss = $sl->get(ServiceService::class);
+var_dump($_POST);
 
-$service = $ss->get(24519);
+$horaire = isset($_POST['horaire']) ? $_POST['horaire'] : null;
 
-$vhl = new VolumeHoraireListe($service);
+$hd = $horaire;
+//$hd = null;//'32/05/2017';
 
-$sl = $vhl->getSousListes([
-    $vhl::FILTRE_HORAIRE_DEBUT,
-    $vhl::FILTRE_HORAIRE_FIN,
-    $vhl::FILTRE_MOTIF_NON_PAIEMENT
+$form = new Form();
+$form->add([
+    'type'    => 'DateTime',
+    'name'    => 'horaire',
+    'options' => [
+        'label'    => 'Horaire',
+        'format'   => 'd/m/Y à H:i',
+    ],
 ]);
+$form->add([
+    'name'       => 'submit',
+    'type'       => 'Submit',
+    'attributes' => [
+        'value' => 'Enregistrer',
+        'title' => "Enregistrer",
+        'class' => 'btn btn-primary',
+    ],
+]);
+$form->get('horaire')->setValue($hd);
 
-$h = new ListeFilterHydrator();
+echo $this->form($form);
 
-foreach( $sl as $vhl ){
-    $d = $h->extractInts($vhl);
-
-    var_dump($d);
-}

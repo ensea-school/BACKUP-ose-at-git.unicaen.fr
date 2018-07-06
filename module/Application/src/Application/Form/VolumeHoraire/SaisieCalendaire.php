@@ -2,12 +2,13 @@
 
 namespace Application\Form\VolumeHoraire;
 
+use Application\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
-use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
-use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
+use UnicaenApp\Util;
 use Zend\Form\Element\Hidden;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Description of Saisie
@@ -38,15 +39,17 @@ class SaisieCalendaire extends AbstractForm
         $this->setAttribute('method', 'post')
             ->setAttribute('class', 'volume-horaire')
         ;
+        $hydrator = new SaisieCalendaireHydrator();
+        $this->setHydrator($hydrator);
 
         $this->add([
-            'type'       => 'UnicaenApp\Form\Element\DateTime',
+            'type'       => 'DateTime',
             'name'       => 'horaire-debut',
             'options'    => [
                 'label'  => 'Horaire de début',
+                'format' => Util::DATETIME_FORMAT,
             ],
         ]);
-        $this->get('horaire-debut')->setIncludeTime(true);
 
         $this->add([
             'name'       => 'heures',
@@ -111,26 +114,6 @@ class SaisieCalendaire extends AbstractForm
 
 
 
-    /* Associe une entity VolumeHoraireList au formulaire */
-    public function bind($object, $flags = 17)
-    {
-        /* @var $object \Application\Entity\VolumeHoraireListe */
-        $vhlph = new ListeFilterHydrator();
-
-        $data            = $vhlph->extract($object);
-        $data['service'] = $object->getService()->getId();
-        $data['heures']  = StringFromFloat::run($object->getHeures(), false);
-
-        if (!$this->getViewMNP()) {
-            $this->remove('motif-non-paiement');
-        } else {
-            $data['motif-non-paiement'] = $object->getMotifNonPaiement() ? $object->getMotifNonPaiement()->getId() : 0;
-        }
-        $this->setData($data);
-    }
-
-
-
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -154,56 +137,49 @@ class SaisieCalendaire extends AbstractForm
             ],
         ];
     }
+}
 
 
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class SaisieCalendaireHydrator implements HydratorInterface
+{
 
     /**
-     * @return boolean
-     */
-    public function getViewMNP()
-    {
-        return $this->viewMNP;
-    }
-
-
-
-    /**
-     * @param boolean $viewMNP
+     * Hydrate $object with the provided $data.
      *
-     * @return Saisie
-     */
-    public function setViewMNP($viewMNP)
-    {
-        $this->viewMNP = $viewMNP;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getEditMNP()
-    {
-        return $this->editMNP;
-    }
-
-
-
-    /**
-     * @param boolean $editMNP
+     * @param  array                                  $data
+     * @param  VolumeHoraireListe $object
      *
-     * @return Saisie
+     * @return object
      */
-    public function setEditMNP($editMNP)
+    public function hydrate(array $data, $object)
     {
-        $this->editMNP = $editMNP;
+        $object->setHoraireDebut(\DateTime::createFromFormat(Util::DATETIME_FORMAT, $data['horaire-debut']) );
 
-        if (!$editMNP && $this->has('motif-non-paiement')) {
-            $this->remove('motif-non-paiement');
-        }
-
-        return $this;
+        return $object;
     }
+
+
+
+    /**
+     * Extract values from an object
+     *
+     * @param  VolumeHoraireListe $object
+     *
+     * @return array
+     */
+    public function extract($object)
+    {
+        $data = [
+            'horaire-debut' => $object->getHoraireDebut(),
+        ];
+
+        return $data;
+    }
+
 }

@@ -346,7 +346,7 @@ class OseAdmin
 
     private function loadBdd()
     {
-        require_once('../config/application.config.php');
+        require_once('../config.local.php');
 
         $bdd = new Bdd;
 

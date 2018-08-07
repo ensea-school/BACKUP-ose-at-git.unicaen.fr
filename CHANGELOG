@@ -39,6 +39,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Dans le module Charges, il est désormais possible de modifier/créer des scénarios de niveau établissement
 
+* Meilleures possibilités de personnalisation (page contacts, adresse mail d'envoi, icône de l'application).
+
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :

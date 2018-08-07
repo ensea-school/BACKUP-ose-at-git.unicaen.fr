@@ -44,10 +44,17 @@ author: Laurent Lécluse - DSI - Unicaen
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/07.0.sql`
 
-* Ajoutez un paramètre "contact" dans votre fichier de configuration de l'application, rubrique "etablissement"
-pour pouvoir définir le contenu de votre page "contact"
+* De nouveaux paramètres de configuration ont été ajoutés dans le fichier de configuration global de l'application
+`/config.local.php`. A vous de les ajouter manuellement à votre fichier de confguration existant.
+Au besoin, le modèle est le fichier `/config.local.php.default`.
 
-* Idem si vous voulez personnaliser l'icône de l'application (paramètre icones dans etablissement du fichier de config).
+Les paramètres à ajouter puis personnaliser sont :
+
+| Rubrique        | Paramètre       | Description                         |
+| --------------- | --------------- | ----------------------------------- |
+| etablissement | contact | Personnalisation du contenu de votre page "contact" (code HTML) |
+| etablissement | icones | Personnaliser l'icône de l'application |
+| mail | from | préciser l'adresse d'expéditeur des mails de OSE |
 
 #OSE 6.3.2
 

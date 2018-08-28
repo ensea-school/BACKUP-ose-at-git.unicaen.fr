@@ -39,7 +39,11 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Dans le module Charges, il est désormais possible de modifier/créer des scénarios de niveau établissement
 
-* Meilleures possibilités de personnalisation (page contacts, adresse mail d'envoi, icône de l'application).
+* Meilleures possibilités de personnalisation :
+    * page contacts, 
+    * adresse mail d'envoi, 
+    * icône de l'application, 
+    * URL des documentations permanents et vacataires dans les paramètres généraux.
 
 ## Notes de mise à jour
 

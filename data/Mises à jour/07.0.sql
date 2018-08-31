@@ -195,6 +195,46 @@ INSERT INTO parametre (
   (select id from utilisateur where username='oseappli')
 );
 
+INSERT INTO parametre (
+    id,
+    nom,
+    valeur,
+    description,
+    histo_creation,
+    histo_createur_id,
+    histo_modification,
+    histo_modificateur_id
+    ) VALUES (
+                 parametre_id_seq.nextval,
+                 'doc-intervenant-vacataires',
+                 '',
+                 'URL de la documentation OSE pour les vacataires',
+                 sysdate,
+                 (select id from utilisateur where username='oseappli'),
+                 sysdate,
+                 (select id from utilisateur where username='oseappli')
+                 );
+
+INSERT INTO parametre (
+    id,
+    nom,
+    valeur,
+    description,
+    histo_creation,
+    histo_createur_id,
+    histo_modification,
+    histo_modificateur_id
+    ) VALUES (
+                 parametre_id_seq.nextval,
+                 'doc-intervenant-permanents',
+                 '',
+                 'URL de la documentation OSE pour les permanents',
+                 sysdate,
+                 (select id from utilisateur where username='oseappli'),
+                 sysdate,
+                 (select id from utilisateur where username='oseappli')
+                 );
+
 INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
 SELECT
   privilege_id_seq.nextval id,

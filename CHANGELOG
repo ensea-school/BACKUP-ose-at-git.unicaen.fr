@@ -15,6 +15,9 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * L'affichage des détails d'une composante (lorsqu'on clique sur son nom) a été réparé.
 
+* Administration des fonctions référentielles :
+Les composantes supprimées n'apparaissent maintenant plus dans la liste. Apparaissent en plus les composantes sans enseignements (pour lesquelles il peut y avoir du référentiel).
+
 ## Nouveautés
 
 * Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)

@@ -111,9 +111,10 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
         <?=($ti->isVisible() ? 'Visible' : 'Caché');
         if ($canEdit) {
             ?>
-            <a class="btn btn-default btn-xs ajax-modal" data-event="type-intervention-saisie" style="float:right"
+            <a class="btn btn-default btn-xs pop-ajax" data-event="type-intervention-saisie" style="float:right"
                href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
-               title="Ajouter un type d'intervention pour une structure">
+               title="Ajouter un type d'intervention pour une structure"
+                data-submit-reload="true">
                 Ajouter une exception pour une structure</a>
         <?php }
         $saut = 0;
@@ -139,8 +140,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     if ($canEdit) {
                         ?>
                         <td style="width: 50px;">
-                            <a class="ajax-modal" data-event="type-intervention-saisie"
-                               href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>">
+                            <a class="pop-ajax" data-event="type-intervention-saisie"
+                               href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>"
+                               data-submit-reload="true">
                                 <span class="glyphicon glyphicon-edit"></span></a>
                             <a class="pop-ajax" data-event="type-intervention-saisie"
                                href="<?= $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"

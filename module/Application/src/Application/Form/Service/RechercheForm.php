@@ -160,11 +160,11 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface,
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "StructureService gestionnaire de l'enseignement",
+                    'title' => "Structure gestionnaire de l'enseignement",
                 ],
             ],
             'attributes' => [
-                'title' => "StructureService gestionnaire de l'enseignement",
+                'title' => "Structure gestionnaire de l'enseignement",
                 'class' => 'input-sm',
             ],
             'type'       => 'Select',

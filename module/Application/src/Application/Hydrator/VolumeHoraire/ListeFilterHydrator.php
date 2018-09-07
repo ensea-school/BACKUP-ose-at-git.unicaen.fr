@@ -5,6 +5,7 @@ namespace Application\Hydrator\VolumeHoraire;
 use Application\Entity\VolumeHoraireListe;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenApp\Util;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterface
@@ -51,7 +52,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
      *
      * @return int
      */
-    private function dataToInt(string $filter, $value): int
+    public function dataToInt(string $filter, $value): int
     {
         if (false === $value) return -2;
         if (true === $value) return -1;
@@ -68,13 +69,14 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     /**
      * @param string $filter
      * @param        $value
+     * @param array  $options
      *
      * @return bool|\DateTime|int|null|object
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    private function allToData(string $filter, $value)
+    public function allToData(string $filter, $value, $options = [])
     {
         if (
             is_bool($value) || null === $value || is_object($value)
@@ -82,19 +84,26 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
             return $value;
         }
 
-        $value = (int)$value;
+        if ('all' == $value) return false;
 
-        if (-2 == $value) return false;
-        if (-1 == $value) return true;
-        if (0 == $value) return null;
+        $valInt = (int)$value;
+
+        if (-2 == $valInt) return false;
+        if (-1 == $valInt) return true;
+        if (0 == $valInt) return null;
 
         $class = VolumeHoraireListe::FILTRES_LIST[$filter]['class'];
         switch ($class) {
             case null:
-                return $value;
+                return $valInt;
             case \DateTime::class:
-                $dateTime = new \DateTime;
-                $dateTime->setTimestamp($value);
+                if ((string)(int)$value === $value){
+                    $dateTime = new \DateTime;
+                    $dateTime->setTimestamp($valInt);
+                }else{
+                    $format = isset($options['format']) ? $options['format'] : Util::DATETIME_FORMAT;
+                    $dateTime = \DateTime::createFromFormat($format, $value);
+                }
 
                 return $dateTime;
             default:
@@ -102,7 +111,7 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
                     throw new \Exception('L\'EntityManager doit être fourni!!');
                 }
 
-                return $em->find($class, $value);
+                return $em->find($class, $valInt);
         }
     }
 
@@ -115,12 +124,12 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
      *
      * @return array
      */
-    public function extractInts($object)
+    public function extractInts($object, $withAll=false)
     {
         $data = $this->extract($object);
         foreach ($data as $filter => $value) {
             $intData = $this->dataToInt($filter, $value);
-            if (-2 == $intData) {
+            if (-2 == $intData && !$withAll) {
                 unset($data[$filter]);
             } else {
                 $data[$filter] = $intData;
@@ -166,9 +175,9 @@ class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterf
     /**
      * @param array $filters
      *
-     * @return ListeHydrator
+     * @return ListeFilterHydrator
      */
-    public function setFilters(array $filters): ListeHydrator
+    public function setFilters(array $filters): ListeFilterHydrator
     {
         $this->filters = $filters;
 

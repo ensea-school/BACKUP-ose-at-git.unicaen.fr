@@ -2,6 +2,8 @@
 
 namespace OSETest;
 
+use Application\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\MotifNonPaiement;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
@@ -14,7 +16,7 @@ use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Zend\Code\Reflection\MethodReflection;
+use DoctrineORMModule\Proxy\__CG__\UnicaenImport\Entity\Db\Source;
 
 class VolumeHoraireListeTest
 {
@@ -25,7 +27,7 @@ class VolumeHoraireListeTest
     use SourceServiceAwareTrait;
     use ServiceServiceAwareTrait;
 
-    const DT_FORMAT = 'd/m/Y H:i';
+    const DT_FORMAT = 'd/m/Y à H:i';
 
     /**
      * @var Service
@@ -56,6 +58,11 @@ class VolumeHoraireListeTest
      * @var VolumeHoraireListe
      */
     private $volumeHoraireListe;
+
+    /**
+     * @var
+     */
+    private $dumping = false;
 
 
 
@@ -161,9 +168,9 @@ class VolumeHoraireListeTest
                 $volumeHoraire->setHoraireDebut(\DateTime::createFromFormat(self::DT_FORMAT, $vhData['horaireDebut']));
             }
             if (isset($vhData['motifNonPaiement']) && $vhData['motifNonPaiement']) {
-                if (is_int($vhData['motifNonPaiement'])){
+                if (is_int($vhData['motifNonPaiement'])) {
                     $motifNonPaiement = $this->getServiceMotifNonPaiement()->get($vhData['motifNonPaiement']);
-                }else{
+                } else {
                     $motifNonPaiement = $this->getServiceMotifNonPaiement()->getRepo()->findOneBy(['libelleCourt' => $vhData['motifNonPaiement']]);
                 }
                 $volumeHoraire->setMotifNonPaiement($motifNonPaiement);
@@ -178,9 +185,9 @@ class VolumeHoraireListeTest
                 $volumeHoraire->setAutoValidation($vhData['valide']);
             }
             if (isset($vhData['source'])) {
-                if (is_int($vhData['source'])){
+                if (is_int($vhData['source'])) {
                     $source = $this->getServiceSource()->get($vhData['source']);
-                }else{
+                } else {
                     $source = $this->getServiceSource()->getByCode($vhData['source']);
                 }
                 $volumeHoraire->setSource($source);
@@ -197,7 +204,7 @@ class VolumeHoraireListeTest
 
 
 
-    private function normalizedData($vhData, $autoDeleteDefaults=false)
+    private function normalizedData($vhData, $autoDeleteDefaults = false)
     {
         $nd = [
             'horaireDebut'     => null,
@@ -245,7 +252,7 @@ class VolumeHoraireListeTest
             $nd['heures'] = (float)$vhData;
         }
 
-        if ($autoDeleteDefaults){
+        if ($autoDeleteDefaults) {
             if ($nd['horaireDebut'] === null) unset($nd['horaireDebut']);
             if ($nd['motifNonPaiement'] === null) unset($nd['motifNonPaiement']);
             if ($nd['heures'] === null) unset($nd['heures']);
@@ -309,6 +316,97 @@ class VolumeHoraireListeTest
 
 
 
+    public function dumpBegin(VolumeHoraireListe $volumeHoraireListe): VolumeHoraireListeTest
+    {
+        $this->dumping = $this->createScenarioFromVolumeHoraireListe($volumeHoraireListe);
+
+        return $this;
+    }
+
+
+
+    public function dumpAction(...$args): VolumeHoraireListeTest
+    {
+        foreach ($args as $i => $arg) {
+            switch (true) {
+                case $arg instanceof \DateTime:
+                    $args[$i] = $arg->format(self::DT_FORMAT);
+                break;
+                case $arg instanceof TypeIntervention:
+                case $arg instanceof Periode:
+                case $arg instanceof Source:
+                case $arg instanceof MotifNonPaiement:
+                    $args[$i] = $arg->getCode();
+                break;
+            }
+        }
+
+        if ($this->dumping !== false) {
+            $this->dumping['actions'][] = $args;
+        }
+
+        return $this;
+    }
+
+
+
+    public function dumping(): bool
+    {
+        return $this->dumping !== false;
+    }
+
+
+
+    /**
+     * @return bool|array
+     */
+    public function dumpEnd()
+    {
+        $dumping       = $this->dumping;
+        $this->dumping = false;
+
+        return $dumping;
+    }
+
+
+
+    public function dumpEndToFile($filename = null)
+    {
+        if (null === $filename) {
+            $filename = '/home/laurent/UnicaenCode/dumps/vhl-' . uniqid(); // à revoir!!
+        }
+
+        file_put_contents($filename, var_export($this->dumpEnd(), true));
+    }
+
+
+
+    public function createScenarioFromVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
+    {
+        $volumesHoraires = [];
+        /** @var VolumeHoraire[] $vhs */
+        $vhs = $volumeHoraireListe->getService()->getVolumeHoraire()->toArray();
+        foreach ($vhs as $volumeHoraire) {
+            if (
+                $volumeHoraire->getTypeVolumeHoraire() == $volumeHoraireListe->getTypeVolumeHoraire()
+                && $volumeHoraire->estNonHistorise()
+                && $volumeHoraire->getTypeIntervention() == $volumeHoraireListe->getTypeIntervention()
+                && $volumeHoraire->getPeriode() == $volumeHoraireListe->getPeriode()
+            ) {
+                $volumesHoraires[$volumeHoraire->getId()] = $this->normalizedData($volumeHoraire, true);
+            }
+        }
+        $scenario = [
+            'input'   => $volumesHoraires,
+            'output'  => [],
+            'actions' => [],
+        ];
+
+        return $scenario;
+    }
+
+
+
     public function createScenarioFromService($serviceId, $typeVolumeHoraireCode, $periodeCode, $typeInterventionCode)
     {
         $service           = $this->getServiceService()->get($serviceId);
@@ -321,18 +419,7 @@ class VolumeHoraireListeTest
         $vhl->setPeriode($periode);
         $vhl->setTypeIntervention($typeIntervention);
 
-        $volumesHoraires = [];
-        $vhs = $vhl->getVolumeHoraires();
-        foreach( $vhs as $volumeHoraire){
-            $volumesHoraires[$volumeHoraire->getId()] = $this->normalizedData($volumeHoraire, true);
-        }
-        $scenario = [
-            'input' => $volumesHoraires,
-            'output' => [],
-            'actions' => [],
-        ];
-
-        return $scenario;
+        return $this->createScenarioFromVolumeHoraireListe($vhl);
     }
 
 
@@ -396,18 +483,87 @@ class VolumeHoraireListeTest
 
     private function callVhlMethod($method, array $args)
     {
-        switch($method){
-            case 'setHeuresWithMotifNonPaiement':
-                if (is_string($args[1])) {
-                    $args[1] = $this->getServiceMotifNonPaiement()->getRepo()->findOneBy(['libelleCourt' => $args[1]]);
-                }
-                if (is_string($args[2])) {
-                    $args[2] = $this->getServiceMotifNonPaiement()->getRepo()->findOneBy(['libelleCourt' => $args[2]]);
-                }
-            break;
+        $formats = [
+            'setMotifNonPaiement'                  => [MotifNonPaiement::class],
+            'moveHeuresFromAncienMotifNonPaiement' => [null, MotifNonPaiement::class],
+            'changeAll'                            => [\DateTime::class, \DateTime::class, TypeIntervention::class, Periode::class, MotifNonPaiement::class],
+            'setTypeIntervention'                  => [TypeIntervention::class],
+            'setPeriode'                           => [Periode::class],
+            'setSource'                            => [Source::class],
+            'setHoraireDebut'                      => [\DateTime::class],
+            'setHoraireFin'                        => [\DateTime::class],
+        ];
+
+        if (isset($formats[$method])) {
+            foreach ($args as $i => $arg) {
+                $args[$i] = $this->argToObject($arg, $formats[$method][$i]);
+            }
         }
 
         call_user_func_array([$this->volumeHoraireListe, $method], $args);
+    }
+
+
+
+    private function argToObject($arg, $type)
+    {
+        switch ($type) {
+            case TypeIntervention::class:
+                if (is_int($arg)) {
+                    return $this->getServiceTypeIntervention()->get($arg);
+                } elseif (is_string($arg)) {
+                    return $this->getServiceTypeIntervention()->getByCode($arg);
+                }
+            case Periode::class:
+                if (is_int($arg)) {
+                    return $this->getServicePeriode()->get($arg);
+                } elseif (is_string($arg)) {
+                    return $this->getServicePeriode()->getByCode($arg);
+                }
+            case Source::class:
+                if (is_int($arg)) {
+                    return $this->getServiceSource()->get($arg);
+                } elseif (is_string($arg)) {
+                    return $this->getServiceSource()->getByCode($arg);
+                }
+            case \DateTime::class:
+                if (is_int($arg)) {
+                    $dateTime = new \DateTime();
+                    $dateTime->setTimestamp($arg);
+
+                    return $dateTime;
+                } elseif (is_string($arg)) {
+                    return \DateTime::createFromFormat(self::DT_FORMAT, $arg);
+                }
+            case MotifNonPaiement::class:
+                if (is_int($arg)) {
+                    return $this->getServiceMotifNonPaiement()->get($arg);
+                } elseif (is_string($arg)) {
+                    return $this->getServiceMotifNonPaiement()->getRepo()->findOneBy(['libelleCourt' => $arg]);
+                }
+        }
+
+        return $arg;
+    }
+
+
+
+    private function objectToArg($data)
+    {
+        switch (true) {
+            case $data instanceof \DateTime:
+                return $data->format(self::DT_FORMAT);
+
+            case $data instanceof TypeIntervention:
+            case $data instanceof Periode:
+            case $data instanceof Source:
+                return $data->getCode();
+
+            case $data instanceof MotifNonPaiement:
+                return $data->getLibelleCourt();
+        }
+
+        return $data;
     }
 
 
@@ -479,7 +635,13 @@ class VolumeHoraireListeTest
 
         ?>
         <h3>Heures : (Sources=<?= $heuresInput ?>, Attendues=<?= $heuresOutput ?>, Calculées=<?= $heuresCalc ?>)</h3>
-        <?php foreach ($this->scenario['actions'] as $action): ?>
+        <?php foreach ($this->scenario['actions'] as $action):
+        foreach ($action as $ak => $av) {
+            if (false === $av) $action[$ak] = '<i>false</i>';
+            if (null === $av) $action[$ak] = '<i>null</i>';
+            if (true === $av) $action[$ak] = '<i>true</i>';
+        }
+        ?>
         <div>
             <b><?= $action[0] ?></b>
             <span style="color:gray">(</span><?php unset($action[0]);

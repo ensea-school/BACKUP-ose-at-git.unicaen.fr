@@ -26,37 +26,37 @@ return;
 */
 
 $seulScenario = null;
-//$seulScenario = 20;
+//$seulScenario = 14;
 
 $scenarios = [
     1  => [
         'input'   => [
             1 => [
-                'horaireDebut'     => '27/09/1980 14:00',
+                'horaireDebut'     => '27/09/1980 à 14:00',
                 'motifNonPaiement' => null,
-                'HistoCreation'    => '14/08/2018 11:00',
+                'HistoCreation'    => '14/08/2018 à 11:00',
                 'heures'           => 5,
             ],
             2 => [
-                'horaireDebut'     => '27/09/1980 14:00',
+                'horaireDebut'     => '27/09/1980 à 14:00',
                 'motifNonPaiement' => null,
-                'HistoCreation'    => '14/08/2018 11:00',
+                'HistoCreation'    => '14/08/2018 à 11:00',
                 'heures'           => 4,
             ],
             3 => [
-                'horaireDebut'     => '27/09/1980 14:00',
+                'horaireDebut'     => '27/09/1980 à 14:00',
                 'motifNonPaiement' => 1,
-                'HistoCreation'    => '14/08/2018 11:00',
+                'HistoCreation'    => '14/08/2018 à 11:00',
                 'heures'           => 4,
             ],
             4 => [
-                'horaireDebut'     => '27/09/1980 14:00',
+                'horaireDebut'     => '27/09/1980 à 14:00',
                 'motifNonPaiement' => 1,
-                'HistoCreation'    => '14/08/2018 11:01',
+                'HistoCreation'    => '14/08/2018 à 11:01',
                 'heures'           => 4,
             ],
             5 => [
-                'horaireDebut'     => '27/09/1980 14:00',
+                'horaireDebut'     => '27/09/1980 à 14:00',
                 'motifNonPaiement' => 1,
                 'HistoCreation'    => null,
                 'heures'           => 3,
@@ -127,138 +127,173 @@ $scenarios = [
             ['setHeures', 1],
         ],
     ],
-    6  => [
-        'input'   => [
-            30216 => [
-                'heures' => 16.0,
-                'source' => 'ADE',
+    6  => [ // on déplace toutes les heures de MNP vers un nouveau
+            'input'   => [
+                30216 => [
+                    'heures' => 16.0,
+                    'source' => 'ADE',
+                ],
+                30264 => [
+                    'motifNonPaiement' => 'HC payées par ENSCCF',
+                    'heures'           => 5.0,
+                ],
+                30265 => [
+                    'heures' => -8.0,
+                ],
+                30187 => [
+                    'heures' => 3.0,
+                    'valide' => true,
+                ],
             ],
-            30264 => [
-                'motifNonPaiement' => 'HC payées par ENSCCF',
-                'heures'           => 5.0,
+            'output'  => [
+                30265 => [
+                    'heures' => -19,
+                ],
+                'n1'  => [
+                    'motifNonPaiement' => 'Essai-1',
+                    'heures'           => 11,
+                ],
             ],
-            30265 => [
-                'heures' => -8.0,
+            'actions' => [
+                ['setMotifNonPaiement', 'Essai-1'],
+                ['moveHeuresFromAncienMotifNonPaiement', 11, null],
             ],
-            30187 => [
-                'heures' => 3.0,
-                'valide' => true,
-            ],
-        ],
-        'output'  => [
-            30264 => ['heures' => 2],
-            'n1'  => [
-                'motifNonPaiement' => 'Essai-1',
-                'heures'           => 3,
-            ],
-        ],
-        'actions' => [
-            ['setHeuresWithMotifNonPaiement', 3, 'HC payées par ENSCCF', 'Essai-1'],
-        ],
     ],
-    7  => [
-        'input'   => [
-            30216 => [
-                'heures' => 16.0,
-                'source' => 'ADE',
+    7  => [ // on déplace partiellement les heures de MNP vers un nouveau
+            'input'   => [
+                30216 => [
+                    'heures' => 16.0,
+                    'source' => 'ADE',
+                ],
+                30264 => [
+                    'motifNonPaiement' => 'HC payées par ENSCCF',
+                    'heures'           => 5.0,
+                ],
+                30265 => [
+                    'heures' => -8.0,
+                ],
+                30187 => [
+                    'heures' => 3.0,
+                    'valide' => true,
+                ],
             ],
-            30264 => [
-                'motifNonPaiement' => 'HC payées par ENSCCF',
-                'heures'           => 5.0,
+            'output'  => [
+                30265 => [
+                    'heures' => -14,
+                ],
+                'n1'  => [
+                    'motifNonPaiement' => 'Essai-1',
+                    'heures'           => 6,
+                ],
             ],
-            30265 => [
-                'heures' => -8.0,
+            'actions' => [
+                ['setMotifNonPaiement', 'Essai-1'],
+                ['moveHeuresFromAncienMotifNonPaiement', 6, null],
             ],
-            30187 => [
-                'heures' => 3.0,
-                'valide' => true,
-            ],
-        ],
-        'output'  => [
-            30264 => ['removed' => true],
-            30265 => [
-                'heures' => -19,
-            ],
-            'n1'  => [
-                'heures'           => 50,
-                'motifNonPaiement' => 'Essai-1',
-            ],
-        ],
-        'actions' => [
-            ['setHeuresWithMotifNonPaiement', 50, false, 'Essai-1'],
-        ],
     ],
-    8  => [
-        'input'   => [
-            30216 => [
-                'heures' => 16.0,
-                'source' => 'ADE',
+    8  => [ // on déplace plus  d'heures de MNP vers un nouveau MNP
+            'input'   => [
+                30216 => [
+                    'heures' => 16.0,
+                    'source' => 'ADE',
+                ],
+                30264 => [
+                    'motifNonPaiement' => 'HC payées par ENSCCF',
+                    'heures'           => 5.0,
+                ],
+                30265 => [
+                    'heures' => -8.0,
+                ],
+                30187 => [
+                    'heures' => 3.0,
+                    'valide' => true,
+                ],
             ],
-            30264 => [
-                'motifNonPaiement' => 'HC payées par ENSCCF',
-                'heures'           => 5.0,
+            'output'  => [
+                30265 => [
+                    'heures' => -19,
+                ],
+                'n1'  => [
+                    'motifNonPaiement' => 'Essai-1',
+                    'heures'           => 15,
+                ],
             ],
-            30265 => [
-                'heures' => -8.0,
+            'actions' => [
+                ['setMotifNonPaiement', 'Essai-1'],
+                ['moveHeuresFromAncienMotifNonPaiement', 15, null],
             ],
-            30187 => [
-                'heures' => 3.0,
-                'valide' => true,
-            ],
-        ],
-        'output'  => [
-            30264 => ['heures' => 2],
-            'n1'  => [
-                'heures'           => 3,
-                'motifNonPaiement' => 'Essai-1',
-            ],
-        ],
-        'actions' => [
-            ['setHeuresWithMotifNonPaiement', 3, 'HC payées par ENSCCF', 'Essai-1'],
-        ],
     ],
-    9  => [
-        'input'   => [
-            30216 => [
-                'heures' => 16.0,
-                'source' => 'ADE',
+    9  => [ // déplacement sans changement de MNP
+            'input'   => [
+                30216 => [
+                    'heures' => 16.0,
+                    'source' => 'ADE',
+                ],
+                30264 => [
+                    'motifNonPaiement' => 'HC payées par ENSCCF',
+                    'heures'           => 5.0,
+                ],
+                30265 => [
+                    'heures' => -8.0,
+                ],
+                30187 => [
+                    'heures' => 3.0,
+                    'valide' => true,
+                ],
             ],
-            30264 => [
-                'motifNonPaiement' => 'HC payées par ENSCCF',
-                'heures'           => 5.0,
+            'output'  => [
+                30264 => [
+                    'motifNonPaiement' => 'HC payées par ENSCCF',
+                    'heures'           => 15.0,
+                ],
             ],
-            30265 => [
-                'heures' => -8.0,
+            'actions' => [
+                ['setMotifNonPaiement', 'HC payées par ENSCCF'],
+                ['moveHeuresFromAncienMotifNonPaiement', 15, 'HC payées par ENSCCF'],
             ],
-            30187 => [
-                'heures' => 3.0,
-                'valide' => true,
-            ],
-        ],
-        'output'  => [
-            30264 => [
-                'motifNonPaiement' => 'Essai-1',
-            ],
-        ],
-        'actions' => [
-            ['setHeuresWithMotifNonPaiement', 5, 'HC payées par ENSCCF', 'Essai-1'],
-        ],
     ],
-    10 => [
+    10 => [ // déplacement sans changement de MNP
+            'input'   => [
+                30216 => [
+                    'heures' => 16.0,
+                    'source' => 'ADE',
+                ],
+                30264 => [
+                    'motifNonPaiement' => 'HC payées par ENSCCF',
+                    'heures'           => 5.0,
+                ],
+                30265 => [
+                    'heures' => -8.0,
+                ],
+                30187 => [
+                    'heures' => 3.0,
+                    'valide' => true,
+                ],
+            ],
+            'output'  => [
+                30265 => [
+                    'heures' => -4.0,
+                ],
+            ],
+            'actions' => [
+                ['setMotifNonPaiement', null],
+                ['moveHeuresFromAncienMotifNonPaiement', 15, null],
+            ],
+    ],
+    11 => [
         'input'   => [-2, 2, 5],
         'output'  => [['removed' => true], 2, 7],
         'actions' => [['setHeures', 9]],
     ],
-    11 => [
-        'input'   =>
-            [
-                30266 => ['heures' => 5.0,],
-                30267 => ['heures' => 10.0,],
-                30240 => ['heures' => 1.0,],
-                30245 => ['heures' => 9.0,],
-                30270 => ['heures' => 1.0,],
-                30271 => ['heures' => 2.0,],
-            ],
+    12 => [
+        'input'   => [
+            30266 => ['heures' => 5.0,],
+            30267 => ['heures' => 10.0,],
+            30240 => ['heures' => 1.0,],
+            30245 => ['heures' => 9.0,],
+            30270 => ['heures' => 1.0,],
+            30271 => ['heures' => 2.0,],
+        ],
         'output'  => [
             30267 => ['removed' => true],
             30240 => ['removed' => true],
@@ -270,29 +305,58 @@ $scenarios = [
             ['setHeures', 5],
         ],
     ],
-    20 => [
+    13 => [
+        'input'   => [
+            30285 => ['horaireDebut' => '02/09/2018 à 00:00', 'horaireFin' => '02/09/2018 à 00:00', 'heures' => 10,],
+            30183 => ['horaireDebut' => '02/09/2018 à 00:00', 'horaireFin' => '02/09/2018 à 00:00', 'heures' => 10, 'valide' => true,],
+            30294 => ['horaireDebut' => '02/09/2018 à 00:00', 'horaireFin' => '02/09/2018 à 00:00', 'heures' => 5,],
+        ],
+        'output'  => [
+            30285 => ['motifNonPaiement' => 'HC payées par ENSCCF', 'heures' => 20],
+            30294 => ['motifNonPaiement' => 'HC payées par ENSCCF',],
+            'n1'  => ['horaireDebut' => '02/09/2018 à 00:00', 'horaireFin' => '02/09/2018 à 00:00', 'heures' => -10],
+        ],
+        'actions' => [
+            ['setMotifNonPaiement', null],
+            ['setHeures', 25],
+            ['changeAll', '02/09/2018 à 00:00', '02/09/2018 à 00:00', 'CM', 'S2', 'HC payées par ENSCCF'],
+        ],
+    ],
+    14 => [
+        'input' => [
+            30320 => ['heures' => 20.9],
+            30325 => ['heures' => 1.1, 'motifNonPaiement' => 'HC payées par ENSCCF'],
+        ],
+        'output' => [
+
+        ],
+        'actions' => [
+            ['changeAll',null,null,'CM','S2', false]
+        ],
+    ],
+    15 => [
         'input'   => [5, 2, -2],
         'output'  => [3, ['removed' => true], -2],
         'actions' => [['setHeures', 1]],
     ],
-    30 => [
+    16 => [
         'input'   => [0],
         'output'  => [1],
         'actions' => [['setHeures', 1]],
     ],
-    40 => [
+    17 => [
         'input'   => [2, 0],
         'output'  => [2, 1],
         'actions' => [['setHeures', 3]],
     ],
-    50 => [
+    18 => [
         'input'   => [-2, 10, 5],
         'output'  => [-2, 10, 4],
         'actions' => [['setHeures', 12]],
     ],
 ];
 
-if ($seulScenario){
+if ($seulScenario) {
     $scenarios = [$seulScenario => $scenarios[$seulScenario]];
 }
 

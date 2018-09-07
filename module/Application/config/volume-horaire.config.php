@@ -55,6 +55,18 @@ return [
                             ],
                         ],
                     ],
+                    'suppression-calendaire' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/suppression-calendaire/:service',
+                            'constraints' => [
+                                'service' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'suppression-calendaire',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -70,7 +82,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\VolumeHoraire',
-                    'action'     => ['saisie', 'saisie-calendaire'],
+                    'action'     => ['saisie', 'saisie-calendaire', 'suppression-calendaire'],
                     'privileges' => Privileges::ENSEIGNEMENT_EDITION,
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],

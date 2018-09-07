@@ -188,6 +188,16 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 
 
     /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+
+
+    /**
      * Set service
      *
      * @param \Application\Entity\Db\Service $service
@@ -482,9 +492,10 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     {
         if ($this->isAutoValidation()) return true;
 
-        $validations = $this->getValidation();
-        foreach ($validations as $validation) {
-            if ($validation->estNonHistorise()) return true;
+        if ($validations = $this->getValidation()) {
+            foreach ($validations as $validation) {
+                if ($validation->estNonHistorise()) return true;
+            }
         }
 
         return false;

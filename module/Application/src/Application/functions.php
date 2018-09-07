@@ -75,3 +75,15 @@ function booleanToString($value, $trueVal = '1', $falseVal = '0')
 {
     if ($value) return $trueVal; else return $falseVal;
 }
+
+
+
+function vhlDump( \Application\Entity\VolumeHoraireListe $volumeHoraireListe): \OSETest\VolumeHoraireListeTest
+{
+    include_once getcwd() . '/tests/OSETest/VolumeHoraireListeTest.php';
+    $dumper = new \OSETest\VolumeHoraireListeTest();
+    $volumeHoraireListe->__debug = $dumper;
+    $dumper->dumpBegin($volumeHoraireListe);
+
+    return $dumper;
+}

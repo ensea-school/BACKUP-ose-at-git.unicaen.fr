@@ -143,8 +143,10 @@ class ListeCalendaire extends AbstractViewHelper
     public function render()
     {
         $this->hasForbiddenPeriodes = false;
-        $canViewMNP                 = false;//$this->getView()->isAllowed($this->getVolumeHoraireListe()->getService()->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
-        $canEdit                    = true;
+        $service = $this->getVolumeHoraireListe()->getService();
+
+        $canViewMNP                 = $this->getView()->isAllowed($service->getIntervenant(), Privileges::MOTIF_NON_PAIEMENT_VISUALISATION);
+        $canEdit                    = $this->getView()->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION);
 
         $filtres = [
             VolumeHoraireListe::FILTRE_HORAIRE_DEBUT,
@@ -152,7 +154,7 @@ class ListeCalendaire extends AbstractViewHelper
             VolumeHoraireListe::FILTRE_TYPE_INTERVENTION,
             VolumeHoraireListe::FILTRE_PERIODE,
         ];
-        if ($canViewMNP){
+        if ($canViewMNP) {
             $filtres[] = VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT;
         }
 
@@ -164,30 +166,30 @@ class ListeCalendaire extends AbstractViewHelper
         $out .= "<th style=\"width:11em\">Mode</th>\n";
         $out .= "<th style=\"width:10em\">Fin</th>\n";
         $out .= "<th style=\"widt:6em\">Période</th>\n";
-        if ($canViewMNP){
+        if ($canViewMNP) {
             $out .= "<th>Motif de non paiement</th>\n";
         }
-        if ($canEdit){
-            $out .= "<th>&nbsp;</th>\n";
+        if ($canEdit) {
+            $out .= "<th style='text-align:center'>".$this->renderAddAction($this->getVolumeHoraireListe()->createChild()->setNew(true))."</th>\n";
         }
-        $out      .= "</tr>\n";
+        $out .= "</tr>\n";
         $out .= '</thead>';
         $out .= '<body>';
 
         $vhls = $this->getVolumeHoraireListe()->getSousListes($filtres);
-        foreach( $vhls as $vhl ){
+        foreach ($vhls as $vhl) {
             if ($vhl->getHeures() != 0) {
                 $out .= '<tr>';
                 $out .= "<td>" . $this->renderHoraire($vhl->getHoraireDebut()) . "</td>\n";
-                $out .= "<td>" . $this->renderHeures($vhl) ."</td>\n";
-                $out .= "<td>" . $this->renderTypeIntervention($vhl->getTypeIntervention()) ."</td>\n";
+                $out .= "<td>" . $this->renderHeures($vhl) . "</td>\n";
+                $out .= "<td>" . $this->renderTypeIntervention($vhl->getTypeIntervention()) . "</td>\n";
                 $out .= "<td>" . $this->renderHoraire($vhl->getHoraireFin()) . "</td>\n";
                 $out .= "<td>" . $vhl->getPeriode() . "</td>\n";
                 if ($canViewMNP) {
                     $out .= "<td>" . $this->renderMotifNonPaiement($vhl->getMotifNonPaiement()) . "</td>\n";
                 }
-                if ($canEdit){
-                    $out .= "<td>".$this->renderActions($vhl)."</td>\n";
+                if ($canEdit) {
+                    $out .= "<td style='width:1%;white-space:nowrap'>" . $this->renderActions($vhl) . "</td>\n";
                 }
                 $out .= "</tr>\n";
             }
@@ -200,32 +202,64 @@ class ListeCalendaire extends AbstractViewHelper
 
 
 
+    private function renderAddAction(VolumeHoraireListe $volumeHoraireListe)
+    {
+        $vhlph = new ListeFilterHydrator();
+
+        $p1 = ['service' => $volumeHoraireListe->getService()->getId()];
+        $p2 = ['query' => $vhlph->extractInts($volumeHoraireListe)];
+
+        return $this->getView()->tag('a', [
+            'href'              => $this->getView()->url('volume-horaire/saisie-calendaire', $p1, $p2),
+            'title'             => 'Ajouter',
+            'class'             => 'pop-ajax',
+            'data-submit-event' => 'save-volume-horaire',
+            'data-min-width'    => '450px',
+            'data-service'      => $volumeHoraireListe->getService()->getId(),
+        ])->html('<span class="glyphicon glyphicon-plus"></span>');
+    }
+
+
+
     private function renderActions(VolumeHoraireListe $volumeHoraireListe)
     {
         $vhlph = new ListeFilterHydrator();
 
         $p1 = ['service' => $volumeHoraireListe->getService()->getId()];
         $p2 = ['query' => $vhlph->extractInts($volumeHoraireListe)];
-        if (false == $volumeHoraireListe->getMotifNonPaiement()){
-            $p2['query']['motif-non-paiement'] = 'all';
-        }
 
-        return $this->getView()->tag('a', [
-            'href' => $this->getView()->url('volume-horaire/saisie-calendaire', $p1, $p2),
-            'class' => 'ajax-modal',
-        ] )->html('<span class="glyphicon glyphicon-pencil"></span>');
+        $edit = $this->getView()->tag('a', [
+            'href'              => $this->getView()->url('volume-horaire/saisie-calendaire', $p1, $p2),
+            'title'             => 'Modifier',
+            'class'             => 'pop-ajax',
+            'data-submit-event' => 'save-volume-horaire',
+            'data-min-width'    => '450px',
+            'data-service'      => $volumeHoraireListe->getService()->getId(),
+        ])->html('<span class="glyphicon glyphicon-pencil"></span>');
+
+        $delete = $this->getView()->tag('a', [
+            'href'              => $this->getView()->url('volume-horaire/suppression-calendaire', $p1, $p2),
+            'title'             => 'Supprimer',
+            'class'             => 'pop-ajax',
+            'data-submit-event' => 'save-volume-horaire',
+            'data-content' => 'Souhaitez-vous vraiment supprimer ces heures de service ?',
+            'data-confirm'      => 'true',
+            'data-service'      => $volumeHoraireListe->getService()->getId(),
+        ])->html('<span class="glyphicon glyphicon-trash"></span>');
+
+        return $edit . ' ' . $delete;
     }
 
 
 
     private function renderTypeIntervention(TypeIntervention $typeIntervention)
     {
-        return "<abbr title=\"".$typeIntervention->getLibelle()."\">".$typeIntervention->getCode()."</abbr>";
+        return "<abbr title=\"" . $typeIntervention->getLibelle() . "\">" . $typeIntervention->getCode() . "</abbr>";
     }
 
 
 
-    private function renderHoraire( $horaire )
+    private function renderHoraire($horaire)
     {
         if (!$horaire instanceof \DateTime) return null;
 

@@ -1,6 +1,22 @@
 <?php
 
-echo $this
-        ->volumeHoraireListe( $volumeHoraireListe )
+use Application\Entity\VolumeHoraireListe;
+
+/**
+ * @var $this               \Application\View\Renderer\PhpRenderer
+ * @var $volumeHoraireListe VolumeHoraireListe
+ * @var $readOnly           bool
+ * @var $semestriel         bool
+ */
+
+if ($semestriel){
+    echo $this
+        ->volumeHoraireListe($volumeHoraireListe)
         ->setReadOnly($readOnly)
         ->render();
+}else{
+    echo $this
+        ->volumehorairelisteCalendaire($volumeHoraireListe)
+        ->setReadOnly($readOnly)
+        ->render();
+}

@@ -6,7 +6,9 @@ use Application\Acl\Role;
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Parametre;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -28,7 +30,6 @@ class ContextService extends AbstractService
     use UserContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use LdapConnecteurAwareTrait;
-
 
     /**
      * selectedIdentityRole
@@ -117,7 +118,7 @@ class ContextService extends AbstractService
     public function getIntervenant()
     {
         if (false === $this->intervenant || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
-            $utilisateurCode = $this->getConnecteurLdap()->getUtilisateurCourantCode();
+            $utilisateurCode   = $this->getConnecteurLdap()->getUtilisateurCourantCode();
             $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
         }
 
@@ -160,9 +161,73 @@ class ContextService extends AbstractService
 
 
     /**
+     * @param string|TypeVolumeHoraire $typeVolumeHoraire
+     *
+     * @return string
+     */
+    public function getModaliteServices($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): string
+    {
+        if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
+            $typeVolumeHoraire = $typeVolumeHoraire->getCode();
+        }
+
+        if ($typeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+            $prevReal = 'real';
+        } else {
+            $prevReal = 'prev';
+        }
+
+        return $this->getServiceParametres()->get('modalite_services_' . $prevReal . '_ens');
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isModaliteServicesSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
+    {
+        return $this->getModaliteServices($typeVolumeHoraire) == Parametre::SERVICES_MODALITE_SEMESTRIEL;
+    }
+
+
+
+    /**
+     * @param string|TypeVolumeHoraire $typeVolumeHoraire
+     *
+     * @return string
+     */
+    public function getModaliteReferentiel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): string
+    {
+        if ($typeVolumeHoraire instanceof TypeVolumeHoraire) {
+            $typeVolumeHoraire = $typeVolumeHoraire->getCode();
+        }
+
+        if ($typeVolumeHoraire == TypeVolumeHoraire::CODE_REALISE) {
+            $prevReal = 'real';
+        } else {
+            $prevReal = 'prev';
+        }
+
+        return $this->getServiceParametres()->get('modalite_services_' . $prevReal . '_ref');
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isModaliteReferentielSemestriel($typeVolumeHoraire = TypeVolumeHoraire::CODE_PREVU): bool
+    {
+        return $this->getModaliteReferentiel() == Parametre::SERVICES_MODALITE_SEMESTRIEL;
+    }
+
+
+
+    /**
      *
      * @param Etablissement $etablissement
-     * @param boolean             $updateParametres
+     * @param boolean       $updateParametres
      *
      * @return self
      */
@@ -249,8 +314,8 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @param Annee $annee
-     * @param boolean     $updateParametres
+     * @param Annee   $annee
+     * @param boolean $updateParametres
      *
      * @return self
      */
@@ -333,7 +398,7 @@ class ContextService extends AbstractService
     /**
      *
      * @param Structure $structure
-     * @param boolean         $updateParametres
+     * @param boolean   $updateParametres
      *
      * @return self
      */

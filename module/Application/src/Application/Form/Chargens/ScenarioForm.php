@@ -108,7 +108,9 @@ class ScenarioForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            /* Filtres et validateurs */
+            'structure' => [
+                'required' => false,
+            ],
         ];
     }
 }

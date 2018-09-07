@@ -2,24 +2,26 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\Db\Traits\EtapeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
+use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Application\Entity\VolumeHoraireReferentielListe;
 
 /**
  * ServiceReferentiel
  */
-class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
+class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface
 {
     use HistoriqueAwareTrait;
     use IntervenantAwareTrait;
     use StructureAwareTrait;
     use TypeVolumeHoraireAwareTrait;
+    use ImportAwareTrait;
 
     /**
      * @var integer

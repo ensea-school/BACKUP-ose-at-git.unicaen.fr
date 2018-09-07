@@ -53,6 +53,13 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     private $visible;
 
     /**
+     * visible extérieur
+     *
+     * @var boolean
+     */
+    private $visibleExterieur;
+
+    /**
      * anneeDebut
      *
      * @var Annee
@@ -153,6 +160,32 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isVisibleExterieur(): bool
+    {
+        return $this->visibleExterieur;
+    }
+
+
+
+    /**
+     * @param bool $visibleExterieur
+     *
+     * @return TypeIntervention
+     */
+    public function setVisibleExterieur(bool $visibleExterieur): TypeIntervention
+    {
+        $this->visibleExterieur = $visibleExterieur;
+
+        return $this;
+    }
+
+
 
     /**
      * @return Annee

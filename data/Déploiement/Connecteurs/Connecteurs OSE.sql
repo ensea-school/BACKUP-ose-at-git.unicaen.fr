@@ -545,6 +545,8 @@ FROM
 
 
 -- SRC_DEPARTEMENT
+-- Attention : les codes des départements doivent avoir 3 chiffres.
+-- Par exemple 014 pour le Calvados, pour Paris 075, etc.
 CREATE OR REPLACE FORCE VIEW SRC_DEPARTEMENT AS
 WITH harpege_query AS (
   SELECT

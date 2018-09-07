@@ -52,6 +52,11 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      */
     protected $etapeRequise;
 
+    /**
+     * @var bool
+     */
+    protected $serviceStatutaire = true;
+
 
 
     /**
@@ -250,6 +255,30 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     public function setEtapeRequise($etapeRequise): FonctionReferentiel
     {
         $this->etapeRequise = $etapeRequise;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isServiceStatutaire(): bool
+    {
+        return $this->serviceStatutaire;
+    }
+
+
+
+    /**
+     * @param bool $serviceStatutaire
+     *
+     * @return FonctionReferentiel
+     */
+    public function setServiceStatutaire(bool $serviceStatutaire): FonctionReferentiel
+    {
+        $this->serviceStatutaire = $serviceStatutaire;
 
         return $this;
     }

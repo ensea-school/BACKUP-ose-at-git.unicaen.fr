@@ -1,11 +1,10 @@
 <?php
-$versionFile = dirname(dirname(__DIR__)).'/VERSION';
-if (file_exists($versionFile)){
+$versionFile = dirname(dirname(__DIR__)) . '/VERSION';
+if (file_exists($versionFile)) {
     $version = file_get_contents($versionFile);
-}else{
-    $version = 'inconnue';
+} else {
+    $version = AppConfig::getEnv() . ' (pas de numéro)';
 }
-$dateVersion = '31/05/2018';
 
 return [
     'unicaen-app' => [
@@ -17,10 +16,10 @@ return [
             'nom'                    => "OSE",
             'desc'                   => "Organisation des Services d'Enseignement",
             'version'                => $version,
-            'date'                   => $dateVersion,
-            'contact'                => ['mail' => AppConfig::get('etablissement','contactAssistance')],
-            'mentionsLegales'        => AppConfig::get('etablissement','mentionsLegales'),
-            'informatiqueEtLibertes' => AppConfig::get('etablissement','informatiqueEtLibertes'),
+            'date'                   => '31/05/2018',
+            'contact'                => ['mail' => null],
+            'mentionsLegales'        => AppConfig::get('etablissement', 'mentionsLegales'),
+            'informatiqueEtLibertes' => AppConfig::get('etablissement', 'informatiqueEtLibertes'),
         ],
 
         /**
@@ -32,33 +31,33 @@ return [
             'connection'  => [
                 'default' => [
                     'params' => [
-                        'host'                => AppConfig::get('ldap','host'),
-                        'username'            => AppConfig::get('ldap','username'),
-                        'password'            => AppConfig::get('ldap','password'),
-                        'baseDn'              => AppConfig::get('ldap','baseDn'),
-                        'bindRequiresDn'      => AppConfig::get('ldap','bindRequiresDn'),
-                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . AppConfig::get('ldap','loginAttribute') . "=%s))",
-                        'port'                => AppConfig::get('ldap','port'),
+                        'host'                => AppConfig::get('ldap', 'host'),
+                        'username'            => AppConfig::get('ldap', 'username'),
+                        'password'            => AppConfig::get('ldap', 'password'),
+                        'baseDn'              => AppConfig::get('ldap', 'baseDn'),
+                        'bindRequiresDn'      => AppConfig::get('ldap', 'bindRequiresDn'),
+                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . AppConfig::get('ldap', 'loginAttribute') . "=%s))",
+                        'port'                => AppConfig::get('ldap', 'port'),
                     ],
                 ],
             ],
             'dn'          => [
-                'UTILISATEURS_BASE_DN'            => AppConfig::get('ldap','utilisateursBaseDN'),
-                'UTILISATEURS_DESACTIVES_BASE_DN' => AppConfig::get('ldap','utilisateursDesactivesBaseDN'),
-                'GROUPS_BASE_DN'                  => AppConfig::get('ldap','groupsBaseDN'),
-                'STRUCTURES_BASE_DN'              => AppConfig::get('ldap','structuresBaseDN'),
+                'UTILISATEURS_BASE_DN'            => AppConfig::get('ldap', 'utilisateursBaseDN'),
+                'UTILISATEURS_DESACTIVES_BASE_DN' => AppConfig::get('ldap', 'utilisateursDesactivesBaseDN'),
+                'GROUPS_BASE_DN'                  => AppConfig::get('ldap', 'groupsBaseDN'),
+                'STRUCTURES_BASE_DN'              => AppConfig::get('ldap', 'structuresBaseDN'),
             ],
             'filters'     => [
-                'LOGIN_FILTER'                 => '(' . AppConfig::get('ldap','loginAttribute') . '=%s)',
-                'LOGIN_OR_NAME_FILTER'         => '(|(' . AppConfig::get('ldap','loginAttribute') . '=%s)(cn=%s*))',
+                'LOGIN_FILTER'                 => '(' . AppConfig::get('ldap', 'loginAttribute') . '=%s)',
+                'LOGIN_OR_NAME_FILTER'         => '(|(' . AppConfig::get('ldap', 'loginAttribute') . '=%s)(cn=%s*))',
                 'FILTER_STRUCTURE_DN'          => '(%s)',
-                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . AppConfig::get('ldap','structureCode') . '=%s)',
-                'NO_INDIVIDU_FILTER'           => '(' . AppConfig::get('ldap','utilisateurCode') . '=%08s)',
+                'FILTER_STRUCTURE_CODE_ENTITE' => '(' . AppConfig::get('ldap', 'structureCode') . '=%s)',
+                'NO_INDIVIDU_FILTER'           => '(' . AppConfig::get('ldap', 'utilisateurCode') . '=%08s)',
             ],
             'utilisateur' => [
-                'LOGIN'  => AppConfig::get('ldap','loginAttribute'),
-                'FILTER' => AppConfig::get('ldap','utilisateurFiltre'),
-                'CODE'   => AppConfig::get('ldap','utilisateurCode'),
+                'LOGIN'  => AppConfig::get('ldap', 'loginAttribute'),
+                'FILTER' => AppConfig::get('ldap', 'utilisateurFiltre'),
+                'CODE'   => AppConfig::get('ldap', 'utilisateurCode'),
             ],
         ],
 
@@ -68,13 +67,15 @@ return [
         'mail' => [
             // transport des mails
             'transport_options' => [
-                'host' => AppConfig::get('mail','smtpHost'),
-                'port' => AppConfig::get('mail','smtpPort'),
+                'host' => AppConfig::get('mail', 'smtpHost'),
+                'port' => AppConfig::get('mail', 'smtpPort'),
             ],
             // adresses à substituer à celles des destinataires originaux ('CURRENT_USER' équivaut à l'utilisateur connecté)
-            'redirect_to'       => AppConfig::get('mail','redirection'),
+            'redirect_to'       => AppConfig::get('mail', 'redirection'),
+            // adresse d'expéditeur par défaut
+            'from'              => AppConfig::get('mail', 'from'),
             // désactivation totale de l'envoi de mail par l'application
-            'do_not_send'       => AppConfig::get('mail','envoiDesactive'),
+            'do_not_send'       => AppConfig::get('mail', 'envoiDesactive'),
         ],
     ],
 
@@ -82,16 +83,16 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'etab' => [
-                        'label'    => AppConfig::get('etablissement','nom'),
-                        'title'    => AppConfig::get('etablissement','logoDescription'),
-                        'uri'      => AppConfig::get('etablissement','logoUri'),
+                    'etab'                     => [
+                        'label' => AppConfig::get('etablissement', 'nom'),
+                        'title' => AppConfig::get('etablissement', 'logoDescription'),
+                        'uri'   => AppConfig::get('etablissement', 'logoUri'),
                     ],
                     'mentions-legales'         => [
-                        'uri'      => AppConfig::get('etablissement','mentionsLegales'),
+                        'uri' => AppConfig::get('etablissement', 'mentionsLegales'),
                     ],
                     'informatique-et-libertes' => [
-                        'uri'      => AppConfig::get('etablissement','informatiqueEtLibertes'),
+                        'uri' => AppConfig::get('etablissement', 'informatiqueEtLibertes'),
                     ],
                 ],
             ],

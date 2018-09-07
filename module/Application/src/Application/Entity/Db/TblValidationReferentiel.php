@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Traits\ServiceReferentielAwareTrait;
@@ -25,11 +26,43 @@ class TblValidationReferentiel
     protected $id;
 
     /**
+     * @var boolen
+     */
+    protected $autoValidation = false;
+
+
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
     }
+
+
+
+    /**
+     * @return boolen
+     */
+    public function getAutoValidation(): boolen
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param boolen $autoValidation
+     *
+     * @return TblValidationEnseignement
+     */
+    public function setAutoValidation(boolen $autoValidation): TblValidationEnseignement
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
 }
 

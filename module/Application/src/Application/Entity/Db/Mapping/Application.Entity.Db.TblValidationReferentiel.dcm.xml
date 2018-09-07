@@ -6,6 +6,7 @@
       <sequence-generator sequence-name="TBL_VALIDATION_REF_ID_SEQ" allocation-size="1" initial-value="1"/>
     </id>
 
+    <field name="autoValidation" type="boolean" column="AUTO_VALIDATION" nullable="false"/>
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee" fetch="LAZY">
       <join-columns>
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>

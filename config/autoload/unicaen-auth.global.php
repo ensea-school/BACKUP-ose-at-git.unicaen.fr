@@ -30,6 +30,11 @@ $settings = [
     'privilege_entity_class' => 'UnicaenAuth\Entity\Db\Privilege',
 
     /**
+     * Attribut LDAP utilisé pour le username des utilisateurs
+     */
+    'ldap_username' => strtolower(AppConfig::get('ldap', 'loginAttribute')),
+
+    /**
      * Activation ou non de l'authentification Shibboleth.
      */
     'shibboleth' => [

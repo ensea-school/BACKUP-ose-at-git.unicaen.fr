@@ -23,7 +23,7 @@ class RechercheController extends AbstractController
             return new JsonModel([]);
         }
 
-        $res = $this->getProcessusIntervenant()->rechercher($term);
+        $res = $this->getProcessusIntervenant()->recherche()->rechercher($term);
 
         $result = [];
         foreach ($res as $key => $r) {

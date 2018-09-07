@@ -314,7 +314,7 @@ return [
                             ],
                             'service'                 => [
                                 'label'               => "Enseignements prévisionnels",
-                                'title'               => "Enseignements  prévisionnelsde l'intervenant",
+                                'title'               => "Enseignements prévisionnels de l'intervenant",
                                 'route'               => 'intervenant/services',
                                 'paramsInject'        => [
                                     'intervenant',

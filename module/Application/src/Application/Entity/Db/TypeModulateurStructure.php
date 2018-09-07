@@ -26,6 +26,15 @@ class TypeModulateurStructure implements HistoriqueAwareInterface
      */
     protected $structure;
 
+    /**
+     * @var Annee
+     */
+    private $anneeDebut;
+
+    /**
+     * @var Annee
+     */
+    private $anneeFin;
 
 
     /**
@@ -93,4 +102,51 @@ class TypeModulateurStructure implements HistoriqueAwareInterface
     {
         return $this->structure;
     }
+
+    /**
+     * @return Annee
+     */
+    public function getAnneeDebut()
+    {
+        return $this->anneeDebut;
+    }
+
+
+
+    /**
+     * @param Annee $anneeDebut
+     *
+     * @return TypeInterventionStructure
+     */
+    public function setAnneeDebut(Annee $anneeDebut = null)
+    {
+        $this->anneeDebut = $anneeDebut;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Annee
+     */
+    public function getAnneeFin()
+    {
+        return $this->anneeFin;
+    }
+
+
+
+    /**
+     * @param Annee $anneeFin
+     *
+     * @return TypeInterventionStructure
+     */
+    public function setAnneeFin(Annee $anneeFin = null)
+    {
+        $this->anneeFin = $anneeFin;
+
+        return $this;
+    }
+
 }

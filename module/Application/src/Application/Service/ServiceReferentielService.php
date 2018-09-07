@@ -7,6 +7,7 @@ use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
@@ -31,6 +32,7 @@ class ServiceReferentielService extends AbstractEntityService
     use TypeVolumeHoraireServiceAwareTrait;
     use EtatVolumeHoraireServiceAwareTrait;
     use VolumeHoraireReferentielServiceAwareTrait;
+    use SourceServiceAwareTrait;
 
 
 
@@ -253,6 +255,21 @@ class ServiceReferentielService extends AbstractEntityService
             if ($serviceAllreadyExists) {
                 $result = $serviceAllreadyExists;
             } else {
+                $sourceOse = $this->getServiceSource()->getOse();
+                if (!$entity->getSource()){
+                    $entity->setSource($sourceOse);
+                }
+                if (!$entity->getSourceCode()){
+                    $entity->setSourceCode(uniqid('ose-'));
+                }
+                foreach( $entity->getVolumeHoraireReferentiel() as $vhr){
+                    if (!$vhr->getSource()){
+                        $vhr->setSource($sourceOse);
+                    }
+                    if (!$vhr->getSourceCode()){
+                        $vhr->setSourceCode(uniqid('ose-'));
+                    }
+                }
                 $result = parent::save($entity);
             }
 

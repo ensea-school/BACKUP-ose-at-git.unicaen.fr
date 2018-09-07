@@ -3,6 +3,68 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
+#OSE 7.0 (en développement)
+
+## Corrections de bugs
+
+* La page "Contact" est maintenant personnalisable.
+
+* Le bug empêchant de saisir de nouveaux services depuis la page "Services" est résolu.
+
+* Les filtres portant sur l'export des services (CSV et PDF) refonctionnent.
+
+* L'affichage des détails d'une composante (lorsqu'on clique sur son nom) a été réparé.
+
+* Administration des fonctions référentielles :
+Les composantes supprimées n'apparaissent maintenant plus dans la liste. Apparaissent en plus les composantes sans enseignements (pour lesquelles il peut y avoir du référentiel).
+
+## Nouveautés
+
+* Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
+
+* Possibilité de définir des volumes horaires enseignement et référentiel comme auto-validés.
+
+* Possibilité de déterminer si les heures de service pour un type de formation donné peuvent être comptées dans le service statutaire ou non. 
+
+* Possibilité de déterminer si les heures pour une fonction référentielle donnée peuvent être comptées dans le service statutaire ou non.
+
+* Possibilité d'importer des heures d'enseignement depuis ADE.
+
+* Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut) selon qu'on soit en prévisionnel ou en réalisé.
+
+* Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
+
+* Formulaire de saisie de services amélioré :
+    * Le choix de l'intervenant n'apparait plus lorsque  l'on se trouve déjà dans la fiche de l'intervenant
+    * La saisie des volumes horaires n'est affichée que lorsque c'est nécessaire (plus de liste de tous les types d'intervention affichés par défaut).
+    * Il est désormais possible de limiter les types d'intervention disponibles pour saisir des services à l'extérieur
+     (paramétrage possible depuis Administration/Types d'intervention)
+
+* Dans le module Charges, il est désormais possible de modifier/créer des scénarios de niveau établissement
+
+* Meilleures possibilités de personnalisation :
+    * page contacts, 
+    * adresse mail d'envoi, 
+    * icône de l'application, 
+    * URL des documentations permanents et vacataires dans les paramètres généraux.
+
+## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/07.0.sql`
+
+* De nouveaux paramètres de configuration ont été ajoutés dans le fichier de configuration global de l'application
+`/config.local.php`. A vous de les ajouter manuellement à votre fichier de confguration existant.
+Au besoin, le modèle est le fichier `/config.local.php.default`.
+
+Les paramètres à ajouter puis personnaliser sont :
+
+| Rubrique        | Paramètre       | Description                         |
+| --------------- | --------------- | ----------------------------------- |
+| etablissement | contact | Personnalisation du contenu de votre page "contact" (code HTML) |
+| etablissement | icones | Personnaliser l'icône de l'application |
+| mail | from | préciser l'adresse d'expéditeur des mails de OSE |
+
 #OSE 6.3.2
 
 ## Corrections de bugs

@@ -12,6 +12,7 @@ use Application\Service\Traits\WfEtapeDepServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Zend\Console\Console;
 
 
 /**
@@ -40,7 +41,7 @@ class WorkflowController extends AbstractController
 
     public function dependancesAction()
     {
-        $dql = '
+        $dql    = '
         SELECT
           we
         FROM
@@ -67,7 +68,7 @@ class WorkflowController extends AbstractController
         $d = $query->getResult();
         /* @var $d WfEtapeDep[] */
         $deps = [];
-        foreach( $d as $dep ){
+        foreach ($d as $dep) {
             $deps[$dep->getEtapeSuiv()->getId()][$dep->getEtapePrec()->getId()] = $dep;
         }
 
@@ -85,26 +86,24 @@ class WorkflowController extends AbstractController
             $etapeSuivanteId = $this->params()->fromQuery('etapeSuivante');
 
             $wfEtapeDep = $this->getServiceWfEtapeDep()->newEntity();
-            if ($etapeSuivanteId){
+            if ($etapeSuivanteId) {
                 $etapeSuivante = $this->getServiceWfEtape()->get($etapeSuivanteId);
                 $wfEtapeDep->setEtapeSuiv($etapeSuivante);
             }
-
         }
 
         $title = "Saisie d'une dépendance";
 
         $form = $this->getFormWorkflowDependance();
         $form->bindRequestSave($wfEtapeDep, $this->getRequest(), function ($wfEtapeDep) {
-            try{
+            try {
                 $this->getServiceWfEtapeDep()->save($wfEtapeDep);
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 throw DbException::translate($e);
             }
         });
 
         return compact('title', 'form');
-
     }
 
 
@@ -127,26 +126,50 @@ class WorkflowController extends AbstractController
     public function calculerToutAction()
     {
         $action = $this->params()->fromQuery('action') === '1';
-        $title = 'Calcul du workflow...';
-        $error = null;
+        $title  = 'Calcul du workflow...';
+        $error  = null;
 
-        if ($action){
-            try{
+        if ($action) {
+            try {
                 $this->getServiceWorkflow()->calculerTout();
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 $error = $e->getMessage();
             }
-
         }
 
         return compact('action', 'title', 'error');
     }
 
 
+
     public function calculTableauxBordAction()
     {
-        $this->getServiceWorkflow()->calculerTousTableauxBord();
+        $result = $this->getServiceWorkflow()->calculerTousTableauxBord(function (array $d) {
+            $tblLine = 'Tableau de bord : '.str_pad($d['tableau-bord'],30);
+            $ci = Console::getInstance();
+            $ci->write($tblLine);
+            $ci->write('Calcul en cours...', 6);
+        }, function (array $d) {
+            $tblLine = 'Tableau de bord : '.str_pad($d['tableau-bord'],30);
+            $ci = Console::getInstance();
+            $ci->clearLine();
+            $ci->write($tblLine);
+            if ($d['result']){
+                $duree = round($d['duree'],3).' secondes';
+                $ci->writeLine('Effectué en '.$duree, 3);
+            }else{
+                $ci->writeLine('Erreur : '.$d['exception']->getMessage(), 2);
+            }
+        });
+
+        Console::getInstance()->writeLine('Fin du calcul des tableaux de bord');
+        if ($result){
+            Console::getInstance()->writeLine('Tout c\'est bien passé');
+        }else{
+            Console::getInstance()->writeLine('Attention : des erreurs ont été rencontrées!!');
+        }
     }
+
 
 
     public function feuilleDeRouteRefreshAction()
@@ -154,14 +177,14 @@ class WorkflowController extends AbstractController
         /** @var Intervenant $intervenant */
         $intervenant = $this->getEvent()->getParam('intervenant');
 
-        if ($intervenant){
+        if ($intervenant) {
             $errors = $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
         }
 
-        if (empty($errors)){
+        if (empty($errors)) {
             $this->flashMessenger()->addSuccessMessage('Feuille de route actualisée.');
-        }else{
-            foreach( $errors as $error){
+        } else {
+            foreach ($errors as $error) {
                 $this->flashMessenger()->addErrorMessage($error->getMessage());
             }
         }
@@ -177,7 +200,7 @@ class WorkflowController extends AbstractController
         /* @var $intervenant Intervenant */
 
         $wfEtapeCode = $this->params()->fromRoute('wfEtapeCode');
-        if (!$wfEtapeCode){
+        if (!$wfEtapeCode) {
             throw new LogicException('L\'étape du workflow doit être précisée');
         }
 

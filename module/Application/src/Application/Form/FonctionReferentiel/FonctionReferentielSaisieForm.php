@@ -91,6 +91,14 @@ class FonctionReferentielSaisieForm extends AbstractForm
             'type'    => 'Checkbox',
         ]);
 
+        $this->add([
+            'name'    => 'service-statutaire',
+            'options' => [
+                'label' => 'Les heures peuvent être comptabilisées dans le service statutaire des intervenants',
+            ],
+            'type'    => 'Checkbox',
+        ]);
+
         $this->add(new Csrf('security'));
         $this->add([
             'name'       => 'submit',
@@ -117,7 +125,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
     {
         $role             = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByEnseignement();
+        $qb               = $serviceStructure->finderByHistorique();
         if ($role->getStructure()) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }
@@ -194,6 +202,7 @@ class FonctionReferentielHydrator implements HydratorInterface
         }
 
         $object->setEtapeRequise($data['etape-requise']);
+        $object->setServiceStatutaire($data['service-statutaire']);
 
         return $object;
     }
@@ -217,7 +226,8 @@ class FonctionReferentielHydrator implements HydratorInterface
             'domaine-fonctionnel' => ($s = $object->getDomaineFonctionnel()) ? $s->getId() : null,
             'plafond'             => $object->getPlafond(),
             'structure'           => ($s = $object->getStructure()) ? $s->getId() : null,
-            'etape-requise'   => $object->isEtapeRequise(),
+            'etape-requise'       => $object->isEtapeRequise(),
+            'service-statutaire'  => $object->isServiceStatutaire(),
         ];
 
         return $data;

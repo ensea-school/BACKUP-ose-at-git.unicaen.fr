@@ -22,6 +22,7 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
@@ -58,6 +59,7 @@ class ServiceService extends AbstractEntityService
     use RechercheHydratorAwareTrait;
     use ValidationServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
+    use SourceServiceAwareTrait;
 
     /**
      *
@@ -244,8 +246,6 @@ class ServiceService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $tvhs = [];
-
         $this->getEntityManager()->getConnection()->beginTransaction();
         try {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
@@ -275,6 +275,22 @@ class ServiceService extends AbstractEntityService
                 $result = $serviceAllreadyExists;
             } else {
                 if ($entity->hasChanged()) {
+                    $sourceOse = $this->getServiceSource()->getOse();
+                    if (!$entity->getSource()){
+                        $entity->setSource($sourceOse);
+                    }
+                    if (!$entity->getSourceCode()){
+                        $entity->setSourceCode(uniqid('ose-'));
+                    }
+                    foreach( $entity->getVolumeHoraire() as $vh ){
+                        if (!$vh->getSource()){
+                            $vh->setSource($sourceOse);
+                        }
+                        if (!$vh->getSourceCode()){
+                            $vh->setSourceCode(uniqid('ose-'));
+                        }
+                    }
+
                     $result = parent::save($entity);
                     $entity->setChanged(false);
                 } else {
@@ -286,7 +302,6 @@ class ServiceService extends AbstractEntityService
             $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
             foreach ($entity->getVolumeHoraire() as $volumeHoraire) {
                 /* @var $volumeHoraire \Application\Entity\Db\Volumehoraire */
-                $tvhs[] = $volumeHoraire->getTypeVolumeHoraire();
                 if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()) {
                     $serviceVolumeHoraire->delete($volumeHoraire);
@@ -318,9 +333,9 @@ class ServiceService extends AbstractEntityService
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireListe();
             foreach ($vhListe->getPeriodes() as $periode) {
-                $lc = $vhListe->getChild()->setPeriode($periode);
+                $lc = $vhListe->createChild()->setPeriode($periode);
                 foreach ($lc->getTypesIntervention() as $typeIntervention) {
-                    $lc->getChild()->setTypeIntervention($typeIntervention)->setHeures(0);
+                    $lc->createChild()->setTypeIntervention($typeIntervention)->setHeures(0);
                 }
             }
         }
@@ -716,12 +731,12 @@ class ServiceService extends AbstractEntityService
     public function setRealisesFromPrevus(Service $service)
     {
         $prevus = $service
-            ->getVolumeHoraireListe()->getChild()
+            ->getVolumeHoraireListe()->createChild()
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
 
         $realises = $service
-            ->getVolumeHoraireListe()->getChild()
+            ->getVolumeHoraireListe()->createChild()
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
 
@@ -1094,6 +1109,8 @@ class ServiceService extends AbstractEntityService
         if ($c8 = $recherche->getStructureAff()) $conditions['structure_aff_id'] = '(es.structure_aff_id = -1 OR es.structure_aff_id = ' . $c8->getId() . ')';
         if ($c9 = $recherche->getStructureEns()) $conditions['structure_ens_id'] = '(es.structure_ens_id = -1 OR es.structure_ens_id = ' . $c9->getId() . ')';
 
+        if ($c10 = $this->getServiceContext()->getStructure()) $conditions['structure_context_id'] = '(es.structure_ens_id = -1 OR es.structure_ens_id = ' . $c10->getId() . ' OR es.structure_aff_id = -1 OR es.structure_aff_id = ' . $c10->getId() . ')';
+
         $sql   = '
           SELECT 
             es.*, 
@@ -1173,7 +1190,7 @@ class ServiceService extends AbstractEntityService
             $data['intervenants'][$iid]['services'][$sid]['total']       += $total;
         }
 
-        $lim = 7000;
+        $lim = 10000;
 
         if ($count > $lim) {
             die('La génération du fichier est impossible : trop de données ( ' . $count . ' lignes pour ' . $lim . ' autorisées) sont remontées. Merci de placer un filtre (composante, type d\'intervenant, etc)');

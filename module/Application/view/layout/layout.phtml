@@ -10,14 +10,20 @@
 
     echo $this->headTitle($this->appInfos()->nom)->setSeparator(' - ')->setAutoEscape(false);
 
-    echo $this->headLink()
+    echo $this->headLink();
+    echo "\n";
+    $icons = AppConfig::get('etablissement','icons');
+    if (is_array($icons)) {
+        foreach ($icons as $icon) {
+            $ihtml = "\t<link rel=\"icon\" ";
+            foreach ($icon as $attrName => $attrVal) {
+                $ihtml .= $attrName . '="' . $attrVal . '" ';
+            }
+            $ihtml .= "/>\n";
+            echo $ihtml;
+        }
+    }
     ?>
-
-    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-194x194.png" sizes="194x194">
-    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/android-chrome-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="//www.unicaen.fr/images/favicon/favicon-16x16.png" sizes="16x16">
 
     <!-- Scripts -->
     <?= $this->headScript(); ?>

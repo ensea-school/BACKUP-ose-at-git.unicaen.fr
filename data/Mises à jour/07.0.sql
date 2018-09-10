@@ -270,3 +270,54 @@ update tbl set ordre = 14 where tbl_name = 'service';
 update tbl set ordre = 15 where tbl_name = 'workflow';
 update tbl set ordre = 16 where tbl_name = 'chargens_seuils_def';
 update tbl set ordre = 17 where tbl_name = 'chargens';
+
+
+
+CREATE TABLE modele_contrat (
+  id                      NUMBER(*,0) NOT NULL,
+  libelle                 VARCHAR2(250 CHAR) NOT NULL,
+  statut_intervenant_id   NUMBER(*,0),
+  structure_id            NUMBER(*,0),
+  fichier                 BLOB,
+  requete                 VARCHAR2(4000 CHAR)
+)
+LOGGING;
+
+ALTER TABLE modele_contrat ADD CONSTRAINT modele_contrat_pk PRIMARY KEY ( id );
+CREATE TABLE modele_contrat_bloc (
+  id                  NUMBER NOT NULL,
+  modele_contrat_id   NUMBER(*,0) NOT NULL,
+  nom                 VARCHAR2(100 CHAR) NOT NULL,
+  requete             VARCHAR2(4000 CHAR) NOT NULL
+)
+LOGGING;
+
+ALTER TABLE modele_contrat_bloc ADD CONSTRAINT modele_contrat_bloc_pk PRIMARY KEY ( id );
+ALTER TABLE modele_contrat
+  ADD CONSTRAINT mct_structure_fk FOREIGN KEY ( structure_id )
+REFERENCES structure ( id )
+  NOT DEFERRABLE;
+ALTER TABLE modele_contrat
+  ADD CONSTRAINT mct_statut_intervenant_fk FOREIGN KEY ( statut_intervenant_id )
+REFERENCES statut_intervenant ( id )
+  NOT DEFERRABLE;
+ALTER TABLE modele_contrat_bloc
+  ADD CONSTRAINT mcbloc_modele_contrat_fk FOREIGN KEY ( modele_contrat_id )
+REFERENCES modele_contrat ( id )
+ON DELETE CASCADE
+  NOT DEFERRABLE;
+
+INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
+SELECT
+       privilege_id_seq.nextval id,
+       (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c ) CATEGORIE_ID,
+       t1.p CODE,
+       t1.l LIBELLE,
+       (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
+FROM (
+
+     SELECT 'contrat' c, 'modeles-visualisation' p, 'Visualisation des modèles' l FROM dual
+     UNION ALL SELECT 'contrat' c, 'modeles-edition' p, 'Édition des modèles' l FROM dual
+     UNION ALL SELECT 'contrat' c, 'projet-generation' p, 'Génération de projet de contrat' l FROM dual
+     UNION ALL SELECT 'contrat' c, 'contrat-generation' p, 'Génération de contrat' l FROM dual
+     ) t1;

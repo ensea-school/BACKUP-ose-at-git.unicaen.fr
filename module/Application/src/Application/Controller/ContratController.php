@@ -316,8 +316,8 @@ class ContratController extends AbstractController
 
         $intervenant = $contrat->getIntervenant();
 
-        if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
-            throw new UnAuthorizedException("Visualisation du contrat interdite.");
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Génération du contrat interdite.");
         }
 
         $estUnAvenant    = $contrat->estUnAvenant();
@@ -512,5 +512,12 @@ class ContratController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([
             'contrat',
         ], $intervenant);
+    }
+
+
+
+    public function modelesListeAction()
+    {
+        return [];
     }
 }

@@ -21,6 +21,20 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
+                    'modeles' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/modeles',
+                            'defaults' => [
+                                'controller'    => 'Application\Controller\Contrat',
+                                'action'        => 'modeles-liste',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+
+                        ],
+                    ],
                     'creer'               => [
                         'type'    => 'Segment',
                         'options' => [
@@ -157,8 +171,14 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['exporter', 'telecharger-fichier', 'lister-fichier'],
+                    'action'     => ['telecharger-fichier', 'lister-fichier'],
                     'privileges' => Privileges::CONTRAT_VISUALISATION,
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['exporter'],
+                    'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
+                    'assertion'  => Assertion\ContratAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
@@ -196,6 +216,12 @@ return [
                     'privileges' => Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
                     'assertion'  => Assertion\ContratAssertion::class,
                 ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['modeles-liste'],
+                    'privileges' => Privileges::CONTRAT_MODELES_VISUALISATION,
+                    'assertion'  => Assertion\ContratAssertion::class,
+                ],
             ],
         ],
         'resource_providers' => [
@@ -215,12 +241,35 @@ return [
                             Privileges::CONTRAT_SUPPRESSION,
                             Privileges::CONTRAT_VALIDATION,
                             Privileges::CONTRAT_VISUALISATION,
+                            Privileges::CONTRAT_PROJET_GENERATION,
+                            Privileges::CONTRAT_CONTRAT_GENERATION,
                             ContratAssertion::PRIV_LISTER_FICHIERS,
                             ContratAssertion::PRIV_AJOUTER_FICHIER,
                             ContratAssertion::PRIV_SUPPRIMER_FICHIER,
+                            ContratAssertion::PRIV_EXPORT,
                         ],
                         'resources'  => 'Contrat',
                         'assertion'  => Assertion\ContratAssertion::class,
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation'      => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'administration' => [
+                        'pages' => [
+                            'contrats' => [
+                                'label'        => 'Modèles de contrats de travail',
+                                'icon'         => 'fa  fa-commenting',
+                                'route'        => 'contrat/modeles',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Contrat', 'modeles-liste'),
+                                'order'        => 60,
+                                'border-color' => '#FFA643',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -232,6 +281,9 @@ return [
         ],
     ],
     'service_manager' => [
+        'factories' => [
+            Service\ModeleContratService::class => Service\Factory\ModeleContratServiceFactory::class,
+        ],
         'invokables' => [
             Service\ContratService::class     => Service\ContratService::class,
             Service\TypeContratService::class => Service\TypeContratService::class,

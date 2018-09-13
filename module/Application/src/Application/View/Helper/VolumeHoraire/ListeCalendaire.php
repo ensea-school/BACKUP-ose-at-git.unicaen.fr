@@ -163,7 +163,7 @@ class ListeCalendaire extends AbstractViewHelper
         $out .= '<tr>';
         $out .= "<th style=\"width:10em\">Début</th>\n";
         $out .= "<th style=\"width:4em\">Heures</th>\n";
-        $out .= "<th style=\"width:11em\">Mode</th>\n";
+        $out .= "<th style=\"width:11em\">Type d'intervention</th>\n";
         $out .= "<th style=\"width:10em\">Fin</th>\n";
         $out .= "<th style=\"widt:6em\">Période</th>\n";
         if ($canViewMNP) {

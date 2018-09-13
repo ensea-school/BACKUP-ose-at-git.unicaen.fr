@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "929082c45053a00dc25b703cb0222c17",
+    "content-hash": "a9239b2e807d15736ea5b3b36f79acfb",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1285,16 +1285,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.14",
+            "version": "v3.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "d5a058ff6ecad26b30c1ba452241306ea34c65cc"
+                "reference": "c4625e75341e4fb309ce0c049cbf7fb84b8897cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/d5a058ff6ecad26b30c1ba452241306ea34c65cc",
-                "reference": "d5a058ff6ecad26b30c1ba452241306ea34c65cc",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/c4625e75341e4fb309ce0c049cbf7fb84b8897cd",
+                "reference": "c4625e75341e4fb309ce0c049cbf7fb84b8897cd",
                 "shasum": ""
             },
             "require": {
@@ -1337,7 +1337,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:19:56+00:00"
+            "time": "2018-08-03T10:42:44+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1400,16 +1400,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.44",
+            "version": "v2.8.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "cc83afdb5ac99147806b3bb65a3ff1227664f596"
+                "reference": "4be278e19064c3492095de50c9e375caae569ae1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/cc83afdb5ac99147806b3bb65a3ff1227664f596",
-                "reference": "cc83afdb5ac99147806b3bb65a3ff1227664f596",
+                "url": "https://api.github.com/repos/symfony/process/zipball/4be278e19064c3492095de50c9e375caae569ae1",
+                "reference": "4be278e19064c3492095de50c9e375caae569ae1",
                 "shasum": ""
             },
             "require": {
@@ -1445,15 +1445,15 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:13:39+00:00"
+            "time": "2018-08-03T09:45:57+00:00"
         },
         {
             "name": "unicaen/app",
-            "version": "1.3.15",
+            "version": "1.3.16",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "cafc7f5e3c779bb8d63752ed29ca82d87561b67e"
+                "reference": "6ebaf169356e018220e26456fe0bd525de4c728a"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1496,7 +1496,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2018-08-08T10:10:58+00:00"
+            "time": "2018-09-13T07:34:51+00:00"
         },
         {
             "name": "unicaen/auth",
@@ -1583,12 +1583,32 @@
             "time": "2018-04-12T14:26:04+00:00"
         },
         {
+            "name": "unicaen/open-document",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
+                "reference": "bfc492c88e7e60b916348063308f67178b07ef47"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Unicaen\\OpenDocument\\": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
+            "time": "2018-03-01T14:53:17+00:00"
+        },
+        {
             "name": "unicaen/oracle",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/oracle.git",
-                "reference": "859f408b39cd446b4ea87705f93cdd9eeddb9e11"
+                "reference": "fc16a7394c40ffa50324f7028e90431f9ecae12a"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -1608,7 +1628,7 @@
                 ]
             },
             "description": "Bibliothèque utile lorsqu'on utilise un base de données Oracle",
-            "time": "2018-04-27T08:59:00+00:00"
+            "time": "2018-09-11T07:47:55+00:00"
         },
         {
             "name": "unicaen/tbl",
@@ -3963,7 +3983,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bjyoungblood/bjy-authorize": 20
+        "bjyoungblood/bjy-authorize": 20,
+        "unicaen/open-document": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

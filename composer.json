@@ -18,6 +18,7 @@
         "zendframework/zend-file"   : "^2.4",
         "unicaen/code"              : "1.1.6",
         "unicaen/import"            : "1.1.6",
-        "unicaen/tbl"               : "1.0.3"
+        "unicaen/tbl"               : "1.0.3",
+        "unicaen/open-document"     : "dev-master"
     }
 }

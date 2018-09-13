@@ -7,8 +7,28 @@
             <generator strategy="SEQUENCE"/>
         </id>
         <field name="libelle" type="string" column="LIBELLE" nullable="false"/>
-        <field name="contenu" type="blob" column="CONTENU" nullable="false"/>
+        <field name="fichier" type="blob" column="FICHIER" nullable="false"/>
         <field name="requete" type="string" column="REQUETE" nullable="false"/>
+        <field name="bloc1Nom" type="string" column="BLOC1_NOM" nullable="true"/>
+        <field name="bloc1Requete" type="string" column="BLOC1_REQUETE" nullable="true"/>
+        <field name="bloc2Nom" type="string" column="BLOC2_NOM" nullable="true"/>
+        <field name="bloc2Requete" type="string" column="BLOC2_REQUETE" nullable="true"/>
+        <field name="bloc3Nom" type="string" column="BLOC3_NOM" nullable="true"/>
+        <field name="bloc3Requete" type="string" column="BLOC3_REQUETE" nullable="true"/>
+        <field name="bloc4Nom" type="string" column="BLOC4_NOM" nullable="true"/>
+        <field name="bloc4Requete" type="string" column="BLOC4_REQUETE" nullable="true"/>
+        <field name="bloc5Nom" type="string" column="BLOC5_NOM" nullable="true"/>
+        <field name="bloc5Requete" type="string" column="BLOC5_REQUETE" nullable="true"/>
+        <field name="bloc6Nom" type="string" column="BLOC6_NOM" nullable="true"/>
+        <field name="bloc6Requete" type="string" column="BLOC6_REQUETE" nullable="true"/>
+        <field name="bloc7Nom" type="string" column="BLOC7_NOM" nullable="true"/>
+        <field name="bloc7Requete" type="string" column="BLOC7_REQUETE" nullable="true"/>
+        <field name="bloc8Nom" type="string" column="BLOC8_NOM" nullable="true"/>
+        <field name="bloc8Requete" type="string" column="BLOC8_REQUETE" nullable="true"/>
+        <field name="bloc9Nom" type="string" column="BLOC9_NOM" nullable="true"/>
+        <field name="bloc9Requete" type="string" column="BLOC9_REQUETE" nullable="true"/>
+        <field name="bloc10Nom" type="string" column="BLOC10_NOM" nullable="true"/>
+        <field name="bloc10Requete" type="string" column="BLOC10_REQUETE" nullable="true"/>
         <many-to-one field="statutIntervenant" target-entity="Application\Entity\Db\StatutIntervenant">
             <join-columns>
                 <join-column name="STATUT_INTERVENANT_ID" referenced-column-name="ID"/>
@@ -19,6 +39,5 @@
                 <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
             </join-columns>
         </many-to-one>
-        <one-to-many field="bloc" target-entity="Application\Entity\Db\ModeleContratBloc" mapped-by="modeleContrat"/>
     </entity>
 </doctrine-mapping>

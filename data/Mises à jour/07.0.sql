@@ -273,26 +273,41 @@ update tbl set ordre = 17 where tbl_name = 'chargens';
 
 
 
+
+
 CREATE TABLE modele_contrat (
   id                      NUMBER(*,0) NOT NULL,
   libelle                 VARCHAR2(250 CHAR) NOT NULL,
   statut_intervenant_id   NUMBER(*,0),
   structure_id            NUMBER(*,0),
   fichier                 BLOB,
-  requete                 VARCHAR2(4000 CHAR)
+  requete                 VARCHAR2(4000 CHAR),
+  bloc1_nom               VARCHAR2(50 CHAR),
+  bloc1_requete           VARCHAR2(4000 CHAR),
+  bloc2_nom               VARCHAR2(50 CHAR),
+  bloc2_requete           VARCHAR2(4000 CHAR),
+  bloc3_nom               VARCHAR2(50 CHAR),
+  bloc3_requete           VARCHAR2(4000 CHAR),
+  bloc4_nom               VARCHAR2(50 CHAR),
+  bloc4_requete           VARCHAR2(4000 CHAR),
+  bloc5_nom               VARCHAR2(50 CHAR),
+  bloc5_requete           VARCHAR2(4000 CHAR),
+  bloc6_nom               VARCHAR2(50 CHAR),
+  bloc6_requete           VARCHAR2(4000 CHAR),
+  bloc7_nom               VARCHAR2(50 CHAR),
+  bloc7_requete           VARCHAR2(4000 CHAR),
+  bloc8_nom               VARCHAR2(50 CHAR),
+  bloc8_requete           VARCHAR2(4000 CHAR),
+  bloc9_nom               VARCHAR2(50 CHAR),
+  bloc9_requete           VARCHAR2(4000 CHAR),
+  bloc10_nom              VARCHAR2(50 CHAR),
+  bloc10_requete          VARCHAR2(4000 CHAR)
 )
 LOGGING;
+
+CREATE SEQUENCE MODELE_CONTRAT_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 1 NOCACHE;
 
 ALTER TABLE modele_contrat ADD CONSTRAINT modele_contrat_pk PRIMARY KEY ( id );
-CREATE TABLE modele_contrat_bloc (
-  id                  NUMBER NOT NULL,
-  modele_contrat_id   NUMBER(*,0) NOT NULL,
-  nom                 VARCHAR2(100 CHAR) NOT NULL,
-  requete             VARCHAR2(4000 CHAR) NOT NULL
-)
-LOGGING;
-
-ALTER TABLE modele_contrat_bloc ADD CONSTRAINT modele_contrat_bloc_pk PRIMARY KEY ( id );
 ALTER TABLE modele_contrat
   ADD CONSTRAINT mct_structure_fk FOREIGN KEY ( structure_id )
 REFERENCES structure ( id )
@@ -300,11 +315,6 @@ REFERENCES structure ( id )
 ALTER TABLE modele_contrat
   ADD CONSTRAINT mct_statut_intervenant_fk FOREIGN KEY ( statut_intervenant_id )
 REFERENCES statut_intervenant ( id )
-  NOT DEFERRABLE;
-ALTER TABLE modele_contrat_bloc
-  ADD CONSTRAINT mcbloc_modele_contrat_fk FOREIGN KEY ( modele_contrat_id )
-REFERENCES modele_contrat ( id )
-ON DELETE CASCADE
   NOT DEFERRABLE;
 
 INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
@@ -321,3 +331,4 @@ FROM (
      UNION ALL SELECT 'contrat' c, 'projet-generation' p, 'Génération de projet de contrat' l FROM dual
      UNION ALL SELECT 'contrat' c, 'contrat-generation' p, 'Génération de contrat' l FROM dual
      ) t1;
+

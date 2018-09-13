@@ -15,32 +15,18 @@ return [
                 'options'       => [
                     'route'    => '/contrat',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Contrat',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Contrat',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'modeles' => [
-                        'type' => 'Literal',
-                        'options' => [
-                            'route' => '/modeles',
-                            'defaults' => [
-                                'controller'    => 'Application\Controller\Contrat',
-                                'action'        => 'modeles-liste',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                        'child_routes' => [
-
-                        ],
-                    ],
                     'creer'               => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:intervenant/creer/:structure',
                             'constraints' => [
-                                'structure'   => '[0-9]*',
+                                'structure' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'creer',
@@ -156,6 +142,55 @@ return [
                             ],
                         ],
                     ],
+                    'modeles'             => [
+                        'type'          => 'Literal',
+                        'options'       => [
+                            'route'    => '/modeles',
+                            'defaults' => [
+                                'controller' => 'Application\Controller\Contrat',
+                                'action'     => 'modeles-liste',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes'  => [
+                            'editer'    => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/editer[/:modeleContrat]',
+                                    'constraints' => [
+                                        'modeleContrat' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'modeles-editer',
+                                    ],
+                                ],
+                            ],
+                            'telecharger'    => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/telecharger[/:modeleContrat]',
+                                    'constraints' => [
+                                        'modeleContrat' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'modeles-telecharger',
+                                    ],
+                                ],
+                            ],
+                            'supprimer' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'       => '/supprimer/:modeleContrat',
+                                    'constraints' => [
+                                        'contrat' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'modeles-supprimer',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -216,11 +251,18 @@ return [
                     'privileges' => Privileges::CONTRAT_SAISIE_DATE_RETOUR_SIGNE,
                     'assertion'  => Assertion\ContratAssertion::class,
                 ],
+
+                /* Modèles de contrat */
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['modeles-liste'],
+                    'action'     => ['modeles-liste', 'modeles-telecharger'],
                     'privileges' => Privileges::CONTRAT_MODELES_VISUALISATION,
                     'assertion'  => Assertion\ContratAssertion::class,
+                ],
+                [
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => ['modeles-editer', 'modeles-supprimer'],
+                    'privileges' => Privileges::CONTRAT_MODELES_EDITION,
                 ],
             ],
         ],
@@ -281,7 +323,7 @@ return [
         ],
     ],
     'service_manager' => [
-        'factories' => [
+        'factories'  => [
             Service\ModeleContratService::class => Service\Factory\ModeleContratServiceFactory::class,
         ],
         'invokables' => [
@@ -296,6 +338,9 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories' => [
+            Form\Contrat\ModeleForm::class => Form\Contrat\Factory\ModeleFormFactory::class,
+        ],
         'invokables' => [
             Form\Intervenant\ContratValidation::class => Form\Intervenant\ContratValidation::class, /** @todo à supprimer ? */
             Form\Intervenant\ContratRetour::class     => Form\Intervenant\ContratRetour::class,

@@ -26,7 +26,7 @@ class ModeleContrat
     /**
      * @var string
      */
-    protected $contenu;
+    protected $fichier;
 
     /**
      * @var string
@@ -34,35 +34,111 @@ class ModeleContrat
     protected $requete;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var string
      */
-    protected $bloc;
-
-
+    protected $bloc1Nom;
 
     /**
-     * PHP 5 allows developers to declare constructor methods for classes.
-     * Classes which have a constructor method call this method on each newly-created object,
-     * so it is suitable for any initialization that the object may need before it is used.
-     *
-     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
-     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
-     *
-     * param [ mixed $args [, $... ]]
-     *
-     * @link https://php.net/manual/en/language.oop5.decon.php
+     * @var string
      */
-    public function __construct()
-    {
-        $this->bloc = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    protected $bloc1Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc2Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc2Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc3Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc3Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc4Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc4Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc5Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc5Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc6Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc6Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc7Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc7Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc8Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc8Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc9Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc9Requete;
+
+    /**
+     * @var string
+     */
+    protected $bloc10Nom;
+
+    /**
+     * @var string
+     */
+    protected $bloc10Requete;
 
 
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -74,7 +150,7 @@ class ModeleContrat
      *
      * @return ModeleContrat
      */
-    public function setId(int $id): ModeleContrat
+    public function setId($id): ModeleContrat
     {
         $this->id = $id;
 
@@ -86,7 +162,7 @@ class ModeleContrat
     /**
      * @return string
      */
-    public function getLibelle(): string
+    public function getLibelle()
     {
         return $this->libelle;
     }
@@ -98,7 +174,7 @@ class ModeleContrat
      *
      * @return ModeleContrat
      */
-    public function setLibelle(string $libelle): ModeleContrat
+    public function setLibelle($libelle): ModeleContrat
     {
         $this->libelle = $libelle;
 
@@ -110,21 +186,21 @@ class ModeleContrat
     /**
      * @return string
      */
-    public function getContenu(): string
+    public function getFichier()
     {
-        return $this->contenu;
+        return $this->fichier;
     }
 
 
 
     /**
-     * @param string $contenu
+     * @param string $fichier
      *
      * @return ModeleContrat
      */
-    public function setContenu(string $contenu): ModeleContrat
+    public function setFichier($fichier): ModeleContrat
     {
-        $this->contenu = $contenu;
+        $this->fichier = $fichier;
 
         return $this;
     }
@@ -134,7 +210,7 @@ class ModeleContrat
     /**
      * @return string
      */
-    public function getRequete(): string
+    public function getRequete()
     {
         return $this->requete;
     }
@@ -146,7 +222,7 @@ class ModeleContrat
      *
      * @return ModeleContrat
      */
-    public function setRequete(string $requete): ModeleContrat
+    public function setRequete($requete): ModeleContrat
     {
         $this->requete = $requete;
 
@@ -155,46 +231,41 @@ class ModeleContrat
 
 
 
-    /**
-     * Add bloc
-     *
-     * @param ModeleContratBloc $bloc
-     *
-     * @return ModeleContrat
-     */
-    public function addBloc(ModeleContratBloc $bloc): ModeleContrat
+    public function getBlocs(): array
     {
-        $this->bloc[] = $bloc;
+        $blocs = [];
 
-        return $this;
+        for ($i = 1; $i <= 10; $i++) {
+            $nomVar     = "bloc$i" . "Nom";
+            $requeteVar = "bloc$i" . "Requete";
+            if ($this->{$nomVar} && $this->{$requeteVar}) {
+                $blocs[$this->{$nomVar}] = $this->{$requeteVar};
+            }
+        }
+
+        return $blocs;
     }
 
 
 
-    /**
-     * Remove bloc
-     *
-     * @param ModeleContratBloc $bloc
-     *
-     * @return ModeleContrat
-     */
-    public function removeBloc(ModeleContratBloc $bloc): ModeleContrat
+    public function setBlocs(array $blocs): ModeleContrat
     {
-        $this->bloc->removeElement($bloc);
+        $i = 1;
+        foreach ($blocs as $nom => $requete) {
+            $nomVar              = "bloc$i" . "Nom";
+            $requeteVar          = "bloc$i" . "Requete";
+            $this->{$nomVar}     = $nom;
+            $this->{$requeteVar} = $requete;
+            $i++;
+        }
+        for( null;$i<=10;$i++){ // on vide le reste!!
+            $nomVar              = "bloc$i" . "Nom";
+            $requeteVar          = "bloc$i" . "Requete";
+            $this->{$nomVar}     = null;
+            $this->{$requeteVar} = null;
+        }
 
         return $this;
-    }
-
-
-
-    /**
-     * Get bloc
-     *
-     * @return \Doctrine\Common\Collections\Collection|ModeleContratBloc[]
-     */
-    public function getBloc()
-    {
-        return $this->bloc;
     }
 
 

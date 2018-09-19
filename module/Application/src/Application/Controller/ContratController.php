@@ -312,10 +312,26 @@ class ContratController extends AbstractController
 
 
 
+    public function exporterAction()
+    {
+        /* @var Contrat $contrat */
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Génération du contrat interdite.");
+        }
+
+        $this->getServiceModeleContrat()->generer($contrat);
+    }
+
+
+
     /**
      *
+     * @todo A Supprimer!!!
+     * @deprecated
      */
-    public function exporterAction()
+    public function exporterOLDAction()
     {
         $this->initFilters();
 
@@ -407,8 +423,8 @@ class ContratController extends AbstractController
         );
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
-        $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
-        die(); // pour éviter de générer une erreur par la suite
+       // $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+       // die(); // pour éviter de générer une erreur par la suite
     }
 
 
@@ -539,7 +555,7 @@ class ContratController extends AbstractController
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
 
-        $form     = $this->getFormContratModele();
+        $form = $this->getFormContratModele();
 
         if (!$modeleContrat) {
             $title         = 'Ajout d\'un modèle de contrat';
@@ -586,7 +602,7 @@ class ContratController extends AbstractController
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
 
         $fichier = new Fichier();
-        $fichier->setNom(Util::reduce($modeleContrat->getLibelle()).'.odt');
+        $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
         $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
         $fichier->setContenu($modeleContrat->getFichier());
         $this->uploader()->download($fichier);

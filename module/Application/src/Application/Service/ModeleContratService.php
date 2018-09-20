@@ -71,6 +71,7 @@ class ModeleContratService extends AbstractEntityService
         if ($contrat->estUnProjet()){
             $document->getStylist()->addFiligrane('PROJET');
         }
+        $document->getPublisher()->setAutoBreak(true);
         $document->publish($this->generateData($modele, $contrat));
         $document->setPdfOutput(true);
         $document->download($fileName);
@@ -87,13 +88,26 @@ class ModeleContratService extends AbstractEntityService
         $connection = $this->getEntityManager()->getConnection();
 
         $params = ['contrat' => $contrat->getId()];
-        $data = [0 => $connection->fetchAssoc($modele->getRequete(), $params)];
+        $mainData = $connection->fetchAssoc($modele->getRequete(), $params);
+
+        $data = [0 => $mainData];
 
         $blocs = $modele->getBlocs();
         foreach($blocs as $bname => $bquery){
             $bdata = $connection->fetchAll($bquery, $params);
             $bkey = $bname.'@table:table-row';
             $data[0][$bkey] = $bdata;
+        }
+
+        $data[1] = $data[0];
+
+        if (isset($mainData['exemplaire1'])){
+            $data[0]['exemplaire'] = $mainData['exemplaire1'];
+            unset($mainData['exemplaire1']);
+        }
+        if (isset($mainData['exemplaire2'])){
+            $data[1]['exemplaire'] = $mainData['exemplaire2'];
+            unset($mainData['exemplaire2']);
         }
 
         return $data;

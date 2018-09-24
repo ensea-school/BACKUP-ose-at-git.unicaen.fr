@@ -32,6 +32,14 @@ Les composantes supprimées n'apparaissent maintenant plus dans la liste. Appara
 
 * Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut) selon qu'on soit en prévisionnel ou en réalisé.
 
+* Possibilité de personnaliser le modèle de contrat de travail et d'avenant.
+    * Un modèle générique est à votre disposition dans le dossier data de l'application (format OpenDocument Texte à adapter avec l'application LibreOffice).
+    * Les modèles peuvent être spécifiques à une composante donnée ou bien à un statut donné (ou les deux)
+    * Un système de variables permet de réaliser un publipostage à partir des données de contrat pour les injecter dans le document
+    * Vous pouvez personnaliser les requêtes afin d'injecter dans le modèle les données de votre choix
+    * Vous pouvez créer de nouvelles variables comme bon vous semble
+    * Une interface d'administration vous permettra de configurer vos modèles
+    
 * Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
 
 * Formulaire de saisie de services amélioré :

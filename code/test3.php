@@ -7,14 +7,16 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
+use Application\Service\ModeleContratService;
 use Unicaen\OpenDocument\Document;
 
 
 $d = [
     [
-        'nom'                      => 'Lécluse',
-        'prenom'                   => 'Laurent',
-        'sec1'                     => false,
+        'nom'    => 'Lécluse',
+        'prenom' => 'Laurent',
+        'varFoot' => 'test footer ok!!!',
+        'sec1'   => false,
 
         'dpl_libelle@table:table-row' => [
             [
@@ -49,11 +51,15 @@ $d = [
     ],
 
     [
-        'nom'                      => 'Fery',
-        'prenom'                   => 'Karin',
-        'sec1@text:section'       => [
+        'nom'                         => 'Fery',
+        'prenom'                      => 'Karin',
+        'varFoot' => 'test footer 2 bizarre!!!',
+        'sec1@text:section'           => [
             ['secvar' => 'Varsec1',],
-            ['secvar' => 'Varsec2',]
+            ['secvar' => 'Varsec2',],
+            ['secvar' => 'Varsec3',],
+            ['secvar' => 'Varsec4',],
+            ['secvar' => 'Varsec5',],
         ],
         'dpl_libelle@table:table-row' => [
             [
@@ -91,7 +97,7 @@ poto',
 
 
 ///** @var ModeleContrat $contrat */
-//$contrat = $sl->get(ModeleContratService::class)->get(3);
+$contrat = $sl->get(ModeleContratService::class)->get(13);
 
 $document = new Document();
 $document->setTmpDir('/home/laurent/UnicaenCode');
@@ -103,7 +109,10 @@ $p = $document->publish($d);
 $document->setPdfOutput(true);
 //$document->saveToFile('/home/laurent/UnicaenCode/odtExport.pdf');
 
-xmlDump($document->getPublisher()->getOutContent());
+//xmlDump($document->getPublisher()->getOutContent());
+//xmlDump($document->getStyles());
+//var_dump($document->getStylist()->getVariables());
+
 
 $document->download('exp.pdf');
 

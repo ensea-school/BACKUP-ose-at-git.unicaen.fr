@@ -42,7 +42,7 @@ class ModeleContratService extends AbstractEntityService
         $modeles = $this->getList();
 
         usort($modeles, function (ModeleContrat $m1, ModeleContrat $m2) use ($contrat) {
-            return $this->getRank($m1,$contrat) < $this->getRank($m2,$contrat);
+            return $this->getRank($m1, $contrat) < $this->getRank($m2, $contrat);
         });
 
         $modele = reset($modeles);
@@ -52,7 +52,7 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    public function generer( Contrat $contrat)
+    public function generer(Contrat $contrat)
     {
         $fileName = sprintf(($contrat->estUnAvenant() ? 'avenant' : 'contrat') . "_%s_%s_%s.pdf",
             $contrat->getStructure()->getCode(),
@@ -61,14 +61,21 @@ class ModeleContratService extends AbstractEntityService
 
         $modele = $this->getByContrat($contrat);
 
-        if (!$modele){
+        if (!$modele) {
             throw new \Exception('Aucun modèle ne correspond à ce contrat');
         }
 
         $document = new Document();
-        $document->setTmpDir(getcwd().'/data/cache/');
-        $document->loadFromData($modele->getFichier());
-        if ($contrat->estUnProjet()){
+        $document->setTmpDir(getcwd() . '/data/cache/');
+
+        $fichier = $modele->getFichier();
+        if ($fichier) {
+            $document->loadFromData($fichier);
+        } else {
+            $document->loadFromFile(getcwd() . '/data/modele_contrat.odt');
+        }
+
+        if ($contrat->estUnProjet()) {
             $document->getStylist()->addFiligrane('PROJET');
         }
         $document->getPublisher()->setAutoBreak(true);
@@ -79,33 +86,48 @@ class ModeleContratService extends AbstractEntityService
 
 
 
-    private function generateData( ModeleContrat $modele, Contrat $contrat)
+    private function generateData(ModeleContrat $modele, Contrat $contrat)
     {
-        if (!$modele->getRequete()){
-            throw new \Exception('Impossible de générer le contrat: pas de requête pour le modèle "'.$modele->getLibelle().'"');
-        }
-
         $connection = $this->getEntityManager()->getConnection();
 
         $params = ['contrat' => $contrat->getId()];
-        $mainData = $connection->fetchAssoc($modele->getRequete(), $params);
+
+        $mainData = $connection->fetchAssoc('SELECT * FROM V_CONTRAT_MAIN WHERE CONTRAT_ID = :contrat', $params);
+        if ($modele->getRequete()) {
+            $mainDataPerso = $connection->fetchAssoc($modele->getRequete(), $params);
+            foreach ($mainDataPerso as $key => $value) {
+                if ($value) {
+                    $mainData[$key] = $value;
+                }
+            }
+        }
 
         $data = [0 => $mainData];
 
         $blocs = $modele->getBlocs();
-        foreach($blocs as $bname => $bquery){
+        foreach ($blocs as $bname => $bquery) {
             $bdata = $connection->fetchAll($bquery, $params);
-            $bkey = $bname.'@table:table-row';
+            $bkey  = $bname . '@table:table-row';
+
             $data[0][$bkey] = $bdata;
+        }
+
+        if (!isset($data[0]['serviceCode@table:table-row'])
+            && !isset($data[0]['serviceComposante@table:table-row'])
+            && !isset($data[0]['serviceLibelle@table:table-row'])
+            && !isset($data[0]['serviceHeures@table:table-row'])
+        ) {
+            $data[0]['serviceCode@table:table-row'] =
+                $connection->fetchAll('SELECT * FROM V_CONTRAT_SERVICES WHERE CONTRAT_ID = :contrat', $params);
         }
 
         $data[1] = $data[0];
 
-        if (isset($mainData['exemplaire1'])){
+        if (isset($mainData['exemplaire1'])) {
             $data[0]['exemplaire'] = $mainData['exemplaire1'];
             unset($mainData['exemplaire1']);
         }
-        if (isset($mainData['exemplaire2'])){
+        if (isset($mainData['exemplaire2'])) {
             $data[1]['exemplaire'] = $mainData['exemplaire2'];
             unset($mainData['exemplaire2']);
         }

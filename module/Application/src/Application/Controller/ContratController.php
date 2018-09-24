@@ -331,7 +331,7 @@ class ContratController extends AbstractController
      * @todo A Supprimer!!!
      * @deprecated
      */
-    public function exporterOLDAction()
+    public function exporterOldAction()
     {
         $this->initFilters();
 
@@ -423,8 +423,8 @@ class ContratController extends AbstractController
         );
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
-       // $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
-       // die(); // pour éviter de générer une erreur par la suite
+        $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+        die(); // pour éviter de générer une erreur par la suite
     }
 
 

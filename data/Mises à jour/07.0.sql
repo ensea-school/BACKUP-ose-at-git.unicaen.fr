@@ -5,9 +5,16 @@ ALTER TABLE service ADD (source_id   NUMBER(*,0) );
 ALTER TABLE service ADD (source_code VARCHAR2(100 CHAR));
 
 ALTER TRIGGER SERVICE_CK DISABLE;
+ALTER TRIGGER INTERVENANT_HORO_SERVICE DISABLE;
+ALTER TRIGGER INTERVENANT_HORO_VH DISABLE;
+ALTER TRIGGER SERVICE_HISTO_CK DISABLE;
+ALTER TRIGGER SERVICE_HISTO_CK_S DISABLE;
+ALTER TRIGGER VOLUME_HORAIRE_CK DISABLE;
+
+
+
 UPDATE service SET source_id = (SELECT id FROM source WHERE code = 'OSE');
 UPDATE service SET source_code = id;
-ALTER TRIGGER SERVICE_CK ENABLE;
 
 ALTER TABLE service MODIFY ( source_id NOT NULL );
 ALTER TABLE service MODIFY ( source_code NOT NULL );
@@ -16,10 +23,15 @@ ALTER TABLE service ADD CONSTRAINT service_source_un UNIQUE ( source_code,histo_
 
 -- Import possible pour les volumes horaires
 ALTER TABLE volume_horaire ADD (source_id   NUMBER(*,0) );
-UPDATE volume_horaire SET source_id = (SELECT id FROM source WHERE code = 'OSE');
-
 ALTER TABLE volume_horaire ADD (source_code VARCHAR2(100 CHAR));
-UPDATE volume_horaire SET source_code = id;
+UPDATE volume_horaire SET source_id = (SELECT id FROM source WHERE code = 'OSE'), source_code = id;
+
+ALTER TRIGGER SERVICE_CK ENABLE;
+ALTER TRIGGER INTERVENANT_HORO_SERVICE ENABLE;
+ALTER TRIGGER INTERVENANT_HORO_VH ENABLE;
+ALTER TRIGGER SERVICE_HISTO_CK ENABLE;
+ALTER TRIGGER SERVICE_HISTO_CK_S ENABLE;
+ALTER TRIGGER VOLUME_HORAIRE_CK ENABLE;
 
 ALTER TABLE volume_horaire MODIFY ( source_id NOT NULL );
 ALTER TABLE volume_horaire MODIFY ( source_code NOT NULL );
@@ -342,6 +354,32 @@ FROM (
      UNION ALL SELECT 'contrat' c, 'contrat-generation' p, 'Génération de contrat' l FROM dual
      ) t1;
 
+CREATE OR REPLACE VIEW V_CONTRAT_SERVICES AS
+  SELECT
+         c.id                                             contrat_id,
+         str.libelle_court                                "serviceComposante",
+         ep.code                                          "serviceCode",
+         ep.libelle                                       "serviceLibelle",
+         sum(vh.heures)                                   heures,
+         replace(ltrim(to_char(sum(vh.heures), '999999.00')),'.',',') "serviceHeures"
+  FROM
+       contrat               c
+         JOIN intervenant           i ON i.id = c.intervenant_id
+         JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
+         JOIN service               s ON s.intervenant_id = i.id AND s.histo_destruction IS NULL
+         JOIN volume_horaire       vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL AND vh.type_volume_horaire_id = tvh.id
+         JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
+         JOIN validation            v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
+         LEFT JOIN validation           cv ON cv.id = c.validation_id AND cv.histo_destruction IS NULL
+         LEFT JOIN element_pedagogique  ep ON ep.id = s.element_pedagogique_id
+         JOIN structure           str ON str.id = COALESCE(ep.structure_id,i.structure_id)
+  WHERE
+      c.histo_destruction IS NULL
+    AND (cv.id IS NULL OR vh.contrat_id = c.id)
+  GROUP BY
+           c.id, str.libelle_court, ep.code, ep.libelle
+;
+
 CREATE OR REPLACE VIEW V_CONTRAT_MAIN AS
   WITH hs AS (
       SELECT contrat_id, sum(heures) "serviceTotal" FROM V_CONTRAT_SERVICES GROUP BY contrat_id
@@ -439,32 +477,6 @@ CREATE OR REPLACE VIEW V_CONTRAT_MAIN AS
        WHERE
            c.histo_destruction IS NULL
        ) ct
-;
-
-CREATE OR REPLACE VIEW V_CONTRAT_SERVICES AS
-  SELECT
-         c.id                                             contrat_id,
-         str.libelle_court                                "serviceComposante",
-         ep.code                                          "serviceCode",
-         ep.libelle                                       "serviceLibelle",
-         sum(vh.heures)                                   heures,
-         replace(ltrim(to_char(sum(vh.heures), '999999.00')),'.',',') "serviceHeures"
-  FROM
-       contrat               c
-         JOIN intervenant           i ON i.id = c.intervenant_id
-         JOIN type_volume_horaire tvh ON tvh.code = 'PREVU'
-         JOIN service               s ON s.intervenant_id = i.id AND s.histo_destruction IS NULL
-         JOIN volume_horaire       vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL AND vh.type_volume_horaire_id = tvh.id
-         JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
-         JOIN validation            v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
-         LEFT JOIN validation           cv ON cv.id = c.validation_id AND cv.histo_destruction IS NULL
-         LEFT JOIN element_pedagogique  ep ON ep.id = s.element_pedagogique_id
-         JOIN structure           str ON str.id = COALESCE(ep.structure_id,i.structure_id)
-  WHERE
-      c.histo_destruction IS NULL
-    AND (cv.id IS NULL OR vh.contrat_id = c.id)
-  GROUP BY
-           c.id, str.libelle_court, ep.code, ep.libelle
 ;
 
 

@@ -19,6 +19,6 @@
         "unicaen/code"              : "1.1.6",
         "unicaen/import"            : "1.1.6",
         "unicaen/tbl"               : "1.0.3",
-        "unicaen/open-document"     : "1.2"
+        "unicaen/open-document"     : "1.3"
     }
 }

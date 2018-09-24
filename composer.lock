@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7972a11d4dffeb69c9eea361d635016",
+    "content-hash": "23dd9e4a05c10ee71c54b318c041638b",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1584,11 +1584,11 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "1.2",
+            "version": "1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "3c3684202d0f845b3d16cce0015a85dcd4d90f4f"
+                "reference": "642d14ef4dc3a63687ffef2059549dbb759eff5e"
             },
             "type": "library",
             "autoload": {
@@ -1600,7 +1600,7 @@
                 ]
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2018-09-20T13:39:51+00:00"
+            "time": "2018-09-24T09:00:20+00:00"
         },
         {
             "name": "unicaen/oracle",

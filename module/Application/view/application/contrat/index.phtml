@@ -9,7 +9,12 @@ use Application\Provider\Privilege\Privileges;
  * @var $contrats    \Application\Entity\Db\Contrat[]
  */
 
-$hasContrat = !empty($contrats);
+$hasContrat = false;
+foreach( $contrats as $contrat ){
+    if (!$contrat->estUnProjet()){
+        $hasContrat = true;
+    }
+}
 
 $this->headTitle()->append($intervenant->getNomUsuel())->append("Contrat/avenant");
 

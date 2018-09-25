@@ -662,6 +662,7 @@ class ServiceController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
             'validation_enseignement',
+            'contrat',
         ], $intervenant);
 
         if (!$validation) {

@@ -38,6 +38,7 @@ class DataGen
         'IMPORT_TABLES'              => '',
         'INDICATEUR'                 => '',
         'MESSAGE'                    => '',
+        'MODELE_CONTRAT'             => "libelle = 'Modèle par défaut'",
         'MOTIF_MODIFICATION_SERVICE' => '',
         'MOTIF_NON_PAIEMENT'         => '',
         'PARAMETRE'                  => '',

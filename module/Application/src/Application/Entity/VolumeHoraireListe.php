@@ -271,6 +271,7 @@ class VolumeHoraireListe
             if (true === $this->etatVolumeHoraire) {
                 if (null === $etatVolumeHoraire) return false;
             } else {
+                if (null === $etatVolumeHoraire) return false;
                 if ($etatVolumeHoraire->getOrdre() < $this->etatVolumeHoraire->getOrdre()) return false;
             }
         }

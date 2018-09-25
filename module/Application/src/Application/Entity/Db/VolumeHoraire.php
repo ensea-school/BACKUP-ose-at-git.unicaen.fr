@@ -426,6 +426,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
      */
     public function getEtatVolumeHoraire()
     {
+        if (!$this->etatVolumeHoraire) return null;
+
         return $this->etatVolumeHoraire->first();
     }
 

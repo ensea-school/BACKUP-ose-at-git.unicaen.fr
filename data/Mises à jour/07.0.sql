@@ -339,6 +339,15 @@ ALTER TABLE modele_contrat
 REFERENCES statut_intervenant ( id )
   NOT DEFERRABLE;
 
+
+INSERT INTO modele_contrat (
+    id,
+    libelle
+    ) VALUES (
+                 modele_contrat_id_seq.nextval,
+                 'Modèle par défaut'
+                 );
+
 INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
 SELECT
        privilege_id_seq.nextval id,

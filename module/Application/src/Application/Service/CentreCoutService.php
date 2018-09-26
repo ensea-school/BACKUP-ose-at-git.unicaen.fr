@@ -114,4 +114,17 @@ class CentreCoutService extends AbstractEntityService
             return null;
         }
     }
+
+    /**
+     * Retourne la liste des types de modulateurs
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     * @return CentreCout[]
+     */
+    public function getList( QueryBuilder $qb=null, $alias=null ){
+        list($qb,$alias) = $this->initQuery($qb,$alias);
+        $qb->addOrderBy("$alias.parent");
+        return parent::getList($qb, $alias);
+    }
 }

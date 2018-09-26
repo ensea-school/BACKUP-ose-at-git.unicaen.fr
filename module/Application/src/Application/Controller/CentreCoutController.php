@@ -10,6 +10,7 @@ use Application\Exception\DbException;
 use Application\Form\CentreCout\Traits\CentreCoutSaisieFormAwareTrait;
 use Application\Form\CentreCout\Traits\CentreCoutStructureSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Doctrine\ORM\QueryBuilder;
 
 class CentreCoutController extends AbstractController
 {

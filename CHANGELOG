@@ -18,6 +18,10 @@ author: Laurent Lécluse - DSI - Unicaen
 * Administration des fonctions référentielles :
 Les composantes supprimées n'apparaissent maintenant plus dans la liste. Apparaissent en plus les composantes sans enseignements (pour lesquelles il peut y avoir du référentiel).
 
+* Page d'accès aux contrats qui affichait une erreur si des services étaient validés dans une composante supplémentaire sans que l'agrément du conseil restreint ne soit saisi.
+
+* Dans certains cas, le passage des heures du prévisionnel au réalisé ne fonctionnait pas.
+
 ## Nouveautés
 
 * Synchronisation possible de services et des volumes horaires associés (en vue d'import depuis ADE)
@@ -28,9 +32,9 @@ Les composantes supprimées n'apparaissent maintenant plus dans la liste. Appara
 
 * Possibilité de déterminer si les heures pour une fonction référentielle donnée peuvent être comptées dans le service statutaire ou non.
 
-* Possibilité d'importer des heures d'enseignement depuis ADE.
-
 * Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut) selon qu'on soit en prévisionnel ou en réalisé.
+
+* Mise en place d'une interface de saisie d'heures en mode calendaire
 
 * Possibilité de personnaliser le modèle de contrat de travail et d'avenant.
     * Un modèle générique est à votre disposition dans le dossier data de l'application (format OpenDocument Texte à adapter avec l'application LibreOffice).
@@ -39,6 +43,8 @@ Les composantes supprimées n'apparaissent maintenant plus dans la liste. Appara
     * Vous pouvez personnaliser les requêtes afin d'injecter dans le modèle les données de votre choix
     * Vous pouvez créer de nouvelles variables comme bon vous semble
     * Une interface d'administration vous permettra de configurer vos modèles
+
+* il est désormais possible, via la gestion des privilèges, d'interdire à des statuts ou des rôles de générer de nouveaux contrats et/ou avenants.
     
 * Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
 
@@ -72,6 +78,16 @@ Les paramètres à ajouter puis personnaliser sont :
 | etablissement | contact | Personnalisation du contenu de votre page "contact" (code HTML) |
 | etablissement | icones | Personnaliser l'icône de l'application |
 | mail | from | préciser l'adresse d'expéditeur des mails de OSE |
+
+* Pour la génération des contrats de travail, veillez bien à installer Unoconv sur votre serveur.
+Pour plus d'informations, merci de vous rendre à la page "Procédure d'installation" où tout y est expliqué.
+
+* De nouveaux privilèges liés aux contrats de travail ont été créés. Il vous revient de les attribuer aux rôles et statuts de votre souhait.
+Sans cela, les fonctionnalités associées ne seront pas accessibles.
+
+* Dans les paramètres de configuration (Menu Administration/Paramètres généraux), 
+veuillez sélectionner "FRANCE" dans le bloc "Divers" (en bas à gauche de la page).
+
 
 #OSE 6.3.2
 

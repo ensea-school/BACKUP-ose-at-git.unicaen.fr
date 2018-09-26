@@ -194,6 +194,20 @@ class ModeleContrat
 
 
     /**
+     * @return bool
+     */
+    public function hasFichier(): bool
+    {
+        if (is_resource($this->fichier)){
+            return !empty(stream_get_contents($this->fichier, 1));
+        }else{
+            return !empty($this->fichier);
+        }
+    }
+
+
+
+    /**
      * @param string $fichier
      *
      * @return ModeleContrat

@@ -68,11 +68,10 @@ class ModeleContratService extends AbstractEntityService
         $document = new Document();
         $document->setTmpDir(getcwd() . '/data/cache/');
 
-        $fichier = $modele->getFichier();
-        if ($fichier) {
-            $document->loadFromData($fichier);
+        if ($modele->hasFichier()) {
+            $document->loadFromData($modele->getFichier());
         } else {
-            $document->loadFromFile(getcwd() . '/data/modele_contrat.odt');
+            $document->loadFromFile($this->getModeleGeneriqueFile(), true);
         }
 
         if ($contrat->estUnProjet()) {
@@ -82,6 +81,16 @@ class ModeleContratService extends AbstractEntityService
         $document->publish($this->generateData($modele, $contrat));
         $document->setPdfOutput(true);
         $document->download($fileName);
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getModeleGeneriqueFile(): string
+    {
+        return getcwd() . '/data/modele_contrat.odt';
     }
 
 

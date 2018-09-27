@@ -150,8 +150,19 @@ return [
          * à rappchcher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
         'utilisateurCode'              => 'supannEmpId',
 
-        /* Filtre pour la recherche d'utilisateurs */
+        /* Filtre de recherche d'utilisateurs pour les affectations */
         'utilisateurFiltre'            => '(eduPersonAffiliation=member)(!(eduPersonAffiliation=student))',
+
+        /* Masque de données permettant de préciser des informations lorsqu'on fait une recherche de personne en vue
+         * de créer une nouvelle affectation d'accès à OSE
+         * Format du masque : http://php.net/manual/fr/function.sprintf.php
+         */
+        'utilisateurExtraMasque'       => '(n°%s; %s)',
+
+        /* Liste des attributs LDAP à fournir au masque de données ci-dessus
+         * Dans l'exemple par défaut, on renvoie l'identifiant du personnel ainsi que son mail
+         */
+        'utilisateurExtraAttributes'   => ['supannEmpId', 'mail'],
 
         /* DN des utilisateurs */
         'utilisateursBaseDN'           => 'ou=people,dc=unicaen,dc=fr',

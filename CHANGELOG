@@ -3,7 +3,16 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
-#OSE 7.0 (en développement)
+#OSE 8.0 (en développement)
+
+## Corrections de bugs
+
+## Nouveautés
+
+## Notes de mise à jour
+
+
+#OSE 7.0 (béta 2)
 
 ## Corrections de bugs
 
@@ -21,6 +30,10 @@ Les composantes supprimées n'apparaissent maintenant plus dans la liste. Appara
 * Page d'accès aux contrats qui affichait une erreur si des services étaient validés dans une composante supplémentaire sans que l'agrément du conseil restreint ne soit saisi.
 
 * Dans certains cas, le passage des heures du prévisionnel au réalisé ne fonctionnait pas.
+
+* Les utilisateurs LDAP qui n'ont pas de SupannEmpId peuvent maintenant se connecter à OSE sans soucis
+
+* Lorsqu'un clique sur une composante dans le service référentiel, l'affichage du détail ne plante plus.
 
 ## Nouveautés
 
@@ -61,6 +74,7 @@ Les composantes supprimées n'apparaissent maintenant plus dans la liste. Appara
     * adresse mail d'envoi, 
     * icône de l'application, 
     * URL des documentations permanents et vacataires dans les paramètres généraux.
+    * possibilité de préciser des informations lorsqu'un recherche une personne pour affectation à OSE
 
 ## Notes de mise à jour
 
@@ -78,6 +92,8 @@ Les paramètres à ajouter puis personnaliser sont :
 | etablissement | contact | Personnalisation du contenu de votre page "contact" (code HTML) |
 | etablissement | icones | Personnaliser l'icône de l'application |
 | mail | from | préciser l'adresse d'expéditeur des mails de OSE |
+| ldap | utilisateurExtraMasque | Masque de données à afficher lorsqu'on recherche une personne en vue de lui créer une affectation | 
+| ldap | utilisateurExtraAttributes | Attributs LDAP à fournir pour le masque ci-dessus |
 
 * Pour la génération des contrats de travail, veillez bien à installer Unoconv sur votre serveur.
 Pour plus d'informations, merci de vous rendre à la page "Procédure d'installation" où tout y est expliqué.

@@ -162,7 +162,13 @@ class LdapConnecteur extends AbstractService
 
         $ldapUser = $this->serviceUserContext->getLdapUser();
 
-        if ($ldapUser) return $ldapUser->getData(strtolower($this->getUtilisateurCode()));
+        if ($ldapUser){
+            try {
+                return $ldapUser->getData(strtolower($this->getUtilisateurCode()));
+            }catch(\Exception $e){
+                return null;
+            }
+        }
 
         return null;
     }

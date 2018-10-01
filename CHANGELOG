@@ -12,7 +12,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Notes de mise à jour
 
 
-#OSE 7.0 (béta 2)
+#OSE 7.0
 
 ## Corrections de bugs
 
@@ -81,6 +81,10 @@ Les composantes supprimées n'apparaissent maintenant plus dans la liste. Appara
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/07.0.sql`
 
+* Dans les paramètres de configuration (Menu Administration/Paramètres généraux), 
+veuillez sélectionner "FRANCE" dans le bloc "Divers" (en bas à gauche de la page). 
+**Attention** : si ce n'est pas fait, la page "données personnelles" des intervenants ne pourra pas s'afficher.
+
 * De nouveaux paramètres de configuration ont été ajoutés dans le fichier de configuration global de l'application
 `/config.local.php`. A vous de les ajouter manuellement à votre fichier de confguration existant.
 Au besoin, le modèle est le fichier `/config.local.php.default`.
@@ -100,9 +104,6 @@ Pour plus d'informations, merci de vous rendre à la page "Procédure d'installa
 
 * De nouveaux privilèges liés aux contrats de travail ont été créés. Il vous revient de les attribuer aux rôles et statuts de votre souhait.
 Sans cela, les fonctionnalités associées ne seront pas accessibles.
-
-* Dans les paramètres de configuration (Menu Administration/Paramètres généraux), 
-veuillez sélectionner "FRANCE" dans le bloc "Divers" (en bas à gauche de la page).
 
 
 #OSE 6.3.2

@@ -605,7 +605,7 @@ class ContratController extends AbstractController
         $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
         $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
         if ($modeleContrat->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier()));
+            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(),-1,0));
         } else {
             $fichier->setContenu(file_get_contents($this->getServiceModeleContrat()->getModeleGeneriqueFile()));
         }

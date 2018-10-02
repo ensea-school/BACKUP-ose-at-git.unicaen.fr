@@ -11,6 +11,16 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Notes de mise à jour
 
+#OSE 7.0.1
+
+## Corrections de bugs
+
+La génération des contrats ne fonctionnait pas en mode production.
+Idem pour télécharger des modèles de contrats.
+
+## Notes de mise à jour
+
+Pas de BDD à mettre à jour, juste le code de l'application en lancant la commande /bin/ose update.
 
 #OSE 7.0
 

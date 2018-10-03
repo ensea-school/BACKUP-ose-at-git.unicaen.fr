@@ -203,7 +203,7 @@ class SaisieForm extends AbstractViewHelper
         /* @var $typeVolumeHoraire TypeVolumeHoraire */
         $inRealise = $typeVolumeHoraire->isRealise();
         if ($inRealise) {
-            $vhl = $fieldset->getObject()->getService()->getVolumeHoraireListe()->getChild();
+            $vhl = $fieldset->getObject()->getService()->getVolumeHoraireListe()->createChild();
             /* @var $vhl \Application\Entity\VolumeHoraireListe */
             $vhl->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
             $vhl->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());

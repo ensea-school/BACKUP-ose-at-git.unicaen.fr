@@ -87,9 +87,7 @@ $i         = 0;
             if ($tblOk) { ?>
                 <table class="table table-bordered">
                     <thead>
-                    <th> Structure</th>
-                    <th> Source</th>
-                    <th> Code</th>
+                    <th>Désignation</th>
                     <th> Actions</th>
                     <?php // if ($okActions) echo '<th>Actions</th>' ?>
                     </thead>
@@ -98,7 +96,7 @@ $i         = 0;
                         if ($ccs->getCentreCout()->getId() == $fr->getId()) { ?>
                             <tr>
                                 <td><?= $ccs->getStructure() ?></td>
-                                <td><?= $ccs->getSourceCode() ?></td>
+                                <td>
                                 <?php if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) { ?>
                                 <td>
                                     <a class="ajax-modal" data-event="centre-cout-saisie"
@@ -170,9 +168,7 @@ $i         = 0;
                 if ($tblOk) { ?>
                     <table class="table table-bordered">
                         <thead>
-                        <th> Structure</th>
-                        <th> Source</th>
-                        <th> Code</th>
+                        <th>Désignation</th>
                         <th> Actions</th>
                         <?php // if ($okActions) echo '<th>Actions</th>' ?>
                         </thead>
@@ -181,10 +177,8 @@ $i         = 0;
                             if ($ccs->getCentreCout()->getId() == $frf->getId()) { ?>
                                 <tr>
                                     <td><?= $ccs->getStructure() ?></td>
-                                    <td><?= $ccs->getSource() ?></td>
-                                    <td><?= $ccs->getSourceCode() ?></td>
-                                    <?php if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) { ?>
                                     <td>
+                                    <?php if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) { ?>
                                         <a class="ajax-modal" data-event="centre-cout-saisie"
                                            href="<?= $this->url('centre-cout/saisie-structure', ['centre-cout' => $fr->getId(), 'centre-cout-structure' => $ccs->getId()]) ?>"
                                            title="Modifier la structure">

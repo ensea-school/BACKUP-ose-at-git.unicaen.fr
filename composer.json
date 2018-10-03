@@ -19,5 +19,8 @@
         "unicaen/code"              : "1.1.6",
         "unicaen/import"            : "1.1.6",
         "unicaen/tbl"               : "1.0.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6"
     }
 }

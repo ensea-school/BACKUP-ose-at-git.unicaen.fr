@@ -11,6 +11,12 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Notes de mise à jour
 
+#OSE 7.0.2
+
+## Corrections de bugs
+
+En mode calendaire, le formulaire de saisie de service réalisé ne s'affichait plus.
+
 #OSE 7.0.1
 
 ## Corrections de bugs

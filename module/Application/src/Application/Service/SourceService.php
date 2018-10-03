@@ -12,8 +12,10 @@ use UnicaenImport\Entity\Db\Source;
  */
 class SourceService extends AbstractEntityService
 {
-    const CODE_SOURCE_OSE     = 'OSE';
-    const CODE_SOURCE_TEST    = 'Test';
+    const CODE_SOURCE_OSE  = 'OSE';
+    const CODE_SOURCE_TEST = 'Test';
+
+
 
     /**
      * retourne la classe des entités
@@ -26,6 +28,8 @@ class SourceService extends AbstractEntityService
         return Source::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -36,6 +40,20 @@ class SourceService extends AbstractEntityService
         return 'src';
     }
 
+
+
+    /**
+     * @param $code
+     *
+     * @return null|Source
+     */
+    public function getByCode($code)
+    {
+        return $this->getRepo()->findOneBy(['code' => $code]);
+    }
+
+
+
     /**
      * Retourne l'entité source OSE
      *
@@ -43,8 +61,10 @@ class SourceService extends AbstractEntityService
      */
     public function getOse()
     {
-        return $this->getRepo()->findOneBy(['code' => self::CODE_SOURCE_OSE]);
+        return $this->getByCode(self::CODE_SOURCE_OSE);
     }
+
+
 
     /**
      * Retourne l'entité de test OSE
@@ -53,18 +73,21 @@ class SourceService extends AbstractEntityService
      */
     public function getTest()
     {
-        return $this->getRepo()->findOneBy(['code' => self::CODE_SOURCE_TEST]);
+        return $this->getByCode(self::CODE_SOURCE_TEST);
     }
+
+
 
     /**
      *
      * @param QueryBuilder|null $qb
-     * @param string|null $alias
+     * @param string|null       $alias
      */
-    public function orderBy( QueryBuilder $qb=null, $alias=null )
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
+
         return $qb;
     }
 }

@@ -7,10 +7,27 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Service\PaysService;
+use Application\Service\ModeleContratService;
+use Unicaen\OpenDocument\Document;
 
-/** @var PaysService $cs */
-$cs = $sl->get(PaysService::class);
+$fichier = '/home/laurent/Téléchargements/testfill.odt';
+//$fichier = '/home/laurent/UnicaenCode/srcodt.odt';
+//$fichier = '/home/laurent/tt.odt';
+//$fichier = '/home/laurent/Téléchargements/Contrat.odt';
+
+$modeleContrat = $sl->get(ModeleContratService::class)->get(13);
+
+$document = new Document();
+$document->setTmpDir('/home/laurent/UnicaenCode');
+//$document->loadFromFile($fichier);
+$document->loadFromData($modeleContrat->getFichier());
+
+$document->getStylist()->addFiligrane('PROJET');
+
+$document->setStylesChanged(true);
+xmlDump($document->getStyles());
+$document->setPdfOutput(true);
+//$document->saveToFile('/home/laurent/UnicaenCode/odtExport.pdf');
 
 
-
+//$document->download('exp.pdf');

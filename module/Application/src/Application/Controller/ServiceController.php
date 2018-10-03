@@ -458,7 +458,18 @@ class ServiceController extends AbstractController
         $this->initFilters();
         $id                = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
-        $intervenant = $this->context()->intervenantFromQuery('intervenant', $this->getServiceIntervenant()->get($this->params()->fromPost('intervenant-id')));
+
+        $intervenant = null;
+        if (!$intervenant){
+            $intervenant = $this->context()->intervenantFromQuery('intervenant');
+        }
+        if (!$intervenant){
+            $service = $this->params()->fromPost('service');
+            if (isset($service['intervenant-id'])){
+                $intervenant = $this->getServiceIntervenant()->get($service['intervenant-id']);
+            }
+        }
+
         if (empty($typeVolumeHoraire)) {
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         } else {
@@ -651,6 +662,7 @@ class ServiceController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
             'validation_enseignement',
+            'contrat',
         ], $intervenant);
 
         if (!$validation) {

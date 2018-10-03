@@ -2,14 +2,15 @@
 
 namespace Application\Entity;
 
-use Application\Entity\Db\VolumeHoraireReferentiel;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\ServiceReferentiel;
-use Application\Entity\Db\Validation;
 use Application\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Validation;
+use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use RuntimeException;
 use LogicException;
+use RuntimeException;
+use UnicaenImport\Entity\Db\Source;
 
 /**
  *
@@ -18,6 +19,14 @@ use LogicException;
  */
 class VolumeHoraireReferentielListe
 {
+    const FILTRE_ETAT_VOLUME_HORAIRE = 'etat-volume-horaire';
+    const FILTRE_HORAIRE_DEBUT       = 'horaire-debut';
+    const FILTRE_HORAIRE_FIN         = 'horaire-fin';
+    const FILTRE_TYPE_VOLUME_HORAIRE = 'type-volume-horaire';
+    const FILTRE_VALIDATION          = 'validation';
+    const FILTRE_SOURCE              = 'source';
+    const FILTRE_HISTORIQUE          = 'historique';
+
     use SourceServiceAwareTrait;
 
     /**
@@ -565,16 +574,25 @@ class VolumeHoraireReferentielListe
     {
         $result = [];
         if ($this->getTypeVolumeHoraire() instanceof TypeVolumeHoraire) {
-            $result['type-volume-horaire'] = $this->getTypeVolumeHoraire()->getId();
+            $result[self::FILTRE_TYPE_VOLUME_HORAIRE] = $this->getTypeVolumeHoraire()->getId();
+        }
+        if ($this->getEtatVolumeHoraire() instanceof EtatVolumeHoraire) {
+            $result[self::FILTRE_ETAT_VOLUME_HORAIRE] = $this->getEtatVolumeHoraire()->getId();
         }
         if ($this->getValidation() instanceof Validation) {
-            $result['validation'] = $this->getValidation()->getId();
+            $result[self::FILTRE_VALIDATION] = $this->getValidation()->getId();
         }
         if ($this->getHoraireDebut() instanceof \DateTime) {
-            $result['horaire-debut'] = $this->getHoraireDebut();
+            $result[self::FILTRE_HORAIRE_DEBUT] = $this->getHoraireDebut();
         }
         if ($this->getHoraireFin() instanceof \DateTime) {
-            $result['horaire-fin'] = $this->getHoraireFin();
+            $result[self::FILTRE_HORAIRE_FIN] = $this->getHoraireFin();
+        }
+        if ($this->getSource() instanceof Source) {
+            $result[self::FILTRE_SOURCE] = $this->getSource()->getId();
+        }
+        if ($this->getFilterByHistorique()){
+            $result[self::FILTRE_HISTORIQUE] = $this->getFilterByHistorique();
         }
 
         return $result;

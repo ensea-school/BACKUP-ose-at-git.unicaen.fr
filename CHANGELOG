@@ -3,7 +3,32 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
-#OSE 7.0 (en développement)
+#OSE 8.0 (en développement)
+
+## Corrections de bugs
+
+## Nouveautés
+
+## Notes de mise à jour
+
+#OSE 7.0.2
+
+## Corrections de bugs
+
+En mode calendaire, le formulaire de saisie de service réalisé ne s'affichait plus.
+
+#OSE 7.0.1
+
+## Corrections de bugs
+
+La génération des contrats ne fonctionnait pas en mode production.
+Idem pour télécharger des modèles de contrats.
+
+## Notes de mise à jour
+
+Pas de BDD à mettre à jour, juste le code de l'application en lancant la commande /bin/ose update.
+
+#OSE 7.0
 
 ## Corrections de bugs
 
@@ -12,6 +37,19 @@ author: Laurent Lécluse - DSI - Unicaen
 * Le bug empêchant de saisir de nouveaux services depuis la page "Services" est résolu.
 
 * Les filtres portant sur l'export des services (CSV et PDF) refonctionnent.
+
+* L'affichage des détails d'une composante (lorsqu'on clique sur son nom) a été réparé.
+
+* Administration des fonctions référentielles :
+Les composantes supprimées n'apparaissent maintenant plus dans la liste. Apparaissent en plus les composantes sans enseignements (pour lesquelles il peut y avoir du référentiel).
+
+* Page d'accès aux contrats qui affichait une erreur si des services étaient validés dans une composante supplémentaire sans que l'agrément du conseil restreint ne soit saisi.
+
+* Dans certains cas, le passage des heures du prévisionnel au réalisé ne fonctionnait pas.
+
+* Les utilisateurs LDAP qui n'ont pas de SupannEmpId peuvent maintenant se connecter à OSE sans soucis
+
+* Lorsqu'un clique sur une composante dans le service référentiel, l'affichage du détail ne plante plus.
 
 ## Nouveautés
 
@@ -23,21 +61,66 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Possibilité de déterminer si les heures pour une fonction référentielle donnée peuvent être comptées dans le service statutaire ou non.
 
-* Possibilité d'importer des heures d'enseignement depuis ADE.
-
 * Possibilité de basculer OSE en mode calendaire ou en mode semestriel (par défaut) selon qu'on soit en prévisionnel ou en réalisé.
 
+* Mise en place d'une interface de saisie d'heures en mode calendaire
+
+* Possibilité de personnaliser le modèle de contrat de travail et d'avenant.
+    * Un modèle générique est à votre disposition dans le dossier data de l'application (format OpenDocument Texte à adapter avec l'application LibreOffice).
+    * Les modèles peuvent être spécifiques à une composante donnée ou bien à un statut donné (ou les deux)
+    * Un système de variables permet de réaliser un publipostage à partir des données de contrat pour les injecter dans le document
+    * Vous pouvez personnaliser les requêtes afin d'injecter dans le modèle les données de votre choix
+    * Vous pouvez créer de nouvelles variables comme bon vous semble
+    * Une interface d'administration vous permettra de configurer vos modèles
+
+* il est désormais possible, via la gestion des privilèges, d'interdire à des statuts ou des rôles de générer de nouveaux contrats et/ou avenants.
+    
 * Le pays "France" peut maintenant être sélectionné dans la configuration globale de l'application
+
+* Formulaire de saisie de services amélioré :
+    * Le choix de l'intervenant n'apparait plus lorsque  l'on se trouve déjà dans la fiche de l'intervenant
+    * La saisie des volumes horaires n'est affichée que lorsque c'est nécessaire (plus de liste de tous les types d'intervention affichés par défaut).
+    * Il est désormais possible de limiter les types d'intervention disponibles pour saisir des services à l'extérieur
+     (paramétrage possible depuis Administration/Types d'intervention)
+
+* Dans le module Charges, il est désormais possible de modifier/créer des scénarios de niveau établissement
+
+* Meilleures possibilités de personnalisation :
+    * page contacts, 
+    * adresse mail d'envoi, 
+    * icône de l'application, 
+    * URL des documentations permanents et vacataires dans les paramètres généraux.
+    * possibilité de préciser des informations lorsqu'un recherche une personne pour affectation à OSE
 
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `data/Mises à jour/07.0.sql`
 
-* Ajoutez un paramètre "contact" dans votre fichier de configuration de l'application, rubrique "etablissement"
-pour pouvoir définir le contenu de votre page "contact"
+* Dans les paramètres de configuration (Menu Administration/Paramètres généraux), 
+veuillez sélectionner "FRANCE" dans le bloc "Divers" (en bas à gauche de la page). 
+**Attention** : si ce n'est pas fait, la page "données personnelles" des intervenants ne pourra pas s'afficher.
 
-* Idem si vous voulez personnaliser l'icône de l'application (paramètre icones dans etablissement du fichier de config).
+* De nouveaux paramètres de configuration ont été ajoutés dans le fichier de configuration global de l'application
+`/config.local.php`. A vous de les ajouter manuellement à votre fichier de confguration existant.
+Au besoin, le modèle est le fichier `/config.local.php.default`.
+
+Les paramètres à ajouter puis personnaliser sont :
+
+| Rubrique        | Paramètre       | Description                         |
+| --------------- | --------------- | ----------------------------------- |
+| etablissement | contact | Personnalisation du contenu de votre page "contact" (code HTML) |
+| etablissement | icones | Personnaliser l'icône de l'application |
+| mail | from | préciser l'adresse d'expéditeur des mails de OSE |
+| ldap | utilisateurExtraMasque | Masque de données à afficher lorsqu'on recherche une personne en vue de lui créer une affectation | 
+| ldap | utilisateurExtraAttributes | Attributs LDAP à fournir pour le masque ci-dessus |
+
+* Pour la génération des contrats de travail, veillez bien à installer Unoconv sur votre serveur.
+Pour plus d'informations, merci de vous rendre à la page "Procédure d'installation" où tout y est expliqué.
+
+* De nouveaux privilèges liés aux contrats de travail ont été créés. Il vous revient de les attribuer aux rôles et statuts de votre souhait.
+Sans cela, les fonctionnalités associées ne seront pas accessibles.
+
 
 #OSE 6.3.2
 

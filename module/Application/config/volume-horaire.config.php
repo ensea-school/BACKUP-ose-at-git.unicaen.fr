@@ -43,6 +43,30 @@ return [
                             ],
                         ],
                     ],
+                    'saisie-calendaire' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/saisie-calendaire/:service',
+                            'constraints' => [
+                                'service' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisie-calendaire',
+                            ],
+                        ],
+                    ],
+                    'suppression-calendaire' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/suppression-calendaire/:service',
+                            'constraints' => [
+                                'service' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'suppression-calendaire',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -58,7 +82,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\VolumeHoraire',
-                    'action'     => ['saisie'],
+                    'action'     => ['saisie', 'saisie-calendaire', 'suppression-calendaire'],
                     'privileges' => Privileges::ENSEIGNEMENT_EDITION,
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
@@ -88,6 +112,7 @@ return [
     'form_elements'   => [
         'invokables' => [
             Form\VolumeHoraire\Saisie::class                 => Form\VolumeHoraire\Saisie::class,
+            Form\VolumeHoraire\SaisieCalendaire::class       => Form\VolumeHoraire\SaisieCalendaire::class,
             Form\VolumeHoraire\SaisieMultipleFieldset::class => Form\VolumeHoraire\SaisieMultipleFieldset::class, // Nécessite plusieurs instances
         ],
     ],

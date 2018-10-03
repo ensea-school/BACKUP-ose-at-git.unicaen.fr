@@ -72,7 +72,7 @@ class FiltreForm extends AbstractForm
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "StructureService gestionnaire de la formation",
+                    'title' => "Structure gestionnaire de la formation",
                 ],
                 'value_options'             => Util::collectionAsOptions($this->structures),
             ],

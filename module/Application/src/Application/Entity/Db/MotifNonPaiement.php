@@ -144,6 +144,6 @@ class MotifNonPaiement implements HistoriqueAwareInterface
      */
     public function __toString()
     {
-        return $this->getLibelleLong();
+        return $this->getLibelleLong() ?: $this->getLibelleCourt();
     }
 }

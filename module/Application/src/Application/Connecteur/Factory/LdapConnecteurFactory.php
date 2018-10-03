@@ -35,7 +35,6 @@ class LdapConnecteurFactory
             $mapperUser
         );
 
-
         $config = $container->get('Config');
         if (isset($config['unicaen-app']['ldap']['utilisateur'])){
             $configLdapUtilisateur = $config['unicaen-app']['ldap']['utilisateur'];
@@ -54,6 +53,9 @@ class LdapConnecteurFactory
         if (isset($configLdapUtilisateur['CODE'])){
             $service->setUtilisateurCode( $configLdapUtilisateur['CODE'] );
         }
+
+        $service->setUtilisateurExtraMasque(\AppConfig::get('ldap', 'utilisateurExtraMasque', ''));
+        $service->setUtilisateurExtraAttributes(\AppConfig::get('ldap', 'utilisateurExtraAttributes', []));
 
         return $service;
     }

@@ -167,6 +167,22 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'    => 'doc-intervenant-vacataires',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Vacataires',
+            ],
+        ]);
+
+        $this->add([
+            'name'    => 'doc-intervenant-permanents',
+            'type'    => 'Text',
+            'options' => [
+                'label' => 'Permanents',
+            ],
+        ]);
+
+        $this->add([
             'type' => 'Select',
             'name' => 'oseuser',
             'options'    => [

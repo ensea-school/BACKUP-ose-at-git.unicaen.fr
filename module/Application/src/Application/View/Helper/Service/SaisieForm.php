@@ -35,15 +35,61 @@ class SaisieForm extends AbstractViewHelper
 
 
     /**
+     * @return \Application\Entity\Db\ElementPedagogique|null
+     */
+    protected function getElementPedagogique()
+    {
+        $service = $this->form->get('service')->getObject();
+        /* @var $service Service */
+        return  $service->getElementPedagogique();
+    }
+
+
+
+    /**
+     * @return \Application\Entity\Db\Etablissement|null
+     */
+    protected function getEtablissement()
+    {
+        $service = $this->form->get('service')->getObject();
+        /* @var $service Service */
+        return $service->getEtablissement();
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    protected function isEnseignementChoisi(): bool
+    {
+        $etablissement = $this->getEtablissement();
+        $elementPedagogique = $this->getElementPedagogique();
+
+        if ($elementPedagogique){
+            return true;
+        }
+        if (!$etablissement){
+            return false;
+        }
+        if ($etablissement != $this->getServiceContext()->getEtablissement()){
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    /**
      *
      * @return Periode[]
      */
     public function getPeriodes()
     {
-        $service = $this->form->get('service')->getObject();
-        /* @var $service Service */
-        if ($service->getElementPedagogique() && $service->getElementPedagogique()->getPeriode()) {
-            return [$service->getElementPedagogique()->getPeriode()];
+        $ep = $this->getElementPedagogique();
+        if ($ep && $ep->getPeriode()) {
+            return [$ep->getPeriode()];
         }
 
         return $this->getServicePeriode()->getEnseignement();
@@ -99,8 +145,11 @@ class SaisieForm extends AbstractViewHelper
         $fservice = $this->form->get('service');
 
         $res = $this->getView()->form()->openTag($this->form);
-        if (!$this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+        if ($fservice->has('intervenant')) {
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
+        }
+        if ($fservice->has('intervenant-id')) {
+            $res .= $this->getView()->formHidden($fservice->get('intervenant-id'));
         }
         if ($fservice->has('interne-externe')) {
             $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
@@ -132,12 +181,15 @@ class SaisieForm extends AbstractViewHelper
         if (!$this->getServiceContext()->isModaliteServicesSemestriel($this->form->getTypeVolumeHoraire())){
             return null;
         }
+
         $res = '';
-        foreach ($this->getPeriodes() as $periode) {
-            $res .= '<div class="periode" id="' . $periode->getCode() . '">';
-            $res .= '<h3>' . $periode . '</h3>';
-            $res .= $this->renderVolumeHoraire($this->form->get($periode->getCode()));
-            $res .= '</div>';
+        if ($this->isEnseignementChoisi()){
+            foreach ($this->getPeriodes() as $periode) {
+                $res .= '<div class="periode" id="' . $periode->getCode() . '">';
+                $res .= '<h3>' . $periode . '</h3>';
+                $res .= $this->renderVolumeHoraire($this->form->get($periode->getCode()));
+                $res .= '</div>';
+            }
         }
 
         return $res;
@@ -151,7 +203,7 @@ class SaisieForm extends AbstractViewHelper
         /* @var $typeVolumeHoraire TypeVolumeHoraire */
         $inRealise = $typeVolumeHoraire->isRealise();
         if ($inRealise) {
-            $vhl = $fieldset->getObject()->getService()->getVolumeHoraireListe()->getChild();
+            $vhl = $fieldset->getObject()->getService()->getVolumeHoraireListe()->createChild();
             /* @var $vhl \Application\Entity\VolumeHoraireListe */
             $vhl->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu());
             $vhl->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
@@ -164,6 +216,7 @@ class SaisieForm extends AbstractViewHelper
         } else {
             $qb = $this->getServiceTypeIntervention()->finderByHistorique();
             $this->getServiceTypeIntervention()->finderByContext($qb);
+            $this->getServiceTypeIntervention()->finderByVisibleExterieur(true, $qb);
             $typesIntervention = $this->getServiceTypeIntervention()->getList($qb);
         }
 

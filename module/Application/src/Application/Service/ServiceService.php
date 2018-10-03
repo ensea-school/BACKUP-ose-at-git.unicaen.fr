@@ -333,9 +333,9 @@ class ServiceService extends AbstractEntityService
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireListe();
             foreach ($vhListe->getPeriodes() as $periode) {
-                $lc = $vhListe->getChild()->setPeriode($periode);
+                $lc = $vhListe->createChild()->setPeriode($periode);
                 foreach ($lc->getTypesIntervention() as $typeIntervention) {
-                    $lc->getChild()->setTypeIntervention($typeIntervention)->setHeures(0);
+                    $lc->createChild()->setTypeIntervention($typeIntervention)->setHeures(0);
                 }
             }
         }
@@ -731,12 +731,12 @@ class ServiceService extends AbstractEntityService
     public function setRealisesFromPrevus(Service $service)
     {
         $prevus = $service
-            ->getVolumeHoraireListe()->getChild()
+            ->getVolumeHoraireListe()->createChild()
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
 
         $realises = $service
-            ->getVolumeHoraireListe()->getChild()
+            ->getVolumeHoraireListe()->createChild()
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise())
             ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
 

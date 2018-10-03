@@ -141,6 +141,42 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
 
 
 
+    public function getOrderedVolumeHoraire(\Application\Entity\Db\Validation $validation = null)
+    {
+        $vhs = $this->getVolumeHoraire($validation);
+        $res = [];
+        foreach( $vhs as $vh ){
+            $res[] = $vh;
+        }
+
+        usort($res, function(VolumeHoraire $a, VolumeHoraire $b){
+            if ($a->getHoraireDebut() != $b->getHoraireDebut()){
+                $ahd = $a->getHoraireDebut() ? $a->getHoraireDebut()->getTimestamp() : 999999999999999999999999;
+                $bhd = $b->getHoraireDebut() ? $b->getHoraireDebut()->getTimestamp() : 999999999999999999999999;
+
+                return $ahd > $bhd;
+            }
+
+            if ($a->getHoraireFin() != $b->getHoraireFin()){
+                $ahf = $a->getHoraireFin() ? $a->getHoraireFin()->getTimestamp() : 999999999999999999999999;
+                $bhf = $b->getHoraireFin() ? $b->getHoraireFin()->getTimestamp() : 999999999999999999999999;
+
+                return $ahf > $bhf;
+            }
+
+            if ($a->getTypeIntervention() != $b->getTypeIntervention()){
+                $ati = $a->getTypeIntervention() ? $a->getTypeIntervention()->getOrdre() : 999999999999999999999999;
+                $bti = $b->getTypeIntervention() ? $b->getTypeIntervention()->getOrdre() : 999999999999999999999999;
+
+                return $ati > $bti;
+            }
+        });
+
+        return array_values($res);
+    }
+
+
+
     /**
      *
      * @param Periode          $periode
@@ -205,7 +241,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface, ImportAwar
             $this->changed = true;
 
             if ($elementPedagogique) {
-                $vhl               = $this->getVolumeHoraireListe()->get();
+                $vhl               = $this->getVolumeHoraireListe()->getVolumeHoraires();
                 $typesIntervention = $elementPedagogique->getTypeIntervention();       // liste des types d'intervention de l'EP
                 $periode           = $elementPedagogique->getPeriode();
                 foreach ($vhl as $vh) {

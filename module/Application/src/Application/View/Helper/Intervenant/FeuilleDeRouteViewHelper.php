@@ -359,7 +359,7 @@ class FeuilleDeRouteViewHelper extends AbstractViewHelper
         }
 
         if (!$etape instanceof TblWorkflow){
-            throw new \LogicException('L\'étape est innexistante ou est fournie dans un format qui ne peut pas être pris en compte');
+            throw new \LogicException('L\'étape est inexistante ou est fournie dans un format qui ne peut pas être pris en compte');
         }
 
         /* @var $etape TblWorkflow */

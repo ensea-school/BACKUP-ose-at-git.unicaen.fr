@@ -5,6 +5,7 @@ namespace Application\Connecteur;
 use Application\Entity\Db\Composante;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractService;
+use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;
 use UnicaenAuth\Service\UserContext;
 use UnicaenApp\Mapper\Ldap\Structure as MapperStructure;
@@ -54,6 +55,16 @@ class LdapConnecteur extends AbstractService
      */
     private $utilisateurCode;
 
+    /**
+     * @var string
+     */
+    private $utilisateurExtraMasque;
+
+    /**
+     * @var array
+     */
+    private $utilisateurExtraAttributes;
+
 
 
     /**
@@ -92,19 +103,48 @@ class LdapConnecteur extends AbstractService
             /* @var $foundUsers People[] */
 
             foreach ($foundUsers as $ldapPeople) {
-                $id = $ldapPeople->getData(strtolower($this->getUtilisateurLogin()));
+                $id = $this->getPeopleAttribute($ldapPeople, $this->getUtilisateurLogin());
+
                 $result[$id] = [
                     'id'    => $id,
                     'label' => $ldapPeople->getCn(),
-                    'extra' => " - " . implode(" - ", [
-                            current($ldapPeople->getAffectationsAdmin($this->mapperStructure, true)),
-                        ]),
+                    'extra' => $this->getPeopleExtra($ldapPeople),
                 ];
             }
         }
 
         return $result;
     }
+
+
+
+    private function getPeopleExtra(AbstractEntity $people)
+    {
+        $masque = $this->getUtilisateurExtraMasque();
+        $attrs = $this->getUtilisateurExtraAttributes();
+
+        $attrsVals = [];
+        foreach( $attrs as $attr ){
+            $attrsVals[$attr] = $this->getPeopleAttribute($people,$attr);
+        }
+
+        return vsprintf($masque, $attrsVals);
+    }
+
+
+
+    private function getPeopleAttribute( AbstractEntity $ldapPeople, string $attribute )
+    {
+        try{
+            $val = $ldapPeople->getData(strtolower($attribute) );
+            if (is_array($val)) $val = implode(',',$val);
+        }catch(\Exception $e ){
+            $val = null;
+        }
+
+        return $val;
+    }
+
 
 
 
@@ -162,7 +202,9 @@ class LdapConnecteur extends AbstractService
 
         $ldapUser = $this->serviceUserContext->getLdapUser();
 
-        if ($ldapUser) return $ldapUser->getData(strtolower($this->getUtilisateurCode()));
+        if ($ldapUser){
+            return $this->getPeopleAttribute($ldapUser,$this->getUtilisateurCode());
+        }
 
         return null;
     }
@@ -235,6 +277,54 @@ class LdapConnecteur extends AbstractService
     public function setUtilisateurCode(string $utilisateurCode): LdapConnecteur
     {
         $this->utilisateurCode = $utilisateurCode;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getUtilisateurExtraMasque(): string
+    {
+        return $this->utilisateurExtraMasque;
+    }
+
+
+
+    /**
+     * @param string $utilisateurExtraMasque
+     *
+     * @return LdapConnecteur
+     */
+    public function setUtilisateurExtraMasque(string $utilisateurExtraMasque): LdapConnecteur
+    {
+        $this->utilisateurExtraMasque = $utilisateurExtraMasque;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getUtilisateurExtraAttributes(): array
+    {
+        return $this->utilisateurExtraAttributes;
+    }
+
+
+
+    /**
+     * @param array $utilisateurExtraAttributes
+     *
+     * @return LdapConnecteur
+     */
+    public function setUtilisateurExtraAttributes(array $utilisateurExtraAttributes): LdapConnecteur
+    {
+        $this->utilisateurExtraAttributes = $utilisateurExtraAttributes;
 
         return $this;
     }

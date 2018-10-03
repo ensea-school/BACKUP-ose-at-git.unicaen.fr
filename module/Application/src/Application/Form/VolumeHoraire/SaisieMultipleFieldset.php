@@ -170,7 +170,7 @@ class SaisieMultipleHydrator implements HydratorInterface
      */
     public function extract($object)
     {
-        $vhl  = $object->getChild();
+        $vhl  = $object->createChild();
         $data = [
             'type-volume-horaire' => $object->getTypeVolumeHoraire() ? $object->getTypeVolumeHoraire()->getId() : null,
             'service'             => $object->getService() ? $object->getService()->getId() : null,

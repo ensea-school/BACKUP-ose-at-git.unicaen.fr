@@ -47,9 +47,13 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const CLOTURE_CLOTURE                                     = 'cloture-cloture';
     const CLOTURE_EDITION_SERVICES                            = 'cloture-edition-services';
     const CLOTURE_REOUVERTURE                                 = 'cloture-reouverture';
+    const CONTRAT_CONTRAT_GENERATION                          = 'contrat-contrat-generation';
     const CONTRAT_CREATION                                    = 'contrat-creation';
     const CONTRAT_DEPOT_RETOUR_SIGNE                          = 'contrat-depot-retour-signe';
     const CONTRAT_DEVALIDATION                                = 'contrat-devalidation';
+    const CONTRAT_MODELES_EDITION                             = 'contrat-modeles-edition';
+    const CONTRAT_MODELES_VISUALISATION                       = 'contrat-modeles-visualisation';
+    const CONTRAT_PROJET_GENERATION                           = 'contrat-projet-generation';
     const CONTRAT_SAISIE_DATE_RETOUR_SIGNE                    = 'contrat-saisie-date-retour-signe';
     const CONTRAT_SUPPRESSION                                 = 'contrat-suppression';
     const CONTRAT_VALIDATION                                  = 'contrat-validation';

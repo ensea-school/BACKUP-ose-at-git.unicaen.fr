@@ -26,7 +26,7 @@ class TblValidationReferentiel
     protected $id;
 
     /**
-     * @var boolen
+     * @var bool
      */
     protected $autoValidation = false;
 
@@ -43,9 +43,9 @@ class TblValidationReferentiel
 
 
     /**
-     * @return boolen
+     * @return bool
      */
-    public function getAutoValidation(): boolen
+    public function getAutoValidation(): bool
     {
         return $this->autoValidation;
     }
@@ -53,11 +53,11 @@ class TblValidationReferentiel
 
 
     /**
-     * @param boolen $autoValidation
+     * @param bool $autoValidation
      *
      * @return TblValidationEnseignement
      */
-    public function setAutoValidation(boolen $autoValidation): TblValidationEnseignement
+    public function setAutoValidation(bool $autoValidation): TblValidationEnseignement
     {
         $this->autoValidation = $autoValidation;
 

@@ -150,8 +150,19 @@ return [
          * à rappchcher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
         'utilisateurCode'              => 'supannEmpId',
 
-        /* Filtre pour la recherche d'utilisateurs */
+        /* Filtre de recherche d'utilisateurs pour les affectations */
         'utilisateurFiltre'            => '(eduPersonAffiliation=member)(!(eduPersonAffiliation=student))',
+
+        /* Masque de données permettant de préciser des informations lorsqu'on fait une recherche de personne en vue
+         * de créer une nouvelle affectation d'accès à OSE
+         * Format du masque : http://php.net/manual/fr/function.sprintf.php
+         */
+        'utilisateurExtraMasque'       => '(n°%s; %s)',
+
+        /* Liste des attributs LDAP à fournir au masque de données ci-dessus
+         * Dans l'exemple par défaut, on renvoie l'identifiant du personnel ainsi que son mail
+         */
+        'utilisateurExtraAttributes'   => ['supannEmpId', 'mail'],
 
         /* DN des utilisateurs */
         'utilisateursBaseDN'           => 'ou=people,dc=unicaen,dc=fr',
@@ -178,11 +189,14 @@ return [
         /* Port du serveur SMTP (généralement, 25) */
         'smtpPort'       => 25,
 
+        /* Adresse de l'expéditeur par défaut */
+        'from' => 'ne_pas_repondre@unicaen.fr',
+
         /* Mails utilisés pour la redirection
          * La redirection est utile uniquement en mode développement ou en test.
          * Elle est utile pour éviter que des intervenants ne soient contactés lors de tests et qu'un admin ou un développeur
          * reçoive le mail à sa place).
-         * Fournir sous forme de tableau, CURRENT_USER enverra les mails à l'utilisateur connecté qui a déclenché l'action)
+         * Fournir sous forme de tableau
          * Pour ne pas activer la redirection des mails, laissez vide le tableau ('redirection' => [],).
          */
         'redirection'    => ['mail@mon-domaine.fr'],

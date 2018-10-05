@@ -34,13 +34,9 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/impo
     <?php foreach ($modeles as $modele): ?>
         <tr>
             <td><?php
-                if ($modele->getFichier()) {
-                    echo $this->tag('a', [
-                        'href' => $this->url('contrat/modeles/telecharger', ['modeleContrat' => $modele->getId()]),
-                    ])->text($modele->getLibelle());
-                } else {
-                    echo $modele->getLibelle();
-                }
+                echo $this->tag('a', [
+                    'href' => $this->url('contrat/modeles/telecharger', ['modeleContrat' => $modele->getId()]),
+                ])->text($modele->getLibelle());
                 ?></td>
             <td><?= $modele->getStructure() ?></td>
             <td><?= $modele->getStatutIntervenant() ?></td>

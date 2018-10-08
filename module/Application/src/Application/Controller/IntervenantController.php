@@ -373,8 +373,15 @@ class IntervenantController extends AbstractController
                     ];
                 }
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
-                $hetd                                                              = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getTotal();
-                $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd']   += $hetd;
+
+                $hetd = 0;
+                if ($frvh = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()) {
+                    if ($frvhf = $frvh->first()) {
+                        $hetd = $frvhf->getTotal();
+                    }
+                }
+
+                $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd'] += $hetd;
             }
 
             if ($totalHeures > 0) {

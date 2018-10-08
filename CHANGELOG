@@ -15,7 +15,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Corrections de bugs
 
-Le modèle de contrat est désormais téléchargeable depuis l'interface d'administration.
+* Le modèle de contrat est désormais téléchargeable depuis l'interface d'administration.
+* Un bug affectant l'affichage de la page "Calcul HETD" dans certains cas est résolu.
 
 #OSE 7.0.2
 

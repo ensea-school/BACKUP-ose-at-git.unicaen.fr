@@ -138,7 +138,7 @@ class CentreCoutStructureHydrator implements HydratorInterface
             $object->setStructure($this->getServiceStructure()->get($data['structure']));
         }
         $object->setSourceCode($data['code']);
-        $object->setCentreCout($this->getServiceCentreCout()->getById($data['centre-cout']));
+        $object->setCentreCout($this->getServiceCentreCout()->get($data['centre-cout']));
         $object->setSource($this->getServiceSource()->getOse());
         $object->setUniteBudgetaire($data['unite-budgetaire']);
 

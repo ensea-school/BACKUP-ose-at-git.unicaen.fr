@@ -95,36 +95,4 @@ class CentreCoutService extends AbstractEntityService
         return $result;
     }
 
-    /**
-     * Retourne une entité à partir de son code
-     * Retourne null si le code est null
-     *
-     * @param string|string[] $code
-     * @return mixed|null
-     */
-    public function getById($id)
-    {
-        if(is_array($id)){
-            list($qb,$alias) = $this->initQuery();
-            $qb->andWhere($alias.'.id IN (:'.$alias.'_id)')->setParameter($alias.'_id', $id);
-            return $this->getList( $qb );
-        }elseif ($id){
-            return $this->getRepo()->findOneBy(['id' => $id]);
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * Retourne la liste des types de modulateurs
-     *
-     * @param QueryBuilder|null $qb
-     * @param string|null $alias
-     * @return CentreCout[]
-     */
-    public function getList( QueryBuilder $qb=null, $alias=null ){
-        list($qb,$alias) = $this->initQuery($qb,$alias);
-        $qb->addOrderBy("$alias.parent");
-        return parent::getList($qb, $alias);
-    }
 }

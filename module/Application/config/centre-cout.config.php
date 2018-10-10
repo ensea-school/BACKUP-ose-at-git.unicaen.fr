@@ -98,12 +98,12 @@ return [
                 [
                     'controller' => 'Application\Controller\CentreCout',
                     'action'     => ['index'],
-                    'privileges' => Privileges::DROIT_PRIVILEGE_EDITION,
+                    'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\CentreCout',
                     'action'     => ['saisie', 'delete','saisie-structure','delete-structure'],
-                    'privileges' => Privileges::ODF_CENTRES_COUT_EDITION,
+                    'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
                 ],
             ],
         ],

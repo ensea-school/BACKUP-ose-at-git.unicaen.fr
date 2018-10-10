@@ -9,7 +9,7 @@ use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append("Centres de cout");
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ODF_CENTRES_COUT_EDITION));
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION));
 
 ?>
 <h1 class="page-header">Centres de coûts</h1>

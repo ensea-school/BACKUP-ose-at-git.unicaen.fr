@@ -45,10 +45,10 @@ class CentreCoutController extends AbstractController
 
         $form = $this->getFormCentreCoutSaisie();
         if (empty($centreCout)) {
-            $title = 'Création d\'un nouveau Centre de Cout';
+            $title = 'Création d\'un nouveau Centre de Coûts';
             $centreCout = $this->getServiceCentreCout()->newEntity();
         } else {
-            $title = 'Édition d\'une Centre de Cout';
+            $title = 'Édition d\'un Centre de Coûts';
         }
 
         $form->bindRequestSave($centreCout, $this->getRequest(), function (CentreCout $fr) {
@@ -70,7 +70,7 @@ class CentreCoutController extends AbstractController
 
         try {
             $this->getServiceCentreCout()->delete($centreCout);
-            $this->flashMessenger()->addSuccessMessage("Centre de Cout supprimé avec succès.");
+            $this->flashMessenger()->addSuccessMessage("Centre de Coûts supprimé avec succès.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }
@@ -87,11 +87,11 @@ class CentreCoutController extends AbstractController
 
         $form = $this->getFormCentreCoutStructureSaisie();
         if (empty($centreCoutStructure)) {
-            $title = 'Création d\'une structure pour le Centre de Cout';
+            $title = 'Création d\'une structure pour le Centre de Coûts';
             $centreCoutStructure = $this->getServiceCentreCoutStructure()->newEntity()
                 ->setCentreCout($centreCout);
         } else {
-            $title = 'Édition d\'une structure pour le Centre de Cout';
+            $title = 'Édition d\'une structure pour le Centre de Coûts';
         }
 
         $form->bindRequestSave($centreCoutStructure, $this->getRequest(), function (CentreCoutStructure $ccs) {
@@ -113,7 +113,7 @@ class CentreCoutController extends AbstractController
 
         try {
             $this->getServiceCentreCoutStructure()->delete($centreCoutStructure);
-            $this->flashMessenger()->addSuccessMessage("Structure plus liée au centre de cout.");
+            $this->flashMessenger()->addSuccessMessage("Structure plus liée au centre de coûts.");
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }

@@ -79,7 +79,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'centre-cout' => [
-                                'label'        => 'Centres de Couts',
+                                'label'        => 'Centres de Coûts',
                                 'icon'         => 'fa fa-graduation-cap',
                                 'route'        => 'centre-cout',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\CentreCout', 'index'),

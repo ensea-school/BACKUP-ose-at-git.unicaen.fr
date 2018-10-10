@@ -7,7 +7,7 @@
 
 use Application\Provider\Privilege\Privileges;
 
-$this->headTitle()->append("Centres de cout");
+$this->headTitle()->append("Centres de coûts");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION));
 
@@ -60,11 +60,11 @@ while ($i < $nTblListe) {
             <td><?php if (($fr->getSource()->getLibelle() == 'OSE') && ($canEdit)) { ?>
                     <a class="ajax-modal" data-event="centre-cout-saisie"
                        href="<?= $this->url('centre-cout/saisie', ['centre-cout' => $fr->getId()]) ?>"
-                       title="Modifier la Centre de Cout">
+                       title="Modifier la Centre de Coûts">
                         <span class="glyphicon glyphicon-edit"></span></a>
                     <a class="pop-ajax"
                        href="<?= $this->url('centre-cout/delete', ['centre-cout' => $fr->getId()]) ?>"
-                       title="Supprimer la Centre de Cout"
+                       title="Supprimer la Centre de Coûts"
                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                        data-confirm="true"
                        data-confirm-button="Oui"
@@ -105,7 +105,7 @@ while ($i < $nTblListe) {
                                             <span class="glyphicon glyphicon-edit"></span></a>
                                         <a class="pop-ajax"
                                            href="<?= $this->url('centre-cout/delete-structure', ['centre-cout-structure' => $ccs->getId()]) ?>"
-                                           title="Supprimer la sructure du Centre de Cout"
+                                           title="Supprimer la sructure du Centre de Coûts"
                                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                            data-confirm="true"
                                            data-confirm-button="Oui"
@@ -142,11 +142,11 @@ while ($i < $nTblListe) {
                     <td style="text-align:center;width:1px;white-space: nowrap">
                         <a class="ajax-modal" data-event="centre-cout-saisie"
                            href="<?= $this->url('centre-cout/saisie', ['centre-cout' => $frf->getId()]) ?>"
-                           title="Modifier la Centre de Cout">
+                           title="Modifier la Centre de Coûts">
                             <span class="glyphicon glyphicon-edit"></span></a>
                         <a class="pop-ajax"
                            href="<?= $this->url('centre-cout/delete', ['centre-cout' => $frf->getId()]) ?>"
-                           title="Supprimer la Centre de Cout"
+                           title="Supprimer le Centre de Coûts"
                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                            data-confirm="true"
                            data-confirm-button="Oui"
@@ -186,7 +186,7 @@ while ($i < $nTblListe) {
                                                         <span class="glyphicon glyphicon-edit"></span></a>
                                                     <a class="pop-ajax"
                                                        href="<?= $this->url('centre-cout/delete-structure', ['centre-cout-structure' => $ccs->getId()]) ?>"
-                                                       title="Supprimer la sructure du Centre de Cout"
+                                                       title="Supprimer la sructure du Centre de Coûts"
                                                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                                        data-confirm="true"
                                                        data-confirm-button="Oui"
@@ -220,7 +220,7 @@ while ($i < $nTblListe) {
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="centre-cout-saisie"
        href="<?= $this->url('centre-cout/saisie') ?>"
-       title="Ajouter un Centre de Cout">
+       title="Ajouter un Centre de Coûts">
         <span class="glyphicon glyphicon-edit"></span>
         Ajouter un Centre de cout</a>
 

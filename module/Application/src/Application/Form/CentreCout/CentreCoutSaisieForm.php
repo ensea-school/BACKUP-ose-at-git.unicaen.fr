@@ -142,7 +142,7 @@ class CentreCoutSaisieForm extends AbstractForm
             'source-code' => [
                 'required' => true,
             ],
-            'parent' => [
+            'parent'      => [
                 'required' => false,
             ],
         ];
@@ -203,14 +203,14 @@ class CentreCoutHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'                 => $object->getId()
-            , 'code'             => $object->getCode()
-            , 'libelle'          => $object->getLibelle()
-            , 'source-code'      => $object->getSourceCode()
-            , 'unite-budgetaire' => $object->getUniteBudgetaire()
-            , 'activite'         => ($s = $object->getActivite()) ? $s->getId() : null,
-            'type-ressource'     => ($s = $object->getTypeRessource()) ? $s->getId() : null,
-            'parent'             => ($s = $object->getParent()) ? $s->getId() : null,
+            'id'               => $object->getId(),
+            'code'             => $object->getCode(),
+            'libelle'          => $object->getLibelle(),
+            'source-code'      => $object->getSourceCode(),
+            'unite-budgetaire' => $object->getUniteBudgetaire(),
+            'activite'         => ($s = $object->getActivite()) ? $s->getId() : null,
+            'type-ressource'   => ($s = $object->getTypeRessource()) ? $s->getId() : null,
+            'parent'           => ($s = $object->getParent()) ? $s->getId() : null,
 
         ];
 

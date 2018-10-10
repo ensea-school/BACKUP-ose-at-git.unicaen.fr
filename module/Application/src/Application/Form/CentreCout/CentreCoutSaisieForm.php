@@ -40,7 +40,7 @@ class CentreCoutSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'libelle',
             'options' => [
-                'label' => "Libelle",
+                'label' => "Libellé",
             ],
             'type'    => 'Text',
         ]);
@@ -97,7 +97,7 @@ class CentreCoutSaisieForm extends AbstractForm
         ]);
         $this->get('parent')
             ->setEmptyOption("(Aucun)")
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceCentreCout()->getList()));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getParent()));
 
         $this->add(new Csrf('security'));
         $this->add([
@@ -110,6 +110,18 @@ class CentreCoutSaisieForm extends AbstractForm
         ]);
 
         return $this;
+    }
+
+
+
+    public function getParent()
+    {
+        $serviceCentreCout = $this->getServiceCentreCout();
+        $qb                = $serviceCentreCout->finderByHistorique();
+        $qb->andWhere('parent' == Null);
+        $centreCouts = $serviceCentreCout->getList($qb);
+
+        return $centreCouts;
     }
 
 

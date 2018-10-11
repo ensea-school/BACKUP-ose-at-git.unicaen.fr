@@ -11,6 +11,12 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Notes de mise à jour
 
+#OSE 7.0.4 (en développement)
+
+## Corrections de bugs
+
+* Les intervenants peuvent maintenant avoir un code composé de lettres, plus seulement de chiffres
+
 #OSE 7.0.3
 
 ## Corrections de bugs

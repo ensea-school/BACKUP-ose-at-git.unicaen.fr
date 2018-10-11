@@ -147,7 +147,7 @@ class Context extends Params
     private function intervenantFromSourceCode($sourceCodes)
     {
         if (is_scalar($sourceCodes)) {
-            $sourceCode = (string)(int) $sourceCodes;
+            $sourceCode = (string)$sourceCodes;
             if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
                 throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
             }

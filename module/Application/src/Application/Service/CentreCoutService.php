@@ -17,6 +17,8 @@ class CentreCoutService extends AbstractEntityService
 {
     use TypeHeuresServiceAwareTrait;
 
+
+
     /**
      * retourne la classe des entités
      *
@@ -26,6 +28,8 @@ class CentreCoutService extends AbstractEntityService
     {
         return CentreCout::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
@@ -37,10 +41,12 @@ class CentreCoutService extends AbstractEntityService
         return 'cc';
     }
 
+
+
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param TypeHeures  $typeHeures
+     * @param TypeHeures        $typeHeures
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -49,13 +55,15 @@ class CentreCoutService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $this->join( $this->getServiceTypeHeures(), $qb, 'typeHeures', false, $alias );
-        $qb->andWhere( $this->getServiceTypeHeures()->getAlias().' = :typeHeures');
+        $this->join($this->getServiceTypeHeures(), $qb, 'typeHeures', false, $alias);
+        $qb->andWhere($this->getServiceTypeHeures()->getAlias() . ' = :typeHeures');
         $qb->setParameter('typeHeures', $typeHeures);
 
 
         return $qb;
     }
+
+
 
     /**
      * Formatte une liste d'entités CentreCout (centres de coûts et éventuels EOTP fils)
@@ -70,15 +78,15 @@ class CentreCoutService extends AbstractEntityService
         $result = [];
 
         foreach ($centresCouts as $cc) {
-            $id = $cc->getId();
-            $ccp = $cc->getParent() ?: null;
+            $id       = $cc->getId();
+            $ccp      = $cc->getParent() ?: null;
             $idParent = $ccp ? $ccp->getId() : null;
 
             if ($idParent) {
-                $result[$idParent]['label'] = (string)$ccp;
+                $result[$idParent]['label']        = (string)$ccp;
                 $result[$idParent]['options'][$id] = (string)$cc;
             } else {
-                $result[$id]['label'] = (string)$cc;
+                $result[$id]['label']        = (string)$cc;
                 $result[$id]['options'][$id] = (string)$cc;
             }
         }
@@ -95,4 +103,28 @@ class CentreCoutService extends AbstractEntityService
         return $result;
     }
 
+
+
+    /**
+     * Retourne la liste des centres de coûts sans parent
+     *
+     * @return CentreCout[]
+     */
+    public function getListeParent(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        $qb->where("$alias.parent is Null");
+        $qb->andWhere("$alias.histoDestruction is Null");
+        $this->orderBy($qb);
+        $entities    = $qb->getQuery()->execute();
+        $result      = [];
+        $entityClass = $this->getEntityClass();
+        foreach ($entities as $entity) {
+            if ($entity instanceof $entityClass) {
+                $result[$entity->getId()] = $entity;
+            }
+        }
+
+        return $result;
+    }
 }

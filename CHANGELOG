@@ -16,6 +16,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * Les intervenants peuvent maintenant avoir un code composé de lettres, plus seulement de chiffres
+* Le report des heures de l'année précédente vers l'année en cours actualise maintenant automatiquement la feuille de route de l'intervenant
 
 #OSE 7.0.3
 

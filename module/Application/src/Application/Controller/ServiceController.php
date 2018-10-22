@@ -369,6 +369,7 @@ class ServiceController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getServiceService()->setPrevusFromPrevus($intervenant);
+        $this->updateTableauxBord($intervenant);
         $errors = [];
 
         return compact('errors');
@@ -380,6 +381,7 @@ class ServiceController extends AbstractController
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
         $this->getServiceService()->setPrevusFromAgenda($intervenant);
+        $this->updateTableauxBord($intervenant);
 
         return new MessengerViewModel();
     }

@@ -19,6 +19,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * Le report des heures de l'année précédente vers l'année en cours actualise maintenant automatiquement la feuille de route de l'intervenant
 * Les plafonds bloquants ne peuvent plus être dépassés lors du report  du service prévisionnel de l'année dernière vers l'année actuelle
 * Les plafonds bloquants ne peuvent plus être dépassés lors de l'initialisation du réalisé à partir du prévisionnel
+* Lors de l'initialisation du service prévisionnel à partir de celui de l'année dernière, les heures portant sur des services précédemment historisés s'importent aussi dorénavant.
 
 #OSE 7.0.3
 

@@ -620,6 +620,7 @@ class ServiceService extends AbstractEntityService
             $service->setHistoDestructeur(null); // restauration du service si besoin!!
             $service->setHistoDestruction(null);
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
+            $service->setChanged(true);
             $this->save($service, false);
         }
     }

@@ -368,8 +368,10 @@ class ServiceController extends AbstractController
     public function initialisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getProcessusPlafond()->beginTransaction();
         $this->getServiceService()->setPrevusFromPrevus($intervenant);
         $this->updateTableauxBord($intervenant);
+        $this->getProcessusPlafond()->endTransaction($intervenant, $this->getServiceTypeVolumeHoraire()->getPrevu());
         $errors = [];
 
         return compact('errors');
@@ -397,6 +399,7 @@ class ServiceController extends AbstractController
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service                                           = $this->getServiceService()->get($sid);
+                $this->getProcessusPlafond()->beginTransaction();
                 $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
                 $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
                 if ($this->isAllowed($service, Privileges::ENSEIGNEMENT_EDITION)) {
@@ -406,6 +409,7 @@ class ServiceController extends AbstractController
                         $errors[] = $e->getMessage();
                     }
                 }
+                $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $this->getServiceTypeVolumeHoraire()->getRealise());
             }
         }
 

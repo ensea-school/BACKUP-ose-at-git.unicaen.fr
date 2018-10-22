@@ -17,6 +17,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Les intervenants peuvent maintenant avoir un code composé de lettres, plus seulement de chiffres
 * Le report des heures de l'année précédente vers l'année en cours actualise maintenant automatiquement la feuille de route de l'intervenant
+* Les plafonds bloquants ne peuvent plus être dépassés lors du report  du service prévisionnel de l'année dernière vers l'année actuelle
+* Les plafonds bloquants ne peuvent plus être dépassés lors de l'initialisation du réalisé à partir du prévisionnel
 
 #OSE 7.0.3
 

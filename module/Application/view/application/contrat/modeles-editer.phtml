@@ -29,8 +29,15 @@ echo $this->form()->openTag($form);
     </div>
 </div>
 <?= $this->formControlGroup($form->get('fichier')) ?>
-<div class="alert alert-info" role="alert">Chaque requête devra obligatoirement comporter une colonne "CONTRAT_ID"
-portant l'identifiant du contrat à générer.
+<div class="alert alert-info" role="alert">
+    Le champ "requête" ne doit être rempli que si des champs supplémentaires
+    (qui ne seraient pas fournis par la vue v_contrat_main) doivent être transmis au modèle pour publipostage.
+    En outre, une variable <b>:contrat</b> doit être insérée dans la requête pour que l'outil de publipostage puisse
+    lui transmettre l'identifiant du contrat qui a été demandé.<br />
+    Exemple de requête :
+    <pre style="padding:1px;font-size: 8pt">SELECT "n"+1 "n2"
+FROM   v_contrat_main c
+WHERE  c.contrat_id = :contrat</pre>
 </div>
 <?= $this->formControlGroup($form->get('requete')) ?>
 

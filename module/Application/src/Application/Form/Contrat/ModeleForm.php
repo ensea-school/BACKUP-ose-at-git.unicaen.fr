@@ -87,7 +87,8 @@ class ModeleForm extends AbstractForm
             'type'       => 'File',
             'name'       => 'fichier',
             'options'    => [
-                'label' => "Modèle au format OpenDocument Texte (ODT)",
+                'label' => "Modèle au format OpenDocument Texte (ODT) <small>(à fournir seulement si changement)</small>",
+                'label_options' => ['disable_html_escape' => true],
             ],
             'attributes' => [
                 'id'       => 'fichier',

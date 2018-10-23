@@ -9,9 +9,15 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Nouveautés
 
+* Possibilité de récupérer les libellés de labos dans les affectations de recherche
+
 ## Notes de mise à jour
 
 #OSE 7.0.4 (en développement)
+
+## Nouveautés
+
+* Possibilité d'éditer 1, 2 ou 3 exemplaires d'un contrat à partir d'un modèle
 
 ## Corrections de bugs
 
@@ -20,6 +26,9 @@ author: Laurent Lécluse - DSI - Unicaen
 * Les plafonds bloquants ne peuvent plus être dépassés lors du report  du service prévisionnel de l'année dernière vers l'année actuelle
 * Les plafonds bloquants ne peuvent plus être dépassés lors de l'initialisation du réalisé à partir du prévisionnel
 * Lors de l'initialisation du service prévisionnel à partir de celui de l'année dernière, les heures portant sur des services précédemment historisés s'importent aussi dorénavant.
+* Lors de la génération de contrat, le bug "Uncaught TypeError: Return value of getVariables must be of the type array, null returned" qui se produisait si aucune variable n'était positionnée dans les en-têtes ou pieds de page a été résolu.
+* L'ergonomie du formulaire d'édition des modèles de contrats a été revue afin de mieux vous guider
+* Faille de sécurité corrigée : le sudo n'est plus obligatoire pour utiliser unoconv
 
 #OSE 7.0.3
 

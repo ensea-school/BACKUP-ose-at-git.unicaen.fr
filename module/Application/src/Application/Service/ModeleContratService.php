@@ -130,15 +130,19 @@ class ModeleContratService extends AbstractEntityService
                 $connection->fetchAll('SELECT * FROM V_CONTRAT_SERVICES WHERE CONTRAT_ID = :contrat', $params);
         }
 
-        $data[1] = $data[0];
-
-        if (isset($mainData['exemplaire1'])) {
+        if (isset($mainData['exemplaire1']) && $mainData['exemplaire1'] && 0 != $mainData['exemplaire1']) {
             $data[0]['exemplaire'] = $mainData['exemplaire1'];
             unset($mainData['exemplaire1']);
         }
-        if (isset($mainData['exemplaire2'])) {
+        if (isset($mainData['exemplaire2']) && $mainData['exemplaire2'] && 0 != $mainData['exemplaire2']) {
+            $data[1] = $data[0];
             $data[1]['exemplaire'] = $mainData['exemplaire2'];
             unset($mainData['exemplaire2']);
+        }
+        if (isset($mainData['exemplaire3']) && $mainData['exemplaire3'] && 0 != $mainData['exemplaire3']) {
+            $data[2] = $data[0];
+            $data[2]['exemplaire'] = $mainData['exemplaire3'];
+            unset($mainData['exemplaire3']);
         }
 
         return $data;

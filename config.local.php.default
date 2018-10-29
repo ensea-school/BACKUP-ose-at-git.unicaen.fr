@@ -201,7 +201,7 @@ return [
          */
         'redirection'    => ['mail@mon-domaine.fr'],
 
-        /* Envoi de mail activé ou non (OUI en production, normalement) */
+        /* Envoi de mail activé ou non (false = mails envoyés, true = système d'envoi de mails inactif) */
         'envoiDesactive' => false,
     ],
 

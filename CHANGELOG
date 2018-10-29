@@ -13,11 +13,12 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Notes de mise à jour
 
-#OSE 7.0.4 (en développement)
+#OSE 7.0.4
 
 ## Nouveautés
 
 * Possibilité d'éditer 1, 2 ou 3 exemplaires d'un contrat à partir d'un modèle
+* Unoconv est maintenant utilisé sans besoin de faire appel à SUDO.
 
 ## Corrections de bugs
 

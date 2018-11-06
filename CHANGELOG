@@ -13,6 +13,12 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Notes de mise à jour
 
+#OSE 7.0.5 (en développement)
+
+## Corrections de bugs
+
+* Correction au niveau du plafond "Heures max. de référentiel par intervenant selon son statut" : les heures de FC majorées ne sont plus prises en compte.
+
 #OSE 7.0.4
 
 ## Nouveautés

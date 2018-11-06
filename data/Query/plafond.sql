@@ -100,7 +100,7 @@ FROM
   JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
   JOIN statut_intervenant        si ON si.id = i.statut_id
 WHERE
-  fr.total > si.maximum_hetd
+  fr.total - fr.heures_compl_fc_majorees > si.maximum_hetd
   /*i.id*/
 
 UNION

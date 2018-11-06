@@ -18,6 +18,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * Correction au niveau du plafond "Heures max. de référentiel par intervenant selon son statut" : les heures de FC majorées ne sont plus prises en compte.
+* La génération de contrat n'éditait plus qu'un seul exemplaire (depuis la v7.0.4). C'est réparé.
 
 #OSE 7.0.4
 

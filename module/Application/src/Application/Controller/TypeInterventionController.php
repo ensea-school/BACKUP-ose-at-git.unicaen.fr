@@ -10,6 +10,7 @@ use Application\Form\TypeIntervention\Traits\TypeInterventionSaisieFormAwareTrai
 use Application\Form\TypeIntervention\Traits\TypeInterventionStructureSaisieFormAwareTrait;
 use Application\Exception\DbException;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 class TypeInterventionController extends AbstractController
 {
@@ -17,7 +18,7 @@ class TypeInterventionController extends AbstractController
     use TypeInterventionStructureServiceAwareTrait;
     use TypeInterventionSaisieFormAwareTrait;
     use TypeInterventionStructureSaisieFormAwareTrait;
-
+    use ContextServiceAwareTrait;
 
 
     public function indexAction()
@@ -26,12 +27,33 @@ class TypeInterventionController extends AbstractController
             TypeIntervention::class,
         ]);
 
-        $typesInterventions = $this->getServiceTypeIntervention()->getList();
+        $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
         $this->em()->getFilters()->enable('historique')->init([
             TypeInterventionStructure::class,
         ]);
         $typesInterventionsStructures = $this->getServiceTypeInterventionStructure()->getList();
+        $dql = "
+        SELECT
+          ti, adeb, afin
+        FROM
+          " . \Application\Entity\Db\TypeIntervention::class . " ti
+          LEFT JOIN ti.anneeDebut adeb
+          LEFT JOIN ti.anneeFin afin
+        WHERE
+          COALESCE($anneeId,$anneeId) BETWEEN COALESCE(adeb.id,$anneeId) AND COALESCE(afin.id,$anneeId)
+        "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
+
+        /* @var $tis TypeIntervention[] */
+        $tis                     = $this->em()->createQuery($dql)->getResult();
+        $typesInterventions = [];
+        foreach ($tis as $ti) {
+            $tiID = $ti->getId();
+    //        foreach ($tiss as $typesInterventionsStructures){
+        //
+      //      }
+            $typesInterventions[$tiID] = $ti;
+        }
 
         return compact('typesInterventions', 'typesInterventionsStructures');
     }

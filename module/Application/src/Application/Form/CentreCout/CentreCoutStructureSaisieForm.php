@@ -52,22 +52,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
 
         $this->add([
-            'name'    => 'code',
-            'options' => [
-                'label' => "Code",
-            ],
-            'type'    => 'Text',
-        ]);
-
-        $this->add([
-            'name'    => 'code',
-            'options' => [
-                'label' => "Code",
-            ],
-            'type'    => 'Text',
-        ]);
-
-        $this->add([
             'name'    => 'unite-budgetaire',
             'options' => [
                 'label' => "Unité budgétaire",
@@ -118,9 +102,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
                 'required' => false,
             ],
 
-            'source-code' => [
-                'required' => false,
-            ],
         ];
     }
 
@@ -151,9 +132,7 @@ class CentreCoutStructureHydrator implements HydratorInterface
         if (array_key_exists('structure', $data)) {
             $object->setStructure($this->getServiceStructure()->get($data['structure']));
         }
-        $object->setSourceCode($data['code']);
         $object->setCentreCout($this->getServiceCentreCout()->get($data['centre-cout']));
-        $object->setSource($this->getServiceSource()->getOse());
         $object->setUniteBudgetaire($data['unite-budgetaire']);
 
         return $object;
@@ -173,7 +152,6 @@ class CentreCoutStructureHydrator implements HydratorInterface
         $data = [
             'id'               => $object->getId(),
             'structure'        => ($s = $object->getStructure()) ? $s->getId() : null,
-            'code'             => $object->getSourceCode(),
             'centre-cout'      => $object->getCentreCout()->getId(),
             'unite-budgetaire' => $object->getUniteBudgetaire(),
         ];

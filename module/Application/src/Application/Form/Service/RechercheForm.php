@@ -160,11 +160,11 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface,
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "StructureService gestionnaire de l'enseignement",
+                    'title' => "Structure gestionnaire de l'enseignement",
                 ],
             ],
             'attributes' => [
-                'title' => "StructureService gestionnaire de l'enseignement",
+                'title' => "Structure gestionnaire de l'enseignement",
                 'class' => 'input-sm',
             ],
             'type'       => 'Select',
@@ -183,6 +183,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface,
 
 
         $elementPedagogique = $this->getFieldsetOffreFormationElementPedagogiqueRecherche();
+        $elementPedagogique->setElementId('element-recherche');
         $elementPedagogique->setName('element-pedagogique');
         $elementPedagogique->setLabel('Enseignement :');
         $elementPedagogique->setNiveauEnabled(false);

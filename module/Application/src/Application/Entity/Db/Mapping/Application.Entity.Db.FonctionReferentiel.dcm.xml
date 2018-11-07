@@ -17,6 +17,7 @@
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="100" nullable="false"/>
     <field name="plafond" type="float" column="PLAFOND" precision="126" scale="0" nullable="true"/>
     <field name="etapeRequise" type="boolean" column="ETAPE_REQUISE" nullable="false"/>
+    <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
     <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
       <join-columns>
         <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>

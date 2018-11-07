@@ -287,28 +287,42 @@ class WorkflowService extends AbstractService
      * @return int
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function calculerTousTableauxBord()
+    public function calculerTousTableauxBord($beforeTrigger=null, $afterTrigger=null)
     {
         $sql = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
         $tbls = $this->getEntityManager()->getConnection()->fetchAll($sql);
-        $errors = [];
+        $result = true;
+        $begin = microtime(true);
         foreach( $tbls as $tbl ){
             $tbl = $tbl['TBL_NAME'];
             $sql = 'BEGIN UNICAEN_TBL.CALCULER(\''.$tbl.'\'); END;';
+            if (is_callable($beforeTrigger)){
+                $beforeTrigger([
+                    'tableau-bord' => $tbl,
+                ]);
+            }
             try{
                 $this->getEntityManager()->getConnection()->exec($sql);
-                echo "Tableau de bord $tbl recalculé\n";
+                if (is_callable($afterTrigger)){
+                    $afterTrigger([
+                        'tableau-bord' => $tbl,
+                        'result' => true,
+                        'duree' => microtime(true) - $begin,
+                    ]);
+                }
             }catch(\Exception $e){
-                $errors[$tbl] = $e->getMessage();
+                if (is_callable($afterTrigger)){
+                    $afterTrigger([
+                        'tableau-bord' => $tbl,
+                        'result' => false,
+                        'exception' => $e,
+                        'duree' => microtime(true) - $begin,
+                    ]);
+                }
+                $result = false;
             }
         }
-        if ($errors){
-            $msg = "Erreur de calcul sur des tableaux de bord : \n";
-            foreach( $errors as $tbl => $error){
-                $msg .= $tbl.' : '.$error."\n";
-            }
-            throw new Exception($msg);
-        }
+        return $result;
     }
 
 
@@ -317,8 +331,10 @@ class WorkflowService extends AbstractService
      * @param array                                        $tableauxBords
      * @param Intervenant|Intervenant[]|string $intervenant
      */
-    public function calculerTableauxBord($tableauxBords = [], $intervenant)
+    public function calculerTableauxBord($tableauxBords = [], $intervenant): array
     {
+        $errors = [];
+
         $deps = [
             'formule'                 => ['agrement', 'paiement'],
             'piece_jointe_demande'    => ['piece_jointe'],
@@ -364,14 +380,18 @@ class WorkflowService extends AbstractService
                     $params = 'INTERVENANT_ID IN (' . $intervenant . ')';
                 }
 
-                $this->getServiceTableauBord()->calculer(
-                    $dep,
-                    $params
-                );
+                try {
+                    $this->getServiceTableauBord()->calculer(
+                        $dep,
+                        $params
+                    );
+                }catch(\Exception $e ){
+                    $errors[$dep] = $e;
+                }
             }
         }
 
-        return $this;
+        return $errors;
     }
 
 

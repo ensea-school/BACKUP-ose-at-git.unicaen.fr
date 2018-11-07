@@ -7,13 +7,27 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Constants;
+use Application\Service\ModeleContratService;
+use Unicaen\OpenDocument\Document;
 
-$sql = file_get_contents('data/Query/plafond.sql');
-$sql = str_replace('/*i.id*/', 'AND i.id = ' . 51647, $sql) . ' AND tvh.id = ' . 1;
+$fichier = '/home/laurent/Téléchargements/testfill.odt';
+//$fichier = '/home/laurent/UnicaenCode/srcodt.odt';
+//$fichier = '/home/laurent/tt.odt';
+//$fichier = '/home/laurent/Téléchargements/Contrat.odt';
 
-$sql =  preg_replace('/--(.*)\n/Uis', "\n", $sql) ;
-sqlDump($sql);
-$res          = $sl->get(Constants::BDD)->getConnection()->fetchAll($sql);
+$modeleContrat = $sl->get(ModeleContratService::class)->get(13);
 
-var_dump($res);
+$document = new Document();
+$document->setTmpDir('/home/laurent/UnicaenCode');
+//$document->loadFromFile($fichier);
+$document->loadFromData($modeleContrat->getFichier());
+
+$document->getStylist()->addFiligrane('PROJET');
+
+$document->setStylesChanged(true);
+xmlDump($document->getStyles());
+$document->setPdfOutput(true);
+//$document->saveToFile('/home/laurent/UnicaenCode/odtExport.pdf');
+
+
+//$document->download('exp.pdf');

@@ -19,6 +19,7 @@
     <field name="code" type="string" column="CODE" length="100" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
+    <field name="uniteBudgetaire" type="string" column="UNITE_BUDGETAIRE" length="15" nullable="true"/>
     <many-to-one field="parent" target-entity="Application\Entity\Db\CentreCout">
       <join-columns>
         <join-column name="PARENT_ID" referenced-column-name="ID"/>

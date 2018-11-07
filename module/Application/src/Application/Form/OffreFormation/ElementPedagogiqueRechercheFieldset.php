@@ -33,6 +33,8 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
 
     protected $etapeName        = 'etape';
 
+    protected $elementId        = 'element';
+
     protected $structureEnabled = true;
 
     protected $niveauEnabled    = true;
@@ -64,12 +66,12 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "StructureService gestionnaire de l'enseignement",
+                    'title' => "Structure gestionnaire de l'enseignement",
                 ],
             ],
             'attributes' => [
                 'id'               => 'structure',
-                'title'            => "StructureService gestionnaire de l'enseignement",
+                'title'            => "Structure gestionnaire de l'enseignement",
                 'class'            => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
                 'data-width'       => "100%",
                 'data-live-search' => "true",
@@ -145,7 +147,7 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
                 ],
             ],
             'attributes' => [
-                'id'    => 'element',
+                'id'    => $this->getElementId(),
                 'title' => "Saisissez 2 lettres au moins",
                 'class' => 'element-pedagogique element-pedagogique-element input-sm',
             ],
@@ -317,6 +319,31 @@ class ElementPedagogiqueRechercheFieldset extends AbstractFieldset implements En
     public function setEtapeEnabled($etapeEnabled = true)
     {
         $this->etapeEnabled = $etapeEnabled;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getElementId(): string
+    {
+        return $this->elementId;
+    }
+
+
+
+    /**
+     * @param string $elementId
+     *
+     * @return ElementPedagogiqueRechercheFieldset
+     */
+    public function setElementId(string $elementId): ElementPedagogiqueRechercheFieldset
+    {
+        $this->elementId = $elementId;
+        $this->get('element')->setAttribute('id', $elementId);
 
         return $this;
     }

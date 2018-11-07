@@ -381,7 +381,7 @@ abstract class AbstractEntityService extends AbstractService
             }
 
             return $this->getList($qb);
-        } elseif ((int)$id) {
+        } elseif ((int)$id && (int)$id != 0) {
             return $this->getRepo()->find((int)$id);
         } else {
             return null;

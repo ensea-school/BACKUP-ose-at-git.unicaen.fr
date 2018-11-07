@@ -25,10 +25,41 @@ class TblValidationEnseignement
     protected $id;
 
     /**
+     * @var bool
+     */
+    protected $autoValidation = false;
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
     }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getAutoValidation(): bool
+    {
+        return $this->autoValidation;
+    }
+
+
+
+    /**
+     * @param bool $autoValidation
+     *
+     * @return TblValidationEnseignement
+     */
+    public function setAutoValidation(bool $autoValidation): TblValidationEnseignement
+    {
+        $this->autoValidation = $autoValidation;
+
+        return $this;
+    }
+
+
 }

@@ -249,8 +249,8 @@ return [
             'home' => [
                 'pages' => [
                     'service' => [
-                        'label'    => 'Enseignements',
-                        'title'    => "Résumé des enseignements",
+                        'label'    => 'Services',
+                        'title'    => "Visualisation et export des services",
                         'route'    => 'service/resume',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\Service', 'resume'),
                     ],
@@ -279,6 +279,14 @@ return [
                     ],
                     'assertion'  => Assertion\ServiceAssertion::class,
                 ],
+                /*[
+                    'controller' => 'Application\Controller\Service',
+                    'action'     => ['import-agenda'],
+                    'privileges' => [
+                        Privileges::ENSEIGNEMENT_IMPORT_INTERVENANT_PREVISIONNEL_AGENDA,
+                    ],
+                    'assertion'  => Assertion\ServiceAssertion::class,
+                ],*/
                 [
                     'controller' => 'Application\Controller\Service',
                     'action'     => ['validation'],
@@ -477,9 +485,11 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories' => [
+            Form\Service\SaisieFieldset::class            => Form\Service\Factory\SaisieFieldsetFactory::class,
+        ],
         'invokables' => [
             Form\Service\Saisie::class                    => Form\Service\Saisie::class,
-            Form\Service\SaisieFieldset::class            => Form\Service\SaisieFieldset::class,
             Form\ServiceReferentiel\Saisie::class         => Form\ServiceReferentiel\Saisie::class,
             Form\ServiceReferentiel\SaisieFieldset::class => Form\ServiceReferentiel\SaisieFieldset::class,
             Form\Service\RechercheForm::class             => Form\Service\RechercheForm::class,

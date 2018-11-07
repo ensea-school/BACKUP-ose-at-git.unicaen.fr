@@ -27,18 +27,9 @@ include_once(__DIR__ . '/src/Application/functions.php');
 
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    public static $serviceLocator;
-
-
 
     public function onBootstrap(MvcEvent $e)
     {
-        $sm                   = $e->getApplication()->getServiceManager();
-        self::$serviceLocator = $sm; // Initialisation pour les filtres Doctrine et les traits!!
-
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -53,7 +44,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         );
 
         $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'injectRouteEntitiesInEvent'], -90);
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'checkRouteParams'], -100);
     }
 
 
@@ -70,13 +60,20 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
     {
         $sm     = $e->getApplication()->getServiceManager();
         $params = $e->getRouteMatch()->getParams();
-
         foreach ($params as $name => $value) {
             $entityService = $this->getEntityService($sm, $name);
 
             if ($entityService instanceof Service\AbstractEntityService) {
                 switch ($name) {
                     case 'intervenant':
+                        $role = $sm->get(ContextService::class)->getSelectedIdentityRole();
+                        if ($role && $entity = $role->getIntervenant()) {
+                            $e->setParam($name, $entity);
+                        }else{
+                            $entity = $entityService->getBySourceCode($value);
+                            $e->setParam($name, $entity);
+                        }
+
                         $entity = $entityService->getBySourceCode($value);
                         $e->setParam($name, $entity);
                     break;
@@ -106,26 +103,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         }
 
         return null;
-    }
-
-
-
-    /**
-     * Si l'utilisateur connecté a le profil "Intervenant", vérification que l'intervenant spécifié dans
-     * la requête est bien celui connecté.
-     *
-     * @param \Zend\Mvc\MvcEvent $e
-     */
-    public function checkRouteParams(MvcEvent $e)
-    {
-        $role       = $e->getApplication()->getServiceManager()->get(ContextService::class)->getSelectedIdentityRole();
-        $routeMatch = $e->getRouteMatch();
-        if ($role && $intervenant = $role->getIntervenant()) {
-            if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $intervenant->getRouteParam()) {
-                $routeMatch->setParam($name, $intervenant->getRouteParam());
-            }
-            $routeMatch->setParam('intervenant', $intervenant->getRouteParam());
-        }
     }
 
 

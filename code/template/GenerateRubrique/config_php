@@ -97,7 +97,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\nommaj\Saisie::class                 => Form\nommaj\Saisie::class,
+            Form\nommaj\nommajSaisieForm::class                 => Form\nommaj\nommajSaisieForm::class,
         ],
     ],
 ];

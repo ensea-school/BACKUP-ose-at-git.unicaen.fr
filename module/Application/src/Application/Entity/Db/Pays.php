@@ -15,7 +15,6 @@ class Pays implements HistoriqueAwareInterface, ImportAwareInterface
     use HistoriqueAwareTrait;
     use ImportAwareTrait;
 
-    const CODE_FRANCE = "100";
 
     /**
      * @var string

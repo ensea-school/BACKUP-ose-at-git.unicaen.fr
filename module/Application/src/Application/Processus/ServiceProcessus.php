@@ -13,6 +13,7 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\TypeInterventionService;
 
@@ -31,6 +32,7 @@ class ServiceProcessus extends AbstractProcessus
     use StructureServiceAwareTrait;
     use EtapeServiceAwareTrait;
     use PeriodeServiceAwareTrait;
+    use TypeInterventionServiceAwareTrait;
 
 
 
@@ -62,7 +64,7 @@ class ServiceProcessus extends AbstractProcessus
         $service
             ->join(     IntervenantService::class,      $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
             ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
-            ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures'] );
+            ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures', 'autoValidation', 'horaireDebut', 'horaireFin'] );
 
         $elementPedagogiqueService
             ->leftJoin( $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
@@ -82,12 +84,12 @@ class ServiceProcessus extends AbstractProcessus
         if ($intervenant) {
             $service->finderByIntervenant($intervenant, $qb);
         }
-
-        $qb
-            ->addOrderBy($structureService->getAlias() . '.libelleCourt')
-            ->addOrderBy($etapeService->getAlias() . '.libelle')
-            ->addOrderBy($periodeService->getAlias() . '.libelleCourt')
-            ->addOrderBy($elementPedagogiqueService->getAlias() . '.sourceCode');
+        $structureService->orderBy($qb);
+        $etapeService->orderBy($qb);
+        $periodeService->orderBy($qb);
+        $qb->orderBy($elementPedagogiqueService->getAlias().'.code');
+        $this->getServiceVolumeHoraire()->orderBy($qb);
+        $this->getServiceTypeIntervention()->orderBy($qb);
 
         if (!$intervenant && $role->getStructure()) {
             $service->finderByComposante($role->getStructure(), $qb);

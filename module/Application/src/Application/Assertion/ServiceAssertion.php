@@ -172,6 +172,10 @@ class ServiceAssertion extends AbstractAssertion
                 return $this->assertEnseignements($role);
 
             break;
+            case 'Application\Controller\Service.importAgenda':
+                return $this->assertImportAgenda($role);
+
+            break;
         }
 
         return true;
@@ -185,6 +189,14 @@ class ServiceAssertion extends AbstractAssertion
             $role->hasPrivilege(Privileges::ENSEIGNEMENT_VISUALISATION),
             !$role->getIntervenant(),
         ]);
+    }
+
+
+
+    protected function assertImportAgenda(Role $role)
+    {
+        return true;
+        //return $this->assertEtapeAtteignable(WfEtape::CODE_SERVICE_SAISIE);
     }
 
 

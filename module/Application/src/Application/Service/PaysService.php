@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Pays;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -9,6 +11,9 @@ use Doctrine\ORM\QueryBuilder;
  */
 class PaysService extends AbstractEntityService
 {
+    use ParametresServiceAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -17,8 +22,10 @@ class PaysService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\Pays::class;
+        return Pays::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
@@ -29,6 +36,32 @@ class PaysService extends AbstractEntityService
     {
         return 'p';
     }
+
+
+
+    /**
+     * @return Pays
+     */
+    public function getFrance(): Pays
+    {
+        $franceId = $this->getServiceParametres()->get('pays_france');
+
+        return $this->get($franceId);
+    }
+
+
+
+    /**
+     * @param Pays $pays
+     *
+     * @return bool
+     */
+    public function isFrance(Pays $pays): bool
+    {
+        return $pays == $this->getFrance();
+    }
+
+
 
     /**
      * Retourne la liste des pays, triés par libellé long.

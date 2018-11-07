@@ -9,6 +9,9 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
  */
 class Parametre implements HistoriqueAwareInterface
 {
+    const SERVICES_MODALITE_SEMESTRIEL = 'semestriel';
+    const SERVICES_MODALITE_CALENDAIRE = 'calendaire';
+
     use HistoriqueAwareTrait;
 
     /**

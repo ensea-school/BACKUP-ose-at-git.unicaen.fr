@@ -13,7 +13,9 @@ $validation  = $contrat->getValidation();
 $retourSigne = $contrat->getDateRetourSigne();
 $uploader    = $this->uploader();
 
-$urlExport = $this->url('contrat/exporter', ['contrat' => $contrat->getId()]); // oui car on peut le voir!!
+$urlExport = $this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)
+    ? $this->url('contrat/exporter', ['contrat' => $contrat->getId()]) // oui car on peut le voir!!
+    : null;
 
 $urlLister = $this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)
     ? $this->url('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true)

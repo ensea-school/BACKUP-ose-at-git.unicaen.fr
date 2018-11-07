@@ -288,10 +288,9 @@ $.widget("ose.serviceListe", {
             title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
         });
 
-        $("body").on('save-volume-horaire', function (event, data) {
-            var thatId = event.a.parents('div.service-liste').attr('id');
-            var serviceId = event.a.data('service');
-            event.a.popover('hide');
+        $("body").on('save-volume-horaire', function (event, popAjax) {
+            var serviceId = popAjax.element.data('service');
+            popAjax.hide();
             that.onAfterSaisie(serviceId);
         });
     },
@@ -318,6 +317,7 @@ $.widget("ose.serviceForm", {
             this.element.find('#element-interne').hide();
             this.getElementElementPedagogiqueId().val('');
             this.getElementElementPedagogiqueLabel().val('');
+            this.getElementElementPedagogiqueListe().selectpicker('val','');
             this.element.find('#element-externe').show();
         }
         this.updateVolumesHoraires();
@@ -347,11 +347,6 @@ $.widget("ose.serviceForm", {
         if ('service-interne' == this.getInterneExterne() && '' == this.getElementElementPedagogiqueId().val()) {
             readOnly = true;
         }
-        /*        text = 'UPDATING = ' + (this.updating ? 'true' : 'false');
-         text += "\nINTERNE = " + (this.getInterneExterne());
-         text += "\nEP VIDE = " + ('' == this.getElementElementPedagogiqueId().val() ? 'true' : 'false');
-         text += "\nrésultat RO = " + (readOnly ? 'true' : 'false');
-         alert(text);*/
 
         this.getElementVolumesHoraires().find('input.form-control').prop('disabled', readOnly);
         this.getElementVolumesHoraires().find('button.prevu-to-realise').prop('disabled', readOnly);
@@ -381,6 +376,10 @@ $.widget("ose.serviceForm", {
         });
 
         this.getElementElementPedagogiqueId().on("change", function () {
+            that.updateVolumesHoraires();
+        });
+
+        this.getElementEtablissementId().on("change", function () {
             that.updateVolumesHoraires();
         });
 

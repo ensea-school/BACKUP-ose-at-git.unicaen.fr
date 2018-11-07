@@ -3,18 +3,22 @@
 namespace Application\Controller;
 
 use Application\Assertion\ContratAssertion;
+use Application\Entity\Db\Fichier;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\ModeleContrat;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Exception\DbException;
+use Application\Form\Contrat\Traits\ModeleFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContratServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\ModeleContratServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
@@ -24,6 +28,7 @@ use Application\Constants;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
 use UnicaenApp\Exporter\Pdf;
+use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Entity\Db\Contrat;
 use Zend\View\Model\JsonModel;
@@ -49,6 +54,8 @@ class ContratController extends AbstractController
     use TauxHoraireHETDServiceAwareTrait;
     use DossierServiceAwareTrait;
     use WorkflowServiceAwareTrait;
+    use ModeleContratServiceAwareTrait;
+    use ModeleFormAwareTrait;
 
 
 
@@ -81,10 +88,10 @@ class ContratController extends AbstractController
 
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \LogicException('Intervenant non précisé ou inexistant');
         }
-        $structure   = $role->getStructure();
+        $structure = $role->getStructure();
 
         $title = "Contrat/avenants <small>{$intervenant}</small>";
 
@@ -201,6 +208,7 @@ class ContratController extends AbstractController
 
         if (!$this->isAllowed($contrat, Privileges::CONTRAT_VALIDATION)) {
             $this->flashMessenger()->addErrorMessage('Vous n\'avez pas le droit de valider ce projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat'));
+
             //$form = null;
 
             return new MessengerViewModel;
@@ -304,10 +312,26 @@ class ContratController extends AbstractController
 
 
 
+    public function exporterAction()
+    {
+        /* @var Contrat $contrat */
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Génération du contrat interdite.");
+        }
+
+        $this->getServiceModeleContrat()->generer($contrat);
+    }
+
+
+
     /**
      *
+     * @todo A Supprimer!!!
+     * @deprecated
      */
-    public function exporterAction()
+    public function exporterOldAction()
     {
         $this->initFilters();
 
@@ -316,8 +340,8 @@ class ContratController extends AbstractController
 
         $intervenant = $contrat->getIntervenant();
 
-        if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
-            throw new UnAuthorizedException("Visualisation du contrat interdite.");
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Génération du contrat interdite.");
         }
 
         $estUnAvenant    = $contrat->estUnAvenant();
@@ -415,7 +439,7 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)){
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_AJOUTER_FICHIER)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de déposer ce fichier');
         }
 
@@ -444,7 +468,7 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)){
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_LISTER_FICHIERS)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de visualiser les fichierzs dépôsés');
         }
 
@@ -465,7 +489,7 @@ class ContratController extends AbstractController
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
 
-        if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)){
+        if (!$this->isAllowed($contrat, Privileges::CONTRAT_VISUALISATION)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de télécharger ce fichier');
         }
 
@@ -491,7 +515,7 @@ class ContratController extends AbstractController
 
         $fichier = $this->getEvent()->getParam('fichier');
 
-        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_SUPPRIMER_FICHIER)){
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_SUPPRIMER_FICHIER)) {
             throw new UnAuthorizedException('Vous n\'avez pas de droit de supprimer ce fichier');
         }
 
@@ -502,6 +526,7 @@ class ContratController extends AbstractController
 
         $this->em()->flush();
         $this->updateTableauxBord($contrat->getIntervenant());
+
         return $this->redirect()->toRoute('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true);
     }
 
@@ -512,5 +537,78 @@ class ContratController extends AbstractController
         $this->getServiceWorkflow()->calculerTableauxBord([
             'contrat',
         ], $intervenant);
+    }
+
+
+
+    public function modelesListeAction()
+    {
+        $modeles = $this->getServiceModeleContrat()->getList();
+
+        return compact('modeles');
+    }
+
+
+
+    public function modelesEditerAction()
+    {
+        /* @var $modeleContrat ModeleContrat */
+        $modeleContrat = $this->getEvent()->getParam('modeleContrat');
+
+        $form = $this->getFormContratModele();
+
+        if (!$modeleContrat) {
+            $title         = 'Ajout d\'un modèle de contrat';
+            $modeleContrat = new ModeleContrat();
+        } else {
+            $title = 'Modification d\'un modèle de contrat';
+        }
+
+        $form->bindRequestSave($modeleContrat, $this->getRequest(), function (ModeleContrat $mc) {
+            try {
+                $this->getServiceModeleContrat()->save($mc);
+                $this->flashMessenger()->addSuccessMessage('Modèle de contrat bien enregistré');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        });
+
+        return compact('form', 'title');
+    }
+
+
+
+    public function modelesSupprimerAction()
+    {
+        /* @var $modeleContrat ModeleContrat */
+        $modeleContrat = $this->getEvent()->getParam('modeleContrat');
+
+        try {
+            $this->getServiceModeleContrat()->delete($modeleContrat);
+            $this->flashMessenger()->addSuccessMessage("Modèle de contrat supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        }
+
+        return new MessengerViewModel();
+    }
+
+
+
+    public function modelesTelechargerAction()
+    {
+        /* @var $modeleContrat ModeleContrat */
+        $modeleContrat = $this->getEvent()->getParam('modeleContrat');
+
+        $fichier = new Fichier();
+        $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
+        $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
+        if ($modeleContrat->hasFichier()) {
+            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(),-1,0));
+        } else {
+            $fichier->setContenu(file_get_contents($this->getServiceModeleContrat()->getModeleGeneriqueFile()));
+        }
+        $this->uploader()->download($fichier);
     }
 }

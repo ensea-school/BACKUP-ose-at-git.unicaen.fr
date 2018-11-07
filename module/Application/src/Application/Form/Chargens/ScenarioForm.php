@@ -58,7 +58,7 @@ class ScenarioForm extends AbstractForm
                 'empty_option'              => "- Aucune -",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [
-                    'title' => "StructureService gestionnaire de l'enseignement",
+                    'title' => "Structure gestionnaire de l'enseignement",
                 ],
                 'value_options'             => Util::collectionAsOptions($this->structures),
             ],
@@ -108,7 +108,9 @@ class ScenarioForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            /* Filtres et validateurs */
+            'structure' => [
+                'required' => false,
+            ],
         ];
     }
 }

@@ -1,0 +1,60 @@
+<?php
+
+$this->headTitle()->append($title = "À propos...");
+
+?>
+<div style="margin: 1em">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <?= $title ?>
+        </div>
+        <div class="panel-body">
+            <h1>
+            <span class="appname" style="padding-bottom:0px">
+        <span class="c1">O</span><span class="c2">S</span><span class="c3">E</span>
+
+    </span>
+                <small>
+                    Organisation des Services d'Enseignement<br/>
+                    Version <?= $this->appInfos()->getConfig()->get('version') ?>
+
+                </small>
+            </h1>
+            <p>&nbsp;</p>
+            <p>
+                OSE est une application de gestion permettant aux enseignants de fournir de manière dématérialisée
+                leurs informations personnelles, leurs pièces justificatives, leurs heures de service prévisionnel
+                et réalisé tout en calculant les heures complémentaires qui en découlent.
+            </p>
+            <p>
+                La composante peut valider les données, les agréments, produire les contrats et effectuer des demandes
+                de mise en paiement.
+            </p>
+            <p>
+                Les services de l’établissement assurent les mises en paiement et disposent d’outils de pilotage.
+            </p>
+            <p>
+                Un workflow ainsi qu’une batterie d’indicateurs permettent un suivi des tâches à effectuer.
+            </p>
+            <p>
+                OSE permet en outre de calculer la charge d’enseignement d’une offre de formation.
+            </p>
+        </div>
+        <div class="panel-footer">
+            <table border="0" width="100%" style="background:none">
+                <tr>
+                    <td style="text-align:center;white-space:nowrap;vertical-align: middle">
+                        <a href="http://www.cecill.info/licences/Licence_CeCILL_V2.1-fr.html">Informations de licence</a>
+                    </td>
+                    <td style="text-align:center;white-space:nowrap;vertical-align: middle">
+                        <a href="http://www.unicaen.fr">© 2018 <img src="<?= $this->basePath('/images/logo-unicaen.png') ?>"
+                                                                    width="300"/></a>
+                    </td>
+                    <td style="text-align:center;white-space:nowrap;vertical-align: middle">
+                        <a href="http://www.unicaen.fr/deploiement/ose/">Présentation de l'application</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

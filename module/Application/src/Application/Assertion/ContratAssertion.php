@@ -23,6 +23,7 @@ class ContratAssertion extends AbstractAssertion
     const PRIV_LISTER_FICHIERS = 'contrat-lister-fichiers';
     const PRIV_SUPPRIMER_FICHIER = 'contrat-supprimer-fichier';
     const PRIV_AJOUTER_FICHIER = 'contrat-ajouter-fichier';
+    const PRIV_EXPORT = 'contrat-export-all';
 
     use WorkflowServiceAwareTrait;
 
@@ -44,6 +45,18 @@ class ContratAssertion extends AbstractAssertion
 
         // Si le rôle n'est pas renseigné alors on s'en va...
         if (!$role instanceof Role) return false;
+
+        switch (true) {
+            case $entity instanceof Contrat:
+                switch ($privilege) {
+                    case Privileges::CONTRAT_PROJET_GENERATION:
+                    case Privileges::CONTRAT_CONTRAT_GENERATION:
+                    case self::PRIV_EXPORT:
+                        return $this->assertGeneration($entity);
+                }
+            break;
+        }
+
         // pareil si le rôle ne possède pas le privilège adéquat
         if ($privilege && !in_array($privilege, $localPrivs) && !$role->hasPrivilege($privilege)) return false; // @todo traiter les privilèges locaux!!
 
@@ -180,6 +193,17 @@ class ContratAssertion extends AbstractAssertion
             $this->assertRole($contrat),
             !$contrat->getValidation()
         ]);
+    }
+
+
+
+    protected function assertGeneration(Contrat $contrat )
+    {
+        if ($contrat->estUnProjet()){
+            return $this->getRole()->hasPrivilege(Privileges::CONTRAT_PROJET_GENERATION);
+        }else{
+            return $this->getRole()->hasPrivilege(Privileges::CONTRAT_CONTRAT_GENERATION);
+        }
     }
 
 

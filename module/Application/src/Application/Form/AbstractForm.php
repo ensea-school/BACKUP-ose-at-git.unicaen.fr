@@ -77,7 +77,12 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
         $this->exception = null;
         $this->bind($entity);
         if ($request->isPost()) {
-            $this->setData($request->getPost());
+            $data = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $this->setData($data);
             if ($this->isValid()) {
                 if ($saveFnc instanceof AbstractEntityService) {
                     try {
@@ -87,7 +92,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
                         $e = DbException::translate($e);
                         $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
                     }
-                } elseif($saveFnc instanceof \Closure) {
+                } elseif ($saveFnc instanceof \Closure) {
                     try {
                         $saveFnc($entity);
                     } catch (\Exception $e) {

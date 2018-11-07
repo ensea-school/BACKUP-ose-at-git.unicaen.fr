@@ -23,5 +23,6 @@
         <join-column name="ID" referenced-column-name="ID"/>
       </join-columns>
     </one-to-one>
+    <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
   </entity>
 </doctrine-mapping>

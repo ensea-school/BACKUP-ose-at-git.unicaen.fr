@@ -2,50 +2,100 @@
 
 namespace Application\Form\VolumeHoraire;
 
+use Application\Entity\Db\MotifNonPaiement;
+use Application\Entity\Db\Periode;
+use Application\Entity\Db\TypeIntervention;
+use Application\Entity\VolumeHoraireListe;
 use Application\Filter\FloatFromString;
-use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
+use Application\Hydrator\VolumeHoraire\ListeFilterHydrator;
 use Application\Service\Traits\MotifNonPaiementServiceAwareTrait;
+use Application\Service\Traits\PeriodeServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenApp\Util;
 use Zend\Form\Element\Hidden;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Description of Saisie
  *
  */
-class Saisie extends AbstractForm
+class Saisie extends AbstractForm implements EntityManagerAwareInterface
 {
     use MotifNonPaiementServiceAwareTrait;
+    use TypeInterventionServiceAwareTrait;
+    use PeriodeServiceAwareTrait;
+    use EntityManagerAwareTrait;
 
     /**
      * @var boolean
      */
-    protected $viewMNP;
+    protected $viewMNP = false;
 
     /**
      * @var boolean
      */
-    protected $editMNP;
+    protected $editMNP = false;
 
 
 
     /**
-     *
+     * @return MotifNonPaiement[]
      */
-    public function init()
+    protected function getMotifsNonPaiement()
     {
-        $this->setAttribute('action', $this->getCurrentUrl());
-        $this->setAttribute('method', 'post')
-            ->setAttribute('class', 'volume-horaire')
-//                ->setHydrator(new ClassMethods(false))
-//                ->setInputFilter(new InputFilter())
-//                ->setPreferFormInputFilter(false)
-        ;
+        $qb = $this->getServiceMotifNonPaiement()->finderByHistorique();
+
+        return $this->getServiceMotifNonPaiement()->getList($qb);
+    }
+
+
+
+    /**
+     * @return TypeIntervention[]
+     */
+    protected function getTypesIntervention()
+    {
+        $qb = $this->getServiceTypeIntervention()->finderByContext();
+        $this->getServiceTypeIntervention()->finderByHistorique($qb);
+
+        return $this->getServiceTypeIntervention()->getList($qb);
+    }
+
+
+
+    /**
+     * @return Periode[]
+     */
+    protected function getPeriodes()
+    {
+        $qb = $this->getServicePeriode()->finderByHistorique();
+        $this->getServicePeriode()->finderByEnseignement($qb);
+
+        return $this->getServicePeriode()->getList($qb);
+    }
+
+
+
+    public function build()
+    {
+        $this->setAttributes([
+            'action' => $this->getCurrentUrl(),
+            'method' => 'post',
+            'class'  => 'volume-horaire',
+        ]);
+
+        $hydrator = new SaisieHydrator();
+        $hydrator->setEntityManager($this->getEntityManager());
+        $this->setHydrator($hydrator);
 
         $this->add([
             'name'       => 'heures',
             'type'       => 'Text',
             'options'    => [
-                'label' => "Nombre d'heures :",
+                'label' => "Heures",
             ],
             'attributes' => [
                 'value' => "0",
@@ -54,30 +104,30 @@ class Saisie extends AbstractForm
             ],
         ]);
 
-        $this->add([
-            'name'       => 'motif-non-paiement',
-            'options'    => [
-                'label' => "Motif de non paiement :",
-            ],
-            'attributes' => [
-                'value' => "",
-                'title' => "Motif de non paiement",
-                'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm',
-            ],
-            'type'       => 'Select',
-        ]);
-
-        $motifsNonPaiement = $this->getServiceMotifNonPaiement()->getList();
-        foreach ($motifsNonPaiement as $id => $motifNonPaiement) {
-            $motifsNonPaiement[$id] = (string)$motifNonPaiement;
+        if ($this->canEditMNP()) {
+            $this->add([
+                'type'       => 'Select',
+                'name'       => 'motif-non-paiement',
+                'options'    => [
+                    'label'         => "Motif de non paiement :",
+                    'empty_option'  => "Aucun motif : paiement prévu",
+                    'value_options' => Util::collectionAsOptions($this->getMotifsNonPaiement()),
+                ],
+                'attributes' => [
+                    'value' => "",
+                    'title' => "Motif de non paiement",
+                    'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm',
+                ],
+            ]);
+        } else {
+            $this->add(new Hidden('motif-non-paiement'));
         }
-        $motifsNonPaiement[0] = 'Aucun motif : paiement prévu';
-        $this->get('motif-non-paiement')->setValueOptions($motifsNonPaiement);
 
         $this->add(new Hidden('service'));
         $this->add(new Hidden('periode'));
-        $this->add(new Hidden('type-volume-horaire'));
         $this->add(new Hidden('type-intervention'));
+        $this->add(new Hidden('type-volume-horaire'));
+        $this->add(new Hidden('ancien-motif-non-paiement'));
 
         $this->add([
             'name'       => 'submit',
@@ -97,28 +147,57 @@ class Saisie extends AbstractForm
             ],
             'attributes' => [
                 'title' => "Abandonner cette saisie",
-                'class' => 'volume-horaire volume-horaire-annuler btn btn-default fermer',
+                'class' => 'volume-horaire volume-horaire-annuler btn btn-default fermer pop-ajax-hide',
             ],
         ]);
     }
 
 
 
-    /* Associe une entity VolumeHoraireList au formulaire */
-    public function bind($object, $flags = 17)
+    /**
+     * @return bool
+     */
+    public function canViewMNP(): bool
     {
-        /* @var $object \Application\Entity\VolumeHoraireListe */
+        return $this->viewMNP;
+    }
 
-        $data            = $object->filtersToArray();
-        $data['service'] = $object->getService()->getId();
-        $data['heures']  = StringFromFloat::run($object->getHeures(), false);
 
-        if (!$this->getViewMNP()) {
-            $this->remove('motif-non-paiement');
-        } else {
-            $data['motif-non-paiement'] = $object->getMotifNonPaiement() ? $object->getMotifNonPaiement()->getId() : 0;
-        }
-        $this->setData($data);
+
+    /**
+     * @param bool $viewMNP
+     *
+     * @return Saisie
+     */
+    public function setViewMNP(bool $viewMNP): Saisie
+    {
+        $this->viewMNP = $viewMNP;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function canEditMNP(): bool
+    {
+        return $this->editMNP;
+    }
+
+
+
+    /**
+     * @param bool $editMNP
+     *
+     * @return Saisie
+     */
+    public function setEditMNP(bool $editMNP): Saisie
+    {
+        $this->editMNP = $editMNP;
+
+        return $this;
     }
 
 
@@ -132,13 +211,16 @@ class Saisie extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'motif-non-paiement' => [
+            'motif-non-paiement'        => [
                 'required' => false,
             ],
-            'periode'            => [
+            'ancien-motif-non-paiement' => [
                 'required' => false,
             ],
-            'heures'             => [
+            'periode'                   => [
+                'required' => false,
+            ],
+            'heures'                    => [
                 'required' => true,
                 'filters'  => [
                     ['name' => FloatFromString::class],
@@ -146,56 +228,104 @@ class Saisie extends AbstractForm
             ],
         ];
     }
+}
 
 
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class SaisieHydrator implements HydratorInterface
+{
+    use EntityManagerAwareTrait;
 
     /**
-     * @return boolean
+     * @var array
      */
-    public function getViewMNP()
+    private $data;
+
+
+
+    private function getVal($key)
     {
-        return $this->viewMNP;
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
+        } else {
+            return null;
+        }
     }
 
 
 
     /**
-     * @param boolean $viewMNP
+     * Hydrate $object with the provided $data.
      *
-     * @return Saisie
-     */
-    public function setViewMNP($viewMNP)
-    {
-        $this->viewMNP = $viewMNP;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getEditMNP()
-    {
-        return $this->editMNP;
-    }
-
-
-
-    /**
-     * @param boolean $editMNP
+     * @param  array              $data
+     * @param  VolumeHoraireListe $object
      *
-     * @return Saisie
+     * @return object
      */
-    public function setEditMNP($editMNP)
+    public function hydrate(array $data, $object)
     {
-        $this->editMNP = $editMNP;
+        //$dumper = vhlDump($object);
 
-        if (!$editMNP && $this->has('motif-non-paiement')) {
-            $this->remove('motif-non-paiement');
+        $this->data = $data;
+
+        $lfh = new ListeFilterHydrator();
+        $lfh->setEntityManager($this->getEntityManager());
+
+        $typeIntervention = $lfh->allToData(VolumeHoraireListe::FILTRE_TYPE_INTERVENTION, $this->getVal('type-intervention'));
+        $object->setTypeIntervention($typeIntervention);
+
+        $periode = $lfh->allToData(VolumeHoraireListe::FILTRE_PERIODE, $this->getVal('periode'));
+        $object->setPeriode($periode);
+
+        $ancienMotifNonPaiement = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('ancien-motif-non-paiement'));
+        $motifNonPaiement       = $lfh->allToData(VolumeHoraireListe::FILTRE_MOTIF_NON_PAIEMENT, $this->getVal('motif-non-paiement'));
+
+        $heures = (float)$this->getVal('heures');
+        $object->setMotifNonPaiement($motifNonPaiement);
+        $object->moveHeuresFromAncienMotifNonPaiement($heures, $ancienMotifNonPaiement);
+
+        //$dumper->dumpEndToFile();
+
+        return $object;
+    }
+
+
+
+    /**
+     * Extract values from an object
+     *
+     * @param  VolumeHoraireListe $object
+     *
+     * @return array
+     */
+    public function extract($object)
+    {
+        $lfh = new ListeFilterHydrator();
+        $lfh->setEntityManager($this->getEntityManager());
+        $lfh->setFilters(VolumeHoraireListe::FILTRE_LIST);
+        $data = $lfh->extractInts($object, true);
+
+        /* Ajout des heures */
+        $data['heures'] = $object->getHeures();
+
+        /* Gestion des valeurs anciennes */
+        $anciens = [
+            'motif-non-paiement',
+        ];
+        foreach ($anciens as $ancien) {
+            if (isset($data[$ancien])) {
+                $data['ancien-' . $ancien] = $data[$ancien];
+            }
         }
 
-        return $this;
+        return $data;
     }
+
 }

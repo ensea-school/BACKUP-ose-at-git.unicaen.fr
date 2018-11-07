@@ -40,7 +40,7 @@ while ($i < $nTblListe) {
     <th style="word-wrap: break-word ; ">Type de ressource</th>
     <th style="word-wrap: break-word ; ">Unité budgétaire</th>
     <?php if ($canEdit) {
-        echo '<th style="word-wrap: break-word ; ">Source<br>Actions</th>';
+        echo '<th style="word-wrap: break-word ;">Source<br>Actions</th>';
     } else echo '<th style="word-wrap: break-word ; ">Source</th>' ?>
     <th style="word-wrap: break-word ; ">Structure</th>
     </thead>
@@ -56,7 +56,7 @@ while ($i < $nTblListe) {
         <td><?= $fr->getActivite()->getLibelle() . '<br>' ?></td>
         <td><?= $fr->getTypeRessource() . '<br>' ?></td>
         <td><?= $fr->getUniteBudgetaire() . '<br>' ?></td>
-        <td><?php if (($fr->getSource()->getLibelle() == 'OSE') && ($canEdit)) { ?>
+        <td style=" text-align: center;"><?php if (($fr->getSource()->getLibelle() == 'OSE') && ($canEdit)) { ?>
                 <a class="ajax-modal" data-event="centre-cout-saisie"
                    href="<?= $this->url('centre-cout/saisie', ['centre-cout' => $fr->getId()]) ?>"
                    title="Modifier la Centre de Coûts">

@@ -17,21 +17,22 @@ echo $this->form()->openTag($form); ?>
 </div>
 
 <div class="row">
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('libelle')); ?>
-    </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <?= $this->formControlGroup($form->get('code')); ?>
+    </div>
+    <div class="col-md-8">
+        <?= $this->formControlGroup($form->get('libelle')); ?>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('activite')); ?>
-    </div>
-    <div class="col-md-6">
         <?= $this->formControlGroup($form->get('type-ressource')); ?>
     </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('activite')); ?>
+    </div>
+
 </div>
 <?= $this->formControlGroup($form->get('security')); ?>
 <?= $this->formSubmit($form->get('submit')); ?>

@@ -166,7 +166,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return bool
      */
-    public function isVisibleExterieur(): bool
+    public function isVisibleExterieur()
     {
         return $this->visibleExterieur;
     }

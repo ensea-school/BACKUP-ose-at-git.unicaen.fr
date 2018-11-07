@@ -70,6 +70,13 @@ class TypeInterventionSaisieForm extends AbstractForm
         ]);
 
         $this->add([
+            'name' => 'visible-exterieur',
+            'options' => [
+                'label' => 'Visible de l\'extérieur?',
+            ],
+            'type' => 'Checkbox',
+        ]);
+        $this->add([
             'type'       => 'Select',
             'name'       => 'annee-debut',
             'options'    => [
@@ -172,6 +179,9 @@ class TypeInterventionSaisieForm extends AbstractForm
             'regle-fc' => [
                 'required' => true,
             ],
+            'visible-exterieur' => [
+                'equired' => true,
+            ],
         ];
     }
 
@@ -198,6 +208,7 @@ class TypeInterventionHydrator implements HydratorInterface
         $object->setTauxHetdService(FloatFromString::run($data['taux-hetd-service']));
         $object->setTauxHetdComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
         $object->setVisible($data['visible']);
+        $object->setVisibleExterieur($data['visible-exterieur']);
         if (array_key_exists('annee-debut', $data)) {
             $object->setAnneeDebut($this->getServiceAnnee()->get($data['annee-debut']));
         }
@@ -227,6 +238,7 @@ class TypeInterventionHydrator implements HydratorInterface
             'taux-hetd-service' => StringFromFloat::run($object->getTauxHetdService()),
             'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHetdComplementaire()),
             'visible' => $object->isVisible(),
+            'visible-exterieur' => $object->isVisibleExterieur(),
             'annee-debut'       => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
             'annee-fin'         => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
             'regle-foad'           => $object->getRegleFOAD(),

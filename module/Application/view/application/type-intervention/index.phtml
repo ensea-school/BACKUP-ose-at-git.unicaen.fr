@@ -108,7 +108,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             ?>
         </td>
         <td style="text-align:left;">
-        <?=($ti->isVisible() ? 'Visible' : 'Caché');
+        <?=($ti->isVisible() ? 'Visible' : 'Caché').' - '.($ti->isVisibleExterieur() ? 'Visible de l\'extérieur':'Pas visible de l\'extérieur');
         if ($canEdit) {
             ?>
             <a class="btn btn-default btn-xs pop-ajax" data-event="type-intervention-saisie" style="float:right"

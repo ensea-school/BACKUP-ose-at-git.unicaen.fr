@@ -78,6 +78,7 @@ return [
                         Privileges::PIECE_JUSTIFICATIVE_GESTION_VISUALISATION,
                         Privileges::PLAFONDS_GESTION_VISUALISATION,
                         Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
+                        Privileges::TYPE_INTERVENTION_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

@@ -1,8 +1,38 @@
 <?php
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $form  \Application\Form\CentreCout\CentreCoutSaisieForm
+ * @var $form  \Application\Form\FonctionReferentiel\TypeInterventionSaisieForm
  */
-
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
-echo $this->form($form);
+
+echo $this->form()->openTag($form); ?>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('parent')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('unite-budgetaire')); ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('libelle')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('code')); ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('activite')); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $this->formControlGroup($form->get('type-ressource')); ?>
+    </div>
+</div>
+<?= $this->formControlGroup($form->get('security')); ?>
+<?= $this->formSubmit($form->get('submit')); ?>
+<?= $this->form()->closeTag(); ?>

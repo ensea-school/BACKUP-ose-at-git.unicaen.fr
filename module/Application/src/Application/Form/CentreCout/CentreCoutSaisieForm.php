@@ -45,23 +45,16 @@ class CentreCoutSaisieForm extends AbstractForm
             'type'    => 'Text',
         ]);
         $this->add([
-            'name'    => 'source-code',
-            'options' => [
-                'label' => "Source Code",
-            ],
-            'type'    => 'Text',
-        ]);
-        $this->add([
             'name'    => 'unite-budgetaire',
             'options' => [
-                'label' => "Unite Budgetaire",
+                'label' => "Unité Budgétaire",
             ],
             'type'    => 'Text',
         ]);
         $this->add([
             'name'       => 'activite',
             'options'    => [
-                'label' => 'Activite',
+                'label' => 'Activité',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -139,9 +132,6 @@ class CentreCoutSaisieForm extends AbstractForm
                 'required' => true,
             ],
 
-            'source-code' => [
-                'required' => true,
-            ],
             'parent'      => [
                 'required' => false,
             ],
@@ -175,7 +165,7 @@ class CentreCoutHydrator implements HydratorInterface
     {
         $object->setCode($data['code']);
         $object->setLibelle($data['libelle']);
-        $object->setSourceCode($data['source-code']);
+        $object->setSourceCode($data['code']);
         $object->setUniteBudgetaire($data['unite-budgetaire']);
         if (array_key_exists('activite', $data)) {
             $object->setActivite($this->getServiceccActivite()->get($data['activite']));

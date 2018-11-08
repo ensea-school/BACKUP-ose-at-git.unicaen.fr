@@ -994,9 +994,9 @@ class ServiceService extends AbstractEntityService
             'intervenant-discipline-libelle' => 'Discipline intervenant',
             'heures-service-statutaire'      => 'Service statutaire',
             'heures-service-du-modifie'      => 'Modification de service du',
-            'service-structure-aff-libelle'  => 'StructureService d\'affectation',
+            'service-structure-aff-libelle'  => 'Structure d\'affectation',
 
-            'service-structure-ens-libelle' => 'StructureService d\'enseignement',
+            'service-structure-ens-libelle' => 'Structure d\'enseignement',
             'groupe-type-formation-libelle' => 'Groupe de type de formation',
             'type-formation-libelle'        => 'Type de formation',
             'etape-niveau'                  => 'Niveau',
@@ -1011,7 +1011,7 @@ class ServiceService extends AbstractEntityService
             'element-taux-fa'               => 'Taux FA',
             'commentaires'                  => 'Commentaires',
             'element-ponderation-compl'     => 'Majoration',
-            'element-source-libelle'        => 'SourceService enseignement',
+            'element-source-libelle'        => 'Source enseignement',
             'periode-libelle'               => 'Période',
             'heures-non-payees'             => 'Heures non payées',
         ];

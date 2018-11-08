@@ -61,6 +61,13 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
      */
     private $miseEnPaiement;
 
+    /**
+     * @var string
+     */
+    private $uniteBudgetaire;
+
+
+
 
 
     public function __construct()
@@ -240,6 +247,32 @@ class CentreCout implements HistoriqueAwareInterface, ImportAwareInterface
     public function getTypeHeures()
     {
         return $this->typeHeures;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $uniteBudgetaire
+     *
+     * @return CentreCout
+     */
+    public function setUniteBudgetaire($uniteBudgetaire)
+    {
+        $this->uniteBudgetaire = $uniteBudgetaire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getUniteBudgetaire()
+    {
+        return $this->uniteBudgetaire;
     }
 
 

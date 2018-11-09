@@ -25,6 +25,7 @@ en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiem
 * La génération de contrat n'éditait plus qu'un seul exemplaire (depuis la v7.0.4). C'est réparé.
 * De nombreux libellés "StructureService" ont été remplacés par "Structure", "Service" ayant été ajouté par erreur.
 * Le mode de saisie de service Calendaire ne fonctionnait pas. Il a été réparé.
+* Dans la fiche intervenant, d'anciennes adresses s'affichaient parfois à la place des actuelles.
 
 #OSE 7.0.4
 
@@ -55,14 +56,14 @@ en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiem
 
 ## Corrections de bugs
 
-En mode calendaire, le formulaire de saisie de service réalisé ne s'affichait plus.
+* En mode calendaire, le formulaire de saisie de service réalisé ne s'affichait plus.
 
 #OSE 7.0.1
 
 ## Corrections de bugs
 
-La génération des contrats ne fonctionnait pas en mode production.
-Idem pour télécharger des modèles de contrats.
+* La génération des contrats ne fonctionnait pas en mode production.
+* Idem pour télécharger des modèles de contrats.
 
 ## Notes de mise à jour
 

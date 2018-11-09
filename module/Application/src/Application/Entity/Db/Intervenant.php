@@ -1436,7 +1436,9 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
      */
     public function getAdressePrincipale()
     {
-        $adresses = $this->getAdresse();
+        $adresses = $this->getAdresse()->filter(function(AdresseIntervenant $adresse){
+            return $adresse->estNonHistorise();
+        });
 
         if (!count($adresses)) {
             return null;

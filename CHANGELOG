@@ -9,7 +9,9 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Nouveautés
 
-* Possibilité de récupérer les libellés de labos dans les affectations de recherche
+* Possibilité de récupérer les libellés de labos dans les affectations de recherche. 
+Attention : pour en bénéficier, il faudra mettre à jour votre connecteur affectation_recherche
+en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiement/Connecteurs/Connecteurs OSE.sql). 
 
 ## Notes de mise à jour
 

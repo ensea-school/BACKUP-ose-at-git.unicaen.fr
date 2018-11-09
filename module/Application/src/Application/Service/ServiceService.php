@@ -107,12 +107,14 @@ class ServiceService extends AbstractEntityService
      */
     public function newEntity()
     {
+        /** @var Service $entity */
         $entity = parent::newEntity();
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         if ($intervenant = $role->getIntervenant()) {
             $entity->setIntervenant($intervenant);
         }
+        $entity->setEtablissement($this->getServiceContext()->getEtablissement());
 
         return $entity;
     }

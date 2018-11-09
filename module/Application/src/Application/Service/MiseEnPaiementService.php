@@ -540,7 +540,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
      * et pour l'année courante
      *
-     * Format de retour : [StructureService.id][TypeRessource.id] = (float)Heures
+     * Format de retour : [Structure.id][TypeRessource.id] = (float)Heures
      *                 ou [TypeRessource.id] = (float)Heures
      *
      * Si la structure n'est pas spécifiée alors on retourne le tableau pour chaque structure.

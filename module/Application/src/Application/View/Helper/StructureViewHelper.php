@@ -7,7 +7,7 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 
 /**
- * Description of StructureService
+ * Description of StructureViewHelper
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */

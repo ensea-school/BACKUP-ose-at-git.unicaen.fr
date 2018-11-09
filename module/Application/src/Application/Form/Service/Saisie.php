@@ -28,13 +28,6 @@ class Saisie extends AbstractForm
     use SaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;
 
-    /**
-     * etablissement par défaut
-     *
-     * @var Etablissement
-     */
-    protected $etablissement;
-
 
 
     /**

@@ -76,7 +76,7 @@ class Asset
         $e = new Structure();
         $e
                 ->setLibelleCourt(uniqid('TEST '))
-                ->setLibelleLong(uniqid('StructureService de test'))
+                ->setLibelleLong(uniqid('Structure de test'))
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
 

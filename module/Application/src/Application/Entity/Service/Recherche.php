@@ -40,14 +40,14 @@ implements
     use EtatVolumeHoraireAwareTrait;
 
     /**
-     * StructureService d'affectation
+     * Structure d'affectation
      *
      * @var \Application\Entity\Db\Structure
      */
     protected $structureAff;
 
     /**
-     * StructureService d'enseignement
+     * Structure d'enseignement
      *
      * @var \Application\Entity\Db\Structure
      */

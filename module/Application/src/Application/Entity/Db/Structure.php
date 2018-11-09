@@ -14,7 +14,7 @@ use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
- * StructureService
+ * Structure
  */
 class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAwareInterface, ObjectManagerAware
 {

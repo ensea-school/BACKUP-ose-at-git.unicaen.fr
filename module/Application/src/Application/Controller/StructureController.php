@@ -83,10 +83,10 @@ class StructureController extends AbstractController
             throw new LogicException("Aucun identifiant de structure spécifié.");
         }
         if (!($structure = $this->getServiceStructure()->get($id))) {
-            throw new RuntimeException("StructureService '$id' spécifiée introuvable.");
+            throw new RuntimeException("Structure '$id' spécifiée introuvable.");
         }
 
-        $title = "StructureService";
+        $title = "Structure";
         return compact('structure', 'title');
     }
 

@@ -54,7 +54,7 @@ class Liste extends AbstractViewHelper
         ],
         'structure'    => [
             'visibility' => true,
-            'head-text'  => "<th title=\"StructureService\">StructureService</th>",
+            'head-text'  => "<th title=\"Structure\">Structure</th>",
         ],
         'fonction'     => [
             'visibility' => true,

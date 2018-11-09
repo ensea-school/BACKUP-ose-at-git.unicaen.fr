@@ -279,7 +279,7 @@ class EntityProvider
     }
 
     /**
-     * Retourne à chaque appel une nouvelle instance de StructureService persistée.
+     * Retourne à chaque appel une nouvelle instance de Structure persistée.
      *
      * @return Structure
      */
@@ -302,7 +302,7 @@ class EntityProvider
 
         $this->structureRacine = $this->getEntityManager()->getRepository("Application\Entity\Db\Structure")->findOneByParente(null);
         if (!$this->structureRacine) {
-            throw new RuntimeException("StructureService racine introuvable.");
+            throw new RuntimeException("Structure racine introuvable.");
         }
 
         return $this->structureRacine;
@@ -310,8 +310,8 @@ class EntityProvider
 
     /**
      * Retourne :
-     * - soit une StructureService d'enseignement quelconque ;
-     * - soit à chaque appel une nouvelle instance de StructureService d'enseignement persistée.
+     * - soit une Structure d'enseignement quelconque ;
+     * - soit à chaque appel une nouvelle instance de Structure d'enseignement persistée.
      *
      * @param boolean $quelconque
      * @return Structure
@@ -325,7 +325,7 @@ class EntityProvider
                         ->andWhere("ts.enseignement = 1");
                 $this->structureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
                 if (!$this->structureEns) {
-                    throw new RuntimeException("StructureService d'enseignement quelconque introuvable.");
+                    throw new RuntimeException("Structure d'enseignement quelconque introuvable.");
                 }
             }
 

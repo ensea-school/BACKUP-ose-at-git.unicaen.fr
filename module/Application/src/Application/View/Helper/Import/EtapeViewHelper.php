@@ -16,7 +16,7 @@ class EtapeViewHelper extends DifferentielLigne
         switch( $column ){
             case 'STRUCTURE_ID':
                 if (null === $value){
-                    return '<span class="text-danger">StructureService non identifiée</span>';
+                    return '<span class="text-danger">Structure non identifiée</span>';
                 }else{
                     $column = 'Structure';
                     $value = $this->getServiceStructure()->get($value);

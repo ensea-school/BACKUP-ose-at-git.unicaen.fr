@@ -84,8 +84,8 @@ class Saisie extends AbstractForm
                 $pf->setName($periode->getCode());
                 $this->add($pf);
             }
-            $this->add(new Hidden('type-volume-horaire'));
         }
+        $this->add(new Hidden('type-volume-horaire'));
         $this->add(new Hidden('intervenant'));
 
         $this->add([

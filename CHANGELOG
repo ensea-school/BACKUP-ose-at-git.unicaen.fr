@@ -20,6 +20,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * Correction au niveau du plafond "Heures max. de référentiel par intervenant selon son statut" : les heures de FC majorées ne sont plus prises en compte.
 * La génération de contrat n'éditait plus qu'un seul exemplaire (depuis la v7.0.4). C'est réparé.
 * De nombreux libellés "StructureService" ont été remplacés par "Structure", "Service" ayant été ajouté par erreur.
+* Le mode de saisie de service Calendaire ne fonctionnait pas. Il a été réparé.
 
 #OSE 7.0.4
 

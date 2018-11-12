@@ -258,7 +258,7 @@ class SaisieFieldsetHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
+        $intervenant = isset($data['intervenant']['id']) ? $data['intervenant']['id'] : null;
         if ($intervenant){
             $object->setIntervenant( $this->getServiceIntervenant()->getBySourceCode($intervenant));
         }

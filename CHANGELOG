@@ -27,6 +27,7 @@ en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiem
 * Le mode de saisie de service Calendaire ne fonctionnait pas. Il a été réparé.
 * Dans la fiche intervenant, d'anciennes adresses s'affichaient parfois à la place des actuelles.
 * La saisie d'intervenants depuis le menu "Services" fonctionne de nouveau pleinement, y compris avec des intervenants dont les codes comportent des lettres.
+* Lors de la saisie de service référentiel, le système de sélection des composantes fonctionne de nouveau.
 
 #OSE 7.0.4
 

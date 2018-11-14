@@ -12,8 +12,8 @@ $(function ()
 
     WidgetInitializer.add('jstree', 'jstree', function ()
     {
-        WidgetInitializer.includeJs(Url('vendor/vakata-jstree-3.3.3/dist/jstree.min.js'));
-        WidgetInitializer.includeCss(Url('vendor/vakata-jstree-3.3.3/dist/themes/default/style.min.css'));
+        WidgetInitializer.includeJs(Url('vendor/vakata-jstree-3.3.7/dist/jstree.min.js'));
+        WidgetInitializer.includeCss(Url('vendor/vakata-jstree-3.3.7/dist/themes/default/style.min.css'));
     });
 
     WidgetInitializer.add('table-sort', 'tableSort', function ()

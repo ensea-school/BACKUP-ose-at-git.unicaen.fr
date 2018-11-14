@@ -20,7 +20,7 @@ class TypeInterventionController extends AbstractController
     use TypeInterventionStructureSaisieFormAwareTrait;
     use ContextServiceAwareTrait;
 
-
+    /* @var $tiss TypeInterventionStructure */
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -33,6 +33,7 @@ class TypeInterventionController extends AbstractController
             TypeInterventionStructure::class,
         ]);
         $typesInterventionsStructures = $this->getServiceTypeInterventionStructure()->getList();
+        $allTypesInterventions=$this->getServiceTypeIntervention()->getList();
         $dql = "
         SELECT
           ti, adeb, afin
@@ -49,12 +50,19 @@ class TypeInterventionController extends AbstractController
         $typesInterventions = [];
         foreach ($tis as $ti) {
             $tiID = $ti->getId();
-    //        foreach ($tiss as $typesInterventionsStructures){
-        //
-      //      }
             $typesInterventions[$tiID] = $ti;
         }
 
+        foreach ($typesInterventionsStructures as $tiss){
+            $ti=$tiss->getTypeIntervention();
+            $ok=false;
+            if ((!$tiss->getAnneeDebut() || $tiss->getAnneeDebut()->getId()<=$anneeId) && (!$tiss->getAnneeFin() || $tiss->getAnneeFin()->getId()>=$anneeId)){
+                if ((!in_array($ti,$typesInterventions)) && (in_array($ti,$allTypesInterventions))){
+                $tiID                      = $ti->getId();
+                if ($ti) $typesInterventions[$tiID] = $ti;
+            }
+            }
+        }
         return compact('typesInterventions', 'typesInterventionsStructures');
     }
 

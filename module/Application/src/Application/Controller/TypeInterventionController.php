@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Controller;
 
 use Application\Entity\Db\Structure;
@@ -20,6 +21,8 @@ class TypeInterventionController extends AbstractController
     use TypeInterventionStructureSaisieFormAwareTrait;
     use ContextServiceAwareTrait;
 
+
+
     /* @var $tiss TypeInterventionStructure */
     public function indexAction()
     {
@@ -27,14 +30,33 @@ class TypeInterventionController extends AbstractController
             TypeIntervention::class,
         ]);
 
-        $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
         $this->em()->getFilters()->enable('historique')->init([
             TypeInterventionStructure::class,
         ]);
-        $typesInterventionsStructures = $this->getServiceTypeInterventionStructure()->getList();
-        $allTypesInterventions=$this->getServiceTypeIntervention()->getList();
-        $dql = "
+        $anneeId = $this->getServiceContext()->getAnnee()->getId();
+
+        $dql                          = "
+        SELECT
+          sti, adeb, afin
+        FROM
+          " . \Application\Entity\Db\TypeInterventionStructure::class . " sti
+          LEFT JOIN sti.anneeDebut adeb
+          LEFT JOIN sti.anneeFin afin
+        WHERE
+          COALESCE($anneeId,$anneeId) BETWEEN COALESCE(adeb.id,$anneeId) AND COALESCE(afin.id,$anneeId)
+        "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
+
+        $sti                = $this->em()->createQuery($dql)->getResult();
+        $typesInterventionsStructures = [];
+        foreach ($sti as $tiss) {
+            $stiID                      = $tiss->getId();
+            $typesInterventionsStructures[$stiID] = $tiss;
+        }
+
+        $allTypesInterventions        = $this->getServiceTypeIntervention()->getList();
+
+        $dql                          = "
         SELECT
           ti, adeb, afin
         FROM
@@ -46,23 +68,23 @@ class TypeInterventionController extends AbstractController
         "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
 
         /* @var $tis TypeIntervention[] */
-        $tis                     = $this->em()->createQuery($dql)->getResult();
+        $tis                = $this->em()->createQuery($dql)->getResult();
         $typesInterventions = [];
         foreach ($tis as $ti) {
-            $tiID = $ti->getId();
+            $tiID                      = $ti->getId();
             $typesInterventions[$tiID] = $ti;
         }
 
-        foreach ($typesInterventionsStructures as $tiss){
-            $ti=$tiss->getTypeIntervention();
-            $ok=false;
-            if ((!$tiss->getAnneeDebut() || $tiss->getAnneeDebut()->getId()<=$anneeId) && (!$tiss->getAnneeFin() || $tiss->getAnneeFin()->getId()>=$anneeId)){
-                if ((!in_array($ti,$typesInterventions)) && (in_array($ti,$allTypesInterventions))){
-                $tiID                      = $ti->getId();
-                if ($ti) $typesInterventions[$tiID] = $ti;
-            }
+        foreach ($typesInterventionsStructures as $tiss) {
+            $ti = $tiss->getTypeIntervention();
+            if ((!$tiss->getAnneeDebut() || $tiss->getAnneeDebut()->getId() <= $anneeId) && (!$tiss->getAnneeFin() || $tiss->getAnneeFin()->getId() >= $anneeId)) {
+                if ((!in_array($ti, $typesInterventions)) && (in_array($ti, $allTypesInterventions))) {
+                    $tiID = $ti->getId();
+                    $typesInterventions[$tiID] = $ti;
+                }
             }
         }
+
         return compact('typesInterventions', 'typesInterventionsStructures');
     }
 
@@ -82,7 +104,7 @@ class TypeInterventionController extends AbstractController
             $title = 'Édition d\'un type d\'intervention';
         }
 
-        if ($typeIntervention->getOrdre() == NULL) $typeIntervention->setOrdre(9999);
+        if ($typeIntervention->getOrdre() == null) $typeIntervention->setOrdre(9999);
         $form->bindRequestSave($typeIntervention, $this->getRequest(), function (TypeIntervention $ti) {
             try {
                 $this->getServiceTypeIntervention()->save($ti);
@@ -166,15 +188,17 @@ class TypeInterventionController extends AbstractController
         return new MessengerViewModel(compact('typeInterventionStructure'));
     }
 
+
+
     public function typeInterventionTrierAction()
     {
         /* @var $ti TypeIntervention */
-        $txt='result=';
+        $txt       = 'result=';
         $champsIds = explode(',', $this->params()->fromPost('champsIds', ''));
-        $ordre = 1;
+        $ordre     = 1;
         foreach ($champsIds as $champId) {
-            $txt.=$champId.'=>';
-            $ti = $this->getServiceTypeIntervention()->get($champId);
+            $txt .= $champId . '=>';
+            $ti  = $this->getServiceTypeIntervention()->get($champId);
             if ($ti) {
                 $txt .= ';' . $ti->getOrdre();
                 $ti->setOrdre($ordre);
@@ -182,11 +206,12 @@ class TypeInterventionController extends AbstractController
                 try {
                     $this->getServiceTypeIntervention()->save($ti);
                 } catch (\Exception $e) {
-                    $e = DbException::translate($e);
+                    $e   = DbException::translate($e);
                     $txt .= ':' . $e->getMessage();
                 }
             }
         }
+
         return new JsonModel(['msg' => 'Tri des champs effectué']);
     }
 }

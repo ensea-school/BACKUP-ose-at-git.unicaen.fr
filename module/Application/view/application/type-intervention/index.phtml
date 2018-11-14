@@ -128,7 +128,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     <td>
                         <?php
                         if (($tis->getAnneeDebut()) || ($tis->getAnneeFin())) {
-                            if (!$tis->getAnneeDebut()) echo 'Jusqu\'en ' . $ti->getAnneeFin();
+                            if (!$tis->getAnneeDebut()) echo 'Jusqu\'en ' . $tis->getAnneeFin();
                             else {
                                 if (!$tis->getAnneeFin()) echo 'À partir de ' . $tis->getAnneeDebut();
                                 else echo 'de ' . $tis->getAnneeDebut() . ' à ' . $tis->getAnneeFin();

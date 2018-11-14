@@ -73,7 +73,6 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      */
     private $anneeFin;
 
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -92,6 +91,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      * @var boolean
      */
     private $regleFC;
+
+
 
     /**
      * Constructor
@@ -140,11 +141,12 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
     public function isVisible(Structure $structure = null, Annee $annee = null)
     {
-        if ($structure && $annee){
+        if ($structure && $annee) {
             $lst = $this->getTypeInterventionStructure($structure, $annee);
-            if ($lst->count() == 1){
+            if ($lst->count() == 1) {
                 /** @var TypeInterventionStructure $tis */
                 $tis = $lst->first();
+
                 return $tis->isVisible();
             }
         }
@@ -195,6 +197,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return $this->anneeDebut;
     }
 
+
+
     /**
      * @param Annee $anneeDebut
      *
@@ -207,6 +211,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * @return Annee
      */
@@ -214,6 +220,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->anneeFin;
     }
+
+
 
     /**
      * @param Annee $anneeFin
@@ -227,6 +235,60 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
+    /**
+     * @param Annee          $annee
+     * @param Structure|null $structure
+     *
+     * @return bool
+     */
+    public function isValide(Annee $annee, Structure $structure = null): bool
+    {
+        /** @var TypeInterventionStructure[] $tisList */
+        $tisList = $this->getTypeInterventionStructure()->filter(function (TypeInterventionStructure $tis) use ($structure) {
+            if (!$tis->estNonHistorise()) {
+                return false;
+            }
+            if ($structure && $tis->setStructure() != $structure) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if ($tisList->count() > 0) {
+            foreach ($tisList as $tis) {
+                $tisAnneeDeb = $tis->getAnneeDebut() ?: $this->getAnneeDebut();
+                $tisAnneeFin = $tis->getAnneeFin() ?: $this->getAnneeFin();
+
+                $valide = false;
+                if ($tisAnneeDeb && $tisAnneeDeb->getId() <= $annee) {
+                    $valide = true;
+                }
+                if ($tisAnneeFin && $tisAnneeFin->getId() >= $annee) {
+                    $valide = true;
+                }
+
+                if ($valide) return true;
+            }
+
+            return false;
+        } else {
+
+            if ($this->getAnneeDebut() && $this->getAnneeDebut()->getId() > $annee) {
+                return false;
+            }
+            if ($this->getAnneeFin() && $this->getAnneeFin()->getId() < $annee) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+
+
     /**
      * @return bool
      */
@@ -234,6 +296,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->regleFOAD;
     }
+
 
 
     /**
@@ -247,6 +310,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * @return bool
@@ -269,6 +334,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
 
 
     /**
@@ -319,7 +385,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
                 $tis = $tis->filter(function (TypeInterventionStructure $t) use ($annee) {
                     $aDeb = $t->getAnneeDebut() ? $t->getAnneeDebut()->getId() : 0;
                     $aFin = $t->getAnneeFin() ? $t->getAnneeFin()->getId() : 9999999;
-                    $aId = $annee->getId();
+                    $aId  = $annee->getId();
 
                     return $aDeb <= $aId && $aId <= $aFin;
                 });
@@ -330,6 +396,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         return $this->typeInterventionStructure;
     }
+
 
 
     /**

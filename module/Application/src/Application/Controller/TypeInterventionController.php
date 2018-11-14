@@ -23,69 +23,24 @@ class TypeInterventionController extends AbstractController
 
 
 
-    /* @var $tiss TypeInterventionStructure */
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             TypeIntervention::class,
-        ]);
-
-
-        $this->em()->getFilters()->enable('historique')->init([
             TypeInterventionStructure::class,
         ]);
-        $anneeId = $this->getServiceContext()->getAnnee()->getId();
 
-        $dql                          = "
-        SELECT
-          sti, adeb, afin
-        FROM
-          " . \Application\Entity\Db\TypeInterventionStructure::class . " sti
-          LEFT JOIN sti.anneeDebut adeb
-          LEFT JOIN sti.anneeFin afin
-        WHERE
-          COALESCE($anneeId,$anneeId) BETWEEN COALESCE(adeb.id,$anneeId) AND COALESCE(afin.id,$anneeId)
-        "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
+        $annee = $this->getServiceContext()->getAnnee();
+        $tiList = $this->getServiceTypeIntervention()->getList();
 
-        $sti                = $this->em()->createQuery($dql)->getResult();
-        $typesInterventionsStructures = [];
-        foreach ($sti as $tiss) {
-            $stiID                      = $tiss->getId();
-            $typesInterventionsStructures[$stiID] = $tiss;
-        }
-
-        $allTypesInterventions        = $this->getServiceTypeIntervention()->getList();
-
-        $dql                          = "
-        SELECT
-          ti, adeb, afin
-        FROM
-          " . \Application\Entity\Db\TypeIntervention::class . " ti
-          LEFT JOIN ti.anneeDebut adeb
-          LEFT JOIN ti.anneeFin afin
-        WHERE
-          COALESCE($anneeId,$anneeId) BETWEEN COALESCE(adeb.id,$anneeId) AND COALESCE(afin.id,$anneeId)
-        "; // COALESCE($anneeId,$anneeId) bizarre mais c'est pour contourner un bug de doctrine!!!!!!
-
-        /* @var $tis TypeIntervention[] */
-        $tis                = $this->em()->createQuery($dql)->getResult();
         $typesInterventions = [];
-        foreach ($tis as $ti) {
-            $tiID                      = $ti->getId();
-            $typesInterventions[$tiID] = $ti;
-        }
-
-        foreach ($typesInterventionsStructures as $tiss) {
-            $ti = $tiss->getTypeIntervention();
-            if ((!$tiss->getAnneeDebut() || $tiss->getAnneeDebut()->getId() <= $anneeId) && (!$tiss->getAnneeFin() || $tiss->getAnneeFin()->getId() >= $anneeId)) {
-                if ((!in_array($ti, $typesInterventions)) && (in_array($ti, $allTypesInterventions))) {
-                    $tiID = $ti->getId();
-                    $typesInterventions[$tiID] = $ti;
-                }
+        foreach($tiList as $ti ){
+            if ($ti->isValide($annee)){
+                $typesInterventions[] = $ti;
             }
         }
 
-        return compact('typesInterventions', 'typesInterventionsStructures');
+        return compact('typesInterventions');
     }
 
 

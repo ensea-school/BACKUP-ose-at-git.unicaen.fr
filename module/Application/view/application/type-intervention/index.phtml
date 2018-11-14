@@ -140,7 +140,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     if ($canEdit) {
                         ?>
                         <td style="width: 50px;">
-                            <a class="pop-ajax" data-event="type-intervention-saisie"
+                            <a class="pop-ajax" data-min-width="400" data-event="type-intervention-saisie"
                                href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>"
                                data-submit-reload="true">
                                 <span class="glyphicon glyphicon-edit"></span></a>

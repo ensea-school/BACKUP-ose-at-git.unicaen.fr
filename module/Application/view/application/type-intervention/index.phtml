@@ -53,25 +53,21 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
 
 <table class="table table-bordered table-condensed table-hover">
     <thead>
-    <th rowspan="2">Code</th>
-    <th rowspan="2">Libellé</th>
-    <th colspan="2" style="padding:0">
-        <table>
-            <tr>
-                <td colspan="2" style="text-align:center">Taux HETD</td>
-            </tr>
-            <tr>
-                <td class="table-bordered">
-                    service
-                </td>
-                <td class="table-bordered">compl.</td>
-            </tr>
-        </table>
-    </th>
-    <th rowspan="2">Effective</th>
-    <th rowspan="2">Règles</th>
-    <th rowspan="2" style="text-align:center;">Visibilité</th>
-    <?php if ($canEdit) echo '<th rowspan="2">Actions</th>' ?>
+    <tr>
+        <th rowspan="2">Code</th>
+        <th rowspan="2">Libellé</th>
+        <th colspan="2">Taux HETD</th>
+        <th rowspan="2">Effective</th>
+        <th rowspan="2">Règles</th>
+        <th rowspan="2" style="text-align:center;">Visibilité</th>
+        <?php if ($canEdit) echo '<th rowspan="2">Actions</th>' ?>
+    </tr>
+    <tr>
+        <td class="table-bordered">
+            service
+        </td>
+        <td class="table-bordered">compl.</td>
+    </tr>
     </thead>
     <tbody class="triables">
     <tr></tr>
@@ -86,10 +82,12 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
         <td>
             <?php
             if (($ti->getAnneeDebut()) || ($ti->getAnneeFin())) {
-                if (!$ti->getAnneeDebut()) echo 'Jusqu\'en ' . $ti->getAnneeFin();
-                else {
-                    if (!$ti->getAnneeFin()) echo 'À partir de ' . $ti->getAnneeDebut();
-                    else echo 'de ' . $ti->getAnneeDebut() . ' à ' . $ti->getAnneeFin();
+                if (!$ti->getAnneeDebut()) {
+                    echo 'Jusqu\'en ' . $ti->getAnneeFin();
+                } else {
+                    if (!$ti->getAnneeFin()) {
+                        echo 'À partir de ' . $ti->getAnneeDebut();
+                    } else echo 'de ' . $ti->getAnneeDebut() . ' à ' . $ti->getAnneeFin();
                 }
             } else echo 'Permanente';
             ?>
@@ -108,13 +106,13 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             ?>
         </td>
         <td style="text-align:left;">
-        <?=($ti->isVisible() ? 'Visible' : 'Caché').' - '.($ti->isVisibleExterieur() ? 'Visible de l\'extérieur':'Pas visible de l\'extérieur');
+        <?= ($ti->isVisible() ? 'Visible' : 'Caché') . ' - ' . ($ti->isVisibleExterieur() ? 'Visible de l\'extérieur' : 'Pas visible de l\'extérieur');
         if ($canEdit) {
             ?>
             <a class="btn btn-default btn-xs pop-ajax" data-event="type-intervention-saisie" style="float:right"
                href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
                title="Ajouter un type d'intervention pour une structure"
-                data-submit-reload="true">
+               data-submit-reload="true">
                 Ajouter une exception pour une structure</a>
         <?php }
         $saut = 0;
@@ -124,14 +122,16 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                 if ($saut == 1) echo '<br><br><table class="table table-bordered table-condensed table-extra-condensed">'
                 ?>
                 <tr>
-                    <td><?=($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
+                    <td><?= ($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
                     <td>
                         <?php
                         if (($tis->getAnneeDebut()) || ($tis->getAnneeFin())) {
-                            if (!$tis->getAnneeDebut()) echo 'Jusqu\'en ' . $tis->getAnneeFin();
-                            else {
-                                if (!$tis->getAnneeFin()) echo 'À partir de ' . $tis->getAnneeDebut();
-                                else echo 'de ' . $tis->getAnneeDebut() . ' à ' . $tis->getAnneeFin();
+                            if (!$tis->getAnneeDebut()) {
+                                echo 'Jusqu\'en ' . $tis->getAnneeFin();
+                            } else {
+                                if (!$tis->getAnneeFin()) {
+                                    echo 'À partir de ' . $tis->getAnneeDebut();
+                                } else echo 'de ' . $tis->getAnneeDebut() . ' à ' . $tis->getAnneeFin();
                             }
                         } else echo 'Permanente';
                         ?>

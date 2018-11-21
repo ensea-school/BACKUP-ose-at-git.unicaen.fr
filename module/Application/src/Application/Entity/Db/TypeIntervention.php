@@ -94,16 +94,6 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
 
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->typeInterventionStructure = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-
-
     public function __toString()
     {
         return (string)$this->getCode();
@@ -263,10 +253,10 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
                 $tisAnneeFin = $tis->getAnneeFin() ?: $this->getAnneeFin();
 
                 $valide = false;
-                if ($tisAnneeDeb && $tisAnneeDeb->getId() <= $annee) {
+                if ($tisAnneeDeb && $tisAnneeDeb->getId() <= $annee->getId()) {
                     $valide = true;
                 }
-                if ($tisAnneeFin && $tisAnneeFin->getId() >= $annee) {
+                if ($tisAnneeFin && $tisAnneeFin->getId() >= $annee->getId()) {
                     $valide = true;
                 }
 
@@ -276,10 +266,10 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
             return false;
         } else {
 
-            if ($this->getAnneeDebut() && $this->getAnneeDebut()->getId() > $annee) {
+            if ($this->getAnneeDebut() && $this->getAnneeDebut()->getId() > $annee->getId()) {
                 return false;
             }
-            if ($this->getAnneeFin() && $this->getAnneeFin()->getId() < $annee) {
+            if ($this->getAnneeFin() && $this->getAnneeFin()->getId() < $annee->getId()) {
                 return false;
             }
 
@@ -374,24 +364,10 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return \Doctrine\Common\Collections\Collection|TypeInterventionStructure
      */
-    public function getTypeInterventionStructure(Structure $structure = null, Annee $annee = null)
+    public function getTypeInterventionStructure()
     {
-        if ($structure) {
-            $tis = $this->typeInterventionStructure->filter(function (TypeInterventionStructure $t) use ($structure) {
-                return $t->getStructure() === $structure && $t->estNonHistorise();
-            });
-
-            if ($annee) {
-                $tis = $tis->filter(function (TypeInterventionStructure $t) use ($annee) {
-                    $aDeb = $t->getAnneeDebut() ? $t->getAnneeDebut()->getId() : 0;
-                    $aFin = $t->getAnneeFin() ? $t->getAnneeFin()->getId() : 9999999;
-                    $aId  = $annee->getId();
-
-                    return $aDeb <= $aId && $aId <= $aFin;
-                });
-            }
-
-            return $tis;
+        if (!$this->typeInterventionStructure) {
+            $this->typeInterventionStructure = new \Doctrine\Common\Collections\ArrayCollection();
         }
 
         return $this->typeInterventionStructure;

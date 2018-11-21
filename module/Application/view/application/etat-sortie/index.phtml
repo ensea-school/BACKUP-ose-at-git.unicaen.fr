@@ -1,0 +1,90 @@
+<?php
+
+use Application\Entity\Db\EtatSortie;
+use Application\Provider\Privilege\Privileges;
+
+/**
+ * @var $this        \Application\View\Renderer\PhpRenderer
+ * @var $etatsSortie EtatSortie[]
+ */
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_ADMINISTRATION_EDITION));
+
+
+/* On réutilise l'ACE d'UnicaenImport (pas top) */
+echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/import/ace-builds-master/src-min/ace.js');
+
+?>
+<h1 class="page-header">États de sortie</h1>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Libellé</th>
+        <th style="width:1%">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($etatsSortie as $etatSortie): ?>
+        <tr>
+            <td><?= $etatSortie->getCode(); ?></td>
+            <td><?= $etatSortie->getLibelle(); ?></td>
+            <td style="white-space: nowrap">
+                <?php if ($canEdit): ?>
+                    <a class="ajax-modal" data-event="etats-sortie-saisir"
+                       href="<?= $this->url('etat-sortie/saisir', ['etatSortie' => $etatSortie->getId()]) ?>">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <a class="pop-ajax"
+                       data-event="type-intervention-saisie"
+                       href="<?= $this->url('etat-sortie/supprimer', ['etatSortie' => $etatSortie->getId()]) ?>"
+                       title="Supprimer l'état de sortie"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                <?php endif; ?>&nbsp;
+                <?php if ($etatSortie->hasFichier()) {
+
+                    echo $this->tag('a', [
+                        'class' => 'btn btn-default btn-xs',
+                        'href'  => $this->url('etat-sortie/telecharger', ['etatSortie' => $etatSortie->getId()]),
+                    ])->text('Télécharger le modèle');
+
+                    echo $this->tag('a', [
+                        'class' => 'btn btn-default btn-xs',
+                        'href'  => $this->url('etat-sortie/generer-pdf', ['etatSortie' => $etatSortie->getId()]),
+                    ])->text('Extraction en PDF');
+
+                    echo $this->tag('a', [
+                        'class' => 'btn btn-default btn-xs',
+                        'href'  => $this->url('etat-sortie/generer-csv', ['etatSortie' => $etatSortie->getId()]),
+                    ])->text('Extraction pour tableur (CSV)');
+                } ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit): ?>
+    <a class="btn btn-primary ajax-modal" data-event="etats-sortie-saisir" href="<?= $this->url('etat-sortie/saisir') ?>">
+        <span class="glyphicon glyphicon-plus"></span>
+        Ajouter un état de sortie
+    </a>
+<?php endif; ?>
+<script>
+
+    $(function () {
+
+        $("body").on("etats-sortie-saisir", function (event, data) {
+            window.location.reload();
+        });
+
+    });
+
+</script>

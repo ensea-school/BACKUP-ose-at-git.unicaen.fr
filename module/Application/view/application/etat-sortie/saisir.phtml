@@ -2,11 +2,11 @@
 
 /**
  * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $form  ModeleForm
+ * @var $form  EtatSortieForm
  * @var $title string
  */
 
-use Application\Form\Contrat\ModeleForm;
+use Application\Form\EtatSortieForm;
 
 ?>
 <h1 class="page-header"><?php echo $title ?></h1>
@@ -18,45 +18,44 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->form()->openTag($form);
 
 ?>
-
-<?= $this->formControlGroup($form->get('libelle')) ?>
 <div class="row">
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('structure')) ?>
-    </div>
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('statut-intervenant')) ?>
-    </div>
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('code')) ?></div>
+    <div class="col-md-8"><?= $this->formControlGroup($form->get('libelle')) ?></div>
 </div>
 <?= $this->formControlGroup($form->get('fichier')) ?>
-<div class="alert alert-info" role="alert">
-    Le champ "requête" ne doit être rempli que si des champs supplémentaires
-    (qui ne seraient pas fournis par la vue v_contrat_main) doivent être transmis au modèle pour publipostage.
-    En outre, une variable <b>:contrat</b> doit être insérée dans la requête pour que l'outil de publipostage puisse
-    lui transmettre l'identifiant du contrat qui a été demandé.<br />
-    Exemple de requête :
-    <pre style="padding:1px;font-size: 8pt">SELECT "n"+1 "n2"
-FROM   v_contrat_main c
-WHERE  c.contrat_id = :contrat</pre>
+<h2>Requête principale <small>(facultative)</small></h2>
+<div class="panel panel-default etat-sortie-requete">
+    <div class="panel-heading" role="tab">
+        <label>Champ clé : </label>
+        <?= $this->formText($form->get('cle')) ?>
+        &nbsp;<label>Saut de page automatique : </label>
+        <?= $this->formCheckbox($form->get('auto-break')) ?>
+    </div>
+    <div class="panel-body">
+        <?= $this->formTextarea($form->get('requete')) ?>
+    </div>
 </div>
-<?= $this->formControlGroup($form->get('requete')) ?>
-
+<h2>Requêtes par zones</h2>
 <div class="panel-group" id="blocs" role="tablist" aria-multiselectable="true">
 
     <?php for ($i = 1; $i <= 10; $i++): ?>
-    <div class="panel panel-default modele-contrat-bloc" id="bloc<?= $i ?>">
-        <div class="panel-heading" role="tab" id="headingOne">
-           <label>Champ de référence : </label> <?= $this->formText($form->get("bloc-$i-nom")) ?>
-        </div>
-        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
-            <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
+        <div class="panel panel-default etat-sortie-bloc" id="bloc<?= $i ?>">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <label>Champ de référence : </label>
+                <?= $this->formText($form->get("bloc-$i-nom")) ?>
+                &nbsp;<label>Zone : </label>
+                <?= $this->formSelect($form->get("bloc-$i-zone")) ?>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
+                </div>
             </div>
         </div>
-    </div>
     <?php endfor; ?>
     <button type="button" class="btn btn-default btn-xs ajout-bloc">
-        <span class="glyphicon glyphicon-plus"></span> Ajouter un bloc</button>
+        <span class="glyphicon glyphicon-plus"></span> Ajouter une requête
+    </button>
 </div>
 <?php
 echo $this->formSubmit($form->get('submit'));
@@ -68,7 +67,7 @@ echo $this->form()->closeTag();
 
     $(function ()
     {
-        $.widget("ose.contratModelesEditer", {
+        $.widget("ose.etatSortieSaisir", {
             requeteEditor: null,
             blocs: {},
 
@@ -89,32 +88,32 @@ echo $this->form()->closeTag();
                 }
             },
 
-            ajoutBloc: function()
+            ajoutBloc: function ()
             {
                 for (var i = 1; i <= 10; i++) {
-                    if (!this.isBlocRempli(i)){
+                    if (!this.isBlocRempli(i)) {
                         this.showBloc(i);
                         break;
                     }
                 }
             },
 
-            isBlocRempli: function(bloc)
+            isBlocRempli: function (bloc)
             {
-                var res = this.element.find('bloc-'+bloc+'-nom').val() != ''
+                var res = this.element.find('bloc-' + bloc + '-nom').val() != ''
                     && this.blocs[bloc].getSession().getValue() != '';
 
                 return res;
             },
 
-            showBloc: function(bloc)
+            showBloc: function (bloc)
             {
-                this.element.find(".modele-contrat-bloc#bloc"+bloc).show();
+                this.element.find(".etat-sortie-bloc#bloc" + bloc).show();
             },
 
-            hideBloc: function(bloc)
+            hideBloc: function (bloc)
             {
-                this.element.find(".modele-contrat-bloc#bloc"+bloc).hide();
+                this.element.find(".etat-sortie-bloc#bloc" + bloc).hide();
             },
 
             _create: function ()
@@ -122,7 +121,7 @@ echo $this->form()->closeTag();
                 var that = this;
 
                 that.element.find('.btn-save').click(function () { that.save();});
-                that.element.find('.ajout-bloc').click(function(){that.ajoutBloc()});
+                that.element.find('.ajout-bloc').click(function () {that.ajoutBloc()});
 
                 var options = {
                     minLines: 15, maxLines: 30,
@@ -139,38 +138,45 @@ echo $this->form()->closeTag();
                     that.blocs[i].getSession().setMode("ace/mode/sql");
                     that.blocs[i].setOptions(options);
 
-                    if (that.isBlocRempli(i)){
+                    if (that.isBlocRempli(i)) {
                         that.showBloc(i);
-                    }else{
+                    } else {
                         that.hideBloc(i);
                     }
                 }
             }
         });
 
-        WidgetInitializer.add('contrat-modeles-editer', 'contratModelesEditer');
+        WidgetInitializer.add('etat-sortie-saisir', 'etatSortieSaisir');
     });
 
 </script>
 <style>
-    .modele-contrat-bloc {
+    .etat-sortie-saisir .etat-sortie-bloc {
         display: none;
     }
 
-    .modele-contrat-bloc .panel-heading {
+    .etat-sortie-saisir .etat-sortie-bloc .panel-heading .form-control {
+        display: inline;
+    }
+
+    .etat-sortie-saisir #fichier {
+        height: none;
+    }
+
+    .etat-sortie-saisir .panel-heading {
         padding-top: 3px;
         padding-bottom: 3px;
     }
 
-    .modele-contrat-bloc .panel-heading .form-control {
-        display: inline;
+    .etat-sortie-saisir .panel-body {
+        padding: 0px;
     }
 
-    .modele-contrat-bloc .panel-heading .bloc-nom {
-        width: 70%;
-    }
-
-    #fichier {
-        height: none;
+    .etat-sortie-saisir .ace_editor {
+        border: none;
+        border-radius: 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
     }
 </style>

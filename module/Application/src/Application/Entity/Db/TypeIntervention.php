@@ -249,31 +249,16 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         if ($tisList->count() > 0) {
             foreach ($tisList as $tis) {
-                $tisAnneeDeb = $tis->getAnneeDebut() ?: $this->getAnneeDebut();
-                $tisAnneeFin = $tis->getAnneeFin() ?: $this->getAnneeFin();
-
-                $valide = false;
-                if ($tisAnneeDeb && $tisAnneeDeb->getId() <= $annee->getId()) {
-                    $valide = true;
-                }
-                if ($tisAnneeFin && $tisAnneeFin->getId() >= $annee->getId()) {
-                    $valide = true;
-                }
-
-                if ($valide) return true;
+                if ($tis->isValide($annee)) return true;
             }
 
             return false;
         } else {
+            $deb = $this->getAnneeDebut() ? $this->getAnneeDebut()->getId() : 0;
+            $fin = $this->getAnneeFin() ? $this->getAnneeFin()->getId() : 99999;
+            $a   = $annee->getId();
 
-            if ($this->getAnneeDebut() && $this->getAnneeDebut()->getId() > $annee->getId()) {
-                return false;
-            }
-            if ($this->getAnneeFin() && $this->getAnneeFin()->getId() < $annee->getId()) {
-                return false;
-            }
-
-            return true;
+            return $a >= $deb && $a <= $fin;
         }
     }
 
@@ -328,6 +313,20 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
+     * @return string[]
+     */
+    public function getRegles(): array
+    {
+        $regles = [];
+        if ($this->getRegleFC()) $regles[] = 'FC';
+        if ($this->getRegleFOAD()) $regles[] = 'FOAD';
+
+        return $regles;
+    }
+
+
+
+    /**
      * Add typeInterventionStructure
      *
      * @param TypeInterventionStructure $typeInterventionStructure
@@ -366,11 +365,21 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getTypeInterventionStructure()
     {
-        if (!$this->typeInterventionStructure) {
-            $this->typeInterventionStructure = new \Doctrine\Common\Collections\ArrayCollection();
-        }
-
         return $this->typeInterventionStructure;
+    }
+
+
+
+    /**
+     * Get typeInterventionStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection|TypeInterventionStructure
+     */
+    public function getTypeInterventionStructureValides(Annee $annee)
+    {
+        return $this->typeInterventionStructure->filter(function(TypeInterventionStructure $tis) use ($annee){
+            return $tis->isValide($annee);
+        });
     }
 
 

@@ -1,54 +1,20 @@
 <?php
-/**
- * @var $this                         \Application\View\Renderer\PhpRenderer
- * @var $TypesInterventions           \Application\Entity\Db\TypeIntervention[]
- * @var $TypesInterventionsStructures \Application\Entity\Db\TypeInterventionStructures[]
- * @var $ti                           \Application\Entity\Db\TypeIntervention
- * @var $typesInterventionsStructures \Application\Entity\Db\TypeInterventionStructure[]
- *
- */
 
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Privilege\Privileges;
 use UnicaenApp\Util;
+
+/**
+ * @var $this                         \Application\View\Renderer\PhpRenderer
+ * @var $typesInterventions           TypeIntervention[]
+ * @var $annee                        Annee
+ */
 
 $this->headTitle()->append("Types d'interventions");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENTION_EDITION));
 ?>
-
-<style>
-    .triables {
-        align: left;
-    }
-
-    .champ-triable tr {
-        align: left;
-    }
-</style>
-
-<script type="text/javascript">
-
-    $(function () {
-
-        $(".triables").sortable({
-            handle: '.glyphicon-move',
-            axis: 'y',
-            update: function (event, ui) {
-                var champsIds = '';
-                ui.item.parent().find('tr.champ-triable').each(function () {
-                    if (champsIds != '') champsIds += ',';
-                    champsIds += $(this).data('id');
-                });
-                console.debug(champsIds);
-                $.post(Url('type-intervention/type-intervention-trier'), {champsIds: champsIds}).done(function (res) {
-                    alertFlash(res.msg, 'success', 3000);
-                });
-            }
-        });
-    });
-    //        $(".triables").disableSelection();
-</script>
-
 <h1 class="page-header">Types d'interventions</h1>
 
 <table class="table table-bordered table-condensed table-hover">
@@ -60,127 +26,93 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
         <th rowspan="2">Effective</th>
         <th rowspan="2">Règles</th>
         <th rowspan="2" style="text-align:center;">Visibilité</th>
-        <?php if ($canEdit) echo '<th rowspan="2">Actions</th>' ?>
+        <?php if ($canEdit): ?>
+            <th rowspan="2">Actions</th><?php endif; ?>
     </tr>
     <tr>
-        <td class="table-bordered">
-            service
-        </td>
+        <td class="table-bordered">service</td>
         <td class="table-bordered">compl.</td>
     </tr>
     </thead>
     <tbody class="triables">
-    <tr></tr>
     <?php foreach ($typesInterventions as $ti): ?>
-    <tr class="champ-triable" data-id="<?= $ti->getId() ?>">
-        <td>
-            <?= $ti->getCode() ?>&nbsp;
-        </td>
-        <td><?= $ti->getLibelle() ?></td>
-        <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdService()) ?></td>
-        <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
-        <td>
-            <?php
-            if (($ti->getAnneeDebut()) || ($ti->getAnneeFin())) {
-                if (!$ti->getAnneeDebut()) {
-                    echo 'Jusqu\'en ' . $ti->getAnneeFin();
-                } else {
-                    if (!$ti->getAnneeFin()) {
-                        echo 'À partir de ' . $ti->getAnneeDebut();
-                    } else echo 'de ' . $ti->getAnneeDebut() . ' à ' . $ti->getAnneeFin();
-                }
-            } else echo 'Permanente';
-            ?>
-        </td>
-        <td><?php
-            $saut = 0;
-            if ($ti->getRegleFOAD()) {
-                $saut = 1;
-                echo 'FOAD';
-            }
-            if ($ti->getRegleFC()) {
-                if ($saut) echo '<br>';
-                echo 'FC';
-                $saut = 1;
-            }
-            ?>
-        </td>
-        <td style="text-align:left;">
-        <?= ($ti->isVisible() ? 'Visible' : 'Caché') . ' - ' . ($ti->isVisibleExterieur() ? 'Visible de l\'extérieur' : 'Pas visible de l\'extérieur');
-        if ($canEdit) {
-            ?>
-            <a class="btn btn-default btn-xs pop-ajax" data-event="type-intervention-saisie" style="float:right"
-               href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
-               title="Ajouter un type d'intervention pour une structure"
-               data-submit-reload="true">
-                Ajouter une exception pour une structure</a>
-        <?php }
-        $saut = 0;
-        foreach ($typesInterventionsStructures as $tis) {
-            if ($tis->getTypeIntervention() == $ti) {
-                $saut++;
-                if ($saut == 1) echo '<br><br><table class="table table-bordered table-condensed table-extra-condensed">'
+        <tr class="champ-triable" data-id="<?= $ti->getId() ?>">
+            <td>
+                <?= $ti->getCode() ?>&nbsp;
+            </td>
+            <td><?= $ti->getLibelle() ?></td>
+            <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdService()) ?></td>
+            <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
+            <td><?= validiteIntervalle($ti->getAnneeDebut(), $ti->getAnneeFin()); ?></td>
+            <td><?= implode(', ', $ti->getRegles()) ?></td>
+            <td style="text-align:left;">
+                <?= ($ti->isVisible() ? 'Visible' : 'Caché') . ' - ' . ($ti->isVisibleExterieur() ? 'Visible en saisie extérieure' : 'Caché pour la saisie extérieure'); ?>
+                <?php
+                $tisList = $ti->getTypeInterventionStructureValides($annee);
+                $hasTis  = $tisList->count() > 0;
                 ?>
-                <tr>
-                    <td><?= ($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
-                    <td>
-                        <?php
-                        if (($tis->getAnneeDebut()) || ($tis->getAnneeFin())) {
-                            if (!$tis->getAnneeDebut()) {
-                                echo 'Jusqu\'en ' . $tis->getAnneeFin();
-                            } else {
-                                if (!$tis->getAnneeFin()) {
-                                    echo 'À partir de ' . $tis->getAnneeDebut();
-                                } else echo 'de ' . $tis->getAnneeDebut() . ' à ' . $tis->getAnneeFin();
-                            }
-                        } else echo 'Permanente';
-                        ?>
-                    </td>
-                    <?php
-                    if ($canEdit) {
-                        ?>
-                        <td style="width: 50px;">
-                            <a class="pop-ajax" data-min-width="400" data-event="type-intervention-saisie"
-                               href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>"
-                               data-submit-reload="true">
-                                <span class="glyphicon glyphicon-edit"></span></a>
-                            <a class="pop-ajax" data-event="type-intervention-saisie"
-                               href="<?= $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"
-                               title="Supprimer le type d'intervention"
-                               data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                               data-confirm="true" data-confirm-button="Oui"
-                               data-cancel-button="Non"
-                               data-submit-reload="true">
-                                <span class="glyphicon glyphicon-trash"></span></a>
-                        </td>
-                    <?php } ?>
-                </tr>
-            <?php }
-        }
-        if ($saut > 0) echo '</table>'
-        ?>
-        </td>
-        <?php if ($canEdit): ?>
-            <td style="text-align:center;width:1px;white-space: nowrap">
+                <?php if ($hasTis): ?>
+                    <table class="table table-bordered table-condensed table-extra-condensed tbl-tis">
+                        <?php foreach ($tisList as $tis) : ?>
+                            <tr>
+                                <td><?= ($tis->isVisible() ? $tis->getStructure() : '<s>' . $tis->getStructure() . '</s>') ?></td>
+                                <td><?= validiteIntervalle($tis->getAnneeDebut(), $tis->getAnneeFin()); ?></td>
+                                <?php if ($canEdit): ?>
+
+                                    <td style="width: 50px;">
+                                        <a class="pop-ajax"
+                                           data-min-width="400"
+                                           data-event="type-intervention-saisie"
+                                           href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId(), 'typeInterventionStructure' => $tis->getId()]); ?>"
+                                           data-submit-reload="true">
+                                            <span class="glyphicon glyphicon-edit"></span></a>
+                                        <a class="pop-ajax"
+                                           data-event="type-intervention-saisie"
+                                           href="<?= $this->url('type-intervention/type-intervention-structure-delete', ['typeInterventionStructure' => $tis->getId()]) ?>"
+                                           title="Supprimer le type d'intervention"
+                                           data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                                           data-confirm="true" data-confirm-button="Oui"
+                                           data-cancel-button="Non"
+                                           data-submit-reload="true">
+                                            <span class="glyphicon glyphicon-trash"></span></a>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                <?php endif; ?>
+                <?php if ($canEdit) : ?>
+                    <a class="btn btn-default btn-xs pop-ajax"
+                       data-event="type-intervention-saisie"
+                       style="float:right"
+                       href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
+                       title="Ajouter un type d'intervention pour une structure"
+                       data-submit-reload="true">
+                        Ajouter une exception pour une structure</a>
+                <?php endif; ?>
+            </td>
+            <?php if ($canEdit): ?>
+                <td style="text-align:center;width:1px;white-space: nowrap">
                     <span class="glyphicon glyphicon-move"
                           title="Vous pouvez trier les champs en déplaçant les lignes du tableau"></span>
-                <a class="ajax-modal" data-event="type-intervention-saisie"
-                   href="<?= $this->url('type-intervention/saisie', ['typeIntervention' => $ti->getId()]) ?>"
-                   title="Modifier le type d'intervention">
-                    <span class="glyphicon glyphicon-edit"></span></a>
-                <a class="pop-ajax"
-                   href="<?= $this->url('type-intervention/delete', ['typeIntervention' => $ti->getId()]) ?>"
-                   title="Supprimer le type d'intervention"
-                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
-                   data-confirm="true"
-                   data-confirm-button="Oui"
-                   data-cancel-button="Non"
-                   data-submit-reload="true"
-                >
-                    <span class="glyphicon glyphicon-trash"></span>
-                </a>
-            </td>
-        <?php endif; // $ti ?>
+                    <a class="ajax-modal"
+                       data-event="type-intervention-saisie"
+                       href="<?= $this->url('type-intervention/saisie', ['typeIntervention' => $ti->getId()]) ?>"
+                       title="Modifier le type d'intervention">
+                        <span class="glyphicon glyphicon-edit"></span></a>
+                    <a class="pop-ajax"
+                       href="<?= $this->url('type-intervention/delete', ['typeIntervention' => $ti->getId()]) ?>"
+                       title="Supprimer le type d'intervention"
+                       data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                       data-confirm="true"
+                       data-confirm-button="Oui"
+                       data-cancel-button="Non"
+                       data-submit-reload="true"
+                    >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            <?php endif; // $ti ?>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -197,6 +129,35 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             $("body").on("type-intervention-saisie", function (event, data) {
                 window.location.reload();
             });
+
+            $(".triables").sortable({
+                handle: '.glyphicon-move',
+                axis: 'y',
+                update: function (event, ui) {
+                    var champsIds = '';
+                    ui.item.parent().find('tr.champ-triable').each(function () {
+                        if (champsIds != '') champsIds += ',';
+                        champsIds += $(this).data('id');
+                    });
+                    console.debug(champsIds);
+                    $.post(Url('type-intervention/type-intervention-trier'), {champsIds: champsIds}).done(function (res) {
+                        alertFlash(res.msg, 'success', 3000);
+                    });
+                }
+            });
         });
     </script>
 <?php endif; ?>
+<style>
+    .triables {
+        align: left;
+    }
+
+    .champ-triable tr {
+        align: left;
+    }
+
+    .tbl-tis {
+        margin-bottom: 1px;
+    }
+</style>

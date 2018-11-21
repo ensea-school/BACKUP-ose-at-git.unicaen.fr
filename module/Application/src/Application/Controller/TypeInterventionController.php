@@ -30,17 +30,17 @@ class TypeInterventionController extends AbstractController
             TypeInterventionStructure::class,
         ]);
 
-        $annee = $this->getServiceContext()->getAnnee();
+        $annee  = $this->getServiceContext()->getAnnee();
         $tiList = $this->getServiceTypeIntervention()->getList();
 
         $typesInterventions = [];
-        foreach($tiList as $ti ){
-            if ($ti->isValide($annee)){
+        foreach ($tiList as $ti) {
+            if ($ti->isValide($annee)) {
                 $typesInterventions[] = $ti;
             }
         }
 
-        return compact('typesInterventions');
+        return compact('typesInterventions', 'annee');
     }
 
 

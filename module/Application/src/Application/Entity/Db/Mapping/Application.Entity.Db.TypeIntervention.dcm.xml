@@ -24,6 +24,10 @@
         </many-to-one>
         <field name="regleFOAD" type="boolean" column="REGLE_FOAD" nullable="false"/>
         <field name="regleFC" type="boolean" column="REGLE_FC" nullable="false"/>
+
+        <one-to-many field="typeInterventionStructure" target-entity="Application\Entity\Db\TypeInterventionStructure"
+                     mapped-by="typeIntervention"/>
+
         <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
             <join-columns>
                 <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

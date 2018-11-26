@@ -389,6 +389,7 @@ class EtatSortie
             if ($this->{$nomVar} && $this->{$requeteVar}) {
                 $blocs[$this->{$nomVar}] = [
                     'nom'     => $this->{$nomVar},
+                    'numero'  => $i,
                     'requete' => $this->{$requeteVar},
                     'zone'    => $this->{$zoneVar},
                 ];

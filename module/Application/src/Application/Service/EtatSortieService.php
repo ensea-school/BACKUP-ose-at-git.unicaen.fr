@@ -62,24 +62,71 @@ class EtatSortieService extends AbstractEntityService
 
 
 
-    private function generateData(EtatSortie $etatSortie, array $filtres)
+    public function genererCsv(EtatSortie $etatSortie, array $filtres)
     {
-        $connection = $this->getEntityManager()->getConnection();
+        $data = $this->generateData($etatSortie, $filtres);
 
-        if ($etatSortie->getCle()) return $this->generateDataWithCle($etatSortie, $filtres);
+        $blocs = $etatSortie->getBlocs();
+        $bkey = null;
+        foreach( $blocs as $bloc){
+            $bkey = $bloc['nom'].'@'.$bloc['zone'];
+            break;
+        }
+        $data = [195 => $data[195]];
+        $res = [];
+        foreach ($data as $k => $d) {
 
-        if (!$etatSortie->getRequete()){
-            throw new \Exception('Aucune requête n\'est associée à l\'état de sortie');
+            /* On récupère les sous-données éventuelles */
+            if (array_key_exists($bkey, $d)){
+                $bdata = $d[$bkey];
+            }else{
+                $bdata = null;
+            }
+
+            /* On supprime toutes les sous-données */
+            foreach( $d as $dk => $dv ){
+                if (false !== strpos($dk, '@')){
+                    unset($d[$dk]);
+                }
+            }
+
+            /* Si il y a des sous-données */
+            if ($bdata){
+                foreach( $bdata as $bd ){
+                    $res[] = $d + $bd;
+                }
+            }else{
+                $res[] = $d;
+            }
+
         }
 
-        return $this->connFetch($etatSortie->getRequete(), $filtres);
+        return $res;
+    }
+
+
+
+    private function generateData(EtatSortie $etatSortie, array $filtres)
+    {
+        if ($etatSortie->getCle()) return $this->generateDataWithCle($etatSortie, $filtres);
+
+        if ($etatSortie->getRequete()) {
+            return $this->connFetch($etatSortie->getRequete(), $filtres);
+        } else {
+            $blocs = $etatSortie->getBlocs();
+            foreach ($blocs as $bloc) {
+                return [0 => [$bloc['nom'] . '@' . $bloc['zone'] => $this->connFetch($bloc['requete'], $filtres)]];
+            }
+        }
+
+        throw new \Exception('Aucune requête n\'est associée à l\'état de sortie');
     }
 
 
 
     private function generateDataWithCle(EtatSortie $etatSortie, array $filtres)
     {
-        $cle        = $etatSortie->getCle();
+        $cle = $etatSortie->getCle();
 
         $data = [];
 
@@ -95,13 +142,13 @@ class EtatSortieService extends AbstractEntityService
 
         $blocs = $etatSortie->getBlocs();
         foreach ($blocs as $bname => $boptions) {
-            $bdata = $this->connBlocFetch($boptions['requete'], $etatSortie->getRequete(), $cle, $filtres);
-            $blocKey = $boptions['nom'].'@'.$boptions['zone'];
-            foreach( $bdata as $d ){
+            $bdata   = $this->connBlocFetch($boptions['requete'], $etatSortie->getRequete(), $cle, $filtres);
+            $blocKey = $boptions['nom'] . '@' . $boptions['zone'];
+            foreach ($bdata as $d) {
                 if (!array_key_exists($cle, $d)) {
-                    throw new \Exception('Aucune colonne de la requête de bloc "'.$bname.'" ne correspond à la clé "' . $cle . '"');
+                    throw new \Exception('Aucune colonne de la requête de bloc "' . $bname . '" ne correspond à la clé "' . $cle . '"');
                 }
-                if (!isset($data[$d[$cle]][$blocKey])){
+                if (!isset($data[$d[$cle]][$blocKey])) {
                     $data[$d[$cle]][$blocKey] = [];
                 }
 
@@ -119,11 +166,11 @@ class EtatSortieService extends AbstractEntityService
         $connection = $this->getEntityManager()->getConnection();
 
         $query = "SELECT q.* FROM ($sql) q WHERE 1=1";
-        foreach($filtres as $filtre => $null){
+        foreach ($filtres as $filtre => $null) {
             $query .= " AND q.\"$filtre\" = :$filtre";
         }
 
-        return $connection->fetchAll( $query, $filtres);
+        return $connection->fetchAll($query, $filtres);
     }
 
 
@@ -133,10 +180,10 @@ class EtatSortieService extends AbstractEntityService
         $connection = $this->getEntityManager()->getConnection();
 
         $query = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
-        foreach($filtres as $filtre => $null){
+        foreach ($filtres as $filtre => $null) {
             $query .= " AND mq.\"$filtre\" = :$filtre";
         }
 
-        return $connection->fetchAll( $query, $filtres);
+        return $connection->fetchAll($query, $filtres);
     }
 }

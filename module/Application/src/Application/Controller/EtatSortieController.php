@@ -5,9 +5,11 @@ namespace Application\Controller;
 
 use Application\Entity\Db\EtatSortie;
 use Application\Entity\Db\Fichier;
+use Application\Exception\DbException;
 use Application\Form\Traits\EtatSortieFormAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use UnicaenApp\Util;
+use UnicaenApp\View\Model\CsvModel;
 
 /**
  * Description of EtatSortieController
@@ -109,12 +111,20 @@ class EtatSortieController extends AbstractController
         /* @var $etatSortie EtatSortie */
         $etatSortie = $this->getEvent()->getParam('etatSortie');
 
-        $fichier = new Fichier();
-        $fichier->setNom(Util::reduce($etatSortie->getLibelle()) . '.odt');
-        $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
-        if ($etatSortie->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($etatSortie->getFichier(), -1, 0));
+        $filtres = $this->params()->fromPost() + $this->params()->fromQuery();
+
+        $data = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filtres);
+        if (isset($data[0])){
+            $head = array_keys($data[0]);
+        }else{
+            $head = [];
         }
-        $this->uploader()->download($fichier);
+
+        $csvModel = new CsvModel();
+        $csvModel->setHeader($head);
+        $csvModel->addLines($data);
+        $csvModel->setFilename($etatSortie->getLibelle().'.csv');
+
+        return $csvModel;
     }
 }

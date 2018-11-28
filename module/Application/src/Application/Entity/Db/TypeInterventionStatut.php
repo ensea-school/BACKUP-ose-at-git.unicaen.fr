@@ -123,7 +123,7 @@ protected $tauxHETDComplementaire;
      *
      * @return float
      */
-    public function getTauxHETDComplemntaire()
+    public function getTauxHETDComplementaire()
     {
         return $this->tauxHETDService;
     }

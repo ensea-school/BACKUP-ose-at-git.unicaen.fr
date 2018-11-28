@@ -40,7 +40,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             <td>
                 <?= $ti->getCode() ?>&nbsp;
             </td>
-            <td><?= $ti->getLibelle() ?></td>
+            <td><?= $this->typeInterventionAdmin($ti); ?></td>
             <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdService()) ?></td>
             <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
             <td><?= validiteIntervalle($ti->getAnneeDebut(), $ti->getAnneeFin()); ?></td>
@@ -117,6 +117,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     <?php endforeach; ?>
     </tbody>
 </table>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="type-intervention-saisie"
        href="<?= $this->url('type-intervention/saisie') ?>"

@@ -1,0 +1,54 @@
+<?php
+
+use Application\Entity\Db\TypeInterventionStatut;
+use Application\Provider\Privilege\Privileges;
+use UnicaenApp\Util;
+
+/**
+ * @var $this                         \Application\View\Renderer\PhpRenderer
+ * @var $typeInterventionStatuts           TypeInterventionStatut[]
+ * */
+
+$this->headTitle()->append("Statuts spécifique pour ".(count($typeInterventionStatuts)?$typeInterventionStatuts[0]->getTypeIntervention()->getLibelle():''));
+
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENTION_EDITION));
+?>
+<h1 class="page-header">Statuts spécifiques pour <?=(count($typeInterventionStatuts)?$typeInterventionStatuts[0]->getTypeIntervention()->getLibelle():'')?></h1>
+
+<table class="table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>Statut d'intervenant</th>
+        <th>Taux HETD service</th>
+        <th>Taux HETD complémentaire</th>
+        <?php if ($canEdit): ?>
+            <th>Actions</th><?php endif; ?>
+    </tr>
+    </thead>
+    <tbody class="triables">
+    <?php foreach ($typeInterventionStatuts as $tis): ?>
+        <tr>
+            <td>
+                <?= $tis->getStatutIntervenant()->getLibelle() ?>&nbsp;
+            </td>
+            <td>
+                <?= $tis->getTauxHETDService() ?>
+            </td>
+            <td>
+                <?= $tis->getTauxHETDComplementaire() ?>
+            </td>
+                                <?php if ($canEdit): ?>
+            <tr></tr>
+
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("type-intervention-saisie", function (event, data) {
+                window.location.reload();
+            });
+
+    </script>

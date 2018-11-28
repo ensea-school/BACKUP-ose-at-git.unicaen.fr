@@ -43,6 +43,12 @@ class TypeInterventionController extends AbstractController
         return compact('typesInterventions', 'annee');
     }
 
+    public function statutAction()
+    {
+        $typeIntervention =         $typeIntervention = $this->getEvent()->getParam('typeIntervention');
+        $typeInterventionStatuts=$typeIntervention->getTypeInterventionStatut();
+        return compact('typeInterventionStatuts');
+    }
 
 
     public function saisieAction()

@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Application\Entity\Db\TypeInterventionStatut;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -77,6 +78,11 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     private $typeInterventionStructure;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typeInterventionStatut;
 
     /**
      * regleFOAD
@@ -494,4 +500,13 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return 'TypeIntervention';
     }
 
+    /**
+     * Get typeInterventionStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection|TypeInterventionStatut
+     */
+    public function getTypeInterventionStatut()
+    {
+        return $this->typeInterventionStatut;
+    }
 }

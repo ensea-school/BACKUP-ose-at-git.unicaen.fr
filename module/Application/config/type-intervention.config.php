@@ -32,6 +32,19 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'statut'                             => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/statut[/:typeIntervention]',
+                            'constraints' => [
+                                'typeIntervention' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'statut',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'delete'                             => [
                         'type'          => 'Segment',
                         'options'       => [
@@ -118,7 +131,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
-                    'action'     => ['index'],
+                    'action'     => ['index','statut'],
                     'privileges' => [Privileges::TYPE_INTERVENTION_VISUALISATION],
                 ],
                 [
@@ -143,6 +156,12 @@ return [
         'invokables' => [
             Form\TypeIntervention\TypeInterventionSaisieForm::class          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
             Form\TypeIntervention\TypeInterventionStructureSaisieForm::class => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
+            Form\TypeIntervention\TypeInterventionStatutSaisieForm::class => Form\TypeIntervention\TypeInterventionStatutSaisieForm::class,
+        ],
+    ],
+    'view_helpers'    => [
+        'invokables' => [
+            'typeInterventionAdmin' => View\Helper\TypeInterventionAdminViewHelper::class,
         ],
     ],
 ];

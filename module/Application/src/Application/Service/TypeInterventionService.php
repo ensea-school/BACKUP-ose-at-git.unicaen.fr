@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\TypeInterventionStatut;
 
 /**
  * Description of TypeIntervention
@@ -98,5 +99,4 @@ class TypeInterventionService extends AbstractEntityService
             return null;
         }
     }
-
 }

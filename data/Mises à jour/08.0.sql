@@ -40,7 +40,7 @@ INSERT INTO parametre (
     ) VALUES (
                  parametre_id_seq.nextval,
                  'structure_univ',
-                 (SELECT id FROM structure WHERE source_code = 'UNIV'),
+                 null,
                  'Composante représentant l''université (utile éventuellement pour la forpule de calcul)',
                  sysdate,
                  (select id from utilisateur where username='oseappli'),

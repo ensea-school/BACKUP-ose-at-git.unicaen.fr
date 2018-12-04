@@ -17,6 +17,9 @@ en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiem
 
 * Interface de paramétrage des centres de coûts dans le menu Administration.
 
+* Paramétrages généraux : la composante représentant l'université (de niveau 1 donc) peut maintenant se paramétrer directement 
+dans l'interface d'administration.
+
 ## Notes de mise à jour
 
 #OSE 7.0.5

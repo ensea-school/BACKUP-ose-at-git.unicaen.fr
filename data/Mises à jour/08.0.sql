@@ -28,7 +28,25 @@ FROM (SELECT 'etat-sortie' c, 'administration-visualisation' p, 'Administration 
       UNION ALL SELECT 'etat-sortie' c, 'administration-edition' p, 'Administration (édition)' l FROM dual) t1;
 
 
-
+INSERT INTO parametre (
+    id,
+    nom,
+    valeur,
+    description,
+    histo_creation,
+    histo_createur_id,
+    histo_modification,
+    histo_modificateur_id
+    ) VALUES (
+                 parametre_id_seq.nextval,
+                 'structure_univ',
+                 (SELECT id FROM structure WHERE source_code = 'UNIV'),
+                 'Composante représentant l''université (utile éventuellement pour la forpule de calcul)',
+                 sysdate,
+                 (select id from utilisateur where username='oseappli'),
+                 sysdate,
+                 (select id from utilisateur where username='oseappli')
+                 );
 
 
 -- =!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=

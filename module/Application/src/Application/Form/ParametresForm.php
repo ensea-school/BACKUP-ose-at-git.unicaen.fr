@@ -7,6 +7,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
+use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
@@ -24,6 +25,7 @@ class ParametresForm extends AbstractForm
     use UtilisateurServiceAwareTrait;
     use ScenarioServiceAwareTrait;
     use PaysServiceAwareTrait;
+    use StructureServiceAwareTrait;
 
     public function init()
     {
@@ -48,6 +50,21 @@ class ParametresForm extends AbstractForm
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
                 'label' => 'Pour l\'import',
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Select',
+            'name' => 'structure_univ',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceStructure()->getList(
+                    $this->getServiceStructure()->finderByHistorique()
+                )),
+                'label' => 'Composante représentant l\'université',
             ],
             'attributes' => [
                 'class' => 'selectpicker',

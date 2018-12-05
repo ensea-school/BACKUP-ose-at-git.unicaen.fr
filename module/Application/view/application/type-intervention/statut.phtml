@@ -5,15 +5,16 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenApp\Util;
 
 /**
- * @var $this                         \Application\View\Renderer\PhpRenderer
+ * @var $this                              \Application\View\Renderer\PhpRenderer
  * @var $typeInterventionStatuts           TypeInterventionStatut[]
  * */
 
-$this->headTitle()->append("Statuts spécifique pour ".(count($typeInterventionStatuts)?$typeInterventionStatuts[0]->getTypeIntervention()->getLibelle():''));
+$this->headTitle()->append("Statuts spécifique pour " . (count($typeInterventionStatuts) ? $typeInterventionStatuts[0]->getTypeIntervention()->getLibelle() : ''));
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENTION_EDITION));
 ?>
-<h1 class="page-header">Statuts spécifiques pour <?=(count($typeInterventionStatuts)?$typeInterventionStatuts[0]->getTypeIntervention()->getLibelle():'')?></h1>
+<h1 class="page-header">Statuts spécifiques
+    pour <?= (count($typeInterventionStatuts) ? $typeInterventionStatuts[0]->getTypeIntervention()->getLibelle() : '') ?></h1>
 
 <table class="table table-bordered table-condensed table-hover">
     <thead>
@@ -28,27 +29,53 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     <tbody class="triables">
     <?php foreach ($typeInterventionStatuts as $tis): ?>
         <tr>
+        <td>
+            <?= $tis->getStatutIntervenant()->getLibelle() ?>&nbsp;
+        </td>
+        <td>
+            <?= $tis->getTauxHETDService() ?>
+        </td>
+        <td>
+            <?= $tis->getTauxHETDComplementaire() ?>
+        </td>
+        <?php if ($canEdit): ?>
             <td>
-                <?= $tis->getStatutIntervenant()->getLibelle() ?>&nbsp;
+                <a class="pop-ajax"
+                   data-min-width="400"
+                   data-event="type-intervention-statut"
+                   href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $tis->getTypeIntervention()->getId(),'typeInterventionStatut' => $tis->getId()]); ?>"
+                   data-submit-reload="true">
+                    <span class="glyphicon glyphicon-edit"></span></a>
+                <a class="pop-ajax"
+                   data-event="type-intervention-statut"
+                   href="<?= $this->url('type-intervention/statut-delete', ['typeInterventionStatut' => $tis->getId()]) ?>"
+                   title="Supprimer le type d'intervention"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                   data-confirm="true" data-confirm-button="Oui"
+                   data-cancel-button="Non"
+                   data-submit-reload="true">
+                    <span class="glyphicon glyphicon-trash"></span></a>
             </td>
-            <td>
-                <?= $tis->getTauxHETDService() ?>
-            </td>
-            <td>
-                <?= $tis->getTauxHETDComplementaire() ?>
-            </td>
-                                <?php if ($canEdit): ?>
-            <tr></tr>
 
-                                <?php endif; ?>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
+        <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit) : ?>
+    <a class="btn btn-default btn-xs pop-ajax"
+       data-event="type-intervention-statut"
+       style="float:right"
+       href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $tis->getTypeIntervention()->getId()]) ?>"
+       title="Ajouter un statut spécifique pour le type d'intervention pour une structure"
+       data-submit-reload="true">
+        Ajouter un statut pour le type d\'intervention</a>
+<?php endif; ?>
 
-    <script type="text/javascript">
-        $(function () {
-            $("body").on("type-intervention-saisie", function (event, data) {
-                window.location.reload();
-            });
+<script type="text/javascript">
+    $(function () {
+        $("body").on("type-intervention-statut", function (event, data) {
+            window.location.reload();
+        });
 
-    </script>
+</script>

@@ -1,23 +1,23 @@
 <?php
 
-namespace Application\Form\TypeInterventionStatut;
+namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
-use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionServiceAwareTrait;
+use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use UnicaenApp\Util;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
- * Description of TypeInterventionStatutStructureSaisieForm
+ * Description of TypeInterventionStatutSaisieForm
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky at unicaen.fr>
  */
-class TypeInterventionStatutStructureSaisieForm extends AbstractForm
+class TypeInterventionStatutSaisieForm extends AbstractForm
 {
-    use \Application\Entity\Db\Traits\TypeInterventionStatutStructureAwareTrait;
+    use \Application\Entity\Db\Traits\TypeInterventionStatutAwareTrait;
     use TypeInterventionServiceAwareTrait;
     use StatutIntervenantServiceAwareTrait;
 
@@ -25,7 +25,7 @@ class TypeInterventionStatutStructureSaisieForm extends AbstractForm
 
     public function init()
     {
-        $hydrator = new TypeInterventionStatutStructureHydrator();
+        $hydrator = new TypeInterventionStatutHydrator();
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());
@@ -37,7 +37,7 @@ class TypeInterventionStatutStructureSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'statut-intervenant',
             'options'    => [
-                'label' => 'Staut de l\'intervenant',
+                'label' => 'Statut de l\'intervenant',
             ],
             'attributes' => [
                 'class'            => 'selectpicker',
@@ -69,8 +69,8 @@ class TypeInterventionStatutStructureSaisieForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-        $this->get('statutIntervenant')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStatutIntervenant->getList()));
+        $this->get('statut-intervenant')
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getList($this->getServiceStatutIntervenant()->finderByHistorique())));
 
         return $this;
     }
@@ -86,7 +86,7 @@ class TypeInterventionStatutStructureSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'stauut-intervenant' => [
+            'statut-intervenant' => [
                 'required' => true,
             ],
         ];
@@ -98,9 +98,10 @@ class TypeInterventionStatutStructureSaisieForm extends AbstractForm
 
 
 
-class TypeInterventionStatutStructureHydrator implements HydratorInterface
+class TypeInterventionStatutHydrator implements HydratorInterface
 {
-    use TypeInterventionIntervenantServiceAwareTrait;
+    use TypeInterventionServiceAwareTrait;
+    use StatutIntervenantServiceAwareTrait;
     use TypeInterventionStatutServiceAwareTrait;
     use EntityManagerAwareTrait;
 
@@ -110,7 +111,7 @@ class TypeInterventionStatutStructureHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param  array                                                  $data
-     * @param  \Application\Entity\Db\TypeInterventionStatutStructure $object
+     * @param  \Application\Entity\Db\TypeInterventionStatutStatut $object
      *
      * @return object
      */
@@ -131,7 +132,7 @@ class TypeInterventionStatutStructureHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypeInterventionStatutStructure $object
+     * @param  \Application\Entity\Db\TypeInterventionStatut $object
      *
      * @return array
      */

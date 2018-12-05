@@ -1,5 +1,5 @@
 <?php
-namespace Application\Form\TypeInterventionStatut\Traits;
+namespace Application\Form\TypeIntervention\Traits;
 
 use Application\Form\TypeIntervention\TypeInterventionStatutSaisieForm;
 

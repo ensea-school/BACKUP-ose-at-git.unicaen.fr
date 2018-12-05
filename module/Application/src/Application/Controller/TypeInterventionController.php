@@ -3,12 +3,15 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeInterventionStatut;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeInterventionStructure;
 use Application\Form\TypeIntervention\Traits\TypeInterventionSaisieFormAwareTrait;
 use Application\Form\TypeIntervention\Traits\TypeInterventionStructureSaisieFormAwareTrait;
+use Application\Form\TypeIntervention\Traits\TypeInterventionStatutSaisieFormAwareTrait;
 use Application\Exception\DbException;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -17,8 +20,10 @@ class TypeInterventionController extends AbstractController
 {
     use TypeInterventionServiceAwareTrait;
     use TypeInterventionStructureServiceAwareTrait;
+    use TypeInterventionStatutServiceAwareTrait;
     use TypeInterventionSaisieFormAwareTrait;
     use TypeInterventionStructureSaisieFormAwareTrait;
+    use TypeInterventionStatutSaisieFormAwareTrait;
     use ContextServiceAwareTrait;
 
 
@@ -43,12 +48,16 @@ class TypeInterventionController extends AbstractController
         return compact('typesInterventions', 'annee');
     }
 
+
+
     public function statutAction()
     {
-        $typeIntervention =         $typeIntervention = $this->getEvent()->getParam('typeIntervention');
-        $typeInterventionStatuts=$typeIntervention->getTypeInterventionStatut();
+        $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
+        $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut();
+
         return compact('typeInterventionStatuts');
     }
+
 
 
     public function saisieAction()
@@ -174,5 +183,52 @@ class TypeInterventionController extends AbstractController
         }
 
         return new JsonModel(['msg' => 'Tri des champs effectué']);
+    }
+
+
+
+    public function statutSaisieAction()
+    {
+        /* @var $typeInterventionStatut TypeInterventionStatut */
+
+        $typeIntervention       = $this->getEvent()->getParam('typeIntervention');
+        $typeInterventionStatut = $this->getEvent()->getParam('typeInterventionStatut');
+        $form                   = $this->getFormTypeInterventionStatutSaisie();
+        if (empty($typeInterventionStatut)) {
+            $title                  = 'Ajout d\'un statut spécifique pour un nouveau type d\'intervention';
+            $typeInterventionStatut = $this->getServiceTypeIntervention()->newEntity();
+            $typeInterventionStatut->setTypeIntervention($typeIntervention);
+        } else {
+            $title = 'Édition d\'un statut pour un type d\'intervention';
+        }
+
+        $form->bindRequestSave($typeInterventionStatut, $this->getRequest(), function (TypeInterventionStatut $tis) {
+            try {
+                $this->getServiceTypeInterventionStatut->save($tis);
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tis->getId());
+            }
+        });
+
+        return compact('form', 'title');
+    }
+
+
+
+    public function statutDeleteAction()
+    {
+        /* @var $typeInterventionStatut TypeInterventionStatut */
+        $typeInterventionStatut = $this->getEvent()->getParam('typeInterventionStatut');
+
+        try {
+            $this->getServiceTypeInterventionStatut()->delete($typeInterventionStatut);
+            $this->flashMessenger()->addSuccessMessage("statut d\'intervention supprimé avec succès.");
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+        }
+
+        return new MessengerViewModel(compact('typeInterventionStatut'));
     }
 }

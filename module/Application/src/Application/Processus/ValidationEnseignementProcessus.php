@@ -171,7 +171,12 @@ class ValidationEnseignementProcessus extends AbstractProcessus
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
                 /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                if ($vh->getHeures() > 0 && $service->getElementPedagogique() && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())){
+                if (
+                    $vh->getTypeVolumeHoraire() == $typeVolumeHoraire
+                    && $vh->getHeures() > 0
+                    && $service->getElementPedagogique()
+                    && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())
+                ){
                     throw new \Exception('Des heures sont saisies sur au moins un type d\'intervention ('.$vh->getTypeIntervention().') non approprié. Veuillez modifier le service avant de pouvoir le valider.');
                 }
             }
@@ -179,8 +184,10 @@ class ValidationEnseignementProcessus extends AbstractProcessus
 
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
-                /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                $validation->addVolumeHoraire($vh);
+                if ($vh->getTypeVolumeHoraire() == $typeVolumeHoraire) {
+                    /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                    $validation->addVolumeHoraire($vh);
+                }
             }
         }
         $this->getServiceValidation()->save($validation);

@@ -421,20 +421,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
 
 
     /**
-     * @return bool
-     */
-    public function isValide(): bool
-    {
-        $validation = $this->getValidation();
-        /* @var $validation \Doctrine\Common\Collections\ArrayCollection */
-        if (!$validation) return false;
-
-        return $validation->count() > 0;
-    }
-
-
-
-    /**
      * Get etatVolumeHoraire
      *
      * @return EtatVolumeHoraire

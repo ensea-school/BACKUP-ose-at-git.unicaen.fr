@@ -174,6 +174,9 @@ class ValidationEnseignementProcessus extends AbstractProcessus
                 if (
                     $vh->getTypeVolumeHoraire() == $typeVolumeHoraire
                     && $vh->getHeures() > 0
+                    && $vh->estNonHistorise()
+                    && $vh->getValidation()
+                    && (!$vh->isValide())
                     && $service->getElementPedagogique()
                     && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())
                 ){
@@ -184,7 +187,7 @@ class ValidationEnseignementProcessus extends AbstractProcessus
 
         foreach ($services as $service) {
             foreach ($service->getVolumehoraire() as $vh) {
-                if ($vh->getTypeVolumeHoraire() == $typeVolumeHoraire) {
+                if (($vh->getTypeVolumeHoraire() == $typeVolumeHoraire) && (!$vh->isValide())) {
                     /* @var $vh \Application\Entity\Db\VolumeHoraire */
                     $validation->addVolumeHoraire($vh);
                 }

@@ -175,7 +175,6 @@ class ValidationEnseignementProcessus extends AbstractProcessus
                     $vh->getTypeVolumeHoraire() == $typeVolumeHoraire
                     && $vh->getHeures() > 0
                     && $vh->estNonHistorise()
-                    && $vh->getValidation()
                     && (!$vh->isValide())
                     && $service->getElementPedagogique()
                     && !$service->getElementPedagogique()->getTypeIntervention()->contains($vh->getTypeIntervention())

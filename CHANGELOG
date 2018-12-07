@@ -8,6 +8,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * Lors de la saisie de service, si on sélectionne une étape, tous les éléments associés remontent dans le formolaire et non les 100 premiers comme avant.
+* La validation des services tentait de valider des heures déjà validées dans certains cas.
 
 ## Nouveautés
 

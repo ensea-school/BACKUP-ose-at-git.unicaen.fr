@@ -53,11 +53,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     private $etatVolumeHoraireReferentiel;
 
     /**
-     * @var FormuleVolumeHoraireReferentiel
-     */
-    private $formuleVolumeHoraireReferentiel;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatVolumeHoraireReferentiel;
@@ -76,6 +71,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
      * @var \DateTime
      */
     protected $horaireFin;
+
 
 
     /**
@@ -280,18 +276,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
     /**
-     * Get formuleVolumeHoraireReferentiel
-     *
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function getFormuleVolumeHoraireReferentiel()
-    {
-        return $this->formuleVolumeHoraireReferentiel;
-    }
-
-
-
-    /**
      * Get formuleResultatVolumeHoraireReferentiel
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -323,7 +307,6 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
     {
         return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
-
 
 
 
@@ -372,6 +355,8 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
         return $this;
     }
+
+
 
     /**
      * @return \DateTime

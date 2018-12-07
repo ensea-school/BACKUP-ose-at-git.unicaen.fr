@@ -101,6 +101,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     public function __construct()
     {
         $this->formuleResultatVolumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -415,6 +416,20 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
         $validations = $this->validation->filter($filter);
 
         return $validations;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isValide(): bool
+    {
+        $validation = $this->getValidation();
+        /* @var $validation \Doctrine\Common\Collections\ArrayCollection */
+        if (!$validation) return false;
+
+        return $validation->count() > 0;
     }
 
 

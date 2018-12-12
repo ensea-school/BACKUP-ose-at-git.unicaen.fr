@@ -9,7 +9,7 @@ use UnicaenApp\Util;
  * @var $typeInterventionStatuts           TypeInterventionStatut[]
  * @var $typeIntervention TypeIntervention
  * */
-
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENTION_EDITION));
 $this->headTitle()->append("Statuts spécifique pour " .$typeIntervention);
 ?>
@@ -43,20 +43,20 @@ $this->headTitle()->append("Statuts spécifique pour " .$typeIntervention);
         </td>
         <?php if ($canEdit): ?>
             <td>
-                <a class="pop-ajax"
+                <a class="ajax-modal"
                    data-min-width="400"
                    data-event="type-intervention-statut"
                    href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $tis->getTypeIntervention()->getId(),'typeInterventionStatut' => $tis->getId()]); ?>"
                    data-submit-reload="false">
                     <span class="glyphicon glyphicon-edit"></span></a>
-                <a class="pop-ajax"
+                <a class="ajax-modal"
                    data-event="type-intervention-statut"
                    href="<?= $this->url('type-intervention/statut-delete', ['typeInterventionStatut' => $tis->getId()]) ?>"
                    title="Supprimer le type d'intervention"
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true" data-confirm-button="Oui"
                    data-cancel-button="Non"
-                   data-submit-reload="true">
+                   data-submit-reload="false">
                     <span class="glyphicon glyphicon-trash"></span></a>
             </td>
 
@@ -66,17 +66,19 @@ $this->headTitle()->append("Statuts spécifique pour " .$typeIntervention);
     </tbody>
 </table>
 <?php if ($canEdit) : ?>
-    <a class="btn btn-primary pop-ajax"
+    <a class="btn btn-primary ajax-modal"
        data-event="type-intervention-statut"
        href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $typeIntervention->getId()]) ?>"
        title="Ajouter un statut spécifique pour le type d'intervention"
-       data-submit-reload="true">
+       onclick="window.close()"
+       data-submit-reload="false">
         Ajouter un statut pour le type d'intervention</a>
 <?php endif; ?>
 
 <script type="text/javascript">
-    $(function () {
-        $("body").on("type-intervention-statut", function (event, data) {
+        $(function () {
+            $("body").on("type-intervention-statut", function (event, data) {
+            });
         });
 
 </script>

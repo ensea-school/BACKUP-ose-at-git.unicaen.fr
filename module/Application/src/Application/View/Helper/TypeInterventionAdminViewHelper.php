@@ -5,7 +5,7 @@ namespace Application\View\Helper;
 use Application\Entity\Db\TypeInterventionStatut;
 use Application\Entity\Db\TypeIntervention;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
-use Application\View\Helper\AbstractViewHelper;
+use UnicaenApp\Util;
 
 /**
  * Aide de vue permettant d'afficher une liste de statuts
@@ -88,7 +88,7 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
      */
     public function render($details = false)
     {
-        $ti = $this->getTypeIntervention();
+        $ti   = $this->getTypeIntervention();
 
         $title   = '';
         $statuts = $ti->getTypeInterventionStatut();
@@ -96,16 +96,32 @@ class TypeInterventionAdminViewHelper extends AbstractViewHelper
             if ($title) $title .= ' - ';
             $title .= $tis->getStatutIntervenant()->getLibelle();
         }
+        $etoile= (strlen($title)? '&#x2605;':'');
 
         $url = $this->getView()->url('type-intervention/statut', ['typeIntervention' => $ti->getId()]);
 
-        return $this->getView()->tag('a', [
+        $html = '<td>';
+        $html .= $this->getView()->tag('a', [
             'class'              => 'ajax-modal',
             'data-toggle'        => 'tooltip',
             'data-placement'     => 'bottom',
             'title'              => $title,
             'href'               => $url,
             'data-submit-reload' => 'true',
-        ])->text($ti->getLibelle());
+        ])->text(Util::formattedNumber($ti->getTauxHetdService()).$etoile);
+        $html .= '</td><td>';
+
+        $html .= $this->getView()->tag('a', [
+            'class'              => 'ajax-modal',
+            'data-toggle'        => 'tooltip',
+            'data-placement'     => 'bottom',
+            'title'              => $title,
+            'href'               => $url,
+            'data-submit-reload' => 'true',
+        ])->text(Util::formattedNumber($ti->getTauxHetdComplementaire()).$etoile);
+
+        $html.='</td>';
+
+        return $html;
     }
 }

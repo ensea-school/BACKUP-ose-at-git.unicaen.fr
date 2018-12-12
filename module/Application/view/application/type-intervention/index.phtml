@@ -40,9 +40,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             <td>
                 <?= $ti->getCode() ?>&nbsp;
             </td>
-            <td><?= $this->typeInterventionAdmin($ti); ?></td>
-            <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdService()) ?></td>
-            <td style="text-align:right;"><?= Util::formattedNumber($ti->getTauxHetdComplementaire()) ?></td>
+            <td><?= $ti->getLibelle() ?></td>
+            <?= $this->typeInterventionAdmin($ti); ?>
             <td><?= validiteIntervalle($ti->getAnneeDebut(), $ti->getAnneeFin()); ?></td>
             <td><?= implode(', ', $ti->getRegles()) ?></td>
             <td style="text-align:left;">

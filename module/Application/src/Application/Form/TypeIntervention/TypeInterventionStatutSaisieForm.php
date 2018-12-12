@@ -167,8 +167,8 @@ class TypeInterventionStatutHydrator implements HydratorInterface
             'id'                       => $object->getId(),
             'type-intervention'        => $object->getTypeIntervention()->getId(),
             'statut-intervenant'                   => ($s = $object->getStatutIntervenant()) ? $s->getId() : null,
-            'taux-hetd-service'        => $object->getTauxHETDService(),
-            'taux-hetd-complementaire' => $object->getTauxHETDComplementaire(),
+            'taux-hetd-service'        => StringFromFloat::run($object->getTauxHETDService()),
+            'taux-hetd-complementaire' => StringFromFloat::run($object->getTauxHETDComplementaire()),
         ];
 
         return $data;

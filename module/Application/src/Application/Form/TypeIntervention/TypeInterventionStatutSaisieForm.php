@@ -9,6 +9,8 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use Application\Filter\FloatFromString;
+use Application\Filter\StringFromFloat;
 
 /**
  * Description of TypeInterventionStatutSaisieForm
@@ -31,7 +33,7 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
                 'name' => 'type-intervention',
-                'type' => 'Hidden',
+                'type' => 'hidden',
             ]
         );
         $this->add([
@@ -89,6 +91,29 @@ class TypeInterventionStatutSaisieForm extends AbstractForm
             'statut-intervenant' => [
                 'required' => true,
             ],
+            'taux-hetd-service' => [
+                'required' => true,
+                'validators' => [
+                    new \Zend\Validator\Callback(array(
+                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }))
+                ],
+            ],
+            'taux-hetd-complementaire' => [
+                'required' => true,
+                'validators' => [
+                    new \Zend\Validator\Callback(array(
+                        'messages' => array(\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'),
+                        'callback' => function ($value) {
+                            return (StringFromFloat::run($value) >= 0.0 ? true : false);
+                        }))
+                ],
+            ],
+            'annee-debut' => [
+                'required' => false,
+            ],
         ];
     }
 
@@ -110,19 +135,19 @@ class TypeInterventionStatutHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                                  $data
-     * @param  \Application\Entity\Db\TypeInterventionStatutStatut $object
+     * @param  array                                         $data
+     * @param  \Application\Entity\Db\TypeInterventionStatut $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $object->setTypeIntervention($this->getServiceTypeIntervention()->get($data['type-intervention']));
-        if (array_key_exists('sttaut-intervenant', $data)) {
+        if (array_key_exists('statut-intervenant', $data)) {
             $object->setStatutIntervenant($this->getServiceStatutIntervenant()->get($data['statut-intervenant']));
         }
-        $object->setTauxHETDService($data['taux-hetd-service']);
-        $object->setTauxHETDComplemntaire(data['taux-statut-complementaire']);
+        $object->setTauxHETDService(FloatFromString::run($data['taux-hetd-service']));
+        $object->setTauxHETDComplementaire(FloatFromString::run($data['taux-hetd-complementaire']));
 
         return $object;
     }
@@ -139,11 +164,11 @@ class TypeInterventionStatutHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'                => $object->getId(),
-            'type-intervention' => $object->getTypeIntervention(),
-            'statut'         => ($s = $object->getStatutIntervenant()) ? $s->getId() : null,
-            'taux-hetd-service'                => $object->getId(),
-            'taux-hetd-complementaire'                => $object->getId(),
+            'id'                       => $object->getId(),
+            'type-intervention'        => $object->getTypeIntervention()->getId(),
+            'statut-intervenant'                   => ($s = $object->getStatutIntervenant()) ? $s->getId() : null,
+            'taux-hetd-service'        => $object->getTauxHETDService(),
+            'taux-hetd-complementaire' => $object->getTauxHETDComplementaire(),
         ];
 
         return $data;

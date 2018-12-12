@@ -82,9 +82,8 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                     </table>
                 <?php endif; ?>
                 <?php if ($canEdit) : ?>
-                    <a class="btn btn-default btn-xs pop-ajax"
+                    <a class="btn btn-primary btn-xs  pop-ajax"
                        data-event="type-intervention-saisie"
-                       style="float:right"
                        href="<?= $this->url('type-intervention/type-intervention-structure-saisie', ['typeIntervention' => $ti->getId()]) ?>"
                        title="Ajouter un type d'intervention pour une structure"
                        data-submit-reload="true">

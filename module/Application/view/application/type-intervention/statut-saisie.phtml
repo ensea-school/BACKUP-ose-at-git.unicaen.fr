@@ -5,8 +5,10 @@
  */
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
-echo $this->form()->openTag($form); ?>
+echo $this->form()->openTag($form);
 
+echo $this->formControlGroup($form->get('type-intervention'));
+?>
 <div class="row">
     <div class="col-md-6">
         <BR>

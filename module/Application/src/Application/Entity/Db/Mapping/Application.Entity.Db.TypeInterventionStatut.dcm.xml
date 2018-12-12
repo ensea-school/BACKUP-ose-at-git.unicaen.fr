@@ -5,6 +5,7 @@
     <entity name="Application\Entity\Db\TypeInterventionStatut" table="TYPE_INTERVENTION_STATUT">
         <id name="id" type="integer" column="ID">
             <generator strategy="SEQUENCE"/>
+            <sequence-generator sequence-name="TYPE_INTERVENTION_STATU_ID_SEQ" allocation-size="1"/>
         </id>
         <field name="tauxHETDService" type="float" column="TAUX_HETD_SERVICE" nullable="true"/>
         <field name="tauxHETDComplementaire" type="float" column="TAUX_HETD_COMPLEMENTAIRE" nullable="true"/>

@@ -55,7 +55,7 @@ class TypeInterventionController extends AbstractController
         $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut();
 
-        return compact('typeInterventionStatuts');
+        return compact('typeIntervention', 'typeInterventionStatuts');
     }
 
 
@@ -196,15 +196,18 @@ class TypeInterventionController extends AbstractController
         $form                   = $this->getFormTypeInterventionStatutSaisie();
         if (empty($typeInterventionStatut)) {
             $title                  = 'Ajout d\'un statut spécifique pour un nouveau type d\'intervention';
-            $typeInterventionStatut = $this->getServiceTypeIntervention()->newEntity();
-            $typeInterventionStatut->setTypeIntervention($typeIntervention);
+            $typeInterventionStatut = $this->getServiceTypeInterventionStatut()->newEntity()
+            ->setTypeIntervention($typeIntervention)
+            ->setTauxHETDService(1)
+            ->setTauxHETDComplementaire(1);
         } else {
             $title = 'Édition d\'un statut pour un type d\'intervention';
         }
 
         $form->bindRequestSave($typeInterventionStatut, $this->getRequest(), function (TypeInterventionStatut $tis) {
             try {
-                $this->getServiceTypeInterventionStatut->save($tis);
+                $this->getServiceTypeInterventionStatut()->save($tis);
+                $this->redirect()->toRoute('type-intervention/statut',['typeIntervention' => $tis->getTypeIntervention()->getId()]); // redirection vers la page parent en cas de succès
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);

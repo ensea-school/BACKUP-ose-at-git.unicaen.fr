@@ -7,16 +7,19 @@ use UnicaenApp\Util;
 /**
  * @var $this                              \Application\View\Renderer\PhpRenderer
  * @var $typeInterventionStatuts           TypeInterventionStatut[]
+ * @var $typeIntervention TypeIntervention
  * */
 
-$this->headTitle()->append("Statuts spécifique pour " . (count($typeInterventionStatuts) ? $typeInterventionStatuts[0]->getTypeIntervention()->getLibelle() : ''));
-
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENTION_EDITION));
+$this->headTitle()->append("Statuts spécifique pour " .$typeIntervention);
 ?>
-<h1 class="page-header">Statuts spécifiques
-    pour <?= (count($typeInterventionStatuts) ? $typeInterventionStatuts[0]->getTypeIntervention()->getLibelle() : '') ?></h1>
 
-<table class="table table-bordered table-condensed table-hover">
+
+<h1 class="page-header">Statuts spécifiques
+    pour <?= $typeIntervention ?>
+</h1>
+
+<table class="table table-bordered table-condensed table-extra-condensed table-hover">
     <thead>
     <tr>
         <th>Statut d'intervenant</th>
@@ -26,17 +29,17 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
             <th>Actions</th><?php endif; ?>
     </tr>
     </thead>
-    <tbody class="triables">
+    <tbody>
     <?php foreach ($typeInterventionStatuts as $tis): ?>
         <tr>
         <td>
             <?= $tis->getStatutIntervenant()->getLibelle() ?>&nbsp;
         </td>
         <td>
-            <?= $tis->getTauxHETDService() ?>
+            <?= Util::formattedNumber($tis->getTauxHETDService()) ?>
         </td>
         <td>
-            <?= $tis->getTauxHETDComplementaire() ?>
+            <?= Util::formattedNumber($tis->getTauxHETDComplementaire()) ?>
         </td>
         <?php if ($canEdit): ?>
             <td>
@@ -44,7 +47,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
                    data-min-width="400"
                    data-event="type-intervention-statut"
                    href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $tis->getTypeIntervention()->getId(),'typeInterventionStatut' => $tis->getId()]); ?>"
-                   data-submit-reload="true">
+                   data-submit-reload="false">
                     <span class="glyphicon glyphicon-edit"></span></a>
                 <a class="pop-ajax"
                    data-event="type-intervention-statut"
@@ -63,19 +66,17 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENT
     </tbody>
 </table>
 <?php if ($canEdit) : ?>
-    <a class="btn btn-default btn-xs pop-ajax"
+    <a class="btn btn-primary pop-ajax"
        data-event="type-intervention-statut"
-       style="float:right"
-       href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $tis->getTypeIntervention()->getId()]) ?>"
-       title="Ajouter un statut spécifique pour le type d'intervention pour une structure"
+       href="<?= $this->url('type-intervention/statut-saisie', ['typeIntervention' => $typeIntervention->getId()]) ?>"
+       title="Ajouter un statut spécifique pour le type d'intervention"
        data-submit-reload="true">
-        Ajouter un statut pour le type d\'intervention</a>
+        Ajouter un statut pour le type d'intervention</a>
 <?php endif; ?>
 
 <script type="text/javascript">
     $(function () {
         $("body").on("type-intervention-statut", function (event, data) {
-            window.location.reload();
         });
 
 </script>

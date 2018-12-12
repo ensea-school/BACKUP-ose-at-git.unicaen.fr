@@ -51,7 +51,7 @@ protected $tauxHETDComplementaire;
      */
     public function setTypeIntervention($typeIntervention)
     {
-        $this->typeIntervention = $typeIntervention;
+        $this->typeIntervention=$typeIntervention;
 
         return $this;
     }
@@ -115,7 +115,7 @@ protected $tauxHETDComplementaire;
     }
 
     /**
-     * Set tauxHetdService
+     * Set tauxHETDComplementaire
      *
      * @param float $tauxHETDComplementaire
      *
@@ -123,19 +123,19 @@ protected $tauxHETDComplementaire;
      */
     public function setTauxHETDComplementaire($tauxHETDComplementaire)
     {
-        $this->tauxHETDComplementaire = $tauxHETDComplementaire;
+        $this->tauxHETDComplementaire=$tauxHETDComplementaire;
 
         return $this;
     }
 
     /**
-     * Get tauxHETDComplemùentaire
+     * Get tauxHETDComplementaire
      *
      * @return float
      */
     public function getTauxHETDComplementaire()
     {
-        return $this->tauxHETDService;
+        return $this->tauxHETDComplementaire;
     }
 
 }

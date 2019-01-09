@@ -49,6 +49,25 @@ INSERT INTO parametre (
                  );
 
 
+UPDATE tbl SET feuille_de_route = 1 WHERE tbl_name IN (
+    'agrement',
+    'cloture_realise',
+    'contrat',
+    'dossier',
+    'paiement',
+    'piece_jointe',
+    'piece_jointe_demande',
+    'piece_jointe_fournie',
+    'service',
+    'service_referentiel',
+    'service_saisie',
+    'validation_referentiel',
+    'workflow',
+    'validation_enseignement',
+    'formule'
+    );
+
+
 -- =!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=
 -- =  bien ajouter les requêtes de modif de DDL générées ! ! ! ! =
 -- =!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=

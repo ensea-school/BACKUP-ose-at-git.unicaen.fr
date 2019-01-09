@@ -211,11 +211,11 @@ function vn(array $array, $key, $type = 's')
     <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FI') ?></div>
 </div>
 <div class="row">
-    <div class="col-sm-4">Service FA</div>
+    <div class="col-sm-4">+ Service FA</div>
     <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FA') ?></div>
 </div>
 <div class="row">
-    <div class="col-sm-4">Service FC</div>
+    <div class="col-sm-4">+ Service FC</div>
     <div class="col-sm-2 nombre"><?= vn($data, 'SERVICE_FC') ?></div>
 </div>
 <div class="row">
@@ -225,7 +225,7 @@ function vn(array $array, $key, $type = 's')
 <div class="row">
     <div class="col-sm-4">= Service assuré</div>
     <div class="col-sm-2 nombre"><span class="label label-info"
-                                       style="font-size:12pt"><?= vn($data, 'TOTAL') ?></span>
+                                       style="font-size:12pt"><?= vn($data, 'SERVICE_TOTAL') ?></span>
     </div>
 </div>
 <div class="row">&nbsp;</div>
@@ -234,26 +234,26 @@ function vn(array $array, $key, $type = 's')
     <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FI') ?></div>
 </div>
 <div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (formation en apprentissage)">HC FA</abbr></div>
+    <div class="col-sm-4"><abbr title="Heures complémentaires (formation en apprentissage)">+ HC FA</abbr></div>
     <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FA') ?></div>
 </div>
 <div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue)">HC FC</abbr></div>
+    <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue)">+ HC FC</abbr></div>
     <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC') ?></div>
 </div>
 <div class="row">
-    <div class="col-sm-4"><abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">Rémunération FC
+    <div class="col-sm-4"><abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">+ Rémunération FC
             D714-60</abbr></div>
     <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_FC_MAJOREES') ?></div>
 </div>
 <div class="row">
-    <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">HC Référentiel</abbr></div>
+    <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">+ HC Référentiel</abbr></div>
     <div class="col-sm-2 nombre"><?= vn($data, 'HEURES_COMPL_REFERENTIEL') ?></div>
 </div>
 <div class="row">
     <div class="col-sm-4">= Heures complémentaires</div>
     <div class="col-sm-2 nombre"><span class="label label-info"
-                                       style="font-size:12pt"><?= vn($data, 'HEURES_COMPL_FI') ?></span>
+                                       style="font-size:12pt"><?= vn($data, 'HEURES_COMPL_TOTAL') ?></span>
     </div>
 </div>
 <br/>

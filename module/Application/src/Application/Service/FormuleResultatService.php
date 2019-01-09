@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
@@ -213,6 +215,15 @@ class FormuleResultatService extends AbstractEntityService
             foreach ($fr as $k => $v) {
                 $data[$k] = $v;
             }
+            $data['SERVICE_TOTAL'] = $data['SERVICE_FI']
+                + $data['SERVICE_FA']
+                + $data['SERVICE_FC']
+                + $data['SERVICE_REFERENTIEL'];
+            $data['HEURES_COMPL_TOTAL'] = $data['HEURES_COMPL_FI']
+                + $data['HEURES_COMPL_FA']
+                + $data['HEURES_COMPL_FC']
+                + $data['HEURES_COMPL_FC_MAJOREES']
+                + $data['HEURES_COMPL_REFERENTIEL'];
             $sql  = "SELECT * FROM formule_resultat_service WHERE formule_resultat_id = :frId";
             $frss = $conn->fetchAll($sql, compact('frId'));
             foreach ($frss as $frs) {
@@ -244,6 +255,27 @@ class FormuleResultatService extends AbstractEntityService
         usort($data['types-intervention'], function ($ti1, $ti2) {
             return $ti1->getOrdre() > $ti2->getOrdre();
         });
+
+        usort($data['s'], function ($ee1, $ee2) {
+            if ($ee1['element-etablissement'] instanceof ElementPedagogique){
+                $ee1Code = $ee1['element-etablissement']->getCode();
+            }elseif($ee1['element-etablissement'] instanceof Etablissement){
+                $ee1Code = $ee1['element-etablissement']->getLibelle();
+            }
+
+            if ($ee2['element-etablissement'] instanceof ElementPedagogique){
+                $ee2Code = $ee2['element-etablissement']->getCode();
+            }elseif($ee2['element-etablissement'] instanceof Etablissement){
+                $ee2Code = $ee2['element-etablissement']->getLibelle();
+            }
+
+            return $ee1Code > $ee2Code;
+        });
+
+        usort($data['r'], function ($r1, $r2) {
+            return $r1['fonction']->getLibelleCourt() > $r2['fonction']->getLibelleCourt();
+        });
+
 
         return $data;
     }

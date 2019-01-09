@@ -7,69 +7,69 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Connecteur\LdapConnecteur;
-use Application\Constants;
-use Doctrine\ORM\EntityManager;
-use UnicaenApp\Mapper\Ldap\People;
+use Application\Entity\Db\Fichier;
+use Application\Entity\Db\PieceJointe;
+use Application\Entity\Db\Validation;
+use Application\Service\FichierService;
+use Application\Service\IntervenantService;
+use Application\Service\PieceJointeService;
+use Application\Service\TypePieceJointeService;
+use Application\Service\TypeValidationService;
+use Application\Service\ValidationService;
+use Application\Service\WorkflowService;
 
-$sql = '
-SELECT 
-  a.id, 
-  p.supann_emp_id
-FROM 
-  affectation a
-  JOIN personnel p ON p.id = a.personnel_id 
-WHERE 
-  a.histo_destruction IS NULL
-';
+$dirs = scandir('/home/laurent/cv');
+//$dirs = ['2624.pdf'];
+/** @var IntervenantService $si */
+$si = $sl->get(IntervenantService::class);
 
-/** @var EntityManager $em */
-$em = $sl->get(Constants::BDD);
+$typePieceJointe = $sl->get(TypePieceJointeService::class)->get(1);
+$tvPJ = $sl->get(TypeValidationService::class)->get(4);
+$tvFichier = $sl->get(TypeValidationService::class)->get(5);
 
-/** @var People $ldap */
-$ldapMapper = $sl->get('ldap_people_mapper');
+foreach( $dirs as $dir ){
+    if ($dir == '.' || $dir == '..') continue;
 
-/** @var LdapConnecteur $ldap */
-$ldap = $sl->get(LdapConnecteur::class);
+    $code = explode('.', $dir)[0];
 
-$a = $em->getConnection()->fetchAll($sql);
+    $intervenant = $si->getBySourceCode($code);
 
-foreach( $a as $aff ){
-    $p = $ldapMapper->findOneByNoIndividu($aff['SUPANN_EMP_ID'], true);
-    $aid = $aff['ID'];
-    if ($p){
-        $login = $p->getSupannAliasLogin();
+    $fichier = new Fichier();
+    $fichier->setContenu(file_get_contents('/home/laurent/cv/'.$dir));
+    $fichier->setNom($dir);
+    $fichier->setTaille(filesize('/home/laurent/cv/'.$dir));
+    $fichier->setTypeMime('application/pdf');
 
-        $utilisateur = $ldap->getUtilisateur($login);
+    $valFichier = new Validation();
+    $valFichier->setIntervenant($intervenant);
+    $valFichier->setTypeValidation($tvFichier);
+    $valFichier->setStructure($intervenant->getStructure());
+    $sl->get(ValidationService::class)->save($valFichier);
+    $fichier->setValidation($valFichier);
 
-        $uid = $utilisateur->getId();
-        $usql = "UPDATE affectation SET utilisateur_id=$uid WHERE id = $aid;";
-        echo $usql."<br />";
+    $pj = $sl->get(PieceJointeService::class)->getByType($intervenant, $typePieceJointe);
+    if (!$pj || !$pj->estNonHistorise()) {
+        $pj = new PieceJointe();
+        $pj->setIntervenant($intervenant);
+        $pj->setType($typePieceJointe);
+        $sl->get(PieceJointeService::class)->save($pj);
     }
+    $sl->get(FichierService::class)->save($fichier);
+
+    $sql = "INSERT INTO piece_jointe_fichier(piece_jointe_id,fichier_id) values (".$pj->getId().",".$fichier->getId().")";
+
+    /* Validation */
+    if (!($pj->getValidation() && $pj->getValidation()->estNonHistorise())){
+        $validation = new Validation();
+        $validation->setIntervenant($intervenant);
+        $validation->setTypeValidation($tvPJ);
+        $validation->setStructure($intervenant->getStructure());
+        $sl->get(ValidationService::class)->save($validation);
+        $pj->setValidation($validation);
+        $sl->get(PieceJointeService::class)->save($pj);
+    }
+
+    $sl->get(WorkflowService::class)->calculerTableauxBord([], $intervenant);
+
+    echo $dir.' '.$intervenant->getCode()."<br />";
 }
-
-/*
-
-select
-  a.id,
-  p.nom_usuel || ' ' || p.prenom personnel,
-  p.supann_emp_id supp,
-  r.libelle role,
-  s.libelle_court structure,
-  s.libelle source,
-  a.source_code a_sc,
-  p.source_code p_sc
-from
-  affectation a
-  JOIN source s ON s.id = a.source_id
-  JOIN personnel p ON p.id = a.personnel_id
-  JOIN role r ON r.id = a.role_id
-  LEFT JOIN structure s ON s.id = a.structure_id
-where
-  a.utilisateur_id is null
-  and a.histo_destruction is null;
-
-update affectation set utilisateur_id = 1 where id = 1;
-delete from affectation where utilisateur_id is null;
-
-*/

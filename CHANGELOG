@@ -21,6 +21,10 @@ en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiem
 * Paramétrages généraux : la composante représentant l'université (de niveau 1 donc) peut maintenant se paramétrer directement 
 dans l'interface d'administration.
 
+* Refonte de l'infrastructure de gestion de la formule de calcul. Les performances ont été très sensiblement améliorées (x100).
+
+* L'installation de OSE via Gitlab passe désormais par HTTPS au lieu de SSH. La clé de déploiement n'est plus nécessaire.
+
 ## Notes de mise à jour
 
 #OSE 7.0.5

@@ -54,8 +54,9 @@ class TypeInterventionController extends AbstractController
     {
         $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
         $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut();
+        $title                   = "Statuts spécifique pour " . $typeIntervention;
 
-        return compact('typeIntervention', 'typeInterventionStatuts');
+        return compact('typeIntervention', 'typeInterventionStatuts', 'title');
     }
 
 
@@ -223,15 +224,21 @@ class TypeInterventionController extends AbstractController
     public function statutDeleteAction()
     {
         /* @var $typeInterventionStatut TypeInterventionStatut */
+        $typeIntervention=$this->getEvent()->getParam('typeIntervention');
         $typeInterventionStatut = $this->getEvent()->getParam('typeInterventionStatut');
-
+        ?>
+        <script>
+            console.log(<?= gettype($typeIntervention) ?>);
+           </script>
+<?php
         try {
             $this->getServiceTypeInterventionStatut()->delete($typeInterventionStatut);
-            $this->flashMessenger()->addSuccessMessage("statut d\'intervention supprimé avec succès.");
+            $this->flashMessenger()->addSuccessMessage("statut d\'intervention supprimé avec succès.");;
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }
-
+        $url=$this->url()->fromRoute('type-intervention/statut',['typeIntervention'=>$typeIntervention->getId()]);
+        $this->redirect()->toUrl($url);
         return new MessengerViewModel(compact('typeInterventionStatut'));
     }
 }

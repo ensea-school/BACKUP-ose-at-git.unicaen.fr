@@ -11,13 +11,7 @@ use UnicaenApp\Util;
  * */
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::TYPE_INTERVENTION_EDITION));
-$this->headTitle()->append("Statuts spécifique pour " .$typeIntervention);
 ?>
-
-
-<h1 class="page-header">Statuts spécifiques
-    pour <?= $typeIntervention ?>
-</h1>
 
 <table class="table table-bordered table-condensed table-extra-condensed table-hover">
     <thead>
@@ -50,8 +44,7 @@ $this->headTitle()->append("Statuts spécifique pour " .$typeIntervention);
                    data-submit-reload="false">
                     <span class="glyphicon glyphicon-edit"></span></a>
                 <a class="ajax-modal"
-                   data-event="type-intervention-statut"
-                   href="<?= $this->url('type-intervention/statut-delete', ['typeInterventionStatut' => $tis->getId()]) ?>"
+                   href="<?= $this->url('type-intervention/statut-delete', ['typeIntervention' => $tis->getTypeIntervention()->getId(), 'typeInterventionStatut' => $tis->getId()]) ?>"
                    title="Supprimer le type d'intervention"
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true" data-confirm-button="Oui"

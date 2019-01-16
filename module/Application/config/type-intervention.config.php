@@ -114,7 +114,7 @@ return [
                         'statut-delete'                             => [
                             'type'          => 'Segment',
                             'options'       => [
-                                'route'       => '/statut-delete/:typeInterventionStatut',
+                                'route'       => '/statut-delete/:typeIntervention/:typeInterventionStatut',
                                 'constraints' => [
                                     'typeInterventionStatut' => '[0-9]*',
                                 ],

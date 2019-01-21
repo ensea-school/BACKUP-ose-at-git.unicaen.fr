@@ -55,47 +55,23 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Contrat</h3>
+            <h3 class="panel-title">États de sortie</h3>
         </div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('contrat_civilite_president')); ?>
+                    <?= $this->formControlGroup($form->get('es_services_pdf')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('contrat_etablissement')); ?>
+                    <?= $this->formControlGroup($form->get('es_etat_paiement')); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('contrat_etablissement_represente')); ?>
+                    <?= $this->formControlGroup($form->get('es_winpaie')); ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('contrat_lieu_signature')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Export PDF des services d'enseignement</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('export_pdf_services_signature_1')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('export_pdf_services_signature_2')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('export_pdf_services_signataire_1')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('export_pdf_services_signataire_2')); ?>
                 </div>
             </div>
         </div>
@@ -152,30 +128,6 @@
                 </div>
                 <div class="col-md-6">
                     <?= $this->formControlGroup($form->get('doc-intervenant-permanents')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Etats de paiement et exports Winpaie</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('winpaie_carte')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('winpaie_mc')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('winpaie_retenue')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('winpaie_sens')); ?>
                 </div>
             </div>
         </div>

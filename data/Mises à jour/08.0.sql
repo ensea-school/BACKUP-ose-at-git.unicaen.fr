@@ -128,6 +128,12 @@ INSERT INTO parametre (
                  );
 
 
+delete from parametre where nom in (
+    'winpaie_carte',
+    'winpaie_mc',
+    'winpaie_retenue',
+    'winpaie_sens'
+    );
 
 -- =!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=
 -- =  bien ajouter les requêtes de modif de DDL générées ! ! ! ! =

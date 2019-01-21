@@ -5,6 +5,7 @@ namespace Application\Form;
 use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -26,6 +27,7 @@ class ParametresForm extends AbstractForm
     use ScenarioServiceAwareTrait;
     use PaysServiceAwareTrait;
     use StructureServiceAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
     public function init()
     {
@@ -69,38 +71,6 @@ class ParametresForm extends AbstractForm
             'attributes' => [
                 'class' => 'selectpicker',
                 'data-live-search' => 'true'
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'contrat_civilite_president',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Civilité du président (avec article)',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'contrat_etablissement',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Établissement',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'contrat_etablissement_represente',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Représenté par',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'contrat_lieu_signature',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Lieu de signature',
             ],
         ]);
 
@@ -213,66 +183,41 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
-            'name'    => 'winpaie_carte',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Carte',
+            'type' => 'Select',
+            'name' => 'es_winpaie',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                'label' => 'État de sortie pour l\'extraction Winpaie',
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
         ]);
 
         $this->add([
-            'name'    => 'winpaie_mc',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'MC',
+            'type' => 'Select',
+            'name' => 'es_services_pdf',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                'label' => 'État de sortie pour l\'édition PDF des services',
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
         ]);
 
         $this->add([
-            'name'    => 'winpaie_retenue',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Retenue',
+            'type' => 'Select',
+            'name' => 'es_etat_paiement',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                'label' => 'État de sortie pour les états de paiement',
             ],
-        ]);
-
-        $this->add([
-            'name'    => 'winpaie_sens',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Sens',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'export_pdf_services_signature_1',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Signature 1',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'export_pdf_services_signataire_1',
-            'type'    => 'Textarea',
-            'options' => [
-                'label' => 'Signataire 1',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'export_pdf_services_signature_2',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Signature 2',
-            ],
-        ]);
-
-        $this->add([
-            'name'    => 'export_pdf_services_signataire_2',
-            'type'    => 'Textarea',
-            'options' => [
-                'label' => 'Signataire 2',
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
         ]);
 

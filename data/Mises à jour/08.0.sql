@@ -67,6 +67,67 @@ UPDATE tbl SET feuille_de_route = 1 WHERE tbl_name IN (
     'formule'
     );
 
+INSERT INTO parametre (
+    id,
+    nom,
+    valeur,
+    description,
+    histo_creation,
+    histo_createur_id,
+    histo_modification,
+    histo_modificateur_id
+    ) VALUES (
+                 parametre_id_seq.nextval,
+                 'es_winpaie',
+                 (select id from etat_sortie where code = 'winpaie'),
+                 'État de sortie pour l''extraction Winpaie',
+                 sysdate,
+                 (select id from utilisateur where username='oseappli'),
+                 sysdate,
+                 (select id from utilisateur where username='oseappli')
+                 );
+
+INSERT INTO parametre (
+    id,
+    nom,
+    valeur,
+    description,
+    histo_creation,
+    histo_createur_id,
+    histo_modification,
+    histo_modificateur_id
+    ) VALUES (
+                 parametre_id_seq.nextval,
+                 'es_services_pdf',
+                 (select id from etat_sortie where code = 'services'),
+                 'État de sortie pour l''édition PDF des services',
+                 sysdate,
+                 (select id from utilisateur where username='oseappli'),
+                 sysdate,
+                 (select id from utilisateur where username='oseappli')
+                 );
+
+INSERT INTO parametre (
+    id,
+    nom,
+    valeur,
+    description,
+    histo_creation,
+    histo_createur_id,
+    histo_modification,
+    histo_modificateur_id
+    ) VALUES (
+                 parametre_id_seq.nextval,
+                 'es_etat_paiement',
+                 (select id from etat_sortie where code = 'etat-paiement'),
+                 'État de sortie pour les états de paiement',
+                 sysdate,
+                 (select id from utilisateur where username='oseappli'),
+                 sysdate,
+                 (select id from utilisateur where username='oseappli')
+                 );
+
+
 
 -- =!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=
 -- =  bien ajouter les requêtes de modif de DDL générées ! ! ! ! =

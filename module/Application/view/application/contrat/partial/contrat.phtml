@@ -58,7 +58,7 @@ $panel = ($retourSigne !== null) ? 'success' : ($validation ? 'info' : 'default'
             </a>
             </span>
         <?php endif; ?>
-        <h3><?= $contrat ?> - <?= $contrat->getStructure() ?></h3>
+        <h3><?= $contrat->toString() ?> - <?= $contrat->getStructure() ?></h3>
     </div>
 
     <div class="panel-body">

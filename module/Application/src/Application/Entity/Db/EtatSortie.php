@@ -3,6 +3,8 @@
 namespace Application\Entity\Db;
 
 
+use Zend\Json\Json;
+
 /**
  * EtatSortie
  */
@@ -27,6 +29,11 @@ class EtatSortie
      * @var string
      */
     protected $cle;
+
+    /**
+     * @var string
+     */
+    protected $csvParams;
 
     /**
      * @var bool
@@ -285,6 +292,44 @@ class EtatSortie
     public function setCle($cle): EtatSortie
     {
         $this->cle = $cle;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getCsvParams()
+    {
+        return $this->csvParams;
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getCsvParamsArray(): array
+    {
+        if ($this->csvParams){
+            return Json::decode($this->csvParams, Json::TYPE_ARRAY);
+        }else{
+            return [];
+        }
+    }
+
+
+
+    /**
+     * @param string $csvParams
+     *
+     * @return EtatSortie
+     */
+    public function setCsvParams($csvParams): EtatSortie
+    {
+        $this->csvParams = $csvParams;
 
         return $this;
     }

@@ -60,12 +60,12 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/impo
                         'class' => 'btn btn-default btn-xs',
                         'href'  => $this->url('etat-sortie/generer-pdf', ['etatSortie' => $etatSortie->getId()]),
                     ])->text('Extraction en PDF');
-
-                    echo $this->tag('a', [
-                        'class' => 'btn btn-default btn-xs',
-                        'href'  => $this->url('etat-sortie/generer-csv', ['etatSortie' => $etatSortie->getId()]),
-                    ])->text('Extraction pour tableur (CSV)');
-                } ?>
+                }
+                echo $this->tag('a', [
+                    'class' => 'btn btn-default btn-xs',
+                    'href'  => $this->url('etat-sortie/generer-csv', ['etatSortie' => $etatSortie->getId()]),
+                ])->text('Extraction pour tableur (CSV)');
+                ?>
             </td>
         </tr>
     <?php endforeach; ?>

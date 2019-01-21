@@ -64,6 +64,7 @@ class EtatSortieService extends AbstractEntityService
 
     public function genererCsv(EtatSortie $etatSortie, array $filtres)
     {
+        $params = $etatSortie->getCsvParamsArray();
         $data = $this->generateData($etatSortie, $filtres);
 
         $blocs = $etatSortie->getBlocs();
@@ -72,7 +73,6 @@ class EtatSortieService extends AbstractEntityService
             $bkey = $bloc['nom'].'@'.$bloc['zone'];
             break;
         }
-        $data = [195 => $data[195]];
         $res = [];
         foreach ($data as $k => $d) {
 
@@ -93,15 +93,51 @@ class EtatSortieService extends AbstractEntityService
             /* Si il y a des sous-données */
             if ($bdata){
                 foreach( $bdata as $bd ){
-                    $res[] = $d + $bd;
+                    $res[] = $this->filterData($d + $bd, $params );
                 }
             }else{
-                $res[] = $d;
+                $res[] = $this->filterData($d, $params );
             }
-
         }
 
         return $res;
+    }
+
+
+
+    public function genererCsvHeader(EtatSortie $etatSortie, array &$data): array
+    {
+        if (!isset($data[0])) return [];
+
+        $head = array_keys($data[0]);
+        $params = $etatSortie->getCsvParamsArray();
+        foreach( $head as $k => $v ){
+            if (isset($params[$v]['libelle']) && $params[$v]['libelle']){
+                $head[$k] = $params[$v]['libelle'];
+            }
+        }
+
+        return $head;
+    }
+
+
+
+    private function filterData(array $line, array $params): array
+    {
+        foreach( $line as $k => $v ){
+            if (!(isset($params[$k]['visible']) ? $params[$k]['visible'] : true)){
+                unset($line[$k]);
+            }else{
+                $type = isset($params[$k]['type']) ? $params[$k]['type'] : 'string';
+                switch($type){
+                    case 'float':
+                        $line[$k] = (float)$v;
+                    break;
+                }
+            }
+        }
+
+        return $line;
     }
 
 

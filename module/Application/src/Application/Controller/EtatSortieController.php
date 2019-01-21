@@ -114,11 +114,7 @@ class EtatSortieController extends AbstractController
         $filtres = $this->params()->fromPost() + $this->params()->fromQuery();
 
         $data = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filtres);
-        if (isset($data[0])){
-            $head = array_keys($data[0]);
-        }else{
-            $head = [];
-        }
+        $head = $this->getServiceEtatSortie()->genererCsvHeader($etatSortie, $data);
 
         $csvModel = new CsvModel();
         $csvModel->setHeader($head);

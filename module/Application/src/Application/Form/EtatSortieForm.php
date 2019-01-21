@@ -53,6 +53,18 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'    => 'TextArea',
+            'name'    => 'csv-params',
+            'options' => [
+                'label' => "Paramètres d'export CSV (format JSON)",
+            ],
+            'attributes' => [
+                'id'   => 'csv-params',
+                'rows' => '20',
+            ],
+        ]);
+
+        $this->add([
             'type'    => 'Checkbox',
             'name'    => 'auto-break',
             'options' => [
@@ -184,6 +196,7 @@ class EtatSortieHydrator implements HydratorInterface
         $object->setCode($data['code']);
         $object->setLibelle($data['libelle']);
         $object->setCle($data['cle']);
+        $object->setCsvParams($data['csv-params']);
         $object->setAutoBreak($data['auto-break'] === 'true');
         $object->setRequete($data['requete']);
         if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
@@ -221,6 +234,7 @@ class EtatSortieHydrator implements HydratorInterface
             'code'       => $object->getCode(),
             'libelle'    => $object->getLibelle(),
             'cle'        => $object->getCle(),
+            'csv-params' => $object->getCsvParams(),
             'auto-break' => $object->isAutoBreak() ? 'true' : 'false',
             'requete'    => $object->getRequete(),
         ];

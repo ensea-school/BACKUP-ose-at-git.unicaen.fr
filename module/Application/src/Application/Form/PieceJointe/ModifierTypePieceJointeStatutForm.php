@@ -38,7 +38,7 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
         $this->add([
             'name'    => 'premier-recrutement',
             'options' => [
-                'label' => 'Uniquement an cas de premier recrutement',
+                'label' => 'Uniquement en cas de premier recrutement',
             ],
             'type'    => 'Checkbox',
         ]);

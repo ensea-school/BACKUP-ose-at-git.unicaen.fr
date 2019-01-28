@@ -10,6 +10,7 @@
         <field name="libelle" type="string" column="LIBELLE" nullable="false"/>
         <field name="cle" type="string" column="CLE" nullable="true"/>
         <field name="csvParams" type="string" column="CSV_PARAMS" nullable="true"/>
+        <field name="pdfTraitement" type="string" column="PDF_TRAITEMENT" nullable="true"/>
         <field name="autoBreak" type="boolean" column="AUTO_BREAK" nullable="false"/>
         <field name="fichier" type="blob" column="FICHIER" nullable="false"/>
         <field name="requete" type="string" column="REQUETE" nullable="false"/>

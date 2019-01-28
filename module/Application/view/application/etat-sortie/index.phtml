@@ -11,9 +11,6 @@ use Application\Provider\Privilege\Privileges;
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_ADMINISTRATION_EDITION));
 
 
-/* On réutilise l'ACE d'UnicaenImport (pas top) */
-echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/import/ace-builds-master/src-min/ace.js');
-
 ?>
 <h1 class="page-header">États de sortie</h1>
 
@@ -32,8 +29,7 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/impo
             <td><?= $etatSortie->getLibelle(); ?></td>
             <td style="white-space: nowrap">
                 <?php if ($canEdit): ?>
-                    <a class="ajax-modal" data-event="etats-sortie-saisir"
-                       href="<?= $this->url('etat-sortie/saisir', ['etatSortie' => $etatSortie->getId()]) ?>">
+                    <a href="<?= $this->url('etat-sortie/saisir', ['etatSortie' => $etatSortie->getId()]) ?>">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     <a class="pop-ajax"
@@ -77,14 +73,3 @@ echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/impo
         Ajouter un état de sortie
     </a>
 <?php endif; ?>
-<script>
-
-    $(function () {
-
-        $("body").on("etats-sortie-saisir", function (event, data) {
-            window.location.reload();
-        });
-
-    });
-
-</script>

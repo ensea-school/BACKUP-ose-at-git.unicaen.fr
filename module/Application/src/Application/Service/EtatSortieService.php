@@ -2,8 +2,11 @@
 
 namespace Application\Service;
 
+use Application\Constants;
 use Application\Entity\Db\EtatSortie;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
+use UnicaenApp\View\Model\CsvModel;
 
 /**
  * Description of EtatSortieService
@@ -17,6 +20,9 @@ use Unicaen\OpenDocument\Document;
  */
 class EtatSortieService extends AbstractEntityService
 {
+    use ParametresServiceAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -43,10 +49,34 @@ class EtatSortieService extends AbstractEntityService
 
 
 
-    public function generer(EtatSortie $etatSortie, array $filtres)
+    /**
+     * @param string $param
+     *
+     * @return EtatSortie
+     * @throws \Exception
+     */
+    public function getByParametre(string $param): EtatSortie
     {
-        $fileName = $etatSortie->getLibelle() . '.pdf';
+        $etatSortieId = $this->getServiceParametres()->get($param);
+        $etatSortie   = $this->get($etatSortieId);
+        if (!$etatSortie) {
+            throw new \Exception('Etat de sortie "' . $param . '" non configuré dans les paramètres de OSE');
+        }
 
+        return $etatSortie;
+    }
+
+
+
+    /**
+     * @param EtatSortie $etatSortie
+     * @param array      $filtres
+     *
+     * @return Document
+     * @throws \Exception
+     */
+    public function genererPdf(EtatSortie $etatSortie, array $filtres): Document
+    {
         $document = new Document();
         $document->setTmpDir(getcwd() . '/data/cache/');
 
@@ -55,83 +85,101 @@ class EtatSortieService extends AbstractEntityService
         }
 
         $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
-        $document->publish($this->generateData($etatSortie, $filtres));
+        $data = $this->generateData($etatSortie, $filtres);
         $document->setPdfOutput(true);
-        $document->download($fileName);
+
+        $document->getPublisher()->setPublished(false);
+
+        if (trim($etatSortie->getPdfTraitement())){
+            eval($etatSortie->getPdfTraitement());
+        }
+        if (!$document->getPublisher()->isPublished()) $document->publish($data);
+
+        return $document;
     }
 
 
 
-    public function genererCsv(EtatSortie $etatSortie, array $filtres)
+    /**
+     * @param EtatSortie $etatSortie
+     * @param array      $filtres
+     *
+     * @return CsvModel
+     * @throws \Exception
+     */
+    public function genererCsv(EtatSortie $etatSortie, array $filtres): CsvModel
     {
         $params = $etatSortie->getCsvParamsArray();
-        $data = $this->generateData($etatSortie, $filtres);
+        $data   = $this->generateData($etatSortie, $filtres);
 
         $blocs = $etatSortie->getBlocs();
-        $bkey = null;
-        foreach( $blocs as $bloc){
-            $bkey = $bloc['nom'].'@'.$bloc['zone'];
+        $bkey  = null;
+        foreach ($blocs as $bloc) {
+            $bkey = $bloc['nom'] . '@' . $bloc['zone'];
             break;
         }
-        $res = [];
+
+        $csvModel = new CsvModel();
+
         foreach ($data as $k => $d) {
 
             /* On récupère les sous-données éventuelles */
-            if (array_key_exists($bkey, $d)){
+            if (array_key_exists($bkey, $d)) {
                 $bdata = $d[$bkey];
-            }else{
+            } else {
                 $bdata = null;
             }
 
             /* On supprime toutes les sous-données */
-            foreach( $d as $dk => $dv ){
-                if (false !== strpos($dk, '@')){
+            foreach ($d as $dk => $dv) {
+                if (false !== strpos($dk, '@')) {
                     unset($d[$dk]);
                 }
             }
 
             /* Si il y a des sous-données */
-            if ($bdata){
-                foreach( $bdata as $bd ){
-                    $res[] = $this->filterData($d + $bd, $params );
+            if ($bdata) {
+                foreach ($bdata as $bd) {
+                    $csvModel->addLine($this->filterData($d + $bd, $params));
                 }
-            }else{
-                $res[] = $this->filterData($d, $params );
+            } else {
+                $csvModel->addLine($this->filterData($d, $params));
             }
         }
 
-        return $res;
-    }
-
-
-
-    public function genererCsvHeader(EtatSortie $etatSortie, array &$data): array
-    {
-        if (!isset($data[0])) return [];
-
-        $head = array_keys($data[0]);
-        $params = $etatSortie->getCsvParamsArray();
-        foreach( $head as $k => $v ){
-            if (isset($params[$v]['libelle']) && $params[$v]['libelle']){
-                $head[$k] = $params[$v]['libelle'];
+        $csvModel->setFilename($etatSortie->getLibelle() . '.csv');
+        if (isset($csvModel->getData()[0])) {
+            $head = array_keys($csvModel->getData()[0]);
+            foreach ($head as $k => $v) {
+                if (isset($params[$v]['libelle']) && $params[$v]['libelle']) {
+                    $head[$k] = $params[$v]['libelle'];
+                }
             }
+            $csvModel->setHeader($head);
         }
 
-        return $head;
+        return $csvModel;
     }
 
 
 
     private function filterData(array $line, array $params): array
     {
-        foreach( $line as $k => $v ){
-            if (!(isset($params[$k]['visible']) ? $params[$k]['visible'] : true)){
+        foreach ($line as $k => $v) {
+            if (!(isset($params[$k]['visible']) ? $params[$k]['visible'] : true)) {
                 unset($line[$k]);
-            }else{
+            } else {
                 $type = isset($params[$k]['type']) ? $params[$k]['type'] : 'string';
-                switch($type){
+                switch (strtolower($type)) {
                     case 'float':
                         $line[$k] = (float)$v;
+                    break;
+                    case 'date':
+                        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $v);
+                        if ($date instanceof \DateTime) {
+                            $format   = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
+                            $line[$k] = $date->format($format);
+                        }
                     break;
                 }
             }

@@ -36,6 +36,11 @@ class EtatSortie
     protected $csvParams;
 
     /**
+     * @var string
+     */
+    protected $pdfTraitement;
+
+    /**
      * @var bool
      */
     protected $autoBreak = true;
@@ -313,9 +318,9 @@ class EtatSortie
      */
     public function getCsvParamsArray(): array
     {
-        if ($this->csvParams){
+        if ($this->csvParams) {
             return Json::decode($this->csvParams, Json::TYPE_ARRAY);
-        }else{
+        } else {
             return [];
         }
     }
@@ -330,6 +335,30 @@ class EtatSortie
     public function setCsvParams($csvParams): EtatSortie
     {
         $this->csvParams = $csvParams;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getPdfTraitement()
+    {
+        return $this->pdfTraitement;
+    }
+
+
+
+    /**
+     * @param string $pdfTraitement
+     *
+     * @return EtatSortie
+     */
+    public function setPdfTraitement($pdfTraitement): EtatSortie
+    {
+        $this->pdfTraitement = $pdfTraitement;
 
         return $this;
     }

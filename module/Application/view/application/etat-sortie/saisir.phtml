@@ -15,6 +15,9 @@ use Application\Form\EtatSortieForm;
 
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
+/* On réutilise l'ACE d'UnicaenImport (pas top) */
+echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/import/ace-builds-master/src-min/ace.js');
+
 echo $this->form()->openTag($form);
 
 ?>
@@ -22,44 +25,60 @@ echo $this->form()->openTag($form);
     <div class="col-md-4"><?= $this->formControlGroup($form->get('code')) ?></div>
     <div class="col-md-8"><?= $this->formControlGroup($form->get('libelle')) ?></div>
 </div>
-<?= $this->formControlGroup($form->get('fichier')) ?>
-<?= $this->formControlGroup($form->get('csv-params')) ?>
-<div class="requetes">
-<h2>Requête SQL de document <small>(facultative)</small></h2>
-<div class="panel panel-default etat-sortie-requete">
-    <div class="panel-heading" role="tab">
-        <label>Champ clé : </label>
-        <?= $this->formText($form->get('cle')) ?>
-        &nbsp;<label>Saut de page automatique : </label>
-        <?= $this->formCheckbox($form->get('auto-break')) ?>
-    </div>
-    <div class="panel-body">
-        <?= $this->formTextarea($form->get('requete')) ?>
-    </div>
-</div>
-<h2>Requêtes SQL par zones</h2>
-<div class="panel-group" id="blocs" role="tablist" aria-multiselectable="true">
 
-    <?php for ($i = 1; $i <= 10; $i++): ?>
-        <div class="panel panel-default etat-sortie-bloc" id="bloc<?= $i ?>">
-            <div class="panel-heading" role="tab" id="headingOne">
-                <label>Champ de référence : </label>
-                <?= $this->formText($form->get("bloc-$i-nom")) ?>
-                &nbsp;<label>Zone : </label>
-                <?= $this->formSelect($form->get("bloc-$i-zone")) ?>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#sql" aria-controls="sql" role="tab" data-toggle="tab">Requêtage</a></li>
+    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-toggle="tab">Export CSV</a></li>
+    <li role="presentation"><a href="#pdf" aria-controls="pdf" role="tab" data-toggle="tab">Export PDF</a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="sql">
+
+        <h2>Requête SQL de document <small>(facultative)</small></h2>
+        <div class="panel panel-default etat-sortie-requete">
+            <div class="panel-heading" role="tab">
+                <label>Champ clé : </label>
+                <?= $this->formText($form->get('cle')) ?>
             </div>
-            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                <div class="panel-body">
-                    <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
-                </div>
+            <div class="panel-body">
+                <?= $this->formTextarea($form->get('requete')) ?>
             </div>
         </div>
-    <?php endfor; ?>
-    <button type="button" class="btn btn-default btn-xs ajout-bloc">
-        <span class="glyphicon glyphicon-plus"></span> Ajouter une requête
-    </button>
+        <h2>Requêtes SQL par zones</h2>
+        <div class="panel-group" id="blocs" role="tablist" aria-multiselectable="true">
+
+            <?php for ($i = 1; $i <= 10; $i++): ?>
+                <div class="panel panel-default etat-sortie-bloc" id="bloc<?= $i ?>">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <label>Champ de référence : </label>
+                        <?= $this->formText($form->get("bloc-$i-nom")) ?>
+                        &nbsp;<label>Zone : </label>
+                        <?= $this->formSelect($form->get("bloc-$i-zone")) ?>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endfor; ?>
+            <button type="button" class="btn btn-default btn-xs ajout-bloc">
+                <span class="glyphicon glyphicon-plus"></span> Ajouter une requête
+            </button>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="csv">
+        <?= $this->formControlGroup($form->get('csv-params')) ?>
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="pdf">
+        <?= $this->formControlGroup($form->get('fichier')) ?>
+        <?= $this->formControlGroup($form->get('auto-break')) ?>
+        <?= $this->formControlGroup($form->get('pdf-traitement')) ?>
+    </div>
 </div>
-</div>
+
 <?php
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
@@ -73,6 +92,7 @@ echo $this->form()->closeTag();
         $.widget("ose.etatSortieSaisir", {
             requeteEditor: null,
             paramsEditor: null,
+            traitementEditor: null,
             blocs: {},
 
             save: function ()
@@ -82,6 +102,12 @@ echo $this->form()->closeTag();
                     .attr("name",'csv-params')
                     .val(this.paramsEditor.getSession().getValue());
                 this.element.append($(csvParams));
+
+                var pdfTraitement = $("<input>")
+                    .attr("type", 'hidden')
+                    .attr("name",'pdf-traitement')
+                    .val(this.traitementEditor.getSession().getValue());
+                this.element.append($(pdfTraitement));
 
                 var requete = $("<input>")
                     .attr("type", "hidden")
@@ -134,13 +160,18 @@ echo $this->form()->closeTag();
                 that.element.find('.ajout-bloc').click(function () {that.ajoutBloc()});
 
                 var options = {
-                    minLines: 15, maxLines: 30,
+                    minLines: 15, maxLines: 40,
                 };
 
                 that.paramsEditor = ace.edit("csv-params");
                 that.paramsEditor.setTheme("ace/theme/github");
                 that.paramsEditor.getSession().setMode("ace/mode/json");
                 that.paramsEditor.setOptions(options);
+
+                that.traitementEditor = ace.edit("pdf-traitement");
+                that.traitementEditor.setTheme("ace/theme/github");
+                that.traitementEditor.getSession().setMode({path:"ace/mode/php", inline:true});
+                that.traitementEditor.setOptions(options);
 
                 that.requeteEditor = ace.edit("requete");
                 that.requeteEditor.setTheme("ace/theme/github");
@@ -188,7 +219,7 @@ echo $this->form()->closeTag();
         padding: 0px;
     }
 
-    .etat-sortie-saisir .requetes .ace_editor {
+    .etat-sortie-saisir #sql .ace_editor {
         border: none;
         border-radius: 0;
         margin-bottom: 0px;

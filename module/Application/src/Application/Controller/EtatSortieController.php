@@ -50,6 +50,7 @@ class EtatSortieController extends AbstractController
             try {
                 $this->getServiceEtatSortie()->save($es);
                 $this->flashMessenger()->addSuccessMessage('État de sortie bien enregistré');
+                return $this->redirect()->toRoute('etat-sortie');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
@@ -101,7 +102,12 @@ class EtatSortieController extends AbstractController
 
         $filtres = $this->params()->fromPost() + $this->params()->fromQuery();
 
-        $this->getServiceEtatSortie()->generer($etatSortie, $filtres);
+        $document = $this->getServiceEtatSortie()->genererPdf($etatSortie, $filtres);
+        if (headers_sent()){
+            throw new \Exception("Fin du script : en-têtes déjà envoyées");
+        }else {
+            $document->download($etatSortie->getLibelle() . '.pdf');
+        }
     }
 
 
@@ -113,13 +119,7 @@ class EtatSortieController extends AbstractController
 
         $filtres = $this->params()->fromPost() + $this->params()->fromQuery();
 
-        $data = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filtres);
-        $head = $this->getServiceEtatSortie()->genererCsvHeader($etatSortie, $data);
-
-        $csvModel = new CsvModel();
-        $csvModel->setHeader($head);
-        $csvModel->addLines($data);
-        $csvModel->setFilename($etatSortie->getLibelle().'.csv');
+        $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filtres);
 
         return $csvModel;
     }

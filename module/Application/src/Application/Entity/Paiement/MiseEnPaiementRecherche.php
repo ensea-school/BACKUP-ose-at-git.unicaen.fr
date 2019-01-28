@@ -5,6 +5,7 @@ namespace Application\Entity\Paiement;
 use Application\Entity\Collection;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Db\Traits\AnneeAwareTrait;
 
 
 /**
@@ -14,7 +15,7 @@ use Application\Entity\Db\MiseEnPaiement;
  */
 class MiseEnPaiementRecherche
 {
-
+    use AnneeAwareTrait;
     use \Application\Entity\Db\Traits\StructureAwareTrait;
     use \Application\Entity\Db\Traits\PeriodeAwareTrait;
     use \Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
@@ -56,7 +57,7 @@ class MiseEnPaiementRecherche
     }
 
     /**
-     * 
+     *
      * @return Intervenant[]
      */
     public function getIntervenants()
@@ -68,4 +69,35 @@ class MiseEnPaiementRecherche
         return $this->intervenants;
     }
 
+
+
+    public function getFilters(): array
+    {
+        $filters = [];
+        if ($e = $this->getEtat()){
+            $filters['ETAT'] = $e;
+        }
+        if ($a = $this->getAnnee()) {
+            $filters['ANNEE_ID'] = $a->getId();
+        }
+        if ($s = $this->getStructure()) {
+            $filters['STRUCTURE_ID'] = $s->getId();
+        }
+        if ($p = $this->getPeriode()) {
+            $filters['PERIODE_ID'] = $p->getId();
+        }
+        if ($t = $this->getTypeIntervenant()) {
+            $filters['TYPE_INTERVENANT_ID'] = $t->getId();
+        }
+        if ($this->getIntervenants()->count() > 0) {
+            $iIdList = [];
+            foreach ($this->getIntervenants() as $intervenant) {
+                $filters['INTERVENANT_ID'] = $iIdList;
+                $iIdList[] = $intervenant->getId();
+            }
+            $filters['INTERVENANT_ID'] = $iIdList;
+        }
+
+        return $filters;
+    }
 }

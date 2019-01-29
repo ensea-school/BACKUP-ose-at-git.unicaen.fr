@@ -394,7 +394,18 @@ class EtatSortie
      */
     public function getFichier()
     {
-        return $this->fichier;
+        if (is_resource($this->fichier)) {
+            return stream_get_contents($this->fichier, -1, 0);
+        }elseif($this->fichier) {
+            return $this->fichier;
+        }else{
+            $fichierGenerique = getcwd() . '/data/'.$this->getCode().'.odt';
+            if (file_exists($fichierGenerique)) {
+                return file_get_contents($fichierGenerique);
+            }
+        }
+
+        return null;
     }
 
 
@@ -406,8 +417,11 @@ class EtatSortie
     {
         if (is_resource($this->fichier)) {
             return !empty(stream_get_contents($this->fichier, 1));
-        } else {
-            return !empty($this->fichier);
+        } elseif(!empty($this->fichier)) {
+            return true;
+        }else{
+            $fichierGenerique = getcwd() . '/data/'.$this->getCode().'.odt';
+            return file_exists($fichierGenerique);
         }
     }
 

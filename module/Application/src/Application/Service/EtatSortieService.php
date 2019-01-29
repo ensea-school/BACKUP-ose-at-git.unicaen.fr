@@ -79,21 +79,26 @@ class EtatSortieService extends AbstractEntityService
     {
         $document = new Document();
         $document->setTmpDir(getcwd() . '/data/cache/');
-
+        $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
+        $document->setPdfOutput(true);
         if ($etatSortie->hasFichier()) {
-            $document->loadFromData(stream_get_contents($etatSortie->getFichier(), -1, 0));
-        }else{
-            throw new \Exception('Fichier modèle au format OpenDocument non fourni dans l\'état de sortie "'.$etatSortie->getLibelle().'"');
+            $document->loadFromData($etatSortie->getFichier());
+        } else {
+            throw new \Exception('Fichier modèle au format OpenDocument non fourni dans l\'état de sortie "' . $etatSortie->getLibelle() . '"');
         }
 
-        $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
         $data = $this->generateData($etatSortie, $filtres);
-        $document->setPdfOutput(true);
+        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
-        $document->getPublisher()->setPublished(false);
+        if (trim($etatSortie->getPdfTraitement())) {
+            $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
+            // Isolation de traitement pour éviter tout débordement...
+            $traitement = function () use ($document, $etatSortie, $data, $filtres, $role, $__PHP__CODE__TRAITEMENT__) {
+                eval($__PHP__CODE__TRAITEMENT__);
 
-        if (trim($etatSortie->getPdfTraitement())){
-            eval($etatSortie->getPdfTraitement());
+                return $data;
+            };
+            $data       = $traitement();
         }
         if (!$document->getPublisher()->isPublished()) $document->publish($data);
 
@@ -251,26 +256,25 @@ class EtatSortieService extends AbstractEntityService
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query = "SELECT q.* FROM ($sql) q WHERE 1=1";
+        $query        = "SELECT q.* FROM ($sql) q WHERE 1=1";
         $queryFilters = $filtres;
         foreach ($filtres as $filtre => $values) {
-            if (is_array($values)){
+            if (is_array($values)) {
                 unset($queryFilters[$filtre]);
                 $index = 0;
                 $query .= " AND (";
-                foreach( $values as $val ){
-                    if ($index > 0){
-                        $query .=  ' OR ';
+                foreach ($values as $val) {
+                    if ($index > 0) {
+                        $query .= ' OR ';
                     }
-                    $query .= "q.\"$filtre\" = :$filtre$index";
-                    $queryFilters[$filtre.$index] = $val;
+                    $query                          .= "q.\"$filtre\" = :$filtre$index";
+                    $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
                 $query .= ")";
-            }else{
+            } else {
                 $query .= " AND q.\"$filtre\" = :$filtre";
             }
-
         }
 
         return $connection->fetchAll($query, $queryFilters);
@@ -282,23 +286,23 @@ class EtatSortieService extends AbstractEntityService
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
+        $query        = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
         $queryFilters = $filtres;
         foreach ($filtres as $filtre => $values) {
-            if (is_array($values)){
+            if (is_array($values)) {
                 unset($queryFilters[$filtre]);
                 $index = 0;
                 $query .= " AND (";
-                foreach( $values as $val ){
-                    if ($index > 0){
-                        $query .=  ' OR ';
+                foreach ($values as $val) {
+                    if ($index > 0) {
+                        $query .= ' OR ';
                     }
-                    $query .= "mq.\"$filtre\" = :$filtre$index";
-                    $queryFilters[$filtre.$index] = $val;
+                    $query                          .= "mq.\"$filtre\" = :$filtre$index";
+                    $queryFilters[$filtre . $index] = $val;
                     $index++;
                 }
                 $query .= ")";
-            }else{
+            } else {
                 $query .= " AND mq.\"$filtre\" = :$filtre";
             }
         }

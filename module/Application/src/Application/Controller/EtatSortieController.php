@@ -88,7 +88,7 @@ class EtatSortieController extends AbstractController
         $fichier->setNom(Util::reduce($etatSortie->getLibelle()) . '.odt');
         $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
         if ($etatSortie->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($etatSortie->getFichier(), -1, 0));
+            $fichier->setContenu($etatSortie->getFichier());
         }
         $this->uploader()->download($fichier);
     }

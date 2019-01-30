@@ -32,6 +32,19 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'statut'                             => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/statut/:typeIntervention',
+                            'constraints' => [
+                                'typeIntervention' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'statut',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'delete'                             => [
                         'type'          => 'Segment',
                         'options'       => [
@@ -84,6 +97,33 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                        'statut-saisie'                             => [
+                            'type'          => 'Segment',
+                            'options'       => [
+                                'route'       => '/statut-saisie/:typeIntervention[/:typeInterventionStatut]',
+                                'constraints' => [
+                                    'typeIntervention' => '[0-9]*',
+                                    'typeInterventionStatut' => '[0-9]*',
+                                ],
+                                'defaults'    => [
+                                    'action' => 'statut-saisie',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
+                        'statut-delete'                             => [
+                            'type'          => 'Segment',
+                            'options'       => [
+                                'route'       => '/statut-delete/:typeIntervention/:typeInterventionStatut',
+                                'constraints' => [
+                                    'typeInterventionStatut' => '[0-9]*',
+                                ],
+                                'defaults'    => [
+                                    'action' => 'statut-delete',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
                 ],
             ],
         ],
@@ -118,12 +158,13 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
-                    'action'     => ['index'],
+                    'action'     => ['index','statut'],
                     'privileges' => [Privileges::TYPE_INTERVENTION_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\TypeIntervention',
-                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete', 'type-intervention-trier'],
+                    'action'     => ['saisie', 'delete', 'type-intervention-structure-saisie', 'type-intervention-structure-delete',
+                                     'type-intervention-trier','statut-saisie','statut-delete'],
                     'privileges' => [Privileges::TYPE_INTERVENTION_EDITION],
                 ],
             ],
@@ -132,6 +173,7 @@ return [
     'service_manager' => [
         'invokables' => [
             Service\TypeInterventionStructureService::class => Service\TypeInterventionStructureService::class,
+            Service\TypeInterventionStatutService::class => Service\TypeInterventionStatutService::class,
         ],
     ],
     'controllers'     => [
@@ -143,6 +185,13 @@ return [
         'invokables' => [
             Form\TypeIntervention\TypeInterventionSaisieForm::class          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
             Form\TypeIntervention\TypeInterventionStructureSaisieForm::class => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
+            Form\TypeIntervention\TypeInterventionStatutSaisieForm::class => Form\TypeIntervention\TypeInterventionStatutSaisieForm::class,
+            Form\TypeIntervention\TypeInterventionStatutDeleteForm::class => Form\TypeIntervention\TypeInterventionStatutDeleteForm::class,
+        ],
+    ],
+    'view_helpers'    => [
+        'invokables' => [
+            'typeInterventionAdmin' => View\Helper\TypeInterventionAdminViewHelper::class,
         ],
     ],
 ];

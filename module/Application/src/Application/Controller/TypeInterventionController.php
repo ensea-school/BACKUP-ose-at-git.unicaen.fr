@@ -208,7 +208,7 @@ class TypeInterventionController extends AbstractController
         $form->bindRequestSave($typeInterventionStatut, $this->getRequest(), function (TypeInterventionStatut $tis) {
             try {
                 $this->getServiceTypeInterventionStatut()->save($tis);
-                $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $tis->getTypeIntervention()->getId()], ['title' => 'toto']); // redirection vers la page parent en cas de succès
+                $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $tis->getTypeIntervention()->getId()]); // redirection vers la page parent en cas de succès
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);
@@ -223,22 +223,15 @@ class TypeInterventionController extends AbstractController
 
     public function statutDeleteAction()
     {
-        /* @var $typeInterventionStatut TypeInterventionStatut */
-        $typeIntervention=$this->getEvent()->getParam('typeIntervention');
-        $typeInterventionStatut = $this->getEvent()->getParam('typeInterventionStatut');
-        ?>
-        <script>
-            console.log(<?= gettype($typeIntervention) ?>);
-           </script>
-<?php
-        try {
-            $this->getServiceTypeInterventionStatut()->delete($typeInterventionStatut);
-            $this->flashMessenger()->addSuccessMessage("statut d\'intervention supprimé avec succès.");;
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
-        }
-        $url=$this->url()->fromRoute('type-intervention/statut',['typeIntervention'=>$typeIntervention->getId()]);
-        $this->redirect()->toUrl($url);
-        return new MessengerViewModel(compact('typeInterventionStatut'));
+        $ti    = $this->getEvent()->getParam('typeIntervention');
+        $tis   = $this->getEvent()->getParam('typeInterventionStatut');
+        $title = "Suppression du statut";
+        $form  = $this->makeFormSupprimer(function () use ($tis,$ti) {
+            $this->getServiceTypeInterventionStatut()->delete($tis);
+            $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $ti->getId()]); // redirection vers la page parent en cas de succès
+            $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
+
+        });
+        return compact('form', 'title');
     }
 }

@@ -186,6 +186,7 @@ return [
             Form\TypeIntervention\TypeInterventionSaisieForm::class          => Form\TypeIntervention\TypeInterventionSaisieForm::class,
             Form\TypeIntervention\TypeInterventionStructureSaisieForm::class => Form\TypeIntervention\TypeInterventionStructureSaisieForm::class,
             Form\TypeIntervention\TypeInterventionStatutSaisieForm::class => Form\TypeIntervention\TypeInterventionStatutSaisieForm::class,
+            Form\TypeIntervention\TypeInterventionStatutDeleteForm::class => Form\TypeIntervention\TypeInterventionStatutDeleteForm::class,
         ],
     ],
     'view_helpers'    => [

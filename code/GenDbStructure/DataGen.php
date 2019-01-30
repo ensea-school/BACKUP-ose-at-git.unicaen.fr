@@ -250,6 +250,26 @@ class DataGen
             }
         }
 
+        $res .= "\n\n-- DIVERSES REQUETES SUPPLEMENTAIRES\n";
+
+        $res .= "INSERT INTO affectation(
+        id,
+        utilisateur_id,
+        role_id,
+        source_id,
+        histo_creation,
+        histo_createur_id,
+        histo_modification,
+        histo_modificateur_id
+    )values (
+        affectation_id_seq.nextval,
+        (select id from utilisateur where username = 'oseappli'),
+  (select id from role where code = 'administrateur'),
+  (select id from source where code = 'OSE'),
+  sysdate, (select id from utilisateur where username = 'oseappli'),
+  sysdate, (select id from utilisateur where username = 'oseappli')
+);";
+
         return $res;
     }
 

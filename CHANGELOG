@@ -3,7 +3,9 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
-#OSE 8.0 (en développement)
+
+
+#OSE 8.0
 
 ## Corrections de bugs
 
@@ -26,7 +28,18 @@ dans l'interface d'administration.
 
 * L'installation de OSE via Gitlab passe désormais par HTTPS au lieu de SSH. La clé de déploiement n'est plus nécessaire.
 
+* Nouveau système d'états de sorties personnalisables. Les documents concernés sont :
+  * L'export Winpaie
+  * Les états de paiement et états de demandes de mise en paiement
+
+* Amélioration de l'interface d'administration des types d'intervention : possibilité de définir des taux spécifiques par statut d'intervenant (pour le TP hors service par exemple)
+
 ## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/08.0.sql`
+
+* Mettez à jour vos paramètres généraux de configuration (Menu Administration/Paramétrages/Paramètres généraux).
 
 #OSE 7.0.6
 

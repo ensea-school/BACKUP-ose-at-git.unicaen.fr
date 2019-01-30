@@ -68,7 +68,7 @@ class Liste extends AbstractViewHelper
         ],
         'structure-aff'       => [
             'visibility' => false,
-            'head-text'  => "<th title=\"Structure d'appartenance de l'intervenant\">StructureService d'affectation</th>",
+            'head-text'  => "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>",
         ],
         'structure-ens'       => [
             'visibility' => true,

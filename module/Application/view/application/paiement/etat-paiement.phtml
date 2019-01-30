@@ -1,15 +1,17 @@
 <?php
 
 use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Provider\Privilege\Privileges;
 
+/* @var $recherche MiseEnPaiementRecherche */
 /* @var $rechercheForm \Application\Form\Paiement\MiseEnPaiementRechercheForm */
 /* @var $etatPaiement array */
 /* @var $etat string */
 /* @var $miseEnPaiementForm Application\Form\Paiement\MiseEnPaiementForm */
 
 $title = 'Paiement';
-switch( $etat ){
+switch( $recherche->getEtat() ){
     case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
         $title = 'Mise en paiement';
         $rechercheForm->get('afficher')->setValue('Afficher les demandes à mettre en paiement');
@@ -27,7 +29,7 @@ $this->headTitle()->append($title);
 
 ?>
 <h1><?= $title ?></h1>
-<div class="panel panel-default filter" data-etat="<?= $etat ?>">
+<div class="panel panel-default filter" data-etat="<?= $recherche->getEtat() ?>">
 
     <div class="panel-heading">Filtres</div>
     <div class="panel-body">
@@ -46,7 +48,7 @@ $this->headTitle()->append($title);
             echo $this->formControlGroup($rechercheForm->get('structure'));
 
             if ($rechercheForm->get('structure')->getValue()){
-                if (MiseEnPaiement::MIS_EN_PAIEMENT === $etat){
+                if (MiseEnPaiement::MIS_EN_PAIEMENT === $recherche->getEtat()){
                     echo $this->formControlGroup($rechercheForm->get('periode'));
                     if ($rechercheForm->get('periode')->getValue()){
                         echo $this->formControlGroup($rechercheForm->get('intervenants'), $this->formAdvancedMultiCheckbox()->setHeight('20em'));

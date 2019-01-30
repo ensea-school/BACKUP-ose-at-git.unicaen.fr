@@ -127,6 +127,8 @@ class ElementPedagogiqueController extends AbstractController
             exit;
         }
 
+        $limit = $etape ? 9999999 : 101;
+
         // respect des filtres éventuels spécifiés en GET ou sinon en session
         $params              = [];
         $params['structure'] = $structure;
@@ -134,7 +136,7 @@ class ElementPedagogiqueController extends AbstractController
         $params['etape']     = $etape;
         $params['element']   = $element;
         $params['term']      = $term;
-        $params['limit']     = $limit = 101;
+        $params['limit']     = $limit;
 
         // fetch
         $found = $this->getServiceElementPedagogique()->getSearchResultByTerm($params);

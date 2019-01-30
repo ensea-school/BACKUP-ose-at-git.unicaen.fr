@@ -360,10 +360,10 @@ class DataGen
                 return "' || CASE WHEN $column IS NULL THEN 'NULL' ELSE 'q''[' || $column || ']''' END || '";
             case 'CLOB':
                 return "' || CASE WHEN $column IS NULL THEN 'NULL' ELSE 'q''[' || to_char($column) || ']''' END || '";
-            break;
+            case 'BLOB':
+                return 'NULL';
             case 'DATE':
                 return "' || CASE WHEN $column IS NULL THEN 'NULL' ELSE 'to_date(''' || to_char($column,'YYYY-MM-DD HH:MI:SS') || ''',''YYYY-MM-DD HH:MI:SS'')' END || '";
-            break;
         }
 
         return $column;

@@ -101,6 +101,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface, Impo
     public function __construct()
     {
         $this->formuleResultatVolumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 

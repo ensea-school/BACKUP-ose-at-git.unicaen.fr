@@ -101,10 +101,14 @@ class Saisie extends AbstractForm
     {
         $data = [
             'etape-requise' => [],
+            'structures' => [],
         ];
         foreach( $fonctions as $fonction ){
             if ($fonction->isEtapeRequise()){
                 $data['etape-requise'][] = $fonction->getId();
+            }
+            if ($fonction->getStructure()){
+                $data['structures'][$fonction->getId()] = $fonction->getStructure()->getId();
             }
         }
 

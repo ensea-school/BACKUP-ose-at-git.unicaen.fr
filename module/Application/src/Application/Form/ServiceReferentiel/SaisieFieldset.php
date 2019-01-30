@@ -222,7 +222,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             return null;
         }
 
-        // recherche de la StructureService sélectionnée
+        // recherche de la Structure sélectionnée
         $structures      = $this->getStructures();
         $value           = $this->get('structure')->getValue();
         $structureSaisie = isset($structures[$value]) ? $structures[$value] : null;
@@ -244,7 +244,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             $callback = function () use ($structureSaisie, $structureFonction) {
                 return $structureSaisie === $structureFonction;
             };
-            $message  = sprintf("StructureService obligatoire : '%s'", $structureFonction);
+            $message  = sprintf("Structure obligatoire : '%s'", $structureFonction);
         }
 
         $v = new Callback($callback);

@@ -101,7 +101,7 @@ class ModificationServiceDuService extends AbstractEntityService
         $res  = [
             'head' => [
                 'annee'                          => 'Année',
-                'structure-libelle'              => 'StructureService d\'affectation',
+                'structure-libelle'              => 'Structure d\'affectation',
                 'intervenant-code'               => 'Code intervenant',
                 'intervenant-nom-usuel'          => 'Nom usuel',
                 'intervenant-nom-patronymique'   => 'Nom patronymique',

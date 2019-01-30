@@ -56,8 +56,6 @@
                 <cascade-all/>
             </cascade>
         </one-to-many>
-        <one-to-one field="formuleServiceReferentiel" target-entity="Application\Entity\Db\FormuleServiceReferentiel"
-                    mapped-by="serviceReferentiel"/>
         <one-to-many field="formuleResultatServiceReferentiel"
                      target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="serviceReferentiel"/>
 

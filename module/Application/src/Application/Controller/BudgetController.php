@@ -267,9 +267,9 @@ class BudgetController extends AbstractController
             'intervenant-grade-libelle'      => 'Grade',
             'intervenant-discipline-code'    => 'Discipline intervenant (Code)',
             'intervenant-discipline-libelle' => 'Discipline intervenant',
-            'service-structure-aff-libelle'  => 'StructureService d\'affectation',
+            'service-structure-aff-libelle'  => 'Structure d\'affectation',
 
-            'service-structure-ens-libelle' => 'StructureService d\'enseignement',
+            'service-structure-ens-libelle' => 'Structure d\'enseignement',
             'groupe-type-formation-libelle' => 'Groupe de type de formation',
             'type-formation-libelle'        => 'Type de formation',
             'etape-niveau'                  => 'Niveau',
@@ -283,7 +283,7 @@ class BudgetController extends AbstractController
             'element-taux-fc'               => 'Taux FC',
             'element-taux-fa'               => 'Taux FA',
             'commentaires'                  => 'Commentaires',
-            'element-source-libelle'        => 'SourceService enseignement',
+            'element-source-libelle'        => 'Source enseignement',
 
             'type-ressource-libelle'      => 'Enveloppe',
             'centre-couts-code'           => 'Centre de coûts ou EOTP (code)',

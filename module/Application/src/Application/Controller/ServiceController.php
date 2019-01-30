@@ -465,10 +465,7 @@ class ServiceController extends AbstractController
         $id                = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
 
-        $intervenant = null;
-        if (!$intervenant){
-            $intervenant = $this->context()->intervenantFromQuery('intervenant');
-        }
+        $intervenant = $this->context()->intervenantFromQuery('intervenant');
         if (!$intervenant){
             $service = $this->params()->fromPost('service');
             if (isset($service['intervenant-id'])){

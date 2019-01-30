@@ -250,7 +250,7 @@ class DossierFieldset extends AbstractFieldset
                 'label' => 'Adresse mail personnelle (éventuelle)',
             ],
             'attributes' => [
-                'info_icon' => "Si vous renseignez une adresse mail perso, celle-ci sera uttilisée pour vous contacter.",
+                'info_icon' => "Si vous renseignez une adresse mail perso, celle-ci sera utilisée pour vous contacter.",
                 'readonly'  => false,
             ],
             'type'       => 'Text',

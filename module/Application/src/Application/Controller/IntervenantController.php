@@ -15,6 +15,7 @@ use Application\Processus\Traits\ServiceReferentielProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CampagneSaisieServiceAwareTrait;
 use Application\Service\Traits\EtatVolumeHoraireServiceAwareTrait;
+use Application\Service\Traits\FormuleResultatServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
@@ -24,7 +25,6 @@ use LogicException;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
-use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\View\Model\ViewModel;
 
@@ -37,7 +37,6 @@ class IntervenantController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ContextServiceAwareTrait;
     use IntervenantServiceAwareTrait;
-    use TypeHeuresServiceAwareTrait;
     use HeuresCompFormAwareTrait;
     use SessionContainerTrait;
     use EditionFormAwareTrait;
@@ -50,6 +49,7 @@ class IntervenantController extends AbstractController
     use CampagneSaisieServiceAwareTrait;
     use ValidationServiceAwareTrait;
     use PlafondProcessusAwareTrait;
+    use FormuleResultatServiceAwareTrait;
 
 
 
@@ -286,11 +286,6 @@ class IntervenantController extends AbstractController
 
     public function voirHeuresCompAction()
     {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Service::class,
-            \Application\Entity\Db\VolumeHoraire::class,
-        ]);
-
         $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant \Application\Entity\Db\Intervenant */
 
@@ -312,156 +307,18 @@ class IntervenantController extends AbstractController
             throw new LogicException('Etat de volume horaire erroné');
         }
 
-        $typesHeures = $this->getServiceTypeHeures()->getList();
-
         $form->setData([
             'type-volume-horaire' => $typeVolumeHoraire->getId(),
             'etat-volume-horaire' => $etatVolumeHoraire->getId(),
         ]);
 
-        $data = [
-            'structure-affectation'         => $intervenant->getStructure(),
-            'heures-service-statutaire'     => $intervenant->getStatut()->getServiceStatutaire(),
-            'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie()->getHeures(),
-            'heures-decharge'               => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie()->getHeuresDecharge(),
-            'services'                      => [],
-            'referentiel'                   => [],
-            'types-intervention'            => [],
-            'has-ponderation-service-compl' => false,
-            'th-taux'                       => [],
-            'th-service'                    => [],
-            'th-compl'                      => [],
-        ];
+        $data = $this->getServiceFormuleResultat()->getData(
+            $intervenant,
+            $typeVolumeHoraire,
+            $etatVolumeHoraire
+        );
 
-        $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel();
-        foreach ($referentiels as $referentiel) {
-            /* @var $referentiel \Application\Entity\Db\FormuleServiceReferentiel */
-
-            if (!isset($data['referentiel'][$referentiel->getStructure()->getId()])) {
-                $data['referentiel'][$referentiel->getStructure()->getId()] = [
-                    'structure'          => $referentiel->getStructure(),
-                    'heures'             => 0,
-                    'hetd'               => 0,
-                    'hetd-compl'         => 0,
-                    'service-statutaire' => $referentiel->isServiceStatutaire(),
-                ];
-            }
-            $data['referentiel'][$referentiel->getStructure()->getId()]['heures']     += $referentiel->getHeures($typeVolumeHoraire, $etatVolumeHoraire);
-            $frr                                                                      = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd']       += $frr ? $frr->getHeuresServiceReferentiel() : 0;
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
-        }
-
-        $services = $intervenant->getFormuleIntervenant()->getFormuleService();
-        foreach ($services as $service) {
-            $dsId = $service->getId();
-            $ds   = [];
-
-            /* @var $service \Application\Entity\Db\FormuleService */
-            $typesIntervention = [];
-            $totalHeures       = 0;
-
-            $fvhs = $service->getFormuleVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire);
-            foreach ($fvhs as $fvh) {
-                /* @var $fvh \Application\Entity\Db\FormuleVolumeHoraire */
-                $totalHeures += $fvh->getHeures();
-                if (!isset($typesIntervention[$fvh->getTypeIntervention()->getId()])) {
-                    $typesIntervention[$fvh->getTypeIntervention()->getId()] = [
-                        'type-intervention' => $fvh->getTypeIntervention(),
-                        'heures'            => 0,
-                        'hetd'              => 0,
-                    ];
-                }
-                $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
-
-                $hetd = 0;
-                if ($frvh = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()) {
-                    if ($frvhf = $frvh->first()) {
-                        $hetd = $frvhf->getTotal();
-                    }
-                }
-
-                $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd'] += $hetd;
-            }
-
-            if ($totalHeures > 0) {
-                $frs = $service->getService()->getUniqueFormuleResultatService($typeVolumeHoraire, $etatVolumeHoraire);
-                if (1.0 !== $service->getPonderationServiceCompl()) {
-                    $data['has-ponderation-service-compl'] = true;
-                }
-                $ds = [
-                    'element-etablissement'     => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique() : $service->getService()->getEtablissement(),
-                    'taux'                      => [],
-                    'structure'                 => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique()->getStructure() : $service->getService()->getIntervenant()->getStructure(),
-                    'ponderation-service-compl' => $service->getPonderationServiceCompl(),
-                    'service-statutaire'        => $service->isServiceStatutaire(),
-                    'heures'                    => [],
-                    'hetd'                      => [
-                        'total' => 0,
-                    ],
-                ];
-
-                foreach ($typesHeures as $typeHeures) {
-                    /* @var $typeHeures \Application\Entity\Db\TypeHeures */
-                    // taux
-                    try {
-                        $h = $service->getTaux($typeHeures);
-                    } catch (\Exception $ex) {
-                        $h = 0.0;
-                    }
-                    if ($h > 0) {
-                        $ds['taux'][$typeHeures->getId()]      = $h;
-                        $data['th-taux'][$typeHeures->getId()] = $typeHeures;
-                    }
-
-                    // HETD service
-                    try {
-                        $h = $frs->getHeuresService($typeHeures);
-                    } catch (\Exception $ex) {
-                        $h = 0.0;
-                    }
-                    if ($h > 0) {
-                        $ds['hetd']['service'][$typeHeures->getId()] = $h;
-                        $data['th-service'][$typeHeures->getId()]    = $typeHeures;
-                    }
-
-                    // HETD compl
-                    try {
-                        $h = $frs->getHeuresCompl($typeHeures);
-                    } catch (\Exception $ex) {
-                        $h = 0.0;
-                    }
-                    if ($h > 0) {
-                        $ds['hetd']['compl'][$typeHeures->getId()] = $h;
-                        $data['th-compl'][$typeHeures->getId()]    = $typeHeures;
-                    }
-                }
-
-                foreach ($typesIntervention as $ti) {
-                    if ($ti['heures'] > 0) {
-                        $data['types-intervention'][$ti['type-intervention']->getId()] = $ti['type-intervention'];
-                        $ds['heures'][$ti['type-intervention']->getId()]               = $ti['heures'];
-                        $ds['hetd'][$ti['type-intervention']->getId()]                 = $ti['hetd'];
-                    }
-                }
-                $data['services'][$dsId] = $ds;
-            }
-        }
-
-        usort($data['types-intervention'], function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
-        });
-        usort($data['th-taux'], function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
-        });
-        usort($data['th-service'], function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
-        });
-        usort($data['th-compl'], function ($ti1, $ti2) {
-            return $ti1->getOrdre() > $ti2->getOrdre();
-        });
-
-        return compact('form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
+        return compact('form', 'intervenant', 'data');
     }
 
 

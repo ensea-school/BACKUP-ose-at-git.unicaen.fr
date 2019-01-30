@@ -49,11 +49,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     private $volumeHoraireReferentiel;
 
     /**
-     * @var FormuleServiceReferentiel
-     */
-    private $formuleServiceReferentiel;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatServiceReferentiel;
@@ -228,24 +223,14 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface,
     public function hasValidation()
     {
         $volumesHoraires = $this->getVolumeHoraireReferentiel();
-        foreach( $volumesHoraires as $volumeHoraire ){
+        foreach ($volumesHoraires as $volumeHoraire) {
             /* @var $volumeHoraire VolumeHoraireReferentiel */
-            if ($volumeHoraire->hasValidation())
+            if ($volumeHoraire->hasValidation()) {
                 return true;
+            }
         }
+
         return false;
-    }
-
-
-
-    /**
-     * Get formuleServiceReferentiel
-     *
-     * @return FormuleServiceReferentiel
-     */
-    public function getFormuleServiceReferentiel()
-    {
-        return $this->formuleServiceReferentiel;
     }
 
 

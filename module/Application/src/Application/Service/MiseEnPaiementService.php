@@ -258,15 +258,10 @@ class MiseEnPaiementService extends AbstractEntityService
      *
      * @return array
      */
-    public function getEtatPaiementCsv(MiseEnPaiementRecherche $recherche, array $options = [])
+    public function getEtatPaiementCsv(MiseEnPaiementRecherche $recherche)
     {
         // initialisation
-        $defaultOptions = [
-            'composante' => null,            // Composante qui en fait la demande
-        ];
-        $options        = array_merge($defaultOptions, $options);
         $annee          = $this->getServiceContext()->getAnnee();
-
 
         $data = [];
 
@@ -293,10 +288,6 @@ class MiseEnPaiementService extends AbstractEntityService
                 $iIdList[] = $intervenant->getId();
             }
             $conditions['intervenant_id'] = 'intervenant_id IN (' . implode(',', $iIdList) . ')';
-        }
-
-        if ($options['composante'] instanceof Structure) {
-            $conditions['composante'] = "structure_id = " . (int)$options['composante']->getId();
         }
 
         $sql  = 'SELECT * FROM V_ETAT_PAIEMENT WHERE ' . implode(' AND ', $conditions) . ' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
@@ -330,123 +321,6 @@ class MiseEnPaiementService extends AbstractEntityService
                 'exercice-ac-montant' => (float)$d['EXERCICE_AC_MONTANT'],
             ];
             $data[] = $ds;
-        }
-
-        return $data;
-    }
-
-
-
-    /**
-     * Retourne les données de l'export Winpaie des mises en paiement en fonction des critères de recherche transmis
-     *
-     * @param MiseEnPaiementRecherche $recherche
-     *
-     * @return array
-     */
-    public function getExportWinpaie(MiseEnPaiementRecherche $recherche, array $options = [])
-    {
-        // initialisation
-        $defaultOptions = [
-            'composante' => null,            // Composante qui en fait la demande
-        ];
-        $options        = array_merge($defaultOptions, $options);
-        $annee          = $this->getServiceContext()->getAnnee();
-
-        $data = [];
-
-        // requêtage
-        $conditions = [
-            'annee_id = ' . $annee->getId(),
-        ];
-
-        if ($t = $recherche->getTypeIntervenant()) {
-            $conditions['type_intervenant_id'] = 'type_intervenant_id = ' . $t->getId();
-        }
-        if ($p = $recherche->getPeriode()) {
-            $conditions['periode_id'] = 'periode_paiement_id = ' . $p->getId();
-        }
-        if ($s = $recherche->getStructure()) {
-            $conditions['structure_id'] = 'structure_id = ' . $s->getId();
-        }
-        if ($recherche->getIntervenants()->count() > 0) {
-            $iIdList = [];
-            foreach ($recherche->getIntervenants() as $intervenant) {
-                $iIdList[] = $intervenant->getId();
-            }
-            $conditions['intervenant_id'] = 'intervenant_id IN (' . implode(',', $iIdList) . ')';
-        }
-
-        if ($options['composante'] instanceof Structure) {
-            $conditions['composante'] = "structure_id = " . (int)$options['composante']->getId();
-        }
-
-        $sql  = '
-        SELECT
-            INSEE,
-            NOM,
-            CARTE,
-            CODE_ORIGINE, 
-            RETENUE, 
-            SENS, 
-            MC, 
-            SUM(NBU) NBU,
-            MONTANT, 
-            LIBELLE
-        FROM
-            V_EXPORT_PAIEMENT_WINPAIE
-        WHERE
-            ' . implode(' AND ', $conditions) . '
-        GROUP BY
-            INSEE,
-            NOM,
-            CARTE,
-            CODE_ORIGINE,
-            RETENUE,
-            SENS,
-            MC,
-            MONTANT,
-            LIBELLE
-        ORDER BY
-            NOM, CODE_ORIGINE
-        ';
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-
-        // récupération des données
-        while ($d = $stmt->fetch()) {
-            $nbu      = (float)$d['NBU'];
-            $libelle  = $d['LIBELLE'];
-            $nbuLimit = 99;
-            $ds       = [
-                'insee'        => "'".$d['INSEE'],
-                'nom'          => $d['NOM'],
-                'carte'        => $d['CARTE'],
-                'code-origine' => $d['CODE_ORIGINE'],
-                'retenue'      => $d['RETENUE'],
-                'sens'         => $d['SENS'],
-                'mc'           => $d['MC'],
-                'nbu'          => null,
-                'montant'      => (float)$d['MONTANT'],
-                'libelle'      => null,
-            ];
-
-            $occ = floor($nbu / $nbuLimit);
-            $mod = $nbu - $nbuLimit * $occ;
-
-            if ($occ > 0) {
-                for ($i = 0; $i < $occ; $i++) {
-                    $ds['nbu']     = (float)$nbuLimit;
-                    $ds['libelle'] = $libelle . ' ' . ((int)$nbuLimit) . ' H';
-                    $data[]        = $ds;
-                }
-            }
-            if ($mod > 0) {
-                $ds['nbu']     = $mod;
-                $ds['libelle'] = $libelle . ' ' . sprintf('%02d', floor($mod)) . ' H';
-                $av            = (round($mod - floor($mod), 2)) * 100;
-                if ($av > 0) $ds['libelle'] .= sprintf(' %02d', floor($av));
-                $data[] = $ds;
-            }
         }
 
         return $data;
@@ -540,7 +414,7 @@ class MiseEnPaiementService extends AbstractEntityService
      * Il retourne le nb d'heures demandées en paiement par type de ressource pour une structure donnée
      * et pour l'année courante
      *
-     * Format de retour : [StructureService.id][TypeRessource.id] = (float)Heures
+     * Format de retour : [Structure.id][TypeRessource.id] = (float)Heures
      *                 ou [TypeRessource.id] = (float)Heures
      *
      * Si la structure n'est pas spécifiée alors on retourne le tableau pour chaque structure.

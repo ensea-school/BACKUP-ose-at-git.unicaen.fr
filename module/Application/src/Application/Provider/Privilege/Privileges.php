@@ -81,6 +81,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ENSEIGNEMENT_IMPORT_INTERVENANT_REALISE_AGENDA      = 'enseignement-import-intervenant-realise-agenda';
     const ENSEIGNEMENT_VALIDATION                             = 'enseignement-validation';
     const ENSEIGNEMENT_VISUALISATION                          = 'enseignement-visualisation';
+    const ETAT_SORTIE_ADMINISTRATION_EDITION                  = 'etat-sortie-administration-edition';
+    const ETAT_SORTIE_ADMINISTRATION_VISUALISATION            = 'etat-sortie-administration-visualisation';
     const IMPORT_ECARTS                                       = 'import-ecarts';
     const IMPORT_MAJ                                          = 'import-maj';
     const IMPORT_SOURCES_EDITION                              = 'import-sources-edition';

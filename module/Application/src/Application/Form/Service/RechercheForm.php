@@ -156,7 +156,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface,
         $this->add([
             'name'       => 'structure-aff',
             'options'    => [
-                'label'                     => "StructureService d'affectation:",
+                'label'                     => "Structure d'affectation:",
                 'empty_option'              => "(Toutes)",
                 'disable_inarray_validator' => true,
                 'label_attributes'          => [

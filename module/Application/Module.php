@@ -67,15 +67,12 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
                 switch ($name) {
                     case 'intervenant':
                         $role = $sm->get(ContextService::class)->getSelectedIdentityRole();
-                        if ($role && $entity = $role->getIntervenant()) {
-                            $e->setParam($name, $entity);
+                        if ($role && $role->getIntervenant()) {
+                            $e->setParam($name, $role->getIntervenant());
                         }else{
                             $entity = $entityService->getBySourceCode($value);
                             $e->setParam($name, $entity);
                         }
-
-                        $entity = $entityService->getBySourceCode($value);
-                        $e->setParam($name, $entity);
                     break;
                     case 'typeAgrementCode':
                         $entity = $entityService->getByCode($value);

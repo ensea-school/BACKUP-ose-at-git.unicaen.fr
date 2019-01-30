@@ -93,7 +93,7 @@ class AgrementViewHelper extends AbstractHtmlElement
         if (!$this->short) {
             $vars["Intervenant"] = (string)$entity->getIntervenant();
             if ($structure = $entity->getStructure()) {
-                $vars["StructureService"] = (string)$structure;
+                $vars["Structure"] = (string)$structure;
             }
         }
         $vars["Date de la décision"] = $entity->getDateDecision()->format(Constants::DATE_FORMAT);

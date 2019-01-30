@@ -232,9 +232,16 @@ $.widget("ose.serviceReferentielForm", {
             that.prevuToRealise();
         });
 
-        this.element.find('select.fonction-referentiel-fonction').change(function(){ that.majDisplayFormation(); });
+        this.element.find('select.fonction-referentiel-fonction').change(function(){ that.majDisplay(); });
+        that.majDisplay();
+    },
 
-        that.majDisplayFormation();
+
+
+    majDisplay: function()
+    {
+        this.majDisplayStructure();
+        this.majDisplayFormation();
     },
 
 
@@ -256,9 +263,35 @@ $.widget("ose.serviceReferentielForm", {
 
 
 
+    majDisplayStructure: function()
+    {
+        var currentFonction = this.element.find('select.fonction-referentiel-fonction').val();
+        var structures = this.element.data('fonctions')['structures'];
+
+        $('option', this.getStructureElement()).attr('disabled', false);
+        if (structures[currentFonction] != undefined){
+            var structure = structures[currentFonction];
+
+            this.getStructureElement().val(structure);
+            $('option:not(:selected)', this.getStructureElement()).attr('disabled', true);
+        }else{
+            console.log('Toutes!!');
+        }
+        this.getStructureElement().selectpicker('refresh');
+    },
+
+
+
     getDivFormationElement: function()
     {
         return this.element.find('.fonction-referentiel-formation').parent();
+    },
+
+
+
+    getStructureElement: function()
+    {
+        return this.element.find('select.fonction-referentiel-structure');
     }
 
 })

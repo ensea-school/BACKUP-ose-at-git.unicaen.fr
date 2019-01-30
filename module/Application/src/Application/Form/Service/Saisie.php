@@ -28,13 +28,6 @@ class Saisie extends AbstractForm
     use SaisieFieldsetAwareTrait;
     use SaisieMultipleFieldsetAwareTrait;
 
-    /**
-     * etablissement par défaut
-     *
-     * @var Etablissement
-     */
-    protected $etablissement;
-
 
 
     /**
@@ -91,8 +84,8 @@ class Saisie extends AbstractForm
                 $pf->setName($periode->getCode());
                 $this->add($pf);
             }
-            $this->add(new Hidden('type-volume-horaire'));
         }
+        $this->add(new Hidden('type-volume-horaire'));
         $this->add(new Hidden('intervenant'));
 
         $this->add([

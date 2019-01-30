@@ -346,6 +346,11 @@ class EtatSortie
      */
     public function getPdfTraitement()
     {
+        $fichierGenerique = getcwd() . '/'. $this->pdfTraitement;
+        if (file_exists($fichierGenerique)){
+            $this->pdfTraitement = substr(file_get_contents($fichierGenerique), 5 );
+        }
+
         return $this->pdfTraitement;
     }
 
@@ -399,7 +404,7 @@ class EtatSortie
         }elseif($this->fichier) {
             return $this->fichier;
         }else{
-            $fichierGenerique = getcwd() . '/data/'.$this->getCode().'.odt';
+            $fichierGenerique = getcwd() . '/data/Etats de sortie/'.$this->getCode().'.odt';
             if (file_exists($fichierGenerique)) {
                 return file_get_contents($fichierGenerique);
             }
@@ -420,7 +425,7 @@ class EtatSortie
         } elseif(!empty($this->fichier)) {
             return true;
         }else{
-            $fichierGenerique = getcwd() . '/data/'.$this->getCode().'.odt';
+            $fichierGenerique = getcwd() . '/data/Etats de sortie/'.$this->getCode().'.odt';
             return file_exists($fichierGenerique);
         }
     }

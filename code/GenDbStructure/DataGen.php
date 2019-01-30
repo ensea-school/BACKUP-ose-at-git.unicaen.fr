@@ -73,6 +73,7 @@ class DataGen
         'UTILISATEUR'                => "username = '" . self::OSE_USER . "'",
         'WF_ETAPE'                   => '',
         'WF_ETAPE_DEP'               => '',
+        'ETAT_SORTIE'                => "code IN ('winpaie', 'etat_paiement')"
     ];
 
 
@@ -339,7 +340,6 @@ class DataGen
         if ('IMPORT_TABLES' == $table && 'SYNC_ENABLED' == $column) {
             return '0';
         }
-
 
         if ($def['constraint_table']) {
             $ctable  = $def['constraint_table'];

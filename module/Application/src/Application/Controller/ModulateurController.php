@@ -42,15 +42,16 @@ class modulateurController extends AbstractController
         $this->em()->getFilters()->enable('historique')->init([
             TypeModulateurStructure::class,
         ]);
-        $modulateurs     = $this->getServiceModulateur()->getList();
-        $typeModulateurs = $this->getServiceTypeModulateur()->getList();
+        $anneeId                  = $this->getServiceContext()->getAnnee()->getId();
+        $modulateurs              = $this->getServiceModulateur()->getList();
+        $typeModulateurs          = $this->getServiceTypeModulateur()->getList();
         $typeModulateurStructures = $this->getServiceTypeModulateurStructure()->getList();
 
 
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $structure   = $role->getStructure();
+        $role      = $this->getServiceContext()->getSelectedIdentityRole();
+        $structure = $role->getStructure();
 
-        return compact('modulateurs', 'typeModulateurs','typeModulateurStructures','structure');
+        return compact('modulateurs', 'typeModulateurs', 'typeModulateurStructures', 'structure', 'anneeId');
     }
 
 
@@ -142,20 +143,24 @@ class modulateurController extends AbstractController
 
         return new MessengerViewModel(compact('typeModulateur'));
     }
+
+
+
     public function typeModulateurStructureSaisieAction()
     {
         /* @var $typeModulateurStructure typeModulateurStructure */
         /* @var $typeModulateur typeModulateur */
-        $typeModulateur = $this->getEvent()->getParam('typeModulateur');
+        $typeModulateur          = $this->getEvent()->getParam('typeModulateur');
+        $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');
 
         $form = $this->getFormTypeModulateurStructureSaisie();
-  //      if (empty($typeModulateurStructure)) {
-            $title          = 'Création d\'un nouveau Type de Modulateur de Structure';
+        if (empty($typeModulateurStructure)) {
+            $title                   = 'Ajout d\'une structure pour le type de modulateur';
             $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity()
                 ->setTypeModulateur($typeModulateur);
-            //    } else {
-            //$title = 'Édition d\'un Type de Modulateur pour une structure';
-        //}
+        } else {
+            $title = 'Édition d\'une sructure pour le type de modulateur';
+        }
 
         $form->bindRequestSave($typeModulateurStructure, $this->getRequest(), function (typeModulateurStructure $tms) {
             try {
@@ -163,7 +168,7 @@ class modulateurController extends AbstractController
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tms->getId().':'.$tms->getTypeModulateur());
+                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tms->getId() . ':' . $tms->getTypeModulateur());
             }
         });
 
@@ -172,7 +177,8 @@ class modulateurController extends AbstractController
 
 
 
-    public function typeModulateurStructureDeleteAction()
+    public
+    function typeModulateurStructureDeleteAction()
     {
         /* @var $typeModulateurStructure typeModulateurStructure */
         $typeModulateurStructure = $this->getEvent()->getParam('typeModulateurStructure');

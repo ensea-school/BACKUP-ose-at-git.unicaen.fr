@@ -12,11 +12,4 @@ $this->messenger()->addCurrentMessagesFromFlashMessenger();
 if ($form) {
     echo '<p></span class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression ?</p>';
     echo $this->formSupprimer($form);
-    ?>
-    <script>
-        document.getElementById("supprimer").addEventListener("click",function(){
-     return false;
-    });
-    </script>
-<?php
 }

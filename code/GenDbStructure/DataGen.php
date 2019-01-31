@@ -32,6 +32,7 @@ class DataGen
         'DOMAINE_FONCTIONNEL'        => '',
         'ETABLISSEMENT'              => '',
         'ETAT_VOLUME_HORAIRE'        => '',
+        'ETAT_SORTIE'                => "code IN ('winpaie', 'etat_paiement')",
         'FONCTION_REFERENTIEL'       => '',
         'GRADE'                      => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
         'GROUPE'                     => '',
@@ -73,7 +74,6 @@ class DataGen
         'UTILISATEUR'                => "username = '" . self::OSE_USER . "'",
         'WF_ETAPE'                   => '',
         'WF_ETAPE_DEP'               => '',
-        'ETAT_SORTIE'                => "code IN ('winpaie', 'etat_paiement')"
     ];
 
 

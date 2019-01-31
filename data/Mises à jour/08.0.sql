@@ -96,6 +96,91 @@ CREATE TABLE "ETAT_SORTIE"
    "BLOC10_REQUETE" VARCHAR2(4000 CHAR),
    "AUTO_BREAK" NUMBER(1,0) DEFAULT 1 NOT NULL ENABLE
 )
+/
+
+-- Table ETAT_SORTIE
+INSERT INTO ETAT_SORTIE(ID, CODE, LIBELLE, FICHIER, REQUETE, CLE, CSV_PARAMS, PDF_TRAITEMENT, BLOC1_NOM, BLOC1_ZONE, BLOC2_NOM, BLOC1_REQUETE, BLOC2_ZONE, BLOC2_REQUETE, BLOC3_NOM, BLOC3_ZONE, BLOC3_REQUETE, BLOC4_NOM, BLOC4_ZONE, BLOC4_REQUETE, BLOC5_NOM, BLOC5_ZONE, BLOC5_REQUETE, BLOC6_NOM, BLOC6_REQUETE, BLOC6_ZONE, BLOC7_NOM, BLOC7_ZONE, BLOC7_REQUETE, BLOC8_NOM, BLOC8_ZONE, BLOC8_REQUETE, BLOC9_NOM, BLOC9_ZONE, BLOC9_REQUETE, BLOC10_NOM, BLOC10_ZONE, BLOC10_REQUETE, AUTO_BREAK) VALUES (ETAT_SORTIE_ID_SEQ.NEXTVAL, q'[etat_paiement]', q'[État de paiement]', NULL, q'[select * from V_ETAT_PAIEMENT]', NULL, q'[{
+    "ANNEE_ID"                  : { "visible": false },
+    "TYPE_INTERVENANT_ID"       : { "visible": false },
+    "STRUCTURE_ID"              : { "visible": false },
+    "PERIODE_ID"                : { "visible": false },
+    "INTERVENANT_ID"            : { "visible": false },
+    "CENTRE_COUT_ID"            : { "visible": false },
+    "DOMAINE_FONCTIONNEL_ID"    : { "visible": false },
+
+    "ANNEE"                     : { "libelle": "Année" },
+    "ETAT"                      : { "libelle": "État" },
+    "COMPOSANTE"                : { "libelle": "Composante" },
+    "DATE_MISE_EN_PAIEMENT"     : { "type": "date", "libelle": "Date de mise en paiement" },
+    "PERIODE"                   : { "libelle": "Période" },
+    "STATUT"                    : { "libelle": "Statut" },
+    "INTERVENANT_CODE"          : { "libelle": "N° intervenant" },
+    "INTERVENANT_NOM"           : { "libelle": "Intervenant" },
+    "INTERVENANT_NUMERO_INSEE"  : { "libelle": "N° INSEE" },
+    "CENTRE_COUT_CODE"          : { "libelle": "Centre de coûts ou EOTP (code)" },
+    "CENTRE_COUT_LIBELLE"       : { "libelle": "Centre de coûts ou EOTP (libellé)" },
+    "DOMAINE_FONCTIONNEL_CODE"  : { "libelle": "Domaine fonctionnel (code)" },
+    "DOMAINE_FONCTIONNEL_LIBELLE" : { "libelle": "Domaine fonctionnel (libelle)" },
+    "HETD"                      : { "type": "float", "libelle": "HETD" },
+    "HETD_POURC"                : { "type": "float", "libelle": "HETD (%)" },
+    "HETD_MONTANT"              : { "type": "float", "libelle": "HETD (€)" },
+    "REM_FC_D714"               : { "type": "float", "libelle": "Rém. FC D714.60" },
+    "EXERCICE_AA"               : { "type": "float", "libelle": "EXERCICE AA" },
+    "EXERCICE_AA_MONTANT"       : { "type": "float", "libelle": "EXERCICE AA (€)" },
+    "EXERCICE_AC"               : { "type": "float", "libelle": "EXERCICE AC" },
+    "EXERCICE_AC_MONTANT"       : { "type": "float", "libelle": "EXERCICE AC (€)" }
+}]', q'[/data/Etats de sortie/etat_paiement.php]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1);
+
+INSERT INTO ETAT_SORTIE(ID, CODE, LIBELLE, FICHIER, REQUETE, CLE, CSV_PARAMS, PDF_TRAITEMENT, BLOC1_NOM, BLOC1_ZONE, BLOC2_NOM, BLOC1_REQUETE, BLOC2_ZONE, BLOC2_REQUETE, BLOC3_NOM, BLOC3_ZONE, BLOC3_REQUETE, BLOC4_NOM, BLOC4_ZONE, BLOC4_REQUETE, BLOC5_NOM, BLOC5_ZONE, BLOC5_REQUETE, BLOC6_NOM, BLOC6_REQUETE, BLOC6_ZONE, BLOC7_NOM, BLOC7_ZONE, BLOC7_REQUETE, BLOC8_NOM, BLOC8_ZONE, BLOC8_REQUETE, BLOC9_NOM, BLOC9_ZONE, BLOC9_REQUETE, BLOC10_NOM, BLOC10_ZONE, BLOC10_REQUETE, AUTO_BREAK) VALUES (ETAT_SORTIE_ID_SEQ.NEXTVAL, q'[winpaie]', q'[Extraction Winpaie]', NULL, q'[SELECT epw.*, 'Bonjour' champ_supp FROM V_EXPORT_PAIEMENT_WINPAIE epw]', NULL, q'[{
+    "ANNEE_ID": {
+        "visible": false
+    },
+    "TYPE_INTERVENANT_ID": {
+        "visible": false
+    },
+    "STRUCTURE_ID": {
+        "visible": false
+    },
+    "PERIODE_ID": {
+        "visible": false
+    },
+    "INTERVENANT_ID": {
+        "visible": false
+    },
+    "INSEE": {
+        "libelle": "Insee"
+    },
+    "NOM": {
+        "libelle": "Nom"
+    },
+    "CARTE": {
+        "libelle": "Carte"
+    },
+    "CODE_ORIGINE": {
+        "libelle": "Code origine"
+    },
+    "RETENUE": {
+        "libelle": "Retenue"
+    },
+    "SENS": {
+        "libelle": "Sens"
+    },
+    "MC": {
+        "libelle": "MC"
+    },
+    "NBU": {
+        "libelle": "NBU",
+        "type": "float"
+    },
+    "MONTANT": {
+        "libelle": "Montant",
+        "type": "float"
+    },
+    "LIBELLE": {
+        "libelle": "Libellé"
+    }
+}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+
 
 /
 
@@ -3222,7 +3307,7 @@ INSERT INTO parametre (
     ) VALUES (
                  parametre_id_seq.nextval,
                  'es_etat_paiement',
-                 (select id from etat_sortie where code = 'etat-paiement'),
+                 (select id from etat_sortie where code = 'etat_paiement'),
                  'État de sortie pour les états de paiement',
                  sysdate,
                  (select id from utilisateur where username='oseappli'),

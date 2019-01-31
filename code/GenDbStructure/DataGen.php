@@ -331,7 +331,7 @@ class DataGen
 
     protected function formatCol($table, $column, $def)
     {
-        if ('ID' == $column && $table != 'ANNEE') {
+        if ('ID' == $column && !in_array($table,['ANNEE','TYPE_VOLUME_HORAIRE','ETAT_VOLUME_HORAIRE'])) {
             return substr($table, 0, 23) . '_ID_SEQ.NEXTVAL';
         }
 

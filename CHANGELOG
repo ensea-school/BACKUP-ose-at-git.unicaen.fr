@@ -3,6 +3,18 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
+#OSE 8.0.1
+
+## Corrections de bugs
+
+* La mise en paiement est de nouveau accessible
+* L'export CSV des services est de nouveau accessible
+* L'état de sortie Winpaie comportait une colonne utilisée pour des tests qui a été corrigée
+
+## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/08.0.1.sql`
 
 
 #OSE 8.0

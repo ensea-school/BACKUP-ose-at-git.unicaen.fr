@@ -166,7 +166,7 @@ class MiseEnPaiementService extends AbstractEntityService
         ];
 
         if ($t = $recherche->getTypeIntervenant()) {
-            $conditions['intervenant_type_id'] = 'intervenant_type_id = ' . $t->getId();
+            $conditions['type_intervenant_id'] = 'type_intervenant_id = ' . $t->getId();
         }
         if ($e = $recherche->getEtat()) {
             $conditions['etat'] = 'etat = \'' . $e . '\'';
@@ -271,7 +271,7 @@ class MiseEnPaiementService extends AbstractEntityService
         ];
 
         if ($t = $recherche->getTypeIntervenant()) {
-            $conditions['intervenant_type_id'] = 'intervenant_type_id = ' . $t->getId();
+            $conditions['type_intervenant_id'] = 'type_intervenant_id = ' . $t->getId();
         }
         if ($e = $recherche->getEtat()) {
             $conditions['etat'] = 'etat = \'' . $e . '\'';

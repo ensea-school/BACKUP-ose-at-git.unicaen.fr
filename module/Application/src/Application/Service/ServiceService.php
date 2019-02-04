@@ -1117,10 +1117,9 @@ class ServiceService extends AbstractEntityService
         $sql   = '
           SELECT 
             es.*, 
-            COALESCE(fsm.heures,0) modifications_service_du 
+            COALESCE(es.service_du_modifie,0) modifications_service_du 
           FROM 
             V_EXPORT_SERVICE es
-            LEFT JOIN V_FORMULE_SERVICE_MODIFIE fsm ON fsm.intervenant_id = es.intervenant_id
           WHERE 
             ' . implode(' AND ', $conditions) . '
           ORDER BY 

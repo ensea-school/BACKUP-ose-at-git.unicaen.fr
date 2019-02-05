@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  octopus:
+    container_name: ose-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - "8080:80"
+    - "8443:8443"
+    volumes:
+    - .:/var/www/ose
+    - /tmp:/tmp
+    working_dir: /var/www/ose

@@ -323,17 +323,23 @@ class PaiementController extends AbstractController
         $rechercheForm = $this->getFormPaiementMiseEnPaiementRecherche();
         $rechercheForm->bind($recherche);
 
-        $recherche->setStructure($role->getStructure());
-        if (!$recherche->getStructure()) {
+        if ($role->getStructure()){
+            $structures = [$role->getStructure()->getId() => $role->getStructure()];
+        }else{
             $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
             $this->getServiceStructure()->finderByRole($role, $qb);
             $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
             $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
             $structures = $this->getServiceStructure()->getList($qb);
-            $rechercheForm->populateStructures($structures);
+        }
+
+        $rechercheForm->populateStructures($structures);
+
+        if (!$recherche->getStructure()) {
             if (count($structures) == 1) {
-                $recherche->setStructure(current($structures));
-                $rechercheForm->get('structure')->setValue($recherche->getStructure()->getId());
+                $structure = current($structures);
+                $recherche->setStructure($structure);
+                $rechercheForm->get('structure')->setValue($structure->getId());
                 $noData = false;
             } elseif (count($structures) == 0) {
                 $noData = true;
@@ -350,7 +356,6 @@ class PaiementController extends AbstractController
             $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
             $periodes = $this->getServicePeriode()->getList($qb);
             $rechercheForm->populatePeriodes($periodes);
-
             if (count($periodes) == 1) {
                 $recherche->setPeriode( current($periodes));
                 $rechercheForm->get('periode')->setValue($recherche->getPeriode()->getId());
@@ -362,7 +367,9 @@ class PaiementController extends AbstractController
             $this->getServiceIntervenant()->finderByAnnee($recherche->getAnnee(), $qb);
             $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($recherche->getTypeIntervenant(), $qb);
             $this->getServiceMiseEnPaiement()->finderByEtat($recherche->getEtat(), $qb);
-            $rechercheForm->populateIntervenants($this->getServiceIntervenant()->getList($qb));
+            $intervenants = $this->getServiceIntervenant()->getList($qb);
+            $rechercheForm->populateIntervenants($intervenants);
+            $noData = count($intervenants) == 0;
         }
 
         $request = $this->getRequest();

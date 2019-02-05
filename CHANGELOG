@@ -8,6 +8,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * Dans l'onglet Services, le filtre par intervenant fonctionne à nouveau
+* Dans la page des mises en paiement (menu gestion), si on a un rôle de périmètre composante, le bug n'affichant plus la structure est résolu
 
 
 #OSE 8.0.1

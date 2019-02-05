@@ -32,7 +32,7 @@ ADD docker/php.conf ${PHP_CONF_DIR}/fpm/conf.d/ose.ini
 ADD docker/apache-ports.conf    ${APACHE_CONF_DIR}/ports.conf
 ADD docker/apache-site.conf     ${APACHE_CONF_DIR}/sites-available/ose.conf
 ADD docker/apache-site-ssl.conf ${APACHE_CONF_DIR}/sites-available/ose-ssl.conf
-#ADD docker/fpm/pool.d/app.conf  ${PHP_CONF_DIR}/fpm/pool.d/ose.conf
+ADD docker/fpm/pool.d/app.conf  ${PHP_CONF_DIR}/fpm/pool.d/ose.conf
 
 RUN a2ensite ose ose-ssl && \
     service php7.0-fpm reload

@@ -9,8 +9,8 @@
     ],
     "require"     : {
         "php"                       : "^7.0",
-        "unicaen/app"               : "1.3.21",
-        "unicaen/auth"              : "1.2.18",
+        "unicaen/app"               : "1.3.24",
+        "unicaen/auth"              : "1.3.4",
         "zendframework/zend-code"   : "^2.4",
         "zendframework/zend-text"   : "^2.4",
         "bjyoungblood/bjy-authorize": "dev-master",
@@ -19,6 +19,6 @@
         "unicaen/code"              : "1.1.6",
         "unicaen/import"            : "1.1.6",
         "unicaen/tbl"               : "1.0.3",
-        "unicaen/open-document"     : "1.4"
+        "unicaen/open-document"     : "1.7"
     }
 }

@@ -120,4 +120,23 @@ class TypeInterventionStructure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
+    /**
+     * @param Annee          $annee
+     *
+     * @return bool
+     */
+    public function isValide(Annee $annee): bool
+    {
+        $deb = $this->getAnneeDebut() ?: $this->getTypeIntervention()->getAnneeDebut();
+        $fin = $this->getAnneeFin() ?: $this->getTypeIntervention()->getAnneeFin();
+
+        $deb = $deb ? $deb->getId() : 0;
+        $fin = $fin ? $fin->getId() : 99999;
+        $a = $annee->getId();
+
+        return $a >= $deb && $a <= $fin;
+    }
+
 }

@@ -35,6 +35,26 @@ $settings = [
     'ldap_username' => strtolower(AppConfig::get('ldap', 'loginAttribute')),
 
     /**
+     * Configuration de l'authentification locale.
+     */
+    'local' => [
+        /**
+         * Possibilité ou non de s'authentifier à l'aide d'un compte local.
+         */
+        'enabled' => false,
+    ],
+
+    /**
+     * Configuration de l'authentification LDAP.
+     */
+    'ldap' => [
+        /**
+         * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
+         */
+        'enabled' => true,
+    ],
+
+    /**
      * Activation ou non de l'authentification Shibboleth.
      */
     'shibboleth' => [

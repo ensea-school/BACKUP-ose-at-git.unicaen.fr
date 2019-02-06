@@ -3,6 +3,8 @@
 namespace Application\Entity\Db;
 
 
+use Zend\Json\Json;
+
 /**
  * EtatSortie
  */
@@ -27,6 +29,16 @@ class EtatSortie
      * @var string
      */
     protected $cle;
+
+    /**
+     * @var string
+     */
+    protected $csvParams;
+
+    /**
+     * @var string
+     */
+    protected $pdfTraitement;
 
     /**
      * @var bool
@@ -292,6 +304,73 @@ class EtatSortie
 
 
     /**
+     * @return string
+     */
+    public function getCsvParams()
+    {
+        return $this->csvParams;
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getCsvParamsArray(): array
+    {
+        if ($this->csvParams) {
+            return Json::decode($this->csvParams, Json::TYPE_ARRAY);
+        } else {
+            return [];
+        }
+    }
+
+
+
+    /**
+     * @param string $csvParams
+     *
+     * @return EtatSortie
+     */
+    public function setCsvParams($csvParams): EtatSortie
+    {
+        $this->csvParams = $csvParams;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getPdfTraitement()
+    {
+        $fichierGenerique = getcwd() . '/'. $this->pdfTraitement;
+        if (file_exists($fichierGenerique)){
+            $this->pdfTraitement = substr(file_get_contents($fichierGenerique), 5 );
+        }
+
+        return $this->pdfTraitement;
+    }
+
+
+
+    /**
+     * @param string $pdfTraitement
+     *
+     * @return EtatSortie
+     */
+    public function setPdfTraitement($pdfTraitement): EtatSortie
+    {
+        $this->pdfTraitement = $pdfTraitement;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return bool
      */
     public function isAutoBreak(): bool
@@ -320,7 +399,18 @@ class EtatSortie
      */
     public function getFichier()
     {
-        return $this->fichier;
+        if (is_resource($this->fichier)) {
+            return stream_get_contents($this->fichier, -1, 0);
+        }elseif($this->fichier) {
+            return $this->fichier;
+        }else{
+            $fichierGenerique = getcwd() . '/data/Etats de sortie/'.$this->getCode().'.odt';
+            if (file_exists($fichierGenerique)) {
+                return file_get_contents($fichierGenerique);
+            }
+        }
+
+        return null;
     }
 
 
@@ -332,8 +422,11 @@ class EtatSortie
     {
         if (is_resource($this->fichier)) {
             return !empty(stream_get_contents($this->fichier, 1));
-        } else {
-            return !empty($this->fichier);
+        } elseif(!empty($this->fichier)) {
+            return true;
+        }else{
+            $fichierGenerique = getcwd() . '/data/Etats de sortie/'.$this->getCode().'.odt';
+            return file_exists($fichierGenerique);
         }
     }
 

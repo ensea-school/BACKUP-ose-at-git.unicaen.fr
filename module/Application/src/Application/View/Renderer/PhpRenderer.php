@@ -2,6 +2,7 @@
 
 namespace Application\View\Renderer;
 
+
 /**
  * Description of PhpRenderer
  *
@@ -9,7 +10,7 @@ namespace Application\View\Renderer;
  *
  * @method \Application\View\Helper\AgrementViewHelper agrement(\Application\Entity\Db\Agrement $agrement = null)
  * @method \Application\View\Helper\CartridgeViewHelper cartridge(array $items, array $options = [])
- * @method \Application\View\Helper\Chargens\ChargensViewHelper chargens(\Application\Provider\Chargens\ChargensProvider $provider)
+ * @method \Application\View\Helper\Chargens\ChargensViewHelper chargens()
  * @method \Application\View\Helper\EtablissementViewHelper etablissement(\Application\Entity\Db\Etablissement $etablissement = null)
  * @method \Application\View\Helper\FormButtonGroupViewHelper formButtonGroup(\Zend\Form\ElementInterface $element = null, $labelPosition = null)
  * @method \Application\View\Helper\FormSupprimerViewHelper formSupprimer($form)
@@ -20,8 +21,10 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper elementCentreCoutFieldset(\Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset $fieldset = null)
  * @method \Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset elementModulateursSaisieFieldset(\Application\Form\OffreFormation\ElementModulateursFieldset $fieldset = null)
  * @method \Application\View\Helper\OffreFormation\ElementPedagogiqueViewHelper elementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+ * @method \Application\View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper elementTauxMixiteFieldset(\Application\Form\OffreFormation\TauxMixite\TauxMixiteFieldset $fieldset = null)
  * @method \Application\View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper etapeCentreCoutForm(\Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm $form = null)
  * @method \Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm etapeModulateursSaisieForm(\Application\Form\OffreFormation\EtapeModulateursSaisie $form = null)
+ * @method \Application\View\Helper\OffreFormation\EtapeTauxMixiteFormViewHelper etapeTauxMixiteForm(\Application\Form\OffreFormation\TauxMixite\TauxMixiteForm $form = null)
  * @method \Application\View\Helper\OffreFormation\EtapeViewHelper etape(\Application\Entity\Db\Etape $etape = null)
  * @method \Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche fieldsetElementPedagogiqueRecherche(\Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset $fieldset = null)
  * @method \Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper demandeMiseEnPaiement(array $servicesAPayer, $changeIndex = null)
@@ -31,9 +34,11 @@ namespace Application\View\Renderer;
  * @method \Application\View\Helper\Service\Resume serviceresume($resumeServices)
  * @method \Application\View\Helper\Service\SaisieForm servicesaisieform(\Application\Form\Service\Saisie $form = null)
  * @method \Application\View\Helper\StructureViewHelper structure(\Application\Entity\Db\Structure $structure = null)
+ * @method \Application\View\Helper\TypeInterventionAdminViewHelper typeInterventionAdmin($typeIntervention)
  * @method string utilisateur(\Application\Entity\Db\Utilisateur $utilisateur, $title = null, $subject = null, $body = null)
  * @method \Application\View\Helper\ValidationViewHelper validation(\Application\Entity\Db\Validation $validation = null)
  * @method \Application\View\Helper\VolumeHoraire\Liste volumehoraireliste(\Application\Entity\VolumeHoraireListe $volumeHoraireListe)
+ * @method \Application\View\Helper\VolumeHoraire\ListeCalendaire volumehorairelistecalendaire(\Application\Entity\VolumeHoraireListe $volumeHoraireListe)
  * @method \UnicaenApp\Form\View\Helper\Form form(\Zend\Form\FormInterface $form = null)
  * @method \UnicaenApp\Form\View\Helper\FormAdvancedMultiCheckbox formAdvancedMultiCheckbox(\Zend\Form\ElementInterface $element = null, $labelPosition = null)
  * @method \UnicaenApp\Form\View\Helper\FormControlGroup formControlGroup(\Zend\Form\ElementInterface $element = null, $pluginClass = 'formElement')
@@ -53,16 +58,13 @@ namespace Application\View\Renderer;
  * @method \UnicaenApp\View\Helper\HistoriqueViewHelper historique(\UnicaenApp\Entity\HistoriqueAwareInterface $entity = null)
  * @method \UnicaenApp\View\Helper\InlineScript inlineScript($mode = 'FILE', $spec = null, $placement = 'APPEND', array $attrs = [], $type = 'text/javascript')
  * @method \UnicaenApp\View\Helper\InstadiaViewHelper instadia()
- * @method \UnicaenApp\View\Helper\MessageCollectorHelper messagecollector()
- * @method \UnicaenApp\View\Helper\Messenger messenger()
+ * @method \UnicaenApp\View\Helper\MessageCollectorHelper messagecollector($severity = null)
  * @method string modalAjaxDialog($dialogDivId = null)
  * @method \UnicaenApp\View\Helper\TabAjax\TabAjaxViewHelper tabAjax($tabs = null)
  * @method \UnicaenApp\View\Helper\TagViewHelper tag($name = null, array $attributes = [])
- * @method \UnicaenApp\View\Helper\ToggleDetails toggleDetails($detailsDivId, $title = null, $iconClass = null)
+ * @method \UnicaenApp\View\Helper\ToggleDetails toggleDetails($detailsDivId, $rememberState = true)
  * @method \UnicaenApp\View\Helper\Upload\UploaderHelper uploader()
  * @method \UnicaenAuth\View\Helper\AppConnection appConnection()
- * @method \UnicaenImport\View\Helper\DifferentielLigne\DifferentielLigne differentielLigne(\UnicaenImport\Entity\Differentiel\Ligne $ligne)
- * @method \UnicaenImport\View\Helper\DifferentielListe differentielListe($lignes)
  * @method string zenddevelopertoolsdetailarray($label, array $details, $redundant = false)
  * @method string zenddevelopertoolsmemory($size, $precision = 2)
  * @method string zenddevelopertoolstime($time, $precision = 2)

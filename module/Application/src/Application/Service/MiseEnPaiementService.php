@@ -172,7 +172,7 @@ class MiseEnPaiementService extends AbstractEntityService
             $conditions['etat'] = 'etat = \'' . $e . '\'';
         }
         if ($p = $recherche->getPeriode()) {
-            $conditions['periode_id'] = 'periode_paiement_id = ' . $p->getId();
+            $conditions['periode_id'] = 'periode_id = ' . $p->getId();
         }
         if ($s = $recherche->getStructure()) {
             $conditions['structure_id'] = 'structure_id = ' . $s->getId();
@@ -277,7 +277,7 @@ class MiseEnPaiementService extends AbstractEntityService
             $conditions['etat'] = 'etat = \'' . $e . '\'';
         }
         if ($p = $recherche->getPeriode()) {
-            $conditions['periode_id'] = 'periode_paiement_id = ' . $p->getId();
+            $conditions['periode_id'] = 'periode_id = ' . $p->getId();
         }
         if ($s = $recherche->getStructure()) {
             $conditions['structure_id'] = 'structure_id = ' . $s->getId();

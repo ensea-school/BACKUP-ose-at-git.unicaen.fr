@@ -80,6 +80,7 @@ return [
                         Privileges::CENTRES_COUTS_ADMINISTRATION_VISUALISATION,
                         Privileges::ETAT_SORTIE_ADMINISTRATION_VISUALISATION,
                         Privileges::TYPE_INTERVENTION_VISUALISATION,
+                        Privileges::MODULATEUR_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

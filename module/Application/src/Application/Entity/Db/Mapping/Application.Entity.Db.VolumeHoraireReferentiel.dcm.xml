@@ -55,9 +55,6 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
-        <one-to-one field="formuleVolumeHoraireReferentiel"
-                    target-entity="Application\Entity\Db\FormuleVolumeHoraireReferentiel"
-                    mapped-by="volumeHoraireReferentiel"/>
         <one-to-many field="formuleResultatVolumeHoraireReferentiel"
                      target-entity="Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel"
                      mapped-by="volumeHoraireReferentiel"/>

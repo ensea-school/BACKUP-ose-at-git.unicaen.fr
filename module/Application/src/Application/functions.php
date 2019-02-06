@@ -1,5 +1,7 @@
 <?php
 
+use Application\Entity\Db\Annee;
+
 /**
  * @param string $value
  *
@@ -77,11 +79,30 @@ function booleanToString($value, $trueVal = '1', $falseVal = '0')
 }
 
 
+/**
+ * @param Annee $anneeDebut
+ * @param Annee $anneeFin
+ *
+ * @return string
+ */
+function validiteIntervalle($anneeDebut, $anneeFin): string
+{
+    if ($anneeDebut && $anneeFin) {
+        return "À partir de $anneeDebut jusqu'en $anneeFin";
+    } elseif (!$anneeDebut && !$anneeFin) {
+        return "Permanente";
+    } elseif (!$anneeDebut && $anneeFin) {
+        return "Jusqu'en $anneeFin";
+    } elseif ($anneeDebut && !$anneeFin) {
+        return "À partir de $anneeDebut";
+    }
+}
 
-function vhlDump( \Application\Entity\VolumeHoraireListe $volumeHoraireListe): \OSETest\VolumeHoraireListeTest
+
+function vhlDump(\Application\Entity\VolumeHoraireListe $volumeHoraireListe): \OSETest\VolumeHoraireListeTest
 {
     include_once getcwd() . '/tests/OSETest/VolumeHoraireListeTest.php';
-    $dumper = new \OSETest\VolumeHoraireListeTest();
+    $dumper                      = new \OSETest\VolumeHoraireListeTest();
     $volumeHoraireListe->__debug = $dumper;
     $dumper->dumpBegin($volumeHoraireListe);
 

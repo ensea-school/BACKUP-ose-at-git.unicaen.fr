@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Application\Entity\Db\TypeInterventionStatut;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -73,11 +74,15 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      */
     private $anneeFin;
 
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $typeInterventionStructure;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typeInterventionStatut;
 
     /**
      * regleFOAD
@@ -92,14 +97,6 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      * @var boolean
      */
     private $regleFC;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->typeInterventionStructure = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 
 
@@ -140,11 +137,12 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
     public function isVisible(Structure $structure = null, Annee $annee = null)
     {
-        if ($structure && $annee){
+        if ($structure && $annee) {
             $lst = $this->getTypeInterventionStructure($structure, $annee);
-            if ($lst->count() == 1){
+            if ($lst->count() == 1) {
                 /** @var TypeInterventionStructure $tis */
                 $tis = $lst->first();
+
                 return $tis->isVisible();
             }
         }
@@ -166,7 +164,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @return bool
      */
-    public function isVisibleExterieur(): bool
+    public function isVisibleExterieur()
     {
         return $this->visibleExterieur;
     }
@@ -195,6 +193,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return $this->anneeDebut;
     }
 
+
+
     /**
      * @param Annee $anneeDebut
      *
@@ -207,6 +207,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * @return Annee
      */
@@ -214,6 +216,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->anneeFin;
     }
+
+
 
     /**
      * @param Annee $anneeFin
@@ -227,6 +231,45 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
+    /**
+     * @param Annee          $annee
+     * @param Structure|null $structure
+     *
+     * @return bool
+     */
+    public function isValide(Annee $annee, Structure $structure = null): bool
+    {
+        /** @var TypeInterventionStructure[] $tisList */
+        $tisList = $this->getTypeInterventionStructure()->filter(function (TypeInterventionStructure $tis) use ($structure) {
+            if (!$tis->estNonHistorise()) {
+                return false;
+            }
+            if ($structure && $tis->setStructure() != $structure) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if ($tisList->count() > 0) {
+            foreach ($tisList as $tis) {
+                if ($tis->isValide($annee)) return true;
+            }
+
+            return false;
+        } else {
+            $deb = $this->getAnneeDebut() ? $this->getAnneeDebut()->getId() : 0;
+            $fin = $this->getAnneeFin() ? $this->getAnneeFin()->getId() : 99999;
+            $a   = $annee->getId();
+
+            return $a >= $deb && $a <= $fin;
+        }
+    }
+
+
+
     /**
      * @return bool
      */
@@ -234,6 +277,7 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->regleFOAD;
     }
+
 
 
     /**
@@ -247,6 +291,8 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * @return bool
@@ -269,6 +315,21 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
+
+    /**
+     * @return string[]
+     */
+    public function getRegles(): array
+    {
+        $regles = [];
+        if ($this->getRegleFC()) $regles[] = 'FC';
+        if ($this->getRegleFOAD()) $regles[] = 'FOAD';
+
+        return $regles;
+    }
+
 
 
     /**
@@ -308,28 +369,25 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
      *
      * @return \Doctrine\Common\Collections\Collection|TypeInterventionStructure
      */
-    public function getTypeInterventionStructure(Structure $structure = null, Annee $annee = null)
+    public function getTypeInterventionStructure()
     {
-        if ($structure) {
-            $tis = $this->typeInterventionStructure->filter(function (TypeInterventionStructure $t) use ($structure) {
-                return $t->getStructure() === $structure && $t->estNonHistorise();
-            });
-
-            if ($annee) {
-                $tis = $tis->filter(function (TypeInterventionStructure $t) use ($annee) {
-                    $aDeb = $t->getAnneeDebut() ? $t->getAnneeDebut()->getId() : 0;
-                    $aFin = $t->getAnneeFin() ? $t->getAnneeFin()->getId() : 9999999;
-                    $aId = $annee->getId();
-
-                    return $aDeb <= $aId && $aId <= $aFin;
-                });
-            }
-
-            return $tis;
-        }
-
         return $this->typeInterventionStructure;
     }
+
+
+
+    /**
+     * Get typeInterventionStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection|TypeInterventionStructure
+     */
+    public function getTypeInterventionStructureValides(Annee $annee)
+    {
+        return $this->typeInterventionStructure->filter(function(TypeInterventionStructure $tis) use ($annee){
+            return $tis->isValide($annee);
+        });
+    }
+
 
 
     /**
@@ -442,4 +500,13 @@ class TypeIntervention implements HistoriqueAwareInterface, ResourceInterface
         return 'TypeIntervention';
     }
 
+    /**
+     * Get typeInterventionStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection|TypeInterventionStatut
+     */
+    public function getTypeInterventionStatut()
+    {
+        return $this->typeInterventionStatut;
+    }
 }

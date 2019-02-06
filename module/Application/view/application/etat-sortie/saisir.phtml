@@ -1,0 +1,228 @@
+<?php
+
+/**
+ * @var $this  \Application\View\Renderer\PhpRenderer
+ * @var $form  EtatSortieForm
+ * @var $title string
+ */
+
+use Application\Form\EtatSortieForm;
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+/* On réutilise l'ACE d'UnicaenImport (pas top) */
+echo $this->inlinescript()->appendFile($this->basePath() . '/vendor/unicaen/import/ace-builds-master/src-min/ace.js');
+
+echo $this->form()->openTag($form);
+
+?>
+<div class="row">
+    <div class="col-md-4"><?= $this->formControlGroup($form->get('code')) ?></div>
+    <div class="col-md-8"><?= $this->formControlGroup($form->get('libelle')) ?></div>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#sql" aria-controls="sql" role="tab" data-toggle="tab">Requêtage</a></li>
+    <li role="presentation"><a href="#csv" aria-controls="csv" role="tab" data-toggle="tab">Export CSV</a></li>
+    <li role="presentation"><a href="#pdf" aria-controls="pdf" role="tab" data-toggle="tab">Export PDF</a></li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="sql">
+
+        <h2>Requête SQL de document <small>(facultative)</small></h2>
+        <div class="panel panel-default etat-sortie-requete">
+            <div class="panel-heading" role="tab">
+                <label>Champ clé : </label>
+                <?= $this->formText($form->get('cle')) ?>
+            </div>
+            <div class="panel-body">
+                <?= $this->formTextarea($form->get('requete')) ?>
+            </div>
+        </div>
+        <h2>Requêtes SQL par zones</h2>
+        <div class="panel-group" id="blocs" role="tablist" aria-multiselectable="true">
+
+            <?php for ($i = 1; $i <= 10; $i++): ?>
+                <div class="panel panel-default etat-sortie-bloc" id="bloc<?= $i ?>">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <label>Champ de référence : </label>
+                        <?= $this->formText($form->get("bloc-$i-nom")) ?>
+                        &nbsp;<label>Zone : </label>
+                        <?= $this->formSelect($form->get("bloc-$i-zone")) ?>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <?= $this->formTextarea($form->get("bloc-$i-requete")) ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endfor; ?>
+            <button type="button" class="btn btn-default btn-xs ajout-bloc">
+                <span class="glyphicon glyphicon-plus"></span> Ajouter une requête
+            </button>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="csv">
+        <?= $this->formControlGroup($form->get('csv-params')) ?>
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="pdf">
+        <?= $this->formControlGroup($form->get('fichier')) ?>
+        <?= $this->formControlGroup($form->get('auto-break')) ?>
+        <?= $this->formControlGroup($form->get('pdf-traitement')) ?>
+    </div>
+</div>
+
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
+
+
+?>
+<script>
+
+    $(function ()
+    {
+        $.widget("ose.etatSortieSaisir", {
+            requeteEditor: null,
+            paramsEditor: null,
+            traitementEditor: null,
+            blocs: {},
+
+            save: function ()
+            {
+                var csvParams = $("<input>")
+                    .attr("type", 'hidden')
+                    .attr("name",'csv-params')
+                    .val(this.paramsEditor.getSession().getValue());
+                this.element.append($(csvParams));
+
+                var pdfTraitement = $("<input>")
+                    .attr("type", 'hidden')
+                    .attr("name",'pdf-traitement')
+                    .val(this.traitementEditor.getSession().getValue());
+                this.element.append($(pdfTraitement));
+
+                var requete = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "requete")
+                    .val(this.requeteEditor.getSession().getValue());
+                this.element.append($(requete));
+
+                for (var i = 1; i <= 10; i++) {
+                    var binput = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", "bloc-" + i + "-requete")
+                        .val(this.blocs[i].getSession().getValue());
+                    this.element.append($(binput));
+                }
+            },
+
+            ajoutBloc: function ()
+            {
+                for (var i = 1; i <= 10; i++) {
+                    if (!this.isBlocRempli(i)) {
+                        this.showBloc(i);
+                        break;
+                    }
+                }
+            },
+
+            isBlocRempli: function (bloc)
+            {
+                var res = this.element.find('bloc-' + bloc + '-nom').val() != ''
+                    && this.blocs[bloc].getSession().getValue() != '';
+
+                return res;
+            },
+
+            showBloc: function (bloc)
+            {
+                this.element.find(".etat-sortie-bloc#bloc" + bloc).show();
+            },
+
+            hideBloc: function (bloc)
+            {
+                this.element.find(".etat-sortie-bloc#bloc" + bloc).hide();
+            },
+
+            _create: function ()
+            {
+                var that = this;
+
+                that.element.find('.btn-save').click(function () { that.save();});
+                that.element.find('.ajout-bloc').click(function () {that.ajoutBloc()});
+
+                var options = {
+                    minLines: 15, maxLines: 40,
+                };
+
+                that.paramsEditor = ace.edit("csv-params");
+                that.paramsEditor.setTheme("ace/theme/github");
+                that.paramsEditor.getSession().setMode("ace/mode/json");
+                that.paramsEditor.setOptions(options);
+
+                that.traitementEditor = ace.edit("pdf-traitement");
+                that.traitementEditor.setTheme("ace/theme/github");
+                that.traitementEditor.getSession().setMode({path:"ace/mode/php", inline:true});
+                that.traitementEditor.setOptions(options);
+
+                that.requeteEditor = ace.edit("requete");
+                that.requeteEditor.setTheme("ace/theme/github");
+                that.requeteEditor.getSession().setMode("ace/mode/sql");
+                that.requeteEditor.setOptions(options);
+
+                for (var i = 1; i <= 10; i++) {
+                    that.blocs[i] = ace.edit("bloc-" + i + "-requete");
+                    that.blocs[i].setTheme("ace/theme/github");
+                    that.blocs[i].getSession().setMode("ace/mode/sql");
+                    that.blocs[i].setOptions(options);
+
+                    if (that.isBlocRempli(i)) {
+                        that.showBloc(i);
+                    } else {
+                        that.hideBloc(i);
+                    }
+                }
+            }
+        });
+
+        WidgetInitializer.add('etat-sortie-saisir', 'etatSortieSaisir');
+    });
+
+</script>
+<style>
+    .etat-sortie-saisir .etat-sortie-bloc {
+        display: none;
+    }
+
+    .etat-sortie-saisir .etat-sortie-bloc .panel-heading .form-control {
+        display: inline;
+    }
+
+    .etat-sortie-saisir #fichier {
+        height: none;
+    }
+
+    .etat-sortie-saisir .panel-heading {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    .etat-sortie-saisir .panel-body {
+        padding: 0px;
+    }
+
+    .etat-sortie-saisir #sql .ace_editor {
+        border: none;
+        border-radius: 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+</style>

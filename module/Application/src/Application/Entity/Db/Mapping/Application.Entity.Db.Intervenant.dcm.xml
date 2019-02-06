@@ -121,7 +121,6 @@
         </one-to-many>
         <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant"/>
         <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant"/>
-        <one-to-many field="formuleIntervenant" target-entity="Application\Entity\Db\FormuleIntervenant" mapped-by="intervenant" fetch="EXTRA_LAZY"/>
         <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant"/>
         <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier" mapped-by="intervenant"/>
         <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant"/>

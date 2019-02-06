@@ -3,9 +3,35 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
-#OSE 8.0 (en développement)
+#OSE 8.0.2
 
 ## Corrections de bugs
+
+* Dans l'onglet Services, le filtre par intervenant fonctionne à nouveau
+* Dans la page des mises en paiement (menu gestion), si on a un rôle de périmètre composante, le bug n'affichant plus la structure est résolu
+
+
+#OSE 8.0.1
+
+## Corrections de bugs
+
+* La mise en paiement est de nouveau accessible
+* L'export CSV des services est de nouveau accessible
+* L'état de sortie Winpaie comportait une colonne utilisée pour des tests qui a été corrigée
+
+## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/08.0.1.sql`
+
+
+#OSE 8.0
+
+## Corrections de bugs
+
+* Lors de la saisie de service, si on sélectionne une étape, tous les éléments associés remontent dans le formolaire et non les 100 premiers comme avant.
+* La validation des services tentait de valider des heures déjà validées dans certains cas.
+* Les données personnelles ne pouvaient pas être enregistrées si les intervenants avaient plusieurs adresses.
 
 ## Nouveautés
 
@@ -15,7 +41,31 @@ en vous inspirant de l'exemple fourni dans le code source de OSE (data/Déploiem
 
 * Interface de paramétrage des centres de coûts dans le menu Administration.
 
+* Paramétrages généraux : la composante représentant l'université (de niveau 1 donc) peut maintenant se paramétrer directement 
+dans l'interface d'administration.
+
+* Refonte de l'infrastructure de gestion de la formule de calcul. Les performances ont été très sensiblement améliorées (x100).
+
+* L'installation de OSE via Gitlab passe désormais par HTTPS au lieu de SSH. La clé de déploiement n'est plus nécessaire.
+
+* Nouveau système d'états de sorties personnalisables. Les documents concernés sont :
+  * L'export Winpaie
+  * Les états de paiement et états de demandes de mise en paiement
+
+* Amélioration de l'interface d'administration des types d'intervention : possibilité de définir des taux spécifiques par statut d'intervenant (pour le TP hors service par exemple)
+
 ## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/08.0.sql`
+
+* Mettez à jour vos paramètres généraux de configuration (Menu Administration/Paramétrages/Paramètres généraux).
+
+#OSE 7.0.6
+
+## Corrections de bugs
+
+* Faille de sécurité qui permettait à un intervenant de visualiser les données d'autres intervenants en changeant le code dans l'URL corrigée.
 
 #OSE 7.0.5
 

@@ -14,13 +14,13 @@ return [
                 'options'       => [
                     'route'    => '/modulateur',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Modulateur',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Modulateur',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'saisie'                 => [
+                    'saisie'                           => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/saisie/:typeModulateur[/:modulateur]',
@@ -34,7 +34,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'delete'                 => [
+                    'delete'                           => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/delete/:modulateur',
@@ -47,7 +47,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-modulateur-saisie' => [
+                    'type-modulateur-saisie'           => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/type-modulateur-saisie[/:typeModulateur]',
@@ -60,7 +60,7 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'type-modulateur-delete' => [
+                    'type-modulateur-delete'           => [
                         'type'          => 'Segment',
                         'options'       => [
                             'route'       => '/type-modulateur-delete/:typeModulateur',
@@ -76,9 +76,10 @@ return [
                     'type-modulateur-structure-saisie' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/type-modulateur-structure-saisie/:typeModulateur',
+                            'route'       => '/type-modulateur-structure-saisie/:typeModulateur[/:typeModulateurStructure]',
                             'constraints' => [
-                                'typeModulateur' => '[0-9]*',
+                                'typeModulateur'          => '[0-9]*',
+                                'typeModulateurStructure' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'type-modulateur-structure-saisie',
@@ -132,7 +133,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Modulateur',
-                    'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete','type-modulateur-structure-saisie','type-modulateur-structure-delete'],
+                    'action'     => ['saisie', 'delete', 'type-modulateur-saisie', 'type-modulateur-delete', 'type-modulateur-structure-saisie', 'type-modulateur-structure-delete'],
                     'privileges' => [Privileges::MODULATEUR_EDITION],
                 ],
             ],
@@ -167,8 +168,8 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\Modulateur\ModulateurSaisieForm::class     => Form\Modulateur\ModulateurSaisieForm::class,
-            Form\Modulateur\TypeModulateurSaisieForm::class => Form\Modulateur\TypeModulateurSaisieForm::class,
+            Form\Modulateur\ModulateurSaisieForm::class              => Form\Modulateur\ModulateurSaisieForm::class,
+            Form\Modulateur\TypeModulateurSaisieForm::class          => Form\Modulateur\TypeModulateurSaisieForm::class,
             Form\Modulateur\TypeModulateurStructureSaisieForm::class => Form\Modulateur\TypeModulateurStructureSaisieForm::class,
         ],
     ],

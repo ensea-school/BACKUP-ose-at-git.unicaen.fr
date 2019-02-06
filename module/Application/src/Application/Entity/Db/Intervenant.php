@@ -219,11 +219,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     private $formuleResultat;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $formuleIntervenant;
-
-    /**
      * @var \Application\Entity\Db\IndicModifDossier
      */
     private $indicModifDossier;
@@ -271,7 +266,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
         $this->histoService                       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleIntervenant                 = new \Doctrine\Common\Collections\ArrayCollection();
         $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1555,22 +1549,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
         }
 
         return $formuleResultat;
-    }
-
-
-
-    /**
-     * Get FormuleIntervenant
-     *
-     * @return FormuleIntervenant
-     */
-    public function getFormuleIntervenant()
-    {
-        if (!count($this->formuleIntervenant)) {
-            return null;
-        }
-
-        return $this->formuleIntervenant->first();
     }
 
 

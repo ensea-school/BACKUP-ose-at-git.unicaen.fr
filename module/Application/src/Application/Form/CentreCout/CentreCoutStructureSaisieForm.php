@@ -51,14 +51,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
             ->setEmptyOption("(Aucun)")
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
 
-        $this->add([
-            'name'    => 'unite-budgetaire',
-            'options' => [
-                'label' => "Unité budgétaire",
-            ],
-            'type'    => 'Text',
-        ]);
-
         $this->add(new Csrf('security'));
         $this->add([
             'name'       => 'submit',
@@ -133,7 +125,6 @@ class CentreCoutStructureHydrator implements HydratorInterface
             $object->setStructure($this->getServiceStructure()->get($data['structure']));
         }
         $object->setCentreCout($this->getServiceCentreCout()->get($data['centre-cout']));
-        $object->setUniteBudgetaire($data['unite-budgetaire']);
 
         return $object;
     }
@@ -153,9 +144,8 @@ class CentreCoutStructureHydrator implements HydratorInterface
             'id'               => $object->getId(),
             'structure'        => ($s = $object->getStructure()) ? $s->getId() : null,
             'centre-cout'      => $object->getCentreCout()->getId(),
-            'unite-budgetaire' => $object->getUniteBudgetaire(),
         ];
 
         return $data;
     }
-}   
+}

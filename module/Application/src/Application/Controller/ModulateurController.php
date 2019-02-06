@@ -159,7 +159,7 @@ class modulateurController extends AbstractController
             $typeModulateurStructure = $this->getServiceTypeModulateurStructure()->newEntity()
                 ->setTypeModulateur($typeModulateur);
         } else {
-            $title = 'Édition d\'une sructure pour le type de modulateur';
+            $title = 'Édition d\'une structure pour le type de modulateur';
         }
 
         $form->bindRequestSave($typeModulateurStructure, $this->getRequest(), function (typeModulateurStructure $tms) {

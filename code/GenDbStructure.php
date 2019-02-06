@@ -15,6 +15,8 @@ include_once 'GenDbStructure/DataGen.php';
 $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
 /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
+echo "<h1>Atention à bien se mettre sur OSE TEST BIEN à JOUR pour pouvoir générer les données!!!</h1>";
+
 $em = $sl->get(Constants::BDD);
 
 $dg = new \GenDbStructure\DdlGen($em);

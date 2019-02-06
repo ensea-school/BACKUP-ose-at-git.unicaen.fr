@@ -11,6 +11,7 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 
 /**
@@ -18,7 +19,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RechercheHydrator implements EntityManagerAwareInterface
+class RechercheHydrator implements EntityManagerAwareInterface, HydratorInterface
 {
     use EntityManagerAwareTrait;
     use NiveauEtapeServiceAwareTrait;

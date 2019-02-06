@@ -2,8 +2,11 @@
 
 namespace Application\Service;
 
+use Application\Constants;
 use Application\Entity\Db\EtatSortie;
+use Application\Service\Traits\ParametresServiceAwareTrait;
 use Unicaen\OpenDocument\Document;
+use UnicaenApp\View\Model\CsvModel;
 
 /**
  * Description of EtatSortieService
@@ -17,6 +20,9 @@ use Unicaen\OpenDocument\Document;
  */
 class EtatSortieService extends AbstractEntityService
 {
+    use ParametresServiceAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -43,65 +49,150 @@ class EtatSortieService extends AbstractEntityService
 
 
 
-    public function generer(EtatSortie $etatSortie, array $filtres)
+    /**
+     * @param string $param
+     *
+     * @return EtatSortie
+     * @throws \Exception
+     */
+    public function getByParametre(string $param): EtatSortie
     {
-        $fileName = $etatSortie->getLibelle() . '.pdf';
-
-        $document = new Document();
-        $document->setTmpDir(getcwd() . '/data/cache/');
-
-        if ($etatSortie->hasFichier()) {
-            $document->loadFromData(stream_get_contents($etatSortie->getFichier(), -1, 0));
+        $etatSortieId = $this->getServiceParametres()->get($param);
+        $etatSortie   = $this->get($etatSortieId);
+        if (!$etatSortie) {
+            throw new \Exception('Etat de sortie "' . $param . '" non configuré dans les paramètres de OSE');
         }
 
-        $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
-        $document->publish($this->generateData($etatSortie, $filtres));
-        $document->setPdfOutput(true);
-        $document->download($fileName);
+        return $etatSortie;
     }
 
 
 
-    public function genererCsv(EtatSortie $etatSortie, array $filtres)
+    /**
+     * @param EtatSortie $etatSortie
+     * @param array      $filtres
+     *
+     * @return Document
+     * @throws \Exception
+     */
+    public function genererPdf(EtatSortie $etatSortie, array $filtres): Document
     {
+        $document = new Document();
+        $document->setTmpDir(getcwd() . '/data/cache/');
+        $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
+        $document->setPdfOutput(true);
+        if ($etatSortie->hasFichier()) {
+            $document->loadFromData($etatSortie->getFichier());
+        } else {
+            throw new \Exception('Fichier modèle au format OpenDocument non fourni dans l\'état de sortie "' . $etatSortie->getLibelle() . '"');
+        }
+
         $data = $this->generateData($etatSortie, $filtres);
+        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+
+        if (trim($etatSortie->getPdfTraitement())) {
+            $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
+            // Isolation de traitement pour éviter tout débordement...
+            $traitement = function () use ($document, $etatSortie, $data, $filtres, $role, $__PHP__CODE__TRAITEMENT__) {
+                eval($__PHP__CODE__TRAITEMENT__);
+
+                return $data;
+            };
+            $data       = $traitement();
+        }
+        if (!$document->getPublisher()->isPublished()) $document->publish($data);
+
+        return $document;
+    }
+
+
+
+    /**
+     * @param EtatSortie $etatSortie
+     * @param array      $filtres
+     *
+     * @return CsvModel
+     * @throws \Exception
+     */
+    public function genererCsv(EtatSortie $etatSortie, array $filtres): CsvModel
+    {
+        $params = $etatSortie->getCsvParamsArray();
+        $data   = $this->generateData($etatSortie, $filtres);
 
         $blocs = $etatSortie->getBlocs();
-        $bkey = null;
-        foreach( $blocs as $bloc){
-            $bkey = $bloc['nom'].'@'.$bloc['zone'];
+        $bkey  = null;
+        foreach ($blocs as $bloc) {
+            $bkey = $bloc['nom'] . '@' . $bloc['zone'];
             break;
         }
-        $data = [195 => $data[195]];
-        $res = [];
+
+        $csvModel = new CsvModel();
+
         foreach ($data as $k => $d) {
 
             /* On récupère les sous-données éventuelles */
-            if (array_key_exists($bkey, $d)){
+            if (array_key_exists($bkey, $d)) {
                 $bdata = $d[$bkey];
-            }else{
+            } else {
                 $bdata = null;
             }
 
             /* On supprime toutes les sous-données */
-            foreach( $d as $dk => $dv ){
-                if (false !== strpos($dk, '@')){
+            foreach ($d as $dk => $dv) {
+                if (false !== strpos($dk, '@')) {
                     unset($d[$dk]);
                 }
             }
 
             /* Si il y a des sous-données */
-            if ($bdata){
-                foreach( $bdata as $bd ){
-                    $res[] = $d + $bd;
+            if ($bdata) {
+                foreach ($bdata as $bd) {
+                    $csvModel->addLine($this->filterData($d + $bd, $params));
                 }
-            }else{
-                $res[] = $d;
+            } else {
+                $csvModel->addLine($this->filterData($d, $params));
             }
-
         }
 
-        return $res;
+        $csvModel->setFilename($etatSortie->getLibelle() . '.csv');
+        if (isset($csvModel->getData()[0])) {
+            $head = array_keys($csvModel->getData()[0]);
+            foreach ($head as $k => $v) {
+                if (isset($params[$v]['libelle']) && $params[$v]['libelle']) {
+                    $head[$k] = $params[$v]['libelle'];
+                }
+            }
+            $csvModel->setHeader($head);
+        }
+
+        return $csvModel;
+    }
+
+
+
+    private function filterData(array $line, array $params): array
+    {
+        foreach ($line as $k => $v) {
+            if (!(isset($params[$k]['visible']) ? $params[$k]['visible'] : true)) {
+                unset($line[$k]);
+            } else {
+                $type = isset($params[$k]['type']) ? $params[$k]['type'] : 'string';
+                switch (strtolower($type)) {
+                    case 'float':
+                        $line[$k] = (float)$v;
+                    break;
+                    case 'date':
+                        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $v);
+                        if ($date instanceof \DateTime) {
+                            $format   = isset($params[$k]['format']) ? $params[$k]['format'] : Constants::DATE_FORMAT;
+                            $line[$k] = $date->format($format);
+                        }
+                    break;
+                }
+            }
+        }
+
+        return $line;
     }
 
 
@@ -165,12 +256,28 @@ class EtatSortieService extends AbstractEntityService
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query = "SELECT q.* FROM ($sql) q WHERE 1=1";
-        foreach ($filtres as $filtre => $null) {
-            $query .= " AND q.\"$filtre\" = :$filtre";
+        $query        = "SELECT q.* FROM ($sql) q WHERE 1=1";
+        $queryFilters = $filtres;
+        foreach ($filtres as $filtre => $values) {
+            if (is_array($values)) {
+                unset($queryFilters[$filtre]);
+                $index = 0;
+                $query .= " AND (";
+                foreach ($values as $val) {
+                    if ($index > 0) {
+                        $query .= ' OR ';
+                    }
+                    $query                          .= "q.\"$filtre\" = :$filtre$index";
+                    $queryFilters[$filtre . $index] = $val;
+                    $index++;
+                }
+                $query .= ")";
+            } else {
+                $query .= " AND q.\"$filtre\" = :$filtre";
+            }
         }
 
-        return $connection->fetchAll($query, $filtres);
+        return $connection->fetchAll($query, $queryFilters);
     }
 
 
@@ -179,11 +286,27 @@ class EtatSortieService extends AbstractEntityService
     {
         $connection = $this->getEntityManager()->getConnection();
 
-        $query = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
-        foreach ($filtres as $filtre => $null) {
-            $query .= " AND mq.\"$filtre\" = :$filtre";
+        $query        = "SELECT q.* FROM ($sql) q JOIN ($mainSql) mq ON mq.\"$cle\" = q.\"$cle\" WHERE 1=1";
+        $queryFilters = $filtres;
+        foreach ($filtres as $filtre => $values) {
+            if (is_array($values)) {
+                unset($queryFilters[$filtre]);
+                $index = 0;
+                $query .= " AND (";
+                foreach ($values as $val) {
+                    if ($index > 0) {
+                        $query .= ' OR ';
+                    }
+                    $query                          .= "mq.\"$filtre\" = :$filtre$index";
+                    $queryFilters[$filtre . $index] = $val;
+                    $index++;
+                }
+                $query .= ")";
+            } else {
+                $query .= " AND mq.\"$filtre\" = :$filtre";
+            }
         }
 
-        return $connection->fetchAll($query, $filtres);
+        return $connection->fetchAll($query, $queryFilters);
     }
 }

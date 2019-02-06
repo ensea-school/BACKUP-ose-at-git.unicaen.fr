@@ -53,6 +53,30 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
+            'type'       => 'TextArea',
+            'name'       => 'csv-params',
+            'options'    => [
+                'label' => "Paramètres d'export CSV (format JSON)",
+            ],
+            'attributes' => [
+                'id'   => 'csv-params',
+                'rows' => '25',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'TextArea',
+            'name'       => 'pdf-traitement',
+            'options'    => [
+                'label' => "Traitement des données",
+            ],
+            'attributes' => [
+                'id'   => 'pdf-traitement',
+                'rows' => '25',
+            ],
+        ]);
+
+        $this->add([
             'type'    => 'Checkbox',
             'name'    => 'auto-break',
             'options' => [
@@ -184,6 +208,8 @@ class EtatSortieHydrator implements HydratorInterface
         $object->setCode($data['code']);
         $object->setLibelle($data['libelle']);
         $object->setCle($data['cle']);
+        $object->setCsvParams($data['csv-params']);
+        $object->setPdfTraitement($data['pdf-traitement']);
         $object->setAutoBreak($data['auto-break'] === 'true');
         $object->setRequete($data['requete']);
         if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
@@ -218,11 +244,13 @@ class EtatSortieHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'code'       => $object->getCode(),
-            'libelle'    => $object->getLibelle(),
-            'cle'        => $object->getCle(),
-            'auto-break' => $object->isAutoBreak() ? 'true' : 'false',
-            'requete'    => $object->getRequete(),
+            'code'           => $object->getCode(),
+            'libelle'        => $object->getLibelle(),
+            'cle'            => $object->getCle(),
+            'csv-params'     => $object->getCsvParams(),
+            'pdf-traitement' => $object->getPdfTraitement(),
+            'auto-break'     => $object->isAutoBreak() ? 'true' : 'false',
+            'requete'        => $object->getRequete(),
         ];
 
         $blocs = $object->getBlocs();

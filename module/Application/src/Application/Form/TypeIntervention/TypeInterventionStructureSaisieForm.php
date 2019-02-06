@@ -60,7 +60,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
             'name'       => 'annee-debut',
             'options'    => [
                 'empty_option'  => 'Aucune',
-                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getChoixAnnees()),
                 'label'         => 'année de début',
             ],
             'attributes' => [
@@ -73,7 +73,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
             'name'       => 'annee-fin',
             'options'    => [
                 'empty_option'  => 'Aucune',
-                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
+                'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getChoixAnnees()),
                 'label'         => 'année de fin',
             ],
             'attributes' => [

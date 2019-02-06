@@ -32,6 +32,7 @@ class DataGen
         'DOMAINE_FONCTIONNEL'        => '',
         'ETABLISSEMENT'              => '',
         'ETAT_VOLUME_HORAIRE'        => '',
+        'ETAT_SORTIE'                => "code IN ('winpaie', 'etat_paiement')",
         'FONCTION_REFERENTIEL'       => '',
         'GRADE'                      => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
         'GROUPE'                     => '',
@@ -249,6 +250,26 @@ class DataGen
             }
         }
 
+        $res .= "\n\n-- DIVERSES REQUETES SUPPLEMENTAIRES\n";
+
+        $res .= "INSERT INTO affectation(
+        id,
+        utilisateur_id,
+        role_id,
+        source_id,
+        histo_creation,
+        histo_createur_id,
+        histo_modification,
+        histo_modificateur_id
+    )values (
+        affectation_id_seq.nextval,
+        (select id from utilisateur where username = 'oseappli'),
+  (select id from role where code = 'administrateur'),
+  (select id from source where code = 'OSE'),
+  sysdate, (select id from utilisateur where username = 'oseappli'),
+  sysdate, (select id from utilisateur where username = 'oseappli')
+);";
+
         return $res;
     }
 
@@ -310,7 +331,7 @@ class DataGen
 
     protected function formatCol($table, $column, $def)
     {
-        if ('ID' == $column && $table != 'ANNEE') {
+        if ('ID' == $column && !in_array($table,['ANNEE','TYPE_VOLUME_HORAIRE','ETAT_VOLUME_HORAIRE'])) {
             return substr($table, 0, 23) . '_ID_SEQ.NEXTVAL';
         }
 
@@ -340,7 +361,6 @@ class DataGen
             return '0';
         }
 
-
         if ($def['constraint_table']) {
             $ctable  = $def['constraint_table'];
             $ccol    = $def['constraint_column'];
@@ -360,10 +380,10 @@ class DataGen
                 return "' || CASE WHEN $column IS NULL THEN 'NULL' ELSE 'q''[' || $column || ']''' END || '";
             case 'CLOB':
                 return "' || CASE WHEN $column IS NULL THEN 'NULL' ELSE 'q''[' || to_char($column) || ']''' END || '";
-            break;
+            case 'BLOB':
+                return 'NULL';
             case 'DATE':
                 return "' || CASE WHEN $column IS NULL THEN 'NULL' ELSE 'to_date(''' || to_char($column,'YYYY-MM-DD HH:MI:SS') || ''',''YYYY-MM-DD HH:MI:SS'')' END || '";
-            break;
         }
 
         return $column;

@@ -1,22 +1,30 @@
 <?php
+
 namespace Application\Controller;
 
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeInterventionStatut;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
+use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeInterventionStructure;
 use Application\Form\TypeIntervention\Traits\TypeInterventionSaisieFormAwareTrait;
 use Application\Form\TypeIntervention\Traits\TypeInterventionStructureSaisieFormAwareTrait;
+use Application\Form\TypeIntervention\Traits\TypeInterventionStatutSaisieFormAwareTrait;
 use Application\Exception\DbException;
 use UnicaenApp\View\Model\MessengerViewModel;
+use Application\Service\Traits\ContextServiceAwareTrait;
 
 class TypeInterventionController extends AbstractController
 {
     use TypeInterventionServiceAwareTrait;
     use TypeInterventionStructureServiceAwareTrait;
+    use TypeInterventionStatutServiceAwareTrait;
     use TypeInterventionSaisieFormAwareTrait;
     use TypeInterventionStructureSaisieFormAwareTrait;
+    use TypeInterventionStatutSaisieFormAwareTrait;
+    use ContextServiceAwareTrait;
 
 
 
@@ -24,16 +32,31 @@ class TypeInterventionController extends AbstractController
     {
         $this->em()->getFilters()->enable('historique')->init([
             TypeIntervention::class,
-        ]);
-
-        $typesInterventions = $this->getServiceTypeIntervention()->getList();
-
-        $this->em()->getFilters()->enable('historique')->init([
             TypeInterventionStructure::class,
         ]);
-        $typesInterventionsStructures = $this->getServiceTypeInterventionStructure()->getList();
 
-        return compact('typesInterventions', 'typesInterventionsStructures');
+        $annee  = $this->getServiceContext()->getAnnee();
+        $tiList = $this->getServiceTypeIntervention()->getList();
+
+        $typesInterventions = [];
+        foreach ($tiList as $ti) {
+            if ($ti->isValide($annee)) {
+                $typesInterventions[] = $ti;
+            }
+        }
+
+        return compact('typesInterventions', 'annee');
+    }
+
+
+
+    public function statutAction()
+    {
+        $typeIntervention        = $typeIntervention = $this->getEvent()->getParam('typeIntervention');
+        $typeInterventionStatuts = $typeIntervention->getTypeInterventionStatut();
+        $title                   = "Statuts spécifique pour " . $typeIntervention;
+
+        return compact('typeIntervention', 'typeInterventionStatuts', 'title');
     }
 
 
@@ -52,7 +75,7 @@ class TypeInterventionController extends AbstractController
             $title = 'Édition d\'un type d\'intervention';
         }
 
-        if ($typeIntervention->getOrdre() == NULL) $typeIntervention->setOrdre(9999);
+        if ($typeIntervention->getOrdre() == null) $typeIntervention->setOrdre(9999);
         $form->bindRequestSave($typeIntervention, $this->getRequest(), function (TypeIntervention $ti) {
             try {
                 $this->getServiceTypeIntervention()->save($ti);
@@ -136,15 +159,17 @@ class TypeInterventionController extends AbstractController
         return new MessengerViewModel(compact('typeInterventionStructure'));
     }
 
+
+
     public function typeInterventionTrierAction()
     {
         /* @var $ti TypeIntervention */
-        $txt='result=';
+        $txt       = 'result=';
         $champsIds = explode(',', $this->params()->fromPost('champsIds', ''));
-        $ordre = 1;
+        $ordre     = 1;
         foreach ($champsIds as $champId) {
-            $txt.=$champId.'=>';
-            $ti = $this->getServiceTypeIntervention()->get($champId);
+            $txt .= $champId . '=>';
+            $ti  = $this->getServiceTypeIntervention()->get($champId);
             if ($ti) {
                 $txt .= ';' . $ti->getOrdre();
                 $ti->setOrdre($ordre);
@@ -152,11 +177,61 @@ class TypeInterventionController extends AbstractController
                 try {
                     $this->getServiceTypeIntervention()->save($ti);
                 } catch (\Exception $e) {
-                    $e = DbException::translate($e);
+                    $e   = DbException::translate($e);
                     $txt .= ':' . $e->getMessage();
                 }
             }
         }
+
         return new JsonModel(['msg' => 'Tri des champs effectué']);
+    }
+
+
+
+    public function statutSaisieAction()
+    {
+        /* @var $typeInterventionStatut TypeInterventionStatut */
+
+        $typeIntervention       = $this->getEvent()->getParam('typeIntervention');
+        $typeInterventionStatut = $this->getEvent()->getParam('typeInterventionStatut');
+        $form                   = $this->getFormTypeInterventionStatutSaisie();
+        if (empty($typeInterventionStatut)) {
+            $title                  = 'Ajout d\'un statut spécifique pour un nouveau type d\'intervention';
+            $typeInterventionStatut = $this->getServiceTypeInterventionStatut()->newEntity()
+                ->setTypeIntervention($typeIntervention)
+                ->setTauxHETDService(1)
+                ->setTauxHETDComplementaire(1);
+        } else {
+            $title = 'Édition d\'un statut pour un type d\'intervention';
+        }
+
+        $form->bindRequestSave($typeInterventionStatut, $this->getRequest(), function (TypeInterventionStatut $tis) {
+            try {
+                $this->getServiceTypeInterventionStatut()->save($tis);
+                $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $tis->getTypeIntervention()->getId()]); // redirection vers la page parent en cas de succès
+                $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
+            } catch (\Exception $e) {
+                $e = DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tis->getId());
+            }
+        });
+
+        return compact('form', 'title');
+    }
+
+
+
+    public function statutDeleteAction()
+    {
+        $ti    = $this->getEvent()->getParam('typeIntervention');
+        $tis   = $this->getEvent()->getParam('typeInterventionStatut');
+        $title = "Suppression du statut";
+        $form  = $this->makeFormSupprimer(function () use ($tis,$ti) {
+            $this->getServiceTypeInterventionStatut()->delete($tis);
+            $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $ti->getId()]); // redirection vers la page parent en cas de succès
+            $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
+
+        });
+        return compact('form', 'title');
     }
 }

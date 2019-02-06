@@ -163,13 +163,7 @@ foreach ($typeModulateurs as $tm) {
                             } ?>
                             </tbody>
                         </table>
-                        <?php if ($canEdit): ?>
-                            <a class="btn-sm btn-primary ajax-modal" data-event="modulateur-saisie"
-                               href="<?= $this->url('modulateur/saisie', ['typeModulateur' => $tm->getId()]) ?>"
-                               title="Ajouter un modulateur">
-                                <span class="glyphicon glyphicon-edit"></span>
-                                Ajouter un modulateur</a>
-                        <?php endif; ?>
+
                     </div>
 
                 </div>

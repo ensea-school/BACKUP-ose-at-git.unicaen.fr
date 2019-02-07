@@ -10,6 +10,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * L'export CSV global des paiements refonctionne
 * Le tri des demandes de mises en paiements et mises en paiement se fait de nouveau par intervenant
 * Dans Gestion/Paiement/Mises en paiement, les mises en paiement fonctionnent à nouveau
+* La date et l'heure situées en bas de page de l'état de paiement sont maintenant bien à jour
 
 #OSE 8.0.2
 

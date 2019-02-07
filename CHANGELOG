@@ -3,6 +3,14 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
+#OSE 8.0.3
+
+## Corrections de bugs
+
+* L'export CSV global des paiements refonctionne
+* Le tri des demandes de mises en paiements et mises en paiement se fait de nouveau par intervenant
+* Dans Gestion/Paiement/Mises en paiement, les mises en paiement fonctionnent à nouveau
+
 #OSE 8.0.2
 
 ## Corrections de bugs

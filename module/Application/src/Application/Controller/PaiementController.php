@@ -422,13 +422,18 @@ class PaiementController extends AbstractController
         $this->initFilters();
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
+        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_etat_paiement');
+
         $recherche = new MiseEnPaiementRecherche;
-        $options   = [];
-        if ($role->getStructure()) {
-            $options['composante'] = $role->getStructure();
+        $recherche->setAnnee($this->getServiceContext()->getAnnee());
+        if ($role->getStructure()){
+            $recherche->setStructure($role->getStructure());
         }
 
-        return $this->etatPaiementCsv($recherche, $options);
+        $csvModel = $this->getServiceEtatSortie()->genererCsv($etatSortie, $recherche->getFilters());
+        $csvModel->setFilename($this->makeFilenameFromRecherche($recherche).'.csv');
+
+        return $csvModel;
     }
 
 

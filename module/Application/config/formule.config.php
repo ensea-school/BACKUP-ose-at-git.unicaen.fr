@@ -28,6 +28,9 @@ return [
     ],
 
     'service_manager' => [
+        'factories' => [
+            Service\FormuleService::class => Service\Factory\FormuleServiceFactory::class,
+        ],
         'invokables' => [
             Service\FormuleResultatService::class                         => Service\FormuleResultatService::class,
             Service\FormuleResultatServiceService::class                  => Service\FormuleResultatServiceService::class,

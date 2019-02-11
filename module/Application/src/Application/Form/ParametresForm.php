@@ -6,6 +6,7 @@ use Application\Entity\Db\Parametre;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
+use Application\Service\Traits\FormuleServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
@@ -28,6 +29,7 @@ class ParametresForm extends AbstractForm
     use PaysServiceAwareTrait;
     use StructureServiceAwareTrait;
     use EtatSortieServiceAwareTrait;
+    use FormuleServiceAwareTrait;
 
     public function init()
     {
@@ -138,18 +140,14 @@ class ParametresForm extends AbstractForm
         $this->add($etablissement);
 
         $this->add([
-            'name'    => 'formule_function_name',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Fonction',
+            'type' => 'Select',
+            'name' => 'formule',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceFormule()->getList()),
             ],
-        ]);
-
-        $this->add([
-            'name'    => 'formule_package_name',
-            'type'    => 'Text',
-            'options' => [
-                'label' => 'Package Oracle',
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
         ]);
 

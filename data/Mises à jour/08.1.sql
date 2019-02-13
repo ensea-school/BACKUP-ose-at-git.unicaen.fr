@@ -38,3 +38,48 @@ INSERT INTO parametre (
   sysdate, (select id from utilisateur where username='oseappli')
 );
 DELETE FROM parametre WHERE nom IN ('formule_package_name', 'formule_function_name');
+
+
+
+
+INSERT INTO CATEGORIE_PRIVILEGE (ID,CODE,LIBELLE) VALUES (
+  CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
+  'domaines-fonctionnels',
+  'Domaines fonctionnels'
+);
+INSERT INTO CATEGORIE_PRIVILEGE (ID,CODE,LIBELLE) VALUES (
+  CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
+  'motifs-modification-service-du',
+  'Motifs de modification de service dû'
+);
+INSERT INTO CATEGORIE_PRIVILEGE (ID,CODE,LIBELLE) VALUES (
+  CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
+  'structures',
+  'Structures'
+);
+
+INSERT INTO PRIVILEGE (ID, CATEGORIE_ID, CODE, LIBELLE, ORDRE)
+SELECT
+       privilege_id_seq.nextval id,
+       (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c ) CATEGORIE_ID,
+       t1.p CODE,
+       t1.l LIBELLE,
+       (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
+FROM (
+
+     SELECT 'odf' c, 'grands-types-diplome-visualisation' p, 'Grands types de diplômes (visualisation)' l FROM dual
+     UNION ALL SELECT 'odf' c, 'grands-types-diplome-edition' p, 'Grands types de diplômes (édition)' l FROM dual
+
+     UNION ALL SELECT 'odf' c, 'types-diplome-visualisation' p, 'Types de diplômes (visualisation)' l FROM dual
+     UNION ALL SELECT 'odf' c, 'types-diplome-edition' p, 'Types de diplômes (édition)' l FROM dual
+
+     UNION ALL SELECT 'motifs-modification-service-du' c, 'visualisation' p, 'Administration (visualisation)' l FROM dual
+     UNION ALL SELECT 'motifs-modification-service-du' c, 'edition' p, 'Administration (édition)' l FROM dual
+
+     UNION ALL SELECT 'structures' c, 'administration-visualisation' p, 'Administration (visualisation)' l FROM dual
+     UNION ALL SELECT 'structures' c, 'administration-edition' p, 'Administration (édition)' l FROM dual
+
+     UNION ALL SELECT 'budget' c, 'types-ressources-visualisation' p, 'Types de ressources - Visualisation' l FROM dual
+     UNION ALL SELECT 'budget' c, 'types-ressources-edition' p, 'Types de ressources - Édition' l FROM dual
+
+     ) t1;

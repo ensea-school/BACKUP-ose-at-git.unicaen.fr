@@ -1,0 +1,69 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ZendSkeletonApplication\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-05 22:32-0700\n"
+"PO-Revision-Date: 2019-02-19 15:04+0100\n"
+"Last-Translator: Evan Coury <me@evancoury.com>\n"
+"Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: translate\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../view/error/index.phtml:29
+msgid "Previous exceptions"
+msgstr "Exceptions précédentes"
+
+#: ../view/error/index.phtml:58
+msgid "No Exception available"
+msgstr "Aucune exception disponible"
+
+#: ../view/error/404.phtml:1
+msgid "A 404 error occurred"
+msgstr "Une erreur 404 est survenue"
+
+#: ../view/error/404.phtml:10
+msgid "The requested controller was unable to dispatch the request."
+msgstr "Le contrôleur demandé n'a pas pu dispatcher la requête."
+
+#: ../view/error/404.phtml:13
+msgid "The requested controller could not be mapped to an existing controller class."
+msgstr "Le contrôleur demandé ne correspond pas à une classe existante de contrôleur."
+
+#: ../view/error/404.phtml:16
+msgid "The requested controller was not dispatchable."
+msgstr "Le contrôleur demandé n'est pas dispatchable."
+
+#: ../view/error/404.phtml:19
+msgid "The requested URL could not be matched by routing."
+msgstr "L'URL demandée n'a pas pu trouver de route correspondante."
+
+#: ../view/error/404.phtml:22
+msgid "We cannot determine at this time why a 404 was generated."
+msgstr "Nous ne pouvons pas déterminer pour le moment pourquoi une 404 a été générée."
+
+#: ../view/error/404.phtml:34
+msgid "Controller"
+msgstr "Contrôleur"
+
+#: ../view/error/404.phtml:41
+#, php-format
+msgid "resolves to %s"
+msgstr "résout en %s"
+
+#: ../view/error/404.phtml:51
+msgid "Exception"
+msgstr "Exception"
+
+#: ../view/application/intervenant/cloturer-saisie.phtml:2
+msgid "J'ai terminé la saisie de la totalité de mon service réalisé"
+msgstr ""
+
+#: ../view/application/intervenant/cloturer-saisie.phtml:2
+msgid "L'intervenant a terminé la saisie de la totalité de son service réalisé"
+msgstr ""

@@ -234,7 +234,7 @@ $config = [
         ],
     ],
 ];
-var_dump(getcwd());
+
 if ($customCss = \AppConfig::get('etablissement', 'css')){
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }

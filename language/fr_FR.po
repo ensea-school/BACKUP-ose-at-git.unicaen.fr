@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OSE\n"
-"POT-Creation-Date: 2019-02-19 17:11+0100\n"
-"PO-Revision-Date: 2019-02-19 17:14+0100\n"
+"POT-Creation-Date: 2019-02-19 17:47+0100\n"
+"PO-Revision-Date: 2019-02-19 17:50+0100\n"
 "Last-Translator: Laurent Lécluse <laurent.lecluse@unicaen.fr>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -18,16 +18,16 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: vendor/unicaen/import/public/ace-builds-"
 "master\n"
 
+#: module/Application/src/Application/Controller/BudgetController.php:217
 #: module/Application/src/Application/Controller/BudgetController.php:218
-#: module/Application/src/Application/Controller/BudgetController.php:219
 msgid "Dont, au titre de "
 msgstr ""
 
-#: module/Application/src/Application/Controller/BudgetController.php:220
+#: module/Application/src/Application/Controller/BudgetController.php:219
 msgid "Année civile "
-msgstr "cvds"
+msgstr ""
 
-#: module/Application/src/Application/Controller/BudgetController.php:324
+#: module/Application/src/Application/Controller/BudgetController.php:323
 msgid "Composante"
 msgstr ""
 
@@ -75,12 +75,16 @@ msgstr ""
 msgid "Type :"
 msgstr ""
 
+#: module/Application/src/Application/Traits/TranslatorTrait.php:43
+msgid "bdd "
+msgstr ""
+
 #: module/Application/src/Application/View/Helper/AppLink.php:108
 msgid "Page d'accueil de l'application"
 msgstr ""
 
 #: module/Application/src/Application/View/Helper/ServiceReferentiel/FormSaisie.php:128
-msgid "Prévu <span class=\"glyphicon glyphicon-arrow-right\"></span> réalisé"
+msgid "Prévu => réalisé"
 msgstr ""
 
 #: module/Application/src/Application/translate.php:9
@@ -160,36 +164,36 @@ msgstr ""
 #: module/Application/view/error/exception.phtml:17
 #: module/Application/view/error/index.phtml:13
 msgid "Additional information"
-msgstr ""
+msgstr "Informations supplémentaires"
 
 #: module/Application/view/error/exception.phtml:20
 #: module/Application/view/error/exception.phtml:44
 #: module/Application/view/error/index.phtml:16
 #: module/Application/view/error/index.phtml:42
 msgid "File"
-msgstr ""
+msgstr "Fichier"
 
 #: module/Application/view/error/exception.phtml:24
 #: module/Application/view/error/exception.phtml:48
 #: module/Application/view/error/index.phtml:47
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #: module/Application/view/error/exception.phtml:28
 #: module/Application/view/error/exception.phtml:52
 #: module/Application/view/error/index.phtml:21
 #: module/Application/view/error/index.phtml:51
 msgid "Stack trace"
-msgstr ""
+msgstr "Pile d'exécution"
 
 #: module/Application/view/error/exception.phtml:38
 #: module/Application/view/error/index.phtml:32
 msgid "Previous exceptions"
-msgstr ""
+msgstr "Erreurs précédentes"
 
 #: module/Application/view/error/exception.phtml:69
 msgid "No Exception available"
-msgstr ""
+msgstr "Aucune erreur trouvée"
 
 #~ msgid "ETAPE_SOURCE_UN"
 #~ msgstr ""

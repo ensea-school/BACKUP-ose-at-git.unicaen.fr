@@ -6,11 +6,9 @@ use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\CentreCoutStructure;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\CentreCoutStructureServiceAwareTrait;
-use Application\Exception\DbException;
 use Application\Form\CentreCout\Traits\CentreCoutSaisieFormAwareTrait;
 use Application\Form\CentreCout\Traits\CentreCoutStructureSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
-use Doctrine\ORM\QueryBuilder;
 
 class CentreCoutController extends AbstractController
 {
@@ -56,8 +54,7 @@ class CentreCoutController extends AbstractController
                 $this->getServiceCentreCout()->save($fr);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $fr->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -72,7 +69,7 @@ class CentreCoutController extends AbstractController
             $this->getServiceCentreCout()->delete($centreCout);
             $this->flashMessenger()->addSuccessMessage("Centre de Coûts supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
         return new MessengerViewModel(compact('centreCout'));
     }
@@ -99,8 +96,7 @@ class CentreCoutController extends AbstractController
                 $this->getServiceCentreCoutStructure()->save($ccs);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $ccs->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -115,7 +111,7 @@ class CentreCoutController extends AbstractController
             $this->getServiceCentreCoutStructure()->delete($centreCoutStructure);
             $this->flashMessenger()->addSuccessMessage("Structure plus liée au centre de coûts.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
         return new MessengerViewModel(compact('centreCoutStructure'));
     }

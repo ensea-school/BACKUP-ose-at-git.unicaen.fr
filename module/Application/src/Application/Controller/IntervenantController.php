@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Validation;
 use Application\Entity\Service\Recherche;
-use Application\Exception\DbException;
 use Application\Form\Intervenant\Traits\EditionFormAwareTrait;
 use Application\Form\Intervenant\Traits\HeuresCompFormAwareTrait;
 use Application\Processus\Traits\IntervenantProcessusAwareTrait;
@@ -219,7 +218,7 @@ class IntervenantController extends AbstractController
                     $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été réouverte", 'success');
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             } else {
                 if (!$this->isAllowed($intervenant, Privileges::CLOTURE_CLOTURE)) {
@@ -230,7 +229,7 @@ class IntervenantController extends AbstractController
                     $this->getServiceWorkflow()->calculerTableauxBord('cloture_realise', $intervenant);
                     $this->flashMessenger()->addSuccessMessage("La saisie du service réalisé a bien été clôturée", 'success');
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         }
@@ -273,8 +272,7 @@ class IntervenantController extends AbstractController
                     $this->getServiceIntervenant()->save($intervenant);
                     $form->get('id')->setValue($intervenant->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }
@@ -362,7 +360,7 @@ class IntervenantController extends AbstractController
                     $this->flashMessenger()->addSuccessMessage('Données bien supprimées');
                 }
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         } else {
             $this->flashMessenger()->addWarningMessage(

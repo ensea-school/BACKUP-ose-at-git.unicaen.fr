@@ -16,7 +16,6 @@ use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use RuntimeException;
-use Application\Exception\DbException;
 use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
@@ -107,8 +106,7 @@ class VolumeHoraireController extends AbstractController
                 $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire());
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -141,8 +139,7 @@ class VolumeHoraireController extends AbstractController
             $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $volumeHoraireListe->getTypeVolumeHoraire());
             $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
         } catch (\Exception $e) {
-            $e = DbException::translate($e);
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

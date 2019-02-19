@@ -4,10 +4,8 @@ namespace Application\Controller\OffreFormation;
 
 use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\VolumeHoraireEns;
 use Application\Filter\FloatFromString;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
-use Application\Exception\DbException;
 use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -66,8 +64,7 @@ class ElementPedagogiqueController extends AbstractController
                     $this->getServiceElementPedagogique()->save($element);
                     $form->get('id')->setValue($element->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }
@@ -228,7 +225,7 @@ class ElementPedagogiqueController extends AbstractController
                 try {
                     $this->getServiceVolumeHoraireEns()->changeHeuresGroupes($vhe, $heures, $groupes);
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
 

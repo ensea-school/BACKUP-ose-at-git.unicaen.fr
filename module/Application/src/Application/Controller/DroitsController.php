@@ -16,7 +16,6 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Application\Entity\Db\StatutIntervenant;
 use UnicaenAuth\Entity\Db\Privilege;
-use Application\Exception\DbException;
 
 /**
  * Description of DroitsController
@@ -83,8 +82,7 @@ class DroitsController extends AbstractController
                     $this->getServiceRole()->save($role);
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }
@@ -275,8 +273,7 @@ class DroitsController extends AbstractController
                     $this->getServiceAffectation()->save($affectation);
                     $form->get('id')->setValue($affectation->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }

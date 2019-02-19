@@ -18,7 +18,6 @@ use Zend\Form\Element\Select;
 use Application\Entity\Db\TypeDotation;
 use Application\Service\Traits\TypeDotationServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Exception\DbException;
 use Application\Form\Budget\Traits\TypeDotationSaisieFormAwareTrait;
 
 
@@ -368,8 +367,7 @@ class BudgetController extends AbstractController
                 $this->getServiceTypeDotation()->save($td);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $td->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -386,7 +384,7 @@ class BudgetController extends AbstractController
             $this->getServiceTypeDotation()->delete($typeDotation);
             $this->flashMessenger()->addSuccessMessage("Type de dotation supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
         return new \UnicaenApp\View\Model\MessengerViewModel(compact('typeDotation'));
     }

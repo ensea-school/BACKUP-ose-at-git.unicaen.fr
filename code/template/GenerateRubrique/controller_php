@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Entity\Db\nommaj;
 use Application\Service\Traits\nommajServiceAwareTrait;
-use Application\Exception\DbException;
 use Application\Form\nommaj\Traits\nommajSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -46,8 +45,7 @@ class nommajController extends AbstractController
                 $this->getServicenommaj()->save($fr);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $fr->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -62,7 +60,7 @@ class nommajController extends AbstractController
             $this->getServicenommaj()->delete($nomm);
             $this->flashMessenger()->addSuccessMessage("nommaj supprimée avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
         return new MessengerViewModel(compact('nomm'));
     }

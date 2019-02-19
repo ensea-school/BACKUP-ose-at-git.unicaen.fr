@@ -6,7 +6,6 @@ use Application\Constants;
 use Application\Entity\Db\IndicModifDossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtape;
-use Application\Exception\DbException;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -142,7 +141,7 @@ class DossierController extends AbstractController
                     $this->updateTableauxBord($intervenant);
                     $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
 
                 // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
@@ -179,7 +178,7 @@ class DossierController extends AbstractController
             $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>enregistrée</strong> avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel;
@@ -199,7 +198,7 @@ class DossierController extends AbstractController
             $this->updateTableauxBord($intervenant, true);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel;
@@ -220,7 +219,7 @@ class DossierController extends AbstractController
             $this->updateTableauxBord($intervenant);
             $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e));
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel;
@@ -273,7 +272,7 @@ class DossierController extends AbstractController
 
                 $this->flashMessenger()->addSuccessMessage("Action effectuée avec succès.");
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
 
             return new MessengerViewModel();

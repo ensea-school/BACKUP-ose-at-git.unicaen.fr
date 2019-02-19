@@ -16,7 +16,6 @@ use Application\Service\Traits\ServiceReferentielServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ValidationServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireReferentielServiceAwareTrait;
-use Application\Exception\DbException;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
@@ -155,8 +154,7 @@ class ServiceReferentielController extends AbstractController
                     $this->updateTableauxBord($intervenant);
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e = DbException::translate($e);
-                    $this->flashMessenger()->addErrorMessage($e->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
                 $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
             } else {
@@ -249,8 +247,7 @@ class ServiceReferentielController extends AbstractController
                 $this->updateTableauxBord($service->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
             $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
         }
@@ -344,7 +341,7 @@ class ServiceReferentielController extends AbstractController
                         "Validation effectuée avec succès."
                     );
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         } else {
@@ -372,7 +369,7 @@ class ServiceReferentielController extends AbstractController
                         "Dévalidation effectuée avec succès."
                     );
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         } else {

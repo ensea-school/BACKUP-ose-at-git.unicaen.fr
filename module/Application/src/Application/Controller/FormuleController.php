@@ -64,7 +64,7 @@ class FormuleController extends AbstractController
             $this->getServiceFormuleTestIntervenant()->delete($formuleTestIntervenant);
             $this->flashMessenger()->addSuccessMessage("Test de formule supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

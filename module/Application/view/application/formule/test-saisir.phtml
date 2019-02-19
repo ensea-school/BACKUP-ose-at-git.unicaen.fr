@@ -1,0 +1,27 @@
+<?php
+
+use Application\Entity\Db\FormuleTestIntervenant;
+use Application\Form\FormuleTest\IntervenantForm;
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $title string
+ * @var $form IntervenantForm
+ * @var $formuleTestIntervenant FormuleTestIntervenant
+ */
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+
+
+
+
+<?php
+
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+
+echo $this->form($form);
+
+var_dump($formuleTestIntervenant);
+?>

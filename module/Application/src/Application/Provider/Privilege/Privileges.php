@@ -25,6 +25,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const BUDGET_EXPORT                                       = 'budget-export';
     const BUDGET_TYPE_DOTATION_EDITION                        = 'budget-type-dotation-edition';
     const BUDGET_TYPE_DOTATION_VISUALISATION                  = 'budget-type-dotation-visualisation';
+    const BUDGET_TYPES_RESSOURCES_EDITION                     = 'budget-types-ressources-edition';
+    const BUDGET_TYPES_RESSOURCES_VISUALISATION               = 'budget-types-ressources-visualisation';
     const BUDGET_VISUALISATION                                = 'budget-visualisation';
     const CENTRES_COUTS_ADMINISTRATION_EDITION                = 'centres-couts-administration-edition';
     const CENTRES_COUTS_ADMINISTRATION_VISUALISATION          = 'centres-couts-administration-visualisation';
@@ -63,6 +65,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const DISCIPLINE_EDITION                                  = 'discipline-edition';
     const DISCIPLINE_GESTION                                  = 'discipline-gestion';
     const DISCIPLINE_VISUALISATION                            = 'discipline-visualisation';
+    const DOMAINES_FONCTIONNELS_ADMINISTRATION_EDITION        = 'domaines-fonctionnels-administration-edition';
+    const DOMAINES_FONCTIONNELS_ADMINISTRATION_VISUALISATION  = 'domaines-fonctionnels-administration-visualisation';
     const DOSSIER_DEVALIDATION                                = 'dossier-devalidation';
     const DOSSIER_DIFFERENCES                                 = 'dossier-differences';
     const DOSSIER_EDITION                                     = 'dossier-edition';
@@ -83,6 +87,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ENSEIGNEMENT_VISUALISATION                          = 'enseignement-visualisation';
     const ETAT_SORTIE_ADMINISTRATION_EDITION                  = 'etat-sortie-administration-edition';
     const ETAT_SORTIE_ADMINISTRATION_VISUALISATION            = 'etat-sortie-administration-visualisation';
+    const FORMULE_TESTS                                       = 'formule-tests';
     const IMPORT_ECARTS                                       = 'import-ecarts';
     const IMPORT_MAJ                                          = 'import-maj';
     const IMPORT_SOURCES_EDITION                              = 'import-sources-edition';
@@ -121,6 +126,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const MODULATEUR_VISUALISATION                            = 'modulateur-visualisation';
     const MOTIF_NON_PAIEMENT_EDITION                          = 'motif-non-paiement-edition';
     const MOTIF_NON_PAIEMENT_VISUALISATION                    = 'motif-non-paiement-visualisation';
+    const MOTIFS_MODIFICATION_SERVICE_DU_EDITION              = 'motifs-modification-service-du-edition';
+    const MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION        = 'motifs-modification-service-du-visualisation';
     const ODF_CENTRES_COUT_EDITION                            = 'odf-centres-cout-edition';
     const ODF_ELEMENT_EDITION                                 = 'odf-element-edition';
     const ODF_ELEMENT_VH_EDITION                              = 'odf-element-vh-edition';
@@ -129,8 +136,12 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ODF_ETAPE_EDITION                                   = 'odf-etape-edition';
     const ODF_ETAPE_VISUALISATION                             = 'odf-etape-visualisation';
     const ODF_EXPORT_CSV                                      = 'odf-export-csv';
+    const ODF_GRANDS_TYPES_DIPLOME_EDITION                    = 'odf-grands-types-diplome-edition';
+    const ODF_GRANDS_TYPES_DIPLOME_VISUALISATION              = 'odf-grands-types-diplome-visualisation';
     const ODF_MODULATEURS_EDITION                             = 'odf-modulateurs-edition';
     const ODF_TAUX_MIXITE_EDITION                             = 'odf-taux-mixite-edition';
+    const ODF_TYPES_DIPLOME_EDITION                           = 'odf-types-diplome-edition';
+    const ODF_TYPES_DIPLOME_VISUALISATION                     = 'odf-types-diplome-visualisation';
     const ODF_VISUALISATION                                   = 'odf-visualisation';
     const PARAMETRES_ANNEES_EDITION                           = 'parametres-annees-edition';
     const PARAMETRES_ANNEES_VISUALISATION                     = 'parametres-annees-visualisation';
@@ -155,6 +166,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const REFERENTIEL_EDITION                                 = 'referentiel-edition';
     const REFERENTIEL_VALIDATION                              = 'referentiel-validation';
     const REFERENTIEL_VISUALISATION                           = 'referentiel-visualisation';
+    const STRUCTURES_ADMINISTRATION_EDITION                   = 'structures-administration-edition';
+    const STRUCTURES_ADMINISTRATION_VISUALISATION             = 'structures-administration-visualisation';
     const TYPE_INTERVENTION_EDITION                           = 'type-intervention-edition';
     const TYPE_INTERVENTION_VISUALISATION                     = 'type-intervention-visualisation';
     const UNICAEN_TBL_ACTUALISATION                           = 'unicaen-tbl-actualisation';

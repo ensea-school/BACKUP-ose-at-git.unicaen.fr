@@ -15,6 +15,9 @@ return [
 
         /* Affichage complet des erreurs (false en production) */
         'affichageErreurs' => true,
+
+        /* Langue utilisée (la liste des langues est disponible dans le répertoire /language de l'application) */
+        'locale' => 'fr_FR',
     ],
 
 

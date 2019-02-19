@@ -55,6 +55,16 @@ $config = [
     'zfcuser'            => [
         'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
+    'translator' => [
+        'locale'                    => \AppConfig::get('global', 'locale'),
+        'translation_file_patterns' => [
+            [
+                'type'     => 'gettext',
+                'base_dir' => getcwd().'/language',
+                'pattern'  => '%s.mo',
+            ],
+        ],
+    ],
     'router'             => [
         'routes' => [
             'home'             => [
@@ -224,7 +234,7 @@ $config = [
         ],
     ],
 ];
-
+var_dump(getcwd());
 if ($customCss = \AppConfig::get('etablissement', 'css')){
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }

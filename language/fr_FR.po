@@ -1,69 +1,213 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ZendSkeletonApplication\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-05 22:32-0700\n"
-"PO-Revision-Date: 2019-02-19 15:04+0100\n"
-"Last-Translator: Evan Coury <me@evancoury.com>\n"
-"Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
+"Project-Id-Version: OSE\n"
+"POT-Creation-Date: 2019-02-19 17:11+0100\n"
+"PO-Revision-Date: 2019-02-19 17:14+0100\n"
+"Last-Translator: Laurent Lécluse <laurent.lecluse@unicaen.fr>\n"
+"Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: translate\n"
-"X-Poedit-Basepath: .\n"
 "X-Generator: Poedit 1.8.11\n"
-"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: translate;setLabel;setLegend;_\n"
+"X-Poedit-SearchPath-0: module/Application\n"
+"X-Poedit-SearchPathExcluded-0: public/vendor\n"
+"X-Poedit-SearchPathExcluded-1: vendor/unicaen/import/public/ace-builds-"
+"master\n"
 
-#: ../view/error/index.phtml:29
-msgid "Previous exceptions"
-msgstr "Exceptions précédentes"
+#: module/Application/src/Application/Controller/BudgetController.php:218
+#: module/Application/src/Application/Controller/BudgetController.php:219
+msgid "Dont, au titre de "
+msgstr ""
 
-#: ../view/error/index.phtml:58
-msgid "No Exception available"
-msgstr "Aucune exception disponible"
+#: module/Application/src/Application/Controller/BudgetController.php:220
+msgid "Année civile "
+msgstr "cvds"
 
-#: ../view/error/404.phtml:1
-msgid "A 404 error occurred"
-msgstr "Une erreur 404 est survenue"
+#: module/Application/src/Application/Controller/BudgetController.php:324
+msgid "Composante"
+msgstr ""
 
-#: ../view/error/404.phtml:10
-msgid "The requested controller was unable to dispatch the request."
-msgstr "Le contrôleur demandé n'a pas pu dispatcher la requête."
+#: module/Application/src/Application/Controller/EtablissementController.php:38
+msgid "Recherchez l'établissement concerné :"
+msgstr ""
 
-#: ../view/error/404.phtml:13
-msgid "The requested controller could not be mapped to an existing controller class."
-msgstr "Le contrôleur demandé ne correspond pas à une classe existante de contrôleur."
+#: module/Application/src/Application/Controller/StructureController.php:39
+msgid "Recherchez la structure concernée :"
+msgstr ""
 
-#: ../view/error/404.phtml:16
-msgid "The requested controller was not dispatchable."
-msgstr "Le contrôleur demandé n'est pas dispatchable."
+#: module/Application/src/Application/Form/Droits/AffectationForm.php:68
+msgid "Utilisateur"
+msgstr ""
 
-#: ../view/error/404.phtml:19
-msgid "The requested URL could not be matched by routing."
-msgstr "L'URL demandée n'a pas pu trouver de route correspondante."
+#: module/Application/src/Application/Form/Intervenant/HeuresCompForm.php:29
+msgid "Type de service :"
+msgstr ""
 
-#: ../view/error/404.phtml:22
-msgid "We cannot determine at this time why a 404 was generated."
-msgstr "Nous ne pouvons pas déterminer pour le moment pourquoi une 404 a été générée."
+#: module/Application/src/Application/Form/Intervenant/HeuresCompForm.php:35
+#: module/Application/src/Application/Form/Service/RechercheForm.php:201
+msgid "État :"
+msgstr ""
 
-#: ../view/error/404.phtml:34
-msgid "Controller"
-msgstr "Contrôleur"
+#: module/Application/src/Application/Form/ParametresForm.php:138
+#: module/Application/src/Application/Form/Service/SaisieFieldset.php:100
+msgid "Établissement :"
+msgstr ""
 
-#: ../view/error/404.phtml:41
-#, php-format
-msgid "resolves to %s"
-msgstr "résout en %s"
+#: module/Application/src/Application/Form/Service/RechercheForm.php:150
+msgid "Statut :"
+msgstr ""
 
-#: ../view/error/404.phtml:51
-msgid "Exception"
-msgstr "Exception"
+#: module/Application/src/Application/Form/Service/RechercheForm.php:181
+#: module/Application/src/Application/Form/Service/SaisieFieldset.php:71
+#: module/Application/src/Application/Form/ServiceReferentiel/SaisieFieldset.php:79
+msgid "Intervenant :"
+msgstr ""
 
-#: ../view/application/intervenant/cloturer-saisie.phtml:2
+#: module/Application/src/Application/Form/Service/RechercheForm.php:188
+msgid "Enseignement :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Service/RechercheForm.php:194
+msgid "Type :"
+msgstr ""
+
+#: module/Application/src/Application/View/Helper/AppLink.php:108
+msgid "Page d'accueil de l'application"
+msgstr ""
+
+#: module/Application/src/Application/View/Helper/ServiceReferentiel/FormSaisie.php:128
+msgid "Prévu <span class=\"glyphicon glyphicon-arrow-right\"></span> réalisé"
+msgstr ""
+
+#: module/Application/src/Application/translate.php:9
+msgid "bdd .SERVICE__UN"
+msgstr ""
+"Vous ne pouvez pas enregistrer cet enseignement car il en existe déjà un de "
+"similaire."
+
+#: module/Application/src/Application/translate.php:10
+msgid "bdd ORA-01722"
+msgstr "Nombre invalide"
+
+#: module/Application/src/Application/translate.php:11
+msgid "bdd .MEP_FR_SERVICE_FK"
+msgstr ""
+"Vous ne pouvez pas dévalider ces heures d'enseignement, car des demandes de "
+"mise en paiement ou des mises en paiement ont été faites."
+
+#: module/Application/src/Application/translate.php:12
+msgid "bdd .MEP_FR_SERVICE_REF_FK"
+msgstr ""
+"Vous ne pouvez pas dévalider ces heures de référentiel, car des demandes de "
+"mise en paiement ou des mises en paiement ont été faites."
+
+#: module/Application/src/Application/translate.php:13
+msgid "bdd .EP_CODE__UN"
+msgstr ""
+"Un enseignement existe déjà avec le même code. Merci de choisir un autre "
+"code d'enseignement."
+
+#: module/Application/src/Application/translate.php:14
+msgid "bdd .ETAPE_SOURCE_UN"
+msgstr ""
+"Une formation existe déjà avec le même code. Merci de choisir un autre code "
+"de formation."
+
+#: module/Application/view/application/index/index.phtml:53
+msgid "Tableau synthétique des enseignements concernant ma composante..."
+msgstr ""
+
+#: module/Application/view/application/index/index.phtml:66
+msgid "Connectez-vous..."
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:17
+msgid "Expéditeur du mail"
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:20
+msgid "Nombre de mails à envoyer"
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:23
+msgid "Objet du mail"
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:24
+msgid "Corps du mail"
+msgstr ""
+
+#: module/Application/view/application/intervenant/cloturer-saisie.phtml:2
+msgid "J'ai terminé la saisie de la totalité de mon service réalisé."
+msgstr ""
+
+#: module/Application/view/application/intervenant/partial/cloture.phtml:43
 msgid "J'ai terminé la saisie de la totalité de mon service réalisé"
 msgstr ""
 
-#: ../view/application/intervenant/cloturer-saisie.phtml:2
+#: module/Application/view/application/intervenant/partial/cloture.phtml:60
 msgid "L'intervenant a terminé la saisie de la totalité de son service réalisé"
 msgstr ""
+
+#: module/Application/view/error/exception.phtml:1
+msgid "Opération impossible"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:17
+#: module/Application/view/error/index.phtml:13
+msgid "Additional information"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:20
+#: module/Application/view/error/exception.phtml:44
+#: module/Application/view/error/index.phtml:16
+#: module/Application/view/error/index.phtml:42
+msgid "File"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:24
+#: module/Application/view/error/exception.phtml:48
+#: module/Application/view/error/index.phtml:47
+msgid "Message"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:28
+#: module/Application/view/error/exception.phtml:52
+#: module/Application/view/error/index.phtml:21
+#: module/Application/view/error/index.phtml:51
+msgid "Stack trace"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:38
+#: module/Application/view/error/index.phtml:32
+msgid "Previous exceptions"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:69
+msgid "No Exception available"
+msgstr ""
+
+#~ msgid "ETAPE_SOURCE_UN"
+#~ msgstr ""
+#~ "Une formation existe déjà avec le même code. Merci de choisir un autre "
+#~ "code de formation."
+
+#~ msgid "(OSE.ETAPE_SOURCE_UN)"
+#~ msgstr ""
+#~ "Une formation existe déjà avec le même code. Merci de choisir un autre "
+#~ "code de formation."
+
+#~ msgid "OSE.EP_CODE__UN"
+#~ msgstr ""
+#~ "Un enseignement existe déjà avec le même code. Merci de choisir un autre "
+#~ "code d'enseignement"
+
+#~ msgid "test formule2"
+#~ msgstr "test form33"
+
+#~ msgid "test formule"
+#~ msgstr "test trad"

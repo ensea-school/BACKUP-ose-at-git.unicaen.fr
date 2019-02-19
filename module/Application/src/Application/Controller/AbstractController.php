@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Exception\DbException;
 use Application\Form\Supprimer;
+use Application\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManager;
 use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -16,6 +17,7 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 abstract class AbstractController extends AbstractActionController
 {
+    use TranslatorTrait;
 
     /**
      * @param $saveFnc
@@ -64,4 +66,5 @@ abstract class AbstractController extends AbstractActionController
         define('_MPDF_TTFONTDATAPATH', $pdfPath);
         return new Pdf(\Application::$container->get('view_manager')->getRenderer());
     }
+
 }

@@ -4,6 +4,7 @@ namespace Application\Form;
 
 use Application\Exception\DbException;
 use Application\Service\AbstractEntityService;
+use Application\Traits\TranslatorTrait;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\InputFilter\InputFilterProviderInterface;
@@ -12,6 +13,7 @@ use Zend\Mvc\Controller\Plugin\FlashMessenger;
 
 abstract class AbstractForm extends Form implements InputFilterProviderInterface
 {
+    use TranslatorTrait;
 
     /**
      * @var FlashMessenger

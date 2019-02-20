@@ -54,7 +54,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'motif-modification-service' => [
-                                'label'        => 'Motif de Modification du Service Dû',
+                                'label'        => 'Motif de modification du service dû',
                                 'icon'         => 'fa fa-graduation-cap',
                                 'route'        => 'motif-modification-service',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\MotifModificationService', 'index'),

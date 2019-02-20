@@ -8,10 +8,10 @@ use Application\Provider\Privilege\Privileges;
 
 $this->headTitle()->append("DOMAINE_FONCTIONNELs");
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_PRIVILEGE_VISUALISATION));
+$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DOMAINES_FONCTIONNELS_ADMINISTRATION_EDITION));
 
 ?>
-<h1 class="page-header">DOMAINE_FONCTIONNELs</h1>
+<h1 class="page-header">Domaines fonctionnels</h1>
 
 <table class="table table-bordered table-sort">
     <thead>
@@ -54,9 +54,9 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_PRIVILEG
 <?php if ($canEdit): ?>
     <a class="btn btn-primary ajax-modal" data-event="domaine-fonctionnel-saisie"
        href="<?= $this->url('domaine-fonctionnel/saisie') ?>"
-       title="Ajouter une DOMAINE_FONCTIONNEL">
+       title="Ajouter une domaine fonctionnel">
         <span class="glyphicon glyphicon-edit"></span>
-        Ajouter une DOMAINE_FONCTIONNEL</a>
+        Ajouter un domaine fonctionnel</a>
 
     <script type="text/javascript">
         $(function () {

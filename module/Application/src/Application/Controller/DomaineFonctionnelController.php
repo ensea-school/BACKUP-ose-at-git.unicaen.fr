@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Entity\Db\DomaineFonctionnel;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
-use Application\Exception\DbException;
 use Application\Form\DomaineFonctionnel\Traits\DomaineFonctionnelSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -50,7 +49,7 @@ class DomaineFonctionnelController extends AbstractController
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $fr->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 

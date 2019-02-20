@@ -73,12 +73,12 @@ return [
                 [
                     'controller' => 'Application\Controller\DomaineFonctionnel',
                     'action'     => ['index'],
-                    'privileges' => Privileges::DROIT_PRIVILEGE_EDITION,
+                    'privileges' => Privileges::DOMAINES_FONCTIONNELS_ADMINISTRATION_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\DomaineFonctionnel',
                     'action'     => ['saisie','delete'],
-                    'privileges' => Privileges::DROIT_PRIVILEGE_VISUALISATION,
+                    'privileges' => Privileges::DOMAINES_FONCTIONNELS_ADMINISTRATION_EDITION,
                 ],
             ],
         ],

@@ -81,6 +81,7 @@ return [
                         Privileges::ETAT_SORTIE_ADMINISTRATION_VISUALISATION,
                         Privileges::TYPE_INTERVENTION_VISUALISATION,
                         Privileges::MODULATEUR_VISUALISATION,
+                        Privileges::MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],

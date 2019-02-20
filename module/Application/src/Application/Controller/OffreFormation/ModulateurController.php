@@ -5,7 +5,6 @@ namespace Application\Controller\OffreFormation;
 use Application\Controller\AbstractController;
 use Application\Form\OffreFormation\Traits\EtapeModulateursSaisieAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
-use Application\Exception\DbException;
 
 /**
  * Description of ModulateurController
@@ -48,8 +47,7 @@ class ModulateurController extends AbstractController
                     $this->getServiceEtape()->saveModulateurs($etape);
                     $form->bind($etape); // forçage de rafraichissement de formulaire, je ne sais pas pouquoi il faut faire çà!!
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             } else {
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';

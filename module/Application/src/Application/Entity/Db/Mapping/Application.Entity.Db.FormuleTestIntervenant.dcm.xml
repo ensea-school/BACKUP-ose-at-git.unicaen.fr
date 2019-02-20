@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Application\Entity\Db\FormuleTestIntervenant" table="FORMULE_TEST_INTERVENANT">
+        <id name="id" type="integer" column="ID">
+            <generator strategy="SEQUENCE"/>
+            <sequence-generator sequence-name="FTEST_INTERVENANT_ID_SEQ" allocation-size="1" initial-value="1"/>
+        </id>
+        <field name="libelle" type="string" column="LIBELLE" length="150" nullable="false"/>
+
+        <many-to-one field="formule" target-entity="Application\Entity\Db\Formule">
+            <join-column name="FORMULE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+            <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+            <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="structureTest" target-entity="Application\Entity\Db\FormuleTestStructure">
+            <join-column name="STRUCTURE_TEST_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
+            <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+        <many-to-one field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+            <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+        </many-to-one>
+
+        <field name="heuresDecharge" type="float" column="HEURES_DECHARGE" precision="126" scale="0" nullable="false"/>
+        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
+        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0" nullable="false"/>
+        <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
+
+        <field name="param1" type="string" column="PARAM_1" length="50" nullable="true"/>
+        <field name="param2" type="string" column="PARAM_2" length="50" nullable="true"/>
+        <field name="param3" type="string" column="PARAM_3" length="50" nullable="true"/>
+        <field name="param4" type="string" column="PARAM_4" length="50" nullable="true"/>
+        <field name="param5" type="string" column="PARAM_5" length="50" nullable="true"/>
+
+        <field name="aServiceDu" type="float" column="A_SERVICE_DU" precision="126" scale="0" nullable="true"/>
+        <field name="cServiceDu" type="float" column="C_SERVICE_DU" precision="126" scale="0" nullable="true"/>
+
+        <one-to-many field="volumeHoraireTest" target-entity="Application\Entity\Db\FormuleTestVolumeHoraire" mapped-by="intervenantTest"/>
+    </entity>
+</doctrine-mapping>

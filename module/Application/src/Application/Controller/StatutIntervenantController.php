@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
-use Application\Exception\DbException;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
@@ -56,8 +55,7 @@ class StatutIntervenantController extends AbstractController
                     $this->getServiceStatutIntervenant()->save($si);
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 } catch (\Exception $e) {
-                    $e = DbException::translate($e);
-                    $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $si->getId());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             });
         } else {
@@ -87,7 +85,7 @@ class StatutIntervenantController extends AbstractController
                 $this->getServiceStatutIntervenant()->delete($statutIntervenant);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         }
 
@@ -108,7 +106,7 @@ class StatutIntervenantController extends AbstractController
                 try {
                     $this->getServiceStatutIntervenant()->save($si);
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         }
@@ -138,8 +136,7 @@ class StatutIntervenantController extends AbstractController
                     $form->get('id')->setValue($newStatutIntervenant->getId()); // transmet le nouvel ID
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }

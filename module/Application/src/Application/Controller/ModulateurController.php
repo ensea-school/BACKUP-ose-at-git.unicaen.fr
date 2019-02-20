@@ -7,7 +7,6 @@ use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Application\Entity\Db\TypeModulateurStructure;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
 use Application\Entity\Db\TypeModulateur;
-use Application\Exception\DbException;
 use Application\Form\Modulateur\Traits\ModulateurSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
@@ -77,8 +76,7 @@ class modulateurController extends AbstractController
                 $this->getServiceModulateur()->save($modu);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $modu->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -94,7 +92,7 @@ class modulateurController extends AbstractController
             $this->getServiceModulateur()->delete($modulateur);
             $this->flashMessenger()->addSuccessMessage("Modulateur supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('modulateur'));
@@ -120,8 +118,7 @@ class modulateurController extends AbstractController
                 $this->getServiceTypeModulateur()->save($tm);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tm->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -138,7 +135,7 @@ class modulateurController extends AbstractController
             $this->getServiceTypeModulateur()->delete($typeModulateur);
             $this->flashMessenger()->addSuccessMessage("Type de Modulateur supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('typeModulateur'));
@@ -167,8 +164,7 @@ class modulateurController extends AbstractController
                 $this->getServiceTypeModulateurStructure()->save($tms);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tms->getId() . ':' . $tms->getTypeModulateur());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -186,7 +182,7 @@ class modulateurController extends AbstractController
             $this->getServiceTypeModulateurStructure()->delete($typeModulateurStructure);
             $this->flashMessenger()->addSuccessMessage("Type de Modulateur de structure supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('typeModulateur'));

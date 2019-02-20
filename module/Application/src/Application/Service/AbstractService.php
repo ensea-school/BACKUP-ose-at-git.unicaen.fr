@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Traits\TranslatorTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 
@@ -16,6 +17,7 @@ class AbstractService implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
     use Traits\ContextServiceAwareTrait;
+    use TranslatorTrait;
 
     /**
      *

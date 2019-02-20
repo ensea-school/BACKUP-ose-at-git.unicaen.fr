@@ -4,9 +4,21 @@ $pourcFormatter = function($value){
     $value = (float)$value * 100;
     return number_format( $value, 2, ',', ' ').'%';
 };
+$curFormatter = function($value){
+    if ($value == '') return '';
+    $value = (float)$value;
+    return number_format( $value, 2, ',', ' ').' €';
+};
+
 $document->addFormatter('hetd_pourc', $pourcFormatter);
 $document->addFormatter('st_hetd_pourc', $pourcFormatter);
 $document->addFormatter('t_hetd_pourc', $pourcFormatter);
+$document->addFormatter('hetd_montant', $curFormatter);
+$document->addFormatter('st_hetd_montant', $curFormatter);
+$document->addFormatter('t_hetd_montant', $curFormatter);
+$document->addFormatter('rem_fc_d714', $curFormatter);
+$document->addFormatter('st_rem_fc_d714', $curFormatter);
+$document->addFormatter('t_rem_fc_d714', $curFormatter);
 
 /* Mise en relief des données à partir de la requête originale */
 $variables    = [
@@ -91,7 +103,7 @@ $publisher->publishBegin();
 // Récupération des sous-documents, à savoir les lignes de tableau servant de modèles
 $detailTemplate = $publisher->getSubDoc($publisher->getBody(), $publisher::TABLE_ROW, 'hetd');
 $totalTemplate  = $publisher->getSubDoc($publisher->getBody(), $publisher::TABLE_ROW, 'st_hetd');
-        
+
 // Publication des lignes
 foreach ($intervenants as $intervenant) {
     foreach ($intervenant['lignes'] as $detailData) {
@@ -105,7 +117,7 @@ foreach ($intervenants as $intervenant) {
 // Suppression des lignes de modèles dans le docmument
 $publisher->remove($detailTemplate);
 $publisher->remove($totalTemplate);
-        
+
 // Publication des variables au niveau du document (dernière ligne du tableau, et fin du traitement
 $publisher->publishValues($publisher->getBody(), $variables);
 $publisher->publishEnd();

@@ -13,7 +13,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
-use Application\Exception\DbException;
 
 /**
  * Description of EtapeController
@@ -60,8 +59,7 @@ class EtapeController extends AbstractController
                     $this->getServiceEtape()->save($etape);
                     $form->get('id')->setValue($etape->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }

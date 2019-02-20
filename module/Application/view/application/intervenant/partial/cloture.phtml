@@ -40,7 +40,7 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
         data-confirm="true"
         data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Je clôture mes services"
         data-submit-reload="true"
-    >J'ai terminé la saisie de la totalité de mon service réalisé</a>
+    ><?= $this->translate('J\'ai terminé la saisie de la totalité de mon service réalisé') ?></a>
     <br/><br/>
 
 <?php elseif (!$isSelf && !$isCloture): ?>
@@ -57,7 +57,7 @@ $canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_
         data-confirm="true"
         data-confirm-button="<span class='glyphicon glyphicon-ok'></span> Clôture des services"
         data-submit-reload="true"
-    >L'intervenant a terminé la saisie de la totalité de son service réalisé</a>
+    ><?= $this->translate('L\'intervenant a terminé la saisie de la totalité de son service réalisé') ?></a>
     <br/><br/>
 
 <?php elseif ($isCloture && !$bottom): ?>

@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $fti FormuleTestIntervenant[]
+ */
+
+use Application\Entity\Db\FormuleTestIntervenant;
+
+$title = "Page de tests de formule de calcul des HETD";
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?>
+
+<table class="table table-bordered table-condensed table-sort">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Libellé</th>
+        <th>Formule</th>
+        <th>Année</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach( $fti as $formuleTestIntervenant ): ?>
+    <tr>
+        <td><?= $formuleTestIntervenant->getId() ?></td>
+        <td><?= $formuleTestIntervenant->getLibelle() ?></td>
+        <td><?= $formuleTestIntervenant->getFormule() ?></td>
+        <td><?= $formuleTestIntervenant->getAnnee() ?></td>
+        <td>
+
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

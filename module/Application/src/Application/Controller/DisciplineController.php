@@ -7,7 +7,6 @@ use Application\Form\Traits\DisciplineFormAwareTrait;
 use Application\Service\Traits\DisciplineServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
-use Application\Exception\DbException;
 
 
 /**
@@ -77,8 +76,7 @@ class DisciplineController extends AbstractController
                     $this->getServiceDiscipline()->save($discipline);
                     $form->get('id')->setValue($discipline->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }

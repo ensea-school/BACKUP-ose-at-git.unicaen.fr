@@ -5,6 +5,10 @@ author: Laurent Lécluse - DSI - Unicaen
 
 #OSE 8.1
 
+## Corrections de bugs
+
+* Les avenants comportaient par défaut un champ "modifieComplete" qui n'était pas fourni par la vue.
+
 ## Nouveautés
 
 * Il est désormais possible de customiser et/ou de traduire de petites parties de l'application. Attention toutefois : le travail de mise en place du dispositif n'en est qu'au tout début.

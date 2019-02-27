@@ -88,7 +88,7 @@ class FormuleTestVolumeHoraire
     /**
      * @var float
      */
-    private $heures;
+    private $heures = 0;
 
     /**
      * @var float
@@ -195,7 +195,7 @@ class FormuleTestVolumeHoraire
     /**
      * @return bool
      */
-    public function isReferentiel(): bool
+    public function getReferentiel(): bool
     {
         return $this->referentiel;
     }
@@ -219,7 +219,7 @@ class FormuleTestVolumeHoraire
     /**
      * @return bool
      */
-    public function isServiceStatutaire(): bool
+    public function getServiceStatutaire(): bool
     {
         return $this->serviceStatutaire;
     }

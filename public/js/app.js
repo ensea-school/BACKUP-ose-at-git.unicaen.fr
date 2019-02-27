@@ -223,5 +223,41 @@ Util = {
             }
         }
         return false;
-    }
+    },
+
+    /**
+     *
+     * @param float value
+     *
+     * @return string
+     */
+    floatToString: function(value)
+    {
+        var locale = 'fr';
+        var options = {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false};
+        var formatter = new Intl.NumberFormat(locale, options);
+
+        return formatter.format(value);
+    },
+
+    stringToFloat: function(value)
+    {
+        if (null === value || '' === value || undefined === value) return null;
+
+        value = parseFloat(value.replace(',','.'));
+
+        return value;
+    },
+
+/*
+    function stringToFloat($value)
+{
+    if (null === $value || '' === $value) return null;
+
+    $value = str_replace([',', ' '], ['.', ''], $value);
+
+    return (float)$value;
+}
+
+*/
 };

@@ -8,6 +8,7 @@ use Application\Entity\Db\Traits\FormuleAwareTrait;
 use Application\Entity\Db\Traits\FormuleTestStructureAwareTrait;
 use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Hydrator\FormuleTestIntervenantHydrator;
 
 class FormuleTestIntervenant
 {
@@ -113,9 +114,11 @@ class FormuleTestIntervenant
     /**
      * @param string $libelle
      */
-    public function setLibelle(string $libelle)
+    public function setLibelle(string $libelle): FormuleTestIntervenant
     {
         $this->libelle = $libelle;
+
+        return $this;
     }
 
 
@@ -133,9 +136,11 @@ class FormuleTestIntervenant
     /**
      * @param float $heuresDecharge
      */
-    public function setHeuresDecharge(float $heuresDecharge)
+    public function setHeuresDecharge(float $heuresDecharge): FormuleTestIntervenant
     {
         $this->heuresDecharge = $heuresDecharge;
+
+        return $this;
     }
 
 
@@ -153,9 +158,11 @@ class FormuleTestIntervenant
     /**
      * @param float $heuresServiceStatutaire
      */
-    public function setHeuresServiceStatutaire(float $heuresServiceStatutaire)
+    public function setHeuresServiceStatutaire(float $heuresServiceStatutaire): FormuleTestIntervenant
     {
         $this->heuresServiceStatutaire = $heuresServiceStatutaire;
+
+        return $this;
     }
 
 
@@ -173,9 +180,11 @@ class FormuleTestIntervenant
     /**
      * @param float $heuresServiceModifie
      */
-    public function setHeuresServiceModifie(float $heuresServiceModifie)
+    public function setHeuresServiceModifie(float $heuresServiceModifie): FormuleTestIntervenant
     {
         $this->heuresServiceModifie = $heuresServiceModifie;
+
+        return $this;
     }
 
 
@@ -183,7 +192,7 @@ class FormuleTestIntervenant
     /**
      * @return bool
      */
-    public function isDepassementServiceDuSansHC(): bool
+    public function getDepassementServiceDuSansHC(): bool
     {
         return $this->depassementServiceDuSansHC;
     }
@@ -193,9 +202,11 @@ class FormuleTestIntervenant
     /**
      * @param bool $depassementServiceDuSansHC
      */
-    public function setDepassementServiceDuSansHC(bool $depassementServiceDuSansHC)
+    public function setDepassementServiceDuSansHC(bool $depassementServiceDuSansHC): FormuleTestIntervenant
     {
         $this->depassementServiceDuSansHC = $depassementServiceDuSansHC;
+
+        return $this;
     }
 
 
@@ -213,9 +224,11 @@ class FormuleTestIntervenant
     /**
      * @param string $param1
      */
-    public function setParam1(string $param1)
+    public function setParam1(string $param1): FormuleTestIntervenant
     {
         $this->param1 = $param1;
+
+        return $this;
     }
 
 
@@ -233,9 +246,11 @@ class FormuleTestIntervenant
     /**
      * @param string $param2
      */
-    public function setParam2(string $param2)
+    public function setParam2(string $param2): FormuleTestIntervenant
     {
         $this->param2 = $param2;
+
+        return $this;
     }
 
 
@@ -253,9 +268,11 @@ class FormuleTestIntervenant
     /**
      * @param string $param3
      */
-    public function setParam3(string $param3)
+    public function setParam3(string $param3): FormuleTestIntervenant
     {
         $this->param3 = $param3;
+
+        return $this;
     }
 
 
@@ -273,9 +290,11 @@ class FormuleTestIntervenant
     /**
      * @param string $param4
      */
-    public function setParam4(string $param4)
+    public function setParam4(string $param4): FormuleTestIntervenant
     {
         $this->param4 = $param4;
+
+        return $this;
     }
 
 
@@ -293,9 +312,11 @@ class FormuleTestIntervenant
     /**
      * @param string $param5
      */
-    public function setParam5(string $param5)
+    public function setParam5(string $param5): FormuleTestIntervenant
     {
         $this->param5 = $param5;
+
+        return $this;
     }
 
 
@@ -313,9 +334,11 @@ class FormuleTestIntervenant
     /**
      * @param float $aServiceDu
      */
-    public function setAServiceDu(float $aServiceDu)
+    public function setAServiceDu(float $aServiceDu): FormuleTestIntervenant
     {
         $this->aServiceDu = $aServiceDu;
+
+        return $this;
     }
 
 
@@ -333,9 +356,11 @@ class FormuleTestIntervenant
     /**
      * @param float $cServiceDu
      */
-    public function setCServiceDu(float $cServiceDu)
+    public function setCServiceDu(float $cServiceDu): FormuleTestIntervenant
     {
         $this->cServiceDu = $cServiceDu;
+
+        return $this;
     }
 
 
@@ -357,7 +382,7 @@ class FormuleTestIntervenant
      *
      * @return Service
      */
-    public function addVolumeHoraireTest(FormuleTestVolumeHoraire $volumeHoraireTest)
+    public function addVolumeHoraireTest(FormuleTestVolumeHoraire $volumeHoraireTest): FormuleTestIntervenant
     {
         $this->volumeHoraireTest[] = $volumeHoraireTest;
 
@@ -371,9 +396,23 @@ class FormuleTestIntervenant
      *
      * @param FormuleTestVolumeHoraire $volumeHoraireTest
      */
-    public function removeVolumeHoraireTest(FormuleTestVolumeHoraire $volumeHoraireTest)
+    public function removeVolumeHoraireTest(FormuleTestVolumeHoraire $volumeHoraireTest): FormuleTestIntervenant
     {
         $this->volumeHoraireTest->removeElement($volumeHoraireTest);
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return FormuleTestIntervenant
+     */
+    public function clearVolumeHoraireTest(): FormuleTestIntervenant
+    {
+        $this->volumeHoraireTest->clear();
+
+        return $this;
     }
 
 
@@ -386,6 +425,330 @@ class FormuleTestIntervenant
     public function getVolumeHoraireTest()
     {
         return $this->volumeHoraireTest;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAServiceFi()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAServiceFi();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAServiceFa()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAServiceFa();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAServiceFc()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAServiceFc();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAServiceReferentiel()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAServiceReferentiel();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAHeuresComplFi()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAHeuresComplFi();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAHeuresComplFa()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAHeuresComplFa();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAHeuresComplFc()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAHeuresComplFc();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAHeuresComplFcMajorees()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAHeuresComplFcMajorees();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getAHeuresComplReferentiel()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getAHeuresComplReferentiel();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCServiceFi()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCServiceFi();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCServiceFa()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCServiceFa();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCServiceFc()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCServiceFc();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCServiceReferentiel()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCServiceReferentiel();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCHeuresComplFi()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCHeuresComplFi();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCHeuresComplFa()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCHeuresComplFa();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCHeuresComplFc()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCHeuresComplFc();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCHeuresComplFcMajorees()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCHeuresComplFcMajorees();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCHeuresComplReferentiel()
+    {
+        $sum = 0;
+        foreach ($this->getVolumeHoraireTest() as $vht) {
+            $sum += $vht->getCHeuresComplReferentiel();
+        }
+
+        return $sum;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCServiceAssure()
+    {
+        return $this->getCServiceFi()
+            + $this->getCServiceFa()
+            + $this->getCServiceFc()
+            + $this->getCServiceReferentiel();
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getCHeuresComplAPayer()
+    {
+        return $this->getCHeuresComplFi()
+            + $this->getCHeuresComplFa()
+            + $this->getCHeuresComplFc()
+            + $this->getCHeuresComplFcMajorees()
+            + $this->getCHeuresComplReferentiel();
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $hydrator = new FormuleTestIntervenantHydrator();
+
+        return $hydrator->extract($this);
+    }
+
+
+
+    /**
+     * @param array $data
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function fromArray(array $data): FormuleTestIntervenant
+    {
+        $hydrator = new FormuleTestIntervenantHydrator();
+        $hydrator->hydrate($data, $this);
+
+        return $this;
     }
 
 

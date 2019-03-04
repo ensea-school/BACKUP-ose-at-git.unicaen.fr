@@ -89,6 +89,11 @@ class FormuleTestIntervenant
      */
     protected $volumeHoraireTest;
 
+    /**
+     * @var string
+     */
+    private $debugInfo;
+
 
 
     /**
@@ -749,6 +754,57 @@ class FormuleTestIntervenant
         $hydrator->hydrate($data, $this);
 
         return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDebugInfo()
+    {
+        $data = ['lines' => [], 'cols' => [], 'cells' => [], 'inds' => []];
+        $calcs = [];
+
+        $a = explode('[',$this->debugInfo);
+        foreach( $a as $d ){
+            $d = explode( '|', $d);
+            switch($d[0]){
+                case 'cell':
+                    $c = $d[1];
+                    $l = (int)$d[2];
+                    $val = (float)$d[3];
+
+                    if ($l > 0){
+                        $data['cells'][$c][$l] = $val;
+                        $data['lines'][$l] = $l;
+                        $data['cols'][$c] = $c;
+                    }else{
+                        $data['inds'][$c] = $val;
+                    }
+
+                break;
+                case 'calc':
+                    $fnc = $d[1];
+                    $c = $d[2];
+                    $res = $d[3];
+                    $data['cells'][$c][$fnc] = $res;
+                    $calcs[$fnc] = $fnc;
+                    $data['cols'][$c] = $c;
+                break;
+            }
+        }
+
+        sort($data['lines']);
+        sort($calcs);
+        $data['lines'] = array_merge($data['lines'], $calcs);
+        usort($data['cols'], function($a, $b){
+            $diffLen = strlen($a ) - strlen($b);
+            if ($diffLen) return $diffLen;
+            return $a > $b;
+        });
+
+        return $data;
     }
 
 

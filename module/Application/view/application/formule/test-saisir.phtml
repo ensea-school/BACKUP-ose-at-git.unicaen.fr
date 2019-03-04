@@ -44,7 +44,7 @@ class LocalFormater
             'data-type'    => 'int',
             'data-default' => '',
         ];
-
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
         $finalAttrs = array_merge($defAttrs, $attrs);
 
         if ($finalAttrs['data-type'] == 'bool') {
@@ -78,7 +78,7 @@ class LocalFormater
             'data-type'    => 'float',
             'data-default' => '',
         ];
-
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
         $finalAttrs = array_merge($defAttrs, $attrs);
 
         return $this->view->tag('input', $finalAttrs)->openClose(true);
@@ -94,6 +94,7 @@ class LocalFormater
             'data-index' => $this->index,
             'data-type'  => 'float',
         ];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
         $finalAttrs = array_merge($defAttrs, $attrs);
 
         return $this->view->tag('td', $finalAttrs)->openClose(false);
@@ -228,7 +229,10 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <tr>
             <th colspan="11">Données</th>
             <th rowspan="3" style="width:2px">&nbsp;</th>
-            <th colspan="9">Résultats (en HETD)</th>
+            <th colspan="10"><select id="affRes" class="form-control">
+                    <option value="hetd">Résultats (en HETD)</option>
+                    <option value="debug">Informations de débogage par ligne</option>
+                </select></th>
         </tr>
         <tr>
             <th rowspan="2" style="width:8em">Structure</th>
@@ -238,8 +242,9 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <th colspan="2">Coëfs. HTED (taux)</th>
             <th colspan="2">Modulation</th>
             <th rowspan="2">Heures</th>
-            <th colspan="4">Service</th>
-            <th colspan="5">Heures complémentaires</th>
+            <th colspan="4" class="resultats">Service</th>
+            <th colspan="5" class="resultats">Heures complémentaires</th>
+            <th class="debug" rowspan="2" style="width:300px">Informations de débogage</th>
         </tr>
         <tr>
             <th>Fi</th>
@@ -249,15 +254,15 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <th>Service compl.</th>
             <th>Service dû</th>
             <th>Service compl.</th>
-            <th>Heures</th>
-            <th>Fi</th>
-            <th>Fa</th>
-            <th>Fc</th>
-            <th>Réfé-rentiel</th>
-            <th>Fi</th>
-            <th>Fa</th>
-            <th>Fc maj.</th>
-            <th>Réfé-rentiel</th>
+            <th class="resultats">Fi</th>
+            <th class="resultats">Fa</th>
+            <th class="resultats">Fc</th>
+            <th class="resultats">Réfé-rentiel</th>
+            <th class="resultats">Fi</th>
+            <th class="resultats">Fa</th>
+            <th class="resultats">Fc</th>
+            <th class="resultats">Fc maj.</th>
+            <th class="resultats">Réfé-rentiel</th>
         </tr>
         </thead>
         <tbody>
@@ -313,19 +318,27 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 <?php if ($i == 0): ?>
                     <td rowspan="30" style="width:2px">&nbsp;</td>
                 <?php endif; ?>
-                <?= $lf->output('cServiceFi') ?>
-                <?= $lf->output('cServiceFa') ?>
-                <?= $lf->output('cServiceFc') ?>
-                <?= $lf->output('cServiceReferentiel') ?>
-                <?= $lf->output('cHeuresComplFi') ?>
-                <?= $lf->output('cHeuresComplFa') ?>
-                <?= $lf->output('cHeuresComplFc') ?>
-                <?= $lf->output('cHeuresComplFcMajorees') ?>
-                <?= $lf->output('cHeuresComplReferentiel') ?>
+                <?= $lf->output('cServiceFi', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceFa', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceFc', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceReferentiel', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFi', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFa', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFc', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFcMajorees', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplReferentiel', ['class' => 'resultats']) ?>
+                <?= $lf->output('debugInfo', ['class' => 'debug', 'data-type' => 'string']) ?>
             </tr>
         <?php endfor; ?>
         </tbody>
     </table>
+    <div>
+        <h2>Informations de débogage
+            <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#debug-info" aria-expanded="false" aria-controls="debug-info">
+                Afficher/masquer
+            </button></h2>
+        <div class="collapse debug-info" id="debug-info"></div>
+    </div>
 
     <a class="btn btn-default" href="<?= $this->url('formule-calcul/test') ?>"><i class="fa fa-undo" aria-hidden="true"></i>
         Retour à la liste des formules</a>
@@ -356,6 +369,37 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         width: 100%;
         background-color: #fff8dc;
     }
+
+    .debug {
+        display: none;
+    }
+
+    .debug.doutput {
+        font-size: 8pt;
+        width: 400px;
+        white-space: unset;
+    }
+
+    .debug-table {
+        font-size: 8pt;
+    }
+
+    .debug-table th {
+        text-align: center;
+        text-transform: uppercase;
+        background-color:#ccc;
+    }
+
+    .debug-table td {
+        text-align: right;
+        min-width: 20px;
+        max-width: 20px;
+    }
+
+    .debug-table td .zero {
+        color:gray;
+    }
+
 </style>
 <script type="text/javascript">
     $(function () {
@@ -512,8 +556,62 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     $(this).html(value);
                 });
 
+                this.affDebugInfo( data.debugInfo );
+
                 this.id = data.id;
             },
+
+
+
+            affDebugInfo: function( data )
+            {
+                var h = '';
+                console.log(data);
+
+                h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table">';
+                h += '<tr><th></th>';
+                for( var c in data.cols ){
+                    h += '<th>' + data.cols[c] + '</th>';
+                }
+                h += '</tr>';
+                for( var l in data.lines ){
+                    h += '<tr><th>'+data.lines[l]+'</th>';
+                    for( var c in data.cols ){
+                        var val = data.cells[data.cols[c]][data.lines[l]];
+
+                        if (isNaN(val)){
+                            val = '';
+                        }else{
+                            val = Util.floatToString(val);
+                            if (val === '0') val = '<span class="zero">0</span>';
+                        }
+
+
+                        h += '<td>' + val + '</td>';
+                    }
+                    h += '</tr>';
+                }
+                h += '</table>';
+
+                h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table" style="width:20em">';
+                for( var i in data.inds){
+                    var val = data.inds[i];
+
+                    if (isNaN(val)){
+                        val = '';
+                    }else{
+                        val = Util.floatToString(val);
+                        if (val === '0') val = '<span class="zero">0</span>';
+                    }
+
+                    h += '<tr><th>'+i+'</th><td>' + val + '</td></tr>';
+                }
+                h += '</table>';
+
+                this.element.find('.debug-info').html(h);
+            },
+
+
 
             calculTauxFi: function (index)
             {
@@ -541,12 +639,26 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     }
                 });
 
-                this.element.find(".dinput").change(function () {
-                    that.autoSave();
-                });
+                // Désactivé, car si on saisit une deuxième valeur, elle est remplacée par le rés de l'AJAX précédant...
+                // this.element.find(".dinput").change(function () {
+                //     that.autoSave();
+                // });
 
                 this.element.find(".enregistrer").click(function () {
                     that.save(true);
+                });
+
+                this.element.find("#affRes").change(function(){
+                    switch($(this).val()){
+                        case 'hetd':
+                            that.element.find(".debug").hide();
+                            that.element.find(".resultats").show();
+                            break;
+                        case 'debug':
+                            that.element.find(".resultats").hide();
+                            that.element.find(".debug").show();
+                            break;
+                    }
                 });
 
                 this.setData(this.element.data('data'));

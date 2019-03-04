@@ -44,6 +44,8 @@
         <field name="aServiceDu" type="float" column="A_SERVICE_DU" precision="126" scale="0" nullable="true"/>
         <field name="cServiceDu" type="float" column="C_SERVICE_DU" precision="126" scale="0" nullable="true"/>
 
+        <field name="debugInfo" type="string" column="DEBUG_INFO" nullable="true"/>
+
         <one-to-many field="volumeHoraireTest" target-entity="Application\Entity\Db\FormuleTestVolumeHoraire"
                      mapped-by="intervenantTest">
             <cascade>

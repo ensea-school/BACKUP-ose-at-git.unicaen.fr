@@ -53,5 +53,7 @@
         <field name="cHeuresComplFc" type="float" column="C_HEURES_COMPL_FC" precision="126" scale="0" nullable="true"/>
         <field name="cHeuresComplFcMajorees" type="float" column="C_HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="true"/>
         <field name="cHeuresComplReferentiel" type="float" column="C_HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="true"/>
+
+        <field name="debugInfo" type="string" column="DEBUG_INFO" nullable="true"/>
     </entity>
 </doctrine-mapping>

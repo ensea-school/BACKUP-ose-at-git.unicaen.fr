@@ -180,6 +180,11 @@ class FormuleTestVolumeHoraire
      */
     private $cHeuresComplReferentiel;
 
+    /**
+     * @var string
+     */
+    private $debugInfo;
+
 
 
     /**
@@ -981,5 +986,31 @@ class FormuleTestVolumeHoraire
 
         return $this;
     }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDebugInfo()
+    {
+        return $this->debugInfo;
+    }
+
+
+
+    /**
+     * @param string $debugInfo
+     *
+     * @return FormuleTestVolumeHoraire
+     */
+    public function setDebugInfo($debugInfo): FormuleTestVolumeHoraire
+    {
+        $this->debugInfo = $debugInfo;
+
+        return $this;
+    }
+
+
 
 }

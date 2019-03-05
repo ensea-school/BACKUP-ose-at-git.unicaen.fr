@@ -370,6 +370,10 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         background-color: #fff8dc;
     }
 
+    .doutput {
+        text-align:right;
+    }
+
     .debug {
         display: none;
     }
@@ -396,7 +400,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         max-width: 20px;
     }
 
-    .debug-table td .zero {
+    td .zero {
         color:gray;
     }
 
@@ -426,7 +430,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     case 'float':
                         return Util.stringToFloat(value);
                     case 'float-pourc':
-                        return Util.stringToFloat(value) / 100;
+                        if (value.indexOf('/') !== -1){
+                            return Util.stringToFloat(value);
+                        }else{
+                            return Util.stringToFloat(value) / 100;
+                        }
                     case 'int':
                         return parseInt(value);
                 }
@@ -445,7 +453,12 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                     case 'float':
                         return Util.floatToString(variable);
                     case 'float-pourc':
-                        return Util.floatToString(variable * 100);
+                        var res = Util.floatToString(variable);
+                        if (res.indexOf('/') !== -1){
+                            return res;
+                        }else{
+                            return Util.floatToString(variable * 100);
+                        }
                     case 'int':
                         return variable.toString();
                 }
@@ -553,6 +566,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                         }
                     }
                     var value = that.variableToValue(variable, type);
+
+                    if (value === '0'){
+                        value = '<span class="zero">0</span>';
+                    }
+
                     $(this).html(value);
                 });
 
@@ -566,7 +584,6 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             affDebugInfo: function( data )
             {
                 var h = '';
-                console.log(data);
 
                 h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table">';
                 h += '<tr><th></th>';
@@ -634,8 +651,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 });
 
                 this.element.find("input.dinput").change(function () {
-                    if ($(this).data('type') !== 'string') {
-                        $(this).val(Util.floatToString(Util.stringToFloat($(this).val())));
+                    var type = $(this).data('type');
+                    if (type !== 'string') {
+                        var variable = that.valueToVariable($(this).val(), type);
+                        console.log(variable);
+                        $(this).val(that.variableToValue(variable, type));
                     }
                 });
 

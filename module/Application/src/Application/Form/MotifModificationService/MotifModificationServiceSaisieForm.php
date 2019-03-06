@@ -39,12 +39,17 @@ class MotifModificationServiceSaisieForm extends AbstractForm
             'options' => [
                 'label' => "Multiplicateur",
             ],
-            'type'    => 'Text',
+            'type'    => 'Select',
         ]);
+        $this->get('multiplicateur')->setValueOptions(Array(
+            '-1' => '-1',
+            '1' => '1',
+        ));
+
         $this->add([
             'name'    => 'decharge',
             'options' => [
-                'label' => "Decharge",
+                'label' => "Décharge",
             ],
             'type'    => 'Checkbox',
         ]);

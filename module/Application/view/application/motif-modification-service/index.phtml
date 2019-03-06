@@ -12,19 +12,19 @@ function affBooleen($flg)
     return ($flg ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>');
 }
 
-$this->headTitle()->append("MOTIF_MODIFICATION_SERVICEs");
+$this->headTitle()->append("Motif de modification de service dû");
 
 $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIFS_MODIFICATION_SERVICE_DU_EDITION));
 
 ?>
-    <h1 class="page-header">MOTIF_MODIFICATION_SERVICEs</h1>
+    <h1 class="page-header">Motif de modification de service dû</h1>
 
     <table class="table table-bordered table-sort">
         <thead>
                     <th style="word-wrap: break-word ; ">Code</th>
                     <th style="word-wrap: break-word ; ">Libelle</th>
                     <th style="word-wrap: break-word ; ">Multiplicateur</th>
-                    <th style="word-wrap: break-word ; ">Decharge</th>
+                    <th style="word-wrap: break-word ; ">Décharge</th>
 <?php if ($canEdit) echo '<th>Actions</th>' ?>
         </thead>
         <tbody>
@@ -38,11 +38,11 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIFS_MODIFIC
                     <td style="text-align:center;width:1px;white-space: nowrap">
                         <a class="ajax-modal" data-event="motif-modification-service-saisie"
                            href="<?= $this->url('motif-modification-service/saisie', ['motif-modification-service' => $fr->getId()]) ?>"
-                           title="Modifier la MotifModificationService">
+                           title="Modifier le Motif de Modificationde Service dû">
                             <span class="glyphicon glyphicon-edit"></span></a>
                         <a class="pop-ajax"
                            href="<?= $this->url('motif-modification-service/delete', ['motif-modification-service' => $fr->getId()]) ?>"
-                           title="Supprimer la MotifModificationService"
+                           title="Supprimer le Motif de Modificationde Service dû"
                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                            data-confirm="true"
                            data-confirm-button="Oui"

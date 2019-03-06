@@ -35,12 +35,12 @@ class DomaineFonctionnelController extends AbstractController
 
         $form = $this->getFormDomaineFonctionnelSaisie();
         if (empty($domaineFonctionnel)) {
-            $title = 'Création d\'un nouveau Domaine Fonctionnel';
+            $title = 'Création d\'un nouveau domaine fonctionnel';
             $domaineFonctionnel = $this->getServiceDomaineFonctionnel()->newEntity()
             ->setSource($this->getServiceSource()->getOse());
 
         } else {
-            $title = 'Édition d\'un Domaine Fonctionnel';
+            $title = 'Édition d\'un domaine fonctionnel';
         }
 
         $form->bindRequestSave($domaineFonctionnel, $this->getRequest(), function (DomaineFonctionnel $fr) {

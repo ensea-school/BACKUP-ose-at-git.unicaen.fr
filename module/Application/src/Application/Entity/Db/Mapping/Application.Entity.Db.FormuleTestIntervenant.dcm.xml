@@ -29,8 +29,10 @@
         </many-to-one>
 
         <field name="heuresDecharge" type="float" column="HEURES_DECHARGE" precision="126" scale="0" nullable="false"/>
-        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
-        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0" nullable="false"/>
+        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"
+               nullable="false"/>
+        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"
+               nullable="false"/>
         <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
 
         <field name="param1" type="string" column="PARAM_1" length="50" nullable="true"/>
@@ -42,6 +44,16 @@
         <field name="aServiceDu" type="float" column="A_SERVICE_DU" precision="126" scale="0" nullable="true"/>
         <field name="cServiceDu" type="float" column="C_SERVICE_DU" precision="126" scale="0" nullable="true"/>
 
-        <one-to-many field="volumeHoraireTest" target-entity="Application\Entity\Db\FormuleTestVolumeHoraire" mapped-by="intervenantTest"/>
+        <field name="debugInfo" type="string" column="DEBUG_INFO" nullable="true"/>
+
+        <one-to-many field="volumeHoraireTest" target-entity="Application\Entity\Db\FormuleTestVolumeHoraire"
+                     mapped-by="intervenantTest">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+            <order-by>
+                <order-by-field name="id" direction="ASC" />
+            </order-by>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

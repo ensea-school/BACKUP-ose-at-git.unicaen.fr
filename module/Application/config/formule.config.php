@@ -49,6 +49,19 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
+                            'enregistrement'      => [
+                                'type'          => 'Segment',
+                                'options'       => [
+                                    'route'       => '/enregistrement[/:formuleTestIntervenant]',
+                                    'constraints' => [
+                                        'formuleTestIntervenant' => '[0-9]*',
+                                    ],
+                                    'defaults'    => [
+                                        'action' => 'test-enregistrement',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
                             'supprimer'   => [
                                 'type'          => 'Segment',
                                 'options'       => [
@@ -111,7 +124,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Formule',
-                    'action'     => ['test', 'test-saisir', 'test-supprimer'],
+                    'action'     => ['test', 'test-saisir', 'test-enregistrement', 'test-supprimer'],
                     'privileges' => [Privileges::FORMULE_TESTS],
                 ],
             ],
@@ -132,9 +145,4 @@ return [
         ],
     ],
 
-    'form_elements' => [
-        'factories' => [
-            Form\FormuleTest\IntervenantForm::class => Form\FormuleTest\Factory\IntervenantFormFactory::class,
-        ],
-    ],
 ];

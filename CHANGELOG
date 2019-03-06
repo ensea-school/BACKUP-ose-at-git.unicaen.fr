@@ -5,9 +5,17 @@ author: Laurent Lécluse - DSI - Unicaen
 
 #OSE 8.1
 
+## Corrections de bugs
+
+* Les avenants comportaient par défaut un champ "modifieComplete" qui n'était pas fourni par la vue.
+
 ## Nouveautés
 
 * Il est désormais possible de customiser et/ou de traduire de petites parties de l'application. Attention toutefois : le travail de mise en place du dispositif n'en est qu'au tout début.
+* Possibilité de choisir sa formule dans les paramétrages généraux via une liste déroulante
+* Formule de calcul de l'université de Montpellier
+* Interface de test de la formule de calcul directmement intégrée dans OSE
+* Interface d'administration des motifs de modification de service dû
 
 #OSE 8.0.3
 

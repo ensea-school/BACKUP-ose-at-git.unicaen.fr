@@ -15,6 +15,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * Possibilité de choisir sa formule dans les paramétrages généraux via une liste déroulante
 * Formule de calcul de l'université de Montpellier
 * Interface de test de la formule de calcul directmement intégrée dans OSE
+* Interface d'administration des motifs de modification de service dû
 
 #OSE 8.0.3
 

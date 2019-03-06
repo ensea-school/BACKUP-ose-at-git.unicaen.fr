@@ -88,7 +88,7 @@ class FormuleTestVolumeHoraire
     /**
      * @var float
      */
-    private $heures;
+    private $heures = 0;
 
     /**
      * @var float
@@ -180,6 +180,11 @@ class FormuleTestVolumeHoraire
      */
     private $cHeuresComplReferentiel;
 
+    /**
+     * @var string
+     */
+    private $debugInfo;
+
 
 
     /**
@@ -195,7 +200,7 @@ class FormuleTestVolumeHoraire
     /**
      * @return bool
      */
-    public function isReferentiel(): bool
+    public function getReferentiel(): bool
     {
         return $this->referentiel;
     }
@@ -219,7 +224,7 @@ class FormuleTestVolumeHoraire
     /**
      * @return bool
      */
-    public function isServiceStatutaire(): bool
+    public function getServiceStatutaire(): bool
     {
         return $this->serviceStatutaire;
     }
@@ -981,5 +986,31 @@ class FormuleTestVolumeHoraire
 
         return $this;
     }
+
+
+
+    /**
+     * @return string
+     */
+    public function getDebugInfo()
+    {
+        return $this->debugInfo;
+    }
+
+
+
+    /**
+     * @param string $debugInfo
+     *
+     * @return FormuleTestVolumeHoraire
+     */
+    public function setDebugInfo($debugInfo): FormuleTestVolumeHoraire
+    {
+        $this->debugInfo = $debugInfo;
+
+        return $this;
+    }
+
+
 
 }

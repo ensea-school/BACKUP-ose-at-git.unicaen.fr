@@ -49,7 +49,7 @@ class MotifModificationServiceSaisieForm extends AbstractForm
         $this->add([
             'name'    => 'decharge',
             'options' => [
-                'label' => "Décharge",
+                'label' => "Traité comme une décharge (le dépassement du service dû ne donne pas lieu à des heures complémentaires)",
             ],
             'type'    => 'Checkbox',
         ]);

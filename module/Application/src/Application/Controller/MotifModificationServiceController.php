@@ -35,10 +35,10 @@ class MotifModificationServiceController extends AbstractController
 
         $form = $this->getFormMotifModificationServiceSaisie();
         if (empty($motifModificationServiceDu)) {
-            $title                    = 'Création d\'un nouveau Motif de Modification de Service Dû';
+            $title                    = 'Création d\'un nouveau motif de modification de service dû';
             $motifModificationServiceDu = $this->getServiceMotifModificationService()->newEntity();
         } else {
-            $title = 'Édition d\'un Motif de Modification de Service Dû';
+            $title = 'Édition d\'un motif de modification de service dû';
         }
 
         $form->bindRequestSave($motifModificationServiceDu, $this->getRequest(), function (MotifModificationServiceDu $fr) {

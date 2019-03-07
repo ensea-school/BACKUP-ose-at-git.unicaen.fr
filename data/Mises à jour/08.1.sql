@@ -497,7 +497,7 @@ DROP PACKAGE UNICAEN_OSE_FORMULE
 
 -- DdlSequence.create.
 
-CREATE SEQUENCE FORMULE__ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 1 NOCACHE
+CREATE SEQUENCE FORMULE_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 1 NOCACHE
 
 /
 
@@ -4691,6 +4691,9 @@ FROM (
 
    UNION ALL SELECT 'budget' c, 'types-ressources-visualisation' p, 'Types de ressources - Visualisation' l FROM dual
    UNION ALL SELECT 'budget' c, 'types-ressources-edition' p, 'Types de ressources - Édition' l FROM dual
+
+   UNION ALL SELECT 'domaines-fonctionnels' c, 'administration-visualisation' p, 'Administration (visualisation)' l FROM dual
+   UNION ALL SELECT 'domaines-fonctionnels' c, 'administration-edition' p,	'Administration (édition)' l FROM dual
 
    UNION ALL SELECT 'formule' c, 'tests' p, 'Tests' l FROM dual
 

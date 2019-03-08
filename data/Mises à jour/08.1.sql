@@ -658,7 +658,7 @@ END FORMULE_MONTPELLIER;
 
 /
 
-CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
+create or replace PACKAGE BODY FORMULE_MONTPELLIER AS
   decalageLigne NUMERIC DEFAULT 20;
 
 
@@ -692,9 +692,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
   PROCEDURE dbgDump( val CLOB ) IS
   BEGIN
-    dbg('
-' || val || '
-');
+    dbg('<div class="dbg-dump">' || val || '</div>');
   END;
 
   PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
@@ -834,7 +832,8 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-    -- m = SI(J21>0;SI(L20+K21= 1 THEN
+    -- m = SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0)
+    WHEN c = 'm' AND v >= 1 THEN
       IF cell('j',l) > 0 THEN
         IF cell('l',l-1) + cell('k',l) < ose_formule.intervenant.service_du THEN
           RETURN 0;
@@ -853,7 +852,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-    -- o = SI(OU(service_realise"Oui");0;(M21+SI(H21<>"Oui";I21;0))*N21)
+    -- o = SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(M21+SI(H21<>"Oui";I21;0))*N21)
     -- service_realise = MAX($L$21:$L$50)
     -- service_du = ose_formule.intervenant.service_du
     -- HC_autorisees = ose_formule.intervenant.depassement_service_du_sans_hc = false
@@ -925,7 +924,8 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-    -- s53 =SI(OU(HC=0;R53= 1 THEN
+    -- s53 =SI(OU(HC=0;R53<service_du);0;R53-service_du)
+    WHEN c = 's53' AND v >= 1 THEN
       IF calcFnc('total','o') = 0 OR cell('r53') < ose_formule.intervenant.service_du THEN
         RETURN 0;
       ELSE

@@ -1,14 +1,27 @@
-version: '2'
+version: '3'
 
 services:
   ose:
     container_name: ose-container
+
     build:
       context: .
       dockerfile: Dockerfile
+
     ports:
-    - "8080:80"
-    - "8443:443"
+        - "8080:80"
+        - "8443:443"
+
     volumes:
-    - .:/var/www/ose
+        - .:/var/www/ose
+
     working_dir: /var/www/ose
+
+    networks:
+        laures:
+            aliases:
+                - ose-dev
+
+networks:
+  laures:
+    external: true

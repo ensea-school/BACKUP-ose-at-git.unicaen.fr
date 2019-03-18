@@ -2,9 +2,11 @@
 
 namespace Application\Controller;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
+use Application\Service\PrivilegeService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
@@ -35,6 +37,7 @@ class DroitsController extends AbstractController
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
+    use CacheContainerTrait;
 
 
 
@@ -161,6 +164,8 @@ class DroitsController extends AbstractController
         $statut    = $this->context()->statutIntervenantFromPost('statut');
         $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
+        $cc = $this->getCacheContainer(PrivilegeService::class);
+        unset($cc->privilegesRoles);
 
         switch ($action) {
             case 'accorder':

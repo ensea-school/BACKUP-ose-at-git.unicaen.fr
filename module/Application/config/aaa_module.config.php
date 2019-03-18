@@ -161,6 +161,7 @@ $config = [
             'MouchardCompleterContext'                => MouchardCompleterContextFactory::class,
             'UnicaenAuth\Service\Privilege'           => Service\Factory\PrivilegeServiceFactory::class,
             Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
+            Cache\CacheService::class                 => Cache\Factory\CacheServiceFactory::class,
         ],
     ],
     'view_helpers'       => [

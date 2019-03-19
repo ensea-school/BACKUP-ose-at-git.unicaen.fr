@@ -4801,3 +4801,9 @@ CREATE OR REPLACE FORCE VIEW "V_CONTRAT_MAIN" AS
         WHERE
             c.histo_destruction IS NULL
         ) ct;
+
+
+
+
+
+INSERT INTO "OSE"."FORMULE" (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université Le Havre Normandie', 'FORMULE_ULHN', 'CALCUL_RESULTAT')

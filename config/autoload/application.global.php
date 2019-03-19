@@ -17,8 +17,8 @@ return [
         ],
         'configuration' => [
             'orm_default' => [
-                'metadata_cache'   => 'array',
-                //                'query_cache'      => 'array',
+                'metadata_cache'   => 'filesystem',
+                'query_cache'      => 'filesystem',
                 'result_cache'     => 'filesystem',
                 'hydration_cache'  => 'array',
                 'generate_proxies' => AppConfig::get('bdd', 'generateProxies'),

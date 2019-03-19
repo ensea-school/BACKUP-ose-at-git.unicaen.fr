@@ -98,7 +98,7 @@ class LdapConnecteur extends AbstractService
     public function rechercheUtilisateurs($critere)
     {
         $result = [];
-        if (($username = $critere)) {
+        if (($username = $critere) && \AppConfig::get('ldap', 'actif', true)) {
             $foundUsers = $this->mapperPeople->findAllByNameOrUsername($username, $this->getUtilisateurLogin(), $this->getUtilisateurFiltre());
             /* @var $foundUsers People[] */
 

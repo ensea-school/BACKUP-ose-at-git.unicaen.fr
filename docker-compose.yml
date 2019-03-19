@@ -16,13 +16,16 @@ services:
 
     working_dir: /var/www/ose
 
+#    ports:
+#      - "8080:80"
+#      - "8443:443"
+
+
     networks:
-        launet:
-            ipv4_address: 172.25.0.101
+        devnet:
+            ipv4_address: 172.21.0.10
 
 networks:
-  launet:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 172.25.0.0/24
+  devnet:
+    external:
+        name: laures

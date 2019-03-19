@@ -80,7 +80,6 @@ class AppConfig
 
         if ('development' == $env) {
             $modules[] = 'ZendDeveloperTools';
-            $configGlobPaths[] = 'config/autoload/{,*.}{global,local}.php.dev';
         }
 
         if (self::inConsole() || 'development' == $env){

@@ -128,6 +128,9 @@ return [
 
     /* Configuration LDAP */
     'ldap'   => [
+        /* Actif (si non, alors seuls les comptes locaux seront autorisés à se connecter à OSE) */
+        'actif'                      => true,
+
         /* IP ou nom DNS de la machine hébergeant le serveur LDAP */
         'host'                         => 'ldap.unicaen.fr',
 

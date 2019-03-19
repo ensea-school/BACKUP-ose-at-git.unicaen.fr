@@ -6,6 +6,7 @@ use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
+use Application\Provider\Role\RoleProvider;
 use Application\Service\PrivilegeService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -15,6 +16,7 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Application\Traits\DoctrineCacheAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Application\Entity\Db\StatutIntervenant;
 use UnicaenAuth\Entity\Db\Privilege;
@@ -38,6 +40,7 @@ class DroitsController extends AbstractController
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
     use CacheContainerTrait;
+    use DoctrineCacheAwareTrait;
 
 
 
@@ -282,6 +285,7 @@ class DroitsController extends AbstractController
                 }
             }
         }
+        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
 
         return compact('form', 'title', 'errors');
     }
@@ -297,6 +301,7 @@ class DroitsController extends AbstractController
         $form = $this->makeFormSupprimer(function()use($affectation){
             $this->getServiceAffectation()->delete($affectation);
         });
+        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
 
         return compact('affectation', 'title', 'form');
     }

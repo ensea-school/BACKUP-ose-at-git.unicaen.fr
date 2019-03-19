@@ -47,20 +47,23 @@ $config = [
             ],
         ],
         'cache'         => [
-            'apc' => [
+            'apc'        => [
                 'namespace' => 'OSE__' . __NAMESPACE__,
+            ],
+            'filesystem' => [
+                'directory' => getcwd().'/data/cache/Doctrine',
             ],
         ],
     ],
     'zfcuser'            => [
         'user_entity_class' => Entity\Db\Utilisateur::class,
     ],
-    'translator' => [
+    'translator'         => [
         'locale'                    => \AppConfig::get('global', 'locale'),
         'translation_file_patterns' => [
             [
                 'type'     => 'gettext',
-                'base_dir' => getcwd().'/language',
+                'base_dir' => getcwd() . '/language',
                 'pattern'  => '%s.mo',
             ],
         ],
@@ -236,7 +239,7 @@ $config = [
     ],
 ];
 
-if ($customCss = \AppConfig::get('etablissement', 'css')){
+if ($customCss = \AppConfig::get('etablissement', 'css')) {
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }
 

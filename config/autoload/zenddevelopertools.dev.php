@@ -153,7 +153,7 @@ return array(
                 'doctrine.mapping_collector.orm_default' => false,
                 //'bjy_authorize_role_collector' => false,
                 //'request' => false,
-                'memory'  => false,
+                //'memory'  => false,
             )
         )
     )

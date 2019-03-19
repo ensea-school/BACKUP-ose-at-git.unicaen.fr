@@ -109,7 +109,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         // chargement des rôles métiers
 
         $query = $this->getEntityManager()->createQuery(
-            'SELECT DISTINCT
+            'SELECT
             r, a, s, p
         FROM
             Application\Entity\Db\Role r
@@ -119,6 +119,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         WHERE
             r.histoDestruction IS NULL'
         )->setParameter('utilisateur', $utilisateur);
+        $query->useResultCache(true);
+        $query->setResultCacheId(__CLASS__.'/affectations');
+
 
         $result          = $query->getResult();
         $rolesPrivileges = $this->getRolesPrivileges();

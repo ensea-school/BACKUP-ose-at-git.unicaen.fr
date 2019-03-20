@@ -12,7 +12,6 @@ use Application\Entity\Db\TypeInterventionStructure;
 use Application\Form\TypeIntervention\Traits\TypeInterventionSaisieFormAwareTrait;
 use Application\Form\TypeIntervention\Traits\TypeInterventionStructureSaisieFormAwareTrait;
 use Application\Form\TypeIntervention\Traits\TypeInterventionStatutSaisieFormAwareTrait;
-use Application\Exception\DbException;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
@@ -81,8 +80,7 @@ class TypeInterventionController extends AbstractController
                 $this->getServiceTypeIntervention()->save($ti);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $ti->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -100,7 +98,7 @@ class TypeInterventionController extends AbstractController
             $this->getServiceTypeIntervention()->delete($typeIntervention);
             $this->flashMessenger()->addSuccessMessage("Type d\'intervention supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('typeIntervention'));
@@ -134,8 +132,7 @@ class TypeInterventionController extends AbstractController
                 $this->getServiceTypeInterventionStructure()->save($tis);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tis->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -153,7 +150,7 @@ class TypeInterventionController extends AbstractController
             $this->getServiceTypeInterventionStructure()->delete($typeInterventionStructure);
             $this->flashMessenger()->addSuccessMessage("Type d\'intervention pour une structure supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel(compact('typeInterventionStructure'));
@@ -177,8 +174,7 @@ class TypeInterventionController extends AbstractController
                 try {
                     $this->getServiceTypeIntervention()->save($ti);
                 } catch (\Exception $e) {
-                    $e   = DbException::translate($e);
-                    $txt .= ':' . $e->getMessage();
+                    $txt .= ':' . $this->translate($e);
                 }
             }
         }
@@ -211,8 +207,7 @@ class TypeInterventionController extends AbstractController
                 $this->redirect()->toRoute('type-intervention/statut', ['typeIntervention' => $tis->getTypeIntervention()->getId()]); // redirection vers la page parent en cas de succès
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $tis->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 

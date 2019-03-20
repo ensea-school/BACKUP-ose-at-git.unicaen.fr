@@ -1,0 +1,217 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OSE\n"
+"POT-Creation-Date: 2019-02-19 17:47+0100\n"
+"PO-Revision-Date: 2019-02-19 17:50+0100\n"
+"Last-Translator: Laurent Lécluse <laurent.lecluse@unicaen.fr>\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: translate;setLabel;setLegend;_\n"
+"X-Poedit-SearchPath-0: module/Application\n"
+"X-Poedit-SearchPathExcluded-0: public/vendor\n"
+"X-Poedit-SearchPathExcluded-1: vendor/unicaen/import/public/ace-builds-"
+"master\n"
+
+#: module/Application/src/Application/Controller/BudgetController.php:217
+#: module/Application/src/Application/Controller/BudgetController.php:218
+msgid "Dont, au titre de "
+msgstr ""
+
+#: module/Application/src/Application/Controller/BudgetController.php:219
+msgid "Année civile "
+msgstr ""
+
+#: module/Application/src/Application/Controller/BudgetController.php:323
+msgid "Composante"
+msgstr ""
+
+#: module/Application/src/Application/Controller/EtablissementController.php:38
+msgid "Recherchez l'établissement concerné :"
+msgstr ""
+
+#: module/Application/src/Application/Controller/StructureController.php:39
+msgid "Recherchez la structure concernée :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Droits/AffectationForm.php:68
+msgid "Utilisateur"
+msgstr ""
+
+#: module/Application/src/Application/Form/Intervenant/HeuresCompForm.php:29
+msgid "Type de service :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Intervenant/HeuresCompForm.php:35
+#: module/Application/src/Application/Form/Service/RechercheForm.php:201
+msgid "État :"
+msgstr ""
+
+#: module/Application/src/Application/Form/ParametresForm.php:138
+#: module/Application/src/Application/Form/Service/SaisieFieldset.php:100
+msgid "Établissement :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Service/RechercheForm.php:150
+msgid "Statut :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Service/RechercheForm.php:181
+#: module/Application/src/Application/Form/Service/SaisieFieldset.php:71
+#: module/Application/src/Application/Form/ServiceReferentiel/SaisieFieldset.php:79
+msgid "Intervenant :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Service/RechercheForm.php:188
+msgid "Enseignement :"
+msgstr ""
+
+#: module/Application/src/Application/Form/Service/RechercheForm.php:194
+msgid "Type :"
+msgstr ""
+
+#: module/Application/src/Application/Traits/TranslatorTrait.php:43
+msgid "bdd "
+msgstr ""
+
+#: module/Application/src/Application/View/Helper/AppLink.php:108
+msgid "Page d'accueil de l'application"
+msgstr ""
+
+#: module/Application/src/Application/View/Helper/ServiceReferentiel/FormSaisie.php:128
+msgid "Prévu => réalisé"
+msgstr ""
+
+#: module/Application/src/Application/translate.php:9
+msgid "bdd .SERVICE__UN"
+msgstr ""
+"Vous ne pouvez pas enregistrer cet enseignement car il en existe déjà un de "
+"similaire."
+
+#: module/Application/src/Application/translate.php:10
+msgid "bdd ORA-01722"
+msgstr "Nombre invalide"
+
+#: module/Application/src/Application/translate.php:11
+msgid "bdd .MEP_FR_SERVICE_FK"
+msgstr ""
+"Vous ne pouvez pas dévalider ces heures d'enseignement, car des demandes de "
+"mise en paiement ou des mises en paiement ont été faites."
+
+#: module/Application/src/Application/translate.php:12
+msgid "bdd .MEP_FR_SERVICE_REF_FK"
+msgstr ""
+"Vous ne pouvez pas dévalider ces heures de référentiel, car des demandes de "
+"mise en paiement ou des mises en paiement ont été faites."
+
+#: module/Application/src/Application/translate.php:13
+msgid "bdd .EP_CODE__UN"
+msgstr ""
+"Un enseignement existe déjà avec le même code. Merci de choisir un autre "
+"code d'enseignement."
+
+#: module/Application/src/Application/translate.php:14
+msgid "bdd .ETAPE_SOURCE_UN"
+msgstr ""
+"Une formation existe déjà avec le même code. Merci de choisir un autre code "
+"de formation."
+
+#: module/Application/view/application/index/index.phtml:53
+msgid "Tableau synthétique des enseignements concernant ma composante..."
+msgstr ""
+
+#: module/Application/view/application/index/index.phtml:66
+msgid "Connectez-vous..."
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:17
+msgid "Expéditeur du mail"
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:20
+msgid "Nombre de mails à envoyer"
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:23
+msgid "Objet du mail"
+msgstr ""
+
+#: module/Application/view/application/indicateur/envoi-mail-intervenants.phtml:24
+msgid "Corps du mail"
+msgstr ""
+
+#: module/Application/view/application/intervenant/cloturer-saisie.phtml:2
+msgid "J'ai terminé la saisie de la totalité de mon service réalisé."
+msgstr ""
+
+#: module/Application/view/application/intervenant/partial/cloture.phtml:43
+msgid "J'ai terminé la saisie de la totalité de mon service réalisé"
+msgstr ""
+
+#: module/Application/view/application/intervenant/partial/cloture.phtml:60
+msgid "L'intervenant a terminé la saisie de la totalité de son service réalisé"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:1
+msgid "Opération impossible"
+msgstr ""
+
+#: module/Application/view/error/exception.phtml:17
+#: module/Application/view/error/index.phtml:13
+msgid "Additional information"
+msgstr "Informations supplémentaires"
+
+#: module/Application/view/error/exception.phtml:20
+#: module/Application/view/error/exception.phtml:44
+#: module/Application/view/error/index.phtml:16
+#: module/Application/view/error/index.phtml:42
+msgid "File"
+msgstr "Fichier"
+
+#: module/Application/view/error/exception.phtml:24
+#: module/Application/view/error/exception.phtml:48
+#: module/Application/view/error/index.phtml:47
+msgid "Message"
+msgstr "Message"
+
+#: module/Application/view/error/exception.phtml:28
+#: module/Application/view/error/exception.phtml:52
+#: module/Application/view/error/index.phtml:21
+#: module/Application/view/error/index.phtml:51
+msgid "Stack trace"
+msgstr "Pile d'exécution"
+
+#: module/Application/view/error/exception.phtml:38
+#: module/Application/view/error/index.phtml:32
+msgid "Previous exceptions"
+msgstr "Erreurs précédentes"
+
+#: module/Application/view/error/exception.phtml:69
+msgid "No Exception available"
+msgstr "Aucune erreur trouvée"
+
+#~ msgid "ETAPE_SOURCE_UN"
+#~ msgstr ""
+#~ "Une formation existe déjà avec le même code. Merci de choisir un autre "
+#~ "code de formation."
+
+#~ msgid "(OSE.ETAPE_SOURCE_UN)"
+#~ msgstr ""
+#~ "Une formation existe déjà avec le même code. Merci de choisir un autre "
+#~ "code de formation."
+
+#~ msgid "OSE.EP_CODE__UN"
+#~ msgstr ""
+#~ "Un enseignement existe déjà avec le même code. Merci de choisir un autre "
+#~ "code d'enseignement"
+
+#~ msgid "test formule2"
+#~ msgstr "test form33"
+
+#~ msgid "test formule"
+#~ msgstr "test trad"

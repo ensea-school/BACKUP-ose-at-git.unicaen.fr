@@ -1,14 +1,31 @@
-version: '2'
+version: '3'
+
+# Ne pas oublier d'ajouter au fichier /etc/hosts :
+# 172.25.0.101 ose-dev.localhost
 
 services:
-  ose:
-    container_name: ose-container
+  ose-dev:
+    container_name: ose-dev
+
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-    - "8080:80"
-    - "8443:443"
+
     volumes:
-    - .:/var/www/ose
+        - .:/var/www/ose
+
     working_dir: /var/www/ose
+
+#    ports:
+#      - "8080:80"
+#      - "8443:443"
+
+
+    networks:
+        devnet:
+            ipv4_address: 172.21.0.10
+
+networks:
+  devnet:
+    external:
+        name: laures

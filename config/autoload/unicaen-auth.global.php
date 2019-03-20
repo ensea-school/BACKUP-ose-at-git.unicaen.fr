@@ -41,7 +41,7 @@ $settings = [
         /**
          * Possibilité ou non de s'authentifier à l'aide d'un compte local.
          */
-        'enabled' => false,
+        'enabled' => !AppConfig::get('ldap', 'actif', true),
     ],
 
     /**
@@ -51,7 +51,7 @@ $settings = [
         /**
          * Possibilité ou non de s'authentifier via l'annuaire LDAP ET en local!!.
          */
-        'enabled' => true,
+        'enabled' => AppConfig::get('ldap', 'actif', true),
     ],
 
     /**

@@ -2,9 +2,12 @@
 
 namespace Application\Controller;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Form\Droits\Traits\AffectationFormAwareTrait;
+use Application\Provider\Role\RoleProvider;
+use Application\Service\PrivilegeService;
 use Application\Service\Traits\AffectationServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\RoleServiceAwareTrait;
@@ -13,10 +16,10 @@ use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Form\Droits\Traits\RoleFormAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use Application\Traits\DoctrineCacheAwareTrait;
 use UnicaenAuth\Service\Traits\PrivilegeServiceAwareTrait;
 use Application\Entity\Db\StatutIntervenant;
 use UnicaenAuth\Entity\Db\Privilege;
-use Application\Exception\DbException;
 
 /**
  * Description of DroitsController
@@ -36,6 +39,8 @@ class DroitsController extends AbstractController
     use RoleFormAwareTrait;
     use AffectationFormAwareTrait;
     use ContextServiceAwareTrait;
+    use CacheContainerTrait;
+    use DoctrineCacheAwareTrait;
 
 
 
@@ -83,8 +88,7 @@ class DroitsController extends AbstractController
                     $this->getServiceRole()->save($role);
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }
@@ -163,6 +167,8 @@ class DroitsController extends AbstractController
         $statut    = $this->context()->statutIntervenantFromPost('statut');
         $privilege = $this->getServicePrivilege()->get($this->params()->fromPost('privilege'));
         $action    = $this->params()->fromPost('action');
+        $cc = $this->getCacheContainer(PrivilegeService::class);
+        unset($cc->privilegesRoles);
 
         switch ($action) {
             case 'accorder':
@@ -275,11 +281,11 @@ class DroitsController extends AbstractController
                     $this->getServiceAffectation()->save($affectation);
                     $form->get('id')->setValue($affectation->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
-                    $e        = DbException::translate($e);
-                    $errors[] = $e->getMessage();
+                    $errors[] = $this->translate($e);
                 }
             }
         }
+        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
 
         return compact('form', 'title', 'errors');
     }
@@ -295,6 +301,7 @@ class DroitsController extends AbstractController
         $form = $this->makeFormSupprimer(function()use($affectation){
             $this->getServiceAffectation()->delete($affectation);
         });
+        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
 
         return compact('affectation', 'title', 'form');
     }

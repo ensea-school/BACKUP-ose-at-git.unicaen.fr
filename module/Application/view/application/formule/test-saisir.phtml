@@ -1,0 +1,715 @@
+<?php
+
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\EtatVolumeHoraire;
+use Application\Entity\Db\Formule;
+use Application\Entity\Db\FormuleTestIntervenant;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\TypeVolumeHoraire;
+
+/**
+ * @var $this                   \Application\View\Renderer\PhpRenderer
+ * @var $title                  string
+ * @var $formuleTestIntervenant FormuleTestIntervenant
+ * @var $structures             Structure[]
+ * @var $formules               Formule[]
+ * @var $annees                 Annee[]
+ * @var $typesIntervenants      TypeIntervenant[]
+ * @var $typesVh                TypeVolumeHoraire[]
+ * @var $etatsVh                EtatVolumeHoraire[]
+ * @var $annee                  Annee
+ * @var $formuleId              int
+ */
+class LocalFormater
+{
+    /**
+     * @var \Application\View\Renderer\PhpRenderer
+     */
+    public $view;
+
+    /**
+     * @var int
+     */
+    public $index = null;
+
+
+
+    function select($name, array $attrs = [], $options = []): string
+    {
+        $defAttrs = [
+            'class'        => 'dinput',
+            'data-name'    => $name,
+            'data-index'   => $this->index,
+            'data-type'    => 'int',
+            'data-default' => '',
+        ];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
+        $finalAttrs = array_merge($defAttrs, $attrs);
+
+        if ($finalAttrs['data-type'] == 'bool') {
+            $options = ['true' => 'Oui', 'false' => 'Non'];
+        }
+
+        $result = $this->view->tag('select', $finalAttrs)->open();
+        if (!$finalAttrs['data-default']) {
+            $result .= '<option value=""></option>' . "\n";
+        }
+        foreach ($options as $ov => $ol) {
+            if (is_object($ol)) $ov = $ol->getId();
+            $result .= $this->view->tag('option', ['value' => $ov])->text($ol);
+        }
+        $result .= '</select>';
+
+        return $result;
+    }
+
+
+
+    public function input($name, array $attrs = []): string
+    {
+        $defAttrs = [
+            'type'         => 'text',
+            'style'        => "width:100%",
+            'maxlength'    => "6",
+            'class'        => 'dinput',
+            'data-name'    => $name,
+            'data-index'   => $this->index,
+            'data-type'    => 'float',
+            'data-default' => '',
+        ];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
+        $finalAttrs = array_merge($defAttrs, $attrs);
+
+        return $this->view->tag('input', $finalAttrs)->openClose(true);
+    }
+
+
+
+    public function output($name, array $attrs = [])
+    {
+        $defAttrs   = [
+            'class'      => 'doutput',
+            'data-name'  => $name,
+            'data-index' => $this->index,
+            'data-type'  => 'float',
+        ];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
+        $finalAttrs = array_merge($defAttrs, $attrs);
+
+        return $this->view->tag('td', $finalAttrs)->openClose(false);
+    }
+}
+
+
+
+
+
+$lf       = new LocalFormater();
+$lf->view = $this;
+
+echo $this->tag('h1', ['class' => 'page-header'])->html($title);
+
+?>
+<div class="formule-test-intervenant"
+     data-data="<?= $this->escapeHtmlAttr(json_encode($formuleTestIntervenant->toArray())) ?>">
+    <div class="errors"><?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?></div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Intervenant</h2>
+            <table class="table table-condensed table-extra-condensed fti">
+                <tr>
+                    <th>Libellé</th>
+                    <td class="saisie"><?= $lf->input('libelle', ['maxlength' => "150", 'data-type' => 'string']) ?></td>
+                </tr>
+                <tr>
+                    <th>Formule</th>
+                    <td class="saisie"><?= $lf->select('formule', ['data-default' => $formuleId], $formules) ?></td>
+                </tr>
+                <tr>
+                    <th>Année</th>
+                    <td class="saisie"><?= $lf->select('annee', ['data-default' => $annee->getId()], $annees) ?></td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td class="saisie"><?= $lf->select('typeIntervenant', ['data-default' => 1], $typesIntervenants) ?></td>
+                </tr>
+                <tr>
+                    <th>Structure</th>
+                    <td class="saisie"><?= $lf->select('structureTest', [], $structures) ?></td>
+                </tr>
+                <tr>
+                    <th>Type de volume horaire</th>
+                    <td class="saisie"><?= $lf->select('typeVolumeHoraire', ['data-default' => 1], $typesVh) ?></td>
+                </tr>
+                <tr>
+                    <th>État de volume horaire</th>
+                    <td class="saisie"><?= $lf->select('etatVolumeHoraire', ['data-default' => 1], $etatsVh) ?></td>
+                </tr>
+                <tr>
+                    <th>Heures de décharge</th>
+                    <td class="saisie"><?= $lf->input('heuresDecharge') ?></td>
+                </tr>
+                <tr>
+                    <th>Heures de service statutaire</th>
+                    <td class="saisie"><?= $lf->input('heuresServiceStatutaire') ?></td>
+                </tr>
+                <tr>
+                    <th>Heures de service modifié</th>
+                    <td class="saisie"><?= $lf->input('heuresServiceModifie') ?></td>
+                </tr>
+                <tr>
+                    <th>Dépassement de service dû sans HC</th>
+                    <td class="saisie"><?= $lf->select('depassementServiceDuSansHC', ['data-type' => 'bool']) ?></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <h2>Résultat</h2>
+            <table class="table table-condensed table-extra-condensed">
+                <tr>
+                    <th colspan="2">Service dû</th>
+                    <td class="doutput" data-type="float" data-name="cServiceDu"></td>
+                </tr>
+
+                <tr>
+                    <th rowspan="4">Service</th>
+                    <th>FI</th>
+                    <?= $lf->output('cServiceFi') ?>
+                </tr>
+                <tr>
+                    <th>FA</th>
+                    <?= $lf->output('cServiceFa') ?>
+                </tr>
+                <tr>
+                    <th>FC</th>
+                    <?= $lf->output('cServiceFc') ?>
+                </tr>
+                <tr>
+                    <th>Référentiel</th>
+                    <?= $lf->output('cServiceReferentiel') ?>
+                </tr>
+                <tr>
+                    <th colspan="2">Total service assuré</th>
+                    <?= $lf->output('cServiceAssure') ?>
+                </tr>
+                <tr>
+                    <th rowspan="5">Heures compl.</th>
+                    <th>FI</th>
+                    <?= $lf->output('cHeuresComplFi') ?>
+                </tr>
+                <tr>
+                    <th>FA</th>
+                    <?= $lf->output('cHeuresComplFa') ?>
+                </tr>
+                <tr>
+                    <th>FC</th>
+                    <?= $lf->output('cHeuresComplFc') ?>
+                </tr>
+                <tr>
+                    <th>FC majorées</th>
+                    <?= $lf->output('cHeuresComplFcMajorees') ?>
+                </tr>
+                <tr>
+                    <th>Référentiel</th>
+                    <?= $lf->output('cHeuresComplReferentiel') ?>
+                </tr>
+                <tr>
+                    <th colspan="2">Total heures compl. à payer</th>
+                    <?= $lf->output('cHeuresComplAPayer') ?>
+                </tr>
+            </table>
+            <button class="enregistrer btn btn-primary">Enregistrer les données et recalculer les HETD</button>
+        </div>
+    </div>
+
+    <h2>Heures effectuées (A saisir de manière chronologique)</h2>
+    <table class="table table-bordered table-condensed table-extra-condensed table-hover fvh">
+        <thead>
+        <tr>
+            <th colspan="11">Données</th>
+            <th rowspan="3" style="width:2px">&nbsp;</th>
+            <th colspan="10"><select id="affRes" class="form-control">
+                    <option value="hetd">Résultats (en HETD)</option>
+                    <option value="debug">Informations de débogage par ligne</option>
+                </select></th>
+        </tr>
+        <tr>
+            <th rowspan="2" style="width:8em">Structure</th>
+            <th rowspan="2">Référentiel</th>
+            <th rowspan="2">Compte dans le service statutaire</th>
+            <th colspan="3">Répartition</th>
+            <th colspan="2">Coëfs. HTED (taux)</th>
+            <th colspan="2">Modulation</th>
+            <th rowspan="2">Heures</th>
+            <th colspan="4" class="resultats">Service</th>
+            <th colspan="5" class="resultats">Heures complémentaires</th>
+            <th class="debug" rowspan="2" style="width:300px">Informations de débogage</th>
+        </tr>
+        <tr>
+            <th>Fi</th>
+            <th>Fa</th>
+            <th>Fc</th>
+            <th>Service dû</th>
+            <th>Service compl.</th>
+            <th>Service dû</th>
+            <th>Service compl.</th>
+            <th class="resultats">Fi</th>
+            <th class="resultats">Fa</th>
+            <th class="resultats">Fc</th>
+            <th class="resultats">Réfé-rentiel</th>
+            <th class="resultats">Fi</th>
+            <th class="resultats">Fa</th>
+            <th class="resultats">Fc</th>
+            <th class="resultats">Fc maj.</th>
+            <th class="resultats">Réfé-rentiel</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php for ($i = 0; $i < 30; $i++): $lf->index = $i; ?>
+            <tr>
+                <td class="saisie"><?= $lf->select('structureTest', [], $structures) ?></td>
+                <td class="saisie"><?= $lf->select('referentiel', ['data-type' => 'bool', 'data-default' => 'false']) ?></td>
+                <td class="saisie"><?= $lf->select('serviceStatutaire', ['data-type' => 'bool', 'data-default' => true]) ?></td>
+                <td><?= $lf->input('tauxFi', [
+                        'style'     => "width:3em;background-color:white",
+                        'maxlength' => "5",
+                        'disabled'  => 'disabled',
+                        'data-type' => 'float-pourc',
+                        'data-default' => 1,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('tauxFa', [
+                        'style'     => "width:3em",
+                        'maxlength' => "5",
+                        'data-type' => 'float-pourc',
+                        'data-default' => 0,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('tauxFc', [
+                        'style'     => "width:3em",
+                        'maxlength' => "5",
+                        'data-type' => 'float-pourc',
+                        'data-default' => 0,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('tauxServiceDu', [
+                        'style'     => "width:3em",
+                        'maxlength' => "5",
+                        'data-type' => 'float-pourc',
+                        'data-default' => 1,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('tauxServiceCompl', [
+                        'style'     => "width:3em",
+                        'maxlength' => "5",
+                        'data-type' => 'float-pourc',
+                        'data-default' => 1,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('ponderationServiceDu', [
+                        'style'     => "width:3em",
+                        'maxlength' => "5",
+                        'data-type' => 'float-pourc',
+                        'data-default' => 1,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('ponderationServiceCompl', [
+                        'style'     => "width:3em",
+                        'maxlength' => "5",
+                        'data-type' => 'float-pourc',
+                        'data-default' => 1,
+                    ]) ?><span class="pourc">%</span></td>
+                <td class="saisie"><?= $lf->input('heures') ?></td>
+                <?php if ($i == 0): ?>
+                    <td rowspan="30" style="width:2px">&nbsp;</td>
+                <?php endif; ?>
+                <?= $lf->output('cServiceFi', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceFa', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceFc', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceReferentiel', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFi', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFa', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFc', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplFcMajorees', ['class' => 'resultats']) ?>
+                <?= $lf->output('cHeuresComplReferentiel', ['class' => 'resultats']) ?>
+                <?= $lf->output('debugInfo', ['class' => 'debug', 'data-type' => 'string']) ?>
+            </tr>
+        <?php endfor; ?>
+        </tbody>
+    </table>
+    <div>
+        <h2>Informations de débogage
+            <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#debug-info" aria-expanded="false" aria-controls="debug-info">
+                Afficher/masquer
+            </button></h2>
+        <div class="collapse debug-info" id="debug-info"></div>
+    </div>
+
+    <a class="btn btn-default" href="<?= $this->url('formule-calcul/test') ?>"><i class="fa fa-undo" aria-hidden="true"></i>
+        Retour à la liste des formules</a>
+
+</div>
+<style>
+    .saisie {
+        background-color: #fff8dc;
+    }
+
+    .fvh th {
+        font-size: 8pt;
+    }
+
+    .fvh td {
+        white-space: nowrap;
+        padding: 1px !important;
+        width: 3em;
+    }
+
+    .fvh td .pourc {
+        font-size: 8pt;
+    }
+
+    .dinput {
+        border: none;
+        height: 2em;
+        width: 100%;
+        background-color: #fff8dc;
+    }
+
+    .doutput {
+        text-align:right;
+    }
+
+    .debug {
+        display: none;
+    }
+
+    .debug.doutput {
+        font-size: 8pt;
+        width: 400px;
+        white-space: unset;
+    }
+
+    .debug-table {
+        font-size: 8pt;
+    }
+
+    .debug-table th {
+        text-align: center;
+        text-transform: uppercase;
+        background-color:#ccc;
+    }
+
+    .debug-table td {
+        text-align: right;
+        min-width: 20px;
+        max-width: 20px;
+    }
+
+    td .zero {
+        color:gray;
+    }
+
+</style>
+<script type="text/javascript">
+    $(function () {
+
+        $.widget("ose.formuleTestIntervenant", {
+            id: null,
+            saving: false,
+
+            valueToVariable: function (value, type)
+            {
+                if (value === '' || value === null || value === undefined) {
+                    return null;
+                }
+
+                switch (type) {
+                    case 'bool':
+                        if (value === 'true') {
+                            return true;
+                        } else if (value === 'false') {
+                            return false;
+                        } else {
+                            return Boolean(value);
+                        }
+                    case 'float':
+                        return Util.stringToFloat(value);
+                    case 'float-pourc':
+                        if (value.indexOf('/') !== -1){
+                            return Util.stringToFloat(value);
+                        }else{
+                            return Util.stringToFloat(value) / 100;
+                        }
+                    case 'int':
+                        return parseInt(value);
+                }
+                return value;
+            },
+
+            affErreur: function (erreur)
+            {
+                var errStr = "<div class=\"messenger alert alert-danger \">\n" +
+                    "<button type=\"button\" class=\"close\" title=\"Fermer cette alerte\" data-dismiss=\"alert\">×</button>\n" +
+                    "<span class=\"glyphicon glyphicon-exclamation-sign\"></span>\n" +
+                    Util.nl2br(erreur, true) +
+                    "</div>";
+
+                this.element.find('.errors').html(this.element.find('.errors').html() + errStr);
+
+            },
+
+            variableToValue: function (variable, type)
+            {
+                if (variable === '' || variable === null || variable === undefined) {
+                    return null;
+                }
+
+                switch (type) {
+                    case 'bool':
+                        return variable ? 'true' : 'false';
+                    case 'float':
+                        return Util.floatToString(variable);
+                    case 'float-pourc':
+                        var res = Util.floatToString(variable);
+                        if (res.indexOf('/') !== -1){
+                            return res;
+                        }else{
+                            return Util.floatToString(variable * 100);
+                        }
+                    case 'int':
+                        return variable.toString();
+                }
+                return variable;
+            },
+
+            save: function (autoReload)
+            {
+                var lastId = this.id;
+                var that = this;
+                var url = '<?= $this->url('formule-calcul/test/enregistrement') ?>';
+                var result = false;
+                if (this.id) url += '/' + this.id;
+
+                that.saving = true;
+                $.post(url, {"data": JSON.stringify(that.getData())}, function (data)
+                {
+                    that.element.find('.errors').html('');
+                    that.setData(data.data);
+                    if (data.errors) {
+                        for (e in data.errors) {
+                            that.affErreur(data.errors[e]);
+                        }
+                    } else {
+                        if (autoReload && lastId == null) {
+                            window.location.href = '<?= $this->url('formule-calcul/test/saisir') ?>/' + that.id;
+                        }
+                    }
+                    that.saving = false;
+                }).fail(function (jqXHR)
+                {
+                    alertFlash(jqXHR.responseText, 'danger', 5000);
+                    console.log(jqXHR);
+                    that.saving = false;
+                });
+
+                return result;
+            },
+
+            autoSave: function ()
+            {
+                if (this.id != null && !this.saving) {
+                    this.save(0);
+                }
+            },
+
+            getData: function () {
+                var that = this;
+                var data = {'volumeHoraireTest': {}};
+
+                this.element.find(".dinput").each(function () {
+                    var name = $(this).data('name');
+                    var index = $(this).data('index');
+                    var type = $(this).data('type');
+                    var value = $(this).val();
+                    var variable = that.valueToVariable(value, type);
+
+                    if (!index && index !== 0) {
+                        data[name] = variable;
+                    } else {
+                        if (data['volumeHoraireTest'][index] == undefined) {
+                            data['volumeHoraireTest'][index] = {};
+                        }
+                        data['volumeHoraireTest'][index][name] = variable;
+                    }
+                });
+
+                return data;
+            },
+
+            setData: function (data) {
+                var that = this;
+                this.element.find(".dinput").each(function () {
+                    var name = $(this).data('name');
+                    var index = $(this).data('index');
+                    var type = $(this).data('type');
+                    if (!index && index !== 0) {
+                        var variable = data[name];
+                    } else {
+                        if (data['volumeHoraireTest'][index]) {
+                            var variable = data['volumeHoraireTest'][index][name];
+                        } else {
+                            var variable = null;
+                        }
+                    }
+                    var value = that.variableToValue(variable, type);
+
+                    if (!value && $(this).data('default') !== '') {
+                        value = that.variableToValue($(this).data('default'), type);
+                    }
+
+                    $(this).val(value);
+                });
+
+                this.element.find(".doutput").each(function () {
+                    var name = $(this).data('name');
+                    var index = $(this).data('index');
+                    var type = $(this).data('type');
+                    if (!index && index !== 0) {
+                        var variable = data[name];
+                    } else {
+                        if (data['volumeHoraireTest'][index]) {
+                            var variable = data['volumeHoraireTest'][index][name];
+                        } else {
+                            var variable = null;
+                        }
+                    }
+                    var value = that.variableToValue(variable, type);
+
+                    if (value === '0'){
+                        value = '<span class="zero">0</span>';
+                    }
+
+                    $(this).html(value);
+                });
+
+                this.affDebugInfo( data.debugInfo );
+
+                this.id = data.id;
+            },
+
+
+
+            affDebugInfo: function( data )
+            {
+                var h = '';
+
+                h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table">';
+                h += '<tr><th></th>';
+                for( var c in data.cols ){
+                    h += '<th>' + data.cols[c] + '</th>';
+                }
+                h += '</tr>';
+                for( var l in data.lines ){
+                    h += '<tr><th>'+data.lines[l]+'</th>';
+                    for( var c in data.cols ){
+                        var val = data.cells[data.cols[c]][data.lines[l]];
+
+                        if (isNaN(val)){
+                            val = '';
+                        }else{
+                            val = Util.floatToString(val);
+                            if (val === '0') val = '<span class="zero">0</span>';
+                        }
+
+
+                        h += '<td>' + val + '</td>';
+                    }
+                    h += '</tr>';
+                }
+                h += '</table>';
+
+                h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table" style="width:20em">';
+                for( var i in data.inds){
+                    var val = data.inds[i];
+
+                    if (isNaN(val)){
+                        val = '';
+                    }else{
+                        val = Util.floatToString(val);
+                        if (val === '0') val = '<span class="zero">0</span>';
+                    }
+
+                    h += '<tr><th>'+i+'</th><td>' + val + '</td></tr>';
+                }
+                h += '</table>';
+
+                this.element.find('.debug-info').html(h);
+            },
+
+
+
+            calculTauxFi: function (index)
+            {
+                var tauxFa = Util.stringToFloat(this.findElement('tauxFa', index).val());
+                var tauxFc = Util.stringToFloat(this.findElement('tauxFc', index).val());
+
+                this.findElement('tauxFi', index).val(Util.floatToString(100 - (tauxFa + tauxFc)));
+            },
+
+            _create: function ()
+            {
+                var that = this;
+
+                this.element.find(".fvh [data-name='tauxFa']").change(function () {
+                    that.calculTauxFi($(this).data('index'));
+                });
+
+                this.element.find(".fvh [data-name='tauxFc']").change(function () {
+                    that.calculTauxFi($(this).data('index'));
+                });
+
+                this.element.find("input.dinput").change(function () {
+                    var type = $(this).data('type');
+                    if (type !== 'string') {
+                        var variable = that.valueToVariable($(this).val(), type);
+                        console.log(variable);
+                        $(this).val(that.variableToValue(variable, type));
+                    }
+                });
+
+                // Désactivé, car si on saisit une deuxième valeur, elle est remplacée par le rés de l'AJAX précédant...
+                // this.element.find(".dinput").change(function () {
+                //     that.autoSave();
+                // });
+
+                this.element.find(".enregistrer").click(function () {
+                    that.save(true);
+                });
+
+                this.element.find("#affRes").change(function(){
+                    switch($(this).val()){
+                        case 'hetd':
+                            that.element.find(".debug").hide();
+                            that.element.find(".resultats").show();
+                            break;
+                        case 'debug':
+                            that.element.find(".resultats").hide();
+                            that.element.find(".debug").show();
+                            break;
+                    }
+                });
+
+                this.setData(this.element.data('data'));
+            },
+
+            findElement: function (name, index)
+            {
+                if (index === 0 || index > 0) {
+                    return this.element.find(".fvh [data-name='" + name + "'][data-index='" + index + "']");
+                } else {
+                    return this.element.find(".fti [data-name='" + name + "']");
+                }
+
+            }
+
+        });
+
+        WidgetInitializer.add('formule-test-intervenant', 'formuleTestIntervenant');
+
+    });
+</script>

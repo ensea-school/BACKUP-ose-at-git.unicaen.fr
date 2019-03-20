@@ -15,6 +15,9 @@ return [
 
         /* Affichage complet des erreurs (false en production) */
         'affichageErreurs' => true,
+
+        /* Langue utilisée (la liste des langues est disponible dans le répertoire /language de l'application) */
+        'locale' => 'fr_FR',
     ],
 
 
@@ -125,6 +128,9 @@ return [
 
     /* Configuration LDAP */
     'ldap'   => [
+        /* Actif (si non, alors seuls les comptes locaux seront autorisés à se connecter à OSE) */
+        'actif'                      => true,
+
         /* IP ou nom DNS de la machine hébergeant le serveur LDAP */
         'host'                         => 'ldap.unicaen.fr',
 

@@ -5,11 +5,9 @@ namespace Application\Controller;
 
 use Application\Entity\Db\EtatSortie;
 use Application\Entity\Db\Fichier;
-use Application\Exception\DbException;
 use Application\Form\Traits\EtatSortieFormAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use UnicaenApp\Util;
-use UnicaenApp\View\Model\CsvModel;
 
 /**
  * Description of EtatSortieController
@@ -52,8 +50,7 @@ class EtatSortieController extends AbstractController
                 $this->flashMessenger()->addSuccessMessage('État de sortie bien enregistré');
                 return $this->redirect()->toRoute('etat-sortie');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -71,7 +68,7 @@ class EtatSortieController extends AbstractController
             $this->getServiceEtatSortie()->delete($etatSortie);
             $this->flashMessenger()->addSuccessMessage("État de sortie supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

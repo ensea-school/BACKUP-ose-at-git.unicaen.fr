@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @var $this \Application\View\Renderer\PhpRenderer
+ * @var $fti  FormuleTestIntervenant[]
+ */
+
+use Application\Entity\Db\FormuleTestIntervenant;
+
+$title = "Page de tests de formule de calcul des HETD";
+
+?>
+<h1 class="page-header"><?php echo $title ?></h1>
+<table class="table table-bordered table-condensed table-sort">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Libellé</th>
+        <th>Formule</th>
+        <th>Année</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($fti as $formuleTestIntervenant): ?>
+        <tr>
+            <td><?= $formuleTestIntervenant->getId() ?></td>
+            <td><?= $formuleTestIntervenant->getLibelle() ?></td>
+            <td><?= $formuleTestIntervenant->getFormule() ?></td>
+            <td><?= $formuleTestIntervenant->getAnnee() ?></td>
+            <td>
+                <a href="<?= $this->url('formule-calcul/test/saisir', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"><span
+                            class="glyphicon glyphicon-pencil"></span></span></a>
+                <a class="pop-ajax"
+                   href="<?= $this->url('formule-calcul/test/supprimer', ['formuleTestIntervenant' => $formuleTestIntervenant->getId()]) ?>"
+                   title="Supprimer le test de formule"
+                   data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
+                   data-confirm="true"
+                   data-confirm-button="Oui"
+                   data-cancel-button="Non"
+                   data-submit-reload="true"
+
+                ><span class="glyphicon glyphicon-trash"></span></span></a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<a class="btn btn-primary" href="<?= $this->url('formule-calcul/test/saisir') ?>">Nouveau test de formule</a>

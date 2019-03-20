@@ -20,7 +20,6 @@ use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\Http\Request;
-use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
@@ -448,8 +447,7 @@ class ServiceController extends AbstractController
                 $this->updateTableauxBord($service->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Suppression effectuée');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
             $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
         }
@@ -515,8 +513,7 @@ class ServiceController extends AbstractController
                         $this->updateTableauxBord($entity->getIntervenant());
                         $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                     } catch (\Exception $e) {
-                        $e = DbException::translate($e);
-                        $this->flashMessenger()->addErrorMessage($e->getMessage());
+                        $this->flashMessenger()->addErrorMessage($this->translate($e));
                     }
                     $this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire);
                 }
@@ -620,7 +617,7 @@ class ServiceController extends AbstractController
                         "Validation effectuée avec succès."
                     );
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         } else {
@@ -648,7 +645,7 @@ class ServiceController extends AbstractController
                         "Dévalidation effectuée avec succès."
                     );
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         } else {

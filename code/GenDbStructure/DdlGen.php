@@ -102,10 +102,16 @@ class DdlGen
                 $name = $ql['OBJECT_NAME'];
                 $ddl  = trim($ql['OBJECT_DDL']);
                 if (isset($query['callback'])) {
-                    $this->ddl[$type][$name] = $query['callback']($name, $ddl);
-                } else {
-                    $this->ddl[$type][$name] = $ddl;
+                    $ddl = $query['callback']($name, $ddl);
                 }
+                $ddla = explode("\n", $ddl );
+                $ddl = '';
+                foreach($ddla as $ddll){
+                    if ($ddl != '') $ddl .= "\n";
+                    $ddl .= rtrim($ddll);
+                }
+
+                $this->ddl[$type][$name] = $ddl;
             }
         }
     }

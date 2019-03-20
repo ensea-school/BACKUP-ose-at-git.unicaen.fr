@@ -47,13 +47,26 @@ $config = [
             ],
         ],
         'cache'         => [
-            'apc' => [
+            'apc'        => [
                 'namespace' => 'OSE__' . __NAMESPACE__,
+            ],
+            'filesystem' => [
+                'directory' => getcwd().'/data/cache/Doctrine',
             ],
         ],
     ],
     'zfcuser'            => [
         'user_entity_class' => Entity\Db\Utilisateur::class,
+    ],
+    'translator'         => [
+        'locale'                    => \AppConfig::get('global', 'locale'),
+        'translation_file_patterns' => [
+            [
+                'type'     => 'gettext',
+                'base_dir' => getcwd() . '/language',
+                'pattern'  => '%s.mo',
+            ],
+        ],
     ],
     'router'             => [
         'routes' => [
@@ -151,6 +164,7 @@ $config = [
             'MouchardCompleterContext'                => MouchardCompleterContextFactory::class,
             'UnicaenAuth\Service\Privilege'           => Service\Factory\PrivilegeServiceFactory::class,
             Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
+            Cache\CacheService::class                 => Cache\Factory\CacheServiceFactory::class,
         ],
     ],
     'view_helpers'       => [
@@ -225,7 +239,7 @@ $config = [
     ],
 ];
 
-if ($customCss = \AppConfig::get('etablissement', 'css')){
+if ($customCss = \AppConfig::get('etablissement', 'css')) {
     $config['public_files']['stylesheets']['999_'] = $customCss;
 }
 

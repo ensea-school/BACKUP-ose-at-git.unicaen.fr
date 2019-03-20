@@ -2,8 +2,8 @@
 
 namespace Application\Form;
 
-use Application\Exception\DbException;
 use Application\Service\AbstractEntityService;
+use Application\Traits\TranslatorTrait;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\InputFilter\InputFilterProviderInterface;
@@ -12,6 +12,7 @@ use Zend\Mvc\Controller\Plugin\FlashMessenger;
 
 abstract class AbstractForm extends Form implements InputFilterProviderInterface
 {
+    use TranslatorTrait;
 
     /**
      * @var FlashMessenger
@@ -89,8 +90,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
                         $saveFnc->save($entity);
                         $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
                     } catch (\Exception $e) {
-                        $e = DbException::translate($e);
-                        $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+                        $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
                     }
                 } elseif ($saveFnc instanceof \Closure) {
                     try {
@@ -123,8 +123,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
             $service->delete($entity);
             $this->getControllerPluginFlashMessenger()->addSuccessMessage($successMessage);
         } catch (\Exception $e) {
-            $e = DbException::translate($e);
-            $this->getControllerPluginFlashMessenger()->addErrorMessage($e->getMessage());
+            $this->getControllerPluginFlashMessenger()->addErrorMessage($this->translate($e->getMessage()));
 
             return false;
         }

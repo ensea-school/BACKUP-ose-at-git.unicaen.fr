@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Entity\Db\FonctionReferentiel;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
-use Application\Exception\DbException;
 use Application\Form\FonctionReferentiel\Traits\FonctionReferentielSaisieFormAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 
@@ -46,8 +45,7 @@ class FonctionReferentielController extends AbstractController
                 $this->getServiceFonctionReferentiel()->save($fr);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage() . ':' . $fr->getId());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -62,7 +60,7 @@ class FonctionReferentielController extends AbstractController
             $this->getServiceFonctionReferentiel()->delete($fonctionReferentiel);
             $this->flashMessenger()->addSuccessMessage("Fonction Référentielle supprimée avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
         return new MessengerViewModel(compact('fonctionReferentiel'));
     }

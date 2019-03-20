@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Application\Entity\Db\PlafondApplication;
-use Application\Exception\DbException;
 use Application\Form\Plafond\Traits\PlafondApplicationFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PlafondApplicationServiceAwareTrait;
@@ -104,7 +103,7 @@ class PlafondController extends AbstractController
             $this->getServicePlafondApplication()->delete($plafondApplication);
             $this->flashMessenger()->addSuccessMessage("Règle de plafond supprimée avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

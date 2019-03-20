@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\WfEtapeDep;
-use Application\Exception\DbException;
 use Application\Form\Workflow\Traits\DependanceFormAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
@@ -99,7 +98,7 @@ class WorkflowController extends AbstractController
             try {
                 $this->getServiceWfEtapeDep()->save($wfEtapeDep);
             } catch (\Exception $e) {
-                throw DbException::translate($e);
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 

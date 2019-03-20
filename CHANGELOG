@@ -3,6 +3,28 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
+#OSE 8.1 (béta)
+
+## Corrections de bugs
+
+* Les avenants comportaient par défaut un champ "modifieComplete" qui n'était pas fourni par la vue.
+
+## Nouveautés
+
+* Il est désormais possible de customiser et/ou de traduire de petites parties de l'application. Attention toutefois : le travail de mise en place du dispositif n'en est qu'au tout début.
+* Possibilité de choisir sa formule dans les paramétrages généraux via une liste déroulante
+* Formule de calcul de l'université de Montpellier
+* Interface de test de la formule de calcul directmement intégrée dans OSE
+* Interface d'administration des motifs de modification de service dû
+* Interface d'administration des domaines fonctionnels
+
+## Notes de mise à jour
+
+* Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
+`data/Mises à jour/08.1.sql`
+Les mises à jour `data/Mises à jour/08.0.1.sql` et `data/Mises à jour/08.0.3.sql` sont inclues dans le précédent fichier.
+Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
+
 #OSE 8.0.3
 
 ## Corrections de bugs

@@ -513,7 +513,6 @@ return [
     'Application\Assertion\PaiementAssertion'                                                            => __DIR__ . '/src/Application/Assertion/PaiementAssertion.php',
     'Application\Assertion\ServiceAssertion'                                                             => __DIR__ . '/src/Application/Assertion/ServiceAssertion.php',
     'Application\Assertion\DossierPiecesAssertion'                                                       => __DIR__ . '/src/Application/Assertion/DossierPiecesAssertion.php',
-    'Application\Exception\DbException'                                                                  => __DIR__ . '/src/Application/Exception/DbException.php',
     'Application\Hydrator\Service\Interfaces\RechercheHydratorAwareInterface'                            => __DIR__ . '/src/Application/Hydrator/Service/Interfaces/RechercheHydratorAwareInterface.php',
     'Application\Hydrator\Service\RechercheHydrator'                                                     => __DIR__ . '/src/Application/Hydrator/Service/RechercheHydrator.php',
     'Application\Hydrator\Service\Traits\RechercheHydratorAwareTrait'                                    => __DIR__ . '/src/Application/Hydrator/Service/Traits/RechercheHydratorAwareTrait.php',

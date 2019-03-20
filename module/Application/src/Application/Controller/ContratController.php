@@ -10,7 +10,6 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
-use Application\Exception\DbException;
 use Application\Form\Contrat\Traits\ModeleFormAwareTrait;
 use Application\Form\Intervenant\Traits\ContratRetourAwareTrait;
 use Application\Processus\Traits\ContratProcessusAwareTrait;
@@ -153,7 +152,7 @@ class ContratController extends AbstractController
                 $this->updateTableauxBord($contrat->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage('Le projet ' . ($contrat->estUnAvenant() ? 'd\'avenant' : 'de contrat') . ' a bien été créé.');
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         }
 
@@ -187,7 +186,7 @@ class ContratController extends AbstractController
                 $this->updateTableauxBord($contrat->getIntervenant());
                 $this->flashMessenger()->addSuccessMessage("Suppression $contratToString effectuée avec succès.");
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         };
 
@@ -230,7 +229,7 @@ class ContratController extends AbstractController
                     "Validation " . lcfirst($contrat->toString(true, true)) . " enregistrée avec succès."
                 );
             } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         }
 
@@ -262,7 +261,7 @@ class ContratController extends AbstractController
                         "Dévalidation " . lcfirst($contrat->toString(true, true)) . " effectuée avec succès."
                     );
                 } catch (\Exception $e) {
-                    $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+                    $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
             }
         } else {
@@ -569,8 +568,7 @@ class ContratController extends AbstractController
                 $this->getServiceModeleContrat()->save($mc);
                 $this->flashMessenger()->addSuccessMessage('Modèle de contrat bien enregistré');
             } catch (\Exception $e) {
-                $e = DbException::translate($e);
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         });
 
@@ -588,7 +586,7 @@ class ContratController extends AbstractController
             $this->getServiceModeleContrat()->delete($modeleContrat);
             $this->flashMessenger()->addSuccessMessage("Modèle de contrat supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

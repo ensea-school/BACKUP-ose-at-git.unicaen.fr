@@ -93,7 +93,7 @@ class AppConfig
             'modules'                 => $modules,
             'module_listener_options' => [
                 'config_glob_paths'        => [
-                    'config/autoload/{,*.}{global,local}.php',
+                    'config/autoload/{,*.}{global,local'.('development' == $env ? ',dev' : '').'}.php',
                 ],
                 'module_paths'             => [
                     './module',

@@ -6,7 +6,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
-use Application\Exception\DbException;
 use Application\Form\PieceJointe\Traits\ModifierTypePieceJointeStatutFormAwareTrait;
 use Application\Service\Traits\PieceJointeServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
@@ -326,7 +325,7 @@ class PieceJointeController extends AbstractController
             $this->getServiceTypePieceJointe()->delete($typePieceJointe);
             $this->flashMessenger()->addSuccessMessage("Type de pièce jointe supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();
@@ -397,8 +396,7 @@ class PieceJointeController extends AbstractController
                 try {
                     $this->getServiceTypePieceJointe()->save($tpj);
                 } catch (\Exception $e) {
-                    $e   = DbException::translate($e);
-                    $txt .= ':' . $e->getMessage();
+                    $txt .= ':' . $this->translate($e);
                 }
             }
         }
@@ -416,7 +414,7 @@ class PieceJointeController extends AbstractController
             $this->getServiceTypePieceJointeStatut()->delete($typePieceJointeStatut);
             $this->flashMessenger()->addSuccessMessage("Type de pièce jointe supprimé avec succès.");
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
 
         return new MessengerViewModel();

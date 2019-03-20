@@ -32,6 +32,10 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
      */
     protected $decharge;
 
+    /**
+     * @var float
+     */
+    protected $multiplicateur;
 
 
     /**
@@ -124,7 +128,31 @@ class MotifModificationServiceDu implements HistoriqueAwareInterface
         return $this;
     }
 
+    /**
+     * Set multiplicateur
+     *
+     * @param int $multiplicateur
+     *
+     * @return MotifModificationService
+     */
+    public function setMultiplicateur($multiplicateur)
+    {
+        $this->multiplicateur = $multiplicateur;
 
+        return $this;
+    }
+
+
+
+    /**
+     * Get mutiplicateur
+     *
+     * @return int
+     */
+    public function getMultiplicateur()
+    {
+        return $this->multiplicateur;
+    }
 
     /**
      * Retourne la représentation littérale de cet objet.

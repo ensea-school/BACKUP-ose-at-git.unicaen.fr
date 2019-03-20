@@ -1,11 +1,11 @@
 $(function ()
 {
-    WidgetInitializer.add('selectpicker', 'selectpicker', function(){
+    WidgetInitializer.add('selectpicker', 'selectpicker', function () {
         WidgetInitializer.includeJs(Url('vendor/bootstrap-select-1.9.4/dist/js/bootstrap-select.min.js'));
         WidgetInitializer.includeCss(Url('vendor/bootstrap-select-1.9.4/dist/css/bootstrap-select.min.css'));
     });
 
-    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function(){
+    WidgetInitializer.add('intervenant-recherche', 'intervenantRecherche', function () {
         WidgetInitializer.includeJs(Url('intervenant-recherche/widget.js'));
         WidgetInitializer.includeCss(Url('intervenant-recherche/widget.css'));
     });
@@ -26,84 +26,84 @@ $(function ()
     });
 
     /* Services */
-    WidgetInitializer.add('service-liste', 'serviceListe', function(){
+    WidgetInitializer.add('service-liste', 'serviceListe', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
-    WidgetInitializer.add('service-form', 'serviceForm', function(){
+    WidgetInitializer.add('service-form', 'serviceForm', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
-    WidgetInitializer.add('service-filtres', 'serviceFiltres', function(){
+    WidgetInitializer.add('service-filtres', 'serviceFiltres', function () {
         WidgetInitializer.includeJs(Url('js/service.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
 
     /* Service référentiel */
-    WidgetInitializer.add('service-referentiel-liste', 'serviceReferentielListe', function(){
+    WidgetInitializer.add('service-referentiel-liste', 'serviceReferentielListe', function () {
         WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
-    WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm', function(){
+    WidgetInitializer.add('service-referentiel-form', 'serviceReferentielForm', function () {
         WidgetInitializer.includeJs(Url('js/service-referentiel.js'));
         WidgetInitializer.includeCss(Url('css/service.css'));
     });
 
     /* Indicateurs */
-    WidgetInitializer.add('indicateur', 'indicateur', function(){
+    WidgetInitializer.add('indicateur', 'indicateur', function () {
         WidgetInitializer.includeJs(Url('js/indicateur.js'));
         WidgetInitializer.includeCss(Url('css/indicateur.css'));
     });
 
     /* Pièces jointes */
-  //  WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
-  //      WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
-  //      WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
-  //  });
+    //  WidgetInitializer.add('piece-jointe', 'pieceJointe', function(){
+    //      WidgetInitializer.includeJs(Url('js/piece_jointe.js'));
+    //      WidgetInitializer.includeCss(Url('css/piece_jointe.css'));
+    //  });
 
     /* Offre de formation */
-    WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function(){
+    WidgetInitializer.add('element-pedagogique-recherche', 'elementPedagogiqueRecherche', function () {
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
-    WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function(){
+    WidgetInitializer.add('etape-centre-cout', 'etapeCentreCout', function () {
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
-    WidgetInitializer.add('etape-taux-mixite', 'etapeTauxMixite', function(){
+    WidgetInitializer.add('etape-taux-mixite', 'etapeTauxMixite', function () {
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
-    WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs', function(){
+    WidgetInitializer.add('etape-modulateurs', 'etapeModulateurs', function () {
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
-    WidgetInitializer.add('etape-saisie', 'etapeSaisie', function(){
+    WidgetInitializer.add('etape-saisie', 'etapeSaisie', function () {
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
-    WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function(){
+    WidgetInitializer.add('element-pedagogique-saisie', 'elementPedagogiqueSaisie', function () {
         WidgetInitializer.includeJs(Url('js/offre-formation.js'));
     });
 
     /* Charges d'enseignement */
-    WidgetInitializer.add('chargens', 'chargens', function(){
+    WidgetInitializer.add('chargens', 'chargens', function () {
         WidgetInitializer.includeJs(Url('vendor/go.js'));
         WidgetInitializer.includeJs(Url('js/chargens.js'));
         WidgetInitializer.includeCss(Url('css/chargens.css'));
     });
-    WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function(){
+    WidgetInitializer.add('chargens-filtre', 'chargensFiltre', function () {
         WidgetInitializer.includeJs(Url('js/chargens.js'));
         WidgetInitializer.includeCss(Url('css/chargens.css'));
     });
 
     /* Droits */
-    WidgetInitializer.add('droits-tbl', 'droitsTbl', function(){
+    WidgetInitializer.add('droits-tbl', 'droitsTbl', function () {
         WidgetInitializer.includeJs(Url('js/droits.js'));
         WidgetInitializer.includeCss(Url('css/droits.css'));
     });
-    WidgetInitializer.add('affectation-form', 'affectationForm', function(){
+    WidgetInitializer.add('affectation-form', 'affectationForm', function () {
         WidgetInitializer.includeJs(Url('js/droits.js'));
         WidgetInitializer.includeCss(Url('css/droits.css'));
     });
 
     /* DateTime Picker */
-    WidgetInitializer.add('bootstrap-datetimepicker', 'bootstrapDatetimepicker', function(){
+    WidgetInitializer.add('bootstrap-datetimepicker', 'bootstrapDatetimepicker', function () {
         WidgetInitializer.includeJs(Url('vendor/unicaen/app/js/bootstrap-datetimepicker.min.js'));
         WidgetInitializer.includeCss(Url('vendor/unicaen/app/css/bootstrap-datetimepicker.min.css'));
     });
@@ -137,7 +137,7 @@ Util = {
             var snf = '';
         } else {
             var snd0 = '<span class="number-dec-00">,00</span>';
-            var sn = '<span class="number number-' + ( (heures < 0) ? 'negatif' : 'positif' ) + '">';
+            var sn = '<span class="number number-' + ((heures < 0) ? 'negatif' : 'positif') + '">';
             var snf = '</span>';
         }
 
@@ -208,20 +208,89 @@ Util = {
 
         });
 
-        if (1 == shown){
+        if (1 == shown) {
             select.selectpicker('val', lastShown);
         }
     },
 
-    inArray: function ( needle, haystack, strict )
+    inArray: function (needle, haystack, strict)
     {
-        for( var i in haystack ){
-            if (strict){
+        for (var i in haystack) {
+            if (strict) {
                 if (haystack[i] === needle) return true;
-            }else{
+            } else {
                 if (haystack[i] == needle) return true;
             }
         }
         return false;
+    },
+
+    fractions: {
+        0.333333: '1/3',
+        0.166667: '1/6',
+        0.142857: '1/7',
+        0.111111: '1/9',
+        0.666667: '2/3',
+        0.285714: '2/7',
+        0.222222: '2/9',
+        0.428571: '3/7',
+        1.333333: '4/3',
+        0.571429: '4/7',
+        0.444444: '4/9',
+        1.666667: '5/3',
+        0.833333: '5/6',
+        0.714286: '5/7',
+        0.555556: '5/9',
+        0.857143: '6/7',
+        2.333333: '7/3',
+        1.166667: '7/6',
+        0.777778: '7/9',
+        2.666667: '8/3',
+        1.142857: '8/7',
+        0.888889: '8/9',
+        1.285714: '9/7',
+    },
+
+    /**
+     *
+     * @param float value
+     *
+     * @return string
+     */
+    floatToString: function (value)
+    {
+        var test = Math.round(value * 1000000) / 1000000;
+        if (undefined !== this.fractions[test]) {
+            return this.fractions[test];
+        }
+        var locale = 'fr';
+        var options = {minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false};
+        var formatter = new Intl.NumberFormat(locale, options);
+
+        return formatter.format(value);
+    },
+
+    stringToFloat: function (value)
+    {
+        if (null === value || '' === value || undefined === value) return null;
+
+        if (value.indexOf('/') !== -1) {
+            value = value.split('/');
+            value = Util.stringToFloat(value[0]) / Util.stringToFloat(value[1]);
+        } else {
+            value = parseFloat(value.replace(',', '.'));
+        }
+
+        return value;
+    },
+
+    nl2br: function (str, is_xhtml)
+    {
+        if (typeof str === 'undefined' || str === null) {
+            return '';
+        }
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
     }
+
 };

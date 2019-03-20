@@ -51,10 +51,49 @@ switch ($action) {
 
 
 
-function install(Console $c, OseAdmin $oa)
+function install(Console $c, OseAdmin $oa, $fromMaster=true)
 {
     $osedir = dirname(__DIR__);
+
     $c->println("Installation de OSE");
+
+    if ($fromMaster) {
+        // Choix de la version
+        $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+        $c->println("Voici la liste des versions de OSE disponibles:");
+        $tags = $oa->getTags();
+        foreach ($tags as $tag) {
+            $c->println($tag);
+        }
+        $ok = false;
+        while (!$ok) {
+            $c->print("Veuillez choisir une version à déployer: ");
+            $version = $c->getInput('version');
+            if ($oa->tagIsValid($version)) {
+                $ok = true;
+            } else {
+                $c->println("$version n'est pas dans la liste des versions disponibles.");
+            }
+        }
+
+        // Récupération des sources
+        $c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
+        $c->exec([
+            "cd $osedir",
+            "git checkout tags/$version",
+            "mkdir data/cache",
+            "chmod 777 data/cache",
+            "chmod +7 bin/ose",
+        ]);
+        $oa->writeVersion($osedir, $version);
+    }else{
+        $c->exec([
+            "cd $osedir",
+            "mkdir data/cache",
+            "chmod 777 data/cache",
+            "chmod +7 bin/ose",
+        ]);
+    }
 
     // Récupération de Composer
     $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);

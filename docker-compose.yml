@@ -20,7 +20,6 @@ services:
 #      - "8080:80"
 #      - "8443:443"
 
-
     networks:
         devnet:
             ipv4_address: 172.21.0.10

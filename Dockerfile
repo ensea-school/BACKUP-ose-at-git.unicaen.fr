@@ -15,7 +15,8 @@ ENV APACHE_CONF_DIR=/etc/apache2 \
 
 ## Installation de packages requis.
 RUN apt-get install -y \
-        php7.0-imagick
+        php7.0-imagick \
+        unoconv
 
 # Nettoyage
 RUN apt-get autoremove -y && apt-get clean && rm -rf /tmp/* /var/tmp/*
@@ -34,5 +35,11 @@ ADD docker/apache-site.conf     ${APACHE_CONF_DIR}/sites-available/ose.conf
 ADD docker/apache-site-ssl.conf ${APACHE_CONF_DIR}/sites-available/ose-ssl.conf
 ADD docker/fpm/pool.d/app.conf  ${PHP_CONF_DIR}/fpm/pool.d/ose.conf
 
-RUN a2ensite ose ose-ssl && \
+# Confoguration d'Unoconv
+ADD docker/unoconv.service      /etc/systemd/system/unoconv.service
+
+RUN systemctl enable unoconv.service
+RUN systemctl start unoconv.service
+
+RUN a2ensite ose && \
     service php7.0-fpm reload

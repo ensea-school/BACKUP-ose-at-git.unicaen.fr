@@ -109,11 +109,11 @@ $lf       = new LocalFormater();
 $lf->view = $this;
 
 echo $this->tag('h1', ['class' => 'page-header'])->html($title);
-echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>
 <div class="formule-test-intervenant"
      data-data="<?= $this->escapeHtmlAttr(json_encode($formuleTestIntervenant->toArray())) ?>">
+    <div class="errors"><?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?></div>
     <div class="row">
         <div class="col-md-6">
             <h2>Intervenant</h2>
@@ -441,6 +441,18 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 return value;
             },
 
+            affErreur: function (erreur)
+            {
+                var errStr = "<div class=\"messenger alert alert-danger \">\n" +
+                    "<button type=\"button\" class=\"close\" title=\"Fermer cette alerte\" data-dismiss=\"alert\">×</button>\n" +
+                    "<span class=\"glyphicon glyphicon-exclamation-sign\"></span>\n" +
+                    Util.nl2br(erreur, true) +
+                    "</div>";
+
+                this.element.find('.errors').html(this.element.find('.errors').html() + errStr);
+
+            },
+
             variableToValue: function (variable, type)
             {
                 if (variable === '' || variable === null || variable === undefined) {
@@ -476,10 +488,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
                 that.saving = true;
                 $.post(url, {"data": JSON.stringify(that.getData())}, function (data)
                 {
+                    that.element.find('.errors').html('');
                     that.setData(data.data);
                     if (data.errors) {
                         for (e in data.errors) {
-                            console.log(data.errors[e]);
+                            that.affErreur(data.errors[e]);
                         }
                     } else {
                         if (autoReload && lastId == null) {

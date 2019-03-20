@@ -130,7 +130,7 @@ class FormuleController extends AbstractController
             try {
                 $this->getServiceFormuleTestIntervenant()->calculer($formuleTestIntervenant);
             } catch (\Exception $e) {
-                $result['errors'] = $this->translate($e);
+                $result['errors'][] = $this->translate($e);
             }
         }
         $result['data'] = $formuleTestIntervenant->toArray();

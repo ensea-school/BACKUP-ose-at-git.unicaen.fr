@@ -9,6 +9,8 @@ $c->printMainTitle("OSE", 15);
 $action = $c->getArg(1);
 
 switch ($action) {
+    case 'install':
+        install($c, $oa);
     case 'update':
         update($c, $oa);
     break;
@@ -45,6 +47,61 @@ switch ($action) {
     default:
         help($c, $oa);
     break;
+}
+
+
+
+function install(Console $c, OseAdmin $oa)
+{
+    $osedir = dirname(__DIR__);
+    $c->println("Installation de OSE");
+
+    // Récupération de Composer
+    $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
+    $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
+
+    // Récupération des dépendances
+    $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
+    $c->passthru("cd $osedir;php composer.phar install");
+
+
+    // Mise à jour des liens vers les répertoires publics des dépendances
+    $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
+    $oa->majUnicaenSymLinks($osedir);
+    $c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
+
+    // Configuration locale
+    //$c->println("\nMise en place de la base de données", $c::COLOR_LIGHT_CYAN);
+    //$c->println("\nUne base de données Oracle doit préalablement avoir été créée. Merci de fournir dès à présent ses"
+    //." paramètres d'accès pour que OSE initialialise la base de données :");
+
+    $c->exec([
+        "cd $osedir",
+        "cp config.local.php.default config.local.php",
+    ]);
+
+    // Génération des proxies pour l'ORM Doctrine
+    $c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
+    $c->exec([
+        "cd $osedir",
+        "php vendor/bin/doctrine-module orm:generate-proxies",
+        "chmod -R 777 data/cache/DoctrineProxy",
+    ]);
+
+    // Mise en place des tâches CRON ??
+
+    // Conclusion
+    $c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
+    $c->println("Il reste encore six étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+    $c->println(" 1 - Configurez votre serveur Apache");
+    $c->println(" 2 - Initialisez la base de données de OSE avec le script prévu à cet effet");
+    $c->println(" 3 - Mettez en place la configuration locale de l'application");
+    $c->println(" 4 - Une fois bien connecté, configurez vos connecteurs en vous appuyant\n     le cas échéant sur ceux qui vous sont fournis");
+    $c->println(" 5 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+    $c->println(" 6 - Paramétrez l'application pour l'adapter à vos besoins");
+    $c->println('');
+    $c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
+    $c->println('');
 }
 
 
@@ -401,8 +458,8 @@ class Bdd
 
     public function connect(): self
     {
-        $cs = $this->getHost() . ':' . $this->getPort() . '/' . $this->getDbname();
-        $this->connexion = oci_connect($this->getUsername(), $this->password, $cs );
+        $cs              = $this->getHost() . ':' . $this->getPort() . '/' . $this->getDbname();
+        $this->connexion = oci_connect($this->getUsername(), $this->password, $cs);
         if (!$this->connexion) {
             $e = oci_error();
             throw new \Exception($e['message']);
@@ -434,12 +491,12 @@ class Bdd
     {
         $statement = oci_parse($this->connexion, $sql);
 
-        foreach( $params as $key => $val ){
+        foreach ($params as $key => $val) {
             ${$key} = $val;
-            oci_bind_by_name($statement, ':'.$key, ${$key}  );
+            oci_bind_by_name($statement, ':' . $key, ${$key});
         }
 
-        if (false === @oci_execute($statement)){
+        if (false === @oci_execute($statement)) {
             $this->sendError($statement);
         }
 
@@ -458,10 +515,10 @@ class Bdd
 
 
 
-    public function select( $sql, array $params = [])
+    public function select($sql, array $params = [])
     {
         $statement = $this->execStatement($sql, $params);
-        if(false === oci_fetch_all($statement, $res, 0, -1, OCI_FETCHSTATEMENT_BY_ROW)){
+        if (false === oci_fetch_all($statement, $res, 0, -1, OCI_FETCHSTATEMENT_BY_ROW)) {
             $this->sendError($statement);
         }
         oci_free_statement($statement);
@@ -471,11 +528,11 @@ class Bdd
 
 
 
-    protected function sendError( $statement )
+    protected function sendError($statement)
     {
         $error = oci_error($statement);
         oci_free_statement($statement);
-        $msg = $error['message']." (offset ".$error['offset'].")";
+        $msg = $error['message'] . " (offset " . $error['offset'] . ")";
         throw new Exception($msg, $error['code']);
     }
 

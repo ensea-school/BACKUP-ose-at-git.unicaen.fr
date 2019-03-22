@@ -78,11 +78,11 @@ class AppConfig
             array_unshift($modules, 'BjyAuthorize'); // ne charge BjyAuthorize QUE si on n'est pas en mode console
         }
 
-        if ('development' == $env) {
+        if ('dev' == $env) {
             $modules[] = 'ZendDeveloperTools';
         }
 
-        if (self::inConsole() || 'development' == $env){
+        if (self::inConsole() || 'dev' == $env){
             $modules[] = 'UnicaenCode';
         }
 
@@ -93,7 +93,7 @@ class AppConfig
             'modules'                 => $modules,
             'module_listener_options' => [
                 'config_glob_paths'        => [
-                    'config/autoload/{,*.}{global,local'.('development' == $env ? ',dev' : '').'}.php',
+                    'config/autoload/{,*.}{global,local'.('dev' == $env ? ',dev' : '').'}.php',
                 ],
                 'module_paths'             => [
                     './module',

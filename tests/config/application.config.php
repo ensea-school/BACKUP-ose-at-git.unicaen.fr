@@ -12,7 +12,7 @@ $modules = [
     'Application'
 ];
 
-if ($env == 'development') {
+if ($env == 'dev') {
     if ( 'dig-40' == getenv('HTTP_HOST')){
         $modules[] = 'Test';
     }

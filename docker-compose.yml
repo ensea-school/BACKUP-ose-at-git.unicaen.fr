@@ -12,9 +12,9 @@ services:
       dockerfile: Dockerfile
 
     volumes:
-        - .:/var/www/ose
+        - .:/app
 
-    working_dir: /var/www/ose
+    working_dir: /app
 
 #    ports:
 #      - "8080:80"

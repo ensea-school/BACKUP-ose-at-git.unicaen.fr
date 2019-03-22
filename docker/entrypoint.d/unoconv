@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# oui, il est mis deux fois, mais je ne sais pas pourquoi il ne se lance qu'à la deuxième...
+unoconv --listener
+unoconv --listener &

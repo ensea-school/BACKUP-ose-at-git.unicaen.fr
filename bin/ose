@@ -52,6 +52,14 @@ switch ($action) {
 
 
 
+function test(Console $c, OseAdmin $oa)
+{
+    $osedir = dirname(__DIR__);
+    var_dump($osedir);
+}
+
+
+
 function install(Console $c, OseAdmin $oa, $fromMaster=true)
 {
     $osedir = dirname(__DIR__);

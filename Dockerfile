@@ -41,4 +41,4 @@ COPY /docker/${APPLICATION_ENV}/entrypoint.d /entrypoint.d/
 ONBUILD COPY /docker/${APPLICATION_ENV}/entrypoint.d /entrypoint.d/
 
 RUN a2ensite app && \
-    service php7.0-fpm reload
+    service php${PHP_VERSION}-fpm reload

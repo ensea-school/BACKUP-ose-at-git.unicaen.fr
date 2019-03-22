@@ -1,6 +1,6 @@
 <?php
 
-$env = getenv('APP_ENV') ?: 'production';
+$env = getenv('APP_ENV') ?: 'prod';
 
 $modules = [
     'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',

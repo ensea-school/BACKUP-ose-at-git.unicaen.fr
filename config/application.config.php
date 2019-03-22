@@ -100,8 +100,8 @@ class AppConfig
                     './vendor',
                 ],
                 'cache_dir'                => 'data/cache/',
-                'config_cache_enabled'     => ('production' == $env),
-                'module_map_cache_enabled' => ('production' == $env),
+                'config_cache_enabled'     => ('prod' == $env),
+                'module_map_cache_enabled' => ('prod' == $env),
             ],
         ];
     }

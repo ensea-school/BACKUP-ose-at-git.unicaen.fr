@@ -2,6 +2,10 @@
 
 Organisation des Services d'Enseignement
 
+## Liste des changements
+
+Cf. [`CHANGELOG.md`](CHANGELOG.md).
+
 
 ## Installation
 

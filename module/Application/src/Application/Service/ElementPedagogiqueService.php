@@ -64,7 +64,7 @@ class ElementPedagogiqueService extends AbstractEntityService
      *
      * @return array
      */
-    public function getSearchResultByTerm(array $filters = [])
+    public function getSearchResultByTerm(array $filters = [], $order="gtf.ordre, e.niveau, ep.libelle")
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -127,7 +127,7 @@ select * from (
   select ep.id,
     rank() over (partition by ep.id order by cp.ordre) rang,
     count(*) over (partition by ep.id)                 nb_ch,
-    ep.source_code, ep.libelle,
+    ep.code, ep.source_code, TRIM(ep.libelle) libelle,
     e.libelle libelle_etape, e.niveau,
     pe.libelle_long libelle_pe,
     gtf.libelle_court libelle_gtf,
@@ -146,7 +146,7 @@ select * from (
     and $whereTerm
     $whereContext
   order by
-    gtf.ordre, e.niveau, ep.libelle
+    $order
 )
 where rang = 1
 ";

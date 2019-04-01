@@ -136,29 +136,43 @@ class ElementPedagogiqueController extends AbstractController
         $params['limit']     = $limit;
 
         // fetch
-        $found = $this->getServiceElementPedagogique()->getSearchResultByTerm($params);
+        $found = $this->getServiceElementPedagogique()->getSearchResultByTerm($params, $term === null ? 'ep.code' : 'gtf.ordre, e.niveau, ep.code');
 
         $result = [];
         foreach ($found as $item) {
-            if ($item['NB_CH'] > 1) {
-                $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
-            }
+            if (null === $term) {
+                if (0 === strpos($item['LIBELLE'], $item['CODE'])){
+                    $label = $item['LIBELLE'];
+                }else{
+                    $label = $item['CODE'].' '.$item['LIBELLE'];
+                }
+                $result[] = [
+                    'id' => $item['ID'],
+                    'label' => $label,
+                    'extra' => $item['LIBELLE_PE'],
+                ];
+            } else {
+                if ($item['NB_CH'] > 1) {
+                    $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
+                }
 
-            $extra = '';
-            if (!$niveau) {
-                $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
+                $extra = '';
+                if (!$niveau) {
+                    $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
+                }
+                if (!$etape) {
+                    $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
+                }
+                $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
+
+                $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
+                $result[] = [
+                    'id'       => $item['ID'],
+                    'label'    => $item['CODE'] . ' ' . $item['LIBELLE'],
+                    'extra'    => $extra,
+                    'template' => $template,
+                ];
             }
-            if (!$etape) {
-                $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
-            }
-            $extra               .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
-            $template            = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
-            $result[$item['ID']] = [
-                'id'       => $item['ID'],
-                'label'    => $item['SOURCE_CODE'] . ' ' . $item['LIBELLE'],
-                'extra'    => $extra,
-                'template' => $template,
-            ];
         };
 
         $result = \UnicaenApp\Form\Element\SearchAndSelect::truncatedResult($result, $limit - 1);
@@ -229,7 +243,7 @@ class ElementPedagogiqueController extends AbstractController
                 }
             }
 
-            if (!$vhe->estNonHistorise()){
+            if (!$vhe->estNonHistorise()) {
                 $vhe = $this->getServiceVolumeHoraireEns()->newEntity($element, $typeIntervention);
             }
 

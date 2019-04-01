@@ -87,9 +87,11 @@ $.widget("ose.elementPedagogiqueRecherche", {
             );
         }
         for (var i in data) {
-            select.append(
-                $('<option>').text(data[i].label).val(data[i].id)
-            );
+            var option = $('<option>');
+            option.val(data[i].id);
+            option.text(data[i].label);
+            option.data('subtext',data[i].extra);
+            select.append(option);
         }
         select.val(value);
         select.selectpicker('refresh');

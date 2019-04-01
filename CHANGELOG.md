@@ -8,6 +8,12 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * Les avenants comportaient par défaut un champ "modifieComplete" qui n'était pas fourni par la vue.
+* Lors de la saisie d'un nouveau service d'enseignement, si la formation a déjà été sélectionnée :
+  * Les éléments sont triés correctement
+  * Les éléments sont affichés avec le semestre
+
+* Avenants au contrat travail corrigé : le projet et l'avenant validé ne présentaient pas les mêmes nombres d'heures dans le détail des services. 
+* Procédures d'installation et de mise à jour intégrées directement au projet dans Gitlab.
 
 ## Nouveautés
 

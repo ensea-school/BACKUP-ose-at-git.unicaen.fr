@@ -8,81 +8,20 @@ titlepage-rule-color: ffffff
 titlepage-rule-height: 1
 ...
 
-# Prérequis
-## Serveur Web
-Installer sur une distribution GNU/Linux - Debian 9 (Stretch) de préférence.
+# Généralités
 
-Dépendances requises :
+OSE est une application web qui exploite une base de données Oracle.
+Il faut donc installer :
 
-* git
-* wget
-* Apache 2 avec le module de réécriture d'URL (*rewrite*) activé
-* PHP 7.0 avec les modules suivants :
-    * cli
-    * curl
-    * intl
-    * json
-    * ldap
-    * bcmath
-    * mbstring
-    * mcrypt
-    * opcache
-    * xml
-    * zip
-    * bcmath
-    * gd
-    * OCI8 (pilote pour Oracle).
+* Une base de données Oracle
+* Un serveur web Apache + PHP 7
 
-Le mode installation de OSE liste toutes les dépendances nécessaires et teste leur présence sur votre serveur.
+Le serveur web peut être installé manuellement ou bien déployé via une image Docker.
+Le serveur web n'héberge aucune donnée, hormis des fichiers de configuration et de cache. Toutes les données d'explloitation sont donc
+stockées en base de données.
 
-## Unoconv
-### Présentation
-Unoconv est un utilitaire qui utilise LibreOffice pour convertir des documents depuis le format OpenDocument
- vers le format PDF.
+# Serveur de base de donnée
 
-OSE l'utilise par exemple pour générer des contrats de travail ou d'autres états de sortie destinés à l'impression.
-
-**UnoConv** devra donc être installé sur le serveur. 
-
-### Installation 
-Unoconv est intégré à la plupart des distributions GNU/Linux.
-
-Spécifique à Debian :
-Il en existe un paquet intégré à Debian.)
-Attention également : sous Debian, unoconv peut s'installer par apt-get, mais il faut aussi installer LibreOffice Writer, la dépendance n'étant pas automatique (`apt-get install unoconv libreoffice-writer`).
-
-### Configuration
-Unoconv doit être lancé en tant que démon.
-Il tournera donc en tâche de fond et OSE fera appel à lui pour effectuer les conversions en PDF souhaitées.
-Pour cela, la commande `unoconv --listener` doit être lancée.
-
-Voici un exemple de configuration du démon unoconv lancé au moyen de systemd :
-
-Dans le fichier `/etc/systemd/system/unoconv.service`, placez le contenu suivant :
-
-```ini
-[Unit]
-Description=Unoconv listener for document conversions
-Documentation=https://github.com/dagwieers/unoconv
-After=network.target remote-fs.target nss-lookup.target
- 
-[Service]
-Type=simple
-ExecStart=/usr/bin/unoconv --listener
- 
-[Install]
-WantedBy=multi-user.target
-```
-
-Puis activez et lancez le service :
-
-```bash
-systemctl enable unoconv.service
-systemctl start unoconv.service
-```
-
-
-## Base de données
 ### Spécifications
 Les spécifications sont les suivantes :
 
@@ -133,7 +72,91 @@ Avec Apache, vous devez ajouter la ligne suivante à votre configuration dans le
 export NLS_LANG="FRENCH"
 ```
 
-# Installation des fichiers
+# Installation du serveur web
+
+Le serveur Web doit mainternant être installé.
+
+Vous pouvez, au choix :
+
+* L'installer vous-même (recommandé en production ou en pré-prod)
+* Ou bien le déployer à l'aide de Docker (recommandé en test ou pour développer)
+
+## Méthode manuelle, à adapter selon vos besoins
+
+### Serveur Web
+Installer sur une distribution GNU/Linux - Debian 9 (Stretch) de préférence.
+
+Dépendances requises :
+
+* git
+* wget
+* Apache 2 avec le module de réécriture d'URL (*rewrite*) activé
+* PHP 7.0 avec les modules suivants :
+    * cli
+    * curl
+    * intl
+    * json
+    * ldap
+    * bcmath
+    * mbstring
+    * mcrypt
+    * opcache
+    * xml
+    * zip
+    * bcmath
+    * gd
+    * OCI8 (pilote pour Oracle).
+
+Le mode installation de OSE liste toutes les dépendances nécessaires et teste leur présence sur votre serveur.
+
+### Unoconv
+#### Présentation
+Unoconv est un utilitaire qui utilise LibreOffice pour convertir des documents depuis le format OpenDocument
+ vers le format PDF.
+
+OSE l'utilise par exemple pour générer des contrats de travail ou d'autres états de sortie destinés à l'impression.
+
+**UnoConv** devra donc être installé sur le serveur. 
+
+#### Installation 
+Unoconv est intégré à la plupart des distributions GNU/Linux.
+
+Spécifique à Debian :
+Il en existe un paquet intégré à Debian.)
+Attention également : sous Debian, unoconv peut s'installer par apt-get, mais il faut aussi installer LibreOffice Writer, la dépendance n'étant pas automatique (`apt-get install unoconv libreoffice-writer`).
+
+#### Configuration
+Unoconv doit être lancé en tant que démon.
+Il tournera donc en tâche de fond et OSE fera appel à lui pour effectuer les conversions en PDF souhaitées.
+Pour cela, la commande `unoconv --listener` doit être lancée.
+
+Voici un exemple de configuration du démon unoconv lancé au moyen de systemd :
+
+Dans le fichier `/etc/systemd/system/unoconv.service`, placez le contenu suivant :
+
+```ini
+[Unit]
+Description=Unoconv listener for document conversions
+Documentation=https://github.com/dagwieers/unoconv
+After=network.target remote-fs.target nss-lookup.target
+ 
+[Service]
+Type=simple
+ExecStart=/usr/bin/unoconv --listener
+ 
+[Install]
+WantedBy=multi-user.target
+```
+
+Puis activez et lancez le service :
+
+```bash
+systemctl enable unoconv.service
+systemctl start unoconv.service
+```
+
+
+### Fichiers de l'application
 
 L'installation se fait en récupérant les sources directement depuis le dépôt GitLab de l'Université de Caen.
 Un script a été conçu pour automatiser cette opération.
@@ -143,8 +166,8 @@ Exécutez la commande suivante sur votre serveur :
 wget https://ose.unicaen.fr/deploiement/ose-deploy && php ose-deploy
 ```
 
-# Configuration d'Apache
-## Avec un VirtualHost
+### Configuration d'Apache
+#### Exemple avec un VirtualHost
 Exemple pris avec /var/www/ose en répertoire d'installation et ose.unicaen.fr en nom d'hôte.
 A adapter à vos besoins.
 ```apache
@@ -164,7 +187,7 @@ A adapter à vos besoins.
 	RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
 
 	# Usage de l'application. 
-	# Plusieurs valeurs possibles : development, test, production
+	# Plusieurs valeurs possibles : dev (pour le développement), test (pour du test), prod (à utiliser en production)
 	SetEnv APPLICATION_ENV "test"
 	php_value upload_max_filesize 50M
 	php_value post_max_size 100M
@@ -179,7 +202,7 @@ A adapter à vos besoins.
 </VirtualHost>
 ```
 
-## Avec un alias
+#### Exemple avec un alias
 Exemple pris avec /var/www/ose en répertoire d'installation et /ose en Alias.
 A adapter à vos besoins.
 ```apache
@@ -203,7 +226,7 @@ Alias /ose			                /var/www/ose/public
 	RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
 
 	# Usage de l'application. 
-	# Plusieurs valeurs possibles : development, test, production
+	# Plusieurs valeurs possibles : dev (pour le développement), test (pour du test), prod (à utiliser en production)
 	SetEnv APPLICATION_ENV "test"
 
 	php_value upload_max_filesize 50M
@@ -214,6 +237,59 @@ Alias /ose			                /var/www/ose/public
 </Directory>
 ```
 N'oubliez pas de recharger la configuration d'Apache (systemctl reload apache2)!
+
+## Avec Docker
+
+Cette méthode sera privilégiée si vous souhaitez installer une instance de OSE pour du test ou pour développer.
+Attention : vous utiliserez ici le `master` de OSE.
+
+### Création d'un réseau local
+```bash
+docker network create --driver bridge --subnet 172.21.0.0/16 --gateway 172.21.0.1 laures
+```
+
+### Récupération d'UnicaenImage
+
+L'image OSE repose sur UnicaenImage, qu'il faut donc installer préalablement :
+
+```bash
+git clone https://git.unicaen.fr/open-source/docker/unicaen-image
+cd unicaen-image
+docker build \
+--rm \
+--build-arg HTTP_PROXY=http://proxy.unicaen.fr:3128 \ # Votre proxy si nécessaire
+-f Dockerfile-7.0 \
+-t unicaen-image-php7.0-apache \
+.
+```
+
+### Construction de l'image OSE
+#### Environnement de développement
+```bash
+git clone https://git.unicaen.fr/open-source/OSE dev
+cd dev
+docker-compose build --no-cache
+docker-compose up
+docker exec ose-dev ose install
+```
+Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
+172.21.0.10 ose-dev.localhost
+
+OSE sera accessible sur votre machine, à l'adresse http://ose-dev.localhost
+
+#### Environnement de test
+```bash
+git clone https://git.unicaen.fr/open-source/OSE test
+cd test
+docker-compose -f docker-compose-test.yml build --no-cache
+docker-compose -f docker-compose-test.yml up
+docker exec ose-test ose install 
+```
+
+Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
+172.21.0.15 ose-test.localhost
+
+OSE sera accessible sur votre machine, à l'adresse http://ose-test.localhost
 
 # Création de la base de données
 Créez une base de données avec un utilisateur pour OSE, un schéma, puis un tablespace vides.
@@ -238,9 +314,10 @@ Une fois cette étape terminée, il convient de passer OSE en mode production. C
 
 # Mise en place des tâches CRON
 Des tâches CRON doivent être lancée sur votre serveur régulièrement pour mettre à jour certaines données
-ou réaliser des actions.
+ou réaliser des actions. 
 
-Ces tâches n'ont pas besoin d'être lancées régulièrement sur un serveur de pré-production.
+Ceci est utile en production. Il n'est pas conseillé d'activer ces tâches CRON en développement ou
+en test, mais plutôt de lancer manuellement ces tâches.
 
 Dans tous les cas, c'est le script de OSE qui sera appelé.
 Le script est situé dans le répertoire de OSE, `bin/ose`.

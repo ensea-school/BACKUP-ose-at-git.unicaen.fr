@@ -6,7 +6,7 @@ titlepage-color: 06386e
 titlepage-text-color: ffffff
 titlepage-rule-color: ffffff
 titlepage-rule-height: 1
-...
+---
 
 # Généralités
 

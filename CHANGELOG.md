@@ -1,7 +1,7 @@
 ---
 title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
-...
+---
 
 # OSE 8.1 (béta)
 

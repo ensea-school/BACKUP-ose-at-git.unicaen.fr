@@ -11,8 +11,8 @@ LABEL maintainer="Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>"
 
 ENV APACHE_CONF_DIR=/etc/apache2 \
     PHP_CONF_DIR=/etc/php/${PHP_VERSION} \
-    APPLICATION_HOSTNAME=ose-dev.localhost \
-    APPLICATION_ENV=dev
+    APPLICATION_HOSTNAME=ose-test.localhost \
+    APPLICATION_ENV=test
 
 ## Installation de packages requis.
 RUN apt-get install -y unoconv

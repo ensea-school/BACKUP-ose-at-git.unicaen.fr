@@ -26,12 +26,13 @@ de travail dans son état originel au moyen de la commande suivante :
 
 ## Mise à jour de la base de données
 
-* Dans le répertoire `data/Mises à jour`, si un fichier `.sql` corresopnd à la nouvelle version installée,
+* Dans le répertoire `bdd/update`, si un fichier `.sql` corresopnd à la nouvelle version installée,
 exécutez les requêtes dans SQL Developer pour mettre à jour la base de données.
 
 ## Tests
 
-Le fichier `data/Déploiement/Changements.pdf` recense les changements apportés par les différentes versions de l'application.
+[La liste des changements](https://ose.unicaen.fr/deploiement/changements.html) 
+recense les changements apportés par les différentes versions de l'application.
 Vous êtes invité à tester prioritairement ces changements.
 
 ## Passage en production

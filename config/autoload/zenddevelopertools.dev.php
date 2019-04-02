@@ -41,7 +41,7 @@ return array(
              * Expects: string
              * Default: 'data/cache'
              */
-            'cache_dir' => 'data/cache',
+            'cache_dir' => 'cache',
 
             /**
              * If a matches is defined, the profiler will be disabled if the request does not match the pattern.

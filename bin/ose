@@ -97,16 +97,16 @@ function install(Console $c, OseAdmin $oa, $fromMaster=true)
         $c->exec([
             "cd $osedir",
             "git checkout tags/$version",
-            "mkdir data/cache",
-            "chmod 777 data/cache",
+            "mkdir cache",
+            "chmod 777 cache",
             "chmod +7 bin/ose",
         ]);
         $oa->writeVersion($osedir, $version);
     }else{
         $c->exec([
             "cd $osedir",
-            "mkdir data/cache",
-            "chmod 777 data/cache",
+            "mkdir cache",
+            "chmod 777 cache",
             "chmod +7 bin/ose",
         ]);
     }
@@ -152,8 +152,8 @@ function install(Console $c, OseAdmin $oa, $fromMaster=true)
     $c->exec([
         "cd $osedir",
         "php vendor/bin/doctrine-module orm:generate-proxies",
-        "chmod -R 777 data/cache/DoctrineProxy",
-        "chmod -R 777 data/cache/Doctrine",
+        "chmod -R 777 cache/DoctrineProxy",
+        "chmod -R 777 cache/Doctrine",
     ]);
 
     // Mise en place des tâches CRON ??
@@ -216,10 +216,10 @@ function update(Console $c, OseAdmin $oa)
     // Néttoyage des caches et mise à jour des proxies, lancement du script de migration éventuel
     $c->exec([
         "cd $osedir",
-        "rm -Rf data/cache/*",
+        "rm -Rf cache/*",
         "php vendor/bin/doctrine-module orm:generate-proxies",
-        "chmod -R 777 data/cache/DoctrineProxy",
-        "chmod -R 777 data/cache/Doctrine",
+        "chmod -R 777 cache/DoctrineProxy",
+        "chmod -R 777 cache/Doctrine",
         "php bin/ose migration $oldVersion $version",
     ]);
 

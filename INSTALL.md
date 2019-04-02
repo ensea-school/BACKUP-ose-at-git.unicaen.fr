@@ -293,7 +293,7 @@ OSE sera accessible sur votre machine, à l'adresse http://ose-test.localhost
 
 # Création de la base de données
 Créez une base de données avec un utilisateur pour OSE, un schéma, puis un tablespace vides.
-Un script d'initialisation vous est fourni (répertoire data/Déploiement/ose-ddl.sql). Il vous revient de le lancer pour peupler la base de données.
+Un script d'initialisation vous est fourni (répertoire bdd/install.sql). Il vous revient de le lancer pour peupler la base de données.
 
 Attention à bien veiller à ce que les accents soient correctement traités.
 Les caractères du fichier sont en **UTF8**.
@@ -354,7 +354,7 @@ OSE est maintenant installé.
 
 # Connecteurs
 Afin de pouvoir intégrer OSE à votre système d'information, 
-des [connecteurs](https://git.unicaen.fr/open-source/OSE/tree/master/data/D%C3%A9ploiement/Connecteurs) 
+des [connecteurs](https://git.unicaen.fr/open-source/OSE/tree/master/connecteurs) 
 vous sont fournis à titre d'exemple.
 Vous devrez en effet les adapter à vos besoins.
 

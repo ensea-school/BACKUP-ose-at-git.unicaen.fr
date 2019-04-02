@@ -57,7 +57,7 @@ abstract class AbstractController extends AbstractActionController
      */
     protected function pdf()
     {
-        $pdfPath = getcwd().'/data/cache/mpdf/';
+        $pdfPath = getcwd().'/cache/mpdf/';
         if (!file_exists($pdfPath)){
             mkdir($pdfPath);
         }

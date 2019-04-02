@@ -22,7 +22,7 @@ return [
                 'result_cache'     => 'filesystem',
                 'hydration_cache'  => 'array',
                 'generate_proxies' => AppConfig::get('bdd', 'generateProxies'),
-                'proxy_dir'        => 'data/cache/DoctrineProxy',
+                'proxy_dir'        => 'cache/DoctrineProxy',
             ],
         ],
     ],

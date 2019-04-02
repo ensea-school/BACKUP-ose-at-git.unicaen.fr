@@ -27,13 +27,24 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 * Interface d'administration des motifs de modification de service dû
 * Interface d'administration des domaines fonctionnels
 * Installation possible via Docker d'une version de développement ou de test
+* Changements d'organisation des fichiers du projet
+    * Les fichiers liés à la base de données sont maintenant placés dans /bdd. Un sous-répertoire update recense tous les
+    fichiers de mises à jour de base de données liés aux nouvelles versions
+    * Le fichier /bdd/install.sql est à injecter dans un schéma de base de données vide pour toute nouvelle installation de OSE.
+    * Le dossier data/cache s'appelle maintenant directement /cache
+    * Les connecteurs sont maintenant placés dans un dossier /connecteurs
+* Les procédures d'installation et de mise à jour sont disposibles également dans le Gitlab 
+(Cf. [`INSTALL.md`](INSTALL.md) et [`UPDATE.md`](UPDATE.md))
 
 ## Notes de mise à jour
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
-`data/Mises à jour/08.1.sql`
-Les mises à jour `data/Mises à jour/08.0.1.sql` et `data/Mises à jour/08.0.3.sql` sont inclues dans le précédent fichier.
+`bdd/update/08.1.sql`
+Les mises à jour `bdd/update/08.0.1.sql` et `bdd/update/08.0.3.sql` sont inclues dans le précédent fichier.
 Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
+* Attention : le dossier de cache est déplacé de /data/cache vers /cache. La procédure de mise à jour devrait lui attribuer
+automatiquement les accès nécessaires au bon fonctionnement de l'application. Vous pourrez supprimer manuellement l'ancien
+dossier /data/cache qui n'a plus d'utilité.
 * Attention : au niveau de votre configuration Apache, APPLICATION_ENV peut prendre désormais trois valeurs possibles :
 dev,test ou prod. Les anciennes valeurs development et production doivent donc être respectivement remplacées par dev et prod.
 

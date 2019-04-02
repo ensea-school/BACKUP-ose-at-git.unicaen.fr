@@ -66,7 +66,7 @@ class ModeleContratService extends AbstractEntityService
         }
 
         $document = new Document();
-        $document->setTmpDir(getcwd() . '/data/cache/');
+        $document->setTmpDir(getcwd() . '/cache/');
 
         if ($modele->hasFichier()) {
             $document->loadFromData(stream_get_contents($modele->getFichier(),-1,0));

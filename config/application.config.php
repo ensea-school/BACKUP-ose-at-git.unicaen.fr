@@ -99,7 +99,7 @@ class AppConfig
                     './module',
                     './vendor',
                 ],
-                'cache_dir'                => 'data/cache/',
+                'cache_dir'                => 'cache/',
                 'config_cache_enabled'     => ('prod' == $env),
                 'module_map_cache_enabled' => ('prod' == $env),
             ],

@@ -78,7 +78,7 @@ class EtatSortieService extends AbstractEntityService
     public function genererPdf(EtatSortie $etatSortie, array $filtres): Document
     {
         $document = new Document();
-        $document->setTmpDir(getcwd() . '/data/cache/');
+        $document->setTmpDir(getcwd() . '/cache/');
         $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
         $document->setPdfOutput(true);
         if ($etatSortie->hasFichier()) {

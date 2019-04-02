@@ -226,10 +226,10 @@ class Installateur
                         return true;
                     }
                 },
-                'Droit d\'écriture sur le dossier data/cache' => function () {
-                    $cacheDir = __DIR__ . '/../data/cache';
+                'Droit d\'écriture sur le dossier cache' => function () {
+                    $cacheDir = __DIR__ . '/../cache';
 
-                    return is_writable($cacheDir) ? true : 'Répertoire data/cache non accessible en écriture';
+                    return is_writable($cacheDir) ? true : 'Répertoire cache non accessible en écriture';
                 },
                 'Présence d\'UnoConv'                         => function () {
                     return substr(shell_exec('unoconv --version'), 0, 7) == 'unoconv' ? true : 'Commande "unoconv" introuvable';
@@ -360,8 +360,8 @@ class Installateur
     public function affTests()
     {
         /* Au besoin, on supprime le cache de onfiguration */
-        if (file_exists('data/cache/module-config-cache.php')){
-            unlink('data/cache/module-config-cache.php');
+        if (file_exists('cache/module-config-cache.php')){
+            unlink('cache/module-config-cache.php');
         }
 
         $tests = $this->makeTests();

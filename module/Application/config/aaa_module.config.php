@@ -51,7 +51,7 @@ $config = [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'directory' => getcwd().'/data/cache/Doctrine',
+                'directory' => getcwd().'/cache/Doctrine',
             ],
         ],
     ],

@@ -3,26 +3,30 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ...
 
-#OSE 8.1 (béta)
+# OSE 8.1 (béta)
 
 ## Corrections de bugs
 
 * Les avenants comportaient par défaut un champ "modifieComplete" qui n'était pas fourni par la vue.
 * Lors de la saisie d'un nouveau service d'enseignement, si la formation a déjà été sélectionnée :
-  * Les éléments sont triés correctement
-  * Les éléments sont affichés avec le semestre
+    * Les éléments sont triés correctement
+    * Les éléments sont affichés avec le semestre
 
-* Avenants au contrat travail corrigé : le projet et l'avenant validé ne présentaient pas les mêmes nombres d'heures dans le détail des services. 
+* Avenants au contrat travail corrigé : le projet et l'avenant validé ne présentaient pas les mêmes nombres d'heures 
+dans le détail des services. 
 * Procédures d'installation et de mise à jour intégrées directement au projet dans Gitlab.
 
 ## Nouveautés
 
-* Il est désormais possible de customiser et/ou de traduire de petites parties de l'application. Attention toutefois : le travail de mise en place du dispositif n'en est qu'au tout début.
+* Il est désormais possible de customiser et/ou de traduire de petites parties de l'application. 
+Attention toutefois : le travail de mise en place du dispositif n'en est qu'au tout début.
 * Possibilité de choisir sa formule dans les paramétrages généraux via une liste déroulante
 * Formule de calcul de l'université de Montpellier
+* Formule de calcul de l'université du Havre
 * Interface de test de la formule de calcul directmement intégrée dans OSE
 * Interface d'administration des motifs de modification de service dû
 * Interface d'administration des domaines fonctionnels
+* Installation possible via Docker d'une version de développement ou de test
 
 ## Notes de mise à jour
 
@@ -30,8 +34,11 @@ author: Laurent Lécluse - DSI - Unicaen
 `data/Mises à jour/08.1.sql`
 Les mises à jour `data/Mises à jour/08.0.1.sql` et `data/Mises à jour/08.0.3.sql` sont inclues dans le précédent fichier.
 Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
+* Attention : au niveau de votre configuration Apache, APPLICATION_ENV peut prendre désormais trois valeurs possibles :
+dev,test ou prod. Les anciennes valeurs development et production doivent donc être respectivement remplacées par dev et prod.
 
-#OSE 8.0.3
+
+# OSE 8.0.3
 
 ## Corrections de bugs
 
@@ -40,7 +47,7 @@ Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
 * Dans Gestion/Paiement/Mises en paiement, les mises en paiement fonctionnent à nouveau
 * La date et l'heure situées en bas de page de l'état de paiement sont maintenant bien à jour
 
-#OSE 8.0.2
+# OSE 8.0.2
 
 ## Corrections de bugs
 
@@ -48,7 +55,7 @@ Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
 * Dans la page des mises en paiement (menu gestion), si on a un rôle de périmètre composante, le bug n'affichant plus la structure est résolu
 
 
-#OSE 8.0.1
+# OSE 8.0.1
 
 ## Corrections de bugs
 
@@ -62,7 +69,7 @@ Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
 `data/Mises à jour/08.0.1.sql`
 
 
-#OSE 8.0
+# OSE 8.0
 
 ## Corrections de bugs
 
@@ -98,13 +105,13 @@ dans l'interface d'administration.
 
 * Mettez à jour vos paramètres généraux de configuration (Menu Administration/Paramétrages/Paramètres généraux).
 
-#OSE 7.0.6
+# OSE 7.0.6
 
 ## Corrections de bugs
 
 * Faille de sécurité qui permettait à un intervenant de visualiser les données d'autres intervenants en changeant le code dans l'URL corrigée.
 
-#OSE 7.0.5
+# OSE 7.0.5
 
 ## Corrections de bugs
 
@@ -117,7 +124,7 @@ dans l'interface d'administration.
 * Lors de la saisie de service référentiel, le système de sélection des composantes fonctionne de nouveau.
 * Sur la page  de validation du service réalisé d'un intervenant, le rappel des volumes horaires prévus et validés s'affiche correctement
 
-#OSE 7.0.4
+# OSE 7.0.4
 
 ## Nouveautés
 
@@ -131,24 +138,25 @@ dans l'interface d'administration.
 * Les plafonds bloquants ne peuvent plus être dépassés lors du report  du service prévisionnel de l'année dernière vers l'année actuelle
 * Les plafonds bloquants ne peuvent plus être dépassés lors de l'initialisation du réalisé à partir du prévisionnel
 * Lors de l'initialisation du service prévisionnel à partir de celui de l'année dernière, les heures portant sur des services précédemment historisés s'importent aussi dorénavant.
-* Lors de la génération de contrat, le bug "Uncaught TypeError: Return value of getVariables must be of the type array, null returned" qui se produisait si aucune variable n'était positionnée dans les en-têtes ou pieds de page a été résolu.
+* Lors de la génération de contrat, le bug "Uncaught TypeError: Return value of getVariables must be of the type array, null returned"
+ qui se produisait si aucune variable n'était positionnée dans les en-têtes ou pieds de page a été résolu.
 * L'ergonomie du formulaire d'édition des modèles de contrats a été revue afin de mieux vous guider
 * Faille de sécurité corrigée : le sudo n'est plus obligatoire pour utiliser unoconv
 
-#OSE 7.0.3
+# OSE 7.0.3
 
 ## Corrections de bugs
 
 * Le modèle de contrat est désormais téléchargeable depuis l'interface d'administration.
 * Un bug affectant l'affichage de la page "Calcul HETD" dans certains cas est résolu.
 
-#OSE 7.0.2
+# OSE 7.0.2
 
 ## Corrections de bugs
 
 * En mode calendaire, le formulaire de saisie de service réalisé ne s'affichait plus.
 
-#OSE 7.0.1
+# OSE 7.0.1
 
 ## Corrections de bugs
 
@@ -159,7 +167,7 @@ dans l'interface d'administration.
 
 Pas de BDD à mettre à jour, juste le code de l'application en lancant la commande /bin/ose update.
 
-#OSE 7.0
+# OSE 7.0
 
 ## Corrections de bugs
 
@@ -253,7 +261,7 @@ Pour plus d'informations, merci de vous rendre à la page "Procédure d'installa
 Sans cela, les fonctionnalités associées ne seront pas accessibles.
 
 
-#OSE 6.3.2
+# OSE 6.3.2
 
 ## Corrections de bugs
 
@@ -287,7 +295,7 @@ l'utilisateur, ce qui n'était pas le cas avant où on pouvais se reconnecter sa
 * Une DeployKey générique est intégrée dans le script d'installation de OSE. Il n'est maintenant plus nécessaire de 
 déployer une clé nominative sur un serveur.
 
-#OSE 6.3.1
+# OSE 6.3.1
 
 ## Corrections de bugs
 
@@ -314,7 +322,7 @@ indiquée pour la 6.3 (ci-dessous).
 N'oubliez pas d'exécuter les requêtes SQL de mise à jour (`data/Mises à jour/06.3.sql`)!
 
 
-#OSE 6.3 
+# OSE 6.3 
 
 ## Corrections de bugs
 

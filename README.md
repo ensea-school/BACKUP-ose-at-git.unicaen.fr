@@ -1,5 +1,7 @@
 # Application OSE
 
+![Logo OSE](doc/logo.png)
+
 Organisation des Services d'Enseignement
 
 ## Liste des changements

@@ -55,7 +55,14 @@ switch ($action) {
 function test(Console $c, OseAdmin $oa)
 {
     $osedir = dirname(__DIR__);
-    var_dump($osedir);
+
+    try {
+        $e = $c->exec('composer', false, true);
+        var_dump('bien');
+    }catch(\Exception $e){
+        var_dump('pas trouvé');
+    }
+
 }
 
 
@@ -104,14 +111,26 @@ function install(Console $c, OseAdmin $oa, $fromMaster=true)
         ]);
     }
 
-    // Récupération de Composer
-    $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
-    $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
+    try {
+        $e = $c->exec('composer', false, true);
+        $composerExists = true;
+    }catch(\Exception $e){
+        $composerExists = false;
+    }
 
-    // Récupération des dépendances
-    $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
-    $c->passthru("cd $osedir;php composer.phar install");
+    if ($composerExists){
+        // Récupération des dépendances
+        $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
+        $c->passthru("cd $osedir;composer install");
+    }else{
+        // Récupération de Composer
+        $c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
+        $c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
 
+        // Récupération des dépendances
+        $c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
+        $c->passthru("cd $osedir;php composer.phar install");
+    }
 
     // Mise à jour des liens vers les répertoires publics des dépendances
     $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
@@ -134,6 +153,7 @@ function install(Console $c, OseAdmin $oa, $fromMaster=true)
         "cd $osedir",
         "php vendor/bin/doctrine-module orm:generate-proxies",
         "chmod -R 777 data/cache/DoctrineProxy",
+        "chmod -R 777 data/cache/Doctrine",
     ]);
 
     // Mise en place des tâches CRON ??
@@ -199,6 +219,7 @@ function update(Console $c, OseAdmin $oa)
         "rm -Rf data/cache/*",
         "php vendor/bin/doctrine-module orm:generate-proxies",
         "chmod -R 777 data/cache/DoctrineProxy",
+        "chmod -R 777 data/cache/Doctrine",
         "php bin/ose migration $oldVersion $version",
     ]);
 
@@ -814,11 +835,15 @@ class Console
 
 
 
-    public function gestExitCode($code)
+    public function gestExitCode($code, bool $sendException=false)
     {
         if (0 == $code) return;
 
-        $this->printDie("Une erreur ($code) est survenue. Le script est stoppé");
+        if ($sendException){
+            throw new \Exception("Une erreur ($code) est survenue. Le script est stoppé");
+        }else{
+            $this->printDie("Une erreur ($code) est survenue. Le script est stoppé");
+        }
     }
 
 
@@ -886,7 +911,7 @@ class Console
 
 
 
-    public function exec($command, $autoDisplay = true)
+    public function exec($command, bool $autoDisplay = true, bool $sendException=false)
     {
         if (is_array($command)) {
             $command = implode(';', $command);
@@ -896,7 +921,7 @@ class Console
         if ($autoDisplay) {
             echo implode("\n", $output) . "\n";
         }
-        $this->gestExitCode($return);
+        $this->gestExitCode($return, $sendException);
 
         return $output;
     }

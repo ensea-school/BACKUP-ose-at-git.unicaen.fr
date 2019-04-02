@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9457e0ad1717f08573ba3f63e2289cf",
+    "content-hash": "854f95e5f3f164b9b08537638ec944a9",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1413,16 +1413,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.21",
+            "version": "v3.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "26d7f23b9bd0b93bee5583e4d6ca5cb1ab31b186"
+                "reference": "8d8a9e877b3fcdc50ddecf8dcea146059753f782"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/26d7f23b9bd0b93bee5583e4d6ca5cb1ab31b186",
-                "reference": "26d7f23b9bd0b93bee5583e4d6ca5cb1ab31b186",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/8d8a9e877b3fcdc50ddecf8dcea146059753f782",
+                "reference": "8d8a9e877b3fcdc50ddecf8dcea146059753f782",
                 "shasum": ""
             },
             "require": {
@@ -1465,20 +1465,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-01T13:45:19+00:00"
+            "time": "2019-02-24T15:45:11+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19"
+                "reference": "82ebae02209c21113908c229e9883c419720738a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
-                "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/82ebae02209c21113908c229e9883c419720738a",
+                "reference": "82ebae02209c21113908c229e9883c419720738a",
                 "shasum": ""
             },
             "require": {
@@ -1490,7 +1490,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -1523,20 +1523,20 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2019-02-06T07:57:58+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
                 "shasum": ""
             },
             "require": {
@@ -1548,7 +1548,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -1582,7 +1582,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-09-21T13:07:52+00:00"
+            "time": "2019-02-06T07:57:58+00:00"
         },
         {
             "name": "symfony/process",
@@ -1686,11 +1686,11 @@
         },
         {
             "name": "unicaen/auth",
-            "version": "1.3.4",
+            "version": "1.3.6",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "bf2c9a9592c5e855e6612501abbe0ed3b4cfdc7f"
+                "reference": "f2e2e3d0e7ca1be1f6d1b409ade22020b47ec324"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1713,15 +1713,15 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2019-01-30T10:43:31+00:00"
+            "time": "2019-02-07T09:58:01+00:00"
         },
         {
             "name": "unicaen/code",
-            "version": "1.1.6",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "607fe27c60c3c90a6c953cf2b16bfdbdc8b54d17"
+                "reference": "7c3d36ad949ece224611ef0d61bbb841cca3c06d"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -1739,7 +1739,7 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2018-04-12T15:24:29+00:00"
+            "time": "2019-02-08T08:38:51+00:00"
         },
         {
             "name": "unicaen/import",
@@ -1791,11 +1791,11 @@
         },
         {
             "name": "unicaen/oracle",
-            "version": "1.2.4",
+            "version": "1.2.8",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/oracle.git",
-                "reference": "52ae94ec5f3b4bb9f3af38676e076491139edecc"
+                "reference": "026e0ef03dc0326ec1e563774852891c894fa03f"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -1815,7 +1815,7 @@
                 ]
             },
             "description": "Bibliothèque utile lorsqu'on utilise un base de données Oracle",
-            "time": "2019-01-09T13:47:48+00:00"
+            "time": "2019-03-10T20:11:52+00:00"
         },
         {
             "name": "unicaen/tbl",

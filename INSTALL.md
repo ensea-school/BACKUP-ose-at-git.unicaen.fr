@@ -255,11 +255,15 @@ L'image OSE repose sur UnicaenImage, qu'il faut donc installer préalablement :
 ```bash
 git clone https://git.unicaen.fr/open-source/docker/unicaen-image
 cd unicaen-image
+
+HTTP_PROXY=http://proxy.unicaen.fr:3128 ; \
+PHP_VERSION=7.0 ; \
 docker build \
 --rm \
---build-arg HTTP_PROXY=http://proxy.unicaen.fr:3128 \ # Votre proxy si nécessaire
--f Dockerfile-7.0 \
--t unicaen-image-php7.0-apache \
+--build-arg PHP_VERSION=${PHP_VERSION} \
+--build-arg HTTP_PROXY=${HTTP_PROXY} \
+-f Dockerfile \
+-t unicaen-dev-php${PHP_VERSION}-apache \
 .
 ```
 

@@ -173,6 +173,10 @@ class DossierController extends AbstractController
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $validation = $this->getServiceDossier()->getValidation($intervenant);
+        if ($validation){
+            throw new \Exception('Ce dossier a déjà été validé par '.$validation->getHistoCreateur().' le '.$validation->getHistoCreation()->format(Constants::DATE_FORMAT));
+        }
         try {
             $this->getServiceValidation()->validerDossier($dossier);
             $this->updateTableauxBord($intervenant, true);

@@ -15,6 +15,8 @@ author: Laurent Lécluse - DSI - Unicaen
 * Avenants au contrat travail corrigé : le projet et l'avenant validé ne présentaient pas les mêmes nombres d'heures 
 dans le détail des services. 
 * Procédures d'installation et de mise à jour intégrées directement au projet dans Gitlab.
+* Certains dossiers intervenants pouvaient être validés plusieurs fois. 
+Un mécanisme contrôle désormais que le dossier n'est pas déjà validé avant de valider à nouveau.
 
 ## Nouveautés
 

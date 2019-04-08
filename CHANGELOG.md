@@ -38,6 +38,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
     * Les connecteurs sont maintenant placés dans un dossier /connecteurs
 * Les procédures d'installation et de mise à jour sont disposibles également dans le Gitlab 
 (Cf. [`INSTALL.md`](INSTALL.md) et [`UPDATE.md`](UPDATE.md))
+* Nouveau privilège permettant de modifier des services après côture, même en cas de mise en paiement (à réserver à des gestionnaires avertis des conséquences sur les paiements)
 
 ## Notes de mise à jour
 

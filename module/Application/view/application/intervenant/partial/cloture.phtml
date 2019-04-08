@@ -14,7 +14,8 @@ $isCloture = $cloture->getId() !== null;
 
 $canCloturer   = $this->isAllowed($cloture, Privileges::CLOTURE_CLOTURE);
 $canDecloturer = $this->isAllowed($cloture, Privileges::CLOTURE_REOUVERTURE);
-$canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_EDITION_SERVICES));
+$canEditAfter  = $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_EDITION_SERVICES))
+    || $this->isAllowed(Privileges::getResourceId(Privileges::CLOTURE_EDITION_SERVICES_AVEC_MEP));
 
 ?>
 

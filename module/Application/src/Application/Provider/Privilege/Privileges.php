@@ -50,6 +50,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const CHARGENS_VISUALISATION                              = 'chargens-visualisation';
     const CLOTURE_CLOTURE                                     = 'cloture-cloture';
     const CLOTURE_EDITION_SERVICES                            = 'cloture-edition-services';
+    const CLOTURE_EDITION_SERVICES_AVEC_MEP                   = 'cloture-edition-services-avec-mep';
     const CLOTURE_REOUVERTURE                                 = 'cloture-reouverture';
     const CONTRAT_CONTRAT_GENERATION                          = 'contrat-contrat-generation';
     const CONTRAT_CREATION                                    = 'contrat-creation';

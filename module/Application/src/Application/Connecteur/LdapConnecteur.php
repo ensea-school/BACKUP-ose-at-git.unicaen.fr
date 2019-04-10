@@ -159,6 +159,8 @@ class LdapConnecteur extends AbstractService
      */
     public function getUtilisateur($login, $autoInsert = true)
     {
+        if (!\AppConfig::get('ldap', 'actif', true)) return null;
+
         if ($user = $this->mapperUser->findByUsername($login)) return $user; // si on le trouve alors c'est OK
 
         if ($people = $this->mapperPeople->findOneByUsername($login)) {

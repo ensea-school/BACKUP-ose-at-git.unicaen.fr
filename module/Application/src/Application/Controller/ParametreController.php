@@ -12,7 +12,6 @@ use Application\Service\Traits\EtablissementServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Zend\View\Model\JsonModel;
 
 
@@ -26,7 +25,6 @@ class ParametreController extends AbstractController
     use ParametresFormAwareTrait;
     use ParametresServiceAwareTrait;
     use EtablissementServiceAwareTrait;
-    use UtilisateurServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use TypeIntervenantServiceAwareTrait;
     use TypeVolumeHoraireServiceAwareTrait;
@@ -149,8 +147,6 @@ class ParametreController extends AbstractController
 
             if ($parametre == 'etablissement') {
                 $value = $this->getServiceEtablissement()->get($value);
-            } elseif ($parametre == 'directeur_ressources_humaines_id') {
-                $value = $this->getServiceUtilisateur()->getByUsername($value);
             }
 
             if ($form->has($parametre)) {

@@ -76,15 +76,6 @@ class ParametresForm extends AbstractForm
             ],
         ]);
 
-        $drh = new SearchAndSelect('directeur_ressources_humaines_id');
-        $drh ->setRequired(true)
-            ->setSelectionRequired(true)
-            ->setAutocompleteSource(
-                $this->getUrl('recherche', ['action' => 'utilisateurFind'])
-            )
-            ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
-        $this->add($drh);
-
         $this->add([
             'name'    => 'discipline_codes_corresp_1_libelle',
             'type'    => 'Text',

@@ -45,20 +45,6 @@ class UtilisateurService extends AbstractEntityService
 
 
     /**
-     * Retourne le directeur des ressources humaines, s'il est défini.
-     *
-     * @return Utilisateur
-     */
-    public function getDrh()
-    {
-        $drh = $this->getServiceParametres()->get('directeur_ressources_humaines_id');
-
-        return $this->getByUsername($drh);
-    }
-
-
-
-    /**
      * Retourne l'utilisateur OSE
      *
      * @return Utilisateur

@@ -37,7 +37,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
     * Le dossier data/cache s'appelle maintenant directement /cache
     * Les connecteurs sont maintenant placés dans un dossier /connecteurs
 * Les procédures d'installation et de mise à jour sont disposibles également dans le Gitlab 
-(Cf. [`INSTALL.md`](INSTALL.md) et [`UPDATE.md`](xUPDATE.md))
+(Cf. [`Procédure d'installation`](INSTALL.md) et [`Procédure de mise à jour`](UPDATE.md))
 * Nouveau privilège permettant de modifier des services après côture, même en cas de mise en paiement (à réserver à des gestionnaires avertis des conséquences sur les paiements)
 * Dans les paramètres généraux, il n'est plus nécessaire de renseigner qui est le DRH de l'établissement
 * La recherche d'intervenants saisis directement dans OSE fonctionne maintenant même sans avoir de vue source Intervenant
@@ -46,7 +46,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `bdd/update/08.1.sql`
-Les mises à jour `bdd/update/08.0.1.sql` et `bdd/update/08.0.3.sql` sont inclues dans le précédent fichier.
+Les mises à jour <`bdd/update/08.0.1.sql`> et <`bdd/update/08.0.3.sql`> sont inclues dans le précédent fichier.
 Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
 * Attention : le dossier de cache est déplacé de /data/cache vers /cache. La procédure de mise à jour devrait lui attribuer
 automatiquement les accès nécessaires au bon fonctionnement de l'application. Vous pourrez supprimer manuellement l'ancien

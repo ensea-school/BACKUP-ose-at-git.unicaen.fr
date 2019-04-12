@@ -33,7 +33,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 * Changements d'organisation des fichiers du projet
     * Les fichiers liés à la base de données sont maintenant placés dans /bdd. Un sous-répertoire update recense tous les
     fichiers de mises à jour de base de données liés aux nouvelles versions
-    * Le fichier /bdd/install.sql est à injecter dans un schéma de base de données vide pour toute nouvelle installation de OSE.
+    * Le fichier [bdd/install.sql](bdd/install.sql) est à injecter dans un schéma de base de données vide pour toute nouvelle installation de OSE.
     * Le dossier data/cache s'appelle maintenant directement /cache
     * Les connecteurs sont maintenant placés dans un dossier /connecteurs
 * Les procédures d'installation et de mise à jour sont disposibles également dans le Gitlab 

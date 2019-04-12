@@ -37,7 +37,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
     * Le dossier data/cache s'appelle maintenant directement /cache
     * Les connecteurs sont maintenant placés dans un dossier /connecteurs
 * Les procédures d'installation et de mise à jour sont disposibles également dans le Gitlab 
-(Cf. [`INSTALL.md`](INSTALL.md) et [`UPDATE.md`](UPDATE.md))
+(Cf. [`INSTALL.md`](INSTALL.md) et [`UPDATE.md`](xUPDATE.md))
 * Nouveau privilège permettant de modifier des services après côture, même en cas de mise en paiement (à réserver à des gestionnaires avertis des conséquences sur les paiements)
 * Dans les paramètres généraux, il n'est plus nécessaire de renseigner qui est le DRH de l'établissement
 * La recherche d'intervenants saisis directement dans OSE fonctionne maintenant même sans avoir de vue source Intervenant

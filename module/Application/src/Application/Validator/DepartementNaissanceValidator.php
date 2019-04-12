@@ -2,11 +2,13 @@
 
 namespace Application\Validator;
 
-use LogicException;
+use Application\Service\Traits\PaysServiceAwareTrait;
 use Zend\Validator\AbstractValidator;
 
 class DepartementNaissanceValidator extends AbstractValidator
 {
+    use PaysServiceAwareTrait;
+
     const MSG_NOT_REQUIRED = 'msgNotRequired';
     const MSG_REQUIRED     = 'msgRequired';
     
@@ -20,12 +22,8 @@ class DepartementNaissanceValidator extends AbstractValidator
     public function __construct($options = null)
     {
         parent::__construct($options);
-        
-        if (!isset($options['france_id'])) {
-            throw new LogicException("Paramètre 'france_id' introuvable.");
-        }
-        
-        $this->franceId = $options['france_id'];
+
+        $this->franceId = $this->getServicePays()->getIdByLibelle($this->getServicePays()::PAYS_FRANCE);
     }
     
     public function isValid($value, $context = null)

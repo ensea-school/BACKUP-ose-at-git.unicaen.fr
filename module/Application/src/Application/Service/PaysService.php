@@ -5,12 +5,17 @@ namespace Application\Service;
 use Application\Entity\Db\Pays;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use UnicaenApp\Util;
 
 /**
  * Description of Pays
  */
 class PaysService extends AbstractEntityService
 {
+    CONST PAYS_FRANCE = 'france ';
+    CONST PAYS_ALGERIE = 'algerie';
+
+
     use ParametresServiceAwareTrait;
 
 
@@ -40,13 +45,19 @@ class PaysService extends AbstractEntityService
 
 
     /**
-     * @return Pays
+     * @return int|null
      */
-    public function getFrance(): Pays
+    public function getIdByLibelle(string $libelle)
     {
-        $franceId = $this->getServiceParametres()->get('pays_france');
+        $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle_court) = :pays';
 
-        return $this->get($franceId);
+        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
+
+        if (isset($res[0]['ID'])){
+            return (int)$res[0]['ID'];
+        }
+
+        return null;
     }
 
 
@@ -58,7 +69,7 @@ class PaysService extends AbstractEntityService
      */
     public function isFrance(Pays $pays): bool
     {
-        return $pays == $this->getFrance();
+        return $pays->getId() == $this->getIdByLibelle(self::PAYS_FRANCE);
     }
 
 

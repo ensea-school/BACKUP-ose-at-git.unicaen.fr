@@ -7,10 +7,9 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-$command = 'unoconv -f pdf -o /app/test.pdf /app/test.odt';
-//$command = 'systemctl list-units';
-//$command = 'ls';
+$sp = $sl->get(\Application\Service\PaysService::class);
 
-exec($command, $output, $return);
-var_dump($output);
-var_dump($return);
+
+$france = $sp->getIdByLibelle('Algérie');
+
+var_dump($france);

@@ -18,6 +18,7 @@ dans le détail des services.
 * Procédures d'installation et de mise à jour intégrées directement au projet dans Gitlab.
 * Certains dossiers intervenants pouvaient être validés plusieurs fois. 
 Un mécanisme contrôle désormais que le dossier n'est pas déjà validé avant de valider à nouveau.
+* Le contrôle de cohérence des données personnelles prend maintenant en compte le cas des français nés dans un ex-département français d'Algérie.  
 
 ## Nouveautés
 

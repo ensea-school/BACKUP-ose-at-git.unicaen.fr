@@ -3,8 +3,6 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Dossier as Dossier;
-use Application\Entity\Db\Pays as PaysEntity;
-use Application\Entity\Db\Pays;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractFieldset;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
@@ -370,7 +368,7 @@ class DossierFieldset extends AbstractFieldset
             'departementNaissance' => [
                 'required'   => $departementRequired,
                 'validators' => [
-                    new DepartementNaissanceValidator(['france_id' => self::$franceId]),
+                    new DepartementNaissanceValidator(),
                 ],
             ],
             'villeNaissance'       => [

@@ -4,6 +4,7 @@ namespace Application\Validator;
 
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
+use Application\Service\Traits\PaysServiceAwareTrait;
 use LogicException;
 use UnicaenApp\Validator\NumeroINSEE;
 
@@ -21,12 +22,21 @@ class NumeroINSEEValidator extends NumeroINSEE
 {
     use DepartementServiceAwareTrait;
     use CiviliteServiceAwareTrait;
+    use PaysServiceAwareTrait;
 
     const MSG_CIVILITE = 'msgCivilite';
     const MSG_ANNEE    = 'msgAnnee';
     const MSG_MOIS     = 'msgMois';
     const MSG_DEPT     = 'msgDepartement';
 
+    /**
+     * @var ?int
+     */
+    protected $algerieId;
+
+    /**
+     * @var ?int
+     */
     protected $franceId;
 
 
@@ -40,11 +50,8 @@ class NumeroINSEEValidator extends NumeroINSEE
             self::MSG_DEPT     => "Le numéro n'est pas cohérent avec le pays et l'éventuel département de naissance saisi",
         ]);
 
-        if (!isset($options['france_id'])) {
-            throw new LogicException("Paramètre 'france_id' introuvable.");
-        }
-
-        $this->franceId = (int)$options['france_id'];
+        $this->franceId  = $this->getServicePays()->getIdByLibelle('FRANCE');
+        $this->algerieId = $this->getServicePays()->getIdByLibelle('ALGERIE');
 
         if (!isset($options['serviceDepartement'])) {
             throw new LogicException("Service Département non fourni.");
@@ -167,12 +174,19 @@ class NumeroINSEEValidator extends NumeroINSEE
             return true;
         }
 
-        $paysNaissance = (int)$context['paysNaissance'];
-        $estNeEnFrance = $paysNaissance === $this->franceId;
+        $paysNaissance  = (int)$context['paysNaissance'];
+        $estNeEnFrance  = $paysNaissance === $this->franceId;
+        $estNeEnAlgerie = $paysNaissance === $this->algerieId;
 
         if ($estNeEnFrance) {
             // on doit avoir un code département français valide
             if (!$this->isValidDepartementFrance($value, $context)) {
+                return false;
+            }
+        }
+        if ($estNeEnAlgerie) {
+            // on doit avoir un code département français valide
+            if (!$this->isValidDepartementAlgerie($value, $context)) {
                 return false;
             }
         } else {
@@ -272,6 +286,22 @@ class NumeroINSEEValidator extends NumeroINSEE
             $d = (int)$departement;
             if (970 <= $d && $d <= 989) {
                 return $departement;
+            }
+        }
+
+        return null;
+    }
+
+
+
+    private function isValidDepartementAlgerie($value, $context)
+    {
+        $departement = substr($value, 5, 2);
+
+        if (is_numeric($departement)) {
+            $d = (int)$departement;
+            if (in_array($d, [91,92,93,94,99])) {
+                return '0' . (string)$departement;
             }
         }
 

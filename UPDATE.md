@@ -31,7 +31,7 @@ exécutez les requêtes dans SQL Developer pour mettre à jour la base de donné
 
 ## Tests
 
-[La liste des changements](https://ose.unicaen.fr/deploiement/changements.html) 
+[La liste des changements](CHANGELOG.md) 
 recense les changements apportés par les différentes versions de l'application.
 Vous êtes invité à tester prioritairement ces changements.
 

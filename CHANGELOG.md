@@ -46,7 +46,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 
 * Modifiez la structure de votre base de données en exécutant dans SQL developer le script de mise à jour suivant :
 `bdd/update/08.1.sql`
-Les mises à jour [`bdd/update/08.0.1.sql`](bdd/update/08.0.1.sql)> et <`bdd/update/08.0.3.sql`> sont inclues dans le précédent fichier.
+Les mises à jour [`bdd/update/08.0.1.sql`](bdd/update/08.0.1.sql) et [`bdd/update/08.0.3.sql`](bdd/update/08.0.3.sql) sont inclues dans le précédent fichier.
 Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
 * Attention : le dossier de cache est déplacé de /data/cache vers /cache. La procédure de mise à jour devrait lui attribuer
 automatiquement les accès nécessaires au bon fonctionnement de l'application. Vous pourrez supprimer manuellement l'ancien

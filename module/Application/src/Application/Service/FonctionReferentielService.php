@@ -33,7 +33,7 @@ class FonctionReferentielService extends AbstractEntityService
 
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery();
+        list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.libelleLong");
 

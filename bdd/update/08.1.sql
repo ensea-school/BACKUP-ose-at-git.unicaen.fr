@@ -5823,3 +5823,7 @@ ALTER TABLE fonction_referentiel
   ADD CONSTRAINT fr_parent_fk FOREIGN KEY ( parent_id )
     REFERENCES fonction_referentiel ( id )
       NOT DEFERRABLE;
+
+INSERT INTO plafond (ID, CODE, LIBELLE) VALUES (
+  plafond_id_seq.nextval, 'ref-par-fonction-mere', 'Heures max. de référentiel par intervenant et par type de fonction référentielle'
+);

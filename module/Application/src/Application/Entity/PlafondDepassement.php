@@ -135,7 +135,7 @@ class PlafondDepassement
      */
     public function __toString()
     {
-        $errStr = 'Le plafond suivant %s a été dépassé. Il est en effet de %s heures pour %s heures saisies.';
+        $errStr = 'Le plafond "%s" a été dépassé. Il est en effet de %s heures pour %s heures saisies.';
 
         return sprintf(
             $errStr,

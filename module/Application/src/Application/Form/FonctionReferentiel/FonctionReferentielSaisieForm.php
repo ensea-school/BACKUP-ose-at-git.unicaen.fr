@@ -37,8 +37,8 @@ class FonctionReferentielSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'parent',
             'options'    => [
-                'label' => 'Fonction parente',
-                'empty_option'  => "Pas de fonction parente",
+                'label' => 'Type de fonction',
+                'empty_option'  => "Pas de type de fonction",
                 'value_options' => Util::collectionAsOptions($this->getFonctionsReferentiellesParentes()),
             ],
             'attributes' => [

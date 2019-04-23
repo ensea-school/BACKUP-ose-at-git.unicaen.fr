@@ -13,7 +13,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
 ?>
     <h1 class="page-header">Référentiel fonctions</h1>
 
-    <table class="table table-bordered table-sort">
+    <table class="table table-bordered table-sort" data-sort="false">
         <thead>
         <th>Code</th>
         <th>Libelle</th>
@@ -28,7 +28,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::REFERENTIEL_AD
         <tbody>
         <?php foreach ($fonctionsReferentiels as $fr): ?>
             <tr>
-                <td><?= $fr->getCode() ?>
+                <td data-order="<?= ($fr->getParent() ? $fr->getParent()->getCode().'.' : '').$fr->getCode() ?>" style="<?= $fr->getParent() ? 'padding-left: 5em' : '' ?>"><?= $fr->getCode() ?>
                 </td>
                 <td><?= $fr->getLibelleLong() ?></td>
                 <td><?= $fr->getLibelleCourt() ?></td>

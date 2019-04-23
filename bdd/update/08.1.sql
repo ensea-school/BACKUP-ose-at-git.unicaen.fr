@@ -5815,3 +5815,148 @@ ALTER TABLE SYNC_LOG ADD (NMESSAGE VARCHAR2(4000) );
 UPDATE SYNC_LOG SET NMESSAGE = MESSAGE;
 ALTER TABLE SYNC_LOG DROP COLUMN MESSAGE;
 ALTER TABLE SYNC_LOG RENAME COLUMN NMESSAGE TO MESSAGE;
+
+ALTER TABLE fonction_referentiel ADD (
+  parent_id NUMBER(*, 0)
+  );
+ALTER TABLE fonction_referentiel
+  ADD CONSTRAINT fr_parent_fk FOREIGN KEY ( parent_id )
+    REFERENCES fonction_referentiel ( id )
+      NOT DEFERRABLE;
+
+INSERT INTO plafond (ID, CODE, LIBELLE) VALUES (
+  plafond_id_seq.nextval, 'ref-par-fonction-mere', 'Heures max. de référentiel par intervenant et par type de fonction référentielle'
+);
+
+INSERT INTO indicateur (
+  ID,
+  TYPE,
+  ORDRE,
+  ENABLED,
+  NUMERO,
+  LIBELLE_SINGULIER,
+  LIBELLE_PLURIEL,
+  ROUTE,
+  TEM_DISTINCT,
+  TEM_NOT_STRUCTURE,
+  MESSAGE
+) VALUES (
+  indicateur_id_seq.nextval,
+  'Enseignements et référentiel <em>Permanents</em>',
+  1211,
+  1,
+  1211,
+  '%s intervenant a des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour le type de fonction correspondant',
+  '%s intervenants ont des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour le type de fonction correspondant',
+  'intervenant/services',
+  1,
+  0,
+  NULL
+);
+
+INSERT INTO indicateur (
+  ID,
+  TYPE,
+  ORDRE,
+  ENABLED,
+  NUMERO,
+  LIBELLE_SINGULIER,
+  LIBELLE_PLURIEL,
+  ROUTE,
+  TEM_DISTINCT,
+  TEM_NOT_STRUCTURE,
+  MESSAGE
+) VALUES (
+  indicateur_id_seq.nextval,
+  'Enseignements et référentiel <em>Permanents</em>',
+  1221,
+  1,
+  1221,
+  '%s intervenant a des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour le type de fonction correspondant',
+  '%s intervenants ont des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour le type de fonction correspondant',
+  'intervenant/services',
+  1,
+  0,
+  NULL
+);
+
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1211 AS
+SELECT
+  i.id id,
+  i.annee_id,
+  i.id intervenant_id,
+  i.structure_id,
+  AVG(t.plafond)  plafond,
+  AVG(t.heures)   heures
+FROM
+  (
+    SELECT
+      vhr.type_volume_horaire_id        type_volume_horaire_id,
+      sr.intervenant_id                 intervenant_id,
+      fr.plafond                        plafond,
+      fr.id                             fr_id,
+      SUM(vhr.heures)                   heures
+    FROM
+      service_referentiel       sr
+        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code= 'PREVU'
+    WHERE
+        sr.histo_destruction IS NULL
+    GROUP BY
+      vhr.type_volume_horaire_id,
+      sr.intervenant_id,
+      fr.plafond,
+      fr.id
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond
+  /*i.id*/
+GROUP BY
+  t.type_volume_horaire_id,
+  i.annee_id,
+  i.id,
+  i.structure_id;
+
+
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1221 AS
+SELECT
+  i.id id,
+  i.annee_id,
+  i.id intervenant_id,
+  i.structure_id,
+  AVG(t.plafond)  plafond,
+  AVG(t.heures)   heures
+FROM
+  (
+    SELECT
+      vhr.type_volume_horaire_id        type_volume_horaire_id,
+      sr.intervenant_id                 intervenant_id,
+      fr.plafond                        plafond,
+      fr.id                             fr_id,
+      SUM(vhr.heures)                   heures
+    FROM
+      service_referentiel       sr
+        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code= 'REALISE'
+    WHERE
+        sr.histo_destruction IS NULL
+    GROUP BY
+      vhr.type_volume_horaire_id,
+      sr.intervenant_id,
+      fr.plafond,
+      fr.id
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond
+  /*i.id*/
+GROUP BY
+  t.type_volume_horaire_id,
+  i.annee_id,
+  i.id,
+  i.structure_id;

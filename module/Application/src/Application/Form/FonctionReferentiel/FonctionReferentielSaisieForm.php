@@ -2,9 +2,12 @@
 
 namespace Application\Form\FonctionReferentiel;
 
+use Application\Entity\Db\FonctionReferentiel;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
+use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use UnicaenApp\Util;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -16,6 +19,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
  */
 class FonctionReferentielSaisieForm extends AbstractForm
 {
+    use FonctionReferentielServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
     use ContextServiceAwareTrait;
@@ -29,6 +33,20 @@ class FonctionReferentielSaisieForm extends AbstractForm
         $this->setHydrator($hydrator);
 
         $this->setAttribute('action', $this->getCurrentUrl());
+
+        $this->add([
+            'name'       => 'parent',
+            'options'    => [
+                'label' => 'Type de fonction',
+                'empty_option'  => "Pas de type de fonction",
+                'value_options' => Util::collectionAsOptions($this->getFonctionsReferentiellesParentes()),
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+            'type'       => 'Select',
+        ]);
         $this->add([
             'name'       => 'code',
             'options'    => [
@@ -121,6 +139,18 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
 
 
+    /**
+     * @return FonctionReferentiel[]
+     */
+    protected function getFonctionsReferentiellesParentes()
+    {
+        $qb = $this->getServiceFonctionReferentiel()->finderByProperty('parent', null);
+
+        return $this->getServiceFonctionReferentiel()->getList($qb);
+    }
+
+
+
     public function getStructures()
     {
         $role             = $this->getServiceContext()->getSelectedIdentityRole();
@@ -146,6 +176,9 @@ class FonctionReferentielSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
+            'parent'                => [
+                'required' => false,
+            ],
             'code'                => [
                 'required' => false,
             ],
@@ -175,6 +208,7 @@ class FonctionReferentielSaisieForm extends AbstractForm
 
 class FonctionReferentielHydrator implements HydratorInterface
 {
+    use FonctionReferentielServiceAwareTrait;
     use DomaineFonctionnelServiceAwareTrait;
     use StructureServiceAwareTrait;
 
@@ -191,6 +225,7 @@ class FonctionReferentielHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $object->setCode($data['code']);
+        $object->setParent($this->getServiceFonctionReferentiel()->get(isset($data['parent']) ? $data['parent'] : null));
         $object->setLibelleCourt($data['libelle-court']);
         $object->setLibelleLong($data['libelle-long']);
         if (array_key_exists('domaine-fonctionnel', $data)) {
@@ -220,6 +255,7 @@ class FonctionReferentielHydrator implements HydratorInterface
     {
         $data = [
             'id'                  => $object->getId(),
+            'parent'              => $object->getParent() ? $object->getParent()->getId() : null,
             'code'                => $object->getCode(),
             'libelle-court'       => $object->getLibelleCourt(),
             'libelle-long'        => $object->getLibelleLong(),

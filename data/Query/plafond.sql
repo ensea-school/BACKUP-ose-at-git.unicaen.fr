@@ -86,6 +86,46 @@ GROUP BY
 
 UNION
 
+-- Heures max. de référentiel par intervenant et par fonction référentielle mère
+SELECT
+  'ref-par-fonction-mere' plafond_code,
+  t.type_volume_horaire_id,
+  i.annee_id,
+  t.intervenant_id,
+  AVG(t.plafond)  plafond,
+  AVG(t.heures)   heures
+FROM
+  (
+    SELECT
+      vhr.type_volume_horaire_id        type_volume_horaire_id,
+      sr.intervenant_id                 intervenant_id,
+      fr.plafond                        plafond,
+      fr.id                             fr_id,
+      SUM(vhr.heures)                   heures
+    FROM
+      service_referentiel       sr
+        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+    WHERE
+        sr.histo_destruction IS NULL
+    GROUP BY
+      vhr.type_volume_horaire_id,
+      sr.intervenant_id,
+      fr.plafond,
+      fr.id
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond
+  /*i.id*/
+GROUP BY
+  t.type_volume_horaire_id,
+  i.annee_id,
+  t.intervenant_id
+
+UNION
+
 -- Nombre maximum d'heures équivalent TD par intervenant selon son statut
 SELECT
   'hetd'                              plafond_code,

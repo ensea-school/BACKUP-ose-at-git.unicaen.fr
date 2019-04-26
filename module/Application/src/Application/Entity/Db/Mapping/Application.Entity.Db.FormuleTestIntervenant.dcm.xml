@@ -7,7 +7,7 @@
             <generator strategy="SEQUENCE"/>
             <sequence-generator sequence-name="FTEST_INTERVENANT_ID_SEQ" allocation-size="1" initial-value="1"/>
         </id>
-        <field name="libelle" type="string" column="LIBELLE" length="150" nullable="false"/>
+        <field name="libelle" type="string" column="LIBELLE" length="150"/>
 
         <many-to-one field="formule" target-entity="Application\Entity\Db\Formule">
             <join-column name="FORMULE_ID" referenced-column-name="ID"/>
@@ -28,18 +28,23 @@
             <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
-        <field name="heuresDecharge" type="float" column="HEURES_DECHARGE" precision="126" scale="0" nullable="false"/>
-        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"
-               nullable="false"/>
-        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"
-               nullable="false"/>
-        <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false"/>
+        <field name="heuresDecharge" type="float" column="HEURES_DECHARGE" precision="126" scale="0"/>
+        <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"/>
+        <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"/>
+        <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC"/>
 
-        <field name="param1" type="string" column="PARAM_1" length="50" nullable="true"/>
-        <field name="param2" type="string" column="PARAM_2" length="50" nullable="true"/>
-        <field name="param3" type="string" column="PARAM_3" length="50" nullable="true"/>
-        <field name="param4" type="string" column="PARAM_4" length="50" nullable="true"/>
-        <field name="param5" type="string" column="PARAM_5" length="50" nullable="true"/>
+        <field name="tauxCmServiceDu" type="float" column="TAUX_CM_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxCmServiceCompl" type="float" column="TAUX_CM_SERVICE_COMPL" precision="126" scale="0"/>
+        <field name="tauxTpServiceDu" type="float" column="TAUX_TP_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxTpServiceCompl" type="float" column="TAUX_TP_SERVICE_COMPL" precision="126" scale="0"/>
+        <field name="tauxAutreServiceDu" type="float" column="TAUX_AUTRE_SERVICE_DU" precision="126" scale="0"/>
+        <field name="tauxAutreServiceCompl" type="float" column="TAUX_AUTRE_SERVICE_COMPL" precision="126" scale="0"/>
+
+        <field name="param1" type="string" column="PARAM_1" length="100" nullable="true"/>
+        <field name="param2" type="string" column="PARAM_2" length="100" nullable="true"/>
+        <field name="param3" type="string" column="PARAM_3" length="100" nullable="true"/>
+        <field name="param4" type="string" column="PARAM_4" length="100" nullable="true"/>
+        <field name="param5" type="string" column="PARAM_5" length="100" nullable="true"/>
 
         <field name="aServiceDu" type="float" column="A_SERVICE_DU" precision="126" scale="0" nullable="true"/>
         <field name="cServiceDu" type="float" column="C_SERVICE_DU" precision="126" scale="0" nullable="true"/>
@@ -47,7 +52,7 @@
         <field name="debugInfo" type="string" column="DEBUG_INFO" nullable="true"/>
 
         <one-to-many field="volumeHoraireTest" target-entity="Application\Entity\Db\FormuleTestVolumeHoraire"
-                     mapped-by="intervenantTest">
+                     mapped-by="intervenantTest" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>

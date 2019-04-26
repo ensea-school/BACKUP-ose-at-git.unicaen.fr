@@ -26,6 +26,11 @@ class FormuleTestVolumeHoraire
     private $serviceStatutaire = true;
 
     /**
+     * @var string
+     */
+    private $typeInterventionCode;
+
+    /**
      * @var float
      */
     private $tauxFi = 1;
@@ -39,16 +44,6 @@ class FormuleTestVolumeHoraire
      * @var float
      */
     private $tauxFc = 0;
-
-    /**
-     * @var float
-     */
-    private $tauxServiceDu = 1;
-
-    /**
-     * @var float
-     */
-    private $tauxServiceCompl = 1;
 
     /**
      * @var float
@@ -200,7 +195,7 @@ class FormuleTestVolumeHoraire
     /**
      * @return bool
      */
-    public function getReferentiel(): bool
+    public function getReferentiel()
     {
         return $this->referentiel;
     }
@@ -212,7 +207,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setReferentiel(bool $referentiel): FormuleTestVolumeHoraire
+    public function setReferentiel($referentiel): FormuleTestVolumeHoraire
     {
         $this->referentiel = $referentiel;
 
@@ -239,6 +234,30 @@ class FormuleTestVolumeHoraire
     public function setServiceStatutaire(bool $serviceStatutaire): FormuleTestVolumeHoraire
     {
         $this->serviceStatutaire = $serviceStatutaire;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getTypeInterventionCode()
+    {
+        return $this->typeInterventionCode;
+    }
+
+
+
+    /**
+     * @param string $typeInterventionCode
+     *
+     * @return FormuleTestVolumeHoraire
+     */
+    public function setTypeInterventionCode($typeInterventionCode): FormuleTestVolumeHoraire
+    {
+        $this->typeInterventionCode = $typeInterventionCode;
 
         return $this;
     }
@@ -320,54 +339,6 @@ class FormuleTestVolumeHoraire
     /**
      * @return float
      */
-    public function getTauxServiceDu(): float
-    {
-        return $this->tauxServiceDu;
-    }
-
-
-
-    /**
-     * @param float $tauxServiceDu
-     *
-     * @return FormuleTestVolumeHoraire
-     */
-    public function setTauxServiceDu(float $tauxServiceDu): FormuleTestVolumeHoraire
-    {
-        $this->tauxServiceDu = $tauxServiceDu;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return float
-     */
-    public function getTauxServiceCompl(): float
-    {
-        return $this->tauxServiceCompl;
-    }
-
-
-
-    /**
-     * @param float $tauxServiceCompl
-     *
-     * @return FormuleTestVolumeHoraire
-     */
-    public function setTauxServiceCompl(float $tauxServiceCompl): FormuleTestVolumeHoraire
-    {
-        $this->tauxServiceCompl = $tauxServiceCompl;
-
-        return $this;
-    }
-
-
-
-    /**
-     * @return float
-     */
     public function getPonderationServiceDu(): float
     {
         return $this->ponderationServiceDu;
@@ -428,7 +399,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setParam1(string $param1): FormuleTestVolumeHoraire
+    public function setParam1($param1): FormuleTestVolumeHoraire
     {
         $this->param1 = $param1;
 
@@ -452,7 +423,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setParam2(string $param2): FormuleTestVolumeHoraire
+    public function setParam2($param2): FormuleTestVolumeHoraire
     {
         $this->param2 = $param2;
 
@@ -476,7 +447,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setParam3(string $param3): FormuleTestVolumeHoraire
+    public function setParam3($param3): FormuleTestVolumeHoraire
     {
         $this->param3 = $param3;
 
@@ -500,7 +471,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setParam4(string $param4): FormuleTestVolumeHoraire
+    public function setParam4($param4): FormuleTestVolumeHoraire
     {
         $this->param4 = $param4;
 
@@ -524,7 +495,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setParam5(string $param5): FormuleTestVolumeHoraire
+    public function setParam5($param5): FormuleTestVolumeHoraire
     {
         $this->param5 = $param5;
 
@@ -572,7 +543,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAServiceFi(float $aServiceFi): FormuleTestVolumeHoraire
+    public function setAServiceFi($aServiceFi): FormuleTestVolumeHoraire
     {
         $this->aServiceFi = $aServiceFi;
 
@@ -596,7 +567,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAServiceFa(float $aServiceFa): FormuleTestVolumeHoraire
+    public function setAServiceFa($aServiceFa): FormuleTestVolumeHoraire
     {
         $this->aServiceFa = $aServiceFa;
 
@@ -620,7 +591,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAServiceFc(float $aServiceFc): FormuleTestVolumeHoraire
+    public function setAServiceFc($aServiceFc): FormuleTestVolumeHoraire
     {
         $this->aServiceFc = $aServiceFc;
 
@@ -644,7 +615,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAServiceReferentiel(float $aServiceReferentiel): FormuleTestVolumeHoraire
+    public function setAServiceReferentiel($aServiceReferentiel): FormuleTestVolumeHoraire
     {
         $this->aServiceReferentiel = $aServiceReferentiel;
 
@@ -668,7 +639,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAHeuresComplFi(float $aHeuresComplFi): FormuleTestVolumeHoraire
+    public function setAHeuresComplFi($aHeuresComplFi): FormuleTestVolumeHoraire
     {
         $this->aHeuresComplFi = $aHeuresComplFi;
 
@@ -692,7 +663,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAHeuresComplFa(float $aHeuresComplFa): FormuleTestVolumeHoraire
+    public function setAHeuresComplFa($aHeuresComplFa): FormuleTestVolumeHoraire
     {
         $this->aHeuresComplFa = $aHeuresComplFa;
 
@@ -716,7 +687,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAHeuresComplFc(float $aHeuresComplFc): FormuleTestVolumeHoraire
+    public function setAHeuresComplFc($aHeuresComplFc): FormuleTestVolumeHoraire
     {
         $this->aHeuresComplFc = $aHeuresComplFc;
 
@@ -740,7 +711,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAHeuresComplFcMajorees(float $aHeuresComplFcMajorees): FormuleTestVolumeHoraire
+    public function setAHeuresComplFcMajorees($aHeuresComplFcMajorees): FormuleTestVolumeHoraire
     {
         $this->aHeuresComplFcMajorees = $aHeuresComplFcMajorees;
 
@@ -764,7 +735,7 @@ class FormuleTestVolumeHoraire
      *
      * @return FormuleTestVolumeHoraire
      */
-    public function setAHeuresComplReferentiel(float $aHeuresComplReferentiel): FormuleTestVolumeHoraire
+    public function setAHeuresComplReferentiel($aHeuresComplReferentiel): FormuleTestVolumeHoraire
     {
         $this->aHeuresComplReferentiel = $aHeuresComplReferentiel;
 
@@ -1010,7 +981,5 @@ class FormuleTestVolumeHoraire
 
         return $this;
     }
-
-
 
 }

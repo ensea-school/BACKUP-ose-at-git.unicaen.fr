@@ -7,5 +7,15 @@
     <field name="libelle" type="string" column="LIBELLE" length="100" nullable="false"/>
     <field name="packageName" type="string" column="PACKAGE_NAME" length="30" nullable="false"/>
     <field name="procedureName" type="string" column="PROCEDURE_NAME" length="30" nullable="false"/>
+    <field name="iParam1Libelle" type="string" column="I_PARAM_1_LIBELLE" length="100" nullable="true"/>
+    <field name="iParam2Libelle" type="string" column="I_PARAM_2_LIBELLE" length="100" nullable="true"/>
+    <field name="iParam3Libelle" type="string" column="I_PARAM_3_LIBELLE" length="100" nullable="true"/>
+    <field name="iParam4Libelle" type="string" column="I_PARAM_4_LIBELLE" length="100" nullable="true"/>
+    <field name="iParam5Libelle" type="string" column="I_PARAM_5_LIBELLE" length="100" nullable="true"/>
+    <field name="vhParam1Libelle" type="string" column="VH_PARAM_1_LIBELLE" length="100" nullable="true"/>
+    <field name="vhParam2Libelle" type="string" column="VH_PARAM_2_LIBELLE" length="100" nullable="true"/>
+    <field name="vhParam3Libelle" type="string" column="VH_PARAM_3_LIBELLE" length="100" nullable="true"/>
+    <field name="vhParam4Libelle" type="string" column="VH_PARAM_4_LIBELLE" length="100" nullable="true"/>
+    <field name="vhParam5Libelle" type="string" column="VH_PARAM_5_LIBELLE" length="100" nullable="true"/>
   </entity>
 </doctrine-mapping>

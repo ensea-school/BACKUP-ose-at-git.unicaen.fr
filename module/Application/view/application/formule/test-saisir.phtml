@@ -44,7 +44,7 @@ class LocalFormater
             'data-type'    => 'int',
             'data-default' => '',
         ];
-        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'] . ' ' . $attrs['class'];
         $finalAttrs = array_merge($defAttrs, $attrs);
 
         if ($finalAttrs['data-type'] == 'bool') {
@@ -78,7 +78,7 @@ class LocalFormater
             'data-type'    => 'float',
             'data-default' => '',
         ];
-        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'] . ' ' . $attrs['class'];
         $finalAttrs = array_merge($defAttrs, $attrs);
 
         return $this->view->tag('input', $finalAttrs)->openClose(true);
@@ -88,13 +88,13 @@ class LocalFormater
 
     public function output($name, array $attrs = [])
     {
-        $defAttrs   = [
+        $defAttrs = [
             'class'      => 'doutput',
             'data-name'  => $name,
             'data-index' => $this->index,
             'data-type'  => 'float',
         ];
-        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'].' '.$attrs['class'];
+        if (isset($attrs['class'])) $attrs['class'] = $defAttrs['class'] . ' ' . $attrs['class'];
         $finalAttrs = array_merge($defAttrs, $attrs);
 
         return $this->view->tag('td', $finalAttrs)->openClose(false);
@@ -108,11 +108,24 @@ class LocalFormater
 $lf       = new LocalFormater();
 $lf->view = $this;
 
+$maxLignes = 30;
+if ($formuleTestIntervenant->getVolumeHoraireTest()->count() > 30) {
+    $maxLignes = $formuleTestIntervenant->getVolumeHoraireTest()->count();
+}
+$typesInterventions = ['CM' => 'CM', 'TD' => 'TD', 'TP' => 'TP', 'AUTRE' => 'Autre', 'REFERENTIEL' => 'Référentiel'];
+
+$fLibelles = [];
+foreach ($formules as $formule) {
+    $fLibelles[$formule->getId()] = $formule->libellesToArray();
+}
+
 echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
 ?>
 <div class="formule-test-intervenant"
-     data-data="<?= $this->escapeHtmlAttr(json_encode($formuleTestIntervenant->toArray())) ?>">
+     data-data="<?= $this->escapeHtmlAttr(json_encode($formuleTestIntervenant->toArray())) ?>"
+     data-formules="<?= $this->escapeHtmlAttr(json_encode($fLibelles)) ?>"
+>
     <div class="errors"><?= $this->messenger()->addCurrentMessagesFromFlashMessenger(); ?></div>
     <div class="row">
         <div class="col-md-6">
@@ -162,9 +175,39 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     <th>Dépassement de service dû sans HC</th>
                     <td class="saisie"><?= $lf->select('depassementServiceDuSansHC', ['data-type' => 'bool']) ?></td>
                 </tr>
+                <?php for ($p = 1; $p < 6; $p++): ?>
+                    <tr class="i-param i-param-<?= $p ?>">
+                        <th class="i-param i-param-<?= $p ?>">Paramètre <?= $p ?></th>
+                        <td class="saisie"><?= $lf->input('param' . $p, ['data-type' => 'string']) ?></td>
+                    </tr>
+                <?php endfor; ?>
             </table>
         </div>
         <div class="col-md-5">
+            <h2>Types d'intervention (HETD)</h2>
+            <table class="table table-condensed table-extra-condensed table-bordered">
+                <tr>
+                    <th style="width:20%"></th>
+                    <th style="width:20%">CM</th>
+                    <th style="width:20%">TD</th>
+                    <th style="width:20%">TP</th>
+                    <th style="width:20%">Autre</th>
+                </tr>
+                <tr>
+                    <th>En service</th>
+                    <td class="saisie"><?= $lf->input('tauxCmServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                    <td>1</td>
+                    <td class="saisie"><?= $lf->input('tauxTpServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                    <td class="saisie"><?= $lf->input('tauxAutreServiceDu', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                </tr>
+                <tr>
+                    <th>Au-delà du service</th>
+                    <td class="saisie"><?= $lf->input('tauxCmServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                    <td>1</td>
+                    <td class="saisie"><?= $lf->input('tauxTpServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                    <td class="saisie"><?= $lf->input('tauxAutreServiceCompl', ['maxlength' => "150", 'data-type' => 'float']) ?></td>
+                </tr>
+            </table>
             <h2>Résultat</h2>
             <table class="table table-condensed table-extra-condensed">
                 <tr>
@@ -227,20 +270,21 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     <table class="table table-bordered table-condensed table-extra-condensed table-hover fvh">
         <thead>
         <tr>
-            <th colspan="11">Données</th>
+            <th rowspan="3" style="width: 2em"></th>
+            <th colspan="9" class="vh-donnees">Données</th>
             <th rowspan="3" style="width:2px">&nbsp;</th>
-            <th colspan="10"><select id="affRes" class="form-control">
+            <th colspan="9"><select id="affRes" class="form-control">
                     <option value="hetd">Résultats (en HETD)</option>
-                    <option value="debug">Informations de débogage par ligne</option>
+                    <option value="debug">Informations de débogage</option>
                 </select></th>
         </tr>
         <tr>
             <th rowspan="2" style="width:8em">Structure</th>
-            <th rowspan="2">Référentiel</th>
             <th rowspan="2">Compte dans le service statutaire</th>
+            <th rowspan="2">Type d'intervention</th>
             <th colspan="3">Répartition</th>
-            <th colspan="2">Coëfs. HTED (taux)</th>
             <th colspan="2">Modulation</th>
+            <th colspan="5" class="vh-params">Paramètres</th>
             <th rowspan="2">Heures</th>
             <th colspan="4" class="resultats">Service</th>
             <th colspan="5" class="resultats">Heures complémentaires</th>
@@ -252,8 +296,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             <th>Fc</th>
             <th>Service dû</th>
             <th>Service compl.</th>
-            <th>Service dû</th>
-            <th>Service compl.</th>
+            <?php for ($p = 1; $p < 6; $p++): ?>
+                <th class="vh-param vh-param-<?= $p ?>">Param. <?= $p ?></th>
+            <?php endfor; ?>
             <th class="resultats">Fi</th>
             <th class="resultats">Fa</th>
             <th class="resultats">Fc</th>
@@ -266,67 +311,60 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         </tr>
         </thead>
         <tbody>
-        <?php for ($i = 0; $i < 30; $i++): $lf->index = $i; ?>
+        <?php for ($i = 0; $i < $maxLignes; $i++): $lf->index = $i; ?>
             <tr>
+                <th><?= $i + 1 ?></th>
                 <td class="saisie"><?= $lf->select('structureTest', [], $structures) ?></td>
-                <td class="saisie"><?= $lf->select('referentiel', ['data-type' => 'bool', 'data-default' => 'false']) ?></td>
                 <td class="saisie"><?= $lf->select('serviceStatutaire', ['data-type' => 'bool', 'data-default' => true]) ?></td>
+                <td class="saisie"><?= $lf->select('typeInterventionCode', ['data-type' => 'string'], $typesInterventions) ?></td>
                 <td><?= $lf->input('tauxFi', [
-                        'style'     => "width:3em;background-color:white",
-                        'maxlength' => "5",
-                        'disabled'  => 'disabled',
-                        'data-type' => 'float-pourc',
+                        'style'        => "width:3em;background-color:white",
+                        'maxlength'    => "5",
+                        'disabled'     => 'disabled',
+                        'data-type'    => 'float-pourc',
                         'data-default' => 1,
                     ]) ?><span class="pourc">%</span></td>
                 <td class="saisie"><?= $lf->input('tauxFa', [
-                        'style'     => "width:3em",
-                        'maxlength' => "5",
-                        'data-type' => 'float-pourc',
+                        'style'        => "width:3em",
+                        'maxlength'    => "5",
+                        'data-type'    => 'float-pourc',
                         'data-default' => 0,
                     ]) ?><span class="pourc">%</span></td>
                 <td class="saisie"><?= $lf->input('tauxFc', [
-                        'style'     => "width:3em",
-                        'maxlength' => "5",
-                        'data-type' => 'float-pourc',
+                        'style'        => "width:3em",
+                        'maxlength'    => "5",
+                        'data-type'    => 'float-pourc',
                         'data-default' => 0,
                     ]) ?><span class="pourc">%</span></td>
-                <td class="saisie"><?= $lf->input('tauxServiceDu', [
-                        'style'     => "width:3em",
-                        'maxlength' => "5",
-                        'data-type' => 'float-pourc',
-                        'data-default' => 1,
-                    ]) ?><span class="pourc">%</span></td>
-                <td class="saisie"><?= $lf->input('tauxServiceCompl', [
-                        'style'     => "width:3em",
-                        'maxlength' => "5",
-                        'data-type' => 'float-pourc',
-                        'data-default' => 1,
-                    ]) ?><span class="pourc">%</span></td>
                 <td class="saisie"><?= $lf->input('ponderationServiceDu', [
-                        'style'     => "width:3em",
-                        'maxlength' => "5",
-                        'data-type' => 'float-pourc',
+                        'style'        => "width:3em",
+                        'maxlength'    => "5",
+                        'data-type'    => 'float-pourc',
                         'data-default' => 1,
                     ]) ?><span class="pourc">%</span></td>
                 <td class="saisie"><?= $lf->input('ponderationServiceCompl', [
-                        'style'     => "width:3em",
-                        'maxlength' => "5",
-                        'data-type' => 'float-pourc',
+                        'style'        => "width:3em",
+                        'maxlength'    => "5",
+                        'data-type'    => 'float-pourc',
                         'data-default' => 1,
                     ]) ?><span class="pourc">%</span></td>
+                <?php for ($p = 1; $p < 6; $p++): ?>
+                    <td class="saisie vh-param vh-param-<?= $p ?>"
+                        style="width:5.7em"><?= $lf->input('param' . $p, ['data-type' => 'string', 'maxlength' => "100"]) ?></td>
+                <?php endfor; ?>
                 <td class="saisie"><?= $lf->input('heures') ?></td>
                 <?php if ($i == 0): ?>
-                    <td rowspan="30" style="width:2px">&nbsp;</td>
+                    <td rowspan="<?= $maxLignes ?>" style="width:2px">&nbsp;</td>
                 <?php endif; ?>
-                <?= $lf->output('cServiceFi', ['class' => 'resultats']) ?>
-                <?= $lf->output('cServiceFa', ['class' => 'resultats']) ?>
-                <?= $lf->output('cServiceFc', ['class' => 'resultats']) ?>
-                <?= $lf->output('cServiceReferentiel', ['class' => 'resultats']) ?>
-                <?= $lf->output('cHeuresComplFi', ['class' => 'resultats']) ?>
-                <?= $lf->output('cHeuresComplFa', ['class' => 'resultats']) ?>
-                <?= $lf->output('cHeuresComplFc', ['class' => 'resultats']) ?>
-                <?= $lf->output('cHeuresComplFcMajorees', ['class' => 'resultats']) ?>
-                <?= $lf->output('cHeuresComplReferentiel', ['class' => 'resultats']) ?>
+                <?= $lf->output('cServiceFi', ['class' => 'resultats', 'data-assert' => 'aServiceFi']) ?>
+                <?= $lf->output('cServiceFa', ['class' => 'resultats', 'data-assert' => 'aServiceFa']) ?>
+                <?= $lf->output('cServiceFc', ['class' => 'resultats', 'data-assert' => 'aServiceFc']) ?>
+                <?= $lf->output('cServiceReferentiel', ['class' => 'resultats', 'data-assert' => 'aServiceReferentiel']) ?>
+                <?= $lf->output('cHeuresComplFi', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFi']) ?>
+                <?= $lf->output('cHeuresComplFa', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFa']) ?>
+                <?= $lf->output('cHeuresComplFc', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFc']) ?>
+                <?= $lf->output('cHeuresComplFcMajorees', ['class' => 'resultats', 'data-assert' => 'aHeuresComplFcMajorees']) ?>
+                <?= $lf->output('cHeuresComplReferentiel', ['class' => 'resultats', 'data-assert' => 'aHeuresComplReferentiel']) ?>
                 <?= $lf->output('debugInfo', ['class' => 'debug', 'data-type' => 'string']) ?>
             </tr>
         <?php endfor; ?>
@@ -334,9 +372,11 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     </table>
     <div>
         <h2>Informations de débogage
-            <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#debug-info" aria-expanded="false" aria-controls="debug-info">
+            <button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#debug-info"
+                    aria-expanded="false" aria-controls="debug-info">
                 Afficher/masquer
-            </button></h2>
+            </button>
+        </h2>
         <div class="collapse debug-info" id="debug-info"></div>
     </div>
 
@@ -371,7 +411,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     }
 
     .doutput {
-        text-align:right;
+        text-align: right;
     }
 
     .debug {
@@ -384,6 +424,18 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         white-space: unset;
     }
 
+    .vh-param {
+        display: none;
+    }
+
+    .vh-params {
+        display: none;
+    }
+
+    tr.i-param {
+        display: none;
+    }
+
     .debug-table {
         font-size: 8pt;
     }
@@ -391,7 +443,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     .debug-table th {
         text-align: center;
         text-transform: uppercase;
-        background-color:#ccc;
+        background-color: #ccc;
     }
 
     .debug-table td {
@@ -401,7 +453,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     }
 
     td .zero {
-        color:gray;
+        color: gray;
     }
 
 </style>
@@ -430,9 +482,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     case 'float':
                         return Util.stringToFloat(value);
                     case 'float-pourc':
-                        if (value.indexOf('/') !== -1){
+                        if (value.indexOf('/') !== -1) {
                             return Util.stringToFloat(value);
-                        }else{
+                        } else {
                             return Util.stringToFloat(value) / 100;
                         }
                     case 'int':
@@ -464,11 +516,12 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                         return variable ? 'true' : 'false';
                     case 'float':
                         return Util.floatToString(variable);
+
                     case 'float-pourc':
                         var res = Util.floatToString(variable);
-                        if (res.indexOf('/') !== -1){
+                        if (res.indexOf('/') !== -1) {
                             return res;
-                        }else{
+                        } else {
                             return Util.floatToString(variable * 100);
                         }
                     case 'int':
@@ -525,12 +578,13 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     var name = $(this).data('name');
                     var index = $(this).data('index');
                     var type = $(this).data('type');
+                    var isFti = $(this).parents('table.fvh').length == 0;
                     var value = $(this).val();
                     var variable = that.valueToVariable(value, type);
 
-                    if (!index && index !== 0) {
+                    if (isFti){
                         data[name] = variable;
-                    } else {
+                    }else{
                         if (data['volumeHoraireTest'][index] == undefined) {
                             data['volumeHoraireTest'][index] = {};
                         }
@@ -547,15 +601,18 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     var name = $(this).data('name');
                     var index = $(this).data('index');
                     var type = $(this).data('type');
-                    if (!index && index !== 0) {
+                    var isFti = $(this).parents('table.fvh').length == 0;
+
+                    if (isFti){
                         var variable = data[name];
-                    } else {
+                    }else{
                         if (data['volumeHoraireTest'][index]) {
                             var variable = data['volumeHoraireTest'][index][name];
                         } else {
                             var variable = null;
                         }
                     }
+
                     var value = that.variableToValue(variable, type);
 
                     if (!value && $(this).data('default') !== '') {
@@ -563,59 +620,170 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     }
 
                     $(this).val(value);
+
+                    if ('typeInterventionCode' == name) {
+                        that.changementTypeIntervention($(this));
+                    }
+                    if ('structureTest' == name) {
+                        that.changementStructure($(this));
+                    }
                 });
 
                 this.element.find(".doutput").each(function () {
                     var name = $(this).data('name');
                     var index = $(this).data('index');
                     var type = $(this).data('type');
-                    if (!index && index !== 0) {
+                    var assert = $(this).data('assert');
+                    var isFti = $(this).parents('table.fvh').length == 0;
+
+                    if (isFti) {
                         var variable = data[name];
+                        var assertVal = null;
                     } else {
                         if (data['volumeHoraireTest'][index]) {
                             var variable = data['volumeHoraireTest'][index][name];
+                            var assertVal = data['volumeHoraireTest'][index][assert];
                         } else {
                             var variable = null;
+                            var assertVal = null;
                         }
+                    }
+                    if (assert !== undefined && assertVal !== null){
+                        if (Math.abs(variable - assertVal) > 0.009){
+                            $(this).css('background-color', '#ffe5e5');
+                            $(this).attr('title', 'Valeur attendue : '+that.variableToValue(assertVal, type));
+                        }else{
+                            $(this).css('background-color', '#e7ffe5');
+                            $(this).attr('title', '');
+                        }
+                    }else{
+                        $(this).css('background-color', 'none');
                     }
                     var value = that.variableToValue(variable, type);
 
-                    if (value === '0'){
+                    if (value === '0') {
                         value = '<span class="zero">0</span>';
                     }
 
                     $(this).html(value);
                 });
 
-                this.affDebugInfo( data.debugInfo );
+                this.affDebugInfo(data.debugInfo);
+                this.changementFormule(data.formule);
 
                 this.id = data.id;
             },
 
 
 
-            affDebugInfo: function( data )
+            changementFormule: function (formuleId)
+            {
+                var formules = this.element.data('formules');
+                var vhPCount = 0;
+
+                for (var i = 1; i < 6; i++) {
+                    if (formules[formuleId]['iParam' + i + 'Libelle']) {
+                        this.element.find('tr.i-param-' + i).show();
+                        this.element.find('th.i-param-' + i).html(formules[formuleId]['iParam' + i + 'Libelle']);
+                    } else {
+                        this.element.find('tr.i-param-' + i).hide();
+                    }
+
+                    if (formules[formuleId]['vhParam' + i + 'Libelle']) {
+                        vhPCount++;
+                        this.element.find('th.vh-param-' + i).show();
+                        this.element.find('th.vh-param-' + i).html(formules[formuleId]['vhParam' + i + 'Libelle']);
+                        this.element.find('td.vh-param-' + i).show();
+                    } else {
+                        this.element.find('th.vh-param-' + i).hide();
+                        this.element.find('td.vh-param-' + i).hide();
+                    }
+                }
+
+                if (vhPCount > 0) {
+                    this.element.find('.vh-params').show();
+                    this.element.find('.vh-params').attr('colspan', vhPCount);
+                    this.element.find('.vh-donnees').attr('colspan', 9 + vhPCount);
+                } else {
+                    this.element.find('.vh-params').hide();
+                    this.element.find('.vh-donnees').attr('colspan', 9);
+                }
+            },
+
+
+
+            changementTypeIntervention: function (select)
+            {
+                var tr = select.parent().parent();
+                var value = select.val();
+                if (value == 'REFERENTIEL' || !value) {
+                    tr.find('.dinput[data-name=tauxFi]').parent().css('visibility', 'hidden');
+                    tr.find('.dinput[data-name=tauxFa]').parent().css('visibility', 'hidden');
+                    tr.find('.dinput[data-name=tauxFc]').parent().css('visibility', 'hidden');
+                    tr.find('.dinput[data-name=ponderationServiceDu]').parent().css('visibility', 'hidden');
+                    tr.find('.dinput[data-name=ponderationServiceCompl]').parent().css('visibility', 'hidden');
+                    if (!value) {
+                        tr.find('.dinput[data-name=heures]').parent().css('visibility', 'hidden');
+                    } else {
+                        tr.find('.dinput[data-name=heures]').parent().css('visibility', 'visible');
+                    }
+                } else {
+                    tr.find('.dinput[data-name=tauxFi]').parent().css('visibility', 'visible');
+                    tr.find('.dinput[data-name=tauxFa]').parent().css('visibility', 'visible');
+                    tr.find('.dinput[data-name=tauxFc]').parent().css('visibility', 'visible');
+                    tr.find('.dinput[data-name=ponderationServiceDu]').parent().css('visibility', 'visible');
+                    tr.find('.dinput[data-name=ponderationServiceCompl]').parent().css('visibility', 'visible');
+                    tr.find('.dinput[data-name=heures]').parent().css('visibility', 'visible');
+                }
+            },
+
+
+
+            changementStructure: function (select)
+            {
+                var tr = select.parent().parent();
+                var value = select.val();
+                if (!value) {
+                    tr.find('.dinput[data-name=serviceStatutaire]').parent().css('visibility', 'hidden');
+                    tr.find('.dinput[data-name=typeInterventionCode]').parent().css('visibility', 'hidden');
+                } else {
+                    tr.find('.dinput[data-name=serviceStatutaire]').parent().css('visibility', 'visible');
+                    tr.find('.dinput[data-name=typeInterventionCode]').parent().css('visibility', 'visible');
+                }
+                this.changementTypeIntervention(tr.find('.dinput[data-name=typeInterventionCode]'));
+                this.affLignes();
+            },
+
+
+
+            affLignes: function ()
+            {
+                // TODO : cacher les lignes en trop
+            },
+
+
+
+            affDebugInfo: function (data)
             {
                 var h = '';
 
                 h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table">';
                 h += '<tr><th></th>';
-                for( var c in data.cols ){
+                for (var c in data.cols) {
                     h += '<th>' + data.cols[c] + '</th>';
                 }
                 h += '</tr>';
-                for( var l in data.lines ){
-                    h += '<tr><th>'+data.lines[l]+'</th>';
-                    for( var c in data.cols ){
+                for (var l in data.lines) {
+                    h += '<tr><th>' + data.lines[l] + '</th>';
+                    for (var c in data.cols) {
                         var val = data.cells[data.cols[c]][data.lines[l]];
 
-                        if (isNaN(val)){
+                        if (isNaN(val)) {
                             val = '';
-                        }else{
+                        } else {
                             val = Util.floatToString(val);
                             if (val === '0') val = '<span class="zero">0</span>';
                         }
-
 
                         h += '<td>' + val + '</td>';
                     }
@@ -624,17 +792,17 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 h += '</table>';
 
                 h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table" style="width:20em">';
-                for( var i in data.inds){
+                for (var i in data.inds) {
                     var val = data.inds[i];
 
-                    if (isNaN(val)){
+                    if (isNaN(val)) {
                         val = '';
-                    }else{
+                    } else {
                         val = Util.floatToString(val);
                         if (val === '0') val = '<span class="zero">0</span>';
                     }
 
-                    h += '<tr><th>'+i+'</th><td>' + val + '</td></tr>';
+                    h += '<tr><th>' + i + '</th><td>' + val + '</td></tr>';
                 }
                 h += '</table>';
 
@@ -650,6 +818,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
                 this.findElement('tauxFi', index).val(Util.floatToString(100 - (tauxFa + tauxFc)));
             },
+
+
 
             _create: function ()
             {
@@ -667,10 +837,22 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     var type = $(this).data('type');
                     if (type !== 'string') {
                         var variable = that.valueToVariable($(this).val(), type);
-                        console.log(variable);
                         $(this).val(that.variableToValue(variable, type));
                     }
                 });
+
+                this.element.find(".dinput[data-name='formule']").change(function () {
+                    that.changementFormule($(this).val());
+                });
+
+                this.element.find(".dinput[data-name='typeInterventionCode']").change(function () {
+                    that.changementTypeIntervention($(this));
+                });
+
+                this.element.find(".dinput[data-name='structureTest']").change(function () {
+                    that.changementStructure($(this));
+                });
+
 
                 // Désactivé, car si on saisit une deuxième valeur, elle est remplacée par le rés de l'AJAX précédant...
                 // this.element.find(".dinput").change(function () {
@@ -681,8 +863,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     that.save(true);
                 });
 
-                this.element.find("#affRes").change(function(){
-                    switch($(this).val()){
+                this.element.find("#affRes").change(function () {
+                    switch ($(this).val()) {
                         case 'hetd':
                             that.element.find(".debug").hide();
                             that.element.find(".resultats").show();

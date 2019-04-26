@@ -227,6 +227,10 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
             }
         }
 
+        if ($object->getReferentiel()){
+            $data['typeInterventionCode'] = 'REFERENTIEL';
+        }
+
         return $data;
     }
 }

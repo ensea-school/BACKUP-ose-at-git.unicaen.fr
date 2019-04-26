@@ -5710,9 +5710,10 @@ values (formule_id_seq.nextval, 'Université de Caen', 'FORMULE_UNICAEN', 'CALCU
 insert into formule(id, libelle, package_name, procedure_name)
 values (formule_id_seq.nextval, 'Université de Montpellier', 'FORMULE_MONTPELLIER', 'CALCUL_RESULTAT');
 
-INSERT INTO "OSE"."FORMULE" (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université Le Havre Normandie', 'FORMULE_ULHN', 'CALCUL_RESULTAT');
+INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université Le Havre Normandie', 'FORMULE_ULHN', 'CALCUL_RESULTAT');
+INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME, VH_PARAM_1_LIBELLE) VALUES (formule_id_seq.nextval, 'Université de Nanterre', 'FORMULE_NANTERRE', 'CALCUL_RESULTAT', 'Code composante');
 
---INSERT INTO "OSE"."FORMULE" (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université de Bretagne Occidentale', 'FORMULE_UBO', 'CALCUL_RESULTAT');
+--INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université de Bretagne Occidentale', 'FORMULE_UBO', 'CALCUL_RESULTAT');
 
 
 

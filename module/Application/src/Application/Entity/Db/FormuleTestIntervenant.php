@@ -50,6 +50,36 @@ class FormuleTestIntervenant
     private $depassementServiceDuSansHC = false;
 
     /**
+     * @var float
+     */
+    private $tauxCmServiceDu = 1.5;
+
+    /**
+     * @var float
+     */
+    private $tauxCmServiceCompl = 1.5;
+
+    /**
+     * @var float
+     */
+    private $tauxTpServiceDu = 1;
+
+    /**
+     * @var float
+     */
+    private $tauxTpServiceCompl = 2/3;
+
+    /**
+     * @var float
+     */
+    private $tauxAutreServiceDu = 1;
+
+    /**
+     * @var float
+     */
+    private $tauxAutreServiceCompl = 1;
+
+    /**
      * @var string
      */
     private $param1;
@@ -217,6 +247,150 @@ class FormuleTestIntervenant
 
 
     /**
+     * @return float
+     */
+    public function getTauxCmServiceDu(): float
+    {
+        return $this->tauxCmServiceDu;
+    }
+
+
+
+    /**
+     * @param float $tauxCmServiceDu
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function setTauxCmServiceDu(float $tauxCmServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxCmServiceDu = $tauxCmServiceDu;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getTauxCmServiceCompl(): float
+    {
+        return $this->tauxCmServiceCompl;
+    }
+
+
+
+    /**
+     * @param float $tauxCmServiceCompl
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function setTauxCmServiceCompl(float $tauxCmServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxCmServiceCompl = $tauxCmServiceCompl;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getTauxTpServiceDu(): float
+    {
+        return $this->tauxTpServiceDu;
+    }
+
+
+
+    /**
+     * @param float $tauxTpServiceDu
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function setTauxTpServiceDu(float $tauxTpServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxTpServiceDu = $tauxTpServiceDu;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getTauxTpServiceCompl(): float
+    {
+        return $this->tauxTpServiceCompl;
+    }
+
+
+
+    /**
+     * @param float $tauxTpServiceCompl
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function setTauxTpServiceCompl(float $tauxTpServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxTpServiceCompl = $tauxTpServiceCompl;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getTauxAutreServiceDu(): float
+    {
+        return $this->tauxAutreServiceDu;
+    }
+
+
+
+    /**
+     * @param float $tauxAutreServiceDu
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function setTauxAutreServiceDu(float $tauxAutreServiceDu): FormuleTestIntervenant
+    {
+        $this->tauxAutreServiceDu = $tauxAutreServiceDu;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getTauxAutreServiceCompl(): float
+    {
+        return $this->tauxAutreServiceCompl;
+    }
+
+
+
+    /**
+     * @param float $tauxAutreServiceCompl
+     *
+     * @return FormuleTestIntervenant
+     */
+    public function setTauxAutreServiceCompl(float $tauxAutreServiceCompl): FormuleTestIntervenant
+    {
+        $this->tauxAutreServiceCompl = $tauxAutreServiceCompl;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return string
      */
     public function getParam1()
@@ -229,7 +403,7 @@ class FormuleTestIntervenant
     /**
      * @param string $param1
      */
-    public function setParam1(string $param1): FormuleTestIntervenant
+    public function setParam1($param1): FormuleTestIntervenant
     {
         $this->param1 = $param1;
 
@@ -251,7 +425,7 @@ class FormuleTestIntervenant
     /**
      * @param string $param2
      */
-    public function setParam2(string $param2): FormuleTestIntervenant
+    public function setParam2($param2): FormuleTestIntervenant
     {
         $this->param2 = $param2;
 
@@ -273,7 +447,7 @@ class FormuleTestIntervenant
     /**
      * @param string $param3
      */
-    public function setParam3(string $param3): FormuleTestIntervenant
+    public function setParam3($param3): FormuleTestIntervenant
     {
         $this->param3 = $param3;
 
@@ -295,7 +469,7 @@ class FormuleTestIntervenant
     /**
      * @param string $param4
      */
-    public function setParam4(string $param4): FormuleTestIntervenant
+    public function setParam4($param4): FormuleTestIntervenant
     {
         $this->param4 = $param4;
 
@@ -317,7 +491,7 @@ class FormuleTestIntervenant
     /**
      * @param string $param5
      */
-    public function setParam5(string $param5): FormuleTestIntervenant
+    public function setParam5($param5): FormuleTestIntervenant
     {
         $this->param5 = $param5;
 

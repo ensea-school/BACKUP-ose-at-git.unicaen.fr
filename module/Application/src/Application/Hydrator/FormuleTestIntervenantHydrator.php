@@ -23,6 +23,8 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
 {
     private function findEntity( $class, $id)
     {
+        if (!$id) return null;
+
         $em = \Application::$container->get(Constants::BDD);
 
         return $em->getRepository($class)->find($id);
@@ -44,7 +46,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
         foreach ($methods as $method) {
             if (0 === strpos($method, 'set')) {
                 $property = lcfirst(substr($method, 3));
-                if (isset($data[$property])) {
+                if (array_key_exists($property,$data)) {
                     switch ($property) {
                         case 'volumeHoraireTest':
                         break;
@@ -70,6 +72,12 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                             $object->$method($data[$property]);
                     }
                 }
+            }
+        }
+
+        for($p=1;$p<6;$p++){
+            if (!$object->getFormule()->{'getIParam'.$p.'Libelle'}()){
+                $object->{'setParam'.$p}(null);
             }
         }
 
@@ -156,7 +164,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
         foreach ($methods as $method) {
             if (0 === strpos($method, 'set')) {
                 $property = lcfirst(substr($method, 3));
-                if (isset($data[$property])) {
+                if (array_key_exists($property,$data)) {
                     switch ($property) {
                         case 'heures':
                             $object->setHeures($data[$property] == null ? 0 : $data[$property]);
@@ -168,6 +176,22 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                             $object->$method($data[$property]);
                     }
                 }
+            }
+        }
+
+        if (array_key_exists('typeInterventionCode',$data)){
+            $ti = $data['typeInterventionCode'];
+            if ('REFERENTIEL' == $ti){
+                $object->setReferentiel(true);
+                $object->setTypeInterventionCode(null);
+            }else{
+                $object->setReferentiel(false);
+            }
+        }
+
+        for($p=1;$p<6;$p++){
+            if (!$object->getIntervenantTest()->getFormule()->{'getVhParam'.$p.'Libelle'}()){
+                $object->{'setParam'.$p}(null);
             }
         }
 
@@ -201,6 +225,10 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                         $data[$property] = $object->$method();
                 }
             }
+        }
+
+        if ($object->getReferentiel()){
+            $data['typeInterventionCode'] = 'REFERENTIEL';
         }
 
         return $data;

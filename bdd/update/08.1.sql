@@ -77,7 +77,17 @@ CREATE TABLE "FORMULE"
 (	"ID" NUMBER(*,0) NOT NULL ENABLE,
    "LIBELLE" VARCHAR2(100 CHAR) NOT NULL ENABLE,
    "PACKAGE_NAME" VARCHAR2(30 CHAR) NOT NULL ENABLE,
-   "PROCEDURE_NAME" VARCHAR2(30 CHAR) NOT NULL ENABLE
+   "PROCEDURE_NAME" VARCHAR2(30 CHAR) NOT NULL ENABLE,
+   "I_PARAM_1_LIBELLE" VARCHAR2(100 CHAR),
+   "I_PARAM_2_LIBELLE" VARCHAR2(100 CHAR),
+   "I_PARAM_3_LIBELLE" VARCHAR2(100 CHAR),
+   "I_PARAM_4_LIBELLE" VARCHAR2(100 CHAR),
+   "I_PARAM_5_LIBELLE" VARCHAR2(100 CHAR),
+   "VH_PARAM_1_LIBELLE" VARCHAR2(100 CHAR),
+   "VH_PARAM_2_LIBELLE" VARCHAR2(100 CHAR),
+   "VH_PARAM_3_LIBELLE" VARCHAR2(100 CHAR),
+   "VH_PARAM_4_LIBELLE" VARCHAR2(100 CHAR),
+   "VH_PARAM_5_LIBELLE" VARCHAR2(100 CHAR)
 );
 /
 
@@ -94,11 +104,11 @@ CREATE TABLE "FORMULE_TEST_INTERVENANT"
    "HEURES_SERVICE_STATUTAIRE" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
    "HEURES_SERVICE_MODIFIE" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
    "DEPASSEMENT_SERVICE_DU_SANS_HC" NUMBER(1,0) DEFAULT 0 NOT NULL ENABLE,
-   "PARAM_1" VARCHAR2(50 CHAR),
-   "PARAM_2" VARCHAR2(50 CHAR),
-   "PARAM_3" VARCHAR2(50 CHAR),
-   "PARAM_4" VARCHAR2(50 CHAR),
-   "PARAM_5" VARCHAR2(50 CHAR),
+   "PARAM_1" VARCHAR2(100 CHAR),
+   "PARAM_2" VARCHAR2(100 CHAR),
+   "PARAM_3" VARCHAR2(100 CHAR),
+   "PARAM_4" VARCHAR2(100 CHAR),
+   "PARAM_5" VARCHAR2(100 CHAR),
    "A_SERVICE_DU" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
    "C_SERVICE_DU" FLOAT(126),
    "DEBUG_INFO" CLOB
@@ -127,15 +137,14 @@ CREATE TABLE "FORMULE_TEST_VOLUME_HORAIRE"
    "TAUX_FI" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
    "TAUX_FA" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
    "TAUX_FC" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
-   "TAUX_SERVICE_DU" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
-   "TAUX_SERVICE_COMPL" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
+   "TYPE_INTERVENTION_CODE" VARCHAR2(15 CHAR),
    "PONDERATION_SERVICE_DU" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
    "PONDERATION_SERVICE_COMPL" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
-   "PARAM_1" VARCHAR2(50 CHAR),
-   "PARAM_2" VARCHAR2(50 CHAR),
-   "PARAM_3" VARCHAR2(50 CHAR),
-   "PARAM_4" VARCHAR2(50 CHAR),
-   "PARAM_5" VARCHAR2(50 CHAR),
+   "PARAM_1" VARCHAR2(100 CHAR),
+   "PARAM_2" VARCHAR2(100 CHAR),
+   "PARAM_3" VARCHAR2(100 CHAR),
+   "PARAM_4" VARCHAR2(100 CHAR),
+   "PARAM_5" VARCHAR2(100 CHAR),
    "HEURES" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
    "A_SERVICE_FI" FLOAT(126),
    "A_SERVICE_FA" FLOAT(126),
@@ -5167,95 +5176,97 @@ GROUP BY
 /
 
 CREATE OR REPLACE FORCE VIEW V_FORMULE_VOLUME_HORAIRE AS
-  SELECT
-    to_number( 1 || vh.id )                                              id,
-    vh.id                                                                volume_horaire_id,
-    null                                                                 volume_horaire_ref_id,
-    s.id                                                                 service_id,
-    null                                                                 service_referentiel_id,
-    s.intervenant_id                                                     intervenant_id,
-    ti.id                                                                type_intervention_id,
-    vh.type_volume_horaire_id                                            type_volume_horaire_id,
-    vhe.etat_volume_horaire_id                                           etat_volume_horaire_id,
+SELECT
+  to_number( 1 || vh.id )                                              id,
+  vh.id                                                                volume_horaire_id,
+  null                                                                 volume_horaire_ref_id,
+  s.id                                                                 service_id,
+  null                                                                 service_referentiel_id,
+  s.intervenant_id                                                     intervenant_id,
+  ti.id                                                                type_intervention_id,
+  vh.type_volume_horaire_id                                            type_volume_horaire_id,
+  vhe.etat_volume_horaire_id                                           etat_volume_horaire_id,
 
-    CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
-    CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
-    CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
-    ep.structure_id                                                      structure_id,
-    MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
-    MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
-    COALESCE(tf.service_statutaire,1)                                    service_statutaire,
+  CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
+  CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
+  CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
+  ep.structure_id                                                      structure_id,
+  MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
+  MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
+  COALESCE(tf.service_statutaire,1)                                    service_statutaire,
 
-    vh.heures                                                            heures,
-    vh.horaire_debut                                                     horaire_debut,
-    vh.horaire_fin                                                       horaire_fin,
-    COALESCE(tis.taux_hetd_service,ti.taux_hetd_service,1)               taux_service_du,
-    COALESCE(tis.taux_hetd_complementaire,ti.taux_hetd_complementaire,1) taux_service_compl
-  FROM
-    volume_horaire            vh
-      JOIN service                    s ON s.id = vh.service_id
-      JOIN intervenant                i ON i.id = s.intervenant_id
-      JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
-      JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
+  vh.heures                                                            heures,
+  vh.horaire_debut                                                     horaire_debut,
+  vh.horaire_fin                                                       horaire_fin,
+  ti.code                                                              type_intervention_code,
+  COALESCE(tis.taux_hetd_service,ti.taux_hetd_service,1)               taux_service_du,
+  COALESCE(tis.taux_hetd_complementaire,ti.taux_hetd_complementaire,1) taux_service_compl
+FROM
+            volume_horaire            vh
+       JOIN service                    s ON s.id = vh.service_id
+       JOIN intervenant                i ON i.id = s.intervenant_id
+       JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
+       JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
 
-      LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
-      LEFT JOIN etape                      e ON e.id = ep.etape_id
-      LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
-      LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
-      AND em.histo_destruction IS NULL
-      LEFT JOIN modulateur                 m ON m.id = em.modulateur_id
-      LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_intervenant_id = i.statut_id
-  WHERE
-      vh.histo_destruction IS NULL
-    AND s.histo_destruction IS NULL
-    AND vh.heures <> 0
-    AND vh.motif_non_paiement_id IS NULL
-    AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
-  GROUP BY
-    vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, ep.id,
-    ep.taux_fi, ep.taux_fa, ep.taux_fc, ep.structure_id, tf.service_statutaire, vh.heures,
-    vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
-    ti.taux_hetd_service, ti.taux_hetd_complementaire
+  LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN etape                      e ON e.id = ep.etape_id
+  LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
+  LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
+                                        AND em.histo_destruction IS NULL
+  LEFT JOIN modulateur                 m ON m.id = em.modulateur_id
+  LEFT JOIN type_intervention_statut tis ON tis.type_intervention_id = ti.id AND tis.statut_intervenant_id = i.statut_id
+WHERE
+  vh.histo_destruction IS NULL
+  AND s.histo_destruction IS NULL
+  AND vh.heures <> 0
+  AND vh.motif_non_paiement_id IS NULL
+  AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
+GROUP BY
+  vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, ep.id,
+  ep.taux_fi, ep.taux_fa, ep.taux_fc, ep.structure_id, tf.service_statutaire, vh.heures,
+  vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
+  ti.code, ti.taux_hetd_service, ti.taux_hetd_complementaire
 
-  UNION ALL
+UNION ALL
 
-  SELECT
-    to_number( 2 || vhr.id )          id,
-    null                              volume_horaire_id,
-    vhr.id                            volume_horaire_ref_id,
-    null                              service_id,
-    sr.id                             service_referentiel_id,
-    sr.intervenant_id                 intervenant_id,
-    null                              type_intervention_id,
-    vhr.type_volume_horaire_id        type_volume_horaire_id,
-    evh.id                            etat_volume_horaire_id,
+SELECT
+  to_number( 2 || vhr.id )          id,
+  null                              volume_horaire_id,
+  vhr.id                            volume_horaire_ref_id,
+  null                              service_id,
+  sr.id                             service_referentiel_id,
+  sr.intervenant_id                 intervenant_id,
+  null                              type_intervention_id,
+  vhr.type_volume_horaire_id        type_volume_horaire_id,
+  evh.id                            etat_volume_horaire_id,
 
-    0                                 taux_fi,
-    0                                 taux_fa,
-    0                                 taux_fc,
-    sr.structure_id                   structure_id,
-    1                                 ponderation_service_du,
-    1                                 ponderation_service_compl,
-    COALESCE(fr.service_statutaire,1) service_statutaire,
+  0                                 taux_fi,
+  0                                 taux_fa,
+  0                                 taux_fc,
+  sr.structure_id                   structure_id,
+  1                                 ponderation_service_du,
+  1                                 ponderation_service_compl,
+  COALESCE(fr.service_statutaire,1) service_statutaire,
 
-    vhr.heures                        heures,
-    vhr.horaire_debut                 horaire_debut,
-    vhr.horaire_fin                   horaire_fin,
-    1                                 taux_service_du,
-    1                                 taux_service_compl
-  FROM
-    volume_horaire_ref               vhr
-      JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-      JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
-      JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
-      JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
-  WHERE
-      vhr.histo_destruction IS NULL
-    AND sr.histo_destruction IS NULL
-    AND vhr.heures <> 0
-    AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )
+  vhr.heures                        heures,
+  vhr.horaire_debut                 horaire_debut,
+  vhr.horaire_fin                   horaire_fin,
+  null                              type_intervention_code,
+  1                                 taux_service_du,
+  1                                 taux_service_compl
+FROM
+  volume_horaire_ref               vhr
+  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
+  JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
+  JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
+  JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
+WHERE
+  vhr.histo_destruction IS NULL
+  AND sr.histo_destruction IS NULL
+  AND vhr.heures <> 0
+  AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )
 
-  ORDER BY
+ORDER BY
     horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id;
 /
 
@@ -5699,9 +5710,10 @@ values (formule_id_seq.nextval, 'Université de Caen', 'FORMULE_UNICAEN', 'CALCU
 insert into formule(id, libelle, package_name, procedure_name)
 values (formule_id_seq.nextval, 'Université de Montpellier', 'FORMULE_MONTPELLIER', 'CALCUL_RESULTAT');
 
-INSERT INTO "OSE"."FORMULE" (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université Le Havre Normandie', 'FORMULE_ULHN', 'CALCUL_RESULTAT');
+INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université Le Havre Normandie', 'FORMULE_ULHN', 'CALCUL_RESULTAT');
+INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME, VH_PARAM_1_LIBELLE) VALUES (formule_id_seq.nextval, 'Université de Nanterre', 'FORMULE_NANTERRE', 'CALCUL_RESULTAT', 'Code composante');
 
---INSERT INTO "OSE"."FORMULE" (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université de Bretagne Occidentale', 'FORMULE_UBO', 'CALCUL_RESULTAT');
+--INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université de Bretagne Occidentale', 'FORMULE_UBO', 'CALCUL_RESULTAT');
 
 
 

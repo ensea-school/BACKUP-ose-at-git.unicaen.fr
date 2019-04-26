@@ -27,6 +27,8 @@ class FormuleController extends AbstractController
     use ContextServiceAwareTrait;
     use ParametresServiceAwareTrait;
 
+
+
     public function testAction()
     {
         $fti = $this->getServiceFormuleTestIntervenant()->getList();
@@ -41,23 +43,23 @@ class FormuleController extends AbstractController
         /* @var $formuleTestIntervenant FormuleTestIntervenant */
         $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
 
-        $structures = $this->em()->createQuery("SELECT s FROM ".FormuleTestStructure::class." s ORDER BY s.libelle")->execute();
-        $formules = $this->em()->createQuery("SELECT f FROM ".Formule::class." f ORDER BY f.id")->execute();
-        $annees = $this->em()->createQuery("SELECT a FROM ".Annee::class." a WHERE a.id BETWEEN 2013 AND 2030 ORDER BY a.id")->execute();
-        $typesIntervenants = $this->em()->createQuery("SELECT ti FROM ".TypeIntervenant::class." ti ORDER BY ti.id")->execute();
-        $typesVh = $this->em()->createQuery("SELECT t FROM ".TypeVolumeHoraire::class." t ORDER BY t.id")->execute();
-        $etatsVh = $this->em()->createQuery("SELECT t FROM ".EtatVolumeHoraire::class." t ORDER BY t.id")->execute();
-        $annee = $this->getServiceContext()->getAnnee();
-        $formuleId = $this->getServiceParametres()->get('formule');
+        $structures        = $this->em()->createQuery("SELECT s FROM " . FormuleTestStructure::class . " s ORDER BY s.libelle")->execute();
+        $formules          = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
+        $annees            = $this->em()->createQuery("SELECT a FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND 2030 ORDER BY a.id")->execute();
+        $typesIntervenants = $this->em()->createQuery("SELECT ti FROM " . TypeIntervenant::class . " ti ORDER BY ti.id")->execute();
+        $typesVh           = $this->em()->createQuery("SELECT t FROM " . TypeVolumeHoraire::class . " t ORDER BY t.id")->execute();
+        $etatsVh           = $this->em()->createQuery("SELECT t FROM " . EtatVolumeHoraire::class . " t ORDER BY t.id")->execute();
+        $annee             = $this->getServiceContext()->getAnnee();
+        $formuleId         = $this->getServiceParametres()->get('formule');
 
         if (!$formuleTestIntervenant) {
-            $title      = 'Ajout d\'un test de formule';
+            $title                  = 'Ajout d\'un test de formule';
             $formuleTestIntervenant = new FormuleTestIntervenant();
         } else {
             $title = 'Modification d\'un test de formule';
             try {
                 $this->getServiceFormuleTestIntervenant()->calculer($formuleTestIntervenant);
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         }
@@ -88,42 +90,44 @@ class FormuleController extends AbstractController
     {
         /* @var $formuleTestIntervenant FormuleTestIntervenant */
         $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
-        if (!$formuleTestIntervenant){
+        if (!$formuleTestIntervenant) {
             $formuleTestIntervenant = new FormuleTestIntervenant();
         }
 
         $result = ['errors' => '', 'data' => []];
-        $data = json_decode($this->params()->fromPost('data'), true);
+        $data   = json_decode($this->params()->fromPost('data'), true);
         $formuleTestIntervenant->fromArray($data);
 
         $passed = true;
-        if (!$formuleTestIntervenant->getLibelle()){
+        if (!$formuleTestIntervenant->getLibelle()) {
             $result['errors'][] = 'Libellé manquant';
-            $passed = false;
+            $passed             = false;
         }
-        if (!$formuleTestIntervenant->getFormule()){
+        if (!$formuleTestIntervenant->getFormule()) {
             $result['errors'][] = 'La formule à utiliser n\'est pas précisée';
-            $passed = false;
+            $passed             = false;
         }
-        if (!$formuleTestIntervenant->getAnnee()){
+        if (!$formuleTestIntervenant->getAnnee()) {
             $result['errors'][] = 'L\'année doit être renseignée';
-            $passed = false;
+            $passed             = false;
         }
-        if (!$formuleTestIntervenant->getTypeIntervenant()){
+        if (!$formuleTestIntervenant->getTypeIntervenant()) {
             $result['errors'][] = 'Le type d\'intervenant (permanent, vacataire) doit être renseigné';
-            $passed = false;
+            $passed             = false;
         }
-        if (!$formuleTestIntervenant->getStructureTest()){
+        if ($formuleTestIntervenant->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT
+            && !$formuleTestIntervenant->getStructureTest()
+        ) {
             $result['errors'][] = 'La structure doit être renseignée';
-            $passed = false;
+            $passed             = false;
         }
-        if (!$formuleTestIntervenant->getTypeVolumeHoraire()){
+        if (!$formuleTestIntervenant->getTypeVolumeHoraire()) {
             $result['errors'][] = 'Le type de volume horaire (prévu ou réalisé) doit être renseigné';
-            $passed = false;
+            $passed             = false;
         }
-        if (!$formuleTestIntervenant->getEtatVolumeHoraire()){
+        if (!$formuleTestIntervenant->getEtatVolumeHoraire()) {
             $result['errors'][] = 'L\'état de volume horaire (saisi, validé, etc) doit être renseigné';
-            $passed = false;
+            $passed             = false;
         }
         if ($passed) {
             $this->getServiceFormuleTestIntervenant()->save($formuleTestIntervenant);

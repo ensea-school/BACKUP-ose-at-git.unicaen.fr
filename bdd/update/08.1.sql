@@ -37,6 +37,14 @@ DROP SEQUENCE TYPE_INTERVENTION_REGLE_ID_SEQ;
 DROP SEQUENCE TYPE_STRUCTURE_ID_SEQ;
 /
 
+/* Suppression des tables de tests de formule. De nouveaux jeux de tests vous seront fournis */
+-- Ces deux requêtes ne sont à exécuter QUE SI vous passez de OSE 8.1 beta 1à5 vers la 8.1 beta 6
+DROP TABLE FORMULE_TEST_INTERVENANT;
+/
+
+DROP TABLE FORMULE_TEST_VOLUME_HORAIRE;
+/
+
 
 
 
@@ -192,15 +200,6 @@ CREATE OR REPLACE PACKAGE "FORMULE_MONTPELLIER" AS
 END FORMULE_MONTPELLIER;
 /
 
-CREATE OR REPLACE PACKAGE "FORMULE_UBO" AS
-
-  PROCEDURE CALCUL_RESULTAT;
-
-  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
-
-END FORMULE_UBO;
-/
-
 CREATE OR REPLACE PACKAGE "FORMULE_ULHN" AS
 
   PROCEDURE CALCUL_RESULTAT;
@@ -208,6 +207,17 @@ CREATE OR REPLACE PACKAGE "FORMULE_ULHN" AS
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
 
 END FORMULE_ULHN;
+/
+
+CREATE OR REPLACE PACKAGE "FORMULE_NANTERRE" AS
+
+  PROCEDURE CALCUL_RESULTAT;
+
+  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
+
+END FORMULE_NANTERRE;
+
+
 /
 
 CREATE OR REPLACE PACKAGE "FORMULE_UNICAEN" AS
@@ -265,9 +275,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
   PROCEDURE dbgDump( val CLOB ) IS
   BEGIN
-    dbg('
-' || val || '
-');
+    dbg('<div class="dbg-dump">' || val || '</div>');
   END;
 
   PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
@@ -367,11 +375,13 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
     vh ose_formule.t_volume_horaire;
+    i  ose_formule.t_intervenant;
     v NUMERIC;
     val FLOAT;
   BEGIN
     v := calcVersion;
 
+    i := ose_formule.intervenant;
     IF l > 0 THEN
       vh := ose_formule.volumes_horaires.items(l);
     END IF;
@@ -407,7 +417,8 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-        -- m = SI(J21>0;SI(L20+K21= 1 THEN
+      -- m = SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0)
+      WHEN c = 'm' AND v >= 1 THEN
         IF cell('j',l) > 0 THEN
           IF cell('l',l-1) + cell('k',l) < ose_formule.intervenant.service_du THEN
             RETURN 0;
@@ -426,7 +437,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-      -- o = SI(OU(service_realise"Oui");0;(M21+SI(H21<>"Oui";I21;0))*N21)
+      -- o = SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(M21+SI(H21<>"Oui";I21;0))*N21)
       -- service_realise = MAX($L$21:$L$50)
       -- service_du = ose_formule.intervenant.service_du
       -- HC_autorisees = ose_formule.intervenant.depassement_service_du_sans_hc = false
@@ -498,7 +509,10 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-        -- s136 =SI(OU(HC=0;r136= 1 THEN
+      -- s136 =SI(OU(HC=0;r136<service_du);0;r136-service_du)
+      -- s136 =SI(OU(HC=0;R136<service_du);0;SI(pour_les_autres_composantes=0;HC;SI((HC-pour_les_autres_composantes)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-pour_les_autres_composantes)))
+      -- pour_les_autres_composantes = R137
+      WHEN c = 's136' AND v >= 1 THEN
         IF calcFnc('total','o') = 0 OR cell('r136') < ose_formule.intervenant.service_du THEN
           RETURN 0;
         ELSE
@@ -556,16 +570,15 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-      -- u =SI(R137=0;0;S137/R137)
-      -- u =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)))
+      -- u =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$D21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)))
       WHEN c = 'u' AND v >= 1 THEN
         -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
         IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
           RETURN 0;
         ELSE
-          -- SI(H21="Non";O21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21))
+          -- SI(H21="Non";O21*$D21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21))
           IF NOT vh.service_statutaire THEN
-            RETURN cell('o',l);
+            RETURN cell('o',l) * vh.taux_fi;
           ELSE
             -- SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)
             IF cell('m',l) > 0 THEN
@@ -580,7 +593,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-      -- v =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)))
+      -- v =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)))
       -- HC = calcFnc('total','o')
       -- H21="Non" = NOT vh.service_statutaire
       -- P21 = O21!!
@@ -591,7 +604,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
         ELSE
           -- SI(H21="Non";P21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21))
           IF NOT vh.service_statutaire THEN
-            RETURN cell('o',l);
+            RETURN cell('o',l) * vh.taux_fa;
           ELSE
             -- SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)
             IF cell('m',l) > 0 THEN
@@ -606,7 +619,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-      -- w =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";Q21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)))
+      -- w =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)))
       WHEN c = 'w' AND v >= 1 THEN
         -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
         IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
@@ -614,7 +627,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
         ELSE
           --SI(H21="Non";Q21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21))
           IF NOT vh.service_statutaire THEN
-            RETURN cell('q',l);
+            RETURN cell('o',l) * vh.taux_fc;
           ELSE
             -- SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)
             IF cell('m',l) > 0 THEN
@@ -705,842 +718,6 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 END FORMULE_MONTPELLIER;
 /
 
-CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
-  decalageLigne NUMERIC DEFAULT 0;
-
-
-  /* Stockage des valeurs intermédiaires */
-  TYPE t_cell IS RECORD (
-    valeur FLOAT,
-    enCalcul BOOLEAN DEFAULT FALSE
-    );
-  TYPE t_cells IS TABLE OF t_cell INDEX BY PLS_INTEGER;
-  TYPE t_coll IS RECORD (
-    cells t_cells
-    );
-  TYPE t_colls IS TABLE OF t_coll INDEX BY VARCHAR2(50);
-  feuille t_colls;
-
-  debugActif BOOLEAN DEFAULT TRUE;
-  debugLine NUMERIC;
-
-
-  PROCEDURE dbg( val CLOB ) IS
-  BEGIN
-    ose_formule.volumes_horaires.items(debugLine).debug_info :=
-          ose_formule.volumes_horaires.items(debugLine).debug_info || val;
-  END;
-
-
-  PROCEDURE dbgi( val CLOB ) IS
-  BEGIN
-    ose_formule.intervenant.debug_info := ose_formule.intervenant.debug_info || val;
-  END;
-
-  PROCEDURE dbgDump( val CLOB ) IS
-  BEGIN
-    dbg('
-' || val || '
-');
-  END;
-
-  PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
-    ligne NUMERIC;
-  BEGIN
-    ligne := l;
-    IF l <> 0 THEN
-      ligne := ligne + decalageLigne;
-    END IF;
-
-    dbgi( '[cell|' || c || '|' || ligne || '|' || val );
-  END;
-
-  PROCEDURE dbgCalc( fncName VARCHAR2, c VARCHAR2, res FLOAT ) IS
-  BEGIN
-    dbgi( '[calc|' || fncName || '|' || c || '|' || res );
-  END;
-
-  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 0 ) RETURN FLOAT IS
-    val FLOAT;
-  BEGIN
-    IF feuille.exists(c) THEN
-      IF feuille(c).cells.exists(l) THEN
-        IF feuille(c).cells(l).enCalcul THEN
-          raise_application_error( -20001, 'Dépendance cyclique : la cellule [' || c || ';' || l || '] est déjà en cours de calcul');
-        END IF;
-        RETURN feuille(c).cells(l).valeur;
-      END IF;
-    END IF;
-
-    feuille(c).cells(l).enCalcul := true;
-    val := calcCell( c, l );
-    IF debugActif THEN
-      dbgCell( c, l, val );
-    END IF;
-    feuille(c).cells(l).valeur := val;
-    feuille(c).cells(l).enCalcul := false;
-
-    RETURN val;
-  END;
-
-  FUNCTION mainCell( libelle VARCHAR2, c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
-    val FLOAT;
-  BEGIN
-    debugLine := l;
-    val := cell(c,l);
-
-    RETURN val;
-  END;
-
-  FUNCTION calcFnc( fncName VARCHAR2, c VARCHAR2 ) RETURN FLOAT IS
-    val FLOAT;
-    cellRes FLOAT;
-  BEGIN
-    IF feuille.exists('__' || fncName || '__' || c || '__') THEN
-      IF feuille('__' || fncName || '__' || c || '__').cells.exists(1) THEN
-        RETURN feuille('__' || fncName || '__' || c || '__').cells(1).valeur;
-      END IF;
-    END IF;
-    CASE
-      -- Liste des fonctions supportées
-
-      WHEN fncName = 'total' THEN
-        val := 0;
-        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-          val := val + COALESCE(cell(c, l),0);
-        END LOOP;
-
-      WHEN fncName = 'max' THEN
-        val := NULL;
-        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-          cellRes := cell(c,l);
-          IF val IS NULL OR val < cellRes THEN
-            val := cellRes;
-          END IF;
-        END LOOP;
-
-      -- fin de la liste des fonctions supportées
-      ELSE
-        raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
-      END CASE;
-    IF debugActif THEN
-      dbgCalc(fncName, c, val );
-    END IF;
-    feuille('__' || fncName || '__' || c || '__').cells(1).valeur := val;
-
-    RETURN val;
-  END;
-
-
-  FUNCTION calcVersion RETURN NUMERIC IS
-  BEGIN
-    RETURN 1;
-  END;
-
-
-
-  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
-    vh ose_formule.t_volume_horaire;
-    v NUMERIC;
-    val FLOAT;
-  BEGIN
-    v := calcVersion;
-
-    IF l > 0 THEN
-      vh := ose_formule.volumes_horaires.items(l);
-    END IF;
-    CASE
-
-
-      -- t11=SI(ET($H26=$I$11;NON($F26));I26;0)
-      WHEN c = 't11' AND v >= 1 THEN
-        IF vh.structure_is_affectation AND NOT vh.taux_fc = 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t12=SI(ET($H26<>$I$11;NON($F26));I26;0)
-      WHEN c = 't12' AND v >= 1 THEN
-        IF NOT vh.structure_is_affectation AND NOT vh.taux_fc = 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t13=SI(ET($H26=$I$11;$F26);I26;0)
-      WHEN c = 't13' AND v >= 1 THEN
-        IF vh.structure_is_affectation AND vh.taux_fc = 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t14=SI(ET($H26<>$I$11;$F26);I26;0)
-      WHEN c = 't14' AND v >= 1 THEN
-        IF NOT vh.structure_is_affectation AND vh.taux_fc = 1 THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t15=SI($H38=$I$11;I38;0)
-      WHEN c = 't15' AND v >= 1 THEN
-        IF vh.structure_is_affectation THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t16=SI(ET($H38<>$I$11;$H38<>$I$2);I38;0)
-      WHEN c = 't16' AND v >= 1 THEN
-        IF NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t17=SI($H38=$I$2;I38;0)
-      WHEN c = 't17' AND v >= 1 THEN
-        IF vh.structure_is_univ THEN
-          RETURN vh.heures;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t21=I47*I$24
-      WHEN c = 't21' AND v >= 1 THEN
-        RETURN cell('t11', l) * vh.taux_service_du;
-
-
-
-      -- t22=S47*I$24
-      WHEN c = 't22' AND v >= 1 THEN
-        RETURN cell('t12', l) * vh.taux_service_du;
-
-
-
-      -- t23=AC47*I$24
-      WHEN c = 't23' AND v >= 1 THEN
-        RETURN cell('t13', l) * vh.taux_service_du;
-
-
-
-      -- t24=AM47*I$24
-      WHEN c = 't24' AND v >= 1 THEN
-        RETURN cell('t14', l) * vh.taux_service_du;
-
-
-
-      -- t25=AW47*$R$5
-      WHEN c = 't25' AND v >= 1 THEN
-        RETURN cell('t15', l);
-
-
-
-      -- t26=AY47*$R$5
-      WHEN c = 't26' AND v >= 1 THEN
-        RETURN cell('t16', l);
-
-
-
-      -- t27=BA47*$R$5
-      WHEN c = 't27' AND v >= 1 THEN
-        RETURN cell('t17', l);
-
-
-
-      -- t31=MAX(I15-Q69;0)
-      WHEN c = 't31' AND v >= 1 THEN
-        RETURN LEAST(ose_formule.intervenant.service_du - calcFnc('total','t21'), 0);
-
-
-
-      -- t32=MAX(Q71-AA69;0)
-      WHEN c = 't32' AND v >= 1 THEN
-        RETURN LEAST(cell('t31') - calcFnc('total','t22'), 0);
-
-
-
-      -- t33=MAX(AA71-AK69;0)
-      WHEN c = 't33' AND v >= 1 THEN
-        RETURN LEAST(cell('t32') - calcFnc('total','t23'), 0);
-
-
-
-      -- t34=MAX(AK71-AU69;0)
-      WHEN c = 't34' AND v >= 1 THEN
-        RETURN LEAST(cell('t33') - calcFnc('total','t24'), 0);
-
-
-
-      -- t35=MAX(AU71-AW64;0)
-      WHEN c = 't35' AND v >= 1 THEN
-        RETURN LEAST(cell('t34') - calcFnc('total','t25'), 0);
-
-
-
-      -- t36=MAX(AW71-AY64;0)
-      WHEN c = 't36' AND v >= 1 THEN
-        RETURN LEAST(cell('t35', l) - calcFnc('total','t26'), 0);
-
-
-
-      -- t37=MAX(AY71-BA64;0)
-      WHEN c = 't37' AND v >= 1 THEN
-        RETURN LEAST(cell('t36', l) - calcFnc('total','t27'), 0);
-
-
-
-      -- t41=SI($Q$69<>0;I59/$Q$69;0)
-      WHEN c = 't41' AND v >= 1 THEN
-        IF calcFnc('total','t21') <> 0 THEN
-          RETURN cell('t21', l) / calcFnc('total','t21');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t42=SI($AA$69<>0;S59/$AA$69;0)
-      WHEN c = 't42' AND v >= 1 THEN
-        IF calcFnc('total','t22') <> 0 THEN
-          RETURN cell('t22', l) / calcFnc('total','t22');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t43=SI($AK$69<>0;AC59/$AK$69;0)
-      WHEN c = 't43' AND v >= 1 THEN
-        IF calcFnc('total','t23') <> 0 THEN
-          RETURN cell('t23', l) / calcFnc('total','t23');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t44=SI($AU$69<>0;AM59/$AU$69;0)
-      WHEN c = 't44' AND v >= 1 THEN
-        IF calcFnc('total','t24') <> 0 THEN
-          RETURN cell('t24', l) / calcFnc('total','t24');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t45=SI($AW$64<>0;AW59/$AW$64;0)
-      WHEN c = 't45' AND v >= 1 THEN
-        IF calcFnc('total','t25') <> 0 THEN
-          RETURN cell('t25', l) / calcFnc('total','t25');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t46=SI($AY$64<>0;AY59/$AY$64;0)
-      WHEN c = 't46' AND v >= 1 THEN
-        IF calcFnc('total','t26') <> 0 THEN
-          RETURN cell('t26', l) / calcFnc('total','t26');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t47=SI($BA$64<>0;BA59/$BA$64;0)
-      WHEN c = 't47' AND v >= 1 THEN
-        IF calcFnc('total','t27') <> 0 THEN
-          RETURN cell('t27', l) / calcFnc('total','t27');
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t51=MIN($I$15;$Q$69)*I74
-      WHEN c = 't51' AND v >= 1 THEN
-        RETURN LEAST(ose_formule.intervenant.service_du, calcFnc('total','t21')) * cell('t41', l);
-
-
-
-      -- t52=MIN($Q$71;$AA$69)*S74
-      WHEN c = 't52' AND v >= 1 THEN
-        RETURN LEAST(cell('t31'), calcFnc('total','t22')) * cell('t42', l);
-
-
-
-      -- t53=MIN($AA$71;$AK$69)*AC74
-      WHEN c = 't53' AND v >= 1 THEN
-        RETURN LEAST(cell('t32'), calcFnc('total','t23')) * cell('t43', l);
-
-
-
-      -- t54=MIN($AK$71;$AU$69)*AM74
-      WHEN c = 't54' AND v >= 1 THEN
-        RETURN LEAST(cell('t33'), calcFnc('total','t24')) * cell('t44', l);
-
-
-
-      -- t55=MIN($AU$71;$AW$64)*AW74
-      WHEN c = 't55' AND v >= 1 THEN
-        RETURN LEAST(cell('t34'), calcFnc('total','t25')) * cell('t45', l);
-
-
-
-      -- t56=MIN($AW$71;$AY$64)*AY74
-      WHEN c = 't56' AND v >= 1 THEN
-        RETURN LEAST(cell('t35'), calcFnc('total','t26')) * cell('t46', l);
-
-
-
-      -- t57=MIN($AY$71;$BA$64)*BA74
-      WHEN c = 't57' AND v >= 1 THEN
-        RETURN LEAST(cell('t36'), calcFnc('total','t27')) * cell('t47', l);
-
-
-
-      -- t61=I86*$C26
-      WHEN c = 't61' AND v >= 1 THEN
-        RETURN cell('t51', l) * vh.taux_fi;
-
-
-
-      -- t62=S86*$C26
-      WHEN c = 't62' AND v >= 1 THEN
-        RETURN cell('t52', l) * vh.taux_fi;
-
-
-
-      -- t71=I86*$D26
-      WHEN c = 't71' AND v >= 1 THEN
-        RETURN cell('t51', l) * vh.taux_fa;
-
-
-
-      -- t72=S86*$D26
-      WHEN c = 't72' AND v >= 1 THEN
-        RETURN cell('t52', l) * vh.taux_fa;
-
-
-
-      -- t81=I86*$E26
-      WHEN c = 't81' AND v >= 1 THEN
-        RETURN cell('t51', l) * vh.taux_fc;
-
-
-
-      -- t82=S86*$E26
-      WHEN c = 't82' AND v >= 1 THEN
-        RETURN cell('t52', l) * vh.taux_fc;
-
-
-
-      -- t83=AC86*$E26
-      WHEN c = 't83' AND v >= 1 THEN
-        RETURN cell('t53', l) * vh.taux_fc;
-
-
-
-      -- t84=AM86*$E26
-      WHEN c = 't84' AND v >= 1 THEN
-        RETURN cell('t54', l) * vh.taux_fc;
-
-
-
-      -- t91=SI(I59<>0;I86/I59;0)
-      WHEN c = 't91' AND v >= 1 THEN
-        IF cell('t21', l) <> 0 THEN
-          RETURN cell('t51', l) / cell('t21', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t92=SI(S59<>0;S86/S59;0)
-      WHEN c = 't92' AND v >= 1 THEN
-        IF cell('t22', l) <> 0 THEN
-          RETURN cell('t52', l) / cell('t22', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t93=SI(AC59<>0;AC86/AC59;0)
-      WHEN c = 't93' AND v >= 1 THEN
-        IF cell('t23', l) <> 0 THEN
-          RETURN cell('t53', l) / cell('t23', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t94=SI(AM59<>0;AM86/AM59;0)
-      WHEN c = 't94' AND v >= 1 THEN
-        IF cell('t24', l) <> 0 THEN
-          RETURN cell('t54', l) / cell('t24', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t95=SI(AW59<>0;AW86/AW59;0)
-      WHEN c = 't95' AND v >= 1 THEN
-        IF cell('t25', l) <> 0 THEN
-          RETURN cell('t55', l) / cell('t25', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t96=SI(AY59<>0;AY86/AY59;0)
-      WHEN c = 't96' AND v >= 1 THEN
-        IF cell('t26', l) <> 0 THEN
-          RETURN cell('t56', l) / cell('t26', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t97=SI(BA59<>0;BA86/BA59;0)
-      WHEN c = 't97' AND v >= 1 THEN
-        IF cell('t27', l) <> 0 THEN
-          RETURN cell('t57', l) / cell('t27', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t101=SI($BA$71<>0;0;1-I134)
-      WHEN c = 't101' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t91', l);
-        END IF;
-
-
-
-      -- t102=SI($BA$71<>0;0;1-S134)
-      WHEN c = 't102' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t92', l);
-        END IF;
-
-
-
-      -- t103=SI($BA$71<>0;0;1-AC134)
-      WHEN c = 't103' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t93', l);
-        END IF;
-
-
-
-      -- t104=SI($BA$71<>0;0;1-AM134)
-      WHEN c = 't104' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t94', l);
-        END IF;
-
-
-
-      -- t105=SI($BA$71<>0;0;1-AW134)
-      WHEN c = 't105' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t95', l);
-        END IF;
-
-
-
-      -- t106=SI($BA$71<>0;0;1-AY134)
-      WHEN c = 't106' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t96', l);
-        END IF;
-
-
-
-      -- t107=SI($BA$71<>0;0;1-BA134)
-      WHEN c = 't107' AND v >= 1 THEN
-        IF cell('t37') <> 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN 1 - cell('t97', l);
-        END IF;
-
-
-
-      -- t111=I47*I$25*I146
-      WHEN c = 't111' AND v >= 1 THEN
-        RETURN cell('t11', l) * vh.taux_service_compl * cell('t101', l);
-
-
-
-      -- t112=S47*I$25*S146
-      WHEN c = 't112' AND v >= 1 THEN
-        RETURN cell('t12', l) * vh.taux_service_compl * cell('t102', l);
-
-
-
-      -- t113=AC47*I$25*AC146
-      WHEN c = 't113' AND v >= 1 THEN
-        RETURN cell('t13', l) * vh.taux_service_compl * cell('t103', l);
-
-
-
-      -- t114=AM47*I$25*AM146
-      WHEN c = 't114' AND v >= 1 THEN
-        RETURN cell('t14', l) * vh.taux_service_compl * cell('t104', l);
-
-
-
-      -- t115=AW47*$R$6*AW146
-      WHEN c = 't115' AND v >= 1 THEN
-        RETURN cell('t15', l) * cell('t105', l);
-
-
-
-      -- t116=AY47*$R$6*AY146
-      WHEN c = 't116' AND v >= 1 THEN
-        RETURN cell('t16', l) * cell('t106', l);
-
-
-
-      -- t117=BA47*$R$6*BA146
-      WHEN c = 't117' AND v >= 1 THEN
-        RETURN cell('t17', l) * cell('t107', l);
-
-
-
-      -- t123=AC158*SI($F26;$G26;1)
-      WHEN c = 't123' AND v >= 1 THEN
-        IF vh.taux_fc = 1 THEN
-          RETURN cell('t113', l) * vh.ponderation_service_compl;
-        ELSE
-          RETURN cell('t113', l);
-        END IF;
-
-
-
-      -- t124=AM158*SI($F26;$G26;1)
-      WHEN c = 't124' AND v >= 1 THEN
-        IF vh.taux_fc = 1 THEN
-          RETURN cell('t114', l) * vh.ponderation_service_compl;
-        ELSE
-          RETURN cell('t114', l);
-        END IF;
-
-
-
-      -- t131=I158*$C26
-      WHEN c = 't131' AND v >= 1 THEN
-        RETURN cell('t111', l) * vh.taux_fi;
-
-
-
-      -- t132=S158*$C26
-      WHEN c = 't132' AND v >= 1 THEN
-        RETURN cell('t112', l) * vh.taux_fi;
-
-
-
-      -- t141=I158*$D26
-      WHEN c = 't141' AND v >= 1 THEN
-        RETURN cell('t111', l) * vh.taux_fa;
-
-
-
-      -- t142=S158*$D26
-      WHEN c = 't142' AND v >= 1 THEN
-        RETURN cell('t112', l) * vh.taux_fa;
-
-
-
-      -- t151=I158*$E26
-      WHEN c = 't151' AND v >= 1 THEN
-        RETURN cell('t111', l) * vh.taux_fc;
-
-
-
-      -- t152=S158*$E26
-      WHEN c = 't152' AND v >= 1 THEN
-        RETURN cell('t112', l) * vh.taux_fc;
-
-
-
-      -- t153=SI(AC170=AC158;AC158;0)*$E26
-      WHEN c = 't153' AND v >= 1 THEN
-        IF cell('t123', l) = cell('t113', l) THEN
-          RETURN cell('t113', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t154=SI(AM170=AM158;AM158;0)*$E26
-      WHEN c = 't154' AND v >= 1 THEN
-        IF cell('t124', l) = cell('t114', l) THEN
-          RETURN cell('t114', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t163=SI(AC170<>AC158;AC170;0)*$E26
-      WHEN c = 't163' AND v >= 1 THEN
-        IF cell('t123', l) <> cell('t113', l) THEN
-          RETURN cell('t123', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- t164=SI(AM170<>AM158;AM170;0)*$E26
-      WHEN c = 't164' AND v >= 1 THEN
-        IF cell('t124', l) <> cell('t114', l) THEN
-          RETURN cell('t124', l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- rs=SOMME(I98:AU98)
-      WHEN c = 'rs' AND v >= 1 THEN
-        RETURN cell('t61',l) + cell('t62',l);
-
-
-
-      -- ss=SOMME(I110:AU110)
-      WHEN c = 'ss' AND v >= 1 THEN
-        RETURN cell('t71',l) + cell('t72',l);
-
-
-
-      -- ts=SOMME(I122:AU122)
-      WHEN c = 'ts' AND v >= 1 THEN
-        RETURN cell('t81',l) + cell('t82',l) + cell('t83',l) + cell('t84',l);
-
-
-
-      -- us=SI($I$13="Oui";SOMME(I182:AU182);0)
-      WHEN c = 'us' AND v >= 1 THEN
-        RETURN cell('t131',l) + cell('t132',l);
-
-
-
-      -- vs=SI($I$13="Oui";SOMME(I194:AU194);0)
-      WHEN c = 'vs' AND v >= 1 THEN
-        IF ose_formule.intervenant.depassement_service_du_sans_hc THEN
-          RETURN cell('t141',l) + cell('t142',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- ws=SI($I$13="Oui";SOMME(I206:AU206);0)
-      WHEN c = 'ws' AND v >= 1 THEN
-        IF ose_formule.intervenant.depassement_service_du_sans_hc THEN
-          RETURN cell('t151',l) + cell('t152',l) + cell('t153',l) + cell('t154',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- xs=SI($I$13="Oui";SOMME(I218:AU218);0)
-      WHEN c = 'xs' AND v >= 1 THEN
-        IF ose_formule.intervenant.depassement_service_du_sans_hc THEN
-          RETURN cell('t163',l) + cell('t164',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- rr=SOMME(AW86:BA86)
-      WHEN c = 'rr' AND v >= 1 THEN
-        RETURN cell('t55',l) + cell('t56',l) + cell('t57',l);
-
-
-
-      -- ur=SI($I$13="Oui";SOMME(AW158:BA158);0)
-      WHEN c = 'ur' AND v >= 1 THEN
-        IF ose_formule.intervenant.depassement_service_du_sans_hc THEN
-          RETURN cell('t115',l) + cell('t116',l) + cell('t117',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      ELSE
-        raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
-      END CASE; END;
-
-
-
-  PROCEDURE CALCUL_RESULTAT IS
-  BEGIN
-    feuille.delete;
-
-    -- transmission des résultats aux volumes horaires et volumes horaires référentiel
-    FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'rs',l);
-      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'ss',l);
-      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'ts',l);
-      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'rr',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'us',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'vs',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'ws',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'xs',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'ur',l);
-    END LOOP;
-  END;
-
-END FORMULE_UBO;
-/
-
 CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
   decalageLigne NUMERIC DEFAULT 21;
 
@@ -1575,9 +752,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
 
   PROCEDURE dbgDump( val CLOB ) IS
   BEGIN
-    dbg('
-' || val || '
-');
+    dbg('<div class="dbg-dump">' || val || '</div>');
   END;
 
   PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
@@ -1677,11 +852,13 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
     vh ose_formule.t_volume_horaire;
+    i  ose_formule.t_intervenant;
     v NUMERIC;
     val FLOAT;
   BEGIN
     v := calcVersion;
 
+    i := ose_formule.intervenant;
     IF l > 0 THEN
       vh := ose_formule.volumes_horaires.items(l);
     END IF;
@@ -1754,7 +931,8 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
           RETURN cell('t',l-1) + cell('l',l);
         END IF;
 
-        -- u=SI(J22>0;SI(T21+L22= 1 THEN
+      -- u=SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0)
+      WHEN c = 'u' AND v >= 1 THEN
         IF cell('j',l) > 0 THEN
           IF (cell('t',l-1) + cell('l',l)) < ose_formule.intervenant.service_du THEN
             RETURN 0;
@@ -1765,16 +943,13 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
           RETURN 0;
         END IF;
 
-      -- v=SI(OU(service_realise"Oui");0;(U22+SI(H22<>"Oui";I22;0))*K22)
+      -- v=SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(U22+SI(H22<>"Oui";I22;0))*K22)
       WHEN c = 'v' AND v >= 1 THEN
         IF cell('service_realise') < ose_formule.intervenant.service_du OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
           RETURN 0;
         ELSE
-          IF vh.service_statutaire THEN
-            RETURN 0;
-          ELSE
-            RETURN vh.heures;
-          END IF;
+          --(U22+SI(H22<>"Oui";I22;0))*K22
+          RETURN (cell('u',l) + CASE WHEN NOT vh.service_statutaire THEN cell('i',l) ELSE 0 END ) * cell('k',l);
         END IF;
 
       -- x=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";($L22-$U22)*D22;$O22*D22))
@@ -1912,6 +1087,821 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
 END FORMULE_ULHN;
 /
 
+CREATE OR REPLACE PACKAGE BODY FORMULE_NANTERRE AS
+  decalageLigne NUMERIC DEFAULT 21;
+
+
+  /* Stockage des valeurs intermédiaires */
+  TYPE t_cell IS RECORD (
+    valeur FLOAT,
+    enCalcul BOOLEAN DEFAULT FALSE
+    );
+  TYPE t_cells IS TABLE OF t_cell INDEX BY PLS_INTEGER;
+  TYPE t_coll IS RECORD (
+    cells t_cells
+    );
+  TYPE t_colls IS TABLE OF t_coll INDEX BY VARCHAR2(50);
+  feuille t_colls;
+
+  debugActif BOOLEAN DEFAULT TRUE;
+  debugLine NUMERIC;
+
+
+  PROCEDURE dbg( val CLOB ) IS
+  BEGIN
+    ose_formule.volumes_horaires.items(debugLine).debug_info :=
+          ose_formule.volumes_horaires.items(debugLine).debug_info || val;
+  END;
+
+
+  PROCEDURE dbgi( val CLOB ) IS
+  BEGIN
+    ose_formule.intervenant.debug_info := ose_formule.intervenant.debug_info || val;
+  END;
+
+  PROCEDURE dbgDump( val CLOB ) IS
+  BEGIN
+    dbg('<div class="dbg-dump">' || val || '</div>');
+  END;
+
+  PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
+    ligne NUMERIC;
+  BEGIN
+    ligne := l;
+    IF l <> 0 THEN
+      ligne := ligne + decalageLigne;
+    END IF;
+
+    dbgi( '[cell|' || c || '|' || ligne || '|' || val );
+  END;
+
+  PROCEDURE dbgCalc( fncName VARCHAR2, c VARCHAR2, res FLOAT ) IS
+  BEGIN
+    dbgi( '[calc|' || fncName || '|' || c || '|' || res );
+  END;
+
+  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 0 ) RETURN FLOAT IS
+    val FLOAT;
+  BEGIN
+    IF feuille.exists(c) THEN
+      IF feuille(c).cells.exists(l) THEN
+        IF feuille(c).cells(l).enCalcul THEN
+          raise_application_error( -20001, 'Dépendance cyclique : la cellule [' || c || ';' || l || '] est déjà en cours de calcul');
+        END IF;
+        RETURN feuille(c).cells(l).valeur;
+      END IF;
+    END IF;
+
+    feuille(c).cells(l).enCalcul := true;
+    val := calcCell( c, l );
+    IF debugActif THEN
+      dbgCell( c, l, val );
+    END IF;
+    feuille(c).cells(l).valeur := val;
+    feuille(c).cells(l).enCalcul := false;
+
+    RETURN val;
+  END;
+
+  FUNCTION mainCell( libelle VARCHAR2, c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
+    val FLOAT;
+  BEGIN
+    debugLine := l;
+    val := cell(c,l);
+
+    RETURN val;
+  END;
+
+  FUNCTION calcFnc( fncName VARCHAR2, c VARCHAR2 ) RETURN FLOAT IS
+    val FLOAT;
+    cellRes FLOAT;
+  BEGIN
+    IF feuille.exists('__' || fncName || '__' || c || '__') THEN
+      IF feuille('__' || fncName || '__' || c || '__').cells.exists(1) THEN
+        RETURN feuille('__' || fncName || '__' || c || '__').cells(1).valeur;
+      END IF;
+    END IF;
+    CASE
+      -- Liste des fonctions supportées
+
+      WHEN fncName = 'total' THEN
+        val := 0;
+        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+          val := val + COALESCE(cell(c, l),0);
+        END LOOP;
+
+      WHEN fncName = 'max' THEN
+        val := NULL;
+        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+          cellRes := cell(c,l);
+          IF val IS NULL OR val < cellRes THEN
+            val := cellRes;
+          END IF;
+        END LOOP;
+
+      -- fin de la liste des fonctions supportées
+      ELSE
+        raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
+      END CASE;
+    IF debugActif THEN
+      dbgCalc(fncName, c, val );
+    END IF;
+    feuille('__' || fncName || '__' || c || '__').cells(1).valeur := val;
+
+    RETURN val;
+  END;
+
+
+  FUNCTION calcVersion RETURN NUMERIC IS
+  BEGIN
+    RETURN 1;
+  END;
+
+
+
+  FUNCTION notInStructs( v VARCHAR2 DEFAULT NULL ) RETURN BOOLEAN IS
+  BEGIN
+    RETURN COALESCE(v,' ') NOT IN ('KE8','UP10');
+  END;
+
+
+
+  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
+    vh ose_formule.t_volume_horaire;
+    i  ose_formule.t_intervenant;
+    v NUMERIC;
+    val FLOAT;
+  BEGIN
+    v := calcVersion;
+
+    i := ose_formule.intervenant;
+    IF l > 0 THEN
+      vh := ose_formule.volumes_horaires.items(l);
+    END IF;
+    CASE
+
+
+
+      -- service_realise=SOMME(BJ22:BM51)
+      WHEN c = 'service_realise' AND v >= 1 THEN
+        RETURN calcFnc('total','BJ') + calcFnc('total','BK') + calcFnc('total','BL') + calcFnc('total','BM');
+
+
+
+      -- HC=SOMME(BN22:BR51)
+      WHEN c = 'HC' AND v >= 1 THEN
+        RETURN calcFnc('total','BN') + calcFnc('total','BO') + calcFnc('total','BP') + calcFnc('total','BQ') + calcFnc('total','BR');
+
+
+
+      -- I=SI(ESTVIDE(C22);0;RECHERCHEH(SI(ET(C22="TP";TP_vaut_TD="Oui");"TD";C22);types_intervention;2;0))
+      WHEN c = 'I' AND v >= 1 THEN
+        -- ON ne retourne que le taux en service dû... ? ?
+        RETURN vh.taux_service_du;
+
+
+
+      -- J=H22*I22
+      WHEN c = 'J' AND v >= 1 THEN
+        RETURN vh.heures * cell('I', l);
+
+
+
+      -- L=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0))
+      WHEN c = 'L' AND v >= 1 THEN
+        -- ET($C22<>"Référentiel";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10")
+        ose_test.echo (vh.param_1 ||  '-' || case when
+                                                      COALESCE(vh.param_1,' ') NOT IN ('KE8','UP10')
+                                                    then '1' else '0' end);
+
+        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+          RETURN cell('J',l) * vh.taux_fi;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- M=SI(L$52>0;L22/L$52;0)
+      WHEN c = 'M' AND v >= 1 THEN
+        IF cell('L52') > 0 THEN
+          RETURN cell('L', l) / cell('L52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- N=L$53*M22
+      WHEN c = 'N' AND v >= 1 THEN
+        RETURN cell('L53') * cell('M', l);
+
+
+
+      -- O=SI(ET(L$54=0;HC_autorisees="Oui");L22-N22;0)
+      WHEN c = 'O' AND v >= 1 THEN
+        IF cell('L54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('L', l) - cell('N', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- Q=SI($H22="";0;SI(ET($C22="Référentiel";$G22="Oui";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22;0))
+      WHEN c = 'Q' AND v >= 1 THEN
+        -- ET($C22="Référentiel";$G22="Oui";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10")
+        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+          RETURN cell('J',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- R=SI(Q$52>0;Q22/Q$52;0)
+      WHEN c = 'R' AND v >= 1 THEN
+        IF cell('Q52') > 0 THEN
+          RETURN cell('Q', l) / cell('Q52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- S=Q$53*R22
+      WHEN c = 'S' AND v >= 1 THEN
+        RETURN cell('Q53') * cell('R', l);
+
+
+
+      -- T=SI(ET(Q$54=0;HC_autorisees="Oui");Q22-S22;0)
+      WHEN c = 'T' AND v >= 1 THEN
+        IF cell('Q54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('Q', l) - cell('S', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- V=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0))
+      WHEN c = 'V' AND v >= 1 THEN
+        --ET($C22<>"Référentiel";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0)
+        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+          RETURN cell('J',l) * vh.taux_fi;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- W=SI(V$52>0;V22/V$52;0)
+      WHEN c = 'W' AND v >= 1 THEN
+        IF cell('V52') > 0 THEN
+          RETURN cell('V', l) / cell('V52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- X=V$53*W22
+      WHEN c = 'X' AND v >= 1 THEN
+        RETURN cell('V53') * cell('W', l);
+
+
+
+      -- Y=SI(ET(V$54=0;HC_autorisees="Oui");V22-X22;0)
+      WHEN c = 'Y' AND v >= 1 THEN
+        IF cell('V54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('V', l) - cell('X', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AA=SI($H22="";0;SI(ET($C22="Référentiel";$G22="Oui";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22;0))
+      WHEN c = 'AA' AND v >= 1 THEN
+        --ET($C22="Référentiel";$G22="Oui";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10")
+        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND NOT vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+          RETURN cell('J',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AB=SI(AA$52>0;AA22/AA$52;0)
+      WHEN c = 'AB' AND v >= 1 THEN
+        IF cell('AA52') > 0 THEN
+          RETURN cell('AA', l) / cell('AA52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AC=AA$53*AB22
+      WHEN c = 'AC' AND v >= 1 THEN
+        RETURN cell('AA53') * cell('AB', l);
+
+
+
+      -- AD=SI(ET(AA$54=0;HC_autorisees="Oui");AA22-AC22;0)
+      WHEN c = 'AD' AND v >= 1 THEN
+        IF cell('AA54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AA', l) - cell('AC', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AF=SI($H22="";0;SI(OU($B22="KE8";$B22="UP10");SI($C22="Référentiel";SI($G22="Oui";$J22;0);$J22*$D22);0))
+      WHEN c = 'AF' AND v >= 1 THEN
+        IF vh.param_1 IN ('KE8','UP10') THEN
+          --SI($C22="Référentiel";SI($G22="Oui";$J22;0);$J22*$D22)
+          IF vh.volume_horaire_ref_id IS NOT NULL THEN
+            --SI($G22="Oui";$J22;0)
+            IF vh.service_statutaire THEN
+              RETURN cell('J', l);
+            ELSE
+              RETURN 0;
+            END IF;
+          ELSE
+            RETURN cell('J', l) * vh.taux_fi;
+          END IF;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AG=SI(AF$52>0;AF22/AF$52;0)
+      WHEN c = 'AG' AND v >= 1 THEN
+        IF cell('AF52') > 0 THEN
+          RETURN cell('AF', l) / cell('AF52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AH=AF$53*AG22
+      WHEN c = 'AH' AND v >= 1 THEN
+        RETURN cell('AF53') * cell('AG', l);
+
+
+
+      -- AI=SI(ET(AF$54=0;HC_autorisees="Oui");AF22-AH22;0)
+      WHEN c = 'AI' AND v >= 1 THEN
+        IF cell('AF54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AF', l) - cell('AH', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AK=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22=composante_affectation);$J22*$E22;0))
+      WHEN c = 'AK' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
+          RETURN cell('J', l) * vh.taux_fa;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AL=SI(AK$52>0;AK22/AK$52;0)
+      WHEN c = 'AL' AND v >= 1 THEN
+        IF cell('AK52') > 0 THEN
+          RETURN cell('AK', l) / cell('AK52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AM=AK$53*AL22
+      WHEN c = 'AM' AND v >= 1 THEN
+        RETURN cell('AK53') * cell('AL', l);
+
+
+
+      -- AN=SI(ET(AK$54=0;HC_autorisees="Oui");AK22-AM22;0)
+      WHEN c = 'AN' AND v >= 1 THEN
+        IF cell('AK54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AK', l) - cell('AM', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AP=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22<>composante_affectation);$J22*$E22;0))
+      WHEN c = 'AP' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
+          RETURN cell('J', l) * vh.taux_fa;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AQ=SI(AP$52>0;AP22/AP$52;0)
+      WHEN c = 'AQ' AND v >= 1 THEN
+        IF cell('AP52') > 0 THEN
+          RETURN cell('AP', l) / cell('AP52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AR=AP$53*AQ22
+      WHEN c = 'AR' AND v >= 1 THEN
+        RETURN cell('AP53') * cell('AQ', l);
+
+
+
+      -- AS=SI(ET(AP$54=0;HC_autorisees="Oui");AP22-AR22;0)
+      WHEN c = 'AS' AND v >= 1 THEN
+        IF cell('AP54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AP', l) - cell('AR', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AU=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22=composante_affectation);$J22*$F22;0))
+      WHEN c = 'AU' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation THEN
+          RETURN cell('J', l) * vh.taux_fc;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AV=SI(AU$52>0;AU22/AU$52;0)
+      WHEN c = 'AV' AND v >= 1 THEN
+        IF cell('AU52') > 0 THEN
+          RETURN cell('AU', l) / cell('AU52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AW=AU$53*AV22
+      WHEN c = 'AW' AND v >= 1 THEN
+        RETURN cell('AU53') * cell('AV', l);
+
+
+
+      -- AX=SI(ET(AU$54=0;HC_autorisees="Oui");AU22-AW22;0)
+      WHEN c = 'AX' AND v >= 1 THEN
+        IF cell('AU54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AU', l) - cell('AW', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- AZ=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22<>composante_affectation);$J22*$F22;0))
+      WHEN c = 'AZ' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation THEN
+          RETURN cell('J', l) * vh.taux_fc;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BA=SI(AZ$52>0;AZ22/AZ$52;0)
+      WHEN c = 'BA' AND v >= 1 THEN
+        IF cell('AZ52') > 0 THEN
+          RETURN cell('AZ', l) / cell('AZ52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BB=AZ$53*BA22
+      WHEN c = 'BB' AND v >= 1 THEN
+        RETURN cell('AZ53') * cell('BA', l);
+
+
+
+      -- BC=SI(ET(AZ$54=0;HC_autorisees="Oui");AZ22-BB22;0)
+      WHEN c = 'BC' AND v >= 1 THEN
+        IF cell('AZ54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('AZ', l) - cell('BB', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BE=J22-SOMME(L22;Q22;V22;AA22;AF22;AK22;AP22;AU22;AZ22)
+      WHEN c = 'BE' AND v >= 1 THEN
+        RETURN cell('J', l) - (cell('L', l) + cell('Q', l) + cell('V', l) + cell('AA', l) + cell('AF', l) + cell('AK', l) + cell('AP', l) + cell('AU', l) + cell('AZ', l));
+
+
+
+      -- BF=SI(BE$52>0;BE22/BE$52;0)
+      WHEN c = 'BF' AND v >= 1 THEN
+        IF cell('BE52') > 0 THEN
+          RETURN cell('BE', l) / cell('BE52');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BG=BE$53*BF22
+      WHEN c = 'BG' AND v >= 1 THEN
+        RETURN cell('BE53') * cell('BF', l);
+
+
+
+      -- BH=SI(ET(BE$54=0;HC_autorisees="Oui");BE22-BG22;0)
+      WHEN c = 'BH' AND v >= 1 THEN
+        IF cell('BE54') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+          RETURN cell('BE', l) - cell('BG', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- BJ=N22+X22+AH22
+      WHEN c = 'BJ' AND v >= 1 THEN
+        RETURN cell('N', l) + cell('X', l) + cell('AH', l);
+
+
+
+      -- BK=AM22+AR22
+      WHEN c = 'BK' AND v >= 1 THEN
+        RETURN cell('AM', l) + cell('AR', l);
+
+
+
+      -- BL=AW22+BB22
+      WHEN c = 'BL' AND v >= 1 THEN
+        RETURN cell('AW', l) + cell('BB', l);
+
+
+
+      -- BM=S22+AC22+BG22
+      WHEN c = 'BM' AND v >= 1 THEN
+        RETURN cell('S', l) + cell('AC', l) + cell('BG', l);
+
+
+
+      -- BN=O22+Y22+AI22
+      WHEN c = 'BN' AND v >= 1 THEN
+        RETURN cell('O', l) + cell('Y', l) + cell('AI', l);
+
+
+
+      -- BO=AN22+AS22
+      WHEN c = 'BO' AND v >= 1 THEN
+        RETURN cell('AN', l) + cell('AS', l);
+
+
+
+      -- BP=AX22+BC22
+      WHEN c = 'BP' AND v >= 1 THEN
+        RETURN cell('AX', l) + cell('BC', l);
+
+
+
+      -- BQ=0
+      WHEN c = 'BQ' AND v >= 1 THEN
+        RETURN 0;
+
+
+
+      -- BR=T22+AD22+BH22
+      WHEN c = 'BR' AND v >= 1 THEN
+        RETURN cell('T', l) + cell('AD', l) + cell('BH', l);
+
+
+
+      -- L52=SOMME(L22:L51)
+      WHEN c = 'L52' AND v >= 1 THEN
+        RETURN calcFnc('total','L');
+
+
+
+      -- L53=MIN(L52;service_du)
+      WHEN c = 'L53' AND v >= 1 THEN
+        RETURN LEAST(cell('L52'), i.service_du);
+
+
+
+      -- L54=service_du-L53
+      WHEN c = 'L54' AND v >= 1 THEN
+        RETURN i.service_du - cell('L53');
+
+
+
+      -- Q52=SOMME(Q22:Q51)
+      WHEN c = 'Q52' AND v >= 1 THEN
+        RETURN calcFnc('total','Q');
+
+
+
+      -- Q53=MIN(Q52;L54)
+      WHEN c = 'Q53' AND v >= 1 THEN
+        RETURN LEAST(cell('Q52'), cell('L54'));
+
+
+
+      -- Q54=L54-Q53
+      WHEN c = 'Q54' AND v >= 1 THEN
+        RETURN cell('L54') - cell('Q53');
+
+
+
+      -- V52=SOMME(V22:V51)
+      WHEN c = 'V52' AND v >= 1 THEN
+        RETURN calcFnc('total','V');
+
+
+
+      -- V53=MIN(V52;Q54)
+      WHEN c = 'V53' AND v >= 1 THEN
+        RETURN LEAST(cell('V52'), cell('Q54'));
+
+
+
+      -- V54=Q54-V53
+      WHEN c = 'V54' AND v >= 1 THEN
+        RETURN cell('Q54') - cell('V53');
+
+
+
+      -- AA52=SOMME(AA22:AA51)
+      WHEN c = 'AA52' AND v >= 1 THEN
+        RETURN calcFnc('total','AA');
+
+
+
+      -- AA53=MIN(AA52;V54)
+      WHEN c = 'AA53' AND v >= 1 THEN
+        RETURN LEAST(cell('AA52'), cell('V54'));
+
+
+
+      -- AA54=V54-AA53
+      WHEN c = 'AA54' AND v >= 1 THEN
+        RETURN cell('V54') - cell('AA53');
+
+
+
+      -- AF52=SOMME(AF22:AF51)
+      WHEN c = 'AF52' AND v >= 1 THEN
+        RETURN calcFnc('total','AF');
+
+
+
+      -- AF53=MIN(AF52;AA54)
+      WHEN c = 'AF53' AND v >= 1 THEN
+        RETURN LEAST(cell('AF52'), cell('AA54'));
+
+
+
+      -- AF54=AA54-AF53
+      WHEN c = 'AF54' AND v >= 1 THEN
+        RETURN cell('AA54') - cell('AF53');
+
+
+
+      -- AK52=SOMME(AK22:AK51)
+      WHEN c = 'AK52' AND v >= 1 THEN
+        RETURN calcFnc('total','AK');
+
+
+
+      -- AK53=MIN(AK52;AF54)
+      WHEN c = 'AK53' AND v >= 1 THEN
+        RETURN LEAST(cell('AK52'), cell('AF54'));
+
+
+
+      -- AK54=AF54-AK53
+      WHEN c = 'AK54' AND v >= 1 THEN
+        RETURN cell('AF54') - cell('AK53');
+
+
+
+      -- AP52=SOMME(AP22:AP51)
+      WHEN c = 'AP52' AND v >= 1 THEN
+        RETURN calcFnc('total','AP');
+
+
+
+      -- AP53=MIN(AP52;AK54)
+      WHEN c = 'AP53' AND v >= 1 THEN
+        RETURN LEAST(cell('AP52'), cell('AK54'));
+
+
+
+      -- AP54=AK54-AP53
+      WHEN c = 'AP54' AND v >= 1 THEN
+        RETURN cell('AK54') - cell('AP53');
+
+
+
+      -- AU52=SOMME(AU22:AU51)
+      WHEN c = 'AU52' AND v >= 1 THEN
+        RETURN calcFnc('total','AU');
+
+
+
+      -- AU53=MIN(AU52;AP54)
+      WHEN c = 'AU53' AND v >= 1 THEN
+        RETURN LEAST(cell('AU52'), cell('AP54'));
+
+
+
+      -- AU54=AP54-AU53
+      WHEN c = 'AU54' AND v >= 1 THEN
+        RETURN cell('AP54') - cell('AU53');
+
+
+
+      -- AZ52=SOMME(AZ22:AZ51)
+      WHEN c = 'AZ52' AND v >= 1 THEN
+        RETURN calcFnc('total','AZ');
+
+
+
+      -- AZ53=MIN(AZ52;AU54)
+      WHEN c = 'AZ53' AND v >= 1 THEN
+        RETURN LEAST(cell('AZ52'), cell('AU54'));
+
+
+
+      -- AZ54=AU54-AZ53
+      WHEN c = 'AZ54' AND v >= 1 THEN
+        RETURN cell('AU54') - cell('AZ53');
+
+
+
+      -- BE52=SOMME(BE22:BE51)
+      WHEN c = 'BE52' AND v >= 1 THEN
+        RETURN calcFnc('total','BE');
+
+
+
+      -- BE53=MIN(BE52;AZ54)
+      WHEN c = 'BE53' AND v >= 1 THEN
+        RETURN LEAST(cell('BE52'), cell('AZ54'));
+
+
+
+      -- BE54=AZ54-BE53
+      WHEN c = 'BE54' AND v >= 1 THEN
+        RETURN cell('AZ54') - cell('BE53');
+
+
+
+      ELSE
+        raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
+      END CASE; END;
+
+
+
+  PROCEDURE CALCUL_RESULTAT IS
+  BEGIN
+    feuille.delete;
+
+    -- transmission des résultats aux volumes horaires et volumes horaires référentiel
+    FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'BJ',l);
+      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'BK',l);
+      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'BL',l);
+      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'BM',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'BN',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'BO',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'BP',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'BQ',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'BR',l);
+    END LOOP;
+  END;
+
+END FORMULE_NANTERRE;
+/
+
 CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN" AS
 
   /* Stockage des valeurs intermédiaires */
@@ -2039,8 +2029,10 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN" AS
   -- Formule de calcul définie par tableaux
   FUNCTION EXECFORMULE( tableau NUMERIC, version NUMERIC ) RETURN FLOAT IS
     vh ose_formule.t_volume_horaire;
+    i  ose_formule.t_intervenant;
   BEGIN
     vh := ose_formule.volumes_horaires.items(vh_index);
+    i := ose_formule.intervenant;
     CASE
 
 
@@ -3038,27 +3030,8 @@ COMMENT ON TABLE "AFFECTATION_RECHERCHE" IS 'Un chercheur peut avoir plusieurs a
 ALTER TABLE "FICHIER" MODIFY ("CONTENU" NULL);
 /
 
-ALTER TABLE "MODIFICATION_SERVICE_DU" MODIFY ("COMMENTAIRES" VARCHAR2(4000 CHAR));
-/
-
-ALTER TABLE "PARAMETRE" MODIFY ("VALEUR" VARCHAR2(200 CHAR));
-/
-
-ALTER TABLE "PARAMETRE" MODIFY ("DESCRIPTION" VARCHAR2(500 CHAR));
-/
-
-ALTER TABLE "SERVICE" MODIFY ("DESCRIPTION" VARCHAR2(4000 CHAR));
-/
-
 ALTER TABLE "SYNC_LOG" MODIFY ("DATE_SYNC" DATE);
 /
-
-ALTER TABLE "SYNC_LOG" MODIFY ("MESSAGE" VARCHAR2(4000 CHAR));
-/
-
-ALTER TABLE "SYNC_LOG" MODIFY ("MESSAGE" NULL);
-/
-
 
 
 
@@ -3456,18 +3429,28 @@ END OSE_EVENT;
 CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
 
   TYPE t_intervenant IS RECORD (
+    -- identifiants
     id                             NUMERIC,
     annee_id                       NUMERIC,
     structure_id                   NUMERIC,
     type_volume_horaire_id         NUMERIC,
     etat_volume_horaire_id         NUMERIC,
 
+    -- paramètres globaux
     heures_decharge                FLOAT DEFAULT 0,
     heures_service_statutaire      FLOAT DEFAULT 0,
     heures_service_modifie         FLOAT DEFAULT 0,
     depassement_service_du_sans_hc BOOLEAN DEFAULT FALSE,
     type_intervenant_code          VARCHAR(2),
 
+    -- paramètres spacifiques
+    param_1                        VARCHAR(100),
+    param_2                        VARCHAR(100),
+    param_3                        VARCHAR(100),
+    param_4                        VARCHAR(100),
+    param_5                        VARCHAR(100),
+
+    -- résultats
     service_du                     FLOAT,
     debug_info                     CLOB
     );
@@ -3480,7 +3463,7 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     service_referentiel_id     NUMERIC,
     structure_id               NUMERIC,
 
-    -- paramètres
+    -- paramètres globaux
     structure_is_affectation   BOOLEAN DEFAULT TRUE,
     structure_is_univ          BOOLEAN DEFAULT FALSE,
     service_statutaire         BOOLEAN DEFAULT TRUE,
@@ -3489,12 +3472,19 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     taux_fc                    FLOAT DEFAULT 0,
 
     -- pondérations et heures
-
+    type_intervention_code     VARCHAR(15),
     taux_service_du            FLOAT DEFAULT 1, -- en fonction des types d'intervention
     taux_service_compl         FLOAT DEFAULT 1, -- en fonction des types d'intervention
     ponderation_service_du     FLOAT DEFAULT 1, -- relatif aux modulateurs
     ponderation_service_compl  FLOAT DEFAULT 1, -- relatif aux modulateurs
     heures                     FLOAT DEFAULT 0, -- heures réelles saisies
+
+    -- paramètres spacifiques
+    param_1                    VARCHAR(100),
+    param_2                    VARCHAR(100),
+    param_3                    VARCHAR(100),
+    param_4                    VARCHAR(100),
+    param_5                    VARCHAR(100),
 
     -- résultats
     service_fi                 FLOAT DEFAULT 0,
@@ -3549,7 +3539,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     service_referentiel_id     NUMERIC,
     volume_horaire_id          NUMERIC,
     volume_horaire_ref_id      NUMERIC,
-    structure_id               NUMERIC,
 
     service_fi                 FLOAT DEFAULT 0,
     service_fa                 FLOAT DEFAULT 0,
@@ -3564,11 +3553,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     changed                    BOOLEAN DEFAULT FALSE,
     debug_info                 CLOB
     );
+
   TYPE t_resultats IS TABLE OF t_resultat INDEX BY VARCHAR2(15);
 
   all_volumes_horaires t_lst_vh_types;
   arrondi NUMERIC DEFAULT 2;
   t_res t_resultats;
+  formule_definition formule%rowtype;
+  in_calculer_tout BOOLEAN DEFAULT false;
 
 
 
@@ -3607,14 +3599,19 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     intervenant.service_du := 0;
 
     SELECT
-      intervenant_id,
-      annee_id,
-      structure_id,
-      type_intervenant_code,
-      heures_service_statutaire,
-      depassement_service_du_sans_hc,
-      heures_service_modifie,
-      heures_decharge
+      fi.intervenant_id,
+      fi.annee_id,
+      fi.structure_id,
+      fi.type_intervenant_code,
+      fi.heures_service_statutaire,
+      fi.depassement_service_du_sans_hc,
+      fi.heures_service_modifie,
+      fi.heures_decharge,
+      fli.param_1,
+      fli.param_2,
+      fli.param_3,
+      fli.param_4,
+      fli.param_5
       INTO
         intervenant.id,
         intervenant.annee_id,
@@ -3623,9 +3620,15 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
         intervenant.heures_service_statutaire,
         dsdushc,
         intervenant.heures_service_modifie,
-        intervenant.heures_decharge
+        intervenant.heures_decharge,
+        intervenant.param_1,
+        intervenant.param_2,
+        intervenant.param_3,
+        intervenant.param_4,
+        intervenant.param_5
     FROM
       v_formule_intervenant fi
+        LEFT JOIN v_formule_local_i_params fli ON fli.intervenant_id = fi.intervenant_id
     WHERE
         fi.intervenant_id = intervenant.id;
 
@@ -3648,6 +3651,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     intervenant.heures_decharge                := 0;
     intervenant.type_intervenant_code          := 'E';
     intervenant.service_du                     := 0;
+    intervenant.param_1                        := NULL;
+    intervenant.param_2                        := NULL;
+    intervenant.param_3                        := NULL;
+    intervenant.param_4                        := NULL;
+    intervenant.param_5                        := NULL;
   END;
 
 
@@ -3719,8 +3727,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     SELECT to_number(valeur) INTO structure_univ FROM parametre WHERE nom = 'structure_univ';
 
     FOR d IN (
-      SELECT *
+      SELECT fvh.*, flvh.param_1, flvh.param_2, flvh.param_3, flvh.param_4, flvh.param_5
       FROM   v_formule_volume_horaire fvh
+               LEFT JOIN v_formule_local_vh_params flvh ON flvh.volume_horaire_id = COALESCE(fvh.volume_horaire_id,0) AND flvh.volume_horaire_ref_id = COALESCE(fvh.volume_horaire_ref_id,0)
       WHERE  fvh.intervenant_id = intervenant.id
       ) LOOP
       vh.volume_horaire_id         := d.volume_horaire_id;
@@ -3737,8 +3746,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       vh.structure_is_univ         := NVL(d.structure_id,0) = NVL(structure_univ,-1);
       vh.service_statutaire        := d.service_statutaire = 1;
       vh.heures                    := d.heures;
+      vh.type_intervention_code    := d.type_intervention_code;
       vh.taux_service_du           := d.taux_service_du;
       vh.taux_service_compl        := d.taux_service_compl;
+      vh.param_1                   := d.param_1;
+      vh.param_2                   := d.param_2;
+      vh.param_3                   := d.param_3;
+      vh.param_4                   := d.param_4;
+      vh.param_5                   := d.param_5;
 
       FOR etat_volume_horaire_id IN 1 .. d.etat_volume_horaire_id LOOP
         BEGIN
@@ -3767,8 +3782,23 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     SELECT id INTO structure_univ FROM formule_test_structure WHERE universite = 1;
 
     FOR d IN (
-      SELECT *
-      FROM   formule_test_volume_horaire ftvh
+      SELECT
+        ftvh.*,
+        CASE ftvh.type_intervention_code
+          WHEN 'CM' THEN COALESCE(fti.taux_cm_service_du,1.5)
+          WHEN 'TP' THEN COALESCE(fti.taux_tp_service_du,1)
+          WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_du,1)
+          ELSE 1
+          END taux_service_du,
+        CASE ftvh.type_intervention_code
+          WHEN 'CM' THEN COALESCE(fti.taux_cm_service_compl,1.5)
+          WHEN 'TP' THEN COALESCE(fti.taux_tp_service_compl,2/3)
+          WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_compl,1)
+          ELSE 1
+          END taux_service_compl
+      FROM
+        formule_test_volume_horaire ftvh
+          JOIN formule_test_intervenant fti ON fti.id = intervenant.id
       WHERE  ftvh.intervenant_test_id = intervenant.id
       ORDER BY ftvh.id
       ) LOOP
@@ -3792,8 +3822,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       volumes_horaires.items(length).structure_is_univ         := NVL(d.structure_test_id,0) = NVL(structure_univ,-1);
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;
+      volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
       volumes_horaires.items(length).taux_service_du           := d.taux_service_du;
       volumes_horaires.items(length).taux_service_compl        := d.taux_service_compl;
+      volumes_horaires.items(length).param_1                   := d.param_1;
+      volumes_horaires.items(length).param_2                   := d.param_2;
+      volumes_horaires.items(length).param_3                   := d.param_3;
+      volumes_horaires.items(length).param_4                   := d.param_4;
+      volumes_horaires.items(length).param_5                   := d.param_5;
     END LOOP;
   END;
 
@@ -3855,7 +3891,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     ose_test.echo('  volume_horaire_ref_id    = ' || t_res(code).volume_horaire_ref_id);
     ose_test.echo('  service_id               = ' || t_res(code).service_id);
     ose_test.echo('  service_referentiel_id   = ' || t_res(code).service_referentiel_id);
-    ose_test.echo('  structure_id             = ' || t_res(code).structure_id);
     ose_test.echo('  service_fi               = ' || t_res(code).service_fi);
     ose_test.echo('  service_fa               = ' || t_res(code).service_fa);
     ose_test.echo('  service_fc               = ' || t_res(code).service_fc);
@@ -4182,10 +4217,12 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   PROCEDURE CALCULER( INTERVENANT_ID NUMERIC ) IS
     type_volume_horaire_id NUMERIC;
     etat_volume_horaire_id NUMERIC;
-    fdata formule%rowtype;
   BEGIN
     intervenant.id := intervenant_id;
-    fdata := ose_parametre.get_formule;
+
+    IF NOT in_calculer_tout THEN
+      formule_definition := ose_parametre.get_formule;
+    END IF;
 
     LOAD_INTERVENANT_FROM_BDD;
     LOAD_VH_FROM_BDD;
@@ -4197,7 +4234,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
     intervenant.etat_volume_horaire_id := etat_volume_horaire_id;
     volumes_horaires := all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id);
-    EXECUTE IMMEDIATE 'BEGIN ' || fdata.package_name || '.' || fdata.procedure_name || '; END;';
+    EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.package_name || '.' || formule_definition.procedure_name || '; END;';
         all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id) := volumes_horaires;
     etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
     END LOOP;
@@ -4212,6 +4249,8 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   PROCEDURE CALCULER_TOUT( ANNEE_ID NUMERIC DEFAULT NULL ) IS
     a_id NUMERIC;
   BEGIN
+    in_calculer_tout := true;
+    formule_definition := ose_parametre.get_formule;
     a_id := NVL(CALCULER_TOUT.ANNEE_ID, OSE_PARAMETRE.GET_ANNEE);
     FOR mp IN (
       SELECT DISTINCT
@@ -4238,6 +4277,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       LOOP
         CALCULER( mp.intervenant_id );
       END LOOP;
+    in_calculer_tout := false;
   END;
 
 
@@ -5392,8 +5432,87 @@ CREATE OR REPLACE FORCE VIEW V_TBL_CONTRAT AS
       structure_id;
 /
 
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1211 AS
+SELECT
+  i.id id,
+  i.annee_id,
+  i.id intervenant_id,
+  i.structure_id,
+  AVG(t.plafond)  plafond,
+  AVG(t.heures)   heures
+FROM
+  (
+    SELECT
+      vhr.type_volume_horaire_id        type_volume_horaire_id,
+      sr.intervenant_id                 intervenant_id,
+      fr.plafond                        plafond,
+      fr.id                             fr_id,
+      SUM(vhr.heures)                   heures
+    FROM
+      service_referentiel       sr
+        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code= 'PREVU'
+    WHERE
+        sr.histo_destruction IS NULL
+    GROUP BY
+      vhr.type_volume_horaire_id,
+      sr.intervenant_id,
+      fr.plafond,
+      fr.id
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond
+  /*i.id*/
+GROUP BY
+  t.type_volume_horaire_id,
+  i.annee_id,
+  i.id,
+  i.structure_id;
+/
 
-
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1221 AS
+SELECT
+  i.id id,
+  i.annee_id,
+  i.id intervenant_id,
+  i.structure_id,
+  AVG(t.plafond)  plafond,
+  AVG(t.heures)   heures
+FROM
+  (
+    SELECT
+      vhr.type_volume_horaire_id        type_volume_horaire_id,
+      sr.intervenant_id                 intervenant_id,
+      fr.plafond                        plafond,
+      fr.id                             fr_id,
+      SUM(vhr.heures)                   heures
+    FROM
+      service_referentiel       sr
+        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
+        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code= 'REALISE'
+    WHERE
+        sr.histo_destruction IS NULL
+    GROUP BY
+      vhr.type_volume_horaire_id,
+      sr.intervenant_id,
+      fr.plafond,
+      fr.id
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond
+  /*i.id*/
+GROUP BY
+  t.type_volume_horaire_id,
+  i.annee_id,
+  i.id,
+  i.structure_id;
+/
 
 --------------------------------------------------
 -- Modification des triggers
@@ -5703,18 +5822,18 @@ insert into formule_test_structure (id, libelle, universite) values (ftest_struc
 insert into formule_test_structure (id, libelle, universite) values (ftest_structure_id_seq.nextval, 'Université', 1);
 
 
+/* Formules, paramètres et nouveaux privilèges : attention à ne pas les insérer plusieurs fois!! */
 
-insert into formule(id, libelle, package_name, procedure_name)
+INSERT INTO FORMULE(id, libelle, package_name, procedure_name)
 values (formule_id_seq.nextval, 'Université de Caen', 'FORMULE_UNICAEN', 'CALCUL_RESULTAT_V3');
 
-insert into formule(id, libelle, package_name, procedure_name)
+INSERT INTO FORMULE(id, libelle, package_name, procedure_name)
 values (formule_id_seq.nextval, 'Université de Montpellier', 'FORMULE_MONTPELLIER', 'CALCUL_RESULTAT');
 
 INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université Le Havre Normandie', 'FORMULE_ULHN', 'CALCUL_RESULTAT');
 INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME, VH_PARAM_1_LIBELLE) VALUES (formule_id_seq.nextval, 'Université de Nanterre', 'FORMULE_NANTERRE', 'CALCUL_RESULTAT', 'Code composante');
 
 --INSERT INTO FORMULE (ID, LIBELLE, PACKAGE_NAME, PROCEDURE_NAME) VALUES (formule_id_seq.nextval, 'Université de Bretagne Occidentale', 'FORMULE_UBO', 'CALCUL_RESULTAT');
-
 
 
 -- Mise à jour des paramètres
@@ -5790,6 +5909,7 @@ FROM (
 ) t1;
 
 -- Suppression de l'usage des CLOBS partout où c'est possible
+-- si les colonnes concernées szont déjà en VARCHAR, alors il n'est pas nécessaire d'exécuter ces lignes
 ALTER TABLE PARAMETRE ADD (NVALEUR VARCHAR2(200) );
 ALTER TABLE PARAMETRE ADD (NDESCRIPTION VARCHAR2(500) );
 
@@ -5823,6 +5943,9 @@ UPDATE SYNC_LOG SET NMESSAGE = MESSAGE;
 ALTER TABLE SYNC_LOG DROP COLUMN MESSAGE;
 ALTER TABLE SYNC_LOG RENAME COLUMN NMESSAGE TO MESSAGE;
 
+-- fin de la suppression de l'usage des CLOBS partout où c'est possible
+
+-- Attention à ne pas refaire plusieurs fois ces opérations sur la BDD (si vous avez déjà installé une version 8.1 beta)
 ALTER TABLE fonction_referentiel ADD (
   parent_id NUMBER(*, 0)
   );
@@ -5830,6 +5953,7 @@ ALTER TABLE fonction_referentiel
   ADD CONSTRAINT fr_parent_fk FOREIGN KEY ( parent_id )
     REFERENCES fonction_referentiel ( id )
       NOT DEFERRABLE;
+
 
 INSERT INTO plafond (ID, CODE, LIBELLE) VALUES (
   plafond_id_seq.nextval, 'ref-par-fonction-mere', 'Heures max. de référentiel par intervenant et par type de fonction référentielle'
@@ -5887,83 +6011,239 @@ INSERT INTO indicateur (
   NULL
 );
 
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1211 AS
-SELECT
-  i.id id,
-  i.annee_id,
-  i.id intervenant_id,
-  i.structure_id,
-  AVG(t.plafond)  plafond,
-  AVG(t.heures)   heures
-FROM
-  (
-    SELECT
-      vhr.type_volume_horaire_id        type_volume_horaire_id,
-      sr.intervenant_id                 intervenant_id,
-      fr.plafond                        plafond,
-      fr.id                             fr_id,
-      SUM(vhr.heures)                   heures
-    FROM
-      service_referentiel       sr
-        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
-        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
-        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
-        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code= 'PREVU'
-    WHERE
-        sr.histo_destruction IS NULL
-    GROUP BY
-      vhr.type_volume_horaire_id,
-      sr.intervenant_id,
-      fr.plafond,
-      fr.id
-  ) t
-    JOIN intervenant i ON i.id = t.intervenant_id
-WHERE
-    t.heures > t.plafond
-  /*i.id*/
-GROUP BY
-  t.type_volume_horaire_id,
-  i.annee_id,
-  i.id,
-  i.structure_id;
+ALTER TABLE structure ADD (
+  plafond_referentiel FLOAT
+);
 
 
-CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1221 AS
+
+CREATE VIEW V_FORMULE_LOCAL_VH_PARAMS AS
 SELECT
-  i.id id,
-  i.annee_id,
-  i.id intervenant_id,
-  i.structure_id,
-  AVG(t.plafond)  plafond,
-  AVG(t.heures)   heures
+  null volume_horaire_id,
+  null volume_horaire_ref_id,
+  null param_1,
+  null param_2,
+  null param_3,
+  null param_4,
+  null param_5
 FROM
-  (
-    SELECT
-      vhr.type_volume_horaire_id        type_volume_horaire_id,
-      sr.intervenant_id                 intervenant_id,
-      fr.plafond                        plafond,
-      fr.id                             fr_id,
-      SUM(vhr.heures)                   heures
-    FROM
-      service_referentiel       sr
-        JOIN fonction_referentiel      frf ON frf.id = sr.fonction_id
-        JOIN fonction_referentiel      fr ON fr.id = frf.parent_id
-        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
-        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code= 'REALISE'
-    WHERE
-        sr.histo_destruction IS NULL
-    GROUP BY
-      vhr.type_volume_horaire_id,
-      sr.intervenant_id,
-      fr.plafond,
-      fr.id
-  ) t
-    JOIN intervenant i ON i.id = t.intervenant_id
-WHERE
-    t.heures > t.plafond
-  /*i.id*/
-GROUP BY
-  t.type_volume_horaire_id,
-  i.annee_id,
-  i.id,
-  i.structure_id;
+  dual;
+
+CREATE VIEW V_FORMULE_LOCAL_I_PARAMS AS
+SELECT
+  null intervenant_id,
+  null param_1,
+  null param_2,
+  null param_3,
+  null param_4,
+  null param_5
+FROM
+  dual;
+
+
+-- batterie de tests de formules
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('110','TEST Montpellier 2','2','2018','1','1','1','1','0','192','0','0',null,null,null,null,null,'0','192','0,66666666666667','1','1','1,5','1,5','0,66666666666667');
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('111','TEST Montpellier 1','2','2018','1','1','1','1','0','192','0','0',null,null,null,null,null,'0','192','0,66666666666667','1','1','1,5','1,5','0,66666666666667');
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('112','TEST Le Havre 2 (Zlitni)','3','2018','1','5','2','1','0','192','0','0',null,null,null,null,null,'0','192','1','1','1','1,5','1,5','0,66666666666667');
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('106','TEST Le Havre 1','3','2018','1','9','2','1','0','384','0','0',null,null,null,null,null,'0','384','0,66666666666667','1','1','1,5','1,5','0,66666666666666666666666666666666666667');
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('107','Test Brest','4','2018','1','3','1','1','0','192','0','0',null,null,null,null,null,'0','192','1','1','1','1,5','1,5','0,66666666666666666666666666666666666667');
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('113','TEST Nanterre 1','5','2018','1','1','1','1','0','192','0','0',null,null,null,null,null,'0','192','1','1','1','1,5','1,5','1');
+Insert into FORMULE_TEST_INTERVENANT (ID,LIBELLE,FORMULE_ID,ANNEE_ID,TYPE_INTERVENANT_ID,STRUCTURE_TEST_ID,TYPE_VOLUME_HORAIRE_ID,ETAT_VOLUME_HORAIRE_ID,HEURES_DECHARGE,HEURES_SERVICE_STATUTAIRE,HEURES_SERVICE_MODIFIE,DEPASSEMENT_SERVICE_DU_SANS_HC,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,A_SERVICE_DU,C_SERVICE_DU,TAUX_TP_SERVICE_DU,TAUX_AUTRE_SERVICE_DU,TAUX_AUTRE_SERVICE_COMPL,TAUX_CM_SERVICE_DU,TAUX_CM_SERVICE_COMPL,TAUX_TP_SERVICE_COMPL) values ('109','TEST Montpellier 3','2','2018','1','1','1','1','0','192','0','0',null,null,null,null,null,'0','192','0,66666666666667','1','1','1,5','1,5','0,66666666666667');
+
+
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1808','111','1','0','1','1','0','0','1','1',null,null,null,null,null,'10','6,67','0','0','0','1,98','0','0','0','0','6,6666666666667','0','0','0','1,9755351681957284403669724770642201835','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1809','111','1','1','1','0','0','0','1','1',null,null,null,null,null,'10','0','0','0','0','0','0','0','0','1,98','0','0','0','0','0','0','0','0','1,9755351681957284403669724770642201835',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1810','111','3','0','1','1','0','0','1','1',null,null,null,null,null,'10','6,67','0','0','0','10','0','0','0','0','6,6666666666667','0','0','0','10','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1811','111','2','0','0','1','0','0','1','1',null,null,null,null,null,'15','10','0','0','0','15','0','0','0','0','10,00000000000005','0','0','0','15','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1812','111','2','0','0','1','0','0','1','1',null,null,null,null,null,'10','6,67','0','0','0','10','0','0','0','0','6,6666666666667','0','0','0','10','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1813','111','2','0','0','1','0','0','1','1',null,null,null,null,null,'20','13,33','0','0','0','20','0','0','0','0','13,3333333333334','0','0','0','20','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1814','111','1','0','1','0,5','0,5','0','1','1',null,null,null,null,null,'5','1,67','1,67','0','0','0,99','0','0','0','0','1,666666666666675','1,666666666666675','0','0','0,98776758409786422018348623853211009174','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1815','111','3','0','1','1','0','0','1','1',null,null,null,null,null,'10','6,67','0','0','0','10','0','0','0','0','6,6666666666667','0','0','0','10','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1816','111','9','1','0','0','0','0','1','1',null,null,null,null,null,'30','0','0','0','0','0','0','0','0','30','0','0','0','0','0','0','0','0','30',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1817','111','9','1','1','0','0','0','1','1',null,null,null,null,null,'10','0','0','0','0','0','0','0','0','10','0','0','0','0','0','0','0','0','10',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1818','111','1','0','1','1','0','0','1','1',null,null,null,null,null,'25','37,5','0','0','0','7,41','0','0','0','0','37,5','0','0','0','7,4082568807339816513761467889908256881','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1802','111','1','0','1','1','0','0','1','1',null,null,null,null,null,'50','75','0','0','0','14,82','0','0','0','0','75','0','0','0','14,816513761467963302752293577981651376','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1803','111','2','0','1','0,5','0,5','0','1','1',null,null,null,null,null,'30','15','15','0','0','30','0','0','0','0','15','15','0','0','30','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1804','111','1','0','0','0,5','0','0,5','1','1',null,null,null,null,null,'50','37,5','0','37,5','0','14,82','0','0','0','0','37,5','0','37,5','0','14,816513761467963302752293577981651376','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1805','111','1','0','1','1','0','0','1','1',null,null,null,null,null,'12','12','0','0','0','2,37','0','0','0','0','12','0','0','0','2,3706422018348741284403669724770642202','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1806','111','9','1','1','0','0','0','1','1',null,null,null,null,null,'40','0','0','0','40','0','0','0','0','40','0','0','0','40','0','0','0','0','40',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1807','111','1','0','1','1','0','0','1','1',null,null,null,null,null,'48','48','0','0','0','9,48','0','0','0','0','48','0','0','0','9,4825688073394965137614678899082568807','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1444','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'2','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1445','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1446','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1447','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1448','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1449','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1450','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1451','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1452','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1453','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1454','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1455','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1456','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1457','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'2','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1458','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1459','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','1,5','0','0','0','0','0','0','0','0','1,5','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1460','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'3','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1461','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1462','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1463','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'3','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1464','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1465','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'3','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1466','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1467','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1468','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1469','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1470','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'3','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1471','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1472','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1473','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'4','4','0','0','0','0','0','0','0','0','4','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1474','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1475','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'2','3','0','0','0','0','0','0','0','0','3','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1476','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1477','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1478','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1479','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1480','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1481','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1482','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1483','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1484','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1485','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1486','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1487','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1488','109','1','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','0','0','0','0','0','2,25','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1489','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','4','0','0','0','1,84','0','0','0','0','4','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1490','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1491','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1492','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','4','0','0','0','1,84','0','0','0','0','4','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1493','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1494','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1495','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1496','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','4','0','0','0','1,84','0','0','0','0','4','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1497','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','4','0','0','0','1,84','0','0','0','0','4','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1498','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1499','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1500','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1502','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1503','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1504','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'5','7,5','0','0','0','3,45','0','0','0','0','7,5','0','0','0','3,4468664850136299727520435967302452316','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1506','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1507','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1509','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'2','2','0','0','0','0,92','0','0','0','0','2','0','0','0','0,9191643960036346594005449591280653951','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1510','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1511','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1513','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1514','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1516','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1517','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1519','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1520','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1521','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1523','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1524','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1526','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1527','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1529','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1530','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1964','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'24','24','0','0','0','0','0','0','0','0','24','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1965','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'16','16','0','0','0','0','0','0','0','0','16','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1966','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'24','24','0','0','0','0','0','0','0','0','24','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1967','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'24','24','0','0','0','0','0','0','0','0','24','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1968','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'16','16','0','0','0','0','0','0','0','0','16','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1969','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'4','4','0','0','0','0','0','0','0','0','4','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1970','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'16','16','0','0','0','0','0','0','0','0','16','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1971','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'24','24','0','0','0','0','0','0','0','0','24','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1972','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'16','16','0','0','0','0','0','0','0','0','16','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1973','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'8','8','0','0','0','0','0','0','0','0','8','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1974','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'8','8','0','0','0','0','0','0','0','0','8','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1975','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'8','8','0','0','0','0','0','0','0','0','8','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1976','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'6','4','0','0','0','2','0','0','0','0','4','0','0','0','2','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1977','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'12','0','0','0','0','8','0','0','0','0','0','0','0','0','8,00000000000004','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1978','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'6','0','0','0','0','6','0','0','0','0','0','0','0','0','6','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1979','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'2','0','0','0','0','2','0','0','0','0','0','0','0','0','2','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1981','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'8','4','0','0','0','12','0','0','0','0','4','0','0','0','12','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1982','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'1','0','0','0','0','1','0','0','0','0','0','0','0','0','1','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('261','107','3','0','1','1','0','0','1','1',null,null,null,null,null,'120',null,null,null,null,null,null,null,null,null,'172,8','0','0','-150,85714285714285714285714285714285714','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('262','107','8','0','1','1','0','0','1','1',null,null,null,null,null,'50',null,null,null,null,null,null,null,null,null,'-6,4516129032258064516129032258064516129','0','0','-124,40944881889763779527559055118110236','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('263','107','3','0','1','1','0','0','1','1,28',null,null,null,null,null,'20',null,null,null,null,null,null,null,null,null,'19,2','0','0','-25,142857142857142857142857142857142857','0','0','0','0','0','AUTRE');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('264','107','8','0','1','0','0','1','1','1',null,null,null,null,null,'50',null,null,null,null,null,null,null,null,null,'0','0','-101','-124,40944881889763779527559055118110236','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('265','107','1','0','1','1','0','0','1','1',null,null,null,null,null,'12',null,null,null,null,null,null,null,null,null,null,null,null,'-29,858267716535433070866141732283464567',null,'0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('266','107','7','0','1','1','0','0','1','1',null,null,null,null,null,'12',null,null,null,null,null,null,null,null,null,'-1,5483870967741935483870967741935483871','0','0','-29,858267716535433070866141732283464567','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('267','107','7','0','1','0','0','1','1','1',null,null,null,null,null,'3',null,null,null,null,null,null,null,null,null,null,null,null,'-7,4645669291338582677165354330708661417',null,'0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1531','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1532','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1533','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1534','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1535','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1536','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1537','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1538','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1539','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1540','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1541','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1542','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1543','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1544','109','2','0','1','1','0','0','1','1',null,null,null,null,null,'2','3','0','0','0','1,38','0','0','0','0','3','0','0','0','1,3787465940054519891008174386920980926','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1545','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1546','109','2','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1547','109','2','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1548','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1549','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1550','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1551','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1552','109','3','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1553','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1554','109','2','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1501','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1505','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1508','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1512','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'3,5','5,25','0','0','0','2,41','0','0','0','0','5,25','0','0','0','2,4128065395095409809264305177111716621','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1515','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1518','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1522','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1525','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'4','2,67','0','0','0','1,84','0','0','0','0','2,66666666666668','0','0','0','1,8383287920072693188010899182561307902','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1528','109','4','0','1','1','0','0','1','1',null,null,null,null,null,'1,5','2,25','0','0','0','1,03','0','0','0','0','2,25','0','0','0','1,0340599455040889918256130790190735695','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1984','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'-1','-1','0','0','0','0','0','0','0','0','-1','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1986','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'18','0','0','0','0','18','0','0','0','0','0','0','0','0','18','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1988','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'5','0','0','0','0','5','0','0','0','0','0','0','0','0','5','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1989','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'7','0','0','0','0','7','0','0','0','0','0','0','0','0','7','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1991','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'11','0','0','0','0','11','0','0','0','0','0','0','0','0','11','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1993','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'15,5','0','0','0','0','15,5','0','0','0','0','0','0','0','0','15,5','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1994','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'13,5','0','0','0','0','13,5','0','0','0','0','0','0','0','0','13,5','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1980','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'6','3','0','0','0','9','0','0','0','0','3','0','0','0','9','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1983','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'11','0','0','0','0','11','0','0','0','0','0','0','0','0','11','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1985','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'1','1','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1987','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'5','0','0','0','0','5','0','0','0','0','0','0','0','0','5','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1990','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'2','1','0','0','0','3','0','0','0','0','1','0','0','0','3','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('1992','112','5','0','1','1','0','0','1','1',null,null,null,null,null,'10','0','0','0','0','10','0','0','0','0','0','0','0','0','10','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2001','106','1','0','1','1','0','0','1','1',null,null,null,null,null,'200','300','0','0','0','0','0','0','0','0',null,null,null,null,null,null,null,null,null,'CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2092','113','1','1','1','0','0','0','1','1',null,null,null,null,null,'15','0','0','0','15','0','0','0','0','0','0','0','0','15','0','0','0','0','0',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2002','106','2','0','1','1','0','0','1','1',null,null,null,null,null,'80','80','0','0','0','0','0','0','0','0',null,null,null,null,null,null,null,null,null,'TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2003','106','1','0','1','1','0','0','1','1',null,null,null,null,null,'10','4','0','0','0','4','0','0','0','0',null,null,null,null,null,null,null,null,null,'TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2093','113','8','0','1','1','0','0','1','1','KE8',null,null,null,null,'30','30','0','0','0','0','0','0','0','0','30','0','0','0','0','0','0','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2094','113','1','1','1','0','0','0','1','1',null,null,null,null,null,'40','0','0','0','40','0','0','0','0','0','0','0','0','40','0','0','0','0','0',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2095','113','2','0','1','1','0','0','1','1',null,null,null,null,null,'10','15','0','0','0','0','0','0','0','0','15','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2096','113','2','1','1','0','0','0','1','1',null,null,null,null,null,'10','0','0','0','10','0','0','0','0','0','0','0','0','10','0','0','0','0','0',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2097','113','1','0','1','0','1','0','1','1',null,null,null,null,null,'15','0','15','0','0','0','0','0','0','0','0','15','0','0','0','0','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2098','113','1','1','1','0','0','0','1','1',null,null,null,null,null,'5','0','0','0','5','0','0','0','0','0','0','0','0','5','0','0','0','0','0',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2099','113','2','0','1','0','0','1','1','1',null,null,null,null,null,'25','0','0','0','0','0','0','25','0','0','0','0','0','0','0','0','25','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2084','113','1','0','1','1','0','0','1','1',null,null,null,null,null,'20','30','0','0','0','0','0','0','0','0','30','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2085','113','2','0','1','0','1','0','1','1',null,null,null,null,null,'50','0','17','0','0','0','33','0','0','0','0','17','0','0','0','33','0','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2086','113','8','0','1','0','0','1','1','1','KE8',null,null,null,null,'30','0','0','0','0','0','0','30','0','0','0','0','0','0','0','0','30','0','0','TP');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2087','113','8','1','0','0','0','0','1','1','KE8',null,null,null,null,'20','0','0','0','0','0','0','0','0','20','0','0','0','0','0','0','0','0','20',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2088','113','9','0','1','1','0','0','1','1','UP10',null,null,null,null,'10','15','0','0','0','0','0','0','0','0','15','0','0','0','0','0','0','0','0','CM');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2089','113','1','0','1','0','0','1','1','1',null,null,null,null,null,'20','0','0','0','0','0','0','20','0','0','0','0','0','0','0','0','20','0','0','TD');
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2090','113','1','1','0','0','0','0','1','1',null,null,null,null,null,'40','0','0','0','0','0','0','0','0','40','0','0','0','0','0','0','0','0','40',null);
+Insert into FORMULE_TEST_VOLUME_HORAIRE (ID,INTERVENANT_TEST_ID,STRUCTURE_TEST_ID,REFERENTIEL,SERVICE_STATUTAIRE,TAUX_FI,TAUX_FA,TAUX_FC,PONDERATION_SERVICE_DU,PONDERATION_SERVICE_COMPL,PARAM_1,PARAM_2,PARAM_3,PARAM_4,PARAM_5,HEURES,A_SERVICE_FI,A_SERVICE_FA,A_SERVICE_FC,A_SERVICE_REFERENTIEL,A_HEURES_COMPL_FI,A_HEURES_COMPL_FA,A_HEURES_COMPL_FC,A_HEURES_COMPL_FC_MAJOREES,A_HEURES_COMPL_REFERENTIEL,C_SERVICE_FI,C_SERVICE_FA,C_SERVICE_FC,C_SERVICE_REFERENTIEL,C_HEURES_COMPL_FI,C_HEURES_COMPL_FA,C_HEURES_COMPL_FC,C_HEURES_COMPL_FC_MAJOREES,C_HEURES_COMPL_REFERENTIEL,TYPE_INTERVENTION_CODE) values ('2091','113','2','1','0','0','0','0','1','1',null,null,null,null,null,'50','0','0','0','0','0','0','0','0','50','0','0','0','0','0','0','0','0','50',null);
+
+-- remplacement de vos séquences, pour éviter des chevauchements d'ID plus tard...
+-- IDEM : requêtes à n'exécuter qu'une seule fois
+/
+DROP SEQUENCE FTEST_INTERVENANT_ID_SEQ;
+/
+DROP SEQUENCE FTEST_VOLUME_HORAIRE_ID_SEQ;
+/
+CREATE SEQUENCE FTEST_INTERVENANT_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 10000 NOCACHE;
+/
+CREATE SEQUENCE FTEST_VOLUME_HORAIRE_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 10000 NOCACHE;

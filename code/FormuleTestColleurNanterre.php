@@ -57,6 +57,7 @@ $data = explode("\n", $data);
         <th>Taux FC</th>
         <th>Modulateur HC</th>
         <th>Heures</th>
+        <th>Param1</th>
         <th>SFi</th>
         <th>SFa</th>
         <th>SFc</th>
@@ -103,6 +104,7 @@ $data = explode("\n", $data);
             $tauxFc                 = $c[4];
             $modulateurHC           = 1;
             $heures                 = $c[6];
+            $param1                 = null;
             $serviceFi              = stringToFloat(substr($c[60], 0, -5));
             $serviceFa              = stringToFloat(substr($c[61], 0, -5));
             $serviceFc              = stringToFloat(substr($c[62], 0, -5));
@@ -117,15 +119,18 @@ $data = explode("\n", $data);
             if ($typeIntervention == 'Référentiel') $typeIntervention = 'REFERENTIEL';
 
             $referentiel = $typeIntervention == 'REFERENTIEL';
-            $tauxFi = (float)str_replace(',','.',substr($tauxFi,0,-1)) / 100;
-            $tauxFa = (float)str_replace(',','.',substr($tauxFa,0,-1)) / 100;
-            $tauxFc = (float)str_replace(',','.',substr($tauxFc,0,-1)) / 100;
+            $tauxFi = stringToFloat(substr($tauxFi,0,-1)) / 100;
+            $tauxFa = stringToFloat(substr($tauxFa,0,-1)) / 100;
+            $tauxFc = stringToFloat(substr($tauxFc,0,-1)) / 100;
 
             if ('' == $modulateurHC) $modulateurHC = 1;
 
             $heures = substr($heures, 0, -2);
             $heures = stringToFloat($heures);
 
+            if ($c[0] == 'KE8' || $c[0] == 'UP10'){
+                $param1 = $c[0];
+            }
 
 
             $debug = false;
@@ -148,6 +153,7 @@ $data = explode("\n", $data);
                 $vh->setTauxFc($tauxFc);
                 $vh->setPonderationServiceCompl($modulateurHC);
                 $vh->setHeures($heures);
+                $vh->setParam1($param1);
                 $vh->setAServiceFi($serviceFi);
                 $vh->setAServiceFa($serviceFa);
                 $vh->setAServiceFc($serviceFc);
@@ -172,6 +178,7 @@ $data = explode("\n", $data);
                 <td><?= $tauxFc ?></td>
                 <td><?= $modulateurHC ?></td>
                 <td><?= $heures ?></td>
+                <td><?= $param1 ?></td>
                 <td><?= $serviceFi ?></td>
                 <td><?= $serviceFa ?></td>
                 <td><?= $serviceFc ?></td>

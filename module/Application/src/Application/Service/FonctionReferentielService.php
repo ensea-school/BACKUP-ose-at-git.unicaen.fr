@@ -1,12 +1,17 @@
 <?php
 
 namespace Application\Service;
+use Application\Entity\Db\FonctionReferentiel;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Description of FonctionReferentiel
+ * Description of FonctionReferentielService
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ *
+ * @method FonctionReferentiel get($id)
+ * @method FonctionReferentiel[] getList(\Doctrine\ORM\QueryBuilder $qb = null, $alias = null)
+ * @method FonctionReferentiel newEntity()
  */
 class FonctionReferentielService extends AbstractEntityService
 {
@@ -18,7 +23,7 @@ class FonctionReferentielService extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return \Application\Entity\Db\FonctionReferentiel::class;
+        return FonctionReferentiel::class;
     }
 
     /**
@@ -31,12 +36,21 @@ class FonctionReferentielService extends AbstractEntityService
         return 'fonc_ref';
     }
 
-    public function getList(QueryBuilder $qb = null, $alias = null)
+
+
+    /**
+     * @param QueryBuilder|null $qb
+     * @param null              $alias
+     *
+     * @return QueryBuilder|mixed|null
+     */
+    public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $qb->addOrderBy("$alias.libelleLong");
 
-        return parent::getList($qb, $alias);
+        return $qb;
     }
+
 }

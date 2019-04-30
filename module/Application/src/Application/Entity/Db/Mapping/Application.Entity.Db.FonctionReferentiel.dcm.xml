@@ -23,6 +23,8 @@
         <join-column name="PARENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="fille" target-entity="Application\Entity\Db\FonctionReferentiel" mapped-by="parent"/>
+
     <many-to-one field="domaineFonctionnel" target-entity="Application\Entity\Db\DomaineFonctionnel">
       <join-columns>
         <join-column name="DOMAINE_FONCTIONNEL_ID" referenced-column-name="ID"/>

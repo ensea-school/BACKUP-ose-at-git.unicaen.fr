@@ -41,11 +41,6 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
      */
     protected $structures;
 
-    /**
-     * @var FonctionReferentiel[]
-     */
-    protected $fonctions;
-
 
 
     public function __construct($name = null, $options = [])
@@ -144,8 +139,7 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
         ]);
 
         $this->get('structure')->setValueOptions(Util::collectionAsOptions($this->getStructures()));//->setEmptyOption("(Sélectionnez une structure...)");
-        $this->get('fonction')->setValueOptions(Util::collectionAsOptions($this->getFonctions()));//->setEmptyOption("(Sélectionnez une fonction...)");
-
+        $this->get('fonction')->setValueOptions($this->getFonctions());//->setEmptyOption("(Sélectionnez une fonction...)");
     }
 
 
@@ -154,9 +148,9 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
     {
         if (!$this->structures) {
             $qb = $this->getServiceStructure()->finderByEnseignement();
-            if ($univ = $this->getServiceStructure()->getRacine()){
+            if ($univ = $this->getServiceStructure()->getRacine()) {
                 $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);
-            }else{
+            } else {
                 $this->structures = $this->getServiceStructure()->getList($qb);
             }
         }
@@ -168,11 +162,22 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
 
     public function getFonctions()
     {
-        if (!$this->fonctions) {
-            $this->fonctions = $this->getServiceFonctionReferentiel()->getList();
+        $fncs = $this->getServiceFonctionReferentiel()->getList();
+        $fonctions = [];
+        foreach ($fncs as $id => $fonction) {
+            if ($fonction->getFille()->count() > 0) {
+
+                $filles = [];
+                foreach ($fonction->getFille() as $fille) {
+                    $filles[$fille->getId()] = (string)$fille;
+                }
+                $fonctions[$fonction->getId()] = ['label' => (string)$fonction, 'options' => $filles];
+            } elseif (!$fonction->getParent()) {
+                $fonctions[$id] = (string)$fonction;
+            }
         }
 
-        return $this->fonctions;
+        return $fonctions;
     }
 
 

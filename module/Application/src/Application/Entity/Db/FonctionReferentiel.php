@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -62,6 +63,30 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      */
     protected $serviceStatutaire = true;
 
+    /**
+     * @var FonctionReferentiel[]
+     */
+    protected $fille;
+
+
+
+    /**
+     * PHP 5 allows developers to declare constructor methods for classes.
+     * Classes which have a constructor method call this method on each newly-created object,
+     * so it is suitable for any initialization that the object may need before it is used.
+     *
+     * Note: Parent constructors are not called implicitly if the child class defines a constructor.
+     * In order to run a parent constructor, a call to parent::__construct() within the child constructor is required.
+     *
+     * param [ mixed $args [, $... ]]
+     *
+     * @link https://php.net/manual/en/language.oop5.decon.php
+     */
+    public function __construct()
+    {
+        $this->fille = new ArrayCollection();
+    }
+
 
 
     /**
@@ -81,9 +106,47 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      */
     public function setParent($parent = null): FonctionReferentiel
     {
+        if ($parent instanceof FonctionReferentiel && $parent->getParent()){
+            throw new \Exception('Il est impossible de définir cette fonction référentielle comme parente : elle a déjà un parent');
+        }
+
         $this->parent = $parent;
 
         return $this;
+    }
+
+
+
+    /**
+     * @param FonctionReferentiel $fille
+     *
+     * @return $this
+     */
+    public function addFille(FonctionReferentiel $fille)
+    {
+        $this->fille[] = $fille;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @param FonctionReferentiel $fille
+     */
+    public function removeFille(FonctionReferentiel $fille)
+    {
+        $this->fille->removeElement($fille);
+    }
+
+
+
+    /**
+     * @return ArrayCollection|FonctionReferentiel[]
+     */
+    public function getFille()
+    {
+        return $this->fille;
     }
 
 

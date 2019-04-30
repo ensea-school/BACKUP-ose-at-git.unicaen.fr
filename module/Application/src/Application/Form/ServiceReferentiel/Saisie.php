@@ -2,10 +2,10 @@
 
 namespace Application\Form\ServiceReferentiel;
 
-use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\Service;
 use Application\Form\AbstractForm;
 use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
+use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Zend\Form\FormInterface;
 use Zend\Form\Element\Hidden;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -19,6 +19,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class Saisie extends AbstractForm
 {
     use SaisieFieldsetAwareTrait;
+    use FonctionReferentielServiceAwareTrait;
 
 
 
@@ -56,7 +57,7 @@ class Saisie extends AbstractForm
         $this->setHydrator($hydrator);
 
         $fieldset = $this->getFieldsetServiceReferentielSaisie();
-        $this->setAttribute('data-fonctions', json_encode($this->makeDataFromFonctions($fieldset->getFonctions())));
+        $this->setAttribute('data-fonctions', json_encode($this->makeDataFromFonctions()));
 
         $this->setAttribute('class', 'service-referentiel-form');
 
@@ -93,12 +94,12 @@ class Saisie extends AbstractForm
 
 
     /**
-     * @param FonctionReferentiel[] $fonctions
-     *
      * @return array
      */
-    protected function makeDataFromFonctions(array $fonctions)
+    protected function makeDataFromFonctions()
     {
+        $fonctions = $this->getServiceFonctionReferentiel()->getList();
+
         $data = [
             'etape-requise' => [],
             'structures' => [],

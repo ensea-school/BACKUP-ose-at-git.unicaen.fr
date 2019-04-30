@@ -42,6 +42,9 @@ switch ($action) {
     case 'maj-public-links':
         majPublicLinks($c, $oa);
     break;
+    case 'clear-cache':
+        clearCache($c, $oa);
+    break;
     case 'test':
         test($c, $oa);
     break;
@@ -163,6 +166,23 @@ function install(Console $c, OseAdmin $oa, $fromMaster=true)
 }
 
 
+
+function clearCache(Console $c, OseAdmin $oa)
+{
+    $osedir = dirname(__DIR__);
+
+    // Néttoyage des caches et mise à jour des proxies
+    $c->exec([
+        "cd $osedir",
+        "rm -Rf cache/*",
+        "php vendor/bin/doctrine-module orm:generate-proxies",
+        "chmod -R 777 cache/DoctrineProxy",
+        "chmod -R 777 cache/Doctrine",
+    ]);
+}
+
+
+
 function update(Console $c, OseAdmin $oa)
 {
     $osedir = dirname(__DIR__);
@@ -214,12 +234,9 @@ function update(Console $c, OseAdmin $oa)
     ]);
 
     // Néttoyage des caches et mise à jour des proxies, lancement du script de migration éventuel
+    clearCache($c, $oa);
     $c->exec([
         "cd $osedir",
-        "rm -Rf cache/*",
-        "php vendor/bin/doctrine-module orm:generate-proxies",
-        "chmod -R 777 cache/DoctrineProxy",
-        "chmod -R 777 cache/Doctrine",
         "php bin/ose migration $oldVersion $version",
     ]);
 
@@ -234,6 +251,7 @@ function update(Console $c, OseAdmin $oa)
     $c->println("N'oubliez pas de sortir du mode maintenance!");
     $c->println('');
 }
+
 
 
 function passwordChange(Console $c, OseAdmin $oa)
@@ -258,6 +276,7 @@ function passwordChange(Console $c, OseAdmin $oa)
 }
 
 
+
 function majPublicLinks(Console $c, OseAdmin $oa)
 {
     $osedir = dirname(__DIR__);
@@ -274,6 +293,7 @@ function majPublicLinks(Console $c, OseAdmin $oa)
 }
 
 
+
 function help(Console $c, OseAdmin $oa)
 {
     $actions = [
@@ -285,6 +305,7 @@ function help(Console $c, OseAdmin $oa)
         "formule-calcul"            => "Calcul de toutes les heures complémentaires à l'aide de la formule",
         "changement-mot-de-passe"   => "Changement de mot de passe (pour un utilisateur local uniquement)",
         "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
+        "clear-cache"               => "Vidage du cache de l'application",
     ];
 
     $c->println('Actions possibles :');

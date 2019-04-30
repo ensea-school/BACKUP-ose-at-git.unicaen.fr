@@ -3737,6 +3737,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       FROM   v_formule_volume_horaire fvh
                LEFT JOIN v_formule_local_vh_params flvh ON flvh.volume_horaire_id = COALESCE(fvh.volume_horaire_id,0) AND flvh.volume_horaire_ref_id = COALESCE(fvh.volume_horaire_ref_id,0)
       WHERE  fvh.intervenant_id = intervenant.id
+      ORDER BY ordre
       ) LOOP
       vh.volume_horaire_id         := d.volume_horaire_id;
       vh.volume_horaire_ref_id     := d.volume_horaire_ref_id;
@@ -5222,6 +5223,7 @@ GROUP BY
 /
 
 CREATE OR REPLACE FORCE VIEW V_FORMULE_VOLUME_HORAIRE AS
+SELECT rownum ordre, t.* FROM (
 SELECT
   to_number( 1 || vh.id )                                              id,
   vh.id                                                                volume_horaire_id,
@@ -5313,7 +5315,8 @@ WHERE
   AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )
 
 ORDER BY
-    horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id;
+  horaire_fin, horaire_debut, volume_horaire_id, volume_horaire_ref_id
+) t;
 /
 
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_560 AS

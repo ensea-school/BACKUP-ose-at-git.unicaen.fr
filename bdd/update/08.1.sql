@@ -119,7 +119,13 @@ CREATE TABLE "FORMULE_TEST_INTERVENANT"
    "PARAM_5" VARCHAR2(100 CHAR),
    "A_SERVICE_DU" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
    "C_SERVICE_DU" FLOAT(126),
-   "DEBUG_INFO" CLOB
+   "DEBUG_INFO" CLOB,
+   "TAUX_TP_SERVICE_DU" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
+   "TAUX_AUTRE_SERVICE_DU" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
+   "TAUX_AUTRE_SERVICE_COMPL" FLOAT(126) DEFAULT 1 NOT NULL ENABLE,
+   "TAUX_CM_SERVICE_DU" FLOAT(126) DEFAULT 1.5 NOT NULL ENABLE,
+   "TAUX_CM_SERVICE_COMPL" FLOAT(126) DEFAULT 1.5 NOT NULL ENABLE,
+   "TAUX_TP_SERVICE_COMPL" FLOAT(126) DEFAULT 2/3 NOT NULL ENABLE
 );
 /
 
@@ -5514,6 +5520,66 @@ GROUP BY
   i.structure_id;
 /
 
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1230 AS
+SELECT
+  i.id                id,
+  i.annee_id          annee_id,
+  i.id                intervenant_id,
+  t.structure_id      structure_id,
+  t.plafond           plafond,
+  t.heures            heures
+FROM
+  (
+    SELECT DISTINCT
+      sr.intervenant_id                 intervenant_id,
+      s.plafond_referentiel             plafond,
+      s.id                              structure_id,
+      s.libelle_court                   structure_libelle,
+      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id) heures
+    FROM
+      service_referentiel       sr
+        JOIN structure                  s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code = 'PREVU'
+    WHERE
+        sr.histo_destruction IS NULL
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond;
+/
+
+CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1240 AS
+SELECT
+  i.id                id,
+  i.annee_id          annee_id,
+  i.id                intervenant_id,
+  t.structure_id      structure_id,
+  t.plafond           plafond,
+  t.heures            heures
+FROM
+  (
+    SELECT DISTINCT
+      sr.intervenant_id                 intervenant_id,
+      s.plafond_referentiel             plafond,
+      s.id                              structure_id,
+      s.libelle_court                   structure_libelle,
+      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id) heures
+    FROM
+      service_referentiel       sr
+        JOIN structure                  s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+        JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code = 'REALISE'
+    WHERE
+        sr.histo_destruction IS NULL
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond;
+/
+
+
+
 --------------------------------------------------
 -- Modification des triggers
 --------------------------------------------------
@@ -6006,6 +6072,57 @@ INSERT INTO indicateur (
   '%s intervenant a des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour le type de fonction correspondant',
   '%s intervenants ont des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour le type de fonction correspondant',
   'intervenant/services',
+  1,
+  0,
+  NULL
+);
+
+INSERT INTO indicateur (
+  ID,
+  TYPE,
+  ORDRE,
+  ENABLED,
+  NUMERO,
+  LIBELLE_SINGULIER,
+  LIBELLE_PLURIEL,
+  ROUTE,
+  TEM_DISTINCT,
+  TEM_NOT_STRUCTURE,
+  MESSAGE
+) VALUES (
+  indicateur_id_seq.nextval,
+  'Enseignements et référentiel <em>Permanents</em>',
+  1230,
+  1,
+  1230,
+  '%s intervenant a des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour la composante correspondante',
+  '%s intervenants ont des heures de référentiel <i>prévisionnel</i> dépassant le plafond autorisé pour la composante correspondante',
+  'intervenant/services',
+  1,
+  0,
+  NULL
+);
+
+INSERT INTO indicateur (
+  ID,
+  TYPE,
+  ORDRE,
+  ENABLED,
+  NUMERO,
+  LIBELLE_SINGULIER,
+  LIBELLE_PLURIEL,
+  ROUTE,
+  TEM_DISTINCT,
+  TEM_NOT_STRUCTURE,
+  MESSAGE
+) VALUES (
+  indicateur_id_seq.nextval,
+  'Enseignements et référentiel <em>Permanents</em>',
+  1240,
+  1,
+  1240,
+  '%s intervenant a des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour la composante correspondante',
+  '%s intervenants ont des heures de référentiel <i>réalisé</i> dépassant le plafond autorisé pour la composante correspondante','intervenant/services',
   1,
   0,
   NULL

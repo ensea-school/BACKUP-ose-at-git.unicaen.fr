@@ -1,6 +1,6 @@
 SELECT
   p.id plafond_id,
-  p.libelle plafond_libelle,
+  CASE WHEN b.plafond_libelle IS NOT NULL THEN b.plafond_libelle ELSE p.libelle END plafond_libelle,
   b.type_volume_horaire_id,
   tvh.libelle type_volume_horaire_libelle,
   b.annee_id,
@@ -13,6 +13,7 @@ FROM
 -- Montant maximal par intervenant de la prime D714-60 du code de l'éducation
 SELECT
   'remu-d714-60'                      plafond_code,
+  null                                plafond_libelle,
   fr.type_volume_horaire_id           type_volume_horaire_id,
   i.annee_id                          annee_id,
   i.id                                intervenant_id,
@@ -32,6 +33,7 @@ UNION
 -- Heures max. de référentiel par intervenant selon son statut
 SELECT
   'ref-par-statut'                    plafond_code,
+  null                                plafond_libelle,
   fr.type_volume_horaire_id           type_volume_horaire_id,
   i.annee_id                          annee_id,
   i.id                                intervenant_id,
@@ -49,12 +51,13 @@ UNION
 
 -- Heures max. de référentiel par intervenant et par fonction référentielle
 SELECT
-  'ref-par-fonction' plafond_code,
+  'ref-par-fonction'                  plafond_code,
+  null                                plafond_libelle,
   t.type_volume_horaire_id,
   i.annee_id,
   t.intervenant_id,
-  AVG(t.plafond)  plafond,
-  AVG(t.heures)   heures
+  AVG(t.plafond)                      plafond,
+  AVG(t.heures)                       heures
 FROM
   (
   SELECT
@@ -88,12 +91,13 @@ UNION
 
 -- Heures max. de référentiel par intervenant et par fonction référentielle mère
 SELECT
-  'ref-par-fonction-mere' plafond_code,
+  'ref-par-fonction-mere'             plafond_code,
+  null                                plafond_libelle,
   t.type_volume_horaire_id,
   i.annee_id,
   t.intervenant_id,
-  AVG(t.plafond)  plafond,
-  AVG(t.heures)   heures
+  AVG(t.plafond)                      plafond,
+  AVG(t.heures)                       heures
 FROM
   (
     SELECT
@@ -126,9 +130,42 @@ GROUP BY
 
 UNION
 
+-- Heures max. de référentiel par structure
+SELECT
+  'ref-par-structure' plafond_code,
+  'Heures max. de référentiel pour la composante ' || t.structure_libelle plafond_libelle,
+  t.type_volume_horaire_id,
+  i.annee_id,
+  t.intervenant_id,
+  t.plafond           plafond,
+  t.heures            heures
+FROM
+  (
+    SELECT DISTINCT
+      vhr.type_volume_horaire_id        type_volume_horaire_id,
+      sr.intervenant_id                 intervenant_id,
+      s.plafond_referentiel             plafond,
+      s.id                              structure_id,
+      s.libelle_court                   structure_libelle,
+      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id) heures
+    FROM
+      service_referentiel       sr
+        JOIN structure                  s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
+        JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
+    WHERE
+        sr.histo_destruction IS NULL
+  ) t
+    JOIN intervenant i ON i.id = t.intervenant_id
+WHERE
+    t.heures > t.plafond
+  /*i.id*/
+
+UNION
+
 -- Nombre maximum d'heures équivalent TD par intervenant selon son statut
 SELECT
   'hetd'                              plafond_code,
+  null                                plafond_libelle,
   fr.type_volume_horaire_id           type_volume_horaire_id,
   i.annee_id                          annee_id,
   i.id                                intervenant_id,
@@ -148,6 +185,7 @@ UNION
 -- Nombre d'heures complémentaires maximum (hors rémunération au titre de l'article d714-60 du code de l'éducation)
 SELECT
   'hc-hors-d71460'                    plafond_code,
+  null                                plafond_libelle,
   fr.type_volume_horaire_id           type_volume_horaire_id,
   i.annee_id                          annee_id,
   fr.intervenant_id                   intervenant_id,

@@ -43,6 +43,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 * Dans les paramètres généraux, il n'est plus nécessaire de renseigner qui est le DRH de l'établissement
 * La recherche d'intervenants saisis directement dans OSE fonctionne maintenant même sans avoir de vue source Intervenant
 * Les fonctions référentielles peuvent être regroupées par types, avec des plafonds et indicateurs associés
+* Un plafond par composante a été ajouté pour le référentiel.
 
 ## Notes de mise à jour
 

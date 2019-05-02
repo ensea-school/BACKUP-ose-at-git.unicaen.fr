@@ -190,7 +190,9 @@ class ServiceReferentielController extends AbstractController
     public function initialisationAction()
     {
         $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getProcessusPlafond()->beginTransaction();
         $this->getServiceServiceReferentiel()->setPrevusFromPrevus($intervenant);
+        $this->getProcessusPlafond()->endTransaction($intervenant, $this->getServiceTypeVolumeHoraire()->getPrevu());
         $this->updateTableauxBord($intervenant);
         $errors = [];
 
@@ -204,16 +206,20 @@ class ServiceReferentielController extends AbstractController
         $this->initFilters();
         $services = $this->params()->fromQuery('services');
         if ($services) {
+            $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getRealise();
+
             $services = explode(',', $services);
             foreach ($services as $sid) {
                 $service = $this->getServiceServiceReferentiel()->get($sid);
-
-                $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
+                $service->setTypeVolumeHoraire($typeVolumeHoraire);
                 if ($this->isAllowed($service, Privileges::REFERENTIEL_EDITION)) {
+                    $this->getProcessusPlafond()->beginTransaction();
                     $this->getServiceServiceReferentiel()->setRealisesFromPrevus($service);
                     $this->updateTableauxBord($service->getIntervenant());
+                    $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $typeVolumeHoraire);
                 }
             }
+
         }
 
         return new MessengerViewModel;

@@ -7,9 +7,9 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-$sp = $sl->get(\Application\Service\PaysService::class);
+$sp = $sl->get(\Application\Service\FonctionReferentielService::class);
 
 
-$france = $sp->getIdByLibelle('Algérie');
+$f = $sp->get(324);
 
-var_dump($france);
+var_dump($f->getFille()->count());

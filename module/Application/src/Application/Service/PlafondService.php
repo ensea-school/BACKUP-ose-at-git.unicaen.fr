@@ -42,7 +42,7 @@ class PlafondService extends AbstractEntityService
     public function controle(Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire) : array
     {
         $sql = file_get_contents('data/Query/plafond.sql');
-        $sql = str_replace('/*i.id*/', 'AND i.id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
+        $sql = str_replace('/*i.id*/', 'AND intervenant_id = ' . $intervenant->getId(), $sql) . ' AND tvh.id = ' . $typeVolumeHoraire->getId();
         $sql = preg_replace('/--(.*)\n/Uis', "\n", $sql) ;
         $res          = $this->getEntityManager()->getConnection()->fetchAll($sql);
         $depassements = [];

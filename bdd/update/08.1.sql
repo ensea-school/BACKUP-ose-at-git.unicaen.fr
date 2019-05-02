@@ -2992,7 +2992,7 @@ ALTER TABLE FORMULE_TEST_VOLUME_HORAIRE ADD CONSTRAINT FTVH_FORMULE_TEST_STRUCTU
 ALTER TABLE FORMULE_TEST_STRUCTURE ADD CONSTRAINT FORMULE_TEST_STRUCTURE__UN UNIQUE (LIBELLE) USING INDEX FORMULE_TEST_STRUCTURE__UN ENABLE;
 /
 
-ALTER TABLE FORMULE ADD CONSTRAINT FORMULE__UN UNIQUE (LIBELLE) USING INDEX INDEX FORMULE__UN ENABLE;
+ALTER TABLE FORMULE ADD CONSTRAINT FORMULE__UN UNIQUE (LIBELLE) USING INDEX FORMULE__UN ENABLE;
 /
 
 
@@ -5486,7 +5486,6 @@ FROM
     JOIN intervenant i ON i.id = t.intervenant_id
 WHERE
     t.heures > t.plafond
-  /*i.id*/
 GROUP BY
   t.type_volume_horaire_id,
   i.annee_id,
@@ -5496,58 +5495,60 @@ GROUP BY
 
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1230 AS
 SELECT
-  i.id                id,
-  i.annee_id          annee_id,
-  i.id                intervenant_id,
+  t.intervenant_id    id,
+  t.annee_id          annee_id,
+  t.intervenant_id    intervenant_id,
   t.structure_id      structure_id,
   t.plafond           plafond,
   t.heures            heures
 FROM
   (
     SELECT DISTINCT
-      sr.intervenant_id                 intervenant_id,
+      i.id                              intervenant_id,
+      i.annee_id                        annee_id,
       s.plafond_referentiel             plafond,
       s.id                              structure_id,
       s.libelle_court                   structure_libelle,
-      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id) heures
+      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id,i.annee_id) heures
     FROM
-      service_referentiel       sr
+             service_referentiel       sr
+        JOIN intervenant                i ON i.id = sr.intervenant_id
         JOIN structure                  s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
         JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
         JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code = 'PREVU'
     WHERE
         sr.histo_destruction IS NULL
   ) t
-    JOIN intervenant i ON i.id = t.intervenant_id
 WHERE
     t.heures > t.plafond;
 /
 
 CREATE OR REPLACE FORCE VIEW V_INDICATEUR_1240 AS
 SELECT
-  i.id                id,
-  i.annee_id          annee_id,
-  i.id                intervenant_id,
+  t.intervenant_id    id,
+  t.annee_id          annee_id,
+  t.intervenant_id    intervenant_id,
   t.structure_id      structure_id,
   t.plafond           plafond,
   t.heures            heures
 FROM
   (
     SELECT DISTINCT
-      sr.intervenant_id                 intervenant_id,
+      i.id                              intervenant_id,
+      i.annee_id                        annee_id,
       s.plafond_referentiel             plafond,
       s.id                              structure_id,
       s.libelle_court                   structure_libelle,
-      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id) heures
+      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id,i.annee_id) heures
     FROM
-      service_referentiel       sr
+             service_referentiel       sr
+        JOIN intervenant                i ON i.id = sr.intervenant_id
         JOIN structure                  s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
         JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
         JOIN type_volume_horaire      tvh ON tvh.id = vhr.type_volume_horaire_id AND tvh.code = 'REALISE'
     WHERE
         sr.histo_destruction IS NULL
   ) t
-    JOIN intervenant i ON i.id = t.intervenant_id
 WHERE
     t.heures > t.plafond;
 /
@@ -6015,6 +6016,9 @@ ALTER TABLE fonction_referentiel
 
 INSERT INTO plafond (ID, CODE, LIBELLE) VALUES (
   plafond_id_seq.nextval, 'ref-par-fonction-mere', 'Heures max. de référentiel par intervenant et par type de fonction référentielle'
+);
+INSERT INTO plafond (ID, CODE, LIBELLE) VALUES (
+  plafond_id_seq.nextval, 'ref-par-structure', 'Heures max. de référentiel par structure'
 );
 
 INSERT INTO indicateur (

@@ -135,7 +135,7 @@ SELECT
   'ref-par-structure' plafond_code,
   'Heures max. de référentiel pour la composante ' || t.structure_libelle plafond_libelle,
   t.type_volume_horaire_id,
-  i.annee_id,
+  t.annee_id,
   t.intervenant_id,
   t.plafond           plafond,
   t.heures            heures
@@ -143,19 +143,20 @@ FROM
   (
     SELECT DISTINCT
       vhr.type_volume_horaire_id        type_volume_horaire_id,
-      sr.intervenant_id                 intervenant_id,
+      i.annee_id                        annee_id,
+      i.id                              intervenant_id,
       s.plafond_referentiel             plafond,
       s.id                              structure_id,
       s.libelle_court                   structure_libelle,
-      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id) heures
+      SUM(vhr.heures) OVER (PARTITION BY s.id,vhr.type_volume_horaire_id,i.annee_id) heures
     FROM
-      service_referentiel       sr
+             service_referentiel       sr
+        JOIN intervenant                i ON i.id = sr.intervenant_id
         JOIN structure                  s ON s.id = sr.structure_id AND s.plafond_referentiel IS NOT NULL
         JOIN volume_horaire_ref       vhr ON vhr.service_referentiel_id = sr.id AND vhr.histo_destruction IS NULL
     WHERE
         sr.histo_destruction IS NULL
   ) t
-    JOIN intervenant i ON i.id = t.intervenant_id
 WHERE
     t.heures > t.plafond
   /*i.id*/

@@ -5945,11 +5945,16 @@ FROM (
    UNION ALL SELECT 'domaines-fonctionnels' c, 'administration-visualisation' p, 'Administration (visualisation)' l FROM dual
    UNION ALL SELECT 'domaines-fonctionnels' c, 'administration-edition' p,	'Administration (édition)' l FROM dual
 
+   UNION ALL SELECT 'budget' c, 'cc-activite-visualisation' p, 'CC activité - Visualisation' l FROM dual
+   UNION ALL SELECT 'budget' c, 'cc-activite-edition' p, 'CC activité - Édition' l FROM dual
+
    UNION ALL SELECT 'formule' c, 'tests' p, 'Tests' l FROM dual
 
    UNION ALL SELECT 'cloture' c, 'edition-services-avec-mep' p, 'Modification des services après clôture et mises en paiement' l FROM dual
 
 ) t1;
+
+DELETE FROM privilege WHERE code = 'visualisation' AND categorie_id = (SELECT id from categorie_privilege WHERE code = 'mise-en-paiement');
 
 -- Suppression de l'usage des CLOBS partout où c'est possible
 -- si les colonnes concernées szont déjà en VARCHAR, alors il n'est pas nécessaire d'exécuter ces lignes

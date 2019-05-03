@@ -5866,7 +5866,7 @@ insert into formule_test_structure (id, libelle, universite) values (9, 'Univers
 /* Formules, paramètres et nouveaux privilèges : attention à ne pas les insérer plusieurs fois!! */
 
 INSERT INTO FORMULE(id, libelle, package_name, procedure_name)
-values (formule_id_seq.nextval, 'Université de Caen', 'FORMULE_UNICAEN', 'CALCUL_RESULTAT_V3');
+values (formule_id_seq.nextval, 'Université de Caen', 'FORMULE_UNICAEN', 'CALCUL_RESULTAT');
 
 INSERT INTO FORMULE(id, libelle, package_name, procedure_name)
 values (formule_id_seq.nextval, 'Université de Montpellier', 'FORMULE_MONTPELLIER', 'CALCUL_RESULTAT');
@@ -5889,7 +5889,7 @@ INSERT INTO parametre (
   histo_modification, histo_modificateur_id
 ) VALUES (
   parametre_id_seq.nextval, 'formule',
-  '1', 'Formule de calcul',
+  (select id from formule where package_name='FORMULE_UNICAEN'), 'Formule de calcul',
   sysdate, (select id from utilisateur where username='oseappli'),
   sysdate, (select id from utilisateur where username='oseappli')
 );

@@ -30,6 +30,10 @@ class Application
 
     public static function init()
     {
+        set_exception_handler(function ($e) {
+            self::error($e);
+        });
+
         \Locale::setDefault('fr_FR');
         define('REQUEST_MICROTIME', microtime(true));
         chdir(dirname(__DIR__));
@@ -85,7 +89,7 @@ class Application
         } else {
             self::startContainer();
 
-            if (AppConfig::get('global','affichageErreurs')) {
+            if (AppConfig::get('global', 'affichageErreurs')) {
                 error_reporting(E_ALL);
             }
             putenv("NLS_LANGUAGE=FRENCH");
@@ -96,6 +100,19 @@ class Application
             } else {
                 self::$container->get('Application')->bootstrap([])->run();
             }
+        }
+    }
+
+
+
+    public static function error($exception)
+    {
+        header("HTTP/1.0 500 Internal Server Error");
+        self::$maintenanceText = '<h2>Une erreur est survenue !</h2>' . $exception->getMessage();
+        if (php_sapi_name() !== 'cli') {
+            require 'maintenance.php';
+        } else {
+            echo self::$maintenanceText;
         }
     }
 }

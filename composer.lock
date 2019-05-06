@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "854f95e5f3f164b9b08537638ec944a9",
+    "content-hash": "dab9fbe9993253328b0f58782bdb65f3",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -881,16 +881,16 @@
         },
         {
             "name": "jasig/phpcas",
-            "version": "1.3.6",
+            "version": "1.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/apereo/phpCAS.git",
-                "reference": "7972833e84f6ee5fa41f1479eab5d855109627f5"
+                "reference": "b5b29102c3a42f570c4a3e852f3cf67cae6d6082"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/7972833e84f6ee5fa41f1479eab5d855109627f5",
-                "reference": "7972833e84f6ee5fa41f1479eab5d855109627f5",
+                "url": "https://api.github.com/repos/apereo/phpCAS/zipball/b5b29102c3a42f570c4a3e852f3cf67cae6d6082",
+                "reference": "b5b29102c3a42f570c4a3e852f3cf67cae6d6082",
                 "shasum": ""
             },
             "require": {
@@ -932,7 +932,7 @@
                 "cas",
                 "jasig"
             ],
-            "time": "2018-10-25T20:22:09+00:00"
+            "time": "2019-04-22T19:48:16+00:00"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1413,16 +1413,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.24",
+            "version": "v3.4.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "adbdd5d66342fb0a0bce7422ba68181842b6610d"
+                "reference": "681afbb26488903c5ac15e63734f1d8ac430c9b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/adbdd5d66342fb0a0bce7422ba68181842b6610d",
-                "reference": "adbdd5d66342fb0a0bce7422ba68181842b6610d",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/681afbb26488903c5ac15e63734f1d8ac430c9b9",
+                "reference": "681afbb26488903c5ac15e63734f1d8ac430c9b9",
                 "shasum": ""
             },
             "require": {
@@ -1465,7 +1465,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-03-10T17:07:42+00:00"
+            "time": "2019-04-11T09:48:14+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1586,7 +1586,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.49",
+            "version": "v2.8.50",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -1635,11 +1635,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "1.3.24",
+            "version": "1.3.25",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "6538619ecd0f9c7c450259135879a57f12268544"
+                "reference": "089570a7d47040f9cc1f3cdf9516c6f8c7f9a104"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1682,7 +1682,7 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2019-01-14T13:47:00+00:00"
+            "time": "2019-02-12T10:44:57+00:00"
         },
         {
             "name": "unicaen/auth",

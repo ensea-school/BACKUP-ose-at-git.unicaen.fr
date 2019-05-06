@@ -30,10 +30,6 @@ class Application
 
     public static function init()
     {
-        set_exception_handler(function ($e) {
-            self::error($e);
-        });
-
         \Locale::setDefault('fr_FR');
         define('REQUEST_MICROTIME', microtime(true));
         chdir(dirname(__DIR__));
@@ -46,6 +42,12 @@ class Application
             throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
         }
         require 'config/application.config.php';
+
+        if (!AppConfig::get('global', 'affichageErreurs')) {
+            set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
+                self::error($e);
+            });
+        }
     }
 
 

@@ -51,12 +51,17 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 [bdd/update/08.1.sql](bdd/update/08.1.sql)
 Les mises à jour [`bdd/update/08.0.1.sql`](bdd/update/08.0.1.sql) et [`bdd/update/08.0.3.sql`](bdd/update/08.0.3.sql) sont inclues dans le précédent fichier.
 Inutile, donc, de les exécuter si vous mettez à jour depuis la 8.0.
-* Attention : le dossier de cache est déplacé de /data/cache vers /cache. La procédure de mise à jour devrait lui attribuer
-automatiquement les accès nécessaires au bon fonctionnement de l'application. Vous pourrez supprimer manuellement l'ancien
-dossier /data/cache qui n'a plus d'utilité.
+* Attention : le dossier de cache est déplacé de /data/cache vers /cache. Attention à bien donner à l'utilisateur Apache les droits d'écriture dans le dossier de cache. 
+Vous pourrez supprimer manuellement l'ancien dossier /data/cache qui n'a plus d'utilité.
 * Attention : au niveau de votre configuration Apache, APPLICATION_ENV peut prendre désormais trois valeurs possibles :
 dev,test ou prod. Les anciennes valeurs development et production doivent donc être respectivement remplacées par dev et prod.
 
+* Si vous avez déjà installé une des versions 8.1beta, je vous invite à exécuter le script requête par requête. Les packages, les vues et les triggers pourront être
+mis à jour sans aucun soucis. Par contre, veillez bien à ne pas insérer deux fois les mêmes données, ou bien à ne pas tenter de créer deux fois les mêmes colonnes ou les mêmes clés étrangères.
+Le mieux est de dupliquer votre instance de production en test si vous en avez une, puis ensuite d'appliquer la mise à jour avec la dernière version disponible.
+
+* Les versions béta ne sont pas prévues pour êtres installées sur une base vierge. Seules les mises à jour depuis la version 8.0 sont possibles pour le moment.
+Le script d'installation d'une nouvelle base de données n'a pour le moment pas été mis à jour.
 
 # OSE 8.0.3
 

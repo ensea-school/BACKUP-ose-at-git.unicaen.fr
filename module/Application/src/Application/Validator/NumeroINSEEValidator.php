@@ -183,8 +183,7 @@ class NumeroINSEEValidator extends NumeroINSEE
             if (!$this->isValidDepartementFrance($value, $context)) {
                 return false;
             }
-        }
-        if ($estNeEnAlgerie) {
+        }elseif ($estNeEnAlgerie) {
             // on doit avoir un code département français valide
             if (!$this->isValidDepartementAlgerie($value, $context)) {
                 return false;

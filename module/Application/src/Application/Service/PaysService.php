@@ -12,7 +12,7 @@ use UnicaenApp\Util;
  */
 class PaysService extends AbstractEntityService
 {
-    CONST PAYS_FRANCE = 'france ';
+    CONST PAYS_FRANCE = 'france';
     CONST PAYS_ALGERIE = 'algerie';
 
 

@@ -274,7 +274,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             <th colspan="9" class="vh-donnees">Données</th>
             <th rowspan="3" style="width:2px">&nbsp;</th>
             <th colspan="9"><select id="affRes" class="form-control">
-                    <option value="hetd">Résultats (en HETD)</option>
+                    <option value="attendu">Résultats attendus (en HETD)</option>
+                    <option value="hetd" selected="selected">Résultats calculés (en HETD)</option>
                     <option value="debug">Informations de débogage</option>
                 </select></th>
         </tr>
@@ -286,6 +287,8 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             <th colspan="2">Modulation</th>
             <th colspan="5" class="vh-params">Paramètres</th>
             <th rowspan="2">Heures</th>
+            <th colspan="4" class="attendu">Service</th>
+            <th colspan="5" class="attendu">Heures complémentaires</th>
             <th colspan="4" class="resultats">Service</th>
             <th colspan="5" class="resultats">Heures complémentaires</th>
             <th class="debug" rowspan="2" style="width:300px">Informations de débogage</th>
@@ -308,6 +311,16 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             <th class="resultats">Fc</th>
             <th class="resultats">Fc maj.</th>
             <th class="resultats">Réfé-rentiel</th>
+
+            <th class="attendu">Fi</th>
+            <th class="attendu">Fa</th>
+            <th class="attendu">Fc</th>
+            <th class="attendu">Réfé-rentiel</th>
+            <th class="attendu">Fi</th>
+            <th class="attendu">Fa</th>
+            <th class="attendu">Fc</th>
+            <th class="attendu">Fc maj.</th>
+            <th class="attendu">Réfé-rentiel</th>
         </tr>
         </thead>
         <tbody>
@@ -356,6 +369,15 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 <?php if ($i == 0): ?>
                     <td rowspan="<?= $maxLignes ?>" style="width:2px">&nbsp;</td>
                 <?php endif; ?>
+                <td class="attendu"><?= $lf->input('aServiceFi', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aServiceFa', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aServiceFc', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aServiceReferentiel', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aHeuresComplFi', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aHeuresComplFa', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aHeuresComplFc', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aHeuresComplFcMajorees', ['data-type' => 'float']) ?></td>
+                <td class="attendu"><?= $lf->input('aHeuresComplReferentiel', ['data-type' => 'float']) ?></td>
                 <?= $lf->output('cServiceFi', ['class' => 'resultats', 'data-assert' => 'aServiceFi']) ?>
                 <?= $lf->output('cServiceFa', ['class' => 'resultats', 'data-assert' => 'aServiceFa']) ?>
                 <?= $lf->output('cServiceFc', ['class' => 'resultats', 'data-assert' => 'aServiceFc']) ?>
@@ -424,6 +446,10 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         white-space: unset;
     }
 
+    .attendu {
+        display: none;
+    }
+
     .vh-param {
         display: none;
     }
@@ -434,6 +460,10 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
     tr.i-param {
         display: none;
+    }
+
+    .debug-info-table {
+        overflow:auto;
     }
 
     .debug-table {
@@ -449,7 +479,6 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     .debug-table td {
         text-align: right;
         min-width: 20px;
-        max-width: 20px;
     }
 
     td .zero {
@@ -582,9 +611,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     var value = $(this).val();
                     var variable = that.valueToVariable(value, type);
 
-                    if (isFti){
+                    if (isFti) {
                         data[name] = variable;
-                    }else{
+                    } else {
                         if (data['volumeHoraireTest'][index] == undefined) {
                             data['volumeHoraireTest'][index] = {};
                         }
@@ -603,9 +632,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     var type = $(this).data('type');
                     var isFti = $(this).parents('table.fvh').length == 0;
 
-                    if (isFti){
+                    if (isFti) {
                         var variable = data[name];
-                    }else{
+                    } else {
                         if (data['volumeHoraireTest'][index]) {
                             var variable = data['volumeHoraireTest'][index][name];
                         } else {
@@ -648,15 +677,15 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                             var assertVal = null;
                         }
                     }
-                    if (assert !== undefined && assertVal !== null){
-                        if (Math.abs(variable - assertVal) > 0.009){
+                    if (assert !== undefined && assertVal !== null) {
+                        if (Math.abs(variable - assertVal) > 0.009) {
                             $(this).css('background-color', '#ffe5e5');
-                            $(this).attr('title', 'Valeur attendue : '+that.variableToValue(assertVal, type));
-                        }else{
+                            $(this).attr('title', 'Valeur attendue : ' + that.variableToValue(assertVal, type));
+                        } else {
                             $(this).css('background-color', '#e7ffe5');
                             $(this).attr('title', '');
                         }
-                    }else{
+                    } else {
                         $(this).css('background-color', 'none');
                     }
                     var value = that.variableToValue(variable, type);
@@ -767,7 +796,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
             {
                 var h = '';
 
-                h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table">';
+                h += '<div class="debug-info-table"><table class="table table-bordered table-condensed table-extra-condensed debug-table">';
                 h += '<tr><th></th>';
                 for (var c in data.cols) {
                     h += '<th>' + data.cols[c] + '</th>';
@@ -789,7 +818,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     }
                     h += '</tr>';
                 }
-                h += '</table>';
+                h += '</table></div>';
 
                 h += '<table class="table table-bordered table-condensed table-extra-condensed debug-table" style="width:20em">';
                 for (var i in data.inds) {
@@ -865,11 +894,20 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
                 this.element.find("#affRes").change(function () {
                     switch ($(this).val()) {
+                        case 'attendu':
+                            that.element.find(".attendu").show();
+                            that.element.find(".debug").hide();
+                            that.element.find(".resultats").hide();
+                            break;
+
                         case 'hetd':
+                            that.element.find(".attendu").hide();
                             that.element.find(".debug").hide();
                             that.element.find(".resultats").show();
                             break;
+
                         case 'debug':
+                            that.element.find(".attendu").hide();
                             that.element.find(".resultats").hide();
                             that.element.find(".debug").show();
                             break;

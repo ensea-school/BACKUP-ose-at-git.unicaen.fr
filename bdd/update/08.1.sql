@@ -208,8 +208,6 @@ CREATE OR REPLACE PACKAGE "FORMULE_NANTERRE" AS
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
 
 END FORMULE_NANTERRE;
-
-
 /
 
 CREATE OR REPLACE PACKAGE "FORMULE_UNICAEN" AS
@@ -226,6 +224,14 @@ CREATE OR REPLACE PACKAGE "FORMULE_UNICAEN" AS
 END FORMULE_UNICAEN;
 /
 
+CREATE OR REPLACE PACKAGE "FORMULE_UBO" AS
+
+  PROCEDURE CALCUL_RESULTAT;
+
+  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
+
+END FORMULE_UBO;
+
 
 
 
@@ -241,11 +247,11 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
   TYPE t_cell IS RECORD (
     valeur FLOAT,
     enCalcul BOOLEAN DEFAULT FALSE
-    );
+  );
   TYPE t_cells IS TABLE OF t_cell INDEX BY PLS_INTEGER;
   TYPE t_coll IS RECORD (
     cells t_cells
-    );
+  );
   TYPE t_colls IS TABLE OF t_coll INDEX BY VARCHAR2(50);
   feuille t_colls;
 
@@ -256,7 +262,7 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
   PROCEDURE dbg( val CLOB ) IS
   BEGIN
     ose_formule.volumes_horaires.items(debugLine).debug_info :=
-          ose_formule.volumes_horaires.items(debugLine).debug_info || val;
+      ose_formule.volumes_horaires.items(debugLine).debug_info || val;
   END;
 
 
@@ -328,27 +334,27 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
       END IF;
     END IF;
     CASE
-      -- Liste des fonctions supportées
+    -- Liste des fonctions supportées
 
-      WHEN fncName = 'total' THEN
-        val := 0;
-        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-          val := val + COALESCE(cell(c, l),0);
-        END LOOP;
+    WHEN fncName = 'total' THEN
+      val := 0;
+      FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+        val := val + COALESCE(cell(c, l),0);
+      END LOOP;
 
-      WHEN fncName = 'max' THEN
-        val := NULL;
-        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-          cellRes := cell(c,l);
-          IF val IS NULL OR val < cellRes THEN
-            val := cellRes;
-          END IF;
-        END LOOP;
+    WHEN fncName = 'max' THEN
+      val := NULL;
+      FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+        cellRes := cell(c,l);
+        IF val IS NULL OR val < cellRes THEN
+          val := cellRes;
+        END IF;
+      END LOOP;
 
-      -- fin de la liste des fonctions supportées
-      ELSE
-        raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
-      END CASE;
+    -- fin de la liste des fonctions supportées
+    ELSE
+      raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
+    END CASE;
     IF debugActif THEN
       dbgCalc(fncName, c, val );
     END IF;
@@ -380,312 +386,312 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
     CASE
 
 
-      -- J = SI(ESTVIDE(C21);0;RECHERCHEH(SI(ET(C21="TP";TP_vaut_TD="Oui");"TD";C21);types_intervention;2;0))
-      WHEN c = 'j' AND v >= 1 THEN
-        RETURN GREATEST(vh.taux_service_du * vh.ponderation_service_du,1);
+    -- J = SI(ESTVIDE(C21);0;RECHERCHEH(SI(ET(C21="TP";TP_vaut_TD="Oui");"TD";C21);types_intervention;2;0))
+    WHEN c = 'j' AND v >= 1 THEN
+      RETURN vh.taux_service_du * vh.ponderation_service_du;
 
 
 
-      -- K = SI(H21="Oui";I21*J21;0)
-      WHEN c = 'k' AND v >= 1 THEN
+    -- K = SI(H21="Oui";I21*J21;0)
+    WHEN c = 'k' AND v >= 1 THEN
+      IF vh.service_statutaire THEN
+        RETURN vh.heures * cell('j',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- l = SI(L20+K21>service_du;service_du;L20+K21)
+    WHEN c = 'l' AND v >= 1 THEN
+      IF l < 1 THEN
+        RETURN 0;
+      END IF;
+      IF cell('l', l-1) + cell('k',l) > ose_formule.intervenant.service_du THEN
+        RETURN ose_formule.intervenant.service_du;
+      ELSE
+        RETURN cell('l', l-1) + cell('k',l);
+      END IF;
+
+
+
+    -- m = SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0)
+    WHEN c = 'm' AND v >= 1 THEN
+      IF cell('j',l) > 0 THEN
+        IF cell('l',l-1) + cell('k',l) < ose_formule.intervenant.service_du THEN
+          RETURN 0;
+        ELSE
+          RETURN (cell('l',l-1) + cell('k',l) - ose_formule.intervenant.service_du) / cell('j',l);
+        END IF;
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- n = SI(ESTVIDE(C21);0;RECHERCHEH(C21;types_intervention;3;0))
+    WHEN c = 'n' AND v >= 1 THEN
+      RETURN vh.taux_service_compl * vh.ponderation_service_compl;
+
+
+
+    -- o = SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(M21+SI(H21<>"Oui";I21;0))*N21)
+    -- service_realise = MAX($L$21:$L$50)
+    -- service_du = ose_formule.intervenant.service_du
+    -- HC_autorisees = ose_formule.intervenant.depassement_service_du_sans_hc = false
+    WHEN c = 'o' AND v >= 1 THEN
+      IF (calcFnc('max','l') < ose_formule.intervenant.service_du) OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
+        RETURN 0;
+      ELSE
         IF vh.service_statutaire THEN
-          RETURN vh.heures * cell('j',l);
+          RETURN cell('m',l) * cell('n',l);
         ELSE
-          RETURN 0;
+          RETURN (cell('m',l) + vh.heures) * cell('n',l);
         END IF;
+      END IF;
 
 
 
-      -- l = SI(L20+K21>service_du;service_du;L20+K21)
-      WHEN c = 'l' AND v >= 1 THEN
-        IF l < 1 THEN
-          RETURN 0;
+    -- q =SI(ESTVIDE(C21);0;SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0)))
+    -- Nouvelle interprêtation de la formule : on n'a pas 'TP' donc tout ce qui est <1 devient 1
+    WHEN c = 'q' AND v >= 1 THEN
+      RETURN GREATEST( vh.taux_service_compl, 1);
+
+
+
+    -- r =I21*Q21
+    WHEN c = 'r' AND v >= 1 THEN
+      RETURN vh.heures * cell('q',l);
+
+
+
+    -- r136 =SOMME.SI(B$21:B$50;composante_affectation;R$21:R$50)
+    WHEN c = 'r136' AND v >= 1 THEN
+      val := 0;
+      FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
+        IF ose_formule.volumes_horaires.items(i).structure_is_affectation THEN
+          val := val + cell('r',i);
         END IF;
-        IF cell('l', l-1) + cell('k',l) > ose_formule.intervenant.service_du THEN
-          RETURN ose_formule.intervenant.service_du;
-        ELSE
-          RETURN cell('l', l-1) + cell('k',l);
+      END LOOP;
+      RETURN val;
+
+
+
+    -- r137 =SOMME.SI(B$21:B$50;"<>"&composante_affectation;R$21:R$50)
+    WHEN c = 'r137' AND v >= 1 THEN
+      val := 0;
+      FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
+        IF NOT ose_formule.volumes_horaires.items(i).structure_is_affectation THEN
+          val := val + cell('r',i);
         END IF;
+      END LOOP;
+      RETURN val;
 
 
 
-      -- m = SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0)
-      WHEN c = 'm' AND v >= 1 THEN
-        IF cell('j',l) > 0 THEN
-          IF cell('l',l-1) + cell('k',l) < ose_formule.intervenant.service_du THEN
-            RETURN 0;
-          ELSE
-            RETURN (cell('l',l-1) + cell('k',l) - ose_formule.intervenant.service_du) / cell('j',l);
-          END IF;
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- n = SI(ESTVIDE(C21);0;RECHERCHEH(C21;types_intervention;3;0))
-      WHEN c = 'n' AND v >= 1 THEN
-        RETURN vh.taux_service_compl * vh.ponderation_service_compl;
-
-
-
-      -- o = SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(M21+SI(H21<>"Oui";I21;0))*N21)
-      -- service_realise = MAX($L$21:$L$50)
-      -- service_du = ose_formule.intervenant.service_du
-      -- HC_autorisees = ose_formule.intervenant.depassement_service_du_sans_hc = false
-      WHEN c = 'o' AND v >= 1 THEN
-        IF (calcFnc('max','l') < ose_formule.intervenant.service_du) OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
-          RETURN 0;
-        ELSE
-          IF vh.service_statutaire THEN
-            RETURN cell('m',l) * cell('n',l);
-          ELSE
-            RETURN (cell('m',l) + vh.heures) * cell('n',l);
-          END IF;
-        END IF;
-
-
-
-      -- q =SI(ESTVIDE(C21);0;SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0)))
-      -- Nouvelle interprêtation de la formule : on n'a pas 'TP' donc tout ce qui est <1 devient 1
-      WHEN c = 'q' AND v >= 1 THEN
-        RETURN GREATEST( vh.taux_service_compl, 1);
-
-
-
-      -- r =I21*Q21
-      WHEN c = 'r' AND v >= 1 THEN
-        RETURN vh.heures * cell('q',l);
-
-
-
-      -- r136 =SOMME.SI(B$21:B$50;composante_affectation;R$21:R$50)
-      WHEN c = 'r136' AND v >= 1 THEN
-        val := 0;
-        FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
-          IF ose_formule.volumes_horaires.items(i).structure_is_affectation THEN
-            val := val + cell('r',i);
-          END IF;
-        END LOOP;
-        RETURN val;
-
-
-
-      -- r137 =SOMME.SI(B$21:B$50;"<>"&composante_affectation;R$21:R$50)
-      WHEN c = 'r137' AND v >= 1 THEN
-        val := 0;
-        FOR i IN 1 .. ose_formule.volumes_horaires.length LOOP
-          IF NOT ose_formule.volumes_horaires.items(i).structure_is_affectation THEN
-            val := val + cell('r',i);
-          END IF;
-        END LOOP;
-        RETURN val;
-
-
-
-      -- s =SI(B21=composante_affectation;SI($R$53=0;0;R21*$S$53/$R$53);SI($R$54=0;0;R21*$S$54/$R$54))
-      WHEN c = 's' AND v >= 1 THEN
-        IF vh.structure_is_affectation THEN
-          IF cell('r136') = 0 THEN
-            RETURN 0;
-          ELSE
-            RETURN cell('r',l) * cell('s136')/cell('r136');
-          END IF;
-        ELSE
-          IF cell('r137') = 0 THEN
-            RETURN 0;
-          ELSE
-            RETURN cell('r',l) * cell('s137')/cell('r137');
-          END IF;
-        END IF;
-
-
-
-      -- s136 =SI(OU(HC=0;r136<service_du);0;r136-service_du)
-      -- s136 =SI(OU(HC=0;R136<service_du);0;SI(pour_les_autres_composantes=0;HC;SI((HC-pour_les_autres_composantes)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-pour_les_autres_composantes)))
-      -- pour_les_autres_composantes = R137
-      WHEN c = 's136' AND v >= 1 THEN
-        IF calcFnc('total','o') = 0 OR cell('r136') < ose_formule.intervenant.service_du THEN
-          RETURN 0;
-        ELSE
-          -- SI(R137=0;HC;SI((HC-R137)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-R137))
-          IF cell('r137') = 0 THEN
-            RETURN calcFnc('total','o');
-          ELSE
-            -- SI((HC-R137)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-R137)
-            IF (calcFnc('total','o')-cell('r137'))<(calcFnc('total','o')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r')) THEN
-              -- HC*(R136-service_du)/R132
-              RETURN calcFnc('total','o')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r');
-            ELSE
-              -- HC-R137
-              RETURN calcFnc('total','o')-cell('r137');
-            END IF;
-          END IF;
-        END IF;
-
-
-
-      -- s137 =SI(HC=0;0;r137*(HC-s136)/r137)
-      -- s137 =SI(R137=0;0;SI(HC=0;0;HC-S136))
-      WHEN c = 's137' AND v >= 1 THEN
-        IF calcFnc('total','o') = 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN cell('r137')*(calcFnc('total','o')-cell('s136'))/cell('r137');
-        END IF;
-
-
-
-      -- s138 =SOMME(S136:S137)
-      WHEN c = 's138' AND v >= 1 THEN
-        RETURN cell('s136') + cell('s138');
-
-
-
-      -- t136 =SI(R136=0;0;S136/R136)
-      WHEN c = 't136' AND v >= 1 THEN
+    -- s =SI(B21=composante_affectation;SI($R$53=0;0;R21*$S$53/$R$53);SI($R$54=0;0;R21*$S$54/$R$54))
+    WHEN c = 's' AND v >= 1 THEN
+      IF vh.structure_is_affectation THEN
         IF cell('r136') = 0 THEN
           RETURN 0;
         ELSE
-          RETURN cell('s136') / cell('r136');
+          RETURN cell('r',l) * cell('s136')/cell('r136');
         END IF;
-
-
-
-      -- t137 =SI(R137=0;0;S137/R137)
-      WHEN c = 't137' AND v >= 1 THEN
+      ELSE
         IF cell('r137') = 0 THEN
           RETURN 0;
         ELSE
-          RETURN cell('s137') / cell('r137');
+          RETURN cell('r',l) * cell('s137')/cell('r137');
         END IF;
+      END IF;
 
 
 
-      -- u =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$D21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)))
-      WHEN c = 'u' AND v >= 1 THEN
-        -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
-        IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
-          RETURN 0;
-        ELSE
-          -- SI(H21="Non";O21*$D21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21))
-          IF NOT vh.service_statutaire THEN
-            RETURN cell('o',l) * vh.taux_fi;
-          ELSE
-            -- SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)
-            IF cell('m',l) > 0 THEN
-              -- (($M21*$N21)+($I21-$M21)*J21)*$D21
-              RETURN ((cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('j',l))*vh.taux_fi;
-            ELSE
-              -- $K21*$D21
-              RETURN cell('k',l) * vh.taux_fi;
-            END IF;
-          END IF;
-        END IF;
-
-
-
-      -- v =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)))
-      -- HC = calcFnc('total','o')
-      -- H21="Non" = NOT vh.service_statutaire
-      -- P21 = O21!!
-      WHEN c = 'v' AND v >= 1 THEN
-        -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
-        IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
-          RETURN 0;
-        ELSE
-          -- SI(H21="Non";P21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21))
-          IF NOT vh.service_statutaire THEN
-            RETURN cell('o',l) * vh.taux_fa;
-          ELSE
-            -- SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)
-            IF cell('m',l) > 0 THEN
-              -- (($M21*$N21)+($I21-$M21)*K21)*$E21
-              RETURN ((cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('k',l))*vh.taux_fa;
-            ELSE
-              -- $K21*$E21
-              RETURN cell('k',l) * vh.taux_fa;
-            END IF;
-          END IF;
-        END IF;
-
-
-
-      -- w =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)))
-      WHEN c = 'w' AND v >= 1 THEN
-        -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
-        IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
-          RETURN 0;
-        ELSE
-          --SI(H21="Non";Q21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21))
-          IF NOT vh.service_statutaire THEN
-            RETURN cell('o',l) * vh.taux_fc;
-          ELSE
-            -- SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)
-            IF cell('m',l) > 0 THEN
-              RETURN ((cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('l',l))*vh.taux_fc;
-            ELSE
-              -- $K21*$F21
-              RETURN cell('k',l) * vh.taux_fc;
-            END IF;
-          END IF;
-        END IF;
-
-
-
-      -- x =SI($C21="Référentiel";$K21-$M21;0)
-      WHEN c = 'x' AND v >= 1 THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('k',l) - cell('m',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- y =SI($C21="Référentiel";0;$S21)
-      WHEN c = 'y' AND v >= 1 THEN
-        IF vh.volume_horaire_id IS NOT NULL THEN
-          RETURN cell('s',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-      -- z =0
-      WHEN c = 'z' AND v >= 1 THEN
+    -- s136 =SI(OU(HC=0;r136<service_du);0;r136-service_du)
+    -- s136 =SI(OU(HC=0;R136<service_du);0;SI(pour_les_autres_composantes=0;HC;SI((HC-pour_les_autres_composantes)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-pour_les_autres_composantes)))
+    -- pour_les_autres_composantes = R137
+    WHEN c = 's136' AND v >= 1 THEN
+      IF calcFnc('total','o') = 0 OR cell('r136') < ose_formule.intervenant.service_du THEN
         RETURN 0;
-
-
-
-      -- aa =0
-      WHEN c = 'aa' AND v >= 1 THEN
-        RETURN 0;
-
-
-
-      -- ab =0
-      WHEN c = 'ab' AND v >= 1 THEN
-        RETURN 0;
-
-
-
-      -- ac =SI($C21="Référentiel";$S21;0)
-      WHEN c = 'ac' AND v >= 1 THEN
-        IF vh.volume_horaire_ref_id IS NOT NULL THEN
-          RETURN cell('s',l);
-        ELSE
-          RETURN 0;
-        END IF;
-
-
-
-
-
       ELSE
-        raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
-      END CASE; END;
+        -- SI(R137=0;HC;SI((HC-R137)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-R137))
+        IF cell('r137') = 0 THEN
+          RETURN calcFnc('total','o');
+        ELSE
+          -- SI((HC-R137)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-R137)
+          IF (calcFnc('total','o')-cell('r137'))<(calcFnc('total','o')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r')) THEN
+            -- HC*(R136-service_du)/R132
+            RETURN calcFnc('total','o')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r');
+          ELSE
+            -- HC-R137
+            RETURN calcFnc('total','o')-cell('r137');
+          END IF;
+        END IF;
+      END IF;
+
+
+
+    -- s137 =SI(HC=0;0;r137*(HC-s136)/r137)
+    -- s137 =SI(R137=0;0;SI(HC=0;0;HC-S136))
+    WHEN c = 's137' AND v >= 1 THEN
+      IF calcFnc('total','o') = 0 THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('r137')*(calcFnc('total','o')-cell('s136'))/cell('r137');
+      END IF;
+
+
+
+    -- s138 =SOMME(S136:S137)
+    WHEN c = 's138' AND v >= 1 THEN
+      RETURN cell('s136') + cell('s138');
+
+
+
+    -- t136 =SI(R136=0;0;S136/R136)
+    WHEN c = 't136' AND v >= 1 THEN
+      IF cell('r136') = 0 THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('s136') / cell('r136');
+      END IF;
+
+
+
+    -- t137 =SI(R137=0;0;S137/R137)
+    WHEN c = 't137' AND v >= 1 THEN
+      IF cell('r137') = 0 THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('s137') / cell('r137');
+      END IF;
+
+
+
+    -- u =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$D21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)))
+    WHEN c = 'u' AND v >= 1 THEN
+      -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
+      IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
+        RETURN 0;
+      ELSE
+        -- SI(H21="Non";O21*$D21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21))
+        IF NOT vh.service_statutaire THEN
+          RETURN cell('o',l) * vh.taux_fi;
+        ELSE
+          -- SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$D21;$K21*$D21)
+          IF cell('m',l) > 0 THEN
+            -- (($M21*$N21)+($I21-$M21)*J21)*$D21
+            RETURN ((cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('j',l))*vh.taux_fi;
+          ELSE
+            -- $K21*$D21
+            RETURN cell('k',l) * vh.taux_fi;
+          END IF;
+        END IF;
+      END IF;
+
+
+
+    -- v =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)))
+    -- HC = calcFnc('total','o')
+    -- H21="Non" = NOT vh.service_statutaire
+    -- P21 = O21!!
+    WHEN c = 'v' AND v >= 1 THEN
+      -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
+      IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
+        RETURN 0;
+      ELSE
+        -- SI(H21="Non";P21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21))
+        IF NOT vh.service_statutaire THEN
+          RETURN cell('o',l) * vh.taux_fa;
+        ELSE
+          -- SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)
+          IF cell('m',l) > 0 THEN
+            -- (($M21*$N21)+($I21-$M21)*K21)*$E21
+            RETURN ((cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('k',l))*vh.taux_fa;
+          ELSE
+            -- $K21*$E21
+            RETURN cell('k',l) * vh.taux_fa;
+          END IF;
+        END IF;
+      END IF;
+
+
+
+    -- w =SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)))
+    WHEN c = 'w' AND v >= 1 THEN
+      -- OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"))
+      IF vh.volume_horaire_ref_id IS NOT NULL OR (calcFnc('total','o')=0 AND NOT vh.service_statutaire) THEN
+        RETURN 0;
+      ELSE
+        --SI(H21="Non";Q21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21))
+        IF NOT vh.service_statutaire THEN
+          RETURN cell('o',l) * vh.taux_fc;
+        ELSE
+          -- SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)
+          IF cell('m',l) > 0 THEN
+            RETURN ((cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('l',l))*vh.taux_fc;
+          ELSE
+            -- $K21*$F21
+            RETURN cell('k',l) * vh.taux_fc;
+          END IF;
+        END IF;
+      END IF;
+
+
+
+    -- x =SI($C21="Référentiel";$K21-$M21;0)
+    WHEN c = 'x' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell('k',l) - cell('m',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- y =SI($C21="Référentiel";0;$S21)
+    WHEN c = 'y' AND v >= 1 THEN
+      IF vh.volume_horaire_id IS NOT NULL THEN
+        RETURN cell('s',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+    -- z =0
+    WHEN c = 'z' AND v >= 1 THEN
+      RETURN 0;
+
+
+
+    -- aa =0
+    WHEN c = 'aa' AND v >= 1 THEN
+      RETURN 0;
+
+
+
+    -- ab =0
+    WHEN c = 'ab' AND v >= 1 THEN
+      RETURN 0;
+
+
+
+    -- ac =SI($C21="Référentiel";$S21;0)
+    WHEN c = 'ac' AND v >= 1 THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell('s',l);
+      ELSE
+        RETURN 0;
+      END IF;
+
+
+
+
+
+    ELSE
+      raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
+  END CASE; END;
 
 
 
@@ -2894,6 +2900,938 @@ END FORMULE_UNICAEN;
 /
 
 
+CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
+  decalageLigne NUMERIC DEFAULT 0;
+
+
+  /* Stockage des valeurs intermédiaires */
+  TYPE t_cell IS RECORD (
+    valeur FLOAT,
+    enCalcul BOOLEAN DEFAULT FALSE
+    );
+  TYPE t_cells IS TABLE OF t_cell INDEX BY PLS_INTEGER;
+  TYPE t_coll IS RECORD (
+    cells t_cells
+    );
+  TYPE t_colls IS TABLE OF t_coll INDEX BY VARCHAR2(50);
+  feuille t_colls;
+
+  debugActif BOOLEAN DEFAULT TRUE;
+  debugLine NUMERIC;
+
+
+  PROCEDURE dbg( val CLOB ) IS
+  BEGIN
+    ose_formule.volumes_horaires.items(debugLine).debug_info :=
+          ose_formule.volumes_horaires.items(debugLine).debug_info || val;
+  END;
+
+
+  PROCEDURE dbgi( val CLOB ) IS
+  BEGIN
+    ose_formule.intervenant.debug_info := ose_formule.intervenant.debug_info || val;
+  END;
+
+  PROCEDURE dbgDump( val CLOB ) IS
+  BEGIN
+    dbg('<div class="dbg-dump">' || val || '</div>');
+  END;
+
+  PROCEDURE dbgCell( c VARCHAR2, l NUMERIC, val FLOAT ) IS
+    ligne NUMERIC;
+  BEGIN
+    ligne := l;
+    IF l <> 0 THEN
+      ligne := ligne + decalageLigne;
+    END IF;
+
+    dbgi( '[cell|' || c || '|' || ligne || '|' || val );
+  END;
+
+  PROCEDURE dbgCalc( fncName VARCHAR2, c VARCHAR2, res FLOAT ) IS
+  BEGIN
+    dbgi( '[calc|' || fncName || '|' || c || '|' || res );
+  END;
+
+  FUNCTION cell( c VARCHAR2, l NUMERIC DEFAULT 0 ) RETURN FLOAT IS
+    val FLOAT;
+  BEGIN
+    IF feuille.exists(c) THEN
+      IF feuille(c).cells.exists(l) THEN
+        IF feuille(c).cells(l).enCalcul THEN
+          raise_application_error( -20001, 'Dépendance cyclique : la cellule [' || c || ';' || l || '] est déjà en cours de calcul');
+        END IF;
+        RETURN feuille(c).cells(l).valeur;
+      END IF;
+    END IF;
+
+    feuille(c).cells(l).enCalcul := true;
+    val := calcCell( c, l );
+    IF debugActif THEN
+      dbgCell( c, l, val );
+    END IF;
+    feuille(c).cells(l).valeur := val;
+    feuille(c).cells(l).enCalcul := false;
+
+    RETURN val;
+  END;
+
+  FUNCTION mainCell( libelle VARCHAR2, c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
+    val FLOAT;
+  BEGIN
+    debugLine := l;
+    val := cell(c,l);
+
+    RETURN val;
+  END;
+
+  FUNCTION calcFnc( fncName VARCHAR2, c VARCHAR2 ) RETURN FLOAT IS
+    val FLOAT;
+    cellRes FLOAT;
+  BEGIN
+    IF feuille.exists('__' || fncName || '__' || c || '__') THEN
+      IF feuille('__' || fncName || '__' || c || '__').cells.exists(1) THEN
+        RETURN feuille('__' || fncName || '__' || c || '__').cells(1).valeur;
+      END IF;
+    END IF;
+    CASE
+      -- Liste des fonctions supportées
+
+      WHEN fncName = 'total' THEN
+        val := 0;
+        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+          val := val + COALESCE(cell(c, l),0);
+        END LOOP;
+
+      WHEN fncName = 'max' THEN
+        val := NULL;
+        FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+          cellRes := cell(c,l);
+          IF val IS NULL OR val < cellRes THEN
+            val := cellRes;
+          END IF;
+        END LOOP;
+
+      -- fin de la liste des fonctions supportées
+      ELSE
+        raise_application_error( -20001, 'La formule "' || fncName || '" n''existe pas!');
+      END CASE;
+    IF debugActif THEN
+      dbgCalc(fncName, c, val );
+    END IF;
+    feuille('__' || fncName || '__' || c || '__').cells(1).valeur := val;
+
+    RETURN val;
+  END;
+
+
+  FUNCTION calcVersion RETURN NUMERIC IS
+  BEGIN
+    RETURN 1;
+  END;
+
+
+
+  FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT IS
+    vh ose_formule.t_volume_horaire;
+    i  ose_formule.t_intervenant;
+    v NUMERIC;
+    val FLOAT;
+  BEGIN
+    v := calcVersion;
+
+    i := ose_formule.intervenant;
+    IF l > 0 THEN
+      vh := ose_formule.volumes_horaires.items(l);
+    END IF;
+    CASE
+
+
+
+      WHEN c = 'CM' AND v >= 1 THEN
+        IF vh.type_intervention_code = 'CM' THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      WHEN c = 'TD' AND v >= 1 THEN
+        IF vh.type_intervention_code = 'TD' THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      WHEN c = 'TP' AND v >= 1 THEN
+        IF vh.type_intervention_code = 'TP' THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      WHEN c='sCM' AND v >= 1 THEN
+        RETURN calcFnc('total', 'CM');
+
+
+
+      WHEN c='sTD' AND v >= 1 THEN
+        RETURN calcFnc('total', 'TD');
+
+
+
+      WHEN c='sTP' AND v >= 1 THEN
+        RETURN calcFnc('total', 'TP');
+
+
+
+      WHEN c='sHeures' AND v >= 1 THEN
+        RETURN cell('sCM') + cell('sTD') + cell('sTP');
+
+
+
+      -- =SI(I9=0;2/3;SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))))
+      -- I8= TP vaut TD
+      -- I9 = i.heures_service_statutaire
+      -- I15 = i.service_du
+      -- I26:I35 = Somme des CM I=CM, J=TD, K=TP
+      -- K26:K35 = Somme des TP
+      WHEN c = 'tauxTP' AND v >= 1 THEN
+        IF i.heures_service_statutaire = 0 THEN
+          RETURN 2/3;
+        ELSE
+          -- SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35))))
+          IF LOWER(i.param_1)='oui' THEN
+            -- SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);
+            IF cell('sHeures') = 0 THEN
+              RETURN 1;
+            ELSE
+              -- (2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3
+              RETURN (2+(i.service_du/((1.5*cell('sCM'))+cell('sTD')+cell('sTP'))))/3;
+            END IF;
+          ELSE
+            -- SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)))
+            IF cell('sTP') <= 384 THEN
+              RETURN 1;
+            ELSE
+              --(384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35)
+              RETURN (384+((cell('sTP')-384)*(2/3)))/cell('sTP');
+            END IF;
+          END IF;
+        END IF;
+
+
+
+      WHEN c = 'tauxServiceDu' AND v >= 1 THEN
+        IF vh.type_intervention_code = 'TP' THEN
+          RETURN cell('tauxTP');
+        ELSE
+          RETURN vh.taux_service_du;
+        END IF;
+
+
+
+      WHEN c = 'tauxServiceCompl' AND v >= 1 THEN
+        IF vh.type_intervention_code = 'TP' THEN
+          RETURN cell('tauxTP');
+        ELSE
+          RETURN vh.taux_service_compl;
+        END IF;
+
+
+      -- t11=SI(ET($H26=$I$11;NON($F26));I26;0)
+      WHEN c = 't11' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND NOT vh.taux_fc = 1 THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t12=SI(ET($H26<>$I$11;NON($F26));I26;0)
+      WHEN c = 't12' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND NOT vh.taux_fc = 1 THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t13=SI(ET($H26=$I$11;$F26);I26;0)
+      WHEN c = 't13' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND vh.taux_fc = 1 THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t14=SI(ET($H26<>$I$11;$F26);I26;0)
+      WHEN c = 't14' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND vh.taux_fc = 1 THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t15=SI($H38=$I$11;I38;0)
+      WHEN c = 't15' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_affectation THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t16=SI(ET($H38<>$I$11;$H38<>$I$2);I38;0)
+      WHEN c = 't16' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL AND NOT vh.structure_is_affectation AND NOT vh.structure_is_univ THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t17=SI($H38=$I$2;I38;0)
+      WHEN c = 't17' AND v >= 1 THEN
+        IF vh.volume_horaire_ref_id IS NOT NULL AND vh.structure_is_univ THEN
+          RETURN vh.heures;
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t21=I47*I$24
+      WHEN c = 't21' AND v >= 1 THEN
+        RETURN cell('t11', l) * cell('tauxServiceDu',l);
+
+
+
+      -- t22=S47*I$24
+      WHEN c = 't22' AND v >= 1 THEN
+        RETURN cell('t12', l) * cell('tauxServiceDu',l);
+
+
+
+      -- t23=AC47*I$24
+      WHEN c = 't23' AND v >= 1 THEN
+        RETURN cell('t13', l) * cell('tauxServiceDu',l);
+
+
+
+      -- t24=AM47*I$24
+      WHEN c = 't24' AND v >= 1 THEN
+        RETURN cell('t14', l) * cell('tauxServiceDu',l);
+
+
+
+      -- t25=AW47*$R$5
+      WHEN c = 't25' AND v >= 1 THEN
+        RETURN cell('t15', l);
+
+
+
+      -- t26=AY47*$R$5
+      WHEN c = 't26' AND v >= 1 THEN
+        RETURN cell('t16', l);
+
+
+
+      -- t27=BA47*$R$5
+      WHEN c = 't27' AND v >= 1 THEN
+        RETURN cell('t17', l);
+
+
+
+      -- t31=MAX(I15-Q69;0)
+      WHEN c = 't31' AND v >= 1 THEN
+        RETURN GREATEST(ose_formule.intervenant.service_du - calcFnc('total','t21'), 0);
+
+
+
+      -- t32=MAX(Q71-AA69;0)
+      WHEN c = 't32' AND v >= 1 THEN
+        RETURN GREATEST(cell('t31') - calcFnc('total','t22'), 0);
+
+
+
+      -- t33=MAX(AA71-AK69;0)
+      WHEN c = 't33' AND v >= 1 THEN
+        RETURN GREATEST(cell('t32') - calcFnc('total','t23'), 0);
+
+
+
+      -- t34=MAX(AK71-AU69;0)
+      WHEN c = 't34' AND v >= 1 THEN
+        RETURN GREATEST(cell('t33') - calcFnc('total','t24'), 0);
+
+
+
+      -- t35=MAX(AU71-AW64;0)
+      WHEN c = 't35' AND v >= 1 THEN
+        RETURN GREATEST(cell('t34') - calcFnc('total','t25'), 0);
+
+
+
+      -- t36=MAX(AW71-AY64;0)
+      WHEN c = 't36' AND v >= 1 THEN
+        RETURN GREATEST(cell('t35', l) - calcFnc('total','t26'), 0);
+
+
+
+      -- t37=MAX(AY71-BA64;0)
+      WHEN c = 't37' AND v >= 1 THEN
+        RETURN GREATEST(cell('t36', l) - calcFnc('total','t27'), 0);
+
+
+
+      -- t41=SI($Q$69<>0;I59/$Q$69;0)
+      WHEN c = 't41' AND v >= 1 THEN
+        IF calcFnc('total','t21') <> 0 THEN
+          RETURN cell('t21', l) / calcFnc('total','t21');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t42=SI($AA$69<>0;S59/$AA$69;0)
+      WHEN c = 't42' AND v >= 1 THEN
+        IF calcFnc('total','t22') <> 0 THEN
+          RETURN cell('t22', l) / calcFnc('total','t22');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t43=SI($AK$69<>0;AC59/$AK$69;0)
+      WHEN c = 't43' AND v >= 1 THEN
+        IF calcFnc('total','t23') <> 0 THEN
+          RETURN cell('t23', l) / calcFnc('total','t23');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t44=SI($AU$69<>0;AM59/$AU$69;0)
+      WHEN c = 't44' AND v >= 1 THEN
+        IF calcFnc('total','t24') <> 0 THEN
+          RETURN cell('t24', l) / calcFnc('total','t24');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t45=SI($AW$64<>0;AW59/$AW$64;0)
+      WHEN c = 't45' AND v >= 1 THEN
+        IF calcFnc('total','t25') <> 0 THEN
+          RETURN cell('t25', l) / calcFnc('total','t25');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t46=SI($AY$64<>0;AY59/$AY$64;0)
+      WHEN c = 't46' AND v >= 1 THEN
+        IF calcFnc('total','t26') <> 0 THEN
+          RETURN cell('t26', l) / calcFnc('total','t26');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t47=SI($BA$64<>0;BA59/$BA$64;0)
+      WHEN c = 't47' AND v >= 1 THEN
+        IF calcFnc('total','t27') <> 0 THEN
+          RETURN cell('t27', l) / calcFnc('total','t27');
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t51=MIN($I$15;$Q$69)*I74
+      WHEN c = 't51' AND v >= 1 THEN
+        RETURN LEAST(ose_formule.intervenant.service_du, calcFnc('total','t21')) * cell('t41', l);
+
+
+
+      -- t52=MIN($Q$71;$AA$69)*S74
+      WHEN c = 't52' AND v >= 1 THEN
+        RETURN LEAST(cell('t31'), calcFnc('total','t22')) * cell('t42', l);
+
+
+
+      -- t53=MIN($AA$71;$AK$69)*AC74
+      WHEN c = 't53' AND v >= 1 THEN
+        RETURN LEAST(cell('t32'), calcFnc('total','t23')) * cell('t43', l);
+
+
+
+      -- t54=MIN($AK$71;$AU$69)*AM74
+      WHEN c = 't54' AND v >= 1 THEN
+        RETURN LEAST(cell('t33'), calcFnc('total','t24')) * cell('t44', l);
+
+
+
+      -- t55=MIN($AU$71;$AW$64)*AW74
+      WHEN c = 't55' AND v >= 1 THEN
+        RETURN LEAST(cell('t34'), calcFnc('total','t25')) * cell('t45', l);
+
+
+
+      -- t56=MIN($AW$71;$AY$64)*AY74
+      WHEN c = 't56' AND v >= 1 THEN
+        RETURN LEAST(cell('t35'), calcFnc('total','t26')) * cell('t46', l);
+
+
+
+      -- t57=MIN($AY$71;$BA$64)*BA74
+      WHEN c = 't57' AND v >= 1 THEN
+        RETURN LEAST(cell('t36'), calcFnc('total','t27')) * cell('t47', l);
+
+
+
+      -- t61=I86*$C26
+      WHEN c = 't61' AND v >= 1 THEN
+        RETURN cell('t51', l) * vh.taux_fi;
+
+
+
+      -- t62=S86*$C26
+      WHEN c = 't62' AND v >= 1 THEN
+        RETURN cell('t52', l) * vh.taux_fi;
+
+
+
+      -- t71=I86*$D26
+      WHEN c = 't71' AND v >= 1 THEN
+        RETURN cell('t51', l) * vh.taux_fa;
+
+
+
+      -- t72=S86*$D26
+      WHEN c = 't72' AND v >= 1 THEN
+        RETURN cell('t52', l) * vh.taux_fa;
+
+
+
+      -- t81=I86*$E26
+      WHEN c = 't81' AND v >= 1 THEN
+        RETURN cell('t51', l) * vh.taux_fc;
+
+
+
+      -- t82=S86*$E26
+      WHEN c = 't82' AND v >= 1 THEN
+        RETURN cell('t52', l) * vh.taux_fc;
+
+
+
+      -- t83=AC86*$E26
+      WHEN c = 't83' AND v >= 1 THEN
+        RETURN cell('t53', l) * vh.taux_fc;
+
+
+
+      -- t84=AM86*$E26
+      WHEN c = 't84' AND v >= 1 THEN
+        RETURN cell('t54', l) * vh.taux_fc;
+
+
+
+      -- t91=SI(I59<>0;I86/I59;0)
+      WHEN c = 't91' AND v >= 1 THEN
+        IF cell('t21', l) <> 0 THEN
+          RETURN cell('t51', l) / cell('t21', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t92=SI(S59<>0;S86/S59;0)
+      WHEN c = 't92' AND v >= 1 THEN
+        IF cell('t22', l) <> 0 THEN
+          RETURN cell('t52', l) / cell('t22', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t93=SI(AC59<>0;AC86/AC59;0)
+      WHEN c = 't93' AND v >= 1 THEN
+        IF cell('t23', l) <> 0 THEN
+          RETURN cell('t53', l) / cell('t23', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t94=SI(AM59<>0;AM86/AM59;0)
+      WHEN c = 't94' AND v >= 1 THEN
+        IF cell('t24', l) <> 0 THEN
+          RETURN cell('t54', l) / cell('t24', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t95=SI(AW59<>0;AW86/AW59;0)
+      WHEN c = 't95' AND v >= 1 THEN
+        IF cell('t25', l) <> 0 THEN
+          RETURN cell('t55', l) / cell('t25', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t96=SI(AY59<>0;AY86/AY59;0)
+      WHEN c = 't96' AND v >= 1 THEN
+        IF cell('t26', l) <> 0 THEN
+          RETURN cell('t56', l) / cell('t26', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t97=SI(BA59<>0;BA86/BA59;0)
+      WHEN c = 't97' AND v >= 1 THEN
+        IF cell('t27', l) <> 0 THEN
+          RETURN cell('t57', l) / cell('t27', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t101=SI($BA$71<>0;0;1-I134)
+      WHEN c = 't101' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t91', l);
+        END IF;
+
+
+
+      -- t102=SI($BA$71<>0;0;1-S134)
+      WHEN c = 't102' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t92', l);
+        END IF;
+
+
+
+      -- t103=SI($BA$71<>0;0;1-AC134)
+      WHEN c = 't103' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t93', l);
+        END IF;
+
+
+
+      -- t104=SI($BA$71<>0;0;1-AM134)
+      WHEN c = 't104' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t94', l);
+        END IF;
+
+
+
+      -- t105=SI($BA$71<>0;0;1-AW134)
+      WHEN c = 't105' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t95', l);
+        END IF;
+
+
+
+      -- t106=SI($BA$71<>0;0;1-AY134)
+      WHEN c = 't106' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t96', l);
+        END IF;
+
+
+
+      -- t107=SI($BA$71<>0;0;1-BA134)
+      WHEN c = 't107' AND v >= 1 THEN
+        IF cell('t37') <> 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN 1 - cell('t97', l);
+        END IF;
+
+
+
+      -- t111=I47*I$25*I146
+      WHEN c = 't111' AND v >= 1 THEN
+        RETURN cell('t11', l) * cell('tauxServiceCompl',l) * cell('t101', l);
+
+
+
+      -- t112=S47*I$25*S146
+      WHEN c = 't112' AND v >= 1 THEN
+        RETURN cell('t12', l) * cell('tauxServiceCompl',l) * cell('t102', l);
+
+
+
+      -- t113=AC47*I$25*AC146
+      WHEN c = 't113' AND v >= 1 THEN
+        RETURN cell('t13', l) * cell('tauxServiceCompl',l) * cell('t103', l);
+
+
+
+      -- t114=AM47*I$25*AM146
+      WHEN c = 't114' AND v >= 1 THEN
+        RETURN cell('t14', l) * cell('tauxServiceCompl',l) * cell('t104', l);
+
+
+
+      -- t115=AW47*$R$6*AW146
+      WHEN c = 't115' AND v >= 1 THEN
+        RETURN cell('t15', l) * cell('t105', l);
+
+
+
+      -- t116=AY47*$R$6*AY146
+      WHEN c = 't116' AND v >= 1 THEN
+        RETURN cell('t16', l) * cell('t106', l);
+
+
+
+      -- t117=BA47*$R$6*BA146
+      WHEN c = 't117' AND v >= 1 THEN
+        RETURN cell('t17', l) * cell('t107', l);
+
+
+
+      -- t123=AC158*SI($F26;$G26;1)
+      WHEN c = 't123' AND v >= 1 THEN
+        IF vh.taux_fc = 1 THEN
+          RETURN cell('t113', l) * vh.ponderation_service_compl;
+        ELSE
+          RETURN cell('t113', l);
+        END IF;
+
+
+
+      -- t124=AM158*SI($F26;$G26;1)
+      WHEN c = 't124' AND v >= 1 THEN
+        IF vh.taux_fc = 1 THEN
+          RETURN cell('t114', l) * vh.ponderation_service_compl;
+        ELSE
+          RETURN cell('t114', l);
+        END IF;
+
+
+
+      -- t131=I158*$C26
+      WHEN c = 't131' AND v >= 1 THEN
+        RETURN cell('t111', l) * vh.taux_fi;
+
+
+
+      -- t132=S158*$C26
+      WHEN c = 't132' AND v >= 1 THEN
+        RETURN cell('t112', l) * vh.taux_fi;
+
+
+
+      -- t141=I158*$D26
+      WHEN c = 't141' AND v >= 1 THEN
+        RETURN cell('t111', l) * vh.taux_fa;
+
+
+
+      -- t142=S158*$D26
+      WHEN c = 't142' AND v >= 1 THEN
+        RETURN cell('t112', l) * vh.taux_fa;
+
+
+
+      -- t151=I158*$E26
+      WHEN c = 't151' AND v >= 1 THEN
+        RETURN cell('t111', l) * vh.taux_fc;
+
+
+
+      -- t152=S158*$E26
+      WHEN c = 't152' AND v >= 1 THEN
+        RETURN cell('t112', l) * vh.taux_fc;
+
+
+
+      -- t153=SI(AC170=AC158;AC158;0)*$E26
+      WHEN c = 't153' AND v >= 1 THEN
+        IF cell('t123', l) = cell('t113', l) THEN
+          RETURN cell('t113', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t154=SI(AM170=AM158;AM158;0)*$E26
+      WHEN c = 't154' AND v >= 1 THEN
+        IF cell('t124', l) = cell('t114', l) THEN
+          RETURN cell('t114', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t163=SI(AC170<>AC158;AC170;0)*$E26
+      WHEN c = 't163' AND v >= 1 THEN
+        IF cell('t123', l) <> cell('t113', l) THEN
+          RETURN cell('t123', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- t164=SI(AM170<>AM158;AM170;0)*$E26
+      WHEN c = 't164' AND v >= 1 THEN
+        IF cell('t124', l) <> cell('t114', l) THEN
+          RETURN cell('t124', l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- rs=SOMME(I98:AU98)
+      WHEN c = 'rs' AND v >= 1 THEN
+        RETURN cell('t61',l) + cell('t62',l);
+
+
+
+      -- ss=SOMME(I110:AU110)
+      WHEN c = 'ss' AND v >= 1 THEN
+        RETURN cell('t71',l) + cell('t72',l);
+
+
+
+      -- ts=SOMME(I122:AU122)
+      WHEN c = 'ts' AND v >= 1 THEN
+        RETURN cell('t81',l) + cell('t82',l) + cell('t83',l) + cell('t84',l);
+
+
+
+      -- us=SI($I$13="Oui";SOMME(I182:AU182);0)
+      WHEN c = 'us' AND v >= 1 THEN
+        RETURN cell('t131',l) + cell('t132',l);
+
+
+
+      -- vs=SI($I$13="Oui";SOMME(I194:AU194);0)
+      WHEN c = 'vs' AND v >= 1 THEN
+        IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
+          RETURN cell('t141',l) + cell('t142',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- ws=SI($I$13="Oui";SOMME(I206:AU206);0)
+      WHEN c = 'ws' AND v >= 1 THEN
+        IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
+          RETURN cell('t151',l) + cell('t152',l) + cell('t153',l) + cell('t154',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- xs=SI($I$13="Oui";SOMME(I218:AU218);0)
+      WHEN c = 'xs' AND v >= 1 THEN
+        IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
+          RETURN cell('t163',l) + cell('t164',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      -- rr=SOMME(AW86:BA86)
+      WHEN c = 'rr' AND v >= 1 THEN
+        RETURN cell('t55',l) + cell('t56',l) + cell('t57',l);
+
+
+
+      -- ur=SI($I$13="Oui";SOMME(AW158:BA158);0)
+      WHEN c = 'ur' AND v >= 1 THEN
+        IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
+          RETURN cell('t115',l) + cell('t116',l) + cell('t117',l);
+        ELSE
+          RETURN 0;
+        END IF;
+
+
+
+      ELSE
+        raise_application_error( -20001, 'La colonne c=' || c || ', l=' || l || ' n''existe pas!');
+      END CASE; END;
+
+
+
+  PROCEDURE CALCUL_RESULTAT IS
+  BEGIN
+    feuille.delete;
+
+    -- transmission des résultats aux volumes horaires et volumes horaires référentiel
+    FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+      ose_formule.volumes_horaires.items(l).service_fi               := mainCell('Service FI', 'rs',l);
+      ose_formule.volumes_horaires.items(l).service_fa               := mainCell('Service FA', 'ss',l);
+      ose_formule.volumes_horaires.items(l).service_fc               := mainCell('Service FC', 'ts',l);
+      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell('Service référentiel', 'rr',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell('Heures compl. FI', 'us',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell('Heures compl. FA', 'vs',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell('Heures compl. FC', 'ws',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell('Heures compl. FC Maj.', 'xs',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell('Heures compl. référentiel', 'ur',l);
+    END LOOP;
+  END;
+
+END FORMULE_UBO;
+
 
 
 --------------------------------------------------
@@ -3427,7 +4365,7 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     -- résultats
     service_du                     FLOAT,
     debug_info                     CLOB
-    );
+  );
 
   TYPE t_volume_horaire IS RECORD (
     -- identifiants
@@ -3472,12 +4410,12 @@ CREATE OR REPLACE PACKAGE "OSE_FORMULE" AS
     heures_compl_referentiel   FLOAT DEFAULT 0,
 
     debug_info                 CLOB
-    );
+  );
   TYPE t_lst_volume_horaire IS TABLE OF t_volume_horaire INDEX BY PLS_INTEGER;
   TYPE t_volumes_horaires IS RECORD (
     length NUMERIC DEFAULT 0,
     items t_lst_volume_horaire
-    );
+  );
 
   intervenant      t_intervenant;
   volumes_horaires t_volumes_horaires;
@@ -3501,8 +4439,9 @@ END OSE_FORMULE;
 
 CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
-  TYPE t_lst_vh_etats IS TABLE OF t_volumes_horaires INDEX BY PLS_INTEGER;
-  TYPE t_lst_vh_types IS TABLE OF t_lst_vh_etats INDEX BY PLS_INTEGER;
+  TYPE t_lst_vh_etats        IS TABLE OF t_volumes_horaires INDEX BY PLS_INTEGER;
+  TYPE t_lst_vh_types        IS TABLE OF t_lst_vh_etats INDEX BY PLS_INTEGER;
+  TYPE t_lst_vh_intervenants IS TABLE OF t_lst_vh_types INDEX BY PLS_INTEGER;
 
   TYPE t_resultat IS RECORD (
     id                         NUMERIC,
@@ -3526,11 +4465,11 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
     changed                    BOOLEAN DEFAULT FALSE,
     debug_info                 CLOB
-    );
+  );
 
   TYPE t_resultats IS TABLE OF t_resultat INDEX BY VARCHAR2(15);
 
-  all_volumes_horaires t_lst_vh_types;
+  all_volumes_horaires t_lst_vh_intervenants;
   arrondi NUMERIC DEFAULT 2;
   t_res t_resultats;
   formule_definition formule%rowtype;
@@ -3586,50 +4525,50 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       fli.param_3,
       fli.param_4,
       fli.param_5
-      INTO
-        intervenant.id,
-        intervenant.annee_id,
-        intervenant.structure_id,
-        intervenant.type_intervenant_code,
-        intervenant.heures_service_statutaire,
-        dsdushc,
-        intervenant.heures_service_modifie,
-        intervenant.heures_decharge,
-        intervenant.param_1,
-        intervenant.param_2,
-        intervenant.param_3,
-        intervenant.param_4,
-        intervenant.param_5
+    INTO
+      intervenant.id,
+      intervenant.annee_id,
+      intervenant.structure_id,
+      intervenant.type_intervenant_code,
+      intervenant.heures_service_statutaire,
+      dsdushc,
+      intervenant.heures_service_modifie,
+      intervenant.heures_decharge,
+      intervenant.param_1,
+      intervenant.param_2,
+      intervenant.param_3,
+      intervenant.param_4,
+      intervenant.param_5
     FROM
       v_formule_intervenant fi
-        LEFT JOIN v_formule_local_i_params fli ON fli.intervenant_id = fi.intervenant_id
+      LEFT JOIN v_formule_local_i_params fli ON fli.intervenant_id = fi.intervenant_id
     WHERE
-        fi.intervenant_id = intervenant.id;
+      fi.intervenant_id = intervenant.id;
 
     intervenant.depassement_service_du_sans_hc := (dsdushc = 1);
     intervenant.service_du := CASE
-                                WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-                                  OR intervenant.heures_decharge < 0 -- s'il y a une décharge => aucune HC
+      WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
+        OR intervenant.heures_decharge < 0 -- s'il y a une décharge => aucune HC
 
-                                  THEN 9999
-                                ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
-      END;
+      THEN 9999
+      ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
+    END;
 
-  EXCEPTION WHEN NO_DATA_FOUND THEN
-    intervenant.id                             := NULL;
-    intervenant.annee_id                       := null;
-    intervenant.structure_id                   := null;
-    intervenant.heures_service_statutaire      := 0;
-    intervenant.depassement_service_du_sans_hc := FALSE;
-    intervenant.heures_service_modifie         := 0;
-    intervenant.heures_decharge                := 0;
-    intervenant.type_intervenant_code          := 'E';
-    intervenant.service_du                     := 0;
-    intervenant.param_1                        := NULL;
-    intervenant.param_2                        := NULL;
-    intervenant.param_3                        := NULL;
-    intervenant.param_4                        := NULL;
-    intervenant.param_5                        := NULL;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+      intervenant.id                             := NULL;
+      intervenant.annee_id                       := null;
+      intervenant.structure_id                   := null;
+      intervenant.heures_service_statutaire      := 0;
+      intervenant.depassement_service_du_sans_hc := FALSE;
+      intervenant.heures_service_modifie         := 0;
+      intervenant.heures_decharge                := 0;
+      intervenant.type_intervenant_code          := 'E';
+      intervenant.service_du                     := 0;
+      intervenant.param_1                        := NULL;
+      intervenant.param_2                        := NULL;
+      intervenant.param_3                        := NULL;
+      intervenant.param_4                        := NULL;
+      intervenant.param_5                        := NULL;
   END;
 
 
@@ -3648,44 +4587,59 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
       fti.heures_service_modifie,
       fti.depassement_service_du_sans_hc,
       fti.a_service_du,
+      fti.param_1,
+      fti.param_2,
+      fti.param_3,
+      fti.param_4,
+      fti.param_5,
       ti.code
-      INTO
-        intervenant.id,
-        intervenant.annee_id,
-        intervenant.structure_id,
-        intervenant.type_volume_horaire_id,
-        intervenant.etat_volume_horaire_id,
-        intervenant.heures_decharge,
-        intervenant.heures_service_statutaire,
-        intervenant.heures_service_modifie,
-        dsdushc,
-        intervenant.service_du,
-        intervenant.type_intervenant_code
+    INTO
+      intervenant.id,
+      intervenant.annee_id,
+      intervenant.structure_id,
+      intervenant.type_volume_horaire_id,
+      intervenant.etat_volume_horaire_id,
+      intervenant.heures_decharge,
+      intervenant.heures_service_statutaire,
+      intervenant.heures_service_modifie,
+      dsdushc,
+      intervenant.service_du,
+      intervenant.param_1,
+      intervenant.param_2,
+      intervenant.param_3,
+      intervenant.param_4,
+      intervenant.param_5,
+      intervenant.type_intervenant_code
     FROM
       formule_test_intervenant fti
-        JOIN type_intervenant ti ON ti.id = fti.type_intervenant_id
+      JOIN type_intervenant ti ON ti.id = fti.type_intervenant_id
     WHERE
-        fti.id = intervenant.id;
+      fti.id = intervenant.id;
 
     intervenant.depassement_service_du_sans_hc := (dsdushc = 1);
     intervenant.service_du := CASE
-                                WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-                                  OR intervenant.heures_decharge < 0 -- s'il y a une décharge => aucune HC
+      WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
+        OR intervenant.heures_decharge < 0 -- s'il y a une décharge => aucune HC
 
-                                  THEN 9999
-                                ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
-      END;
+      THEN 9999
+      ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
+    END;
 
-  EXCEPTION WHEN NO_DATA_FOUND THEN
-    intervenant.id                             := NULL;
-    intervenant.annee_id                       := null;
-    intervenant.structure_id                   := null;
-    intervenant.heures_service_statutaire      := 0;
-    intervenant.depassement_service_du_sans_hc := FALSE;
-    intervenant.heures_service_modifie         := 0;
-    intervenant.heures_decharge                := 0;
-    intervenant.type_intervenant_code          := 'E';
-    intervenant.service_du                     := 0;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+      intervenant.id                             := NULL;
+      intervenant.annee_id                       := null;
+      intervenant.structure_id                   := null;
+      intervenant.heures_service_statutaire      := 0;
+      intervenant.depassement_service_du_sans_hc := FALSE;
+      intervenant.heures_service_modifie         := 0;
+      intervenant.heures_decharge                := 0;
+      intervenant.type_intervenant_code          := 'E';
+      intervenant.service_du                     := 0;
+      intervenant.param_1                        := null;
+      intervenant.param_2                        := null;
+      intervenant.param_3                        := null;
+      intervenant.param_4                        := null;
+      intervenant.param_5                        := null;
   END;
 
 
@@ -3701,12 +4655,14 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     SELECT to_number(valeur) INTO structure_univ FROM parametre WHERE nom = 'structure_univ';
 
     FOR d IN (
-      SELECT fvh.*, flvh.param_1, flvh.param_2, flvh.param_3, flvh.param_4, flvh.param_5
-      FROM   v_formule_volume_horaire fvh
-               LEFT JOIN v_formule_local_vh_params flvh ON flvh.volume_horaire_id = COALESCE(fvh.volume_horaire_id,0) AND flvh.volume_horaire_ref_id = COALESCE(fvh.volume_horaire_ref_id,0)
-      WHERE  fvh.intervenant_id = intervenant.id
-      ORDER BY ordre
-      ) LOOP
+      SELECT
+        fvh.*, flvh.param_1, flvh.param_2, flvh.param_3, flvh.param_4, flvh.param_5
+      FROM
+        v_formule_volume_horaire fvh
+        LEFT JOIN v_formule_local_vh_params flvh ON flvh.volume_horaire_id = COALESCE(fvh.volume_horaire_id,0) AND flvh.volume_horaire_ref_id = COALESCE(fvh.volume_horaire_ref_id,0)
+      ORDER BY
+        ordre
+    ) LOOP
       vh.volume_horaire_id         := d.volume_horaire_id;
       vh.volume_horaire_ref_id     := d.volume_horaire_ref_id;
       vh.service_id                := d.service_id;
@@ -3732,13 +4688,13 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
 
       FOR etat_volume_horaire_id IN 1 .. d.etat_volume_horaire_id LOOP
         BEGIN
-          length := all_volumes_horaires(d.type_volume_horaire_id)(etat_volume_horaire_id).length;
+          length := all_volumes_horaires(d.intervenant_id)(d.type_volume_horaire_id)(etat_volume_horaire_id).length;
         EXCEPTION WHEN NO_DATA_FOUND THEN
           length := 0;
         END;
         length := length + 1;
-            all_volumes_horaires(d.type_volume_horaire_id)(etat_volume_horaire_id).length := length;
-            all_volumes_horaires(d.type_volume_horaire_id)(etat_volume_horaire_id).items(length) := vh;
+        all_volumes_horaires(d.intervenant_id)(d.type_volume_horaire_id)(etat_volume_horaire_id).length := length;
+        all_volumes_horaires(d.intervenant_id)(d.type_volume_horaire_id)(etat_volume_horaire_id).items(length) := vh;
       END LOOP;
     END LOOP;
   END;
@@ -3764,19 +4720,19 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
           WHEN 'TP' THEN COALESCE(fti.taux_tp_service_du,1)
           WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_du,1)
           ELSE 1
-          END taux_service_du,
+        END taux_service_du,
         CASE ftvh.type_intervention_code
           WHEN 'CM' THEN COALESCE(fti.taux_cm_service_compl,1.5)
           WHEN 'TP' THEN COALESCE(fti.taux_tp_service_compl,2/3)
           WHEN 'AUTRE' THEN COALESCE(fti.taux_autre_service_compl,1)
           ELSE 1
-          END taux_service_compl
+        END taux_service_compl
       FROM
         formule_test_volume_horaire ftvh
-          JOIN formule_test_intervenant fti ON fti.id = intervenant.id
+        JOIN formule_test_intervenant fti ON fti.id = intervenant.id
       WHERE  ftvh.intervenant_test_id = intervenant.id
       ORDER BY ftvh.id
-      ) LOOP
+    ) LOOP
       length := length + 1;
       volumes_horaires.length := length;
 
@@ -3849,34 +4805,34 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   BEGIN
     code := t_res.FIRST;
     LOOP EXIT WHEN code IS NULL;
-    table_name := CASE
-                    WHEN code LIKE '%-s-%' THEN 'FORMULE_RESULTAT_SERVICE'
-                    WHEN code LIKE '%-sr-%' THEN 'FORMULE_RESULTAT_SERVICE_REF'
-                    WHEN code LIKE '%-vh-%' THEN 'FORMULE_RESULTAT_VH'
-                    WHEN code LIKE '%-vhr-%' THEN 'FORMULE_RESULTAT_VH_REF'
-                    ELSE 'FORMULE_RESULTAT'
+      table_name := CASE
+        WHEN code LIKE '%-s-%' THEN 'FORMULE_RESULTAT_SERVICE'
+        WHEN code LIKE '%-sr-%' THEN 'FORMULE_RESULTAT_SERVICE_REF'
+        WHEN code LIKE '%-vh-%' THEN 'FORMULE_RESULTAT_VH'
+        WHEN code LIKE '%-vhr-%' THEN 'FORMULE_RESULTAT_VH_REF'
+        ELSE 'FORMULE_RESULTAT'
       END;
 
-    ose_test.echo('T_RES( ' || code || ' - Table ' || table_name || ' ) ');
-    ose_test.echo('  id = ' || t_res(code).id);
-    ose_test.echo('  formule_resultat_id      = ' || t_res(code).formule_resultat_id);
-    ose_test.echo('  type_volume_horaire_id   = ' || t_res(code).type_volume_horaire_id);
-    ose_test.echo('  etat_volume_horaire_id   = ' || t_res(code).etat_volume_horaire_id);
-    ose_test.echo('  volume_horaire_id        = ' || t_res(code).volume_horaire_id);
-    ose_test.echo('  volume_horaire_ref_id    = ' || t_res(code).volume_horaire_ref_id);
-    ose_test.echo('  service_id               = ' || t_res(code).service_id);
-    ose_test.echo('  service_referentiel_id   = ' || t_res(code).service_referentiel_id);
-    ose_test.echo('  service_fi               = ' || t_res(code).service_fi);
-    ose_test.echo('  service_fa               = ' || t_res(code).service_fa);
-    ose_test.echo('  service_fc               = ' || t_res(code).service_fc);
-    ose_test.echo('  service_referentiel      = ' || t_res(code).service_referentiel);
-    ose_test.echo('  heures_compl_fi          = ' || t_res(code).heures_compl_fi);
-    ose_test.echo('  heures_compl_fa          = ' || t_res(code).heures_compl_fa);
-    ose_test.echo('  heures_compl_fc          = ' || t_res(code).heures_compl_fc);
-    ose_test.echo('  heures_compl_fc_majorees = ' || t_res(code).heures_compl_fc_majorees);
-    ose_test.echo('  heures_compl_referentiel = ' || t_res(code).heures_compl_referentiel);
+      ose_test.echo('T_RES( ' || code || ' - Table ' || table_name || ' ) ');
+      ose_test.echo('  id = ' || t_res(code).id);
+      ose_test.echo('  formule_resultat_id      = ' || t_res(code).formule_resultat_id);
+      ose_test.echo('  type_volume_horaire_id   = ' || t_res(code).type_volume_horaire_id);
+      ose_test.echo('  etat_volume_horaire_id   = ' || t_res(code).etat_volume_horaire_id);
+      ose_test.echo('  volume_horaire_id        = ' || t_res(code).volume_horaire_id);
+      ose_test.echo('  volume_horaire_ref_id    = ' || t_res(code).volume_horaire_ref_id);
+      ose_test.echo('  service_id               = ' || t_res(code).service_id);
+      ose_test.echo('  service_referentiel_id   = ' || t_res(code).service_referentiel_id);
+      ose_test.echo('  service_fi               = ' || t_res(code).service_fi);
+      ose_test.echo('  service_fa               = ' || t_res(code).service_fa);
+      ose_test.echo('  service_fc               = ' || t_res(code).service_fc);
+      ose_test.echo('  service_referentiel      = ' || t_res(code).service_referentiel);
+      ose_test.echo('  heures_compl_fi          = ' || t_res(code).heures_compl_fi);
+      ose_test.echo('  heures_compl_fa          = ' || t_res(code).heures_compl_fa);
+      ose_test.echo('  heures_compl_fc          = ' || t_res(code).heures_compl_fc);
+      ose_test.echo('  heures_compl_fc_majorees = ' || t_res(code).heures_compl_fc_majorees);
+      ose_test.echo('  heures_compl_referentiel = ' || t_res(code).heures_compl_referentiel);
 
-    code := t_res.NEXT(code);
+      code := t_res.NEXT(code);
     END LOOP;
   END;
 
@@ -3897,85 +4853,85 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     /* On préinitialise avec ce qui existe déjà */
     FOR d IN (
       SELECT
-          fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id code,
-          fr.id                       id,
-          fr.id                       formule_resultat_id,
-          fr.type_volume_horaire_id   type_volume_horaire_id,
-          fr.etat_volume_horaire_id   etat_volume_horaire_id,
-          null                        service_id,
-          null                        service_referentiel_id,
-          null                        volume_horaire_id,
-          null                        volume_horaire_ref_id
+        fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id code,
+        fr.id                       id,
+        fr.id                       formule_resultat_id,
+        fr.type_volume_horaire_id   type_volume_horaire_id,
+        fr.etat_volume_horaire_id   etat_volume_horaire_id,
+        null                        service_id,
+        null                        service_referentiel_id,
+        null                        volume_horaire_id,
+        null                        volume_horaire_ref_id
 
       FROM
         formule_resultat fr
       WHERE
-          fr.intervenant_id = intervenant.id
+        fr.intervenant_id = intervenant.id
 
       UNION ALL SELECT
-                    fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-s-' || frs.service_id code,
-                    frs.id                      id,
-                    fr.id                       formule_resultat_id,
-                    fr.type_volume_horaire_id   type_volume_horaire_id,
-                    fr.etat_volume_horaire_id   etat_volume_horaire_id,
-                    frs.service_id              service_id,
-                    null                        service_referentiel_id,
-                    null                        volume_horaire_id,
-                    null                        volume_horaire_ref_id
+        fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-s-' || frs.service_id code,
+        frs.id                      id,
+        fr.id                       formule_resultat_id,
+        fr.type_volume_horaire_id   type_volume_horaire_id,
+        fr.etat_volume_horaire_id   etat_volume_horaire_id,
+        frs.service_id              service_id,
+        null                        service_referentiel_id,
+        null                        volume_horaire_id,
+        null                        volume_horaire_ref_id
       FROM
         formule_resultat_service frs
-          JOIN formule_resultat fr ON fr.id = frs.formule_resultat_id
+        JOIN formule_resultat fr ON fr.id = frs.formule_resultat_id
       WHERE
-          fr.intervenant_id = intervenant.id
+        fr.intervenant_id = intervenant.id
 
       UNION ALL SELECT
-                    fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-sr-' || frsr.service_referentiel_id code,
-                    frsr.id                     id,
-                    fr.id                       formule_resultat_id,
-                    fr.type_volume_horaire_id   type_volume_horaire_id,
-                    fr.etat_volume_horaire_id   etat_volume_horaire_id,
-                    null                        service_id,
-                    frsr.service_referentiel_id service_referentiel_id,
-                    null                        volume_horaire_id,
-                    null                        volume_horaire_ref_id
+        fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-sr-' || frsr.service_referentiel_id code,
+        frsr.id                     id,
+        fr.id                       formule_resultat_id,
+        fr.type_volume_horaire_id   type_volume_horaire_id,
+        fr.etat_volume_horaire_id   etat_volume_horaire_id,
+        null                        service_id,
+        frsr.service_referentiel_id service_referentiel_id,
+        null                        volume_horaire_id,
+        null                        volume_horaire_ref_id
       FROM
         formule_resultat_service_ref frsr
-          JOIN formule_resultat fr ON fr.id = frsr.formule_resultat_id
+        JOIN formule_resultat fr ON fr.id = frsr.formule_resultat_id
       WHERE
-          fr.intervenant_id = intervenant.id
+        fr.intervenant_id = intervenant.id
 
       UNION ALL SELECT
-                    fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-vh-' || frvh.volume_horaire_id code,
-                    frvh.id                     id,
-                    fr.id                       formule_resultat_id,
-                    fr.type_volume_horaire_id   type_volume_horaire_id,
-                    fr.etat_volume_horaire_id   etat_volume_horaire_id,
-                    null                        service_id,
-                    null                        service_referentiel_id,
-                    frvh.volume_horaire_id      volume_horaire_id,
-                    null                        volume_horaire_ref_id
+        fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-vh-' || frvh.volume_horaire_id code,
+        frvh.id                     id,
+        fr.id                       formule_resultat_id,
+        fr.type_volume_horaire_id   type_volume_horaire_id,
+        fr.etat_volume_horaire_id   etat_volume_horaire_id,
+        null                        service_id,
+        null                        service_referentiel_id,
+        frvh.volume_horaire_id      volume_horaire_id,
+        null                        volume_horaire_ref_id
       FROM
         formule_resultat_vh frvh
-          JOIN formule_resultat fr ON fr.id = frvh.formule_resultat_id
+        JOIN formule_resultat fr ON fr.id = frvh.formule_resultat_id
       WHERE
-          fr.intervenant_id = intervenant.id
+        fr.intervenant_id = intervenant.id
 
       UNION ALL SELECT
-                    fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-vhr-' || frvhr.volume_horaire_ref_id code,
-                    frvhr.id                    id,
-                    fr.id                       formule_resultat_id,
-                    fr.type_volume_horaire_id   type_volume_horaire_id,
-                    fr.etat_volume_horaire_id   etat_volume_horaire_id,
-                    null                        service_id,
-                    null                        service_referentiel_id,
-                    null                        volume_horaire_id,
-                    frvhr.volume_horaire_ref_id volume_horaire_ref_id
+        fr.type_volume_horaire_id || '-' || fr.etat_volume_horaire_id || '-vhr-' || frvhr.volume_horaire_ref_id code,
+        frvhr.id                    id,
+        fr.id                       formule_resultat_id,
+        fr.type_volume_horaire_id   type_volume_horaire_id,
+        fr.etat_volume_horaire_id   etat_volume_horaire_id,
+        null                        service_id,
+        null                        service_referentiel_id,
+        null                        volume_horaire_id,
+        frvhr.volume_horaire_ref_id volume_horaire_ref_id
       FROM
         formule_resultat_vh_ref frvhr
-          JOIN formule_resultat fr ON fr.id = frvhr.formule_resultat_id
+        JOIN formule_resultat fr ON fr.id = frvhr.formule_resultat_id
       WHERE
-          fr.intervenant_id = intervenant.id
-      ) LOOP
+        fr.intervenant_id = intervenant.id
+    ) LOOP
       t_res(d.code).id                     := d.id;
       t_res(d.code).formule_resultat_id    := d.formule_resultat_id;
       t_res(d.code).type_volume_horaire_id := d.type_volume_horaire_id;
@@ -3987,99 +4943,101 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     END LOOP;
 
     /* On charge avec les résultats de formule */
-    type_volume_horaire_id := all_volumes_horaires.FIRST;
-    LOOP EXIT WHEN type_volume_horaire_id IS NULL;
-    etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).FIRST;
-    LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
-    FOR i IN 1 .. all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id).length LOOP
-      vh := all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id).items(i);
-      bcode := type_volume_horaire_id || '-' || etat_volume_horaire_id;
+    IF all_volumes_horaires.exists(intervenant.id) THEN
+      type_volume_horaire_id := all_volumes_horaires(intervenant.id).FIRST;
+      LOOP EXIT WHEN type_volume_horaire_id IS NULL;
+        etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).FIRST;
+        LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
+          FOR i IN 1 .. all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id).length LOOP
+            vh := all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id).items(i);
+            bcode := type_volume_horaire_id || '-' || etat_volume_horaire_id;
 
-      -- formule_resultat
-      code := bcode;
-      tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
+            -- formule_resultat
+            code := bcode;
+            tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
 
-      -- formule_resultat_service
-      IF vh.service_id IS NOT NULL THEN
-        code := bcode || '-s-' || vh.service_id;
-        t_res(code).service_id := vh.service_id;
-        tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
-      END IF;
+            -- formule_resultat_service
+            IF vh.service_id IS NOT NULL THEN
+              code := bcode || '-s-' || vh.service_id;
+              t_res(code).service_id := vh.service_id;
+              tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
+            END IF;
 
-      -- formule_resultat_service_ref
-      IF vh.service_referentiel_id IS NOT NULL THEN
-        code := bcode || '-sr-' || vh.service_referentiel_id;
-        t_res(code).service_referentiel_id := vh.service_referentiel_id;
-        tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
-      END IF;
+            -- formule_resultat_service_ref
+            IF vh.service_referentiel_id IS NOT NULL THEN
+              code := bcode || '-sr-' || vh.service_referentiel_id;
+              t_res(code).service_referentiel_id := vh.service_referentiel_id;
+              tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
+            END IF;
 
-      -- formule_resultat_volume_horaire
-      IF vh.volume_horaire_id IS NOT NULL THEN
-        code := bcode || '-vh-' || vh.volume_horaire_id;
-        t_res(code).volume_horaire_id := vh.volume_horaire_id;
-        tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
-      END IF;
+            -- formule_resultat_volume_horaire
+            IF vh.volume_horaire_id IS NOT NULL THEN
+              code := bcode || '-vh-' || vh.volume_horaire_id;
+              t_res(code).volume_horaire_id := vh.volume_horaire_id;
+              tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
+            END IF;
 
-      -- formule_resultat_volume_horaire_ref
-      IF vh.volume_horaire_ref_id IS NOT NULL THEN
-        code := bcode || '-vhr-' || vh.volume_horaire_ref_id;
-        t_res(code).volume_horaire_ref_id := vh.volume_horaire_ref_id;
-        tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
-      END IF;
+            -- formule_resultat_volume_horaire_ref
+            IF vh.volume_horaire_ref_id IS NOT NULL THEN
+              code := bcode || '-vhr-' || vh.volume_horaire_ref_id;
+              t_res(code).volume_horaire_ref_id := vh.volume_horaire_ref_id;
+              tres_add_heures(code,vh, type_volume_horaire_id, etat_volume_horaire_id);
+            END IF;
 
-    END LOOP;
-    etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
-    END LOOP;
-    type_volume_horaire_id := all_volumes_horaires.NEXT(type_volume_horaire_id);
-    END LOOP;
+          END LOOP;
+          etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
+        END LOOP;
+        type_volume_horaire_id := all_volumes_horaires(intervenant.id).NEXT(type_volume_horaire_id);
+      END LOOP;
+    END IF;
 
     /* On fait la sauvegarde en BDD */
     /* D'abord le formule_resultat */
     code := t_res.FIRST;
     LOOP EXIT WHEN code IS NULL;
-    IF code = (t_res(code).type_volume_horaire_id || '-' || t_res(code).etat_volume_horaire_id) THEN
-      fr.id                       := t_res(code).id;
-      fr.intervenant_id           := intervenant.id;
-      fr.type_volume_horaire_id   := t_res(code).type_volume_horaire_id;
-      fr.etat_volume_horaire_id   := t_res(code).etat_volume_horaire_id;
-      fr.service_fi               := ROUND(t_res(code).service_fi,2);
-      fr.service_fa               := ROUND(t_res(code).service_fa,2);
-      fr.service_fc               := ROUND(t_res(code).service_fc,2);
-      fr.service_referentiel      := ROUND(t_res(code).service_referentiel,2);
-      fr.heures_compl_fi          := ROUND(t_res(code).heures_compl_fi,2);
-      fr.heures_compl_fa          := ROUND(t_res(code).heures_compl_fa,2);
-      fr.heures_compl_fc          := ROUND(t_res(code).heures_compl_fc,2);
-      fr.heures_compl_fc_majorees := ROUND(t_res(code).heures_compl_fc_majorees,2);
-      fr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel,2);
-      fr.total := fr.service_fi + fr.service_fa + fr.service_fc + fr.service_referentiel
-        + fr.heures_compl_fi + fr.heures_compl_fa + fr.heures_compl_fc
-        + fr.heures_compl_fc_majorees + fr.heures_compl_referentiel;
+      IF code = (t_res(code).type_volume_horaire_id || '-' || t_res(code).etat_volume_horaire_id) THEN
+        fr.id                       := t_res(code).id;
+        fr.intervenant_id           := intervenant.id;
+        fr.type_volume_horaire_id   := t_res(code).type_volume_horaire_id;
+        fr.etat_volume_horaire_id   := t_res(code).etat_volume_horaire_id;
+        fr.service_fi               := ROUND(t_res(code).service_fi,2);
+        fr.service_fa               := ROUND(t_res(code).service_fa,2);
+        fr.service_fc               := ROUND(t_res(code).service_fc,2);
+        fr.service_referentiel      := ROUND(t_res(code).service_referentiel,2);
+        fr.heures_compl_fi          := ROUND(t_res(code).heures_compl_fi,2);
+        fr.heures_compl_fa          := ROUND(t_res(code).heures_compl_fa,2);
+        fr.heures_compl_fc          := ROUND(t_res(code).heures_compl_fc,2);
+        fr.heures_compl_fc_majorees := ROUND(t_res(code).heures_compl_fc_majorees,2);
+        fr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel,2);
+        fr.total := fr.service_fi + fr.service_fa + fr.service_fc + fr.service_referentiel
+                  + fr.heures_compl_fi + fr.heures_compl_fa + fr.heures_compl_fc
+                  + fr.heures_compl_fc_majorees + fr.heures_compl_referentiel;
 
-      fr.service_du := ROUND(CASE
-                               WHEN intervenant.depassement_service_du_sans_hc OR intervenant.heures_decharge < 0
-                                 THEN GREATEST(fr.total, intervenant.heures_service_statutaire + intervenant.heures_service_modifie)
-                               ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
-                               END,2);
+        fr.service_du := ROUND(CASE
+          WHEN intervenant.depassement_service_du_sans_hc OR intervenant.heures_decharge < 0
+          THEN GREATEST(fr.total, intervenant.heures_service_statutaire + intervenant.heures_service_modifie)
+          ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
+        END,2);
 
-      fr.solde                    := fr.total - fr.service_du;
-      IF fr.solde >= 0 THEN
-        fr.sous_service           := 0;
-        fr.heures_compl           := fr.solde;
-      ELSE
-        fr.sous_service           := fr.solde * -1;
-        fr.heures_compl           := 0;
+        fr.solde                    := fr.total - fr.service_du;
+        IF fr.solde >= 0 THEN
+          fr.sous_service           := 0;
+          fr.heures_compl           := fr.solde;
+        ELSE
+          fr.sous_service           := fr.solde * -1;
+          fr.heures_compl           := 0;
+        END IF;
+        fr.type_intervenant_code    := intervenant.type_intervenant_code;
+
+        IF fr.id IS NULL THEN
+          fr.id := formule_resultat_id_seq.nextval;
+          t_res(code).id := fr.id;
+          INSERT INTO formule_resultat VALUES fr;
+        ELSE
+          UPDATE formule_resultat SET ROW = fr WHERE id = fr.id;
+        END IF;
       END IF;
-      fr.type_intervenant_code    := intervenant.type_intervenant_code;
-
-      IF fr.id IS NULL THEN
-        fr.id := formule_resultat_id_seq.nextval;
-        t_res(code).id := fr.id;
-        INSERT INTO formule_resultat VALUES fr;
-      ELSE
-        UPDATE formule_resultat SET ROW = fr WHERE id = fr.id;
-      END IF;
-    END IF;
-    code := t_res.NEXT(code);
+      code := t_res.NEXT(code);
     END LOOP;
 
     --DEBUG_TRES;
@@ -4087,75 +5045,75 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     /* Ensuite toutes les dépendances... */
     code := t_res.FIRST;
     LOOP EXIT WHEN code IS NULL;
-    bcode := t_res(code).type_volume_horaire_id || '-' || t_res(code).etat_volume_horaire_id;
-    CASE
-      WHEN code LIKE '%-s-%' THEN -- formule_resultat_service
-        frs.id                         := t_res(code).id;
-        frs.formule_resultat_id        := t_res(bcode).id;
-        frs.service_id                 := t_res(code).service_id;
-        frs.service_fi                 := ROUND(t_res(code).service_fi, 2);
-        frs.service_fa                 := ROUND(t_res(code).service_fa, 2);
-        frs.service_fc                 := ROUND(t_res(code).service_fc, 2);
-        frs.heures_compl_fi            := ROUND(t_res(code).heures_compl_fi, 2);
-        frs.heures_compl_fa            := ROUND(t_res(code).heures_compl_fa, 2);
-        frs.heures_compl_fc            := ROUND(t_res(code).heures_compl_fc, 2);
-        frs.heures_compl_fc_majorees   := ROUND(t_res(code).heures_compl_fc_majorees, 2);
-        frs.total                      := frs.service_fi + frs.service_fa + frs.service_fc
-          + frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees;
-        IF frs.id IS NULL THEN
-          frs.id := formule_resultat_servic_id_seq.nextval;
-          INSERT INTO formule_resultat_service VALUES frs;
-        ELSE
-          UPDATE formule_resultat_service SET ROW = frs WHERE id = frs.id;
-        END IF;
-      WHEN code LIKE '%-sr-%' THEN -- formule_resultat_service_ref
-        frsr.id                        := t_res(code).id;
-        frsr.formule_resultat_id       := t_res(bcode).id;
-        frsr.service_referentiel_id    := t_res(code).service_referentiel_id;
-        frsr.service_referentiel       := ROUND(t_res(code).service_referentiel, 2);
-        frsr.heures_compl_referentiel  := ROUND(t_res(code).heures_compl_referentiel, 2);
-        frsr.total                     := frsr.service_referentiel + frsr.heures_compl_referentiel;
-        IF frsr.id IS NULL THEN
-          frsr.id := formule_resultat_servic_id_seq.nextval;
-          INSERT INTO formule_resultat_service_ref VALUES frsr;
-        ELSE
-          UPDATE formule_resultat_service_ref SET ROW = frsr WHERE id = frsr.id;
-        END IF;
-      WHEN code LIKE '%-vh-%' THEN -- formule_resultat_vh
-        frvh.id := t_res(code).id;
-        frvh.formule_resultat_id       := t_res(bcode).id;
-        frvh.volume_horaire_id         := t_res(code).volume_horaire_id;
-        frvh.service_fi                := ROUND(t_res(code).service_fi, 2);
-        frvh.service_fa                := ROUND(t_res(code).service_fa, 2);
-        frvh.service_fc                := ROUND(t_res(code).service_fc, 2);
-        frvh.heures_compl_fi           := ROUND(t_res(code).heures_compl_fi, 2);
-        frvh.heures_compl_fa           := ROUND(t_res(code).heures_compl_fa, 2);
-        frvh.heures_compl_fc           := ROUND(t_res(code).heures_compl_fc, 2);
-        frvh.heures_compl_fc_majorees  := ROUND(t_res(code).heures_compl_fc_majorees, 2);
-        frvh.total                     := frvh.service_fi + frvh.service_fa + frvh.service_fc
-          + frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees;
-        IF frvh.id IS NULL THEN
-          frvh.id := formule_resultat_vh_id_seq.nextval;
-          INSERT INTO formule_resultat_vh VALUES frvh;
-        ELSE
-          UPDATE formule_resultat_vh SET ROW = frvh WHERE id = frvh.id;
-        END IF;
-      WHEN code LIKE '%-vhr-%' THEN -- formule_resultat_vh_ref
-        frvhr.id := t_res(code).id;
-        frvhr.formule_resultat_id      := t_res(bcode).id;
-        frvhr.volume_horaire_ref_id    := t_res(code).volume_horaire_ref_id;
-        frvhr.service_referentiel      := ROUND(t_res(code).service_referentiel, 2);
-        frvhr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel, 2);
-        frvhr.total                    := frvhr.service_referentiel + frvhr.heures_compl_referentiel;
-        IF frvhr.id IS NULL THEN
-          frvhr.id := formule_resultat_vh_ref_id_seq.nextval;
-          INSERT INTO formule_resultat_vh_ref VALUES frvhr;
-        ELSE
-          UPDATE formule_resultat_vh_ref SET ROW = frvhr WHERE id = frvhr.id;
-        END IF;
-      ELSE code := code;
+      bcode := t_res(code).type_volume_horaire_id || '-' || t_res(code).etat_volume_horaire_id;
+      CASE
+        WHEN code LIKE '%-s-%' THEN -- formule_resultat_service
+          frs.id                         := t_res(code).id;
+          frs.formule_resultat_id        := t_res(bcode).id;
+          frs.service_id                 := t_res(code).service_id;
+          frs.service_fi                 := ROUND(t_res(code).service_fi, 2);
+          frs.service_fa                 := ROUND(t_res(code).service_fa, 2);
+          frs.service_fc                 := ROUND(t_res(code).service_fc, 2);
+          frs.heures_compl_fi            := ROUND(t_res(code).heures_compl_fi, 2);
+          frs.heures_compl_fa            := ROUND(t_res(code).heures_compl_fa, 2);
+          frs.heures_compl_fc            := ROUND(t_res(code).heures_compl_fc, 2);
+          frs.heures_compl_fc_majorees   := ROUND(t_res(code).heures_compl_fc_majorees, 2);
+          frs.total                      := frs.service_fi + frs.service_fa + frs.service_fc
+                 + frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees;
+          IF frs.id IS NULL THEN
+            frs.id := formule_resultat_servic_id_seq.nextval;
+            INSERT INTO formule_resultat_service VALUES frs;
+          ELSE
+            UPDATE formule_resultat_service SET ROW = frs WHERE id = frs.id;
+          END IF;
+        WHEN code LIKE '%-sr-%' THEN -- formule_resultat_service_ref
+          frsr.id                        := t_res(code).id;
+          frsr.formule_resultat_id       := t_res(bcode).id;
+          frsr.service_referentiel_id    := t_res(code).service_referentiel_id;
+          frsr.service_referentiel       := ROUND(t_res(code).service_referentiel, 2);
+          frsr.heures_compl_referentiel  := ROUND(t_res(code).heures_compl_referentiel, 2);
+          frsr.total                     := frsr.service_referentiel + frsr.heures_compl_referentiel;
+          IF frsr.id IS NULL THEN
+            frsr.id := formule_resultat_servic_id_seq.nextval;
+            INSERT INTO formule_resultat_service_ref VALUES frsr;
+          ELSE
+            UPDATE formule_resultat_service_ref SET ROW = frsr WHERE id = frsr.id;
+          END IF;
+        WHEN code LIKE '%-vh-%' THEN -- formule_resultat_vh
+          frvh.id := t_res(code).id;
+          frvh.formule_resultat_id       := t_res(bcode).id;
+          frvh.volume_horaire_id         := t_res(code).volume_horaire_id;
+          frvh.service_fi                := ROUND(t_res(code).service_fi, 2);
+          frvh.service_fa                := ROUND(t_res(code).service_fa, 2);
+          frvh.service_fc                := ROUND(t_res(code).service_fc, 2);
+          frvh.heures_compl_fi           := ROUND(t_res(code).heures_compl_fi, 2);
+          frvh.heures_compl_fa           := ROUND(t_res(code).heures_compl_fa, 2);
+          frvh.heures_compl_fc           := ROUND(t_res(code).heures_compl_fc, 2);
+          frvh.heures_compl_fc_majorees  := ROUND(t_res(code).heures_compl_fc_majorees, 2);
+          frvh.total                     := frvh.service_fi + frvh.service_fa + frvh.service_fc
+                  + frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees;
+          IF frvh.id IS NULL THEN
+            frvh.id := formule_resultat_vh_id_seq.nextval;
+            INSERT INTO formule_resultat_vh VALUES frvh;
+          ELSE
+            UPDATE formule_resultat_vh SET ROW = frvh WHERE id = frvh.id;
+          END IF;
+        WHEN code LIKE '%-vhr-%' THEN -- formule_resultat_vh_ref
+          frvhr.id := t_res(code).id;
+          frvhr.formule_resultat_id      := t_res(bcode).id;
+          frvhr.volume_horaire_ref_id    := t_res(code).volume_horaire_ref_id;
+          frvhr.service_referentiel      := ROUND(t_res(code).service_referentiel, 2);
+          frvhr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel, 2);
+          frvhr.total                    := frvhr.service_referentiel + frvhr.heures_compl_referentiel;
+          IF frvhr.id IS NULL THEN
+            frvhr.id := formule_resultat_vh_ref_id_seq.nextval;
+            INSERT INTO formule_resultat_vh_ref VALUES frvhr;
+          ELSE
+            UPDATE formule_resultat_vh_ref SET ROW = frvhr WHERE id = frvhr.id;
+          END IF;
+        ELSE code := code;
       END CASE;
-    code := t_res.NEXT(code);
+      code := t_res.NEXT(code);
     END LOOP;
   END;
 
@@ -4165,25 +5123,25 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     vh t_volume_horaire;
   BEGIN
     UPDATE formule_test_intervenant SET
-                                      c_service_du = CASE WHEN passed = 1 THEN intervenant.service_du ELSE NULL END,
-                                      debug_info = intervenant.debug_info
+      c_service_du = CASE WHEN passed = 1 THEN intervenant.service_du ELSE NULL END,
+      debug_info = intervenant.debug_info
     WHERE id = intervenant.id;
 
     FOR i IN 1 .. volumes_horaires.length LOOP
       vh := volumes_horaires.items(i);
       UPDATE formule_test_volume_horaire SET
-                                           c_service_fi               = CASE WHEN passed = 1 THEN vh.service_fi ELSE NULL END,
-                                           c_service_fa               = CASE WHEN passed = 1 THEN vh.service_fa ELSE NULL END,
-                                           c_service_fc               = CASE WHEN passed = 1 THEN vh.service_fc ELSE NULL END,
-                                           c_service_referentiel      = CASE WHEN passed = 1 THEN vh.service_referentiel ELSE NULL END,
-                                           c_heures_compl_fi          = CASE WHEN passed = 1 THEN vh.heures_compl_fi ELSE NULL END,
-                                           c_heures_compl_fa          = CASE WHEN passed = 1 THEN vh.heures_compl_fa ELSE NULL END,
-                                           c_heures_compl_fc          = CASE WHEN passed = 1 THEN vh.heures_compl_fc ELSE NULL END,
-                                           c_heures_compl_fc_majorees = CASE WHEN passed = 1 THEN vh.heures_compl_fc_majorees ELSE NULL END,
-                                           c_heures_compl_referentiel = CASE WHEN passed = 1 THEN vh.heures_compl_referentiel ELSE NULL END,
-                                           debug_info                 = vh.debug_info
+        c_service_fi               = CASE WHEN passed = 1 THEN vh.service_fi ELSE NULL END,
+        c_service_fa               = CASE WHEN passed = 1 THEN vh.service_fa ELSE NULL END,
+        c_service_fc               = CASE WHEN passed = 1 THEN vh.service_fc ELSE NULL END,
+        c_service_referentiel      = CASE WHEN passed = 1 THEN vh.service_referentiel ELSE NULL END,
+        c_heures_compl_fi          = CASE WHEN passed = 1 THEN vh.heures_compl_fi ELSE NULL END,
+        c_heures_compl_fa          = CASE WHEN passed = 1 THEN vh.heures_compl_fa ELSE NULL END,
+        c_heures_compl_fc          = CASE WHEN passed = 1 THEN vh.heures_compl_fc ELSE NULL END,
+        c_heures_compl_fc_majorees = CASE WHEN passed = 1 THEN vh.heures_compl_fc_majorees ELSE NULL END,
+        c_heures_compl_referentiel = CASE WHEN passed = 1 THEN vh.heures_compl_referentiel ELSE NULL END,
+        debug_info                 = vh.debug_info
       WHERE
-          id = COALESCE(vh.volume_horaire_id,vh.volume_horaire_ref_id);
+        id = COALESCE(vh.volume_horaire_id,vh.volume_horaire_ref_id);
     END LOOP;
   END;
 
@@ -4200,21 +5158,28 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     END IF;
 
     LOAD_INTERVENANT_FROM_BDD;
-    LOAD_VH_FROM_BDD;
+    IF intervenant.id IS NULL THEN -- intervenant non trouvé
+      RETURN;
+    END IF;
+    IF NOT in_calculer_tout THEN
+      LOAD_VH_FROM_BDD;
+    END IF;
 
-    type_volume_horaire_id := all_volumes_horaires.FIRST;
-    LOOP EXIT WHEN type_volume_horaire_id IS NULL;
-    intervenant.type_volume_horaire_id := type_volume_horaire_id;
-    etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).FIRST;
-    LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
-    intervenant.etat_volume_horaire_id := etat_volume_horaire_id;
-    volumes_horaires := all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id);
-    EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.package_name || '.' || formule_definition.procedure_name || '; END;';
-        all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id) := volumes_horaires;
-    etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
-    END LOOP;
-    type_volume_horaire_id := all_volumes_horaires.NEXT(type_volume_horaire_id);
-    END LOOP;
+    IF all_volumes_horaires.exists(intervenant.id) THEN
+      type_volume_horaire_id := all_volumes_horaires(intervenant.id).FIRST;
+      LOOP EXIT WHEN type_volume_horaire_id IS NULL;
+        intervenant.type_volume_horaire_id := type_volume_horaire_id;
+        etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).FIRST;
+        LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
+          intervenant.etat_volume_horaire_id := etat_volume_horaire_id;
+          volumes_horaires := all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id);
+          EXECUTE IMMEDIATE 'BEGIN ' || formule_definition.package_name || '.' || formule_definition.procedure_name || '; END;';
+          all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id) := volumes_horaires;
+          etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
+        END LOOP;
+        type_volume_horaire_id := all_volumes_horaires(intervenant.id).NEXT(type_volume_horaire_id);
+      END LOOP;
+    END IF;
 
     SAVE_TO_BDD;
 
@@ -4222,36 +5187,18 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   END;
 
   PROCEDURE CALCULER_TOUT( ANNEE_ID NUMERIC DEFAULT NULL ) IS
-    a_id NUMERIC;
+    i_id NUMERIC;
   BEGIN
-    in_calculer_tout := true;
     formule_definition := ose_parametre.get_formule;
-    a_id := NVL(CALCULER_TOUT.ANNEE_ID, OSE_PARAMETRE.GET_ANNEE);
-    FOR mp IN (
-      SELECT DISTINCT
-        intervenant_id
-      FROM
-        service s
-          JOIN intervenant i ON i.id = s.intervenant_id
-      WHERE
-          s.histo_destruction IS NULL
-        AND i.annee_id = a_id
+    intervenant.id := null;
+    LOAD_VH_FROM_BDD;
 
-      UNION ALL
-
-      SELECT DISTINCT
-        intervenant_id
-      FROM
-        service_referentiel sr
-          JOIN intervenant i ON i.id = sr.intervenant_id
-      WHERE
-          sr.histo_destruction IS NULL
-        AND i.annee_id = a_id
-
-      )
-      LOOP
-        CALCULER( mp.intervenant_id );
-      END LOOP;
+    in_calculer_tout := true;
+    i_id := all_volumes_horaires.FIRST;
+    LOOP EXIT WHEN i_id IS NULL;
+      CALCULER( i_id );
+      i_id := all_volumes_horaires.NEXT(i_id);
+    END LOOP;
     in_calculer_tout := false;
   END;
 
@@ -4268,7 +5215,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
     FROM
       formule f JOIN formule_test_intervenant fti ON fti.formule_id = f.id
     WHERE
-        fti.id = intervenant.id;
+      fti.id = intervenant.id;
 
     LOAD_INTERVENANT_FROM_TEST;
     LOAD_VH_FROM_TEST;
@@ -4287,9 +5234,9 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   PROCEDURE TEST_TOUT IS
   BEGIN
     FOR d IN (SELECT id FROM formule_test_intervenant)
-      LOOP
-        TEST( d.id );
-      END LOOP;
+    LOOP
+      TEST( d.id );
+    END LOOP;
   END;
 
 
@@ -4333,45 +5280,45 @@ CREATE OR REPLACE PACKAGE BODY "OSE_FORMULE" AS
   BEGIN
     ose_test.echo('OSE Formule DEBUG Intervenant');
 
-    type_volume_horaire_id := all_volumes_horaires.FIRST;
+    type_volume_horaire_id := all_volumes_horaires(intervenant.id).FIRST;
     LOOP EXIT WHEN type_volume_horaire_id IS NULL;
-    etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).FIRST;
-    LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
-    ose_test.echo('tvh=' || type_volume_horaire_id || ', evh=' || etat_volume_horaire_id);
-    FOR i IN 1 .. all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id).length LOOP
-      vh := all_volumes_horaires(type_volume_horaire_id)(etat_volume_horaire_id).items(i);
-      IF VOLUME_HORAIRE_ID IS NULL OR VOLUME_HORAIRE_ID = vh.volume_horaire_id OR VOLUME_HORAIRE_ID = vh.volume_horaire_ref_id THEN
-        ose_test.echo('volume_horaire_id         = ' || vh.volume_horaire_id);
-        ose_test.echo('volume_horaire_ref_id     = ' || vh.volume_horaire_ref_id);
-        ose_test.echo('service_id                = ' || vh.service_id);
-        ose_test.echo('service_referentiel_id    = ' || vh.service_referentiel_id);
-        ose_test.echo('taux_fi                   = ' || vh.taux_fi);
-        ose_test.echo('taux_fa                   = ' || vh.taux_fa);
-        ose_test.echo('taux_fc                   = ' || vh.taux_fc);
-        ose_test.echo('ponderation_service_du    = ' || vh.ponderation_service_du);
-        ose_test.echo('ponderation_service_compl = ' || vh.ponderation_service_compl);
-        ose_test.echo('structure_id              = ' || vh.structure_id);
-        ose_test.echo('structure_is_affectation  = ' || CASE WHEN vh.structure_is_affectation THEN 'OUI' ELSE 'NON' END);
-        ose_test.echo('structure_is_univ         = ' || CASE WHEN vh.structure_is_univ THEN 'OUI' ELSE 'NON' END);
-        ose_test.echo('service_statutaire        = ' || CASE WHEN vh.service_statutaire THEN 'OUI' ELSE 'NON' END);
-        ose_test.echo('heures                    = ' || vh.heures);
-        ose_test.echo('taux_service_du           = ' || vh.taux_service_du);
-        ose_test.echo('taux_service_compl        = ' || vh.taux_service_compl);
-        ose_test.echo('service_fi                = ' || vh.service_fi);
-        ose_test.echo('service_fa                = ' || vh.service_fa);
-        ose_test.echo('service_fc                = ' || vh.service_fc);
-        ose_test.echo('service_referentiel       = ' || vh.service_referentiel);
-        ose_test.echo('heures_compl_fi           = ' || vh.heures_compl_fi);
-        ose_test.echo('heures_compl_fa           = ' || vh.heures_compl_fa);
-        ose_test.echo('heures_compl_fc           = ' || vh.heures_compl_fc);
-        ose_test.echo('heures_compl_fc_majorees  = ' || vh.heures_compl_fc_majorees);
-        ose_test.echo('heures_compl_referentiel  = ' || vh.heures_compl_referentiel);
-        ose_test.echo('');
-      END IF;
-    END LOOP;
-    etat_volume_horaire_id := all_volumes_horaires(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
-    END LOOP;
-    type_volume_horaire_id := all_volumes_horaires.NEXT(type_volume_horaire_id);
+      etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).FIRST;
+      LOOP EXIT WHEN etat_volume_horaire_id IS NULL;
+        ose_test.echo('tvh=' || type_volume_horaire_id || ', evh=' || etat_volume_horaire_id);
+        FOR i IN 1 .. all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id).length LOOP
+          vh := all_volumes_horaires(intervenant.id)(type_volume_horaire_id)(etat_volume_horaire_id).items(i);
+          IF VOLUME_HORAIRE_ID IS NULL OR VOLUME_HORAIRE_ID = vh.volume_horaire_id OR VOLUME_HORAIRE_ID = vh.volume_horaire_ref_id THEN
+            ose_test.echo('volume_horaire_id         = ' || vh.volume_horaire_id);
+            ose_test.echo('volume_horaire_ref_id     = ' || vh.volume_horaire_ref_id);
+            ose_test.echo('service_id                = ' || vh.service_id);
+            ose_test.echo('service_referentiel_id    = ' || vh.service_referentiel_id);
+            ose_test.echo('taux_fi                   = ' || vh.taux_fi);
+            ose_test.echo('taux_fa                   = ' || vh.taux_fa);
+            ose_test.echo('taux_fc                   = ' || vh.taux_fc);
+            ose_test.echo('ponderation_service_du    = ' || vh.ponderation_service_du);
+            ose_test.echo('ponderation_service_compl = ' || vh.ponderation_service_compl);
+            ose_test.echo('structure_id              = ' || vh.structure_id);
+            ose_test.echo('structure_is_affectation  = ' || CASE WHEN vh.structure_is_affectation THEN 'OUI' ELSE 'NON' END);
+            ose_test.echo('structure_is_univ         = ' || CASE WHEN vh.structure_is_univ THEN 'OUI' ELSE 'NON' END);
+            ose_test.echo('service_statutaire        = ' || CASE WHEN vh.service_statutaire THEN 'OUI' ELSE 'NON' END);
+            ose_test.echo('heures                    = ' || vh.heures);
+            ose_test.echo('taux_service_du           = ' || vh.taux_service_du);
+            ose_test.echo('taux_service_compl        = ' || vh.taux_service_compl);
+            ose_test.echo('service_fi                = ' || vh.service_fi);
+            ose_test.echo('service_fa                = ' || vh.service_fa);
+            ose_test.echo('service_fc                = ' || vh.service_fc);
+            ose_test.echo('service_referentiel       = ' || vh.service_referentiel);
+            ose_test.echo('heures_compl_fi           = ' || vh.heures_compl_fi);
+            ose_test.echo('heures_compl_fa           = ' || vh.heures_compl_fa);
+            ose_test.echo('heures_compl_fc           = ' || vh.heures_compl_fc);
+            ose_test.echo('heures_compl_fc_majorees  = ' || vh.heures_compl_fc_majorees);
+            ose_test.echo('heures_compl_referentiel  = ' || vh.heures_compl_referentiel);
+            ose_test.echo('');
+          END IF;
+        END LOOP;
+        etat_volume_horaire_id := all_volumes_horaires(intervenant.id)(type_volume_horaire_id).NEXT(etat_volume_horaire_id);
+      END LOOP;
+      type_volume_horaire_id := all_volumes_horaires(intervenant.id).NEXT(type_volume_horaire_id);
     END LOOP;
   END;
 

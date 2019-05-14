@@ -27,6 +27,8 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 * Possibilité de choisir sa formule dans les paramétrages généraux via une liste déroulante
 * Formule de calcul de l'université de Montpellier
 * Formule de calcul de l'université du Havre
+* Formule de calcul de l'université de Nanterre
+* Formule de calcul de l'université de Bretagne Occidentale
 * Interface de test de la formule de calcul directmement intégrée dans OSE
 * Interface d'administration des motifs de modification de service dû
 * Interface d'administration des domaines fonctionnels

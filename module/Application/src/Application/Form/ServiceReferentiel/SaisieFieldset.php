@@ -220,9 +220,8 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
     protected function getValidatorStructure()
     {
         // recherche de la FonctionReferentiel sélectionnée pour connaître la structure associée éventuelle
-        $fonctions      = $this->getFonctions();
         $value          = $this->get('fonction')->getValue();
-        $fonctionSaisie = isset($fonctions[$value]) ? $fonctions[$value] : null;
+        $fonctionSaisie = $this->getServiceFonctionReferentiel()->get($value);
         if (!$fonctionSaisie) {
             return null;
         }

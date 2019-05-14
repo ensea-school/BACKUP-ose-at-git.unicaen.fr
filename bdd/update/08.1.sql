@@ -452,10 +452,20 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-    -- q =SI(ESTVIDE(C21);0;SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0)))
-    -- Nouvelle interprêtation de la formule : on n'a pas 'TP' donc tout ce qui est <1 devient 1
+    -- q =SI(ESTVIDE(C21);0;SI(H21="Non";0;SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0))))
+    -- q =SI(H21="Non";0;SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0)))
     WHEN c = 'q' AND v >= 1 THEN
-      RETURN GREATEST( vh.taux_service_compl, 1);
+      IF NOT vh.service_statutaire THEN
+        RETURN 0;
+      ELSE
+        -- SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0))
+        IF vh.type_intervention_code = 'TP' THEN
+          RETURN 1;
+        ELSE
+          RETURN vh.taux_service_du;
+        END IF;
+
+      END IF;
 
 
 
@@ -489,55 +499,61 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
 
-    -- s =SI(B21=composante_affectation;SI($R$53=0;0;R21*$S$53/$R$53);SI($R$54=0;0;R21*$S$54/$R$54))
+    -- s =SI(H21="Non";O21;SI(B21=composante_affectation;SI($R$136=0;0;R21*$T$136);SI($R$137=0;0;R21*$T$137)))
     WHEN c = 's' AND v >= 1 THEN
-      IF vh.structure_is_affectation THEN
-        IF cell('r136') = 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN cell('r',l) * cell('s136')/cell('r136');
-        END IF;
+      IF NOT vh.service_statutaire THEN
+        RETURN cell('o', l);
       ELSE
-        IF cell('r137') = 0 THEN
-          RETURN 0;
-        ELSE
-          RETURN cell('r',l) * cell('s137')/cell('r137');
-        END IF;
-      END IF;
-
-
-
-    -- s136 =SI(OU(HC=0;r136<service_du);0;r136-service_du)
-    -- s136 =SI(OU(HC=0;R136<service_du);0;SI(pour_les_autres_composantes=0;HC;SI((HC-pour_les_autres_composantes)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-pour_les_autres_composantes)))
-    -- pour_les_autres_composantes = R137
-    WHEN c = 's136' AND v >= 1 THEN
-      IF calcFnc('total','o') = 0 OR cell('r136') < ose_formule.intervenant.service_du THEN
-        RETURN 0;
-      ELSE
-        -- SI(R137=0;HC;SI((HC-R137)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-R137))
-        IF cell('r137') = 0 THEN
-          RETURN calcFnc('total','o');
-        ELSE
-          -- SI((HC-R137)<(HC*(R136-service_du)/R132);HC*(R136-service_du)/R132;HC-R137)
-          IF (calcFnc('total','o')-cell('r137'))<(calcFnc('total','o')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r')) THEN
-            -- HC*(R136-service_du)/R132
-            RETURN calcFnc('total','o')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r');
+        IF vh.structure_is_affectation THEN
+          IF cell('r136') = 0 THEN
+            RETURN 0;
           ELSE
-            -- HC-R137
-            RETURN calcFnc('total','o')-cell('r137');
+            RETURN cell('r', l) * cell('t136');
+          END IF;
+        ELSE
+          IF cell('r137') = 0 THEN
+            RETURN 0;
+          ELSE
+            RETURN cell('r', l) * cell('t137');
           END IF;
         END IF;
       END IF;
 
 
 
-    -- s137 =SI(HC=0;0;r137*(HC-s136)/r137)
-    -- s137 =SI(R137=0;0;SI(HC=0;0;HC-S136))
-    WHEN c = 's137' AND v >= 1 THEN
-      IF calcFnc('total','o') = 0 THEN
+    -- s136 =SI(OU(HC=0;R136<service_du);0;SI(pour_les_autres_composantes=0;HC;SI((HC_Budg-pour_les_autres_composantes)<(HC_Budg*(R136-service_du)/R132);HC_Budg*(R136-service_du)/R132;HC_Budg-pour_les_autres_composantes)))
+    -- pour_les_autres_composantes = R137
+    WHEN c = 's136' AND v >= 1 THEN
+      IF calcFnc('total','o') = 0 OR cell('r136') < ose_formule.intervenant.service_du THEN
         RETURN 0;
       ELSE
-        RETURN cell('r137')*(calcFnc('total','o')-cell('s136'))/cell('r137');
+        -- SI(R137=0;HC;SI((HC_Budg-R137)<(HC_Budg*(R136-service_du)/R132);HC_Budg*(R136-service_du)/R132;HC_Budg-R137))
+        IF cell('r137') = 0 THEN
+          RETURN calcFnc('total','o');
+        ELSE
+          -- SI((HC_Budg-R137)<(HC_Budg*(R136-service_du)/R132);HC_Budg*(R136-service_du)/R132;HC_Budg-R137)
+          IF (cell('hc_budg')-cell('r137'))<(cell('hc_budg')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r')) THEN
+            -- HC_Budg*(R136-service_du)/R132
+            RETURN cell('hc_budg')*(cell('r136')-ose_formule.intervenant.service_du)/calcFnc('total','r');
+          ELSE
+            -- HC_Budg-R137
+            RETURN cell('hc_budg')-cell('r137');
+          END IF;
+        END IF;
+      END IF;
+
+
+
+    -- s137 =SI(R137=0;0;SI(HC=0;0;HC_Budg-S136))
+    WHEN c = 's137' AND v >= 1 THEN
+      IF cell('r137') = 0 THEN
+        RETURN 0;
+      ELSE
+        IF calcFnc('total','o') = 0 THEN
+          RETURN 0;
+        ELSE
+          RETURN cell('hc_budg') - cell('s136');
+        END IF;
       END IF;
 
 
@@ -640,11 +656,23 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
 
 
     -- x =SI($C21="Référentiel";$K21-$M21;0)
+    -- x =SI(OU(ESTVIDE($C21);NON(C21="Référentiel");ET(HC=0;H21="Non"));0;SI(H21="Non";O21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21);$K21)))
     WHEN c = 'x' AND v >= 1 THEN
-      IF vh.volume_horaire_ref_id IS NOT NULL THEN
-        RETURN cell('k',l) - cell('m',l);
-      ELSE
+      -- OU(NON(C21="Référentiel");ET(HC=0;H21="Non"))
+      IF vh.volume_horaire_ref_id IS NULL OR (calcFnc('total', 'o')=0 AND NOT vh.service_statutaire) THEN
         RETURN 0;
+      ELSE
+        -- SI(H21="Non";O21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21);$K21))
+        IF NOT vh.service_statutaire THEN
+          RETURN cell('o', l);
+        ELSE
+          -- SI($M21>0;(($M21*$N21)+($I21-$M21)*J21);$K21)
+          IF cell('m',l) > 0 THEN
+            RETURN (cell('m',l)*cell('n',l))+(vh.heures-cell('m',l))*cell('j',l);
+          ELSE
+            RETURN cell('k',l);
+          END IF;
+        END IF;
       END IF;
 
 
@@ -686,6 +714,19 @@ CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
       END IF;
 
 
+
+
+
+    -- hc_budg =HC-SOMME.SI(H$21:H$131;"Non";O$21:O$131)
+    WHEN c = 'hc_budg_cell' AND v >= 1 THEN
+      IF NOT vh.service_statutaire THEN
+        RETURN 0;
+      ELSE
+        RETURN cell('o', l);
+      END IF;
+
+    WHEN c = 'hc_budg' AND v >= 1 THEN
+      RETURN calcFnc('total', 'hc_budg_cell');
 
 
 
@@ -7749,3 +7790,9 @@ DROP SEQUENCE FTEST_VOLUME_HORAIRE_ID_SEQ;
 CREATE SEQUENCE FTEST_INTERVENANT_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 10000 NOCACHE;
 /
 CREATE SEQUENCE FTEST_VOLUME_HORAIRE_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 10000 NOCACHE;
+
+/
+
+ALTER TABLE STRUCTURE MODIFY (LIBELLE_LONG VARCHAR2(100 CHAR) );
+ALTER TABLE CORPS MODIFY (LIBELLE_LONG VARCHAR2(100 CHAR) );
+ALTER TABLE GRADE MODIFY (LIBELLE_LONG VARCHAR2(100 CHAR) );

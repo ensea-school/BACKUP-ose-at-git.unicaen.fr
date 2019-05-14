@@ -3,7 +3,7 @@
 $settings = [
     'view-dirs'            => [getcwd() . '/code'],
     'template-dirs'        => [getcwd() . '/code/template'],
-    'generator-output-dir' => '/home/laurent/UnicaenCode',
+    'generator-output-dir' => '/app/cache/UnicaenCode',
     'namespaces'           => [
         'services'  => [
             'Application',

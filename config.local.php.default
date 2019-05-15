@@ -156,6 +156,11 @@ return [
          * à rappchcher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
         'utilisateurCode'              => 'supannEmpId',
 
+        /* Filtre de code utilisateur.
+         * Expression régulière permettant de selectionner une valeur spécifique d'un atttribut utilisateurCode multivalué (par exemple
+         * supannRefId). Laisser commenté pour ne pas effectuer de filtrage. */
+        //'utilisateurCodeFiltre'        => '/^{OSE}(.*)$/',
+
         /* Filtre de recherche d'utilisateurs pour les affectations */
         'utilisateurFiltre'            => '(eduPersonAffiliation=member)(!(eduPersonAffiliation=student))',
 

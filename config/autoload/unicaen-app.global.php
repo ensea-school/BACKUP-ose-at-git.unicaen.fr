@@ -55,9 +55,10 @@ return [
                 'NO_INDIVIDU_FILTER'           => '(' . AppConfig::get('ldap', 'utilisateurCode') . '=%08s)',
             ],
             'utilisateur' => [
-                'LOGIN'  => AppConfig::get('ldap', 'loginAttribute'),
-                'FILTER' => AppConfig::get('ldap', 'utilisateurFiltre'),
-                'CODE'   => AppConfig::get('ldap', 'utilisateurCode'),
+                'LOGIN'      => AppConfig::get('ldap', 'loginAttribute'),
+                'FILTER'     => AppConfig::get('ldap', 'utilisateurFiltre'),
+                'CODE'       => AppConfig::get('ldap', 'utilisateurCode'),
+                'CODEFILTER' => AppConfig::get('ldap', 'utilisateurCodeFiltre'),
             ],
         ],
 

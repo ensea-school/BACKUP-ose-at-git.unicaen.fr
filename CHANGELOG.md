@@ -30,6 +30,7 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 * Formule de calcul de l'université du Havre
 * Formule de calcul de l'université de Nanterre
 * Formule de calcul de l'université de Bretagne Occidentale
+* Formule de calcul de l'Ensicaen
 * Interface de test de la formule de calcul directmement intégrée dans OSE
 * Interface d'administration des motifs de modification de service dû
 * Interface d'administration des domaines fonctionnels

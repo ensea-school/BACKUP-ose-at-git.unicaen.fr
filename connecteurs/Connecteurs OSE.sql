@@ -1206,6 +1206,7 @@ WITH apogee_fca_query AS (
       WHEN 'MEMOIR' THEN 'Mémoire'
       WHEN 'STAGE'  THEN 'Stage'
       WHEN 'PROJET' THEN 'Projet'
+      WHEN 'SORTIE' THEN 'Terrain'
     ELSE
       vhe.z_type_intervention_id
     END                                     z_type_intervention_id,

@@ -3,7 +3,7 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
-# OSE 8.1 (béta)
+# OSE 8.1
 
 ## Corrections de bugs
 
@@ -47,6 +47,8 @@ Attention toutefois : le travail de mise en place du dispositif n'en est qu'au t
 * La recherche d'intervenants saisis directement dans OSE fonctionne maintenant même sans avoir de vue source Intervenant
 * Les fonctions référentielles peuvent être regroupées par types, avec des plafonds et indicateurs associés
 * Un plafond par composante a été ajouté pour le référentiel.
+* Pour suivre l'évolution de la règlementation des heures supplémentaires, l'export Winpaye a été modifié : 
+le code retenue est passé à 2251 pour les vacataires. Les permanents restent à 0204.
 
 ## Notes de mise à jour
 
@@ -63,8 +65,11 @@ dev,test ou prod. Les anciennes valeurs development et production doivent donc �
 mis à jour sans aucun soucis. Par contre, veillez bien à ne pas insérer deux fois les mêmes données, ou bien à ne pas tenter de créer deux fois les mêmes colonnes ou les mêmes clés étrangères.
 Le mieux est de dupliquer votre instance de production en test si vous en avez une, puis ensuite d'appliquer la mise à jour avec la dernière version disponible.
 
-* Les versions béta ne sont pas prévues pour êtres installées sur une base vierge. Seules les mises à jour depuis la version 8.0 sont possibles pour le moment.
-Le script d'installation d'une nouvelle base de données n'a pour le moment pas été mis à jour.
+* La vue export Winpaye a légèrement évolué : le code retenue n'est désormais plus le même pour les vacataires et les permanents (cf. nouveautés ci-dessus). 
+Cela devrait n'avoir aucune incidence sur vos paramétrages d'états de sortie Winpaye.
+
+* Pour les universités de Bretagne Occidentale et de Nanterre : votre formule de calcul nécessite des vues spécifiques (V_FORMULE_LOCAL_*) 
+qui vous ont été fournies, à implanter dans votre base de données. Veillez à bien implanter ces vues également sur votre serveur de production.
 
 # OSE 8.0.3
 

@@ -1,13 +1,14 @@
 <?php
 
 /**
- * @var $this  \Application\View\Renderer\PhpRenderer
- * @var $title string
- * @var $count integer
- * @var $form  \Zend\Form\Form
+ * @var $this     \Application\View\Renderer\PhpRenderer
+ * @var $title    string
+ * @var $count    integer
+ * @var $sansMail \Application\Entity\Db\Intervenant[]
+ * @var $form     \Zend\Form\Form
  */
 
-echo $this->form()->openTag($this->form->setAttribute('id','mail-form'));
+echo $this->form()->openTag($this->form->setAttribute('id', 'mail-form'));
 
 ?>
 <h1 class="page-header"><?= $title ?></h1>
@@ -22,6 +23,18 @@ echo $this->form()->openTag($this->form->setAttribute('id','mail-form'));
 </div>
 <?= $this->formControlGroup($this->form->get('subject')->setLabel("Objet du mail")) ?>
 <?= $this->formControlGroup($this->form->get('body')->setLabel("Corps du mail")->setAttributes(['rows' => 15, 'id' => 'body'])) ?>
+
+<?php if (!empty($sansMail)): ?>
+    <div class="alert alert-warning">
+        Attention : faute de disposer d'une adresse mail, le ou les intervenants suivants ne pourront pas être contactés :
+        <ul>
+            <?php foreach ($sansMail as $intervenant): ?>
+                <li><?= $intervenant ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
 <button class="btn btn-default" type="button" onclick="window.history.back()"><i class="fa fa-undo" aria-hidden="true"></i>
     Retour à l'indicateur
 </button>

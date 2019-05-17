@@ -32,7 +32,6 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 
-
 class IndicateurController extends AbstractController
 {
     use IndicateurServiceAwareTrait;
@@ -75,11 +74,11 @@ class IndicateurController extends AbstractController
      * @return void
      * @link http://php.net/manual/en/language.oop5.decon.php
      */
-    public function __construct( TreeRouteStack $httpRouter, PhpRenderer $renderer, array $cliConfig )
+    public function __construct(TreeRouteStack $httpRouter, PhpRenderer $renderer, array $cliConfig)
     {
         $this->httpRouter = $httpRouter;
-        $this->renderer = $renderer;
-        $this->cliConfig = $cliConfig;
+        $this->renderer   = $renderer;
+        $this->cliConfig  = $cliConfig;
     }
 
 
@@ -184,7 +183,7 @@ class IndicateurController extends AbstractController
         $notifications = $sab->getList($qb);
 
         $indicateurs = [];
-        foreach( $notifications as $notification ){
+        foreach ($notifications as $notification) {
             $indicateurs[] = $notification->getIndicateur()->setServiceIndicateur($sid);
         }
 
@@ -200,9 +199,9 @@ class IndicateurController extends AbstractController
         $indicateur->setServiceIndicateur($this->getServiceIndicateur());
 
         $intervenantsStringIds = $this->params()->fromQuery('intervenants', $this->params()->fromPost('intervenants', null));
-        if ($intervenantsStringIds){
+        if ($intervenantsStringIds) {
             $intervenantsIds = explode('-', $intervenantsStringIds);
-        }else{
+        } else {
             $intervenantsIds = [];
         }
 
@@ -217,17 +216,13 @@ class IndicateurController extends AbstractController
         }
 
         $formatter = new IntervenantEmailFormatter();
-        $formatter->setServiceDossier( $this->getServiceDossier() );
-        $emails    = $formatter->filter($intervenants);
-        if (($intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail())) {
-            throw new \LogicException(
-                "Aucune adresse mail trouvée pour l'intervenant suivant: " . implode(", ", Util::collectionAsOptions($intervenantsWithNoEmail)));
-        }
-
-        $mailer  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
-        $from    = $mailer->getFrom();
-        $subject = $mailer->getDefaultSubject();
-        $body    = $mailer->getDefaultBody();
+        $formatter->setServiceDossier($this->getServiceDossier());
+        $emails                  = $formatter->filter($intervenants);
+        $intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail();
+        $mailer                  = new IndicateurIntervenantsMailer($this, $indicateur, $this->renderer);
+        $from                    = $mailer->getFrom();
+        $subject                 = $mailer->getDefaultSubject();
+        $body                    = $mailer->getDefaultBody();
 
         $form = new Form();
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -243,7 +238,7 @@ class IndicateurController extends AbstractController
             $post = $this->getRequest()->getPost();
             if ($form->setData($post)->isValid()) {
                 $mailer->send($emails, $post);
-                $count = count($intervenants);
+                $count   = count($intervenants);
                 $pluriel = $count > 1 ? 's' : '';
                 $this->flashMessenger()->addSuccessMessage("Le mail a été envoyé à $count intervenant$pluriel");
                 $this->redirect()->toRoute('indicateur/result', ['indicateur' => $indicateur->getId()]);
@@ -251,9 +246,10 @@ class IndicateurController extends AbstractController
         }
 
         return [
-            'title'   => "Envoyer un mail aux intervenants",
-            'count'   => count($emails),
-            'form'    => $form,
+            'title'    => "Envoyer un mail aux intervenants",
+            'count'    => count($emails),
+            'sansMail' => $intervenantsWithNoEmail,
+            'form'     => $form,
         ];
     }
 
@@ -272,15 +268,15 @@ class IndicateurController extends AbstractController
         // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
         // n'est pas en mesure de construire des URL (car le ConsoleRouter ne sait pas ce qu'est une URL!).
         // On injecte donc provisoirement un HttpRouter dans le circuit.
-        $event      = $this->getEvent();
-        $router     = $event->getRouter();
+        $event  = $this->getEvent();
+        $router = $event->getRouter();
         $event->setRouter($this->httpRouter);
 
         // De plus, pour fonctionner, le HttpRouter a besoin du "prefixe" à utiliser pour assembler les URL
         // (ex: "http://localhost/ose"). Ce prefixe est fourni via un HttpUri initialisé à partir de 2 arguments
         // de la ligne de commande : "requestUriHost" (obligatoire) et "requestUriScheme" (facultatif, "http" par défaut).
         $httpUri = (new \Zend\Uri\Http())
-            ->setHost($this->cliConfig['domain'])              // ex: "/localhost/ose", "ose.unicaen.fr"
+            ->setHost($this->cliConfig['domain'])// ex: "/localhost/ose", "ose.unicaen.fr"
             ->setScheme($this->cliConfig['scheme']);
         $this->httpRouter->setRequestUri($httpUri);
 
@@ -307,20 +303,20 @@ class IndicateurController extends AbstractController
         $intervenant = $this->getEvent()->getParam('intervenant');
 
         $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code');
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
+        $typeVolumeHoraire     = $this->getServiceTypeVolumeHoraire()->getByCode($typeVolumeHoraireCode);
 
         $periodeCode = $this->params()->fromRoute('periode-code');
-        $periode = $this->getServicePeriode()->getByCode($periodeCode);
+        $periode     = $this->getServicePeriode()->getByCode($periodeCode);
 
-        if (!$intervenant){
+        if (!$intervenant) {
             throw new \Exception('Un intervenant doit être spécifié');
         }
 
-        $params = compact('typeVolumeHoraire','periode', 'intervenant');
-        if ($structure = $this->getServiceContext()->getStructure()){
+        $params = compact('typeVolumeHoraire', 'periode', 'intervenant');
+        if ($structure = $this->getServiceContext()->getStructure()) {
             $params['structure'] = $structure->getId();
-            $sFilter = ' AND idc.structure = :structure';
-        }else{
+            $sFilter             = ' AND idc.structure = :structure';
+        } else {
             $sFilter = '';
         }
 
@@ -328,7 +324,7 @@ class IndicateurController extends AbstractController
         SELECT
           idc, s, ep, ti        
         FROM
-          ".IndicateurDepassementCharges::class."   idc
+          " . IndicateurDepassementCharges::class . "   idc
           JOIN idc.structure                        s
           JOIN idc.elementPedagogique               ep
           JOIN idc.typeIntervention                 ti
@@ -342,14 +338,12 @@ class IndicateurController extends AbstractController
         ";
 
 
-        $idcs = $this->em()->createQuery($dql)->setParameters($params)->getResult();
-        $title = 'Dépassement d\'heures ('.$typeVolumeHoraire.') par rapport aux charges <small>'.$intervenant.'</small>';
+        $idcs  = $this->em()->createQuery($dql)->setParameters($params)->getResult();
+        $title = 'Dépassement d\'heures (' . $typeVolumeHoraire . ') par rapport aux charges <small>' . $intervenant . '</small>';
 
-        return compact('title','intervenant', 'idcs');
+        return compact('title', 'intervenant', 'idcs');
     }
 }
-
-
 
 
 
@@ -383,7 +377,7 @@ class IndicateurIntervenantsMailer
     {
         $this->controller = $controller;
         $this->indicateur = $indicateur;
-        $this->renderer = $renderer;
+        $this->renderer   = $renderer;
     }
 
 

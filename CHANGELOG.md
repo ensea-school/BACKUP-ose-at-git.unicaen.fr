@@ -19,6 +19,7 @@ dans le détail des services.
 * Certains dossiers intervenants pouvaient être validés plusieurs fois. 
 Un mécanisme contrôle désormais que le dossier n'est pas déjà validé avant de valider à nouveau.
 * Le contrôle de cohérence des données personnelles prend maintenant en compte le cas des français nés dans un ex-département français d'Algérie.  
+* Les mails de notification aux intervenants peuvent être envoyés même si certains d'entre eux n'ont pas de mail. Ces derniers seront listés.
 
 ## Nouveautés
 

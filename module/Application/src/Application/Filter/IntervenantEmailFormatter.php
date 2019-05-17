@@ -42,12 +42,12 @@ class IntervenantEmailFormatter extends AbstractFilter
             }
 
             if (! $email) {
-                $this->intervenantsWithNoEmail[$intervenant->getCode()] = $intervenant;
+                $this->intervenantsWithNoEmail[] = $intervenant;
+            }else{
+                $emails = [
+                    $email => $intervenant->getNomComplet()
+                ];
             }
-
-            $emails = [
-                $email => $intervenant->getNomComplet()
-            ];
         }
         elseif (is_array($value)) {
             foreach ($value as $intervenant) {

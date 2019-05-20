@@ -20,6 +20,8 @@ dans le détail des services.
 Un mécanisme contrôle désormais que le dossier n'est pas déjà validé avant de valider à nouveau.
 * Le contrôle de cohérence des données personnelles prend maintenant en compte le cas des français nés dans un ex-département français d'Algérie.  
 * Les mails de notification aux intervenants peuvent être envoyés même si certains d'entre eux n'ont pas de mail. Ces derniers seront listés.
+* Les indexes de clés étrangères n'étaient pas créés par les précédents scripts d'installation. C'est désormais le cas et le script de MAJ 
+inclue les indexes manquants pour création.
 
 ## Nouveautés
 

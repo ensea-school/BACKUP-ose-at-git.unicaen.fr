@@ -4,7 +4,7 @@
 Dans la fiche service de l’intervenant, placer le curseur de la souris sur l’icône « Modifier » représentée par un crayon,
 Ensuite, dans l’URL du lien qui s’affiche dans le bas de la fenêtre du navigateur, identifier l’ID (110746 dans l’exemple ci-dessus) et le mémoriser.
 
-![Identifier un ID de service](service_correction_bdd.png)
+![Identifier un ID de service](doc/service_correction_bdd.png)
 
 ## Étape 2 : Aller dans la base de données pour récupérer les volumes horaires concernés
 Exécuter la requête suivante pour récupérer toutes les informations nécessaires à la suite de la procédure :
@@ -54,6 +54,7 @@ Une fois que vous avez identifié le ou les volumes horaires à traiter, plusieu
 * Si le volume horaire a une validation, alors il faut
   * Soit supprimer la validation dans OSE (mais cela va impacter aussi d’autres volumes horaires)
   * Soit retirer un volume horaire spécifique d’une validation (procédure ci-dessous).
+
 Ensuite, procéder aux opérations suivantes :
 * Historiser le volume horaire (procédure ci-dessous)
 * Recalculer la feuille de route de l’intervenant : la fiche de service ayant changé, il convient de recalculer la feuille de route de l’intervenant, car cela peut avoir de l’influence sur l’état d’avancement du Workflow.

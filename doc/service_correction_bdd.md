@@ -1,7 +1,8 @@
 # OSE : Correction d’une fiche de service
 
 ## Étape 1 : récupérer l’ID du service concerné
-Dans la fiche service de l’intervenant, placer le curseur de la souris sur l’icône « Modifier » représentée par un crayon,
+Dans la fiche service de l’intervenant, placer le curseur de la souris sur l’icône « Modifier » représentée par un crayon.
+
 Ensuite, dans l’URL du lien qui s’affiche dans le bas de la fenêtre du navigateur, identifier l’ID (110746 dans l’exemple ci-dessus) et le mémoriser.
 
 ![Identifier un ID de service][service_correction_bdd]

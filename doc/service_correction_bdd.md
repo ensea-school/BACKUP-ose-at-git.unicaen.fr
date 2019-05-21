@@ -4,7 +4,7 @@
 Dans la fiche service de l’intervenant, placer le curseur de la souris sur l’icône « Modifier » représentée par un crayon,
 Ensuite, dans l’URL du lien qui s’affiche dans le bas de la fenêtre du navigateur, identifier l’ID (110746 dans l’exemple ci-dessus) et le mémoriser.
 
-![Identifier un ID de service](doc/service_correction_bdd.png)
+![Identifier un ID de service](/doc/service_correction_bdd.png)
 
 ## Étape 2 : Aller dans la base de données pour récupérer les volumes horaires concernés
 Exécuter la requête suivante pour récupérer toutes les informations nécessaires à la suite de la procédure :

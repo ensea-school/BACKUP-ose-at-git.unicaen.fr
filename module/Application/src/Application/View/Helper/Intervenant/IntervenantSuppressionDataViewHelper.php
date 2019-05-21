@@ -97,9 +97,11 @@ class IntervenantSuppressionDataViewHelper extends AbstractViewHelper
         }
 
         $attrs = [
-            'class' => ['jstree-open'],
             'id'    => $isd->getAbsoluteId(),
         ];
+        if ($first || $isd->getEntity() instanceof VolumeHoraire || $isd->getEntity() instanceof VolumeHoraireReferentiel){
+            $attrs['class'] = 'jstree-open';
+        }
         if ($isd->getIcon()) {
             $attrs['data-jstree'] = [
                 'icon'  => $isd->getIcon(),

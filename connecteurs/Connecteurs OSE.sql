@@ -1170,8 +1170,8 @@ FROM
   JOIN source src ON src.code = 'Calcul'
 WHERE
   heures > 0  --Soit il y a des heures de prévues
-  OR total_heures = 0 -- soit on autorise tout
-  OR annee_id < 2017; -- règle ne s'appliquant pas avant!
+  OR (total_heures = 0 AND annee_id < 2019) -- soit on autorise tout s'il n'y a pas de charges (avant 2019)
+  OR annee_id < 2017 -- soit on autorise vraiment tout (avant 2017)
 
 
 

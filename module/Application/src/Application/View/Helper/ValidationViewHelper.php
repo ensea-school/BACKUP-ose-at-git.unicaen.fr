@@ -86,7 +86,7 @@ class ValidationViewHelper extends AbstractHtmlElement
         $title = $entity->getTypeValidation().' de '.$entity->getIntervenant();
 
         return $this->getView()->tag('abbr', compact('title'))->html(
-            'Validation'
+            'Validation du '.$entity->getHistoModification()->format(\Application\Constants::DATETIME_FORMAT).'  par '.$entity->getHistoModificateur()
         );
     }
 

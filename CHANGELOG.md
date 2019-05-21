@@ -3,6 +3,13 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 8.0.1 (à venir)
+
+## Corrections de bugs
+
+* La prise en compte des paramètres supplémentaires pour la formule de calcul fonctionne désormais pleinement.
+* Dans l'onglet Suppression de la fiche intervenant, l'arborescence s'affiche correctement. La suppression partielle ou complète d'un intervenant fonctionne donc de nouveau. 
+
 # OSE 8.1
 
 ## Corrections de bugs

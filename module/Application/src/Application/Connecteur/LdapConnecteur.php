@@ -5,6 +5,7 @@ namespace Application\Connecteur;
 use Application\Entity\Db\Composante;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\AbstractService;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Entity\Ldap\AbstractEntity;
 use UnicaenApp\Entity\Ldap\People;
 use UnicaenAuth\Service\UserContext;
@@ -20,6 +21,8 @@ use ZfcUserDoctrineORM\Mapper\User as MapperUser;
  */
 class LdapConnecteur extends AbstractService
 {
+    use UtilisateurServiceAwareTrait;
+
     /**
      * @var UserContext
      */
@@ -159,8 +162,7 @@ class LdapConnecteur extends AbstractService
      */
     public function getUtilisateur($login, $autoInsert = true)
     {
-        if (!\AppConfig::get('ldap', 'actif', true)) return null;
-
+        if ($user = $this->getServiceUtilisateur()->getRepo()->findOneBy(['username' => $login])) return $user; // si on le trouve alors c'est OK
         if ($user = $this->mapperUser->findByUsername($login)) return $user; // si on le trouve alors c'est OK
 
         if ($people = $this->mapperPeople->findOneByUsername($login)) {

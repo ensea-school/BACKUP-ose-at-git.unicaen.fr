@@ -90,8 +90,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Administration'    => Controller\AdministrationController::class,
+        'factories' => [
+            'Application\Controller\Administration'    => Controller\Factory\AdministrationControllerFactory::class,
         ],
     ],
 ];

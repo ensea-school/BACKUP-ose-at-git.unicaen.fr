@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
+use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
 
 
 /**
@@ -14,13 +15,10 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 class AdministrationController extends AbstractController
 {
     use UtilisateurServiceAwareTrait;
+    use UserServiceAwareTrait;
 
 
 
-    /**
-     *
-     * @return type
-     */
     public function indexAction()
     {
         return [];
@@ -38,7 +36,10 @@ class AdministrationController extends AbstractController
             throw new \Exception("Utilisateur $utilisateur non trouvé");
         }
 
-        $userObject->setPassword($motDePasse, true);
-        $this->getServiceUtilisateur()->save($userObject);
+        if (strlen($motDePasse) < 6){
+            throw new \Exception("Mot de passe trop court : il doit faire au moint 6 caractères");
+        }
+
+        $this->userService->updateUserPassword( $userObject, $motDePasse);
     }
 }

@@ -13,22 +13,23 @@ Exécuter la requête suivante pour récupérer toutes les informations nécessa
 ```sql
 SELECT
   /* Libellés pour retrouver la bonne ligne */
-  tvh.libelle       type_vh,
-  ep.code           element,
-  str.libelle_court structure,
-  p.libelle_court   semestre,
-  ti.code           type_intervention,
-  mnp.libelle_court motif_non_paiement,
-  src.code          source,
-  vh.horaire_debut  horaire_debut,
-  vh.horaire_fin    horaire_fin,
+  tvh.libelle        type_vh,
+  ep.code            element,
+  str.libelle_court  structure,
+  p.libelle_court    semestre,
+  ti.code            type_intervention,
+  mnp.libelle_court  motif_non_paiement,
+  src.code           source,
+  vh.horaire_debut   horaire_debut,
+  vh.horaire_fin     horaire_fin,
   /* Identifiants */
-  s.id              service_id,
-  vh.id             volume_horaire_id,
-  vvh.validation_id validation_id,
-  vh.contrat_id     contrat_id,
+  s.id               service_id,
+  vh.id              volume_horaire_id,
+  vh.auto_validation auto_validation,
+  vvh.validation_id  validation_id,
+  vh.contrat_id      contrat_id,
   /* Heures */
-  vh.heures
+  vh.heures          heures
 FROM
   volume_horaire vh
   JOIN service s ON s.id = vh.service_id AND s.histo_destruction IS NULL
@@ -69,7 +70,7 @@ DELETE FROM VALIDATION_VOL_HORAIRE WHERE volume_horaire_id = /*VOLUME_HORAIRE ID
 
 Historiser un volume horaire :
 ```sql
-UPDATE volume_horaire SET histo_destruction=SYSDATE, histo_destructeur_id=/*UTILISATEUR_ID*/;
+UPDATE volume_horaire SET histo_destruction=SYSDATE, histo_destructeur_id=/*UTILISATEUR_ID*/ WHERE volume_horaire_id =  /*VOLUME_HORAIRE ID*/;
 ```
 
 L’UTILISATEUR_ID doit être le vôtre. Il correspond à une valeur de la colonne UTILISATEUR.ID

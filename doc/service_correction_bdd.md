@@ -69,7 +69,7 @@ DELETE FROM VALIDATION_VOL_HORAIRE WHERE volume_horaire_id = /*VOLUME_HORAIRE ID
 
 Historiser un volume horaire :
 ```sql
-UPDATE volume_horaire SET histo_destruction=SYSDATE, histo_destructeur_id=/*UTILISATEUR_ID*/;
+UPDATE volume_horaire SET histo_destruction=SYSDATE, histo_destructeur_id=/*UTILISATEUR_ID*/ WHERE volume_horaire_id =  /*VOLUME_HORAIRE ID*/;
 ```
 
 L’UTILISATEUR_ID doit être le vôtre. Il correspond à une valeur de la colonne UTILISATEUR.ID

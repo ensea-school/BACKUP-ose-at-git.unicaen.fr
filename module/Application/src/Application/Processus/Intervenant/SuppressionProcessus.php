@@ -347,7 +347,7 @@ class SuppressionProcessus
         $service = $this->getIntervenant()->getService()->filter(function ($s) {
             return $s->estNonHistorise();
         });
-        if ($service->count() > 1) {
+        if ($service->count() > 0) {
             /** @var Service $s */
             foreach ($service as $s) {
                 $vhs = $s->getVolumeHoraire()->filter(function ($v) {
@@ -383,7 +383,7 @@ class SuppressionProcessus
         $refs = $this->getIntervenant()->getServiceReferentiel()->filter(function ($s) {
             return $s->estNonHistorise();
         });
-        if ($refs->count() > 1) {
+        if ($refs->count() > 0) {
             /** @var ServiceReferentiel $ref */
             foreach ($refs as $ref) {
                 $vhs = $ref->getVolumeHoraireReferentiel()->filter(function ($v) {

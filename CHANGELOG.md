@@ -8,7 +8,8 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * La prise en compte des paramètres supplémentaires pour la formule de calcul fonctionne désormais pleinement.
-* Dans l'onglet Suppression de la fiche intervenant, l'arborescence s'affiche correctement. La suppression partielle ou complète d'un intervenant fonctionne donc de nouveau. 
+* Dans l'onglet Suppression de la fiche intervenant, l'arborescence s'affiche correctement. La suppression partielle ou complète d'un intervenant fonctionne donc de nouveau.
+* Un bug se produisait dans l'arborescence de suppression de fiche intervenant : s'il n'y avait qu'un seul service ou qu'un seul référentiel alors rien n'était affiché. C'est corrigé. 
 
 # OSE 8.1
 

@@ -11,6 +11,14 @@ author: Laurent Lécluse - DSI - Unicaen
 * Dans l'onglet Suppression de la fiche intervenant, l'arborescence s'affiche correctement. La suppression partielle ou complète d'un intervenant fonctionne donc de nouveau.
 * Un bug se produisait dans l'arborescence de suppression de fiche intervenant : s'il n'y avait qu'un seul service ou qu'un seul référentiel alors rien n'était affiché. C'est corrigé. 
 
+## Notes de mise à jour
+
+* Attention : Le répertoire public/modeles de OSE était propre à l'Université de Caen et il a été supprimé.
+Il servait à fournir des modèles de pièces justificatives à remplir par les intervenants.
+Si vous voulez fournir vos propres modèles de pièces justificatives, vous devrez les placer sur un serveur Web (qui peut être celui de OSE, mais ailleurs que dans le code source) 
+pour avoir une URL que vous collerez dans l'interface de gestion des pièces justificatives en éditant un type de pièce jointe, champ "modèle".
+
+
 # OSE 8.1
 
 ## Corrections de bugs

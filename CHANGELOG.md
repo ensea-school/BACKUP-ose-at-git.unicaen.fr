@@ -3,7 +3,7 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
-# OSE 8.0.1 (à venir)
+# OSE 8.1.1 (à venir)
 
 ## Corrections de bugs
 

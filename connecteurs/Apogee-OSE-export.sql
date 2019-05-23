@@ -29,21 +29,22 @@ delete from ose_groupe_type_formation
 -- C : Ordre de classement des groupes de types de formation dans les interfaces utilisateurs
 -- D : Est-il pertinent de suffixer le libelle court par le niveau relatif de la VET dans le diplome? (0/1)
 -- E : Identifiant du groupe de types de formations
---                                             A                                      B             C  D  E
-insert into ose_groupe_type_formation values ('Diplôme Universitaire de Technologie','DUT'         ,10,1,'DUT'       );
-insert into ose_groupe_type_formation values ('PACES'                               ,'PACES'       ,21,0,'PACES'     );
-insert into ose_groupe_type_formation values ('Etudes de Santé'                     ,'Santé'       ,22,1,'SANTE'     );
-insert into ose_groupe_type_formation values ('DES'                                 ,'DES'         ,25,0,'DES'       );
-insert into ose_groupe_type_formation values ('DESC'                                ,'DESC'        ,26,0,'DESC'      );
-insert into ose_groupe_type_formation values ('Licence'                             ,'L'           ,30,1,'L'         );
-insert into ose_groupe_type_formation values ('Licence professionnelle'             ,'LPro'        ,35,0,'LP'        );
-insert into ose_groupe_type_formation values ('Master'                              ,'M'           ,40,1,'M'         );
-insert into ose_groupe_type_formation values ('Diplôme d''ingénieur'                ,'Ingénieur'   ,45,1,'ING'       );
-insert into ose_groupe_type_formation values ('Diplôme d''université'               ,'DU'          ,60,0,'DU'        );
-insert into ose_groupe_type_formation values ('Capacité'                            ,'Capacité'    ,70,0,'CAPA'      );
-insert into ose_groupe_type_formation values ('Orthophonie'                         ,'Orthophonie' ,71,0,'ORTHO'     );
-insert into ose_groupe_type_formation values ('Maïeutique'                          ,'Maïeutique'  ,72,0,'MAIEUTIQUE');
-insert into ose_groupe_type_formation values ('Autre formation'                     ,'Autre'       ,99,0,'AUTRE'     );
+--                                             A                                      B                   C  D  E
+insert into ose_groupe_type_formation values ('DiplÃ´me Universitaire de Technologie','DUT'               ,10,1,'DUT'        );
+insert into ose_groupe_type_formation values ('PACES'                               ,'PACES'             ,21,0,'PACES'      );
+insert into ose_groupe_type_formation values ('Etudes de SantÃ©'                     ,'SantÃ©'             ,22,1,'SANTE'      );
+insert into ose_groupe_type_formation values ('ThÃ¨se d''exercice'                   ,'ThÃ¨se d''exercice' ,24,0,'THESE_EXER' );
+insert into ose_groupe_type_formation values ('DES'                                 ,'DES'               ,25,0,'DES'        );
+insert into ose_groupe_type_formation values ('DESC'                                ,'DESC'              ,26,0,'DESC'       );
+insert into ose_groupe_type_formation values ('Licence'                             ,'L'                 ,30,1,'L'          );
+insert into ose_groupe_type_formation values ('Licence professionnelle'             ,'LPro'              ,35,0,'LP'         );
+insert into ose_groupe_type_formation values ('Master'                              ,'M'                 ,40,1,'M'          );
+insert into ose_groupe_type_formation values ('DiplÃ´me d''ingÃ©nieur'                ,'IngÃ©nieur'         ,45,1,'ING'        );
+insert into ose_groupe_type_formation values ('DiplÃ´me d''universitÃ©'               ,'DU'                ,60,0,'DU'         );
+insert into ose_groupe_type_formation values ('CapacitÃ©'                            ,'CapacitÃ©'          ,70,0,'CAPA'       );
+insert into ose_groupe_type_formation values ('Orthophonie'                         ,'Orthophonie'       ,71,0,'ORTHO'      );
+insert into ose_groupe_type_formation values ('MaÃ¯eutique'                          ,'MaÃ¯eutique'        ,72,0,'MAIEUTIQUE' );
+insert into ose_groupe_type_formation values ('Autre formation'                     ,'Autre'             ,99,0,'AUTRE'      );
 --
 -- Types de formations
 -- Table de correspondance entre les types de formations Apogee et les groupes de types de formations dans OSE
@@ -60,7 +61,8 @@ with tpd as (
       when 'M2' then 'SANTE'
       when '87' then 'SANTE'
       when '88' then 'SANTE'
-      when '43' then 'SANTE'
+      when '43' then 'THESE_EXER'
+      when '45' then 'THESE_EXER'
       when '57' then 'DES'
       when '55' then 'DES'
       when '65' then 'DESC'
@@ -84,8 +86,8 @@ with tpd as (
     cod_tpd_etb                                as source_code    -- Code type de diplome Apogee
   from typ_diplome
   where tem_en_sve_tpd = 'O'
-  and eta_ths_hdr_drt is null                  -- Exclusion des theses et HDR (formations sans enseignement)
-  and cod_tpd_etb not in ('03')                -- Exclusion des auditeurs libres
+  and ( eta_ths_hdr_drt is null or ( eta_ths_hdr_drt || tem_sante = 'TO' ) ) -- Exclusion des theses de recherche et HDR (formations sans enseignement)
+  and cod_tpd_etb not in ('03')                                              -- Exclusion des auditeurs libres
   )
 select tpd.*
 from tpd
@@ -106,7 +108,7 @@ with
       -- Determiner si la notion de niveau a du sens pour le type de formation
       min (
         case gtf.pertinence_niveau
-          when 0 then null
+          when 0 then null 
           else vde.cod_sis_daa_min
           end
                             ) keep ( dense_rank first order by anu.cod_anu, vde.cod_etp, vde.cod_vrs_vet ) as niveau,
@@ -167,7 +169,7 @@ select
   least ( tmp.specifique_echanges, 1 )                                 as specifique_echanges,
   min ( tmp.domaine_fonctionnel )                                      as domaine_fonctionnel,
   -- Determiner en fonction des regimes d inscription si la VET est ouverte en FI, en FC et/ou en apprentissage
-  max ( case when rve.cod_rgi in ( '1', '3' )      then 1 else 0 end ) as FI,
+  max ( case when rve.cod_rgi in ( '1', '3', '7' ) then 1 else 0 end ) as FI,
   max ( case when rve.cod_rgi in ( '4' )           then 1 else 0 end ) as FA,
   max ( case when rve.cod_rgi in ( '2', '5', '6' ) then 1 else 0 end ) as FC,
   tmp.cod_etp,
@@ -450,10 +452,12 @@ select
   odf.libelle,
 -- Si un element est commun a plusieurs etapes il sera ici associe a une etape de reference en fonction des criteres suivants
 --    critere 1 : prise en compte de la VET porteuse definie dans Apogee
+--                ( si la VET porteuse n est pas definie pour l annee consideree alors on prend en compte la VET porteuse definie pour ANN_CHARGES )
+--                sous reserve que cette VET porteuse soit ouverte pour l annee retenue
 --    critere 2 : les etapes dediees aux echanges sont non prioritaires
 --    critere 3 : ordre alphabetique du code etape
   min ( chp.z_etape_id ) keep ( dense_rank first order by
-    case when chp.z_etape_id = ece.cod_etp_porteuse || '_' || ece.cod_vrs_vet_porteuse then 0 else 1 end,
+    case when chp.z_etape_id = case when chp.annee_id >= vap.par_vap then prt.source_code else nvl ( prt.source_code, pr2.source_code ) end then 0 else 1 end,
     etp.specifique_echanges,
     chp.z_etape_id
     )                                          as z_etape_id,
@@ -469,7 +473,14 @@ select
 from ose_offre_de_formation    odf
 join ose_chemin_pedagogique    chp on chp.annee_id = odf.annee_id and chp.z_element_pedagogique_id = odf.noeud_inf_id
 join ose_etape                 etp on etp.annee_id = chp.annee_id and etp.source_code = chp.z_etape_id
-left outer join elp_charge_ens ece on ece.cod_anu = odf.annee_id  and ece.cod_elp = odf.noeud_inf_id
+-- Recherche de la VET porteuse pour l annee consideree
+left outer join elp_charge_ens ece on ece.cod_anu  = odf.annee_id and ece.cod_elp     = odf.noeud_inf_id
+left outer join ose_etape      prt on prt.annee_id = ece.cod_anu  and prt.source_code = ece.cod_etp_porteuse || '_' || ece.cod_vrs_vet_porteuse
+-- Recherche de la VET porteuse pour l annee de reference des charges = ANN_CHARGES
+cross join variable_appli      vap
+left outer join elp_charge_ens ec2 on ec2.cod_anu  = vap.par_vap  and ec2.cod_elp     = odf.noeud_inf_id
+left outer join ose_etape      pr2 on pr2.annee_id = ec2.cod_anu  and pr2.source_code = ec2.cod_etp_porteuse || '_' || ec2.cod_vrs_vet_porteuse
+where vap.cod_vap = 'ANN_CHARGES'
 group by
   odf.annee_id,
   odf.libelle,
@@ -487,7 +498,7 @@ with tmp_element_effectifs as (
   select
     elp.source_code,
     ice.cod_anu,
-    case when iae.cod_rge in ('1', '3')      then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end as effectif_FI,
     case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
     case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
   from ose_element_pedagogique elp
@@ -506,7 +517,7 @@ with tmp_element_effectifs as (
   select
     elp.source_code,
     ice.cod_anu,
-    case when iae.cod_rge in ('1', '3')      then 1 else 0 end as effectif_FI,
+    case when iae.cod_rge in ('1', '3', '7') then 1 else 0 end as effectif_FI,
     case when iae.cod_rge in ('4')           then 1 else 0 end as effectif_FA,
     case when iae.cod_rge in ('2', '5', '6') then 1 else 0 end as effectif_FC
   from ose_element_pedagogique elp
@@ -537,7 +548,7 @@ group by source_code,
 -- Volumes horaires et nombre de groupes ouverts pour chaque enseignement, par type de groupe
 -- Le rapprochement, entre les volumes horaires definis dans le module Charges et les groupes ouverts, se fait sur le code type d heures = le code type de groupe
 -- Si aucun groupe n est modelise pour un element pedagogique alors on considere qu il existe un groupe unique d etudiants pour cet element
--- Cas particulier des enseignements de type Mémoire, Projet, Stage : si aucun groupe n est modelise alors on considere qu il existe autant de groupes que d etudiants inscrits a l element
+-- Cas particulier des enseignements de type MÃ©moire, Projet, Stage : si aucun groupe n est modelise alors on considere qu il existe autant de groupes que d etudiants inscrits a l element
 --
 insert into ose_volume_horaire_ens
 with elp_groupes as (
@@ -548,6 +559,7 @@ with elp_groupes as (
     count ( distinct iag.cod_gpe ) as groupes
   from ose_element_pedagogique elp
   join gpe_obj                 gpo on gpo.typ_obj_gpo = 'ELP' and gpo.cod_elp = elp.source_code
+
   join groupe                  gpe on gpe.cod_gpe = gpo.cod_gpe
   join ind_affecte_gpe         iag on iag.cod_gpe = gpo.cod_gpe and iag.cod_anu = elp.annee_id
   where elp.annee_id between nvl ( gpe.daa_deb_val_gpe, '0000' ) and nvl ( gpe.daa_fin_val_gpe, '9999' )
@@ -556,6 +568,7 @@ with elp_groupes as (
     elp.source_code,
     gpe.cod_tgr
   )
+-- Recherche des charges pour les annees <= ANN_CHARGES
 select
   elp.annee_id,
   elp.source_code                              as z_element_pedagogique_id,
@@ -564,15 +577,41 @@ select
   elp.source_code || '_' || ect.cod_typ_heu    as source_code,
   elp.annee_id || '_' || elp.source_code || '_' || ect.cod_typ_heu as id,
   case when nvl ( eff.effectif_FI, 0 ) + nvl (eff.effectif_FA, 0 ) + nvl (eff.effectif_FC, 0 ) > 0
-    then case when ect.cod_typ_heu in ( 'MEMOIR', 'PROJET', 'STAGE' )
+    then case when ect.cod_typ_heu in ( 'MEMOIR', 'PROJET', 'STAGE', 'SORTIE' )
       then nvl ( elg.groupes, nvl ( eff.effectif_FI, 0 ) + nvl (eff.effectif_FA, 0 ) + nvl (eff.effectif_FC, 0 ) )
       else nvl ( elg.groupes, 1 )
       end
     else 0
     end                                        as groupes
 from            ose_element_pedagogique elp
-join            elp_chg_typ_heu         ect on ect.cod_anu = elp.annee_id and ect.cod_elp = elp.source_code
-left outer join ose_element_effectifs   eff on eff.annee_id = elp.annee_id and eff.z_element_pedagogique_id = elp.source_code
-left outer join elp_groupes             elg on elg.annee_id = ect.cod_anu and elg.source_code = ect.cod_elp and elg.cod_tgr = ect.cod_typ_heu
+left outer join ose_element_effectifs   eff on eff.annee_id  = elp.annee_id and eff.z_element_pedagogique_id = elp.source_code
+join            elp_chg_typ_heu         ect on ect.cod_anu   = elp.annee_id and ect.cod_elp = elp.source_code
+left outer join elp_groupes             elg on elg.annee_id  = ect.cod_anu  and elg.source_code = ect.cod_elp and elg.cod_tgr = ect.cod_typ_heu
 where nvl ( ect.nbr_heu_elp, 0 ) > 0
+union
+-- Recherche des charges pour les annees > ANN_CHARGES
+-- si pas de charges definies alors on prend en compte les charges definies pour l annee ANN_CHARGES
+select
+  elp.annee_id,
+  elp.source_code                              as z_element_pedagogique_id,
+  ann.cod_typ_heu                              as z_type_intervention_id,
+  ann.nbr_heu_elp                              as heures,
+  elp.source_code || '_' || ann.cod_typ_heu    as source_code,
+  elp.annee_id || '_' || elp.source_code || '_' || ann.cod_typ_heu as id,
+  case when nvl ( eff.effectif_FI, 0 ) + nvl (eff.effectif_FA, 0 ) + nvl (eff.effectif_FC, 0 ) > 0
+    then case when ann.cod_typ_heu in ( 'MEMOIR', 'PROJET', 'STAGE', 'SORTIE' )
+      then nvl ( elg.groupes, nvl ( eff.effectif_FI, 0 ) + nvl (eff.effectif_FA, 0 ) + nvl (eff.effectif_FC, 0 ) )
+      else nvl ( elg.groupes, 1 )
+      end
+    else 0
+    end                                        as groupes
+from            variable_appli          vap
+join            ose_element_pedagogique elp on elp.annee_id  > vap.par_vap
+left outer join ose_element_effectifs   eff on eff.annee_id  = elp.annee_id and eff.z_element_pedagogique_id = elp.source_code
+left outer join elp_chg_typ_heu         ect on ect.cod_anu   = elp.annee_id and ect.cod_elp = elp.source_code
+left outer join elp_chg_typ_heu         ann on ann.cod_anu   = vap.par_vap  and ann.cod_elp = elp.source_code
+left outer join elp_groupes             elg on elg.annee_id  = ann.cod_anu  and elg.source_code = ann.cod_elp and elg.cod_tgr = ann.cod_typ_heu
+where vap.cod_vap = 'ANN_CHARGES'
+  and ect.cod_elp is null
+  and nvl ( ann.nbr_heu_elp, 0 ) > 0
 ;

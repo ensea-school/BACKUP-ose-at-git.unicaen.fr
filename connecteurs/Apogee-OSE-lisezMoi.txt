@@ -59,4 +59,4 @@ La table ose_volume_horaire_ens permet :
 - d'associer à chaque enseignement ses volumes horaires par type d'intervention enregistrés dans le module Charges, la saisie de services dans OSE n'étant possible que si une charge existe pour l'enseignement
 - si l'année est en cours ou terminée, d'observer la charge réelle en dénombrant le nombre de groupes ouverts dans lesquels des étudiants sont inscrits, le type de groupe étant assimilé au type d'heure défini dans le module Charges ; en l'absence de groupes modélisés, un groupe unique sera pris en compte pour l'enseignement.
 Cf tableau Apogee-OSE-calculCharges.xls
-
+Modification du 22 mai 2019 : pour les années postérieures à l'année de référence des charges dans Apogée (VARIABLE_APPLI.ANN_CHARGES), si aucune charge n'est enregistrée alors ce sont les charges enregistrées pour l'année ANN_CHARGES qui sont prises en compte.

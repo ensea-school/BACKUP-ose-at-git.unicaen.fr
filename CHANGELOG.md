@@ -11,6 +11,10 @@ author: Laurent Lécluse - DSI - Unicaen
 * Dans l'onglet Suppression de la fiche intervenant, l'arborescence s'affiche correctement. La suppression partielle ou complète d'un intervenant fonctionne donc de nouveau.
 * Un bug se produisait dans l'arborescence de suppression de fiche intervenant : s'il n'y avait qu'un seul service ou qu'un seul référentiel alors rien n'était affiché. C'est corrigé. 
 
+## Nouveautés
+
+* Possibilité de récupérer des attributs multivalués pour faire la correspondance d'identifiant entre le LDAP et le code utilisateur indiqué dans la fiche Intervenant
+
 ## Notes de mise à jour
 
 * Attention : Le répertoire public/modeles de OSE était propre à l'Université de Caen et il a été supprimé.

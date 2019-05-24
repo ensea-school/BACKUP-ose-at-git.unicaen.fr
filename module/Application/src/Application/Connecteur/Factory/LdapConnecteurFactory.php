@@ -54,6 +54,10 @@ class LdapConnecteurFactory
             $service->setUtilisateurCode( $configLdapUtilisateur['CODE'] );
         }
 
+        if (isset($configLdapUtilisateur['CODEFILTER'])){
+            $service->setUtilisateurCodeFiltre( $configLdapUtilisateur['CODEFILTER'] );
+        }
+
         $service->setUtilisateurExtraMasque(\AppConfig::get('ldap', 'utilisateurExtraMasque', ''));
         $service->setUtilisateurExtraAttributes(\AppConfig::get('ldap', 'utilisateurExtraAttributes', []));
 

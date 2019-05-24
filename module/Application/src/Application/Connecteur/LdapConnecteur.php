@@ -61,6 +61,11 @@ class LdapConnecteur extends AbstractService
     /**
      * @var string
      */
+    private $utilisateurCodeFiltre = '';
+
+    /**
+     * @var string
+     */
     private $utilisateurExtraMasque;
 
     /**
@@ -207,7 +212,24 @@ class LdapConnecteur extends AbstractService
         $ldapUser = $this->serviceUserContext->getLdapUser();
 
         if ($ldapUser){
-            return $this->getPeopleAttribute($ldapUser,$this->getUtilisateurCode());
+            // si utilisateur_code_filtre présent : regexp pour recupérer une valeur précise d'un attribut multivalué,
+            // par exemple l'attribut étiqueté supannRefId
+            $utilisateur_code_filtre = $this->getUtilisateurCodeFiltre();
+
+            if ($utilisateur_code_filtre != '') {
+                $utilisateur_courant_code = $this->getPeopleAttribute($ldapUser,$this->getUtilisateurCode());
+
+                // si attribut multivalué, valeurs séparées par de virgules -> transformation en array
+                $utilisateur_courant_code_arr = explode(',', $utilisateur_courant_code);
+
+                foreach ($utilisateur_courant_code_arr as $utilisateur_courant_code_elem) {
+                    if (preg_match($utilisateur_code_filtre, $utilisateur_courant_code_elem, $matches)) {
+                        return $matches[1];
+                    }
+                }
+            } else {
+                return $this->getPeopleAttribute($ldapUser,$this->getUtilisateurCode());
+            }
         }
 
         return null;
@@ -282,6 +304,30 @@ class LdapConnecteur extends AbstractService
     {
         $this->utilisateurCode = $utilisateurCode;
 
+        return $this;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getUtilisateurCodeFiltre(): string
+    {
+        return $this->utilisateurCodeFiltre;
+    }
+ 
+ 
+ 
+    /**
+     * @param string $utilisateurCodeFiltre
+     *
+     * @return LdapConnecteur
+     */
+    public function setUtilisateurCodeFiltre(string $utilisateurCodeFiltre): LdapConnecteur
+    {
+        $this->utilisateurCodeFiltre = $utilisateurCodeFiltre;
+ 
         return $this;
     }
 

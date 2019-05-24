@@ -2,6 +2,7 @@
 
 namespace Application\Assertion;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\VolumeHoraireEns;
 use Application\Provider\Privilege\Privileges;
@@ -9,6 +10,7 @@ use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\ElementModulateur;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
+use Application\Service\Traits\ContextServiceAwareTrait;
 use UnicaenImport\Entity\Db\Source;
 use Application\Entity\Db\Structure;
 use UnicaenAuth\Assertion\AbstractAssertion;
@@ -23,6 +25,8 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class OffreDeFormationAssertion extends AbstractAssertion
 {
+    use ContextServiceAwareTrait;
+
     protected function assertEntity(ResourceInterface $entity = null, $privilege = null)
     {
         $role = $this->getRole();
@@ -108,7 +112,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
-            $this->assertSourceSaisie($elementPedagogique->getSource()),
+            $this->assertSourceSaisie($elementPedagogique->getSource(), $elementPedagogique->getAnnee()),
         ]);
     }
 
@@ -117,7 +121,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertEtapeSaisie(Role $role, Etape $etape)
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
-            && $this->assertSourceSaisie($etape->getSource());
+            && $this->assertSourceSaisie($etape->getSource(), $etape->getAnnee());
     }
 
 
@@ -182,7 +186,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     {
         return $this->asserts([
             $this->assertStructureSaisie($role, $elementPedagogique->getStructure()),
-            $this->assertSourceSaisie($elementPedagogique->getSource()),
+            $this->assertSourceSaisie($elementPedagogique->getSource(), $elementPedagogique->getAnnee()),
         ]);
     }
 
@@ -198,7 +202,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertVolumeHoraireEnsSaisieVH(Role $role, VolumeHoraireEns $volumeHoraireEns)
     {
         return $this->asserts([
-            $volumeHoraireEns->getSource() ? $this->assertSourceSaisie($volumeHoraireEns->getSource()) : true,
+            $volumeHoraireEns->getSource() ? $this->assertSourceSaisie($volumeHoraireEns->getSource(), $volumeHoraireEns->getElementPedagogique()->getAnnee()) : true,
             $volumeHoraireEns->getElementPedagogique() ? $this->assertElementPedagogiqueSaisieVH($role, $volumeHoraireEns->getElementPedagogique()) : true,
             $volumeHoraireEns->getTypeIntervention() ? $this->assertTypeInterventionSaisieVH($role, $volumeHoraireEns->getTypeIntervention()) : true,
         ]);
@@ -241,8 +245,12 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
-    protected function assertSourceSaisie(Source $source)
+    protected function assertSourceSaisie(Source $source, Annee $annee)
     {
+        if ($annee->getId() < $this->getServiceContext()->getAnneeImport()->getId()){
+            return true;
+        };
+
         return !$source->getImportable();
     }
 }

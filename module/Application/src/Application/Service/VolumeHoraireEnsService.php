@@ -96,6 +96,7 @@ class VolumeHoraireEnsService extends AbstractEntityService
             if ($toDelete) {
                 $this->delete($volumeHoraireEns);
             } else {
+                $volumeHoraireEns->setSource($this->getServiceSource()->getOse());
                 $this->save($volumeHoraireEns);
             }
         }

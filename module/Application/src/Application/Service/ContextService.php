@@ -49,6 +49,11 @@ class ContextService extends AbstractService
     protected $annee;
 
     /**
+     * @var Annee
+     */
+    protected $anneeImport;
+
+    /**
      * @var \Application\Entity\Db\Intervenant
      */
     protected $intervenant = false;
@@ -264,6 +269,30 @@ class ContextService extends AbstractService
         }
 
         return $this->annee;
+    }
+
+
+
+    /**
+     * Retourne l'année courante d'import.
+     * C'est à dire :
+     * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ;
+     * - ou sinon celle spécifiée dans les paramètres de l'appli.
+     *
+     * @return Annee
+     */
+    public function getAnneeImport()
+    {
+        if (!$this->anneeImport) {
+            $sc = $this->getSessionContainer();
+            if (!$sc->offsetExists('anneeImport')) {
+                $sc->anneeImport = (int)$this->getServiceParametres()->get('annee_import');
+            }
+
+            $this->anneeImport = $this->getServiceAnnee()->get($sc->anneeImport);
+        }
+
+        return $this->anneeImport;
     }
 
 

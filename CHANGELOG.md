@@ -3,7 +3,7 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
-# OSE 8.1.1 (à venir)
+# OSE 8.1.1
 
 ## Corrections de bugs
 
@@ -14,6 +14,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Nouveautés
 
 * Possibilité de récupérer des attributs multivalués pour faire la correspondance d'identifiant entre le LDAP et le code utilisateur indiqué dans la fiche Intervenant
+* Possibilité de modifier les données liées aux charges d'enseignement sur des éléments pédagogiques qui ne sont plus synchronisés avec Apogée.
 
 ## Notes de mise à jour
 

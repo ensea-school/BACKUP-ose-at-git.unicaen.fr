@@ -151,7 +151,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
     public function __toString()
     {
-        return $this->getSourceCode() . ' - ' . $this->getLibelle();
+        return $this->getCode() . ' - ' . $this->getLibelle();
     }
 
 
@@ -739,7 +739,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         }
 
         $f     = function (CentreCoutEp $ccEp) use ($th) {
-            return $ccEp->getTypeHeures() === $th;
+            return ($ccEp->getTypeHeures() === $th) && empty($ccEp->getHistoDestruction());
         };
         $slice = $this->centreCoutEp->filter($f);
 

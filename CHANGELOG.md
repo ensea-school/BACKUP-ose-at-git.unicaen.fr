@@ -3,6 +3,12 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 8.1.2 (à venir)
+
+## Corrections de bugs
+
+* Depuis l'offre de formation, lorsqu'un élément a plusieurs centres de coûts associés, les historiques ne sont plus pris en compte
+
 # OSE 8.1.1
 
 ## Corrections de bugs

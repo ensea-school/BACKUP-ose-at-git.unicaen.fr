@@ -7,38 +7,28 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-$data = "2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	-2						-2	0	0		0	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						2	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						0	0	0		2	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						0	0	0		4	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	40						0	0	0		40	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	20						0	0	0		20	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	-40						-40	0	0		0	0	0	0
-2018	Derivery	Francois	Université Le Havre Normandie	Vacataire	0	0	0	0	Réalisé	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	-20						-20	0	0		0	0	0	0
+$data = "2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	20						22,88	0	0		7,12	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	0,9	0	0,1	1	1	10						10,3	0	0		3,2	0	1,5	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	0,9	0	0,1	1	1	9						9,27	0	0		2,88	0	1,35	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	35						40,05	0	0		12,45	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	4						3,05	0	0		0,95	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	12						13,73	0	0		4,27	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	6						6,87	0	0		2,13	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	36						41,19	0	0		12,81	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	1,5						1,14	0	0		0,36	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	1,5						1,14	0	0		0,36	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	1,5						1,14	0	0		0,36	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	7						5,34	0	0		1,66	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	9						6,87	0	0		2,13	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	2						1,53	0	0		0,47	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	16						18,31	0	0		5,69	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	1,25						0,95	0	0		0,3	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	0,9	0	0,1	1	1	2						1,37	0	0		0,43	0	0,2	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	TD	1	1	1	0	0	1	1	9						6,87	0	0		2,13	0	0	0	
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	1	REFERENTIEL	1	1	0	0	0	1	1	20									0					20
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	1	REFERENTIEL	1	1	0	0	0	1	1	20									0					20
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	1	REFERENTIEL	1	1	0	0	0	1	1	10									0					10
+2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	1	REFERENTIEL	1	1	0	0	0	1	1	12									0					12
 ";
 
 $debug = false;

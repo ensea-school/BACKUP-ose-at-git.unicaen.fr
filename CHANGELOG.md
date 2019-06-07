@@ -3,6 +3,13 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 8.2 (à venir)
+
+## Corrections de bugs
+* L'email professionnelle, qui ne pouvait pas être saisie, n'empêchera plus la validation des données personnelles si elle est vide.
+
+## Améliorations
+
 # OSE 8.1.2 (à venir)
 
 ## Corrections de bugs

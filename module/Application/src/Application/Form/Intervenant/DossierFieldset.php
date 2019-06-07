@@ -389,7 +389,7 @@ class DossierFieldset extends AbstractFieldset
                 'required' => true,
             ],
             'email'                => [
-                'required'   => true,
+                'required'   => false,
                 'filters'    => [
                     ['name' => 'StringTrim'],
                 ],

@@ -5,7 +5,7 @@ namespace Application\Service\Traits;
 use Application\Service\CiviliteService;
 
 /**
- * Description of CiviliteAwareTrait
+ * Description of CiviliteServiceAwareTrait
  *
  * @author UnicaenCode
  */

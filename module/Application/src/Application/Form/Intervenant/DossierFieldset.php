@@ -345,7 +345,7 @@ class DossierFieldset extends AbstractFieldset
                 'required' => true,
             ],
             'nomPatronymique'      => [
-                'required' => true,
+                'required' => false,
             ],
             'prenom'               => [
                 'required' => true,

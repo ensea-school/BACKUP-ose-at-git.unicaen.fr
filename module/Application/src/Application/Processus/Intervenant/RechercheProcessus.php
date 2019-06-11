@@ -44,8 +44,8 @@ class RechercheProcessus
           i.annee_id
         FROM
           intervenant i
-          JOIN structure s ON s.id = i.structure_id
-          JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
         WHERE
           i.histo_destruction IS NULL
           
@@ -64,8 +64,8 @@ class RechercheProcessus
           i.annee_id
         FROM
           src_intervenant i
-          JOIN structure s ON s.id = i.structure_id
-          JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
         )
         SELECT * FROM vrec WHERE 
           rownum <= ' . (int)$limit . ' AND annee_id = ' . $anneeId;
@@ -144,8 +144,8 @@ class RechercheProcessus
           i.annee_id
         FROM
           intervenant i
-          JOIN structure s ON s.id = i.structure_id
-          JOIN civilite c ON c.id = i.civilite_id
+          LEFT JOIN structure s ON s.id = i.structure_id
+          LEFT JOIN civilite c ON c.id = i.civilite_id
         WHERE
           i.histo_destruction IS NULL
         )

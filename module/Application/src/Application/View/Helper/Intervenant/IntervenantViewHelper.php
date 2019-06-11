@@ -55,16 +55,14 @@ class IntervenantViewHelper extends AbstractHtmlElement
             return '';
         }
 
-        $adresse = $entity->getAdressePrincipale();
-
         $vars = [
             'identite'    => [
                 "NOM prénom"         => $entity,
-                "Civilité"           => $entity->getCiviliteToString(),
-                "Date de naissance"  => $entity->getDateNaissanceToString(),
-                "Ville de naissance" => $entity->getVilleNaissanceLibelle() ?: '<span class="inconnu">(Inconnue)</span>',
-                "Pays de naissance"  => $entity->getPaysNaissance(),
-                "N° INSEE"           => $entity->getNumeroInsee(),
+                "Civilité"           => (string)$entity->getCivilite(),
+                "Date de naissance"  => (string)$entity->getDateNaissanceToString(),
+                "Ville de naissance" => (string)$entity->getVilleNaissanceLibelle() ?: '<span class="inconnu">(Inconnue)</span>',
+                "Pays de naissance"  => (string)$entity->getPaysNaissance(),
+                "N° INSEE"           => (string)$entity->getNumeroInsee(),
             ],
             'coordonnees' => [
                 "Email"            => $entity->getEmail() ?: '<span class="inconnu">(Inconnu)</span>',

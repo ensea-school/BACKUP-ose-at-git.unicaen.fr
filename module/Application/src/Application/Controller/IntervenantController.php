@@ -420,11 +420,11 @@ class IntervenantController extends AbstractController
         }
 
         $container->recents[$intervenant->getSourceCode()] = [
-            'civilite'         => $intervenant->getCivilite()->getLibelleLong(),
+            'civilite'         => $intervenant->getCivilite() ? $intervenant->getCivilite()->getLibelleLong() : null,
             'nom'              => $intervenant->getNomUsuel(),
             'prenom'           => $intervenant->getPrenom(),
             'date-naissance'   => $intervenant->getDateNaissance(),
-            'structure'        => $intervenant->getStructure()->getLibelleCourt(),
+            'structure'        => (string)$intervenant->getStructure(),
             'numero-personnel' => $intervenant->getSourceCode(),
             '__horo_ajout__'   => (int)date('U'),
         ];

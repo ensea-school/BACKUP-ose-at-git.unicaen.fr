@@ -3,7 +3,6 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\StatutIntervenant;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\DossierServiceAwareTrait;

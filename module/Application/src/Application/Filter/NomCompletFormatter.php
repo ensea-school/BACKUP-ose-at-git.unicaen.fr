@@ -50,7 +50,7 @@ class NomCompletFormatter extends AbstractFilter
             $nomUsuel = $value->getNomUsuel();
             $nomPatro = $value->getNomPatronymique();
             $prenom   = $value->getPrenom();
-            $civilite = $value->getCiviliteToString();
+            $civilite = (string)$value->getCivilite();
         }
         else if ($value instanceof People) {
             /* @var $value People */
@@ -62,16 +62,9 @@ class NomCompletFormatter extends AbstractFilter
         else if ($value instanceof Utilisateur) {
             /* @var $value Utilisateur */
             $nomUsuel = $value->getDisplayName();
-            $nomPatro = $value->getDisplayName();
+            $nomPatro = null;
             $prenom   = '';
             $civilite = '';
-        }
-        else if ($value instanceof Personnel) {
-            /* @var $value Personnel */
-            $nomUsuel = $value->getNomUsuel();
-            $nomPatro = $value->getNomPatronymique();
-            $prenom   = $value->getPrenom();
-            $civilite = $value->getCiviliteToString();
         }
         else if ($value instanceof \stdClass) {
             foreach (['nomUsuel', 'nomPatronymique', 'prenom', 'civilite'] as $prop) {
@@ -107,7 +100,7 @@ class NomCompletFormatter extends AbstractFilter
         $parts = [
             $this->prenomDabord ? "$prenom $nomUsuel" : "$nomUsuel $prenom",
             $civilite,
-            $this->avecNomPatro && $nomPatro != $nomUsuel ? "née $nomPatro" : null,
+            $this->avecNomPatro && $nomPatro && $nomPatro != $nomUsuel ? "née $nomPatro" : null,
         ];
 
         $result = implode(', ', array_filter($parts));

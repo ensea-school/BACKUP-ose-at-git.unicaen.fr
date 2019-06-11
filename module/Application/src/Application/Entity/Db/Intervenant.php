@@ -1360,18 +1360,6 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
 
 
     /**
-     * Get civilite
-     *
-     * @return string
-     */
-    public function getCiviliteToString()
-    {
-        return $this->getCivilite()->getLibelleCourt();
-    }
-
-
-
-    /**
      * Get affectations
      *
      * @return string

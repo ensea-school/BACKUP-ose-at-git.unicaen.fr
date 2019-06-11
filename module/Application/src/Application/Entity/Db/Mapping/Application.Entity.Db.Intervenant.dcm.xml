@@ -27,7 +27,7 @@
         <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
         <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-        <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="60" nullable="false"/>
+        <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="60" nullable="true"/>
         <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
         <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
         <field name="numeroInseeCle" type="string" column="NUMERO_INSEE_CLE" length="2" nullable="true"/>

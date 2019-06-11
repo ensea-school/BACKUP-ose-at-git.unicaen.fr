@@ -156,7 +156,7 @@ class Dossier implements HistoriqueAwareInterface
      *
      * @return Dossier
      */
-    public function setCivilite(Civilite $civilite)
+    public function setCivilite($civilite)
     {
         $this->civilite = $civilite;
 

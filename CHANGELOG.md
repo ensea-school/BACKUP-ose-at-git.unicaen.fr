@@ -10,6 +10,13 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Améliorations
 
+* Pour une fiche intervenant, les champs suivants n'ont plus besoin d'être systématiquement fournis :
+  * Civilité
+  * Composante d'affectation
+  * Pays de naissance
+  * Nom patronymique
+  
+
 # OSE 8.1.2 (à venir)
 
 ## Corrections de bugs

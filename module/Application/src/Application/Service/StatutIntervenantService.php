@@ -15,6 +15,7 @@ class StatutIntervenantService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
 
+    const CODE_AUTRES = 'AUTRES';
 
 
     /**
@@ -38,6 +39,30 @@ class StatutIntervenantService extends AbstractEntityService
     public function getAlias()
     {
         return 'si';
+    }
+
+
+
+    /**
+     * @param string $code
+     *
+     * @return StatutIntervenant|null
+     */
+    public function getByCode(string $code=null)
+    {
+        if (!$code) $code = self::CODE_AUTRES;
+
+        return $this->getRepo()->findOneBy(['sourceCode' => $code]);
+    }
+
+
+
+    /**
+     * @return StatutIntervenant|null
+     */
+    public function getAutres()
+    {
+        return $this->getByCode();
     }
 
 

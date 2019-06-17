@@ -51,7 +51,7 @@ $config = [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
             'filesystem' => [
-                'directory' => getcwd().'/cache/Doctrine',
+                'directory' => getcwd() . '/cache/Doctrine',
             ],
         ],
     ],
@@ -145,7 +145,6 @@ $config = [
             Service\AnneeService::class            => Service\AnneeService::class,
             Service\LocalContextService::class     => Service\LocalContextService::class,
             Service\ParametresService::class       => Service\ParametresService::class,
-            Service\UtilisateurService::class      => Service\UtilisateurService::class,
             Service\TypeInterventionService::class => Service\TypeInterventionService::class,
             Service\SourceService::class           => Service\SourceService::class,
             Service\AffectationService::class      => Service\AffectationService::class,
@@ -165,6 +164,7 @@ $config = [
             'UnicaenAuth\Service\Privilege'           => Service\Factory\PrivilegeServiceFactory::class,
             Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                 => Cache\Factory\CacheServiceFactory::class,
+            Service\UtilisateurService::class         => Service\Factory\UtilisateurServiceFactory::class,
         ],
     ],
     'view_helpers'       => [

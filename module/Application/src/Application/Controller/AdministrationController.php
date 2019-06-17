@@ -32,14 +32,11 @@ class AdministrationController extends AbstractController
         $motDePasse  = $this->getRequest()->getParam('mot-de-passe');
 
         $userObject = $this->getServiceUtilisateur()->getByUsername($utilisateur);
+
         if (!$userObject) {
             throw new \Exception("Utilisateur $utilisateur non trouvé");
         }
 
-        if (strlen($motDePasse) < 6){
-            throw new \Exception("Mot de passe trop court : il doit faire au moint 6 caractères");
-        }
-
-        $this->userService->updateUserPassword( $userObject, $motDePasse);
+        $this->getServiceUtilisateur()->changerMotDePasse($userObject, $motDePasse);
     }
 }

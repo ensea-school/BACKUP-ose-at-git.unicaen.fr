@@ -4,7 +4,9 @@ namespace Application\Service;
 
 use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Utilisateur;
+use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
 use UnicaenApp\Util;
 
 /**
@@ -16,6 +18,8 @@ class UtilisateurService extends AbstractEntityService
 {
     use ParametresServiceAwareTrait;
     use LdapConnecteurAwareTrait;
+    use UserServiceAwareTrait;
+    use IntervenantServiceAwareTrait;
 
 
 
@@ -109,6 +113,41 @@ class UtilisateurService extends AbstractEntityService
         }
 
         return $ul;
+    }
+
+
+
+    public function creerUtilisateur( string $nom, string $prenom, \DateTime $dateNaissance, string $login, string $motDePasse, bool $creerFicheIntervenant = true): Utilisateur
+    {
+        if ($creerFicheIntervenant){
+            $intervenant = $this->getServiceIntervenant()->creerIntervenant($nom, $prenom, $dateNaissance);
+        }
+
+        $utilisateur = new Utilisateur();
+        $utilisateur->setUsername($login);
+        $utilisateur->setDisplayName($prenom.' '.$nom);
+        $utilisateur->setState(1);
+        if ($creerFicheIntervenant){
+            $utilisateur->setCode($intervenant->getCode());
+            $intervenant->setUtilisateurCode($intervenant->getCode());
+            $this->getServiceIntervenant()->save($intervenant);
+        }
+        $utilisateur->setPassword($motDePasse);
+        $this->save($utilisateur);
+        $this->changerMotDePasse($utilisateur, $motDePasse);
+
+        return $utilisateur;
+    }
+
+
+
+    public function changerMotDePasse( Utilisateur $utilisateur, string $motDePasse)
+    {
+        if (strlen($motDePasse) < 6){
+            throw new \Exception("Mot de passe trop court : il doit faire au moint 6 caractères");
+        }
+
+        $this->userService->updateUserPassword( $utilisateur, $motDePasse);
     }
 
 }

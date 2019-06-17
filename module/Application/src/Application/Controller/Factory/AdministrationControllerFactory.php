@@ -17,7 +17,6 @@ class AdministrationControllerFactory
     public function __invoke(ControllerManager $controllerManager)
     {
         $controller = new AdministrationController();
-        $controller->setUserService( $controllerManager->getServiceLocator()->get('UnicaenAuth\Service\User') );
 
         return $controller;
     }

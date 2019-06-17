@@ -7,14 +7,10 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-use Application\Entity\Db\ModeleContrat;
-use Application\Service\ModeleContratService;
+/** @var \Application\Service\UtilisateurService $us */
+$us = $sl->get(\Application\Service\UtilisateurService::class);
 
-/** @var ModeleContrat[] $mcs */
-$mcs = $sl->get(ModeleContratService::class)->getList();
 
-foreach( $mcs as $mc){
-    var_dump($mc);
+//$u = $us->creerUtilisateur('Farguet', 'Georges', New DateTime(), 'farguet', 'sifar14', true);
 
-    var_dump($mc->hasFichier());
-}
+var_dump($u);

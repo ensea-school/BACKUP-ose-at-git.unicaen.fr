@@ -159,6 +159,7 @@ class OseAdmin
         if (file_exists($this->getOseDir() . 'admin/actions/' . $action . '.php')) {
             require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
         } else {
+            $c->println('Action "'.$action.'" inconnue.', $c::COLOR_RED);
             require_once $this->getOseDir() . 'admin/actions/help.php';
         }
     }

@@ -48,6 +48,14 @@ class OseAdmin
 
 
 
+    public function init()
+    {
+        $this->version = $this->currentVersion();
+        $this->oldVersion = $this->version;
+    }
+
+
+
     public function majUnicaenSymLinks(): bool
     {
         $oseDir = $this->getOseDir();

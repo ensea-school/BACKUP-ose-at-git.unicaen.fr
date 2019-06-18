@@ -176,7 +176,7 @@ class OseAdmin
      * @throws \BddAdmin\Exception\BddException
      * @throws \BddAdmin\Exception\BddIndexExistsException
      */
-    public function migration(string $prePost = 'pre'): boolean
+    public function migration(string $prePost = 'pre'): bool
     {
         $tags = $this->getTags(1);
         foreach ($tags as $i => $tag) {

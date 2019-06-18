@@ -10,7 +10,7 @@ spl_autoload_register(function ($class) {
 
 $c  = new Console();
 $oa = new OseAdmin($c);
-$oa->oldVersion = $oa->version = $oa->currentVersion($osedir);
+$oa->oldVersion = $oa->version = $oa->currentVersion();
 
 $c->printMainTitle("OSE", 15);
 

@@ -13641,7 +13641,7 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
-          'nullable' => false,
+          'nullable' => true,
           'default' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
@@ -19686,6 +19686,14 @@ END FORMULE_MONTPELLIER;',
           val := cellRes;
         END IF;
       END LOOP;
+--UM
+    WHEN fncName = \'last\' THEN
+      val := NULL;
+      FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
+        cellRes := cell(c,l);
+        val := cellRes;
+      END LOOP;
+
 
     -- fin de la liste des fonctions supportées
     ELSE
@@ -19739,6 +19747,8 @@ END FORMULE_MONTPELLIER;',
 
 
     -- l = SI(OU(L20+K21>service_du;L20=service_du);service_du;L20+K21)
+	-- UM l =SI(K21 < 0;L20+K21;SI(OU(L20+K21>service_du;L20=service_du);service_du;L20+K21))
+/*
     WHEN c = \'l\' AND v >= 1 THEN
       IF l < 1 THEN
         RETURN 0;
@@ -19748,12 +19758,27 @@ END FORMULE_MONTPELLIER;',
       ELSE
         RETURN cell(\'l\', l-1) + cell(\'k\',l);
       END IF;
+*/
 
+-- UM
 
+    WHEN c = \'l\' AND v >= 1 THEN
+      IF l < 1 THEN
+        RETURN 0;
+      END IF;
+	  IF cell(\'k\',l) < 0 THEN
+		RETURN cell(\'l\', l-1) + cell(\'k\',l);
+	  ELSE
+		IF (cell(\'l\', l-1) + cell(\'k\',l) > i.service_du) OR (cell(\'l\', l-1) = i.service_du) THEN
+			RETURN ose_formule.intervenant.service_du;
+		ELSE
+			RETURN cell(\'l\', l-1) + cell(\'k\',l);
+		END IF;
+	  END IF;
 
     -- m = SI(OU(ESTVIDE(composante_affectation);L20=service_du);SI(H21<>"Oui";0;I21);SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0))
     -- composante_affectation vide si vacataire
-    WHEN c = \'m\' AND v >= 1 THEN
+/*    WHEN c = \'m\' AND v >= 1 THEN
       -- OU(ESTVIDE(composante_affectation);L20=service_du)
       IF i.type_intervenant_code = \'E\' OR cell(\'l\',l-1) = i.service_du THEN
         -- SI(H21<>"Oui";0;I21);
@@ -19774,9 +19799,30 @@ END FORMULE_MONTPELLIER;',
           RETURN 0;
         END IF;
       END IF;
-
-
-
+*/
+-- UM
+-- m  =SI(OU(ESTVIDE(composante_affectation);OU(L20=service_du;I21<0));SI(OU(H21<>"Oui";L21<service_du);0;I21);SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0))
+    WHEN c = \'m\' AND v >= 1 THEN
+      --SI(OU(ESTVIDE(composante_affectation);OU(L20=service_du;I21<0))
+      IF i.type_intervenant_code = \'E\' OR cell(\'l\',l-1) = i.service_du OR ( cell(\'l\',l-1) = i.service_du and cell(\'k\',l)<0) THEN
+        -- SI(OU(H21<>"Oui";L21<service_du);0;I21);
+        IF NOT vh.service_statutaire OR (cell(\'l\',l) < i.service_du and cell(\'k\',l)<0) THEN
+          RETURN 0;
+        ELSE
+          RETURN vh.heures;
+        END IF;
+      ELSE
+        -- SI(J21>0;SI(L20+K21<service_du;0;((L20+K21)-service_du)/J21);0)
+        IF cell(\'j\',l) > 0 THEN
+          IF cell(\'l\',l-1) + cell(\'k\',l) < ose_formule.intervenant.service_du THEN
+            RETURN 0;
+          ELSE
+            RETURN (cell(\'l\',l-1) + cell(\'k\',l) - ose_formule.intervenant.service_du) / cell(\'j\',l);
+          END IF;
+        ELSE
+          RETURN 0;
+        END IF;
+      END IF;
 
 
 
@@ -19790,7 +19836,7 @@ END FORMULE_MONTPELLIER;',
     -- service_realise = MAX($L$21:$L$50)
     -- service_du = ose_formule.intervenant.service_du
     -- HC_autorisees = ose_formule.intervenant.depassement_service_du_sans_hc = false
-    WHEN c = \'o\' AND v >= 1 THEN
+/*    WHEN c = \'o\' AND v >= 1 THEN
       IF (calcFnc(\'max\',\'l\') < ose_formule.intervenant.service_du) OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
         RETURN 0;
       ELSE
@@ -19800,7 +19846,18 @@ END FORMULE_MONTPELLIER;',
           RETURN (cell(\'m\',l) + vh.heures) * cell(\'n\',l);
         END IF;
       END IF;
-
+*/
+-- UM
+    WHEN c = \'o\' AND v >= 1 THEN
+      IF (calcFnc(\'last\',\'l\') < ose_formule.intervenant.service_du) OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
+        RETURN 0;
+      ELSE
+        IF vh.service_statutaire THEN
+          RETURN cell(\'m\',l) * cell(\'n\',l);
+        ELSE
+          RETURN (cell(\'m\',l) + vh.heures) * cell(\'n\',l);
+        END IF;
+      END IF;
 
 
     -- q =SI(ESTVIDE(C21);0;SI(H21="Non";0;SI(C21="TP";1;RECHERCHEH(C21;types_intervention;2;0))))
@@ -19965,6 +20022,7 @@ END FORMULE_MONTPELLIER;',
 
 
     -- v =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21))))
+	    --UM  v =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$E21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$E21;$K21*$E21))))
     -- HC = calcFnc(\'total\',\'o\')
     -- H21="Non" = NOT vh.service_statutaire
     -- P21 = O21!!
@@ -19982,8 +20040,8 @@ END FORMULE_MONTPELLIER;',
           ELSE
             -- SI($M21>0;(($M21*$N21)+($I21-$M21)*K21)*$E21;$K21*$E21)
             IF cell(\'m\',l) > 0 THEN
-              -- (($M21*$N21)+($I21-$M21)*K21)*$E21
-              RETURN ((cell(\'m\',l)*cell(\'n\',l))+(vh.heures-cell(\'m\',l))*cell(\'k\',l))*vh.taux_fa;
+              -- (($M21*$N21)+($I21-$M21)*J21)*$E21
+              RETURN ((cell(\'m\',l)*cell(\'n\',l))+(vh.heures-cell(\'m\',l))*cell(\'j\',l))*vh.taux_fa;
             ELSE
               -- $K21*$E21
               RETURN cell(\'k\',l) * vh.taux_fa;
@@ -19995,6 +20053,7 @@ END FORMULE_MONTPELLIER;',
 
 
     -- w =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21))))
+	--UM  w =SI(ESTVIDE(composante_affectation);0;SI(OU(ESTVIDE($C21);$C21="Référentiel";ET(HC=0;H21="Non"));0;SI(H21="Non";O21*$F21;SI($M21>0;(($M21*$N21)+($I21-$M21)*J21)*$F21;$K21*$F21))))
     WHEN c = \'w\' AND v >= 1 THEN
       IF i.type_intervenant_code = \'E\' THEN
         RETURN 0;
@@ -20009,7 +20068,7 @@ END FORMULE_MONTPELLIER;',
           ELSE
             -- SI($M21>0;(($M21*$N21)+($I21-$M21)*L21)*$F21;$K21*$F21)
             IF cell(\'m\',l) > 0 THEN
-              RETURN ((cell(\'m\',l)*cell(\'n\',l))+(vh.heures-cell(\'m\',l))*cell(\'l\',l))*vh.taux_fc;
+              RETURN ((cell(\'m\',l)*cell(\'n\',l))+(vh.heures-cell(\'m\',l))*cell(\'j\',l))*vh.taux_fc;
             ELSE
               -- $K21*$F21
               RETURN cell(\'k\',l) * vh.taux_fc;
@@ -24685,7 +24744,7 @@ END OSE_FORMULE;',
         fvh.*, flvh.param_1, flvh.param_2, flvh.param_3, flvh.param_4, flvh.param_5
       FROM
         v_formule_volume_horaire fvh
-        LEFT JOIN v_formule_local_vh_params flvh ON COALESCE(flvh.volume_horaire_id,0) = COALESCE(fvh.volume_horaire_id,0) AND COALESCE(flvh.volume_horaire_ref_id,0) = COALESCE(fvh.volume_horaire_ref_id,0)
+        LEFT JOIN v_formule_local_vh_params flvh ON COALESCE(to_number(flvh.volume_horaire_id),0) = COALESCE(fvh.volume_horaire_id,0) AND COALESCE(to_number(flvh.volume_horaire_ref_id),0) = COALESCE(fvh.volume_horaire_ref_id,0)
       ORDER BY
         ordre
     ) LOOP
@@ -30517,65 +30576,6 @@ WHERE
   AND i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
 GROUP BY
   i.id, i.annee_id, i.structure_id, ti.code, si.service_statutaire, si.depassement_service_du_sans_hc',
-    ),
-    'V_FORMULE_LOCAL_I_PARAMS' => 
-    array (
-      'name' => 'V_FORMULE_LOCAL_I_PARAMS',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_LOCAL_I_PARAMS AS
-SELECT
-  null intervenant_id,
-  null param_1,
-  null param_2,
-  null param_3,
-  null param_4,
-  null param_5
-FROM
-  dual',
-    ),
-    'V_FORMULE_LOCAL_VH_PARAMS' => 
-    array (
-      'name' => 'V_FORMULE_LOCAL_VH_PARAMS',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_LOCAL_VH_PARAMS AS
-SELECT
-  vh.id     volume_horaire_id,
-  null      volume_horaire_ref_id,
-  str.code  param_1,
-  null      param_2,
-  null      param_3,
-  null      param_4,
-  null      param_5
-FROM
-            volume_horaire            vh
-       JOIN service                    s ON s.id = vh.service_id
-       JOIN intervenant                i ON i.id = s.intervenant_id
-  LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
-       JOIN structure                str ON str.id = COALESCE(ep.structure_id,i.structure_id)
-WHERE
-  vh.histo_destruction IS NULL
-  AND s.histo_destruction IS NULL
-  AND vh.heures <> 0
-  AND vh.motif_non_paiement_id IS NULL
-  AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
-
-UNION ALL
-
-SELECT
-  null      volume_horaire_id,
-  vhr.id    volume_horaire_ref_id,
-  str.code  param_1,
-  null      param_2,
-  null      param_3,
-  null      param_4,
-  null      param_5
-FROM
-  volume_horaire_ref               vhr
-  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-  JOIN structure                   str ON str.id = sr.structure_id
-WHERE
-  vhr.histo_destruction IS NULL
-  AND sr.histo_destruction IS NULL
-  AND vhr.heures <> 0
-  AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )',
     ),
     'V_FORMULE_VOLUME_HORAIRE' => 
     array (

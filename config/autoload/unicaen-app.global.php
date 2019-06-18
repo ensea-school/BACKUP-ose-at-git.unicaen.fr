@@ -36,7 +36,7 @@ return [
                         'password'            => AppConfig::get('ldap', 'password'),
                         'baseDn'              => AppConfig::get('ldap', 'baseDn'),
                         'bindRequiresDn'      => AppConfig::get('ldap', 'bindRequiresDn'),
-                        'accountFilterFormat' => "(&(objectClass=posixAccount)(" . AppConfig::get('ldap', 'loginAttribute') . "=%s))",
+                        'accountFilterFormat' => "(&(objectClass=" . AppConfig::get('ldap', 'loginObjectClass', 'posixAccount') . ")(" . AppConfig::get('ldap', 'loginAttribute') . "=%s))",
                         'port'                => AppConfig::get('ldap', 'port'),
                     ],
                 ],

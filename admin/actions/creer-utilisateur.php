@@ -1,6 +1,7 @@
 <?php
 
 $c->println("\nCréation d'un nouveau compte utilisateur", $c::COLOR_LIGHT_CYAN);
+$c->println('Fonctionnalité en cours de développement : non exploitable pour le moment', $c::BG_RED);
 
 $params = $c->getInputs([
     'nom'               => 'Nom de l\'utilisateur',

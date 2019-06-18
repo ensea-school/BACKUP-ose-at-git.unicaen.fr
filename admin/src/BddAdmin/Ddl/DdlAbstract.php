@@ -156,6 +156,9 @@ abstract class DdlAbstract
                 $this->bdd->exec($sql);
             } catch (Exception $e) {
                 if (!$e instanceof BddCompileException) {
+                    if ($logger){
+                        $logger->log($e->getMessage());
+                    }
                     $errors[] = $e;
                 }
             }

@@ -238,7 +238,9 @@ class DdlTable extends DdlAbstract
     public function create(array $data)
     {
         $this->addQuery($this->makeCreate($data), 'Ajout de la table '.$data['name']);
-        $this->addQuery($this->makeCreateComm($data), 'Ajout de commentaire sur la table '.$data['name']);
+        if ($comm = $this->makeCreateComm($data)) {
+            $this->addQuery($comm, 'Ajout de commentaire sur la table ' . $data['name']);
+        }
     }
 
 

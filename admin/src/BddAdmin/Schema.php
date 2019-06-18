@@ -358,7 +358,7 @@ class Schema
     {
         if ($ddl instanceof self) {
             $ddl = $ddl->getDdl($ddlConfig);
-        } else {
+        } elseif($mode != 'create') {
             $ddl = $this->ddlFilter($ddl, $ddlConfig);
         }
 
@@ -537,7 +537,7 @@ class Schema
                     $sql .= '--------------------------------------------------' . "\n";
                     $sql .= '-- ' . $label . "\n";
                     $sql .= '--------------------------------------------------' . "\n\n";
-                    foreach ($qs as $name => $qr) {
+                    foreach ($qs as $qr => $description) {
                         if ($onlyFirstLine && false !== strpos($qr,"\n")){
                             $qr = substr($qr,0,strpos($qr,"\n"));
                         }

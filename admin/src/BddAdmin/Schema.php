@@ -543,7 +543,7 @@ class Schema
                         if (substr(trim($qr), -1) != ';') {
                             $qr .= ';';
                         }
-                        $sql .= "$qr\n/\n\n";
+                        $sql .= "$qr\n/--\n\n";
                     }
                     $sql .= "\n\n\n";
                 }

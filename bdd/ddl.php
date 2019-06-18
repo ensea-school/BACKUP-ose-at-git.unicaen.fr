@@ -31616,7 +31616,7 @@ SELECT rownum id, t."ANNEE_ID",t."INTERVENANT_ID",t."STRUCTURE_ID" FROM (
     'V_INDICATEUR_510' => 
     array (
       'name' => 'V_INDICATEUR_510',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_510 ASE
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_INDICATEUR_510 AS
 WITH t AS (
 SELECT
   s.intervenant_id,

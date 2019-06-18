@@ -444,7 +444,9 @@ class Schema
             if ($this->logger){
                 $this->logger->logTitle('Compilation de tous les objets de la BDD');
             }
-            $this->compilerTout();
+            if (empty($this->compilerTout()) && $this->logger){
+                $this->logger->log('Compilation effectuée avec succès.');
+            }
         }
 
         return $res;

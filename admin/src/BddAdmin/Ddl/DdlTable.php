@@ -237,15 +237,15 @@ class DdlTable extends DdlAbstract
 
     public function create(array $data)
     {
-        $this->addQuery($this->makeCreate($data));
-        $this->addQuery($this->makeCreateComm($data));
+        $this->addQuery($this->makeCreate($data), 'Ajout de la table '.$data['name']);
+        $this->addQuery($this->makeCreateComm($data), 'Ajout de commentaire sur la table '.$data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP TABLE $name");
+        $this->addQuery("DROP TABLE $name", 'Suppression de la table '.$name);
     }
 
 
@@ -258,7 +258,7 @@ BEGIN
   EXECUTE IMMEDIATE \'DROP SEQUENCE ' . $data['sequence'] . '\';
   EXECUTE IMMEDIATE \'CREATE SEQUENCE ' . $data['sequence'] . ' INCREMENT BY 1 MINVALUE \' || seqId || \' NOCACHE\';
 END';
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Mise à jour de la séquence '.$data['sequence']);
     }
 
 
@@ -328,7 +328,7 @@ END';
 
             if ($old['logging'] !== $new['logging']) {
                 $log = $new['logging'] ? 'LOGGING' : 'NOLOGGING';
-                $this->addQuery("ALTER TABLE \"$name\" $log");
+                $this->addQuery("ALTER TABLE \"$name\" $log", 'Modification du logging de la table '.$new['name']);
             }
 
             $newCols = array_diff(array_keys($new['columns']), array_keys($old['columns']));
@@ -354,7 +354,7 @@ END';
             }
 
             if ($old['commentaire'] !== $new['commentaire']) {
-                $this->addQuery($this->makeCreateComm($new));
+                $this->addQuery($this->makeCreateComm($new), 'Modification du commentaire de la table '.$new['name']);
             }
         }
     }
@@ -373,7 +373,7 @@ END';
         }
 
         $sql = "ALTER TABLE \"$table\" ADD (" . implode(" ", $cp) . ")";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Ajout de la colonne '.$column['name'].' sur la table '.$table);
     }
 
 
@@ -381,7 +381,10 @@ END';
     private function dropColumn(string $table, array $column)
     {
         $column = $column['name'];
-        $this->addQuery("ALTER TABLE \"$table\" DROP COLUMN \"$column\"");
+        $this->addQuery(
+            "ALTER TABLE \"$table\" DROP COLUMN \"$column\"",
+            'Suppression de la colonne '.$column.' sur la table '.$table
+        );
     }
 
 
@@ -391,7 +394,7 @@ END';
         $column = $new['name'];
         if ($this->isColDiffType($old, $new)) {
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" " . $this->makeColumnType($new) . ")";
-            $this->addQuery($sql);
+            $this->addQuery($sql,'Changement du type de la colonne '.$column.' de la table '.$table);
         }
     }
 
@@ -402,7 +405,7 @@ END';
         $column = $new['name'];
         if ($this->isColDiffNullable($old, $new)) {
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" " . ($new['nullable'] ? '' : 'NOT ') . "NULL)";
-            $this->addQuery($sql);
+            $this->addQuery($sql,'Changement d\'état de la colonne '.$column.' de la table '.$table);
         }
     }
 
@@ -415,7 +418,7 @@ END';
             $default = $new['default'];
             if (null === $default) $default = 'NULL';
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" DEFAULT $default )";
-            $this->addQuery($sql);
+            $this->addQuery($sql,'Changement de valeur par défaut de la colonne '.$column.' de la table '.$table);
         }
     }
 
@@ -426,6 +429,6 @@ END';
         $newName = $new['name'];
 
         $sql = "ALTER TABLE \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Renommage de la table '.$oldName.' en '.$newName);
     }
 }

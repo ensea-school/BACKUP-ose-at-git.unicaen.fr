@@ -5,6 +5,7 @@ namespace BddAdmin;
 use BddAdmin\Exception\BddCompileException;
 use BddAdmin\Exception\BddException;
 use BddAdmin\Exception\BddIndexExistsException;
+use mysql_xdevapi\Exception;
 
 class Bdd
 {
@@ -210,6 +211,40 @@ class Bdd
         oci_free_statement($statement);
 
         return true;
+    }
+
+
+
+    /**
+     * @param string $filename
+     *
+     * @return \Exception[]
+     * @throws BddCompileException
+     * @throws BddException
+     * @throws BddIndexExistsException
+     */
+    public function execFile(string $filename): array
+    {
+        if (!file_exists($filename)) {
+            throw new Exception('Le fichier ' . $filename . ' n \'existe pas.');
+        }
+
+        $file    = file_get_contents($filename);
+        $queries = explode("/--", $file);
+        $errors  = [];
+        foreach ($queries as $q) {
+            $q = trim($q);
+            if (substr($q, -1) == ';') {
+                $q = substr($q, 0, -1);
+            }
+            try {
+                $this->exec($q);
+            } catch (\Exception $e) {
+                $errors[] = $e;
+            }
+        }
+
+        return $errors;
     }
 
 

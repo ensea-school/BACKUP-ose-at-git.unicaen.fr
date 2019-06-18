@@ -10,13 +10,10 @@ spl_autoload_register(function ($class) {
 
 $c  = new Console();
 $oa = new OseAdmin($c);
+$oa->oldVersion = $oa->version = $oa->currentVersion($osedir);
 
 $c->printMainTitle("OSE", 15);
 
-if (file_exists($oa->getOseDir().'admin/actions/'.$c->getArg(1).'.php')){
-    require_once $oa->getOseDir().'admin/actions/'.$c->getArg(1).'.php';
-}else{
-    require_once $oa->getOseDir().'admin/actions/help.php';
-}
+$oa->run($c->getArg(1));
 
 $c->println('Traitement terminé.', $c::BG_YELLOW);

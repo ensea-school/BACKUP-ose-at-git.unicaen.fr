@@ -1,21 +1,19 @@
 <?php
 
-$osedir = $oa->getOseDir();
-
 // Choix de la version
 $c->println("Mise à jour de OSE");
 $c->println("Assurez-vous bien d'avoir mis OSE en mode maintenance avant de démarrer\n(pressez Entrée pour continuer)...");
 $c->getInput();
+
+$osedir = $oa->getOseDir();
 
 $c->exec([
     "cd $osedir",
     "git fetch --all --tags --prune",
 ], false);
 
-$oldVersion = $oa->currentVersion($osedir);
-
 $c->println("Sélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-$c->println("La version actuellement installée est la " . $oldVersion);
+$c->println("La version actuellement installée est la " . $oa->oldVersion);
 $c->println("Voici la liste des versions de OSE disponibles:");
 $tags = $oa->getTags();
 foreach ($tags as $tag) {
@@ -49,11 +47,7 @@ $c->passthru([
 ]);
 
 // Néttoyage des caches et mise à jour des proxies, lancement du script de migration éventuel
-clearCache($c, $oa);
-$c->exec([
-    "cd $osedir",
-    "php bin/ose migration $oldVersion $version",
-]);
+$oa->run('clear-cache');
 
 // Mise à jour des liens vers les répertoires publics des dépendances
 $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
@@ -62,6 +56,11 @@ $c->println($res ? 'Liens mis à jour' : 'Liens déjà à jour', $c::COLOR_LIGHT
 
 // Conclusion
 $c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
-$c->println("Il reste encore votre base de données à mettre à jour.");
+
+$c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
+$oa->migration('pre');
+$oa->run('update-bdd');
+$oa->migration('post');
+
 $c->println("N'oubliez pas de sortir du mode maintenance!");
 $c->println('');

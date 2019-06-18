@@ -2,17 +2,29 @@
 
 namespace BddAdmin;
 
-class SchemaConsoleLogger implements SchemaLoggerInterface {
+class SchemaConsoleLogger implements SchemaLoggerInterface
+{
 
     /**
      * @var \Console
      */
     public $console;
 
-    function log(Ddl\DdlAbstract $object, string $action, string $name)
+
+
+    public function log(string $message)
     {
-        if ($this->console){
-            $this->console->println($action.' '.$object::ALIAS.' '.$name);
+        if ($this->console) {
+            $this->console->println($message);
+        }
+    }
+
+
+
+    public function logTitle(string $title)
+    {
+        if ($this->console) {
+            $this->console->println($title, $this->console::COLOR_LIGHT_PURPLE);
         }
     }
 

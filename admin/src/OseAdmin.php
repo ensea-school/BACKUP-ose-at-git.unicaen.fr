@@ -1,8 +1,13 @@
 <?php
 
+
+
+
+
 class OseAdmin
 {
     const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE';
+    const MIN_VERSION = 8; // version minimum installable
 
     /**
      * @var Console
@@ -18,6 +23,16 @@ class OseAdmin
      * @var array
      */
     private $tags = false;
+
+    /**
+     * @var string
+     */
+    public $oldVersion;
+
+    /**
+     * @var string
+     */
+    public $version;
 
 
 
@@ -80,7 +95,7 @@ class OseAdmin
 
 
 
-    public function getTags(): array
+    public function getTags($minVersion = self::MIN_VERSION): array
     {
         if (false === $this->tags) {
             $this->tags = [];
@@ -91,9 +106,8 @@ class OseAdmin
             }
         }
 
-        $minVersion = 8;
-        foreach( $this->tags as $i => $tag ){
-            $version = (int)substr($tag,0,strpos($tag,'.'));
+        foreach ($this->tags as $i => $tag) {
+            $version = (int)substr($tag, 0, strpos($tag, '.'));
             if ($version < $minVersion) unset($this->tags[$i]);
         }
 
@@ -129,6 +143,7 @@ class OseAdmin
     public function writeVersion(string $version)
     {
         $vf = $this->getVersionFile();
+        $this->version = $version;
         file_put_contents($vf, $version);
     }
 
@@ -137,6 +152,96 @@ class OseAdmin
     private function getVersionFile(): string
     {
         return $this->getOseDir() . 'VERSION';
+    }
+
+
+
+    /**
+     * @param string $action
+     */
+    public function run(string $action)
+    {
+        $oa = $this;
+        $c  = $this->console;
+
+        if (file_exists($this->getOseDir() . 'admin/actions/' . $action . '.php')) {
+            require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
+        } else {
+            require_once $this->getOseDir() . 'admin/actions/help.php';
+        }
+    }
+
+
+
+    /**
+     * Lancement des scripts éventuels liés à des migrations pour des versions spécifiques
+     *
+     * @param string $prePost
+     *
+     * @return bool
+     * @throws \BddAdmin\Exception\BddCompileException
+     * @throws \BddAdmin\Exception\BddException
+     * @throws \BddAdmin\Exception\BddIndexExistsException
+     */
+    public function migration(string $prePost = 'pre'): boolean
+    {
+        $tags = $this->getTags(1);
+        foreach ($tags as $i => $tag) {
+            $tag = strtolower($tag);
+            if (false !== ($p = strpos($tag, 'alpha'))) {
+                $tags[$i] = trim(substr($tag, 0, $p));
+            }
+            if (false !== ($p = strpos($tag, 'beta'))) {
+                $tags[$i] = trim(substr($tag, 0, $p));
+            }
+        }
+        $tags = array_unique($tags);
+
+        $oldIndex = array_search($this->oldVersion, $tags);
+        $newIndex = array_search($this->version, $tags);
+
+        if ($oldIndex !== false && $newIndex !== false && $oldIndex < $newIndex) {
+            for ($i = $oldIndex + 1; $i <= $newIndex; $i++) {
+                $phpMigr = $this->getOseDir() . 'admin/migration/' . $tags[$i] . '-' . $prePost . '.php';
+                $sqlMigr = $this->getOseDir() . 'admin/migration/' . $tags[$i] . '-' . $prePost . '.sql';
+
+                if (file_exists($sqlMigr)) {
+                    $this->console->println('Exécution du script de ' . $prePost . '-migration SQL de la version ' . $tags[$i], $this->console::COLOR_LIGHT_BLUE);
+                    $errors = $this->getBdd()->execFile($sqlMigr);
+                    if (!empty($errors)) {
+                        $this->console->println('Des erreurs ont été rencontrées durant l\'exécution du script de migration :', $this->console::BG_RED);
+                        foreach ($errors as $e) {
+                            $this->console->println($e->getMessage(), $this->console::COLOR_RED);
+                        }
+                    }
+                }
+
+                if (file_exists($phpMigr)) {
+                    $this->console->println('Exécution du script de ' . $prePost . '-migration PHP de la version ' . $tags[$i], $this->console::COLOR_LIGHT_BLUE);
+                    require_once $phpMigr;
+                }
+            }
+            return true;
+        } else {
+            $this->console->println('Attention : les scripts de migration automatiques n\'ont pas pu être déclenchés :', $this->console::BG_RED);
+            if ($oldIndex === false) {
+                $this->console->println('La version précédente de OSE n\'a pas pu être clairement identifiée.', $this->console::BG_RED);
+            }
+            if ($newIndex === false) {
+                $this->console->println('La version cible de OSE n\'a pas pu être clairement identifiée.', $this->console::BG_RED);
+            }
+            if ($oldIndex == $newIndex) {
+                $this->console->println('La version cible est identique à celle déjà installée.', $this->console::BG_RED);
+            }
+            if ($oldIndex > $newIndex) {
+                $this->console->println('L\'installation d\'une version plus ancienne n\'est pas supportée par le système de mises à jours automatiques', $this->console::BG_RED);
+            }
+            $this->console->println("Afin d'effectuer vous-mêmes les opérations de migration, merci d'aller dans le répertoire /actions/migration de OSE et exéminer puis exécuter les scripts nécessaires manuellement."
+                . " Ces scripts sont nommés selon la version à laquelle ils correspondent, suivis de -pre s'ils sont à exécuter AVANT la mise ) jour de la DDL de la base de données, et -post s'il sont à exécuter après."
+                . " Enfin, leur extension renseigne s'il s'agit de code PHP à exécuter ou bien de code SQL (à exécuter dans SQLDeveloper par exemple)."
+            );
+            return false;
+        }
     }
 
 
@@ -150,7 +255,7 @@ class OseAdmin
 
     public function getOseDir(): string
     {
-        return dirname(dirname(__DIR__)).'/';
+        return dirname(dirname(__DIR__)) . '/';
     }
 
 

@@ -4,6 +4,8 @@ namespace BddAdmin\Ddl;
 
 use BddAdmin\Bdd;
 use BddAdmin\Exception\BddCompileException;
+use BddAdmin\SchemaConsoleLogger;
+use BddAdmin\SchemaLoggerInterface;
 use Exception;
 
 
@@ -104,20 +106,28 @@ abstract class DdlAbstract
 
 
 
-    protected function addQuery($sql) // (?string $sql)
+    protected function addQuery(string $sql, string $description = null) // (?string $sql)
     {
         if ($sql) {
-            $this->queries[] = $sql;
+            $this->queries[$sql] = $description;
         }
     }
 
 
 
     /**
+     * @param SchemaLoggerInterface|null $logger
+     *
      * @return string[]
      */
-    public function getQueries(): array
+    public function getQueries($logger = null): array
     {
+        if ($logger) {
+            foreach ($this->queries as $sql => $description) {
+                $logger->log($description);
+            }
+        }
+
         return $this->queries;
     }
 
@@ -131,13 +141,18 @@ abstract class DdlAbstract
 
 
     /**
-     * @return Exception[]
+     * @param SchemaLoggerInterface|null $logger
+     *
+     * @return array
      */
-    public function execQueries(): array
+    public function execQueries($logger = null): array
     {
         $errors = [];
-        foreach ($this->queries as $sql) {
+        foreach ($this->queries as $sql => $description) {
             try {
+                if ($logger) {
+                    $logger->log($description);
+                }
                 $this->bdd->exec($sql);
             } catch (Exception $e) {
                 if (!$e instanceof BddCompileException) {
@@ -205,9 +220,9 @@ abstract class DdlAbstract
      *
      * @return self
      */
-    public function addOptions( array $options ): self
+    public function addOptions(array $options): self
     {
-        foreach( $options as $option => $params ){
+        foreach ($options as $option => $params) {
             $this->addOption($option, $params);
         }
 
@@ -290,7 +305,7 @@ abstract class DdlAbstract
 
     /**
      * @param string $oldName
-     * @param array $new
+     * @param array  $new
      *
      * @return mixed
      */
@@ -303,7 +318,7 @@ abstract class DdlAbstract
      *
      * @return array
      */
-    public function prepareRenameCompare( array $data ): array
+    public function prepareRenameCompare(array $data): array
     {
         unset($data['name']);
 

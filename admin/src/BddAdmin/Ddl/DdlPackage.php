@@ -65,12 +65,12 @@ class DdlPackage extends DdlAbstract
     public function create(array $data)
     {
         if ($this->hasOption('definition')) {
-            $this->addQuery($data['definition']);
+            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package '.$data['name']);
         } elseif ($this->hasOption('body')) {
-            $this->addQuery($data['body']);
+            $this->addQuery($data['body'], 'Ajout/modification du corps du package '.$data['name']);
         } else {
-            $this->addQuery($data['definition']);
-            $this->addQuery($data['body']);
+            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package '.$data['name']);
+            $this->addQuery($data['body'], 'Ajout/modification du corps du package '.$data['name']);
         }
     }
 
@@ -78,7 +78,7 @@ class DdlPackage extends DdlAbstract
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP PACKAGE $name");
+        $this->addQuery("DROP PACKAGE $name", 'Suppression du package '.$name);
     }
 
 

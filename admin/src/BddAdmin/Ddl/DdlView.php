@@ -40,14 +40,14 @@ class DdlView extends DdlAbstract
 
     public function create(array $data)
     {
-        $this->addQuery($data['definition']);
+        $this->addQuery($data['definition'], 'Ajout/modification de la vue '.$data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP VIEW " . $name);
+        $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue '.$name);
     }
 
 

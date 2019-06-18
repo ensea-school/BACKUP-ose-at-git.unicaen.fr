@@ -40,14 +40,14 @@ class DdlMaterializedView extends DdlAbstract
     {
         $sql = 'CREATE MATERIALIZED VIEW '.$data['name']." AS\n";
         $sql .= $data['definition'];
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Ajout de la vue matérialisée '.$data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP MATERIALIZED VIEW " . $name);
+        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée '.$name);
     }
 
 

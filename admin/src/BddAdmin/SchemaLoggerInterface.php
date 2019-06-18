@@ -4,6 +4,8 @@ namespace BddAdmin;
 
 interface SchemaLoggerInterface {
 
-    function log( Ddl\DdlAbstract $object, string $action, string $name );
+    function log(string $message );
+
+    function logTitle(string $title);
 
 }

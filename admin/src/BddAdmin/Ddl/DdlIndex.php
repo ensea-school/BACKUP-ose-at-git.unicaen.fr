@@ -66,14 +66,14 @@ class DdlIndex extends DdlAbstract
     public function create(array $data)
     {
         $sql = $this->makeCreate($data);
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Ajout de l\'index '.$data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP INDEX $name");
+        $this->addQuery("DROP INDEX $name", 'Suppression de l\'index '.$name);
     }
 
 
@@ -93,7 +93,7 @@ class DdlIndex extends DdlAbstract
         $newName = $new['name'];
 
         $sql = "ALTER INDEX \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Renommage de l\'index '.$oldName.' en '.$new);
     }
 
 }

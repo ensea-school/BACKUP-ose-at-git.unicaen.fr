@@ -80,7 +80,7 @@ class DdlPrimaryConstraint extends DdlAbstract
     public function create(array $data)
     {
         $sql = $this->makeCreate($data);
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Création de la clé primaine '.$data['name']);
     }
 
 
@@ -91,7 +91,7 @@ class DdlPrimaryConstraint extends DdlAbstract
         $d         = $this->bdd->select($sql, compact('name'));
         $tableName = $d[0]['TABLE_NAME'];
 
-        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name");
+        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la clé primaire '.$name);
     }
 
 
@@ -122,7 +122,7 @@ class DdlPrimaryConstraint extends DdlAbstract
         $newName = $new['name'];
 
         $sql = "ALTER TABLE \"$tableName\" RENAME CONSTRAINT \"$oldName\" TO \"$newName\"";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Renommage de la clé primaire '.$oldName.' en '.$newName);
     }
 
 }

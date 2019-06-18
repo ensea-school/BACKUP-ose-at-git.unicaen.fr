@@ -13,6 +13,7 @@ use BddAdmin\Ddl\DdlTable;
 use BddAdmin\Ddl\DdlTrigger;
 use BddAdmin\Ddl\DdlUniqueConstraint;
 use BddAdmin\Ddl\DdlView;
+use BddAdmin\Exception\BddCompileException;
 
 
 class Schema
@@ -223,7 +224,7 @@ class Schema
                 unset($ddl[$ddlClass]);
             }else {
                 foreach ($ddlConf as $name => $config) {
-                    if (!$this->ddlFilterObject($name, $this->ddlConfigGet($ddlConfig, $ddlClass, $name))) {
+                    if (!$this->ddlFilterObject($name, $this->ddlConfigGet($ddlConfig, $ddlClass))) {
                         unset($ddl[$ddlClass][$name]);
                     }
                 }
@@ -237,15 +238,6 @@ class Schema
 
     private function ddlFilterObject(string $name, array $filter): bool
     {
-        if (isset($filter['includes'])) {
-            $includes = (array)$filter['includes'];
-            foreach ($includes as $include) {
-                if (!preg_match('/^' . str_replace('%', '.*', $include) . '$/', $name, $out)) {
-                    return false;
-                }
-            }
-        }
-
         if (isset($filter['excludes'])) {
             $excludes = (array)$filter['excludes'];
             foreach ($excludes as $exclude) {
@@ -253,6 +245,16 @@ class Schema
                     return false;
                 }
             }
+        }
+
+        if (isset($filter['includes'])) {
+            $includes = (array)$filter['includes'];
+            foreach ($includes as $include) {
+                if (preg_match('/^' . str_replace('%', '.*', $include) . '$/', $name, $out)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         return true;
@@ -413,44 +415,35 @@ class Schema
                 foreach ($names as $oldName => $name) {
                     switch ($action) {
                         case 'rename':
-                            if ($this->logger) {
-                                $this->logger->log($ddlObject, 'rename', $oldName);
-                            }
                             $ddlObject->rename($oldName, $name);
                         break;
                         case 'drop':
                             if (!(isset($options['noDrop']) && $options['noDrop'])) {
-                                if ($this->logger) {
-                                    $this->logger->log($ddlObject, 'drop', $name);
-                                }
                                 $ddlObject->drop($name);
                             }
                         break;
                         case 'alter':
-                            if ($this->logger) {
-                                $this->logger->log($ddlObject, 'alter', $name);
-                            }
                             $ddlObject->alter($kold[$name], $knew[$name]);
                         break;
                         case 'create':
-                            if ($this->logger) {
-                                $this->logger->log($ddlObject, 'create', $name);
-                            }
                             $ddlObject->create($knew[$name]);
                         break;
                     }
                 }
                 if ($ddlObject->getQueries()) {
                     if ($autoExecute) {
-                        $res[$changement] = $ddlObject->execQueries();
+                        $res[$changement] = $ddlObject->execQueries($this->logger);
                     } else {
-                        $res[$changement] = $ddlObject->getQueries();
+                        $res[$changement] = $ddlObject->getQueries($this->logger);
                     }
                 }
             }
         }
 
         if ($mode != 'drop' && $autoExecute) { // create ou alter
+            if ($this->logger){
+                $this->logger->logTitle('Compilation de tous les objets de la BDD');
+            }
             $this->compilerTout();
         }
 
@@ -511,7 +504,14 @@ class Schema
 
 
 
-    public function queriesToSql(array $queries, $title = null) // (array $queries, ?string $title = null)
+    /**
+     * @param array $queries
+     * @param null  $title
+     * @param bool  $reduce
+     *
+     * @return string
+     */
+    public function queriesToSql(array $queries, $title = null, $onlyFirstLine = false) // (array $queries, ?string $title = null)
     {
         $sql = '';
         if ($title) {
@@ -536,6 +536,10 @@ class Schema
                     $sql .= '-- ' . $label . "\n";
                     $sql .= '--------------------------------------------------' . "\n\n";
                     foreach ($qs as $name => $qr) {
+                        if ($onlyFirstLine && false !== strpos($qr,"\n")){
+                            $qr = substr($qr,0,strpos($qr,"\n"));
+                        }
+                        
                         if (substr(trim($qr), -1) != ';') {
                             $qr .= ';';
                         }
@@ -606,6 +610,9 @@ class Schema
                 }
             } catch (BddCompileException $e) {
                 $errors[$type][$name] = $e->getMessage();
+                if($this->logger){
+                    $this->logger->log($type.' '.$name.' : Erreur de compilation');
+                }
             }
         }
 

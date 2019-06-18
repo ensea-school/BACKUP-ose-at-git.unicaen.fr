@@ -26,7 +26,7 @@ class DdlSequence extends DdlAbstract
     public function create(array $data)
     {
         $sql = "CREATE SEQUENCE " . $data['name'] . " INCREMENT BY 1 MINVALUE 1 NOCACHE";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Ajout de la séquence '.$data['name']);
     }
 
 
@@ -34,7 +34,7 @@ class DdlSequence extends DdlAbstract
     public function drop(string $name)
     {
         $sql = "DROP SEQUENCE $name";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Suppression de la séquence '.$name);
     }
 
 

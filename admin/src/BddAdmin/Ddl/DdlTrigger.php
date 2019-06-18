@@ -44,14 +44,14 @@ class DdlTrigger extends DdlAbstract
 
     public function create(array $data)
     {
-        $this->addQuery($data['definition']);
+        $this->addQuery($data['definition'], 'Ajout/modification du trigger '.$data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP TRIGGER $name");
+        $this->addQuery("DROP TRIGGER $name", 'Suppression du trigger '.$name);
     }
 
 
@@ -61,7 +61,7 @@ class DdlTrigger extends DdlAbstract
      */
     public function enable(string $name)
     {
-        $this->addQuery("alter trigger $name enable");
+        $this->addQuery("alter trigger $name enable", 'Activation du trigger '.$name);
     }
 
 
@@ -71,7 +71,7 @@ class DdlTrigger extends DdlAbstract
      */
     public function disable(string $name)
     {
-        $this->addQuery("alter trigger $name disable");
+        $this->addQuery("alter trigger $name disable", 'Désactivation du trigger '.$name);
     }
 
 
@@ -91,7 +91,7 @@ class DdlTrigger extends DdlAbstract
         $newName = $new['name'];
 
         $sql = "ALTER TRIGGER \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql);
+        $this->addQuery($sql, 'Renommage du trigger '.$oldName.' en '.$newName);
     }
 
 }

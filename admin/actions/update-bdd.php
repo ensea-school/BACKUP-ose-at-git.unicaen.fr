@@ -33,3 +33,4 @@ $schema->setLogger($scl);
 
 /* Mise à jour de la BDD */
 $r = $schema->alter($ref, $ddlConfig, true);
+var_dump($r);

@@ -174,6 +174,21 @@ class OseAdmin
 
 
 
+    private function purgerVersion(string $version): string
+    {
+        $version = strtolower($version);
+        if (false !== ($p = strpos($version, 'alpha'))) {
+            $version = trim(substr($version, 0, $p));
+        }
+        if (false !== ($p = strpos($version, 'beta'))) {
+            $version = trim(substr($version, 0, $p));
+        }
+
+        return $version;
+    }
+
+
+
     /**
      * Lancement des scripts éventuels liés à des migrations pour des versions spécifiques
      *
@@ -189,18 +204,12 @@ class OseAdmin
         $this->console->println('Exécution des scripts de '.$prePost.'-migration', $this->console::COLOR_LIGHT_CYAN);
         $tags = $this->getTags(1);
         foreach ($tags as $i => $tag) {
-            $tag = strtolower($tag);
-            if (false !== ($p = strpos($tag, 'alpha'))) {
-                $tags[$i] = trim(substr($tag, 0, $p));
-            }
-            if (false !== ($p = strpos($tag, 'beta'))) {
-                $tags[$i] = trim(substr($tag, 0, $p));
-            }
+            $tags[$i] = $this->purgerVersion($tag);
         }
         $tags = array_unique($tags);
 
-        $oldIndex = array_search($this->oldVersion, $tags);
-        $newIndex = array_search($this->version, $tags);
+        $oldIndex = array_search($this->purgerVersion($this->oldVersion), $tags);
+        $newIndex = array_search($this->purgerVersion($this->version), $tags);
 
         if ($oldIndex !== false && $newIndex !== false && $oldIndex < $newIndex) {
             for ($i = $oldIndex + 1; $i <= $newIndex; $i++) {
@@ -225,23 +234,25 @@ class OseAdmin
             }
             return true;
         } else {
-            $this->console->println('Attention : les scripts de migration automatiques n\'ont pas pu être déclenchés :', $this->console::BG_RED);
-            if ($oldIndex === false) {
-                $this->console->println('La version précédente de OSE n\'a pas pu être clairement identifiée.', $this->console::BG_RED);
+            if ($prePost == 'pre') { // on n'avertit qu'une seule fois!
+                $this->console->println('Attention : les scripts de migration automatiques n\'ont pas pu être déclenchés :', $this->console::BG_RED);
+                if ($oldIndex === false) {
+                    $this->console->println('La version précédente de OSE n\'a pas pu être clairement identifiée.', $this->console::BG_RED);
+                }
+                if ($newIndex === false) {
+                    $this->console->println('La version cible de OSE n\'a pas pu être clairement identifiée.', $this->console::BG_RED);
+                }
+                if ($oldIndex == $newIndex) {
+                    $this->console->println('La version cible est identique à celle déjà installée.', $this->console::BG_RED);
+                }
+                if ($oldIndex > $newIndex) {
+                    $this->console->println('L\'installation d\'une version plus ancienne n\'est pas supportée par le système de mises à jours automatiques', $this->console::BG_RED);
+                }
+                $this->console->println("Afin d'effectuer vous-mêmes les opérations de migration, merci d'aller dans le répertoire /actions/migration de OSE et exéminer puis exécuter les scripts nécessaires manuellement."
+                    . " Ces scripts sont nommés selon la version à laquelle ils correspondent, suivis de -pre s'ils sont à exécuter AVANT la mise ) jour de la DDL de la base de données, et -post s'il sont à exécuter après."
+                    . " Enfin, leur extension renseigne s'il s'agit de code PHP à exécuter ou bien de code SQL (à exécuter dans SQLDeveloper par exemple)."
+                );
             }
-            if ($newIndex === false) {
-                $this->console->println('La version cible de OSE n\'a pas pu être clairement identifiée.', $this->console::BG_RED);
-            }
-            if ($oldIndex == $newIndex) {
-                $this->console->println('La version cible est identique à celle déjà installée.', $this->console::BG_RED);
-            }
-            if ($oldIndex > $newIndex) {
-                $this->console->println('L\'installation d\'une version plus ancienne n\'est pas supportée par le système de mises à jours automatiques', $this->console::BG_RED);
-            }
-            $this->console->println("Afin d'effectuer vous-mêmes les opérations de migration, merci d'aller dans le répertoire /actions/migration de OSE et exéminer puis exécuter les scripts nécessaires manuellement."
-                . " Ces scripts sont nommés selon la version à laquelle ils correspondent, suivis de -pre s'ils sont à exécuter AVANT la mise ) jour de la DDL de la base de données, et -post s'il sont à exécuter après."
-                . " Enfin, leur extension renseigne s'il s'agit de code PHP à exécuter ou bien de code SQL (à exécuter dans SQLDeveloper par exemple)."
-            );
             return false;
         }
     }

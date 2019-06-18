@@ -248,7 +248,7 @@ class OseAdmin
                 if ($oldIndex > $newIndex) {
                     $this->console->println('L\'installation d\'une version plus ancienne n\'est pas supportée par le système de mises à jours automatiques', $this->console::BG_RED);
                 }
-                $this->console->println("Afin d'effectuer vous-mêmes les opérations de migration, merci d'aller dans le répertoire /actions/migration de OSE et exéminer puis exécuter les scripts nécessaires manuellement."
+                $this->console->println("Afin d'effectuer vous-mêmes les opérations de migration, merci d'aller dans le répertoire /actions/migration de OSE et examiner puis exécuter les scripts nécessaires manuellement."
                     . " Ces scripts sont nommés selon la version à laquelle ils correspondent, suivis de -pre s'ils sont à exécuter AVANT la mise ) jour de la DDL de la base de données, et -post s'il sont à exécuter après."
                     . " Enfin, leur extension renseigne s'il s'agit de code PHP à exécuter ou bien de code SQL (à exécuter dans SQLDeveloper par exemple)."
                 );

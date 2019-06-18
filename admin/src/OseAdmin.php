@@ -178,6 +178,7 @@ class OseAdmin
      */
     public function migration(string $prePost = 'pre'): bool
     {
+        $this->console->println('Exécution des scripts de '.$prePost.'-migration', $this->console::COLOR_LIGHT_CYAN);
         $tags = $this->getTags(1);
         foreach ($tags as $i => $tag) {
             $tag = strtolower($tag);

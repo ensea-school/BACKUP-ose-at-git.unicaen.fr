@@ -36,7 +36,6 @@ $c->passthru([
     "cd $osedir",
     "git checkout tags/$version",
 ]);
-$oa->writeVersion($osedir, $version);
 
 // Récupération des dépendances
 $c->println("\nMise à jour des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
@@ -55,6 +54,7 @@ $res = $oa->majUnicaenSymLinks($osedir);
 $c->println($res ? 'Liens mis à jour' : 'Liens déjà à jour', $c::COLOR_LIGHT_GREEN);
 
 // Conclusion
+$oa->writeVersion($osedir, $version);
 $c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);

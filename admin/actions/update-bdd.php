@@ -33,5 +33,6 @@ $schema->setLogger($scl);
 
 /* Mise à jour de la BDD */
 $r = $schema->alter($ref, $ddlConfig, true);
-
-var_dump($r);
+if (!empty($r)){
+    $c->println('Des erreurs ont été rencontrées lors de l\'actualisation de la base de données', $c::BG_RED);
+}

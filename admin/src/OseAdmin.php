@@ -128,9 +128,9 @@ class OseAdmin
 
 
 
-    public function currentVersion(string $osedir): string
+    public function currentVersion(): string
     {
-        $vf = $this->getVersionFile($osedir);
+        $vf = $this->getOseDir() . 'VERSION';
         if (!file_exists($vf)) {
             return 'inconnue';
         }
@@ -142,16 +142,8 @@ class OseAdmin
 
     public function writeVersion(string $version)
     {
-        $vf = $this->getVersionFile();
         $this->version = $version;
-        file_put_contents($vf, $version);
-    }
-
-
-
-    private function getVersionFile(): string
-    {
-        return $this->getOseDir() . 'VERSION';
+        file_put_contents($this->getOseDir() . 'VERSION', $version);
     }
 
 

@@ -152,6 +152,9 @@ return [
         /* Attribut LDAP correspondant au LOGIN de l'utilisateur */
         'loginAttribute'               => 'supannAliasLogin',
 
+        /* ObjectClass utilisé pour filtrer les utilisateurs (par défaut posixAccount) */
+        'loginObjectClass'             => 'posixAccount',
+
         /* Code de l'utilisateur.
          * à rappchcher ensuite de intervenant.utilisateurCode pour faire la correspondance utilisateur => intervenant */
         'utilisateurCode'              => 'supannEmpId',

@@ -5,16 +5,32 @@ author: Laurent Lécluse - DSI - Unicaen
 
 # OSE 8.2 (à venir)
 
-## Corrections de bugs
-* L'email professionnelle, qui ne pouvait pas être saisie, n'empêchera plus la validation des données personnelles si elle est vide.
-
-## Améliorations
-
-# OSE 8.1.2 (à venir)
+# OSE 8.1.2
 
 ## Corrections de bugs
 
 * Depuis l'offre de formation, lorsqu'un élément a plusieurs centres de coûts associés, les historiques ne sont plus pris en compte
+* L'email professionnelle, qui ne pouvait pas être saisie, n'empêchera plus la validation des données personnelles si elle est vide.
+* Formules de calcul :
+  * Correction de problèmes de performance. OSE_FORMULE.CALCULER_TOUT doit avoir une vitesse de calcul de 90 intervenants/seconde environ.
+  * Modifications sur la formule de Montpellier (réalisées par Montpellier)
+  * Correction d'un bug entrainant des erreurs de calcul si on utilise OSE_FORMULE.CALCULER_TOUT.
+
+## Nouveautés
+
+* Mise en place d'un nouveau système de mises à jour. Ce dispositif permet maintenant de mettre à jour automatiquement la base de données.
+Il n'y a donc plus de scripts SQL à exécuter en plus.
+
+Attention : le système calcule tout seul le différentiel entre l'état actuel de votre base de données et l'état attendu
+par la nouvelle version.
+Il se focalise sur les structures de données fournies "en standard" dans l'application, qui doivent être les mêmes pour tout le monde. 
+Il ignore donc les objets qui ont été créés par vos soins. 
+Ces derniers ne seront donc pas modifiés ou supprimés. 
+De même, les connecteurs ne seront pas impactés. 
+
+* Lien LDAP : possibilité de définir dans le fichier de configuration config.local.php le paramètre loginObjectClass qui permet de rechercher des utilisateurs de classe autre que posixAccount.
+cf. Fichier config.local.php.default.
+
 
 # OSE 8.1.1
 

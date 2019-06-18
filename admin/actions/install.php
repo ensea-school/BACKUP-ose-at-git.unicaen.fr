@@ -34,7 +34,7 @@ if (!$fromMaster) {
         "chmod 777 cache",
         "chmod +7 bin/ose",
     ]);
-    $oa->writeVersion($osedir, $version);
+    $oa->writeVersion($version);
 } else {
     $c->exec([
         "cd $osedir",

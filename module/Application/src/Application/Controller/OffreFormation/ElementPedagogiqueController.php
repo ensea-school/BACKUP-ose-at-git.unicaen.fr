@@ -149,7 +149,7 @@ class ElementPedagogiqueController extends AbstractController
                 $result[] = [
                     'id' => $item['ID'],
                     'label' => $label,
-                    'extra' => $item['LIBELLE_PE'],
+                    'extra' => $item['LIBELLE_PE'] ?: '',
                 ];
             } else {
                 if ($item['NB_CH'] > 1) {

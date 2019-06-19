@@ -13,6 +13,12 @@ author: Laurent Lécluse - DSI - Unicaen
   * Pays de naissance
   * Nom patronymique
 
+# OSE 8.1.3 (à venir)
+
+## Corrections de bugs
+
+* Lors de la saisie de service, "null" n'apparait plus si le semestre n'était pas renseigné (c'était le cas dans certaines situations)
+
 # OSE 8.1.2
 
 ## Corrections de bugs

@@ -17,7 +17,9 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Corrections de bugs
 
-* Depuis l'offre de formation, lorsqu'un élément a plusieurs centres de coûts associés, les historiques ne sont plus pris en compte
+* Depuis l'offre de formation :
+  * lorsqu'un élément a plusieurs centres de coûts associés, les historiques ne sont plus pris en compte
+  * les niveaux ne sont plus affichés si aucune étape ne leur correspond 
 * L'email professionnelle, qui ne pouvait pas être saisie, n'empêchera plus la validation des données personnelles si elle est vide.
 * Formules de calcul :
   * Correction de problèmes de performance. OSE_FORMULE.CALCULER_TOUT doit avoir une vitesse de calcul de 90 intervenants/seconde environ.

@@ -97,7 +97,9 @@ class OffreFormationController extends AbstractController
         foreach ($result as $object) {
             if ($object instanceof Etape) {
                 $n                    = NiveauEtape::getInstanceFromEtape($object);
-                $niveaux[$n->getId()] = $n;
+                if ($object->estNonHistorise()) {
+                    $niveaux[$n->getId()] = $n;
+                }
                 if (!$niveau || $niveau->getId() == $n->getId()) {
                     if ($object->estNonHistorise() || $object->getElementPedagogique()->count() > 0){
                         $etapes[] = $object;

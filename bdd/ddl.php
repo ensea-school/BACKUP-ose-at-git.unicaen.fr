@@ -25281,7 +25281,7 @@ END OSE_FORMULE;',
     intervenant.id := null;
     LOAD_VH_FROM_BDD;
 
-    in_calculer_tout := false;
+    in_calculer_tout := true;
     i_id := all_volumes_horaires.FIRST;
     LOOP EXIT WHEN i_id IS NULL;
       CALCULER( i_id );

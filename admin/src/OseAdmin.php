@@ -143,7 +143,7 @@ class OseAdmin
             return 'inconnue';
         }
 
-        return file_get_contents($vf);
+        return trim(file_get_contents($vf));
     }
 
 
@@ -178,13 +178,13 @@ class OseAdmin
     {
         $version = strtolower($version);
         if (false !== ($p = strpos($version, 'alpha'))) {
-            $version = trim(substr($version, 0, $p));
+            $version = substr($version, 0, $p);
         }
         if (false !== ($p = strpos($version, 'beta'))) {
-            $version = trim(substr($version, 0, $p));
+            $version = substr($version, 0, $p);
         }
 
-        return $version;
+        return trim($version);
     }
 
 

@@ -93,7 +93,7 @@ class DdlIndex extends DdlAbstract
         $newName = $new['name'];
 
         $sql = "ALTER INDEX \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de l\'index '.$oldName.' en '.$new);
+        $this->addQuery($sql, 'Renommage de l\'index '.$oldName.' en '.$newName);
     }
 
 }

@@ -35,4 +35,5 @@ $schema->setLogger($scl);
 $r = $schema->alter($ref, $ddlConfig, true);
 if (!empty($r)){
     $c->println('Des erreurs ont été rencontrées lors de l\'actualisation de la base de données', $c::BG_RED);
+    var_dump($r);
 }

@@ -17,8 +17,6 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Corrections de bugs
 
-* Lors de la saisie de service, "null" n'apparait plus si le semestre n'était pas renseigné (c'était le cas dans certaines situations)
-
 # OSE 8.1.2
 
 ## Corrections de bugs
@@ -31,6 +29,7 @@ author: Laurent Lécluse - DSI - Unicaen
   * Correction de problèmes de performance. OSE_FORMULE.CALCULER_TOUT doit avoir une vitesse de calcul de 90 intervenants/seconde environ.
   * Modifications sur la formule de Montpellier (réalisées par Montpellier)
   * Correction d'un bug entrainant des erreurs de calcul si on utilise OSE_FORMULE.CALCULER_TOUT.
+* Lors de la saisie de service, "null" n'apparait plus si le semestre n'était pas renseigné (c'était le cas dans certaines situations)
 
 ## Nouveautés
 

@@ -25308,7 +25308,7 @@ END OSE_FORMULE;',
 
     LOAD_INTERVENANT_FROM_TEST;
     LOAD_VH_FROM_TEST;
-    debug_actif := FALSE;
+    debug_actif := TRUE;
 
     BEGIN
       EXECUTE IMMEDIATE \'BEGIN \' || package_name || \'.\' || procedure_name || \'; END;\';

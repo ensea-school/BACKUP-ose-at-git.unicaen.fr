@@ -4,5 +4,4 @@
 killall /usr/lib/libreoffice/program/soffice.bin
 
 # on le redémarre
-# oui, il est mis deux fois, mais je ne sais pas pourquoi il ne se lance qu'à la deuxième...
 unoconv --listener &

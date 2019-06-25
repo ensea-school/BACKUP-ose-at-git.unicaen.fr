@@ -63,12 +63,12 @@ class ServiceProcessus extends AbstractProcessus
         //@formatter:off
         $service
             ->join(     IntervenantService::class,      $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
-            ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
+            ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'code', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
             ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures', 'autoValidation', 'horaireDebut', 'horaireFin'] );
 
         $elementPedagogiqueService
             ->leftJoin( $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
-            ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
+            ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'code', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
             ->leftJoin( $periodeService,                $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
             ->leftJoin( TypeInterventionService::class,  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
 

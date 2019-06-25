@@ -20,6 +20,8 @@ author: Laurent Lécluse - DSI - Unicaen
 * Les informations complémentaires de l'utilisateur (qui relevaient d'une liste spécifique à l'Université de Caen et qui pouvait amener un plantage de l'application) 
 ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à gauche.
 
+* Dans la fiche de service, les codes des éléments et des étapes s'affichent de nouveau (ils n'étaient plus visibles)
+
 # OSE 8.1.2
 
 ## Corrections de bugs

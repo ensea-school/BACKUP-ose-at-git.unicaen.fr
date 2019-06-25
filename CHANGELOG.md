@@ -17,6 +17,9 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Corrections de bugs
 
+* Les informations complémentaires de l'utilisateur (qui relevaient d'une liste spécifique à l'Université de Caen et qui pouvait amener un plantage de l'application) 
+ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à gauche.
+
 # OSE 8.1.2
 
 ## Corrections de bugs

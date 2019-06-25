@@ -171,6 +171,7 @@ $config = [
         'factories'  => [
             'userProfileSelectRadioItem' => View\Helper\UserProfileSelectRadioItemFactory::class,
             'appLink'                    => View\Helper\AppLinkFactory::class,
+            'userCurrent'                => View\Helper\UserCurrentFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

@@ -86,6 +86,7 @@ class DroitsController extends AbstractController
             if ($form->isValid()) {
                 try {
                     $this->getServiceRole()->save($role);
+                    $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
                     $form->get('id')->setValue($role->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $errors[] = $this->translate($e);

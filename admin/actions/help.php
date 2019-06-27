@@ -10,6 +10,7 @@ $actions = [
     "changement-mot-de-passe"   => "Changement de mot de passe (pour un utilisateur local uniquement)",
     "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
     "clear-cache"               => "Vidage du cache de l'application",
+    "test-bdd"                  => "Test d'accès à la base de données",
 ];
 
 $c->println('Actions possibles :');

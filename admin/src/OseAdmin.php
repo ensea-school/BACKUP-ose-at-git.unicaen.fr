@@ -284,6 +284,22 @@ class OseAdmin
 
 
 
+    /**
+     * @return bool
+     * @throws \BddAdmin\Exception\BddCompileException
+     * @throws \BddAdmin\Exception\BddException
+     * @throws \BddAdmin\Exception\BddIndexExistsException
+     */
+    public function bddIsOk(): bool
+    {
+        $bdd = $this->getBdd();
+        $r = $bdd->select('SELECT 1 FROM dual');
+
+        return isset($r[0][1]) && $r[0][1] === '1';
+    }
+
+
+
     private function loadBdd(): \BddAdmin\Bdd
     {
         $bdd = new \BddAdmin\Bdd(Config::getBdd());

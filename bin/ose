@@ -14,6 +14,6 @@ $oa->init();
 
 $c->printMainTitle("OSE", 15);
 
-$oa->run($c->getArg(1));
+$oa->run($c->getArg(1) ?: 'help');
 
 $c->println('Traitement terminé.', $c::BG_YELLOW);

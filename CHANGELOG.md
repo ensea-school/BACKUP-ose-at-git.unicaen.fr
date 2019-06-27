@@ -18,9 +18,13 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Corrections de bugs
 
 * Les informations complémentaires de l'utilisateur (qui relevaient d'une liste spécifique à l'Université de Caen et qui pouvait amener un plantage de l'application) 
-ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à gauche.
+ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à droite.
 * Dans la fiche de service, les codes des éléments et des étapes s'affichent de nouveau (ils n'étaient plus visibles)
 * Lorsqu'on crée un nouveau rôle et qu'on lui ajoute des privilèges, l'application ne plante plus (problème de cache de données réglé).
+* Dans l'export Winpaye, le numéro INSEE est maintenant correctement formatté (il supprime les espaces en trop, et ajoute des zéros devant les clés si nécessaire)
+
+## Nouveautés
+* Nouveau script de test d'accès à la BDD depuis le script de mise à jour (./bin/ose test-bdd)
 
 # OSE 8.1.2
 

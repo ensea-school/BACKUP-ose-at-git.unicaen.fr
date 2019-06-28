@@ -19225,6 +19225,9 @@
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
 
+  FUNCTION INTERVENANT_QUERY RETURN CLOB;
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB;
+
 END FORMULE_ENSICAEN;',
       'body' => 'CREATE OR REPLACE PACKAGE BODY FORMULE_ENSICAEN AS
   decalageLigne NUMERIC DEFAULT 20;
@@ -19564,6 +19567,41 @@ END FORMULE_ENSICAEN;',
     END LOOP;
   END;
 
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_intervenant fi
+    \';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_volume_horaire fvh
+    ORDER BY
+      ordre\';
+  END;
+
 END FORMULE_ENSICAEN;',
     ),
     'FORMULE_MONTPELLIER' => 
@@ -19574,6 +19612,9 @@ END FORMULE_ENSICAEN;',
   PROCEDURE CALCUL_RESULTAT;
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB;
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB;
 
 END FORMULE_MONTPELLIER;',
       'body' => 'CREATE OR REPLACE PACKAGE BODY "FORMULE_MONTPELLIER" AS
@@ -20193,6 +20234,41 @@ END FORMULE_MONTPELLIER;',
     END LOOP;
   END;
 
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_intervenant fi
+    \';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_volume_horaire fvh
+    ORDER BY
+      ordre\';
+  END;
+
 END FORMULE_MONTPELLIER;',
     ),
     'FORMULE_NANTERRE' => 
@@ -20203,6 +20279,9 @@ END FORMULE_MONTPELLIER;',
   PROCEDURE CALCUL_RESULTAT;
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB;
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB;
 
 END FORMULE_NANTERRE;',
       'body' => 'CREATE OR REPLACE PACKAGE BODY FORMULE_NANTERRE AS
@@ -21012,6 +21091,43 @@ END FORMULE_NANTERRE;',
     END LOOP;
   END;
 
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_intervenant fi
+    \';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fvh.*,
+      str.code param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_volume_horaire fvh
+      JOIN intervenant i ON i.id = fvh.intervenant_id
+      LEFT JOIN structure str ON str.id = COALESCE(fvh.structure_id,i.structure_id)
+    ORDER BY
+      ordre\';
+  END;
+
 END FORMULE_NANTERRE;',
     ),
     'FORMULE_UBO' => 
@@ -21022,6 +21138,9 @@ END FORMULE_NANTERRE;',
   PROCEDURE CALCUL_RESULTAT;
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB;
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB;
 
 END FORMULE_UBO;',
       'body' => 'CREATE OR REPLACE PACKAGE BODY "FORMULE_UBO" AS
@@ -21953,6 +22072,43 @@ END FORMULE_UBO;',
     END LOOP;
   END;
 
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fi.*,
+      CASE WHEN fi.type_intervenant_code = \'\'P\'\' AND si.source_code NOT IN (\'\'ATER\'\',\'\'ATER_MI_TPS\'\',\'\'LECTEUR\'\') THEN \'\'oui\'\' ELSE \'\'non\'\' END param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_intervenant fi
+      JOIN intervenant i ON i.id = fi.intervenant_id
+      JOIN statut_intervenant si ON si.id = i.id
+    \';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_volume_horaire fvh
+    ORDER BY
+      ordre\';
+  END;
+
 END FORMULE_UBO;',
     ),
     'FORMULE_ULHN' => 
@@ -21963,6 +22119,9 @@ END FORMULE_UBO;',
   PROCEDURE CALCUL_RESULTAT;
 
   FUNCTION calcCell( c VARCHAR2, l NUMERIC ) RETURN FLOAT;
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB;
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB;
 
 END FORMULE_ULHN;',
       'body' => 'CREATE OR REPLACE PACKAGE BODY "FORMULE_ULHN" AS
@@ -22357,6 +22516,41 @@ END FORMULE_ULHN;',
     END LOOP;
   END;
 
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_intervenant fi
+    \';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_volume_horaire fvh
+    ORDER BY
+      ordre\';
+  END;
+
 END FORMULE_ULHN;',
     ),
     'FORMULE_UNICAEN' => 
@@ -22372,6 +22566,9 @@ END FORMULE_ULHN;',
   PROCEDURE CALCUL_RESULTAT;
 
   PROCEDURE PURGE_EM_NON_FC;
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB;
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB;
 
 END FORMULE_UNICAEN;',
       'body' => 'CREATE OR REPLACE PACKAGE BODY "FORMULE_UNICAEN" AS
@@ -23369,6 +23566,41 @@ END FORMULE_UNICAEN;',
     END LOOP;
   END;
 
+
+
+
+  FUNCTION INTERVENANT_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fi.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_intervenant fi
+    \';
+  END;
+
+
+
+  FUNCTION VOLUME_HORAIRE_QUERY RETURN CLOB IS
+  BEGIN
+    RETURN \'
+    SELECT
+      fvh.*,
+      NULL param_1,
+      NULL param_2,
+      NULL param_3,
+      NULL param_4,
+      NULL param_5
+    FROM
+      v_formule_volume_horaire fvh
+    ORDER BY
+      ordre\';
+  END;
 
 END FORMULE_UNICAEN;',
     ),
@@ -24586,54 +24818,46 @@ END OSE_FORMULE;',
 
 
   PROCEDURE LOAD_INTERVENANT_FROM_BDD IS
-    dsdushc NUMERIC DEFAULT 0;
+    cur SYS_REFCURSOR;
+    query CLOB;
+    i_dep_service_du_sans_hc NUMERIC DEFAULT 0;
   BEGIN
     intervenant.service_du := 0;
     intervenant.total      := NULL;
     intervenant.solde      := NULL;
 
-    SELECT
-      fi.intervenant_id,
-      fi.annee_id,
-      fi.structure_id,
-      fi.type_intervenant_code,
-      fi.heures_service_statutaire,
-      fi.depassement_service_du_sans_hc,
-      fi.heures_service_modifie,
-      fi.heures_decharge,
-      fli.param_1,
-      fli.param_2,
-      fli.param_3,
-      fli.param_4,
-      fli.param_5
-    INTO
-      intervenant.id,
-      intervenant.annee_id,
-      intervenant.structure_id,
-      intervenant.type_intervenant_code,
-      intervenant.heures_service_statutaire,
-      dsdushc,
-      intervenant.heures_service_modifie,
-      intervenant.heures_decharge,
-      intervenant.param_1,
-      intervenant.param_2,
-      intervenant.param_3,
-      intervenant.param_4,
-      intervenant.param_5
-    FROM
-      v_formule_intervenant fi
-      LEFT JOIN v_formule_local_i_params fli ON fli.intervenant_id = fi.intervenant_id
-    WHERE
-      fi.intervenant_id = intervenant.id;
+    EXECUTE IMMEDIATE \'SELECT \' || formule_definition.package_name || \'.intervenant_query FROM DUAL\' INTO query;
+    OPEN cur FOR query;
 
-    intervenant.depassement_service_du_sans_hc := (dsdushc = 1);
-    intervenant.service_du := CASE
-      WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-        OR intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
+    LOOP
+      FETCH cur INTO
+        intervenant.id,
+        intervenant.annee_id,
+        intervenant.structure_id,
+        intervenant.type_intervenant_code,
+        intervenant.heures_service_statutaire,
+        i_dep_service_du_sans_hc,
+        intervenant.heures_service_modifie,
+        intervenant.heures_decharge,
+        intervenant.param_1,
+        intervenant.param_2,
+        intervenant.param_3,
+        intervenant.param_4,
+        intervenant.param_5
+      ;
 
-      THEN 9999
-      ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
-    END;
+      intervenant.depassement_service_du_sans_hc := (i_dep_service_du_sans_hc = 1);
+      intervenant.service_du := CASE
+        WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
+          OR intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
+
+        THEN 9999
+        ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
+      END;
+
+      EXIT WHEN cur%NOTFOUND;
+    END LOOP;
+    CLOSE cur;
 
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
@@ -24729,58 +24953,77 @@ END OSE_FORMULE;',
 
 
   PROCEDURE LOAD_VH_FROM_BDD IS
+    cur SYS_REFCURSOR;
+    query CLOB;
+    vh_ordre NUMERIC;
+    vh_id NUMERIC;
+    vh_type_intervention_id NUMERIC;
+    vh_horaire_debut DATE;
+    vh_horaire_fin DATE;
+    vh_intervenant_id NUMERIC;
+    vh_type_volume_horaire_id NUMERIC;
+    vh_etat_volume_horaire_id NUMERIC;
+    vh_structure_is_affectation NUMERIC;
+    vh_structure_is_univ NUMERIC;
     vh t_volume_horaire;
     etat_volume_horaire_id NUMERIC DEFAULT 1;
-    structure_univ NUMERIC;
     length NUMERIC;
   BEGIN
     all_volumes_horaires.delete;
 
-    SELECT to_number(valeur) INTO structure_univ FROM parametre WHERE nom = \'structure_univ\';
+    EXECUTE IMMEDIATE \'SELECT \' || formule_definition.package_name || \'.volume_horaire_query FROM DUAL\' INTO query;
+    OPEN cur FOR query;
 
-    FOR d IN (
-      SELECT
-        fvh.*, flvh.param_1, flvh.param_2, flvh.param_3, flvh.param_4, flvh.param_5
-      FROM
-        v_formule_volume_horaire fvh
-        LEFT JOIN v_formule_local_vh_params flvh ON COALESCE(to_number(flvh.volume_horaire_id),0) = COALESCE(fvh.volume_horaire_id,0) AND COALESCE(to_number(flvh.volume_horaire_ref_id),0) = COALESCE(fvh.volume_horaire_ref_id,0)
-      ORDER BY
-        ordre
-    ) LOOP
-      vh.volume_horaire_id         := d.volume_horaire_id;
-      vh.volume_horaire_ref_id     := d.volume_horaire_ref_id;
-      vh.service_id                := d.service_id;
-      vh.service_referentiel_id    := d.service_referentiel_id;
-      vh.taux_fi                   := d.taux_fi;
-      vh.taux_fa                   := d.taux_fa;
-      vh.taux_fc                   := d.taux_fc;
-      vh.ponderation_service_du    := d.ponderation_service_du;
-      vh.ponderation_service_compl := d.ponderation_service_compl;
-      vh.structure_id              := d.structure_id;
-      vh.structure_is_affectation  := d.structure_is_affectation = 1;
-      vh.structure_is_univ         := d.structure_is_univ = 1;
-      vh.service_statutaire        := d.service_statutaire = 1;
-      vh.heures                    := d.heures;
-      vh.type_intervention_code    := d.type_intervention_code;
-      vh.taux_service_du           := d.taux_service_du;
-      vh.taux_service_compl        := d.taux_service_compl;
-      vh.param_1                   := d.param_1;
-      vh.param_2                   := d.param_2;
-      vh.param_3                   := d.param_3;
-      vh.param_4                   := d.param_4;
-      vh.param_5                   := d.param_5;
+    LOOP
+      FETCH cur INTO
+        vh_ordre,
+        vh_id,
+        vh.volume_horaire_id,
+        vh.volume_horaire_ref_id,
+        vh.service_id,
+        vh.service_referentiel_id,
+        vh_intervenant_id,
+        vh_type_intervention_id,
+        vh_type_volume_horaire_id,
+        vh_etat_volume_horaire_id,
+        vh.taux_fi,
+        vh.taux_fa,
+        vh.taux_fc,
+        vh.structure_id,
+        vh_structure_is_affectation,
+        vh_structure_is_univ,
+        vh.ponderation_service_du,
+        vh.ponderation_service_compl,
+        vh.service_statutaire,
+        vh.heures,
+        vh_horaire_debut,
+        vh_horaire_fin,
+        vh.type_intervention_code,
+        vh.taux_service_du,
+        vh.taux_service_compl,
+        vh.param_1,
+        vh.param_2,
+        vh.param_3,
+        vh.param_4,
+        vh.param_5
+      ;
+      vh.structure_is_affectation := vh_structure_is_affectation = 1;
+      vh.structure_is_univ        := vh_structure_is_univ = 1;
 
-      FOR etat_volume_horaire_id IN 1 .. d.etat_volume_horaire_id LOOP
+      FOR etat_volume_horaire_id IN 1 .. vh_etat_volume_horaire_id LOOP
         BEGIN
-          length := all_volumes_horaires(d.intervenant_id)(d.type_volume_horaire_id)(etat_volume_horaire_id).length;
+          length := all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length;
         EXCEPTION WHEN NO_DATA_FOUND THEN
           length := 0;
         END;
         length := length + 1;
-        all_volumes_horaires(d.intervenant_id)(d.type_volume_horaire_id)(etat_volume_horaire_id).length := length;
-        all_volumes_horaires(d.intervenant_id)(d.type_volume_horaire_id)(etat_volume_horaire_id).items(length) := vh;
+        all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length := length;
+        all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).items(length) := vh;
       END LOOP;
+
+      EXIT WHEN cur%NOTFOUND;
     END LOOP;
+    CLOSE cur;
   END;
 
 
@@ -29782,8 +30025,9 @@ FROM (
     t2.structure_id                                                                                     structure_id,
     t2.periode_paiement_id                                                                              periode_id,
     i.id                                                                                                intervenant_id,
-
-    \'\'\'\' || TRIM( i.numero_insee || NVL(TRIM(i.numero_insee_cle),\'00\') )                                insee,
+    CASE WHEN i.numero_insee IS NULL THEN \'\'\'\' ELSE
+      \'\'\'\' || TRIM(i.numero_insee) || COALESCE(LPAD(TRIM(i.numero_insee_cle), 2, \'0\'),\'00\')
+    END                                                                                                 insee,
     i.nom_usuel || \',\' || i.prenom                                                                      nom,
     t2.code_origine                                                                                     code_origine,
     CASE WHEN ind <> CEIL(t2.nbu/max_nbu) THEN max_nbu ELSE t2.nbu - max_nbu*(ind-1) END                nbu,
@@ -30219,7 +30463,7 @@ SELECT
 FROM
   formule_resultat_vh_ref       frvr
   JOIN formule_resultat           fr ON fr.id = frvr.formule_resultat_id
-  JOIN volume_horaire_ref        vhr ON vhr.id =  frvr.volume_horaire_ref_id
+  JOIN volume_horaire_ref        vhr ON vhr.id =  frvr.volume_horaire_ref_id AND vhr.histo_destruction IS NULL
   JOIN service_referentiel        sr ON sr.id = vhr.service_referentiel_id AND sr.intervenant_id = fr.intervenant_id AND sr.histo_destruction IS NULL
 
 UNION ALL
@@ -30582,6 +30826,65 @@ WHERE
   AND i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
 GROUP BY
   i.id, i.annee_id, i.structure_id, ti.code, si.service_statutaire, si.depassement_service_du_sans_hc',
+    ),
+    'V_FORMULE_LOCAL_I_PARAMS' => 
+    array (
+      'name' => 'V_FORMULE_LOCAL_I_PARAMS',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_LOCAL_I_PARAMS AS
+SELECT
+  null intervenant_id,
+  null param_1,
+  null param_2,
+  null param_3,
+  null param_4,
+  null param_5
+FROM
+  dual',
+    ),
+    'V_FORMULE_LOCAL_VH_PARAMS' => 
+    array (
+      'name' => 'V_FORMULE_LOCAL_VH_PARAMS',
+      'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_LOCAL_VH_PARAMS AS
+SELECT
+  vh.id     volume_horaire_id,
+  null      volume_horaire_ref_id,
+  str.code  param_1,
+  null      param_2,
+  null      param_3,
+  null      param_4,
+  null      param_5
+FROM
+            volume_horaire            vh
+       JOIN service                    s ON s.id = vh.service_id
+       JOIN intervenant                i ON i.id = s.intervenant_id
+  LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
+       JOIN structure                str ON str.id = COALESCE(ep.structure_id,i.structure_id)
+WHERE
+  vh.histo_destruction IS NULL
+  AND s.histo_destruction IS NULL
+  AND vh.heures <> 0
+  AND vh.motif_non_paiement_id IS NULL
+  AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
+
+UNION ALL
+
+SELECT
+  null      volume_horaire_id,
+  vhr.id    volume_horaire_ref_id,
+  str.code  param_1,
+  null      param_2,
+  null      param_3,
+  null      param_4,
+  null      param_5
+FROM
+  volume_horaire_ref               vhr
+  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
+  JOIN structure                   str ON str.id = sr.structure_id
+WHERE
+  vhr.histo_destruction IS NULL
+  AND sr.histo_destruction IS NULL
+  AND vhr.heures <> 0
+  AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )',
     ),
     'V_FORMULE_VOLUME_HORAIRE' => 
     array (

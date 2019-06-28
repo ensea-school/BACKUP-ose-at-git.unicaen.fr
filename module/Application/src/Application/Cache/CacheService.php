@@ -46,9 +46,10 @@ class CacheService
 
         $filename = $this->keyToFile($class, $key);
         if (!is_dir(dirname($filename))) {
-            mkdir(dirname($filename), 0755, true);
+            mkdir(dirname($filename), 0777, true);
         }
         file_put_contents($filename, $content);
+        chmod($filename, 0777);
 
         return $this;
     }

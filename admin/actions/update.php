@@ -59,7 +59,7 @@ $c->println($res ? 'Liens mis à jour' : 'Liens déjà à jour', $c::COLOR_LIGHT
 
 // Conclusion
 $oa->writeVersion($version);
-$c->println("\nFin de la mise à jour des fichiers", $c::COLOR_LIGHT_GREEN);
+$c->println("\nMise à jour des fichiers OK : la version installée est désormais la ".$version, $c::COLOR_LIGHT_GREEN);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
 $oa->migration('pre');

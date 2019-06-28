@@ -20,7 +20,7 @@ $ddlConfig = [
     \BddAdmin\Ddl\DdlTrigger::class => $ddlConfig[\BddAdmin\Ddl\DdlTrigger::class],
 ]; // Pour le moment, travail uniquement sur ces 3 structures de données. Pour les autres, cela viendra plus tard.
 
-$ddlConfig[\BddAdmin\Ddl\DdlView::class]['excludes'] = [
+$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'] = [
     'V_FORMULE_LOCAL_I_PARAMS',
     'V_FORMULE_LOCAL_VH_PARAMS',
 ];

@@ -26,6 +26,9 @@ ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à droite.
 
 ## Nouveautés
 * Nouveau script de test d'accès à la BDD depuis le script de mise à jour (./bin/ose test-bdd)
+* Formules de calcul : nouveau système de récupération des paramètres spécifiques directement implanté dans les formules. 
+Les vues V_FORMULE_LOCAL_I_PARAMS et V_FORMULE_LOCAL_VH_PARAMS ne sont plus nécessaires.
+* Renforcement du script de mise à jour (pour les futures mises à jour) : détection de l'accès à la BDD OK ou non avant de démarrer la procédure et avertissement sans blocage si le cache ne peut pas se nettoyer.
 
 # OSE 8.1.2
 

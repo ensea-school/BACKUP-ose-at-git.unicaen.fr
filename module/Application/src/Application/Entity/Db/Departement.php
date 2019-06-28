@@ -139,4 +139,16 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
         return $this->id;
     }
 
+
+
+    /**
+     * @return bool
+     */
+    public function inIleDeFrance(): bool
+    {
+        $intCode = (int)$this->getCode();
+
+        return in_array($intCode, [78,91,92,93,94,95]);
+    }
+
 }

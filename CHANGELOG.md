@@ -22,6 +22,7 @@ ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à droite.
 * Dans la fiche de service, les codes des éléments et des étapes s'affichent de nouveau (ils n'étaient plus visibles)
 * Lorsqu'on crée un nouveau rôle et qu'on lui ajoute des privilèges, l'application ne plante plus (problème de cache de données réglé).
 * Dans l'export Winpaye, le numéro INSEE est maintenant correctement formatté (il supprime les espaces en trop, et ajoute des zéros devant les clés si nécessaire)
+* Dans le dossier, les Numéros INSEE avec pour département 75 sont comptés valides par rapport au département de naissance si l'intervenant est né en actuelle région parisienne avant 1968.
 
 ## Nouveautés
 * Nouveau script de test d'accès à la BDD depuis le script de mise à jour (./bin/ose test-bdd)

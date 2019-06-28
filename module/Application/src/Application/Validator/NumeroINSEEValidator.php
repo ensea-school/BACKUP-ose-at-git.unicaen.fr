@@ -2,6 +2,8 @@
 
 namespace Application\Validator;
 
+use Application\Constants;
+use Application\Entity\Db\Departement;
 use Application\Service\Traits\CiviliteServiceAwareTrait;
 use Application\Service\Traits\DepartementServiceAwareTrait;
 use Application\Service\Traits\PaysServiceAwareTrait;
@@ -183,7 +185,7 @@ class NumeroINSEEValidator extends NumeroINSEE
             if (!$this->isValidDepartementFrance($value, $context)) {
                 return false;
             }
-        }elseif ($estNeEnAlgerie) {
+        } elseif ($estNeEnAlgerie) {
             // on doit avoir un code département français valide
             if (!$this->isValidDepartementAlgerie($value, $context)) {
                 return false;
@@ -218,8 +220,6 @@ class NumeroINSEEValidator extends NumeroINSEE
         if (empty($context['departementNaissance'])) {
             return true;
         }
-        $departementNaissance = $this->getServiceDepartement()->get($context['departementNaissance'], true);
-        /* @var $departementNaissance DepartementEntity */
 
         // Si on trouve un code de département en métropole ou outre-mer valide,
         // on vérifie qu'il est cohérent avec le code du département de naissance saisi
@@ -228,10 +228,24 @@ class NumeroINSEEValidator extends NumeroINSEE
             ||
             ($d = $this->getDepartementOutreMerValide($value))
         ) {
+            /* @var $departementNaissance Departement */
+            $departementNaissance = $this->getServiceDepartement()->get($context['departementNaissance'], true);
             if ($d !== $departementNaissance->getCode()) {
-                $this->error(self::MSG_DEPT);
+                $return        = false;
+                $dateNaissance = \DateTime::createFromFormat(Constants::DATE_FORMAT, $context['dateNaissance']);
+                if ($dateNaissance) {
+                    $anneeNaissance = (int)$dateNaissance->format('Y');
+                    if ($anneeNaissance <= 1968) {
+                        if ($departementNaissance->inIleDeFrance() && $d === '075') {
+                            $return = true;
+                        }
+                    }
+                }
+                if (!$return) {
+                    $this->error(self::MSG_DEPT);
 
-                return false;
+                    return false;
+                }
             }
         } // Sinon, le code département n'est pas valide
         else {
@@ -299,7 +313,7 @@ class NumeroINSEEValidator extends NumeroINSEE
 
         if (is_numeric($departement)) {
             $d = (int)$departement;
-            if (in_array($d, [91,92,93,94,99])) {
+            if (in_array($d, [91, 92, 93, 94, 99])) {
                 return '0' . (string)$departement;
             }
         }

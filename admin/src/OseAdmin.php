@@ -6,7 +6,7 @@
 
 class OseAdmin
 {
-    const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE';
+    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE';
     const MIN_VERSION = 8; // version minimum installable
 
     /**
@@ -50,7 +50,7 @@ class OseAdmin
 
     public function init()
     {
-        $this->version = $this->currentVersion();
+        $this->version    = $this->currentVersion();
         $this->oldVersion = $this->version;
     }
 
@@ -167,7 +167,7 @@ class OseAdmin
         if (file_exists($this->getOseDir() . 'admin/actions/' . $action . '.php')) {
             require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
         } else {
-            $c->println('Action "'.$action.'" inconnue.', $c::COLOR_RED);
+            $c->println('Action "' . $action . '" inconnue.', $c::COLOR_RED);
             require_once $this->getOseDir() . 'admin/actions/help.php';
         }
     }
@@ -201,8 +201,9 @@ class OseAdmin
      */
     public function migration(string $prePost = 'pre'): bool
     {
-        $this->console->println('Exécution des scripts de '.$prePost.'-migration', $this->console::COLOR_LIGHT_CYAN);
-        $tags = $this->getTags(1);
+        $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_CYAN);
+        $execs = 0;
+        $tags  = $this->getTags(1);
         foreach ($tags as $i => $tag) {
             $tags[$i] = $this->purgerVersion($tag);
         }
@@ -219,6 +220,7 @@ class OseAdmin
                 if (file_exists($sqlMigr)) {
                     $this->console->println('Exécution du script de ' . $prePost . '-migration SQL de la version ' . $tags[$i], $this->console::COLOR_LIGHT_BLUE);
                     $errors = $this->getBdd()->execFile($sqlMigr);
+                    $execs++;
                     if (!empty($errors)) {
                         $this->console->println('Des erreurs ont été rencontrées durant l\'exécution du script de migration :', $this->console::BG_RED);
                         foreach ($errors as $e) {
@@ -228,10 +230,22 @@ class OseAdmin
                 }
 
                 if (file_exists($phpMigr)) {
+                    $execs++;
                     $this->console->println('Exécution du script de ' . $prePost . '-migration PHP de la version ' . $tags[$i], $this->console::COLOR_LIGHT_BLUE);
-                    require_once $phpMigr;
+                    try {
+                        require_once $phpMigr;
+                    } catch (\Exception $e) {
+                        $this->console->println($e->getMessage(), $this->console::COLOR_RED);
+                    }
                 }
             }
+
+            if ($execs > 0) {
+                $this->console->println("Scripts de $prePost-migration exécutés");
+            } else {
+                $this->console->println("Aucun script de $prePost-migration à exécuter");
+            }
+
             return true;
         } else {
             if ($prePost == 'pre') { // on n'avertit qu'une seule fois!
@@ -253,6 +267,7 @@ class OseAdmin
                     . " Enfin, leur extension renseigne s'il s'agit de code PHP à exécuter ou bien de code SQL (à exécuter dans SQLDeveloper par exemple)."
                 );
             }
+
             return false;
         }
     }
@@ -293,7 +308,7 @@ class OseAdmin
     public function bddIsOk(): bool
     {
         $bdd = $this->getBdd();
-        $r = $bdd->select('SELECT 1 FROM dual');
+        $r   = $bdd->select('SELECT 1 FROM dual');
 
         return isset($r[0][1]) && $r[0][1] === '1';
     }

@@ -3,6 +3,8 @@
 $bdd    = $oa->getBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
+$c->println('Mise à jour automatique de la base de données', $c::COLOR_LIGHT_CYAN);
+
 /* Récupération du schéma de référence */
 $ref = $schema->loadFromFile($oa->getOseDir() . 'bdd/ddl.php');
 
@@ -33,3 +35,5 @@ $schema->setLogger($scl);
 
 /* Mise à jour de la BDD */
 $schema->alter($ref, $ddlConfig, true);
+
+$c->println('Mise à jour automatique terminée');

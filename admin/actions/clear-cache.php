@@ -2,7 +2,7 @@
 
 $osedir = $oa->getOseDir();
 
-$c->println("\nNéttoyage des caches et mise à jour des proxies", $c::COLOR_LIGHT_CYAN);
+$c->println("\nNettoyage des caches et mise à jour des proxies", $c::COLOR_LIGHT_CYAN);
 try {
     $c->exec([
         "cd $osedir",
@@ -10,8 +10,8 @@ try {
         "php vendor/bin/doctrine-module orm:generate-proxies",
         "chmod -R 777 cache/DoctrineProxy",
         "chmod -R 777 cache/Doctrine",
-    ]);
-    $c->println('Cache néttoyé', $c::COLOR_GREEN);
+    ], false);
+    $c->println('Cache nettoyé, proxies actualisés', $c::COLOR_GREEN);
 } catch (\Exception $e) {
     $c->println($e->getMessage());
     $c->println('Un problème est survenu : le cache de OSE n\'a pas été vidé. '

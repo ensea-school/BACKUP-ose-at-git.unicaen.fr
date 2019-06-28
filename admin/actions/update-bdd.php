@@ -3,7 +3,7 @@
 $bdd    = $oa->getBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
-$c->println("\n".'Actualisation des objets', $c::COLOR_LIGHT_PURPLE);
+$c->println("\n".'Mise à jour des définitions de la base de données', $c::COLOR_LIGHT_PURPLE);
 
 /* Récupération du schéma de référence */
 $ref = $schema->loadFromFile($oa->getOseDir() . 'bdd/ddl.php');
@@ -36,4 +36,5 @@ $schema->setLogger($scl);
 /* Mise à jour de la BDD */
 $schema->alter($ref, $ddlConfig, true);
 
-$c->println('Mise à jour automatique terminée');
+$c->println('Fin de mise à jour des définitions');
+$c->println('');

@@ -3,7 +3,7 @@
 $bdd    = $oa->getBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
-$c->println('Mise à jour automatique de la base de données', $c::COLOR_LIGHT_CYAN);
+$c->println("\n".'Actualisation des objets', $c::COLOR_LIGHT_PURPLE);
 
 /* Récupération du schéma de référence */
 $ref = $schema->loadFromFile($oa->getOseDir() . 'bdd/ddl.php');
@@ -22,10 +22,10 @@ $ddlConfig = [
     \BddAdmin\Ddl\DdlTrigger::class => $ddlConfig[\BddAdmin\Ddl\DdlTrigger::class],
 ]; // Pour le moment, travail uniquement sur ces 3 structures de données. Pour les autres, cela viendra plus tard.
 
-$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'] = [
-    'V_FORMULE_LOCAL_I_PARAMS',
-    'V_FORMULE_LOCAL_VH_PARAMS',
-];
+//$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'] = [
+//    'V_FORMULE_LOCAL_I_PARAMS',
+//    'V_FORMULE_LOCAL_VH_PARAMS',
+//];
 
 
 /* Mise en place du logging en mode console */

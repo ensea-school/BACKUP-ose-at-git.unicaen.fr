@@ -66,5 +66,5 @@ $oa->migration('pre');
 $oa->run('update-bdd');
 $oa->migration('post');
 
-$c->println("N'oubliez pas de sortir du mode maintenance!");
+$c->println("\nFin de la mise à jour. N'oubliez pas de sortir du mode maintenance!");
 $c->println('');

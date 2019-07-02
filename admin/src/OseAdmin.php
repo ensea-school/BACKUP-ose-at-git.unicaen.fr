@@ -325,10 +325,13 @@ class OseAdmin
 
 
 
+    /**
+     * @return \BddAdmin\Bdd
+     */
     public function getBdd(): \BddAdmin\Bdd
     {
         if (!$this->bdd) {
-            $this->bdd = $this->loadBdd();
+            $this->bdd = new \BddAdmin\Bdd(Config::getBdd());
         }
 
         return $this->bdd;
@@ -338,24 +341,19 @@ class OseAdmin
 
     /**
      * @return bool
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
      */
     public function bddIsOk(): bool
     {
-        $bdd = $this->getBdd();
-        $r   = $bdd->select('SELECT 1 FROM dual');
+        $bddConf = Config::getBdd();
 
-        return isset($r[0][1]) && $r[0][1] === '1';
-    }
-
-
-
-    private function loadBdd(): \BddAdmin\Bdd
-    {
-        $bdd = new \BddAdmin\Bdd(Config::getBdd());
-
-        return $bdd;
+        $cs              = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
+        $characterSet    = 'AL32UTF8';
+        $conn = oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
+        if (!$conn) {
+            return false;
+        }else{
+            oci_close($conn);
+            return true;
+        }
     }
 }

@@ -1,3 +1,3 @@
 <?php
 
-$oa->majPrivileges();
+var_dump( $oa->bddIsOk() );

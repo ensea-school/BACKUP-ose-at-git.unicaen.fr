@@ -38,10 +38,11 @@ $schema->alter($ref, $ddlConfig, true);
 
 $c->println('Fin de mise à jour des définitions');
 
-
-$c->println('Mise à jour des privilèges', $c::COLOR_LIGHT_PURPLE);
-$oa->majPrivileges();
-$c->println('Fin de la mise à jour des privilèges');
-
+// On teste que la méthode existe, car au moment de la MAJ l'objet chargé est la version antérieure à celle de ce sccript
+if (method_exists($oa,'majPrivileges')) {
+    $c->println('Mise à jour des privilèges', $c::COLOR_LIGHT_PURPLE);
+    $oa->majPrivileges();
+    $c->println('Fin de la mise à jour des privilèges');
+}
 
 $c->println('');

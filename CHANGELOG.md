@@ -13,7 +13,7 @@ author: Laurent Lécluse - DSI - Unicaen
   * Pays de naissance
   * Nom patronymique
 
-# OSE 8.1.3 (à venir)
+# OSE 8.1.3
 
 ## Corrections de bugs
 
@@ -29,7 +29,6 @@ ne sont plus affichées lorsqu'on clique sur l'utilisateur en haut à droite.
 * Formules de calcul : nouveau système de récupération des paramètres spécifiques directement implanté dans les formules. 
 Les vues V_FORMULE_LOCAL_I_PARAMS et V_FORMULE_LOCAL_VH_PARAMS ne sont plus nécessaires.
 * Renforcement du script de mise à jour (pour les futures mises à jour) : détection de l'accès à la BDD OK ou non avant de démarrer la procédure et avertissement sans blocage si le cache ne peut pas se nettoyer.
-* Système de mise à jour automatique : les privilèges sont maintenus à jour automatiquement
 
 # OSE 8.1.2
 

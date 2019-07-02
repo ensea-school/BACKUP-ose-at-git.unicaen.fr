@@ -49,9 +49,6 @@ $c->passthru([
     "php composer.phar install",
 ]);
 
-// Néttoyage des caches et mise à jour des proxies, lancement du script de migration éventuel
-$oa->run('clear-cache');
-
 // Mise à jour des liens vers les répertoires publics des dépendances
 $c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
 $res = $oa->majUnicaenSymLinks($osedir);
@@ -65,6 +62,9 @@ $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
 $oa->migration('pre');
 $oa->run('update-bdd');
 $oa->migration('post');
+
+// Néttoyage des caches et mise à jour des proxies
+$oa->run('clear-cache');
 
 $c->println("\nFin de la mise à jour. N'oubliez pas de sortir du mode maintenance!");
 $c->println('');

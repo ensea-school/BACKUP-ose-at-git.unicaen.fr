@@ -195,6 +195,20 @@ class Bdd
 
 
     /**
+     * @param string $sequenceName
+     *
+     * @return int
+     */
+    public function sequenceNextVal(string $sequenceName): int
+    {
+        $r = $this->select("SELECT $sequenceName.NEXTVAL seqval FROM DUAL");
+
+        return (int)$r[0]['SEQVAL'];
+    }
+
+
+
+    /**
      * @param string $sql
      * @param array  $params
      *
@@ -287,76 +301,15 @@ class Bdd
 
 
     /**
-     * @param $table
-     * @param $data
+     * @param string $name
      *
-     * @return bool
+     * @return Table
      */
-    public function insert($table, $data, array $params = [])
+    public function getTable(string $name): Table
     {
-        $cols = array_keys($data);
-        $cols = implode(',', $cols);
+        $table = new Table($this, $name);
 
-        $vals = '';
-        foreach ($data as $col => $val) {
-            if ($vals != '') $vals .= ',';
-
-            $vals .= ":$col";
-        }
-        $sql = "INSERT INTO $table ($cols) VALUES ($vals)";
-
-        return $this->exec($sql, $data);
-    }
-
-
-
-    public function copy(self $source, string $table)
-    {
-
-    }
-
-
-
-    /**
-     * @param string               $table
-     * @param array|string|integer $data
-     *
-     * @return bool
-     */
-    public function delete(string $table, $data)
-    {
-
-        if (!is_array($data)) {
-            $data = ['ID' => $data];
-        }
-
-        $sql   = "DELETE FROM \"$table\" WHERE ";
-        $conds = "";
-        foreach ($data as $col => $val) {
-            if ($conds != '') {
-                $conds .= ' AND ';
-            }
-            $conds .= "$col = :$col";
-        }
-        $sql .= $conds;
-
-        return $this->exec($sql, $data);
-    }
-
-
-
-    /**
-     * Vide une table
-     *
-     * @param string $table
-     *
-     * @return bool
-     */
-    public function truncate(string $table)
-    {
-        $sql = "TRUNCATE TABLE \"$table\"";
-
-        return $this->exec($sql);
+        return $table;
     }
 
 

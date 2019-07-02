@@ -274,6 +274,43 @@ class OseAdmin
 
 
 
+    public function majPrivileges()
+    {
+        /* Chargement des categories en config */
+        $data       = require $this->getOseDir() . 'data/privileges.php';
+        $categories = [];
+        $privileges = [];
+        foreach ($data as $code => $record) {
+            $categories[] = [
+                'CODE'    => $code,
+                'LIBELLE' => $record['libelle'],
+                'ORDRE'   => count($categories) + 1,
+            ];
+            $io           = 0;
+            foreach ($record['privileges'] as $pcode => $plib) {
+                $io++;
+                $privileges[] = [
+                    'CATEGORIE_ID' => $code,
+                    'CODE'         => $pcode,
+                    'LIBELLE'      => $plib,
+                    'ORDRE'        => $io,
+                ];
+            }
+        }
+
+        /* Mise à jour */
+        $this->getBdd()->getTable('CATEGORIE_PRIVILEGE')->merge($categories, 'CODE');
+        $this->getBdd()->getTable('PRIVILEGE')->merge(
+            $privileges,
+            ['CATEGORIE_ID', 'CODE'],
+            ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]]
+        );
+
+        /* Vidage du fichier de cache */
+    }
+
+
+
     public function exec($args)
     {
         $this->console->passthru("php " . $this->getOseDir() . "/public/index.php " . $args);

@@ -37,4 +37,11 @@ $schema->setLogger($scl);
 $schema->alter($ref, $ddlConfig, true);
 
 $c->println('Fin de mise à jour des définitions');
+
+
+$c->println('Mise à jour des privilèges', $c::COLOR_LIGHT_PURPLE);
+$oa->majPrivileges();
+$c->println('Fin de la mise à jour des privilèges');
+
+
 $c->println('');

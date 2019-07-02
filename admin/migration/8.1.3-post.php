@@ -1,3 +1,3 @@
 <?php
 
-$oa->run('clear-cache');
+$this->run('clear-cache');

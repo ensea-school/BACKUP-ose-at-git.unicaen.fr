@@ -13,6 +13,13 @@ author: Laurent Lécluse - DSI - Unicaen
   * Pays de naissance
   * Nom patronymique
 
+# OSE 8.1.4
+
+## Correction de bug
+
+* Bug de la version 8.1.3 corrigé dans l'infrastructure de gestion des formules de calcul : 
+certains volumes horaires étaient comptés deux fois,entrainant plus d'heures HETD que prévu.
+
 # OSE 8.1.3
 
 ## Corrections de bugs

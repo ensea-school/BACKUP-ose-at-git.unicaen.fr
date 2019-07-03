@@ -40,6 +40,7 @@ $schema->setLogger($scl);
 $schema->alter($ref, $ddlConfig, true);
 
 $c->println('Fin de mise à jour des définitions');
+$c->println('');
 
 // On teste que la méthode existe, car au moment de la MAJ l'objet chargé est la version antérieure à celle de ce sccript
 if (method_exists($oa,'majPrivileges')) { /** @deprecated > 8.2 */
@@ -47,6 +48,7 @@ if (method_exists($oa,'majPrivileges')) { /** @deprecated > 8.2 */
     $oa->majPrivileges();
     $c->println('Fin de la mise à jour des privilèges');
 }
+$c->println('');
 
 $oa->migration('post');
 $c->println('');

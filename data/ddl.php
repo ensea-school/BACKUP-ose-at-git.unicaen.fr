@@ -11677,16 +11677,6 @@
           'nullable' => false,
           'default' => NULL,
         ),
-        'CONTACT_PJ' => 
-        array (
-          'name' => 'CONTACT_PJ',
-          'type' => 'VARCHAR2',
-          'length' => 255,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-        ),
         'ENSEIGNEMENT' => 
         array (
           'name' => 'ENSEIGNEMENT',
@@ -11696,16 +11686,6 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-        ),
-        'AFF_ADRESSE_CONTRAT' => 
-        array (
-          'name' => 'AFF_ADRESSE_CONTRAT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '1',
         ),
         'SOURCE_ID' => 
         array (

@@ -63,5 +63,8 @@ $c->println("\nMise à jour des fichiers OK : la version installée est désorma
 // Mise à jour de la base de données à partir d'un nouveau processus
 $oa->run('update-bdd', true);
 
+// Néttoyage des caches
+$oa->run('clear-cache', true);
+
 $c->println("\nFin de la mise à jour. N'oubliez pas de sortir du mode maintenance!");
 $c->println('');

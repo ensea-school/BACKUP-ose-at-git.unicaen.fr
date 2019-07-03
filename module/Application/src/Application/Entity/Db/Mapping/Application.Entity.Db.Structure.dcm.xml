@@ -19,9 +19,7 @@
     <field name="code" type="string" column="CODE" length="100" nullable="true"/>
     <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="60" nullable="false"/>
-    <field name="contactPj" type="string" column="CONTACT_PJ" length="255" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
-    <field name="affAdresseContrat" type="boolean" column="AFF_ADRESSE_CONTRAT" nullable="false"/>
     <field name="enseignement" type="boolean" column="ENSEIGNEMENT" nullable="false"/>
     <many-to-one field="source" target-entity="UnicaenImport\Entity\Db\Source">
       <join-columns>

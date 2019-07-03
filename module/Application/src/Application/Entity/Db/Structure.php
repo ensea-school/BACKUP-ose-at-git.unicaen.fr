@@ -38,11 +38,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     protected $libelleLong;
 
     /**
-     * @var string
-     */
-    protected $contactPj;
-
-    /**
      * @var integer
      */
     protected $id;
@@ -63,11 +58,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      * @var MiseEnPaiementIntervenantStructure
      */
     protected $miseEnPaiementIntervenantStructure;
-
-    /**
-     * @var boolean
-     */
-    protected $affAdresseContrat;
 
     /**
      * @var boolean
@@ -161,34 +151,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getLibelleLong()
     {
         return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Set contactPj
-     *
-     * @param string $contactPj
-     *
-     * @return Structure
-     */
-    public function setContactPj($contactPj)
-    {
-        $this->contactPj = $contactPj;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get contactPj
-     *
-     * @return string
-     */
-    public function getContactPj()
-    {
-        return $this->contactPj;
     }
 
 
@@ -293,30 +255,6 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     public function getMiseEnPaiementIntervenantStructure()
     {
         return $this->miseEnPaiementIntervenantStructure;
-    }
-
-
-
-    /**
-     * @return boolean
-     */
-    public function getAffAdresseContrat()
-    {
-        return $this->affAdresseContrat;
-    }
-
-
-
-    /**
-     * @param boolean $affAdresseContrat
-     *
-     * @return Structure
-     */
-    public function setAffAdresseContrat($affAdresseContrat)
-    {
-        $this->affAdresseContrat = $affAdresseContrat;
-
-        return $this;
     }
 
 

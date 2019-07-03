@@ -3,6 +3,9 @@
 $bdd    = $oa->getBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
+$c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
+$oa->migration('pre');
+
 $c->println("\n".'Mise à jour des définitions de la base de données', $c::COLOR_LIGHT_PURPLE);
 
 /* Récupération du schéma de référence */
@@ -22,10 +25,10 @@ $ddlConfig = [
     \BddAdmin\Ddl\DdlTrigger::class => $ddlConfig[\BddAdmin\Ddl\DdlTrigger::class],
 ]; // Pour le moment, travail uniquement sur ces 3 structures de données. Pour les autres, cela viendra plus tard.
 
-//$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'] = [
-//    'V_FORMULE_LOCAL_I_PARAMS',
-//    'V_FORMULE_LOCAL_VH_PARAMS',
-//];
+$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'] = [ // afin d'être sûr qu'elles seront supprimées, car devenues inutiles
+    'V_FORMULE_LOCAL_I_PARAMS',
+    'V_FORMULE_LOCAL_VH_PARAMS',
+];
 
 
 /* Mise en place du logging en mode console */
@@ -39,10 +42,11 @@ $schema->alter($ref, $ddlConfig, true);
 $c->println('Fin de mise à jour des définitions');
 
 // On teste que la méthode existe, car au moment de la MAJ l'objet chargé est la version antérieure à celle de ce sccript
-if (method_exists($oa,'majPrivileges')) {
+if (method_exists($oa,'majPrivileges')) { /** @deprecated > 8.2 */
     $c->println('Mise à jour des privilèges', $c::COLOR_LIGHT_PURPLE);
     $oa->majPrivileges();
     $c->println('Fin de la mise à jour des privilèges');
 }
 
+$oa->migration('post');
 $c->println('');

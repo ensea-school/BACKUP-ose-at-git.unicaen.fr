@@ -13,6 +13,8 @@ $actions = [
     "test-bdd"                  => "Test d'accès à la base de données",
 ];
 
+$c->printMainTitle("OSE", 15);
+
 $c->println('Actions possibles :');
 foreach ($actions as $a => $l) {
     $c->print($a, $c::COLOR_BLACK, $c::BG_LIGHT_GRAY);

@@ -52,6 +52,13 @@ class OseAdmin
     {
         $this->version    = $this->currentVersion();
         $this->oldVersion = $this->version;
+
+        if ($this->console->hasOption('oa-old-version')){
+            $this->oldVersion = $this->console->getOption('oa-old-version');
+        }
+        if ($this->console->hasOption('oa-version')){
+            $this->version = $this->console->getOption('oa-version');
+        }
     }
 
 
@@ -159,15 +166,22 @@ class OseAdmin
     /**
      * @param string $action
      */
-    public function run(string $action)
+    public function run(string $action, $newProcess=false)
     {
-        $oa = $this;
-        $c  = $this->console;
-
         if (file_exists($this->getOseDir() . 'admin/actions/' . $action . '.php')) {
-            require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
+            if ($newProcess){
+                $this->console->passthru(
+                    "php " . $this->getOseDir() . "/bin/ose " . $action
+                    .' --oa-old-version='.$this->oldVersion
+                    .' --oa-version='.$this->version
+                );
+            }else{
+                $oa = $this;
+                $c  = $this->console;
+                require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
+            }
         } else {
-            $c->println('Action "' . $action . '" inconnue.', $c::COLOR_RED);
+            $this->console->println('Action "' . $action . '" inconnue.', $this->console::COLOR_RED);
             require_once $this->getOseDir() . 'admin/actions/help.php';
         }
     }
@@ -189,64 +203,35 @@ class OseAdmin
 
 
 
-    /**
-     * Lancement des scripts éventuels liés à des migrations pour des versions spécifiques
-     *
-     * @param string $prePost
-     *
-     * @return bool
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
-     */
-    public function migration(string $prePost = 'pre'): bool
+    protected function getMigrationFilesToExecute(string $oldVersion, string $newVersion, string $prePost = 'pre'): array
     {
-        $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_PURPLE);
-        $execs = 0;
         $tags  = $this->getTags(1);
         foreach ($tags as $i => $tag) {
             $tags[$i] = $this->purgerVersion($tag);
         }
         $tags = array_unique($tags);
 
-        $oldIndex = array_search($this->purgerVersion($this->oldVersion), $tags);
-        $newIndex = array_search($this->purgerVersion($this->version), $tags);
+        $oldIndex = array_search($this->purgerVersion($oldVersion), $tags);
+        $newIndex = array_search($this->purgerVersion($newVersion), $tags);
+
+        $scripts = [];
 
         if ($oldIndex !== false && $newIndex !== false && $oldIndex < $newIndex) {
             for ($i = $oldIndex + 1; $i <= $newIndex; $i++) {
+
                 $phpMigr = $this->getOseDir() . 'admin/migration/' . $tags[$i] . '-' . $prePost . '.php';
                 $sqlMigr = $this->getOseDir() . 'admin/migration/' . $tags[$i] . '-' . $prePost . '.sql';
 
                 if (file_exists($sqlMigr)) {
-                    $this->console->println('Exécution du script de ' . $prePost . '-migration SQL de la version ' . $tags[$i], $this->console::COLOR_LIGHT_BLUE);
-                    $errors = $this->getBdd()->execFile($sqlMigr);
-                    $execs++;
-                    if (!empty($errors)) {
-                        $this->console->println('Des erreurs ont été rencontrées durant l\'exécution du script de migration :', $this->console::BG_RED);
-                        foreach ($errors as $e) {
-                            $this->console->println($e->getMessage(), $this->console::COLOR_RED);
-                        }
-                    }
+                    $scripts[] = $sqlMigr;
                 }
 
                 if (file_exists($phpMigr)) {
-                    $execs++;
-                    $this->console->println('Exécution du script de ' . $prePost . '-migration PHP de la version ' . $tags[$i], $this->console::COLOR_LIGHT_BLUE);
-                    try {
-                        require_once $phpMigr;
-                    } catch (\Exception $e) {
-                        $this->console->println($e->getMessage(), $this->console::COLOR_RED);
-                    }
+                    $scripts[] = $phpMigr;
                 }
             }
 
-            if ($execs > 0) {
-                $this->console->println("Scripts de $prePost-migration exécutés");
-            } else {
-                $this->console->println("Aucun script de $prePost-migration à exécuter");
-            }
-
-            return true;
+            return $scripts;
         } else {
             if ($prePost == 'pre') { // on n'avertit qu'une seule fois!
                 $this->console->println('Attention : les scripts de migration automatiques n\'ont pas pu être déclenchés :', $this->console::BG_RED);
@@ -268,8 +253,75 @@ class OseAdmin
                 );
             }
 
-            return false;
+            return [];
         }
+    }
+
+
+
+    protected  function runMigrationPhpScript(string $filename)
+    {
+        $this->console->println('Exécution du script de migration ' . basename($filename), $this->console::COLOR_YELLOW);
+        try {
+            $oa = $this;
+            $c  = $this->console;
+
+            require_once $filename;
+        } catch (\Exception $e) {
+            $this->console->println($e->getMessage(), $this->console::COLOR_RED);
+        }
+    }
+
+
+
+    protected  function runMigrationSqlScript(string $filename)
+    {
+        $this->console->println('Exécution du script de migration ' . basename($filename), $this->console::COLOR_YELLOW);
+        $errors = $this->getBdd()->execFile($filename);
+        if (!empty($errors)) {
+            $this->console->println('Des erreurs ont été rencontrées durant l\'exécution du script de migration :', $this->console::BG_RED);
+            foreach ($errors as $e) {
+                $this->console->println($e->getMessage(), $this->console::COLOR_RED);
+            }
+        }
+    }
+
+
+
+    /**
+     * Lancement des scripts éventuels liés à des migrations pour des versions spécifiques
+     *
+     * @param string $prePost
+     *
+     * @return bool
+     * @throws \BddAdmin\Exception\BddCompileException
+     * @throws \BddAdmin\Exception\BddException
+     * @throws \BddAdmin\Exception\BddIndexExistsException
+     */
+    public function migration(string $prePost = 'pre'): bool
+    {
+        $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_PURPLE);
+
+        $scripts = $this->getMigrationFilesToExecute($this->oldVersion, $this->version, $prePost);
+        foreach( $scripts as $script ){
+            $ext = substr($script, -3);
+            switch($ext){
+                case 'php':
+                    $this->runMigrationPhpScript($script);
+                break;
+                case 'sql':
+                    $this->runMigrationSqlScript($script);
+                break;
+            }
+        }
+
+        if (count($scripts) > 0) {
+            $this->console->println("Scripts de $prePost-migration exécutés");
+        } else {
+            $this->console->println("Aucun script de $prePost-migration à exécuter");
+        }
+
+        return true;
     }
 
 

@@ -171,9 +171,8 @@ class Ligne extends AbstractViewHelper
     {
         if (! $structure) return '';
 
-        $url = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);
-        $pourl = $this->getView()->url('structure/default', ['action' => 'apercevoir', 'id' => $structure->getId()]);
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
+        $url = $this->getView()->url('structure/voir', ['structure' => $structure->getId()]);
+        $out = '<a href="'.$url.'" class="ajax-modal">'.$structure.'</a>';
         return $out;
     }
 

@@ -2,7 +2,6 @@
 
 namespace Application\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Traits\StructureAwareTrait;
 
@@ -11,7 +10,7 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class StructureViewHelper extends AbstractHelper
+class StructureViewHelper extends AbstractViewHelper
 {
     use StructureAwareTrait;
 
@@ -85,9 +84,8 @@ class StructureViewHelper extends AbstractHelper
             return '<span class="bg-danger"><abbr title="Cette structure n\'existe plus">' . $structure . '</abbr></span>';
         }
 
-        $url   = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);
-        $pourl = $this->getView()->url('structure/default', ['action' => 'apercevoir', 'id' => $structure->getId()]);
-        $out   = '<a href="' . $url . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $structure . '</a>';
+        $url   = $this->getView()->url('structure/voir', ['structure' => $structure->getId()]);
+        $out   = '<a href="' . $url . '" class="ajax-modal">' . $structure . '</a>';
 
         return $out;
     }

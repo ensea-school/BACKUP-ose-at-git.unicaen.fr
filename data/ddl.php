@@ -24845,6 +24845,7 @@ END OSE_FORMULE;',
         intervenant.param_4,
         intervenant.param_5
       ;
+      EXIT WHEN cur%NOTFOUND;
 
       intervenant.depassement_service_du_sans_hc := (i_dep_service_du_sans_hc = 1);
       intervenant.service_du := CASE
@@ -24854,8 +24855,6 @@ END OSE_FORMULE;',
         THEN 9999
         ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
       END;
-
-      EXIT WHEN cur%NOTFOUND;
     END LOOP;
     CLOSE cur;
 
@@ -25007,6 +25006,8 @@ END OSE_FORMULE;',
         vh.param_4,
         vh.param_5
       ;
+      EXIT WHEN cur%NOTFOUND;
+
       vh.structure_is_affectation := vh_structure_is_affectation = 1;
       vh.structure_is_univ        := vh_structure_is_univ = 1;
 
@@ -25020,8 +25021,6 @@ END OSE_FORMULE;',
         all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).length := length;
         all_volumes_horaires(vh_intervenant_id)(vh_type_volume_horaire_id)(etat_volume_horaire_id).items(length) := vh;
       END LOOP;
-
-      EXIT WHEN cur%NOTFOUND;
     END LOOP;
     CLOSE cur;
   END;

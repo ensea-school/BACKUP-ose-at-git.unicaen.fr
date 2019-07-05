@@ -40,6 +40,7 @@
         <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
         <field name="BIC" type="string" column="BIC" length="255" nullable="true"/>
         <field name="IBAN" type="string" column="IBAN" length="255" nullable="true"/>
+        <field name="ribHorsSepa" type="boolean" column="RIB_HORS_SEPA"/>
         <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
         <field name="montantIndemniteFc" type="float" column="MONTANT_INDEMNITE_FC" nullable="true" />
 

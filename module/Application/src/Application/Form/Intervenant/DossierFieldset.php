@@ -14,6 +14,7 @@ use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\NumeroINSEEValidator;
 use Application\Validator\PaysNaissanceValidator;
 use Application\Constants;
+use Application\Validator\RIBValidator;
 use DoctrineModule\Form\Element\Proxy;
 use DoctrineORMModule\Form\Element\EntitySelect;
 use Zend\Validator\Date as DateValidator;
@@ -21,7 +22,6 @@ use Zend\Validator\Date as DateValidator;
 /**
  * Description of DossierFieldset
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class DossierFieldset extends AbstractFieldset
 {
@@ -268,17 +268,37 @@ class DossierFieldset extends AbstractFieldset
             'type'       => 'Text',
         ]);
 
-        /**
-         * RIB
-         */
+
         $this->add([
-            'name'       => 'rib',
+            'name'       => 'ribBic',
             'options'    => [
-                'label' => 'RIB du <em>compte personnel</em>',
+                'label' => 'BIC',
             ],
             'attributes' => [
+                'size'      => 11,
+                'maxlength' => 11,
             ],
-            'type'       => 'UnicaenApp\Form\Element\RIBFieldset',
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
+            'name'       => 'ribIban',
+            'options'    => [
+                'label' => 'IBAN',
+            ],
+            'attributes' => [
+                'size'      => 34,
+                'maxlength' => 34,
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
+            'name'    => 'ribHorsSepa',
+            'options' => [
+                'label' => 'RIB hors zone SEPA',
+            ],
+            'type'    => 'Checkbox',
         ]);
 
         /**
@@ -407,18 +427,41 @@ class DossierFieldset extends AbstractFieldset
                 ],
             ],
             'telephone'            => [
+                'required' => true,
+                'filters'  => [
+                    ['name' => 'StringTrim'],
+                ],
+            ],
+
+            'ribBic' => [
                 'required'   => true,
                 'filters'    => [
                     ['name' => 'StringTrim'],
+                    ['name' => 'StringToUpper'],
                 ],
                 'validators' => [
-//                    new \Zend\I18n\Validator\PhoneNumber(), // les formats de numéros ne tolèrent pas le 0 de tête!!
+                    new \Zend\Validator\Regex([
+                        'pattern'  => "/[0-9a-zA-Z]{8,11}/",
+                        'messages' => [\Zend\Validator\Regex::NOT_MATCH => "Le BIC doit contenir 8 à 11 caractères"],
+                    ]),
                 ],
             ],
-            'premierRecrutement'   => [
+
+            'ribIban' => [
+                'required'   => true,
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                    ['name' => 'StringToUpper'],
+                ],
+                'validators' => [
+                    new RIBValidator(),
+                ],
+            ],
+
+            'premierRecrutement' => [
                 'required' => $this->has('premierRecrutement'),
             ],
-            'statut'               => [
+            'statut'             => [
                 'required' => true,
             ],
         ];

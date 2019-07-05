@@ -174,6 +174,11 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     protected $IBAN;
 
     /**
+     * @var bool
+     */
+    protected $ribHorsSepa = false;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $service;
@@ -1013,6 +1018,30 @@ class Intervenant implements HistoriqueAwareInterface, ResourceInterface, AnneeA
     public function getIBAN()
     {
         return $this->IBAN;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isRibHorsSepa(): bool
+    {
+        return $this->ribHorsSepa;
+    }
+
+
+
+    /**
+     * @param bool $ribHorsSepa
+     *
+     * @return Intervenant
+     */
+    public function setRibHorsSepa(bool $ribHorsSepa): Intervenant
+    {
+        $this->ribHorsSepa = $ribHorsSepa;
+
+        return $this;
     }
 
 

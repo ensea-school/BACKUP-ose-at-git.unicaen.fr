@@ -21,7 +21,7 @@ class DossierFieldsetDoctrineHydrator extends DoctrineObject
      */
     public function hydrate(array $data, $dossier)
     {
-        $data['rib'] = implode('-', $data['rib']);
+        $data['rib'] = $data['ribBic'].'-'.$data['ribIban'];
         
         if (isset($data['dateNaissance'])) {
             $data['dateNaissance'] = DateTime::createFromFormat(Constants::DATE_FORMAT, $data['dateNaissance']);
@@ -49,7 +49,9 @@ class DossierFieldsetDoctrineHydrator extends DoctrineObject
             $data['dateNaissance'] = $dossier->getDateNaissance()->format(Constants::DATE_FORMAT);
         }
         if ($dossier->getRib()) {
-            $data['rib'] = array_combine(['bic', 'iban'], explode('-', $dossier->getRib()));
+            $rib = explode('-', $dossier->getRib());
+            $data['ribBic'] = isset($rib[0]) ? $rib[0] : null;
+            $data['ribIban'] = isset($rib[1]) ? $rib[1] : null;
         }
         
         $this->processPremierRecrutement($data);

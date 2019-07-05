@@ -70,6 +70,11 @@ class Dossier implements HistoriqueAwareInterface
     protected $rib;
 
     /**
+     * @var bool
+     */
+    protected $ribHorsSepa = false;
+
+    /**
      * @var StatutIntervenant
      */
     protected $statut;
@@ -425,6 +430,30 @@ class Dossier implements HistoriqueAwareInterface
     public function getRib()
     {
         return $this->rib;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isRibHorsSepa(): bool
+    {
+        return $this->ribHorsSepa;
+    }
+
+
+
+    /**
+     * @param bool $ribHorsSepa
+     *
+     * @return Dossier
+     */
+    public function setRibHorsSepa(bool $ribHorsSepa): Dossier
+    {
+        $this->ribHorsSepa = $ribHorsSepa;
+
+        return $this;
     }
 
 

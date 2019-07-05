@@ -50,10 +50,10 @@ $dossier = $form->get('dossier'); /* @var $dossier \Application\Form\Intervenant
     </div>
     <div class="col-md-5">
         <fieldset class="rib">
-            <legend><?= $dossier->get('rib')->getLabel() ?></legend>
-            <div class="rib-part"><?= $this->formControlGroup($dossier->get('rib')->get('bic')); ?></div>
-            <div class="rib-part"><?= $this->formControlGroup($dossier->get('rib')->get('iban')); ?></div>
-            <?= $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
+            <legend>Coordonnées bancaires</legend>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('ribBic')); ?></div>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('ribIban')); ?></div>
+            <div class="rib-part"><?= $this->formControlGroup($dossier->get('ribHorsSepa')); ?></div>
         </fieldset>
         <?php if ($dossier->has('premierRecrutement')) {
             echo $this->formControlGroup($dossier->get('premierRecrutement'));

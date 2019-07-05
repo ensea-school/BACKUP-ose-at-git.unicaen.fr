@@ -153,8 +153,9 @@ class Dossier extends AbstractForm
             'emailPerso'                => 'readonly',
             'telephone'                 => 'readonly',
             'premierRecrutement'        => 'disabled',
-            'rib/bic'                   => 'readonly',
-            'rib/iban'                  => 'readonly',
+            'ribBic'                    => 'readonly',
+            'ribIban'                   => 'readonly',
+            'ribHorsSepa'                   => 'readonly',
         ];
 
         foreach( $roElements as $roe => $attr ){

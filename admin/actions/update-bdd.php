@@ -25,10 +25,15 @@ $ddlConfig = [
     \BddAdmin\Ddl\DdlTrigger::class => $ddlConfig[\BddAdmin\Ddl\DdlTrigger::class],
 ]; // Pour le moment, travail uniquement sur ces 3 structures de données. Pour les autres, cela viendra plus tard.
 
-$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'] = [ // afin d'être sûr qu'elles seront supprimées, car devenues inutiles
-    'V_FORMULE_LOCAL_I_PARAMS',
-    'V_FORMULE_LOCAL_VH_PARAMS',
-];
+
+$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'][] = 'V_FORMULE_LOCAL_I_PARAMS';
+$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'][] = 'V_FORMULE_LOCAL_VH_PARAMS';
+
+if (!isset($ddlConfig[\BddAdmin\Ddl\DdlTable::class]['includes'])){ // provisoire, en attendant que les tables soient gérées automatiquement
+    $ddlConfig[\BddAdmin\Ddl\DdlTable::class]['includes'] = [];
+}
+$ddlConfig[\BddAdmin\Ddl\DdlTable::class]['includes'][] = 'TYPE_DOTATION';
+
 
 
 /* Mise en place du logging en mode console */

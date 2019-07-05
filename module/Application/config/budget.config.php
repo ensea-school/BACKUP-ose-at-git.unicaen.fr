@@ -86,44 +86,6 @@ return [
                             ],
                         ],
                     ],
-                    'type-dotation'           => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-dotation',
-                            'constraints' => [
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-dotation',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
-                    'type-dotation-saisie'    => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-dotation-saisie[/:typeDotation]',
-                            'constraints' => [
-                                'typeDotation' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-dotation-saisie',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
-                    'type-dotation-delete'    => [
-                        'type'          => 'Segment',
-                        'options'       => [
-                            'route'       => '/type-dotation-delete/:typeDotation',
-                            'constraints' => [
-                                'typeDotation' => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'type-dotation-delete',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
                 ],
             ],
         ],
@@ -160,13 +122,6 @@ return [
                                         'title'    => 'Export des données de paiement (CSV)',
                                         'route'    => 'budget/export',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\Budget', 'export'),
-                                    ],
-                                    'type-dotation'           => [
-                                        'label'      => 'Types de dotation',
-                                        'title'      => 'Types de dotations',
-                                        'route'      => 'budget/type-dotation',
-                                        'withtarget' => true,
-                                        'resource'   => PrivilegeController::getResourceId('Application\Controller\Budget', 'type-dotation'),
                                     ],
                                 ],
                             ],
@@ -259,7 +214,6 @@ return [
     'form_elements'   => [
         'invokables' => [
             Form\Budget\DotationSaisieForm::class     => Form\Budget\DotationSaisieForm::class,
-            Form\Budget\TypeDotationSaisieForm::class => Form\Budget\TypeDotationSaisieForm::class,
         ],
     ],
     'service_manager' => [
@@ -267,7 +221,6 @@ return [
             Service\TypeRessourceService::class => Service\TypeRessourceService::class,
             Service\DotationService::class      => Service\DotationService::class,
             Assertion\BudgetAssertion::class    => Assertion\BudgetAssertion::class,
-            Service\TypeDotationService::class  => Service\TypeDotationService::class,
         ],
     ],
     'controllers'     => [

@@ -12,6 +12,8 @@ author: Laurent Lécluse - DSI - Unicaen
   * Composante d'affectation
   * Pays de naissance
   * Nom patronymique
+  
+* Les coordonnées bancaires peuvent être saisies même si elles sont hors zone SEPA (une case à cocher limite le contrôle)
 
 # OSE 8.1.4
 

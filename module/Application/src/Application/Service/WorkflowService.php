@@ -292,8 +292,8 @@ class WorkflowService extends AbstractService
         $sql = "SELECT tbl_name FROM tbl WHERE tbl_name <> 'formule' ORDER BY ordre";
         $tbls = $this->getEntityManager()->getConnection()->fetchAll($sql);
         $result = true;
-        $begin = microtime(true);
         foreach( $tbls as $tbl ){
+            $begin = microtime(true);
             $tbl = $tbl['TBL_NAME'];
             $sql = 'BEGIN UNICAEN_TBL.CALCULER(\''.$tbl.'\'); END;';
             if (is_callable($beforeTrigger)){

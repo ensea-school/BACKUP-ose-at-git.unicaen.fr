@@ -356,6 +356,21 @@ Voici un exemple de crontab :
 
 OSE est maintenant installé.
 
+## Cas spécifique des versions de pré-production
+
+Il n'est pas recommandé d'activer les notifications pour les indicateurs en pré-production.
+De même, il est déconseillé de lancer la tâche de synchronisation tous les quarts d'heure en pré-prod.
+Le mieux est, dans ce contexte, de réaliser ces synchronisations manuellement, table par table, depuis l'interface de OSE.
+cela vous permettra de
+
+*  mieux maitriser les flux de données entre votre SI et OSE ;
+*  mieux identifier des problèmes éventuels au niveau des connecteurs puisque OSE affiche les erreurs rencontrées à l'écran ;
+*  d'avoir une offre de formation de test "stable", c'est-à-dire qui ne se met pas à jour toute seule, ce qui simplifiera vos tests.
+
+En revanche, il est vivement recommandé de bien paramétrer en préproduction les autres tâches
+(calcul des effectifs Chargens, calcul des tableau de bord, formule de calcul).
+
+
 # Connecteurs
 Afin de pouvoir intégrer OSE à votre système d'information, 
 des [connecteurs](connecteurs/) 

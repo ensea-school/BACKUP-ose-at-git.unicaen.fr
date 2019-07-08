@@ -42,14 +42,14 @@ class MotifModificationServiceSaisieForm extends AbstractForm
             'type'    => 'Select',
         ]);
         $this->get('multiplicateur')->setValueOptions(Array(
-            '-1' => '-1',
-            '1' => '1',
+            '-1' => '-1 : retire du service dû',
+            '1' => '1 : ajoute du service dû',
         ));
 
         $this->add([
             'name'    => 'decharge',
             'options' => [
-                'label' => "Traité comme une décharge (le dépassement du service dû ne donne pas lieu à des heures complémentaires)",
+                'label' => "Le dépassement du service dû ne donnera pas lieu à des heures complémentaires (comme par exemple pour une décharge)",
             ],
             'type'    => 'Checkbox',
         ]);

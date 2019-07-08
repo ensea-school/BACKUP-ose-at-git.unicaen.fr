@@ -24,7 +24,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::MOTIFS_MODIFIC
                     <th style="word-wrap: break-word ; ">Code</th>
                     <th style="word-wrap: break-word ; ">Libelle</th>
                     <th style="word-wrap: break-word ; ">Multiplicateur</th>
-                    <th style="word-wrap: break-word ; ">Décharge</th>
+                    <th style="word-wrap: break-word ; " title="Le dépassement du service dû ne donnera pas lieu à des heures complémentaires (comme par exemple pour une décharge)">Pas d'heures complémentaires</th>
 <?php if ($canEdit) echo '<th>Actions</th>' ?>
         </thead>
         <tbody>

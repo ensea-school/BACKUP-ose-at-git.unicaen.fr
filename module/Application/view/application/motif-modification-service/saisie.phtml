@@ -8,19 +8,19 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 echo $this->form()->openTag($form); ?>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <?= $this->formControlGroup($form->get('code')); ?>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         <?= $this->formControlGroup($form->get('libelle')); ?>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <?= $this->formControlGroup($form->get('multiplicateur')); ?>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-8">
         <br>
         <?= $this->formControlGroup($form->get('decharge')); ?>
     </div>

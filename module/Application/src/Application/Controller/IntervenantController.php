@@ -352,7 +352,7 @@ class IntervenantController extends AbstractController
             try {
                 if ($data) $data = $this->getProcessusIntervenant()->suppression()->deleteRecursive($data, $ids);
                 if ($intervenant) {
-                    $this->getServiceWorkflow()->calculerTableauxBord(null, $intervenant);
+                    $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
                 }
                 if (!$data) {
                     $this->flashMessenger()->addSuccessMessage('Fiche intervenant supprimée intégralement. Vous allez être redirigé(e) vers la page de recherche des intervenants.');

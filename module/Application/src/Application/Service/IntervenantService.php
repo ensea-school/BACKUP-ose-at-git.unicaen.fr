@@ -7,7 +7,6 @@ use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\TypeIntervenant;
-use Application\Filter\StringFromFloat;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -130,7 +129,7 @@ class IntervenantService extends AbstractEntityService
 
             $result = $repo->findOneBy($findParams); // on retente
             if ($result) {
-                $this->getServiceWorkflow()->calculerTableauxBord(null, $result);
+                $this->getServiceWorkflow()->calculerTableauxBord([], $result);
             }
         }
 

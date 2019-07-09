@@ -51,10 +51,10 @@ return [
         'messageBienvenue'       => 'Bienvenue dans l\'application de saisie des enseignements de l\'université de Caen Normandie.',
 
         /* Page web des mentions légales de votre établissement */
-        'mentionsLegales'        => "http://gest.unicaen.fr/acces-direct/mentions-legales/",
+        'mentionsLegales'        => "http://www.unicaen.fr/acces-direct/mentions-legales/",
 
-        /* Page web mentionnant vos règles "informatique et liberté" */
-        'informatiqueEtLibertes' => "http://gest.unicaen.fr/acces-direct/informatique-et-libertes/",
+        /* Page web mentionnant vos règles "vie privée" */
+        'viePrivee'              => "http://www.unicaen.fr/vie-privee/",
 
         /* URL de votre propre feuille de style pour personnaliser OSE */
         'css'                    => null,

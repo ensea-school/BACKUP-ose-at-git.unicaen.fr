@@ -12,8 +12,21 @@ author: Laurent Lécluse - DSI - Unicaen
   * Composante d'affectation
   * Pays de naissance
   * Nom patronymique
-  
+
 * Les coordonnées bancaires peuvent être saisies même si elles sont hors zone SEPA (une case à cocher limite le contrôle)
+
+## Nouveautés
+
+* Le logo Unicaen n'est plus fourni par défaut dans l'interface de OSE en pied de page
+* Le lien "Informatique et libertés" est remplacé par un nouveau lien "Vie privée"
+
+## Notes de mise à jour
+
+* CSS personnalisée : Si vous avez remplacé le logo Unicaen par votre propre logo en pied de page, 
+la classe CSS pour cela est maintenant "lien-univ" au lien de "ucbn".
+
+* Dans le fichier de configuration, remplacer l'item "informatiqueEtLibertes" par "viePrivee"
+
 
 # OSE 8.1.4
 

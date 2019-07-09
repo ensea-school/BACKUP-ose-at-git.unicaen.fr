@@ -224,8 +224,7 @@ $config = [
             '030_jquery-ui-theme'     => 'vendor/jquery-ui-1.11.4/jquery-ui.theme.min.css',
             '040_bootstrap'           => 'vendor/bootstrap-3.3.5/css/bootstrap.min.css',
             '050_bootstrap-theme'     => 'vendor/bootstrap-3.3.5/css/bootstrap-theme.min.css',
-            '060_unicaen'             => 'vendor/unicaen/app/css/unicaen.css',
-
+            //'060_unicaen'             => 'vendor/unicaen/app/css/unicaen.css',
 
             '111_' => 'css/cartridge.css',
             '112_' => 'vendor/font-awesome-4.5.0/css/font-awesome.min.css',

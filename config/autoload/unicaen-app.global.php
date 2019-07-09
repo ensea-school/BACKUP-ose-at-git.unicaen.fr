@@ -88,12 +88,13 @@ return [
                         'label' => AppConfig::get('etablissement', 'nom'),
                         'title' => AppConfig::get('etablissement', 'logoDescription'),
                         'uri'   => AppConfig::get('etablissement', 'logoUri'),
+                        'class' => 'lien-univ',
                     ],
                     'mentions-legales'         => [
                         'uri' => AppConfig::get('etablissement', 'mentionsLegales'),
                     ],
                     'informatique-et-libertes' => [
-                        'uri' => AppConfig::get('etablissement', 'informatiqueEtLibertes'),
+                        'uri' => AppConfig::get('etablissement', 'viePrivee'),
                     ],
                 ],
             ],

@@ -182,6 +182,7 @@ class OseAdmin
             }
         } else {
             $this->console->println('Action "' . $action . '" inconnue.', $this->console::COLOR_RED);
+            $c  = $this->console;
             require_once $this->getOseDir() . 'admin/actions/help.php';
         }
     }

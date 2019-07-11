@@ -271,9 +271,9 @@ class Console
             }
 
             if ($silent) {
-                $res[$option] = $this->getInput($option, $description, $type, $format);
-            } else {
                 $res[$option] = $this->getSilentInput($option, $description, $type, $format);
+            } else {
+                $res[$option] = $this->getInput($option, $description, $type, $format);
             }
         }
 

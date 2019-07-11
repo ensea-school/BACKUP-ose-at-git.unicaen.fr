@@ -54,12 +54,12 @@ Paramètres possibles :
 
 Exemple de commande lancée avec des paramètres :
 ```bash
-./bin/ose creer-utilisateur\
-    --nom="Lécluse"\
-    --prenom="Laurent\
-    --date-naissance="01/01/1990"
-    --login="lecluse"
-    --mot-de-passe="mon-mdp-caché"
+./bin/ose creer-utilisateur \
+    --nom="Lécluse" \
+    --prenom="Laurent" \
+    --date-naissance="01/01/1990" \
+    --login="lecluse" \
+    --mot-de-passe="mon-mdp-caché" \
     --creer-intervenant=n
 ```
 

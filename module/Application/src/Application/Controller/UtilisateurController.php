@@ -3,20 +3,20 @@
 namespace Application\Controller;
 
 use Application\Acl\Role;
+use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenAuth\Controller\UtilisateurController as BaseController;
-
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
 
-/**
- *
- *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- */
+
+
 class UtilisateurController extends BaseController
 {
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
+    use UtilisateurServiceAwareTrait;
+    use UserServiceAwareTrait;
 
 
     /**
@@ -52,5 +52,21 @@ class UtilisateurController extends BaseController
         $this->flashMessenger()->addSuccessMessage($message);
 
         exit;
+    }
+
+
+
+    public function changementMotDePasseAction()
+    {
+        $utilisateur = $this->getRequest()->getParam('utilisateur');
+        $motDePasse  = $this->getRequest()->getParam('mot-de-passe');
+
+        $userObject = $this->getServiceUtilisateur()->getByUsername($utilisateur);
+
+        if (!$userObject) {
+            throw new \Exception("Utilisateur $utilisateur non trouvé");
+        }
+
+        $this->getServiceUtilisateur()->changerMotDePasse($userObject, $motDePasse);
     }
 }

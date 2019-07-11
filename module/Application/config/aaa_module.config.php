@@ -183,7 +183,6 @@ $config = [
     'controllers'        => [
         'invokables' => [
             'Application\Controller\Index'       => Controller\IndexController::class,
-            'UnicaenAuth\Controller\Utilisateur' => Controller\UtilisateurController::class,
         ],
     ],
     'controller_plugins' => [

@@ -69,4 +69,22 @@ class UtilisateurController extends BaseController
 
         $this->getServiceUtilisateur()->changerMotDePasse($userObject, $motDePasse);
     }
+
+
+
+    public function creationAction()
+    {
+        $data = $this->getRequest()->getParam('data');
+        $data = json_decode(base64_decode($data));
+        $data->{'date-naissance'} = \DateTime::createFromFormat('d/m/Y', $data->{'date-naissance'});
+
+        $this->getServiceUtilisateur()->creerUtilisateur(
+            $data->nom,
+            $data->prenom,
+            $data->{'date-naissance'},
+            $data->login,
+            $data->{'mot-de-passe'},
+            $data->{'creer-intervenant'}
+        );
+    }
 }

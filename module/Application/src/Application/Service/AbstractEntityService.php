@@ -1,6 +1,7 @@
 <?php
 namespace Application\Service;
 
+use Application\Entity\Db\Utilisateur;
 use Doctrine\ORM\EntityRepository;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\ObjectProperty;
@@ -432,6 +433,16 @@ abstract class AbstractEntityService extends AbstractService
         if ($serviceEntityClass != $entityClass && !is_subclass_of($entity, $serviceEntityClass)) {
             throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
         }
+
+        if ($entity instanceof HistoriqueAwareInterface){
+            if (!$entity->getHistoCreateur()){
+                /** @var UtilisateurService $utilisateurService */
+                $utilisateurService = \Application::$container->get(UtilisateurService::class);
+
+                $entity->setHistoCreateur($utilisateurService->getOse());
+            }
+        }
+
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush($entity);
 

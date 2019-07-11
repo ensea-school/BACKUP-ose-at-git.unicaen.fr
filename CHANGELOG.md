@@ -20,6 +20,8 @@ author: Laurent Lécluse - DSI - Unicaen
 * Le logo Unicaen n'est plus fourni par défaut dans l'interface de OSE en pied de page
 * Le lien "Informatique et libertés" est remplacé par un nouveau lien "Vie privée"
 * Interface de gestion des motifs de non paiement
+* Possibilité de créer un nouvel utilisateur dans OSE déconnecté du LDAP, ainsi qu'une fiche intervenant.
+* [Documentation de la ligne de commande OSE](doc/ligne-de-commande.md)
 
 ## Notes de mise à jour
 

@@ -1,7 +1,6 @@
 <?php
 
 $c->println("\nCréation d'un nouveau compte utilisateur", $c::COLOR_LIGHT_CYAN);
-$c->println('Fonctionnalité en cours de développement : non exploitable pour le moment', $c::BG_RED);
 
 $params = $c->getInputs([
     'nom'               => 'Nom de l\'utilisateur',
@@ -12,4 +11,7 @@ $params = $c->getInputs([
     'creer-intervenant' => ['description' => 'Voulez-vous créer un intervenant pour cet utilisateur ? (O ou Y pour oui)', 'type' => 'bool'],
 ]);
 
-var_export($params);
+$params['date-naissance'] = $params['date-naissance']->format('d/m/Y');
+$params = base64_encode(json_encode($params));
+
+$oa->exec("creer-utilisateur --data=$params");

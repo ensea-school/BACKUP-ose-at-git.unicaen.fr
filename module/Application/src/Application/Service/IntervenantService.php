@@ -80,7 +80,7 @@ class IntervenantService extends AbstractEntityService
     {
         if (empty($sourceCode)) return null;
 
-        $sql = 'SELECT ID FROM INTERVENANT WHERE '.$column.' IN (:value)';
+        $sql = 'SELECT ID FROM INTERVENANT WHERE ' . $column . ' IN (:value)';
         if ($anneeId) {
             $sql .= ' AND ANNEE_ID = ' . (string)(int)$anneeId;
         }
@@ -209,7 +209,7 @@ class IntervenantService extends AbstractEntityService
      */
     public function save($entity)
     {
-        if (!$entity->getSource()){
+        if (!$entity->getSource()) {
             $entity->setSource($this->getServiceSource()->getOse());
         }
 
@@ -329,9 +329,15 @@ class IntervenantService extends AbstractEntityService
      *
      * @return Intervenant
      */
-    public function creerIntervenant(string $nom, string $prenom, \DateTime $dateNaissance, string $statut=null): Intervenant
+    public function creerIntervenant(string $nom, string $prenom, \DateTime $dateNaissance, string $statut = null): Intervenant
     {
         $code = uniqid('OSE');
+
+        if ($statut) {
+            $statutEntity = $this->getServiceStatutIntervenant()->getByCode($statut);
+        } else {
+            $statutEntity = $this->getServiceStatutIntervenant()->getAutres();
+        }
 
         $intervenant = new Intervenant;
         $intervenant->setAnnee($this->getServiceContext()->getAnnee());
@@ -343,9 +349,11 @@ class IntervenantService extends AbstractEntityService
         $intervenant->setNomUsuel($nom);
         $intervenant->setPrenom($prenom);
         $intervenant->setDateNaissance($dateNaissance);
-        $intervenant->setStatut($this->getServiceStatutIntervenant()->getByCode($statut));
+        $intervenant->setStatut($statutEntity);
 
         $this->save($intervenant);
+
+        $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
 
         return $intervenant;
     }

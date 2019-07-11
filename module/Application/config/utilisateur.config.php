@@ -15,6 +15,15 @@ return [
                         ],
                     ],
                 ],
+                'creer-utilisateur' => [
+                    'options' => [
+                        'route'    => 'creer-utilisateur [--data=]',
+                        'defaults' => [
+                            'controller' => 'Application\Controller\Utilisateur',
+                            'action'     => 'creation',
+                        ],
+                    ],
+                ],
             ],
         ],
     ],

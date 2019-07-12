@@ -33,7 +33,7 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
 * CSS personnalisée : Si vous avez remplacé le logo Unicaen par votre propre logo en pied de page, 
 la classe CSS pour cela est maintenant "lien-univ" au lien de "ucbn".
 
-* Dans le fichier de configuration, remplacer l'item "informatiqueEtLibertes" par "viePrivee"
+* Dans le fichier de configuration local.config.php, remplacer l'item "informatiqueEtLibertes" par "viePrivee"
 
 
 # OSE 8.1.4

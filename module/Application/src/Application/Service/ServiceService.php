@@ -334,14 +334,11 @@ class ServiceService extends AbstractEntityService
     {
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireListe();
-            foreach ($vhListe->getPeriodes() as $periode) {
-                $lc = $vhListe->createChild()->setPeriode($periode);
-                foreach ($lc->getTypesIntervention() as $typeIntervention) {
-                    $lc->createChild()->setTypeIntervention($typeIntervention)->setHeures(0);
-                }
+            $listes = $vhListe->getSousListes([$vhListe::FILTRE_PERIODE,$vhListe::FILTRE_TYPE_INTERVENTION, $vhListe::FILTRE_HORAIRE_DEBUT, $vhListe::FILTRE_HORAIRE_FIN]);
+            foreach ($listes as $liste){
+                $liste->setHeures(0);
             }
         }
-        //$vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
 
         $vhl = $entity->getVolumeHoraire();
 

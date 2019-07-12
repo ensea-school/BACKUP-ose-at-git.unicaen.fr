@@ -5,6 +5,11 @@ author: Laurent Lécluse - DSI - Unicaen
 
 # OSE 8.2 (à venir)
 
+## Correction de bug
+
+* Lorsqu'on supprime une ligne de service avec des volumes horaires validés en mode calendaire, 
+les nouveaux volumes horaires négatifs générés portent maintenant les mêmes dates de début et de fin que les originaux.
+
 ## Améliorations
 
 * Pour une fiche intervenant, les champs suivants n'ont plus besoin d'être systématiquement fournis :

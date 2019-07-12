@@ -307,8 +307,12 @@ class ServiceReferentielService extends AbstractEntityService
     {
         if ($softDelete) {
             $vhListe = $entity->getVolumeHoraireReferentielListe();
-            $vhListe->setHeures(0); // aucune heure (SI une heure est validée alors un nouveau VHR sera créé!!
+            $listes = $vhListe->getSousListes([$vhListe::FILTRE_HORAIRE_DEBUT, $vhListe::FILTRE_HORAIRE_FIN]);
+            foreach ($listes as $liste){
+                $liste->setHeures(0);
+            }
         }
+
 
         $vhrl = $entity->getVolumeHoraireReferentiel();
 
@@ -317,7 +321,7 @@ class ServiceReferentielService extends AbstractEntityService
             if ($volumeHoraire->getRemove() || !$volumeHoraire->estNonHistorise()) {
                 $this->getServiceVolumeHoraireReferentiel()->delete($volumeHoraire, $softDelete);
                 $vhrl->removeElement($volumeHoraire);
-            } elseif ($volumeHoraire->getId()) {
+            } else {
                 $delete = false;
                 $this->getServiceVolumeHoraireReferentiel()->save($volumeHoraire);
             }

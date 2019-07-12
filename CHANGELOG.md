@@ -5,10 +5,12 @@ author: Laurent Lécluse - DSI - Unicaen
 
 # OSE 8.2 (à venir)
 
-## Correction de bug
+## Correction de bugs
 
 * Lorsqu'on supprime une ligne de service avec des volumes horaires validés en mode calendaire, 
 les nouveaux volumes horaires négatifs générés portent maintenant les mêmes dates de début et de fin que les originaux.
+* Des volumes horaires référentiels auto-validés pouvaient être modifiés via l'IHM dans certaines circonstances : c'est corrigé.
+* La modification d'heures de service référentiel fonctionne bien même avec des heures auto-validées et calendarisées. 
 
 ## Améliorations
 

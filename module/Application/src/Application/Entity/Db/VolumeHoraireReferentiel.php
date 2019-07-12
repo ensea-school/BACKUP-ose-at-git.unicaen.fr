@@ -335,6 +335,27 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface, ImportAwareI
 
 
     /**
+     * Permet de savoir si ce volume horaire référentiel est validé ou non
+     *
+     * @return bool
+     */
+    public function isValide(): bool
+    {
+        if ($this->isAutoValidation()) return true;
+
+        if ($validations = $this->getValidation()) {
+            foreach ($validations as $validation) {
+                if ($validation->estNonHistorise()) return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+    /**
      * @return \DateTime
      */
     public function getHoraireDebut()

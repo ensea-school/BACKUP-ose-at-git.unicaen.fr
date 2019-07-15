@@ -54,6 +54,6 @@ if (method_exists($oa,'majPrivileges')) { /** @deprecated > 8.2 */
     $c->println('Fin de la mise à jour des privilèges');
 }
 $c->println('');
-
+$c->println('anc VERS='.$oa->oldVersion);
 $oa->migration('post');
 $c->println('');

@@ -12,16 +12,6 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
 * Des volumes horaires référentiels auto-validés pouvaient être modifiés via l'IHM dans certaines circonstances : c'est corrigé.
 * La modification d'heures de service référentiel fonctionne bien même avec des heures auto-validées et calendarisées. 
 
-## Améliorations
-
-* Pour une fiche intervenant, les champs suivants n'ont plus besoin d'être systématiquement fournis :
-  * Civilité
-  * Composante d'affectation
-  * Pays de naissance
-  * Nom patronymique
-
-* Les coordonnées bancaires peuvent être saisies même si elles sont hors zone SEPA (une case à cocher limite le contrôle)
-
 ## Nouveautés
 
 * Le logo Unicaen n'est plus fourni par défaut dans l'interface de OSE en pied de page
@@ -29,8 +19,22 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
 * Interface de gestion des motifs de non paiement
 * Possibilité de créer un nouvel utilisateur dans OSE déconnecté du LDAP, ainsi qu'une fiche intervenant.
 * [Documentation de la ligne de commande OSE](doc/ligne-de-commande.md)
+* Pour une fiche intervenant, les champs suivants n'ont plus besoin d'être systématiquement fournis :
+    * Civilité
+    * Composante d'affectation
+    * Pays de naissance
+    * Nom patronymique
+
+* Les coordonnées bancaires peuvent être saisies même si elles sont hors zone SEPA (une case à cocher limite le contrôle)
+
 
 ## Notes de mise à jour
+
+Si vous faites la mise à jour depuis une version ANTÉRIEURE à la 8.1 :
+
+* Il est obligatoire de migrer OSE d'abord en version 8.1 (bien 8.1, pas 8.0.1 ou autres), puis ensuite de faire la migration 8.1 => 8.2.
+
+Pour tout le monde :
 
 * CSS personnalisée : Si vous avez remplacé le logo Unicaen par votre propre logo en pied de page, 
 la classe CSS pour cela est maintenant "lien-univ" au lien de "ucbn".

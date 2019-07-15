@@ -4,7 +4,9 @@ $bdd    = $oa->getBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
 $c->println("\nMise à jour de la base de données", $c::COLOR_LIGHT_CYAN);
-$oa->migration('pre');
+if ($oa->oldVersion < '8.2') {
+    $oa->migration('pre');
+}
 
 $c->println("\n".'Mise à jour des définitions de la base de données', $c::COLOR_LIGHT_PURPLE);
 
@@ -54,6 +56,7 @@ if (method_exists($oa,'majPrivileges')) { /** @deprecated > 8.2 */
     $c->println('Fin de la mise à jour des privilèges');
 }
 $c->println('');
-$c->println('anc VERS='.$oa->oldVersion);
-$oa->migration('post');
+if ($oa->oldVersion < '8.2') {
+    $oa->migration('post');
+}
 $c->println('');

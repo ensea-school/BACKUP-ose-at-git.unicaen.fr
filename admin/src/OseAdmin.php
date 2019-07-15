@@ -189,7 +189,7 @@ class OseAdmin
 
 
 
-    private function purgerVersion(string $version): string
+    public function purgerVersion(string $version): string
     {
         $version = strtolower($version);
         if (false !== ($p = strpos($version, 'alpha'))) {

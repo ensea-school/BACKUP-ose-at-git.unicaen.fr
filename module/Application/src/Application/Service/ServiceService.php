@@ -921,7 +921,7 @@ class ServiceService extends AbstractEntityService
                 'heures-compl-fc'              => (float)$d['HEURES_COMPL_FC'],
                 'heures-compl-fc-majorees'     => (float)$d['HEURES_COMPL_FC_MAJOREES'],
                 'heures-compl-referentiel'     => (float)$d['HEURES_COMPL_REFERENTIEL'],
-                'total'                        => (float)$d['TOTAL'],
+                'total'                        => (float)$d['HEURES_COMPL_FI'] + (float)$d['HEURES_COMPL_FA'] + (float)$d['HEURES_COMPL_FC'] + (float)$d['HEURES_COMPL_FC_MAJOREES'] + (float)$d['HEURES_COMPL_REFERENTIEL'],
                 'solde'                        => (float)$d['SOLDE'],
                 'date-cloture-service-realise' => $d['DATE_CLOTURE_REALISE'],
             ];

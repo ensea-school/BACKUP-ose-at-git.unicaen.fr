@@ -11,6 +11,7 @@ author: Laurent Lécluse - DSI - Unicaen
 les nouveaux volumes horaires négatifs générés portent maintenant les mêmes dates de début et de fin que les originaux.
 * Des volumes horaires référentiels auto-validés pouvaient être modifiés via l'IHM dans certaines circonstances : c'est corrigé.
 * La modification d'heures de service référentiel fonctionne bien même avec des heures auto-validées et calendarisées. 
+* Le total HETD HC affiche réellmenet les HC et non le total des heures dans services/résumé
 
 ## Nouveautés
 

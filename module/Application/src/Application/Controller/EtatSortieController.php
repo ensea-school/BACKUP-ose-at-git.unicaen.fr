@@ -8,6 +8,7 @@ use Application\Entity\Db\Fichier;
 use Application\Form\Traits\EtatSortieFormAwareTrait;
 use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use UnicaenApp\Util;
+use UnicaenApp\View\Model\MessengerViewModel;
 
 /**
  * Description of EtatSortieController

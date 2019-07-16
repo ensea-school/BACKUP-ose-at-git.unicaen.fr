@@ -13,7 +13,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
 
 ?>
 <h1 class="page-header">États de sortie</h1>
-
+<?php echo $this->messenger()->addCurrentMessagesFromFlashMessenger() ?>
 <table class="table table-bordered">
     <thead>
     <tr>
@@ -68,7 +68,7 @@ $canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::ETAT_SORTIE_AD
     </tbody>
 </table>
 <?php if ($canEdit): ?>
-    <a class="btn btn-primary ajax-modal" data-event="etats-sortie-saisir" href="<?= $this->url('etat-sortie/saisir') ?>">
+    <a class="btn btn-primary" href="<?= $this->url('etat-sortie/saisir') ?>">
         <span class="glyphicon glyphicon-plus"></span>
         Ajouter un état de sortie
     </a>

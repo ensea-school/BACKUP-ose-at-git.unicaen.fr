@@ -49,7 +49,7 @@ class PaysService extends AbstractEntityService
      */
     public function getIdByLibelle(string $libelle)
     {
-        $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle_court) = :pays';
+        $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle_court) = :pays AND histo_destruction IS NULL';
 
         $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
 

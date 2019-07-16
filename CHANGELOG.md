@@ -12,6 +12,7 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
 * Des volumes horaires référentiels auto-validés pouvaient être modifiés via l'IHM dans certaines circonstances : c'est corrigé.
 * La modification d'heures de service référentiel fonctionne bien même avec des heures auto-validées et calendarisées. 
 * Le total HETD HC affiche réellmenet les HC et non le total des heures dans services/résumé
+* Lorsqu'un pays a été importé plusieurs fois, les items historisés remontaient parfois dans des recherches par libelle. Seuls les pays non historisés remontent maintenant.
 
 ## Nouveautés
 

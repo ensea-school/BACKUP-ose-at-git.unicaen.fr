@@ -15,7 +15,7 @@ $views  = [
 
 return [
     'explicit'                                => true,
-    \BddAdmin\Ddl\DdlIndex::class             => ['includes' => []],
+    \BddAdmin\Ddl\DdlIndex::class             => ['includes' => ['null']],
     \BddAdmin\Ddl\DdlMaterializedView::class  => ['includes' => ['null']],
     \BddAdmin\Ddl\DdlPackage::class           => ['includes' => []],
     \BddAdmin\Ddl\DdlPrimaryConstraint::class => ['includes' => ['null']],

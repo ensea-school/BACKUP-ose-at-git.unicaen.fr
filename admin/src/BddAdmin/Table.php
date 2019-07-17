@@ -211,8 +211,12 @@ class Table
     {
         /* Initialisation */
         $defaultOptions = [
-            'where' => null,
-            'key'   => $key,
+            'where'             => null,
+            'key'               => $key,
+            'delete'            => true,
+            'insert'            => true,
+            'update'            => true,
+            'upate-ignore-cols' => [],
         ];
         $options        = array_merge($defaultOptions, $options);
 
@@ -247,23 +251,27 @@ class Table
 
 
         /* Traitement */
-        foreach($diff as $dr){
+        foreach ($diff as $dr) {
             $old = $dr['old'];
             $new = $dr['new'];
 
-            if (empty($old)){ // INSERT
-                $this->insert($new);
-            }elseif(empty($new)){ // DELETE
-                $this->delete($this->makeKeyArray($old, $key));
-            }else{ // UPDATE si différent!!
+            if (empty($old)) { // INSERT
+                if ($options['insert']) {
+                    $this->insert($new);
+                }
+            } elseif (empty($new)) { // DELETE
+                if ($options['delete']) {
+                    $this->delete($this->makeKeyArray($old, $key));
+                }
+            } elseif ($options['update']) { // UPDATE si différent!!
                 $toUpdate = [];
-                foreach($old as $c => $ov){
-                    if ($c != 'ID' && isset($new[$c]) && $new[$c] !== $old[$c]){
+                foreach ($old as $c => $ov) {
+                    if (!in_array($c, $options['upate-ignore-cols']) && $c != 'ID' && isset($new[$c]) && $new[$c] !== $old[$c]) {
                         $toUpdate[$c] = $new[$c];
                     }
                 }
-                if (!empty($toUpdate)){
-                    $this->update($toUpdate, $this->makeKeyArray($old,$key));
+                if (!empty($toUpdate)) {
+                    $this->update($toUpdate, $this->makeKeyArray($old, $key));
                 }
             }
         }

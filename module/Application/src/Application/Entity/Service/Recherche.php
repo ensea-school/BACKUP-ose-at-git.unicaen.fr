@@ -99,6 +99,23 @@ implements
 
 
 
+    public function getFilters(): array
+    {
+        $filters = [];
+        if ($c1 = $this->getTypeVolumeHoraire()) $filters['TYPE_VOLUME_HORAIRE_ID'] = $c1->getId();
+        if ($c2 = $this->getEtatVolumeHoraire()) $filters['ETAT_VOLUME_HORAIRE_ID'] = $c2->getId();
+        if ($c3 = $this->getTypeIntervenant()) $filters['TYPE_INTERVENANT_ID'] = $c3->getId();
+        if ($c4 = $this->getIntervenant()) $filters['INTERVENANT_ID'] = $c4->getId();
+        if ($c6 = $this->getEtape()) $filters['ETAPE_ID'] = $c6->getId();
+        if ($c7 = $this->getElementPedagogique()) $filters['ELEMENT_PEDAGOGIQUE_ID'] = $c7->getId();
+        if ($c8 = $this->getStructureAff()) $filters['STRUCTURE_AFF_ID'] = $c8->getId();
+        if ($c9 = $this->getStructureEns()) $filters['STRUCTURE_ENS_ID'] = $c9->getId();
+
+        return $filters;
+    }
+
+
+
     /**
      * PHP 5 allows developers to declare constructor methods for classes.
      * Classes which have a constructor method call this method on each newly-created object,

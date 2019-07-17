@@ -68,14 +68,15 @@ class EtatSortieService extends AbstractEntityService
 
 
 
-    /**
+    /***
      * @param EtatSortie $etatSortie
      * @param array      $filtres
+     * @param array      $options
      *
      * @return Document
      * @throws \Exception
      */
-    public function genererPdf(EtatSortie $etatSortie, array $filtres): Document
+    public function genererPdf(EtatSortie $etatSortie, array $filtres, array $options = []): Document
     {
         $document = new Document();
         $document->setTmpDir(getcwd() . '/cache/');
@@ -93,7 +94,7 @@ class EtatSortieService extends AbstractEntityService
         if (trim($etatSortie->getPdfTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
             // Isolation de traitement pour éviter tout débordement...
-            $traitement = function () use ($document, $etatSortie, $data, $filtres, $role, $__PHP__CODE__TRAITEMENT__) {
+            $traitement = function () use ($document, $etatSortie, $data, $filtres, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 eval($__PHP__CODE__TRAITEMENT__);
 
                 return $data;
@@ -273,7 +274,20 @@ class EtatSortieService extends AbstractEntityService
                 }
                 $query .= ")";
             } else {
-                $query .= " AND q.\"$filtre\" = :$filtre";
+                if (false !== strpos($filtre, ' OR ')){
+                    $newFiltre = str_replace(' ','_',$filtre);
+                    $queryFilters[$newFiltre] = $queryFilters[$filtre];
+                    unset($queryFilters[$filtre]);
+                    $orFiltres = explode(" OR ", $filtre);
+                    $orQuery = '';
+                    foreach( $orFiltres as $orFiltre){
+                        if ($orQuery) $orQuery .= ' OR ';
+                        $orQuery .="q.\"$orFiltre\" = :$newFiltre";
+                    }
+                    $query .= " AND ($orQuery)";
+                }else{
+                    $query .= " AND q.\"$filtre\" = :$filtre";
+                }
             }
         }
 

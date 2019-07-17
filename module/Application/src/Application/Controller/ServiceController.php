@@ -12,6 +12,7 @@ use Application\Processus\Traits\ServiceProcessusAwareTrait;
 use Application\Processus\Traits\ValidationEnseignementProcessusAwareTrait;
 use Application\Processus\Traits\ValidationProcessusAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\EtatSortieServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
@@ -64,6 +65,7 @@ class ServiceController extends AbstractController
     use ParametresServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use PlafondProcessusAwareTrait;
+    use EtatSortieServiceAwareTrait;
 
 
 
@@ -134,7 +136,7 @@ class ServiceController extends AbstractController
         }
 
         if (!$intervenant) {
-            $rr = $this->rechercheAction();
+            $rr        = $this->rechercheAction();
             $recherche = $rr['rechercheForm']->getObject();
         } else {
             $recherche = new Recherche;
@@ -163,49 +165,44 @@ class ServiceController extends AbstractController
 
     public function exportPdfAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
-        /* @var $intervenant Intervenant */
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
+        /* @var $intervenant Intervenant */
+        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
+        $annee       = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
 
         $this->initFilters();
         if (!$intervenant) {
-            $rr = $this->rechercheAction();
+            $rr        = $this->rechercheAction();
             $recherche = $rr['rechercheForm']->getObject();
         } else {
-            $recherche = new Recherche;
+            $recherche = new Recherche();
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getPrevu());
             $recherche->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
         }
 
-        $variables = [
-            'typeIntervenant' => $recherche->getTypeIntervenant(),
-            'structure'       => $recherche->getStructureAff(),
-            'signature1'      => $this->getServiceParametres()->get('export_pdf_services_signature_1'),
-            'signature2'      => $this->getServiceParametres()->get('export_pdf_services_signature_2'),
-            'signataire1'     => $this->getServiceParametres()->get('export_pdf_services_signataire_1'),
-            'signataire2'     => $this->getServiceParametres()->get('export_pdf_services_signataire_2'),
-            'data'            => $this->getServiceService()->getExportPdfData($recherche),
+        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_pdf');
+        $fileName   = 'Listing des services - ' . date('dmY') . '.pdf';
+
+        $filters             = $recherche->getFilters();
+        $filters['ANNEE_ID'] = $annee->getId();
+        if ($structure){
+            $filters['STRUCTURE_AFF_ID OR STRUCTURE_ENS_ID'] = $structure->getId();
+        }
+
+        $options = [
+            'annee'               => $annee->getLibelle(),
+            'type_volume_horaire' => $recherche->getTypeVolumeHoraire()->getLibelle(),
+            'etat_volume_horaire' => $recherche->getEtatVolumeHoraire()->getLibelle(),
+            'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
+            'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
         ];
+        if ($c10 = $this->getServiceContext()->getStructure()) $conditions['structure_context_id'] = '(structure_ens_id = ' . $c10->getId() . ' OR structure_aff_id = ' . $c10->getId() . ')';
 
-        $tprevrel = lcfirst((string)$recherche->getTypeVolumeHoraire()) . 's';
-        $tannee   = $this->getServiceContext()->getAnnee();
-        $title    = "État des services $tprevrel au titre de l'année universitaire $tannee";
+        $document = $this->getServiceEtatSortie()->genererPdf($etatSortie, $filters, $options);
 
-        $exp = $this->pdf()
-            ->setOrientationPaysage(true)
-            ->setFormat('A3')
-            ->setHeaderTitle($title)
-            ->setMarginBottom(25)
-            ->setMarginTop(25);
-        $exp->setFooterTitle($recherche->getTypeVolumeHoraire() . ' ' . $recherche->getEtatVolumeHoraire());
-        $exp->addBodyScript('application/service/export-pdf.phtml', false, $variables);
-        $exp->getMpdf()->packTableData = true;
-        //$exp->getMpdf()->simpleTables = true;
-
-        $fileName = 'Listing des services - ' . date('dmY') . '.pdf';
-
-        $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+        $document->download($fileName);
     }
 
 
@@ -397,7 +394,7 @@ class ServiceController extends AbstractController
         if ($services) {
             $services = explode(',', $services);
             foreach ($services as $sid) {
-                $service                                           = $this->getServiceService()->get($sid);
+                $service = $this->getServiceService()->get($sid);
                 $this->getProcessusPlafond()->beginTransaction();
                 $intervenants[$service->getIntervenant()->getId()] = $service->getIntervenant();
                 $service->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getRealise());
@@ -464,9 +461,9 @@ class ServiceController extends AbstractController
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire'));
 
         $intervenant = $this->context()->intervenantFromQuery('intervenant');
-        if (!$intervenant){
+        if (!$intervenant) {
             $service = $this->params()->fromPost('service');
-            if (isset($service['intervenant-id'])){
+            if (isset($service['intervenant-id'])) {
                 $intervenant = $this->getServiceIntervenant()->get($service['intervenant-id']);
             }
         }

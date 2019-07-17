@@ -225,19 +225,6 @@ class ParametresForm extends AbstractForm
 
         $this->add([
             'type' => 'Select',
-            'name' => 'pays_france',
-            'options'    => [
-                'value_options' => Util::collectionAsOptions($this->getServicePays()->getList($this->getServicePays()->finderByHistorique())),
-            ],
-            'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type' => 'Select',
             'name' => 'modalite_services_prev_ens',
             'options'    => [
                 'value_options' => [

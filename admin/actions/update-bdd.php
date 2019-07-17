@@ -31,7 +31,7 @@ foreach ($classes as $ddlClass) {
     }
 }
 
-var_dump($ddlConfig);die();
+
 /* Mise en place du logging en mode console */
 $scl          = new \BddAdmin\SchemaConsoleLogger();
 $scl->console = $c;

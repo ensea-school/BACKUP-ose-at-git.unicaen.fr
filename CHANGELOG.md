@@ -28,7 +28,7 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
     * Nom patronymique
 
 * Les coordonnées bancaires peuvent être saisies même si elles sont hors zone SEPA (une case à cocher limite le contrôle)
-
+* L'export PDF des services est maintenant personnalisable.
 
 ## Notes de mise à jour
 

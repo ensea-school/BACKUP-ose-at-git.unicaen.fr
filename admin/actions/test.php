@@ -1,9 +1,9 @@
 <?php
 
-$oldVersion = '8.1.2';
-$newVersion = '8.1.3';
+$bdd = new \BddAdmin\Bdd( Config::get()['bdds']['deploy-local'] );
+$bdd->debug = true;
 
-$oa->oldVersion = $oldVersion;
-$oa->version = $newVersion;
-$oa->migration('post');
+$es = require $oa->getOseDir() . 'data/etats_sortie.php';
 
+/* Mise à jour */
+$bdd->getTable('ETAT_SORTIE')->merge($es, 'CODE', ['update' => false, 'delete' => false]);

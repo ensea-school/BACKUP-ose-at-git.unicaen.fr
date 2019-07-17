@@ -53,6 +53,11 @@ class Bdd
      */
     private $commitMode = OCI_COMMIT_ON_SUCCESS;
 
+    /**
+     * @var bool
+     */
+    public $debug = false;
+
 
 
     /**
@@ -221,8 +226,14 @@ class Bdd
     {
         list($s, $p) = $this->prepareQuery($sql, $params);
 
-        $statement = $this->execStatement($s, $p);
-        oci_free_statement($statement);
+        if ($this->debug){
+            echo $s;
+            var_dump($p);
+        }else{
+            $statement = $this->execStatement($s, $p);
+            oci_free_statement($statement);
+        }
+
 
         return true;
     }
@@ -276,7 +287,7 @@ class Bdd
     public function select(string $sql, array $params = [], $fetchMode = self::FETCH_ALL)
     {
         list($s, $p) = $this->prepareQuery($sql, $params);
-//        $begin = microtime(true);
+
         $statement = $this->execStatement($s, $p);
 
         if ($fetchMode == self::FETCH_EACH) {
@@ -293,8 +304,7 @@ class Bdd
         if ($fetchMode == self::FETCH_ONE && isset($res[0])) {
             return $res[0];
         }
-//        var_dump($sql);
-//        var_dump( round(microtime(true) - $begin, 3).' secondes' );
+
         return $res;
     }
 
@@ -322,7 +332,9 @@ class Bdd
             if ($val instanceof \DateTime) {
                 $p[$name] = $val->format('Y-m-d H:i:s');
                 $s        = str_replace(":$name", "to_date(:$name, 'YYYY-MM-DD HH24:MI:SS')", $s);
-            } else {
+            } elseif(is_bool($val)) {
+                $p[$name] = $val ? 1 : 0;
+            }else{
                 $p[$name] = $val;
             }
         }

@@ -3273,6 +3273,16 @@
           'nullable' => false,
           'default' => NULL,
         ),
+        'RIB_HORS_SEPA' => 
+        array (
+          'name' => 'RIB_HORS_SEPA',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
+        ),
       ),
     ),
     'DOTATION' => 
@@ -7740,6 +7750,16 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+        ),
+        'RIB_HORS_SEPA' => 
+        array (
+          'name' => 'RIB_HORS_SEPA',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
         ),
       ),
     ),
@@ -14656,127 +14676,6 @@
         ),
       ),
     ),
-    'TYPE_DOTATION' => 
-    array (
-      'name' => 'TYPE_DOTATION',
-      'temporary' => false,
-      'logging' => true,
-      'commentaire' => NULL,
-      'sequence' => 'TYPE_DOTATION_ID_SEQ',
-      'columns' => 
-      array (
-        'ID' => 
-        array (
-          'name' => 'ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-        ),
-        'LIBELLE' => 
-        array (
-          'name' => 'LIBELLE',
-          'type' => 'VARCHAR2',
-          'length' => 200,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-        ),
-        'SOURCE_CODE' => 
-        array (
-          'name' => 'SOURCE_CODE',
-          'type' => 'VARCHAR2',
-          'length' => 100,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-        ),
-        'SOURCE_ID' => 
-        array (
-          'name' => 'SOURCE_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-        ),
-        'TYPE_RESSOURCE_ID' => 
-        array (
-          'name' => 'TYPE_RESSOURCE_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-        ),
-        'HISTO_CREATION' => 
-        array (
-          'name' => 'HISTO_CREATION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => 'SYSDATE',
-        ),
-        'HISTO_CREATEUR_ID' => 
-        array (
-          'name' => 'HISTO_CREATEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-        ),
-        'HISTO_MODIFICATION' => 
-        array (
-          'name' => 'HISTO_MODIFICATION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => 'SYSDATE',
-        ),
-        'HISTO_MODIFICATEUR_ID' => 
-        array (
-          'name' => 'HISTO_MODIFICATEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-        ),
-        'HISTO_DESTRUCTION' => 
-        array (
-          'name' => 'HISTO_DESTRUCTION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-        ),
-        'HISTO_DESTRUCTEUR_ID' => 
-        array (
-          'name' => 'HISTO_DESTRUCTEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-        ),
-      ),
-    ),
     'TYPE_FORMATION' => 
     array (
       'name' => 'TYPE_FORMATION',
@@ -18911,16 +18810,6 @@
         0 => 'ID',
       ),
     ),
-    'TYPE_DOTATION_PK' => 
-    array (
-      'name' => 'TYPE_DOTATION_PK',
-      'table' => 'TYPE_DOTATION',
-      'index' => 'TYPE_DOTATION_PK',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
     'TYPE_FORMATION_PK' => 
     array (
       'name' => 'TYPE_FORMATION_PK',
@@ -21324,7 +21213,7 @@ END FORMULE_UBO;',
     -- I26:I35 = Somme des CM I=CM, J=TD, K=TP
     -- K26:K35 = Somme des TP
     WHEN c = \'tauxTP\' AND v >= 1 THEN
-      IF i.heures_service_statutaire = 0 THEN
+      IF i.heures_service_statutaire = 0  OR LOWER(i.param_2)=\'oui\' THEN
         RETURN 2/3;
       ELSE
         -- SI(I8="Oui";SI(SOMME(I26:K35)=0;1;(2+(I15/((1,5*SOMME(I26:I35))+SOMME(J26:K35))))/3);SI(SOMME(K26:K35)<=384;1;((384+((SOMME(K26:K35)-384)*(2/3)))/SOMME(K26:K35))))
@@ -22038,6 +21927,12 @@ END FORMULE_UBO;',
   BEGIN
     feuille.delete;
 
+    IF ose_formule.intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
+      OR ose_formule.intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
+    THEN
+      ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire;
+    END IF;
+
     -- transmission des résultats aux volumes horaires et volumes horaires référentiel
     FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
       ose_formule.volumes_horaires.items(l).service_fi               := mainCell(\'Service FI\', \'rs\',l);
@@ -22059,15 +21954,15 @@ END FORMULE_UBO;',
     RETURN \'
     SELECT
       fi.*,
-      CASE WHEN fi.type_intervenant_code = \'\'P\'\' AND si.source_code NOT IN (\'\'ATER\'\',\'\'ATER_MI_TPS\'\',\'\'LECTEUR\'\') THEN \'\'oui\'\' ELSE \'\'non\'\' END param_1,
-      NULL param_2,
+      CASE WHEN si.source_code IN (\'\'ENS_CH\'\',\'\'ASS_MI_TPS\'\',\'\'ENS_CH_LRU\'\',\'\'DOCTOR\'\') THEN \'\'oui\'\' ELSE \'\'non\'\' END param_1,
+	    CASE WHEN si.source_code IN (\'\'LECTEUR\'\',\'\'ATER\'\') THEN \'\'oui\'\' ELSE \'\'non\'\' END param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       v_formule_intervenant fi
       JOIN intervenant i ON i.id = fi.intervenant_id
-      JOIN statut_intervenant si ON si.id = i.id
+      JOIN statut_intervenant si ON si.id = i.statut_id
     \';
   END;
 
@@ -26407,6 +26302,7 @@ END OSE_WORKFLOW;',
     )
     LOOP
       CALCULER( mp.intervenant_id );
+      COMMIT;
     END LOOP;
   END;
 
@@ -26421,9 +26317,8 @@ END OSE_WORKFLOW;',
     SELECT intervenant_id FROM interv WHERE \' || unicaen_tbl.PARAMS_TO_CONDS( params );
     LOOP
       FETCH diff_cur INTO intervenant_id; EXIT WHEN diff_cur%NOTFOUND;
-      BEGIN
-        CALCULER( intervenant_id );
-      END;
+      CALCULER( intervenant_id );
+      COMMIT;
     END LOOP;
     CLOSE diff_cur;
   END;
@@ -30805,65 +30700,6 @@ WHERE
   AND i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
 GROUP BY
   i.id, i.annee_id, i.structure_id, ti.code, si.service_statutaire, si.depassement_service_du_sans_hc',
-    ),
-    'V_FORMULE_LOCAL_I_PARAMS' => 
-    array (
-      'name' => 'V_FORMULE_LOCAL_I_PARAMS',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_LOCAL_I_PARAMS AS
-SELECT
-  null intervenant_id,
-  null param_1,
-  null param_2,
-  null param_3,
-  null param_4,
-  null param_5
-FROM
-  dual',
-    ),
-    'V_FORMULE_LOCAL_VH_PARAMS' => 
-    array (
-      'name' => 'V_FORMULE_LOCAL_VH_PARAMS',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_FORMULE_LOCAL_VH_PARAMS AS
-SELECT
-  vh.id     volume_horaire_id,
-  null      volume_horaire_ref_id,
-  str.code  param_1,
-  null      param_2,
-  null      param_3,
-  null      param_4,
-  null      param_5
-FROM
-            volume_horaire            vh
-       JOIN service                    s ON s.id = vh.service_id
-       JOIN intervenant                i ON i.id = s.intervenant_id
-  LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
-       JOIN structure                str ON str.id = COALESCE(ep.structure_id,i.structure_id)
-WHERE
-  vh.histo_destruction IS NULL
-  AND s.histo_destruction IS NULL
-  AND vh.heures <> 0
-  AND vh.motif_non_paiement_id IS NULL
-  AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
-
-UNION ALL
-
-SELECT
-  null      volume_horaire_id,
-  vhr.id    volume_horaire_ref_id,
-  str.code  param_1,
-  null      param_2,
-  null      param_3,
-  null      param_4,
-  null      param_5
-FROM
-  volume_horaire_ref               vhr
-  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-  JOIN structure                   str ON str.id = sr.structure_id
-WHERE
-  vhr.histo_destruction IS NULL
-  AND sr.histo_destruction IS NULL
-  AND vhr.heures <> 0
-  AND sr.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, sr.intervenant_id )',
     ),
     'V_FORMULE_VOLUME_HORAIRE' => 
     array (
@@ -39376,18 +39212,6 @@ WHERE
         'TYPE_INTERVENANT_ID' => 'ID',
       ),
     ),
-    'TD_TYPE_RESSOURCE_FK' => 
-    array (
-      'name' => 'TD_TYPE_RESSOURCE_FK',
-      'table' => 'TYPE_DOTATION',
-      'rtable' => 'TYPE_RESSOURCE',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'TYPE_RESSOURCE_ID' => 'ID',
-      ),
-    ),
     'TIEP_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'TIEP_ELEMENT_PEDAGOGIQUE_FK',
@@ -39890,54 +39714,6 @@ WHERE
       'columns' => 
       array (
         'HISTO_MODIFICATEUR_ID' => 'ID',
-      ),
-    ),
-    'TYPE_DOTATION_HCFK' => 
-    array (
-      'name' => 'TYPE_DOTATION_HCFK',
-      'table' => 'TYPE_DOTATION',
-      'rtable' => 'UTILISATEUR',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'HISTO_CREATEUR_ID' => 'ID',
-      ),
-    ),
-    'TYPE_DOTATION_HDFK' => 
-    array (
-      'name' => 'TYPE_DOTATION_HDFK',
-      'table' => 'TYPE_DOTATION',
-      'rtable' => 'UTILISATEUR',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'HISTO_DESTRUCTEUR_ID' => 'ID',
-      ),
-    ),
-    'TYPE_DOTATION_HMFK' => 
-    array (
-      'name' => 'TYPE_DOTATION_HMFK',
-      'table' => 'TYPE_DOTATION',
-      'rtable' => 'UTILISATEUR',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'HISTO_MODIFICATEUR_ID' => 'ID',
-      ),
-    ),
-    'TYPE_DOTATION_SOURCE_FK' => 
-    array (
-      'name' => 'TYPE_DOTATION_SOURCE_FK',
-      'table' => 'TYPE_DOTATION',
-      'rtable' => 'SOURCE',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'SOURCE_ID' => 'ID',
       ),
     ),
     'TYPE_FORMATION_GROUPE_FK' => 
@@ -41168,14 +40944,26 @@ WHERE
         4 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'CORPS_SOURCE_UN' => 
+    'CORPS_SRC_UN' => 
     array (
-      'name' => 'CORPS_SOURCE_UN',
+      'name' => 'CORPS_SRC_UN',
       'table' => 'CORPS',
-      'index' => 'CORPS_SOURCE_UN',
+      'index' => 'CORPS_SRC_UN',
       'columns' => 
       array (
         0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
+    'DEPARTEMENT_SRC_UN' => 
+    array (
+      'name' => 'DEPARTEMENT_SRC_UN',
+      'table' => 'DEPARTEMENT',
+      'index' => 'DEPARTEMENT_SRC_UN',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
       ),
     ),
     'DISCIPLINE_SOURCE_UN' => 
@@ -41379,6 +41167,17 @@ WHERE
         0 => 'LIBELLE',
       ),
     ),
+    'GRADE_SRC_UN' => 
+    array (
+      'name' => 'GRADE_SRC_UN',
+      'table' => 'GRADE',
+      'index' => 'GRADE_SRC_UN',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
     'GROUPE_TYPE_FORMATIO_SOURCE_UN' => 
     array (
       'name' => 'GROUPE_TYPE_FORMATIO_SOURCE_UN',
@@ -41518,9 +41317,8 @@ WHERE
       'index' => 'PAYS_SRC_UN',
       'columns' => 
       array (
-        0 => 'SOURCE_ID',
-        1 => 'SOURCE_CODE',
-        2 => 'HISTO_DESTRUCTION',
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
       ),
     ),
     'PERIMETRE_CODE_UN' => 
@@ -44663,6 +44461,17 @@ END;',
         0 => 'SOURCE_CODE',
       ),
     ),
+    'CORPS_SRC_UN' => 
+    array (
+      'name' => 'CORPS_SRC_UN',
+      'unique' => true,
+      'table' => 'CORPS',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
     'CPEP_FK_IDX' => 
     array (
       'name' => 'CPEP_FK_IDX',
@@ -44741,6 +44550,17 @@ END;',
       'columns' => 
       array (
         0 => 'SOURCE_ID',
+      ),
+    ),
+    'DEPARTEMENT_SRC_UN' => 
+    array (
+      'name' => 'DEPARTEMENT_SRC_UN',
+      'unique' => true,
+      'table' => 'DEPARTEMENT',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
       ),
     ),
     'DISCIPLINE_HCFK_IDX' => 
@@ -46035,6 +45855,17 @@ END;',
         0 => 'ID',
       ),
     ),
+    'GRADE_SRC_UN' => 
+    array (
+      'name' => 'GRADE_SRC_UN',
+      'unique' => true,
+      'table' => 'GRADE',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
     'GROUPE_ELEMENT_PEDAGOGIQUE_FK' => 
     array (
       'name' => 'GROUPE_ELEMENT_PEDAGOGIQUE_FK',
@@ -47215,9 +47046,8 @@ END;',
       'table' => 'PAYS',
       'columns' => 
       array (
-        0 => 'SOURCE_ID',
-        1 => 'SOURCE_CODE',
-        2 => 'HISTO_DESTRUCTION',
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
       ),
     ),
     'PERIMETRE_CODE_UN' => 
@@ -49625,16 +49455,6 @@ END;',
         2 => 'STRUCTURE_ID',
       ),
     ),
-    'TD_TYPE_RESSOURCE_FK_IDX' => 
-    array (
-      'name' => 'TD_TYPE_RESSOURCE_FK_IDX',
-      'unique' => false,
-      'table' => 'TYPE_DOTATION',
-      'columns' => 
-      array (
-        0 => 'TYPE_RESSOURCE_ID',
-      ),
-    ),
     'TEST_BUFFER_PK' => 
     array (
       'name' => 'TEST_BUFFER_PK',
@@ -50085,56 +49905,6 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
-      ),
-    ),
-    'TYPE_DOTATION_HCFK_IDX' => 
-    array (
-      'name' => 'TYPE_DOTATION_HCFK_IDX',
-      'unique' => false,
-      'table' => 'TYPE_DOTATION',
-      'columns' => 
-      array (
-        0 => 'HISTO_CREATEUR_ID',
-      ),
-    ),
-    'TYPE_DOTATION_HDFK_IDX' => 
-    array (
-      'name' => 'TYPE_DOTATION_HDFK_IDX',
-      'unique' => false,
-      'table' => 'TYPE_DOTATION',
-      'columns' => 
-      array (
-        0 => 'HISTO_DESTRUCTEUR_ID',
-      ),
-    ),
-    'TYPE_DOTATION_HMFK_IDX' => 
-    array (
-      'name' => 'TYPE_DOTATION_HMFK_IDX',
-      'unique' => false,
-      'table' => 'TYPE_DOTATION',
-      'columns' => 
-      array (
-        0 => 'HISTO_MODIFICATEUR_ID',
-      ),
-    ),
-    'TYPE_DOTATION_PK' => 
-    array (
-      'name' => 'TYPE_DOTATION_PK',
-      'unique' => true,
-      'table' => 'TYPE_DOTATION',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'TYPE_DOTATION_SOURCE_FK_IDX' => 
-    array (
-      'name' => 'TYPE_DOTATION_SOURCE_FK_IDX',
-      'unique' => false,
-      'table' => 'TYPE_DOTATION',
-      'columns' => 
-      array (
-        0 => 'SOURCE_ID',
       ),
     ),
     'TYPE_FORMATION_GROUPE_FK_IDX' => 

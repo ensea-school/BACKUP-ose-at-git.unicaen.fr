@@ -15,29 +15,23 @@ $ref = $schema->loadFromFile($oa->getOseDir() . 'bdd/ddl.php');
 
 
 /* Construction de la config de DDL pour filtrer */
-$ddlConfig = [];
-// On me met à jour que les objets présents dans le schéma par défaut
-foreach ($ref as $ddlClass => $config) {
-    $ddlConfig[$ddlClass] = ['includes' => array_keys($config)];
+$ddlConfig = require $oa->getOseDir().'/data/ddl_config.php';
+$classes = [ // Tous les objets de ces classes seront int&égralement pris en compte dans la MAJ
+    \BddAdmin\Ddl\DdlView::class,
+    \BddAdmin\Ddl\DdlPackage::class,
+    \BddAdmin\Ddl\DdlTrigger::class,
+];
+
+foreach ($classes as $ddlClass) {
+    if (isset($ref[$ddlClass])){
+        $objects = array_keys($ref[$ddlClass]);
+        foreach($objects as $object){
+            $ddlConfig[$ddlClass]['includes'][] = $object;
+        }
+    }
 }
-$ddlConfig = [
-    'explicit'                      => true,
-    \BddAdmin\Ddl\DdlView::class    => $ddlConfig[\BddAdmin\Ddl\DdlView::class],
-    \BddAdmin\Ddl\DdlPackage::class => $ddlConfig[\BddAdmin\Ddl\DdlPackage::class],
-    \BddAdmin\Ddl\DdlTrigger::class => $ddlConfig[\BddAdmin\Ddl\DdlTrigger::class],
-]; // Pour le moment, travail uniquement sur ces 3 structures de données. Pour les autres, cela viendra plus tard.
 
-
-$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'][] = 'V_FORMULE_LOCAL_I_PARAMS';
-$ddlConfig[\BddAdmin\Ddl\DdlView::class]['includes'][] = 'V_FORMULE_LOCAL_VH_PARAMS';
-
-if (!isset($ddlConfig[\BddAdmin\Ddl\DdlTable::class]['includes'])){ // provisoire, en attendant que les tables soient gérées automatiquement
-    $ddlConfig[\BddAdmin\Ddl\DdlTable::class]['includes'] = [];
-}
-$ddlConfig[\BddAdmin\Ddl\DdlTable::class]['includes'][] = 'TYPE_DOTATION';
-
-
-
+var_dump($ddlConfig);die();
 /* Mise en place du logging en mode console */
 $scl          = new \BddAdmin\SchemaConsoleLogger();
 $scl->console = $c;

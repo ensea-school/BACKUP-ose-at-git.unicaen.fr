@@ -30,6 +30,7 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
 * Les coordonnées bancaires peuvent être saisies même si elles sont hors zone SEPA (une case à cocher limite le contrôle)
 * L'export PDF des services est maintenant personnalisable.
 * Le pays "France" est détecté automatiquement. Il n'a donc plus besoin d'être identifié via administration/paramètres généraux.
+* Amélioration de performances pour l'affichage des données personnelles
 
 ## Notes de mise à jour
 

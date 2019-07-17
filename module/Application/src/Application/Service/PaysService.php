@@ -18,6 +18,10 @@ class PaysService extends AbstractEntityService
 
     use ParametresServiceAwareTrait;
 
+    /**
+     * @var array
+     */
+    private $idsByLibelle;
 
 
     /**
@@ -49,15 +53,19 @@ class PaysService extends AbstractEntityService
      */
     public function getIdByLibelle(string $libelle)
     {
-        $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle_court) = :pays AND histo_destruction IS NULL';
+        if (!isset($this->idsByLibelle[$libelle])) {
+            $sql = 'SELECT id FROM pays WHERE ose_divers.str_reduce(libelle_court) = :pays AND histo_destruction IS NULL';
 
-        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
+            $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['pays' => Util::reduce($libelle)]);
 
-        if (isset($res[0]['ID'])){
-            return (int)$res[0]['ID'];
+            if (isset($res[0]['ID'])) {
+                $this->idsByLibelle[$libelle] = (int)$res[0]['ID'];
+            }else{
+                $this->idsByLibelle[$libelle] = null;
+            }
         }
 
-        return null;
+        return $this->idsByLibelle[$libelle];
     }
 
 

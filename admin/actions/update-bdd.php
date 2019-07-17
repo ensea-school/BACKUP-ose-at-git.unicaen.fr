@@ -51,9 +51,15 @@ $c->println('');
 
 // On teste que la méthode existe, car au moment de la MAJ l'objet chargé est la version antérieure à celle de ce sccript
 if (method_exists($oa,'majPrivileges')) { /** @deprecated > 8.2 */
-    $c->println('Mise à jour des privilèges', $c::COLOR_LIGHT_PURPLE);
+    $c->println('Mise à jour des données', $c::COLOR_LIGHT_PURPLE);
+    $c->println('  * Privilèges ...');
     $oa->majPrivileges();
-    $c->println('Fin de la mise à jour des privilèges');
+
+    $c->println('  * États de sortie ...');
+    $esData = require $oa->getOseDir() . 'data/etats_sortie.php';
+    $bdd->getTable('ETAT_SORTIE')->merge($esData, 'CODE', ['update' => false, 'delete' => false]);
+
+    $c->println('Fin de la mise à jour des données');
 }
 $c->println('');
 if ($oa->oldVersion >= '8.2') {

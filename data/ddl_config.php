@@ -16,13 +16,13 @@ $views  = [
 return [
     'explicit'                                => true,
     \BddAdmin\Ddl\DdlIndex::class             => ['includes' => []],
-    \BddAdmin\Ddl\DdlMaterializedView::class  => ['includes' => []],
+    \BddAdmin\Ddl\DdlMaterializedView::class  => ['includes' => ['null']],
     \BddAdmin\Ddl\DdlPackage::class           => ['includes' => []],
-    \BddAdmin\Ddl\DdlPrimaryConstraint::class => ['includes' => []],
-    \BddAdmin\Ddl\DdlRefConstraint::class     => ['includes' => []],
-    \BddAdmin\Ddl\DdlSequence::class          => ['includes' => []],
+    \BddAdmin\Ddl\DdlPrimaryConstraint::class => ['includes' => ['null']],
+    \BddAdmin\Ddl\DdlRefConstraint::class     => ['includes' => ['null']],
+    \BddAdmin\Ddl\DdlSequence::class          => ['includes' => ['null']],
     \BddAdmin\Ddl\DdlTable::class             => ['includes' => $tables],
     \BddAdmin\Ddl\DdlTrigger::class           => ['includes' => []],
-    \BddAdmin\Ddl\DdlUniqueConstraint::class  => ['includes' => []],
+    \BddAdmin\Ddl\DdlUniqueConstraint::class  => ['includes' => ['null']],
     \BddAdmin\Ddl\DdlView::class              => ['includes' => $views],
 ];

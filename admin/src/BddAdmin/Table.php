@@ -266,7 +266,12 @@ class Table
             } elseif ($options['update']) { // UPDATE si différent!!
                 $toUpdate = [];
                 foreach ($old as $c => $ov) {
-                    if (!in_array($c, $options['upate-ignore-cols']) && $c != 'ID' && isset($new[$c]) && $new[$c] !== $old[$c]) {
+                    $newc = isset($new[$c]) ? $new[$c] : null;
+                    $oldc = isset($old[$c]) ? $old[$c] : null;
+                    if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d');
+                    if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d');
+
+                    if (!in_array($c, $options['upate-ignore-cols']) && $c != 'ID' && isset($new[$c]) && $newc !== $oldc) {
                         $toUpdate[$c] = $new[$c];
                     }
                 }
@@ -403,7 +408,7 @@ class Table
                 return $value;
             case 'DATE':
                 $date = \DateTime::createFromFormat('Y-m-d', $value);
-                $date->setTime(0, 0, 0, 0);
+                $date->setTime(0, 0, 0);
 
                 return $date;
             case 'BLOB':

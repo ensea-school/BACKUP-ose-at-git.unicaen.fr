@@ -26,7 +26,7 @@ class DataGen
         'DOMAINE_FONCTIONNEL'         => '',
         'ETABLISSEMENT'               => '',
         'ETAT_VOLUME_HORAIRE'         => '',
-        'ETAT_SORTIE'                 => "code IN ('winpaie', 'etat_paiement')",
+        'ETAT_SORTIE'                 => "code IN ('winpaie', 'etat_paiement', 'export_services')",
         'FONCTION_REFERENTIEL'        => '',
         'FORMULE'                     => '',
         'FORMULE_TEST_INTERVENANT'    => '',

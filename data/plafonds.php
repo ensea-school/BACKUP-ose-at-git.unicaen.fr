@@ -14,5 +14,6 @@ return [
         'hetd'                  => 'Nombre maximum d\'heures équivalent TD par intervenant selon son statut',
         'hc-hors-d71460'        => 'Nombre d\'heures complémentaires maximum (hors rémunération au titre de l\'article d714-60 du code de l\'éducation)',
         'ref-par-fonction-mere' => 'Heures max. de référentiel par intervenant et par type de fonction référentielle',
+        'hc-fi-hors-ead'        => 'HETD max. en formation initiale hors EAD',
     ],
 ];

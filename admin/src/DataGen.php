@@ -48,6 +48,20 @@ class DataGen
             'title' => 'Plafonds',
             'key'   => 'CODE',
         ],
+        'TYPE_VOLUME_HORAIRE' => [
+            'title' => 'Types de volumes horaires',
+        ],
+        'ETAT_VOLUME_HORAIRE' => [
+            'title' => 'États de volumes horaires',
+        ],
+        'TYPE_VALIDATION'     => [
+            'title' => 'Types de validation',
+            'key'   => 'CODE',
+        ],
+        'TBL'                 => [
+            'title' => 'Tableaux de bord',
+            'key'   => 'TBL_NAME',
+        ],
     ];
 
 
@@ -70,7 +84,6 @@ class DataGen
     'SCENARIO'                    => 'structure_id IS NULL',
     'SOURCE'                      => "code='OSE'",
     'TAUX_HORAIRE_HETD'           => '',
-    'TBL'                         => '',
     'TYPE_AGREMENT'               => '',
     'TYPE_AGREMENT_STATUT'        => '',
     'TYPE_CONTRAT'                => '',
@@ -78,8 +91,6 @@ class DataGen
     'TYPE_INTERVENANT'            => '',
     'TYPE_INTERVENTION'           => "code IN ('CM','TD','TP')",
     'TYPE_RESSOURCE'              => '',
-    'TYPE_VALIDATION'             => '',
-    'TYPE_VOLUME_HORAIRE'         => '',
     'UTILISATEUR'                 => "username = '" . self::OSE_USER . "'",
     'WF_ETAPE'                    => '',
     'WF_ETAPE_DEP'                => '',
@@ -110,12 +121,14 @@ class DataGen
     public function update()
     {
         foreach ($this->config as $table => $params) {
-            echo '  * ' . $params['title'] . ' ...'."\n"; // provisoire
-            //$this->oseAdmin->getConsole()->println('  * ' . $params['title'] . ' ...');
+            if (isset($params['title'])) {
+                echo '  * ' . $params['title'] . ' ...' . "\n"; // provisoire
+                //$this->oseAdmin->getConsole()->println('  * ' . $params['title'] . ' ...');
+            }
             $data = $this->$table();
             $this->oseAdmin->getBdd()->getTable($table)->merge(
                 $data,
-                $params['key'],
+                isset($params['key']) ? $params['key'] : 'ID',
                 isset($params['options']) ? $params['options'] : []
             );
         }
@@ -204,12 +217,12 @@ class DataGen
 
     public function PLAFOND()
     {
-        $data = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
 
-        foreach( $data['plafonds'] as $code => $libelle ){
-            $plafond = [
-                'CODE' => $code,
+        foreach ($data['plafonds'] as $code => $libelle) {
+            $plafond    = [
+                'CODE'    => $code,
                 'LIBELLE' => $libelle,
             ];
             $plafonds[] = $plafond;
@@ -254,5 +267,39 @@ class DataGen
         }
 
         return $indicateurs;
+    }
+
+
+
+    public function TYPE_VOLUME_HORAIRE()
+    {
+        return require $this->oseAdmin->getOseDir() . 'data/types_volumes_horaires.php';
+    }
+
+
+
+    public function ETAT_VOLUME_HORAIRE()
+    {
+        return require $this->oseAdmin->getOseDir() . 'data/etats_volumes_horaires.php';
+    }
+
+
+
+    public function TBL()
+    {
+        return require $this->oseAdmin->getOseDir() . 'data/tbl.php';
+    }
+
+
+
+    public function TYPE_VALIDATION()
+    {
+        $data            = require $this->oseAdmin->getOseDir() . 'data/type_validations.php';
+        $typesValidation = [];
+        foreach ($data as $CODE => $LIBELLE) {
+            $typesValidation[] = compact('CODE', 'LIBELLE');
+        }
+
+        return $typesValidation;
     }
 }

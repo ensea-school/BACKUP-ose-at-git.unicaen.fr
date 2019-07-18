@@ -1,7 +1,7 @@
 <?php
 
-$bdd        = new \BddAdmin\Bdd(Config::get()['bdds']['deploy-local']);
-$bdd->debug = true;
+$bdd        = new \BddAdmin\Bdd(Config::get()['bdds']['dev-local']);
+//$bdd->debug = true;
 
 $oa = new OseAdmin();
 $oa->setBdd($bdd);
@@ -10,11 +10,11 @@ $dataGen = new DataGen($oa);
 $dataGen->update();
 
 
-/*
 
+/*
 $bddp        = new \BddAdmin\Bdd(Config::get()['bdds']['dev-local']);
 
-$i = $bddp->select('SELECT * FROM formule order by libelle');
+$i = $bddp->select('SELECT * FROM tbl order by ordre');
 $indicateurs = [];
 foreach( $i as $indic ){
 
@@ -22,5 +22,5 @@ foreach( $i as $indic ){
 }
 var_dump($indicateurs);
 
-file_put_contents($oa->getOseDir().'/data/formules.php', var_export($indicateurs,true));
+file_put_contents($oa->getOseDir().'/data/tbl.php', var_export($indicateurs,true));
 */

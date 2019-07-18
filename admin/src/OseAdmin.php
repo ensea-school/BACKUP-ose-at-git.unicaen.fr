@@ -41,9 +41,11 @@ class OseAdmin
      *
      * @param Console $console
      */
-    public function __construct(Console $console)
+    public function __construct(Console $console = null)
     {
-        $this->console = $console;
+        if ($console) {
+            $this->console = $console;
+        }
     }
 
 
@@ -53,10 +55,10 @@ class OseAdmin
         $this->version    = $this->currentVersion();
         $this->oldVersion = $this->version;
 
-        if ($this->console->hasOption('oa-old-version')){
+        if ($this->console->hasOption('oa-old-version')) {
             $this->oldVersion = $this->console->getOption('oa-old-version');
         }
-        if ($this->console->hasOption('oa-version')){
+        if ($this->console->hasOption('oa-version')) {
             $this->version = $this->console->getOption('oa-version');
         }
     }
@@ -166,23 +168,23 @@ class OseAdmin
     /**
      * @param string $action
      */
-    public function run(string $action, $newProcess=false)
+    public function run(string $action, $newProcess = false)
     {
         if (file_exists($this->getOseDir() . 'admin/actions/' . $action . '.php')) {
-            if ($newProcess){
+            if ($newProcess) {
                 $this->console->passthru(
                     "php " . $this->getOseDir() . "/bin/ose " . $action
-                    .' --oa-old-version='.$this->oldVersion
-                    .' --oa-version='.$this->version
+                    . ' --oa-old-version=' . $this->oldVersion
+                    . ' --oa-version=' . $this->version
                 );
-            }else{
+            } else {
                 $oa = $this;
                 $c  = $this->console;
                 require_once $this->getOseDir() . 'admin/actions/' . $action . '.php';
             }
         } else {
             $this->console->println('Action "' . $action . '" inconnue.', $this->console::COLOR_RED);
-            $c  = $this->console;
+            $c = $this->console;
             require_once $this->getOseDir() . 'admin/actions/help.php';
         }
     }
@@ -206,7 +208,7 @@ class OseAdmin
 
     protected function getMigrationFilesToExecute(string $oldVersion, string $newVersion, string $prePost = 'pre'): array
     {
-        $tags  = $this->getTags(1);
+        $tags = $this->getTags(1);
         foreach ($tags as $i => $tag) {
             $tags[$i] = $this->purgerVersion($tag);
         }
@@ -260,7 +262,7 @@ class OseAdmin
 
 
 
-    protected  function runMigrationPhpScript(string $filename)
+    protected function runMigrationPhpScript(string $filename)
     {
         $this->console->println('Exécution du script de migration ' . basename($filename), $this->console::COLOR_YELLOW);
         try {
@@ -275,7 +277,7 @@ class OseAdmin
 
 
 
-    protected  function runMigrationSqlScript(string $filename)
+    protected function runMigrationSqlScript(string $filename)
     {
         $this->console->println('Exécution du script de migration ' . basename($filename), $this->console::COLOR_YELLOW);
         $errors = $this->getBdd()->execFile($filename);
@@ -304,9 +306,9 @@ class OseAdmin
         $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_PURPLE);
 
         $scripts = $this->getMigrationFilesToExecute($this->oldVersion, $this->version, $prePost);
-        foreach( $scripts as $script ){
+        foreach ($scripts as $script) {
             $ext = substr($script, -3);
-            switch($ext){
+            switch ($ext) {
                 case 'php':
                     $this->runMigrationPhpScript($script);
                 break;
@@ -323,43 +325,6 @@ class OseAdmin
         }
 
         return true;
-    }
-
-
-
-    public function majPrivileges()
-    {
-        /* Chargement des categories en config */
-        $data       = require $this->getOseDir() . 'data/privileges.php';
-        $categories = [];
-        $privileges = [];
-        foreach ($data as $code => $record) {
-            $categories[] = [
-                'CODE'    => $code,
-                'LIBELLE' => $record['libelle'],
-                'ORDRE'   => count($categories) + 1,
-            ];
-            $io           = 0;
-            foreach ($record['privileges'] as $pcode => $plib) {
-                $io++;
-                $privileges[] = [
-                    'CATEGORIE_ID' => $code,
-                    'CODE'         => $pcode,
-                    'LIBELLE'      => $plib,
-                    'ORDRE'        => $io,
-                ];
-            }
-        }
-
-        /* Mise à jour */
-        $this->getBdd()->getTable('CATEGORIE_PRIVILEGE')->merge($categories, 'CODE');
-        $this->getBdd()->getTable('PRIVILEGE')->merge(
-            $privileges,
-            ['CATEGORIE_ID', 'CODE'],
-            ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]]
-        );
-
-        /* Vidage du fichier de cache */
     }
 
 
@@ -393,19 +358,62 @@ class OseAdmin
 
 
     /**
+     * @param \BddAdmin\Bdd $bdd
+     *
+     * @return $this
+     */
+    public function setBdd(\BddAdmin\Bdd $bdd)
+    {
+        $this->bdd = $bdd;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Console
+     */
+    public function getConsole(): Console
+    {
+        if (!$this->console){
+            $this->console = new Console();
+        }
+
+        return $this->console;
+    }
+
+
+
+    /**
+     * @param Console $console
+     *
+     * @return OseAdmin
+     */
+    public function setConsole(Console $console): OseAdmin
+    {
+        $this->console = $console;
+
+        return $this;
+    }
+
+
+
+    /**
      * @return bool
      */
     public function bddIsOk(): bool
     {
         $bddConf = Config::getBdd();
 
-        $cs              = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
-        $characterSet    = 'AL32UTF8';
-        $conn = oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
+        $cs           = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
+        $characterSet = 'AL32UTF8';
+        $conn         = oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
         if (!$conn) {
             return false;
-        }else{
+        } else {
             oci_close($conn);
+
             return true;
         }
     }

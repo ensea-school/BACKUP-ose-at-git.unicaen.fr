@@ -211,12 +211,12 @@ class Table
     {
         /* Initialisation */
         $defaultOptions = [
-            'where'             => null,
-            'key'               => $key,
-            'delete'            => true,
-            'insert'            => true,
-            'update'            => true,
-            'upate-ignore-cols' => [],
+            'where'              => null,
+            'key'                => $key,
+            'delete'             => true,
+            'insert'             => true,
+            'update'             => true,
+            'update-ignore-cols' => [],
         ];
         $options        = array_merge($defaultOptions, $options);
 
@@ -249,7 +249,6 @@ class Table
             $diff[$k]['new'] = $d;
         }
 
-
         /* Traitement */
         foreach ($diff as $dr) {
             $old = $dr['old'];
@@ -270,8 +269,7 @@ class Table
                     $oldc = isset($old[$c]) ? $old[$c] : null;
                     if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d');
                     if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d');
-
-                    if (!in_array($c, $options['upate-ignore-cols']) && $c != 'ID' && isset($new[$c]) && $newc !== $oldc) {
+                    if (!in_array($c, $options['update-ignore-cols']) && $c != 'ID' && array_key_exists($c,$new) && $newc !== $oldc) {
                         $toUpdate[$c] = $new[$c];
                     }
                 }

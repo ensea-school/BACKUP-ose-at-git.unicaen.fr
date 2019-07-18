@@ -20,7 +20,7 @@ return [
     \BddAdmin\Ddl\DdlPackage::class           => ['includes' => []],
     \BddAdmin\Ddl\DdlPrimaryConstraint::class => ['includes' => ['null']],
     \BddAdmin\Ddl\DdlRefConstraint::class     => ['includes' => ['null']],
-    \BddAdmin\Ddl\DdlSequence::class          => ['includes' => ['null']],
+    \BddAdmin\Ddl\DdlSequence::class          => ['includes' => []],
     \BddAdmin\Ddl\DdlTable::class             => ['includes' => $tables],
     \BddAdmin\Ddl\DdlTrigger::class           => ['includes' => []],
     \BddAdmin\Ddl\DdlUniqueConstraint::class  => ['includes' => ['null']],

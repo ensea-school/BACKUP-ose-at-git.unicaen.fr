@@ -20,6 +20,7 @@ $classes   = [
     \BddAdmin\Ddl\DdlView::class,
     \BddAdmin\Ddl\DdlPackage::class,
     \BddAdmin\Ddl\DdlTrigger::class,
+    \BddAdmin\Ddl\DdlSequence::class,
 ];
 
 foreach ($classes as $ddlClass) {

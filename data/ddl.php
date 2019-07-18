@@ -249,6 +249,10 @@
     array (
       'name' => 'PLAFOND_ETAT_ID_SEQ',
     ),
+    'PLAFOND_ID_SEQ' => 
+    array (
+      'name' => 'PLAFOND_ID_SEQ',
+    ),
     'PRIVILEGE_ID_SEQ' => 
     array (
       'name' => 'PRIVILEGE_ID_SEQ',
@@ -9856,7 +9860,7 @@
       'temporary' => false,
       'logging' => true,
       'commentaire' => NULL,
-      'sequence' => NULL,
+      'sequence' => 'PLAFOND_ID_SEQ',
       'columns' => 
       array (
         'ID' => 

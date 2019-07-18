@@ -42,13 +42,8 @@ $schema->alter($ref, $ddlConfig, true);
 $c->println('');
 
 $c->println('Mise à jour des données', $c::COLOR_LIGHT_PURPLE);
-$c->println('  * Privilèges ...');
-$oa->majPrivileges();
-
-$c->println('  * États de sortie ...');
-$esData = require $oa->getOseDir() . 'data/etats_sortie.php';
-$bdd->getTable('ETAT_SORTIE')->merge($esData, 'CODE', ['update' => false, 'delete' => false]);
-
+$dataGen = new DataGen($oa);
+$dataGen->update();
 
 $c->println('');
 $oa->migration('post');

@@ -45,10 +45,12 @@ $schema->alter($ref, $ddlConfig, true);
 $c->println("\n".'Mise à jour des séquences', $c::COLOR_LIGHT_PURPLE);
 $schema->majSequences($ref);
 
-$c->println("\n".'Mise à jour des données', $c::COLOR_LIGHT_PURPLE);
+$c->println("\n".'Contrôle et mise à jour des données', $c::COLOR_LIGHT_PURPLE);
 $dataGen = new DataGen($oa);
 $dataGen->update();
 
 $c->println('');
 $oa->migration('post');
-$c->println('');
+
+$c->println("\n".'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LIGHT_PURPLE);
+$bdd->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');

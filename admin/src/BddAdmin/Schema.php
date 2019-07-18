@@ -442,7 +442,7 @@ class Schema
 
         if ($mode != 'drop' && $autoExecute) { // create ou alter
             if ($this->logger){
-                $this->logger->logTitle('Compilation de tous les objets de la BDD');
+                $this->logger->logTitle("\n".'Compilation de tous les objets de la BDD');
             }
             if (empty($this->compilerTout()) && $this->logger){
                 $this->logger->log('Compilation effectuée avec succès.');

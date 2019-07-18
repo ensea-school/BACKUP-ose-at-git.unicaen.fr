@@ -40,9 +40,12 @@ $schema->setLogger($scl);
 
 /* Mise à jour de la BDD */
 $schema->alter($ref, $ddlConfig, true);
-$c->println('');
 
-$c->println('Mise à jour des données', $c::COLOR_LIGHT_PURPLE);
+/* Mise à jour des séquences */
+$c->println("\n".'Mise à jour des séquences', $c::COLOR_LIGHT_PURPLE);
+$schema->majSequences($ref);
+
+$c->println("\n".'Mise à jour des données', $c::COLOR_LIGHT_PURPLE);
 $dataGen = new DataGen($oa);
 $dataGen->update();
 

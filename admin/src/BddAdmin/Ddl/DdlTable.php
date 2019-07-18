@@ -254,12 +254,15 @@ class DdlTable extends DdlAbstract
 
     public function majSequence(array $data)
     {
+        if (!isset($data['sequence'])) return;
+        if (!isset($data['columns']['ID'])) return;
+
         $sql = 'DECLARE seqId NUMERIC;
 BEGIN
   SELECT COALESCE(MAX(id+1),1) INTO seqId FROM ' . $data['name'] . ';
   EXECUTE IMMEDIATE \'DROP SEQUENCE ' . $data['sequence'] . '\';
   EXECUTE IMMEDIATE \'CREATE SEQUENCE ' . $data['sequence'] . ' INCREMENT BY 1 MINVALUE \' || seqId || \' NOCACHE\';
-END';
+END;';
         $this->addQuery($sql, 'Mise à jour de la séquence '.$data['sequence']);
     }
 

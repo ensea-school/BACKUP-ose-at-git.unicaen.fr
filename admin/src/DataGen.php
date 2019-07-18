@@ -122,8 +122,8 @@ class DataGen
     {
         foreach ($this->config as $table => $params) {
             if (isset($params['title'])) {
-                echo '  * ' . $params['title'] . ' ...' . "\n"; // provisoire
-                //$this->oseAdmin->getConsole()->println('  * ' . $params['title'] . ' ...');
+                echo $params['title'] . "\n"; // provisoire
+                //$this->oseAdmin->getConsole()->println($params['title']);
             }
             $data = $this->$table();
             $this->oseAdmin->getBdd()->getTable($table)->merge(

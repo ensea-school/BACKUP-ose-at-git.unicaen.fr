@@ -497,9 +497,9 @@ class Schema
 
         if ($ddlObject->getQueries()) {
             if ($autoExecute) {
-                return [DdlTable::class . '.majSequences' => $ddlObject->execQueries()];
+                return [DdlTable::class . '.majSequences' => $ddlObject->execQueries($this->logger)];
             } else {
-                return [DdlTable::class . '.majSequences' => $ddlObject->getQueries()];
+                return [DdlTable::class . '.majSequences' => $ddlObject->getQueries($this->logger)];
             }
         }
     }

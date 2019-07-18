@@ -303,9 +303,11 @@ class OseAdmin
      */
     public function migration(string $prePost = 'pre'): bool
     {
-        $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_PURPLE);
-
         $scripts = $this->getMigrationFilesToExecute($this->oldVersion, $this->version, $prePost);
+        if (count($scripts) > 0) {
+            $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_PURPLE);
+        }
+
         foreach ($scripts as $script) {
             $ext = substr($script, -3);
             switch ($ext) {
@@ -320,8 +322,6 @@ class OseAdmin
 
         if (count($scripts) > 0) {
             $this->console->println("Scripts de $prePost-migration exécutés");
-        } else {
-            $this->console->println("Aucun script de $prePost-migration à exécuter");
         }
 
         return true;

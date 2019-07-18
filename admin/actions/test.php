@@ -3,6 +3,10 @@
 $bdd        = new \BddAdmin\Bdd(Config::get()['bdds']['dev-local']);
 //$bdd->debug = true;
 
+$schema = new \BddAdmin\Schema($bdd);
+
+$schema->majSequences();
+
 $oa = new OseAdmin();
 $oa->setBdd($bdd);
 

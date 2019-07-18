@@ -110,7 +110,8 @@ class DataGen
     public function update()
     {
         foreach ($this->config as $table => $params) {
-            $this->oseAdmin->getConsole()->println('  * ' . $params['title'] . ' ...');
+            echo '  * ' . $params['title'] . ' ...'."\n"; // provisoire
+            //$this->oseAdmin->getConsole()->println('  * ' . $params['title'] . ' ...');
             $data = $this->$table();
             $this->oseAdmin->getBdd()->getTable($table)->merge(
                 $data,

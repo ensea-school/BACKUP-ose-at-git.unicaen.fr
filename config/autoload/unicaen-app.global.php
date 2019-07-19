@@ -94,7 +94,7 @@ return [
                         'uri' => AppConfig::get('etablissement', 'mentionsLegales'),
                     ],
                     'informatique-et-libertes' => [
-                        'uri' => AppConfig::get('etablissement', 'viePrivee'),
+                        'uri' => AppConfig::get('etablissement', 'viePrivee', AppConfig::get('etablissement', 'informatiqueEtLibertes')),
                     ],
                 ],
             ],

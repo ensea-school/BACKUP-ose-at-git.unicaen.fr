@@ -408,7 +408,7 @@ class OseAdmin
 
         $cs           = $bddConf['host'] . ':' . $bddConf['port'] . '/' . $bddConf['dbname'];
         $characterSet = 'AL32UTF8';
-        $conn         = oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
+        $conn         = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
         if (!$conn) {
             return false;
         } else {

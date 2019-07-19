@@ -11801,6 +11801,16 @@
           'nullable' => true,
           'default' => NULL,
         ),
+        'AFF_ADRESSE_CONTRAT' =>
+        array (
+          'name' => 'AFF_ADRESSE_CONTRAT',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '1',
+        ),
       ),
     ),
     'SYNC_LOG' => 

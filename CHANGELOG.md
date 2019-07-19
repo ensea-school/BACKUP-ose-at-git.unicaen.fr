@@ -3,7 +3,7 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
-# OSE 8.2 (à venir)
+# OSE 8.2
 
 ## Correction de bugs
 
@@ -31,6 +31,8 @@ les nouveaux volumes horaires négatifs générés portent maintenant les mêmes
 * L'export PDF des services est maintenant personnalisable.
 * Le pays "France" est détecté automatiquement. Il n'a donc plus besoin d'être identifié via administration/paramètres généraux.
 * Amélioration de performances pour l'affichage des données personnelles
+* Nouveau plafond à définir par statut portant sur les HETD complémentaires en FI hors EAD (Enseignement à distance)
+* Indicateurs 580 et 590 liés à ce nouveau plafond (580=prévisionnel, 590=réalisé)
 
 ## Notes de mise à jour
 

@@ -402,7 +402,7 @@ class OseAdmin
     /**
      * @return bool
      */
-    public function bddIsOk(): bool
+    public function bddIsOk(&$msg): bool
     {
         $bddConf = Config::getBdd();
 
@@ -410,6 +410,7 @@ class OseAdmin
         $characterSet = 'AL32UTF8';
         $conn         = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
         if (!$conn) {
+            $msg          = oci_error()['message'];
             return false;
         } else {
             oci_close($conn);

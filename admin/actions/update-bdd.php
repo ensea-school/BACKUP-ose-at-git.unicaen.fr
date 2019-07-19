@@ -1,5 +1,10 @@
 <?php
 
+if (!$oa->bddIsOk($msg)) {
+    $c->printDie("Impossible d'accéder à la base de données : $msg!"
+        ."\nVeuillez contrôler vos paramètres de configuration s'il vous plaît, avant de refaire une tentative de MAJ de la base de données (./bin/ose update-bdd).");
+}
+
 $bdd    = $oa->getBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
@@ -10,11 +15,11 @@ $oa->migration('pre');
 $c->println("\n" . 'Mise à jour des définitions de la base de données', $c::COLOR_LIGHT_PURPLE);
 
 /* Récupération du schéma de référence */
-$ref = $schema->loadFromFile($oa->getOseDir() . 'bdd/ddl.php');
+$ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 
 
 /* Construction de la config de DDL pour filtrer */
-$ddlConfig = require $oa->getOseDir() . '/data/ddl_config.php';
+$ddlConfig = require $oa->getOseDir() . 'data/ddl_config.php';
 $classes   = [
     // Tous les objets de ces classes seront intégralement pris en compte dans la MAJ
     \BddAdmin\Ddl\DdlView::class,

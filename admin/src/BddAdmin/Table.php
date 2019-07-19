@@ -249,6 +249,7 @@ class Table
             $diff[$k]['new'] = $d;
         }
 
+
         /* Traitement */
         foreach ($diff as $dr) {
             $old = $dr['old'];

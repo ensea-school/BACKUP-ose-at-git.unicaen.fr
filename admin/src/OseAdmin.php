@@ -25,6 +25,11 @@ class OseAdmin
     private $tags = false;
 
     /**
+     * @var int
+     */
+    private $oseAppliId;
+
+    /**
      * @var string
      */
     public $oldVersion;
@@ -339,6 +344,22 @@ class OseAdmin
     public function getOseDir(): string
     {
         return dirname(dirname(__DIR__)) . '/';
+    }
+
+
+
+    public function getOseAppliId(): int
+    {
+        if (!$this->oseAppliId){
+            $u = $this->oseAdmin->getBdd()->select("SELECT id FROM UTILISATEUR WHERE USERNAME='oseappli'");
+            if (isset($u[0]['ID'])){
+                $this->oseAppliId = (int)$u[0]['ID'];
+            }else{
+                throw new \Exception('Utilisateur système "oseappli" non trouvé!!');
+            }
+        }
+
+        return $this->oseAppliId;
     }
 
 

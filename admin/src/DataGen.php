@@ -54,6 +54,15 @@ class DataGen
         'ETAT_VOLUME_HORAIRE' => [
             'title' => 'États de volumes horaires',
         ],
+        'PERIMETRE'           => [
+            'title' => 'Périmètres des rôles',
+            'key'   => 'CODE',
+        ],
+        'SOURCE' => [
+            'title' => 'Sources de données',
+            'key'   => 'CODE',
+            'options' => ['delete' => false],
+        ],
         'TYPE_VALIDATION'     => [
             'title' => 'Types de validation',
             'key'   => 'CODE',
@@ -61,6 +70,11 @@ class DataGen
         'TBL'                 => [
             'title' => 'Tableaux de bord',
             'key'   => 'TBL_NAME',
+        ],
+        'UTILISATEUR'         => [
+            'title'   => 'Utilisateurs',
+            'key'     => 'USERNAME',
+            'options' => ['update-ignore-cols' => ['EMAIL', 'PASSWORD'], 'delete' => false],
         ],
     ];
 
@@ -76,13 +90,11 @@ class DataGen
     'MESSAGE'                     => '',
     'MODELE_CONTRAT'              => "libelle = 'Modèle par défaut'",
     'PARAMETRE'                   => '',
-    'PERIMETRE'                   => '',
     'PERIODE'                     => '',
     'REGLE_STRUCTURE_VALIDATION'  => '',
     'ROLE'                        => '',
     'ROLE_PRIVILEGE'              => '',
     'SCENARIO'                    => 'structure_id IS NULL',
-    'SOURCE'                      => "code='OSE'",
     'TAUX_HORAIRE_HETD'           => '',
     'TYPE_AGREMENT'               => '',
     'TYPE_AGREMENT_STATUT'        => '',
@@ -91,7 +103,6 @@ class DataGen
     'TYPE_INTERVENANT'            => '',
     'TYPE_INTERVENTION'           => "code IN ('CM','TD','TP')",
     'TYPE_RESSOURCE'              => '',
-    'UTILISATEUR'                 => "username = '" . self::OSE_USER . "'",
     'WF_ETAPE'                    => '',
     'WF_ETAPE_DEP'                => '',
 
@@ -285,6 +296,24 @@ class DataGen
 
 
 
+    public function PERIMETRE()
+    {
+        $data       = require $this->oseAdmin->getOseDir() . 'data/perimetres.php';
+        $perimetres = [];
+        foreach ($data as $CODE => $LIBELLE) {
+            $perimetres[] = compact('CODE', 'LIBELLE');
+        }
+
+        return $perimetres;
+    }
+
+
+    public function SOURCE()
+    {
+        return require $this->oseAdmin->getOseDir() . 'data/sources.php';
+    }
+
+
     public function TBL()
     {
         return require $this->oseAdmin->getOseDir() . 'data/tbl.php';
@@ -301,5 +330,12 @@ class DataGen
         }
 
         return $typesValidation;
+    }
+
+
+
+    public function UTILISATEUR()
+    {
+        return require $this->oseAdmin->getOseDir() . 'data/utilisateurs.php';
     }
 }

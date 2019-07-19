@@ -3,16 +3,12 @@
 $bdd        = new \BddAdmin\Bdd(Config::get()['bdds']['dev-local']);
 //$bdd->debug = true;
 
-$schema = new \BddAdmin\Schema($bdd);
 
-$schema->majSequences();
-
-$oa = new OseAdmin();
-$oa->setBdd($bdd);
-
-$dataGen = new DataGen($oa);
-$dataGen->update();
-
+$u = $bdd->select("SELECT id FROM UTILISATEUR WHERE USERNAME='oseappli'");
+if (isset($u[0]['ID'])){
+    $u = (int)$u[0]['ID'];
+}
+var_dump($u);
 
 
 /*

@@ -70,15 +70,12 @@ $c->println("\nMise à jour des liens vers les répertoires publics des dépenda
 $oa->majUnicaenSymLinks($osedir);
 $c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
 
-// Configuration locale
-//$c->println("\nMise en place de la base de données", $c::COLOR_LIGHT_CYAN);
-//$c->println("\nUne base de données Oracle doit préalablement avoir été créée. Merci de fournir dès à présent ses"
-//." paramètres d'accès pour que OSE initialialise la base de données :");
-
-$c->exec([
-    "cd $osedir",
-    "cp config.local.php.default config.local.php",
-]);
+if (!file_exists($osedir.'config.local.php')) {
+    $c->exec([
+        "cd $osedir",
+        "cp config.local.php.default config.local.php",
+    ]);
+}
 
 // Génération des proxies pour l'ORM Doctrine
 $c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
@@ -89,7 +86,13 @@ $c->exec([
     "chmod -R 777 cache/Doctrine",
 ]);
 
-// Mise en place des tâches CRON ??
-
 // Conclusion
 $c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
+$c->println("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+$c->println(" 1 - Configurez le cas échéant votre serveur Apache");
+$c->println(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
+$c->println(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd");
+$c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+$c->println('');
+$c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
+$c->println('');

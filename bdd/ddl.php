@@ -11619,6 +11619,16 @@
           'nullable' => false,
           'default' => '0',
         ),
+        'PLAFOND_HC_FI_HORS_EAD' => 
+        array (
+          'name' => 'PLAFOND_HC_FI_HORS_EAD',
+          'type' => 'FLOAT',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => 126,
+          'nullable' => false,
+          'default' => '9999',
+        ),
       ),
     ),
     'STATUT_PRIVILEGE' => 
@@ -11801,7 +11811,7 @@
           'nullable' => true,
           'default' => NULL,
         ),
-        'AFF_ADRESSE_CONTRAT' =>
+        'AFF_ADRESSE_CONTRAT' => 
         array (
           'name' => 'AFF_ADRESSE_CONTRAT',
           'type' => 'NUMBER',

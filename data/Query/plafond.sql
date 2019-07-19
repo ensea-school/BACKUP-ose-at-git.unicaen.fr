@@ -28,7 +28,8 @@ FROM
 WHERE
   fr.heures_compl_fc_majorees > ROUND( (COALESCE(si.plafond_hc_remu_fc,0) - COALESCE(i.montant_indemnite_fc,0)) / a.taux_hetd, 2 )
   /*i.id*/
-UNION
+
+UNION ALL
 
 -- Heures max. de référentiel par intervenant selon son statut
 SELECT
@@ -47,7 +48,8 @@ FROM
 WHERE
   fr.SERVICE_REFERENTIEL + fr.HEURES_COMPL_REFERENTIEL > si.plafond_referentiel
   /*i.id*/
-UNION
+
+UNION ALL
 
 -- Heures max. de référentiel par intervenant et par fonction référentielle
 SELECT
@@ -87,7 +89,7 @@ GROUP BY
   i.annee_id,
   t.intervenant_id
 
-UNION
+UNION ALL
 
 -- Heures max. de référentiel par intervenant et par fonction référentielle mère
 SELECT
@@ -128,7 +130,7 @@ GROUP BY
   i.annee_id,
   t.intervenant_id
 
-UNION
+UNION ALL
 
 -- Heures max. de référentiel par structure
 SELECT
@@ -161,7 +163,7 @@ WHERE
     t.heures > t.plafond
   /*i.id*/
 
-UNION
+UNION ALL
 
 -- Nombre maximum d'heures équivalent TD par intervenant selon son statut
 SELECT
@@ -181,7 +183,7 @@ WHERE
   fr.total - fr.heures_compl_fc_majorees > si.maximum_hetd
   /*i.id*/
 
-UNION
+UNION ALL
 
 -- Nombre d'heures complémentaires maximum (hors rémunération au titre de l'article d714-60 du code de l'éducation)
 SELECT
@@ -200,6 +202,51 @@ FROM
 WHERE
   (fr.heures_compl_fi + fr.heures_compl_fc + fr.heures_compl_fa + fr.heures_compl_referentiel) > si.plafond_hc_hors_remu_fc
   /*i.id*/
+
+UNION ALL
+
+-- HETD max. en formation initiale hors EAD
+SELECT
+  'hc-fi-hors-ead'                    plafond_code,
+  null                                plafond_libelle,
+  t.type_volume_horaire_id,
+  t.annee_id,
+  t.intervenant_id,
+  si.plafond_hc_fi_hors_ead           plafond,
+  t.heures
+FROM
+  (
+    SELECT
+      fr.type_volume_horaire_id           type_volume_horaire_id,
+      i.annee_id                          annee_id,
+      i.id                                intervenant_id,
+      i.statut_id                         statut_intervenant_id,
+      si.plafond_hc_fi_hors_ead           plafond,
+      SUM(frvh.heures_compl_fi)           heures
+    FROM
+      intervenant                     i
+      JOIN etat_volume_horaire      evh ON evh.code = 'saisi'
+      JOIN formule_resultat          fr ON fr.intervenant_id = i.id AND fr.etat_volume_horaire_id = evh.id
+      JOIN formule_resultat_vh     frvh ON frvh.formule_resultat_id = fr.id
+      JOIN volume_horaire            vh ON vh.id = frvh.volume_horaire_id
+      JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
+      JOIN statut_intervenant        si ON si.id = i.statut_id
+    WHERE
+      ti.regle_foad = 0
+      /*i.id*/
+    GROUP BY
+      fr.type_volume_horaire_id,
+      i.annee_id,
+      i.id,
+      i.statut_id,
+      si.plafond_hc_fi_hors_ead
+  ) t
+    JOIN statut_intervenant si ON si.id = t.statut_intervenant_id
+WHERE
+  t.heures > si.plafond_hc_fi_hors_ead
+
+
+
 
 ) b
 

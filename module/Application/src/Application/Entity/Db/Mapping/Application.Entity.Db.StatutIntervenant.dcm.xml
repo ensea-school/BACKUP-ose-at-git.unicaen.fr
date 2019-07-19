@@ -25,6 +25,7 @@
         <field name="plafondReferentiel" type="float" column="PLAFOND_REFERENTIEL" precision="126" scale="0" nullable="false"/>
         <field name="plafondHcHorsRemuFc" type="float" column="PLAFOND_HC_HORS_REMU_FC" precision="126" scale="0" nullable="false"/>
         <field name="plafondHcRemuFc" type="float" column="PLAFOND_HC_REMU_FC" precision="126" scale="0" nullable="false"/>
+        <field name="plafondHcFiHorsEad" type="float" column="PLAFOND_HC_FI_HORS_EAD" precision="126" scale="0" nullable="false"/>
         <field name="maximumHETD" type="float" column="MAXIMUM_HETD" precision="126" scale="0" nullable="false"/>
         <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
         <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>

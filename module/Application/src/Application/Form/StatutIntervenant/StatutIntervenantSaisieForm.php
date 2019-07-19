@@ -129,7 +129,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'service-statutaire',
             'options'    => [
-                'label' => "Service statutaire",
+                'label'  => "Service statutaire",
                 'suffix' => 'HETD',
             ],
             'attributes' => [
@@ -141,7 +141,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'maximum-HETD',
             'options'    => [
-                'label' => "Plafond des HETD",
+                'label'  => "Plafond des HETD",
                 'suffix' => 'HETD',
             ],
             'attributes' => [
@@ -153,7 +153,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'plafond-referentiel',
             'options'    => [
-                'label' => "Plafond du référentiel",
+                'label'  => "Plafond du référentiel",
                 'suffix' => 'HETD',
             ],
             'attributes' => [
@@ -166,8 +166,8 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'plafond-h-h-c',
             'options'    => [
-                'label' => "Plafond des HC (hors prime FC D714-60)",
-                'suffix' => 'HETD'
+                'label'  => "Plafond des HC (hors prime FC D714-60)",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
                 'title' => "Nombre maximal d'heures complémentaires (hors heures relevant de la prime de formation continue au titre de l'article D714-60 du code de l'éducation)",
@@ -178,8 +178,20 @@ class StatutIntervenantSaisieForm extends AbstractForm
         $this->add([
             'name'       => 'plafond-h-c',
             'options'    => [
-                'label' => "Plafond prime FC D714-60",
-                'suffix' => '&euro;'
+                'label'  => "Plafond prime FC D714-60",
+                'suffix' => '&euro;',
+            ],
+            'attributes' => [
+                'title' => "Montant maximal de la prime de formation continue relevant de l'article D714-60 du code de l'éducation",
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
+            'name'       => 'plafond-hc-fi-hors-ead',
+            'options'    => [
+                'label'  => "Plafond HC en FI hors EAD",
+                'suffix' => 'HETD',
             ],
             'attributes' => [
                 'title' => "Montant maximal de la prime de formation continue relevant de l'article D714-60 du code de l'éducation",
@@ -214,16 +226,16 @@ class StatutIntervenantSaisieForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'libelle'             => [
+            'libelle'                => [
                 'required' => true,
             ],
-            'type-intervenant'    => [
+            'type-intervenant'       => [
                 'required' => true,
             ],
-            'code'                => [
+            'code'                   => [
                 'required' => true,
             ],
-            'plafond-h-c'         => [
+            'plafond-h-c'            => [
                 'required'   => true,
                 'validators' => [
                     new \Zend\Validator\Callback([
@@ -233,7 +245,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'plafond-h-h-c'       => [
+            'plafond-h-h-c'          => [
                 'required'   => true,
                 'validators' => [
                     new \Zend\Validator\Callback([
@@ -243,7 +255,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'service-statutaire'  => [
+            'service-statutaire'     => [
                 'required'   => true,
                 'validators' => [
                     new \Zend\Validator\Callback([
@@ -253,7 +265,7 @@ class StatutIntervenantSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'plafond-referentiel' => [
+            'plafond-referentiel'    => [
                 'required'   => true,
                 'validators' => [
                     new \Zend\Validator\Callback([
@@ -263,7 +275,17 @@ class StatutIntervenantSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
-            'maximum-HETD'        => [
+            'maximum-HETD'           => [
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
+            ],
+            'plafond-hc-fi-hors-ead' => [
                 'required'   => true,
                 'validators' => [
                     new \Zend\Validator\Callback([
@@ -337,6 +359,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setSourceCode($data['code']);
         $object->setPlafondHcHorsRemuFc(FloatFromString::run($data['plafond-h-h-c']));
         $object->setPlafondHcRemuFc(FloatFromString::run($data['plafond-h-c']));
+        $object->setPlafondHcFiHorsEad(FloatFromString::run($data['plafond-hc-fi-hors-ead']));
         $object->setPeutChoisirDansDossier($data['peut-choisir-dans-dossier']);
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
@@ -358,11 +381,11 @@ class StatutIntervenantHydrator implements HydratorInterface
         $data = [
             'id'                             => $object->getId(),
             'libelle'                        => $object->getLibelle(),
-            'depassement'                     => $object->getDepassement(),
+            'depassement'                    => $object->getDepassement(),
             'service-statutaire'             => StringFromFloat::run($object->getServiceStatutaire()),
             'plafond-referentiel'            => StringFromFloat::run($object->getPlafondReferentiel()),
-            'peut-choisir-dans-dossier' => $object->getPeutChoisirDansDossier(),
-            'peut-saisir-dossier' => $object->getPeutSaisirDossier(),
+            'peut-choisir-dans-dossier'      => $object->getPeutChoisirDansDossier(),
+            'peut-saisir-dossier'            => $object->getPeutSaisirDossier(),
             'non-autorise'                   => $object->getNonAutorise(),
             'peut-saisir-service'            => $object->getPeutSaisirService(),
             'peut-saisir-referentiel'        => $object->getPeutSaisirReferentiel(),
@@ -376,6 +399,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'code'                           => $object->getSourceCode(),
             'plafond-h-h-c'                  => StringFromFloat::run($object->getPlafondHcHorsRemuFc()),
             'plafond-h-c'                    => StringFromFloat::run($object->getPlafondHcRemuFc()),
+            'plafond-hc-fi-hors-ead'         => StringFromFloat::run($object->getPlafondHcFiHorsEad()),
             'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
             'depassement-sdshc'              => $object->getDepassementSDSHC(),
         ];

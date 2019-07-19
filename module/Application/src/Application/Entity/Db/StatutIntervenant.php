@@ -160,6 +160,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     protected $plafondHcRemuFc;
 
     /**
+     * @var float
+     */
+    protected $plafondHcFiHorsEad = 9999;
+
+    /**
      * @var boolean
      */
     protected $peutSaisirServiceExt;
@@ -856,6 +861,30 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     public function setPlafondHcRemuFc($plafondHcRemuFc)
     {
         $this->plafondHcRemuFc = $plafondHcRemuFc;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return float
+     */
+    public function getPlafondHcFiHorsEad(): float
+    {
+        return $this->plafondHcFiHorsEad;
+    }
+
+
+
+    /**
+     * @param float $plafondHcFiHorsEad
+     *
+     * @return StatutIntervenant
+     */
+    public function setPlafondHcFiHorsEad(float $plafondHcFiHorsEad): StatutIntervenant
+    {
+        $this->plafondHcFiHorsEad = $plafondHcFiHorsEad;
 
         return $this;
     }

@@ -50,17 +50,19 @@ class DataGen
         ],
         'TYPE_VOLUME_HORAIRE' => [
             'title' => 'Types de volumes horaires',
+            'key'   => 'CODE',
         ],
         'ETAT_VOLUME_HORAIRE' => [
             'title' => 'États de volumes horaires',
+            'key'   => 'CODE',
         ],
         'PERIMETRE'           => [
             'title' => 'Périmètres des rôles',
             'key'   => 'CODE',
         ],
-        'SOURCE' => [
-            'title' => 'Sources de données',
-            'key'   => 'CODE',
+        'SOURCE'              => [
+            'title'   => 'Sources de données',
+            'key'     => 'CODE',
             'options' => ['delete' => false],
         ],
         'TYPE_VALIDATION'     => [
@@ -308,10 +310,12 @@ class DataGen
     }
 
 
+
     public function SOURCE()
     {
         return require $this->oseAdmin->getOseDir() . 'data/sources.php';
     }
+
 
 
     public function TBL()

@@ -7,7 +7,8 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Correction de bugs
 
-* Depuis la 8.2, les RIB SEPA n'étaient jamais considérés comme validés. C'est corrigé.
+* Depuis la 8.2, les RIB SEPA n'étaient jamais considérés comme validés.
+* Toujours depuis la 8.2, les ID des types de volumes horaires et des états de volumes horaires pouvaient être modifiés à tort.
 
 # OSE 8.2
 

@@ -5,8 +5,8 @@ $c->println("Mise à jour de OSE");
 $c->println("Assurez-vous bien d'avoir mis OSE en mode maintenance avant de démarrer\n(pressez Entrée pour continuer)...");
 $c->getInput();
 
-if (!$oa->bddIsOk()){
-    $c->printDie('La mise à jour ne peut pas se poursuivre : la base de données est inaccessible.');
+if (!$oa->bddIsOk($msg)){
+    $c->printDie('La mise à jour ne peut pas se poursuivre : la base de données est inaccessible : '."\n".$msg);
 }
 
 $osedir = $oa->getOseDir();

@@ -9,6 +9,11 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Depuis la 8.2, les RIB SEPA n'étaient jamais considérés comme validés.
 * Toujours depuis la 8.2, les ID des types de volumes horaires et des états de volumes horaires pouvaient être modifiés à tort.
+* Warning PHP (sans conséquence) se prosuisant lors de la mise à jour corrigé. 
+
+## Notes de mise à jour
+
+Si vous mettez à jour depuis la v8.2, un Warning apparaitra au début. Il est sans conséquence. Merci de ne pas en tenir compte.
 
 # OSE 8.2
 

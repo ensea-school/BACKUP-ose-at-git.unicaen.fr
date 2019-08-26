@@ -30,6 +30,6 @@ class RIBValidator extends Iban
 
         if ($horsSepa) return true; // pas de contrôle si hors SEPA!!
 
-        parent::isValid($value, $context);
+        return parent::isValid($value, $context);
     }
 }

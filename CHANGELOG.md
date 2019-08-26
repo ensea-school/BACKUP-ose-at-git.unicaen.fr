@@ -3,6 +3,12 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 8.2.1
+
+## Correction de bugs
+
+* Depuis la 8.2, les RIB SEPA n'étaient jamais considérés comme validés. C'est corrigé.
+
 # OSE 8.2
 
 ## Correction de bugs

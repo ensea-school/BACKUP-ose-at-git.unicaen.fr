@@ -181,7 +181,7 @@ class Table
      *
      * @return bool
      */
-    public function delete($where, array $options = []): bool
+    public function delete($where=null, array $options = []): bool
     {
         $params = [];
         $sql    = "DELETE FROM \"$this->name\"" . $this->makeWhere($where, $options, $params);
@@ -391,7 +391,11 @@ class Table
     {
         if (!isset($this->transformCache[$transformer][$value])) {
             $val                                        = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);
-            $this->transformCache[$transformer][$value] = $this->sqlToVal(current($val[0]), $ddl);
+            if (isset($val[0])){
+                $this->transformCache[$transformer][$value] = $this->sqlToVal(current($val[0]), $ddl);
+            }else{
+                $this->transformCache[$transformer][$value] = null;
+            }
         }
 
         return $this->transformCache[$transformer][$value];

@@ -270,7 +270,7 @@ class Table
                     $oldc = isset($old[$c]) ? $old[$c] : null;
                     if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d');
                     if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d');
-                    if (!in_array($c, $options['update-ignore-cols']) && $c != 'ID' && array_key_exists($c,$new) && $newc !== $oldc) {
+                    if (!in_array($c, $options['update-ignore-cols']) && $c != 'ID' && array_key_exists($c, $new) && $newc !== $oldc) {
                         $toUpdate[$c] = $new[$c];
                     }
                 }
@@ -338,12 +338,21 @@ class Table
                     $whereSql .= ' AND ';
                 }
 
-                $transVal = ':' . $c;
+
                 if (isset($options['columns'][$c]['transformer'])) {
+                    $transVal = ':' . $c;
                     $transVal = '(' . sprintf($options['columns'][$c]['transformer'], $transVal) . ')';
+                    $whereSql   .= $c . ' = ' . $transVal;
+                    $params[$c] = $v;
+                }else{
+                    if ($v === null){
+                        $whereSql   .= $c . ' IS NULL';
+                    }else{
+                        $transVal = ':' . $c;
+                        $whereSql   .= $c . ' = ' . $transVal;
+                        $params[$c] = $v;
+                    }
                 }
-                $whereSql   .= $c . ' = ' . $transVal;
-                $params[$c] = $v;
             }
 
             return ' WHERE ' . $whereSql;
@@ -406,6 +415,7 @@ class Table
             case 'CLOB':
                 return $value;
             case 'DATE':
+                if (!$value) return null;
                 $date = \DateTime::createFromFormat('Y-m-d', $value);
                 $date->setTime(0, 0, 0);
 

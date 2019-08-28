@@ -321,6 +321,7 @@ class ContratController extends AbstractController
         }
 
         $this->getServiceModeleContrat()->generer($contrat);
+        die();
     }
 
 

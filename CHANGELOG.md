@@ -3,6 +3,12 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 8.2.2
+
+## Correction de bugs
+
+* Les futurs vacataires ne pouvaient plus se connecter à l'application (le choix de l'année en cours ne leur était pas proposé si leur fiche n'existait pas)
+
 # OSE 8.2.1
 
 ## Correction de bugs

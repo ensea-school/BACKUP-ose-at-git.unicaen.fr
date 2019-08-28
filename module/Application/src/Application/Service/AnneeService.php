@@ -19,6 +19,8 @@ class AnneeService extends AbstractEntityService
 {
     use SessionContainerTrait;
 
+
+
     /**
      * retourne la classe des entités
      *
@@ -48,7 +50,7 @@ class AnneeService extends AbstractEntityService
      * Retourne l'année N - x.
      *
      * @param Annee $annee Année de référence
-     * @param int         $x     Entier supérieur ou égal à zéro
+     * @param int   $x     Entier supérieur ou égal à zéro
      *
      * @return Annee
      */
@@ -91,13 +93,18 @@ class AnneeService extends AbstractEntityService
     public function getChoixAnnees()
     {
         $session = $this->getSessionContainer();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $rid = $role ? $role->getRoleId() : '__no___role__999az';
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
+        $rid     = $role ? $role->getRoleId() : '__no___role__999az';
         if (!$role || !$session->choixAnnees || !isset($session->choixAnnees[$rid])) {
-            if ($role && ($intervenant = $role->getIntervenant())){
-                $sql    = 'SELECT a.id, a.libelle FROM annee a JOIN intervenant i ON i.annee_id = a.id AND i.code = :code WHERE active = 1 ORDER BY id';
+            if ($role && ($intervenant = $role->getIntervenant())) {
+                $sql    = 'SELECT a.id, a.libelle 
+                          FROM annee a
+                          JOIN parametre p ON p.nom = \'annee\'
+                          LEFT JOIN intervenant i ON i.annee_id = a.id AND i.code = :code
+                          WHERE active = 1 AND (i.id IS NOT NULL OR a.id = p.valeur)
+                          ORDER BY id';
                 $params = ['code' => $intervenant->getCode()];
-            }else{
+            } else {
                 $sql    = 'SELECT id, libelle FROM annee WHERE active = 1 ORDER BY id';
                 $params = [];
             }
@@ -114,6 +121,7 @@ class AnneeService extends AbstractEntityService
                 $session->choixAnnees[$rid][$id] = $libelle;
             }
         }
+
         return $session->choixAnnees[$rid];
     }
 
@@ -123,6 +131,7 @@ class AnneeService extends AbstractEntityService
      *
      * @param QueryBuilder|null $qb
      * @param string|null       $alias
+     *
      * @return QueryBuilder
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)

@@ -30,6 +30,11 @@ class OseAdmin
     private $oseAppliId;
 
     /**
+     * @var int
+     */
+    private $sourceOseId;
+
+    /**
      * @var string
      */
     public $oldVersion;
@@ -350,16 +355,32 @@ class OseAdmin
 
     public function getOseAppliId(): int
     {
-        if (!$this->oseAppliId){
-            $u = $this->oseAdmin->getBdd()->select("SELECT id FROM UTILISATEUR WHERE USERNAME='oseappli'");
-            if (isset($u[0]['ID'])){
+        if (!$this->oseAppliId) {
+            $u = $this->getBdd()->select("SELECT id FROM UTILISATEUR WHERE USERNAME='oseappli'");
+            if (isset($u[0]['ID'])) {
                 $this->oseAppliId = (int)$u[0]['ID'];
-            }else{
+            } else {
                 throw new \Exception('Utilisateur système "oseappli" non trouvé!!');
             }
         }
 
         return $this->oseAppliId;
+    }
+
+
+
+    public function getSourceOseId(): int
+    {
+        if (!$this->sourceOseId) {
+            $src = $this->getBdd()->select("SELECT id FROM SOURCE WHERE CODE='OSE'");
+            if (isset($src[0]['ID'])) {
+                $this->sourceOseId = (int)$src[0]['ID'];
+            } else {
+                throw new \Exception('Source d\'import "OSE" non trouvée!!');
+            }
+        }
+
+        return $this->sourceOseId;
     }
 
 
@@ -397,7 +418,7 @@ class OseAdmin
      */
     public function getConsole(): Console
     {
-        if (!$this->console){
+        if (!$this->console) {
             $this->console = new Console();
         }
 
@@ -431,7 +452,8 @@ class OseAdmin
         $characterSet = 'AL32UTF8';
         $conn         = @oci_pconnect($bddConf['username'], $bddConf['password'], $cs, $characterSet);
         if (!$conn) {
-            $msg          = oci_error()['message'];
+            $msg = oci_error()['message'];
+
             return false;
         } else {
             oci_close($conn);

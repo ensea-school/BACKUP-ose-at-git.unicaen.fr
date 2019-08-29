@@ -12,117 +12,202 @@ class DataGen
     private $oseAdmin;
 
     private $config = [
-        'ANNEE'               => [
-            'title'   => 'Années',
-            'key'     => 'ID',
-            'options' => ['update-ignore-cols' => ['ACTIVE', 'TAUX_HETD']],
-        ],
-        'ETAT_SORTIE'         => [
-            'title'   => 'États de sortie',
-            'key'     => 'CODE',
-            'options' => ['update' => false, 'delete' => false],
-        ],
-        'CATEGORIE_PRIVILEGE' => [
-            'title' => 'Catégories de privilèges',
-            'key'   => 'CODE',
-        ],
-        'PRIVILEGE'           => [
-            'title'   => 'Privilèges',
-            'key'     => ['CATEGORIE_ID', 'CODE'],
-            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
-        ],
-        'INDICATEUR'          => [
-            'title' => 'Indicateurs',
-            'key'   => ['NUMERO'],
-        ],
-        'CIVILITE'            => [
-            'title'   => 'Civilités',
-            'key'     => ['LIBELLE_COURT'],
-            'options' => ['delete' => false],
-        ],
-        'FORMULE'             => [
-            'title' => 'Formules',
-            'key'   => ['ID'],
-        ],
-        'PLAFOND'             => [
-            'title' => 'Plafonds',
-            'key'   => 'CODE',
-        ],
-        'TYPE_VOLUME_HORAIRE' => [
-            'title' => 'Types de volumes horaires',
-            'key'   => 'CODE',
-        ],
-        'ETAT_VOLUME_HORAIRE' => [
-            'title' => 'États de volumes horaires',
-            'key'   => 'CODE',
-        ],
-        'PERIMETRE'           => [
-            'title' => 'Périmètres des rôles',
-            'key'   => 'CODE',
-        ],
-        'SOURCE'              => [
-            'title'   => 'Sources de données',
-            'key'     => 'CODE',
-            'options' => ['delete' => false],
-        ],
-        'TYPE_VALIDATION'     => [
-            'title' => 'Types de validation',
-            'key'   => 'CODE',
-        ],
-        'TBL'                 => [
-            'title' => 'Tableaux de bord',
-            'key'   => 'TBL_NAME',
-        ],
-        'UTILISATEUR'         => [
+        /* Obligatoire au début */
+        'UTILISATEUR'                => [
             'title'   => 'Utilisateurs',
             'key'     => 'USERNAME',
             'options' => ['update-ignore-cols' => ['EMAIL', 'PASSWORD'], 'delete' => false],
         ],
+        'SOURCE'                     => [
+            'title'   => 'Sources de données',
+            'key'     => 'CODE',
+            'options' => ['delete' => false],
+        ],
+
+
+
+        /* Nomenclatures fixes et jamais paramétrables */
+        'CIVILITE'                   => [
+            'title' => 'Civilités',
+            'key'   => ['LIBELLE_COURT'],
+        ],
+        'PLAFOND'                    => [
+            'title' => 'Plafonds',
+            'key'   => 'CODE',
+        ],
+        'PLAFOND_ETAT'               => [
+            'title' => 'États des plafonds',
+            'key'   => 'CODE',
+        ],
+        'TYPE_VOLUME_HORAIRE'        => [
+            'title' => 'Types de volumes horaires',
+            'key'   => 'CODE',
+        ],
+        'ETAT_VOLUME_HORAIRE'        => [
+            'title' => 'États de volumes horaires',
+            'key'   => 'CODE',
+        ],
+        'PERIMETRE'                  => [
+            'title' => 'Périmètres des rôles',
+            'key'   => 'CODE',
+        ],
+        'TYPE_VALIDATION'            => [
+            'title' => 'Types de validation',
+            'key'   => 'CODE',
+        ],
+        'TBL'                        => [
+            'title' => 'Tableaux de bord',
+            'key'   => 'TBL_NAME',
+        ],
+        'WF_ETAPE'                   => [
+            'title' => 'Étapes de workflow',
+            'key'   => 'CODE',
+        ],
+        'TYPE_AGREMENT'              => [
+            'title' => 'Types d\'agréments',
+            'key'   => 'CODE',
+        ],
+        'TYPE_CONTRAT'               => [
+            'title' => 'Types de contrats',
+            'key'   => 'CODE',
+        ],
+        'CATEGORIE_PRIVILEGE'        => [
+            'title' => 'Catégories de privilèges',
+            'key'   => 'CODE',
+        ],
+        'PRIVILEGE'                  => [
+            'title'   => 'Privilèges',
+            'key'     => ['CATEGORIE_ID', 'CODE'],
+            'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
+        ],
+        'INDICATEUR'                 => [
+            'title' => 'Indicateurs',
+            'key'   => 'NUMERO',
+        ],
+        'FORMULE'                    => [
+            'title' => 'Formules',
+            'key'   => 'ID',
+        ],
+        'FORMULE_TEST_STRUCTURE'     => [
+            'title' => 'Structures de tests de formules',
+            'key'   => 'ID',
+        ],
+        //        'TYPE_HEURES'            => [
+        //             'title' => 'Types d\'heures',
+        //             'key'   => 'CODE',
+        //             'options' => ['columns' => ['TYPE_HEURES_ELEMENT_ID' => ['transformer' => 'COALESCE((SELECT id FROM type_heures WHERE code = %s),type_heures_id_seq.curval)']]],
+        //        ],
+        'TYPE_INTERVENANT'           => [
+            'title' => 'Types d\'intervenants',
+            'key'   => 'CODE',
+        ],
+        // PERIODE
+        // TAUX_HORAIRE_HETD
+        // TYPE_RESSOURCE
+
+
+
+        /* Nomenclatures partiellement paramétrables (certaines colonnes) */
+        'ANNEE'                      => [
+            'title'   => 'Années',
+            'key'     => 'ID',
+            'options' => ['update-ignore-cols' => ['ACTIVE', 'TAUX_HETD']],
+        ],
+        // PARAMETRE
+        // REGLE_STRUCTURE_VALIDATION
+
+
+
+        /* Tables avec paramétrages pré-configurés (certaines colonnes + nouveaux enregistrements) */
+        'IMPORT_TABLES'              => [
+            'title'   => 'Configuration de synchro des tables',
+            'key'     => 'TABLE_NAME',
+            'options' => ['update' => false, 'delete' => false],
+        ],
+        'CC_ACTIVITE'                => [
+            'title'   => 'Activités (budget)',
+            'key'     => 'CODE',
+            'options' => ['update' => false, 'delete' => false],
+        ],
+        /*'TYPE_INTERVENTION'         => [
+    'title'   => 'Types d\'intervention',
+    'key'     => 'CODE',
+    'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+],*/
+        'SCENARIO'                   => [
+            'title'   => 'Scénarios',
+            'key'     => 'LIBELLE',
+            'options' => ['delete' => false],
+        ],
+        'ETAT_SORTIE'                => [
+            'title'   => 'États de sortie',
+            'key'     => 'CODE',
+            'options' => ['update' => false, 'delete' => false],
+        ],
+        //  MODELE_CONTRAT
+        // ROLE
+        // ROLE_PRIVILEGE
+        // AFFECTATION
+
+
+
+        /* Jeu de données de configuration par défaut (tout perso) */
+        'PAYS'                       => [
+            'title'   => 'Pays',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'DEPARTEMENT'                => [
+            'title'   => 'Départements',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'ETABLISSEMENT'              => [
+            'title'   => 'Établissements',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'CORPS'                      => [
+            'title'   => 'Corps',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'GRADE'                      => [
+            'title'   => 'grades',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update'  => false, 'delete' => false,
+                          'columns' => ['CORPS_ID' => ['transformer' => 'SELECT id FROM corps WHERE source_code = %s']]], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'DISCIPLINE'                 => [
+            'title'   => 'Disciplines',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'DOMAINE_FONCTIONNEL'        => [
+            'title'   => 'Domaines fonctionnels',
+            'key'     => 'SOURCE_CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        // FONCTION_REFERENTIEL
+        'MOTIF_MODIFICATION_SERVICE' => [
+            'title'   => 'Motifs de modification de service',
+            'key'     => 'CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        'MOTIF_NON_PAIEMENT'         => [
+            'title'   => 'Motifs de non paiement',
+            'key'     => 'CODE',
+            'options' => ['update' => false, 'delete' => false], // Attention : INSERT à FAIRE seulement à l'install!!!
+        ],
+        // TYPE_PIECE_JOINTE
+        // TYPE_PIECE_JOINTE_STATUT
+        // STATUT_INTERVENANT
+        // STATUT_PRIVILEGE
+        // TYPE_AGREMENT_STATUT
+        // WF_ETAPE_DEP
     ];
 
 
-
-    /*
-    'AFFECTATION'                 => "utilisateur_id IN (SELECT id FROM utilisateur WHERE username='" . self::OSE_USER . "')",
-    'CC_ACTIVITE'                 => '',
-    'ETAT_VOLUME_HORAIRE'         => '',
-    'FORMULE_TEST_STRUCTURE'      => '',
-    'GROUPE'                      => '',
-    'IMPORT_TABLES'               => '',
-    'MESSAGE'                     => '',
-    'MODELE_CONTRAT'              => "libelle = 'Modèle par défaut'",
-    'PARAMETRE'                   => '',
-    'PERIODE'                     => '',
-    'REGLE_STRUCTURE_VALIDATION'  => '',
-    'ROLE'                        => '',
-    'ROLE_PRIVILEGE'              => '',
-    'SCENARIO'                    => 'structure_id IS NULL',
-    'TAUX_HORAIRE_HETD'           => '',
-    'TYPE_AGREMENT'               => '',
-    'TYPE_AGREMENT_STATUT'        => '',
-    'TYPE_CONTRAT'                => '',
-    'TYPE_HEURES'                 => '',
-    'TYPE_INTERVENANT'            => '',
-    'TYPE_INTERVENTION'           => "code IN ('CM','TD','TP')",
-    'TYPE_RESSOURCE'              => '',
-    'WF_ETAPE'                    => '',
-    'WF_ETAPE_DEP'                => '',
-
-    'PAYS'                        => '',
-    'DEPARTEMENT'                 => '',
-    'DISCIPLINE'                  => '',
-    'DOMAINE_FONCTIONNEL'         => '',
-    'ETABLISSEMENT'               => '',
-    'CORPS'                       => '',
-    'GRADE'                       => 'corps_id in (select c.id from corps c where c.histo_destruction is null)',
-    'FONCTION_REFERENTIEL'        => '',
-    'MOTIF_MODIFICATION_SERVICE'  => '',
-    'MOTIF_NON_PAIEMENT'          => '',
-    'STATUT_INTERVENANT'          => '',
-    'STATUT_PRIVILEGE'            => 'statut_id IN (SELECT si.id FROM statut_intervenant si WHERE si.histo_destruction IS NULL)',
-    'TYPE_PIECE_JOINTE'           => '',
-    'TYPE_PIECE_JOINTE_STATUT'    => '',
-    */
 
     public function __construct(OseAdmin $oseAdmin)
     {
@@ -131,20 +216,40 @@ class DataGen
 
 
 
-    public function update()
+    public function update(string $table = null)
     {
-        foreach ($this->config as $table => $params) {
-            if (isset($params['title'])) {
-                echo $params['title'] . "\n"; // provisoire
-                //$this->oseAdmin->getConsole()->println($params['title']);
+        foreach ($this->config as $tbl => $params) {
+            if ($tbl === $table || null === $table) {
+                if (isset($params['title'])) {
+                    echo $params['title'] . "\n"; // provisoire
+                    //$this->oseAdmin->getConsole()->println($params['title']);
+                }
+                $data = $this->$tbl();
+                $this->oseAdmin->getBdd()->getTable($tbl)->merge(
+                    $data,
+                    isset($params['key']) ? $params['key'] : 'ID',
+                    isset($params['options']) ? $params['options'] : []
+                );
             }
-            $data = $this->$table();
-            $this->oseAdmin->getBdd()->getTable($table)->merge(
-                $data,
-                isset($params['key']) ? $params['key'] : 'ID',
-                isset($params['options']) ? $params['options'] : []
-            );
         }
+    }
+
+
+
+    private function addHistorique(array &$data)
+    {
+        $data['HISTO_CREATION']        = new \DateTime();
+        $data['HISTO_CREATEUR_ID']     = $this->oseAdmin->getOseAppliId();
+        $data['HISTO_MODIFICATION']    = new \DateTime();
+        $data['HISTO_MODIFICATEUR_ID'] = $this->oseAdmin->getOseAppliId();
+    }
+
+
+
+    private function addSourceOse(array &$data, string $code)
+    {
+        $data['SOURCE_ID']   = $this->oseAdmin->getSourceOseId();
+        $data['SOURCE_CODE'] = $code;
     }
 
 
@@ -209,6 +314,22 @@ class DataGen
 
 
 
+    public function CC_ACTIVITE()
+    {
+        $data      = require $this->oseAdmin->getOseDir() . 'data/cc_activites.php';
+        $activites = [];
+
+        foreach ($data as $code => $activite) {
+            $activite['CODE'] = $code;
+            $this->addHistorique($activite);
+            $activites[] = $activite;
+        }
+
+        return $activites;
+    }
+
+
+
     public function FORMULE()
     {
         $data     = require $this->oseAdmin->getOseDir() . 'data/formules.php';
@@ -228,12 +349,61 @@ class DataGen
 
 
 
+    public function FORMULE_TEST_STRUCTURE()
+    {
+        $data       = require $this->oseAdmin->getOseDir() . 'data/formule_test_structures.php';
+        $structures = [];
+        foreach ($data as $id => $structure) {
+            $structures[] = [
+                'ID'         => $id,
+                'LIBELLE'    => $structure['libelle'],
+                'UNIVERSITE' => $structure['universite'],
+            ];
+        }
+
+        return $structures;
+    }
+
+
+
+    public function IMPORT_TABLES()
+    {
+        $data   = require $this->oseAdmin->getOseDir() . 'data/import_tables.php';
+        $tables = [];
+        foreach ($data as $name => $table) {
+            $table['TABLE_NAME'] = $name;
+            $tables[]            = $table;
+        }
+
+        return $tables;
+    }
+
+
+
     public function PLAFOND()
     {
         $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
         $plafonds = [];
 
         foreach ($data['plafonds'] as $code => $libelle) {
+            $plafond    = [
+                'CODE'    => $code,
+                'LIBELLE' => $libelle,
+            ];
+            $plafonds[] = $plafond;
+        }
+
+        return $plafonds;
+    }
+
+
+
+    public function PLAFOND_ETAT()
+    {
+        $data     = require $this->oseAdmin->getOseDir() . 'data/plafonds.php';
+        $plafonds = [];
+
+        foreach ($data['etats'] as $code => $libelle) {
             $plafond    = [
                 'CODE'    => $code,
                 'LIBELLE' => $libelle,
@@ -341,5 +511,266 @@ class DataGen
     public function UTILISATEUR()
     {
         return require $this->oseAdmin->getOseDir() . 'data/utilisateurs.php';
+    }
+
+
+
+    public function WF_ETAPE()
+    {
+        $data   = require $this->oseAdmin->getOseDir() . 'data/workflow_etapes.php';
+        $etapes = [];
+        $ordre  = 1;
+        foreach ($data as $code => $etape) {
+            $etape['CODE']  = $code;
+            $etape['ORDRE'] = $ordre++ * 10;
+            $etapes[]       = $etape;
+        }
+
+        return $etapes;
+    }
+
+
+
+    public function CORPS()
+    {
+        $data  = require $this->oseAdmin->getOseDir() . 'data/corps.php';
+        $corps = [];
+        foreach ($data as $code => $corp) {
+            $this->addHistorique($corp);
+            $this->addSourceOse($corp, $code);
+            $corps[] = $corp;
+        }
+
+        return $corps;
+    }
+
+
+
+    public function PAYS()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/pays.php';
+        $list = [];
+        foreach ($data as $code => $item) {
+            $this->addHistorique($item);
+            $this->addSourceOse($item, $code);
+            if (isset($item['VALIDITE_DEBUT'])) {
+                $item['VALIDITE_DEBUT'] = \DateTime::createFromFormat('Y-m-d', $item['VALIDITE_DEBUT']);
+            }
+            if (isset($item['VALIDITE_FIN'])) {
+                $item['VALIDITE_FIN'] = \DateTime::createFromFormat('Y-m-d', $item['VALIDITE_FIN']);
+            }
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+
+
+    public function DEPARTEMENT()
+    {
+        $data         = require $this->oseAdmin->getOseDir() . 'data/departements.php';
+        $departements = [];
+        foreach ($data as $code => $departement) {
+            $departement['CODE'] = $code;
+            $this->addHistorique($departement);
+            $this->addSourceOse($departement, $code);
+            $departements[] = $departement;
+        }
+
+        return $departements;
+    }
+
+
+
+    public function DISCIPLINE()
+    {
+        $data        = require $this->oseAdmin->getOseDir() . 'data/disciplines.php';
+        $disciplines = [];
+        foreach ($data as $code => $discipline) {
+            $this->addHistorique($discipline);
+            $this->addSourceOse($discipline, $code);
+            $disciplines[] = $discipline;
+        }
+
+        return $disciplines;
+    }
+
+
+
+    public function DOMAINE_FONCTIONNEL()
+    {
+        $data                 = require $this->oseAdmin->getOseDir() . 'data/domaines_fonctionnels.php';
+        $domainesFonctionnels = [];
+        foreach ($data as $code => $domaineFonctionnel) {
+            $this->addHistorique($domaineFonctionnel);
+            $this->addSourceOse($domaineFonctionnel, $code);
+            $domainesFonctionnels[] = $domaineFonctionnel;
+        }
+
+        return $domainesFonctionnels;
+    }
+
+
+
+    public function ETABLISSEMENT()
+    {
+        $data           = require $this->oseAdmin->getOseDir() . 'data/etablissements.php';
+        $etablissements = [];
+        foreach ($data as $code => $etablissement) {
+            $this->addHistorique($etablissement);
+            $this->addSourceOse($etablissement, $code);
+            $etablissements[] = $etablissement;
+        }
+
+        return $etablissements;
+    }
+
+
+
+    public function GRADE()
+    {
+        $data   = require $this->oseAdmin->getOseDir() . 'data/grades.php';
+        $grades = [];
+        foreach ($data as $code => $grade) {
+            $this->addHistorique($grade);
+            $this->addSourceOse($grade, $code);
+            $grades[] = $grade;
+        }
+
+        return $grades;
+    }
+
+
+
+    public function MOTIF_MODIFICATION_SERVICE()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/motifs_modification_service.php';
+        $list = [];
+        foreach ($data as $code => $item) {
+            $item['CODE'] = $code;
+            $this->addHistorique($item);
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+
+
+    public function MOTIF_NON_PAIEMENT()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/motifs_non_paiement.php';
+        $list = [];
+        foreach ($data as $code => $item) {
+            $item['CODE'] = $code;
+            $this->addHistorique($item);
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+
+
+    public function TYPE_INTERVENTION()
+    {
+        $data  = require $this->oseAdmin->getOseDir() . 'data/types_intervention.php';
+        $list  = [];
+        $ordre = 1;
+        foreach ($data as $code => $item) {
+            $item['CODE']                          = $code;
+            $item['ORDRE']                         = $ordre++;
+            $item['TYPE_INTERVENTION_MAQUETTE_ID'] = $ordre++;
+            $this->addHistorique($item);
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+
+
+    public function TYPE_AGREMENT()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/types_agrements.php';
+        $list = [];
+        foreach ($data as $code => $libelle) {
+            $ta = ['CODE' => $code, 'LIBELLE' => $libelle];
+            $this->addHistorique($ta);
+            $list[] = $ta;
+        }
+
+        return $list;
+    }
+
+
+
+    public function TYPE_CONTRAT()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/types_contrats.php';
+        $list = [];
+        foreach ($data as $code => $libelle) {
+            $tc = ['CODE' => $code, 'LIBELLE' => $libelle];
+            $this->addHistorique($tc);
+            $list[] = $tc;
+        }
+
+        return $list;
+    }
+
+
+
+    public function TYPE_HEURES()
+    {
+        $data  = require $this->oseAdmin->getOseDir() . 'data/types_heures.php';
+        $list  = [];
+        $ordre = 1;
+        foreach ($data as $code => $d) {
+            $th = [
+                'CODE'                     => $code,
+                'LIBELLE_COURT'            => $d['libelle-court'],
+                'LIBELLE_LONG'             => $d['libelle-long'],
+                'ORDRE'                    => $ordre++,
+                'TYPE_HEURES_ELEMENT_ID'   => $d['type-heures-element'],
+                'ELIGIBLE_CENTRE_COUT_EP'  => $d['eligible-centre-cout-ep'],
+                'ELIGIBLE_EXTRACTION_PAIE' => $d['eligible-extraction-paie'],
+                'ENSEIGNEMENT'             => $d['enseignement'],
+            ];
+            $this->addHistorique($th);
+            $list[] = $th;
+        }
+
+        return $list;
+    }
+
+
+
+    public function TYPE_INTERVENANT()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/types_intervenants.php';
+        $list = [];
+        foreach ($data as $code => $libelle) {
+            $tc = ['CODE' => $code, 'LIBELLE' => $libelle];
+            $this->addHistorique($tc);
+            $list[] = $tc;
+        }
+
+        return $list;
+    }
+
+
+
+    public function SCENARIO()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/scenarios.php';
+        $list = [];
+        foreach ($data as $libelle => $item) {
+            $item['LIBELLE'] = $libelle;
+            $this->addHistorique($item);
+            $list[] = $item;
+        }
+
+        return $list;
     }
 }

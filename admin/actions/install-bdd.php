@@ -27,7 +27,7 @@ $schema->create($ref, true);
 /* Insertion des données */
 $c->println("\n" . 'Insertion des données', $c::COLOR_LIGHT_PURPLE);
 $dataGen = new DataGen($oa);
-$dataGen->update();
+$dataGen->install();
 
 $c->println("\n" . 'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LIGHT_PURPLE);
 $bdd->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');

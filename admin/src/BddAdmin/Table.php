@@ -181,7 +181,7 @@ class Table
      *
      * @return bool
      */
-    public function delete($where=null, array $options = []): bool
+    public function delete($where = null, array $options = []): bool
     {
         $params = [];
         $sql    = "DELETE FROM \"$this->name\"" . $this->makeWhere($where, $options, $params);
@@ -327,9 +327,22 @@ class Table
      */
     private function makeWhere($where, array $options, array &$params): string
     {
-        if ($where && !is_array($where) && $this->hasId()) {
-            $where = ['ID' => $where];
+        if (is_string($where) && (
+                false !== strpos($where, '=')
+                || false !== strpos($where, ' IN ')
+                || false !== strpos($where, ' IN(')
+                || false !== strpos($where, ' IS ')
+                || false !== strpos($where, ' NOT ')
+                || false !== strpos($where, '<')
+                || false !== strpos($where, '>')
+            )
+        ) {
+            return ' WHERE '.$where;
         }
+            if ($where && !is_array($where) && $this->hasId()) {
+                $where = ['ID' => $where];
+            }
+
 
         if ($where) {
             $whereSql = '';
@@ -340,15 +353,15 @@ class Table
 
 
                 if (isset($options['columns'][$c]['transformer'])) {
-                    $transVal = ':' . $c;
-                    $transVal = '(' . sprintf($options['columns'][$c]['transformer'], $transVal) . ')';
+                    $transVal   = ':' . $c;
+                    $transVal   = '(' . sprintf($options['columns'][$c]['transformer'], $transVal) . ')';
                     $whereSql   .= $c . ' = ' . $transVal;
                     $params[$c] = $v;
-                }else{
-                    if ($v === null){
-                        $whereSql   .= $c . ' IS NULL';
-                    }else{
-                        $transVal = ':' . $c;
+                } else {
+                    if ($v === null) {
+                        $whereSql .= $c . ' IS NULL';
+                    } else {
+                        $transVal   = ':' . $c;
                         $whereSql   .= $c . ' = ' . $transVal;
                         $params[$c] = $v;
                     }
@@ -390,10 +403,10 @@ class Table
     protected function transform($value, string $transformer, array $ddl)
     {
         if (!isset($this->transformCache[$transformer][$value])) {
-            $val                                        = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);
-            if (isset($val[0])){
+            $val = $this->getBdd()->select(sprintf($transformer, ':val'), ['val' => $value]);
+            if (isset($val[0])) {
                 $this->transformCache[$transformer][$value] = $this->sqlToVal(current($val[0]), $ddl);
-            }else{
+            } else {
                 $this->transformCache[$transformer][$value] = null;
             }
         }
@@ -405,6 +418,8 @@ class Table
 
     protected function sqlToVal($value, array $ddl)
     {
+        if ($value === null) return null;
+
         switch ($ddl['type']) {
             case 'NUMBER':
                 if (1 == $ddl['precision']) {

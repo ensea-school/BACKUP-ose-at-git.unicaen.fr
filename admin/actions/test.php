@@ -6,11 +6,14 @@ $oa->setBdd($bdd);
 /* Insertion des données */
 $dataGen = new DataGen($oa);
 
-$table = 'SCENARIO';
+$table = null;
+//$table = 'PARAMETRE';
 
-$bdd->getTable($table)->delete();
+//$bdd->getTable($table)->delete();
 
-$dataGen->update($table);
+$dataGen->install($table);
 
-$r = $oa->getBdd()->getTable($table)->select();
-var_dump(count($r));
+if ($table) {
+    $r = $oa->getBdd()->getTable($table)->select();
+    var_dump(count($r));
+}

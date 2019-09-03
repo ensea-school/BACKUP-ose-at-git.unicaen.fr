@@ -377,9 +377,6 @@ class DataGen
         $hasHisto  = isset($ddl['columns']['HISTO_CREATION']) && isset($ddl['columns']['HISTO_MODIFICATION']) && isset($ddl['columns']['HISTO_DESTRUCTION']);
         $hasImport = isset($ddl['columns']['SOURCE_ID']) && isset($ddl['columns']['SOURCE_CODE']);
 
-        echo $table . "\n"; // provisoire
-        //$this->oseAdmin->getConsole()->println($tbl);
-
         if (method_exists($this, $table)) {
             $data = $this->$table();
         } elseif (array_key_exists($table, $this->nomenclature)) {
@@ -418,12 +415,15 @@ class DataGen
             }
         }
 
-
-        $tableObject->merge(
+        echo str_pad($table, 31, ' '); // provisoire
+        //$this->oseAdmin->getConsole()->println($tbl);
+        $result = $tableObject->merge(
             $data,
             isset($params['key']) ? $params['key'] : 'ID',
             isset($params['options']) ? $params['options'] : []
         );
+        echo 'Insert: '.$result['insert'].', Update: '.$result['update'].', Delete: '.$result['delete'];
+        echo "\n";
     }
 
 

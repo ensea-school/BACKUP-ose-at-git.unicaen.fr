@@ -207,8 +207,10 @@ class Table
 
 
 
-    public function merge(array $data, $key, array $options = [])
+    public function merge(array $data, $key, array $options = []): array
     {
+        $result = ['insert' => 0, 'update' => 0, 'delete' => 0];
+
         /* Initialisation */
         $defaultOptions = [
             'where'              => null,
@@ -258,10 +260,12 @@ class Table
             if (empty($old)) { // INSERT
                 if ($options['insert']) {
                     $this->insert($new);
+                    $result['insert'] ++;
                 }
             } elseif (empty($new)) { // DELETE
                 if ($options['delete']) {
                     $this->delete($this->makeKeyArray($old, $key));
+                    $result['delete'] ++;
                 }
             } elseif ($options['update']) { // UPDATE si différent!!
                 $toUpdate = [];
@@ -276,9 +280,12 @@ class Table
                 }
                 if (!empty($toUpdate)) {
                     $this->update($toUpdate, $this->makeKeyArray($old, $key));
+                    $result['update'] ++;
                 }
             }
         }
+
+        return $result;
     }
 
 

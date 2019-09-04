@@ -176,6 +176,12 @@ class Schema
                     $ddlConfig[$class] = ['excludes' => '%']; // si pas défini, alors on exclue tout
                 }
             }
+        }else{
+            foreach ($this->ddlClasses as $class) {
+                if (empty($this->ddlConfigGet($ddlConfig, $class))) {
+                    $ddlConfig[$class] = ['includes' => '%']; // si pas défini, alors on inclue tout
+                }
+            }
         }
 
         return $ddlConfig;

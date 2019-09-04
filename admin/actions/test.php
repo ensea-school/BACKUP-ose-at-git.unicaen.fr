@@ -2,12 +2,12 @@
 
 $bdd    = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
 $oa->setBdd($bdd);
-
+$bdd->debug = true;
 /* Insertion des données */
 $dataGen = new DataGen($oa);
 
 $table = null;
-//$table = 'PARAMETRE';
+$table = 'PRIVILEGE';
 
 //$bdd->getTable($table)->delete();
 

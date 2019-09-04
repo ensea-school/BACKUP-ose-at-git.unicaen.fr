@@ -374,7 +374,10 @@ class DataGen
         $tableObject = $this->oseAdmin->getBdd()->getTable($table);
         $ddl         = $tableObject->getDdl();
 
-        $hasHisto  = isset($ddl['columns']['HISTO_CREATION']) && isset($ddl['columns']['HISTO_MODIFICATION']) && isset($ddl['columns']['HISTO_DESTRUCTION']);
+        if ($tableObject->hasHistorique() && !isset($params['options']['histo-user-id'])){
+            $params['options']['histo-user-id'] = $this->oseAdmin->getOseAppliId();
+        }
+
         $hasImport = isset($ddl['columns']['SOURCE_ID']) && isset($ddl['columns']['SOURCE_CODE']);
 
         if (method_exists($this, $table)) {
@@ -394,20 +397,6 @@ class DataGen
                 }
             }
 
-            if ($hasHisto) {
-                if (!isset($data[$i]['HISTO_CREATION'])) {
-                    $data[$i]['HISTO_CREATION'] = new \DateTime();
-                }
-                if (!isset($data[$i]['HISTO_CREATEUR_ID'])) {
-                    $data[$i]['HISTO_CREATEUR_ID'] = $this->oseAdmin->getOseAppliId();
-                }
-                if (!isset($data[$i]['HISTO_MODIFICATION'])) {
-                    $data[$i]['HISTO_MODIFICATION'] = new \DateTime();
-                }
-                if (!isset($data[$i]['HISTO_MODIFICATEUR_ID'])) {
-                    $data[$i]['HISTO_MODIFICATEUR_ID'] = $this->oseAdmin->getOseAppliId();
-                }
-            }
             if ($hasImport) {
                 if (!isset($data[$i]['SOURCE_ID'])) {
                     $data[$i]['SOURCE_ID'] = $this->oseAdmin->getSourceOseId();

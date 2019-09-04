@@ -63,6 +63,16 @@ class Table
 
 
 
+    public function hasHistorique(): bool
+    {
+        $ddl      = $this->getDdl();
+        $hasHisto = isset($ddl['columns']['HISTO_CREATION']) && isset($ddl['columns']['HISTO_MODIFICATION']) && isset($ddl['columns']['HISTO_DESTRUCTION']);
+
+        return $hasHisto;
+    }
+
+
+
     /**
      * @param array|integer|null $where
      * @param string|null        $orderBy
@@ -132,6 +142,13 @@ class Table
             $data['ID'] = $this->getBdd()->sequenceNextVal($this->ddl['sequence']);
         }
 
+        if (isset($options['histo-user-id']) && $options['histo-user-id'] && $this->hasHistorique()) {
+            if (!isset($data['HISTO_CREATION'])) $data['HISTO_CREATION'] = new \DateTime();
+            if (!isset($data['HISTO_CREATEUR_ID'])) $data['HISTO_CREATEUR_ID'] = $options['histo-user-id'];
+            if (!isset($data['HISTO_MODIFICATION'])) $data['HISTO_MODIFICATION'] = new \DateTime();
+            if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $options['histo-user-id'];
+        }
+
         $cols = array_keys($data);
         $cols = implode(', ', $cols);
 
@@ -155,6 +172,11 @@ class Table
     public function update(array $data, $where = null, array $options = []): bool
     {
         $params = [];
+
+        if (isset($options['histo-user-id']) && $options['histo-user-id'] && $this->hasHistorique()) {
+            if (!isset($data['HISTO_MODIFICATION'])) $data['HISTO_MODIFICATION'] = new \DateTime();
+            if (!isset($data['HISTO_MODIFICATEUR_ID'])) $data['HISTO_MODIFICATEUR_ID'] = $options['histo-user-id'];
+        }
 
         $dataSql = '';
         foreach ($data as $col => $val) {
@@ -251,6 +273,10 @@ class Table
             $diff[$k]['new'] = $d;
         }
 
+        $traitementOptions = [];
+        if (isset($options['histo-user-id'])){
+            $traitementOptions['histo-user-id'] = $options['histo-user-id'];
+        }
 
         /* Traitement */
         foreach ($diff as $dr) {
@@ -259,13 +285,13 @@ class Table
 
             if (empty($old)) { // INSERT
                 if ($options['insert']) {
-                    $this->insert($new);
-                    $result['insert'] ++;
+                    $this->insert($new, $traitementOptions);
+                    $result['insert']++;
                 }
             } elseif (empty($new)) { // DELETE
                 if ($options['delete']) {
                     $this->delete($this->makeKeyArray($old, $key));
-                    $result['delete'] ++;
+                    $result['delete']++;
                 }
             } elseif ($options['update']) { // UPDATE si différent!!
                 $toUpdate = [];
@@ -279,8 +305,8 @@ class Table
                     }
                 }
                 if (!empty($toUpdate)) {
-                    $this->update($toUpdate, $this->makeKeyArray($old, $key));
-                    $result['update'] ++;
+                    $this->update($toUpdate, $this->makeKeyArray($old, $key), $traitementOptions);
+                    $result['update']++;
                 }
             }
         }
@@ -344,11 +370,11 @@ class Table
                 || false !== strpos($where, '>')
             )
         ) {
-            return ' WHERE '.$where;
+            return ' WHERE ' . $where;
         }
-            if ($where && !is_array($where) && $this->hasId()) {
-                $where = ['ID' => $where];
-            }
+        if ($where && !is_array($where) && $this->hasId()) {
+            $where = ['ID' => $where];
+        }
 
 
         if ($where) {

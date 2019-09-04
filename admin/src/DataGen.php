@@ -630,7 +630,11 @@ class DataGen
         ];
 
         foreach ($queries as $nom => $query) {
-            $data[$nom]['VALEUR'] = (string)$bdd->select($query, ['valeur' => $data[$nom]['VALEUR']], $bdd::FETCH_ONE)['VALEUR'];
+            $val = isset($data[$nom]['VALEUR']) ? $data[$nom]['VALEUR'] : null;
+            $res = $bdd->select($query, ['valeur' => $val], $bdd::FETCH_ONE);
+            if (isset($res['VALEUR'])){
+                $data[$nom]['VALEUR'] = (string)$res['VALEUR'];
+            }
         }
 
         $data['annee']['VALEUR']        = (string)$this->getAnneeCourante();

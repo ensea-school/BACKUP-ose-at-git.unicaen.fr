@@ -274,6 +274,9 @@ class ServiceAssertion extends AbstractAssertion
             } elseif ($structureAffectation && !$structureEnseignement) {
                 // cas d'un intervenant prenant des enseignements à l'extérieur
                 $asserts[] = $structure == $structureAffectation;
+            } elseif (!$structureAffectation && $structureEnseignement) {
+                // cas d'un intervenant extérieur prenant des enseignements de la composante
+                $asserts[] = $structure == $structureEnseignement;
             }
         }
 

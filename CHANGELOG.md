@@ -3,6 +3,12 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE alpha
+
+## Correction de bugs
+
+* On peut maintenant s'abonner à un indicateur même avec un rôle de périmètre établissement réduit à une composante.
+
 # OSE 8.2.2
 
 ## Correction de bugs

@@ -20,6 +20,8 @@ class AffectationService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
 
+
+
     /**
      * retourne la classe des entités
      *
@@ -31,6 +33,8 @@ class AffectationService extends AbstractEntityService
         return Affectation::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -41,22 +45,26 @@ class AffectationService extends AbstractEntityService
         return 'aff';
     }
 
+
+
     /**
      * Sauvegarde une entité
      *
      * @param Affectation $entity
+     *
      * @throws \RuntimeException
      * @return mixed
      */
     public function save($entity)
     {
         $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
-        if ($structure && $entity->getStructure() != $structure){
+        if ($structure && $entity->getStructure() != $structure) {
             throw new \LogicException('Vous n\'avez pas le droit de modifier une affectation d\'une structure autre que la vôtre.');
         }
-        if (! $entity->getSource()){
-            $entity->setSource( $this->getServiceSource()->getOse() );
+        if (!$entity->getSource()) {
+            $entity->setSource($this->getServiceSource()->getOse());
         }
+
         return parent::save($entity);
     }
 
@@ -67,11 +75,11 @@ class AffectationService extends AbstractEntityService
      *
      * @return null|Affectation
      */
-    public function getByRole( RoleAcl $role = null )
+    public function getByRole(RoleAcl $role = null)
     {
         $context = $this->getServiceContext();
 
-        if (!$role){
+        if (!$role) {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
         }
 
@@ -81,11 +89,14 @@ class AffectationService extends AbstractEntityService
             Affectation::class,
         ]);
 
-        return $this->getRepo()->findOneBy([
+        $params = [
             'utilisateur' => $context->getUtilisateur(),
-            'role'      => $role->getDbRole(),
-            'structure' => $context->getStructure(),
-        ]);
+            'role'        => $role->getDbRole(),
+            'structure'   => $role->getPerimetre()->isComposante() ? $context->getStructure() : null,
+        ];
+        $affectation = $this->getRepo()->findOneBy($params);
+
+        return $affectation;
     }
 
 
@@ -93,8 +104,9 @@ class AffectationService extends AbstractEntityService
     /**
      *
      * @param \Application\Entity\Db\Role|string $role
-     * @param QueryBuilder $qb
-     * @param string $alias
+     * @param QueryBuilder                       $qb
+     * @param string                             $alias
+     *
      * @return QueryBuilder
      * @todo A REVOIR! ! ! !
      */
@@ -107,8 +119,8 @@ class AffectationService extends AbstractEntityService
         }
 
         $qb
-                ->innerJoin($alias.'.role', $ralias = uniqid('r'))
-                ->andWhere("$ralias.code = :code")->setParameter('code', $role);
+            ->innerJoin($alias . '.role', $ralias = uniqid('r'))
+            ->andWhere("$ralias.code = :code")->setParameter('code', $role);
 
         return $qb;
     }

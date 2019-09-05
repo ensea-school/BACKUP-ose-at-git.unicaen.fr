@@ -733,7 +733,7 @@ class ServiceService extends AbstractEntityService
         $prevus = $service
             ->getVolumeHoraireListe()->createChild()
             ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
-            ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
+            ->setValidation(true);
 
         $realises = $service
             ->getVolumeHoraireListe()->createChild()

@@ -64,11 +64,6 @@ class Schema
         DdlPackage::class . '.create.definition' => ['label' => 'Création des définitions de packages'],
         DdlMaterializedView::class . '.create.'  => ['label' => 'Création des vues matérialisées'],
         DdlPackage::class . '.create.body'       => ['label' => 'Création des corps de packages'],
-        DdlIndex::class . '.create.'             => ['label' => 'Création des indexes'],
-        DdlPrimaryConstraint::class . '.create.' => ['label' => 'Création des clés primaires'],
-        DdlRefConstraint::class . '.create.'     => ['label' => 'Création des clés étrangères'],
-        DdlUniqueConstraint::class . '.create.'  => ['label' => 'Création des contraintes d\'unicité'],
-        DdlTrigger::class . '.create.'           => ['label' => 'Création des triggers'],
 
         DdlSequence::class . '.alter.'                     => ['label' => 'Modification des séquences'],
         DdlTable::class . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
@@ -80,9 +75,15 @@ class Schema
         DdlUniqueConstraint::class . '.alter.'             => ['label' => 'Modification des contraintes d\'unicité'],
         DdlTrigger::class . '.alter.'                      => ['label' => 'Modification des triggers'],
         DdlIndex::class . '.alter.'                        => ['label' => 'Modification des indexes'],
-
         DdlTable::class . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
-        DdlTable::class . '.drop.'                         => ['label' => 'Suppression des tables'],
+
+        DdlIndex::class . '.create.'             => ['label' => 'Création des indexes'],
+        DdlPrimaryConstraint::class . '.create.' => ['label' => 'Création des clés primaires'],
+        DdlRefConstraint::class . '.create.'     => ['label' => 'Création des clés étrangères'],
+        DdlUniqueConstraint::class . '.create.'  => ['label' => 'Création des contraintes d\'unicité'],
+        DdlTrigger::class . '.create.'           => ['label' => 'Création des triggers'],
+
+        DdlTable::class . '.drop.' => ['label' => 'Suppression des tables'],
     ];
 
     /**
@@ -176,7 +177,7 @@ class Schema
                     $ddlConfig[$class] = ['excludes' => '%']; // si pas défini, alors on exclue tout
                 }
             }
-        }else{
+        } else {
             foreach ($this->ddlClasses as $class) {
                 if (empty($this->ddlConfigGet($ddlConfig, $class))) {
                     $ddlConfig[$class] = ['includes' => '%']; // si pas défini, alors on inclue tout
@@ -226,9 +227,9 @@ class Schema
     {
         $ddlConfig = $this->prepareDdlConfig($ddlConfig);
         foreach ($ddl as $ddlClass => $ddlConf) {
-            if (empty($this->ddlConfigGet($ddlConfig, $ddlClass))){
+            if (empty($this->ddlConfigGet($ddlConfig, $ddlClass))) {
                 unset($ddl[$ddlClass]);
-            }else {
+            } else {
                 foreach ($ddlConf as $name => $config) {
                     if (!$this->ddlFilterObject($name, $this->ddlConfigGet($ddlConfig, $ddlClass))) {
                         unset($ddl[$ddlClass][$name]);
@@ -260,6 +261,7 @@ class Schema
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -364,12 +366,16 @@ class Schema
     {
         if ($ddl instanceof self) {
             $ddl = $ddl->getDdl($ddlConfig);
-        } elseif($mode != 'create') {
+        } elseif ($mode != 'create') {
             $ddl = $this->ddlFilter($ddl, $ddlConfig);
         }
 
         $ddlConfig = $this->prepareDdlConfig($ddlConfig);
-        $res       = [];
+        if (isset($ddlConfig['include-tables-deps']) && $ddlConfig['include-tables-deps']) {
+            unset($ddlConfig['include-tables-deps']);
+            $this->filterIncludeTableDeps($ddl, $ddlConfig);
+        }
+        $res = [];
         foreach ($this->changements as $changement => $params) {
             list($class, $action, $precision) = explode('.', $changement);
             $noGet = isset($ddlConfig[$class]) ? ($ddlConfig[$class] === false) : false;
@@ -447,15 +453,52 @@ class Schema
         }
 
         if ($mode != 'drop' && $autoExecute) { // create ou alter
-            if ($this->logger){
-                $this->logger->logTitle("\n".'Compilation de tous les objets de la BDD');
+            if ($this->logger) {
+                $this->logger->logTitle("\n" . 'Compilation de tous les objets de la BDD');
             }
-            if (empty($this->compilerTout()) && $this->logger){
+            if (empty($this->compilerTout()) && $this->logger) {
                 $this->logger->log('Compilation effectuée avec succès.');
             }
         }
 
         return $res;
+    }
+
+
+
+    /**
+     * On ajoute, en fonction de la liste des tables fournie en includes, tous les objets dépendants des tables en question.
+     * Classes parsées :
+     *  - DdlIndex::class,
+     *  - DdlPrimaryConstraint::class,
+     *  - DdlUniqueConstraint::class,
+     *  - DdlRefConstraint::class,
+     *
+     * @param array $ddl
+     * @param array $ddlConfig
+     */
+    private function filterIncludeTableDeps(array $ddl, array &$ddlConfig)
+    {
+        $tables = array_unique(isset($ddlConfig[DdlTable::class]['includes']) ? $ddlConfig[DdlTable::class]['includes'] : []);
+
+        $classes = [
+            DdlIndex::class,
+            DdlPrimaryConstraint::class,
+            DdlUniqueConstraint::class,
+            DdlRefConstraint::class,
+        ];
+
+        foreach( $classes as $class ) {
+            if (!isset($ddlConfig[$class]['includes'])) {
+                $ddlConfig[$class]['includes'] = [];
+            }
+            $objects = $this->getDdlObject($class)->get();
+            foreach ($objects as $name => $def) {
+                if (in_array($def['table'], $tables) && !in_array($name, $ddlConfig[$class]['includes'])) {
+                    $ddlConfig[$class]['includes'][] = $name;
+                }
+            }
+        }
     }
 
 
@@ -544,10 +587,10 @@ class Schema
                     $sql .= '-- ' . $label . "\n";
                     $sql .= '--------------------------------------------------' . "\n\n";
                     foreach ($qs as $qr => $description) {
-                        if ($onlyFirstLine && false !== strpos($qr,"\n")){
-                            $qr = substr($qr,0,strpos($qr,"\n"));
+                        if ($onlyFirstLine && false !== strpos($qr, "\n")) {
+                            $qr = substr($qr, 0, strpos($qr, "\n"));
                         }
-                        
+
                         if (substr(trim($qr), -1) != ';') {
                             $qr .= ';';
                         }
@@ -618,8 +661,8 @@ class Schema
                 }
             } catch (BddCompileException $e) {
                 $errors[$type][$name] = $e->getMessage();
-                if($this->logger){
-                    $this->logger->log($type.' '.$name.' : Erreur de compilation');
+                if ($this->logger) {
+                    $this->logger->log($type . ' ' . $name . ' : Erreur de compilation');
                 }
             }
         }

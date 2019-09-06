@@ -42,7 +42,7 @@ $config = [
             'orm_default' => [
                 'subscribers' => [
                     \Doctrine\DBAL\Event\Listeners\OracleSessionInit::class,
-                    'UnicaenApp\HistoriqueListener',
+                    ORM\Event\Listeners\HistoriqueListener::class,
                 ],
             ],
         ],
@@ -142,18 +142,19 @@ $config = [
     ],
     'service_manager'    => [
         'invokables' => [
-            Service\AnneeService::class            => Service\AnneeService::class,
-            Service\LocalContextService::class     => Service\LocalContextService::class,
-            Service\ParametresService::class       => Service\ParametresService::class,
-            Service\TypeInterventionService::class => Service\TypeInterventionService::class,
-            Service\SourceService::class           => Service\SourceService::class,
-            Service\AffectationService::class      => Service\AffectationService::class,
-            Service\RoleService::class             => Service\RoleService::class,
-            Service\PaysService::class             => Service\PaysService::class,
-            Service\DepartementService::class      => Service\DepartementService::class,
-            Service\FichierService::class          => Service\FichierService::class,
-            Service\TauxHoraireHETDService::class  => Service\TauxHoraireHETDService::class,
-            Assertion\InformationAssertion::class  => Assertion\InformationAssertion::class,
+            Service\AnneeService::class                   => Service\AnneeService::class,
+            Service\LocalContextService::class            => Service\LocalContextService::class,
+            Service\ParametresService::class              => Service\ParametresService::class,
+            Service\TypeInterventionService::class        => Service\TypeInterventionService::class,
+            Service\SourceService::class                  => Service\SourceService::class,
+            Service\AffectationService::class             => Service\AffectationService::class,
+            Service\RoleService::class                    => Service\RoleService::class,
+            Service\PaysService::class                    => Service\PaysService::class,
+            Service\DepartementService::class             => Service\DepartementService::class,
+            Service\FichierService::class                 => Service\FichierService::class,
+            Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
+            Assertion\InformationAssertion::class         => Assertion\InformationAssertion::class,
+            ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [
             'navigation'                              => Service\NavigationFactoryFactory::class,
@@ -182,7 +183,7 @@ $config = [
     ],
     'controllers'        => [
         'invokables' => [
-            'Application\Controller\Index'       => Controller\IndexController::class,
+            'Application\Controller\Index' => Controller\IndexController::class,
         ],
     ],
     'controller_plugins' => [

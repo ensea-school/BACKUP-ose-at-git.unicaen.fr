@@ -434,15 +434,6 @@ abstract class AbstractEntityService extends AbstractService
             throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
         }
 
-        if ($entity instanceof HistoriqueAwareInterface){
-            if (!$entity->getHistoCreateur()){
-                /** @var UtilisateurService $utilisateurService */
-                $utilisateurService = \Application::$container->get(UtilisateurService::class);
-
-                $entity->setHistoCreateur($utilisateurService->getOse());
-            }
-        }
-
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush($entity);
 

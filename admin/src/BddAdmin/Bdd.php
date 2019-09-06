@@ -5,7 +5,7 @@ namespace BddAdmin;
 use BddAdmin\Exception\BddCompileException;
 use BddAdmin\Exception\BddException;
 use BddAdmin\Exception\BddIndexExistsException;
-use mysql_xdevapi\Exception;
+use \Exception;
 
 class Bdd
 {

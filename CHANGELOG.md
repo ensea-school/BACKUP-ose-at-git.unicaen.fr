@@ -10,6 +10,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * On peut maintenant s'abonner à un indicateur même avec un rôle de périmètre établissement réduit à une composante.
 * Les services réalisés peuvent maintenant être initialisés à partir de volumers horaires auto-validés en plus e ceux qui ont été validés manuellement.
 * Le référentiel peut être saisi même pour un intervenant d'une autre composante si l'enseignement est dans la composante du gestionnaire
+* L'utilisateur OSE était mentionné partout comme modificateur au lieu de l'utilisateur courant. C'est rétabli.
 
 # OSE 8.2.2
 

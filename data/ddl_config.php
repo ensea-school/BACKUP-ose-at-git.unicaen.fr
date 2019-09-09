@@ -16,13 +16,17 @@ return [
         'V_FORMULE_LOCAL_VH_PARAMS',
         'V_TYPE_INTERVENTION_REGLE_EP',
         'V_INTERVENANT_RECHERCHE',
+        'V_FORMULE_SERVICE',
+        'V_FORMULE_SERVICE_MODIFIE',
+        'V_FORMULE_SERVICE_REF',
+        'V_FORMULE_VOLUME_HORAIRE_REF',
     ]],
     \BddAdmin\Ddl\DdlPackage::class          => ['includes' => [
         'OSE_IMPORT',
         'UNICAEN_OSE_FORMULE',
     ]],
     \BddAdmin\Ddl\DdlTrigger::class          => ['includes' => [
-
+        'TYPE_INTERVENTION_STRUCTURE_CK',
     ]],
     \BddAdmin\Ddl\DdlSequence::class         => ['includes' => [
         'FORMULE_ID_SEQ',
@@ -36,5 +40,9 @@ return [
         'TMP_CALCUL_ID_SEQ',
         'TYPE_INTERVENTION_REGLE_ID_SEQ',
         'TYPE_STRUCTURE_ID_SEQ',
+        'DROP SEQUENCE ANNEE_ID_SEQ',
+        'ETAT_VOLUME_HORAIRE_ID_SEQ',
+        'TYPE_VOLUME_HORAIRE_ID_SEQ',
+        'ANNEE_ID_SEQ',
     ]],
 ];

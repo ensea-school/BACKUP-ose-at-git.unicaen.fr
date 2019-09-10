@@ -69,8 +69,32 @@ class AppConfig
         $env = self::getEnv();
 
         $modules = [
-            'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM',
-            'UnicaenApp', 'UnicaenAuth', 'UnicaenImport', 'UnicaenTbl',
+            'Zend\Cache',
+            'Zend\Filter',
+            'Zend\Form',
+            'Zend\Hydrator',
+            'Zend\I18n',
+            'Zend\InputFilter',
+            'Zend\Log',
+            'Zend\Mail',
+            'Zend\Mvc\Console',
+            'Zend\Mvc\I18n',
+            'Zend\Mvc\Plugin\FlashMessenger',
+            'Zend\Mvc\Plugin\Prg',
+            'Zend\Navigation',
+            'Zend\Paginator',
+            'Zend\Router',
+            'Zend\Session',
+            'Zend\Validator',
+
+            'DoctrineModule',
+            'DoctrineORMModule',
+            'ZfcUser',
+            'BjyAuthorize',
+            'UnicaenApp',
+            'UnicaenAuth',
+            'UnicaenImport',
+            'UnicaenTbl',
             'Application',
         ];
 
@@ -79,7 +103,7 @@ class AppConfig
         }
 
         if ('dev' == $env) {
-            $modules[] = 'ZendDeveloperTools';
+            //$modules[] = 'ZendDeveloperTools';
         }
 
         if (self::inConsole() || 'dev' == $env){

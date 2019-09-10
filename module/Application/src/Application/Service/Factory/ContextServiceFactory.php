@@ -3,8 +3,7 @@
 namespace Application\Service\Factory;
 
 use Application\Service\ContextService;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
-
+use Psr\Container\ContainerInterface;
 
 
 /**
@@ -24,8 +23,6 @@ class ContextServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $config =
-
         $service = new ContextService();
         $service->setServiceUserContext($container->get('UnicaenAuth\Service\UserContext'));
 

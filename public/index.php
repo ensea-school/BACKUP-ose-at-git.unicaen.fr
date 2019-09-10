@@ -30,33 +30,62 @@ class Application
 
     public static function init()
     {
-        \Locale::setDefault('fr_FR');
         define('REQUEST_MICROTIME', microtime(true));
         chdir(dirname(__DIR__));
 
+        /* Chargement de la config globale */
+        require_once 'config/application.config.php';
+
+        /* Définition de la config globale, éventuellement à partir du fichier de config général */
+        if (AppConfig::get('global', 'affichageErreurs')) {
+            error_reporting(E_ALL);
+        }else{
+            set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
+                self::error($e);
+            });
+        }
+
+        \Locale::setDefault('fr_FR');
+        putenv("NLS_LANGUAGE=FRENCH");
+
+        /* Chargement de l'autoloader */
         if (file_exists('vendor/autoload.php')) {
             include 'vendor/autoload.php';
         }
 
         if (!class_exists('Zend\Loader\AutoloaderFactory')) {
-            throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
-        }
-        require 'config/application.config.php';
-
-        if (!AppConfig::get('global', 'affichageErreurs')) {
-            set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
-                self::error($e);
-            });
+            throw new RuntimeException('Unable to load ZF3. Run `php composer.phar install` or define a ZF3_PATH environment variable.');
         }
     }
 
 
 
-    private static function startContainer()
+    private static function zendApplicationStart()
     {
-        self::$container = new Zend\ServiceManager\ServiceManager(new Zend\Mvc\Service\ServiceManagerConfig([]));
-        self::$container->setService('ApplicationConfig', AppConfig::getGlobal());
-        self::$container->get('ModuleManager')->loadModules();
+        $configuration = AppConfig::getGlobal();
+
+        //Zend\Mvc\Application::init(AppConfig::getGlobal())->run();
+
+        // Prepare the service manager
+        $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
+        $smConfig = new \Zend\Mvc\Service\ServiceManagerConfig($smConfig);
+
+        $serviceManager = new Zend\ServiceManager\ServiceManager();
+        self::$container = $serviceManager;
+        $smConfig->configureServiceManager($serviceManager);
+        $serviceManager->setService('ApplicationConfig', $configuration);
+
+        // Load modules
+        $serviceManager->get('ModuleManager')->loadModules();
+
+        // Prepare list of listeners to bootstrap
+        $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
+        $config                     = $serviceManager->get('config');
+        $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
+
+        $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
+
+        $serviceManager->get('Application')->bootstrap($listeners)->run();
     }
 
 
@@ -89,19 +118,7 @@ class Application
                 require 'maintenance.php';
             }
         } else {
-            self::startContainer();
-
-            if (AppConfig::get('global', 'affichageErreurs')) {
-                error_reporting(E_ALL);
-            }
-            putenv("NLS_LANGUAGE=FRENCH");
-
-
-            if (AppConfig::get('global', 'modeInstallation', true)) {
-                require 'install.php';
-            } else {
-                self::$container->get('Application')->bootstrap([])->run();
-            }
+            self::zendApplicationStart();
         }
     }
 

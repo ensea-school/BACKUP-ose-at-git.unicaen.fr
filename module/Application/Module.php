@@ -36,9 +36,10 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
         $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch',
-            function (\Zend\Mvc\MvcEvent $e) {
-                if ($e->getRequest() instanceof \Zend\Http\Request && $e->getRequest()->isXmlHttpRequest()) {
-                    $e->getTarget()->layout('application/ajax-layout.phtml');
+            function (MvcEvent $e) {
+                $request = $e->getRequest();
+                if ($request instanceof \HttpRequest && $request->isXmlHttpRequest()) {
+                    $e->getTarget()->layout('layout/ajax.phtml');
                 }
             }
         );

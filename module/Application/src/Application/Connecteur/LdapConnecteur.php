@@ -11,7 +11,7 @@ use UnicaenApp\Entity\Ldap\People;
 use UnicaenAuth\Service\UserContext;
 use UnicaenApp\Mapper\Ldap\Structure as MapperStructure;
 use UnicaenApp\Mapper\Ldap\People as MapperPeople;
-use ZfcUserDoctrineORM\Mapper\User as MapperUser;
+use UnicaenAuth\Service\UserMapper as MapperUser;
 
 
 /**

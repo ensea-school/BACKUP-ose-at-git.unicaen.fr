@@ -94,10 +94,8 @@ class ContextService extends AbstractService
     public function getSelectedIdentityRole()
     {
         if (null === $this->selectedIdentityRole) {
-            $authUserContext = $this->getServiceUserContext();
-
-            if ($authUserContext->getIdentity()) {
-                $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
+            if ($this->serviceUserContext->getIdentity()) {
+                $this->selectedIdentityRole = $this->serviceUserContext->getSelectedIdentityRole();
                 if (!$this->selectedIdentityRole instanceof Role) $this->selectedIdentityRole = new Role();
             }
         }
@@ -122,7 +120,7 @@ class ContextService extends AbstractService
      */
     public function getIntervenant()
     {
-        if (false === $this->intervenant || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
+        if (false === $this->intervenant || $this->serviceUserContext->getNextSelectedIdentityRole()) {
             $utilisateurCode   = $this->getConnecteurLdap()->getUtilisateurCourantCode();
             $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
         }

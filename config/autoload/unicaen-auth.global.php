@@ -55,10 +55,19 @@ $settings = [
     ],
 
     /**
-     * Activation ou non de l'authentification Shibboleth.
+     * Configuration de l'authentification Shibboleth.
      */
     'shibboleth' => [
+        /**
+         * Affichage ou non du formulaire d'authentification via l'annuaire LDAP.
+         * NB: en réalité cela permet aussi l'authentification avec un compte local.
+         */
         'enable' => false,
+
+        /**
+         * URL de déconnexion.
+         */
+        'logout_url' => '/Shibboleth.sso/Logout?return=', // NB: '?return=' semble obligatoire!
     ],
 ];
 

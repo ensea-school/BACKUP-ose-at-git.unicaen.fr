@@ -209,8 +209,8 @@ $config = [
         ],
         'inline_scripts' => [
             '010_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
-            '030_util'        => 'vendor/unicaen/app/js/util.js',
-            '040_unicaen'     => 'vendor/unicaen/app/js/unicaen.js',
+            '030_util'        => 'vendor/unicaen/app/unicaen/app/js/util.js',
+            '040_unicaen'     => 'vendor/unicaen/app/unicaen/app/js/unicaen.js',
             '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
 
             '001_' => 'js/datepicker-fr.js',

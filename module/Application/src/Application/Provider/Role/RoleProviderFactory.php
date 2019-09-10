@@ -5,9 +5,9 @@ namespace Application\Provider\Role;
 use Application\Service\ContextService;
 use Application\Service\StatutIntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  *
@@ -20,17 +20,10 @@ class RoleProviderFactory implements FactoryInterface
 
 
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return Acteur
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $serviceLocator->get('BjyAuthorize\Config');
-        $em     = $serviceLocator->get(\Application\Constants::BDD);
+        $config = $container->get('BjyAuthorize\Config');
+        $em     = $container->get(\Application\Constants::BDD);
         /* @var $em \Doctrine\ORM\EntityManager */
 
         if (!isset($config['role_providers'][RoleProvider::class])) {
@@ -44,9 +37,9 @@ class RoleProviderFactory implements FactoryInterface
         $roleProvider = new RoleProvider($providerConfig);
         $roleProvider
             ->setEntityManager($em)
-            ->setServiceStatutIntervenant($serviceLocator->get(StatutIntervenantService::class))
-            ->setServiceContext($serviceLocator->get(ContextService::class))
-            ->setPrivilegeProvider($serviceLocator->get('UnicaenAuth\Privilege\PrivilegeProvider'))
+            ->setServiceStatutIntervenant($container->get(StatutIntervenantService::class))
+            ->setServiceContext($container->get(ContextService::class))
+            ->setPrivilegeProvider($container->get('UnicaenAuth\Privilege\PrivilegeProvider'))
             ->setStructureSelectionnee($this->getServiceContext()->getStructure(true));
 
         return $roleProvider;

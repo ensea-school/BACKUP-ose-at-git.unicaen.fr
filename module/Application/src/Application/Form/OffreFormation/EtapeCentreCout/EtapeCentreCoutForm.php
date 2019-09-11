@@ -11,7 +11,7 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieField
 use Application\Form\OffreFormation\EtapeCentreCout\Traits\ElementCentreCoutFieldsetAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use RuntimeException;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Zend\Form\Element\Select;
 
 

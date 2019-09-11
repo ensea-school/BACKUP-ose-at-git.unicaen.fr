@@ -20,7 +20,7 @@ use Zend\Validator\Callback;
 use Zend\Validator\NotEmpty;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

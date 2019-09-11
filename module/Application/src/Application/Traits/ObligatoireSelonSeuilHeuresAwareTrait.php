@@ -5,7 +5,6 @@ namespace Application\Traits;
 /**
  * Description of ObligatoireSelonSeuilHeuresAwareTrait
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 trait ObligatoireSelonSeuilHeuresAwareTrait
 {

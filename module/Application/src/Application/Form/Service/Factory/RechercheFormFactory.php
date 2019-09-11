@@ -1,17 +1,17 @@
 <?php
 
-namespace Application\Controller\Factory;
+namespace Application\Form\Service\Factory;
 
-use Application\Controller\PlafondController;
+use Application\Form\Service\SaisieFieldset;
 use Interop\Container\ContainerInterface;
 
 
 /**
- * Description of PlafondControllerFactory
+ * Description of SaisieFieldsetFactory
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class PlafondControllerFactory
+class rechercheFormFactory
 {
 
     /**
@@ -19,12 +19,13 @@ class PlafondControllerFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return PlafondController
+     * @return SaisieFieldset
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new PlafondController;
+        $fieldset = new SaisieFieldset;
+        $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
 
-        return $controller;
+        return $fieldset;
     }
 }

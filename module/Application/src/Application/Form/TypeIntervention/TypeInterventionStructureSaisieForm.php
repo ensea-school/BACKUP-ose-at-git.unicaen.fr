@@ -6,7 +6,7 @@ use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionStructureServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use UnicaenApp\Util;

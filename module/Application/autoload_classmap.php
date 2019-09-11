@@ -586,8 +586,6 @@ return [
     'Application\Controller\VolumeHoraireController'                                                     => __DIR__ . '/src/Application/Controller/VolumeHoraireController.php',
     'Application\Controller\ContratController'                                                           => __DIR__ . '/src/Application/Controller/ContratController.php',
     'Application\Controller\Plugin\Context'                                                              => __DIR__ . '/src/Application/Controller/Plugin/Context.php',
-    'Application\Controller\Plugin\MailWithLogPluginFactory'                                             => __DIR__ . '/src/Application/Controller/Plugin/MailWithLogPluginFactory.php',
-    'Application\Controller\Plugin\MailWithLogPlugin'                                                    => __DIR__ . '/src/Application/Controller/Plugin/MailWithLogPlugin.php',
     'Application\Controller\Plugin\Em'                                                                   => __DIR__ . '/src/Application/Controller/Plugin/Em.php',
     'Application\Controller\DisciplineController'                                                        => __DIR__ . '/src/Application/Controller/DisciplineController.php',
     'Application\Controller\WorkflowController'                                                          => __DIR__ . '/src/Application/Controller/WorkflowController.php',

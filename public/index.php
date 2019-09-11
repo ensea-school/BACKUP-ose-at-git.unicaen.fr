@@ -45,7 +45,7 @@ class Application
             });
         }
 
-        \Locale::setDefault('fr_FR');
+        \Locale::setDefault(AppConfig::get('global', 'locale'));
         putenv("NLS_LANGUAGE=FRENCH");
 
         /* Chargement de l'autoloader */

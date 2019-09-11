@@ -3,7 +3,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Utilisateur;
 use Doctrine\ORM\EntityRepository;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\ObjectProperty;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Exception\RuntimeException;

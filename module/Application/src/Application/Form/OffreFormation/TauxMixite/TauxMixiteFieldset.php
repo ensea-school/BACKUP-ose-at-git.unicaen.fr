@@ -9,7 +9,7 @@ use Application\Form\AbstractFieldset;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\TypeHeures;
 use Zend\Form\Element\Text;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles

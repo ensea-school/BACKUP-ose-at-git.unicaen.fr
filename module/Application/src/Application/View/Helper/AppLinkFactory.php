@@ -2,9 +2,8 @@
 
 namespace Application\View\Helper;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\HelperPluginManager;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Console\Console;
 use Zend\Mvc\Router\RouteMatch;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -21,24 +20,17 @@ class AppLinkFactory implements FactoryInterface
     use AnneeServiceAwareTrait;
 
 
-    /**
-     * Create service
-     *
-     * @param HelperPluginManager $helperPluginManager
-     * @return AppInfos
-     */
-    public function createService(ServiceLocatorInterface $helperPluginManager)
-    {
-        $container = $helperPluginManager->getServiceLocator();
 
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
         $router = Console::isConsole() ? 'HttpRouter' : 'Router';
         $match  = $container->get('application')->getMvcEvent()->getRouteMatch();
         $helper = new AppLink();
 
         $helper->setRouter($container->get($router));
 
-        $helper->setAnnees( $this->getServiceAnnee()->getChoixAnnees() );
-        $helper->setAnnee( $this->getServiceContext()->getAnnee() );
+        $helper->setAnnees($this->getServiceAnnee()->getChoixAnnees());
+        $helper->setAnnee($this->getServiceContext()->getAnnee());
 
         if ($match instanceof RouteMatch) {
             $helper->setRouteMatch($match);

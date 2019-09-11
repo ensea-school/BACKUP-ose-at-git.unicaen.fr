@@ -371,12 +371,12 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            Service\ScenarioService::class     => Service\ScenarioService::class,
-            Assertion\ChargensAssertion::class => Assertion\ChargensAssertion::class,
+            Service\ScenarioService::class => Service\ScenarioService::class,
         ],
         'factories'  => [
             Service\SeuilChargeService::class         => Service\Factory\SeuilChargeServiceFactory::class,
             Provider\Chargens\ChargensProvider::class => Provider\Chargens\ChargensProviderFactory::class,
+            Assertion\ChargensAssertion::class        => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

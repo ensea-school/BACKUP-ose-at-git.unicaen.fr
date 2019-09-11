@@ -8,7 +8,6 @@ use Application\Form\Intervenant\Traits\ModificationServiceDuFieldsetAwareTrait;
 /**
  * Formulaire de modification de service dû d'un intervenant.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ModificationServiceDuForm extends AbstractForm {
     use ModificationServiceDuFieldsetAwareTrait;

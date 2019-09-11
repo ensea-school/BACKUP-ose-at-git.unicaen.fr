@@ -4,7 +4,7 @@ namespace Application\Form\CentreCout;
 
 use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\CcActiviteServiceAwareTrait;
 use Application\Service\Traits\TypeRessourceServiceAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;

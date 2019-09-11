@@ -17,7 +17,6 @@ use UnicaenApp\View\Model\CsvModel;
 /**
  * Description of IntervenantController
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ModificationServiceDuController extends AbstractController
 {

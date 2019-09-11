@@ -157,8 +157,10 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Assertion\ModulateurAssertion::class          => Assertion\ModulateurAssertion::class,
             Service\TypeModulateurStructureService::class => Service\TypeModulateurStructureService::class,
+        ],
+        'factories' => [
+            Assertion\ModulateurAssertion::class          => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'controllers'     => [

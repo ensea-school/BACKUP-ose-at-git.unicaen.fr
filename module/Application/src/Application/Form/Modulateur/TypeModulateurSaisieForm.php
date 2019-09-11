@@ -4,7 +4,7 @@ namespace Application\Form\modulateur;
 
 use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 

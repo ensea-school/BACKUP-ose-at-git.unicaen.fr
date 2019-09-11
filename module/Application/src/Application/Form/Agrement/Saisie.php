@@ -10,7 +10,6 @@ use UnicaenApp\Hydrator\Strategy\DateStrategy;
 /**
  * Formulaire de saisie d'un agrément.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class Saisie extends AbstractForm
 {

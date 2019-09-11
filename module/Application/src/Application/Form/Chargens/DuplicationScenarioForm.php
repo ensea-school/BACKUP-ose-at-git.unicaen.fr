@@ -5,7 +5,7 @@ namespace Application\Form\Chargens;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\ScenarioServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

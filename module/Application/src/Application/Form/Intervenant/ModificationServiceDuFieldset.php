@@ -7,12 +7,11 @@ use Application\Form\AbstractFieldset;
 use Application\Form\Intervenant\Traits\MotifModificationServiceDuFieldsetAwareTrait;
 use Application\Entity\Db\Intervenant;
 use Zend\Stdlib\ArrayUtils;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie des modifications de service dû par un intervenant.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see    FonctionModificationServiceDuFieldset
  */
 class ModificationServiceDuFieldset extends AbstractFieldset

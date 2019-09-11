@@ -17,7 +17,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * 
  * @todo À déplacer dans UnicaenApp.
  * 
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class NavigationFactory extends DefaultNavigationFactory
 {

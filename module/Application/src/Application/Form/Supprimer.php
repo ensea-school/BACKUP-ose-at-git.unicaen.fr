@@ -8,7 +8,6 @@ use Zend\Form\Element\Hidden;
 /**
  * Description of Supprimer
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class Supprimer extends AbstractForm
 {

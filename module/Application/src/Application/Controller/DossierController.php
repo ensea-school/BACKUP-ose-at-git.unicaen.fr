@@ -147,7 +147,7 @@ class DossierController extends AbstractController
                 // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
                 // au statut choisi dans le dossier.
                 if ($role->getIntervenant()) {
-                    $this->getServiceUserContext()->setNextSelectedIdentityRole($dossier->getStatut()->getRoleId());
+                    $this->serviceUserContext()->setNextSelectedIdentityRole($dossier->getStatut()->getRoleId());
                 }
 
                 if (!$lastDossierId && $role->getIntervenant()) { // on ne redirige que pour l'intervenant et seulement si le dossier a été nouvellement créé

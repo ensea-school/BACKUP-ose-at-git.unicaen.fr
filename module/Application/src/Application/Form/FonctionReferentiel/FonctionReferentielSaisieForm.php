@@ -9,7 +9,7 @@ use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 
 /**

@@ -3,18 +3,18 @@
 namespace Application\Service\Factory;
 
 use Application\Service\SeuilChargeService;
+use Interop\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class SeuilChargeServiceFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $service = new SeuilChargeService();
 
         $service->setServiceTableauBord(
-            $serviceLocator->get(TableauBordService::class)
+            $container->get(TableauBordService::class)
         );
 
         return $service;

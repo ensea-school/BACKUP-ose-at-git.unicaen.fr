@@ -28,7 +28,6 @@ return [
     ],
     'view_manager' => [
         'display_not_found_reason' => AppConfig::get('global', 'affichageErreurs'),
-        'display_exceptions'       => AppConfig::get('global', 'affichageErreurs'),
     ],
     'cli_config'   => [
         'scheme' => AppConfig::get('global', 'scheme'),

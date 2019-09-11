@@ -14,8 +14,8 @@ return [
                 'options'       => [
                     'route'    => '/service',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Service',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Service',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -166,7 +166,7 @@ return [
                 'options'       => [
                     'route'    => '/referentiel',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\ServiceReferentiel',
+                        'controller' => 'Application\Controller\ServiceReferentiel',
                     ],
                 ],
                 'may_terminate' => false,
@@ -474,9 +474,11 @@ return [
             Service\MotifNonPaiementService::class       => Service\MotifNonPaiementService::class,
             Service\ModificationServiceDuService::class  => Service\ModificationServiceDuService::class,
             Service\CampagneSaisieService::class         => Service\CampagneSaisieService::class,
-            Assertion\ServiceAssertion::class            => Assertion\ServiceAssertion::class,
             Processus\ServiceProcessus::class            => Processus\ServiceProcessus::class,
             Processus\ServiceReferentielProcessus::class => Processus\ServiceReferentielProcessus::class,
+        ],
+        'factories'  => [
+            Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'hydrators'       => [
@@ -485,14 +487,14 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
-            Form\Service\SaisieFieldset::class            => Form\Service\Factory\SaisieFieldsetFactory::class,
+        'factories'  => [
+            Form\Service\SaisieFieldset::class => Form\Service\Factory\SaisieFieldsetFactory::class,
+            Form\Service\RechercheForm::class  => Form\Service\Factory\RechercheFormFactory::class,
         ],
         'invokables' => [
             Form\Service\Saisie::class                    => Form\Service\Saisie::class,
             Form\ServiceReferentiel\Saisie::class         => Form\ServiceReferentiel\Saisie::class,
             Form\ServiceReferentiel\SaisieFieldset::class => Form\ServiceReferentiel\SaisieFieldset::class,
-            Form\Service\RechercheForm::class             => Form\Service\RechercheForm::class,
         ],
     ],
     'view_helpers'    => [

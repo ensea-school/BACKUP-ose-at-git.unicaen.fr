@@ -14,9 +14,12 @@ class UtilisateurControllerFactory
 {
     /**
      * @param ContainerInterface $container
+     * @param                    $requestedName
+     * @param null               $options
+     *
      * @return UtilisateurController
      */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         /** @var UserInterface $mapper */
         $userMapper = $container->get('zfcuser_user_mapper');

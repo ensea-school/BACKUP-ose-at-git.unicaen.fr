@@ -4,7 +4,7 @@ namespace Application\Hydrator\Chargens;
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\TypeIntervention;
 use Application\Provider\Chargens\ChargensProvider;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Entity\Chargens\Noeud;
 
 

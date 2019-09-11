@@ -6,7 +6,7 @@ use Application\Entity\VolumeHoraireReferentielListe;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 class ListeFilterHydrator implements HydratorInterface, EntityManagerAwareInterface
 {

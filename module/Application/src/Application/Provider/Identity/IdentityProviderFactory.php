@@ -12,7 +12,6 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 /**
  *
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class IdentityProviderFactory implements FactoryInterface
 {

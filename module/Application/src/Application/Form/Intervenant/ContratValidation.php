@@ -11,7 +11,6 @@ use Zend\Validator\NotEmpty;
 /**
  * Formulaire de validation de contrat/avenant.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratValidation extends AbstractForm
 {

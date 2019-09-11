@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Form\AbstractForm;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of EditionForm

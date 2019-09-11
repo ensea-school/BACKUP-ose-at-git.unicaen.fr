@@ -38,7 +38,6 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  *
  * @method UploaderPlugin uploader()
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratController extends AbstractController
 {

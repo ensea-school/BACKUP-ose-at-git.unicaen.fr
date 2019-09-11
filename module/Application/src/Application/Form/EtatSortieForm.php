@@ -6,7 +6,7 @@ use Application\Entity\Db\EtatSortie;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

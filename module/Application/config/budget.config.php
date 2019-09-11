@@ -15,8 +15,8 @@ return [
                 'options'       => [
                     'route'    => '/budget',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Budget',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Budget',
+                        'action'     => 'index',
                     ],
                 ],
                 'child_routes'  => [
@@ -213,14 +213,16 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\Budget\DotationSaisieForm::class     => Form\Budget\DotationSaisieForm::class,
+            Form\Budget\DotationSaisieForm::class => Form\Budget\DotationSaisieForm::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
             Service\TypeRessourceService::class => Service\TypeRessourceService::class,
             Service\DotationService::class      => Service\DotationService::class,
-            Assertion\BudgetAssertion::class    => Assertion\BudgetAssertion::class,
+        ],
+        'factories'  => [
+            Assertion\BudgetAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'controllers'     => [

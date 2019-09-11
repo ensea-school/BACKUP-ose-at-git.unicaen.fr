@@ -2,10 +2,6 @@
 
 namespace Application;
 
-/**
- *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- */
 class Constants
 {
     const DATE_FORMAT     = 'd/m/Y';

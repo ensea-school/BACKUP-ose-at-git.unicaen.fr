@@ -2,26 +2,20 @@
 
 namespace Application\View\Helper;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of UserCurrentFactory
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class UserCurrentFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $helperPluginManager
-     * @return UserCurrent
-     */
-    public function createService(ServiceLocatorInterface $helperPluginManager)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $authUserContext = $helperPluginManager->getServiceLocator()->get('authUserContext');
-        
+        $authUserContext = $container->get('authUserContext');
+
         return new UserCurrent($authUserContext);
     }
 }

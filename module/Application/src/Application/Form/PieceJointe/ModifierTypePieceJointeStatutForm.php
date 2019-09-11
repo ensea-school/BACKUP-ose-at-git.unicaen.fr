@@ -8,7 +8,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\TypePieceJointeStatutServiceAwareTrait;
 use Zend\Form\Element\Csrf;
 use Application\Service\Traits\AnneeServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

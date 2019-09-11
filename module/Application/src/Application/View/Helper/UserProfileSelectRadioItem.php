@@ -10,7 +10,6 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
  * Aide de vue dessinant un item de sélection d'un profil utilisateur.
  * Utilisé par l'aide de vue UserProfileSelect.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier@unicaen.fr>
  * @see UserProfileSelect
  */
 class UserProfileSelectRadioItem extends UnicaenAuthViewHelper

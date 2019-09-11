@@ -199,7 +199,7 @@ namespace Application\Form\nommaj;
 
 use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
     ';
 
     $fic2                = '

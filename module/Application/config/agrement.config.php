@@ -15,8 +15,8 @@ return [
                     'agrement' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/:intervenant/agrement',
-                            'defaults'    => [
+                            'route'    => '/:intervenant/agrement',
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Agrement',
                                 'action'     => 'index',
                             ],
@@ -294,7 +294,9 @@ return [
             Service\TblAgrementService::class        => Service\TblAgrementService::class,
             Service\TypeAgrementService::class       => Service\TypeAgrementService::class,
             Service\TypeAgrementStatutService::class => Service\TypeAgrementStatutService::class,
-            Assertion\InformationAssertion::class                      => Assertion\AgrementAssertion::class,
+        ],
+        'factories'  => [
+            Assertion\InformationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

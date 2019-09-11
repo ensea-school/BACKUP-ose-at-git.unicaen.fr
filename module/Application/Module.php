@@ -38,7 +38,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch',
             function (MvcEvent $e) {
                 $request = $e->getRequest();
-                if ($request instanceof \HttpRequest && $request->isXmlHttpRequest()) {
+                if ($request instanceof \Zend\Http\Request && $request->isXmlHttpRequest()) {
                     $e->getTarget()->layout('layout/ajax.phtml');
                 }
             }

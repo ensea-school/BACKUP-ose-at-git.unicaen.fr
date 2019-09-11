@@ -8,7 +8,7 @@ use Application\Form\ServiceReferentiel\Traits\SaisieFieldsetAwareTrait;
 use Application\Service\Traits\FonctionReferentielServiceAwareTrait;
 use Zend\Form\FormInterface;
 use Zend\Form\Element\Hidden;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

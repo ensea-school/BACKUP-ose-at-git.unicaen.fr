@@ -11,7 +11,6 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 /**
  * Formulaire de saisie de la date de retour du contrat/avenant signé.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratRetour extends AbstractForm
 {

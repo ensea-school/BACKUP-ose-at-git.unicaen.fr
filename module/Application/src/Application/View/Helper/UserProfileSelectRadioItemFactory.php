@@ -2,37 +2,31 @@
 
 namespace Application\View\Helper;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  *
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
+class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory implements FactoryInterface
 {
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;
 
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $helperPluginManager
-     * @return UserProfile
-     */
-    public function createService(ServiceLocatorInterface $helperPluginManager)
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $container = $helperPluginManager->getServiceLocator();
         $userContextService = $container->get('AuthUserContext');
 
         $service = new UserProfileSelectRadioItem($userContextService);
         $service
-                ->setServiceStructure($this->getServiceStructure())
-                ->setStructure($this->getServiceContext()->getStructure());
+            ->setServiceStructure($this->getServiceStructure())
+            ->setStructure($this->getServiceContext()->getStructure());
 
         return $service;
     }

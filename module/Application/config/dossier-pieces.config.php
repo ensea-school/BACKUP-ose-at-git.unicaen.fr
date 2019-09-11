@@ -485,7 +485,9 @@ return [
             Service\PieceJointeService::class           => Service\PieceJointeService::class,
             Service\TypePieceJointeService::class       => Service\TypePieceJointeService::class,
             Service\TypePieceJointeStatutService::class => Service\TypePieceJointeStatutService::class,
-            Assertion\DossierPiecesAssertion::class     => Assertion\DossierPiecesAssertion::class,
+        ],
+        'factories' => [
+            Assertion\DossierPiecesAssertion::class     => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

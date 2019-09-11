@@ -10,7 +10,7 @@ use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Entity\Db\FormuleTestIntervenant;
 
 

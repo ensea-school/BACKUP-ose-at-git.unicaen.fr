@@ -17,7 +17,7 @@ use Application\Service\Traits\NotificationIndicateurServiceAwareTrait;
 use Application\Filter\IntervenantEmailFormatter;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
-use Zend\Mvc\Router\Http\TreeRouteStack;
+use Zend\Router\Http\TreeRouteStack;
 use Zend\View\Renderer\PhpRenderer;
 use Exception;
 use Zend\Form\Element\Hidden;

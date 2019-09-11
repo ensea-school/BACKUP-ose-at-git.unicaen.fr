@@ -2,9 +2,8 @@
 
 namespace Application\Mouchard;
 
-use Application\Service\ContextService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of MouchardCompleterContextFactory
@@ -13,17 +12,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class MouchardCompleterContextFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return MouchardCompleterContext
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $mouchardCompleterContext = new MouchardCompleterContext();
-        $mouchardCompleterContext->setServiceContext( $serviceLocator->get(ContextService::class));
 
         return $mouchardCompleterContext;
     }

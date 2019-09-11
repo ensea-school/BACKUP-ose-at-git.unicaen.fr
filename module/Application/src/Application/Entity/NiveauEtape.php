@@ -7,7 +7,6 @@ use Application\Entity\Db\Etape;
 /**
  * Description of NiveauEtape
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class NiveauEtape
 {

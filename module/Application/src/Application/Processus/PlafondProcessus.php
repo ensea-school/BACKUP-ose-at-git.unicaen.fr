@@ -5,7 +5,6 @@ namespace Application\Processus;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\PlafondServiceAwareTrait;
-use Doctrine\ORM\EntityManager;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\Mvc\Controller\Plugin\FlashMessenger;

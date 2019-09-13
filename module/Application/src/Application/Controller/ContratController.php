@@ -432,6 +432,7 @@ class ContratController extends AbstractController
     private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
+            'formule',
             'contrat',
         ], $intervenant);
     }

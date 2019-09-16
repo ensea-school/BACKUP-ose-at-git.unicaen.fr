@@ -248,7 +248,7 @@ class ServiceService extends AbstractEntityService
      */
     public function save($entity)
     {
-        $this->getEntityManager()->getConnection()->beginTransaction();
+        $this->getEntityManager()->beginTransaction();
         try {
             $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -311,9 +311,9 @@ class ServiceService extends AbstractEntityService
                     $serviceVolumeHoraire->save($volumeHoraire, false); // pas de contrôle de plafond sur le VH ! ! !
                 }
             }
-            $this->getEntityManager()->getConnection()->commit();
+            $this->getEntityManager()->commit();
         } catch (Exception $e) {
-            $this->getEntityManager()->getConnection()->rollBack();
+            $this->getEntityManager()->rollBack();
             throw $e;
         }
 

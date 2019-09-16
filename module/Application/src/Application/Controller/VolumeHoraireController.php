@@ -102,12 +102,12 @@ class VolumeHoraireController extends AbstractController
                 $service = $vhl->getService();
                 $this->getProcessusPlafond()->beginTransaction();
                 $this->getServiceService()->save($service);
-                $this->updateTableauxBord($service->getIntervenant());
                 $this->getProcessusPlafond()->endTransaction($service->getIntervenant(), $vhl->getTypeVolumeHoraire());
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
+            $this->updateTableauxBord($service->getIntervenant());
         });
 
         return compact('form');

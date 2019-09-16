@@ -7,10 +7,4 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-/** @var \Application\Service\UtilisateurService $us */
-$us = $sl->get(\Application\Service\UtilisateurService::class);
 
-
-//$u = $us->creerUtilisateur('Farguet', 'Georges', New DateTime(), 'farguet', 'sifar14', true);
-
-var_dump($u);

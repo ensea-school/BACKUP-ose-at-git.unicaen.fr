@@ -234,7 +234,7 @@ class ServiceReferentielService extends AbstractEntityService
     public function save($entity)
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
-        $this->getEntityManager()->getConnection()->beginTransaction();
+        $this->getEntityManager()->beginTransaction();
         try {
             if (!$entity->getIntervenant() && $intervenant = $role->getIntervenant()) {
                 $entity->setIntervenant($intervenant);
@@ -284,9 +284,9 @@ class ServiceReferentielService extends AbstractEntityService
                     $serviceVolumeHoraire->save($volumeHoraire);
                 }
             }
-            $this->getEntityManager()->getConnection()->commit();
+            $this->getEntityManager()->commit();
         } catch (Exception $e) {
-            $this->getEntityManager()->getConnection()->rollBack();
+            $this->getEntityManager()->rollBack();
             throw $e;
         }
 

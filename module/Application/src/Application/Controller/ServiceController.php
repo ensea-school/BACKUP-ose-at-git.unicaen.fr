@@ -506,12 +506,12 @@ class ServiceController extends AbstractController
                     $this->getProcessusPlafond()->beginTransaction();
                     try {
                         $entity = $service->save($entity);
-                        $this->updateTableauxBord($entity->getIntervenant());
                         $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                     } catch (\Exception $e) {
                         $this->flashMessenger()->addErrorMessage($this->translate($e));
                     }
                     $this->getProcessusPlafond()->endTransaction($entity->getIntervenant(), $typeVolumeHoraire);
+                    $this->updateTableauxBord($entity->getIntervenant());
                 }
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');

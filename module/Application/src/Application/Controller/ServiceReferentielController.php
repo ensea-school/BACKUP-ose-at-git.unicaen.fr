@@ -151,12 +151,12 @@ class ServiceReferentielController extends AbstractController
                 try {
                     $entity->setIntervenant($intervenant); // car après $form->isValid(), $entity->getIntervenant() === null
                     $entity = $service->save($entity);
-                    $this->updateTableauxBord($intervenant);
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
                 }
                 $this->getProcessusPlafond()->endTransaction($intervenant, $typeVolumeHoraire);
+                $this->updateTableauxBord($intervenant);
             } else {
                 $this->flashMessenger()->addErrorMessage('La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.');
             }

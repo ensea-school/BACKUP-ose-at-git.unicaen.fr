@@ -11,6 +11,8 @@ author: Laurent Lécluse - DSI - Unicaen
 * Les services réalisés peuvent maintenant être initialisés à partir de volumers horaires auto-validés en plus e ceux qui ont été validés manuellement.
 * Le référentiel peut être saisi même pour un intervenant d'une autre composante si l'enseignement est dans la composante du gestionnaire
 * L'utilisateur OSE était mentionné partout comme modificateur au lieu de l'utilisateur courant. C'est rétabli.
+* La création d'un nouveau projet de contrat ne calculait pas les heures HETD avec la formule. C'est maintenant automatique. 
+* Depuis quelques temps, les plafonds bloquants fonctionnaient comme des plafonds informatifs. C'est corrigé.
 
 # OSE 8.2.2
 

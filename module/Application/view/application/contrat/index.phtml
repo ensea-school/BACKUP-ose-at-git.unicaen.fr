@@ -73,7 +73,7 @@ if ($services['non-contractualises']) {
                                 projet <?= $hasContrat ? 'd\'avenant' : 'de contrat' ?>
                             </a>
                         <?php else:
-                            echo $this->feuillederoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
+                            echo $this->feuilleDeRoute($intervenant)->renderWhyNonAtteignable(\Application\Entity\Db\WfEtape::CODE_CONTRAT, $structure);
                         endif; ?>
                         <p>
                             Enseignements (validés) non contractualisés :<br/>
@@ -105,7 +105,7 @@ if ($services['non-contractualises']) {
 <?php endif; ?>
 
 <hr/>
-<?= $this->feuillederoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
+<?= $this->feuilleDeRoute($intervenant)->renderNav(\Application\Entity\Db\WfEtape::CODE_CONTRAT); ?>
 
 <script>
     $("body").on("event-contrat-suppr event-contrat-validation event-validation-suppr event-saisie-retour-suppr", function (event, data)

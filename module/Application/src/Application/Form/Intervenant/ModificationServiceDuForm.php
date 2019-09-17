@@ -20,7 +20,7 @@ class ModificationServiceDuForm extends AbstractForm {
     {
         $this   ->setAttribute('method', 'post')
             ->setAttribute('class', 'modification-service-du')
-            ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
+            ->setHydrator(new \Zend\Hydrator\ClassMethods(false))
             ->setInputFilter(new \Zend\InputFilter\InputFilter())
         ;
 

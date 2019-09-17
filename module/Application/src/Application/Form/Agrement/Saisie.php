@@ -4,7 +4,7 @@ namespace Application\Form\Agrement;
 
 use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Hydrator\ClassMethods;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 
 /**

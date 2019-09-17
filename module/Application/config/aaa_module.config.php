@@ -170,9 +170,10 @@ $config = [
     ],
     'view_helpers'       => [
         'factories'  => [
-            'userProfileSelectRadioItem' => View\Helper\UserProfileSelectRadioItemFactory::class,
-            'appLink'                    => View\Helper\AppLinkFactory::class,
-            'userCurrent'                => View\Helper\UserCurrentFactory::class,
+            'userProfileSelectRadioItem'          => View\Helper\UserProfileSelectRadioItemFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
+
+            'userCurrent' => View\Helper\UserCurrentFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,

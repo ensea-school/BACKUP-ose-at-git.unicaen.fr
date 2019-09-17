@@ -5,7 +5,6 @@ namespace Application\View\Helper;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Console\Console;
-use Zend\Mvc\Router\RouteMatch;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 
@@ -32,7 +31,7 @@ class AppLinkFactory implements FactoryInterface
         $helper->setAnnees($this->getServiceAnnee()->getChoixAnnees());
         $helper->setAnnee($this->getServiceContext()->getAnnee());
 
-        if ($match instanceof RouteMatch) {
+        if ($match instanceof \Zend\Router\RouteMatch) {
             $helper->setRouteMatch($match);
         }
 

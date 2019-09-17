@@ -3,14 +3,13 @@
 namespace Application\Controller\Plugin;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of ContextFactory
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ContextFactory implements FactoryInterface
+class ContextFactory
 {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

@@ -4,7 +4,7 @@
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $sl         \Interop\Container\ContainerInterface
  */
 
 $data = "2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	20						22,88	0	0		7,12	0	0	0	

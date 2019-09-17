@@ -23,8 +23,6 @@ class PlafondApplicationFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $container = $container->getServiceLocator();
-
         $form = new PlafondApplicationForm;
 
         return $form;

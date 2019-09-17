@@ -6,13 +6,12 @@ use Interop\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  *
  *
  */
-class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory implements FactoryInterface
+class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
 {
     use ContextServiceAwareTrait;
     use StructureServiceAwareTrait;

@@ -53,7 +53,7 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'TextArea',
+            'type'       => 'Textarea',
             'name'       => 'csv-params',
             'options'    => [
                 'label' => "Paramètres d'export CSV (format JSON)",
@@ -65,7 +65,7 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'TextArea',
+            'type'       => 'Textarea',
             'name'       => 'pdf-traitement',
             'options'    => [
                 'label' => "Traitement des données",
@@ -102,7 +102,7 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'TextArea',
+            'type'       => 'Textarea',
             'name'       => 'requete',
             'options'    => [
                 'label' => "Requête SQL",
@@ -142,7 +142,7 @@ class EtatSortieForm extends AbstractForm
             ]);
 
             $this->add([
-                'type'       => 'TextArea',
+                'type'       => 'Textarea',
                 'name'       => "bloc-$i-requete",
                 'options'    => [
                     'label' => "Requête générale",

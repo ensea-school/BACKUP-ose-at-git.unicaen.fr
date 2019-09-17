@@ -16,7 +16,7 @@ use UnicaenCode\Util;
 <?php
 
 $form   = new \Zend\Form\Form();
-$em     = $controller->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+$em     = $controller->get('Doctrine\ORM\EntityManager');
 $conn   = $em->getConnection();
 $sm     = $conn->getSchemaManager();
 $tables = $sm->listTableNames();

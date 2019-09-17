@@ -3,13 +3,12 @@
 namespace Application\View\Helper\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of ListeFactory
  *
  */
-class ListeFactory implements FactoryInterface
+class ListeFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

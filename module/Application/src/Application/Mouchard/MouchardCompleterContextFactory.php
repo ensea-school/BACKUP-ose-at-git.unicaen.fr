@@ -3,14 +3,13 @@
 namespace Application\Mouchard;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of MouchardCompleterContextFactory
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MouchardCompleterContextFactory implements FactoryInterface
+class MouchardCompleterContextFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

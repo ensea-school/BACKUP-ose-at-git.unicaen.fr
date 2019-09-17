@@ -156,7 +156,6 @@ $config = [
             ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [
-            'navigation'                              => Service\NavigationFactoryFactory::class,
             Provider\Role\RoleProvider::class         => Provider\Role\RoleProviderFactory::class,
             Provider\Identity\IdentityProvider::class => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class             => Service\Factory\ContextServiceFactory::class,
@@ -170,8 +169,8 @@ $config = [
     ],
     'view_helpers'       => [
         'factories'  => [
-            'userProfileSelectRadioItem'          => View\Helper\UserProfileSelectRadioItemFactory::class,
-            \UnicaenApp\View\Helper\AppLink::class => View\Helper\AppLinkFactory::class,
+            \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
 
             'userCurrent' => View\Helper\UserCurrentFactory::class,
         ],

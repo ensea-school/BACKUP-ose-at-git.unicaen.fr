@@ -4,13 +4,12 @@ namespace Application\View\Helper;
 
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of UserCurrentFactory
  *
  */
-class UserCurrentFactory implements FactoryInterface
+class UserCurrentFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

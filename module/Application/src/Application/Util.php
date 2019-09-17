@@ -4,7 +4,6 @@ namespace Application;
 
 
 use UnicaenAuth\Guard\PrivilegeController;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class Util
@@ -77,11 +76,11 @@ class Util
      */
     static public function routeToControllerAction($route)
     {
-        $serviceLocator = \Application::$container;
-        if (!$serviceLocator) throw new \LogicException('Le serviceLocator n\'est pas accessible!!!');
+        $container = \Application::$container;
+        if (!$container) throw new \LogicException('Le container n\'est pas accessible!!!');
 
         if (!array_key_exists($route, self::$rcaCache)) {
-            $config = $serviceLocator->get('config');
+            $config = $container->get('config');
             $r      = ['child_routes' => $config['router']['routes']];
 
             $elements = explode('/', $route);
@@ -139,53 +138,4 @@ class Util
         return PrivilegeController::getResourceId($controller, $action);
     }
 
-
-
-    static public function injectFromTraits(ServiceLocatorInterface $servicelocator, $object)
-    {
-        $managers = [
-            'FormElementManager',
-            'ViewHelperManager',
-            'HydratorManager',
-            'ControllerManager',
-            'ControllerPluginManager',
-            'FilterManager',
-            'InputFilterManager',
-            'RoutePluginManager',
-            'SerializerAdapterManager',
-            'ValidatorManager',
-        ];
-
-        $rc     = new \ReflectionClass($object);
-        $traits = $rc->getTraits();
-
-        foreach ($traits as $t) {
-            if ('AwareTrait' === substr($t->getName(), -strlen('AwareTrait'))) {
-                $methods = $t->getMethods();
-                foreach ($methods as $m) {
-                    $method = $m->getName();
-                    if (0 === strpos($method, 'set')) {
-                        $parameter = $m->getParameters()[0];
-                        $class     = $parameter->getClass();
-                        if ($class) {
-                            $className = $class->getName();
-                            if ($servicelocator->has($className)) {
-                                $object->$method($servicelocator->get($className));
-                            } else {
-                                foreach ($managers as $manager) {
-                                    if ($servicelocator->has($manager)) {
-                                        $ssl = $servicelocator->get($manager);
-                                        if ($ssl->has($className)) {
-                                            $object->$method($ssl->get($className));
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

@@ -3,7 +3,7 @@
 namespace Application\Cache\Factory;
 
 use Application\Cache\CacheService;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 
 
 

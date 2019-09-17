@@ -10,9 +10,9 @@
 namespace Application;
 
 use Application\Service\ContextService;
+use Interop\Container\ContainerInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
@@ -89,15 +89,15 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
 
 
-    private function getEntityService(ServiceLocatorInterface $serviceLocator, $paramName)
+    private function getEntityService(ContainerInterface $container, $paramName)
     {
         if ('typeAgrementCode' === $paramName) {
             $paramName = 'typeAgrement';
         }
 
         $serviceName = 'Application\\Service\\' . ucfirst($paramName) . 'Service';
-        if ($serviceLocator->has($serviceName)) {
-            return $serviceLocator->get($serviceName);
+        if ($container->has($serviceName)) {
+            return $container->get($serviceName);
         }
 
         return null;

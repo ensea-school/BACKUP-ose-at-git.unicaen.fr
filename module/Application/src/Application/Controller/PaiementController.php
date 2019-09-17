@@ -27,7 +27,6 @@ use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Zend\Json\Json;
-use UnicaenApp\Exporter\Pdf;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 
@@ -394,7 +393,7 @@ class PaiementController extends AbstractController
                 $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement($recherche);
             }
 
-            return compact('recherche', 'rechercheForm', 'etatPaiement', 'etat', 'noData');
+            return compact('recherche', 'rechercheForm', 'etatPaiement', 'noData');
         }
     }
 

@@ -5,9 +5,8 @@ namespace Application\Service\Factory;
 use Application\Service\SeuilChargeService;
 use Interop\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
-class SeuilChargeServiceFactory implements FactoryInterface
+class SeuilChargeServiceFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

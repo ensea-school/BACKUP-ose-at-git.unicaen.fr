@@ -4,7 +4,7 @@
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $sl         \Interop\Container\ContainerInterface
  */
 
 use Application\Entity\Db\Fichier;

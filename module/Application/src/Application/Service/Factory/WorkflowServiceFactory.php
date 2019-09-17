@@ -6,9 +6,8 @@ use Application\Service\WorkflowService;
 use Interop\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\Console\Console;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
-class WorkflowServiceFactory implements FactoryInterface
+class WorkflowServiceFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

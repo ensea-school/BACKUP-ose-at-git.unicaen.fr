@@ -7,7 +7,7 @@
 class Application
 {
     /**
-     * @var Zend\ServiceManager\ServiceLocatorInterface
+     * @var Interop\Container\ContainerInterface
      */
     public static $container;
 

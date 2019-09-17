@@ -3,7 +3,6 @@
 namespace Application\View\Helper;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Console\Console;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;
@@ -13,7 +12,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class AppLinkFactory implements FactoryInterface
+class AppLinkFactory
 {
     use ContextServiceAwareTrait;
     use AnneeServiceAwareTrait;

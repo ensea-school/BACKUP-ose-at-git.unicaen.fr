@@ -7,14 +7,13 @@ use Application\Service\TypeHeuresService;
 use Interop\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\Console\Console;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ChargensProviderFactory implements FactoryInterface
+class ChargensProviderFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

@@ -7,14 +7,13 @@ use Application\Service\StatutIntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RoleProviderFactory implements FactoryInterface
+class RoleProviderFactory
 {
     use ContextServiceAwareTrait;
 

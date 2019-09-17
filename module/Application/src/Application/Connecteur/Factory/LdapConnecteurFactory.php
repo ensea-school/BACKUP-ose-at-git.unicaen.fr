@@ -3,7 +3,7 @@
 namespace Application\Connecteur\Factory;
 
 use Application\Connecteur\LdapConnecteur;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 
 
 /**

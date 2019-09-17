@@ -3,7 +3,7 @@
 namespace <namespace>;
 
 use Application\Constants;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use <targetFullClass>;
 
 

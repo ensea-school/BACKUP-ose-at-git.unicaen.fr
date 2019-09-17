@@ -5,14 +5,13 @@ namespace Application\Processus\Factory;
 
 use Application\Processus\IntervenantProcessus;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class IntervenantProcessusFactory implements FactoryInterface
+class IntervenantProcessusFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

@@ -13,6 +13,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * L'utilisateur OSE était mentionné partout comme modificateur au lieu de l'utilisateur courant. C'est rétabli.
 * La création d'un nouveau projet de contrat ne calculait pas les heures HETD avec la formule. C'est maintenant automatique. 
 * Depuis quelques temps, les plafonds bloquants fonctionnaient comme des plafonds informatifs. C'est corrigé.
+* La séquence FORMULE_RESULTAT_SERVIC_ID_SEQ se met maintenant correctement à jour (avant, cela entrainait de nombreux bugs, car la formule des HC ne se calculait plus après une mise à jour)
 
 # OSE 8.2.2
 

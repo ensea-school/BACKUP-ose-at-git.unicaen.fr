@@ -1,19 +1,26 @@
 <?php
 
-$bdd    = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
-$oa->setBdd($bdd);
-$bdd->debug = true;
-/* Insertion des données */
-$dataGen = new DataGen($oa);
+$bdd    = new \BddAdmin\Bdd(Config::get('bdds', 'dev-local'));
+$schema = new \BddAdmin\Schema($bdd);
 
-$table = null;
-$table = 'PRIVILEGE';
+/* Récupération du schéma de référence */
+$ref = $schema->loadFromFile($oa->getOseDir() . 'data/ddl.php');
 
-//$bdd->getTable($table)->delete();
 
-$dataGen->install($table);
-
-if ($table) {
-    $r = $oa->getBdd()->getTable($table)->select();
-    var_dump(count($r));
+/* Construction de la config de DDL pour filtrer */
+$ddlConfig = require $oa->getOseDir() . 'data/ddl_config.php';
+foreach ($ref as $ddlClass => $objects) {
+    foreach ($objects as $object => $objectDdl) {
+        $ddlConfig[$ddlClass]['includes'][] = $object;
+    }
 }
+
+/* Mise en place du logging en mode console */
+$scl          = new \BddAdmin\SchemaConsoleLogger();
+$scl->console = $c;
+$schema->setLogger($scl);
+
+$res = $schema->majSequences($ref, false);
+
+echo implode( "\n\n/\n\n", array_keys($res['BddAdmin\Ddl\DdlTable.majSequences']));
+

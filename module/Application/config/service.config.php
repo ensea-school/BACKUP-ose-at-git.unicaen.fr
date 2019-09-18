@@ -502,7 +502,7 @@ return [
             'serviceSaisieForm'            => View\Helper\Service\SaisieForm::class,
             'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,
             'serviceResume'                => View\Helper\Service\Resume::class,
-            'FonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
+            'fonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
         ],
         'factories'  => [
             'serviceListe'            => View\Helper\Service\ListeFactory::class,

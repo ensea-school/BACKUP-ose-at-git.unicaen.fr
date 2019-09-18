@@ -125,6 +125,10 @@
     array (
       'name' => 'FORMULE_RESULTAT_ID_SEQ',
     ),
+    'FORMULE_RESULTAT_SERREF_ID_SEQ' => 
+    array (
+      'name' => 'FORMULE_RESULTAT_SERREF_ID_SEQ',
+    ),
     'FORMULE_RESULTAT_SERVIC_ID_SEQ' => 
     array (
       'name' => 'FORMULE_RESULTAT_SERVIC_ID_SEQ',
@@ -5618,8 +5622,8 @@
       'name' => 'FORMULE_RESULTAT_SERVICE_REF',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
-      'sequence' => 'FORMULE_RESULTAT_SERVIC_ID_SEQ',
+      'commentaire' => 'sequence=FORMULE_RESULTAT_SERREF_ID_SEQ;',
+      'sequence' => 'FORMULE_RESULTAT_SERREF_ID_SEQ',
       'columns' => 
       array (
         'ID' => 

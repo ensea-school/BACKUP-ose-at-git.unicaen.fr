@@ -31283,7 +31283,7 @@ SELECT
 SELECT DISTINCT
   s.annee_id annee_id,
   s.intervenant_id intervenant_id,
-  s.structure_id structure_id
+  s.intervenant_structure_id structure_id
 FROM
   tbl_service s
 WHERE

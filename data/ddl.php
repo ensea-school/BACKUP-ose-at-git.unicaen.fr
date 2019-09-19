@@ -22255,7 +22255,8 @@ END FORMULE_ULHN;',
         IF i.service_du = 0 THEN
           -- SI(L22<0;L22;SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22))
           IF cell(\'l\',l) < 0 THEN
-            RETURN cell(\'l\',l);
+            --RETURN cell(\'l\',l); -- pas bon
+            RETURN cell(\'l\',l) / cell(\'j\',l); -- modif du 17/06/2019
           ELSE
             -- SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22)
             IF cell(\'t\',l) + cell(\'l\',l) < i.service_du THEN

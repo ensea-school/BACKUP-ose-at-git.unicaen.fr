@@ -3,7 +3,6 @@
 namespace Application\Assertion;
 
 use Application\Acl\Role;
-use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Assertion\AbstractAssertion;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 

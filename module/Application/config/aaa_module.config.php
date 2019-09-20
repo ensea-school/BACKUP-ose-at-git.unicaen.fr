@@ -156,6 +156,7 @@ $config = [
             ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [
+            \Zend\Navigation\Navigation::class        => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class         => Provider\Role\RoleProviderFactory::class,
             Provider\Identity\IdentityProvider::class => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class             => Service\Factory\ContextServiceFactory::class,

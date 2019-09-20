@@ -9,10 +9,10 @@
     ],
     "require"     : {
         "php"                    : ">=7.2",
-        "unicaen/app"            : "dev-zf-3.x",
-        "unicaen/auth"           : "dev-zf-3.x",
+        "unicaen/app"            : "3.0.1",
+        "unicaen/auth"           : "3.0.1",
         "zendframework/zend-code": "3.3.2",
-        "unicaen/bjy-authorize"  : "dev-zf-3.x",
+        "unicaen/bjy-authorize"  : "3.0.0",
         "zendframework/zend-file": "2.8.3",
         "unicaen/code"           : "1.1.8",
         "unicaen/import"         : "dev-zf-3.x",

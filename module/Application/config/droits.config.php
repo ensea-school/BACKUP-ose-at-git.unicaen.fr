@@ -228,8 +228,10 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories' => [
+            'UnicaenAuth\Form\Droits\Role' => Form\Droits\RoleFormFactory::class,
+        ],
         'invokables' => [
-            Form\Droits\RoleForm::class        => Form\Droits\RoleForm::class,
             Form\Droits\AffectationForm::class => Form\Droits\AffectationForm::class,
         ],
     ],

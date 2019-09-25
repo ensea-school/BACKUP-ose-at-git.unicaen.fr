@@ -1,12 +1,14 @@
 <?php
 // Assume that all external field ended by _ID
-use UnicaenCode\Form\ElementMaker;
+use UnicaenCode\Form\ElementMakerForm;
 use UnicaenCode\Util;
 
 /**
- * @var $this       \Zend\View\Renderer\PhpRenderer
+ * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
+ * @var $viewFile   string
  */
 
 ?>
@@ -56,15 +58,15 @@ $form->add([
 ]);
 $form->get('Origine')->setValue('/var/www/OSE/');
 
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'classe-privilege', 'Privilège existant ?', true
 ));
 
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'non-remplacement', 'Ne pas générer fichier déjà existant ?', true
 ));
 
-$form->add(ElementMaker::submit('generate', 'Générer le code'));
+$form->add(ElementMakerForm::submit('generate', 'Générer le code'));
 
 $form->setData($controller->getRequest()->getPost());
 

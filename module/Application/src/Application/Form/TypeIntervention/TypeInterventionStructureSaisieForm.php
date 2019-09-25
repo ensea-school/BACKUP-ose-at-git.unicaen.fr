@@ -93,7 +93,7 @@ class TypeInterventionStructureSaisieForm extends AbstractForm
         $role             = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByEnseignement();
-        if ($role->getStructure()) {
+        if ($role && $role->getStructure()) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }
         $this->get('structure')

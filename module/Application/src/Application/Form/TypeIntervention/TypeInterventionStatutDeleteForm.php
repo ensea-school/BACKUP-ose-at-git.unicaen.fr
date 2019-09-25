@@ -3,12 +3,9 @@
 namespace Application\Form\TypeIntervention;
 
 use Application\Form\AbstractForm;
-use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Hydrator\HydratorInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 
@@ -46,8 +43,8 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
-        $this->get('statut-intervenant')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getList($this->getServiceStatutIntervenant()->finderByHistorique())));
+//        $this->get('statut-intervenant')
+//            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStatutIntervenant()->getList($this->getServiceStatutIntervenant()->finderByHistorique())));
 
         return $this;
     }
@@ -63,9 +60,9 @@ class TypeInterventionStatutDeleteForm extends AbstractForm
     public function getInputFilterSpecification()
     {
         return [
-            'statut-intervenant' => [
-                'required' => true,
-            ],
+//            'statut-intervenant' => [
+//                'required' => true,
+//            ],
             'taux-hetd-service' => [
                 'required' => true,
                 'validators' => [

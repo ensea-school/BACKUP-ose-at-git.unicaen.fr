@@ -28,7 +28,9 @@ class AffectationForm extends AbstractForm
 
     public function init()
     {
-        $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $structure = $role ? $role->getStructure() : null;
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $hydrator = new AffectationFormHydrator;

@@ -14,7 +14,7 @@ class IndicateurProcessusFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $renderer = $container->get('view_manager')->getRenderer();
+        $renderer = $container->get('ViewHelperManager')->getRenderer();
         $mail     = $container->get('ControllerPluginManager')->get('mail');
 
         $processus = new IndicateurProcessus($renderer, $mail);

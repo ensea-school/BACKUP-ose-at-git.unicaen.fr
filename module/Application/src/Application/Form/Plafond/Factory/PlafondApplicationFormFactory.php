@@ -2,7 +2,7 @@
 
 namespace Application\Form\Plafond\Factory;
 
-use Zend\Form\FormElementManager as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Form\Plafond\PlafondApplicationForm;
 
 

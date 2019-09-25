@@ -64,7 +64,9 @@ class SaisieFieldset extends AbstractFieldset implements EntityManagerAwareInter
             'type' => 'Hidden',
         ]);
 
-        if (!$this->getServiceContext()->getSelectedIdentityRole()->getIntervenant()) {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        if (!($role && $role->getIntervenant())) {
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant->setRequired(true)
                 ->setSelectionRequired(true)

@@ -5,7 +5,8 @@ namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenAuth\Entity\Db\Privilege;
-use Zend\Permissions\Acl\Role\RoleInterface;
+use UnicaenAuth\Entity\Db\RoleInterface;
+use UnicaenAuth\Entity\Db\UserInterface;
 
 /**
  * Role
@@ -308,4 +309,75 @@ class Role implements HistoriqueAwareInterface, RoleInterface
             return false;
         }
     }
+
+
+
+    public function setId($id)
+    {
+        // TODO: Implement setId() method.
+    }
+
+
+
+    public function setRoleId($roleId)
+    {
+        // TODO: Implement setRoleId() method.
+    }
+
+
+
+    public function getIsDefault()
+    {
+        // TODO: Implement getIsDefault() method.
+    }
+
+
+
+    public function setIsDefault($isDefault)
+    {
+        // TODO: Implement setIsDefault() method.
+    }
+
+
+
+    public function getParent()
+    {
+        // TODO: Implement getParent() method.
+    }
+
+
+
+    public function setParent(RoleInterface $parent = null)
+    {
+        // TODO: Implement setParent() method.
+    }
+
+
+
+    public function getLdapFilter()
+    {
+        // TODO: Implement getLdapFilter() method.
+    }
+
+
+
+    public function setLdapFilter($ldapFilter)
+    {
+        // TODO: Implement setLdapFilter() method.
+    }
+
+
+
+    public function getUsers()
+    {
+        // TODO: Implement getUsers() method.
+    }
+
+
+
+    public function addUser(UserInterface $user)
+    {
+        // TODO: Implement addUser() method.
+    }
+
 }

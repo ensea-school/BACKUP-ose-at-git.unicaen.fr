@@ -26,7 +26,7 @@ $settings = [
      * - 'role_entity_class'      : 'UnicaenAuth\Entity\Db\Role'
      * - 'privilege_entity_class' : 'UnicaenAuth\Entity\Db\Privilege'
      */
-    'role_entity_class'      => 'UnicaenAuth\Entity\Db\Role',
+    'role_entity_class'      => 'Application\Entity\Db\Role',
     'privilege_entity_class' => 'UnicaenAuth\Entity\Db\Privilege',
 
     /**

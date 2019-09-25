@@ -2391,9 +2391,9 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "UnicaenCode": "src/",
-                    "UnicaenCodeTest": "tests/"
+                "psr-4": {
+                    "UnicaenCode\\": "src/",
+                    "UnicaenCodeTest\\": "tests/"
                 },
                 "classmap": [
                     "./Module.php"

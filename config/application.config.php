@@ -103,7 +103,7 @@ class AppConfig
         }
 
         if ('dev' == $env) {
-            //$modules[] = 'ZendDeveloperTools';
+            $modules[] = 'ZendDeveloperTools';
         }
 
         if (self::inConsole() || 'dev' == $env){

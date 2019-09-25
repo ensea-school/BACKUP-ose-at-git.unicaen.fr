@@ -79,11 +79,11 @@ class Application
         $serviceManager->get('ModuleManager')->loadModules();
 
         // Prepare list of listeners to bootstrap
-        $listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
-        $config                     = $serviceManager->get('config');
-        $listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
+        //$listenersFromAppConfig     = isset($configuration['listeners']) ? $configuration['listeners'] : [];
+        //$config                     = $serviceManager->get('config');
+        //$listenersFromConfigService = isset($config['listeners']) ? $config['listeners'] : [];
 
-        $listeners = array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
+        $listeners = [];//array_unique(array_merge($listenersFromConfigService, $listenersFromAppConfig));
 
         $serviceManager->get('Application')->bootstrap($listeners)->run();
     }

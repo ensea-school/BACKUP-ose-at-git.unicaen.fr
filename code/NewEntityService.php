@@ -31,7 +31,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
 
     $entity = $form->get('entity')->getValue();
 
-    $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
+    $sCodeGenerator = Util::codeGenerator();
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
     $params = $sCodeGenerator->generateServiceParams([

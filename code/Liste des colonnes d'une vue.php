@@ -176,7 +176,7 @@ END;
 
 
 $lcv = new Lcv;
-$lcv->setEntityManager($sl->get('Doctrine\ORM\EntityManager'));
+$lcv->setEntityManager($container->get('Doctrine\ORM\EntityManager'));
 $lcv->setView($view);
 
 echo '<pre>' . $lcv->generateTblTriggers($tblKey) . '</pre>';

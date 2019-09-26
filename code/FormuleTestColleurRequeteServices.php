@@ -84,9 +84,9 @@ $data = explode("\n", $data);
     <?php
 
     /** @var \Doctrine\ORM\EntityManager $bdd */
-    $bdd = $sl->get(\Application\Constants::BDD);
+    $bdd = $container->get(\Application\Constants::BDD);
     /** @var \Application\Service\FormuleTestIntervenantService $ftiService */
-    $ftiService = $sl->get(\Application\Service\FormuleTestIntervenantService::class);
+    $ftiService = $container->get(\Application\Service\FormuleTestIntervenantService::class);
 
     $fti = null;
     foreach ($data as $l) {
@@ -152,7 +152,7 @@ $data = explode("\n", $data);
             $heuresComplReferentiel = isset($c[37]) ? stringToFloat($c[37]) : null;
 
             // Traitement et affichage
-            $composante = $sl->get(\Application\Constants::BDD)->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find($composante);
+            $composante = $container->get(\Application\Constants::BDD)->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find($composante);
             if ($debug) {
                 $c = '<pre>' . var_export($c, true) . '</pre>';
             } else {

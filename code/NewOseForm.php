@@ -53,7 +53,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
     $type              = $form->get('type')->getValue();
     $classname         = $form->get('classname')->getValue();
 
-    $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
+    $sCodeGenerator = Util::codeGenerator()
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
     $params = $sCodeGenerator->generateFormParams([

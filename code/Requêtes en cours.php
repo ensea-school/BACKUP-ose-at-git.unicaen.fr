@@ -10,7 +10,7 @@
 
 
 $bdd = new \Application\Connecteur\Bdd\BddConnecteur();
-$bdd->setEntityManager($sl->get(\Application\Constants::BDD));
+$bdd->setEntityManager($container->get(\Application\Constants::BDD));
 
 
 $sql = "

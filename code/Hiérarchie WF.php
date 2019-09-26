@@ -10,7 +10,7 @@
 
 use Application\Constants;
 
-$em = $sl->get(Constants::BDD);
+$em = $container->get(Constants::BDD);
 /* @var $em \Doctrine\ORM\EntityManager */
 
 

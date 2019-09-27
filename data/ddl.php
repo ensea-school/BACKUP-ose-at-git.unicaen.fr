@@ -125,6 +125,10 @@
     array (
       'name' => 'FORMULE_RESULTAT_ID_SEQ',
     ),
+    'FORMULE_RESULTAT_SERREF_ID_SEQ' => 
+    array (
+      'name' => 'FORMULE_RESULTAT_SERREF_ID_SEQ',
+    ),
     'FORMULE_RESULTAT_SERVIC_ID_SEQ' => 
     array (
       'name' => 'FORMULE_RESULTAT_SERVIC_ID_SEQ',
@@ -5618,8 +5622,8 @@
       'name' => 'FORMULE_RESULTAT_SERVICE_REF',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
-      'sequence' => 'FORMULE_RESULTAT_SERVIC_ID_SEQ',
+      'commentaire' => 'sequence=FORMULE_RESULTAT_SERREF_ID_SEQ;',
+      'sequence' => 'FORMULE_RESULTAT_SERREF_ID_SEQ',
       'columns' => 
       array (
         'ID' => 
@@ -22251,7 +22255,8 @@ END FORMULE_ULHN;',
         IF i.service_du = 0 THEN
           -- SI(L22<0;L22;SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22))
           IF cell(\'l\',l) < 0 THEN
-            RETURN cell(\'l\',l);
+            --RETURN cell(\'l\',l); -- pas bon
+            RETURN cell(\'l\',l) / cell(\'j\',l); -- modif du 17/06/2019
           ELSE
             -- SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22)
             IF cell(\'t\',l) + cell(\'l\',l) < i.service_du THEN
@@ -31278,7 +31283,7 @@ SELECT
 SELECT DISTINCT
   s.annee_id annee_id,
   s.intervenant_id intervenant_id,
-  s.structure_id structure_id
+  s.intervenant_structure_id structure_id
 FROM
   tbl_service s
 WHERE

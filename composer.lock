@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07c1db1ff2d833a6c299cc94a907b06a",
+    "content-hash": "2336700f6f9187cc7797e01d469b995c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -925,16 +925,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.6.3",
+            "version": "v2.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "434820973cadf2da2d66e7184be370084cc32ca8"
+                "reference": "b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/434820973cadf2da2d66e7184be370084cc32ca8",
-                "reference": "434820973cadf2da2d66e7184be370084cc32ca8",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43",
+                "reference": "b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43",
                 "shasum": ""
             },
             "require": {
@@ -949,9 +949,8 @@
                 "symfony/console": "~3.0|~4.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^1.0",
-                "phpunit/phpunit": "^6.5",
-                "squizlabs/php_codesniffer": "^3.2",
+                "doctrine/coding-standard": "^5.0",
+                "phpunit/phpunit": "^7.5",
                 "symfony/yaml": "~3.4|~4.0"
             },
             "suggest": {
@@ -977,16 +976,16 @@
             ],
             "authors": [
                 {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
                 },
                 {
                     "name": "Jonathan Wage",
@@ -1003,7 +1002,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2018-11-20T23:46:46+00:00"
+            "time": "2019-09-20T14:30:26+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2222,11 +2221,11 @@
         },
         {
             "name": "unicaen/app",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/app.git",
-                "reference": "6557c436dbee769ecf289ba1c8330846da604e27"
+                "reference": "6daaa57c924d4396557e9487b3d8c7f431a58371"
             },
             "require": {
                 "beberlei/assert": "^2.9",
@@ -2282,15 +2281,15 @@
                 ]
             },
             "description": "Module de base des applications unicaen",
-            "time": "2019-09-19T12:48:35+00:00"
+            "time": "2019-09-27T13:37:16+00:00"
         },
         {
             "name": "unicaen/auth",
-            "version": "3.0.1",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "433bbe5a7d3f5089cfc390ea5cbef90b9a56186e"
+                "reference": "613dbe9f3a0a1770f70f3b3def19deddf0f8cf7b"
             },
             "require": {
                 "jasig/phpcas": "^1.3",
@@ -2313,7 +2312,7 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2019-09-18T12:02:04+00:00"
+            "time": "2019-09-24T12:36:44+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
@@ -2378,11 +2377,11 @@
         },
         {
             "name": "unicaen/code",
-            "version": "1.1.8",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/code.git",
-                "reference": "826f8e426dcf3c4e6caa378a0b3289a34a3c8367"
+                "reference": "7b6706ba1902efc647bf5386f9e3012d0e9140c0"
             },
             "require": {
                 "doctrine/dbal": "^2.5",
@@ -2400,15 +2399,15 @@
                 ]
             },
             "description": "Boite à outils pour la programmation avec la bibliothèque Unicaen",
-            "time": "2019-05-29T14:18:55+00:00"
+            "time": "2019-09-26T09:57:21+00:00"
         },
         {
             "name": "unicaen/import",
-            "version": "dev-zf-3.x",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/import.git",
-                "reference": "785eeb12616704eb25a8918ac258a98c4631f02e"
+                "reference": "5c1d5f7f0ad0af0bb94347eba23eb446695cca92"
             },
             "require": {
                 "unicaen/auth": "dev-zf-3.x || ^3.0",
@@ -2428,15 +2427,15 @@
                 ]
             },
             "description": "Module d'import de données vers une base Oracle",
-            "time": "2019-09-19T12:28:26+00:00"
+            "time": "2019-09-27T13:46:53+00:00"
         },
         {
             "name": "unicaen/open-document",
-            "version": "1.7",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "861f45e9a8595503d9960a41b4d4ca42ab728a9e"
+                "reference": "1341df76ea141070215e925964a55365451f496c"
             },
             "type": "library",
             "autoload": {
@@ -2448,7 +2447,7 @@
                 ]
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2019-01-30T13:12:58+00:00"
+            "time": "2019-02-08T08:37:33+00:00"
         },
         {
             "name": "unicaen/oracle",
@@ -2480,11 +2479,11 @@
         },
         {
             "name": "unicaen/tbl",
-            "version": "dev-zf-3.x",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/tbl.git",
-                "reference": "22c73eeed0b38b383cdb15e2b5542797db46ddf6"
+                "reference": "5accc8ba818189260cf5e4b89e23b940cac68958"
             },
             "require": {
                 "unicaen/app": "^3.0"
@@ -2503,7 +2502,7 @@
                 ]
             },
             "description": "Module Unicaen de gestion de tableaux de bord Oracle",
-            "time": "2019-09-20T08:56:49+00:00"
+            "time": "2019-09-27T13:51:09+00:00"
         },
         {
             "name": "zendframework/zend-authentication",
@@ -3471,16 +3470,16 @@
         },
         {
             "name": "zendframework/zend-i18n",
-            "version": "2.9.0",
+            "version": "2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-i18n.git",
-                "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f"
+                "reference": "9233ee8553564a6e45e8311a7173734ba4e5db9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
-                "reference": "6d69af5a04e1a4de7250043cb1322f077a0cdb7f",
+                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/9233ee8553564a6e45e8311a7173734ba4e5db9b",
+                "reference": "9233ee8553564a6e45e8311a7173734ba4e5db9b",
                 "shasum": ""
             },
             "require": {
@@ -3488,7 +3487,7 @@
                 "zendframework/zend-stdlib": "^2.7 || ^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.16",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-config": "^2.6",
@@ -3535,7 +3534,7 @@
                 "i18n",
                 "zf"
             ],
-            "time": "2018-05-16T16:39:13+00:00"
+            "time": "2019-09-26T11:54:57+00:00"
         },
         {
             "name": "zendframework/zend-i18n-resources",
@@ -4883,28 +4882,28 @@
         },
         {
             "name": "zendframework/zend-session",
-            "version": "2.8.7",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-session.git",
-                "reference": "8fd50220888167d08cf0113ced5b023f6da06923"
+                "reference": "0a0c7ae4d8be608e30ecff714c86164ccca19ca3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/8fd50220888167d08cf0113ced5b023f6da06923",
-                "reference": "8fd50220888167d08cf0113ced5b023f6da06923",
+                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/0a0c7ae4d8be608e30ecff714c86164ccca19ca3",
+                "reference": "0a0c7ae4d8be608e30ecff714c86164ccca19ca3",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "zendframework/zend-stdlib": "^3.2.1"
             },
             "require-dev": {
                 "container-interop/container-interop": "^1.1",
                 "mongodb/mongodb": "^1.0.1",
                 "php-mock/php-mock-phpunit": "^1.1.2 || ^2.0",
-                "phpunit/phpunit": "^5.7.5 || >=6.0.13 <6.5.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.16",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-db": "^2.7",
@@ -4923,8 +4922,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8.x-dev",
-                    "dev-develop": "2.9.x-dev"
+                    "dev-master": "2.9.x-dev",
+                    "dev-develop": "2.10.x-dev"
                 },
                 "zf": {
                     "component": "Zend\\Session",
@@ -4940,13 +4939,13 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "manage and preserve session data, a logical complement of cookie data, across multiple page requests by the same client",
+            "description": "Object-oriented interface to PHP sessions and storage",
             "keywords": [
                 "ZendFramework",
                 "session",
                 "zf"
             ],
-            "time": "2019-09-19T19:50:12+00:00"
+            "time": "2019-09-20T12:50:51+00:00"
         },
         {
             "name": "zendframework/zend-stdlib",
@@ -7222,16 +7221,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.4.2",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8"
+                "reference": "0afebf16a2e7f1e434920fa976253576151effe9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
-                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/0afebf16a2e7f1e434920fa976253576151effe9",
+                "reference": "0afebf16a2e7f1e434920fa976253576151effe9",
                 "shasum": ""
             },
             "require": {
@@ -7269,7 +7268,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-04-10T23:49:02+00:00"
+            "time": "2019-09-26T23:12:26+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -7511,8 +7510,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "unicaen/import": 20,
-        "unicaen/tbl": 20,
         "unicaen/php-compat": 20
     },
     "prefer-stable": false,

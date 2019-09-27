@@ -90,7 +90,11 @@ function DemandeMiseEnPaiement(id)
             services[sapEl.attr("id")].mep += this.misesEnPaiementListes[id].getHeuresMEP();
             services[sapEl.attr("id")].dmep += this.misesEnPaiementListes[id].getHeuresDMEP();
         }
+        totalServices = 0;
+        totalDmep = 0;
         for (var id in services) {
+            totalServices += Math.round(services[id].total * 100);
+            totalDmep += Math.round((services[id].mep + services[id].dmep) * 100);
             if (Math.round((services[id].mep + services[id].dmep) * 100) > Math.round(services[id].total * 100) && services[id].dmep > 0) {
                 this.showError(
                     this.element.find('.service-a-payer#' + id),
@@ -99,6 +103,12 @@ function DemandeMiseEnPaiement(id)
                 result = false;
             }
         }
+
+        if (totalDmep > totalServices) {
+            alert('Le nombre d\'heures demandées en paiement dépasse le nombre total d\'HETD à payer : il y en a ' + ((totalDmep - totalServices) / 100) + ' de trop');
+            result = false;
+        }
+
         return result;
     }
 
@@ -389,12 +399,12 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
                 if (Util.json.count(children) > 0) {
                     outC += '<optgroup label="' + this.params['centres-cout'][ccId]['libelle'] + '">';
                     for (var cccId in children) {
-                        outC += this.renderCentreCoutOption( this.params['centres-cout'][cccId], cccId, data['centre-cout-id'] );
+                        outC += this.renderCentreCoutOption(this.params['centres-cout'][cccId], cccId, data['centre-cout-id']);
                     }
-                    outC += this.renderCentreCoutOption( this.params['centres-cout'][ccId], ccId, data['centre-cout-id'] );
+                    outC += this.renderCentreCoutOption(this.params['centres-cout'][ccId], ccId, data['centre-cout-id']);
                     outC += '</optgroup>';
                 } else if (this.params['centres-cout'][ccId]['parent'] == null) {
-                    outC += this.renderCentreCoutOption( this.params['centres-cout'][ccId], ccId, data['centre-cout-id'] );
+                    outC += this.renderCentreCoutOption(this.params['centres-cout'][ccId], ccId, data['centre-cout-id']);
                 }
             }
             outC += '</select>';
@@ -564,7 +574,7 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
         this.element.find('.heures-non-dmep').html(Util.formattedHeures(this.params['heures-non-dmep']));
 
-        if (Math.round((this.params['heures-dmep'] + this.params['heures-mep'])*100)/100 > this.params['heures-total']) {
+        if (Math.round((this.params['heures-dmep'] + this.params['heures-mep']) * 100) / 100 > this.params['heures-total']) {
             this.element.addClass('bg-danger');
             if (0 == this.params['heures-non-dmep']) {
                 this.element.find('.heures-non-dmep').parents('tr').hide();
@@ -885,18 +895,18 @@ $.widget("ose.dmepBudget", {
 
         this.updateBlocageDepassement();
 
-        setTimeout( function(){ that.update() }, 5000);
+        setTimeout(function () { that.update() }, 5000);
     },
 
 
 
-    update: function()
+    update: function ()
     {
         var that = this;
         var updateUrl = this.element.data('update-url');
         var diffData = this.getDiffData();
 
-        data = $.getJSON( updateUrl, function(data){
+        data = $.getJSON(updateUrl, function (data) {
 
             that.getElementsEnveloppes().each(function ()
             {
@@ -906,7 +916,7 @@ $.widget("ose.dmepBudget", {
                 if (data[structureId] !== undefined && data[structureId][typeRessourceId] !== undefined) {
                     var value = data[structureId][typeRessourceId];
                     var diffVal = 0;
-                    if (diffData[structureId] !== undefined && diffData[structureId][typeRessourceId] !== undefined){
+                    if (diffData[structureId] !== undefined && diffData[structureId][typeRessourceId] !== undefined) {
                         diffVal = diffData[structureId][typeRessourceId];
                     }
 
@@ -921,7 +931,7 @@ $.widget("ose.dmepBudget", {
             that.updateBlocageDepassement();
         });
 
-        setTimeout( function(){ that.update() }, 5000);
+        setTimeout(function () { that.update() }, 5000);
     },
 
 
@@ -1010,7 +1020,7 @@ $.widget("ose.dmepBudget", {
         var usage = progress.data('usage') + value;
         var restant = dotation - usage;
         var percent = 100 - Math.round(usage * 10000 / dotation) / 100;
-        if (restant <= 0){
+        if (restant <= 0) {
             percent = 0;
         }
         if (percent < 0) percent = 0;
@@ -1035,7 +1045,7 @@ $.widget("ose.dmepBudget", {
 
 
 
-    updateBlocageDepassement: function()
+    updateBlocageDepassement: function ()
     {
         if (this.depassement) {
             $('.demande-mise-en-paiement .sauvegarde').hide();

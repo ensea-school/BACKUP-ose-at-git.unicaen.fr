@@ -24,12 +24,16 @@ include_once(__DIR__ . '/src/Application/functions.php');
 
 
 
-
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
 
     public function onBootstrap(MvcEvent $e)
     {
+        if (!class_exists('Application')){
+            include_once __DIR__.'/Application.php';
+            \Application::$container = $e->getApplication()->getServiceManager();
+        }
+
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);

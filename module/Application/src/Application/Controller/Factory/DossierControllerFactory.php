@@ -2,19 +2,17 @@
 
 namespace Application\Controller\Factory;
 
-use Application\Controller\ChargensController;
 use Application\Controller\DossierController;
 use Interop\Container\ContainerInterface;
-use Zend\Mvc\Controller\ControllerManager;
 
 class DossierControllerFactory
 {
     /**
      * Create controller
      *
-     * @param ControllerManager $controllerManager
+     * @param ContainerInterface $container
      *
-     * @return ChargensController
+     * @return DossierController
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {

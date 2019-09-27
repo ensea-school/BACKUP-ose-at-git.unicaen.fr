@@ -4,14 +4,13 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\AdministrationController;
 use Interop\Container\ContainerInterface;
-use Zend\Mvc\Controller\ControllerManager;
 
 class AdministrationControllerFactory
 {
     /**
      * Create controller
      *
-     * @param ControllerManager $controllerManager
+     * @param ContainerInterface $container
      *
      * @return AdministrationController
      */

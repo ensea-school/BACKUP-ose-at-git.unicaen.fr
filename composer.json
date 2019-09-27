@@ -9,21 +9,20 @@
     ],
     "require"     : {
         "php"                    : ">=7.2",
-        "unicaen/app"            : "3.0.1",
-        "unicaen/auth"           : "3.0.1",
+        "unicaen/app"            : "3.0.2",
+        "unicaen/auth"           : "3.0.3",
         "zendframework/zend-code": "3.3.2",
         "unicaen/bjy-authorize"  : "3.0.0",
         "zendframework/zend-file": "2.8.3",
-        "unicaen/code"           : "1.1.8",
-        "unicaen/import"         : "dev-zf-3.x",
-        "unicaen/tbl"            : "dev-zf-3.x",
-        "unicaen/open-document"  : "1.7",
+        "unicaen/code"           : "3.0.0",
+        "unicaen/import"         : "3.0.0",
+        "unicaen/tbl"            : "3.0.0",
+        "unicaen/open-document"  : "3.0.0",
         "ocramius/proxy-manager" : "2.2.3"
     },
     "require-dev": {
-        "zendframework/zend-test":              ">=2.3",
-        "phpunit/phpunit":                      ">=3.7",
-        "zendframework/zend-developer-tools":   ">=1.0",
+        "zendframework/zend-test":              "3.3.0",
+        "zendframework/zend-developer-tools":   "1.2.3",
         "unicaen/php-compat":                   "dev-master"
     }
 }

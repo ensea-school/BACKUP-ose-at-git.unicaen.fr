@@ -98,7 +98,7 @@ poto',
 
 
 ///** @var ModeleContrat $contrat */
-$contrat = $sl->get(ModeleContratService::class)->get(13);
+$contrat = $container->get(ModeleContratService::class)->get(13);
 
 $document = new Document();
 $document->setTmpDir('/home/laurent/UnicaenCode');

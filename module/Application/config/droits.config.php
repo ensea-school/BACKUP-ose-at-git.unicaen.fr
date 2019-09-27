@@ -218,8 +218,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Droits' => Controller\DroitsController::class,
+        'factories' => [
+            'Application\Controller\Droits' => Controller\Factory\DroitsControllerFactory::class,
         ],
     ],
     'service_manager' => [

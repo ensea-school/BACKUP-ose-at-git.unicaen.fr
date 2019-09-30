@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2336700f6f9187cc7797e01d469b995c",
+    "content-hash": "b9695cbe813fcc7b4a64e1f7536daf52",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2285,11 +2285,11 @@
         },
         {
             "name": "unicaen/auth",
-            "version": "3.0.3",
+            "version": "3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/auth.git",
-                "reference": "613dbe9f3a0a1770f70f3b3def19deddf0f8cf7b"
+                "reference": "d42aebe4a75f55536f526e1047e2153bd19397fc"
             },
             "require": {
                 "jasig/phpcas": "^1.3",
@@ -2312,15 +2312,15 @@
                 ]
             },
             "description": "Module d'authentification pour les applications Unicaen",
-            "time": "2019-09-24T12:36:44+00:00"
+            "time": "2019-09-30T13:53:09+00:00"
         },
         {
             "name": "unicaen/bjy-authorize",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/bjy-authorize.git",
-                "reference": "9480124324d8b1c6de56cdf27ab687fea2216c84"
+                "reference": "3923fc0ec9346abada75bd4f9581c1ec9c41d73b"
             },
             "require": {
                 "doctrine/common": "^2.7",
@@ -2373,7 +2373,7 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2019-09-18T07:15:38+00:00"
+            "time": "2019-09-30T13:42:16+00:00"
         },
         {
             "name": "unicaen/code",
@@ -3470,16 +3470,16 @@
         },
         {
             "name": "zendframework/zend-i18n",
-            "version": "2.9.1",
+            "version": "2.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-i18n.git",
-                "reference": "9233ee8553564a6e45e8311a7173734ba4e5db9b"
+                "reference": "e17a54b3aee333ab156958f570cde630acee8b07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/9233ee8553564a6e45e8311a7173734ba4e5db9b",
-                "reference": "9233ee8553564a6e45e8311a7173734ba4e5db9b",
+                "url": "https://api.github.com/repos/zendframework/zend-i18n/zipball/e17a54b3aee333ab156958f570cde630acee8b07",
+                "reference": "e17a54b3aee333ab156958f570cde630acee8b07",
                 "shasum": ""
             },
             "require": {
@@ -3534,7 +3534,7 @@
                 "i18n",
                 "zf"
             ],
-            "time": "2019-09-26T11:54:57+00:00"
+            "time": "2019-09-30T12:04:37+00:00"
         },
         {
             "name": "zendframework/zend-i18n-resources",

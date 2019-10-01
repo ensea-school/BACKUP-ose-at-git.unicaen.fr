@@ -297,7 +297,7 @@ OSE sera accessible sur votre machine, à l'adresse http://ose-test.localhost
 
 # Création de la base de données
 Créez une base de données avec un utilisateur pour OSE, un schéma, puis un tablespace vides.
-Un script d'initialisation vous est fourni (fichier [bdd/install.sql](bdd/install.sql)). Il vous revient de le lancer pour peupler la base de données.
+Un script d'initialisation vous est fourni (fichier bdd/install.sql). Il vous revient de le lancer pour peupler la base de données.
 
 Attention à bien veiller à ce que les accents soient correctement traités.
 Les caractères du fichier sont en **UTF8**.

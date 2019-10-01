@@ -11,7 +11,7 @@ try {
     $c->exec([
         "cd $osedir",
         "rm -Rf cache/*",
-        "php vendor/bin/doctrine-module orm:generate-proxies",
+        "php admin/actions/doctrine.php orm:generate-proxies",
         "chmod -R 777 cache/DoctrineProxy",
         "chmod -R 777 cache/Doctrine",
     ], false);

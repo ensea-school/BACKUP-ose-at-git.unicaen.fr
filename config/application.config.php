@@ -1,7 +1,7 @@
 <?php
 
 
-
+include_once dirname(__DIR__).'/module/Application/Application.php';
 
 
 class AppConfig
@@ -90,7 +90,6 @@ class AppConfig
             'DoctrineModule',
             'DoctrineORMModule',
             'ZfcUser',
-            'BjyAuthorize',
             'UnicaenApp',
             'UnicaenAuth',
             'UnicaenImport',
@@ -134,11 +133,7 @@ class AppConfig
 
     private static function inConsole()
     {
-        if (class_exists('Zend\Console\Console')){
-            return \Zend\Console\Console::isConsole();
-        }else{
-            return true;
-        }
+        return PHP_SAPI == 'cli';
     }
 
 

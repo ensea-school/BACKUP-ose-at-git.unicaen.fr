@@ -31,8 +31,6 @@ class Application
         define('REQUEST_MICROTIME', microtime(true));
         chdir($appDir);
 
-        /* Chargement de la config globale */
-        require_once $appDir.'/config/application.config.php';
 
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (AppConfig::get('global', 'affichageErreurs')) {

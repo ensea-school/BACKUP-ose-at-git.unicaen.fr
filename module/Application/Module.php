@@ -29,8 +29,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
     public function onBootstrap(MvcEvent $e)
     {
-        if (!class_exists('Application')){
-            include_once __DIR__.'/Application.php';
+        if (empty(\Application::$container)){
             \Application::$container = $e->getApplication()->getServiceManager();
         }
 

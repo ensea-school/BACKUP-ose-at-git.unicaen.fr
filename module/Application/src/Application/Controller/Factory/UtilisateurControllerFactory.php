@@ -34,7 +34,7 @@ class UtilisateurControllerFactory
         $shibService = $container->get(ShibService::class);
 
         /** @var UserContext $userContextService */
-        $userContextService = $container->get('AuthUserContext');
+        $userContextService = $container->get(UserContext::class);
 
         /** @var LdapPeopleMapper $mapper */
         $ldapPeopleMapper = $container->get('ldap_people_mapper');

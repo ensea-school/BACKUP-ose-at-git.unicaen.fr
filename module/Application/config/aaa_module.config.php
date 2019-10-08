@@ -183,8 +183,8 @@ $config = [
         ],
     ],
     'controllers'        => [
-        'invokables' => [
-            'Application\Controller\Index' => Controller\IndexController::class,
+        'factories' => [
+            'Application\Controller\Index' => Controller\Factory\IndexControllerFactory::class,
         ],
     ],
     'controller_plugins' => [

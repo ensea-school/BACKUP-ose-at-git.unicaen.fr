@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use UnicaenAuth\Service\UserContext;
 
 /**
  *
@@ -20,7 +21,7 @@ class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $userContextService = $container->get('AuthUserContext');
+        $userContextService = $container->get(UserContext::class);
 
         $service = new UserProfileSelectRadioItem($userContextService);
         $service

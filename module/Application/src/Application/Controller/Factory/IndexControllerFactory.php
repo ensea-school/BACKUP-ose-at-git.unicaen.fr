@@ -2,22 +2,22 @@
 
 namespace Application\Controller\Factory;
 
-use Application\Controller\DossierController;
+use Application\Controller\IndexController;
 use Interop\Container\ContainerInterface;
 use UnicaenAuth\Service\UserContext;
 
-class DossierControllerFactory
+class IndexControllerFactory
 {
     /**
      * Create controller
      *
      * @param ContainerInterface $container
      *
-     * @return DossierController
+     * @return IndexController
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $controller = new DossierController();
+        $controller = new IndexController();
 
         /** @var UserContext $userContextService */
         $userContextService = $container->get(UserContext::class);

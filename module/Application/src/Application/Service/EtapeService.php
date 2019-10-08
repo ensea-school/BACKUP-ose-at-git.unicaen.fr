@@ -7,6 +7,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape;
 
@@ -151,7 +152,7 @@ class EtapeService extends AbstractEntityService
         }
 
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
-            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
+            throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
         }
 
         return parent::save($entity);
@@ -162,7 +163,7 @@ class EtapeService extends AbstractEntityService
     public function saveModulateurs(Etape $etape)
     {
         if (!$this->getAuthorize()->isAllowed($etape, Privileges::ODF_MODULATEURS_EDITION)) {
-            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
+            throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
         }
 
         $serviceElementModulateur = $this->getServiceElementModulateur();
@@ -192,7 +193,7 @@ class EtapeService extends AbstractEntityService
     public function delete($entity, $softDelete = true)
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ETAPE_EDITION)) {
-            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cette formation.');
+            throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cette formation.');
         }
 
         return parent::delete($entity, $softDelete);

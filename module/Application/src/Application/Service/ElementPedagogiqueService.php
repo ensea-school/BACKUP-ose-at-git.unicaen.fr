@@ -281,7 +281,7 @@ where rang = 1
     public function delete($entity, $softDelete = true)
     {
         if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_ELEMENT_EDITION)) {
-            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
+            throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
         }
 
         foreach ($entity->getCheminPedagogique() as $cp) {

@@ -30,6 +30,7 @@ RUN ln -sf /app/bin/ose /usr/local/bin/ose
 
 # Config PHP.
 ADD docker/${APPLICATION_ENV}/php.conf ${PHP_CONF_DIR}/fpm/conf.d/app.ini
+ADD docker/${APPLICATION_ENV}/php.conf ${PHP_CONF_DIR}/cli/conf.d/app.ini
 
 # Configuration Apache et FPM
 ADD docker/${APPLICATION_ENV}/apache-ports.conf    ${APACHE_CONF_DIR}/ports.conf

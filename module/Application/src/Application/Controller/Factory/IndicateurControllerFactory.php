@@ -4,6 +4,7 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\IndicateurController;
 use Interop\Container\ContainerInterface;
+use Zend\View\Renderer\PhpRenderer;
 
 class IndicateurControllerFactory
 {
@@ -17,7 +18,7 @@ class IndicateurControllerFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $httpRouter = $container->get('HttpRouter');
-        $renderer = $container->get('ViewHelperManager')->getRenderer();
+        $renderer = $container->get(PhpRenderer::class);
         $cliConfig = $this->getCliConfig($container);
 
         $controller = new IndicateurController( $httpRouter, $renderer, $cliConfig);

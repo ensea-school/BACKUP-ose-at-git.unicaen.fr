@@ -20732,7 +20732,11 @@ END FORMULE_NANTERRE;',
 
     -- BJ=N22+X22+AH22
     WHEN c = \'BJ\' AND v >= 1 THEN
-      RETURN cell(\'N\', l) + cell(\'X\', l) + cell(\'AH\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'N\', l) + cell(\'X\', l);
+      ELSE
+        RETURN cell(\'N\', l) + cell(\'X\', l) + cell(\'AH\', l);
+      END IF;
 
 
 
@@ -20750,13 +20754,21 @@ END FORMULE_NANTERRE;',
 
     -- BM=S22+AC22+BG22
     WHEN c = \'BM\' AND v >= 1 THEN
-      RETURN cell(\'S\', l) + cell(\'AC\', l) + cell(\'BG\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'S\', l) + cell(\'AC\', l) + cell(\'BG\', l) + cell(\'AH\', l);
+      ELSE
+        RETURN cell(\'S\', l) + cell(\'AC\', l) + cell(\'BG\', l);
+      END IF;
 
 
 
     -- BN=O22+Y22+AI22
     WHEN c = \'BN\' AND v >= 1 THEN
-      RETURN cell(\'O\', l) + cell(\'Y\', l) + cell(\'AI\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'O\', l) + cell(\'Y\', l);
+      ELSE
+        RETURN cell(\'O\', l) + cell(\'Y\', l) + cell(\'AI\', l);
+      END IF;
 
 
 
@@ -20780,7 +20792,11 @@ END FORMULE_NANTERRE;',
 
     -- BR=T22+AD22+BH22
     WHEN c = \'BR\' AND v >= 1 THEN
-      RETURN cell(\'T\', l) + cell(\'AD\', l) + cell(\'BH\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'T\', l) + cell(\'AD\', l) + cell(\'BH\', l) + cell(\'AI\', l);
+      ELSE
+        RETURN cell(\'T\', l) + cell(\'AD\', l) + cell(\'BH\', l);
+      END IF;
 
 
 
@@ -30792,7 +30808,7 @@ FROM
             volume_horaire            vh
        JOIN parametre                  p ON p.nom = \'structure_univ\'
        JOIN service                    s ON s.id = vh.service_id
-       JOIN intervenant                i ON i.id = s.intervenant_id
+       JOIN intervenant                i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
        JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
        JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
 
@@ -30848,7 +30864,7 @@ FROM
        volume_horaire_ref          vhr
   JOIN parametre                     p ON p.nom = \'structure_univ\'
   JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-  JOIN intervenant                   i ON i.id = sr.intervenant_id
+  JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
   JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
   JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
   JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
@@ -34318,7 +34334,8 @@ FROM
 
   END
 WHERE
-  i.histo_destruction IS NULL',
+  i.histo_destruction IS NULL
+  AND 1 = OSE_WORKFLOW.match_intervenant(i.id)',
     ),
   ),
   'BddAdmin\\Ddl\\DdlMaterializedView' => 
@@ -42174,12 +42191,11 @@ WHERE
     array (
       'name' => 'TYPE_AGREMENT_STATUT__UN',
       'table' => 'TYPE_AGREMENT_STATUT',
-      'index' => 'TYPE_AGREMENT_STATUT__UN',
+      'index' => 'TYPE_AGREMENT_STATUT__UN1',
       'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
-        2 => 'PREMIER_RECRUTEMENT',
       ),
     ),
     'TYPE_AGREMENT__UN' => 
@@ -50262,6 +50278,17 @@ END;',
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
         2 => 'PREMIER_RECRUTEMENT',
+      ),
+    ),
+    'TYPE_AGREMENT_STATUT__UN1' => 
+    array (
+      'name' => 'TYPE_AGREMENT_STATUT__UN1',
+      'unique' => true,
+      'table' => 'TYPE_AGREMENT_STATUT',
+      'columns' => 
+      array (
+        0 => 'TYPE_AGREMENT_ID',
+        1 => 'STATUT_INTERVENANT_ID',
       ),
     ),
     'TYPE_AGREMENT__UN' => 

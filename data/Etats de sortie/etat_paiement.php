@@ -105,7 +105,7 @@ $totalTemplate  = [
 // Publication des lignes
 foreach ($intervenants as $intervenant) {
     foreach ($intervenant as $k => $interv) {
-        if (count($interv['lignes']) > 0) {
+        if (isset($interv['lignes']) && count($interv['lignes']) > 0) {
             foreach ($interv['lignes'] as $detailData) {
                 $publisher->publishBefore($detailTemplate, $detailData, $totalTemplate['p']);
             }

@@ -2,7 +2,7 @@
 
 namespace Application\Form\Service\Factory;
 
-use Application\Form\Service\SaisieFieldset;
+use Application\Form\Service\RechercheForm;
 use Interop\Container\ContainerInterface;
 
 
@@ -11,7 +11,7 @@ use Interop\Container\ContainerInterface;
  *
  * @author LECLUSE Laurent <laurent.lecluse at unicaen.fr>
  */
-class rechercheFormFactory
+class RechercheFormFactory
 {
 
     /**
@@ -19,11 +19,11 @@ class rechercheFormFactory
      * @param string             $requestedName
      * @param array|null         $options
      *
-     * @return SaisieFieldset
+     * @return RechercheForm
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $fieldset = new SaisieFieldset;
+        $fieldset = new RechercheForm();
         $fieldset->setServiceAuthorize($container->get('BjyAuthorize\Service\Authorize'));
 
         return $fieldset;

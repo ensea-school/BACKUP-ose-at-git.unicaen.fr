@@ -13228,6 +13228,26 @@
           'nullable' => true,
           'default' => NULL,
         ),
+        'SERVICE_ID' => 
+        array (
+          'name' => 'SERVICE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+        ),
+        'SERVICE_REFERENTIEL_ID' => 
+        array (
+          'name' => 'SERVICE_REFERENTIEL_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+        ),
       ),
     ),
     'TBL_PIECE_JOINTE' => 
@@ -27718,6 +27738,8 @@ END UNICAEN_TBL;',
       FROM
         (SELECT
           i.annee_id                                  annee_id,
+          frs.service_id                              service_id,
+          null                                        service_referentiel_id,
           frs.id                                      formule_res_service_id,
           null                                        formule_res_service_ref_id,
           i.id                                        intervenant_id,
@@ -27746,6 +27768,8 @@ END UNICAEN_TBL;',
 
         SELECT
           i.annee_id                                  annee_id,
+          null                                        service_id,
+          frs.service_referentiel_id                  service_referentiel_id,
           null                                        formule_res_service_id,
           frs.id                                      formule_res_service_ref_id,
           i.id                                        intervenant_id,
@@ -27786,6 +27810,8 @@ END UNICAEN_TBL;',
       HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
       HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
       HEURES_PAYEES              = v.HEURES_PAYEES,
+      SERVICE_REFERENTIEL_ID     = v.SERVICE_REFERENTIEL_ID,
+      SERVICE_ID                 = v.SERVICE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -27802,6 +27828,8 @@ END UNICAEN_TBL;',
       HEURES_PAYEES,
       FORMULE_RES_SERVICE_ID,
       FORMULE_RES_SERVICE_REF_ID,
+      SERVICE_REFERENTIEL_ID,
+      SERVICE_ID,
       TO_DELETE
 
     ) VALUES (
@@ -27818,6 +27846,8 @@ END UNICAEN_TBL;',
       v.HEURES_PAYEES,
       v.FORMULE_RES_SERVICE_ID,
       v.FORMULE_RES_SERVICE_REF_ID,
+      v.SERVICE_REFERENTIEL_ID,
+      v.SERVICE_ID,
       0
 
     );
@@ -28553,9 +28583,10 @@ END UNICAEN_TBL;',
           JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id AND rsv.type_volume_horaire_id = vh.type_volume_horaire_id
           LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
           LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
-               JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
+          LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
         WHERE
-          s.histo_destruction IS NULL) tv
+          s.histo_destruction IS NULL
+          AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)) tv
       WHERE
         \' || conds || \'
 
@@ -33422,6 +33453,8 @@ WHERE
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
 SELECT
   i.annee_id                                  annee_id,
+  frs.service_id                              service_id,
+  null                                        service_referentiel_id,
   frs.id                                      formule_res_service_id,
   null                                        formule_res_service_ref_id,
   i.id                                        intervenant_id,
@@ -33450,6 +33483,8 @@ UNION ALL
 
 SELECT
   i.annee_id                                  annee_id,
+  null                                        service_id,
+  frs.service_referentiel_id                  service_referentiel_id,
   null                                        formule_res_service_id,
   frs.id                                      formule_res_service_ref_id,
   i.id                                        intervenant_id,
@@ -33791,9 +33826,10 @@ FROM
   JOIN regle_structure_validation rsv ON rsv.type_intervenant_id = si.type_intervenant_id AND rsv.type_volume_horaire_id = vh.type_volume_horaire_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
   LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
-       JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
+  LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
 WHERE
-  s.histo_destruction IS NULL',
+  s.histo_destruction IS NULL
+  AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)',
     ),
     'V_TBL_VALIDATION_REFERENTIEL' => 
     array (
@@ -38948,6 +38984,18 @@ WHERE
         'PERIODE_PAIEMENT_ID' => 'ID',
       ),
     ),
+    'TBL_PAIEMENT_SR_FK' => 
+    array (
+      'name' => 'TBL_PAIEMENT_SR_FK',
+      'table' => 'TBL_PAIEMENT',
+      'rtable' => 'SERVICE_REFERENTIEL',
+      'delete_rule' => 'CASCADE',
+      'index' => NULL,
+      'columns' => 
+      array (
+        'SERVICE_REFERENTIEL_ID' => 'ID',
+      ),
+    ),
     'TBL_PAIEMENT_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_STRUCTURE_FK',
@@ -38958,6 +39006,18 @@ WHERE
       'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
+      ),
+    ),
+    'TBL_PAIEMENT_S_FK' => 
+    array (
+      'name' => 'TBL_PAIEMENT_S_FK',
+      'table' => 'TBL_PAIEMENT',
+      'rtable' => 'SERVICE',
+      'delete_rule' => 'CASCADE',
+      'index' => NULL,
+      'columns' => 
+      array (
+        'SERVICE_ID' => 'ID',
       ),
     ),
     'TBL_PIECE_JOINTE_ANNEE_FK' => 

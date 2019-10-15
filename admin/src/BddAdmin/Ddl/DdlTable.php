@@ -104,13 +104,14 @@ class DdlTable extends DdlAbstract
             t.temporary       \"temporary\",
             t.logging         \"logging\",
             " . ($withColumns ? "
-                c.column_name     \"cname\",
-                c.data_type       \"type\",
-                c.char_length     \"length\",
-                c.data_scale      \"scale\",
-                c.data_precision  \"precision\",
-                c.nullable        \"nullable\",
-                c.data_default    \"default\",
+                c.column_name      \"cname\",
+                c.data_type        \"type\",
+                c.char_length      \"length\",
+                c.data_scale       \"scale\",
+                c.data_precision   \"precision\",
+                c.nullable         \"nullable\",
+                c.data_default     \"default\",
+                ccomm.comments     \"col_commentaire\",
             " : '') . "
             comm.comments     \"commentaire\",
             s.sequence_name   \"sequence\"
@@ -119,7 +120,7 @@ class DdlTable extends DdlAbstract
             LEFT JOIN user_mviews          m ON m.mview_name = t.table_name
             LEFT JOIN user_tab_comments comm ON comm.table_name = t.table_name
             LEFT JOIN user_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
-            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name " : '') . "
+            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
           WHERE
             m.mview_name IS NULL 
             " . ($this->hasOption(self::OPT_NO_TEMPORARY) ? "AND t.temporary <> 'Y'" : '') . "
@@ -153,13 +154,14 @@ class DdlTable extends DdlAbstract
                 if ('NULL' === $default) $default = null;
 
                 $data[$paq['name']]['columns'][$paq['cname']] = [
-                    'name'      => $paq['cname'],
-                    'type'      => $paq['type'],
-                    'length'    => (int)$paq['length'],
-                    'scale'     => $paq['scale'],
-                    'precision' => $paq['precision'] ? (int)$paq['precision'] : null,
-                    'nullable'  => $paq['nullable'] == 'Y',
-                    'default'   => $default,
+                    'name'        => $paq['cname'],
+                    'type'        => $paq['type'],
+                    'length'      => (int)$paq['length'],
+                    'scale'       => $paq['scale'],
+                    'precision'   => $paq['precision'] ? (int)$paq['precision'] : null,
+                    'nullable'    => $paq['nullable'] == 'Y',
+                    'default'     => $default,
+                    'commentaire' => $paq['col_commentaire'],
                 ];
             }
         }
@@ -297,7 +299,8 @@ END;';
     {
         return $this->isColDiffType($col1, $col2)
             || $this->isColDiffDefault($col1, $col2)
-            || $this->isColDiffNullable($col1, $col2);
+            || $this->isColDiffNullable($col1, $col2)
+            || $this->isColDiffComment($col1, $col2);
     }
 
 
@@ -326,6 +329,13 @@ END;';
 
 
 
+    private function isColDiffComment(array $col1, array $col2)
+    {
+        return $col1['commentaire'] !== $col2['commentaire'];
+    }
+
+
+
     public function alter(array $old, array $new)
     {
         if ($this->isDiff($old, $new)) {
@@ -350,6 +360,7 @@ END;';
                 $this->alterColumnType($name, $cOld, $cNew);
                 $this->alterColumnNullable($name, $cOld, $cNew);
                 $this->alterColumnDefault($name, $cOld, $cNew);
+                $this->alterColumnComment($name, $cOld, $cNew);
             }
 
             if (!(isset($new['options']['noDropColumns']) && $new['options']['noDropColumns'])) {
@@ -424,6 +435,24 @@ END;';
             if (null === $default) $default = 'NULL';
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" DEFAULT $default )";
             $this->addQuery($sql,'Changement de valeur par défaut de la colonne '.$column.' de la table '.$table);
+        }
+    }
+
+
+
+    private function alterColumnComment(string $table, array $old, array $new)
+    {
+        $column = $new['name'];
+        if ($this->isColDiffComment($old, $new)) {
+            $commentaire = $new['commentaire'];
+            if ($commentaire){
+                $commentaire = "'" . str_replace("'", "''", $commentaire) . "'";
+                $sql = "COMMENT ON COLUMN \"$table\".\"$column\" IS $commentaire";
+                $this->addQuery($sql,'Modification du commentaire de la colonne '.$column.' de la table '.$table);
+            }else{
+                $sql = "COMMENT ON COLUMN \"$table\".\"$column\" IS ''";
+                $this->addQuery($sql,'Suppression du commentaire de la colonne '.$column.' de la table '.$table);
+            }
         }
     }
 

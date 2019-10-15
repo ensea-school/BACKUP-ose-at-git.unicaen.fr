@@ -82,6 +82,7 @@ class DataGen
             'table'   => 'WF_ETAPE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
+            'options' => ['update-ignore-cols' => ['LIBELLE_INTERVENANT', 'LIBELLE_AUTRES']],
         ],
         [
             'table'   => 'TYPE_AGREMENT',

@@ -550,6 +550,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -560,6 +561,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TEL_DOMICILE' => 
         array (
@@ -570,6 +572,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MENTION_COMPLEMENTAIRE' => 
         array (
@@ -580,6 +583,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BATIMENT' => 
         array (
@@ -590,6 +594,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NO_VOIE' => 
         array (
@@ -600,6 +605,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM_VOIE' => 
         array (
@@ -610,6 +616,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LOCALITE' => 
         array (
@@ -620,6 +627,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE_POSTAL' => 
         array (
@@ -630,6 +638,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VILLE' => 
         array (
@@ -640,6 +649,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_CODE_INSEE' => 
         array (
@@ -650,6 +660,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_LIBELLE' => 
         array (
@@ -660,6 +671,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -670,6 +682,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -680,6 +693,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -690,6 +704,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -700,6 +715,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -710,6 +726,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -720,6 +737,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -730,6 +748,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -740,6 +759,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -761,6 +781,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -771,6 +792,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PRINCIPALE' => 
         array (
@@ -781,6 +803,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TELEPHONE' => 
         array (
@@ -791,6 +814,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NO_VOIE' => 
         array (
@@ -801,6 +825,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM_VOIE' => 
         array (
@@ -811,6 +836,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LOCALITE' => 
         array (
@@ -821,6 +847,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE_POSTAL' => 
         array (
@@ -831,6 +858,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VILLE' => 
         array (
@@ -841,6 +869,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_CODE_INSEE' => 
         array (
@@ -851,6 +880,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_LIBELLE' => 
         array (
@@ -861,6 +891,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -871,6 +902,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -881,6 +913,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -891,6 +924,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -901,6 +935,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -911,6 +946,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -921,6 +957,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -931,6 +968,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -941,6 +979,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -962,6 +1001,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'UTILISATEUR_ID' => 
         array (
@@ -972,6 +1012,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ROLE_ID' => 
         array (
@@ -982,6 +1023,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -992,6 +1034,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -1002,6 +1045,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -1012,6 +1056,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -1022,6 +1067,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -1032,6 +1078,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -1042,6 +1089,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -1052,6 +1100,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -1062,6 +1111,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -1072,6 +1122,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1093,6 +1144,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -1103,6 +1155,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -1113,6 +1166,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -1123,6 +1177,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -1133,6 +1188,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -1143,6 +1199,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -1153,6 +1210,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -1163,6 +1221,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -1173,6 +1232,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -1183,6 +1243,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -1193,6 +1254,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LABO_LIBELLE' => 
         array (
@@ -1203,6 +1265,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1224,6 +1287,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_AGREMENT_ID' => 
         array (
@@ -1234,6 +1298,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -1244,6 +1309,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_DECISION' => 
         array (
@@ -1254,6 +1320,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -1264,6 +1331,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -1274,6 +1342,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -1284,6 +1353,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -1294,6 +1364,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -1304,6 +1375,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -1314,6 +1386,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -1324,6 +1397,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1345,6 +1419,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -1355,6 +1430,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_DEBUT' => 
         array (
@@ -1365,6 +1441,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_FIN' => 
         array (
@@ -1375,6 +1452,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ACTIVE' => 
         array (
@@ -1385,6 +1463,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TAUX_HETD' => 
         array (
@@ -1395,6 +1474,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1416,6 +1496,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -1426,6 +1507,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -1436,6 +1518,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_DEBUT' => 
         array (
@@ -1446,6 +1529,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_FIN' => 
         array (
@@ -1456,6 +1540,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MESSAGE_INTERVENANT' => 
         array (
@@ -1466,6 +1551,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MESSAGE_AUTRES' => 
         array (
@@ -1476,6 +1562,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -1486,6 +1573,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1507,6 +1595,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -1517,6 +1606,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -1527,6 +1617,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -1537,6 +1628,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1558,6 +1650,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -1568,6 +1661,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -1578,6 +1672,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FI' => 
         array (
@@ -1588,6 +1683,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FA' => 
         array (
@@ -1598,6 +1694,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FC' => 
         array (
@@ -1608,6 +1705,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FC_MAJOREES' => 
         array (
@@ -1618,6 +1716,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REFERENTIEL' => 
         array (
@@ -1628,6 +1727,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -1638,6 +1738,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -1648,6 +1749,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -1658,6 +1760,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -1668,6 +1771,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -1678,6 +1782,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -1688,6 +1793,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1709,6 +1815,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -1719,6 +1826,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -1729,6 +1837,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ACTIVITE_ID' => 
         array (
@@ -1739,6 +1848,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_RESSOURCE_ID' => 
         array (
@@ -1749,6 +1859,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARENT_ID' => 
         array (
@@ -1759,6 +1870,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -1769,6 +1881,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -1779,6 +1892,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -1789,6 +1903,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -1799,6 +1914,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -1809,6 +1925,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -1819,6 +1936,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -1829,6 +1947,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -1839,6 +1958,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'UNITE_BUDGETAIRE' => 
         array (
@@ -1849,6 +1969,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -1870,6 +1991,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CENTRE_COUT_ID' => 
         array (
@@ -1880,6 +2002,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -1890,6 +2013,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_HEURES_ID' => 
         array (
@@ -1900,6 +2024,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -1910,6 +2035,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -1920,6 +2046,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -1930,6 +2057,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -1940,6 +2068,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -1950,6 +2079,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -1960,6 +2090,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -1970,6 +2101,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -1980,6 +2112,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2001,6 +2134,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CENTRE_COUT_ID' => 
         array (
@@ -2011,6 +2145,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -2021,6 +2156,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -2031,6 +2167,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -2041,6 +2178,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2051,6 +2189,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2061,6 +2200,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2071,6 +2211,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2081,6 +2222,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2091,6 +2233,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -2101,6 +2244,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'UNITE_BUDGETAIRE' => 
         array (
@@ -2111,6 +2255,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2132,6 +2277,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -2142,6 +2288,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -2152,6 +2299,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -2162,6 +2310,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -2172,6 +2321,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -2182,6 +2332,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2192,6 +2343,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2202,6 +2354,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2212,6 +2365,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2222,6 +2376,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2232,6 +2387,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -2242,6 +2398,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2263,6 +2420,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -2273,6 +2431,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -2283,6 +2442,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SEXE' => 
         array (
@@ -2293,6 +2453,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2314,6 +2475,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_CONTRAT_ID' => 
         array (
@@ -2324,6 +2486,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -2334,6 +2497,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -2344,6 +2508,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -2354,6 +2519,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NUMERO_AVENANT' => 
         array (
@@ -2364,6 +2530,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'DATE_RETOUR_SIGNE' => 
         array (
@@ -2374,6 +2541,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2384,6 +2552,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2394,6 +2563,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2404,6 +2574,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2414,6 +2585,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2424,6 +2596,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -2434,6 +2607,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CONTRAT_ID' => 
         array (
@@ -2444,6 +2618,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TOTAL_HETD' => 
         array (
@@ -2454,6 +2629,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Total HETD au moment de la création du contrat/avenant.',
         ),
       ),
     ),
@@ -2475,6 +2651,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FICHIER_ID' => 
         array (
@@ -2485,6 +2662,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2506,6 +2684,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -2516,6 +2695,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -2526,6 +2706,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -2536,6 +2717,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -2546,6 +2728,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2556,6 +2739,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2566,6 +2750,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2576,6 +2761,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2586,6 +2772,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2596,6 +2783,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -2606,6 +2794,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2627,6 +2816,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -2637,6 +2827,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -2647,6 +2838,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -2657,6 +2849,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -2667,6 +2860,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2677,6 +2871,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2687,6 +2882,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2697,6 +2893,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -2707,6 +2904,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2717,6 +2915,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2727,6 +2926,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -2737,6 +2937,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2758,6 +2959,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -2768,6 +2970,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -2778,6 +2981,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -2788,6 +2992,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -2798,6 +3003,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODES_CORRESP_1' => 
         array (
@@ -2808,6 +3014,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODES_CORRESP_2' => 
         array (
@@ -2818,6 +3025,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODES_CORRESP_3' => 
         array (
@@ -2828,6 +3036,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODES_CORRESP_4' => 
         array (
@@ -2838,6 +3047,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2848,6 +3058,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2858,6 +3069,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2868,6 +3080,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2878,6 +3091,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2888,6 +3102,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -2898,6 +3113,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -2919,6 +3135,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -2929,6 +3146,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -2939,6 +3157,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -2949,6 +3168,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -2959,6 +3179,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -2969,6 +3190,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -2979,6 +3201,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -2989,6 +3212,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -2999,6 +3223,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -3009,6 +3234,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -3030,6 +3256,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM_USUEL' => 
         array (
@@ -3040,6 +3267,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM_PATRONYMIQUE' => 
         array (
@@ -3050,6 +3278,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PRENOM' => 
         array (
@@ -3060,6 +3289,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CIVILITE_ID' => 
         array (
@@ -3070,6 +3300,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NUMERO_INSEE' => 
         array (
@@ -3080,6 +3311,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_ID' => 
         array (
@@ -3090,6 +3322,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ADRESSE' => 
         array (
@@ -3100,6 +3333,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'EMAIL' => 
         array (
@@ -3110,6 +3344,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TELEPHONE' => 
         array (
@@ -3120,6 +3355,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PREMIER_RECRUTEMENT' => 
         array (
@@ -3130,6 +3366,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PERTE_EMPLOI' => 
         array (
@@ -3140,6 +3377,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'RIB' => 
         array (
@@ -3150,6 +3388,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -3160,6 +3399,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -3170,6 +3410,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -3180,6 +3421,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -3190,6 +3432,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -3200,6 +3443,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -3210,6 +3454,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NUMERO_INSEE_EST_PROVISOIRE' => 
         array (
@@ -3220,6 +3465,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'EMAIL_PERSO' => 
         array (
@@ -3230,6 +3476,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_NAISSANCE' => 
         array (
@@ -3240,6 +3487,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_NAISSANCE_ID' => 
         array (
@@ -3250,6 +3498,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEPT_NAISSANCE_ID' => 
         array (
@@ -3260,6 +3509,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VILLE_NAISSANCE' => 
         array (
@@ -3270,6 +3520,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -3280,6 +3531,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'RIB_HORS_SEPA' => 
         array (
@@ -3290,6 +3542,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -3311,6 +3564,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_RESSOURCE_ID' => 
         array (
@@ -3321,6 +3575,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -3331,6 +3586,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -3341,6 +3597,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -3351,6 +3608,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -3361,6 +3619,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -3371,6 +3630,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -3381,6 +3641,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -3391,6 +3652,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -3401,6 +3663,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -3411,6 +3674,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_CIVILE' => 
         array (
@@ -3421,6 +3685,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -3431,6 +3696,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -3452,6 +3718,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -3462,6 +3729,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FI' => 
         array (
@@ -3472,6 +3740,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'FC' => 
         array (
@@ -3482,6 +3751,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'FA' => 
         array (
@@ -3492,6 +3762,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -3502,6 +3773,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -3512,6 +3784,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -3522,6 +3795,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -3532,6 +3806,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -3542,6 +3817,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -3552,6 +3828,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -3562,6 +3839,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -3572,6 +3850,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -3582,6 +3861,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -3603,6 +3883,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_ID' => 
         array (
@@ -3613,6 +3894,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MODULATEUR_ID' => 
         array (
@@ -3623,6 +3905,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -3633,6 +3916,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -3643,6 +3927,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -3653,6 +3938,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -3663,6 +3949,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -3673,6 +3960,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -3683,6 +3971,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -3704,6 +3993,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -3714,6 +4004,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -3724,6 +4015,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -3734,6 +4026,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -3744,6 +4037,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PERIODE_ID' => 
         array (
@@ -3754,6 +4048,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Un élément pédagogique ne peut avoir qu\'une et une seule période.',
         ),
         'TAUX_FI' => 
         array (
@@ -3764,6 +4059,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_FC' => 
         array (
@@ -3774,6 +4070,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TAUX_FA' => 
         array (
@@ -3784,6 +4081,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TAUX_FOAD' => 
         array (
@@ -3794,6 +4092,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'FI' => 
         array (
@@ -3804,6 +4103,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'FC' => 
         array (
@@ -3814,6 +4114,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'FA' => 
         array (
@@ -3824,6 +4125,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -3834,6 +4136,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -3844,6 +4147,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -3854,6 +4158,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -3864,6 +4169,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -3874,6 +4180,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -3884,6 +4191,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -3894,6 +4202,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -3904,6 +4213,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -3914,6 +4224,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DISCIPLINE_ID' => 
         array (
@@ -3924,6 +4235,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -3945,6 +4257,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -3955,6 +4268,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_FI' => 
         array (
@@ -3965,6 +4279,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_FC' => 
         array (
@@ -3975,6 +4290,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_FA' => 
         array (
@@ -3985,6 +4301,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -3995,6 +4312,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -4005,6 +4323,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -4015,6 +4334,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -4025,6 +4345,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -4035,6 +4356,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -4045,6 +4367,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -4055,6 +4378,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -4065,6 +4389,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -4086,6 +4411,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -4096,6 +4422,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LOCALISATION' => 
         array (
@@ -4106,6 +4433,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEPARTEMENT' => 
         array (
@@ -4116,6 +4444,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -4126,6 +4455,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -4136,6 +4466,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -4146,6 +4477,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -4156,6 +4488,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -4166,6 +4499,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -4176,6 +4510,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -4186,6 +4521,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -4196,6 +4532,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -4217,6 +4554,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -4227,6 +4565,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -4237,6 +4576,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -4247,6 +4587,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_FORMATION_ID' => 
         array (
@@ -4257,6 +4598,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NIVEAU' => 
         array (
@@ -4267,6 +4609,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SPECIFIQUE_ECHANGES' => 
         array (
@@ -4277,6 +4620,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -4287,6 +4631,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DOMAINE_FONCTIONNEL_ID' => 
         array (
@@ -4297,6 +4642,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -4307,6 +4653,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -4317,6 +4664,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -4327,6 +4675,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -4337,6 +4686,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -4347,6 +4697,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -4357,6 +4708,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -4367,6 +4719,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -4377,6 +4730,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -4398,6 +4752,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -4408,6 +4763,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -4418,6 +4774,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FICHIER' => 
         array (
@@ -4428,6 +4785,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REQUETE' => 
         array (
@@ -4438,6 +4796,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CLE' => 
         array (
@@ -4448,6 +4807,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CSV_PARAMS' => 
         array (
@@ -4458,6 +4818,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PDF_TRAITEMENT' => 
         array (
@@ -4468,6 +4829,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC1_NOM' => 
         array (
@@ -4478,6 +4840,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC1_ZONE' => 
         array (
@@ -4488,6 +4851,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC2_NOM' => 
         array (
@@ -4498,6 +4862,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC1_REQUETE' => 
         array (
@@ -4508,6 +4873,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC2_ZONE' => 
         array (
@@ -4518,6 +4884,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC2_REQUETE' => 
         array (
@@ -4528,6 +4895,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC3_NOM' => 
         array (
@@ -4538,6 +4906,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC3_ZONE' => 
         array (
@@ -4548,6 +4917,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC3_REQUETE' => 
         array (
@@ -4558,6 +4928,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC4_NOM' => 
         array (
@@ -4568,6 +4939,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC4_ZONE' => 
         array (
@@ -4578,6 +4950,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC4_REQUETE' => 
         array (
@@ -4588,6 +4961,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC5_NOM' => 
         array (
@@ -4598,6 +4972,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC5_ZONE' => 
         array (
@@ -4608,6 +4983,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC5_REQUETE' => 
         array (
@@ -4618,6 +4994,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC6_NOM' => 
         array (
@@ -4628,6 +5005,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC6_REQUETE' => 
         array (
@@ -4638,6 +5016,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC6_ZONE' => 
         array (
@@ -4648,6 +5027,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC7_NOM' => 
         array (
@@ -4658,6 +5038,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC7_ZONE' => 
         array (
@@ -4668,6 +5049,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC7_REQUETE' => 
         array (
@@ -4678,6 +5060,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC8_NOM' => 
         array (
@@ -4688,6 +5071,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC8_ZONE' => 
         array (
@@ -4698,6 +5082,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC8_REQUETE' => 
         array (
@@ -4708,6 +5093,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC9_NOM' => 
         array (
@@ -4718,6 +5104,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC9_ZONE' => 
         array (
@@ -4728,6 +5115,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC9_REQUETE' => 
         array (
@@ -4738,6 +5126,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC10_NOM' => 
         array (
@@ -4748,6 +5137,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC10_ZONE' => 
         array (
@@ -4758,6 +5148,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC10_REQUETE' => 
         array (
@@ -4768,6 +5159,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'AUTO_BREAK' => 
         array (
@@ -4778,6 +5170,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -4799,6 +5192,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -4809,6 +5203,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -4819,6 +5214,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -4829,6 +5225,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -4850,6 +5247,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM' => 
         array (
@@ -4860,6 +5258,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE' => 
         array (
@@ -4870,6 +5269,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAILLE' => 
         array (
@@ -4880,6 +5280,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CONTENU' => 
         array (
@@ -4890,6 +5291,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DESCRIPTION' => 
         array (
@@ -4900,6 +5302,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -4910,6 +5313,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -4920,6 +5324,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -4930,6 +5335,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -4940,6 +5346,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -4950,6 +5357,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -4960,6 +5368,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -4970,6 +5379,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -4991,6 +5401,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -5001,6 +5412,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -5011,6 +5423,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -5021,6 +5434,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DOMAINE_FONCTIONNEL_ID' => 
         array (
@@ -5031,6 +5445,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PLAFOND' => 
         array (
@@ -5041,6 +5456,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -5051,6 +5467,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -5061,6 +5478,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -5071,6 +5489,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -5081,6 +5500,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -5091,6 +5511,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -5101,6 +5522,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -5111,6 +5533,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Structure associée éventuelle',
         ),
         'ETAPE_REQUISE' => 
         array (
@@ -5121,6 +5544,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_STATUTAIRE' => 
         array (
@@ -5131,6 +5555,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'PARENT_ID' => 
         array (
@@ -5141,6 +5566,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5162,6 +5588,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -5172,6 +5599,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PACKAGE_NAME' => 
         array (
@@ -5182,6 +5610,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PROCEDURE_NAME' => 
         array (
@@ -5192,6 +5621,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'I_PARAM_1_LIBELLE' => 
         array (
@@ -5202,6 +5632,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'I_PARAM_2_LIBELLE' => 
         array (
@@ -5212,6 +5643,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'I_PARAM_3_LIBELLE' => 
         array (
@@ -5222,6 +5654,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'I_PARAM_4_LIBELLE' => 
         array (
@@ -5232,6 +5665,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'I_PARAM_5_LIBELLE' => 
         array (
@@ -5242,6 +5676,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VH_PARAM_1_LIBELLE' => 
         array (
@@ -5252,6 +5687,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VH_PARAM_2_LIBELLE' => 
         array (
@@ -5262,6 +5698,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VH_PARAM_3_LIBELLE' => 
         array (
@@ -5272,6 +5709,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VH_PARAM_4_LIBELLE' => 
         array (
@@ -5282,6 +5720,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VH_PARAM_5_LIBELLE' => 
         array (
@@ -5292,6 +5731,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5313,6 +5753,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -5323,6 +5764,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -5333,6 +5775,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAT_VOLUME_HORAIRE_ID' => 
         array (
@@ -5343,6 +5786,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_DU' => 
         array (
@@ -5353,6 +5797,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FI' => 
         array (
@@ -5363,6 +5808,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FA' => 
         array (
@@ -5373,6 +5819,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FC' => 
         array (
@@ -5383,6 +5830,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_REFERENTIEL' => 
         array (
@@ -5393,6 +5841,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FI' => 
         array (
@@ -5403,6 +5852,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FA' => 
         array (
@@ -5413,6 +5863,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FC' => 
         array (
@@ -5423,6 +5874,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FC_MAJOREES' => 
         array (
@@ -5433,6 +5885,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_REFERENTIEL' => 
         array (
@@ -5443,6 +5896,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TOTAL' => 
         array (
@@ -5453,6 +5907,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOLDE' => 
         array (
@@ -5463,6 +5918,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOUS_SERVICE' => 
         array (
@@ -5473,6 +5929,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL' => 
         array (
@@ -5483,6 +5940,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_CODE' => 
         array (
@@ -5493,6 +5951,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5514,6 +5973,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RESULTAT_ID' => 
         array (
@@ -5524,6 +5984,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_ID' => 
         array (
@@ -5534,6 +5995,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_FI' => 
         array (
@@ -5544,6 +6006,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FA' => 
         array (
@@ -5554,6 +6017,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FC' => 
         array (
@@ -5564,6 +6028,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FI' => 
         array (
@@ -5574,6 +6039,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FA' => 
         array (
@@ -5584,6 +6050,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FC' => 
         array (
@@ -5594,6 +6061,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FC_MAJOREES' => 
         array (
@@ -5604,6 +6072,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TOTAL' => 
         array (
@@ -5614,6 +6083,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5635,6 +6105,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RESULTAT_ID' => 
         array (
@@ -5645,6 +6116,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_REFERENTIEL_ID' => 
         array (
@@ -5655,6 +6127,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_REFERENTIEL' => 
         array (
@@ -5665,6 +6138,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_REFERENTIEL' => 
         array (
@@ -5675,6 +6149,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TOTAL' => 
         array (
@@ -5685,6 +6160,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5706,6 +6182,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RESULTAT_ID' => 
         array (
@@ -5716,6 +6193,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VOLUME_HORAIRE_ID' => 
         array (
@@ -5726,6 +6204,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_FI' => 
         array (
@@ -5736,6 +6215,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FA' => 
         array (
@@ -5746,6 +6226,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_FC' => 
         array (
@@ -5756,6 +6237,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FI' => 
         array (
@@ -5766,6 +6248,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FA' => 
         array (
@@ -5776,6 +6259,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FC' => 
         array (
@@ -5786,6 +6270,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_FC_MAJOREES' => 
         array (
@@ -5796,6 +6281,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TOTAL' => 
         array (
@@ -5806,6 +6292,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5827,6 +6314,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RESULTAT_ID' => 
         array (
@@ -5837,6 +6325,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VOLUME_HORAIRE_REF_ID' => 
         array (
@@ -5847,6 +6336,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_REFERENTIEL' => 
         array (
@@ -5857,6 +6347,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_COMPL_REFERENTIEL' => 
         array (
@@ -5867,6 +6358,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TOTAL' => 
         array (
@@ -5877,6 +6369,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -5898,6 +6391,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -5908,6 +6402,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_ID' => 
         array (
@@ -5918,6 +6413,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -5928,6 +6424,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -5938,6 +6435,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'STRUCTURE_TEST_ID' => 
         array (
@@ -5948,6 +6446,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -5958,6 +6457,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'ETAT_VOLUME_HORAIRE_ID' => 
         array (
@@ -5968,6 +6468,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'HEURES_DECHARGE' => 
         array (
@@ -5978,6 +6479,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES_SERVICE_STATUTAIRE' => 
         array (
@@ -5988,6 +6490,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_SERVICE_MODIFIE' => 
         array (
@@ -5998,6 +6501,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => 
         array (
@@ -6008,6 +6512,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PARAM_1' => 
         array (
@@ -6018,6 +6523,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_2' => 
         array (
@@ -6028,6 +6534,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_3' => 
         array (
@@ -6038,6 +6545,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_4' => 
         array (
@@ -6048,6 +6556,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_5' => 
         array (
@@ -6058,6 +6567,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_SERVICE_DU' => 
         array (
@@ -6068,6 +6578,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'C_SERVICE_DU' => 
         array (
@@ -6078,6 +6589,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEBUG_INFO' => 
         array (
@@ -6088,6 +6600,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_TP_SERVICE_DU' => 
         array (
@@ -6098,6 +6611,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_AUTRE_SERVICE_DU' => 
         array (
@@ -6108,6 +6622,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_AUTRE_SERVICE_COMPL' => 
         array (
@@ -6118,6 +6633,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_CM_SERVICE_DU' => 
         array (
@@ -6128,6 +6644,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1.5',
+          'commentaire' => NULL,
         ),
         'TAUX_CM_SERVICE_COMPL' => 
         array (
@@ -6138,6 +6655,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1.5',
+          'commentaire' => NULL,
         ),
         'TAUX_TP_SERVICE_COMPL' => 
         array (
@@ -6148,6 +6666,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '2/3',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -6169,6 +6688,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -6179,6 +6699,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'UNIVERSITE' => 
         array (
@@ -6189,6 +6710,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -6210,6 +6732,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_TEST_ID' => 
         array (
@@ -6220,6 +6743,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_TEST_ID' => 
         array (
@@ -6230,6 +6754,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REFERENTIEL' => 
         array (
@@ -6240,6 +6765,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SERVICE_STATUTAIRE' => 
         array (
@@ -6250,6 +6776,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_FI' => 
         array (
@@ -6260,6 +6787,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_FA' => 
         array (
@@ -6270,6 +6798,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TAUX_FC' => 
         array (
@@ -6280,6 +6809,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PONDERATION_SERVICE_DU' => 
         array (
@@ -6290,6 +6820,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'PONDERATION_SERVICE_COMPL' => 
         array (
@@ -6300,6 +6831,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'PARAM_1' => 
         array (
@@ -6310,6 +6842,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_2' => 
         array (
@@ -6320,6 +6853,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_3' => 
         array (
@@ -6330,6 +6864,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_4' => 
         array (
@@ -6340,6 +6875,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PARAM_5' => 
         array (
@@ -6350,6 +6886,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -6360,6 +6897,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'A_SERVICE_FI' => 
         array (
@@ -6370,6 +6908,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_SERVICE_FA' => 
         array (
@@ -6380,6 +6919,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_SERVICE_FC' => 
         array (
@@ -6390,6 +6930,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_SERVICE_REFERENTIEL' => 
         array (
@@ -6400,6 +6941,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_HEURES_COMPL_FI' => 
         array (
@@ -6410,6 +6952,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_HEURES_COMPL_FA' => 
         array (
@@ -6420,6 +6963,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_HEURES_COMPL_FC' => 
         array (
@@ -6430,6 +6974,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_HEURES_COMPL_FC_MAJOREES' => 
         array (
@@ -6440,6 +6985,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'A_HEURES_COMPL_REFERENTIEL' => 
         array (
@@ -6450,6 +6996,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_SERVICE_FI' => 
         array (
@@ -6460,6 +7007,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_SERVICE_FA' => 
         array (
@@ -6470,6 +7018,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_SERVICE_FC' => 
         array (
@@ -6480,6 +7029,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_SERVICE_REFERENTIEL' => 
         array (
@@ -6490,6 +7040,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_HEURES_COMPL_FI' => 
         array (
@@ -6500,6 +7051,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_HEURES_COMPL_FA' => 
         array (
@@ -6510,6 +7062,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_HEURES_COMPL_FC' => 
         array (
@@ -6520,6 +7073,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_HEURES_COMPL_FC_MAJOREES' => 
         array (
@@ -6530,6 +7084,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C_HEURES_COMPL_REFERENTIEL' => 
         array (
@@ -6540,6 +7095,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEBUG_INFO' => 
         array (
@@ -6550,6 +7106,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_CODE' => 
         array (
@@ -6560,6 +7117,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -6581,6 +7139,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -6591,6 +7150,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -6601,6 +7161,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ECHELLE' => 
         array (
@@ -6611,6 +7172,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CORPS_ID' => 
         array (
@@ -6621,6 +7183,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -6631,6 +7194,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -6641,6 +7205,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -6651,6 +7216,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -6661,6 +7227,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -6671,6 +7238,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -6681,6 +7249,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -6691,6 +7260,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -6701,6 +7271,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -6722,6 +7293,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -6732,6 +7304,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -6742,6 +7315,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOMBRE' => 
         array (
@@ -6752,6 +7326,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -6762,6 +7337,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -6772,6 +7348,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -6782,6 +7359,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -6792,6 +7370,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -6802,6 +7381,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -6812,6 +7392,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -6833,6 +7414,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -6843,6 +7425,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -6853,6 +7436,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -6863,6 +7447,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PERTINENCE_NIVEAU' => 
         array (
@@ -6873,6 +7458,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -6883,6 +7469,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -6893,6 +7480,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -6903,6 +7491,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -6913,6 +7502,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -6923,6 +7513,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -6933,6 +7524,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -6943,6 +7535,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -6953,6 +7546,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -6974,6 +7568,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -6984,6 +7579,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -6994,6 +7590,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REFERENTIEL' => 
         array (
@@ -7004,6 +7601,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -7014,6 +7612,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -7024,6 +7623,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7045,6 +7645,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SYNC_FILTRE' => 
         array (
@@ -7055,6 +7656,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SYNC_ENABLED' => 
         array (
@@ -7065,6 +7667,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SYNC_JOB' => 
         array (
@@ -7075,6 +7678,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SYNC_HOOK_BEFORE' => 
         array (
@@ -7085,6 +7689,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SYNC_HOOK_AFTER' => 
         array (
@@ -7095,6 +7700,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -7105,6 +7711,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7126,6 +7733,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE' => 
         array (
@@ -7136,6 +7744,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Type de l\'indicateur (alerte, info, etc.)',
         ),
         'ORDRE' => 
         array (
@@ -7146,6 +7755,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '100',
+          'commentaire' => NULL,
         ),
         'ENABLED' => 
         array (
@@ -7156,6 +7766,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Témoin indiquant si l\'indicateur est actif ou non',
         ),
         'NUMERO' => 
         array (
@@ -7166,6 +7777,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Numero unique pérenne user-friendly',
         ),
         'LIBELLE_SINGULIER' => 
         array (
@@ -7176,6 +7788,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_PLURIEL' => 
         array (
@@ -7186,6 +7799,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ROUTE' => 
         array (
@@ -7196,6 +7810,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TEM_DISTINCT' => 
         array (
@@ -7206,6 +7821,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TEM_NOT_STRUCTURE' => 
         array (
@@ -7216,6 +7832,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'MESSAGE' => 
         array (
@@ -7226,6 +7843,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7247,6 +7865,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -7257,6 +7876,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ATTR_NAME' => 
         array (
@@ -7267,6 +7887,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ATTR_OLD_SOURCE_NAME' => 
         array (
@@ -7277,6 +7898,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ATTR_OLD_VALUE' => 
         array (
@@ -7287,6 +7909,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ATTR_NEW_SOURCE_NAME' => 
         array (
@@ -7297,6 +7920,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ATTR_NEW_VALUE' => 
         array (
@@ -7307,6 +7931,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'EST_CREATION_DOSSIER' => 
         array (
@@ -7317,6 +7942,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -7327,6 +7953,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -7337,6 +7964,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -7347,6 +7975,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -7357,6 +7986,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -7367,6 +7997,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -7377,6 +8008,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7398,6 +8030,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CIVILITE_ID' => 
         array (
@@ -7408,6 +8041,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM_USUEL' => 
         array (
@@ -7418,6 +8052,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PRENOM' => 
         array (
@@ -7428,6 +8063,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM_PATRONYMIQUE' => 
         array (
@@ -7438,6 +8074,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_NAISSANCE' => 
         array (
@@ -7448,6 +8085,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VILLE_NAISSANCE_CODE_INSEE' => 
         array (
@@ -7458,6 +8096,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VILLE_NAISSANCE_LIBELLE' => 
         array (
@@ -7468,6 +8107,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TEL_PRO' => 
         array (
@@ -7478,6 +8118,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TEL_MOBILE' => 
         array (
@@ -7488,6 +8129,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'EMAIL' => 
         array (
@@ -7498,6 +8140,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_ID' => 
         array (
@@ -7508,6 +8151,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -7518,6 +8162,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Structure principale d\'affectation',
         ),
         'DISCIPLINE_ID' => 
         array (
@@ -7528,6 +8173,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -7538,6 +8184,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -7548,6 +8195,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NUMERO_INSEE' => 
         array (
@@ -7558,6 +8206,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NUMERO_INSEE_CLE' => 
         array (
@@ -7568,6 +8217,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NUMERO_INSEE_PROVISOIRE' => 
         array (
@@ -7578,6 +8228,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'IBAN' => 
         array (
@@ -7588,6 +8239,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BIC' => 
         array (
@@ -7598,6 +8250,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MONTANT_INDEMNITE_FC' => 
         array (
@@ -7608,6 +8261,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -7618,6 +8272,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -7628,6 +8283,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -7638,6 +8294,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -7648,6 +8305,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -7658,6 +8316,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -7668,6 +8327,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PREMIER_RECRUTEMENT' => 
         array (
@@ -7678,6 +8338,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -7688,6 +8349,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GRADE_ID' => 
         array (
@@ -7698,6 +8360,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CRITERE_RECHERCHE' => 
         array (
@@ -7708,6 +8371,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -7718,6 +8382,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'UTILISATEUR_CODE' => 
         array (
@@ -7728,6 +8393,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_NAISSANCE_ID' => 
         array (
@@ -7738,6 +8404,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEP_NAISSANCE_ID' => 
         array (
@@ -7748,6 +8415,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAYS_NATIONALITE_ID' => 
         array (
@@ -7758,6 +8426,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'RIB_HORS_SEPA' => 
         array (
@@ -7768,6 +8437,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7789,6 +8459,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -7799,6 +8470,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_ID' => 
         array (
@@ -7809,6 +8481,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7830,6 +8503,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOEUD_SUP_ID' => 
         array (
@@ -7840,6 +8514,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOEUD_INF_ID' => 
         array (
@@ -7850,6 +8525,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -7860,6 +8536,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -7870,6 +8547,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -7880,6 +8558,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -7890,6 +8569,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -7900,6 +8580,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -7910,6 +8591,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -7920,6 +8602,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -7930,6 +8613,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -7940,6 +8624,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7961,6 +8646,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -7982,6 +8668,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RES_SERVICE_ID' => 
         array (
@@ -7992,6 +8679,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RES_SERVICE_REF_ID' => 
         array (
@@ -8002,6 +8690,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_MISE_EN_PAIEMENT' => 
         array (
@@ -8012,6 +8701,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PERIODE_PAIEMENT_ID' => 
         array (
@@ -8022,6 +8712,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CENTRE_COUT_ID' => 
         array (
@@ -8032,6 +8723,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DOMAINE_FONCTIONNEL_ID' => 
         array (
@@ -8042,6 +8734,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_HEURES_ID' => 
         array (
@@ -8052,6 +8745,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -8062,6 +8756,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -8072,6 +8767,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_VALIDATION' => 
         array (
@@ -8082,6 +8778,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -8092,6 +8789,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -8102,6 +8800,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -8112,6 +8811,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -8122,6 +8822,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -8132,6 +8833,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -8142,6 +8844,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -8163,6 +8866,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -8173,6 +8877,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_INTERVENANT_ID' => 
         array (
@@ -8183,6 +8888,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -8193,6 +8899,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FICHIER' => 
         array (
@@ -8203,6 +8910,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REQUETE' => 
         array (
@@ -8213,6 +8921,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC1_NOM' => 
         array (
@@ -8223,6 +8932,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC1_ZONE' => 
         array (
@@ -8233,6 +8943,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC1_REQUETE' => 
         array (
@@ -8243,6 +8954,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC2_NOM' => 
         array (
@@ -8253,6 +8965,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC2_ZONE' => 
         array (
@@ -8263,6 +8976,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC2_REQUETE' => 
         array (
@@ -8273,6 +8987,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC3_NOM' => 
         array (
@@ -8283,6 +8998,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC3_ZONE' => 
         array (
@@ -8293,6 +9009,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC3_REQUETE' => 
         array (
@@ -8303,6 +9020,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC4_NOM' => 
         array (
@@ -8313,6 +9031,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC4_ZONE' => 
         array (
@@ -8323,6 +9042,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC4_REQUETE' => 
         array (
@@ -8333,6 +9053,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC5_NOM' => 
         array (
@@ -8343,6 +9064,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC5_ZONE' => 
         array (
@@ -8353,6 +9075,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC5_REQUETE' => 
         array (
@@ -8363,6 +9086,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC6_NOM' => 
         array (
@@ -8373,6 +9097,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC6_ZONE' => 
         array (
@@ -8383,6 +9108,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC6_REQUETE' => 
         array (
@@ -8393,6 +9119,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC7_NOM' => 
         array (
@@ -8403,6 +9130,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC7_ZONE' => 
         array (
@@ -8413,6 +9141,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC7_REQUETE' => 
         array (
@@ -8423,6 +9152,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC8_NOM' => 
         array (
@@ -8433,6 +9163,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC8_ZONE' => 
         array (
@@ -8443,6 +9174,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC8_REQUETE' => 
         array (
@@ -8453,6 +9185,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC9_NOM' => 
         array (
@@ -8463,6 +9196,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC9_ZONE' => 
         array (
@@ -8473,6 +9207,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC9_REQUETE' => 
         array (
@@ -8483,6 +9218,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC10_NOM' => 
         array (
@@ -8493,6 +9229,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC10_ZONE' => 
         array (
@@ -8503,6 +9240,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'BLOC10_REQUETE' => 
         array (
@@ -8513,6 +9251,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -8534,6 +9273,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -8544,6 +9284,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -8554,6 +9295,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MOTIF_ID' => 
         array (
@@ -8564,6 +9306,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -8574,6 +9317,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -8584,6 +9328,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -8594,6 +9339,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -8604,6 +9350,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -8614,6 +9361,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -8624,6 +9372,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'COMMENTAIRES' => 
         array (
@@ -8634,6 +9383,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -8655,6 +9405,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -8665,6 +9416,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -8675,6 +9427,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_MODULATEUR_ID' => 
         array (
@@ -8685,6 +9438,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PONDERATION_SERVICE_DU' => 
         array (
@@ -8695,6 +9449,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PONDERATION_SERVICE_COMPL' => 
         array (
@@ -8705,6 +9460,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -8715,6 +9471,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -8725,6 +9482,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -8735,6 +9493,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -8745,6 +9504,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -8755,6 +9515,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -8765,6 +9526,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -8786,6 +9548,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -8796,6 +9559,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -8806,6 +9570,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MULTIPLICATEUR' => 
         array (
@@ -8816,6 +9581,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DECHARGE' => 
         array (
@@ -8826,6 +9592,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -8836,6 +9603,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -8846,6 +9614,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -8856,6 +9625,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -8866,6 +9636,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -8876,6 +9647,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -8886,6 +9658,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -8907,6 +9680,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -8917,6 +9691,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -8927,6 +9702,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -8937,6 +9713,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -8947,6 +9724,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -8957,6 +9735,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -8967,6 +9746,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -8977,6 +9757,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -8987,6 +9768,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -8997,6 +9779,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9018,6 +9801,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -9028,6 +9812,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -9038,6 +9823,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LISTE' => 
         array (
@@ -9048,6 +9834,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -9058,6 +9845,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -9068,6 +9856,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -9078,6 +9867,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -9088,6 +9878,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -9098,6 +9889,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -9108,6 +9900,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -9118,6 +9911,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -9128,6 +9922,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -9138,6 +9933,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -9148,6 +9944,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -9158,6 +9955,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -9168,6 +9966,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9189,6 +9988,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INDICATEUR_ID' => 
         array (
@@ -9199,6 +9999,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Identifiant de l\'indicateur',
         ),
         'AFFECTATION_ID' => 
         array (
@@ -9209,6 +10010,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Identifiant du personnel',
         ),
         'FREQUENCE' => 
         array (
@@ -9219,6 +10021,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Fréquence de notification en secondes (60*60*24=jour, 60*60*24*7=semaine, etc.)',
         ),
         'DATE_ABONNEMENT' => 
         array (
@@ -9229,6 +10032,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Date d\'abonnement à cette notification',
         ),
         'DATE_DERN_NOTIF' => 
         array (
@@ -9239,6 +10043,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Eventuelle date de dernière notification',
         ),
         'IN_HOME' => 
         array (
@@ -9249,6 +10054,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9270,6 +10076,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOM' => 
         array (
@@ -9280,6 +10087,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -9290,6 +10098,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -9300,6 +10109,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -9310,6 +10120,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -9320,6 +10131,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -9330,6 +10142,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -9340,6 +10153,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALEUR' => 
         array (
@@ -9350,6 +10164,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DESCRIPTION' => 
         array (
@@ -9360,6 +10175,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9381,6 +10197,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -9391,6 +10208,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -9401,6 +10219,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TEMOIN_UE' => 
         array (
@@ -9411,6 +10230,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDITE_DEBUT' => 
         array (
@@ -9421,6 +10241,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'VALIDITE_FIN' => 
         array (
@@ -9431,6 +10252,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -9441,6 +10263,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -9451,6 +10274,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -9461,6 +10285,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -9471,6 +10296,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -9481,6 +10307,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -9491,6 +10318,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -9501,6 +10329,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -9511,6 +10340,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9532,6 +10362,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -9542,6 +10373,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -9552,6 +10384,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9573,6 +10406,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -9583,6 +10417,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -9593,6 +10428,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -9603,6 +10439,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ECART_MOIS' => 
         array (
@@ -9613,6 +10450,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ECART_MOIS_PAIEMENT' => 
         array (
@@ -9623,6 +10461,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -9633,6 +10472,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ENSEIGNEMENT' => 
         array (
@@ -9643,6 +10483,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PAIEMENT' => 
         array (
@@ -9653,6 +10494,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -9663,6 +10505,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -9673,6 +10516,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -9683,6 +10527,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -9693,6 +10538,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -9703,6 +10549,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -9713,6 +10560,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9734,6 +10582,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_PIECE_JOINTE_ID' => 
         array (
@@ -9744,6 +10593,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -9754,6 +10604,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -9764,6 +10615,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -9774,6 +10626,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -9784,6 +10637,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -9794,6 +10648,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -9804,6 +10659,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -9814,6 +10670,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -9824,6 +10681,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9845,6 +10703,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FICHIER_ID' => 
         array (
@@ -9855,6 +10714,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9876,6 +10736,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -9886,6 +10747,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -9896,6 +10758,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9917,6 +10780,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PLAFOND_ID' => 
         array (
@@ -9927,6 +10791,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PLAFOND_ETAT_ID' => 
         array (
@@ -9937,6 +10802,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_DEBUT_ID' => 
         array (
@@ -9947,6 +10813,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_FIN_ID' => 
         array (
@@ -9957,6 +10824,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -9967,6 +10835,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -9988,6 +10857,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -9998,6 +10868,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -10008,6 +10879,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10029,6 +10901,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CATEGORIE_ID' => 
         array (
@@ -10039,6 +10912,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -10049,6 +10923,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -10059,6 +10934,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -10069,6 +10945,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10090,6 +10967,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -10100,6 +10978,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -10110,6 +10989,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PRIORITE' => 
         array (
@@ -10120,6 +11000,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MESSAGE' => 
         array (
@@ -10130,6 +11011,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10151,6 +11033,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -10161,6 +11044,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -10171,6 +11055,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PERIMETRE_ID' => 
         array (
@@ -10181,6 +11066,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_CHANGER_STRUCTURE' => 
         array (
@@ -10191,6 +11077,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -10201,6 +11088,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -10211,6 +11099,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -10221,6 +11110,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -10231,6 +11121,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -10241,6 +11132,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -10251,6 +11143,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10272,6 +11165,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PRIVILEGE_ID' => 
         array (
@@ -10282,6 +11176,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10303,6 +11198,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -10313,6 +11209,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -10323,6 +11220,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -10333,6 +11231,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -10343,6 +11242,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -10353,6 +11253,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -10363,6 +11264,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -10373,6 +11275,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -10383,6 +11286,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE' => 
         array (
@@ -10393,6 +11297,7 @@
           'precision' => 2,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10414,6 +11319,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -10424,6 +11330,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIEN_ID' => 
         array (
@@ -10434,6 +11341,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ACTIF' => 
         array (
@@ -10444,6 +11352,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'POIDS' => 
         array (
@@ -10454,6 +11363,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'CHOIX_MINIMUM' => 
         array (
@@ -10464,6 +11374,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'CHOIX_MAXIMUM' => 
         array (
@@ -10474,6 +11385,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -10484,6 +11396,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -10494,6 +11407,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -10504,6 +11418,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -10514,6 +11429,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -10524,6 +11440,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -10534,6 +11451,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -10544,6 +11462,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -10554,6 +11473,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10575,6 +11495,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -10585,6 +11506,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOEUD_ID' => 
         array (
@@ -10595,6 +11517,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ASSIDUITE' => 
         array (
@@ -10605,6 +11528,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -10615,6 +11539,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -10625,6 +11550,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -10635,6 +11561,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -10645,6 +11572,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -10655,6 +11583,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -10665,6 +11594,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -10675,6 +11605,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -10685,6 +11616,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -10695,6 +11627,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10716,6 +11649,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_NOEUD_ID' => 
         array (
@@ -10726,6 +11660,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_HEURES_ID' => 
         array (
@@ -10736,6 +11671,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'EFFECTIF' => 
         array (
@@ -10746,6 +11682,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -10756,6 +11693,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10777,6 +11715,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_NOEUD_ID' => 
         array (
@@ -10787,6 +11726,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -10797,6 +11737,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OUVERTURE' => 
         array (
@@ -10807,6 +11748,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'DEDOUBLEMENT' => 
         array (
@@ -10817,6 +11759,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'ASSIDUITE' => 
         array (
@@ -10827,6 +11770,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10848,6 +11792,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -10858,6 +11803,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -10868,6 +11814,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETABLISSEMENT_ID' => 
         array (
@@ -10878,6 +11825,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -10888,6 +11836,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -10898,6 +11847,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -10908,6 +11858,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -10918,6 +11869,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -10928,6 +11880,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -10938,6 +11891,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -10948,6 +11902,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -10958,6 +11913,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DESCRIPTION' => 
         array (
@@ -10968,6 +11924,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -10989,6 +11946,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FONCTION_ID' => 
         array (
@@ -10999,6 +11957,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -11009,6 +11968,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -11019,6 +11979,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -11029,6 +11990,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -11039,6 +12001,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -11049,6 +12012,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -11059,6 +12023,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -11069,6 +12034,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -11079,6 +12045,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'COMMENTAIRES' => 
         array (
@@ -11089,6 +12056,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMATION' => 
         array (
@@ -11099,6 +12067,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -11109,6 +12078,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -11119,6 +12089,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11140,6 +12111,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -11150,6 +12122,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -11160,6 +12133,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GROUPE_TYPE_FORMATION_ID' => 
         array (
@@ -11170,6 +12144,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -11180,6 +12155,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEDOUBLEMENT' => 
         array (
@@ -11190,6 +12166,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -11200,6 +12177,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -11210,6 +12188,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -11220,6 +12199,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -11230,6 +12210,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -11240,6 +12221,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -11250,6 +12232,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -11260,6 +12243,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11281,6 +12265,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -11291,6 +12276,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -11301,6 +12287,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'IMPORTABLE' => 
         array (
@@ -11311,6 +12298,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11332,6 +12320,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -11342,6 +12331,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_STATUTAIRE' => 
         array (
@@ -11352,6 +12342,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEPASSEMENT' => 
         array (
@@ -11362,6 +12353,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PLAFOND_REFERENTIEL' => 
         array (
@@ -11372,6 +12364,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'MAXIMUM_HETD' => 
         array (
@@ -11382,6 +12375,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -11392,6 +12386,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -11402,6 +12397,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -11412,6 +12408,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -11422,6 +12419,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -11432,6 +12430,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -11442,6 +12441,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -11452,6 +12452,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -11462,6 +12463,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -11472,6 +12474,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -11482,6 +12485,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NON_AUTORISE' => 
         array (
@@ -11492,6 +12496,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_SERVICE' => 
         array (
@@ -11502,6 +12507,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_CHOISIR_DANS_DOSSIER' => 
         array (
@@ -11512,6 +12518,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_DOSSIER' => 
         array (
@@ -11522,6 +12529,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_REFERENTIEL' => 
         array (
@@ -11532,6 +12540,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_MOTIF_NON_PAIEMENT' => 
         array (
@@ -11542,6 +12551,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PEUT_AVOIR_CONTRAT' => 
         array (
@@ -11552,6 +12562,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PLAFOND_HC_HORS_REMU_FC' => 
         array (
@@ -11562,6 +12573,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '9999',
+          'commentaire' => NULL,
         ),
         'PLAFOND_HC_REMU_FC' => 
         array (
@@ -11572,6 +12584,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '13502',
+          'commentaire' => NULL,
         ),
         'DEPASSEMENT_SERVICE_DU_SANS_HC' => 
         array (
@@ -11582,6 +12595,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PEUT_CLOTURER_SAISIE' => 
         array (
@@ -11592,6 +12606,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_SERVICE_EXT' => 
         array (
@@ -11602,6 +12617,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TEM_ATV' => 
         array (
@@ -11612,6 +12628,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TEM_BIATSS' => 
         array (
@@ -11622,6 +12639,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PLAFOND_HC_FI_HORS_EAD' => 
         array (
@@ -11632,6 +12650,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '9999',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11653,6 +12672,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PRIVILEGE_ID' => 
         array (
@@ -11663,6 +12683,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11684,6 +12705,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -11694,6 +12716,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -11704,6 +12727,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -11714,6 +12738,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ENSEIGNEMENT' => 
         array (
@@ -11724,6 +12749,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -11734,6 +12760,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -11744,6 +12771,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -11754,6 +12782,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -11764,6 +12793,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -11774,6 +12804,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -11784,6 +12815,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -11794,6 +12826,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -11804,6 +12837,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PLAFOND_REFERENTIEL' => 
         array (
@@ -11814,6 +12848,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'AFF_ADRESSE_CONTRAT' => 
         array (
@@ -11824,6 +12859,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11845,6 +12881,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATE_SYNC' => 
         array (
@@ -11855,6 +12892,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TABLE_NAME' => 
         array (
@@ -11865,6 +12903,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -11875,6 +12914,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MESSAGE' => 
         array (
@@ -11885,6 +12925,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11906,6 +12947,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALEUR' => 
         array (
@@ -11916,6 +12958,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -11926,6 +12969,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -11936,6 +12980,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -11946,6 +12991,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -11956,6 +13002,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -11966,6 +13013,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -11976,6 +13024,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -11997,6 +13046,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TABLE_NAME' => 
         array (
@@ -12007,6 +13057,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VIEW_NAME' => 
         array (
@@ -12017,6 +13068,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SEQUENCE_NAME' => 
         array (
@@ -12027,6 +13079,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CONSTRAINT_NAME' => 
         array (
@@ -12037,6 +13090,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CUSTOM_CALCUL_PROC' => 
         array (
@@ -12047,6 +13101,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -12057,6 +13112,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'FEUILLE_DE_ROUTE' => 
         array (
@@ -12067,6 +13123,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12088,6 +13145,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12098,6 +13156,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_AGREMENT_ID' => 
         array (
@@ -12108,6 +13167,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -12118,6 +13178,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -12128,6 +13189,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OBLIGATOIRE' => 
         array (
@@ -12138,6 +13200,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Témoin (1 ou 0) pour définir si l\'agrément doit être demandé obligatoirement ou non',
         ),
         'AGREMENT_ID' => 
         array (
@@ -12148,6 +13211,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'ID de l\'agrément si agréé',
         ),
         'TO_DELETE' => 
         array (
@@ -12158,6 +13222,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12179,6 +13244,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12189,6 +13255,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOEUD_ID' => 
         array (
@@ -12199,6 +13266,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -12209,6 +13277,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_HEURES_ID' => 
         array (
@@ -12219,6 +13288,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -12229,6 +13299,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -12239,6 +13310,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -12249,6 +13321,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ENS_ID' => 
         array (
@@ -12259,6 +13332,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -12269,6 +13343,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GROUPE_TYPE_FORMATION_ID' => 
         array (
@@ -12279,6 +13354,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OUVERTURE' => 
         array (
@@ -12289,6 +13365,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Seuil d\'ouverture',
         ),
         'DEDOUBLEMENT' => 
         array (
@@ -12299,6 +13376,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Seuil de dédoublement',
         ),
         'ASSIDUITE' => 
         array (
@@ -12309,6 +13387,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Taux d\'assiduité en % (entre 0 et 1)',
         ),
         'EFFECTIF' => 
         array (
@@ -12319,6 +13398,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Effectifs',
         ),
         'HEURES_ENS' => 
         array (
@@ -12329,6 +13409,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Heures d\'enseignement (charges par groupe)',
         ),
         'GROUPES' => 
         array (
@@ -12339,6 +13420,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Nombre de groupes calculé',
         ),
         'HEURES' => 
         array (
@@ -12349,6 +13431,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Heures réelles calculées',
         ),
         'HETD' => 
         array (
@@ -12359,6 +13442,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'HETD réelles calculées',
         ),
         'TO_DELETE' => 
         array (
@@ -12369,6 +13453,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12390,6 +13475,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12400,6 +13486,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -12410,6 +13497,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -12420,6 +13508,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GROUPE_TYPE_FORMATION_ID' => 
         array (
@@ -12430,6 +13519,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -12440,6 +13530,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEDOUBLEMENT' => 
         array (
@@ -12450,6 +13541,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Seuil de dédoublement',
         ),
         'TO_DELETE' => 
         array (
@@ -12460,6 +13552,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12481,6 +13574,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12491,6 +13585,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -12501,6 +13596,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_CLOTURER_SAISIE' => 
         array (
@@ -12511,6 +13607,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
         'CLOTURE' => 
         array (
@@ -12521,6 +13618,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1 : 1 si clôturé)',
         ),
         'TO_DELETE' => 
         array (
@@ -12531,6 +13629,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12552,6 +13651,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12562,6 +13662,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -12572,6 +13673,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_AVOIR_CONTRAT' => 
         array (
@@ -12582,6 +13684,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ),
         'STRUCTURE_ID' => 
         array (
@@ -12592,6 +13695,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NBVH' => 
         array (
@@ -12602,6 +13706,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires contractualisables',
         ),
         'EDITE' => 
         array (
@@ -12612,6 +13717,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires contractualisés',
         ),
         'SIGNE' => 
         array (
@@ -12622,6 +13728,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires signés',
         ),
         'TO_DELETE' => 
         array (
@@ -12632,6 +13739,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12653,6 +13761,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TBL_NAME' => 
         array (
@@ -12663,6 +13772,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C1' => 
         array (
@@ -12673,6 +13783,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'V1' => 
         array (
@@ -12683,6 +13794,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C2' => 
         array (
@@ -12693,6 +13805,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'V2' => 
         array (
@@ -12703,6 +13816,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C3' => 
         array (
@@ -12713,6 +13827,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'V3' => 
         array (
@@ -12723,6 +13838,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C4' => 
         array (
@@ -12733,6 +13849,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'V4' => 
         array (
@@ -12743,6 +13860,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'C5' => 
         array (
@@ -12753,6 +13871,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'V5' => 
         array (
@@ -12763,6 +13882,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SQLCOND' => 
         array (
@@ -12773,6 +13893,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12794,6 +13915,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12804,6 +13926,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_RESSOURCE_ID' => 
         array (
@@ -12814,6 +13937,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -12824,6 +13948,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -12834,6 +13959,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TO_DELETE' => 
         array (
@@ -12844,6 +13970,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12865,6 +13992,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -12875,6 +14003,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -12885,6 +14014,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_DOSSIER' => 
         array (
@@ -12895,6 +14025,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => '1 Si l\'intervenant a un dossier, 0 sinon',
         ),
         'DOSSIER_ID' => 
         array (
@@ -12905,6 +14036,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -12915,6 +14047,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TO_DELETE' => 
         array (
@@ -12925,6 +14058,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -12946,6 +14080,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIEN_ID' => 
         array (
@@ -12956,6 +14091,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -12966,6 +14102,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_LIEN_ID' => 
         array (
@@ -12976,6 +14113,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOEUD_SUP_ID' => 
         array (
@@ -12986,6 +14124,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NOEUD_INF_ID' => 
         array (
@@ -12996,6 +14135,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -13006,6 +14146,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ACTIF' => 
         array (
@@ -13016,6 +14157,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Témoin (0 ou 1), 1 si actif',
         ),
         'POIDS' => 
         array (
@@ -13026,6 +14168,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Poids (1 par défaut)',
         ),
         'CHOIX_MINIMUM' => 
         array (
@@ -13036,6 +14179,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Choix minimum',
         ),
         'CHOIX_MAXIMUM' => 
         array (
@@ -13046,6 +14190,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Choix maximum',
         ),
         'NB_CHOIX' => 
         array (
@@ -13056,6 +14201,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Nombre de choix',
         ),
         'TOTAL_POIDS' => 
         array (
@@ -13066,6 +14212,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Total de poids des fils',
         ),
         'TO_DELETE' => 
         array (
@@ -13076,6 +14223,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'MAX_POIDS' => 
         array (
@@ -13086,6 +14234,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Poids maximum pour les fils',
         ),
       ),
     ),
@@ -13107,6 +14256,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13117,6 +14267,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13127,6 +14278,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -13137,6 +14289,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'MISE_EN_PAIEMENT_ID' => 
         array (
@@ -13147,6 +14300,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PERIODE_PAIEMENT_ID' => 
         array (
@@ -13157,6 +14311,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TO_DELETE' => 
         array (
@@ -13167,6 +14322,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_A_PAYER' => 
         array (
@@ -13177,6 +14333,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'HETD à payer',
         ),
         'HEURES_A_PAYER_POND' => 
         array (
@@ -13187,6 +14344,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'HETD à payer (en %)',
         ),
         'HEURES_DEMANDEES' => 
         array (
@@ -13197,6 +14355,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'HETD demandées',
         ),
         'HEURES_PAYEES' => 
         array (
@@ -13207,6 +14366,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'HETD payées',
         ),
         'FORMULE_RES_SERVICE_ID' => 
         array (
@@ -13217,6 +14377,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FORMULE_RES_SERVICE_REF_ID' => 
         array (
@@ -13227,6 +14388,29 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'SERVICE_ID' => 
+        array (
+          'name' => 'SERVICE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'SERVICE_REFERENTIEL_ID' => 
+        array (
+          'name' => 'SERVICE_REFERENTIEL_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -13248,6 +14432,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13258,6 +14443,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_PIECE_JOINTE_ID' => 
         array (
@@ -13268,6 +14454,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13278,6 +14465,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DEMANDEE' => 
         array (
@@ -13288,6 +14476,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (1 si la PJ est demandée)',
         ),
         'FOURNIE' => 
         array (
@@ -13298,6 +14487,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (1 si la PJ est fournie)',
         ),
         'VALIDEE' => 
         array (
@@ -13308,6 +14498,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (1 si la PJ est validée)',
         ),
         'TO_DELETE' => 
         array (
@@ -13318,6 +14509,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_POUR_SEUIL' => 
         array (
@@ -13328,6 +14520,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
       ),
     ),
@@ -13349,6 +14542,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13359,6 +14553,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_PIECE_JOINTE_ID' => 
         array (
@@ -13369,6 +14564,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13379,6 +14575,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TO_DELETE' => 
         array (
@@ -13389,6 +14586,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HEURES_POUR_SEUIL' => 
         array (
@@ -13399,6 +14597,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -13420,6 +14619,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13430,6 +14630,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_PIECE_JOINTE_ID' => 
         array (
@@ -13440,6 +14641,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13450,6 +14652,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -13460,6 +14663,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FICHIER_ID' => 
         array (
@@ -13470,6 +14674,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TO_DELETE' => 
         array (
@@ -13480,6 +14685,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PIECE_JOINTE_ID' => 
         array (
@@ -13490,6 +14696,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -13511,6 +14718,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13521,6 +14729,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13531,6 +14740,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_SERVICE' => 
         array (
@@ -13541,6 +14751,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -13551,6 +14762,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -13561,6 +14773,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NBVH' => 
         array (
@@ -13571,6 +14784,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires saisis',
         ),
         'VALIDE' => 
         array (
@@ -13581,6 +14795,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires validés',
         ),
         'TO_DELETE' => 
         array (
@@ -13591,6 +14806,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -13601,6 +14817,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_PERIODE_ID' => 
         array (
@@ -13611,6 +14828,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -13621,6 +14839,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_HISTO' => 
         array (
@@ -13631,6 +14850,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'ETAPE_HISTO' => 
         array (
@@ -13641,6 +14861,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Témoin (1 si l\'étape est supprimée)',
         ),
         'HAS_HEURES_MAUVAISE_PERIODE' => 
         array (
@@ -13651,6 +14872,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (1 si heures saisies au mauvais semestre)',
         ),
         'SERVICE_ID' => 
         array (
@@ -13661,6 +14883,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_STRUCTURE_ID' => 
         array (
@@ -13671,6 +14894,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -13681,6 +14905,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_CODE' => 
         array (
@@ -13691,6 +14916,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_CODE' => 
         array (
@@ -13701,6 +14927,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -13711,6 +14938,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'NB d\'heures saisi',
         ),
       ),
     ),
@@ -13732,6 +14960,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13742,6 +14971,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13752,6 +14982,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_SERVICE' => 
         array (
@@ -13762,6 +14993,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (1=peut saisir du référentiel)',
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -13772,6 +15004,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -13782,6 +15015,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'NBVH' => 
         array (
@@ -13792,6 +15026,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires',
         ),
         'VALIDE' => 
         array (
@@ -13802,6 +15037,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Nombre de volumes horaires validés',
         ),
         'TO_DELETE' => 
         array (
@@ -13812,6 +15048,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -13833,6 +15070,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13843,6 +15081,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13853,6 +15092,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PEUT_SAISIR_SERVICE' => 
         array (
@@ -13863,6 +15103,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
         'PEUT_SAISIR_REFERENTIEL' => 
         array (
@@ -13873,6 +15114,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
         'HEURES_SERVICE_PREV' => 
         array (
@@ -13883,6 +15125,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'NB d\'heures de service prévisionnel',
         ),
         'HEURES_REFERENTIEL_PREV' => 
         array (
@@ -13893,6 +15136,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'NB d\'heures de référentiel prévisionnel',
         ),
         'HEURES_SERVICE_REAL' => 
         array (
@@ -13903,6 +15147,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'NB d\'heures de service réalisé',
         ),
         'HEURES_REFERENTIEL_REAL' => 
         array (
@@ -13913,6 +15158,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'NB d\'heures de référentiel réalisé',
         ),
         'TO_DELETE' => 
         array (
@@ -13923,6 +15169,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -13944,6 +15191,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -13954,6 +15202,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -13964,6 +15213,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -13974,6 +15224,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -13984,6 +15235,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_ID' => 
         array (
@@ -13994,6 +15246,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -14004,6 +15257,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Si validé',
         ),
         'TO_DELETE' => 
         array (
@@ -14014,6 +15268,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'VOLUME_HORAIRE_ID' => 
         array (
@@ -14024,6 +15279,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'AUTO_VALIDATION' => 
         array (
@@ -14034,6 +15290,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
       ),
     ),
@@ -14055,6 +15312,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_ID' => 
         array (
@@ -14065,6 +15323,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -14075,6 +15334,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -14085,6 +15345,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -14095,6 +15356,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_REFERENTIEL_ID' => 
         array (
@@ -14105,6 +15367,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VALIDATION_ID' => 
         array (
@@ -14115,6 +15378,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => 'Si validé',
         ),
         'TO_DELETE' => 
         array (
@@ -14125,6 +15389,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'VOLUME_HORAIRE_REF_ID' => 
         array (
@@ -14135,6 +15400,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'AUTO_VALIDATION' => 
         array (
@@ -14145,6 +15411,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
       ),
     ),
@@ -14166,6 +15433,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -14176,6 +15444,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Identifiant de l\'intervenant concerné',
         ),
         'ETAPE_ID' => 
         array (
@@ -14186,6 +15455,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Identifiant de l\'étape concernée',
         ),
         'STRUCTURE_ID' => 
         array (
@@ -14196,6 +15466,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => 'null',
+          'commentaire' => 'Eventuelle structure concernée',
         ),
         'ATTEIGNABLE' => 
         array (
@@ -14206,6 +15477,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Témoin indiquant si l\'étape est atteignable ou non',
         ),
         'TO_DELETE' => 
         array (
@@ -14216,6 +15488,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'REALISATION' => 
         array (
@@ -14226,6 +15499,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => 'Pourcentage de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ),
         'OBJECTIF' => 
         array (
@@ -14236,6 +15510,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Objectif de réalisation de l\'étape de Workflow (entre 0 et 1)',
         ),
         'ANNEE_ID' => 
         array (
@@ -14246,6 +15521,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -14256,6 +15532,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_CODE' => 
         array (
@@ -14266,6 +15543,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Code du type d\'intevention (CM / TD / TP, etc)',
         ),
         'ETAPE_CODE' => 
         array (
@@ -14276,6 +15554,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Code de l\'étape du workflow concernée',
         ),
         'STATUT_INTERVENANT_ID' => 
         array (
@@ -14286,6 +15565,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14307,6 +15587,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TABLE_NAME' => 
         array (
@@ -14317,6 +15598,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DATA_ID' => 
         array (
@@ -14327,6 +15609,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14348,6 +15631,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_HEURES_ID' => 
         array (
@@ -14358,6 +15642,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_ID' => 
         array (
@@ -14368,6 +15653,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'EFFECTIF' => 
         array (
@@ -14378,6 +15664,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14399,6 +15686,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -14409,6 +15697,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -14419,6 +15708,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -14429,6 +15719,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -14439,6 +15730,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -14449,6 +15741,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -14459,6 +15752,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -14469,6 +15763,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -14479,6 +15774,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14500,6 +15796,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_AGREMENT_ID' => 
         array (
@@ -14510,6 +15807,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_INTERVENANT_ID' => 
         array (
@@ -14520,6 +15818,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OBLIGATOIRE' => 
         array (
@@ -14530,6 +15829,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PREMIER_RECRUTEMENT' => 
         array (
@@ -14540,6 +15840,7 @@
           'precision' => 1,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -14550,6 +15851,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -14560,6 +15862,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -14570,6 +15873,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -14580,6 +15884,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -14590,6 +15895,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -14600,6 +15906,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14621,6 +15928,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -14631,6 +15939,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -14641,6 +15950,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -14651,6 +15961,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -14661,6 +15972,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -14671,6 +15983,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -14681,6 +15994,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -14691,6 +16005,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -14701,6 +16016,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14722,6 +16038,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -14732,6 +16049,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -14742,6 +16060,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GROUPE_ID' => 
         array (
@@ -14752,6 +16071,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -14762,6 +16082,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -14772,6 +16093,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -14782,6 +16104,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -14792,6 +16115,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -14802,6 +16126,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -14812,6 +16137,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -14822,6 +16148,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -14832,6 +16159,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_STATUTAIRE' => 
         array (
@@ -14842,6 +16170,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -14863,6 +16192,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -14873,6 +16203,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_COURT' => 
         array (
@@ -14883,6 +16214,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_LONG' => 
         array (
@@ -14893,6 +16225,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -14903,6 +16236,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_HEURES_ELEMENT_ID' => 
         array (
@@ -14913,6 +16247,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELIGIBLE_CENTRE_COUT_EP' => 
         array (
@@ -14923,6 +16258,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'ELIGIBLE_EXTRACTION_PAIE' => 
         array (
@@ -14933,6 +16269,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -14943,6 +16280,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -14953,6 +16291,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -14963,6 +16302,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -14973,6 +16313,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -14983,6 +16324,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -14993,6 +16335,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ENSEIGNEMENT' => 
         array (
@@ -15003,6 +16346,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15024,6 +16368,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -15034,6 +16379,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -15044,6 +16390,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15054,6 +16401,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15064,6 +16412,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15074,6 +16423,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15084,6 +16434,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15094,6 +16445,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15104,6 +16456,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15125,6 +16478,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -15135,6 +16489,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -15145,6 +16500,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -15155,6 +16511,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_HETD_SERVICE' => 
         array (
@@ -15165,6 +16522,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TAUX_HETD_COMPLEMENTAIRE' => 
         array (
@@ -15175,6 +16533,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'VISIBLE' => 
         array (
@@ -15185,6 +16544,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15195,6 +16555,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15205,6 +16566,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15215,6 +16577,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15225,6 +16588,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15235,6 +16599,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15245,6 +16610,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_DEBUT_ID' => 
         array (
@@ -15255,6 +16621,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_FIN_ID' => 
         array (
@@ -15265,6 +16632,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REGLE_FOAD' => 
         array (
@@ -15275,6 +16643,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'REGLE_FC' => 
         array (
@@ -15285,6 +16654,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_MAQUETTE_ID' => 
         array (
@@ -15295,6 +16665,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VISIBLE_EXTERIEUR' => 
         array (
@@ -15305,6 +16676,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15326,6 +16698,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -15336,6 +16709,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -15346,6 +16720,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15356,6 +16731,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15366,6 +16742,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15376,6 +16753,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15386,6 +16764,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15396,6 +16775,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15406,6 +16786,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -15416,6 +16797,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -15426,6 +16808,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15447,6 +16830,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -15457,6 +16841,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_INTERVENANT_ID' => 
         array (
@@ -15467,6 +16852,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_HETD_SERVICE' => 
         array (
@@ -15477,6 +16863,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TAUX_HETD_COMPLEMENTAIRE' => 
         array (
@@ -15487,6 +16874,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15508,6 +16896,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -15518,6 +16907,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -15528,6 +16918,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VISIBLE' => 
         array (
@@ -15538,6 +16929,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_DEBUT_ID' => 
         array (
@@ -15548,6 +16940,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_FIN_ID' => 
         array (
@@ -15558,6 +16951,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15568,6 +16962,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15578,6 +16973,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15588,6 +16984,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15598,6 +16995,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15608,6 +17006,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15618,6 +17017,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15639,6 +17039,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -15649,6 +17050,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -15659,6 +17061,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PUBLIQUE' => 
         array (
@@ -15669,6 +17072,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OBLIGATOIRE' => 
         array (
@@ -15679,6 +17083,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SAISIE_PAR_ENSEIGNANT' => 
         array (
@@ -15689,6 +17094,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15699,6 +17105,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15709,6 +17116,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15719,6 +17127,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15729,6 +17138,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15739,6 +17149,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15749,6 +17160,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15770,6 +17182,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_MODULATEUR_ID' => 
         array (
@@ -15780,6 +17193,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -15790,6 +17204,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -15800,6 +17215,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -15810,6 +17226,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15820,6 +17237,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15830,6 +17248,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15840,6 +17259,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15850,6 +17270,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15860,6 +17281,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15870,6 +17292,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -15891,6 +17314,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_MODULATEUR_ID' => 
         array (
@@ -15901,6 +17325,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -15911,6 +17336,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_DEBUT_ID' => 
         array (
@@ -15921,6 +17347,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_FIN_ID' => 
         array (
@@ -15931,6 +17358,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -15941,6 +17369,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -15951,6 +17380,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -15961,6 +17391,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -15971,6 +17402,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -15981,6 +17413,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -15991,6 +17424,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16012,6 +17446,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -16022,6 +17457,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -16032,6 +17468,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -16042,6 +17479,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -16052,6 +17490,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -16062,6 +17501,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -16072,6 +17512,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -16082,6 +17523,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -16092,6 +17534,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'URL_MODELE_DOC' => 
         array (
@@ -16102,6 +17545,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -16112,6 +17556,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16133,6 +17578,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_PIECE_JOINTE_ID' => 
         array (
@@ -16143,6 +17589,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATUT_INTERVENANT_ID' => 
         array (
@@ -16153,6 +17600,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OBLIGATOIRE' => 
         array (
@@ -16163,6 +17611,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SEUIL_HETD' => 
         array (
@@ -16173,6 +17622,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PREMIER_RECRUTEMENT' => 
         array (
@@ -16183,6 +17633,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -16193,6 +17644,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -16203,6 +17655,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -16213,6 +17666,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -16223,6 +17677,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -16233,6 +17688,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -16243,6 +17699,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_DEBUT_ID' => 
         array (
@@ -16253,6 +17710,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ANNEE_FIN_ID' => 
         array (
@@ -16263,6 +17721,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CHANGEMENT_RIB' => 
         array (
@@ -16273,6 +17732,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'FC' => 
         array (
@@ -16283,6 +17743,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16304,6 +17765,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -16314,6 +17776,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -16324,6 +17787,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FI' => 
         array (
@@ -16334,6 +17798,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FA' => 
         array (
@@ -16344,6 +17809,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FC' => 
         array (
@@ -16354,6 +17820,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'FC_MAJOREES' => 
         array (
@@ -16364,6 +17831,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'REFERENTIEL' => 
         array (
@@ -16374,6 +17842,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -16384,6 +17853,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -16394,6 +17864,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -16404,6 +17875,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -16414,6 +17886,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -16424,6 +17897,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -16434,6 +17908,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETABLISSEMENT' => 
         array (
@@ -16444,6 +17919,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16465,6 +17941,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -16475,6 +17952,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -16485,6 +17963,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16506,6 +17985,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -16516,6 +17996,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE' => 
         array (
@@ -16526,6 +18007,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ORDRE' => 
         array (
@@ -16536,6 +18018,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16557,6 +18040,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'USERNAME' => 
         array (
@@ -16567,6 +18051,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'EMAIL' => 
         array (
@@ -16577,6 +18062,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DISPLAY_NAME' => 
         array (
@@ -16587,6 +18073,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PASSWORD' => 
         array (
@@ -16597,6 +18084,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STATE' => 
         array (
@@ -16607,6 +18095,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -16617,6 +18106,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PASSWORD_RESET_TOKEN' => 
         array (
@@ -16627,6 +18117,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => 'null',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16648,6 +18139,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VALIDATION_ID' => 
         array (
@@ -16658,6 +18150,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'INTERVENANT_ID' => 
         array (
@@ -16668,6 +18161,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'STRUCTURE_ID' => 
         array (
@@ -16678,6 +18172,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -16688,6 +18183,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -16698,6 +18194,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -16708,6 +18205,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -16718,6 +18216,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -16728,6 +18227,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -16738,6 +18238,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16759,6 +18260,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VOLUME_HORAIRE_ID' => 
         array (
@@ -16769,6 +18271,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16790,6 +18293,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'VOLUME_HORAIRE_REF_ID' => 
         array (
@@ -16800,6 +18304,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16821,6 +18326,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -16842,6 +18348,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -16852,6 +18359,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_ID' => 
         array (
@@ -16862,6 +18370,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'PERIODE_ID' => 
         array (
@@ -16872,6 +18381,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -16882,6 +18392,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -16892,6 +18403,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'MOTIF_NON_PAIEMENT_ID' => 
         array (
@@ -16902,6 +18414,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CONTRAT_ID' => 
         array (
@@ -16912,6 +18425,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -16922,6 +18436,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -16932,6 +18447,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -16942,6 +18458,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -16952,6 +18469,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -16962,6 +18480,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -16972,6 +18491,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -16982,6 +18502,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -16992,6 +18513,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'AUTO_VALIDATION' => 
         array (
@@ -17002,6 +18524,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HORAIRE_DEBUT' => 
         array (
@@ -17012,6 +18535,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HORAIRE_FIN' => 
         array (
@@ -17022,6 +18546,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -17043,6 +18568,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SCENARIO_ID' => 
         array (
@@ -17053,6 +18579,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -17063,6 +18590,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -17073,6 +18601,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GROUPES' => 
         array (
@@ -17083,6 +18612,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -17093,6 +18623,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -17103,6 +18634,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -17113,6 +18645,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -17123,6 +18656,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -17133,6 +18667,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -17143,6 +18678,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -17153,6 +18689,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -17163,6 +18700,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -17184,6 +18722,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ELEMENT_PEDAGOGIQUE_ID' => 
         array (
@@ -17194,6 +18733,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENTION_ID' => 
         array (
@@ -17204,6 +18744,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -17214,6 +18755,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -17224,6 +18766,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -17234,6 +18777,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -17244,6 +18788,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -17254,6 +18799,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -17264,6 +18810,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -17274,6 +18821,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -17284,6 +18832,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -17294,6 +18843,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'GROUPES' => 
         array (
@@ -17304,6 +18854,7 @@
           'precision' => 126,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -17325,6 +18876,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -17335,6 +18887,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SERVICE_REFERENTIEL_ID' => 
         array (
@@ -17345,6 +18898,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HEURES' => 
         array (
@@ -17355,6 +18909,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATION' => 
         array (
@@ -17365,6 +18920,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_CREATEUR_ID' => 
         array (
@@ -17375,6 +18931,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATION' => 
         array (
@@ -17385,6 +18942,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => 'SYSDATE',
+          'commentaire' => NULL,
         ),
         'HISTO_MODIFICATEUR_ID' => 
         array (
@@ -17395,6 +18953,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTION' => 
         array (
@@ -17405,6 +18964,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HISTO_DESTRUCTEUR_ID' => 
         array (
@@ -17415,6 +18975,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_ID' => 
         array (
@@ -17425,6 +18986,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'SOURCE_CODE' => 
         array (
@@ -17435,6 +18997,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'AUTO_VALIDATION' => 
         array (
@@ -17445,6 +19008,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'HORAIRE_DEBUT' => 
         array (
@@ -17455,6 +19019,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'HORAIRE_FIN' => 
         array (
@@ -17465,6 +19030,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -17486,6 +19052,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'WF_ETAPE_DEP_ID' => 
         array (
@@ -17496,6 +19063,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TBL_WORKFLOW_ID' => 
         array (
@@ -17506,6 +19074,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'TO_DELETE' => 
         array (
@@ -17516,6 +19085,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -17537,6 +19107,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'CODE' => 
         array (
@@ -17547,6 +19118,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => 'Code de cette étape',
         ),
         'ORDRE' => 
         array (
@@ -17557,6 +19129,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => 'Permet d\'ordonner les étapes',
         ),
         'LIBELLE_INTERVENANT' => 
         array (
@@ -17567,6 +19140,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LIBELLE_AUTRES' => 
         array (
@@ -17577,6 +19151,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ROUTE' => 
         array (
@@ -17587,6 +19162,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'DESC_NON_FRANCHIE' => 
         array (
@@ -17597,6 +19173,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OBLIGATOIRE' => 
         array (
@@ -17607,6 +19184,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'DESC_SANS_OBJECTIF' => 
         array (
@@ -17617,6 +19195,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ROUTE_INTERVENANT' => 
         array (
@@ -17627,6 +19206,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -17648,6 +19228,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ETAPE_PREC_ID' => 
         array (
@@ -17658,6 +19239,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'LOCALE' => 
         array (
@@ -17668,6 +19250,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'INTEGRALE' => 
         array (
@@ -17678,6 +19261,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'PARTIELLE' => 
         array (
@@ -17688,6 +19272,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
         'ID' => 
         array (
@@ -17698,6 +19283,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'ACTIVE' => 
         array (
@@ -17708,6 +19294,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
+          'commentaire' => NULL,
         ),
         'TYPE_INTERVENANT_ID' => 
         array (
@@ -17718,6 +19305,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
         ),
         'OBLIGATOIRE' => 
         array (
@@ -17728,6 +19316,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
         ),
       ),
     ),
@@ -20732,7 +22321,11 @@ END FORMULE_NANTERRE;',
 
     -- BJ=N22+X22+AH22
     WHEN c = \'BJ\' AND v >= 1 THEN
-      RETURN cell(\'N\', l) + cell(\'X\', l) + cell(\'AH\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'N\', l) + cell(\'X\', l);
+      ELSE
+        RETURN cell(\'N\', l) + cell(\'X\', l) + cell(\'AH\', l);
+      END IF;
 
 
 
@@ -20750,13 +22343,21 @@ END FORMULE_NANTERRE;',
 
     -- BM=S22+AC22+BG22
     WHEN c = \'BM\' AND v >= 1 THEN
-      RETURN cell(\'S\', l) + cell(\'AC\', l) + cell(\'BG\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'S\', l) + cell(\'AC\', l) + cell(\'BG\', l) + cell(\'AH\', l);
+      ELSE
+        RETURN cell(\'S\', l) + cell(\'AC\', l) + cell(\'BG\', l);
+      END IF;
 
 
 
     -- BN=O22+Y22+AI22
     WHEN c = \'BN\' AND v >= 1 THEN
-      RETURN cell(\'O\', l) + cell(\'Y\', l) + cell(\'AI\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'O\', l) + cell(\'Y\', l);
+      ELSE
+        RETURN cell(\'O\', l) + cell(\'Y\', l) + cell(\'AI\', l);
+      END IF;
 
 
 
@@ -20780,7 +22381,11 @@ END FORMULE_NANTERRE;',
 
     -- BR=T22+AD22+BH22
     WHEN c = \'BR\' AND v >= 1 THEN
-      RETURN cell(\'T\', l) + cell(\'AD\', l) + cell(\'BH\', l);
+      IF vh.volume_horaire_ref_id IS NOT NULL THEN
+        RETURN cell(\'T\', l) + cell(\'AD\', l) + cell(\'BH\', l) + cell(\'AI\', l);
+      ELSE
+        RETURN cell(\'T\', l) + cell(\'AD\', l) + cell(\'BH\', l);
+      END IF;
 
 
 
@@ -27396,6 +29001,7 @@ END UNICAEN_TBL;',
                                                    AND vh.histo_destruction IS NULL
                                                    AND vh.heures <> 0
                                                    AND vh.type_volume_horaire_id = tvh.id
+                                                   AND vh.motif_non_paiement_id IS NULL
 
                  JOIN v_volume_horaire_etat     vhe ON vhe.volume_horaire_id = vh.id
 
@@ -27701,6 +29307,8 @@ END UNICAEN_TBL;',
       FROM
         (SELECT
           i.annee_id                                  annee_id,
+          frs.service_id                              service_id,
+          null                                        service_referentiel_id,
           frs.id                                      formule_res_service_id,
           null                                        formule_res_service_ref_id,
           i.id                                        intervenant_id,
@@ -27729,6 +29337,8 @@ END UNICAEN_TBL;',
 
         SELECT
           i.annee_id                                  annee_id,
+          null                                        service_id,
+          frs.service_referentiel_id                  service_referentiel_id,
           null                                        formule_res_service_id,
           frs.id                                      formule_res_service_ref_id,
           i.id                                        intervenant_id,
@@ -27769,6 +29379,8 @@ END UNICAEN_TBL;',
       HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
       HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
       HEURES_PAYEES              = v.HEURES_PAYEES,
+      SERVICE_REFERENTIEL_ID     = v.SERVICE_REFERENTIEL_ID,
+      SERVICE_ID                 = v.SERVICE_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -27785,6 +29397,8 @@ END UNICAEN_TBL;',
       HEURES_PAYEES,
       FORMULE_RES_SERVICE_ID,
       FORMULE_RES_SERVICE_REF_ID,
+      SERVICE_REFERENTIEL_ID,
+      SERVICE_ID,
       TO_DELETE
 
     ) VALUES (
@@ -27801,6 +29415,8 @@ END UNICAEN_TBL;',
       v.HEURES_PAYEES,
       v.FORMULE_RES_SERVICE_ID,
       v.FORMULE_RES_SERVICE_REF_ID,
+      v.SERVICE_REFERENTIEL_ID,
+      v.SERVICE_ID,
       0
 
     );
@@ -28538,7 +30154,8 @@ END UNICAEN_TBL;',
           LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
           LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
         WHERE
-          s.histo_destruction IS NULL) tv
+          s.histo_destruction IS NULL
+          AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)) tv
       WHERE
         \' || conds || \'
 
@@ -30250,6 +31867,7 @@ ORDER BY
 WITH t AS ( SELECT
   \'vh_\' || vh.id                    id,
   s.id                              service_id,
+  null                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
   fr.etat_volume_horaire_id         etat_volume_horaire_id,
@@ -30260,12 +31878,14 @@ WITH t AS ( SELECT
   vh.periode_id                     periode_id,
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
+  NULL                              motif_non_paiement_id,
 
   s.description                     service_description,
 
   vh.heures                         heures,
   0                                 heures_ref,
   0                                 heures_non_payees,
+  null                              motif_non_paiement,
   frvh.service_fi                   service_fi,
   frvh.service_fa                   service_fa,
   frvh.service_fc                   service_fc,
@@ -30290,6 +31910,7 @@ UNION ALL
 SELECT
   \'vh_\' || vh.id                    id,
   s.id                              service_id,
+  null                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
   vhe.etat_volume_horaire_id        etat_volume_horaire_id,
@@ -30300,12 +31921,14 @@ SELECT
   vh.periode_id                     periode_id,
   vh.type_intervention_id           type_intervention_id,
   NULL                              fonction_referentiel_id,
+  mnp.id                            motif_non_paiement_id,
 
   s.description                     service_description,
 
   vh.heures                         heures,
   0                                 heures_ref,
   1                                 heures_non_payees,
+  mnp.libelle_court                 motif_non_paiement,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -30324,16 +31947,17 @@ FROM
   JOIN service                     s ON s.id = vh.service_id
   JOIN v_volume_horaire_etat     vhe ON vhe.volume_horaire_id = vh.id
   JOIN formule_resultat           fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
+  JOIN motif_non_paiement        mnp ON mnp.id = vh.motif_non_paiement_id
 WHERE
-  vh.motif_non_paiement_id IS NOT NULL
-  AND vh.histo_destruction IS NULL
+  vh.histo_destruction IS NULL
   AND s.histo_destruction IS NULL
 
 UNION ALL
 
 SELECT
   \'vh_ref_\' || vhr.id               id,
-  sr.id                             service_id,
+  null                              service_id,
+  sr.id                             service_referentiel_id,
   sr.intervenant_id                 intervenant_id,
   fr.type_volume_horaire_id         type_volume_horaire_id,
   fr.etat_volume_horaire_id         etat_volume_horaire_id,
@@ -30344,12 +31968,14 @@ SELECT
   NULL                              periode_id,
   NULL                              type_intervention_id,
   sr.fonction_id                    fonction_referentiel_id,
+  NULL                              motif_non_paiement_id,
 
   NULL                              service_description,
 
   0                                 heures,
   vhr.heures                        heures_ref,
   0                                 heures_non_payees,
+  null                              motif_non_paiement,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -30374,6 +32000,7 @@ UNION ALL
 SELECT
   \'vh_0_\' || i.id                   id,
   NULL                              service_id,
+  NULL                              service_referentiel_id,
   i.id                              intervenant_id,
   tvh.id                            type_volume_horaire_id,
   evh.id                            etat_volume_horaire_id,
@@ -30384,12 +32011,14 @@ SELECT
   NULL                              periode_id,
   NULL                              type_intervention_id,
   NULL                              fonction_referentiel_id,
+  NULL                              motif_non_paiement_id,
 
   NULL                              service_description,
 
   0                                 heures,
   0                                 heures_ref,
   0                                 heures_non_payees,
+  null                              motif_non_paiement,
   0                                 service_fi,
   0                                 service_fa,
   0                                 service_fc,
@@ -30435,75 +32064,84 @@ GROUP BY
   ep.id
 )
 SELECT
-  t.id                            id,
-  t.service_id                    service_id,
-  i.id                            intervenant_id,
-  ti.id                           type_intervenant_id,
-  i.annee_id                      annee_id,
-  his.histo_modification          service_date_modification,
-  t.type_volume_horaire_id        type_volume_horaire_id,
-  t.etat_volume_horaire_id        etat_volume_horaire_id,
-  etab.id                         etablissement_id,
-  saff.id                         structure_aff_id,
-  sens.id                         structure_ens_id,
+  t.id                              id,
+  t.service_id                      service_id,
+  t.service_referentiel_id          service_referentiel_id,
+  i.id                              intervenant_id,
+  si.id                             statut_intervenant_id,
+  ti.id                             type_intervenant_id,
+  i.annee_id                        annee_id,
+  t.type_volume_horaire_id          type_volume_horaire_id,
+  t.etat_volume_horaire_id          etat_volume_horaire_id,
+  etab.id                           etablissement_id,
+  saff.id                           structure_aff_id,
+  sens.id                           structure_ens_id,
+  gtf.id                            groupe_type_formation_id,
+  tf.id                             type_formation_id,
   ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, etp.niveau ) niveau_formation_id,
-  etp.id                          etape_id,
-  ep.id                           element_pedagogique_id,
-  t.periode_id                    periode_id,
-  t.type_intervention_id          type_intervention_id,
-  t.fonction_referentiel_id       fonction_referentiel_id,
+  etp.id                            etape_id,
+  ep.id                             element_pedagogique_id,
+  t.periode_id                      periode_id,
+  t.type_intervention_id            type_intervention_id,
+  t.fonction_referentiel_id         fonction_referentiel_id,
+  di.id                             intervenant_discipline_id,
+  de.id                             element_discipline_id,
+  t.motif_non_paiement_id           motif_non_paiement_id,
 
   tvh.libelle || \' \' || evh.libelle type_etat,
-  i.source_code                   intervenant_code,
-  i.nom_usuel || \' \' || i.prenom  intervenant_nom,
-  i.date_naissance                intervenant_date_naissance,
-  si.libelle                      intervenant_statut_libelle,
-  ti.code                         intervenant_type_code,
-  ti.libelle                      intervenant_type_libelle,
-  g.source_code                   intervenant_grade_code,
-  g.libelle_court                 intervenant_grade_libelle,
-  di.source_code                  intervenant_discipline_code,
-  di.libelle_court                intervenant_discipline_libelle,
-  saff.libelle_court              service_structure_aff_libelle,
+  his.histo_modification            service_date_modification,
 
-  sens.libelle_court              service_structure_ens_libelle,
-  etab.libelle                    etablissement_libelle,
-  gtf.libelle_court               groupe_type_formation_libelle,
-  tf.libelle_court                type_formation_libelle,
-  etp.niveau                      etape_niveau,
-  etp.source_code                 etape_code,
-  etp.libelle                     etape_libelle,
-  ep.source_code                  element_code,
+  i.source_code                     intervenant_code,
+  i.nom_usuel || \' \' || i.prenom    intervenant_nom,
+  i.date_naissance                  intervenant_date_naissance,
+  si.libelle                        intervenant_statut_libelle,
+  ti.code                           intervenant_type_code,
+  ti.libelle                        intervenant_type_libelle,
+  g.source_code                     intervenant_grade_code,
+  g.libelle_court                   intervenant_grade_libelle,
+  di.source_code                    intervenant_discipline_code,
+  di.libelle_court                  intervenant_discipline_libelle,
+  saff.libelle_court                service_structure_aff_libelle,
+
+  sens.libelle_court                service_structure_ens_libelle,
+  etab.libelle                      etablissement_libelle,
+  gtf.libelle_court                 groupe_type_formation_libelle,
+  tf.libelle_court                  type_formation_libelle,
+  etp.niveau                        etape_niveau,
+  etp.source_code                   etape_code,
+  etp.libelle                       etape_libelle,
+  ep.source_code                    element_code,
   COALESCE(ep.libelle,to_char(t.service_description)) element_libelle,
-  de.source_code                  element_discipline_code,
-  de.libelle_court                element_discipline_libelle,
-  fr.libelle_long                 fonction_referentiel_libelle,
-  ep.taux_fi                      element_taux_fi,
-  ep.taux_fc                      element_taux_fc,
-  ep.taux_fa                      element_taux_fa,
-  t.service_ref_formation         service_ref_formation,
-  t.commentaires                  commentaires,
-  p.libelle_court                 periode_libelle,
+  de.source_code                    element_discipline_code,
+  de.libelle_court                  element_discipline_libelle,
+  fr.libelle_long                   fonction_referentiel_libelle,
+  ep.taux_fi                        element_taux_fi,
+  ep.taux_fc                        element_taux_fc,
+  ep.taux_fa                        element_taux_fa,
+  t.service_ref_formation           service_ref_formation,
+  t.commentaires                    commentaires,
+  p.libelle_court                   periode_libelle,
   CASE WHEN ponds.ponderation_service_compl = 1 THEN NULL ELSE ponds.ponderation_service_compl END element_ponderation_compl,
-  src.libelle                     element_source_libelle,
+  src.libelle                       element_source_libelle,
 
-  t.heures                        heures,
-  t.heures_ref                    heures_ref,
-  t.heures_non_payees             heures_non_payees,
-  si.service_statutaire           service_statutaire,
-  fi.heures_service_modifie       service_du_modifie,
-  t.service_fi                    service_fi,
-  t.service_fa                    service_fa,
-  t.service_fc                    service_fc,
-  t.service_referentiel           service_referentiel,
-  t.heures_compl_fi               heures_compl_fi,
-  t.heures_compl_fa               heures_compl_fa,
-  t.heures_compl_fc               heures_compl_fc,
-  t.heures_compl_fc_majorees      heures_compl_fc_majorees,
-  t.heures_compl_referentiel      heures_compl_referentiel,
-  t.total                         total,
-  t.solde                         solde,
-  v.histo_modification            date_cloture_realise
+  t.heures                          heures,
+  t.heures_ref                      heures_ref,
+  t.heures_non_payees               heures_non_payees,
+  t.motif_non_paiement              motif_non_paiement,
+  si.service_statutaire             service_statutaire,
+  fi.heures_service_modifie         service_du_modifie,
+  t.service_fi                      service_fi,
+  t.service_fa                      service_fa,
+  t.service_fc                      service_fc,
+  t.service_referentiel             service_referentiel,
+  t.heures_compl_fi                 heures_compl_fi,
+  t.heures_compl_fa                 heures_compl_fa,
+  t.heures_compl_fc                 heures_compl_fc,
+  t.heures_compl_fc_majorees        heures_compl_fc_majorees,
+  t.heures_compl_referentiel        heures_compl_referentiel,
+  t.total                           total,
+  t.solde                           solde,
+  v.histo_modification              date_cloture_realise
 
 FROM
   t
@@ -30792,7 +32430,7 @@ FROM
             volume_horaire            vh
        JOIN parametre                  p ON p.nom = \'structure_univ\'
        JOIN service                    s ON s.id = vh.service_id
-       JOIN intervenant                i ON i.id = s.intervenant_id
+       JOIN intervenant                i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
        JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
        JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
 
@@ -30848,7 +32486,7 @@ FROM
        volume_horaire_ref          vhr
   JOIN parametre                     p ON p.nom = \'structure_univ\'
   JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-  JOIN intervenant                   i ON i.id = sr.intervenant_id
+  JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
   JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
   JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
   JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
@@ -33389,6 +35027,8 @@ WHERE
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PAIEMENT AS
 SELECT
   i.annee_id                                  annee_id,
+  frs.service_id                              service_id,
+  null                                        service_referentiel_id,
   frs.id                                      formule_res_service_id,
   null                                        formule_res_service_ref_id,
   i.id                                        intervenant_id,
@@ -33417,6 +35057,8 @@ UNION ALL
 
 SELECT
   i.annee_id                                  annee_id,
+  null                                        service_id,
+  frs.service_referentiel_id                  service_referentiel_id,
   null                                        formule_res_service_id,
   frs.id                                      formule_res_service_ref_id,
   i.id                                        intervenant_id,
@@ -33760,7 +35402,8 @@ FROM
   LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
   LEFT JOIN validation v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
 WHERE
-  s.histo_destruction IS NULL',
+  s.histo_destruction IS NULL
+  AND NOT (vvh.validation_id IS NOT NULL AND v.id IS NULL)',
     ),
     'V_TBL_VALIDATION_REFERENTIEL' => 
     array (
@@ -34318,7 +35961,8 @@ FROM
 
   END
 WHERE
-  i.histo_destruction IS NULL',
+  i.histo_destruction IS NULL
+  AND 1 = OSE_WORKFLOW.match_intervenant(i.id)',
     ),
   ),
   'BddAdmin\\Ddl\\DdlMaterializedView' => 
@@ -34326,302 +35970,7 @@ WHERE
     'MV_EXT_SERVICE' => 
     array (
       'name' => 'MV_EXT_SERVICE',
-      'definition' => 'WITH t AS ( SELECT
-  vh.id                             volume_horaire_id,
-  null                              volume_horaire_ref_id,
-  s.id                              service_id,
-  null                              service_referentiel_id,
-  s.intervenant_id                  intervenant_id,
-  vh.type_volume_horaire_id         type_volume_horaire_id,
-  fr.etat_volume_horaire_id         etat_volume_horaire_id,
-  s.element_pedagogique_id          element_pedagogique_id,
-  s.etablissement_id                etablissement_id,
-  NULL                              structure_aff_id,
-  NULL                              structure_ens_id,
-  vh.periode_id                     periode_id,
-  vh.type_intervention_id           type_intervention_id,
-  NULL                              fonction_referentiel_id,
-
-  s.description                     service_description,
-
-  vh.heures                         heures,
-  0                                 heures_ref,
-  0                                 heures_non_payees,
-  frvh.service_fi                   service_fi,
-  frvh.service_fa                   service_fa,
-  frvh.service_fc                   service_fc,
-  0                                 service_referentiel,
-  frvh.heures_compl_fi              heures_compl_fi,
-  frvh.heures_compl_fa              heures_compl_fa,
-  frvh.heures_compl_fc              heures_compl_fc,
-  frvh.heures_compl_fc_majorees     heures_compl_fc_majorees,
-  0                                 heures_compl_referentiel,
-  frvh.total                        total,
-  fr.solde                          solde,
-  NULL                              service_ref_formation,
-  NULL                              commentaires
-FROM
-  formule_resultat_vh                frvh
-  JOIN formule_resultat                fr ON fr.id = frvh.formule_resultat_id
-  JOIN volume_horaire                  vh ON vh.id = frvh.volume_horaire_id AND vh.motif_non_paiement_id IS NULL AND vh.histo_destruction IS NULL
-  JOIN service                          s ON s.id = vh.service_id AND s.intervenant_id = fr.intervenant_id AND s.histo_destruction IS NULL
-
-UNION ALL
-
-SELECT
-  vh.id                             volume_horaire_id,
-  null                              volume_horaire_ref_id,
-  s.id                              service_id,
-  null                              service_referentiel_id,
-  s.intervenant_id                  intervenant_id,
-  vh.type_volume_horaire_id         type_volume_horaire_id,
-  vhe.etat_volume_horaire_id        etat_volume_horaire_id,
-  s.element_pedagogique_id          element_pedagogique_id,
-  s.etablissement_id                etablissement_id,
-  NULL                              structure_aff_id,
-  NULL                              structure_ens_id,
-  vh.periode_id                     periode_id,
-  vh.type_intervention_id           type_intervention_id,
-  NULL                              fonction_referentiel_id,
-
-  s.description                     service_description,
-
-  vh.heures                         heures,
-  0                                 heures_ref,
-  1                                 heures_non_payees,
-  0                                 service_fi,
-  0                                 service_fa,
-  0                                 service_fc,
-  0                                 service_referentiel,
-  0                                 heures_compl_fi,
-  0                                 heures_compl_fa,
-  0                                 heures_compl_fc,
-  0                                 heures_compl_fc_majorees,
-  0                                 heures_compl_referentiel,
-  0                                 total,
-  fr.solde                          solde,
-  NULL                              service_ref_formation,
-  NULL                              commentaires
-FROM
-  volume_horaire                  vh
-  JOIN service                     s ON s.id = vh.service_id
-  JOIN v_volume_horaire_etat     vhe ON vhe.volume_horaire_id = vh.id
-  JOIN formule_resultat           fr ON fr.intervenant_id = s.intervenant_id AND fr.type_volume_horaire_id = vh.type_volume_horaire_id AND fr.etat_volume_horaire_id = vhe.etat_volume_horaire_id
-WHERE
-  vh.motif_non_paiement_id IS NOT NULL
-  AND vh.histo_destruction IS NULL
-  AND s.histo_destruction IS NULL
-
-UNION ALL
-
-SELECT
-  null                              volume_horaire_id,
-  vhr.id                            volume_horaire_ref_id,
-  null                              service_id,
-  sr.id                             service_referentiel_id,
-  sr.intervenant_id                 intervenant_id,
-  fr.type_volume_horaire_id         type_volume_horaire_id,
-  fr.etat_volume_horaire_id         etat_volume_horaire_id,
-  NULL                              element_pedagogique_id,
-  OSE_PARAMETRE.GET_ETABLISSEMENT   etablissement_id,
-  NULL                              structure_aff_id,
-  sr.structure_id                   structure_ens_id,
-  NULL                              periode_id,
-  NULL                              type_intervention_id,
-  sr.fonction_id                    fonction_referentiel_id,
-
-  NULL                              service_description,
-
-  0                                 heures,
-  vhr.heures                        heures_ref,
-  0                                 heures_non_payees,
-  0                                 service_fi,
-  0                                 service_fa,
-  0                                 service_fc,
-  frvr.service_referentiel          service_referentiel,
-  0                                 heures_compl_fi,
-  0                                 heures_compl_fa,
-  0                                 heures_compl_fc,
-  0                                 heures_compl_fc_majorees,
-  frvr.heures_compl_referentiel     heures_compl_referentiel,
-  frvr.total                        total,
-  fr.solde                          solde,
-  sr.formation                      service_ref_formation,
-  sr.commentaires                   commentaires
-FROM
-  formule_resultat_vh_ref       frvr
-  JOIN formule_resultat           fr ON fr.id = frvr.formule_resultat_id
-  JOIN volume_horaire_ref        vhr ON vhr.id =  frvr.volume_horaire_ref_id
-  JOIN service_referentiel        sr ON sr.id = vhr.service_referentiel_id AND sr.intervenant_id = fr.intervenant_id AND sr.histo_destruction IS NULL
-
-UNION ALL
-
-SELECT
-  null                              volume_horaire_id,
-  null                              volume_horaire_ref_id,
-  null                              service_id,
-  null                              service_referentiel_id,
-  i.id                              intervenant_id,
-  tvh.id                            type_volume_horaire_id,
-  evh.id                            etat_volume_horaire_id,
-  NULL                              element_pedagogique_id,
-  OSE_PARAMETRE.GET_ETABLISSEMENT   etablissement_id,
-  NULL                              structure_aff_id,
-  NULL                              structure_ens_id,
-  NULL                              periode_id,
-  NULL                              type_intervention_id,
-  NULL                              fonction_referentiel_id,
-
-  NULL                              service_description,
-
-  0                                 heures,
-  0                                 heures_ref,
-  0                                 heures_non_payees,
-  0                                 service_fi,
-  0                                 service_fa,
-  0                                 service_fc,
-  0                                 service_referentiel,
-  0                                 heures_compl_fi,
-  0                                 heures_compl_fa,
-  0                                 heures_compl_fc,
-  0                                 heures_compl_fc_majorees,
-  NULL                              heures_compl_referentiel,
-  0                                 total,
-  0                                 solde,
-  NULL                              service_ref_formation,
-  NULL                              commentaires
-FROM
-  intervenant i
-  JOIN statut_intervenant si ON si.id = i.statut_id
-  JOIN etat_volume_horaire evh ON evh.code IN (\'saisi\',\'valide\')
-  JOIN type_volume_horaire tvh ON tvh.code IN (\'PREVU\',\'REALISE\')
-  LEFT JOIN modification_service_du msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
-  LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
-WHERE
-  i.histo_destruction IS NULL
-  AND si.service_statutaire > 0
-GROUP BY
-  i.id, si.service_statutaire, evh.id, tvh.id
-HAVING
-  si.service_statutaire + SUM(msd.heures * mms.multiplicateur) = 0
-
-
-), ponds AS (
-SELECT
-  ep.id                                          element_pedagogique_id,
-  MAX(COALESCE( m.ponderation_service_du, 1))    ponderation_service_du,
-  MAX(COALESCE( m.ponderation_service_compl, 1)) ponderation_service_compl
-FROM
-            element_pedagogique ep
-  LEFT JOIN element_modulateur  em ON em.element_id = ep.id
-                                  AND em.histo_destruction IS NULL
-  LEFT JOIN modulateur          m ON m.id = em.modulateur_id
-WHERE
-  ep.histo_destruction IS NULL
-GROUP BY
-  ep.id
-)
-SELECT
-  i.annee_id                      annee_id,
-  t.type_volume_horaire_id        type_volume_horaire_id,
-  t.etat_volume_horaire_id        etat_volume_horaire_id,
-  t.volume_horaire_id             volume_horaire_id,
-  t.volume_horaire_ref_id         volume_horaire_ref_id,
-  t.service_id                    service_id,
-  t.service_referentiel_id        service_referentiel_id,
-  i.id                            intervenant_id,
-  ti.id                           type_intervenant_id,
-  his.histo_modification          service_date_modification,
-  etab.id                         etablissement_id,
-  saff.id                         structure_aff_id,
-  sens.id                         structure_ens_id,
-  ose_divers.niveau_formation_id_calc( gtf.id, gtf.pertinence_niveau, etp.niveau ) niveau_formation_id,
-  etp.id                          etape_id,
-  ep.id                           element_pedagogique_id,
-  t.periode_id                    periode_id,
-  t.type_intervention_id          type_intervention_id,
-  t.fonction_referentiel_id       fonction_referentiel_id,
-
-  di.id                           discipline_intervenant_id,
-  de.id                           discipline_enseignement_id,
-
-  tvh.libelle || \' \' || evh.libelle type_etat,
-  i.source_code                   intervenant_code,
-  i.nom_usuel || \' \' || i.prenom  intervenant_nom,
-  i.date_naissance                intervenant_date_naissance,
-  si.libelle                      intervenant_statut_libelle,
-  ti.code                         intervenant_type_code,
-  ti.libelle                      intervenant_type_libelle,
-  g.source_code                   intervenant_grade_code,
-  g.libelle_court                 intervenant_grade_libelle,
-  di.source_code                  intervenant_discipline_code,
-  di.libelle_court                intervenant_discipline_libelle,
-  saff.libelle_court              service_structure_aff_libelle,
-
-  sens.libelle_court              service_structure_ens_libelle,
-  etab.libelle                    etablissement_libelle,
-  gtf.libelle_court               groupe_type_formation_libelle,
-  tf.libelle_court                type_formation_libelle,
-  etp.niveau                      etape_niveau,
-  etp.source_code                 etape_code,
-  etp.libelle                     etape_libelle,
-  ep.source_code                  element_code,
-  COALESCE(ep.libelle,to_char(t.service_description)) element_libelle,
-  de.source_code                  element_discipline_code,
-  de.libelle_court                element_discipline_libelle,
-  fr.libelle_long                 fonction_referentiel_libelle,
-  ep.taux_fi                      element_taux_fi,
-  ep.taux_fc                      element_taux_fc,
-  ep.taux_fa                      element_taux_fa,
-  t.service_ref_formation         service_ref_formation,
-  t.commentaires                  commentaires,
-  p.libelle_court                 periode_libelle,
-  CASE WHEN ponds.ponderation_service_compl = 1 THEN NULL ELSE ponds.ponderation_service_compl END element_ponderation_compl,
-  src.libelle                     element_source_libelle,
-
-  t.heures                        heures,
-  t.heures_ref                    heures_ref,
-  t.heures_non_payees             heures_non_payees,
-  si.service_statutaire           service_statutaire,
-  fi.heures_service_modifie       service_du_modifie,
-  t.service_fi                    service_fi,
-  t.service_fa                    service_fa,
-  t.service_fc                    service_fc,
-  t.service_referentiel           service_referentiel,
-  t.heures_compl_fi               heures_compl_fi,
-  t.heures_compl_fa               heures_compl_fa,
-  t.heures_compl_fc               heures_compl_fc,
-  t.heures_compl_fc_majorees      heures_compl_fc_majorees,
-  t.heures_compl_referentiel      heures_compl_referentiel,
-  t.total                         total,
-  t.solde                         solde,
-  v.histo_modification            date_cloture_realise
-
-FROM
-  t
-  JOIN intervenant                        i ON i.id     = t.intervenant_id AND i.histo_destruction IS NULL
-  JOIN statut_intervenant                si ON si.id    = i.statut_id
-  JOIN type_intervenant                  ti ON ti.id    = si.type_intervenant_id
-  JOIN etablissement                   etab ON etab.id  = t.etablissement_id
-  JOIN type_volume_horaire              tvh ON tvh.id   = t.type_volume_horaire_id
-  JOIN etat_volume_horaire              evh ON evh.id   = t.etat_volume_horaire_id
-  LEFT JOIN histo_intervenant_service   his ON his.intervenant_id = i.id AND his.type_volume_horaire_id = tvh.id AND his.referentiel = 0
-  LEFT JOIN grade                         g ON g.id     = i.grade_id
-  LEFT JOIN discipline                   di ON di.id    = i.discipline_id
-  LEFT JOIN structure                  saff ON saff.id  = i.structure_id AND ti.code = \'P\'
-  LEFT JOIN element_pedagogique          ep ON ep.id    = t.element_pedagogique_id
-  LEFT JOIN discipline                   de ON de.id    = ep.discipline_id
-  LEFT JOIN structure                  sens ON sens.id  = NVL(t.structure_ens_id, ep.structure_id)
-  LEFT JOIN periode                       p ON p.id     = t.periode_id
-  LEFT JOIN source                      src ON src.id   = ep.source_id OR (ep.source_id IS NULL AND src.code = \'OSE\')
-  LEFT JOIN etape                       etp ON etp.id   = ep.etape_id
-  LEFT JOIN type_formation               tf ON tf.id    = etp.type_formation_id AND tf.histo_destruction IS NULL
-  LEFT JOIN groupe_type_formation       gtf ON gtf.id   = tf.groupe_id AND gtf.histo_destruction IS NULL
-  LEFT JOIN v_formule_intervenant        fi ON fi.intervenant_id = i.id
-  LEFT JOIN ponds                     ponds ON ponds.element_pedagogique_id = ep.id
-  LEFT JOIN fonction_referentiel         fr ON fr.id    = t.fonction_referentiel_id
-  LEFT JOIN type_validation              tv ON tvh.code = \'REALISE\' AND tv.code = \'CLOTURE_REALISE\'
-  LEFT JOIN validation                    v ON v.intervenant_id = i.id AND v.type_validation_id = tv.id AND v.histo_destruction IS NULL',
+      'definition' => 'SELECT * FROM V_EXPORT_SERVICE',
     ),
     'TBL_NOEUD' => 
     array (
@@ -39209,6 +40558,18 @@ WHERE
         'PERIODE_PAIEMENT_ID' => 'ID',
       ),
     ),
+    'TBL_PAIEMENT_SR_FK' => 
+    array (
+      'name' => 'TBL_PAIEMENT_SR_FK',
+      'table' => 'TBL_PAIEMENT',
+      'rtable' => 'SERVICE_REFERENTIEL',
+      'delete_rule' => 'CASCADE',
+      'index' => NULL,
+      'columns' => 
+      array (
+        'SERVICE_REFERENTIEL_ID' => 'ID',
+      ),
+    ),
     'TBL_PAIEMENT_STRUCTURE_FK' => 
     array (
       'name' => 'TBL_PAIEMENT_STRUCTURE_FK',
@@ -39219,6 +40580,18 @@ WHERE
       'columns' => 
       array (
         'STRUCTURE_ID' => 'ID',
+      ),
+    ),
+    'TBL_PAIEMENT_S_FK' => 
+    array (
+      'name' => 'TBL_PAIEMENT_S_FK',
+      'table' => 'TBL_PAIEMENT',
+      'rtable' => 'SERVICE',
+      'delete_rule' => 'CASCADE',
+      'index' => NULL,
+      'columns' => 
+      array (
+        'SERVICE_ID' => 'ID',
       ),
     ),
     'TBL_PIECE_JOINTE_ANNEE_FK' => 
@@ -42174,12 +43547,11 @@ WHERE
     array (
       'name' => 'TYPE_AGREMENT_STATUT__UN',
       'table' => 'TYPE_AGREMENT_STATUT',
-      'index' => 'TYPE_AGREMENT_STATUT__UN',
+      'index' => 'TYPE_AGREMENT_STATUT__UN1',
       'columns' => 
       array (
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
-        2 => 'PREMIER_RECRUTEMENT',
       ),
     ),
     'TYPE_AGREMENT__UN' => 
@@ -50262,6 +51634,17 @@ END;',
         0 => 'TYPE_AGREMENT_ID',
         1 => 'STATUT_INTERVENANT_ID',
         2 => 'PREMIER_RECRUTEMENT',
+      ),
+    ),
+    'TYPE_AGREMENT_STATUT__UN1' => 
+    array (
+      'name' => 'TYPE_AGREMENT_STATUT__UN1',
+      'unique' => true,
+      'table' => 'TYPE_AGREMENT_STATUT',
+      'columns' => 
+      array (
+        0 => 'TYPE_AGREMENT_ID',
+        1 => 'STATUT_INTERVENANT_ID',
       ),
     ),
     'TYPE_AGREMENT__UN' => 

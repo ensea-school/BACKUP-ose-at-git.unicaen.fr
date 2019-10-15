@@ -30298,6 +30298,7 @@ ORDER BY
 WITH t AS ( SELECT
   \'vh_\' || vh.id                    id,
   s.id                              service_id,
+  null                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
   fr.etat_volume_horaire_id         etat_volume_horaire_id,
@@ -30340,6 +30341,7 @@ UNION ALL
 SELECT
   \'vh_\' || vh.id                    id,
   s.id                              service_id,
+  null                              service_referentiel_id,
   s.intervenant_id                  intervenant_id,
   vh.type_volume_horaire_id         type_volume_horaire_id,
   vhe.etat_volume_horaire_id        etat_volume_horaire_id,
@@ -30385,7 +30387,8 @@ UNION ALL
 
 SELECT
   \'vh_ref_\' || vhr.id               id,
-  sr.id                             service_id,
+  null                              service_id,
+  sr.id                             service_referentiel_id,
   sr.intervenant_id                 intervenant_id,
   fr.type_volume_horaire_id         type_volume_horaire_id,
   fr.etat_volume_horaire_id         etat_volume_horaire_id,
@@ -30428,6 +30431,7 @@ UNION ALL
 SELECT
   \'vh_0_\' || i.id                   id,
   NULL                              service_id,
+  NULL                              service_referentiel_id,
   i.id                              intervenant_id,
   tvh.id                            type_volume_horaire_id,
   evh.id                            etat_volume_horaire_id,
@@ -30493,6 +30497,7 @@ GROUP BY
 SELECT
   t.id                              id,
   t.service_id                      service_id,
+  t.service_referentiel_id          service_referentiel_id,
   i.id                              intervenant_id,
   si.id                             statut_intervenant_id,
   ti.id                             type_intervenant_id,

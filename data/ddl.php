@@ -13387,7 +13387,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
-          'commentaire' => NULL,
+          'commentaire' => 'Taux d\'assiduité en % (entre 0 et 1)',
         ),
         'EFFECTIF' => 
         array (
@@ -13420,7 +13420,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => NULL,
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de groupes calculé',
         ),
         'HEURES' => 
         array (
@@ -13684,7 +13684,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (0 ou 1 : 1 si l\'intervenant doit avoir un contrat)',
         ),
         'STRUCTURE_ID' => 
         array (
@@ -13706,7 +13706,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires contractualisables',
         ),
         'EDITE' => 
         array (
@@ -13717,7 +13717,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires contractualisés',
         ),
         'SIGNE' => 
         array (
@@ -13728,7 +13728,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires signés',
         ),
         'TO_DELETE' => 
         array (
@@ -14025,7 +14025,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => '1 Si l\'intervenant a un dossier, 0 sinon',
         ),
         'DOSSIER_ID' => 
         array (
@@ -14157,7 +14157,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (0 ou 1), 1 si actif',
         ),
         'POIDS' => 
         array (
@@ -14168,7 +14168,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
-          'commentaire' => NULL,
+          'commentaire' => 'Poids (1 par défaut)',
         ),
         'CHOIX_MINIMUM' => 
         array (
@@ -14179,7 +14179,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
-          'commentaire' => NULL,
+          'commentaire' => 'Choix minimum',
         ),
         'CHOIX_MAXIMUM' => 
         array (
@@ -14190,7 +14190,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
-          'commentaire' => NULL,
+          'commentaire' => 'Choix maximum',
         ),
         'NB_CHOIX' => 
         array (
@@ -14201,7 +14201,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de choix',
         ),
         'TOTAL_POIDS' => 
         array (
@@ -14212,7 +14212,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '1',
-          'commentaire' => NULL,
+          'commentaire' => 'Total de poids des fils',
         ),
         'TO_DELETE' => 
         array (
@@ -14234,7 +14234,7 @@
           'precision' => NULL,
           'nullable' => false,
           'default' => '1',
-          'commentaire' => NULL,
+          'commentaire' => 'Poids maximum pour les fils',
         ),
       ),
     ),
@@ -14333,7 +14333,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'HETD à payer',
         ),
         'HEURES_A_PAYER_POND' => 
         array (
@@ -14344,7 +14344,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'HETD à payer (en %)',
         ),
         'HEURES_DEMANDEES' => 
         array (
@@ -14355,7 +14355,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'HETD demandées',
         ),
         'HEURES_PAYEES' => 
         array (
@@ -14366,7 +14366,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'HETD payées',
         ),
         'FORMULE_RES_SERVICE_ID' => 
         array (
@@ -14476,7 +14476,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (1 si la PJ est demandée)',
         ),
         'FOURNIE' => 
         array (
@@ -14487,7 +14487,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (1 si la PJ est fournie)',
         ),
         'VALIDEE' => 
         array (
@@ -14498,7 +14498,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (1 si la PJ est validée)',
         ),
         'TO_DELETE' => 
         array (
@@ -14520,7 +14520,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
       ),
     ),
@@ -14784,7 +14784,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires saisis',
         ),
         'VALIDE' => 
         array (
@@ -14795,7 +14795,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires validés',
         ),
         'TO_DELETE' => 
         array (
@@ -14861,7 +14861,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '1',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (1 si l\'étape est supprimée)',
         ),
         'HAS_HEURES_MAUVAISE_PERIODE' => 
         array (
@@ -14872,7 +14872,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (1 si heures saisies au mauvais semestre)',
         ),
         'SERVICE_ID' => 
         array (
@@ -14938,7 +14938,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'NB d\'heures saisi',
         ),
       ),
     ),
@@ -14993,7 +14993,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (1=peut saisir du référentiel)',
         ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
@@ -15026,7 +15026,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires',
         ),
         'VALIDE' => 
         array (
@@ -15037,7 +15037,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Nombre de volumes horaires validés',
         ),
         'TO_DELETE' => 
         array (
@@ -15103,7 +15103,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
         'PEUT_SAISIR_REFERENTIEL' => 
         array (
@@ -15114,7 +15114,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
         'HEURES_SERVICE_PREV' => 
         array (
@@ -15125,7 +15125,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'NB d\'heures de service prévisionnel',
         ),
         'HEURES_REFERENTIEL_PREV' => 
         array (
@@ -15136,7 +15136,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'NB d\'heures de référentiel prévisionnel',
         ),
         'HEURES_SERVICE_REAL' => 
         array (
@@ -15147,7 +15147,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'NB d\'heures de service réalisé',
         ),
         'HEURES_REFERENTIEL_REAL' => 
         array (
@@ -15158,7 +15158,7 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'NB d\'heures de référentiel réalisé',
         ),
         'TO_DELETE' => 
         array (
@@ -15257,7 +15257,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
-          'commentaire' => NULL,
+          'commentaire' => 'Si validé',
         ),
         'TO_DELETE' => 
         array (
@@ -15290,7 +15290,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
       ),
     ),
@@ -15378,7 +15378,7 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
-          'commentaire' => NULL,
+          'commentaire' => 'Si validé',
         ),
         'TO_DELETE' => 
         array (
@@ -15411,7 +15411,7 @@
           'precision' => 1,
           'nullable' => false,
           'default' => '0',
-          'commentaire' => NULL,
+          'commentaire' => 'Témoin (0 ou 1)',
         ),
       ),
     ),

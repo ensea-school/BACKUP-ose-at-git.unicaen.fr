@@ -239,9 +239,17 @@ class DdlTable extends DdlAbstract
 
     public function create(array $data)
     {
+        /* Création de la table */
         $this->addQuery($this->makeCreate($data), 'Ajout de la table '.$data['name']);
+
+        /* Création du commentaire éventuel de la table */
         if ($comm = $this->makeCreateComm($data)) {
             $this->addQuery($comm, 'Ajout de commentaire sur la table ' . $data['name']);
+        }
+
+        /* Création des commentaires éventuels de colonnes */
+        foreach($data['columns'] as $column){
+            $this->alterColumnComment($data['name'], ['commentaire' => null], $column);
         }
     }
 
@@ -390,6 +398,9 @@ END;';
 
         $sql = "ALTER TABLE \"$table\" ADD (" . implode(" ", $cp) . ")";
         $this->addQuery($sql, 'Ajout de la colonne '.$column['name'].' sur la table '.$table);
+
+        /* Ajout du commentaire éventuel de la conne */
+        $this->alterColumnComment($table, ['commentaire' => null], $column);
     }
 
 

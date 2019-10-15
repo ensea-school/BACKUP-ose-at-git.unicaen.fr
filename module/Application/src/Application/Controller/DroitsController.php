@@ -181,6 +181,7 @@ class DroitsController extends AbstractController
                 if ($statut) $this->statutRemovePrivilege($statut, $privilege);
                 break;
         }
+        $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
 
         return compact('role', 'statut', 'privilege');
     }

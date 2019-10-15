@@ -15,10 +15,12 @@ author: Laurent Lécluse - DSI - Unicaen
 * Depuis quelques temps, les plafonds bloquants fonctionnaient comme des plafonds informatifs. C'est corrigé.
 * La séquence FORMULE_RESULTAT_SERVIC_ID_SEQ se met maintenant correctement à jour (avant, cela entrainait de nombreux bugs, car la formule des HC ne se calculait plus après une mise à jour)
 * L'indicateur 120 renvoyait à tort le même résultat que le 110.
+* Lors de la modification d'un privilège, le cache se met à jour automatiquement désormais
 
 ## Nouveautés
 
 * Ajout d'un nouveau contrôle lors des demandes de mise en paiement : il n'est plus possible de payer plus d'heures que d'HETD même si des HETD ont déjà été payées à tort
+* La vue matérialisée MV_EXT_SERVVICE a été créée pour être exploitée pour alimenter des outils de pilotage (BO, etc).
 
 # OSE 8.2.2
 

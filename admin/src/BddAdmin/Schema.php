@@ -62,15 +62,16 @@ class Schema
         DdlTable::class . '.create.'             => ['label' => 'Création des tables'],
         DdlView::class . '.create.'              => ['label' => 'Création des vues'],
         DdlPackage::class . '.create.definition' => ['label' => 'Création des définitions de packages'],
-        DdlMaterializedView::class . '.create.'  => ['label' => 'Création des vues matérialisées'],
         DdlPackage::class . '.create.body'       => ['label' => 'Création des corps de packages'],
 
         DdlSequence::class . '.alter.'                     => ['label' => 'Modification des séquences'],
         DdlTable::class . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
-        DdlPrimaryConstraint::class . '.alter.'            => ['label' => 'Modification des clés primaires'],
+
         DdlPackage::class . '.alter.'                      => ['label' => 'Modification des packages'],
         DdlView::class . '.alter.'                         => ['label' => 'Modification des vues'],
+        DdlMaterializedView::class . '.create.'            => ['label' => 'Création des vues matérialisées'],
         DdlMaterializedView::class . '.alter.'             => ['label' => 'Modification des vues matérialisées'],
+        DdlPrimaryConstraint::class . '.alter.'            => ['label' => 'Modification des clés primaires'],
         DdlRefConstraint::class . '.alter.'                => ['label' => 'Modification des clés étrangères'],
         DdlUniqueConstraint::class . '.alter.'             => ['label' => 'Modification des contraintes d\'unicité'],
         DdlTrigger::class . '.alter.'                      => ['label' => 'Modification des triggers'],

@@ -295,26 +295,47 @@ Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :
 
 OSE sera accessible sur votre machine, à l'adresse http://ose-test.localhost
 
-# Création de la base de données
-Créez une base de données avec un utilisateur pour OSE, un schéma, puis un tablespace vides.
-Un script d'initialisation vous est fourni (fichier [bdd/install.sql](bdd/install.sql)). Il vous revient de le lancer pour peupler la base de données.
-
-Attention à bien veiller à ce que les accents soient correctement traités.
-Les caractères du fichier sont en **UTF8**.
-
 # Configuration technique
 Personnalisez le fichier `config.local.php` pour adapter OSE à votre établissement.
+Une attention toute particulière doit être prise pour configurer les paramètres de base de données, car ces derniers
+seront utiles pour terminer la procédure d'installation.
 
-# Mode installation
-Allez ensuite sur OSE. Par défaut, le mode installation est activé.
+# Création de la base de données
+Créez une base de données avec un utilisateur pour OSE, un schéma, puis un tablespace vides.
 
-Ce mode vous permettra de :
+Les droits de l'utilisateur Ose doivent être les suivants :
 
-*  vérifier que toutes les dépendances nécessaires au bon fonctionnement de l'application sont satisfaites
-*  contrôler que les paramètres de configuration que vous avez choisi fonctionnent correctement
-*  Choisir ou changer le mot de passe de l'utilisateur `oseappli`, qui est administrateur de l'application.
+```sql
+GRANT "CONNECT" TO "OSE";
+GRANT "RESOURCE" TO "OSE";
+GRANT "SELECT_CATALOG_ROLE" TO "OSE";
+GRANT CREATE JOB TO "OSE";
+GRANT FLASHBACK ANY TABLE TO "OSE";
+GRANT DEBUG ANY PROCEDURE TO "OSE";
+GRANT DEBUG CONNECT SESSION TO "OSE";
+GRANT SELECT ANY DICTIONARY TO "OSE";
+GRANT ON COMMIT REFRESH TO "OSE";
+GRANT CREATE MATERIALIZED VIEW TO "OSE";
+GRANT CREATE DATABASE LINK TO "OSE";
+GRANT CREATE VIEW TO "OSE";
+GRANT DROP PUBLIC SYNONYM TO "OSE";
+GRANT CREATE PUBLIC SYNONYM TO "OSE";
+GRANT UNLIMITED TABLESPACE TO "OSE";
+GRANT ALTER SESSION TO "OSE";
+GRANT SELECT ON "SYS"."DBA_ROLE_PRIVS" TO "OSE";
+GRANT SELECT ON "SYS"."DBA_TAB_PRIVS" TO "OSE";
+GRANT SELECT ON "SYS"."DBA_ROLES" TO "OSE";
+GRANT FLASHBACK ON "SYS"."ALL_SOURCE" TO "OSE";
+GRANT EXECUTE ON "SYS"."DBMS_LOCK" TO "OSE";
+GRANT EXECUTE ON "SYS"."DBMS_ALERT" TO "OSE";
+```
 
-Une fois cette étape terminée, il convient de passer OSE en mode production. Cela se fait dans le fichier de configuration `config.local.php`, en positionnant à `false` `global/modeInstallation`.
+Une fois la base de données créée, il faut mettre en place les tables, les vues, etc.
+Cela se fait au moyen de la commande suivante (depuis le répertoire de OSE) :
+
+```bash
+./bin/ose install-bdd
+``` 
 
 # Mise en place des tâches CRON
 Des tâches CRON doivent être lancée sur votre serveur régulièrement pour mettre à jour certaines données
@@ -329,7 +350,7 @@ Il est suivi de l'action à exécuter, puis éventuellement de paramètres à pr
 
 Exemple d'utilisation pour lancer une tâche de synchronisation appelée `synchro`:
 ```bash
-/usr/bin/php /var/www/ose/bin/ose synchronisation synchro
+/usr/bin/php [votre dossier ose]/bin/ose synchronisation synchro
 ```
 
 | Usage                 | Fréquence             | Action de script      |

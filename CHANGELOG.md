@@ -3,7 +3,7 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
-# OSE 9.0 alpha
+# OSE 9.0-zf2 et 9.0-zf3
 
 ## Correction de bugs
 
@@ -19,8 +19,20 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Nouveautés
 
+* Deux éditions de OSE sont disponibles :
+    * 9.0-zf2 basée sur le Zend Framework 2 et qui requiert PHP7.0 (édition "historique")
+    * 9.0-zf3 basée sur le Zend Framework 3 et qui requiert PHP7.3
 * Ajout d'un nouveau contrôle lors des demandes de mise en paiement : il n'est plus possible de payer plus d'heures que d'HETD même si des HETD ont déjà été payées à tort
 * La vue matérialisée MV_EXT_SERVVICE a été créée pour être exploitée pour alimenter des outils de pilotage (BO, etc).
+
+## Notes de mise à jour
+
+Si vous mettez à jour à partir des versions :
+
+* 8.2.* : pas de soucis, un ./bin/ose update suffit.
+* 8.1.* : lancez ./bin/ose update normalement. Vous rencontrerez un message d'erreur dû à un bug lié à cette version (PHP Fatal error:  Uncaught Error: Call to undefined method OseAdmin::getOseAppliId()).
+Pour pallier à cela, il vous faudra exécuter ensuite la commande ./bin/ose update-bdd pour que tout rentre dans l'ordre.
+* < 8.1 : mettez d'abord à jour en version 8.1.4, puis mettez à jour en 9.0.
 
 # OSE 8.2.2
 

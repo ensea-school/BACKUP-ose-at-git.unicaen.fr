@@ -3,9 +3,6 @@
 return [
     /* Paramètres généraux */
     'global' => [
-        /* Détermine si l'installation de OSE est faite ou non. Pour pouvoir lancer OSE, positionnez à false */
-        'modeInstallation' => true,
-
         /* Accès en mode HTTP ou HTTPS */
         'scheme'           => '',
 

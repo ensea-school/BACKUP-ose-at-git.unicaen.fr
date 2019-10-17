@@ -160,6 +160,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                             $affRole->initPrivileges($rolesPrivileges[$roleId]);
                         }
                         $affRole->setDbRole($dbRole);
+                        $affRole->setPerimetre($dbRole->getPerimetre());
                         $affRole->setStructure($structure);
                         $roles[$affRoleId] = $affRole;
                     }

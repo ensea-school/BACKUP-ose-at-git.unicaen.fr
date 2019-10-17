@@ -3,6 +3,12 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 9.0.1-zf2 et 9.0.1-zf3
+
+## Correction de bugs
+
+* Un bug empêchant d'avoir accès aux indicateurs si on est connecté en tant que composante a été résolu
+
 # OSE 9.0-zf2 et 9.0-zf3
 
 ## Correction de bugs

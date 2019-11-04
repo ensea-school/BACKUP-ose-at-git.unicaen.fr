@@ -328,7 +328,7 @@ class DataGen
             'table'   => 'PARAMETRE',
             'context' => ['install', 'update'],
             'key'     => 'NOM',
-            //'options' => ['update-ignore-cols' => ['VALEUR']],
+            'options' => ['update-ignore-cols' => ['VALEUR']],
         ],
     ];
 

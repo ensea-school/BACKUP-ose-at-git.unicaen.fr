@@ -3,6 +3,14 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 9.0.2-zf2 et 9.0.2-zf3
+
+## Correction de bugs
+
+* Un bug modifiant les paramètres globaux qui avaient été configurés a été résolu
+* La duplication de statuts refonctionne
+
+
 # OSE 9.0.1-zf2 et 9.0.1-zf3
 
 ## Correction de bugs

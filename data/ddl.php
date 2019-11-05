@@ -85,7 +85,7 @@
     array (
       'name' => 'DOTATION_ID_SEQ',
     ),
-    'EFFECTIFS_ID_SEQ' => 
+    'EFFECTIFS_ID_SEQ' =>
     array (
       'name' => 'EFFECTIFS_ID_SEQ',
     ),
@@ -16484,7 +16484,7 @@
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
-          'length' => 10,
+          'length' => 15,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => false,
@@ -30306,7 +30306,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' => 
+    'V_AGREMENT_EXPORT_CSV' =>
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -37210,7 +37210,7 @@ WHERE
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_FK' => 
+    'EFFECTIFS_FK' =>
     array (
       'name' => 'EFFECTIFS_FK',
       'table' => 'EFFECTIFS',
@@ -42791,7 +42791,7 @@ WHERE
         5 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'EFFECTIFS_SOURCE_UN' => 
+    'EFFECTIFS_SOURCE_UN' =>
     array (
       'name' => 'EFFECTIFS_SOURCE_UN',
       'table' => 'EFFECTIFS',
@@ -46637,7 +46637,7 @@ END;',
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
       ),
     ),
-    'EFFECTIFS_FK' => 
+    'EFFECTIFS_FK' =>
     array (
       'name' => 'EFFECTIFS_FK',
       'unique' => false,

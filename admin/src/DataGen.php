@@ -133,6 +133,7 @@ class DataGen
             'table'   => 'PERIODE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
+            'options' => ['delete' => false],
         ],
         [
             'table'   => 'TAUX_HORAIRE_HETD',

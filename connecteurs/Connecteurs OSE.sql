@@ -127,11 +127,13 @@ i AS (
             WHEN ct.c_type_contrat_trav IN ('AT')                     THEN 'ATER'
             WHEN ct.c_type_contrat_trav IN ('AX')                     THEN 'ATER_MI_TPS'
             WHEN ct.c_type_contrat_trav IN ('DO')                     THEN 'DOCTOR'
-            WHEN ct.c_type_contrat_trav IN ('GI','PN','ED')           THEN 'ENS_CONTRACT'
+            WHEN ct.c_type_contrat_trav IN ('GD','PN')                THEN 'ENS_CONTRACT_CDD'
+            WHEN ct.c_type_contrat_trav IN ('ED')                     THEN 'ENS_CH_CONTRAT'
+            WHEN ct.c_type_contrat_trav IN ('GI','EI')                THEN 'ENS_CONTRACT_CDI'
             WHEN ct.c_type_contrat_trav IN ('LT','LB')                THEN 'LECTEUR'
             WHEN ct.c_type_contrat_trav IN ('MB','MP')                THEN 'MAITRE_LANG'
             WHEN ct.c_type_contrat_trav IN ('PT')                     THEN 'HOSPITALO_UNIV'
-            WHEN ct.c_type_contrat_trav IN ('C3','CA','CB','CD','CS','HA','HD','HS','MA','S3','SX','SW','SY','SZ','VA') THEN 'BIATSS'
+            WHEN ct.c_type_contrat_trav IN ('C3','CA','CB','CD','CS','DD','HA','HD','HS','MA','S3','SX','SW','SY','SZ','VA') THEN 'BIATSS'
             WHEN ct.c_type_contrat_trav IN ('CU','AH','CG','MM','PM','IN','DN','ET') THEN 'NON_AUTORISE'
             ELSE 'AUTRES'
           END                                                statut,
@@ -171,8 +173,8 @@ i AS (
         FROM
           affectation@harpprod a
           LEFT JOIN carriere@harpprod c ON c.no_dossier_pers = a.no_dossier_pers AND c.no_seq_carriere = a.no_seq_carriere
-          LEFT JOIN periodes_sp_cnu@harpprod    psc                ON psc.no_dossier_pers = a.no_dossier_pers AND psc.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(psc.d_deb,SYSDATE) AND COALESCE(psc.d_fin,SYSDATE)
-          LEFT JOIN periodes_sp_sd_deg@harpprod pss                ON pss.no_dossier_pers = a.no_dossier_pers AND pss.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(pss.d_deb,SYSDATE) AND COALESCE(pss.d_fin,SYSDATE)
+          LEFT JOIN periodes_sp_cnu@harpprod    psc                ON psc.no_dossier_pers = a.no_dossier_pers AND psc.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(psc.d_deb,a.d_fin_affectation,SYSDATE) AND COALESCE(psc.d_fin,a.d_fin_affectation,SYSDATE)
+          LEFT JOIN periodes_sp_sd_deg@harpprod pss                ON pss.no_dossier_pers = a.no_dossier_pers AND pss.no_seq_carriere = a.no_seq_carriere AND COALESCE(a.d_fin_affectation,SYSDATE) BETWEEN COALESCE(pss.d_deb,a.d_fin_affectation,SYSDATE) AND COALESCE(pss.d_fin,a.d_fin_affectation,SYSDATE)
         WHERE -- on sélectionne les données même 6 mois avant et 6 mois après
           SYSDATE BETWEEN a.d_deb_affectation-184 AND COALESCE(a.d_fin_affectation,SYSDATE)+184
 
@@ -234,7 +236,7 @@ SELECT
     ELSE
       INDIVIDU_E_MAIL.NO_E_MAIL
   END                                                         email,
-  i.statut                                                    z_statut_id,
+  CASE WHEN liste_noire.code IS NULL THEN i.statut ELSE 'NON_AUTORISE' END z_statut_id,
   sc.c_structure_n2                                           z_structure_id,
   ltrim(TO_CHAR(individu.no_individu,'99999999'))             source_code,
   code_insee.no_insee                                         numero_insee,
@@ -252,6 +254,7 @@ SELECT
 FROM
                                         i
        JOIN individu@harpprod           individu           ON individu.no_individu           = i.code
+  LEFT JOIN liste_noire                                    ON liste_noire.code               = i.code
   LEFT JOIN MV_UNICAEN_STRUCTURE_CODES  sc                 ON sc.c_structure                 = pbs_divers__cicg.c_structure_globale@harpprod(individu.no_individu, COALESCE(i.date_fin,SYSDATE) )
   LEFT JOIN commune@harpprod            commune            ON individu.c_commune_naissance   = commune.c_commune
   LEFT JOIN individu_e_mail@harpprod    individu_e_mail    ON individu_e_mail.no_individu    = i.code

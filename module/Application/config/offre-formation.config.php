@@ -33,6 +33,15 @@ return [
                             ],
                         ],
                     ],
+                    'reconduction' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/reconduction',
+                            'defaults' => [
+                                'action' => 'reconduction',
+                            ],
+                        ],
+                    ],
                     'element' => [
                         'type'          => 'Literal',
                         'options'       => [
@@ -199,6 +208,16 @@ return [
                         'route'    => 'of',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
                     ],
+                    'administration' => [
+                        'pages' => [
+                            'reconduction-offre' => [
+                                'label'    => 'Reconduction de l\'offre de formation',
+                                'icon'     => 'glyphicon glyphicon-list-alt',
+                                'route'    => 'of/reconduction',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -216,6 +235,11 @@ return [
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => ['export'],
                     'privileges' => Privileges::ODF_EXPORT_CSV,
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['reconduction'],
+                    'privileges' => Privileges::ODF_RECONDUCTION_OFFRE,
                 ],
                 /* Etapes */
                 [

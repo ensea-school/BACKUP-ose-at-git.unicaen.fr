@@ -81,7 +81,7 @@ class OffreFormationController extends AbstractController
                 partial gtf.{id, libelleCourt, ordre},
                 partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
             FROM
-              Application\Entity\Db\Etap e e
+              Application\Entity\Db\Etape e
               JOIN e.structure s
               JOIN e.typeFormation tf
               JOIN tf.groupe gtf

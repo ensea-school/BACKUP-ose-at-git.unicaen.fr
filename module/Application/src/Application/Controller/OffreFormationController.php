@@ -15,6 +15,7 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
+use Zend\Debug\Debug;
 use Zend\Session\Container;
 
 
@@ -139,7 +140,6 @@ class OffreFormationController extends AbstractController
 
         list($structure, $niveau, $etape) = $this->getParams();
 
-
         // persiste les filtres dans le contexte local
         $this->getServiceLocalContext()
             ->setStructure($structure)
@@ -153,6 +153,7 @@ class OffreFormationController extends AbstractController
         if ($structure) $params['structure'] = $structure->getId();
         if ($niveau) $params['niveau'] = $niveau->getId();
         if ($etape) $params['etape'] = $etape->getId();
+
 
 
         // élément pédagogique sélectionné dans le champ de recherche
@@ -231,6 +232,44 @@ class OffreFormationController extends AbstractController
 
     public function reconductionAction()
     {
+        $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
+
+        list($structure, $niveau, $etape) = $this->getParams();
+
+        $this->getServiceLocalContext()
+            ->setStructure($structure)
+            ->setNiveau($niveau)
+            ->setEtape($etape);
+
+        list($niveaux, $etapes, $elements) = $this->getNeep($structure, $niveau, $etape);
+        //Order ETAPE > ELEMENT PEDAGOGIQUE
+        $etapesComplementaires = [];
+        foreach ($etapes as $v)
+        {
+            $etapesComplementaires[$v->getId()]['etape'] = $v;
+        }
+        foreach ($elements as $v)
+        {
+            $structureId = $v->getStructure()->getId();
+            $etapesComplementaires[$structureId]['elements_pedagogique'][] = $v;
+        }
+
+
+
+        Debug::dump($etapesComplementaires);
+
+        return [
+            'etapesComplementaires' => $etapesComplementaires,
+            'structure'  => $structure,
+            'structures' => $structures,
+            'niveau'     => $niveau,
+            'niveaux'    => $niveaux,
+            'etape'  => $etape,
+            'etapes' => $etapes,
+            'elements' => $elements
+        ];
+
+
 
     }
 

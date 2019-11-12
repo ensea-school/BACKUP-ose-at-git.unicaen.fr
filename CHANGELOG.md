@@ -10,6 +10,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * Un bug modifiant les paramètres globaux qui avaient été configurés a été résolu
 * La duplication de statuts refonctionne
 * Lors de la création d'un nouveau statut, l'octroi de privilèges ne plante plus
+* La suppression de rôle fonctionne de nouveau correctement 
 
 
 # OSE 9.0.1-zf2 et 9.0.1-zf3

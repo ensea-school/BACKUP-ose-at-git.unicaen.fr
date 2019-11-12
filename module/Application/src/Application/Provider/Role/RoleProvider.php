@@ -2,6 +2,7 @@
 
 namespace Application\Provider\Role;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -29,6 +30,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use IntervenantServiceAwareTrait;
     use PrivilegeProviderAwareTrait;
     use ContextServiceAwareTrait;
+    use CacheContainerTrait;
 
     /**
      * @var array
@@ -192,8 +194,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
     public function getStatutsInfo()
     {
-        $session = $this->getSessionContainer();
-        if (!isset($session->statutsInfo)) {
+        $cc = $this->getCacheContainer(self::class);
+        if (!isset($cc->statutsInfo)) {
             $si      = [];
             $statuts = $this->getServiceStatutIntervenant()->getList();
             foreach ($statuts as $statut) {
@@ -203,10 +205,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     'role-name' => $statut->getTypeIntervenant()->getLibelle(),
                 ];
             }
-            $session->statutsInfo = $si;
+            $cc->statutsInfo = $si;
         }
 
-        return $session->statutsInfo;
+        return $cc->statutsInfo;
     }
 
 

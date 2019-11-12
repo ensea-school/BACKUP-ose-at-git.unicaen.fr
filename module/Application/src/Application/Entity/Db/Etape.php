@@ -31,6 +31,17 @@ class Etape implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceIn
         return $this->getLibelle();
     }
 
+    public function __clone()
+    {
+        if($this->id)
+        {
+            $this->id = null;
+        }
+        $this->elementPedagogique = new ArrayCollection();
+
+        return $this;
+    }
+
 
 
     /**

@@ -154,6 +154,24 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->getCode() . ' - ' . $this->getLibelle();
     }
 
+    public function __clone()
+    {
+        if($this->id)
+        {
+            $this->id = null;
+        }
+        $this->cheminPedagogique = new ArrayCollection();
+        $this->elementModulateur = new ArrayCollection();
+        $this->effectifs = null;
+        $this->centreCoutEp = null;
+        $this->volumeHoraireEns = null;
+        $this->service = null;
+        $this->typeHeures = null;
+
+
+        return $this;
+    }
+
 
 
     /**

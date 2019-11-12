@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\GroupeTypeFormation;
+use Application\Entity\Db\Traits\CheminPedagogiqueAwareTrait;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
 use Application\Entity\NiveauEtape;
@@ -232,9 +233,58 @@ class OffreFormationController extends AbstractController
 
     public function reconductionAction()
     {
+
+
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
+        $anneeEnCours = $this->getServiceContext()->getAnnee();
+        $anneeSuivante = $this->getServiceContext()->getAnneeSuivante();
+        $this->getServiceMiseEnPaiementIntervenantStructure()
+        /*$serviceAnnee = $this->getServiceAnnee();
+        $selectedAnnee = $this->getServiceAnnee()->get('2020');
+        Debug::dump($selectedAnnee);*/
+
 
         list($structure, $niveau, $etape) = $this->getParams();
+
+        //Reconduction oc selectionnée
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $datas = $request->getPost();
+            //Duplicate formation
+            //TODO : faire un service pour déporter le code du controlleur
+            if(!empty($datas['etape']))
+            {
+                foreach($datas['etape'] as $v)
+                {
+                    $etapeEnCours = $this->getServiceEtape()->get($v);
+                    $reconductionEtape = clone $etapeEnCours;
+                    $reconductionEtape->setAnnee($anneeSuivante);
+                    $reconductionEtape->setSourceCode(md5(microtime()));
+                    // $this->em()->persist($reconductionEtape);
+                    //$this->em()->flush();
+                    unset($etapeEnCours, $reconductionEtape);
+
+                }
+            }
+
+            //duplicate element pédagogique
+            if(!empty($datas['element']))
+            {
+                foreach($datas['element'] as $v)
+                {
+                    $elementEnCours = $this->getServiceElementPedagogique()->get($v);
+                    $reconductionElement = clone $elementEnCours;
+                    $reconductionElement->setAnnee($anneeSuivante);
+                    $reconductionElement->setSourceCode(md5(microtime()));
+                    //$this->em()->persist($reconductionElement);
+                   // $this->em()->flush();
+                    unset($etapeEnCours, $reconductionEtape);
+
+                }
+            }
+
+        }
+
 
         $this->getServiceLocalContext()
             ->setStructure($structure)
@@ -247,6 +297,8 @@ class OffreFormationController extends AbstractController
         foreach ($etapes as $v)
         {
             $etapesComplementaires[$v->getId()]['etape'] = $v;
+            $etapesComplementaires[$v->getId()]['elements_pedagogique'] = [];
+
         }
         foreach ($elements as $v)
         {
@@ -254,12 +306,15 @@ class OffreFormationController extends AbstractController
             $etapesComplementaires[$structureId]['elements_pedagogique'][] = $v;
         }
 
-
-
-        Debug::dump($etapesComplementaires);
+        //Load specific JS
+        //TODO : A mettre dans un plugin générique
+        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
+        $headScript = $viewHelperManager->get('headScript');
+        $headScript->appendFile('/js/reconduction-offre.js');
 
         return [
             'etapesComplementaires' => $etapesComplementaires,
+            'anneeEnCours' => $anneeEnCours,
             'structure'  => $structure,
             'structures' => $structures,
             'niveau'     => $niveau,

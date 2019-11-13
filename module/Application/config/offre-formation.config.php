@@ -374,6 +374,9 @@ return [
         'factories'  => [
             Assertion\OffreDeFormationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
+        'factories'  => [
+            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
+        ],
     ],
     'form_elements'   => [
         'invokables' => [
@@ -389,6 +392,7 @@ return [
         ],
         'factories'  => [
             Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
+            Processus\ReconductionProcessusFactory::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],
     'view_helpers'    => [

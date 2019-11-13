@@ -35,6 +35,19 @@ class CheminPedagogique implements HistoriqueAwareInterface, ImportAwareInterfac
     protected $etape;
 
 
+    public function __clone()
+    {
+        if($this->id)
+        {
+            $this->id = null;
+        }
+        $this->etape = null;
+        $this->elementPedagogique = null;
+
+        return $this;
+    }
+
+
 
     /**
      * Set ordre

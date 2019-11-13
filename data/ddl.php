@@ -85,7 +85,11 @@
     array (
       'name' => 'DOTATION_ID_SEQ',
     ),
-    'EFFECTIFS_ID_SEQ' =>
+    'EFFECTIFS_ETAPE_ID_SEQ' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_ID_SEQ',
+    ),
+    'EFFECTIFS_ID_SEQ' => 
     array (
       'name' => 'EFFECTIFS_ID_SEQ',
     ),
@@ -3860,6 +3864,160 @@
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+      ),
+    ),
+    'EFFECTIFS_ETAPE' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE',
+      'temporary' => false,
+      'logging' => true,
+      'commentaire' => NULL,
+      'sequence' => 'EFFECTIFS_ETAPE_ID_SEQ',
+      'columns' => 
+      array (
+        'ID' => 
+        array (
+          'name' => 'ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'ETAPE_ID' => 
+        array (
+          'name' => 'ETAPE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'FI' => 
+        array (
+          'name' => 'FI',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'FC' => 
+        array (
+          'name' => 'FC',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'FA' => 
+        array (
+          'name' => 'FA',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'SOURCE_ID' => 
+        array (
+          'name' => 'SOURCE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'SOURCE_CODE' => 
+        array (
+          'name' => 'SOURCE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_CREATION' => 
+        array (
+          'name' => 'HISTO_CREATION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => 'SYSDATE',
+          'commentaire' => NULL,
+        ),
+        'HISTO_CREATEUR_ID' => 
+        array (
+          'name' => 'HISTO_CREATEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_MODIFICATION' => 
+        array (
+          'name' => 'HISTO_MODIFICATION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => 'SYSDATE',
+          'commentaire' => NULL,
+        ),
+        'HISTO_MODIFICATEUR_ID' => 
+        array (
+          'name' => 'HISTO_MODIFICATEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_DESTRUCTION' => 
+        array (
+          'name' => 'HISTO_DESTRUCTION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_DESTRUCTEUR_ID' => 
+        array (
+          'name' => 'HISTO_DESTRUCTEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -12652,6 +12810,28 @@
           'default' => '9999',
           'commentaire' => NULL,
         ),
+        'TITULAIRE' => 
+        array (
+          'name' => 'TITULAIRE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'CHARGES_PATRONALES' => 
+        array (
+          'name' => 'CHARGES_PATRONALES',
+          'type' => 'FLOAT',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => 126,
+          'nullable' => false,
+          'default' => '1',
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'STATUT_PRIVILEGE' => 
@@ -17085,7 +17265,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'SAISIE_PAR_ENSEIGNANT' => 
+        'SAISIE_PAR_ENSEIGNANT' =>
         array (
           'name' => 'SAISIE_PAR_ENSEIGNANT',
           'type' => 'NUMBER',
@@ -17096,7 +17276,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HISTO_CREATION' => 
+        'HISTO_CREATION' =>
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',
@@ -23500,7 +23680,11 @@ END FORMULE_UBO;',
 
     -- us=SI($I$13="Oui";SOMME(I182:AU182);0)
     WHEN c = \'us\' AND v >= 1 THEN
-      RETURN cell(\'t131\',l) + cell(\'t132\',l);
+      IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
+        RETURN cell(\'t131\',l) + cell(\'t132\',l);
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 
@@ -23561,7 +23745,7 @@ END FORMULE_UBO;',
     feuille.delete;
 
     IF ose_formule.intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-      OR ose_formule.intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
+      OR ose_formule.intervenant.heures_decharge > 0 -- s\'il y a une décharge => aucune HC
     THEN
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire;
     END IF;
@@ -30306,7 +30490,7 @@ END UNICAEN_TBL;',
   ),
   'BddAdmin\\Ddl\\DdlView' => 
   array (
-    'V_AGREMENT_EXPORT_CSV' =>
+    'V_AGREMENT_EXPORT_CSV' => 
     array (
       'name' => 'V_AGREMENT_EXPORT_CSV',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_AGREMENT_EXPORT_CSV AS
@@ -37210,7 +37394,67 @@ WHERE
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
       ),
     ),
-    'EFFECTIFS_FK' =>
+    'EFFECTIFS_ETAPE_ETAPE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_ETAPE_FK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'ETAPE',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'ETAPE_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HCFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HCFK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'UTILISATEUR',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'HISTO_CREATEUR_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HDFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HDFK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'UTILISATEUR',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'HISTO_DESTRUCTEUR_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HMFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HMFK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'UTILISATEUR',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'HISTO_MODIFICATEUR_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_SOURCE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_FK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'SOURCE',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'SOURCE_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_FK' => 
     array (
       'name' => 'EFFECTIFS_FK',
       'table' => 'EFFECTIFS',
@@ -42791,7 +43035,18 @@ WHERE
         5 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'EFFECTIFS_SOURCE_UN' =>
+    'EFFECTIFS_ETAPE_SOURCE_UN' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_UN',
+      'table' => 'EFFECTIFS_ETAPE',
+      'index' => 'EFFECTIFS_ETAPE_SOURCE_UN',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
+    'EFFECTIFS_SOURCE_UN' => 
     array (
       'name' => 'EFFECTIFS_SOURCE_UN',
       'table' => 'EFFECTIFS',
@@ -46637,7 +46892,68 @@ END;',
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
       ),
     ),
-    'EFFECTIFS_FK' =>
+    'EFFECTIFS_ETAPE_ETAPE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_ETAPE_FK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'ETAPE_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HCFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HCFK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'HISTO_CREATEUR_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HDFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HDFK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'HISTO_DESTRUCTEUR_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HMFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HMFK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'HISTO_MODIFICATEUR_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_SOURCE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_FK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'SOURCE_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_SOURCE_UN' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_UN',
+      'unique' => true,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
+    'EFFECTIFS_FK' => 
     array (
       'name' => 'EFFECTIFS_FK',
       'unique' => false,

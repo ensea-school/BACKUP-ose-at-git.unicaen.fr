@@ -206,7 +206,6 @@ Contrats de travail
 |SIGNE             |Nombre de volumes horaires signés                         |
 
 
-
 ## Table TBL_DMEP_LIQUIDATION
 
 Gestion budgétaire (enveloppes)
@@ -218,7 +217,6 @@ Gestion budgétaire (enveloppes)
 |TYPE_RESSOURCE_ID|==> TYPE_RESSOURCE.ID|
 |STRUCTURE_ID     |==> STRUCTURE.ID     |
 |HEURES           |                     |
-|TO_DELETE        |                     |
 
 
 ## Table TBL_DOSSIER
@@ -233,7 +231,6 @@ Données personnelles
 |PEUT_SAISIR_DOSSIER|1 Si l'intervenant a un dossier, 0 sinon|
 |DOSSIER_ID         |==> DOSSIER.ID                          |
 |VALIDATION_ID      |==> VALIDATION.ID                       |
-|TO_DELETE          |                                        |
 
 
 ## Table TBL_LIEN
@@ -255,7 +252,6 @@ Liens (pour les charges d'enseignement)
 |CHOIX_MAXIMUM   |Choix maximum              |
 |NB_CHOIX        |Nombre de choix            |
 |TOTAL_POIDS     |Total de poids des fils    |
-|TO_DELETE       |                           |
 |MAX_POIDS       |Poids maximum pour les fils|
 
 
@@ -271,7 +267,6 @@ Données liées aux paiements et demandes de mises en paiement
 |STRUCTURE_ID              |==> STRUCTURE.ID                   |
 |MISE_EN_PAIEMENT_ID       |==> MISE_EN_PAIEMENT.ID            |
 |PERIODE_PAIEMENT_ID       |==> PERIODE.ID                     |
-|TO_DELETE                 |                                   |
 |HEURES_A_PAYER            |HETD à payer                       |
 |HEURES_A_PAYER_POND       |HETD à payer (en %)                |
 |HEURES_DEMANDEES          |HETD demandées                     |
@@ -295,7 +290,6 @@ Pièces justificatives
 |DEMANDEE            |Témoin (1 si la PJ est demandée)    |
 |FOURNIE             |Témoin (1 si la PJ est fournie)     |
 |VALIDEE             |Témoin (1 si la PJ est validée)     |
-|TO_DELETE           |                                    |
 |HEURES_POUR_SEUIL   |NB d'heures de seuil pour la demande|
 
 
@@ -309,7 +303,6 @@ Pièces justificatives (demandes)
 |ANNEE_ID            |==> ANNEE.ID            |
 |TYPE_PIECE_JOINTE_ID|==> TYPE_PIECE_JOINTE.ID|
 |INTERVENANT_ID      |==> INTERVENANT.ID      |
-|TO_DELETE           |                        |
 |HEURES_POUR_SEUIL   |                        |
 
 
@@ -325,7 +318,6 @@ Pièces justificatives fournies
 |INTERVENANT_ID      |==> INTERVENANT.ID      |
 |VALIDATION_ID       |==> VALIDATION.ID       |
 |FICHIER_ID          |==> FICHIER.ID          |
-|TO_DELETE           |                        |
 |PIECE_JOINTE_ID     |==> PIECE_JOINTE.ID     |
 
 
@@ -343,7 +335,6 @@ Services d'ensiegnement
 |STRUCTURE_ID                  |==> STRUCTURE.ID                                |
 |NBVH                          |Nombre de volumes horaires saisis               |
 |VALIDE                        |Nombre de volumes horaires validés              |
-|TO_DELETE                     |                                                |
 |ELEMENT_PEDAGOGIQUE_ID        |==> ELEMENT_PEDAGOGIQUE.ID                      |
 |ELEMENT_PEDAGOGIQUE_PERIODE_ID|==> PERIODE.ID                                  |
 |ETAPE_ID                      |==> ETAPE.ID                                    |
@@ -372,7 +363,6 @@ Référentiel
 |STRUCTURE_ID          |==> STRUCTURE.ID                     |
 |NBVH                  |Nombre de volumes horaires           |
 |VALIDE                |Nombre de volumes horaires validés   |
-|TO_DELETE             |                                     |
 
 
 ## Table TBL_SERVICE_SAISIE
@@ -390,7 +380,6 @@ Service (pour alimenter le Workflow)
 |HEURES_REFERENTIEL_PREV|NB d'heures de référentiel prévisionnel|
 |HEURES_SERVICE_REAL    |NB d'heures de service réalisé         |
 |HEURES_REFERENTIEL_REAL|NB d'heures de référentiel réalisé     |
-|TO_DELETE              |                                       |
 
 
 ## Table TBL_VALIDATION_ENSEIGNEMENT
@@ -406,7 +395,6 @@ Suivi des validations de services
 |TYPE_VOLUME_HORAIRE_ID|==> TYPE_VOLUME_HORAIRE.ID   |
 |SERVICE_ID            |==> SERVICE.ID               |
 |VALIDATION_ID         |==> VALIDATION.ID (Si validé)|
-|TO_DELETE             |                             |
 |VOLUME_HORAIRE_ID     |==> VOLUME_HORAIRE.ID        |
 |AUTO_VALIDATION       |Témoin (0 ou 1)              |
 
@@ -424,7 +412,6 @@ Suivi des validations du référentiel
 |TYPE_VOLUME_HORAIRE_ID|==> TYPE_VOLUME_HORAIRE.ID   |
 |SERVICE_REFERENTIEL_ID|==> SERVICE_REFERENTIEL.ID   |
 |VALIDATION_ID         |==> VALIDATION.ID (Si validé)|
-|TO_DELETE             |                             |
 |VOLUME_HORAIRE_REF_ID |==> VOLUME_HORAIRE_REF.ID    |
 |AUTO_VALIDATION       |Témoin (0 ou 1)              |
 
@@ -440,7 +427,6 @@ Workflow (feuilles de routes : avancement par étape par intervenant et le cas �
 |ETAPE_ID             |==> WF_ETAPE.ID (Identifiant de l'étape concernée)              |
 |STRUCTURE_ID         |==> STRUCTURE.ID (Eventuelle structure concernée)               |
 |ATTEIGNABLE          |Témoin indiquant si l'étape est atteignable ou non              |
-|TO_DELETE            |                                                                |
 |REALISATION          |Pourcentage de réalisation de l'étape de Workflow (entre 0 et 1)|
 |OBJECTIF             |Objectif de réalisation de l'étape de Workflow (entre 0 et 1)   |
 |ANNEE_ID             |==> ANNEE.ID                                                    |
@@ -448,5 +434,3 @@ Workflow (feuilles de routes : avancement par étape par intervenant et le cas �
 |TYPE_INTERVENANT_CODE|Code du type d'intevention (CM / TD / TP, etc)                  |
 |ETAPE_CODE           |Code de l'étape du workflow concernée                           |
 |STATUT_INTERVENANT_ID|==> STATUT_INTERVENANT.ID                                       |
-
-

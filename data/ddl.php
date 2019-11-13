@@ -13312,7 +13312,7 @@
       'name' => 'TBL_AGREMENT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Gestion des agréments',
       'sequence' => 'TBL_AGREMENT_ID_SEQ',
       'columns' => 
       array (
@@ -13411,7 +13411,7 @@
       'name' => 'TBL_CHARGENS',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Charges d\'enseignement',
       'sequence' => 'TBL_CHARGENS_ID_SEQ',
       'columns' => 
       array (
@@ -13642,7 +13642,7 @@
       'name' => 'TBL_CHARGENS_SEUILS_DEF',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pré-calculs des seuils par défaut',
       'sequence' => 'TBL_CHARGENS_SEUILS_DEF_ID_SEQ',
       'columns' => 
       array (
@@ -13741,7 +13741,7 @@
       'name' => 'TBL_CLOTURE_REALISE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Clôture de saisie du service réalisé par les intervenants',
       'sequence' => 'TBL_CLOTURE_REALISE_ID_SEQ',
       'columns' => 
       array (
@@ -13818,7 +13818,7 @@
       'name' => 'TBL_CONTRAT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Contrats de travail',
       'sequence' => 'TBL_CONTRAT_ID_SEQ',
       'columns' => 
       array (
@@ -14082,7 +14082,7 @@
       'name' => 'TBL_DMEP_LIQUIDATION',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Gestion budgétaire (enveloppes)',
       'sequence' => 'TBL_DMEP_LIQUIDATION_ID_SEQ',
       'columns' => 
       array (
@@ -14159,7 +14159,7 @@
       'name' => 'TBL_DOSSIER',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Données personnelles',
       'sequence' => 'TBL_DOSSIER_ID_SEQ',
       'columns' => 
       array (
@@ -14247,7 +14247,7 @@
       'name' => 'TBL_LIEN',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Liens (pour les charges d\'enseignement)',
       'sequence' => 'TBL_LIEN_ID_SEQ',
       'columns' => 
       array (
@@ -14423,7 +14423,7 @@
       'name' => 'TBL_PAIEMENT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Données liées aux paiements et demandes de mises en paiement',
       'sequence' => 'TBL_PAIEMENT_ID_SEQ',
       'columns' => 
       array (
@@ -14599,7 +14599,7 @@
       'name' => 'TBL_PIECE_JOINTE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pièces justificatives',
       'sequence' => 'TBL_PIECE_JOINTE_ID_SEQ',
       'columns' => 
       array (
@@ -14709,7 +14709,7 @@
       'name' => 'TBL_PIECE_JOINTE_DEMANDE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pièces justificatives (demandes)',
       'sequence' => 'TBL_PIECE_JOINTE_DEMAND_ID_SEQ',
       'columns' => 
       array (
@@ -14786,7 +14786,7 @@
       'name' => 'TBL_PIECE_JOINTE_FOURNIE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pièces justificatives fournies',
       'sequence' => 'TBL_PIECE_JOINTE_FOURNI_ID_SEQ',
       'columns' => 
       array (
@@ -14885,7 +14885,7 @@
       'name' => 'TBL_SERVICE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Services d\'ensiegnement',
       'sequence' => 'TBL_SERVICE_ID_SEQ',
       'columns' => 
       array (
@@ -15127,7 +15127,7 @@
       'name' => 'TBL_SERVICE_REFERENTIEL',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Référentiel',
       'sequence' => 'TBL_SERVICE_REFERENTIEL_ID_SEQ',
       'columns' => 
       array (
@@ -15237,7 +15237,7 @@
       'name' => 'TBL_SERVICE_SAISIE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Service (pour alimenter le Workflow)',
       'sequence' => 'TBL_SERVICE_SAISIE_ID_SEQ',
       'columns' => 
       array (
@@ -15358,7 +15358,7 @@
       'name' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Suivi des validations de services',
       'sequence' => 'TBL_VALIDATION_ENSEIGNE_ID_SEQ',
       'columns' => 
       array (
@@ -15479,7 +15479,7 @@
       'name' => 'TBL_VALIDATION_REFERENTIEL',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Suivi des validations du référentiel',
       'sequence' => 'TBL_VALIDATION_REFERENT_ID_SEQ',
       'columns' => 
       array (
@@ -15600,7 +15600,7 @@
       'name' => 'TBL_WORKFLOW',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Workflow (feuilles de routes : avancement par étape par intervenant et le cas échéant par composante)',
       'sequence' => 'TBL_WORKFLOW_ID_SEQ',
       'columns' => 
       array (
@@ -36118,6 +36118,60 @@ WHERE
   ),
   'BddAdmin\\Ddl\\DdlMaterializedView' => 
   array (
+    'MV_EXT_DOTATION_LIQUIDATION' => 
+    array (
+      'name' => 'MV_EXT_DOTATION_LIQUIDATION',
+      'definition' => 'SELECT
+	COALESCE(HEURE_DOT.ANNEE_ID,HEURE_LIQUID.ANNEE_ID) ANNEE_ID,
+	COALESCE(HEURE_DOT.TYPE_RESSOURCE_ID, HEURE_LIQUID.TYPE_RESSOURCE_ID) TYPE_RESSOURCE_ID,
+	COALESCE(HEURE_DOT.STRUCTURE_ID, HEURE_LIQUID.STRUCTURE_ID) STRUCTURE_ID,
+	SUM(HEURE_DOT.HEURES) HEURES_D,
+	SUM(HEURE_LIQUID.HEURES) HEURES_L
+FROM
+	(
+		SELECT
+			DOTATION.ANNEE_ID,
+			DOTATION.TYPE_RESSOURCE_ID,
+			DOTATION.STRUCTURE_ID,
+			SUM(
+				CASE
+					WHEN DOTATION.HISTO_DESTRUCTION IS NULL THEN DOTATION.HEURES
+					ELSE 0.0
+				END
+			) HEURES
+		FROM
+			DOTATION
+		GROUP BY
+			DOTATION.ANNEE_ID,
+			DOTATION.TYPE_RESSOURCE_ID,
+			DOTATION.STRUCTURE_ID
+	) HEURE_DOT
+	FULL OUTER JOIN (
+		SELECT
+			V_TBL_DMEP_LIQUIDATION.ANNEE_ID,
+			V_TBL_DMEP_LIQUIDATION.TYPE_RESSOURCE_ID,
+			V_TBL_DMEP_LIQUIDATION.STRUCTURE_ID,
+			SUM(V_TBL_DMEP_LIQUIDATION.HEURES) HEURES
+		FROM
+			V_TBL_DMEP_LIQUIDATION
+		GROUP BY
+			V_TBL_DMEP_LIQUIDATION.ANNEE_ID,
+			V_TBL_DMEP_LIQUIDATION.TYPE_RESSOURCE_ID,
+			V_TBL_DMEP_LIQUIDATION.STRUCTURE_ID
+	) HEURE_LIQUID
+		ON HEURE_DOT.ANNEE_ID = HEURE_LIQUID.ANNEE_ID
+		AND HEURE_DOT.TYPE_RESSOURCE_ID = HEURE_LIQUID.TYPE_RESSOURCE_ID
+		AND HEURE_DOT.STRUCTURE_ID = HEURE_LIQUID.STRUCTURE_ID
+GROUP BY
+	COALESCE(HEURE_DOT.ANNEE_ID,HEURE_LIQUID.ANNEE_ID),
+	COALESCE(HEURE_DOT.TYPE_RESSOURCE_ID, HEURE_LIQUID.TYPE_RESSOURCE_ID),
+	COALESCE(HEURE_DOT.STRUCTURE_ID, HEURE_LIQUID.STRUCTURE_ID)',
+    ),
+    'MV_EXT_ETAT_PAIEMENT' => 
+    array (
+      'name' => 'MV_EXT_ETAT_PAIEMENT',
+      'definition' => 'SELECT * FROM v_etat_paiement',
+    ),
     'MV_EXT_SERVICE' => 
     array (
       'name' => 'MV_EXT_SERVICE',

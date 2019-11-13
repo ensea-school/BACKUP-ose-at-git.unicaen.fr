@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -25,21 +26,6 @@ class TypeModulateur implements HistoriqueAwareInterface, ResourceInterface
      * @var string
      */
     protected $libelle;
-
-    /**
-     * @var boolean
-     */
-    protected $obligatoire;
-
-    /**
-     * @var boolean
-     */
-    protected $publique;
-
-    /**
-     * @var boolean
-     */
-    protected $saisieParEnseignant;
 
     /**
      * @var integer
@@ -142,90 +128,6 @@ class TypeModulateur implements HistoriqueAwareInterface, ResourceInterface
 
 
     /**
-     * Set obligatoire
-     *
-     * @param boolean $obligatoire
-     *
-     * @return TypeModulateur
-     */
-    public function setObligatoire($obligatoire)
-    {
-        $this->obligatoire = $obligatoire;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get obligatoire
-     *
-     * @return boolean
-     */
-    public function getObligatoire()
-    {
-        return $this->obligatoire;
-    }
-
-
-
-    /**
-     * Set publique
-     *
-     * @param boolean $publique
-     *
-     * @return TypeModulateur
-     */
-    public function setPublique($publique)
-    {
-        $this->publique = $publique;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get publique
-     *
-     * @return boolean
-     */
-    public function getPublique()
-    {
-        return $this->publique;
-    }
-
-
-
-    /**
-     * Set saisieParEnseignant
-     *
-     * @param boolean $saisieParEnseignant
-     *
-     * @return TypeModulateur
-     */
-    public function setSaisieParEnseignant($saisieParEnseignant)
-    {
-        $this->saisieParEnseignant = $saisieParEnseignant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get saisieParEnseignant
-     *
-     * @return boolean
-     */
-    public function getSaisieParEnseignant()
-    {
-        return $this->saisieParEnseignant;
-    }
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -311,10 +213,11 @@ class TypeModulateur implements HistoriqueAwareInterface, ResourceInterface
         return $this->structure;
     }
 
+
+
     public function getResourceId()
     {
         return "TypeModulateur";
     }
-
 
 }

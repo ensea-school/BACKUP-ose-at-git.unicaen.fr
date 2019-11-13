@@ -17243,40 +17243,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'PUBLIQUE' => 
-        array (
-          'name' => 'PUBLIQUE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'OBLIGATOIRE' => 
-        array (
-          'name' => 'OBLIGATOIRE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'SAISIE_PAR_ENSEIGNANT' =>
-        array (
-          'name' => 'SAISIE_PAR_ENSEIGNANT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATION' =>
+        'HISTO_CREATION' => 
         array (
           'name' => 'HISTO_CREATION',
           'type' => 'DATE',

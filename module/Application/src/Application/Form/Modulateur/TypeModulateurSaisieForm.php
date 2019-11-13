@@ -46,27 +46,6 @@ class typeModulateurSaisieForm extends AbstractForm
             ],
             'type'    => 'Text',
         ]);
-        $this->add([
-            'name'    => 'publique',
-            'options' => [
-                'label' => 'Publique ?',
-            ],
-            'type'    => 'Checkbox',
-        ]);
-        $this->add([
-            'name'    => 'obligatoire',
-            'options' => [
-                'label' => 'Obligatoire ?',
-            ],
-            'type'    => 'Checkbox',
-        ]);
-        $this->add([
-            'name'    => 'saisie-par-enseignant',
-            'options' => [
-                'label' => 'Saisie par l\'enseignant ?',
-            ],
-            'type'    => 'Checkbox',
-        ]);
         $this->add(new Csrf('security'));
         $this->add([
             'name'       => 'submit',
@@ -124,9 +103,6 @@ class typeModulateurHydrator implements HydratorInterface
     {
         $object->setCode($data['code']);
         $object->setLibelle($data['libelle']);
-        $object->setPublique($data['publique']);
-        $object->setObligatoire($data['obligatoire']);
-        $object->setSaisieParEnseignant($data['saisie-par-enseignant']);
 
         return $object;
     }
@@ -146,9 +122,6 @@ class typeModulateurHydrator implements HydratorInterface
             'id'                    => $object->getId(),
             'code'                  => $object->getCode(),
             'libelle'               => $object->getLibelle(),
-            'publique'              => $object->getPublique(),
-            'obligatoire'           => $object->getObligatoire(),
-            'saisie-par-enseignant' => $object->getSaisieParEnseignant(),
         ];
 
         return $data;

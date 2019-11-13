@@ -14,6 +14,8 @@ $ddlConfig = [
     'materialized-view'  => ['includes' => ['MV_EXT_SERVICE', 'TBL_NOEUD']],
     'package'            => ['excludes' => ['UCBN_LDAP', 'UNICAEN_IMPORT_AUTOGEN_PROCS__']],
 ];
+
+$c->println('Génération de la DDL à partir de la base de données ...');
 $ddl = $schema->getDdl($ddlConfig);
 $schema->saveToFile($ddl, $filename);
 

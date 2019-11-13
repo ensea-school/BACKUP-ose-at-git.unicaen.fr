@@ -12,6 +12,9 @@ author: Laurent Lécluse - DSI - Unicaen
 * Lors de la création d'un nouveau statut, l'octroi de privilèges ne plante plus
 * La suppression de rôle fonctionne de nouveau correctement 
 
+## Nouveautés
+
+* Intégration de vues métérialisées pour extraction BO
 
 # OSE 9.0.1-zf2 et 9.0.1-zf3
 

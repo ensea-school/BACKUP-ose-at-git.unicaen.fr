@@ -160,13 +160,14 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         {
             $this->id = null;
         }
-        $this->cheminPedagogique = new ArrayCollection();
-        $this->elementModulateur = new ArrayCollection();
+        $this->etape = null;
+        $this->elementModulateur = null;
         $this->effectifs = null;
         $this->centreCoutEp = null;
         $this->volumeHoraireEns = null;
         $this->service = null;
         $this->typeHeures = null;
+        $this->cheminPedagogique = null;
 
 
         return $this;

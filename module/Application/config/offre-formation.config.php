@@ -372,6 +372,9 @@ return [
             Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
         ],
+        'factories'  => [
+            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
+        ],
     ],
     'form_elements'   => [
         'invokables' => [
@@ -387,6 +390,7 @@ return [
         ],
         'factories'  => [
             Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
+            Processus\ReconductionProcessusFactory::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],
     'view_helpers'    => [

@@ -5,10 +5,11 @@ namespace Application\Controller;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\GroupeTypeFormation;
-use Application\Entity\Db\Traits\CheminPedagogiqueAwareTrait;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
 use Application\Entity\NiveauEtape;
+use Application\Processus\Traits\ReconductionProcessusAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
@@ -16,7 +17,6 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
-use Zend\Debug\Debug;
 use Zend\Session\Container;
 
 
@@ -33,6 +33,8 @@ class OffreFormationController extends AbstractController
     use ElementPedagogiqueServiceAwareTrait;
     use EtapeServiceAwareTrait;
     use NiveauEtapeServiceAwareTrait;
+    use AnneeServiceAwareTrait;
+    use ReconductionProcessusAwareTrait;
 
     /**
      * @var Container
@@ -234,94 +236,67 @@ class OffreFormationController extends AbstractController
     public function reconductionAction()
     {
 
-
+        $this->initFilters();
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
         $anneeEnCours = $this->getServiceContext()->getAnnee();
-        $anneeSuivante = $this->getServiceContext()->getAnneeSuivante();
-        $this->getServiceMiseEnPaiementIntervenantStructure()
-        /*$serviceAnnee = $this->getServiceAnnee();
-        $selectedAnnee = $this->getServiceAnnee()->get('2020');
-        Debug::dump($selectedAnnee);*/
+        $reconductionStep = '';
+        $messageStep = '';
 
-
+        //Récupération des paramètres GET
         list($structure, $niveau, $etape) = $this->getParams();
 
-        //Reconduction oc selectionnée
         $request = $this->getRequest();
         if ($request->isPost()) {
             $datas = $request->getPost();
-            //Duplicate formation
-            //TODO : faire un service pour déporter le code du controlleur
-            if(!empty($datas['etape']))
-            {
-                foreach($datas['etape'] as $v)
+            $reconductionProcessus = $this->getProcessusReconduction();
+            try{
+                if($reconductionProcessus->reconduction($datas))
                 {
-                    $etapeEnCours = $this->getServiceEtape()->get($v);
-                    $reconductionEtape = clone $etapeEnCours;
-                    $reconductionEtape->setAnnee($anneeSuivante);
-                    $reconductionEtape->setSourceCode(md5(microtime()));
-                    // $this->em()->persist($reconductionEtape);
-                    //$this->em()->flush();
-                    unset($etapeEnCours, $reconductionEtape);
-
+                    $reconductionStep = true;
                 }
+                else{
+                    $reconductionStep = false;
+                }
+
             }
-
-            //duplicate element pédagogique
-            if(!empty($datas['element']))
-            {
-                foreach($datas['element'] as $v)
-                {
-                    $elementEnCours = $this->getServiceElementPedagogique()->get($v);
-                    $reconductionElement = clone $elementEnCours;
-                    $reconductionElement->setAnnee($anneeSuivante);
-                    $reconductionElement->setSourceCode(md5(microtime()));
-                    //$this->em()->persist($reconductionElement);
-                   // $this->em()->flush();
-                    unset($etapeEnCours, $reconductionEtape);
-
-                }
+            catch(\Exception $e){
+                $reconductionStep = false;
+                $messageStep = $e->getMessage();
             }
 
         }
-
-
         $this->getServiceLocalContext()
             ->setStructure($structure)
             ->setNiveau($niveau)
             ->setEtape($etape);
 
         list($niveaux, $etapes, $elements) = $this->getNeep($structure, $niveau, $etape);
-        //Order ETAPE > ELEMENT PEDAGOGIQUE
-        $etapesComplementaires = [];
+        //Organisation pour traitement dans la vue
+        $offresComplementaires = [];
         foreach ($etapes as $v)
         {
-            $etapesComplementaires[$v->getId()]['etape'] = $v;
-            $etapesComplementaires[$v->getId()]['elements_pedagogique'] = [];
+            $offresComplementaires[$v->getId()]['etape'] = $v;
+            $offresComplementaires[$v->getId()]['elements_pedagogique'] = [];
 
         }
         foreach ($elements as $v)
         {
-            $structureId = $v->getStructure()->getId();
-            $etapesComplementaires[$structureId]['elements_pedagogique'][] = $v;
+            $etapeId = $v->getEtape()->getId();
+            $offresComplementaires[$etapeId]['elements_pedagogique'][] = $v;
         }
 
-        //Load specific JS
-        //TODO : A mettre dans un plugin générique
+        //Chargement JS nécessaire uniquement sur cette page
         $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
         $headScript = $viewHelperManager->get('headScript');
-        $headScript->appendFile('/js/reconduction-offre.js');
+        $headScript->offsetSetFile(100, '/js/reconduction-offre.js');
 
         return [
-            'etapesComplementaires' => $etapesComplementaires,
-            'anneeEnCours' => $anneeEnCours,
-            'structure'  => $structure,
-            'structures' => $structures,
-            'niveau'     => $niveau,
-            'niveaux'    => $niveaux,
-            'etape'  => $etape,
-            'etapes' => $etapes,
-            'elements' => $elements
+            'offresComplementaires' => $offresComplementaires,
+            'structure'        => $structure,
+            'structures'       => $structures,
+            'anneeEnCours'     => $anneeEnCours,
+            'reconductionStep' => $reconductionStep,
+            'messageStep'      => $messageStep
         ];
 
 

@@ -1,13 +1,13 @@
 <div class="row" id="reconduction-filters">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
         <div class="panel panel-default">
-            <div class="panel-heading">Structure</div>
+            <div class="panel-heading">Composante</div>
             <div class="panel-body">
                 <?php
                 $selectStructure = new \Zend\Form\Element\Select('structure');
                 $selectStructure
-                    ->setValueOptions(['' => "(Sélectionnez une structure)"] + \UnicaenApp\Util::collectionAsOptions($structures))
+                    ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
                     ->setValue($structure ? $structure->getId() : null)
                     ->setAttributes(['class' => 'structure',
                                      'style' => 'width:250px;']);
@@ -17,53 +17,31 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <!---------------- Champ de sélection niveau --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Niveau</div>
-            <div class="panel-body">
-                <?php
-                $selectNiveau = new \Zend\Form\Element\Select('niveau');
-                $selectNiveau
-                    ->setValueOptions(['' => "(Sélectionnez un niveau)"] + \UnicaenApp\Util::collectionAsOptions($niveaux))
-                    ->setValue($niveau ? $niveau->getId() : null)
-                    ->setAttributes(['class' => 'niveau',
-                                     'style' => 'width:250px;']);
-                echo $this->formSelect($selectNiveau);
-                ?>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <!---------------- Champ de sélection formation --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Formation</div>
-            <div class="panel-body">
-                <?php
-                $selectEtapes = new \Zend\Form\Element\Select('etape');
-                $selectEtapes
-                    ->setValueOptions(['' => "(Sélectionnez une formation)"] + \UnicaenApp\Util::collectionAsOptions($etapes))
-                    ->setValue($etape ? $etape->getId() : null)
-                    ->setAttributes(['class' => 'etape',
-                                    'style' => 'width:250px;']);
-                echo $this->formSelect($selectEtapes);
-                ?>
-            </div>
-        </div>
-    </div>
+
 </div>
 <div class="row" style="margin:0 5px 0 5px;">
     <div class="col-11">
-        <h3>Offre de formation complémantaire / Année scolaire :  <?php echo $anneeEnCours->getLibelle(); ?></h3>
-        <br/>
-        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
+        <?php
+        if($reconductionStep)
+        {
+            echo "<p class=\"bg-success\" style=\"padding:10px;\">La reconduction de l'offre de formation pour la prochaine année universitaire s'est correctement déroulée.</p>";
+        }
+        elseif($reconductionStep === false){
+            echo "<p class=\"bg-danger\" style=\"padding:10px;\">La reconductiond de l'offre de formation a échoué : <br/><br/>" .  $messageStep . "</p>";
+        }
+        ?>
 
-            <?php foreach ($etapesComplementaires as $ec): ?>
+
+        <h3>Offre de formation complémantaire / Année universitaire :  <?php echo $anneeEnCours->getLibelle(); ?></h3>
+        <br/>
+        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
+
+            <?php foreach ($offresComplementaires as $ec): ?>
                 <table class="reconduction-offre table table-bordered table-condensed table-hover">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
-                            <th colspan="6">Formation : <?= $ec['etape']->__toString() . ' (' . $ec['etape']->getAnnee()->getLibelle() . ') -- id / ' . $ec['etape']->getId() . ' / code / ' . $ec['etape']->getCode(); ?></th>
+                            <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
+                            <th colspan="6">Formation : <?= $ec['etape']->__toString() . ' (' . $ec['etape']->getAnnee()->getLibelle() . ')'; ?></th>
                         </tr>
                         <tr>
                             <th colspan="2">Code</th>
@@ -85,7 +63,7 @@
 
                         <?php foreach ($ec['elements_pedagogique'] as $ep): ?>
                             <tr id="<?= $ep->getId() ?>">
-                                <td><input class="checkbox-element" type="checkbox" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep->getId(); ?>"/></td>
+                                <td><input class="checkbox-element" type="checkbox" checked="checked" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep->getId(); ?>"/></td>
                                 <td class="element"><?= $ep->getCode() ?></td>
                                 <td class="element"><?= $this->elementPedagogique($ep)->renderLink($ep->getLibelle()) ?></td>
                                 <td class="periode"><?= $ep->getPeriode() ?: "" ?></td>
@@ -96,14 +74,30 @@
                     </tbody>
                 </table>
             <?php endforeach; ?>
-            <input class="btn btn-primary" type="submit" value="Reconduire l'offre séléctionnée" name="submit"/>
+            <input id="reconduction-button" class="btn btn-primary" type="button" value="Reconduire l'offre séléctionnée"/>
         </form>
 
     </div>
 </div>
+<div id="modal-dialog" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+                <h3>Demande de confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <p>Êtes vous sûre de vouloir reconduire ces offres de formation pour la prochaine année universitaire ?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="btnYes" class="btn confirm">OUI</a>
+                <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">NON</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
-
 
 </script>
 

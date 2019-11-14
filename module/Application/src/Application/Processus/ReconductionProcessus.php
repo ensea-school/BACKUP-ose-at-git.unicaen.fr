@@ -2,11 +2,14 @@
 
 namespace Application\Processus;
 
+use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\VolumeHoraireEns;
 use Application\Service\AnneeService;
 use Application\Service\CheminPedagogiqueService;
 use Application\Service\ContextService;
 use Application\Service\ElementPedagogiqueService;
 use Application\Service\EtapeService;
+use Application\Service\VolumeHoraireEnsService;
 use Zend\Debug\Debug;
 use Zend\Stdlib\Parameters;
 
@@ -20,6 +23,7 @@ class ReconductionProcessus extends AbstractProcessus
     protected $etapeService;
     protected $elementPedagogiqueService;
     protected $cheminPedagogiqueService;
+    protected $volumeHoraireEnsService;
     protected $anneeService;
     protected $contextService;
 
@@ -27,33 +31,59 @@ class ReconductionProcessus extends AbstractProcessus
     public function __construct(EtapeService $etapeService,
                                 ElementPedagogiqueService $elementPedagogiqueService,
                                 CheminPedagogiqueService $cheminPedagogiqueService,
+                                VolumeHoraireEnsService $volumeHoraireEnsService,
                                 AnneeService $anneeService,
                                 ContextService $contextService)
     {
         $this->etapeService = $etapeService;
         $this->elementPedagogiqueService = $elementPedagogiqueService;
         $this->cheminPedagogiqueService = $cheminPedagogiqueService;
+        $this->volumeHoraireEnsService = $volumeHoraireEnsService;
         $this->anneeService = $anneeService;
         $this->contextService = $contextService;
     }
 
-
-
     public function reconduction(Parameters $datas)
     {
-        if(!empty($datas['etape']))
+        if(empty($datas['element']) && empty($datas['etape']))
+        {
+            Throw new \Exception('Aucune donnée à reconduire');
+        }
+
+        if(empty($datas['etape']))
+        {
+            $datas['etape'] = [];
+        }
+        $etapeOfElements = array_keys($datas['element']);
+        $etapeManquante = array_diff($etapeOfElements,$datas['etape']);
+        $etapes = array_merge($datas['etape'], $etapeManquante);
+
+        if(!empty($etapes))
         {
             $anneeEnCours = $this->contextService->getAnnee();
             $em = $this->getEntityManager();
             $dateDuJour = new \DateTime();
             $dateDuJour->format('d/m/Y');
-            foreach($datas['etape'] as $idEtape)
+            foreach($etapes as $idEtape)
             {
-                $etapeEnCours = $this->etapeService->get($idEtape);
-                $etapeReconduit= clone $etapeEnCours;
-                $etapeReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
-                $etapeReconduit->setHistoCreation($dateDuJour);
-                $em->persist($etapeReconduit);
+                if(in_array($idEtape, $etapeManquante))
+                {
+                    if(!array_key_exists($idEtape, $datas['mappingEtape']))
+                    {
+                        Throw new \Exception('Impossible de reconduire les éléments sélectionné');
+                    }
+                    $idEtapeN1 = $datas['mappingEtape'][$idEtape];
+                    $etapeReconduit = $this->etapeService->get($idEtapeN1);
+                }
+                else{
+
+                    $etapeEnCours = $this->etapeService->get($idEtape);
+                    $etapeReconduit= clone $etapeEnCours;
+                    $etapeReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
+                    $etapeReconduit->setSpecifiqueEchanges(false);
+                    $etapeReconduit->setHistoCreation($dateDuJour);
+                    $em->persist($etapeReconduit);
+                }
                 //Reconduction des éléments pédagogiques pour cette étape
                 if(array_key_exists($idEtape, $datas['element']))
                 {
@@ -67,7 +97,7 @@ class ReconductionProcessus extends AbstractProcessus
                         //ajout de l'élément à l'étape
                         $etapeReconduit->addElementPedagogique($elementReconduit);
                         $em->persist($elementReconduit);
-                        //Recondution des chemins pédagogiques
+                        //Reconduction des chemins pédagogiques
                         $cheminsPedagogique = $elementEnCours->getCheminPedagogique();
                         foreach($cheminsPedagogique as $chemin)
                         {
@@ -76,6 +106,16 @@ class ReconductionProcessus extends AbstractProcessus
                             $cheminReconduit->setEtape($etapeReconduit);
                             $cheminReconduit->setHistoCreation($dateDuJour);
                             $em->persist($cheminReconduit);
+                        }
+                        //Reconduction des volumes horaires
+                        $volumesHoraire = $elementEnCours->getVolumeHoraireEns();
+                        foreach($volumesHoraire as $volume)
+                        {
+                            $volumeReconduit = clone $volume;
+                            $volumeReconduit->setHistoCreation($dateDuJour);
+                            $volumeReconduit->setElementPedagogique($elementReconduit);
+                            $elementReconduit->addVolumeHoraireEns($volumeReconduit);
+                            $em->persist($volumeReconduit);
                         }
                         unset($elementReconduit, $elementEnCours);
                     }
@@ -92,6 +132,5 @@ class ReconductionProcessus extends AbstractProcessus
 
       return true;
     }
-
 
 }

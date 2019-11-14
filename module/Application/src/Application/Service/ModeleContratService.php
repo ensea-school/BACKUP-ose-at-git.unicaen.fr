@@ -20,6 +20,13 @@ class ModeleContratService extends AbstractEntityService
 {
 
     /**
+     * @var array
+     */
+    private $config;
+
+
+
+    /**
      * retourne la classe des entités
      *
      * @return string
@@ -66,10 +73,15 @@ class ModeleContratService extends AbstractEntityService
         }
 
         $document = new Document();
-        $document->setTmpDir(getcwd() . '/cache/');
+        if (isset($this->config['host'])){
+            $document->setHost($this->config['host']);
+        }
+        if (isset($this->config['tmp-dir'])){
+            $document->setTmpDir($this->config['tmp-dir']);
+        }
 
         if ($modele->hasFichier()) {
-            $document->loadFromData(stream_get_contents($modele->getFichier(),-1,0));
+            $document->loadFromData(stream_get_contents($modele->getFichier(), -1, 0));
         } else {
             $document->loadFromFile($this->getModeleGeneriqueFile(), true);
         }
@@ -135,12 +147,12 @@ class ModeleContratService extends AbstractEntityService
             unset($mainData['exemplaire1']);
         }
         if (isset($mainData['exemplaire2']) && $mainData['exemplaire2'] && ('0' !== $mainData['exemplaire2'])) {
-            $data[1] = $data[0];
+            $data[1]               = $data[0];
             $data[1]['exemplaire'] = $mainData['exemplaire2'];
             unset($mainData['exemplaire2']);
         }
         if (isset($mainData['exemplaire3']) && $mainData['exemplaire3'] && ('0' !== $mainData['exemplaire3'])) {
-            $data[2] = $data[0];
+            $data[2]               = $data[0];
             $data[2]['exemplaire'] = $mainData['exemplaire3'];
             unset($mainData['exemplaire3']);
         }
@@ -184,5 +196,31 @@ class ModeleContratService extends AbstractEntityService
     {
         return 'modele_contrat';
     }
+
+
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+
+
+    /**
+     * @param array $config
+     *
+     * @return ModeleContratService
+     */
+    public function setConfig(array $config): ModeleContratService
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+
 
 }

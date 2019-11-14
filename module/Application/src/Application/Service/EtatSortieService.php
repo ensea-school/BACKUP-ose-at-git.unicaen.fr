@@ -22,6 +22,11 @@ class EtatSortieService extends AbstractEntityService
 {
     use ParametresServiceAwareTrait;
 
+    /**
+     * @var array
+     */
+    private $config;
+
 
 
     /**
@@ -79,7 +84,13 @@ class EtatSortieService extends AbstractEntityService
     public function genererPdf(EtatSortie $etatSortie, array $filtres, array $options = []): Document
     {
         $document = new Document();
-        $document->setTmpDir(getcwd() . '/cache/');
+        if (isset($this->config['host'])){
+            $document->setHost($this->config['host']);
+        }
+        if (isset($this->config['tmp-dir'])){
+            $document->setTmpDir($this->config['tmp-dir']);
+        }
+
         $document->getPublisher()->setAutoBreak($etatSortie->isAutoBreak());
         $document->setPdfOutput(true);
         if ($etatSortie->hasFichier()) {
@@ -323,4 +334,29 @@ class EtatSortieService extends AbstractEntityService
 
         return $connection->fetchAll($query, $queryFilters);
     }
+
+
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+
+
+    /**
+     * @param array $config
+     *
+     * @return EtatSortieService
+     */
+    public function setConfig(array $config): EtatSortieService
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
 }

@@ -3,6 +3,27 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 10-zf2 et 10-zf3 (à venir)
+
+## Nouveautés
+
+* Possibilité d'utiliser un service Unoconv présent sur un serveur dédié autre que celui de OSE
+
+## Notes de mise à jour
+
+Ajout de nouveaux paramètres de configuration pour pouvoir externaliser l'usage du service Unoconv.
+A ajouter dans votre fichier config.local.php et à personnaliser le cas échéant :
+```php
+    /* Génération d'états de sortie avec Unoconv */
+    'etats-sortie'       => [
+        /* Serveur où se situe le service Unoconv */
+        'host'    => '127.0.0.1', // par défaut sur la même machine que OSE
+
+        /* Répertoire de travail utilisé à la fois par OSE et par le service Unoconv */
+        'tmp-dir' => getcwd() . '/cache/', // par défaut dans le répertoire cache de OSE
+    ],
+```
+
 # OSE 9.0.2-zf2 et 9.0.2-zf3
 
 ## Correction de bugs

@@ -5,12 +5,12 @@ return [
         'connection'    => [
             'orm_default' => [
                 'params' => [
-                    'host'       => AppConfig::get('bdd', 'host'),
-                    'port'       => AppConfig::get('bdd', 'port'),
-                    'dbname'     => AppConfig::get('bdd', 'dbname'),
-                    'user'       => AppConfig::get('bdd', 'username'),
-                    'password'   => AppConfig::get('bdd', 'password'),
-                    'charset'    => 'AL32UTF8',
+                    'host'     => AppConfig::get('bdd', 'host'),
+                    'port'     => AppConfig::get('bdd', 'port'),
+                    'dbname'   => AppConfig::get('bdd', 'dbname'),
+                    'user'     => AppConfig::get('bdd', 'username'),
+                    'password' => AppConfig::get('bdd', 'password'),
+                    'charset'  => 'AL32UTF8',
                     //'persistent' => true,
                 ],
             ],
@@ -18,7 +18,7 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache'   => 'filesystem',
-//                'query_cache'      => 'filesystem',
+                //                'query_cache'      => 'filesystem',
                 'result_cache'     => 'filesystem',
                 'hydration_cache'  => 'array',
                 'generate_proxies' => AppConfig::get('bdd', 'generateProxies'),
@@ -34,5 +34,10 @@ return [
         'scheme' => AppConfig::get('global', 'scheme'),
         'domain' => AppConfig::get('global', 'domain'),
     ],
-
+    'application'  => [
+        'etats-sortie' => [
+            'host'    => AppConfig::get('etats-sortie', 'host', '127.0.0.1'),
+            'tmp-dir' => AppConfig::get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
+        ],
+    ],
 ];

@@ -94,7 +94,7 @@ class Application
 
         $passed = false;
         foreach ($whiteList as $ip) {
-            $passed = $ip[0] === $_SERVER['REMOTE_ADDR'];
+            $passed = $ip[0] === (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null);
             if ($passed && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $passed = isset($ip[1]) && $ip[1] === $_SERVER['HTTP_X_FORWARDED_FOR'];
             }
@@ -108,12 +108,11 @@ class Application
 
     public static function run()
     {
-        if (self::inMaintenance()) {
+        if (php_sapi_name() !== 'cli' && self::inMaintenance()) {
             self::$maintenanceText = AppConfig::get('maintenance', 'messageInfo');
-            if (php_sapi_name() !== 'cli') {
-                require 'maintenance.php';
-            }
-        } else {
+            require 'public/maintenance.php';
+            die();
+        }else{
             self::zendApplicationStart();
         }
     }
@@ -125,9 +124,10 @@ class Application
         header("HTTP/1.0 500 Internal Server Error");
         self::$maintenanceText = '<h2>Une erreur est survenue !</h2>' . $exception->getMessage();
         if (php_sapi_name() !== 'cli') {
-            require 'maintenance.php';
+            require 'public/maintenance.php';
         } else {
-            echo self::$maintenanceText;
+            echo self::$maintenanceText."\n";
         }
+        die();
     }
 }

@@ -50,7 +50,12 @@ $("document").ready(function()
         {
             $(this).parents('table').find('.checkbox-formation').each(function()
             {
-                $(this).prop('checked','checked');
+                var disabled = $(this).prop('disabled');
+                console.log(disabled);
+                if(!disabled)
+                {
+                    $(this).prop('checked','checked');
+                }
             });
         }
     });

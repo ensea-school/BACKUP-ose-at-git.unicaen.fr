@@ -21,6 +21,11 @@
 </div>
 <div class="row" style="margin:0 5px 0 5px;">
     <div class="col-11">
+
+
+
+        <h3>Offre de formation complémantaire / Année universitaire :  <?php echo $anneeEnCours->getLibelle(); ?></h3>
+        <br/>
         <?php
         if($reconductionStep)
         {
@@ -30,18 +35,25 @@
             echo "<p class=\"bg-danger\" style=\"padding:10px;\">La reconductiond de l'offre de formation a échoué : <br/><br/>" .  $messageStep . "</p>";
         }
         ?>
-
-
-        <h3>Offre de formation complémantaire / Année universitaire :  <?php echo $anneeEnCours->getLibelle(); ?></h3>
-        <br/>
+        <?php if($fromPost): ?>
+           <p> <a href="<?= $this->url('of/reconduction') ?>" >Retour</a></p>
+        <?php else: ?>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
 
             <?php foreach ($offresComplementaires as $ec): ?>
-                <table class="reconduction-offre table table-bordered table-condensed table-hover">
+                <?php if($ec['reconduction_partiel'] == 'oui'): ?>
+                    <table class="reconduction-offre table table-bordered table-condensed table-hover">
+                <?php else: ?>
+                    <table class="reconduction-offre table table-bordered table-condensed table-hover" >
+                <?php endif; ?>
                     <thead>
-                        <tr>
-                            <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
-                            <th colspan="6">Formation : <?= $ec['etape']->__toString() . ' (' . $ec['etape']->getAnnee()->getLibelle() . ')'; ?></th>
+                        <tr class="<?php if($ec['reconduction'] == 'oui'){echo "active";}?>">
+                            <?php if($ec['reconduction'] == 'oui'): ?>
+                                <th><input title="Formation déjà reconduite pour l'année prochaine"  type="checkbox" class="checkbox-formation" disabled="disabled" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
+                            <?php else: ?>
+                                <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
+                            <?php endif; ?>
+                        <th colspan="6">Formation : <?= $ec['etape']->__toString() . ' (' . $ec['etape']->getAnnee()->getLibelle() . ')'; ?></th>
                         </tr>
                         <tr>
                             <th colspan="2">Code</th>
@@ -62,13 +74,19 @@
                     <?php } ?>
 
                         <?php foreach ($ec['elements_pedagogique'] as $ep): ?>
-                            <tr id="<?= $ep->getId() ?>">
-                                <td><input class="checkbox-element" type="checkbox" checked="checked" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep->getId(); ?>"/></td>
-                                <td class="element"><?= $ep->getCode() ?></td>
-                                <td class="element"><?= $this->elementPedagogique($ep)->renderLink($ep->getLibelle()) ?></td>
-                                <td class="periode"><?= $ep->getPeriode() ?: "" ?></td>
-                                <td><?= (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
-                                <td><?= $ep->getRegimesInscription(true) ?></td>
+                            <tr id="<?= $ep['element']->getId() ?>" class="<?php if($ep['reconduction'] == 'oui'){echo "active";}?>">
+                                <?php if($ep['reconduction'] == 'oui'): ?>
+                                    <td>
+                                        <input title="Elément pédagogique déjà reconduit pour l'année prochaine" class="checkbox-element" disabled="disabled" type="checkbox" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep['element']->getId(); ?>"/>
+                                    </td>
+                                <?php else: ?>
+                                    <td><input class="checkbox-element" type="checkbox" checked="checked" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep['element']->getId(); ?>"/></td>
+                                <?php endif; ?>
+                                <td class="element"><?= $ep['element']->getCode() ?></td>
+                                <td class="element"><?= $this->elementPedagogique($ep['element'])->renderLink($ep['element']->getLibelle()) ?></td>
+                                <td class="periode"><?= $ep['element']->getPeriode() ?: "" ?></td>
+                                <td><?= (bool)$ep['element']->getTauxFoad() ? "Oui" : "Non" ?></td>
+                                <td><?= $ep['element']->getRegimesInscription(true) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -76,6 +94,7 @@
             <?php endforeach; ?>
             <input id="reconduction-button" class="btn btn-primary" type="button" value="Reconduire l'offre séléctionnée"/>
         </form>
+        <?php endif; ?>
 
     </div>
 </div>

@@ -120,7 +120,7 @@ class DdlTable extends DdlAbstract
             LEFT JOIN user_mviews          m ON m.mview_name = t.table_name
             LEFT JOIN user_tab_comments comm ON comm.table_name = t.table_name
             LEFT JOIN user_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
-            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
+            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name AND c.hidden_column <> 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
           WHERE
             m.mview_name IS NULL 
             " . ($this->hasOption(self::OPT_NO_TEMPORARY) ? "AND t.temporary <> 'Y'" : '') . "

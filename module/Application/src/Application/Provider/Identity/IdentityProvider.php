@@ -61,11 +61,18 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
                 $this->identityRoles = ['user' => 'user'];
                 foreach ($utilisateur->getAffectation() as $affectation) {
                     /* @var $affectation Affectation */
-                    $roleId = $affectation->getRole()->getCode();
-                    if ($structure = $affectation->getStructure()) {
-                        $roleId .= '-' . $structure->getSourceCode();
+                    $role = $affectation->getRole();
+                    try {
+                        if ($role->estNonHistorise()) {
+                            $roleId = $role->getCode();
+                            if ($structure = $affectation->getStructure()) {
+                                $roleId .= '-' . $structure->getSourceCode();
+                            }
+                            $this->identityRoles[] = $roleId;
+                        }
+                    }catch(\Exception $e){
+                        // on ignore les affectations dont les rôles ont été supprimés
                     }
-                    $this->identityRoles[$roleId] = $roleId;
                 }
             }
 

@@ -2,18 +2,22 @@
 
 namespace Application\Controller;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
+use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
+use Zend\View\Model\ViewModel;
 
 class StatutIntervenantController extends AbstractController
 {
     use StatutIntervenantServiceAwareTrait;
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
+    use CacheContainerTrait;
 
 
 
@@ -53,6 +57,7 @@ class StatutIntervenantController extends AbstractController
             $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
                 try {
                     $this->getServiceStatutIntervenant()->save($si);
+                    unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -65,6 +70,34 @@ class StatutIntervenantController extends AbstractController
 
 
         return compact('form', 'title');
+    }
+
+
+
+    public function cloneAction()
+    {
+        /* @var $statutIntervenant StatutIntervenant */
+        $statutIntervenant    = $this->getEvent()->getParam('statutIntervenant');
+        $newStatutIntervenant = $statutIntervenant->dupliquer();
+        $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
+        $form                 = $this->getFormStatutIntervenantSaisie();
+        $title                = 'Duplication d\'un statut d\'intervenant';
+
+        $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
+            try {
+                $this->getServiceStatutIntervenant()->save($si);
+                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
+                $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translate($e));
+            }
+        });
+
+        $viewModel = new ViewModel();
+        $viewModel->setVariables(compact('form', 'title'));
+        $viewModel->setTemplate('application/statut-intervenant/saisie');
+
+        return $viewModel;
     }
 
 
@@ -83,6 +116,7 @@ class StatutIntervenantController extends AbstractController
         } else {
             try {
                 $this->getServiceStatutIntervenant()->delete($statutIntervenant);
+                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -114,34 +148,5 @@ class StatutIntervenantController extends AbstractController
         return new JsonModel(['msg' => 'Tri des champs effectué']);
     }
 
-
-
-    public function cloneAction()
-    {
-        /* @var $statutIntervenant StatutIntervenant */
-        $statutIntervenant = $this->getEvent()->getParam('statutIntervenant');
-        $form              = $this->getFormStatutIntervenantSaisie();
-
-        $title                = 'Duplication d\'un statut d\'intervenant';
-        $newStatutIntervenant = $statutIntervenant->dupliquer();
-        $newStatutIntervenant->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre() + 1);
-        //$statutIntervenantNew->setOrdre($this->getServiceStatutIntervenant()->fetchMaxOrdre()+1);
-        $form->bind($newStatutIntervenant);
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                try {
-                    $this->getServiceStatutIntervenant()->save($newStatutIntervenant);
-                    $form->get('id')->setValue($newStatutIntervenant->getId()); // transmet le nouvel ID
-                    $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
-                } catch (\Exception $e) {
-                    $errors[] = $this->translate($e);
-                }
-            }
-        }
-
-        return compact('form', 'title');
-    }
 }
 

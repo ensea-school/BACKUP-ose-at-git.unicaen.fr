@@ -96,12 +96,12 @@ class DataGen
         ],
         [
             'table'   => 'CATEGORIE_PRIVILEGE',
-            'context' => ['install', 'update'],
+            'context' => ['install', 'update', 'privileges'],
             'key'     => 'CODE',
         ],
         [
             'table'   => 'PRIVILEGE',
-            'context' => ['install', 'update'],
+            'context' => ['install', 'update', 'privileges'],
             'key'     => ['CATEGORIE_ID', 'CODE'],
             'options' => ['columns' => ['CATEGORIE_ID' => ['transformer' => 'SELECT id FROM categorie_privilege WHERE code = %s']]],
         ],
@@ -133,6 +133,7 @@ class DataGen
             'table'   => 'PERIODE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
+            'options' => ['delete' => false],
         ],
         [
             'table'   => 'TAUX_HORAIRE_HETD',
@@ -328,7 +329,7 @@ class DataGen
             'table'   => 'PARAMETRE',
             'context' => ['install', 'update'],
             'key'     => 'NOM',
-            //'options' => ['update-ignore-cols' => ['VALEUR']],
+            'options' => ['update-ignore-cols' => ['VALEUR']],
         ],
     ];
 
@@ -351,6 +352,13 @@ class DataGen
     public function update(string $table = null)
     {
         return $this->action('update', $table);
+    }
+
+
+
+    public function updatePrivileges()
+    {
+        return $this->action('privileges');
     }
 
 

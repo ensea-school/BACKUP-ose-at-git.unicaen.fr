@@ -363,6 +363,88 @@ class Schema
 
 
 
+    public function diff( array $ddl, bool $inverse=false, array $ddlConfig = []): array
+    {
+        $ddl = $this->ddlFilter($ddl, $ddlConfig);
+        $bdd = $this->getDdl($ddlConfig);
+
+        if (!$inverse){
+            $old = $bdd;
+            $new = $ddl;
+        }else{
+            $old = $ddl;
+            $new = $bdd;
+        }
+
+        $res = [];
+        foreach ($this->changements as $changement => $params) {
+            list($class, $action, $precision) = explode('.', $changement);
+            $noGet = isset($ddlConfig[$class]) ? ($ddlConfig[$class] === false) : false;
+            if (!$noGet) {
+                $ddlObject = $this->getDdlObject($class, true);
+
+                $options  = $this->ddlConfigGet($ddlConfig, $class, 'options');
+                if ($options) {
+                    $ddlObject->addOptions((array)$options);
+                }
+
+                $kold = isset($old[$class]) ? $old[$class] : [];
+                $knew = isset($new[$class]) ? $new[$class] : [];
+
+                $renames = $this->checkRenames($ddlObject, $kold, $knew);
+                foreach ($renames as $koldName => $knewData) {
+                    unset($kold[$koldName]);
+                    unset($knew[$knewData['name']]);
+                }
+                switch ($action) {
+                    case 'rename':
+                        $names = $renames;
+                    break;
+                    case 'create':
+                        $names = array_diff(array_keys($knew), array_keys($kold));
+                    break;
+                    case 'alter':
+                        $names = array_intersect(array_keys($kold), array_keys($knew));
+                    break;
+                    case 'drop':
+                        $names = array_diff(array_keys($kold), array_keys($knew));
+                    break;
+                }
+
+                if ($precision) {
+                    $precisions = explode('|', $precision);
+                    foreach ($precisions as $precision) {
+                        $ddlObject->addOption($precision);
+                    }
+                }
+                foreach ($names as $oldName => $name) {
+                    switch ($action) {
+                        case 'rename':
+                            $ddlObject->rename($oldName, $name);
+                        break;
+                        case 'drop':
+                            if (!(isset($options['noDrop']) && $options['noDrop'])) {
+                                $ddlObject->drop($name);
+                            }
+                        break;
+                        case 'alter':
+                            $ddlObject->alter($kold[$name], $knew[$name]);
+                        break;
+                        case 'create':
+                            $ddlObject->create($knew[$name]);
+                        break;
+                    }
+                }
+                if ($ddlObject->getQueries()) {
+                    $res[$changement] = $ddlObject->getQueries($this->logger);
+                }
+            }
+        }
+        return $res;
+    }
+
+
+
     private function change(string $mode, $ddl, array $ddlConfig = [], $autoExecute = true): array
     {
         if ($ddl instanceof self) {
@@ -588,6 +670,7 @@ class Schema
                     $sql .= '-- ' . $label . "\n";
                     $sql .= '--------------------------------------------------' . "\n\n";
                     foreach ($qs as $qr => $description) {
+                        $qr = str_replace( "\t", "  ", $qr);
                         if ($onlyFirstLine && false !== strpos($qr, "\n")) {
                             $qr = substr($qr, 0, strpos($qr, "\n"));
                         }

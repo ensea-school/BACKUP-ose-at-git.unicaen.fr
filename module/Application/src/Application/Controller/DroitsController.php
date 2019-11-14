@@ -106,6 +106,9 @@ class DroitsController extends AbstractController
         $title  = "Suppression du rôle";
         $form   = $this->makeFormSupprimer( function() use ($role){
             $this->getServiceRole()->delete($role);
+            $this->getCacheFilesystem()->delete(RoleProvider::class.'/affectations');
+            $cc = $this->getCacheContainer(PrivilegeService::class);
+            unset($cc->privilegesRoles);
         } );
 
         return compact('role', 'title', 'form');

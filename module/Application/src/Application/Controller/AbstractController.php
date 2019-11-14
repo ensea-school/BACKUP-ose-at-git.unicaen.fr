@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Application\Form\Supprimer;
 use Application\Traits\TranslatorTrait;
 use Doctrine\ORM\EntityManager;
-use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
@@ -48,21 +47,6 @@ abstract class AbstractController extends AbstractActionController
     protected function em()
     {
         return \Application::$container->get(\Application\Constants::BDD);
-    }
-
-
-
-    /**
-     * @return Pdf
-     */
-    protected function pdf()
-    {
-        $pdfPath = getcwd().'/cache/mpdf/';
-        if (!file_exists($pdfPath)){
-            mkdir($pdfPath);
-        }
-        define('_MPDF_TTFONTDATAPATH', $pdfPath);
-        return new Pdf(\Application::$container->get('view_manager')->getRenderer());
     }
 
 }

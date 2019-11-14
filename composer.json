@@ -12,7 +12,7 @@
         "unicaen/app"            : "3.0.2",
         "unicaen/auth"           : "3.0.5",
         "zendframework/zend-code": "3.3.2",
-        "unicaen/bjy-authorize"  : "3.0.1",
+        "unicaen/bjy-authorize"  : "3.0.3",
         "zendframework/zend-file": "2.8.3",
         "unicaen/code"           : "3.0.0",
         "unicaen/import"         : "3.0.0",

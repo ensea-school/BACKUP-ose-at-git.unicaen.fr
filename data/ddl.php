@@ -85,6 +85,10 @@
     array (
       'name' => 'DOTATION_ID_SEQ',
     ),
+    'EFFECTIFS_ETAPE_ID_SEQ' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_ID_SEQ',
+    ),
     'EFFECTIFS_ID_SEQ' => 
     array (
       'name' => 'EFFECTIFS_ID_SEQ',
@@ -3860,6 +3864,160 @@
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+      ),
+    ),
+    'EFFECTIFS_ETAPE' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE',
+      'temporary' => false,
+      'logging' => true,
+      'commentaire' => NULL,
+      'sequence' => 'EFFECTIFS_ETAPE_ID_SEQ',
+      'columns' => 
+      array (
+        'ID' => 
+        array (
+          'name' => 'ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'ETAPE_ID' => 
+        array (
+          'name' => 'ETAPE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'FI' => 
+        array (
+          'name' => 'FI',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'FC' => 
+        array (
+          'name' => 'FC',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'FA' => 
+        array (
+          'name' => 'FA',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'SOURCE_ID' => 
+        array (
+          'name' => 'SOURCE_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'SOURCE_CODE' => 
+        array (
+          'name' => 'SOURCE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_CREATION' => 
+        array (
+          'name' => 'HISTO_CREATION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => 'SYSDATE',
+          'commentaire' => NULL,
+        ),
+        'HISTO_CREATEUR_ID' => 
+        array (
+          'name' => 'HISTO_CREATEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_MODIFICATION' => 
+        array (
+          'name' => 'HISTO_MODIFICATION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => 'SYSDATE',
+          'commentaire' => NULL,
+        ),
+        'HISTO_MODIFICATEUR_ID' => 
+        array (
+          'name' => 'HISTO_MODIFICATEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_DESTRUCTION' => 
+        array (
+          'name' => 'HISTO_DESTRUCTION',
+          'type' => 'DATE',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'HISTO_DESTRUCTEUR_ID' => 
+        array (
+          'name' => 'HISTO_DESTRUCTEUR_ID',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -12652,6 +12810,28 @@
           'default' => '9999',
           'commentaire' => NULL,
         ),
+        'TITULAIRE' => 
+        array (
+          'name' => 'TITULAIRE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'CHARGES_PATRONALES' => 
+        array (
+          'name' => 'CHARGES_PATRONALES',
+          'type' => 'FLOAT',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => 126,
+          'nullable' => false,
+          'default' => '1',
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'STATUT_PRIVILEGE' => 
@@ -13132,7 +13312,7 @@
       'name' => 'TBL_AGREMENT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Gestion des agréments',
       'sequence' => 'TBL_AGREMENT_ID_SEQ',
       'columns' => 
       array (
@@ -13231,7 +13411,7 @@
       'name' => 'TBL_CHARGENS',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Charges d\'enseignement',
       'sequence' => 'TBL_CHARGENS_ID_SEQ',
       'columns' => 
       array (
@@ -13462,7 +13642,7 @@
       'name' => 'TBL_CHARGENS_SEUILS_DEF',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pré-calculs des seuils par défaut',
       'sequence' => 'TBL_CHARGENS_SEUILS_DEF_ID_SEQ',
       'columns' => 
       array (
@@ -13561,7 +13741,7 @@
       'name' => 'TBL_CLOTURE_REALISE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Clôture de saisie du service réalisé par les intervenants',
       'sequence' => 'TBL_CLOTURE_REALISE_ID_SEQ',
       'columns' => 
       array (
@@ -13638,7 +13818,7 @@
       'name' => 'TBL_CONTRAT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Contrats de travail',
       'sequence' => 'TBL_CONTRAT_ID_SEQ',
       'columns' => 
       array (
@@ -13902,7 +14082,7 @@
       'name' => 'TBL_DMEP_LIQUIDATION',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Gestion budgétaire (enveloppes)',
       'sequence' => 'TBL_DMEP_LIQUIDATION_ID_SEQ',
       'columns' => 
       array (
@@ -13979,7 +14159,7 @@
       'name' => 'TBL_DOSSIER',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Données personnelles',
       'sequence' => 'TBL_DOSSIER_ID_SEQ',
       'columns' => 
       array (
@@ -14067,7 +14247,7 @@
       'name' => 'TBL_LIEN',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Liens (pour les charges d\'enseignement)',
       'sequence' => 'TBL_LIEN_ID_SEQ',
       'columns' => 
       array (
@@ -14243,7 +14423,7 @@
       'name' => 'TBL_PAIEMENT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Données liées aux paiements et demandes de mises en paiement',
       'sequence' => 'TBL_PAIEMENT_ID_SEQ',
       'columns' => 
       array (
@@ -14419,7 +14599,7 @@
       'name' => 'TBL_PIECE_JOINTE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pièces justificatives',
       'sequence' => 'TBL_PIECE_JOINTE_ID_SEQ',
       'columns' => 
       array (
@@ -14529,7 +14709,7 @@
       'name' => 'TBL_PIECE_JOINTE_DEMANDE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pièces justificatives (demandes)',
       'sequence' => 'TBL_PIECE_JOINTE_DEMAND_ID_SEQ',
       'columns' => 
       array (
@@ -14606,7 +14786,7 @@
       'name' => 'TBL_PIECE_JOINTE_FOURNIE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Pièces justificatives fournies',
       'sequence' => 'TBL_PIECE_JOINTE_FOURNI_ID_SEQ',
       'columns' => 
       array (
@@ -14705,7 +14885,7 @@
       'name' => 'TBL_SERVICE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Services d\'ensiegnement',
       'sequence' => 'TBL_SERVICE_ID_SEQ',
       'columns' => 
       array (
@@ -14947,7 +15127,7 @@
       'name' => 'TBL_SERVICE_REFERENTIEL',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Référentiel',
       'sequence' => 'TBL_SERVICE_REFERENTIEL_ID_SEQ',
       'columns' => 
       array (
@@ -15057,7 +15237,7 @@
       'name' => 'TBL_SERVICE_SAISIE',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Service (pour alimenter le Workflow)',
       'sequence' => 'TBL_SERVICE_SAISIE_ID_SEQ',
       'columns' => 
       array (
@@ -15178,7 +15358,7 @@
       'name' => 'TBL_VALIDATION_ENSEIGNEMENT',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Suivi des validations de services',
       'sequence' => 'TBL_VALIDATION_ENSEIGNE_ID_SEQ',
       'columns' => 
       array (
@@ -15299,7 +15479,7 @@
       'name' => 'TBL_VALIDATION_REFERENTIEL',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Suivi des validations du référentiel',
       'sequence' => 'TBL_VALIDATION_REFERENT_ID_SEQ',
       'columns' => 
       array (
@@ -15420,7 +15600,7 @@
       'name' => 'TBL_WORKFLOW',
       'temporary' => false,
       'logging' => false,
-      'commentaire' => NULL,
+      'commentaire' => 'Workflow (feuilles de routes : avancement par étape par intervenant et le cas échéant par composante)',
       'sequence' => 'TBL_WORKFLOW_ID_SEQ',
       'columns' => 
       array (
@@ -16484,7 +16664,7 @@
         array (
           'name' => 'CODE',
           'type' => 'VARCHAR2',
-          'length' => 10,
+          'length' => 15,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => false,
@@ -17059,39 +17239,6 @@
           'length' => 50,
           'scale' => NULL,
           'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'PUBLIQUE' => 
-        array (
-          'name' => 'PUBLIQUE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'OBLIGATOIRE' => 
-        array (
-          'name' => 'OBLIGATOIRE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'SAISIE_PAR_ENSEIGNANT' => 
-        array (
-          'name' => 'SAISIE_PAR_ENSEIGNANT',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
           'nullable' => false,
           'default' => NULL,
           'commentaire' => NULL,
@@ -23500,7 +23647,11 @@ END FORMULE_UBO;',
 
     -- us=SI($I$13="Oui";SOMME(I182:AU182);0)
     WHEN c = \'us\' AND v >= 1 THEN
-      RETURN cell(\'t131\',l) + cell(\'t132\',l);
+      IF NOT ose_formule.intervenant.depassement_service_du_sans_hc THEN
+        RETURN cell(\'t131\',l) + cell(\'t132\',l);
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 
@@ -23561,7 +23712,7 @@ END FORMULE_UBO;',
     feuille.delete;
 
     IF ose_formule.intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-      OR ose_formule.intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
+      OR ose_formule.intervenant.heures_decharge > 0 -- s\'il y a une décharge => aucune HC
     THEN
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire;
     END IF;
@@ -35967,6 +36118,60 @@ WHERE
   ),
   'BddAdmin\\Ddl\\DdlMaterializedView' => 
   array (
+    'MV_EXT_DOTATION_LIQUIDATION' => 
+    array (
+      'name' => 'MV_EXT_DOTATION_LIQUIDATION',
+      'definition' => 'SELECT
+	COALESCE(HEURE_DOT.ANNEE_ID,HEURE_LIQUID.ANNEE_ID) ANNEE_ID,
+	COALESCE(HEURE_DOT.TYPE_RESSOURCE_ID, HEURE_LIQUID.TYPE_RESSOURCE_ID) TYPE_RESSOURCE_ID,
+	COALESCE(HEURE_DOT.STRUCTURE_ID, HEURE_LIQUID.STRUCTURE_ID) STRUCTURE_ID,
+	SUM(HEURE_DOT.HEURES) HEURES_D,
+	SUM(HEURE_LIQUID.HEURES) HEURES_L
+FROM
+	(
+		SELECT
+			DOTATION.ANNEE_ID,
+			DOTATION.TYPE_RESSOURCE_ID,
+			DOTATION.STRUCTURE_ID,
+			SUM(
+				CASE
+					WHEN DOTATION.HISTO_DESTRUCTION IS NULL THEN DOTATION.HEURES
+					ELSE 0.0
+				END
+			) HEURES
+		FROM
+			DOTATION
+		GROUP BY
+			DOTATION.ANNEE_ID,
+			DOTATION.TYPE_RESSOURCE_ID,
+			DOTATION.STRUCTURE_ID
+	) HEURE_DOT
+	FULL OUTER JOIN (
+		SELECT
+			V_TBL_DMEP_LIQUIDATION.ANNEE_ID,
+			V_TBL_DMEP_LIQUIDATION.TYPE_RESSOURCE_ID,
+			V_TBL_DMEP_LIQUIDATION.STRUCTURE_ID,
+			SUM(V_TBL_DMEP_LIQUIDATION.HEURES) HEURES
+		FROM
+			V_TBL_DMEP_LIQUIDATION
+		GROUP BY
+			V_TBL_DMEP_LIQUIDATION.ANNEE_ID,
+			V_TBL_DMEP_LIQUIDATION.TYPE_RESSOURCE_ID,
+			V_TBL_DMEP_LIQUIDATION.STRUCTURE_ID
+	) HEURE_LIQUID
+		ON HEURE_DOT.ANNEE_ID = HEURE_LIQUID.ANNEE_ID
+		AND HEURE_DOT.TYPE_RESSOURCE_ID = HEURE_LIQUID.TYPE_RESSOURCE_ID
+		AND HEURE_DOT.STRUCTURE_ID = HEURE_LIQUID.STRUCTURE_ID
+GROUP BY
+	COALESCE(HEURE_DOT.ANNEE_ID,HEURE_LIQUID.ANNEE_ID),
+	COALESCE(HEURE_DOT.TYPE_RESSOURCE_ID, HEURE_LIQUID.TYPE_RESSOURCE_ID),
+	COALESCE(HEURE_DOT.STRUCTURE_ID, HEURE_LIQUID.STRUCTURE_ID)',
+    ),
+    'MV_EXT_ETAT_PAIEMENT' => 
+    array (
+      'name' => 'MV_EXT_ETAT_PAIEMENT',
+      'definition' => 'SELECT * FROM v_etat_paiement',
+    ),
     'MV_EXT_SERVICE' => 
     array (
       'name' => 'MV_EXT_SERVICE',
@@ -37208,6 +37413,66 @@ WHERE
       'columns' => 
       array (
         'ELEMENT_PEDAGOGIQUE_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_ETAPE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_ETAPE_FK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'ETAPE',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'ETAPE_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HCFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HCFK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'UTILISATEUR',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'HISTO_CREATEUR_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HDFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HDFK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'UTILISATEUR',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'HISTO_DESTRUCTEUR_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HMFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HMFK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'UTILISATEUR',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'HISTO_MODIFICATEUR_ID' => 'ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_SOURCE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_FK',
+      'table' => 'EFFECTIFS_ETAPE',
+      'rtable' => 'SOURCE',
+      'delete_rule' => NULL,
+      'index' => NULL,
+      'columns' => 
+      array (
+        'SOURCE_ID' => 'ID',
       ),
     ),
     'EFFECTIFS_FK' => 
@@ -42791,6 +43056,17 @@ WHERE
         5 => 'HISTO_DESTRUCTION',
       ),
     ),
+    'EFFECTIFS_ETAPE_SOURCE_UN' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_UN',
+      'table' => 'EFFECTIFS_ETAPE',
+      'index' => 'EFFECTIFS_ETAPE_SOURCE_UN',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
+      ),
+    ),
     'EFFECTIFS_SOURCE_UN' => 
     array (
       'name' => 'EFFECTIFS_SOURCE_UN',
@@ -46635,6 +46911,67 @@ END;',
       'columns' => 
       array (
         0 => 'ELEMENT_PEDAGOGIQUE_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_ETAPE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_ETAPE_FK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'ETAPE_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HCFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HCFK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'HISTO_CREATEUR_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HDFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HDFK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'HISTO_DESTRUCTEUR_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_HMFK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_HMFK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'HISTO_MODIFICATEUR_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_SOURCE_FK' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_FK',
+      'unique' => false,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'SOURCE_ID',
+      ),
+    ),
+    'EFFECTIFS_ETAPE_SOURCE_UN' => 
+    array (
+      'name' => 'EFFECTIFS_ETAPE_SOURCE_UN',
+      'unique' => true,
+      'table' => 'EFFECTIFS_ETAPE',
+      'columns' => 
+      array (
+        0 => 'SOURCE_CODE',
+        1 => 'HISTO_DESTRUCTION',
       ),
     ),
     'EFFECTIFS_FK' => 

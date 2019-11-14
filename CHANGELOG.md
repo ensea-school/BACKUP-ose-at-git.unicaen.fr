@@ -3,6 +3,25 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 9.0.2-zf2 et 9.0.2-zf3
+
+## Correction de bugs
+
+* Un bug modifiant les paramètres globaux qui avaient été configurés a été résolu
+* La duplication de statuts refonctionne
+* Lors de la création d'un nouveau statut, l'octroi de privilèges ne plante plus
+* La suppression de rôle fonctionne de nouveau correctement 
+
+## Nouveautés
+
+* Intégration de vues métérialisées pour extraction BO
+
+# OSE 9.0.1-zf2 et 9.0.1-zf3
+
+## Correction de bugs
+
+* Un bug empêchant d'avoir accès aux indicateurs si on est connecté en tant que composante a été résolu
+
 # OSE 9.0-zf2 et 9.0-zf3
 
 ## Correction de bugs

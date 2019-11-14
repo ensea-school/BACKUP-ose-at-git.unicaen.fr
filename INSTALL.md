@@ -273,7 +273,7 @@ docker build \
 git clone https://git.unicaen.fr/open-source/OSE dev
 cd dev
 docker-compose build --no-cache
-docker-compose up
+docker-compose up -d
 docker exec ose-dev ose install
 ```
 Enfin, ajouter à votre fichier /etc/hosts la ligne suivante :

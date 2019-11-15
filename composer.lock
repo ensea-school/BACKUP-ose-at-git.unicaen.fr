@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d457b05fcec673d652d6a6a4151b06b6",
+    "content-hash": "fc9241ae062f0bc785b825f3af6fae3d",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1112,16 +1112,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
                 "shasum": ""
             },
             "require": {
@@ -1130,7 +1130,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -1155,7 +1155,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2018-11-20T15:27:04+00:00"
+            "time": "2019-11-01T11:05:21+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -1419,16 +1419,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.32",
+            "version": "v3.4.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "b3e7ce815d82196435d16dc458023f8fb6b36ceb"
+                "reference": "f72e33fdb1170b326e72c3157f0cd456351dd086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/b3e7ce815d82196435d16dc458023f8fb6b36ceb",
-                "reference": "b3e7ce815d82196435d16dc458023f8fb6b36ceb",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/f72e33fdb1170b326e72c3157f0cd456351dd086",
+                "reference": "f72e33fdb1170b326e72c3157f0cd456351dd086",
                 "shasum": ""
             },
             "require": {
@@ -1471,7 +1471,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-09-19T15:32:51+00:00"
+            "time": "2019-10-24T15:33:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1592,7 +1592,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.50",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -1777,11 +1777,11 @@
         },
         {
             "name": "unicaen/open-document",
-            "version": "1.7",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.unicaen.fr/lib/unicaen/open-document.git",
-                "reference": "861f45e9a8595503d9960a41b4d4ca42ab728a9e"
+                "reference": "a70d209db23b72c19addd20ece30e91d4ef00af9"
             },
             "type": "library",
             "autoload": {
@@ -1793,7 +1793,7 @@
                 ]
             },
             "description": "Module Unicaen de traitement des fichiers au format OpenDocument",
-            "time": "2019-01-30T13:12:58+00:00"
+            "time": "2019-11-15T08:08:47+00:00"
         },
         {
             "name": "unicaen/oracle",

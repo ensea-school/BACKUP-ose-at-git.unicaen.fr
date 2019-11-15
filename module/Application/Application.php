@@ -31,6 +31,10 @@ class Application
         define('REQUEST_MICROTIME', microtime(true));
         chdir($appDir);
 
+//        if (!file_exists($appDir.'/cache/sessions')){
+//            mkdir($appDir.'/cache/sessions');
+//        }
+//        session_save_path ($appDir.'/cache/sessions' );
 
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (AppConfig::get('global', 'affichageErreurs')) {

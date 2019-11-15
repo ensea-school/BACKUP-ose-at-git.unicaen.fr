@@ -87,6 +87,9 @@ foreach ($data as $d) {
         $intervenants[$iid][$k]['st_' . $champ] += $newLigne[$champ];
         $variables['t_' . $champ]               += $newLigne[$champ];
     }
+    if (!isset($intervenants[$iid][$k]['lignes'])){
+        $intervenants[$iid][$k]['lignes'] = [];
+    }
     $intervenants[$iid][$k]['lignes'][] = $newLigne;
 }
 $variables['intervenants'] = count($intervenants);

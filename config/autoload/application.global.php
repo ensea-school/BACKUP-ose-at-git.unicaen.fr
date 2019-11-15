@@ -58,4 +58,10 @@ return [
     'session_storage' => [
         'type' => Zend\Session\Storage\SessionArrayStorage::class
     ],
+    'application'  => [
+        'etats-sortie' => [
+            'host'    => AppConfig::get('etats-sortie', 'host', '127.0.0.1'),
+            'tmp-dir' => AppConfig::get('etats-sortie', 'tmp-dir', getcwd() . '/cache/'),
+        ],
+    ],
 ];

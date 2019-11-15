@@ -169,10 +169,10 @@ class OffreFormationController extends AbstractController
             try{
                 if($reconductionProcessus->reconduction($datas))
                 {
-                    $reconductionStep = true;
+                    $this->flashMessenger()->addSuccessMessage("Les éléments ont bien été reconduit pour l'année universitaire prochaine.");
                 }
                 else{
-                    $reconductionStep = false;
+                    $this->flashMessenger()->addErrorMessage("Les éléments n'ont pas pu être reconduit. Merci de contacter le support.");
                 }
 
             }

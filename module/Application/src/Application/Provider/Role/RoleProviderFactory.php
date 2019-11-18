@@ -38,8 +38,7 @@ class RoleProviderFactory
             ->setEntityManager($em)
             ->setServiceStatutIntervenant($container->get(StatutIntervenantService::class))
             ->setServiceContext($container->get(ContextService::class))
-            ->setPrivilegeProvider($container->get('UnicaenAuth\Privilege\PrivilegeProvider'))
-            ->setStructureSelectionnee($this->getServiceContext()->getStructure(true));
+            ->setPrivilegeProvider($container->get('UnicaenAuth\Privilege\PrivilegeProvider'));
 
         return $roleProvider;
     }

@@ -1,7 +1,8 @@
 <?php
 
-namespace Application\Controller;
+namespace Application\Controller\Factory;
 
+use Application\Controller\UtilisateurController;
 use Interop\Container\ContainerInterface;
 use UnicaenApp\Mapper\Ldap\People as LdapPeopleMapper;
 use UnicaenAuth\Options\ModuleOptions;

@@ -24,9 +24,13 @@ class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
         $userContextService = $container->get(UserContext::class);
 
         $service = new UserProfileSelectRadioItem($userContextService);
-        $service
-            ->setServiceStructure($this->getServiceStructure())
-            ->setStructure($this->getServiceContext()->getStructure());
+        $service->setServiceStructure($this->getServiceStructure());
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        if ($role && $role->getPerimetre()->isEtablissement()) {
+            $service->setStructure($this->getServiceContext()->getStructure(false));
+        }
 
         return $service;
     }

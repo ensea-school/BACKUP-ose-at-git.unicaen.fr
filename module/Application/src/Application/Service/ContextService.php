@@ -89,7 +89,7 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return RoleService
+     * @return Role
      */
     public function getSelectedIdentityRole()
     {
@@ -398,23 +398,21 @@ class ContextService extends AbstractService
      *
      * @return Structure
      */
-    public function getStructure($initializing = false)
+    public function getStructure($checkInRole = true)
     {
-        if (!$this->structure) {
-            $sc = $this->getSessionContainer();
-            if (!$sc->offsetExists('structure')) {
-                if ($initializing) {
-                    $sc->structure = null;
-                } else {
-                    $role = $this->getSelectedIdentityRole();
-                    if ($role && $role->getStructure()) {
-                        $sc->structure = $role->getStructure()->getId();
-                    } else {
-                        $sc->structure = null;
-                    }
-                }
+        if ($checkInRole) {
+            $role = $this->getSelectedIdentityRole();
+            if ($role && $role->getStructure()) {
+                return $role->getStructure();
             }
-            $this->structure = $this->getServiceStructure()->get($sc->structure);
+        }
+
+        if (!$this->structure) {
+            $sc          = $this->getSessionContainer();
+            $structureId = $sc->structure;
+            if ($structureId) {
+                $this->structure = $this->getServiceStructure()->get($structureId);
+            }
         }
 
         return $this->structure;

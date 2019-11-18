@@ -1,7 +1,5 @@
 <?php
 
-namespace Application;
-
 return [
     'console' => [
         'router' => [
@@ -29,11 +27,11 @@ return [
     ],
 
     'controllers'        => [
-        'factory' => [
-            'UnicaenAuth\Controller\Utilisateur' => Controller\Factory\UtilisateurControllerFactory::class,
+        'factories' => [
+            'UnicaenAuth\Controller\Utilisateur' => Application\Controller\Factory\UtilisateurControllerFactory::class,
         ],
         'invokables' => [
-            'Application\Controller\Utilisateur' => Controller\UtilisateurController::class,
+            'Application\Controller\Utilisateur' => Application\Controller\UtilisateurController::class,
         ],
     ],
 ];

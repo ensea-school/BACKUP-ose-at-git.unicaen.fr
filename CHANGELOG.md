@@ -9,6 +9,10 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Possibilité d'utiliser un service Unoconv présent sur un serveur dédié autre que celui de OSE
 
+## Correction de bugs
+
+* Pour un rôle de périmètre établissement avec pour possibilité de changer de structure, le changement fonctionne à nouveau (pour l'édition ZF3 uniquement)
+
 ## Notes de mise à jour
 
 Ajout de nouveaux paramètres de configuration pour pouvoir externaliser l'usage du service Unoconv.

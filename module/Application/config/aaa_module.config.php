@@ -153,6 +153,7 @@ $config = [
             Service\DepartementService::class             => Service\DepartementService::class,
             Service\FichierService::class                 => Service\FichierService::class,
             Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
+            Service\OffreFormationService::class          => Service\OffreFormationService::class,
             ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [
@@ -165,7 +166,6 @@ $config = [
             Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                 => Cache\Factory\CacheServiceFactory::class,
             Service\UtilisateurService::class         => Service\Factory\UtilisateurServiceFactory::class,
-            Assertion\InformationAssertion::class     => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'       => [

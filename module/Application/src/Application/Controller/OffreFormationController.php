@@ -15,6 +15,7 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
+use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Session\Container;
@@ -35,13 +36,12 @@ class OffreFormationController extends AbstractController
     use NiveauEtapeServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use ReconductionProcessusAwareTrait;
+    use OffreFormationServiceAwareTrait;
 
     /**
      * @var Container
      */
     protected $sessionContainer;
-
-
 
 
 
@@ -65,7 +65,6 @@ class OffreFormationController extends AbstractController
         if ($structure) $params['structure'] = $structure->getId();
         if ($niveau) $params['niveau'] = $niveau->getId();
         if ($etape) $params['etape'] = $etape->getId();
-
 
 
         // élément pédagogique sélectionné dans le champ de recherche
@@ -130,7 +129,7 @@ class OffreFormationController extends AbstractController
                 $element->getPeriode(),
                 $element->getTauxFoad(),
                 $element->getTauxFi(),
-                $element->getTauxFa(),
+                $elemendockt->getTauxFa(),
                 $element->getTauxFc(),
                 $effectifs ? $effectifs->getFi() : null,
                 $effectifs ? $effectifs->getFa() : null,
@@ -142,51 +141,49 @@ class OffreFormationController extends AbstractController
         return $csvModel;
     }
 
+
+
     public function reconductionAction()
     {
-
         $this->initFilterHistorique();
         list($structure, $niveau, $etape) = $this->getParams();
-
-        $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
+        //Get role of user
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
+        $structures   = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
         $anneeEnCours = $this->getServiceContext()->getAnnee();
         list($offresComplementaires, $mappingEtape, $reconductionTotale) = $this->getOffreComplementaire();
 
 
         $reconductionStep = '';
-        $messageStep = '';
-        $fromPost = false;
+        $messageStep      = '';
+        $fromPost         = false;
 
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas = $request->getPost();
+            $datas    = $request->getPost();
             $fromPost = true;
 
             //Ajout du mapping des EtapesN et EtapesN1 pour pouvoir reconduire un element pédagogique sur une etape déjà reconduite.
             $datas['mappingEtape'] = $mappingEtape;
             $reconductionProcessus = $this->getProcessusReconduction();
-            try{
-                if($reconductionProcessus->reconduction($datas))
-                {
-                    $this->flashMessenger()->addSuccessMessage("Les éléments ont bien été reconduit pour l'année universitaire prochaine.");
+            try {
+                if ($reconductionProcessus->reconduction($datas)) {
+                    $this->flashMessenger()->addSuccessMessage("Les éléments ont bien été reconduits pour l'année universitaire prochaine.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Les éléments n'ont pas pu être reconduits. Merci de contacter le support.");
                 }
-                else{
-                    $this->flashMessenger()->addErrorMessage("Les éléments n'ont pas pu être reconduit. Merci de contacter le support.");
-                }
-
-            }
-            catch(\Exception $e){
+            } catch (\Exception $e) {
                 $reconductionStep = false;
-                $messageStep = $e->getMessage();
+                $messageStep      = $e->getMessage();
+                echo $e->getMessage();
             }
-
         }
 
 
         //Chargement JS nécessaire uniquement sur cette page
         $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
-        $headScript = $viewHelperManager->get('headScript');
+        $headScript        = $viewHelperManager->get('headScript');
         $headScript->offsetSetFile(100, '/js/reconduction-offre.js');
 
 
@@ -198,11 +195,8 @@ class OffreFormationController extends AbstractController
             'structures'            => $structures,
             'anneeEnCours'          => $anneeEnCours,
             'reconductionStep'      => $reconductionStep,
-            'messageStep'           => $messageStep
+            'messageStep'           => $messageStep,
         ];
-
-
-
     }
 
 
@@ -211,8 +205,9 @@ class OffreFormationController extends AbstractController
     {
         $this->initFilterAnnee();
         $this->initFilterHistorique();
-
     }
+
+
 
     protected function initFilterAnnee()
     {
@@ -221,6 +216,8 @@ class OffreFormationController extends AbstractController
             Etape::class,
         ]);
     }
+
+
 
     protected function initFilterHistorique()
     {
@@ -232,6 +229,7 @@ class OffreFormationController extends AbstractController
             TypeModulateur::class,
         ]);
     }
+
 
 
     protected function disableFilters($name)
@@ -247,6 +245,7 @@ class OffreFormationController extends AbstractController
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
         if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
+
         return [$structure, $niveau, $etape];
     }
 
@@ -254,8 +253,8 @@ class OffreFormationController extends AbstractController
 
     protected function getNeep($structure, $niveau, $etape, $annee = null)
     {
-        if(is_null($annee))
-        {
+
+        if (is_null($annee)) {
             $annee = $this->getServiceContext()->getAnnee();
         }
 
@@ -287,12 +286,12 @@ class OffreFormationController extends AbstractController
 
         foreach ($result as $object) {
             if ($object instanceof Etape) {
-                $n                    = NiveauEtape::getInstanceFromEtape($object);
+                $n = NiveauEtape::getInstanceFromEtape($object);
                 if ($object->estNonHistorise()) {
                     $niveaux[$n->getId()] = $n;
                 }
                 if (!$niveau || $niveau->getId() == $n->getId()) {
-                    if ($object->estNonHistorise() || $object->getElementPedagogique()->count() > 0){
+                    if ($object->estNonHistorise() || $object->getElementPedagogique()->count() > 0) {
                         $etapes[] = $object;
                     }
                     if (!$etape || $etape === $object) {
@@ -323,6 +322,7 @@ class OffreFormationController extends AbstractController
     }
 
 
+
     /**
      * @return array
      */
@@ -330,8 +330,8 @@ class OffreFormationController extends AbstractController
     public function getOffreComplementaire()
     {
         $offresComplementaires = [];
-        $anneeEnCours = $this->getServiceContext()->getAnnee();
-        $anneeSuivante = $this->getServiceAnnee()->getSuivante($anneeEnCours);
+        $anneeEnCours          = $this->getServiceContext()->getAnnee();
+        $anneeSuivante         = $this->getServiceAnnee()->getSuivante($anneeEnCours);
 
         //Récupération des paramètres GET
         list($structure, $niveau, $etape) = $this->getParams();
@@ -343,87 +343,84 @@ class OffreFormationController extends AbstractController
 
 
         //Offre année en cours
-        list($niveaux, $etapes, $elements) = $this->getNeep($structure, $niveau, $etape, $anneeEnCours);
+        list($niveaux, $etapes, $elements) = $this->getServiceOffreFormation()->getNeepComplementaire($structure, $niveau, $etape, $anneeEnCours);
         //Offre année suivante
-        list($niveauxN1, $etapesN1, $elementsN1) = $this->getNeep($structure, $niveau, $etape, $anneeSuivante);
+        list($niveauxN1, $etapesN1, $elementsN1) = $this->getServiceOffreFormation()->getNeepComplementaire($structure, $niveau, $etape, $anneeSuivante);
+
         //Organisation pour traitement dans la vue
-        $codesEtapeN1 = [];
-        $codesElementN1 = [];
-        $etapesNonReconduits = array_diff($etapes, $etapesN1);
+        $codesEtapeN1          = [];
+        $codesElementN1        = [];
+        $etapesNonReconduits   = array_diff($etapes, $etapesN1);
         $elementsNonReconduits = array_diff($elements, $elementsN1);
 
         $reconductionTotale = 'non';
-        if(empty($etapesNonReconduits) && empty($elementsNonReconduits))
-        {
+        if (empty($etapesNonReconduits) && empty($elementsNonReconduits)) {
             $reconductionTotale = 'oui';
         }
 
-        foreach($elementsN1 as $v)
-        {
+        foreach ($elementsN1 as $v) {
             $codesElementN1[] = $v->getCode();
         }
-        foreach($etapesN1 as $v)
-        {
+        foreach ($etapesN1 as $v) {
             $codesEtapeN1[] = $v->getCode();
         }
 
-        foreach ($etapes as $v)
-        {
+        foreach ($etapes as $v) {
+
+            /*if (!$v->isFromSourceOse()) {
+                continue;
+            }*/
             $offresComplementaires[$v->getId()]['reconduction_partiel'] = 'non';
-            $offresComplementaires[$v->getId()]['reconduction'] = (in_array($v->getCode(), $codesEtapeN1))?'oui':'non';
-            $offresComplementaires[$v->getId()]['etape'] = $v;
+            $offresComplementaires[$v->getId()]['reconduction']         = (in_array($v->getCode(), $codesEtapeN1)) ? 'oui' : 'non';
+            $offresComplementaires[$v->getId()]['etape']                = $v;
             $offresComplementaires[$v->getId()]['elements_pedagogique'] = [];
         }
 
-        foreach ($elements as $v)
-        {
+        foreach ($elements as $v) {
+
+            /*if (!$v->getEtape()->isFromSourceOse()) {
+                continue;
+            }*/
 
             $etapeId = $v->getEtape()->getId();
 
-            if(!in_array($v->getCode(), $codesElementN1))
-            {
+            if (!in_array($v->getCode(), $codesElementN1)) {
                 $offresComplementaires[$etapeId]['reconduction_partiel'] = 'oui';
             }
 
-            $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['reconduction'] = (in_array($v->getCode(), $codesElementN1))?'oui':'non';
-            $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['element'] = $v;
+            $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['reconduction'] = (in_array($v->getCode(), $codesElementN1)) ? 'oui' : 'non';
+            $offresComplementaires[$etapeId]['elements_pedagogique'][$v->getId()]['element']      = $v;
         }
 
         $mappingEtape = $this->createMappingEtapeNEtapeN1($etapes, $etapesN1);
 
-
         return [$offresComplementaires, $mappingEtape, $reconductionTotale];
     }
 
+
+
     public function createMappingEtapeNEtapeN1($etapesN, $etapesN1)
     {
-        $codesEtapeN = [];
+        $codesEtapeN  = [];
         $codesEtapeN1 = [];
         $mappingEtape = [];
 
 
-        foreach($etapesN1 as $v)
-        {
+        foreach ($etapesN1 as $v) {
             $codesEtapeN1[$v->getCode()] = $v->getId();
         }
 
-        foreach($etapesN as $v)
-        {
+        foreach ($etapesN as $v) {
             $codesEtapeN[$v->getCode()] = $v->getId();
         }
 
-        foreach($codesEtapeN as $k => $v)
-        {
-            if(array_key_exists($k, $codesEtapeN1))
-            {
+        foreach ($codesEtapeN as $k => $v) {
+            if (array_key_exists($k, $codesEtapeN1)) {
                 $mappingEtape[$v] = $codesEtapeN1[$k];
             }
         }
 
-       return $mappingEtape;
-
-
-
+        return $mappingEtape;
     }
 
 }

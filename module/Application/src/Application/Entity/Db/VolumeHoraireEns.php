@@ -37,16 +37,6 @@ class VolumeHoraireEns implements HistoriqueAwareInterface, ImportAwareInterface
     protected $groupes;
 
 
-    public function __clone()
-    {
-        if($this->id)
-        {
-            $this->id = null;
-        }
-        return $this;
-    }
-
-
 
     /**
      * Get id

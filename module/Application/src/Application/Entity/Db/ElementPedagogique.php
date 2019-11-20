@@ -154,25 +154,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->getCode() . ' - ' . $this->getLibelle();
     }
 
-    public function __clone()
-    {
-        if($this->id)
-        {
-            $this->id = null;
-        }
-        $this->etape = null;
-        $this->elementModulateur = null;
-        $this->effectifs = null;
-        $this->centreCoutEp = null;
-        $this->volumeHoraireEns = null;
-        $this->service = null;
-        $this->typeHeures = null;
-        $this->cheminPedagogique = null;
-
-
-        return $this;
-    }
-
 
 
     /**
@@ -397,10 +378,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
      */
     public function getTaux(TypeHeures $typeHeures)
     {
-        switch($typeHeures->getCode()){
-            case TypeHeures::FI: return $this->getTauxFi();
-            case TypeHeures::FC: return $this->getTauxFc();
-            case TypeHeures::FA: return $this->getTauxFa();
+        switch ($typeHeures->getCode()) {
+            case TypeHeures::FI:
+                return $this->getTauxFi();
+            case TypeHeures::FC:
+                return $this->getTauxFc();
+            case TypeHeures::FA:
+                return $this->getTauxFa();
         }
 
         return null;
@@ -781,7 +765,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
      */
     public function getEffectifs()
     {
-        if (false === $this->effectifs){
+        if (false === $this->effectifs) {
             $this->effectifs = $this->getEntityManager()->getRepository(Effectifs::class)->findOneBy([
                 'elementPedagogique' => $this,
             ]);
@@ -803,7 +787,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['element' => $this->getId()]);
 
         $ids = [];
-        foreach( $res as $r ){
+        foreach ($res as $r) {
             $ids[] = (int)$r['TYPE_INTERVENTION_ID'];
         }
 

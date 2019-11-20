@@ -2,19 +2,12 @@
 
 namespace Application\Processus;
 
-use Application\Service\AnneeService;
-use Application\Service\CheminPedagogiqueService;
-use Application\Service\ContextService;
-use Application\Service\ElementPedagogiqueService;
-use Application\Service\EtapeService;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
-use Application\Service\Traits\VolumeHoraireServiceAwareTrait;
-use Application\Service\VolumeHoraireEnsService;
-use Zend\Debug\Debug;
+use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 use Zend\Stdlib\Parameters;
 
 /**
@@ -28,7 +21,7 @@ class ReconductionProcessus extends AbstractProcessus
     use EtapeServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use CheminPedagogiqueServiceAwareTrait;
-    use VolumeHoraireServiceAwareTrait;
+    use VolumeHoraireEnsServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use ContextServiceAwareTrait;
 
@@ -51,7 +44,7 @@ class ReconductionProcessus extends AbstractProcessus
         $this->etapeService              = $this->getServiceEtape();
         $this->elementPedagogiqueService = $this->getServiceElementPedagogique();
         $this->cheminPedagogiqueService  = $this->getServiceCheminPedagogique();
-        $this->volumeHoraireEnsService   = $this->getServiceVolumeHoraire();
+        $this->volumeHoraireEnsService   = $this->getServiceVolumeHoraireEns();
         $this->anneeService              = $this->getServiceAnnee();
         $this->contextService            = $this->getServiceContext();
     }
@@ -86,9 +79,9 @@ class ReconductionProcessus extends AbstractProcessus
                 } else {
 
                     $etapeEnCours   = $this->etapeService->get($idEtape);
-                    $etapeReconduit = $this->getServiceEtape()->newEntity();
+                    $etapeReconduit = $this->etapeService->newEntity();
                     $etapeReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
-                    $etapeReconduit->setSpecifiqueEchanges(false);
+                    $etapeReconduit->setSpecifiqueEchanges(0);
                     $etapeReconduit->setLibelle($etapeEnCours->getLibelle());
                     $etapeReconduit->setCode($etapeEnCours->getCode());
                     $etapeReconduit->setTypeFormation(($etapeEnCours->getTypeFormation()));
@@ -102,24 +95,46 @@ class ReconductionProcessus extends AbstractProcessus
                 if (array_key_exists($idEtape, $datas['element'])) {
                     foreach ($datas['element'][$idEtape] as $idElement) {
                         $elementEnCours   = $this->elementPedagogiqueService->get($idElement);
-                        $elementReconduit = clone $elementEnCours;
+                        $elementReconduit = $this->elementPedagogiqueService->newEntity();
                         $elementReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
                         $elementReconduit->setEtape($etapeReconduit);
+                        $elementReconduit->setLibelle($elementEnCours->getLibelle());
+                        $elementReconduit->setSourceCode($elementEnCours->getSourceCode());
+                        $elementReconduit->setCode($elementEnCours->getCode());
+                        $elementReconduit->setStructure($etapeReconduit->getStructure());
+                        $elementReconduit->setFa($elementEnCours->getFa());
+                        $elementReconduit->setFc($elementEnCours->getFc());
+                        $elementReconduit->setFi($elementEnCours->getFi());
+                        $elementReconduit->setTauxFa($elementEnCours->getTauxFa());
+                        $elementReconduit->setTauxFi($elementEnCours->getTauxFi());
+                        $elementReconduit->setTauxFc($elementEnCours->getTauxFc());
+                        $elementReconduit->setTauxFoad($elementEnCours->getTauxFoad());
+                        $elementReconduit->setDiscipline($elementEnCours->getDiscipline());
+                        $elementReconduit->setPeriode($elementEnCours->getPeriode());
                         //ajout de l'élément à l'étape
                         $etapeReconduit->addElementPedagogique($elementReconduit);
                         $em->persist($elementReconduit);
                         //Reconduction des chemins pédagogiques
                         $cheminsPedagogique = $elementEnCours->getCheminPedagogique();
                         foreach ($cheminsPedagogique as $chemin) {
-                            $cheminReconduit = clone $chemin;
+                            $chemin;
+                            $cheminReconduit = $this->cheminPedagogiqueService->newEntity();
                             $cheminReconduit->setElementPedagogique($elementReconduit);
                             $cheminReconduit->setEtape($etapeReconduit);
+                            $cheminReconduit->setSourceCode($chemin->getSourceCode());
+                            $cheminReconduit->setSource($chemin->getSource());
+                            $cheminReconduit->setOrdre($chemin->getOrdre());
                             $em->persist($cheminReconduit);
                         }
                         //Reconduction des volumes horaires
                         $volumesHoraire = $elementEnCours->getVolumeHoraireEns();
                         foreach ($volumesHoraire as $volume) {
-                            $volumeReconduit = clone $volume;
+                            $volumeReconduit = $this->volumeHoraireEnsService->newEntity();
+                            $volumeReconduit->setSource($volume->getSource());
+                            $volumeReconduit->setSourceCode($volume->getSourceCode());
+                            $volumeReconduit->setTypeIntervention($volume->getTypeIntervention());
+                            $volumeReconduit->setGroupes($volume->getGroupes());
+                            $volumeReconduit->setHeures($volume->getHeures());
                             $volumeReconduit->setElementPedagogique($elementReconduit);
                             $elementReconduit->addVolumeHoraireEns($volumeReconduit);
                             $em->persist($volumeReconduit);

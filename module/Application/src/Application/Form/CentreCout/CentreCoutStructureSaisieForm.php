@@ -21,7 +21,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
     use CentreCoutStructureServiceAwareTrait;
 
 
-
     public function init()
     {
         $hydrator = new CentreCoutStructureHydrator();
@@ -29,32 +28,31 @@ class CentreCoutStructureSaisieForm extends AbstractForm
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
-            'name'    => 'centre-cout',
+            'name' => 'centre-cout',
             'options' => [
             ],
-            'type'    => 'Hidden',
+            'type' => 'Hidden',
         ]);
 
         $this->add([
-            'name'       => 'structure',
-            'options'    => [
+            'name' => 'structure',
+            'options' => [
                 'label' => 'Structure',
             ],
             'attributes' => [
-                'class'            => 'selectpicker',
+                'class' => 'selectpicker',
                 'data-live-search' => 'true',
             ],
-            'type'       => 'Select',
+            'type' => 'Select',
         ]);
-
+        $qb = $this->getServiceStructure()->finderByEnseignement();
         $this->get('structure')
-            ->setEmptyOption("(Aucun)")
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceStructure()->getList($qb)));
 
         $this->add(new Csrf('security'));
         $this->add([
-            'name'       => 'submit',
-            'type'       => 'Submit',
+            'name' => 'submit',
+            'type' => 'Submit',
             'attributes' => [
                 'value' => "Enregistrer",
                 'class' => 'btn btn-primary',
@@ -65,16 +63,14 @@ class CentreCoutStructureSaisieForm extends AbstractForm
     }
 
 
-
     public function getStructures()
     {
         $serviceStructure = $this->getServiceStructure();
-        $qb               = $serviceStructure->finderByHistorique();
-        $structures       = $serviceStructure->getList($qb);
+        $qb = $serviceStructure->finderByHistorique();
+        $structures = $serviceStructure->getList($qb);
 
         return $structures;
     }
-
 
 
     /**
@@ -100,9 +96,6 @@ class CentreCoutStructureSaisieForm extends AbstractForm
 }
 
 
-
-
-
 class CentreCoutStructureHydrator implements HydratorInterface
 {
     use StructureServiceAwareTrait;
@@ -110,11 +103,10 @@ class CentreCoutStructureHydrator implements HydratorInterface
     use CentreCoutServiceAwareTrait;
 
 
-
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                      $data
+     * @param  array $data
      * @param  \Application\Entity\Db\CentreCoutStructure $object
      *
      * @return object
@@ -130,7 +122,6 @@ class CentreCoutStructureHydrator implements HydratorInterface
     }
 
 
-
     /**
      * Extract values from an object
      *
@@ -141,9 +132,9 @@ class CentreCoutStructureHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'               => $object->getId(),
-            'structure'        => ($s = $object->getStructure()) ? $s->getId() : null,
-            'centre-cout'      => $object->getCentreCout()->getId(),
+            'id' => $object->getId(),
+            'structure' => ($s = $object->getStructure()) ? $s->getId() : null,
+            'centre-cout' => $object->getCentreCout()->getId(),
         ];
 
         return $data;

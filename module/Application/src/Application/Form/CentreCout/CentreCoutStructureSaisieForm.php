@@ -47,7 +47,7 @@ class CentreCoutStructureSaisieForm extends AbstractForm
             'type'       => 'Select',
         ]);
         $this->get('structure')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions(getStructures()));
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
 
         $this->add(new Csrf('security'));
         $this->add([

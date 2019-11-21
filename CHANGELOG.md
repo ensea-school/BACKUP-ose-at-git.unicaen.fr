@@ -13,6 +13,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Correction de bugs
 
 * Pour un rôle de périmètre établissement avec pour possibilité de changer de structure, le changement fonctionne à nouveau (pour l'édition ZF3 uniquement)
+* Dans certains cas, la génération d'états de sortie en PDF produisait des fichiers corrompus.
 
 ## Notes de mise à jour
 

@@ -48,7 +48,7 @@ return [
                             'route'    => '/element',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller'    => 'Application\Controller\OffreFormation\ElementPedagogique',
+                                'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                             ],
                         ],
                         'may_terminate' => false,
@@ -119,7 +119,7 @@ return [
                             'route'    => '/etape',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller'    => 'Application\Controller\OffreFormation\Etape',
+                                'controller' => 'Application\Controller\OffreFormation\Etape',
                             ],
                         ],
                         'may_terminate' => false,
@@ -359,23 +359,19 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\ElementPedagogiqueService::class  => Service\ElementPedagogiqueService::class,
-            Service\CheminPedagogiqueService::class   => Service\CheminPedagogiqueService::class,
-            Service\EtapeService::class               => Service\EtapeService::class,
-            Service\TypeFormationService::class       => Service\TypeFormationService::class,
-            Service\GroupeTypeFormationService::class => Service\GroupeTypeFormationService::class,
-            Service\NiveauEtapeService::class         => Service\NiveauEtapeService::class,
-            Service\NiveauFormationService::class     => Service\NiveauFormationService::class,
-            Service\ModulateurService::class          => Service\ModulateurService::class,
-            Service\ElementModulateurService::class   => Service\ElementModulateurService::class,
-            Service\TypeModulateurService::class      => Service\TypeModulateurService::class,
-            Service\DomaineFonctionnelService::class  => Service\DomaineFonctionnelService::class,
-        ],
-        'factories'  => [
-            Assertion\OffreDeFormationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
-        ],
-        'factories'  => [
-            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
+            Service\ElementPedagogiqueService::class   => Service\ElementPedagogiqueService::class,
+            Service\CheminPedagogiqueService::class    => Service\CheminPedagogiqueService::class,
+            Service\EtapeService::class                => Service\EtapeService::class,
+            Service\TypeFormationService::class        => Service\TypeFormationService::class,
+            Service\GroupeTypeFormationService::class  => Service\GroupeTypeFormationService::class,
+            Service\NiveauEtapeService::class          => Service\NiveauEtapeService::class,
+            Service\NiveauFormationService::class      => Service\NiveauFormationService::class,
+            Service\ModulateurService::class           => Service\ModulateurService::class,
+            Service\ElementModulateurService::class    => Service\ElementModulateurService::class,
+            Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
+            Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
+            Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
+            Processus\ReconductionProcessus::class     => Processus\ReconductionProcessusFactory::class,
         ],
     ],
     'form_elements'   => [
@@ -391,7 +387,7 @@ return [
             Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class             => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
         ],
         'factories'  => [
-            Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
+            Form\OffreFormation\VolumeHoraireEns::class   => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
             Processus\ReconductionProcessusFactory::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],

@@ -199,6 +199,25 @@ class OffreFormationController extends AbstractController
 
 
 
+    public function reconductionCentreCoutAction()
+    {
+        $this->initFilterHistorique();
+        list($structure, $niveau, $etape) = $this->getParams();
+        //Get role of user
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
+        $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
+
+        $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit();
+
+
+        return [
+            'structures' => $structures,
+            'structure'  => $structure,
+        ];
+    }
+
+
+
     protected function initFilters()
     {
         $this->initFilterAnnee();

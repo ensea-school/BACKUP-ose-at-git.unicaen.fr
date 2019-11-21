@@ -56,6 +56,36 @@ class EtapeService extends AbstractEntityService
 
 
 
+    public function getEtapeReconduit()
+    {
+        $anneeN  = $this->getServiceContext()->getAnnee();
+        $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
+
+
+        $qb1 = $this->getEntityManager()->createQueryBuilder();
+        $qb2 = $this->getEntityManager()->createQueryBuilder();
+
+        $etapeN1 = $qb1
+            ->select('eN1.code')
+            ->from(Etape::class, 'eN1')
+            ->where('eN1.annee = :anneeN1');
+
+        $etapeN = $qb2
+            ->select('eN')
+            ->from(Etape::class, 'eN')
+            ->where($qb2->expr()->in('eN.code', $etapeN1->getDQL()))
+            ->andWhere('eN.annee = :anneeN')
+            ->setParameter('anneeN', $anneeN)
+            ->setParameter('anneeN1', $anneeN1);
+
+
+        $result = $etapeN->getQuery()->getArrayResult();
+
+        return $result;
+    }
+
+
+
     /**
      *
      * @param \Application\Entity\NiveauEtape $niveau
@@ -68,8 +98,8 @@ class EtapeService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $typeFormationAlias   = $this->getServiceTypeFormation()->getAlias();
-        $groupeTypeFormationAlias   = $this->getServiceGroupeTypeFormation()->getAlias();
+        $typeFormationAlias       = $this->getServiceTypeFormation()->getAlias();
+        $groupeTypeFormationAlias = $this->getServiceGroupeTypeFormation()->getAlias();
 
         $qb
             ->innerJoin("$alias.typeFormation", $typeFormationAlias)
@@ -109,8 +139,8 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
-     * @param \Doctrine\ORM\QueryBuilder       $qb
-     * @param string                           $alias
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string                     $alias
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -118,9 +148,9 @@ class EtapeService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb, $alias );
-        if ($cStructure = $this->getServiceContext()->getStructure()){
-            $this->finderByStructure( $cStructure, $qb, $alias );
+        $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, $alias);
+        if ($cStructure = $this->getServiceContext()->getStructure()) {
+            $this->finderByStructure($cStructure, $qb, $alias);
         }
 
         return $qb;
@@ -147,7 +177,7 @@ class EtapeService extends AbstractEntityService
      */
     public function save($entity)
     {
-        if (!$entity->getAnnee()){
+        if (!$entity->getAnnee()) {
             $entity->setAnnee($this->getServiceContext()->getAnnee());
         }
 
@@ -185,8 +215,8 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
-     * @param Etape $entity
-     * @param boolean     $softDelete Simple historisation ou bien destruction pure et simple
+     * @param Etape   $entity
+     * @param boolean $softDelete Simple historisation ou bien destruction pure et simple
      *
      * @return self
      */
@@ -198,8 +228,6 @@ class EtapeService extends AbstractEntityService
 
         return parent::delete($entity, $softDelete);
     }
-
-
 
 
 

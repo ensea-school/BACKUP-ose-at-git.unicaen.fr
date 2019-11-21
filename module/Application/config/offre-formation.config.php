@@ -42,13 +42,22 @@ return [
                             ],
                         ],
                     ],
-                    'element' => [
+                    'reconduction-centre-cout' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/reconduction-centre-cout',
+                            'defaults' => [
+                                'action' => 'reconductionCentreCout',
+                            ],
+                        ],
+                    ],
+                    'element'                  => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/element',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller'    => 'Application\Controller\OffreFormation\ElementPedagogique',
+                                'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                             ],
                         ],
                         'may_terminate' => false,
@@ -119,7 +128,7 @@ return [
                             'route'    => '/etape',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller'    => 'Application\Controller\OffreFormation\Etape',
+                                'controller' => 'Application\Controller\OffreFormation\Etape',
                             ],
                         ],
                         'may_terminate' => false,
@@ -210,11 +219,28 @@ return [
                     ],
                     'administration' => [
                         'pages' => [
-                            'reconduction-offre' => [
-                                'label'    => 'Reconduction de l\'offre de formation',
-                                'icon'     => 'glyphicon glyphicon-list-alt',
-                                'route'    => 'of/reconduction',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                            'offre-formation' => [
+                                'label'        => 'Offre de formation',
+                                'icon'         => 'glyphicon glyphicon-list-alt',
+                                'route'        => 'of',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                                'order'        => 0,
+                                'border-color' => '#111',
+                                'pages'        => [
+                                    'reconduction-offre'       => [
+                                        'label'    => 'Reconduction de l\'offre de formation complémentaire',
+                                        'title'    => 'Reconduction de l\'offre de formation complémentaire',
+                                        'route'    => 'of/reconduction',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                                    ],
+                                    'reconduction-centre-cout' => [
+                                        'label'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'route'    => 'of/reconduction-centre-cout',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
+                                    ],
+
+                                ],
                             ],
                         ],
                     ],
@@ -241,6 +267,12 @@ return [
                     'action'     => ['reconduction'],
                     'privileges' => Privileges::ODF_RECONDUCTION_OFFRE,
                 ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['reconductionCentreCout'],
+                    'privileges' => Privileges::ODF_RECONDUCTION_CENTRE_COUT,
+                ],
+
                 /* Etapes */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
@@ -359,20 +391,18 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\ElementPedagogiqueService::class  => Service\ElementPedagogiqueService::class,
-            Service\CheminPedagogiqueService::class   => Service\CheminPedagogiqueService::class,
-            Service\EtapeService::class               => Service\EtapeService::class,
-            Service\TypeFormationService::class       => Service\TypeFormationService::class,
-            Service\GroupeTypeFormationService::class => Service\GroupeTypeFormationService::class,
-            Service\NiveauEtapeService::class         => Service\NiveauEtapeService::class,
-            Service\NiveauFormationService::class     => Service\NiveauFormationService::class,
-            Service\ModulateurService::class          => Service\ModulateurService::class,
-            Service\ElementModulateurService::class   => Service\ElementModulateurService::class,
-            Service\TypeModulateurService::class      => Service\TypeModulateurService::class,
-            Service\DomaineFonctionnelService::class  => Service\DomaineFonctionnelService::class,
-        ],
-        'factories'  => [
-            Assertion\OffreDeFormationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Service\ElementPedagogiqueService::class   => Service\ElementPedagogiqueService::class,
+            Service\CheminPedagogiqueService::class    => Service\CheminPedagogiqueService::class,
+            Service\EtapeService::class                => Service\EtapeService::class,
+            Service\TypeFormationService::class        => Service\TypeFormationService::class,
+            Service\GroupeTypeFormationService::class  => Service\GroupeTypeFormationService::class,
+            Service\NiveauEtapeService::class          => Service\NiveauEtapeService::class,
+            Service\NiveauFormationService::class      => Service\NiveauFormationService::class,
+            Service\ModulateurService::class           => Service\ModulateurService::class,
+            Service\ElementModulateurService::class    => Service\ElementModulateurService::class,
+            Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
+            Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
+            Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
         ],
         'factories'  => [
             Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
@@ -397,14 +427,14 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'etapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
-            'elementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
-            'elementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
-            'etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
-            'etapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
-            'elementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
-            'etapeTauxMixiteForm'                 => View\Helper\OffreFormation\EtapeTauxMixiteFormViewHelper::class,
-            'elementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
+            'EtapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
+            'ElementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
+            'ElementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
+            'Etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
+            'EtapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
+            'ElementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
+            'EtapeTauxMixiteForm'                 => View\Helper\OffreFormation\EtapeTauxMixiteFormViewHelper::class,
+            'ElementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
             'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
     ],

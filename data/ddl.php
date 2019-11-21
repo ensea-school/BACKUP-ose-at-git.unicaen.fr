@@ -5330,6 +5330,17 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
+        'CSV_TRAITEMENT' => 
+        array (
+          'name' => 'CSV_TRAITEMENT',
+          'type' => 'CLOB',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'ETAT_VOLUME_HORAIRE' => 

@@ -8,12 +8,18 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Nouveautés
 
 * Possibilité d'utiliser un service Unoconv présent sur un serveur dédié autre que celui de OSE
+* L'export des services au format CSV est maintenant personnalisable
 
 ## Correction de bugs
 
 * Pour un rôle de périmètre établissement avec pour possibilité de changer de structure, le changement fonctionne à nouveau (pour l'édition ZF3 uniquement)
+* Dans certains cas, la génération d'états de sortie en PDF produisait des fichiers corrompus.
 
 ## Notes de mise à jour
+
+Les deux éditions sont isofonctionnelles.
+L'édition 10-zf3 est maintenant celle recommandée pour la production. Elle requiert PHP 7.3.
+L'édition 10-zf2 passe maintenant en statut "obsolète".
 
 Ajout de nouveaux paramètres de configuration pour pouvoir externaliser l'usage du service Unoconv.
 A ajouter dans votre fichier config.local.php et à personnaliser le cas échéant :

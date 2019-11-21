@@ -99,13 +99,14 @@ class EtatSortieService extends AbstractEntityService
             throw new \Exception('Fichier modèle au format OpenDocument non fourni dans l\'état de sortie "' . $etatSortie->getLibelle() . '"');
         }
 
-        $data = $this->generateData($etatSortie, $filtres);
-        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+        $entityManager = $this->getEntityManager();
+        $data          = $this->generateData($etatSortie, $filtres);
+        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
         if (trim($etatSortie->getPdfTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getPdfTraitement();
             // Isolation de traitement pour éviter tout débordement...
-            $traitement = function () use ($document, $etatSortie, $data, $filtres, $role, $options, $__PHP__CODE__TRAITEMENT__) {
+            $traitement = function () use ($document, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 eval($__PHP__CODE__TRAITEMENT__);
 
                 return $data;
@@ -131,14 +132,15 @@ class EtatSortieService extends AbstractEntityService
     {
         $csv = new CsvModel();
 
-        $data = $this->generateData($etatSortie, $filtres);
-        $role = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
+        $entityManager = $this->getEntityManager();
+        $data          = $this->generateData($etatSortie, $filtres);
+        $role          = $this->getServiceContext()->getSelectedIdentityRole(); // à fournir à l'évaluateur...
 
 
         if (trim($etatSortie->getCsvTraitement())) {
             $__PHP__CODE__TRAITEMENT__ = $etatSortie->getCsvTraitement();
             // Isolation de traitement pour éviter tout débordement...
-            $traitement = function () use ($csv, $etatSortie, $data, $filtres, $role, $options, $__PHP__CODE__TRAITEMENT__) {
+            $traitement = function () use ($csv, $etatSortie, $data, $filtres, $entityManager, $role, $options, $__PHP__CODE__TRAITEMENT__) {
                 eval($__PHP__CODE__TRAITEMENT__);
 
                 return $data;

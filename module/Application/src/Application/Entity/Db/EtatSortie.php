@@ -380,6 +380,11 @@ class EtatSortie
      */
     public function getCsvTraitement()
     {
+        $fichierGenerique = getcwd() . '/' . $this->csvTraitement;
+        if (file_exists($fichierGenerique)) {
+            $this->csvTraitement = substr(file_get_contents($fichierGenerique), 5);
+        }
+
         return $this->csvTraitement;
     }
 
@@ -392,11 +397,6 @@ class EtatSortie
      */
     public function setCsvTraitement($csvTraitement): EtatSortie
     {
-        $fichierGenerique = getcwd() . '/' . $this->csvTraitement;
-        if (file_exists($fichierGenerique)) {
-            $this->csvTraitement = substr(file_get_contents($fichierGenerique), 5);
-        }
-
         $this->csvTraitement = $csvTraitement;
 
         return $this;

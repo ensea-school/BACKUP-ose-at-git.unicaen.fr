@@ -31,48 +31,50 @@ class ParametresForm extends AbstractForm
     use EtatSortieServiceAwareTrait;
     use FormuleServiceAwareTrait;
 
+
+
     public function init()
     {
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'annee',
+            'type'       => 'Select',
+            'name'       => 'annee',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
-                'label' => 'Pour la saisie des services',
+                'label'         => 'Pour la saisie des services',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'annee_import',
+            'type'       => 'Select',
+            'name'       => 'annee_import',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceAnnee()->getList()),
-                'label' => 'Pour l\'import',
+                'label'         => 'Pour l\'import',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'structure_univ',
+            'type'       => 'Select',
+            'name'       => 'structure_univ',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceStructure()->getList(
                     $this->getServiceStructure()->finderByHistorique()
                 )),
-                'label' => 'Composante représentant l\'université',
+                'label'         => 'Composante représentant l\'université',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
@@ -109,14 +111,14 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'domaine_fonctionnel_ens_ext',
+            'type'       => 'Select',
+            'name'       => 'domaine_fonctionnel_ens_ext',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList($this->getServiceDomaineFonctionnel()->finderByHistorique())),
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
@@ -131,14 +133,14 @@ class ParametresForm extends AbstractForm
         $this->add($etablissement);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'formule',
+            'type'       => 'Select',
+            'name'       => 'formule',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceFormule()->getList()),
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
@@ -159,126 +161,139 @@ class ParametresForm extends AbstractForm
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'oseuser',
+            'type'       => 'Select',
+            'name'       => 'oseuser',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceUtilisateur()->getList()),
             ],
             'attributes' => [
-                'class' => 'selectpicker',
+                'class'            => 'selectpicker',
                 'data-live-search' => 'true',
-                'data-size' => 20,
+                'data-size'        => 20,
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'es_winpaie',
+            'type'       => 'Select',
+            'name'       => 'es_winpaie',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label' => 'État de sortie pour l\'extraction Winpaie',
+                'label'         => 'État de sortie pour l\'extraction Winpaie',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'es_services_pdf',
+            'type'       => 'Select',
+            'name'       => 'es_services_pdf',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label' => 'État de sortie pour l\'édition PDF des services',
+                'label'         => 'État de sortie pour l\'édition PDF des services',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'es_etat_paiement',
+            'type'       => 'Select',
+            'name'       => 'es_services_csv',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
-                'label' => 'État de sortie pour les états de paiement',
+                'label'         => 'État de sortie pour l\export CSV des services',
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-live-search' => 'true'
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'scenario_charges_services',
+            'type'       => 'Select',
+            'name'       => 'es_etat_paiement',
+            'options'    => [
+                'value_options' => Util::collectionAsOptions($this->getServiceEtatSortie()->getList()),
+                'label'         => 'État de sortie pour les états de paiement',
+            ],
+            'attributes' => [
+                'class'            => 'selectpicker',
+                'data-live-search' => 'true',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'scenario_charges_services',
             'options'    => [
                 'value_options' => Util::collectionAsOptions($this->getServiceScenario()->getList($this->getServiceScenario()->finderByHistorique())),
             ],
             'attributes' => [
-                'class' => 'selectpicker',
+                'class'            => 'selectpicker',
                 'data-live-search' => 'true',
+                'data-size'        => 20,
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'Select',
+            'name'       => 'modalite_services_prev_ens',
+            'options'    => [
+                'value_options' => [
+                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
+                ],
+            ],
+            'attributes' => [
+                'class'     => 'selectpicker',
                 'data-size' => 20,
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'modalite_services_prev_ens',
+            'type'       => 'Select',
+            'name'       => 'modalite_services_prev_ref',
             'options'    => [
                 'value_options' => [
                     Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
                 ],
             ],
             'attributes' => [
-                'class' => 'selectpicker',
+                'class'     => 'selectpicker',
                 'data-size' => 20,
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'modalite_services_prev_ref',
+            'type'       => 'Select',
+            'name'       => 'modalite_services_real_ens',
             'options'    => [
                 'value_options' => [
                     Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
                 ],
             ],
             'attributes' => [
-                'class' => 'selectpicker',
+                'class'     => 'selectpicker',
                 'data-size' => 20,
             ],
         ]);
 
         $this->add([
-            'type' => 'Select',
-            'name' => 'modalite_services_real_ens',
+            'type'       => 'Select',
+            'name'       => 'modalite_services_real_ref',
             'options'    => [
                 'value_options' => [
                     Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
+                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)',
                 ],
             ],
             'attributes' => [
-                'class' => 'selectpicker',
-                'data-size' => 20,
-            ],
-        ]);
-
-        $this->add([
-            'type' => 'Select',
-            'name' => 'modalite_services_real_ref',
-            'options'    => [
-                'value_options' => [
-                    Parametre::SERVICES_MODALITE_SEMESTRIEL => 'Par semestre (mode semestriel)',
-                    Parametre::SERVICES_MODALITE_CALENDAIRE => 'Par date et heure de cours (mode calendaire)'
-                ],
-            ],
-            'attributes' => [
-                'class' => 'selectpicker',
+                'class'     => 'selectpicker',
                 'data-size' => 20,
             ],
         ]);

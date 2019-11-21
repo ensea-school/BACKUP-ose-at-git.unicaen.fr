@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -136,6 +137,8 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ODF_ELEMENT_VISUALISATION                           = 'odf-element-visualisation';
     const ODF_ETAPE_EDITION                                   = 'odf-etape-edition';
     const ODF_ETAPE_VISUALISATION                             = 'odf-etape-visualisation';
+    const ODF_RECONDUCTION_OFFRE                              = 'odf-reconduction-offre';
+    const ODF_RECONDUCTION_CENTRE_COUT                        = 'odf-reconduction-centre-cout';
     const ODF_EXPORT_CSV                                      = 'odf-export-csv';
     const ODF_GRANDS_TYPES_DIPLOME_EDITION                    = 'odf-grands-types-diplome-edition';
     const ODF_GRANDS_TYPES_DIPLOME_VISUALISATION              = 'odf-grands-types-diplome-visualisation';
@@ -144,7 +147,6 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ODF_TYPES_DIPLOME_EDITION                           = 'odf-types-diplome-edition';
     const ODF_TYPES_DIPLOME_VISUALISATION                     = 'odf-types-diplome-visualisation';
     const ODF_VISUALISATION                                   = 'odf-visualisation';
-    const ODF_RECONDUCTION_OFFRE                              = 'odf-reconduction-offre';
     const PARAMETRES_ANNEES_EDITION                           = 'parametres-annees-edition';
     const PARAMETRES_ANNEES_VISUALISATION                     = 'parametres-annees-visualisation';
     const PARAMETRES_CAMPAGNES_SAISIE_EDITION                 = 'parametres-campagnes-saisie-edition';

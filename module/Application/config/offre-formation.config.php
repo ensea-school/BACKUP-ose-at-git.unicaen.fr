@@ -20,7 +20,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'default' => [
+                    'default'                  => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:id]',
@@ -33,22 +33,31 @@ return [
                             ],
                         ],
                     ],
-                    'reconduction' => [
+                    'reconduction'             => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/reconduction',
+                            'route'    => '/reconduction',
                             'defaults' => [
                                 'action' => 'reconduction',
                             ],
                         ],
                     ],
-                    'element' => [
+                    'reconduction-centre-cout' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/reconduction-centre-cout',
+                            'defaults' => [
+                                'action' => 'reconductionCentreCout',
+                            ],
+                        ],
+                    ],
+                    'element'                  => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/element',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                                'controller'    => 'Application\Controller\OffreFormation\ElementPedagogique',
                             ],
                         ],
                         'may_terminate' => false,
@@ -113,13 +122,13 @@ return [
                             ],
                         ],
                     ],
-                    'etape'   => [
+                    'etape'                    => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/etape',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller' => 'Application\Controller\OffreFormation\Etape',
+                                'controller'    => 'Application\Controller\OffreFormation\Etape',
                             ],
                         ],
                         'may_terminate' => false,
@@ -202,7 +211,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'of' => [
+                    'of'             => [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
@@ -210,11 +219,28 @@ return [
                     ],
                     'administration' => [
                         'pages' => [
-                            'reconduction-offre' => [
-                                'label'    => 'Reconduction de l\'offre de formation',
-                                'icon'     => 'glyphicon glyphicon-list-alt',
-                                'route'    => 'of/reconduction',
-                                'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                            'offre-formation' => [
+                                'label'        => 'Offre de formation',
+                                'icon'         => 'glyphicon glyphicon-list-alt',
+                                'route'        => 'of',
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                                'order'        => 0,
+                                'border-color' => '#111',
+                                'pages'        => [
+                                    'reconduction-offre'       => [
+                                        'label'    => 'Reconduction de l\'offre de formation complémentaire',
+                                        'title'    => 'Reconduction de l\'offre de formation complémentaire',
+                                        'route'    => 'of/reconduction',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                                    ],
+                                    'reconduction-centre-cout' => [
+                                        'label'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
+                                        'route'    => 'of/reconduction-centre-cout',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
+                                    ],
+
+                                ],
                             ],
                         ],
                     ],
@@ -241,6 +267,12 @@ return [
                     'action'     => ['reconduction'],
                     'privileges' => Privileges::ODF_RECONDUCTION_OFFRE,
                 ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['reconductionCentreCout'],
+                    'privileges' => Privileges::ODF_RECONDUCTION_CENTRE_COUT,
+                ],
+
                 /* Etapes */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
@@ -371,9 +403,7 @@ return [
             Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
             Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
-        ],
-        'factories'  => [
-            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
+            Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
         ],
     ],
     'form_elements'   => [
@@ -390,7 +420,6 @@ return [
         ],
         'factories'  => [
             Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
-            Processus\ReconductionProcessusFactory::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],
     'view_helpers'    => [

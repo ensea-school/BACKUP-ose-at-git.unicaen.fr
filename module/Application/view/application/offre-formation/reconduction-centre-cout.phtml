@@ -1,0 +1,21 @@
+<div class="row" id="reconduction-filters">
+    <div class="col-md-12">
+        <!---------------- Champ de sélection d'une structure --------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Composante</div>
+            <div class="panel-body">
+                <?php
+                $selectStructure = new \Zend\Form\Element\Select('structure');
+                $selectStructure
+                    ->setValueOptions(['' => "(Sélectionnez une composante)"] + \UnicaenApp\Util::collectionAsOptions($structures))
+                    ->setValue($structure ? $structure->getId() : null)
+                    ->setAttributes(['class' => 'structure',
+                                     'style' => 'width:250px;']);
+                echo $this->formSelect($selectStructure);
+                ?>
+
+            </div>
+        </div>
+    </div>
+
+</div>

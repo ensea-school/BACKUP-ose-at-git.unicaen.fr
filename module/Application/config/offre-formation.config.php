@@ -20,7 +20,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'default' => [
+                    'default'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:id]',
@@ -36,19 +36,19 @@ return [
                     'reconduction' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/reconduction',
+                            'route'    => '/reconduction',
                             'defaults' => [
                                 'action' => 'reconduction',
                             ],
                         ],
                     ],
-                    'element' => [
+                    'element'      => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/element',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                                'controller'    => 'Application\Controller\OffreFormation\ElementPedagogique',
                             ],
                         ],
                         'may_terminate' => false,
@@ -113,13 +113,13 @@ return [
                             ],
                         ],
                     ],
-                    'etape'   => [
+                    'etape'        => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/etape',
                             'defaults' => [
                                 '__NAMESPACE__' => 'Application\Controller\OffreFormation',
-                                'controller' => 'Application\Controller\OffreFormation\Etape',
+                                'controller'    => 'Application\Controller\OffreFormation\Etape',
                             ],
                         ],
                         'may_terminate' => false,
@@ -202,7 +202,7 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'of' => [
+                    'of'             => [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
@@ -371,9 +371,7 @@ return [
             Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
             Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
-        ],
-        'factories'  => [
-            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
+            Processus\ReconductionProcessus::class     => Processus\ReconductionProcessusFactory::class,
         ],
     ],
     'form_elements'   => [
@@ -389,7 +387,7 @@ return [
             Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class             => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
         ],
         'factories'  => [
-            Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
+            Form\OffreFormation\VolumeHoraireEns::class   => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
             Processus\ReconductionProcessusFactory::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],

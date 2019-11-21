@@ -12,12 +12,28 @@ $actions = [
     "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
     "clear-cache"               => "Vidage du cache de l'application",
     "test-bdd"                  => "Test d'accès à la base de données",
+    "update-bdd"                => "Mise à jour de la base de données de l'application (sans les fichiers)",
 ];
+$actionsDev = [
+    "update-ddl" => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",
+    "update-bdd-privileges" => "Mise à jour des privilèges de la base de données",
+];
+
+if ((getenv('APPLICATION_ENV') ?: 'dev') == 'dev'){
+    $actions = array_merge($actions, $actionsDev);
+}
+
+
 
 $c->printMainTitle("OSE", 15);
 
 $c->println('Actions possibles :');
+$maxLength = 0;
+foreach ($actions as $a => $l) {
+    if (strlen($a) > $maxLength) $maxLength = strlen($a);
+}
 foreach ($actions as $a => $l) {
     $c->print($a, $c::COLOR_BLACK, $c::BG_LIGHT_GRAY);
+    $c->print(str_pad('', $maxLength - strlen($a), ' '));
     $c->println(" : " . $l);
 }

@@ -87,6 +87,9 @@ foreach ($data as $d) {
         $intervenants[$iid][$k]['st_' . $champ] += $newLigne[$champ];
         $variables['t_' . $champ]               += $newLigne[$champ];
     }
+    if (!isset($intervenants[$iid][$k]['lignes'])){
+        $intervenants[$iid][$k]['lignes'] = [];
+    }
     $intervenants[$iid][$k]['lignes'][] = $newLigne;
 }
 $variables['intervenants'] = count($intervenants);
@@ -105,7 +108,7 @@ $totalTemplate  = [
 // Publication des lignes
 foreach ($intervenants as $intervenant) {
     foreach ($intervenant as $k => $interv) {
-        if (count($interv['lignes']) > 0) {
+        if (isset($interv['lignes']) && count($interv['lignes']) > 0) {
             foreach ($interv['lignes'] as $detailData) {
                 $publisher->publishBefore($detailTemplate, $detailData, $totalTemplate['p']);
             }

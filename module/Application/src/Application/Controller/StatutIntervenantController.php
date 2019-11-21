@@ -2,9 +2,11 @@
 
 namespace Application\Controller;
 
+use Application\Cache\Traits\CacheContainerTrait;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Provider\Privilege\Privileges;
 use Application\Form\StatutIntervenant\Traits\StatutIntervenantSaisieFormAwareTrait;
+use Application\Provider\Role\RoleProvider;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
@@ -15,6 +17,7 @@ class StatutIntervenantController extends AbstractController
     use StatutIntervenantServiceAwareTrait;
     use StatutIntervenantSaisieFormAwareTrait;
     use TypeIntervenantServiceAwareTrait;
+    use CacheContainerTrait;
 
 
 
@@ -54,6 +57,7 @@ class StatutIntervenantController extends AbstractController
             $form->bindRequestSave($statutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
                 try {
                     $this->getServiceStatutIntervenant()->save($si);
+                    unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                     $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
                 } catch (\Exception $e) {
                     $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -82,6 +86,7 @@ class StatutIntervenantController extends AbstractController
         $form->bindRequestSave($newStatutIntervenant, $this->getRequest(), function (StatutIntervenant $si) {
             try {
                 $this->getServiceStatutIntervenant()->save($si);
+                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 $this->flashMessenger()->addSuccessMessage('Duplication effectuée');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -111,6 +116,7 @@ class StatutIntervenantController extends AbstractController
         } else {
             try {
                 $this->getServiceStatutIntervenant()->delete($statutIntervenant);
+                unset($this->getCacheContainer(RoleProvider::class)->statutsInfo);
                 $this->flashMessenger()->addSuccessMessage("Statut d'Intervenant supprimé avec succès.");
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));

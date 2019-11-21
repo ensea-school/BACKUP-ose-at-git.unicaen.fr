@@ -3,7 +3,6 @@
 namespace Application\Form;
 
 use Application\Entity\Db\EtatSortie;
-use Application\Form\AbstractForm;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -72,6 +71,18 @@ class EtatSortieForm extends AbstractForm
             ],
             'attributes' => [
                 'id'   => 'pdf-traitement',
+                'rows' => '25',
+            ],
+        ]);
+
+        $this->add([
+            'type'       => 'TextArea',
+            'name'       => 'csv-traitement',
+            'options'    => [
+                'label' => "Traitement des données",
+            ],
+            'attributes' => [
+                'id'   => 'csv-traitement',
                 'rows' => '25',
             ],
         ]);
@@ -210,6 +221,7 @@ class EtatSortieHydrator implements HydratorInterface
         $object->setCle($data['cle']);
         $object->setCsvParams($data['csv-params']);
         $object->setPdfTraitement($data['pdf-traitement']);
+        $object->setCsvTraitement($data['csv-traitement']);
         $object->setAutoBreak($data['auto-break'] === 'true');
         $object->setRequete($data['requete']);
         if (isset($data['fichier']['tmp_name']) && $data['fichier']['tmp_name']) {
@@ -249,6 +261,7 @@ class EtatSortieHydrator implements HydratorInterface
             'cle'            => $object->getCle(),
             'csv-params'     => $object->getCsvParams(),
             'pdf-traitement' => $object->getPdfTraitement(),
+            'csv-traitement' => $object->getCsvTraitement(),
             'auto-break'     => $object->isAutoBreak() ? 'true' : 'false',
             'requete'        => $object->getRequete(),
         ];

@@ -16,6 +16,10 @@ author: Laurent Lécluse - DSI - Unicaen
 
 ## Notes de mise à jour
 
+Les deux éditions sont isofonctionnelles.
+L'édition 10-zf3 est maintenant celle recommandée pour la production. Elle requiert PHP 7.3.
+L'édition 10-zf2 passe maintenant en statut "obsolète".
+
 Ajout de nouveaux paramètres de configuration pour pouvoir externaliser l'usage du service Unoconv.
 A ajouter dans votre fichier config.local.php et à personnaliser le cas échéant :
 ```php

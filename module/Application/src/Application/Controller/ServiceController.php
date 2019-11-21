@@ -123,17 +123,12 @@ class ServiceController extends AbstractController
 
 
 
-    public function exportAction()
+    public function exportCsvAction()
     {
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
+        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-
-
-        $this->initFilters();
-        if ($intervenant) {
-            $this->getServiceLocalContext()->setIntervenant($intervenant);
-        }
+        $annee     = $this->getServiceContext()->getAnnee();
+        $structure = $this->getServiceContext()->getStructure();
 
         if (!$intervenant) {
             $rr        = $this->rechercheAction();
@@ -145,34 +140,38 @@ class ServiceController extends AbstractController
         }
 
         /* Préparation et affichage */
-        $params = [
-            'ignored-columns' => ['intervenant-type-code'],
-        ];
-        if ($structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()) {
-            $params['composante'] = $structure;
+        $etatSortie = $this->getServiceEtatSortie()->getByParametre('es_services_csv');
+        $fileName   = 'Listing des services - ' . date('dmY') . '.csv';
+
+        $filters             = $recherche->getFilters();
+        $filters['ANNEE_ID'] = $annee->getId();
+        if ($structure) {
+            $filters['STRUCTURE_AFF_ID OR STRUCTURE_ENS_ID'] = $structure->getId();
         }
-        $data = $this->getServiceService()->getTableauBord($recherche, $params);
 
-        $csvModel = new CsvModel();
-        $csvModel->setHeader($data['head']);
-        $csvModel->addLines($data['data']);
-        $csvModel->setFilename('service.csv');
+        $options = [
+            'annee'               => $annee->getLibelle(),
+            'type_volume_horaire' => $recherche->getTypeVolumeHoraire()->getLibelle(),
+            'etat_volume_horaire' => $recherche->getEtatVolumeHoraire()->getLibelle(),
+            'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
+            'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
+        ];
 
-        return $csvModel;
+        $csv = $this->getServiceEtatSortie()->genererCsv($etatSortie, $filters, $options);
+        $csv->setFilename($fileName);
+
+        return $csv;
     }
 
 
 
     public function exportPdfAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
+        $intervenant = $this->getEvent()->getParam('intervenant');
         /* @var $intervenant Intervenant */
-        $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervernant');
-        $annee       = $this->getServiceContext()->getAnnee();
+        $annee     = $this->getServiceContext()->getAnnee();
         $structure = $this->getServiceContext()->getStructure();
 
-        $this->initFilters();
         if (!$intervenant) {
             $rr        = $this->rechercheAction();
             $recherche = $rr['rechercheForm']->getObject();
@@ -187,7 +186,7 @@ class ServiceController extends AbstractController
 
         $filters             = $recherche->getFilters();
         $filters['ANNEE_ID'] = $annee->getId();
-        if ($structure){
+        if ($structure) {
             $filters['STRUCTURE_AFF_ID OR STRUCTURE_ENS_ID'] = $structure->getId();
         }
 
@@ -198,7 +197,6 @@ class ServiceController extends AbstractController
             'composante'          => $recherche->getStructureAff() ? $recherche->getStructureAff()->getLibelleCourt() : 'Toutes',
             'type_intervenant'    => $recherche->getTypeIntervenant() ? $recherche->getTypeIntervenant()->getLibelle() : 'Tous intervenants',
         ];
-        if ($c10 = $this->getServiceContext()->getStructure()) $conditions['structure_context_id'] = '(structure_ens_id = ' . $c10->getId() . ' OR structure_aff_id = ' . $c10->getId() . ')';
 
         $document = $this->getServiceEtatSortie()->genererPdf($etatSortie, $filters, $options);
 

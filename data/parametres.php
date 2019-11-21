@@ -14,9 +14,10 @@ return [
     "etablissement"                      => [
         "VALEUR"      => "0141408E",
         "DESCRIPTION" => "Identifiant de l'établissement courant",
+        "QUERY"       => 'SELECT id valeur FROM etablissement WHERE source_code = :valeur AND histo_destruction IS NULL',
     ],
     "structure_univ"                     => [
-        "DESCRIPTION" => "Composante représentant l'université (utile éventuellement pour la forpule de calcul)",
+        "DESCRIPTION" => "Composante représentant l'université (utile éventuellement pour la formule de calcul)",
     ],
     "oseuser"                            => [
         "DESCRIPTION" => "Utilisateur OSE",
@@ -24,14 +25,17 @@ return [
     "formule"                            => [
         "VALEUR"      => "FORMULE_UNICAEN",
         "DESCRIPTION" => "Formule de calcul",
+        "QUERY"       => 'SELECT id valeur FROM formule WHERE package_name = :valeur',
     ],
     "domaine_fonctionnel_ens_ext"        => [
         "VALEUR"      => "D102",
         "DESCRIPTION" => "Domaine fonctionnel à privilégier pour les enseignements pris à l'extérieur",
+        "QUERY"       => 'SELECT id valeur FROM domaine_fonctionnel WHERE source_code = :valeur AND histo_destruction IS NULL',
     ],
     "scenario_charges_services"          => [
         "VALEUR"      => "Initial",
         "DESCRIPTION" => "Scénario utilisé pour confronter les charges d'enseignement aux services des intervenants",
+        "QUERY"       => 'SELECT id valeur FROM scenario WHERE libelle = :valeur AND histo_destruction IS NULL',
     ],
 
 
@@ -39,14 +43,22 @@ return [
     "es_winpaie"                         => [
         "VALEUR"      => "winpaie",
         "DESCRIPTION" => "État de sortie pour l'extraction Winpaie",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
     "es_services_pdf"                    => [
         "VALEUR"      => "export_services",
         "DESCRIPTION" => "État de sortie pour l'édition PDF des services",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
+    ],
+    "es_services_csv"                    => [
+        "VALEUR"      => "export_services",
+        "DESCRIPTION" => "État de sortie pour l'édition CSV des services",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
     "es_etat_paiement"                   => [
         "VALEUR"      => "etat_paiement",
         "DESCRIPTION" => "État de sortie pour les états de paiement",
+        "QUERY"       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
     ],
 
 

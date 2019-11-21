@@ -11,7 +11,7 @@ $schema = new \BddAdmin\Schema($bdd);
 $c->println("\nMise à jour des privilèges dans la base de données", $c::COLOR_LIGHT_CYAN);
 
 $dataGen = new DataGen($oa);
-$dataGen->updatePrivileges();
+$dataGen->update();
 
 // Néttoyage des caches
 $oa->run('clear-cache', true);

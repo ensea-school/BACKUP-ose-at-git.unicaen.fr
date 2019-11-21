@@ -14,8 +14,8 @@ return [
                 'options'       => [
                     'route'    => '/service',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Service',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Service',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -29,12 +29,12 @@ return [
                             ],
                         ],
                     ],
-                    'export'                   => [
+                    'export-csv'               => [
                         'type'    => 'Literal',
                         'options' => [
-                            'route'    => '/export',
+                            'route'    => '/export-csv',
                             'defaults' => [
-                                'action' => 'export',
+                                'action' => 'export-csv',
                             ],
                         ],
                     ],
@@ -166,7 +166,7 @@ return [
                 'options'       => [
                     'route'    => '/referentiel',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\ServiceReferentiel',
+                        'controller' => 'Application\Controller\ServiceReferentiel',
                     ],
                 ],
                 'may_terminate' => false,
@@ -311,7 +311,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action'     => ['export'],
+                    'action'     => ['export-csv'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_EXPORT_CSV,
                     ],
@@ -485,8 +485,8 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
-            Form\Service\SaisieFieldset::class            => Form\Service\Factory\SaisieFieldsetFactory::class,
+        'factories'  => [
+            Form\Service\SaisieFieldset::class => Form\Service\Factory\SaisieFieldsetFactory::class,
         ],
         'invokables' => [
             Form\Service\Saisie::class                    => Form\Service\Saisie::class,

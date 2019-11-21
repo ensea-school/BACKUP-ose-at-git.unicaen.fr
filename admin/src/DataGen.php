@@ -383,7 +383,7 @@ class DataGen
         $tableObject = $this->oseAdmin->getBdd()->getTable($table);
         $ddl         = $tableObject->getDdl();
 
-        if ($tableObject->hasHistorique() && !isset($params['options']['histo-user-id'])){
+        if ($tableObject->hasHistorique() && !isset($params['options']['histo-user-id'])) {
             $params['options']['histo-user-id'] = $this->oseAdmin->getOseAppliId();
         }
 
@@ -420,7 +420,7 @@ class DataGen
             isset($params['key']) ? $params['key'] : 'ID',
             isset($params['options']) ? $params['options'] : []
         );
-        echo 'Insert: '.$result['insert'].', Update: '.$result['update'].', Delete: '.$result['delete'];
+        echo 'Insert: ' . $result['insert'] . ', Update: ' . $result['update'] . ', Delete: ' . $result['delete'];
         echo "\n";
     }
 
@@ -620,29 +620,16 @@ class DataGen
 
         $data = require $this->oseAdmin->getOseDir() . 'data/parametres.php';
 
-        $queries = [
-            'etablissement' =>
-                'SELECT id valeur FROM etablissement WHERE source_code = :valeur AND histo_destruction IS NULL',
+        foreach ($data as $nom => $params) {
+            if (isset($params['QUERY'])) {
+                $query = $params['QUERY'];
 
-            'formule' =>
-                'SELECT id valeur FROM formule WHERE package_name = :valeur',
-
-            'domaine_fonctionnel_ens_ext' =>
-                'SELECT id valeur FROM domaine_fonctionnel WHERE source_code = :valeur AND histo_destruction IS NULL',
-
-            'scenario_charges_services' =>
-                'SELECT id valeur FROM scenario WHERE libelle = :valeur AND histo_destruction IS NULL',
-
-            'es_winpaie'       => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
-            'es_services_pdf'  => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
-            'es_etat_paiement' => 'SELECT id valeur FROM etat_sortie WHERE code = :valeur',
-        ];
-
-        foreach ($queries as $nom => $query) {
-            $val = isset($data[$nom]['VALEUR']) ? $data[$nom]['VALEUR'] : null;
-            $res = $bdd->select($query, ['valeur' => $val], $bdd::FETCH_ONE);
-            if (isset($res['VALEUR'])){
-                $data[$nom]['VALEUR'] = (string)$res['VALEUR'];
+                $val = isset($data[$nom]['VALEUR']) ? $data[$nom]['VALEUR'] : null;
+                $res = $bdd->select($query, ['valeur' => $val], $bdd::FETCH_ONE);
+                if (isset($res['VALEUR'])) {
+                    $data[$nom]['VALEUR'] = (string)$res['VALEUR'];
+                }
+                unset($data[$nom]['QUERY']);
             }
         }
 

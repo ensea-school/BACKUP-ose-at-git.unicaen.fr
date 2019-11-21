@@ -14,6 +14,7 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Pour un rôle de périmètre établissement avec pour possibilité de changer de structure, le changement fonctionne à nouveau (pour l'édition ZF3 uniquement)
 * Dans certains cas, la génération d'états de sortie en PDF produisait des fichiers corrompus.
+* Dans l'export CSV des services, le total était celui des heures compl. uniquement. il est maintenant égal à la somme de toutes les heures (service + compl.)
 
 ## Notes de mise à jour
 

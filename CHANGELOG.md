@@ -8,6 +8,7 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Nouveautés
 
 * Possibilité d'utiliser un service Unoconv présent sur un serveur dédié autre que celui de OSE
+* L'export des services au format CSV est maintenant personnalisable
 
 ## Correction de bugs
 

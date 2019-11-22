@@ -19,3 +19,51 @@
     </div>
 
 </div>
+<h3>Offre de formation disponible pour la prochaine année universitaire</h3>
+<br/>
+<?php
+echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
+?>
+
+<?php if(empty($etapesReconduites)): ?>
+<table class="reconduction-centre-cout table table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th colspan="2">Code</th>
+        <th>Libellé</th>
+        <th>Période</th>
+        <th title="Formation ouverte à distance">FOAD</th>
+        <th title="Régime d'inscription">Rég. d'insc.</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td colspan="6" style="text-align: center;">
+            Aucune formation disponible
+        </td>
+    </tr>
+    </tbody>
+</table>
+<?php else: ?>
+<form action="<?= $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
+    <table class="reconduction-offre table table-bordered table-condensed table-hover" >
+        <thead>
+            <tr>
+                <th></th>
+                <th>Code</th>
+                <th>Libellé</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($etapesReconduites as $er): ?>
+            <tr>
+                <td><input type="checkbox" name="etapes[]" value="<?= $er->getCode(); ?>"></td>
+                <td><?= $er->getCode() . ' / ' . $er->getAnnee()->getLibelle();  ?></td>
+                <td><?= $er->getLibelle() . ' (' . count($er->getElementPedagogique()) . ' EP)'; ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <input type="submit" value="valider">
+</form>
+<?php endif; ?>

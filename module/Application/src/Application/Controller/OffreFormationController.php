@@ -202,17 +202,34 @@ class OffreFormationController extends AbstractController
     public function reconductionCentreCoutAction()
     {
         $this->initFilterHistorique();
+        $etapesReconduites = [];
         list($structure, $niveau, $etape) = $this->getParams();
         //Get role of user
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
 
-        $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $datas = $request->getPost();
+            //Reconduire les centres de coût des EP de l'étape.
+            $this->getProcessusReconduction()->reconduireCCFormation($datas);
+            $fromPost = true;
+        }
+
+        if (!empty($structure)) {
+            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
+        }
+
+        //Chargement JS nécessaire uniquement sur cette page
+        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
+        $headScript        = $viewHelperManager->get('headScript');
+        $headScript->offsetSetFile(100, '/js/reconduction-centre-cout.js');
 
 
         return [
-            'structures' => $structures,
-            'structure'  => $structure,
+            'structures'        => $structures,
+            'structure'         => $structure,
+            'etapesReconduites' => $etapesReconduites,
         ];
     }
 

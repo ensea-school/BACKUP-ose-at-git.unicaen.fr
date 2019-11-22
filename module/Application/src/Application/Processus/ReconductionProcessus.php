@@ -2,6 +2,8 @@
 
 namespace Application\Processus;
 
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etape;
 use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -117,7 +119,6 @@ class ReconductionProcessus extends AbstractProcessus
                         //Reconduction des chemins pédagogiques
                         $cheminsPedagogique = $elementEnCours->getCheminPedagogique();
                         foreach ($cheminsPedagogique as $chemin) {
-                            $chemin;
                             $cheminReconduit = $this->cheminPedagogiqueService->newEntity();
                             $cheminReconduit->setElementPedagogique($elementReconduit);
                             $cheminReconduit->setEtape($etapeReconduit);
@@ -151,6 +152,43 @@ class ReconductionProcessus extends AbstractProcessus
         }
 
         return true;
+    }
+
+
+
+    public function reconduireCCFormation($datas)
+    {
+        $anneeN       = $this->getServiceContext()->getAnnee();
+        $anneeN1      = $this->getServiceContext()->getAnneeSuivante();
+        $serviceEtape = $this->getServiceEtape();
+        $em           = $this->getEntityManager();
+
+        foreach ($datas as $code) {
+            $etapes = $em->getRepository(Etape::class)->findBy(['code' => $code, 'annee' => [$anneeN, $anneeN1]]);
+            foreach ($etapes as $etape) {
+                if ($etape->getAnnee()->getLibelle() == $anneeN->getLibelle()) {
+                    $etapeN = $etape;
+                }
+                if ($etape->getAnnee()->getLibelle() == $anneeN1->getLibelle()) {
+                    $etapeN1 = $etape;
+                }
+            }
+            $elementsPedagogiqueN = $etapeN->getElementPedagogique();
+            foreach ($elementsPedagogiqueN as $ep) {
+                $epN1 = $em->getRepository(ElementPedagogique::class)->findOneBy(['code' => $ep->getCode(), 'annee' => $anneeN1]);
+                if ($epN1) {
+                    $centreCoutN = $ep->getCentreCoutEp();
+                    foreach ($centreCoutN as $cc) {
+                        $epN1->addCentreCoutEp($cc);
+                    }
+                    $em->persist($epN1);
+                }
+                unset($epN1);
+            }
+            $em->flush();
+        }
+
+        return false;
     }
 
 }

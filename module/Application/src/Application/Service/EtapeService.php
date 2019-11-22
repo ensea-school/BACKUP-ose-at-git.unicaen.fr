@@ -2,14 +2,19 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\CentreCout;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Structure;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape;
+use Zend\Form\Element;
 
 /**
  * Description of ElementPedagogique
@@ -56,7 +61,7 @@ class EtapeService extends AbstractEntityService
 
 
 
-    public function getEtapeReconduit()
+    public function getEtapeReconduit($structure)
     {
         $anneeN  = $this->getServiceContext()->getAnnee();
         $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
@@ -68,18 +73,23 @@ class EtapeService extends AbstractEntityService
         $etapeN1 = $qb1
             ->select('eN1.code')
             ->from(Etape::class, 'eN1')
-            ->where('eN1.annee = :anneeN1');
+            ->leftJoin(Structure::class, 'sN1', \Doctrine\ORM\Query\Expr\Join::WITH, 'eN1.structure = sN1.id')
+            ->where('eN1.annee = :anneeN1')
+            ->andWhere('sN1 = :structure');
+
 
         $etapeN = $qb2
             ->select('eN')
             ->from(Etape::class, 'eN')
+            ->innerJoin(Structure::class, 'sN', \Doctrine\ORM\Query\Expr\Join::WITH, 'eN.structure = sN.id')
             ->where($qb2->expr()->in('eN.code', $etapeN1->getDQL()))
-            ->andWhere('eN.annee = :anneeN')
+            ->andWhere('eN . annee = :anneeN')
+            ->andWhere('sN = :structure')
             ->setParameter('anneeN', $anneeN)
-            ->setParameter('anneeN1', $anneeN1);
+            ->setParameter('anneeN1', $anneeN1)
+            ->setParameter('structure', $structure);
 
-
-        $result = $etapeN->getQuery()->getArrayResult();
+        $result = $etapeN->getQuery()->getResult();
 
         return $result;
     }
@@ -244,5 +254,4 @@ class EtapeService extends AbstractEntityService
 
         return $entity;
     }
-
 }

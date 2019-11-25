@@ -5,6 +5,7 @@ namespace Application\Processus;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Service\Traits\AnneeServiceAwareTrait;
+use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -26,6 +27,7 @@ class ReconductionProcessus extends AbstractProcessus
     use VolumeHoraireEnsServiceAwareTrait;
     use AnneeServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use CentreCoutEpServiceAwareTrait;
 
     protected $etapeService;
 
@@ -39,6 +41,8 @@ class ReconductionProcessus extends AbstractProcessus
 
     protected $contextService;
 
+    protected $centreCoutEpService;
+
 
 
     public function __construct()
@@ -49,11 +53,12 @@ class ReconductionProcessus extends AbstractProcessus
         $this->volumeHoraireEnsService   = $this->getServiceVolumeHoraireEns();
         $this->anneeService              = $this->getServiceAnnee();
         $this->contextService            = $this->getServiceContext();
+        $this->centreCoutEpService       = $this->getServiceCentreCoutEp();
     }
 
 
 
-    public function reconduction(Parameters $datas)
+    public function reconduction($datas)
     {
         if (empty($datas['element']) && empty($datas['etape'])) {
             Throw new \Exception('Aucune donnée à reconduire');
@@ -162,33 +167,46 @@ class ReconductionProcessus extends AbstractProcessus
         $anneeN1      = $this->getServiceContext()->getAnneeSuivante();
         $serviceEtape = $this->getServiceEtape();
         $em           = $this->getEntityManager();
+        $nbEPN1       = 0;
 
         foreach ($datas as $code) {
-            $etapes = $em->getRepository(Etape::class)->findBy(['code' => $code, 'annee' => [$anneeN, $anneeN1]]);
-            foreach ($etapes as $etape) {
-                if ($etape->getAnnee()->getLibelle() == $anneeN->getLibelle()) {
-                    $etapeN = $etape;
-                }
-                if ($etape->getAnnee()->getLibelle() == $anneeN1->getLibelle()) {
-                    $etapeN1 = $etape;
-                }
-            }
+            $etapeN               = $em->getRepository(Etape::class)->findOneBy(['code' => $code, 'annee' => [$anneeN]]);
             $elementsPedagogiqueN = $etapeN->getElementPedagogique();
             foreach ($elementsPedagogiqueN as $ep) {
+                //Cas d'un élément pédagogique historisé a ne pas reconduire
+                if ($ep->estHistorise()) {
+                    continue;
+                }
+                //Retrouver l'EP reconduite sur N1
                 $epN1 = $em->getRepository(ElementPedagogique::class)->findOneBy(['code' => $ep->getCode(), 'annee' => $anneeN1]);
                 if ($epN1) {
-                    $centreCoutN = $ep->getCentreCoutEp();
-                    foreach ($centreCoutN as $cc) {
-                        $epN1->addCentreCoutEp($cc);
+                    $nbEPN1++;
+                    //Suppression CCEP de l'EPN1 avant la reconduction N -> N1
+                    $centreCoutEpN1 = $epN1->getCentreCoutEp();
+                    foreach ($centreCoutEpN1 as $ccepN1) {
+                        $em->remove($ccepN1);
+                    }
+                    $em->flush();
+                    $centreCoutEpN = $ep->getCentreCoutEp();
+                    foreach ($centreCoutEpN as $ccep) {
+                        //cas d'un centre de coût historisé.
+                        if ($ccep->estHistorise()) {
+                            continue;
+                        }
+                        $ccepN1 = $this->centreCoutEpService->newEntity();
+                        $ccepN1->setTypeHeures($ccep->getTypeHeures());
+                        $ccepN1->setCentreCout($ccep->getCentreCout());
+                        $ccepN1->setElementPedagogique($epN1);
+                        $this->centreCoutEpService->save($ccepN1);
                     }
                     $em->persist($epN1);
                 }
-                unset($epN1);
             }
-            $em->flush();
         }
+        //Execution en BDD
+        $em->flush();
 
-        return false;
+        return $nbEPN1;
     }
 
 }

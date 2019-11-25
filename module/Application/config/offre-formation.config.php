@@ -9,30 +9,17 @@ use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 return [
     'router'          => [
         'routes' => [
-            'of' => [
+            'aof' => [
                 'type'          => 'Literal',
                 'options'       => [
-                    'route'    => '/offre-de-formation',
+                    'route'    => '/administration-offre',
                     'defaults' => [
                         'controller' => 'Application\Controller\OffreFormation',
-                        'action'     => 'index',
+                        'action'     => 'administrationOffre',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'default'                  => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/:action[/:id]',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
-                            ],
-                            'defaults'    => [
-                                'action' => 'index',
-                            ],
-                        ],
-                    ],
                     'reconduction'             => [
                         'type'    => 'Segment',
                         'options' => [
@@ -51,7 +38,34 @@ return [
                             ],
                         ],
                     ],
-                    'element'                  => [
+                ],
+            ],
+            'of'  => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/offre-de-formation',
+                    'defaults' => [
+                        'controller' => 'Application\Controller\OffreFormation',
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'default' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:action[/:id]',
+                            'constraints' => [
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+
+                    'element' => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/element',
@@ -122,7 +136,7 @@ return [
                             ],
                         ],
                     ],
-                    'etape'                    => [
+                    'etape'   => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/etape',
@@ -220,23 +234,23 @@ return [
                     'administration' => [
                         'pages' => [
                             'offre-formation' => [
-                                'label'        => 'Offre de formation',
-                                'icon'         => 'glyphicon glyphicon-list-alt',
-                                'route'        => 'of',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
-                                'order'        => 0,
-                                'border-color' => '#111',
-                                'pages'        => [
+                                'label'          => 'Administration de l\'offre de formation',
+                                'icon'           => 'glyphicon glyphicon - list-alt',
+                                'route'          => 'aof',
+                                'resource'       => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'administrationOffre'),
+                                'order'          => 0,
+                                'border - color' => '#111',
+                                'pages'          => [
                                     'reconduction-offre'       => [
                                         'label'    => 'Reconduction de l\'offre de formation complémentaire',
                                         'title'    => 'Reconduction de l\'offre de formation complémentaire',
-                                        'route'    => 'of/reconduction',
+                                        'route'    => 'aof/reconduction',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
                                     ],
                                     'reconduction-centre-cout' => [
                                         'label'    => 'Reconduction des centres de coûts de l\'offre de formation',
                                         'title'    => 'Reconduction des centres de coûts de l\'offre de formation',
-                                        'route'    => 'of/reconduction-centre-cout',
+                                        'route'    => 'aof/reconduction-centre-cout',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
                                     ],
 
@@ -254,7 +268,7 @@ return [
                 /* Global */
                 [
                     'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => ['index', 'search-structures', 'search-niveaux'],
+                    'action'     => ['index', 'search-structures', 'search-niveaux', 'administrationOffre'],
                     'privileges' => Privileges::ODF_VISUALISATION,
                 ],
                 [

@@ -15,4 +15,13 @@ $("document").ready(function ()
         $(location).attr('href', urlBase);
     });
 
+    $("#check-all").click(function () {
+        var check = $(this).prop('checked');
+        if (check) {
+            $("#form-reconduction tbody input[type='checkbox']").prop('checked', 'checked');
+        } else {
+            $("#form-reconduction tbody input[type='checkbox']").prop('checked', '');
+        }
+    });
+
 });

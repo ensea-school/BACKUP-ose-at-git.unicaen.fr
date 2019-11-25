@@ -49,17 +49,33 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <table class="reconduction-offre table table-bordered table-condensed table-hover" >
         <thead>
             <tr>
-                <th></th>
+                <th><input type="checkbox" value="" id="check-all"></th>
                 <th>Code</th>
                 <th>Libellé</th>
+                <th colspan="3">Année 2019 / 2020</th>
+                <th colspan="3">Année 2020 / 2021</th>
+            </tr>
+            <tr>
+                <th colspan="3"></th>
+                <th>EP</th>
+                <th>EP avec CC</th>
+                <th>EP sans CC</th>
+                <th>EP</th>
+                <th>EP avec CC</th>
+                <th>EP sans CC</th>
+
             </tr>
         </thead>
         <tbody>
             <?php foreach ($etapesReconduites as $er): ?>
             <tr>
-                <td><input type="checkbox" name="etapes[]" value="<?= $er->getCode(); ?>"></td>
-                <td><?= $er->getCode() . ' / ' . $er->getAnnee()->getLibelle();  ?></td>
-                <td><?= $er->getLibelle() . ' (' . count($er->getElementPedagogique()) . ' EP)'; ?></td>
+                <td><input type="checkbox" name="etapes[]" value="<?= $er['N']->getCode(); ?>"></td>
+                <td><?= $er['N']->getCode(); ?></td>
+                <td><?= $er['N']->getLibelle() . ' (' . count($er['N']->getElementPedagogique()) . ' EP)'; ?></td>
+                <td><?= count($er['N']->getElementPedagogique()); ?></td>
+                <td><?= count($er['N1']->getElementPedagogique()); ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             <?php endforeach; ?>
         </tbody>

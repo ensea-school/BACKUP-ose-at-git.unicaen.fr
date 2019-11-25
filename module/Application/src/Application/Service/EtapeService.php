@@ -61,6 +61,12 @@ class EtapeService extends AbstractEntityService
 
 
 
+    /**
+     * Retour uniquement les Etapes ayant été reconduites pour l'année universitaire suivante
+     *
+     * @return string
+     */
+
     public function getEtapeReconduit($structure)
     {
         $anneeN  = $this->getServiceContext()->getAnnee();
@@ -77,19 +83,18 @@ class EtapeService extends AbstractEntityService
             ->where('eN1.annee = :anneeN1')
             ->andWhere('sN1 = :structure');
 
-
-        $etapeN = $qb2
-            ->select('eN')
-            ->from(Etape::class, 'eN')
-            ->innerJoin(Structure::class, 'sN', \Doctrine\ORM\Query\Expr\Join::WITH, 'eN.structure = sN.id')
-            ->where($qb2->expr()->in('eN.code', $etapeN1->getDQL()))
-            ->andWhere('eN . annee = :anneeN')
-            ->andWhere('sN = :structure')
+        $qb2 = $this->finderByStructure($structure)
+            ->where($qb2->expr()->in('etp.code', $etapeN1->getDQL()))
+            ->andWhere($qb2->expr()->orX(
+                $qb2->expr()->eq('etp.annee', ':anneeN'),
+                $qb2->expr()->eq('etp.annee', ':anneeN1')
+            ))
             ->setParameter('anneeN', $anneeN)
             ->setParameter('anneeN1', $anneeN1)
-            ->setParameter('structure', $structure);
+            ->setParameter('structure', $structure)
+            ->orderBy('etp.annee', 'desc');
 
-        $result = $etapeN->getQuery()->getResult();
+        $result = $qb2->getQuery()->getResult();
 
         return $result;
     }

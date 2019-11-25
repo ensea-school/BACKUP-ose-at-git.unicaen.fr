@@ -18,6 +18,8 @@ use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Session\Container;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
 
 
 /**
@@ -128,7 +130,7 @@ class OffreFormationController extends AbstractController
                 $element->getPeriode(),
                 $element->getTauxFoad(),
                 $element->getTauxFi(),
-                $elemendockt->getTauxFa(),
+                $element->getTauxFa(),
                 $element->getTauxFc(),
                 $effectifs ? $effectifs->getFi() : null,
                 $effectifs ? $effectifs->getFa() : null,
@@ -138,6 +140,13 @@ class OffreFormationController extends AbstractController
         $csvModel->setFilename('offre-de-formation.csv');
 
         return $csvModel;
+    }
+
+
+
+    public function administrationOffreAction()
+    {
+        return [];
     }
 
 
@@ -204,6 +213,7 @@ class OffreFormationController extends AbstractController
         $this->initFilterHistorique();
         $etapesReconduites = [];
         list($structure, $niveau, $etape) = $this->getParams();
+
         //Get role of user
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
@@ -212,12 +222,32 @@ class OffreFormationController extends AbstractController
         if ($request->isPost()) {
             $datas = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
-            $this->getProcessusReconduction()->reconduireCCFormation($datas);
+            try {
+                $result = $this->getProcessusReconduction()->reconduireCCFormation($datas);
+                if ($result > 0) {
+                    $this->flashMessenger()->addSuccessMessage("Les centres de coût ont bien été reconduit sur le $result 
+                élément(s) pédagogique(s) existant pour la prochaine année universitaire");
+                } else {
+                    $this->flashMessenger()->addWarningMessage("Aucun centre de cout n'a été reconduit car aucun élément
+                pédagogique n'existe pour cette formation pour la prochaine année universitaire.");
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
             $fromPost = true;
         }
 
         if (!empty($structure)) {
-            $etapesReconduites = $this->getServiceEtape()->getEtapeReconduit($structure);
+            $etapesReconduitesResult = $this->getServiceEtape()->getEtapeReconduit($structure);
+            if ($etapesReconduitesResult) {
+                foreach ($etapesReconduitesResult as $etape) {
+                    if ($etape->getAnnee()->getLibelle() == $this->getServiceContext()->getAnnee()->getLibelle()) {
+                        $etapesReconduites[$etape->getCode()]['N'] = $etape;
+                    } else {
+                        $etapesReconduites[$etape->getCode()]['N1'] = $etape;
+                    }
+                }
+            }
         }
 
         //Chargement JS nécessaire uniquement sur cette page

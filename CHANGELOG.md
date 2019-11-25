@@ -19,6 +19,7 @@ author: Laurent Lécluse - DSI - Unicaen
 * Contrats/Avenants : Bug dans les totaux d'heures qui changent dans les documents suite à la génération d'avenants corrigé
 * Correction d'un problème d'arrondi au niveau des calcul de totaux sur les formules de calcul
 * Correction d'un problème d'arrondi au niveau des taux de répartition FI/FA/FC dont la somme n'était pas toujours égale sur les éléments pédagogiques
+* Le référentiel s'affichait sur une seule ligne par intervenant, même en cas de fonctions multiples.
 
 ## Notes de mise à jour
 

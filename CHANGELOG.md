@@ -15,6 +15,10 @@ author: Laurent Lécluse - DSI - Unicaen
 * Pour un rôle de périmètre établissement avec pour possibilité de changer de structure, le changement fonctionne à nouveau (pour l'édition ZF3 uniquement)
 * Dans certains cas, la génération d'états de sortie en PDF produisait des fichiers corrompus.
 * Dans l'export CSV des services, le total était celui des heures compl. uniquement. il est maintenant égal à la somme de toutes les heures (service + compl.)
+* Contrats/Avenants : problème de numéros d'avenants parfois incohérents corrigé
+* Contrats/Avenants : Bug dans les totaux d'heures qui changent dans les documents suite à la génération d'avenants corrigé
+* Correction d'un problème d'arrondi au niveau des calcul de totaux sur les formules de calcul
+* Correction d'un problème d'arrondi au niveau des taux de répartition FI/FA/FC dont la somme n'était pas toujours égale sur les éléments pédagogiques
 
 ## Notes de mise à jour
 

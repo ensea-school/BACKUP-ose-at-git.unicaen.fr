@@ -218,12 +218,36 @@ class OffreFormationController extends AbstractController
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
 
+
+        //Récupération de toutes les étapes éligibles à la reconduction des coûts
+        if (!empty($structure)) {
+            $etapesReconduitesResult = $this->getServiceEtape()->getEtapeReconduit($structure);
+            if ($etapesReconduitesResult) {
+                foreach ($etapesReconduitesResult as $etape) {
+                    if ($etape->getAnnee()->getLibelle() == $this->getServiceContext()->getAnnee()->getLibelle()) {
+                        $etapesReconduites[$etape->getCode()]['N']['etape']    = $etape;
+                        $etapesReconduites[$etape->getCode()]['N']['epWithCc'] = $this->getServiceElementPedagogique()->countEpWithCc($etape);
+                    } else {
+                        $etapesReconduites[$etape->getCode()]['N1']['etape']    = $etape;
+                        $etapesReconduites[$etape->getCode()]['N1']['epWithCc'] = $this->getServiceElementPedagogique()->countEpWithCc($etape);
+                    }
+                }
+            }
+        }
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $datas = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
-                $result = $this->getProcessusReconduction()->reconduireCCFormation($datas);
+                $etapesReconduitesCc = [];
+
+                foreach ($datas as $code) {
+                    if (array_key_exists($code, $etapesReconduites)) {
+                        $etapesReconduitesCc[$code] = $etapesReconduites[$code];
+                    }
+                }
+                $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);
                 if ($result > 0) {
                     $this->flashMessenger()->addSuccessMessage("Les centres de coût ont bien été reconduit sur le $result 
                 élément(s) pédagogique(s) existant pour la prochaine année universitaire");
@@ -235,19 +259,6 @@ class OffreFormationController extends AbstractController
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
             $fromPost = true;
-        }
-
-        if (!empty($structure)) {
-            $etapesReconduitesResult = $this->getServiceEtape()->getEtapeReconduit($structure);
-            if ($etapesReconduitesResult) {
-                foreach ($etapesReconduitesResult as $etape) {
-                    if ($etape->getAnnee()->getLibelle() == $this->getServiceContext()->getAnnee()->getLibelle()) {
-                        $etapesReconduites[$etape->getCode()]['N'] = $etape;
-                    } else {
-                        $etapesReconduites[$etape->getCode()]['N1'] = $etape;
-                    }
-                }
-            }
         }
 
         //Chargement JS nécessaire uniquement sur cette page

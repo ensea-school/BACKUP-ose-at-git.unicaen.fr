@@ -51,6 +51,10 @@ Paramètres possibles :
 * ```login``` : Login
 * ```mot-de-passe``` : Mot de passe (6 caractères minimum)
 * ```creer-intervenant``` : Voulez-vous créer un intervenant pour cet utilisateur ?
+* ```code``` : Code éventuel de l'intervenant
+* ```annee``` : Année universitaire pour laquelle l'intervenant sera créé (ex : 2020 pour 2020/2021)
+* ```statut``` : Code du statut de l'intervenant
+
 
 Exemple de commande lancée avec des paramètres :
 ```bash

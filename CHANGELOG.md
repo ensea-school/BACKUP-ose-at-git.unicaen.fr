@@ -9,6 +9,7 @@ author: Laurent Lécluse - DSI - Unicaen
 
 * Possibilité d'utiliser un service Unoconv présent sur un serveur dédié autre que celui de OSE
 * L'export des services au format CSV est maintenant personnalisable
+* En ligne de commande, il est désormais possible d'indiquer dans quelle année universitaire et sous quel statut un intervenant sera créé, de même qu'un code intervenant
 
 ## Correction de bugs
 

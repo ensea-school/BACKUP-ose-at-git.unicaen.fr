@@ -161,7 +161,7 @@ class ReconductionProcessus extends AbstractProcessus
 
 
 
-    public function reconduireCCFormation($datas)
+    public function reconduireCCFormation($etapes)
     {
         $anneeN       = $this->getServiceContext()->getAnnee();
         $anneeN1      = $this->getServiceContext()->getAnneeSuivante();
@@ -169,7 +169,10 @@ class ReconductionProcessus extends AbstractProcessus
         $em           = $this->getEntityManager();
         $nbEPN1       = 0;
 
-        foreach ($datas as $code) {
+        foreach ($etapes as $code => $etape) {
+            var_dump($etape);
+            echo "next";
+            continue;
             $etapeN               = $em->getRepository(Etape::class)->findOneBy(['code' => $code, 'annee' => [$anneeN]]);
             $elementsPedagogiqueN = $etapeN->getElementPedagogique();
             foreach ($elementsPedagogiqueN as $ep) {

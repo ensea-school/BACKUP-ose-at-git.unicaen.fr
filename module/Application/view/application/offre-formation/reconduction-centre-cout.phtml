@@ -19,7 +19,8 @@
     </div>
 
 </div>
-<h3>Offre de formation disponible pour la prochaine année universitaire</h3>
+
+<h3>Offre de formation disponible pour la prochaine année universitaire :</h3>
 <br/>
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -46,14 +47,17 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </table>
 <?php else: ?>
 <form action="<?= $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
+    <p class="bg-primary" style="padding:0.5em;">Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des centres de coûts d'une année sur l'autre.
+    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.</p>
+    <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
     <table class="reconduction-offre table table-bordered table-condensed table-hover" >
         <thead>
             <tr>
                 <th><input type="checkbox" value="" id="check-all"></th>
                 <th>Code</th>
                 <th>Libellé</th>
-                <th colspan="3">Année 2019 / 2020</th>
-                <th colspan="3">Année 2020 / 2021</th>
+                <th colspan="3" style="text-align:center;">Année 2019 / 2020</th>
+                <th colspan="3" style="text-align:center;">Année 2020 / 2021</th>
             </tr>
             <tr>
                 <th colspan="3"></th>
@@ -69,14 +73,20 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <tbody>
             <?php foreach ($etapesReconduites as $er): ?>
             <tr>
-                <td><input type="checkbox" name="etapes[]" value="<?= $er['N']->getCode(); ?>"></td>
-                <td><?= $er['N']->getCode(); ?></td>
-                <td><?= $er['N']->getLibelle() . ' (' . count($er['N']->getElementPedagogique()) . ' EP)'; ?></td>
-                <td><?= count($er['N']->getElementPedagogique()); ?></td>
-                <td><?= count($er['N1']->getElementPedagogique()); ?></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
+                <td>
+                    <?php if($er['N1']['epWithCc'] > 0): ?>
+                    <span style="color:red;font-size:18px;" class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                    <?php endif; ?>
+                    <input type="checkbox" name="etapes[]" value="<?= $er['N']['etape']->getCode(); ?>">
+                </td>
+                <td><?= $er['N']['etape']->getCode(); ?></td>
+                <td><?= $er['N']['etape']->getLibelle(); ?></td>
+                <td><?= count($er['N']['etape']->getElementPedagogique()); ?></td>
+                <td style="text-align:center;"><?= $er['N']['epWithCc']; ?></td>
+                <td style="text-align:center;"><?= count($er['N']['etape']->getElementPedagogique())-$er['N']['epWithCc'];?></td>
+                <td style="text-align:center;"><?= count($er['N1']['etape']->getElementPedagogique()); ?></td>
+                <td style="text-align:center;"><?= $er['N1']['epWithCc']; ?></td>
+                <td style="text-align:center;"><?= count($er['N1']['etape']->getElementPedagogique())-$er['N1']['epWithCc'];?></td>            </tr>
             <?php endforeach; ?>
         </tbody>
     </table>

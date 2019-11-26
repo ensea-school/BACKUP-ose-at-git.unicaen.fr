@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\ElementTauxRegimes;
+use Application\Entity\Db\Etape;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ElementModulateurServiceAwareTrait;
@@ -64,7 +65,7 @@ class ElementPedagogiqueService extends AbstractEntityService
      *
      * @return array
      */
-    public function getSearchResultByTerm(array $filters = [], $order="gtf.ordre, e.niveau, ep.libelle")
+    public function getSearchResultByTerm(array $filters = [], $order = "gtf.ordre, e.niveau, ep.libelle")
     {
         $annee = $this->getServiceContext()->getAnnee();
 
@@ -164,8 +165,8 @@ where rang = 1
 
     /**
      *
-     * @param string      $sourceCode
-     * @param Annee $annee
+     * @param string $sourceCode
+     * @param Annee  $annee
      *
      * @return ElementPedagogique
      */
@@ -178,6 +179,30 @@ where rang = 1
         }
 
         return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
+    }
+
+
+
+    /**
+     *
+     * @param Etape $etape
+     *
+     * @return int $n nombre d'élément pédagogique avec un centre de coût.
+     */
+    public function countEpWithCc(Etape $etape)
+    {
+        $n                    = 0;
+        $elementsPedagogiques = $etape->getElementPedagogique();
+        if (!empty($elementsPedagogiques)) {
+            foreach ($elementsPedagogiques as $ep) {
+                $cc = $ep->getCentreCoutEp()->toArray();
+                if (!empty($cc)) {
+                    $n += 1;
+                }
+            }
+        }
+
+        return $n;
     }
 
 
@@ -305,10 +330,10 @@ where rang = 1
         ]);
 
         $sourceOse = $this->getServiceSource()->getOse();
-        $hasTaux = ($tauxFi || $tauxFc || $tauxFa);
+        $hasTaux   = ($tauxFi || $tauxFc || $tauxFa);
 
         if ($elementPedagogique->getSource() !== $sourceOse) {
-            if ($hasTaux){
+            if ($hasTaux) {
                 if ($etr) {
                     if ($etr->getSource() != $sourceOse) {
                         $etr->setSource($sourceOse);
@@ -323,7 +348,7 @@ where rang = 1
                 $etr->setTauxFi($tauxFi);
                 $etr->setTauxFc($tauxFc);
                 $etr->setTauxFa($tauxFa);
-            }else{
+            } else {
                 if ($etr && $etr->getSource() == $sourceOse) {
                     $etr->setHistoDestruction(new \DateTime);
                     $etr->setHistoDestructeur($this->getServiceContext()->getUtilisateur());
@@ -334,8 +359,8 @@ where rang = 1
 
             $this->getEntityManager()->persist($etr);
             $this->getEntityManager()->flush($etr);
-        }else{
-            if (!$hasTaux){
+        } else {
+            if (!$hasTaux) {
                 $tauxFi = $elementPedagogique->getFi();
                 $tauxFc = $elementPedagogique->getFc();
                 $tauxFa = $elementPedagogique->getFa();

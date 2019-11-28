@@ -8,6 +8,7 @@ use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
 use Application\Service\Traits\CheminPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
+use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
@@ -27,6 +28,7 @@ class ReconductionProcessus extends AbstractProcessus
     use AnneeServiceAwareTrait;
     use ContextServiceAwareTrait;
     use CentreCoutEpServiceAwareTrait;
+    use ElementModulateurServiceAwareTrait;
 
     protected $etapeService;
 
@@ -53,6 +55,7 @@ class ReconductionProcessus extends AbstractProcessus
         $this->anneeService              = $this->getServiceAnnee();
         $this->contextService            = $this->getServiceContext();
         $this->centreCoutEpService       = $this->getServiceCentreCoutEp();
+        $this->elementModulateurService  = $this->getServiceElementModulateur();
     }
 
 
@@ -169,15 +172,26 @@ class ReconductionProcessus extends AbstractProcessus
         $nbEPN1       = 0;
 
         foreach ($etapes as $code => $etape) {
-            $etapeN               = $em->getRepository(Etape::class)->findOneBy(['code' => $code, 'annee' => [$anneeN]]);
-            $elementsPedagogiqueN = $etapeN->getElementPedagogique();
+            $etapeN                     = $etape['N']['etape'];
+            $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
+            $elementsPedagogiqueNByCode = [];
+            foreach ($elementsPedagogiqueN as $ep) {
+                $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+            }
+            $etapeN1                     = $etape['N1']['etape'];
+            $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
+            $elementsPedagogiqueN1ByCode = [];
+            foreach ($elementsPedagogiqueN1 as $epN1) {
+                $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+            }
+
             foreach ($elementsPedagogiqueN as $ep) {
                 //Cas d'un élément pédagogique historisé a ne pas reconduire
                 if ($ep->estHistorise()) {
                     continue;
                 }
                 //Retrouver l'EP reconduite sur N1
-                $epN1 = $em->getRepository(ElementPedagogique::class)->findOneBy(['code' => $ep->getCode(), 'annee' => $anneeN1]);
+                $epN1 = (array_key_exists($ep->getCode(), $elementsPedagogiqueN1ByCode)) ? $elementsPedagogiqueN1ByCode[$ep->getCode()] : false;
                 if ($epN1) {
                     $nbEPN1++;
                     //Suppression CCEP de l'EPN1 avant la reconduction N -> N1
@@ -208,4 +222,49 @@ class ReconductionProcessus extends AbstractProcessus
         return $nbEPN1;
     }
 
+
+
+    public function reconduireModulateurFormation($etapes)
+    {
+        $em     = $this->getEntityManager();
+        $nbEPN1 = 0;
+
+
+        foreach ($etapes as $code => $etape) {
+            $etapeN                     = $etape['N']['etape'];
+            $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
+            $elementsPedagogiqueNByCode = [];
+            foreach ($elementsPedagogiqueN as $ep) {
+                $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+            }
+            $etapeN1                     = $etape['N1']['etape'];
+            $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
+            $elementsPedagogiqueN1ByCode = [];
+            foreach ($elementsPedagogiqueN1 as $epN1) {
+                $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+            }
+
+            foreach ($elementsPedagogiqueN as $ep) {
+                $epN1 = (array_key_exists($ep->getCode(), $elementsPedagogiqueN1ByCode)) ? $elementsPedagogiqueN1ByCode[$ep->getCode()] : false;
+                if ($epN1) {
+                    $nbEPN1++;
+                    $elementsModulateursN1 = $epN1->getElementModulateur();
+                    foreach ($elementsModulateursN1 as $epmepN1) {
+                        $em->remove($epmepN1);
+                    }
+                    $em->flush();
+                    $elementsModulateurs = $ep->getElementModulateur();
+                    foreach ($elementsModulateurs as $epm) {
+                        $epmepN1 = $this->elementModulateurService->newEntity();
+                        $epmepN1->setModulateur($epm->getModulateur());
+                        $epmepN1->setElement($epN1);
+                        $em->persist($epmepN1);
+                    }
+                }
+            }
+            $em->flush();
+        }
+
+        return $nbEPN1;
+    }
 }

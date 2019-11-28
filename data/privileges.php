@@ -21,6 +21,8 @@ return [
             'types-diplome-edition'              => 'Types de diplômes (édition)',
             'reconduction-offre'                 => 'Prolongation de l\'offre l\'année suivante',
             'reconduction-centre-cout'           => 'Reconduction des centres de coûts de l\'offre de formation',
+            'reconduction-modulateur'            => 'Reconduction des modualteurs de l\'offre de formation',
+
         ],
     ],
 

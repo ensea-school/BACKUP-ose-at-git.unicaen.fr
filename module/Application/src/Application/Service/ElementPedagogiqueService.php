@@ -208,6 +208,30 @@ where rang = 1
 
 
     /**
+     *
+     * @param Etape $etape
+     *
+     * @return int $n nombre d'élément pédagogique avec un modulateur
+     */
+    public function countEpWithModulateur(Etape $etape)
+    {
+        $n                    = 0;
+        $elementsPedagogiques = $etape->getElementPedagogique();
+        if (!empty($elementsPedagogiques)) {
+            foreach ($elementsPedagogiques as $ep) {
+                $cc = $ep->getElementModulateur()->toArray();
+                if (!empty($cc)) {
+                    $n += 1;
+                }
+            }
+        }
+
+        return $n;
+    }
+
+
+
+    /**
      * Filtre la liste des éléments selon le contexte courant
      *
      * @param QueryBuilder|null $qb

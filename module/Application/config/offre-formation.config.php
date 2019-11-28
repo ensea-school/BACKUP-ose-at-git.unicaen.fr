@@ -38,6 +38,15 @@ return [
                             ],
                         ],
                     ],
+                    'reconduction-modulateur'  => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/reconduction-modulateur',
+                            'defaults' => [
+                                'action' => 'reconductionModulateur',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'of'  => [
@@ -253,6 +262,12 @@ return [
                                         'route'    => 'aof/reconduction-centre-cout',
                                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionCentreCout'),
                                     ],
+                                    'reconduction-modulateur'  => [
+                                        'label'    => 'Reconduction des modulateurs de l\'offre de formation',
+                                        'title'    => 'Reconduction des modulateurs de l\'offre de formation',
+                                        'route'    => 'aof/reconduction-modulateur',
+                                        'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconductionModulateur'),
+                                    ],
 
                                 ],
                             ],
@@ -285,6 +300,11 @@ return [
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => ['reconductionCentreCout'],
                     'privileges' => Privileges::ODF_RECONDUCTION_CENTRE_COUT,
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['reconductionModulateur'],
+                    'privileges' => Privileges::ODF_RECONDUCTION_MODULATEUR,
                 ],
 
                 /* Etapes */

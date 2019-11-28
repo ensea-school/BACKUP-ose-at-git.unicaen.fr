@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <!---------------- Champ de sélection d'une structure --------------->
         <div class="panel panel-default">
-            <div class="panel-heading">Composante</div>
+            <div class="panel-heading">Veuillez sélectionner une composante : </div>
             <div class="panel-body">
                 <?php
                 $selectStructure = new \Zend\Form\Element\Select('structure');
@@ -18,6 +18,12 @@
         </div>
     </div>
 
+</div>
+
+<div class="alert alert-warning" role="alert">
+    <strong>IMPORTANT</strong><br/>
+    Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des centres de coûts d'une année sur l'autre.
+    Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.
 </div>
 
 <h3>Offre de formation disponible pour la prochaine année universitaire :</h3>
@@ -50,8 +56,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
         <p> <a href="<?= $this->url('aof/reconduction-centre-cout') . "?structure=" . $structure->getId(); ?>" >< Retour à la liste des formations.</a></p>
     <?php else: ?>
         <form action="<?= $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
-            <p class="bg-primary" style="padding:0.5em;">Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des centres de coûts d'une année sur l'autre.
-            Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.</p>
+
             <p style="text-align:right;"><strong>EP</strong> = Elément pédagogique / <strong>CC</strong> = Centre de coût</p>
             <table class="reconduction-offre table table-bordered table-condensed table-hover" >
                 <thead>

@@ -279,6 +279,75 @@ class OffreFormationController extends AbstractController
 
 
 
+    public function reconductionModulateurAction()
+    {
+        $this->initFilterHistorique();
+        list($structure, $niveau, $etape) = $this->getParams();
+        $etapesReconduites = [];
+        $fromPost          = 0;
+        $role              = $this->getServiceContext()->getSelectedIdentityRole();
+        $structures        = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
+
+        //Récupération de toutes les étapes éligibles à la reconduction des coûts
+        if (!empty($structure)) {
+            $etapesReconduitesResult = $this->getServiceEtape()->getEtapeReconduit($structure);
+            if ($etapesReconduitesResult) {
+                foreach ($etapesReconduitesResult as $etape) {
+                    if ($etape->getAnnee()->getLibelle() == $this->getServiceContext()->getAnnee()->getLibelle()) {
+                        $etapesReconduites[$etape->getCode()]['N']['etape']            = $etape;
+                        $etapesReconduites[$etape->getCode()]['N']['epWithModulateur'] = $this->getServiceElementPedagogique()->countEpWithModulateur($etape);
+                    } else {
+                        $etapesReconduites[$etape->getCode()]['N1']['etape']            = $etape;
+                        $etapesReconduites[$etape->getCode()]['N1']['epWithModulateur'] = $this->getServiceElementPedagogique()->countEpWithModulateur($etape);
+                    }
+                }
+            }
+        }
+
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $fromPost = true;
+            $datas    = $request->getPost();
+            //Reconduire les modulateurs des EP de l'étape.
+            try {
+                $etapesReconduitesCc = [];
+
+                foreach (current($datas) as $code) {
+
+                    if (array_key_exists($code, $etapesReconduites)) {
+                        $etapesReconduitesCc[$code] = $etapesReconduites[$code];
+                    }
+                }
+                $result = $this->getProcessusReconduction()->reconduireModulateurFormation($etapesReconduitesCc);
+                if ($result > 0) {
+                    $this->flashMessenger()->addSuccessMessage("Les modulateurs ont bien été reconduit sur le $result 
+                élément(s) pédagogique(s) existant pour la prochaine année universitaire");
+                } else {
+                    $this->flashMessenger()->addWarningMessage("Aucun modulateur n'a été reconduit car aucun élément
+                pédagogique n'existe pour cette formation pour la prochaine année universitaire.");
+                }
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+            $fromPost = true;
+        }
+
+        //Chargement JS nécessaire uniquement sur cette page
+        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
+        $headScript        = $viewHelperManager->get('headScript');
+        $headScript->offsetSetFile(100, '/js/reconduction-modulateur.js');
+
+        return [
+            'structures'        => $structures,
+            'etapesReconduites' => $etapesReconduites,
+            'structure'         => $structure,
+            'fromPost'          => $fromPost,
+        ];
+    }
+
+
+
     protected function initFilters()
     {
         $this->initFilterAnnee();

@@ -139,6 +139,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
     const ODF_ETAPE_VISUALISATION                             = 'odf-etape-visualisation';
     const ODF_RECONDUCTION_OFFRE                              = 'odf-reconduction-offre';
     const ODF_RECONDUCTION_CENTRE_COUT                        = 'odf-reconduction-centre-cout';
+    const ODF_RECONDUCTION_MODULATEUR                         = 'odf-reconduction-modulateur';
     const ODF_EXPORT_CSV                                      = 'odf-export-csv';
     const ODF_GRANDS_TYPES_DIPLOME_EDITION                    = 'odf-grands-types-diplome-edition';
     const ODF_GRANDS_TYPES_DIPLOME_VISUALISATION              = 'odf-grands-types-diplome-visualisation';

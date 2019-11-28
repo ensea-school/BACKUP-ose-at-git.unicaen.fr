@@ -170,7 +170,6 @@ class OffreFormationController extends AbstractController
         if ($request->isPost()) {
             $datas    = $request->getPost();
             $fromPost = true;
-
             //Ajout du mapping des EtapesN et EtapesN1 pour pouvoir reconduire un element pédagogique sur une etape déjà reconduite.
             $datas['mappingEtape'] = $mappingEtape;
             $reconductionProcessus = $this->getProcessusReconduction();
@@ -211,6 +210,7 @@ class OffreFormationController extends AbstractController
     public function reconductionCentreCoutAction()
     {
         $this->initFilterHistorique();
+        $fromPost          = false;
         $etapesReconduites = [];
         list($structure, $niveau, $etape) = $this->getParams();
 
@@ -237,12 +237,14 @@ class OffreFormationController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $datas = $request->getPost();
+            $fromPost = true;
+            $datas    = $request->getPost();
             //Reconduire les centres de coût des EP de l'étape.
             try {
                 $etapesReconduitesCc = [];
 
-                foreach ($datas as $code) {
+                foreach (current($datas) as $code) {
+
                     if (array_key_exists($code, $etapesReconduites)) {
                         $etapesReconduitesCc[$code] = $etapesReconduites[$code];
                     }
@@ -271,6 +273,7 @@ class OffreFormationController extends AbstractController
             'structures'        => $structures,
             'structure'         => $structure,
             'etapesReconduites' => $etapesReconduites,
+            'fromPost'          => $fromPost,
         ];
     }
 

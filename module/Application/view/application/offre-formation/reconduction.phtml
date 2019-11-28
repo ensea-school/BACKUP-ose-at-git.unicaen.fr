@@ -51,12 +51,11 @@
         </table>
         <?php else: ?>
             <?php if($fromPost): ?>
-               <p> <a href="<?= $this->url('of/reconduction') . "?structure=" . $structure->getId(); ?>" >< Retour à la liste des formations.</a></p>
+               <p> <a href="<?= $this->url('aof/reconduction') . "?structure=" . $structure->getId(); ?>" >< Retour à la liste des formations.</a></p>
             <?php else: ?>
             <?php if($reconductionTotale == 'non'): ?>
-                <div class="well well-sm">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année universitaire.</div>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
-
+                    <p class="bg-primary" style="padding:0.5em;">Vous pouvez ici reconduire les formations et éléments pédagogiques de l'année en cours pour l'année universitaire prochaine. Les lignes avec fond gris sont déjà reconduites pour l'année prochaine.</p>
                     <?php foreach ($offresComplementaires as $ec): ?>
                         <?php if($ec['reconduction_partiel'] == 'oui'): ?>
                             <table class="reconduction-offre table table-bordered table-condensed table-hover">
@@ -66,7 +65,9 @@
                             <thead>
                                 <tr class="<?php if($ec['reconduction'] == 'oui'){echo "active";}else{echo "info";}?>">
                                     <?php if($ec['reconduction'] == 'oui'): ?>
-                                        <th><input title="Formation déjà reconduite pour l'année prochaine"  type="checkbox" class="checkbox-formation" disabled="disabled" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
+                                        <th>
+                                            <span style="color:#000000;font-size:14px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Formation déjà reconduite pour l'année prochaine"></span>
+                                            <input type="checkbox" class="checkbox-formation" disabled="disabled" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
                                     <?php else: ?>
                                         <th><input type="checkbox" class="checkbox-formation" checked="checked" name="etape[]" value="<?= $ec['etape']->getId(); ?>"/></th>
                                     <?php endif; ?>
@@ -94,7 +95,8 @@
                                     <tr id="<?= $ep['element']->getId() ?>" class="<?php if($ep['reconduction'] == 'oui'){echo "active";}?>">
                                         <?php if($ep['reconduction'] == 'oui'): ?>
                                             <td>
-                                                <input title="Elément pédagogique déjà reconduit pour l'année prochaine" class="checkbox-element" disabled="disabled" type="checkbox" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep['element']->getId(); ?>"/>
+                                                <span style="color:#000000;font-size:14px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" title="Elément pédagogique déjà reconduit pour l'année prochaine"></span>
+                                                <input class="checkbox-element" disabled="disabled" type="checkbox" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep['element']->getId(); ?>"/>
                                             </td>
                                         <?php else: ?>
                                             <td><input class="checkbox-element" type="checkbox" checked="checked" name="element[<?php echo $ec['etape']->getId();?>][]" value="<?= $ep['element']->getId(); ?>"/></td>

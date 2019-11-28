@@ -11,7 +11,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
-use Zend\Stdlib\Parameters;
 
 /**
  * Description of ReconductionProcessus
@@ -170,9 +169,6 @@ class ReconductionProcessus extends AbstractProcessus
         $nbEPN1       = 0;
 
         foreach ($etapes as $code => $etape) {
-            var_dump($etape);
-            echo "next";
-            continue;
             $etapeN               = $em->getRepository(Etape::class)->findOneBy(['code' => $code, 'annee' => [$anneeN]]);
             $elementsPedagogiqueN = $etapeN->getElementPedagogique();
             foreach ($elementsPedagogiqueN as $ep) {

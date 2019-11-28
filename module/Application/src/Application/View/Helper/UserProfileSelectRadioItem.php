@@ -30,7 +30,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     {
         $html = parent::render();
 
-        $perimetre = $this->role->getPerimetre();
+        $perimetre = $this->role ? $this->role->getPerimetre() : null;
 
         if ($this->role->getPeutChangerStructure() && $perimetre && $perimetre->isEtablissement()) {
             $selectClass = 'user-profile-select-input-structure';

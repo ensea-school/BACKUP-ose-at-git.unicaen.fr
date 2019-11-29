@@ -35,7 +35,9 @@ echo $this->form()->openTag($form);
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="sql">
 
-        <h2>Requête SQL de document <small>(facultative)</small></h2>
+        <h2>Requête SQL de document
+            <small>(facultative)</small>
+        </h2>
         <div class="panel panel-default etat-sortie-requete">
             <div class="panel-heading" role="tab">
                 <label>Champ clé : </label>
@@ -70,6 +72,7 @@ echo $this->form()->openTag($form);
     </div>
     <div role="tabpanel" class="tab-pane" id="csv">
         <?= $this->formControlGroup($form->get('csv-params')) ?>
+        <?= $this->formControlGroup($form->get('csv-traitement')) ?>
 
     </div>
     <div role="tabpanel" class="tab-pane" id="pdf">
@@ -92,22 +95,29 @@ echo $this->form()->closeTag();
         $.widget("ose.etatSortieSaisir", {
             requeteEditor: null,
             paramsEditor: null,
-            traitementEditor: null,
+            traitementPdfEditor: null,
+            traitementCsvEditor: null,
             blocs: {},
 
             save: function ()
             {
                 var csvParams = $("<input>")
                     .attr("type", 'hidden')
-                    .attr("name",'csv-params')
+                    .attr("name", 'csv-params')
                     .val(this.paramsEditor.getSession().getValue());
                 this.element.append($(csvParams));
 
                 var pdfTraitement = $("<input>")
                     .attr("type", 'hidden')
-                    .attr("name",'pdf-traitement')
-                    .val(this.traitementEditor.getSession().getValue());
+                    .attr("name", 'pdf-traitement')
+                    .val(this.traitementPdfEditor.getSession().getValue());
                 this.element.append($(pdfTraitement));
+
+                var csvTraitement = $("<input>")
+                    .attr("type", 'hidden')
+                    .attr("name", 'csv-traitement')
+                    .val(this.traitementCsvEditor.getSession().getValue());
+                this.element.append($(csvTraitement));
 
                 var requete = $("<input>")
                     .attr("type", "hidden")
@@ -168,10 +178,15 @@ echo $this->form()->closeTag();
                 that.paramsEditor.getSession().setMode("ace/mode/json");
                 that.paramsEditor.setOptions(options);
 
-                that.traitementEditor = ace.edit("pdf-traitement");
-                that.traitementEditor.setTheme("ace/theme/github");
-                that.traitementEditor.getSession().setMode({path:"ace/mode/php", inline:true});
-                that.traitementEditor.setOptions(options);
+                that.traitementPdfEditor = ace.edit("pdf-traitement");
+                that.traitementPdfEditor.setTheme("ace/theme/github");
+                that.traitementPdfEditor.getSession().setMode({path: "ace/mode/php", inline: true});
+                that.traitementPdfEditor.setOptions(options);
+
+                that.traitementCsvEditor = ace.edit("csv-traitement");
+                that.traitementCsvEditor.setTheme("ace/theme/github");
+                that.traitementCsvEditor.getSession().setMode({path: "ace/mode/php", inline: true});
+                that.traitementCsvEditor.setOptions(options);
 
                 that.requeteEditor = ace.edit("requete");
                 that.requeteEditor.setTheme("ace/theme/github");

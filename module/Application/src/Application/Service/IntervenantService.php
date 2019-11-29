@@ -3,10 +3,12 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\TypeIntervenant;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementServiceAwareTrait;
 use Application\Service\Traits\MiseEnPaiementIntervenantStructureServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
@@ -34,6 +36,7 @@ class IntervenantService extends AbstractEntityService
     use MiseEnPaiementIntervenantStructureServiceAwareTrait;
     use WorkflowServiceAwareTrait;
     use SourceServiceAwareTrait;
+    use AnneeServiceAwareTrait;
 
 
 
@@ -322,34 +325,47 @@ class IntervenantService extends AbstractEntityService
 
 
     /**
-     * @param string      $nom
-     * @param string      $prenom
-     * @param \DateTime   $dateNaissance
-     * @param string|null $statut
+     * @param string    $nom
+     * @param string    $prenom
+     * @param \DateTime $dateNaissance
+     * @param array     $params
+     *
+     * Params :
+     *   code   : null | string                     => généré si non fourni
+     *   annee  : null | int | Annee                => Année en cours si non fournie
+     *   statut : null | string | StatutIntervenant => AUTRES si non fourni, si string alors c'est le code du statut
      *
      * @return Intervenant
      */
-    public function creerIntervenant(string $nom, string $prenom, \DateTime $dateNaissance, string $statut = null): Intervenant
+    public function creerIntervenant(string $nom, string $prenom, \DateTime $dateNaissance, array $params = []): Intervenant
     {
-        $code = uniqid('OSE');
+        if (!isset($params['code']) || empty($params['code'])) {
+            $params['code'] = uniqid('OSE');
+        }
 
-        if ($statut) {
-            $statutEntity = $this->getServiceStatutIntervenant()->getByCode($statut);
-        } else {
-            $statutEntity = $this->getServiceStatutIntervenant()->getAutres();
+        if (!isset($params['annee']) || empty($params['annee'])) {
+            $params['annee'] = $this->getServiceContext()->getAnnee();
+        } elseif (!$params['annee'] instanceof Annee) {
+            $params['annee'] = $this->getServiceAnnee()->get($params['annee']);
+        }
+
+        if (!isset($params['statut']) || empty($params['statut'])) {
+            $params['statut'] = $this->getServiceStatutIntervenant()->getAutres();
+        } elseif (!$params['statut'] instanceof StatutIntervenant) {
+            $params['statut'] = $this->getServiceStatutIntervenant()->getByCode($params['statut']);
         }
 
         $intervenant = new Intervenant;
-        $intervenant->setAnnee($this->getServiceContext()->getAnnee());
-        $intervenant->setCode($code);
 
+        $intervenant->setCode($params['code']);
         $intervenant->setSource($this->getServiceSource()->getOse());
-        $intervenant->setSourceCode($code);
+        $intervenant->setSourceCode($params['code']);
 
         $intervenant->setNomUsuel($nom);
         $intervenant->setPrenom($prenom);
         $intervenant->setDateNaissance($dateNaissance);
-        $intervenant->setStatut($statutEntity);
+        $intervenant->setAnnee($params['annee']);
+        $intervenant->setStatut($params['statut']);
 
         $this->save($intervenant);
 

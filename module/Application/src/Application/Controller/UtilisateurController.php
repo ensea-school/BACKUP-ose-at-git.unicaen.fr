@@ -19,6 +19,7 @@ class UtilisateurController extends BaseController
     use UserServiceAwareTrait;
 
 
+
     /**
      * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
      * La sélection est mémorisé en session par le service UserContext.
@@ -29,7 +30,7 @@ class UtilisateurController extends BaseController
 
         $role        = $this->serviceUserContext->getSelectedIdentityRole();
         /* @var $role Role */
-        $structureId = $this->getRequest()->getPost('structure-'.$role->getRoleId());
+        $structureId = $this->getRequest()->getPost('structure-' . $role->getRoleId());
 
         if ($role->getPerimetre() && $role->getPerimetre()->isEtablissement()) {
             $structure = null;
@@ -39,12 +40,11 @@ class UtilisateurController extends BaseController
             $this->getServiceContext()->setStructure($structure);
 
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>%s.",
-                    $role->getRoleName(),
-                    $structure ? " pour la structure <strong>$structure</strong>" : null);
-        }
-        else {
+                $role->getRoleName(),
+                $structure ? " pour la structure <strong>$structure</strong>" : null);
+        } else {
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role);
-            if ($s = $role->getStructure()){
+            if ($s = $role->getStructure()) {
                 $this->getServiceContext()->setStructure($s);
             }
         }
@@ -74,8 +74,8 @@ class UtilisateurController extends BaseController
 
     public function creationAction()
     {
-        $data = $this->getRequest()->getParam('data');
-        $data = json_decode(base64_decode($data));
+        $data                     = $this->getRequest()->getParam('data');
+        $data                     = json_decode(base64_decode($data));
         $data->{'date-naissance'} = \DateTime::createFromFormat('d/m/Y', $data->{'date-naissance'});
 
         $this->getServiceUtilisateur()->creerUtilisateur(
@@ -84,7 +84,7 @@ class UtilisateurController extends BaseController
             $data->{'date-naissance'},
             $data->login,
             $data->{'mot-de-passe'},
-            $data->{'creer-intervenant'}
+            (array)$data->params
         );
     }
 }

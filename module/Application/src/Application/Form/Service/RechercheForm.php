@@ -208,7 +208,7 @@ class RechercheForm extends AbstractForm implements EntityManagerAwareInterface
         $this->addActionButton('submit-resume', 'Afficher (résumé)', $this->getUrl('service/resume'), true);
         $this->addActionButton('submit-details', 'Afficher (détails)', $this->getUrl('service'));
         if ($this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXPORT_CSV))) {
-            $this->addActionButton('submit-export-csv', 'Exporter (CSV)', $this->getUrl('service/export'));
+            $this->addActionButton('submit-export-csv', 'Exporter (CSV)', $this->getUrl('service/export-csv'));
         }
         if ($this->getServiceAuthorize()->isAllowed(Privileges::getResourceId(Privileges::ENSEIGNEMENT_EXPORT_PDF))) {
             $this->addActionButton('submit-export-pdf', 'Exporter (PDF)', $this->getUrl('service/export-pdf'));

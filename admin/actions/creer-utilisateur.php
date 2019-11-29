@@ -12,6 +12,36 @@ $params = $c->getInputs([
 ]);
 
 $params['date-naissance'] = $params['date-naissance']->format('d/m/Y');
-$params = base64_encode(json_encode($params));
+$params['params']         = ['creer-intervenant' => $params['creer-intervenant']];
+unset($params['creer-intervenant']);
 
+if ($params['params']['creer-intervenant']) {
+    if ($c->hasOption('code')) {
+        $params['params']['code'] = $c->getOption('code');
+    }
+
+
+    $bdd = $oa->getBdd();
+
+    $annee                     = $bdd->select("SELECT libelle FROM annee WHERE id = (SELECT valeur FROM parametre WHERE nom = 'annee')", [], $bdd::FETCH_ONE)['LIBELLE'];
+    $params['params']['annee'] = $c->getInput('annee', 'Année universitaire (' . $annee . ' par défaut, sinon entrez 2020 pour 2020/2021, etc.)');
+
+    if (!$c->hasOption('statut')) {
+        $statuts = $bdd->select("SELECT source_code CODE, libelle FROM statut_intervenant WHERE histo_destruction IS NULL AND source_code <> 'AUTRES' ORDER BY ordre");
+        $c->println('Statut de \'intervenant ("AUTRES" par défaut, sinon entrez le code parmi les propositions suivantes) :');
+        $maxCodeLength = 0;
+        foreach ($statuts as $statut) {
+            $sLen = strlen($statut['CODE']);
+            if ($sLen > $maxCodeLength) $maxCodeLength = $sLen;
+        }
+        foreach ($statuts as $statut) {
+            $c->print(' * ');
+            $c->print(str_pad($statut['CODE'], $maxCodeLength, ' '), $c::COLOR_CYAN);
+            $c->println(' ' . $statut['LIBELLE']);
+        }
+    }
+    $params['params']['statut'] = $c->getInput('statut');
+}
+
+$params = base64_encode(json_encode($params));
 $oa->exec("creer-utilisateur --data=$params");

@@ -5330,6 +5330,17 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
+        'CSV_TRAITEMENT' => 
+        array (
+          'name' => 'CSV_TRAITEMENT',
+          'type' => 'CLOB',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'ETAT_VOLUME_HORAIRE' => 
@@ -25942,11 +25953,11 @@ END OSE_CHARGENS;',
 
   FUNCTION LIKED( haystack VARCHAR2, needle VARCHAR2 ) RETURN NUMERIC;
 
-  FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 4 ) RETURN FLOAT;
 
-  FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 4 ) RETURN FLOAT;
 
-  FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 4 ) RETURN FLOAT;
 
   PROCEDURE SYNC_LOG( msg VARCHAR2 );
 
@@ -26147,7 +26158,7 @@ END OSE_DIVERS;',
     RETURN;
   END;
 
-  PROCEDURE CALCUL_TAUX( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, r_fi OUT FLOAT, r_fc OUT FLOAT, r_fa OUT FLOAT, arrondi NUMERIC DEFAULT 15 ) IS
+  PROCEDURE CALCUL_TAUX( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, r_fi OUT FLOAT, r_fc OUT FLOAT, r_fa OUT FLOAT, arrondi NUMERIC DEFAULT 4 ) IS
     nt FLOAT;
     bi FLOAT;
     bc FLOAT;
@@ -26196,7 +26207,7 @@ END OSE_DIVERS;',
   END;
 
 
-  FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
+  FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 4 ) RETURN FLOAT IS
     ri FLOAT;
     rc FLOAT;
     ra FLOAT;
@@ -26205,7 +26216,7 @@ END OSE_DIVERS;',
     RETURN ri;
   END;
 
-  FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
+  FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 4 ) RETURN FLOAT IS
     ri FLOAT;
     rc FLOAT;
     ra FLOAT;
@@ -26214,7 +26225,7 @@ END OSE_DIVERS;',
     RETURN rc;
   END;
 
-  FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
+  FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 4 ) RETURN FLOAT IS
     ri FLOAT;
     rc FLOAT;
     ra FLOAT;
@@ -26996,9 +27007,11 @@ END OSE_FORMULE;',
         fr.heures_compl_fc_majorees := ROUND(t_res(code).heures_compl_fc_majorees,2);
         fr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel,2);
         fr.total := COALESCE(intervenant.total,
-              fr.service_fi + fr.service_fa + fr.service_fc + fr.service_referentiel
-              + fr.heures_compl_fi + fr.heures_compl_fa + fr.heures_compl_fc
-              + fr.heures_compl_fc_majorees + fr.heures_compl_referentiel
+              ROUND(
+                t_res(code).service_fi + t_res(code).service_fa + t_res(code).service_fc + t_res(code).service_referentiel
+                + t_res(code).heures_compl_fi + t_res(code).heures_compl_fa + t_res(code).heures_compl_fc
+                + t_res(code).heures_compl_fc_majorees + t_res(code).heures_compl_referentiel
+              ,2)
         );
 
         fr.service_du := ROUND(CASE
@@ -27046,8 +27059,11 @@ END OSE_FORMULE;',
           frs.heures_compl_fa            := ROUND(t_res(code).heures_compl_fa, 2);
           frs.heures_compl_fc            := ROUND(t_res(code).heures_compl_fc, 2);
           frs.heures_compl_fc_majorees   := ROUND(t_res(code).heures_compl_fc_majorees, 2);
-          frs.total                      := frs.service_fi + frs.service_fa + frs.service_fc
-                 + frs.heures_compl_fi + frs.heures_compl_fa + frs.heures_compl_fc + frs.heures_compl_fc_majorees;
+          frs.total                      := ROUND(
+                t_res(code).service_fi + t_res(code).service_fa + t_res(code).service_fc
+                + t_res(code).heures_compl_fi + t_res(code).heures_compl_fa + t_res(code).heures_compl_fc
+                + t_res(code).heures_compl_fc_majorees
+              ,2);
           IF frs.id IS NULL THEN
             frs.id := formule_resultat_servic_id_seq.nextval;
             INSERT INTO formule_resultat_service VALUES frs;
@@ -27060,7 +27076,7 @@ END OSE_FORMULE;',
           frsr.service_referentiel_id    := t_res(code).service_referentiel_id;
           frsr.service_referentiel       := ROUND(t_res(code).service_referentiel, 2);
           frsr.heures_compl_referentiel  := ROUND(t_res(code).heures_compl_referentiel, 2);
-          frsr.total                     := frsr.service_referentiel + frsr.heures_compl_referentiel;
+          frsr.total                     := ROUND(t_res(code).service_referentiel + t_res(code).heures_compl_referentiel,2);
           IF frsr.id IS NULL THEN
             frsr.id := formule_resultat_servic_id_seq.nextval;
             INSERT INTO formule_resultat_service_ref VALUES frsr;
@@ -27078,8 +27094,11 @@ END OSE_FORMULE;',
           frvh.heures_compl_fa           := ROUND(t_res(code).heures_compl_fa, 2);
           frvh.heures_compl_fc           := ROUND(t_res(code).heures_compl_fc, 2);
           frvh.heures_compl_fc_majorees  := ROUND(t_res(code).heures_compl_fc_majorees, 2);
-          frvh.total                     := frvh.service_fi + frvh.service_fa + frvh.service_fc
-                  + frvh.heures_compl_fi + frvh.heures_compl_fa + frvh.heures_compl_fc + frvh.heures_compl_fc_majorees;
+          frvh.total                     := ROUND(
+                t_res(code).service_fi + t_res(code).service_fa + t_res(code).service_fc
+                + t_res(code).heures_compl_fi + t_res(code).heures_compl_fa + t_res(code).heures_compl_fc
+                + t_res(code).heures_compl_fc_majorees
+              ,2);
           IF frvh.id IS NULL THEN
             frvh.id := formule_resultat_vh_id_seq.nextval;
             INSERT INTO formule_resultat_vh VALUES frvh;
@@ -27092,7 +27111,7 @@ END OSE_FORMULE;',
           frvhr.volume_horaire_ref_id    := t_res(code).volume_horaire_ref_id;
           frvhr.service_referentiel      := ROUND(t_res(code).service_referentiel, 2);
           frvhr.heures_compl_referentiel := ROUND(t_res(code).heures_compl_referentiel, 2);
-          frvhr.total                    := frvhr.service_referentiel + frvhr.heures_compl_referentiel;
+          frvhr.total                    := ROUND(t_res(code).service_referentiel + t_res(code).heures_compl_referentiel,2);
           IF frvhr.id IS NULL THEN
             frvhr.id := formule_resultat_vh_ref_id_seq.nextval;
             INSERT INTO formule_resultat_vh_ref VALUES frvhr;
@@ -31036,31 +31055,49 @@ FROM
       'name' => 'V_CONTRAT_SERVICES',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_CONTRAT_SERVICES AS
 SELECT
-  c.id                                             contrat_id,
+  c.contrat_id                                     contrat_id,
   str.libelle_court                                "serviceComposante",
   ep.code                                          "serviceCode",
   ep.libelle                                       "serviceLibelle",
   sum(vh.heures)                                   heures,
   replace(ltrim(to_char(sum(vh.heures), \'999999.00\')),\'.\',\',\') "serviceHeures"
 FROM
-            contrat                  c
+  (SELECT
+    c1.id contrat_id,
+    c1.intervenant_id,
+    c1.validation_id,
+    c1.structure_id,
+    c2.id all_contrat_id
+  FROM
+    contrat c1,
+    contrat c2
+    LEFT JOIN validation v ON v.id = c2.validation_id AND v.histo_destruction IS NULL
+  WHERE
+    c1.histo_destruction IS NULL
+    AND c2.histo_destruction IS NULL
+    AND c1.structure_id = c2.structure_id
+    AND (
+      c1.id = c2.id
+      OR (v.id IS NOT NULL AND c1.contrat_id = c2.id)
+      OR (v.id IS NOT NULL AND c1.contrat_id = c2.contrat_id AND c1.id > c2.id)
+    )
+  )                                  c
        JOIN intervenant              i ON i.id = c.intervenant_id
        JOIN type_volume_horaire    tvh ON tvh.code = \'PREVU\'
        JOIN service                  s ON s.intervenant_id = i.id AND s.histo_destruction IS NULL
-       JOIN volume_horaire          vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL AND vh.type_volume_horaire_id = tvh.id
+       JOIN volume_horaire          vh ON vh.service_id = s.id AND vh.histo_destruction IS NULL AND vh.type_volume_horaire_id = tvh.id AND vh.contrat_id = c.all_contrat_id
   LEFT JOIN validation_vol_horaire vvh ON vvh.volume_horaire_id = vh.id
   LEFT JOIN validation               v ON v.id = vvh.validation_id AND v.histo_destruction IS NULL
   LEFT JOIN validation              cv ON cv.id = c.validation_id AND cv.histo_destruction IS NULL
   LEFT JOIN element_pedagogique     ep ON ep.id = s.element_pedagogique_id
        JOIN structure              str ON str.id = COALESCE(ep.structure_id,i.structure_id)
 WHERE
-  c.histo_destruction IS NULL
   -- On récapitule tous les enseignements validés de la composante et pas seulement le différentiel...
   --AND (cv.id IS NULL OR vh.contrat_id = c.id)
-  AND COALESCE(ep.structure_id,i.structure_id) = c.structure_id
+  COALESCE(ep.structure_id,i.structure_id) = c.structure_id
   AND (vh.auto_validation = 1 OR v.id IS NOT NULL)
 GROUP BY
-  c.id, str.libelle_court, ep.code, ep.libelle',
+  c.contrat_id, str.libelle_court, ep.code, ep.libelle',
     ),
     'V_CTL_SERVICES_ODF_HISTO' => 
     array (

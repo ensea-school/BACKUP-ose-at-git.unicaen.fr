@@ -46,9 +46,7 @@ class CentreCoutStructureSaisieForm extends AbstractForm
             ],
             'type'       => 'Select',
         ]);
-
         $this->get('structure')
-            ->setEmptyOption("(Aucun)")
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getStructures()));
 
         $this->add(new Csrf('security'));
@@ -70,6 +68,7 @@ class CentreCoutStructureSaisieForm extends AbstractForm
     {
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByHistorique();
+        $qb               = $serviceStructure->finderByEnseignement($qb);
         $structures       = $serviceStructure->getList($qb);
 
         return $structures;
@@ -141,9 +140,9 @@ class CentreCoutStructureHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id'               => $object->getId(),
-            'structure'        => ($s = $object->getStructure()) ? $s->getId() : null,
-            'centre-cout'      => $object->getCentreCout()->getId(),
+            'id'          => $object->getId(),
+            'structure'   => ($s = $object->getStructure()) ? $s->getId() : null,
+            'centre-cout' => $object->getCentreCout()->getId(),
         ];
 
         return $data;

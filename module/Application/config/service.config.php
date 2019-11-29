@@ -29,12 +29,12 @@ return [
                             ],
                         ],
                     ],
-                    'export'                   => [
+                    'export-csv'               => [
                         'type'    => 'Literal',
                         'options' => [
-                            'route'    => '/export',
+                            'route'    => '/export-csv',
                             'defaults' => [
-                                'action' => 'export',
+                                'action' => 'export-csv',
                             ],
                         ],
                     ],
@@ -311,7 +311,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action'     => ['export'],
+                    'action'     => ['export-csv'],
                     'privileges' => [
                         Privileges::ENSEIGNEMENT_EXPORT_CSV,
                     ],

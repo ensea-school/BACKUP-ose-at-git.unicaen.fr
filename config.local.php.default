@@ -245,7 +245,7 @@ return [
         'host'    => '127.0.0.1', // par défaut sur la même machine que OSE
 
         /* Répertoire de travail utilisé à la fois par OSE et par le service Unoconv */
-        'tmp-dir' => getcwd() . '/cache/', // par défaut dans le répertoire cache de OSE
+        'tmp-dir' => __DIR__ . '/cache/', // par défaut dans le répertoire cache de OSE
     ],
 
 ];

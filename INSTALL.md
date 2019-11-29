@@ -14,7 +14,7 @@ OSE est une application web qui exploite une base de données Oracle.
 Il faut donc installer :
 
 * Une base de données Oracle
-* Un serveur web Apache + PHP 7
+* Un serveur web Apache + PHP >= 7.3
 
 Le serveur web peut être installé manuellement ou bien déployé via une image Docker.
 Le serveur web n'héberge aucune donnée, hormis des fichiers de configuration et de cache. Toutes les données d'explloitation sont donc
@@ -84,14 +84,14 @@ Vous pouvez, au choix :
 ## Méthode manuelle, à adapter selon vos besoins
 
 ### Serveur Web
-Installer sur une distribution GNU/Linux - Debian 9 (Stretch) de préférence.
+Installer sur une distribution GNU/Linux - Debian 10 (Buster) de préférence.
 
 Dépendances requises :
 
 * git
 * wget
 * Apache 2 avec le module de réécriture d'URL (*rewrite*) activé
-* PHP 7.0 avec les modules suivants :
+* PHP 7.3 ou 7.4 avec les modules suivants :
     * cli
     * curl
     * intl

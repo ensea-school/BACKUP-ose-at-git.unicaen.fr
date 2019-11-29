@@ -39,6 +39,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     protected $perimetre;
 
     /**
+     * @var bool
+     */
+    protected $accessibleExterieur = true;
+
+    /**
      * @var boolean
      */
     protected $peutChangerStructure;
@@ -170,6 +175,30 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     public function getPerimetre()
     {
         return $this->perimetre;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getAccessibleExterieur(): bool
+    {
+        return $this->accessibleExterieur;
+    }
+
+
+
+    /**
+     * @param bool $accessibleExterieur
+     *
+     * @return self
+     */
+    public function setAccessibleExterieur(bool $accessibleExterieur): self
+    {
+        $this->accessibleExterieur = $accessibleExterieur;
+
+        return $this;
     }
 
 

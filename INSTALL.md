@@ -257,7 +257,7 @@ git clone https://git.unicaen.fr/open-source/docker/unicaen-image
 cd unicaen-image
 
 HTTP_PROXY=http://proxy.unicaen.fr:3128 ; \
-PHP_VERSION=7.0 ; \
+PHP_VERSION=7.4 ; \
 docker build \
 --rm \
 --build-arg PHP_VERSION=${PHP_VERSION} \

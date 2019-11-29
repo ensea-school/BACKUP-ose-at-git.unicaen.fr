@@ -8,11 +8,12 @@
         }
     ],
     "require"     : {
-        "php"                    : ">=7.2",
-        "unicaen/app"            : "3.0.2",
-        "unicaen/auth"           : "3.0.6",
+        "php"                    : ">=7.3 || >=7.4",
+        "mpdf/mpdf"              : "8.0.4 as 7.1.7",
+        "unicaen/app"            : "3.0.3",
+        "unicaen/auth"           : "3.0.7",
         "zendframework/zend-code": "3.3.2",
-        "unicaen/bjy-authorize"  : "3.0.3",
+        "unicaen/bjy-authorize"  : "3.0.4",
         "zendframework/zend-file": "2.8.3",
         "unicaen/code"           : "3.0.0",
         "unicaen/import"         : "3.0.0",

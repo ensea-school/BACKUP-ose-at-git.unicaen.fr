@@ -1,5 +1,9 @@
 <?php
 
+
+
+
+
 class Application
 {
     /**
@@ -39,7 +43,7 @@ class Application
         /* Définition de la config globale, éventuellement à partir du fichier de config général */
         if (AppConfig::get('global', 'affichageErreurs')) {
             error_reporting(E_ALL);
-        }else{
+        } else {
             set_exception_handler(function ($e) { // on affiche quand même les erreurs fatales pour expliquer!
                 self::error($e);
             });
@@ -49,8 +53,8 @@ class Application
         putenv("NLS_LANGUAGE=FRENCH");
 
         /* Chargement de l'autoloader */
-        if (file_exists($appDir.'/vendor/autoload.php')) {
-            include $appDir.'/vendor/autoload.php';
+        if (file_exists($appDir . '/vendor/autoload.php')) {
+            include $appDir . '/vendor/autoload.php';
         }
 
         if (!class_exists('Zend\Loader\AutoloaderFactory')) {
@@ -70,7 +74,7 @@ class Application
         $smConfig = isset($configuration['service_manager']) ? $configuration['service_manager'] : [];
         $smConfig = new \Zend\Mvc\Service\ServiceManagerConfig($smConfig);
 
-        $serviceManager = new Zend\ServiceManager\ServiceManager();
+        $serviceManager  = new Zend\ServiceManager\ServiceManager();
         self::$container = $serviceManager;
         $smConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('ApplicationConfig', $configuration);
@@ -116,7 +120,7 @@ class Application
             self::$maintenanceText = AppConfig::get('maintenance', 'messageInfo');
             require 'public/maintenance.php';
             die();
-        }else{
+        } else {
             self::zendApplicationStart();
         }
     }
@@ -130,7 +134,7 @@ class Application
         if (php_sapi_name() !== 'cli') {
             require 'public/maintenance.php';
         } else {
-            echo self::$maintenanceText."\n";
+            echo self::$maintenanceText . "\n";
         }
         die();
     }

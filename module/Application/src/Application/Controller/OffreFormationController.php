@@ -128,7 +128,7 @@ class OffreFormationController extends AbstractController
                 $element->getPeriode(),
                 $element->getTauxFoad(),
                 $element->getTauxFi(),
-                $elemendockt->getTauxFa(),
+                $element->getTauxFa(),
                 $element->getTauxFc(),
                 $effectifs ? $effectifs->getFi() : null,
                 $effectifs ? $effectifs->getFa() : null,
@@ -147,8 +147,13 @@ class OffreFormationController extends AbstractController
         $this->initFilterHistorique();
         list($structure, $niveau, $etape) = $this->getParams();
         //Get role of user
-        $role         = $this->getServiceContext()->getSelectedIdentityRole();
-        $structures   = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->getServiceStructure()->finderByRole($role, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+
         $anneeEnCours = $this->getServiceContext()->getAnnee();
         list($offresComplementaires, $mappingEtape, $reconductionTotale) = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
 

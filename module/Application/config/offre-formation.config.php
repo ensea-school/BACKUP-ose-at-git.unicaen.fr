@@ -371,7 +371,9 @@ return [
             Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
             Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
-            Processus\ReconductionProcessus::class     => Processus\ReconductionProcessusFactory::class,
+        ],
+        'factories'  => [
+            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],
     'form_elements'   => [
@@ -387,8 +389,7 @@ return [
             Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class             => Form\OffreFormation\TauxMixite\TauxMixiteFieldset::class,
         ],
         'factories'  => [
-            Form\OffreFormation\VolumeHoraireEns::class   => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
-            Processus\ReconductionProcessusFactory::class => Processus\Factory\ReconductionProcessusFactory::class,
+            Form\OffreFormation\VolumeHoraireEns::class => Form\OffreFormation\Factory\VolumeHoraireEnsFormFactory::class,
         ],
     ],
     'view_helpers'    => [

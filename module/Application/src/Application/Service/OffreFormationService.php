@@ -131,7 +131,7 @@ class OffreFormationService extends AbstractEntityService
         $offresComplementaires = [];
         $anneeEnCours          = $this->getServiceContext()->getAnnee();
         $anneeSuivante         = $this->getServiceAnnee()->getSuivante($anneeEnCours);
-        $source                = $this->getServiceSource()->get('1');
+        $source                = $this->getServiceSource()->getOse();
 
         $this->getServiceLocalContext()
             ->setStructure($structure)

@@ -9,7 +9,8 @@ namespace Application\Provider\Privilege;
  *
  * @author UnicaenCode
  */
-class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
+class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges
+{
 
     const AGREMENT_CONSEIL_ACADEMIQUE_EDITION                 = 'agrement-conseil-academique-edition';
     const AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION             = 'agrement-conseil-academique-suppression';
@@ -133,6 +134,9 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ODF_ELEMENT_EDITION                                 = 'odf-element-edition';
     const ODF_ELEMENT_VH_EDITION                              = 'odf-element-vh-edition';
     const ODF_ELEMENT_VH_VISUALISATION                        = 'odf-element-vh-visualisation';
+    const ODF_ELEMENT_CC_EDITION                              = 'odf-element-cc-edition';
+    const ODF_ELEMENT_MODULATEUR_EDITION                      = 'odf-element-modulateur-edition';
+    const ODF_ELEMENT_MODULATEUR_CC_VISUALISATION             = 'odf-element-modulateur-cc-visualisation';
     const ODF_ELEMENT_VISUALISATION                           = 'odf-element-visualisation';
     const ODF_ETAPE_EDITION                                   = 'odf-etape-edition';
     const ODF_ETAPE_VISUALISATION                             = 'odf-etape-visualisation';

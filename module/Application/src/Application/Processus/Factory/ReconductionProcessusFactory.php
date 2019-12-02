@@ -29,12 +29,12 @@ class ReconductionProcessusFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $etapeService              = \Application::$container->get(EtapeService::class);
-        $elementPedagogiqueService = \Application::$container->get(ElementPedagogiqueService::class);
-        $cheminPedagogiqueService  = \Application::$container->get(CheminPedagogiqueService::class);
-        $volumeHoraireEnsService   = \Application::$container->get(VolumeHoraireEnsService::class);
-        $anneeService              = \Application::$container->get(AnneeService::class);
-        $contextService            = \Application::$container->get(ContextService::class);
+        $etapeService              = $serviceLocator->get(EtapeService::class);
+        $elementPedagogiqueService = $serviceLocator->get(ElementPedagogiqueService::class);
+        $cheminPedagogiqueService  = $serviceLocator->get(CheminPedagogiqueService::class);
+        $volumeHoraireEnsService   = $serviceLocator->get(VolumeHoraireEnsService::class);
+        $anneeService              = $serviceLocator->get(AnneeService::class);
+        $contextService            = $serviceLocator->get(ContextService::class);
 
         $processus = new ReconductionProcessus($etapeService,
             $elementPedagogiqueService,

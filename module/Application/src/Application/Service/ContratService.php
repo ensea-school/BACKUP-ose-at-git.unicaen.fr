@@ -58,20 +58,20 @@ class ContratService extends AbstractEntityService
      * Supprime (historise par défaut).
      *
      * @param Contrat $entity Entité à détruire
-     * @param bool  $softDelete
+     * @param bool    $softDelete
      *
      * @return self
      */
     public function delete($entity, $softDelete = true)
     {
         if (!$softDelete) {
-            $id   = (int)$entity->getId();
+            $id = (int)$entity->getId();
 
             $sql = "UPDATE volume_horaire SET contrat_id = NULL WHERE contrat_id = $id";
             $this->getEntityManager()->getConnection()->executeQuery($sql);
 
-            foreach( $entity->getFichier() as $fichier ){
-                $this->getServiceFichier()->delete( $fichier, $softDelete);
+            foreach ($entity->getFichier() as $fichier) {
+                $this->getServiceFichier()->delete($fichier, $softDelete);
             }
         }
 
@@ -126,21 +126,30 @@ class ContratService extends AbstractEntityService
     /**
      * Calcule le numero d'avenant suivant : nombre d'avenants validés.
      *
-     * @param Intervenant $intervenant              Intervenant concerné
-     * @param bool        $avenantsValidesSeulement Ne compter que les avenants validés ?
+     * @param Intervenant $intervenant Intervenant concerné
      *
      * @return int
      */
-    public function getNextNumeroAvenant(Intervenant $intervenant, $avenantsValidesSeulement = true)
+    public function getNextNumeroAvenant(Intervenant $intervenant)
     {
-        $qb = $this->finderByIntervenant($intervenant);
-        $qb = $this->finderByTypeContrat($this->getServiceTypeContrat()->getAvenant(), $qb);
-        if ($avenantsValidesSeulement) {
-            $qb = $this->finderByValidation(true, $qb);
-        }
-        $avenantsCount = (int)$qb->select('COUNT(' . $this->getAlias() . ')')->getQuery()->getSingleScalarResult();
+        $sql = "
+        SELECT 
+          max(numero_avenant) + 1 numero_avenant
+        FROM 
+          contrat c
+          JOIN validation v ON v.id = c.validation_id AND v.histo_destruction IS NULL
+        WHERE 
+          c.histo_destruction IS NULL AND c.intervenant_id = :intervenant
+        ";
 
-        return $avenantsCount;
+        $res = $this->getEntityManager()->getConnection()->fetchAll($sql, ['intervenant' => $intervenant->getId()]);
+        if (isset($res[0]['NUMERO_AVENANT'])) {
+            $numeroAvenant = (int)$res[0]['NUMERO_AVENANT'];
+        } else {
+            $numeroAvenant = 1;
+        }
+
+        return $numeroAvenant;
     }
 
 
@@ -148,10 +157,10 @@ class ContratService extends AbstractEntityService
     /**
      * Création des Fichiers déposés pour un contrat.
      *
-     * @param array         $files       Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png',
+     * @param array   $files             Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png',
      *                                   'size' => 321215]
      * @param Contrat $contrat
-     * @param boolean       $deleteFiles Supprimer les fichiers temporaires après création du Fichier
+     * @param boolean $deleteFiles       Supprimer les fichiers temporaires après création du Fichier
      *
      * @return Fichier[]
      */

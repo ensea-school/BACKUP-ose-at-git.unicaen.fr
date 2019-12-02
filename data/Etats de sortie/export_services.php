@@ -25,7 +25,7 @@ $transData = [
 
 foreach ($data as $d) {
     $iid = (int)$d['INTERVENANT_ID'];
-    $sid = (int)$d['SERVICE_ID'];
+    $sid = (int)$d['SERVICE_ID'] + (int)$d['SERVICE_REFERENTIEL_ID'];
 
     if (!isset($transData['intervenants'][$iid])) {
         $transData['intervenants'][$iid] = [
@@ -47,7 +47,7 @@ foreach ($data as $d) {
     if (!isset($transData['intervenants'][$iid]['services'][$sid])) {
         $transData['intervenants'][$iid]['services'][$sid] = [
             'composante'     => $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
-            'type_formation' => $d['TYPE_FORMATION_LIBELLE'],
+            'type_formation' => $d['TYPE_FORMATION_LIBELLE'] ?: 'Référentiel',
             'formation'      => $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
             'enseignement'   => $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
             'fi'             => 0,

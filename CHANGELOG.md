@@ -8,8 +8,25 @@ author: Laurent Lécluse - DSI - Unicaen
 ## Nouveautés
 
 * Possibilité d'utiliser un service Unoconv présent sur un serveur dédié autre que celui de OSE
+* L'export des services au format CSV est maintenant personnalisable
+* En ligne de commande, il est désormais possible d'indiquer dans quelle année universitaire et sous quel statut un intervenant sera créé, de même qu'un code intervenant
+
+## Correction de bugs
+
+* Pour un rôle de périmètre établissement avec pour possibilité de changer de structure, le changement fonctionne à nouveau (pour l'édition ZF3 uniquement)
+* Dans certains cas, la génération d'états de sortie en PDF produisait des fichiers corrompus.
+* Dans l'export CSV des services, le total était celui des heures compl. uniquement. il est maintenant égal à la somme de toutes les heures (service + compl.)
+* Contrats/Avenants : problème de numéros d'avenants parfois incohérents corrigé
+* Contrats/Avenants : Bug dans les totaux d'heures qui changent dans les documents suite à la génération d'avenants corrigé
+* Correction d'un problème d'arrondi au niveau des calcul de totaux sur les formules de calcul
+* Correction d'un problème d'arrondi au niveau des taux de répartition FI/FA/FC dont la somme n'était pas toujours égale sur les éléments pédagogiques
+* Le référentiel s'affichait sur une seule ligne par intervenant, même en cas de fonctions multiples.
 
 ## Notes de mise à jour
+
+Les deux éditions sont isofonctionnelles.
+L'édition 10-zf3 est maintenant celle recommandée pour la production. Elle requiert PHP 7.3.
+L'édition 10-zf2 passe maintenant en statut "obsolète".
 
 Ajout de nouveaux paramètres de configuration pour pouvoir externaliser l'usage du service Unoconv.
 A ajouter dans votre fichier config.local.php et à personnaliser le cas échéant :

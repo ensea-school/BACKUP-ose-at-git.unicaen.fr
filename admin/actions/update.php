@@ -5,8 +5,8 @@ $c->println("Mise à jour de OSE");
 $c->println("Assurez-vous bien d'avoir mis OSE en mode maintenance avant de démarrer\n(pressez Entrée pour continuer)...");
 $c->getInput();
 
-if (!$oa->bddIsOk($msg)){
-    $c->printDie('La mise à jour ne peut pas se poursuivre : la base de données est inaccessible : '."\n".$msg);
+if (!$oa->bddIsOk($msg)) {
+    $c->printDie('La mise à jour ne peut pas se poursuivre : la base de données est inaccessible : ' . "\n" . $msg);
 }
 
 $osedir = $oa->getOseDir();
@@ -58,13 +58,10 @@ $c->println($res ? 'Liens mis à jour' : 'Liens déjà à jour', $c::COLOR_GREEN
 
 // Conclusion
 $oa->writeVersion($version);
-$c->println("\nMise à jour des fichiers OK : la version installée est désormais la ".$version, $c::COLOR_LIGHT_GREEN);
+$c->println("\nMise à jour des fichiers OK : la version installée est désormais la " . $version, $c::COLOR_LIGHT_GREEN);
 
 // Mise à jour de la base de données à partir d'un nouveau processus
 $oa->run('update-bdd', true);
-
-// Néttoyage des caches
-$oa->run('clear-cache', true);
 
 $c->println("\nFin de la mise à jour. N'oubliez pas de sortir du mode maintenance!");
 $c->println('');

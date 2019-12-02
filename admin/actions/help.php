@@ -1,6 +1,6 @@
 <?php
 
-$actions = [
+$actions    = [
     "update"                    => "Mise à jour de l'application",
     "notifier-indicateurs"      => "Envoi des mails relatifs aux indicateurs",
     "synchronisation"           => "<job> : Effectue la synchronisation des données pour le <job> transmis",
@@ -15,14 +15,14 @@ $actions = [
     "update-bdd"                => "Mise à jour de la base de données de l'application (sans les fichiers)",
 ];
 $actionsDev = [
-    "update-ddl" => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",
+    "update-ddl"            => "Mise à jour du fichier de définition de la base de données à partir de cette dernière",
+    "update-bdd-data"       => "Mise à jour des données de la base de données",
     "update-bdd-privileges" => "Mise à jour des privilèges de la base de données",
 ];
 
-if ((getenv('APPLICATION_ENV') ?: 'dev') == 'dev'){
+if ((getenv('APPLICATION_ENV') ?: 'dev') == 'dev') {
     $actions = array_merge($actions, $actionsDev);
 }
-
 
 
 $c->printMainTitle("OSE", 15);

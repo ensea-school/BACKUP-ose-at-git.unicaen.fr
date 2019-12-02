@@ -141,13 +141,13 @@ class ElementPedagogiqueController extends AbstractController
         $result = [];
         foreach ($found as $item) {
             if (null === $term) {
-                if (0 === strpos($item['LIBELLE'], $item['CODE'])){
+                if (0 === strpos($item['LIBELLE'], $item['CODE'])) {
                     $label = $item['LIBELLE'];
-                }else{
-                    $label = $item['CODE'].' '.$item['LIBELLE'];
+                } else {
+                    $label = $item['CODE'] . ' ' . $item['LIBELLE'];
                 }
                 $result[] = [
-                    'id' => $item['ID'],
+                    'id'    => $item['ID'],
                     'label' => $label,
                     'extra' => $item['LIBELLE_PE'] ?: '',
                 ];
@@ -255,5 +255,17 @@ class ElementPedagogiqueController extends AbstractController
         $form->build($vhes);
 
         return compact('title', 'vhes', 'form');
+    }
+
+
+
+    public function modulateursCentresCoutsAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\Modulateur::class,
+            \Application\Entity\Db\CentreCoutEp::class,
+        ]);
+
+        return [];
     }
 }

@@ -210,6 +210,8 @@ class OffreFormationController extends AbstractController
     public function reconductionCentreCoutAction()
     {
         $this->initFilterHistorique();
+        $anneeN            = $this->getServiceContext()->getAnnee();
+        $anneeN1           = $this->getServiceContext()->getAnneeSuivante();
         $fromPost          = false;
         $etapesReconduites = [];
         list($structure, $niveau, $etape) = $this->getParams();
@@ -270,6 +272,8 @@ class OffreFormationController extends AbstractController
 
 
         return [
+            'anneeN'            => $anneeN,
+            'anneeN1'           => $anneeN1,
             'structures'        => $structures,
             'structure'         => $structure,
             'etapesReconduites' => $etapesReconduites,
@@ -282,6 +286,9 @@ class OffreFormationController extends AbstractController
     public function reconductionModulateurAction()
     {
         $this->initFilterHistorique();
+        $anneeN  = $this->getServiceContext()->getAnnee();
+        $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
+
         list($structure, $niveau, $etape) = $this->getParams();
         $etapesReconduites = [];
         $fromPost          = 0;
@@ -339,6 +346,8 @@ class OffreFormationController extends AbstractController
         $headScript->offsetSetFile(100, '/js/reconduction-modulateur.js');
 
         return [
+            'anneeN'            => $anneeN,
+            'anneeN1'           => $anneeN1,
             'structures'        => $structures,
             'etapesReconduites' => $etapesReconduites,
             'structure'         => $structure,

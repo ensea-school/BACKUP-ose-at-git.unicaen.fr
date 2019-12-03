@@ -240,7 +240,9 @@ class Table
             'delete'             => true,
             'insert'             => true,
             'update'             => true,
+            'update-cols'        => [],
             'update-ignore-cols' => [],
+            'update-only-null'   => [],
         ];
         $options        = array_merge($defaultOptions, $options);
 
@@ -274,7 +276,7 @@ class Table
         }
 
         $traitementOptions = [];
-        if (isset($options['histo-user-id'])){
+        if (isset($options['histo-user-id'])) {
             $traitementOptions['histo-user-id'] = $options['histo-user-id'];
         }
 
@@ -300,8 +302,16 @@ class Table
                     $oldc = isset($old[$c]) ? $old[$c] : null;
                     if ($newc instanceof \DateTime) $newc = $newc->format('Y-m-d');
                     if ($oldc instanceof \DateTime) $oldc = $oldc->format('Y-m-d');
-                    if (!in_array($c, $options['update-ignore-cols']) && $c != 'ID' && array_key_exists($c, $new) && $newc !== $oldc) {
-                        $toUpdate[$c] = $new[$c];
+                    if ($newc !== $oldc && array_key_exists($c, $new) && $c != 'ID') {
+                        $ok = empty($options['update-cols']); // OK par défaut si une liste n'a pas été établie manuellement
+
+                        if (in_array($c, $options['update-cols'])) $ok = true;
+                        if (in_array($c, $options['update-ignore-cols'])) $ok = false;
+                        if (in_array($c, $options['update-only-null']) && $oldc !== null) $ok = false;
+
+                        if ($ok) {
+                            $toUpdate[$c] = $new[$c];
+                        }
                     }
                 }
                 if (!empty($toUpdate)) {

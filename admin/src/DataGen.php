@@ -190,7 +190,10 @@ class DataGen
             'table'   => 'ETAT_SORTIE',
             'context' => ['install', 'update'],
             'key'     => 'CODE',
-            'options' => ['update' => false, 'delete' => false],
+            'options' => ['update'           => true, 'delete' => false,
+                          'update-cols'      => ['CSV_PARAMS', 'CSV_TRAITEMENT', 'PDF_TRAITEMENT'],
+                          'update-only-null' => ['CSV_PARAMS', 'CSV_TRAITEMENT', 'PDF_TRAITEMENT'],
+            ],
         ],
         [
             'table'   => 'MODELE_CONTRAT',

@@ -3,7 +3,7 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
-# OSE 10-zf2 et 10-zf3 (à venir)
+# OSE 10-zf2 et 10-zf3
 
 ## Nouveautés
 

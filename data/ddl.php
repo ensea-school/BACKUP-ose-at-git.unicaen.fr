@@ -23959,21 +23959,21 @@ END FORMULE_ULHN;',
       END IF;
 
 
-    -- l82=SOMME(L22:L81)
-    WHEN c = \'l82\' AND v >= 1 THEN
+    -- l522=SOMME(L22:L81)
+    WHEN c = \'l522\' AND v >= 1 THEN
       RETURN calcFnc(\'total\',\'l\');
 
     -- n=SI($L$82>0;L22/$L$82;0)
     WHEN c = \'n\' AND v >= 1 THEN
-      IF cell(\'l82\') > 0 THEN
-        RETURN cell(\'l\',l) / cell(\'l82\');
+      IF cell(\'l522\') > 0 THEN
+        RETURN cell(\'l\',l) / cell(\'l522\');
       ELSE
         RETURN 0;
       END IF;
 
     -- o=MIN(service_du;$L$82)*N22
     WHEN c = \'o\' AND v >= 1 THEN
-      RETURN LEAST(ose_formule.intervenant.service_du, cell(\'l82\')) * cell(\'n\',l);
+      RETURN LEAST(ose_formule.intervenant.service_du, cell(\'l522\')) * cell(\'n\',l);
 
     -- p=SI(L22<>0;O22/L22;0)
     WHEN c = \'p\' AND v >= 1 THEN
@@ -23985,7 +23985,7 @@ END FORMULE_ULHN;',
 
     -- q=SI($L$82>service_du;1-P22;0)
     WHEN c = \'q\' AND v >= 1 THEN
-      IF cell(\'l82\') > ose_formule.intervenant.service_du THEN
+      IF cell(\'l522\') > ose_formule.intervenant.service_du THEN
         RETURN 1 - cell(\'p\',l);
       ELSE
         RETURN 0;

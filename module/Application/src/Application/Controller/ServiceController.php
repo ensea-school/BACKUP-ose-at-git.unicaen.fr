@@ -17,8 +17,6 @@ use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
 use Application\Service\Traits\RegleStructureValidationServiceAwareTrait;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
-use UnicaenApp\Exporter\Pdf;
-use UnicaenApp\View\Model\CsvModel;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Zend\Http\Request;
 use Application\Entity\Db\Intervenant;

@@ -31,17 +31,6 @@ return [
                             ],
                         ],
                     ],
-                    'index2' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/index2/:structure',
-                            'constraints' => [
-                            ],
-                            'defaults'    => [
-                                'action' => 'index2',
-                            ],
-                        ],
-                    ],
                     'delete' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -81,7 +70,7 @@ return [
                                 'label'        => 'Structure',
                                 'icon'         => 'fa fa-graduation-cap',
                                 'route'        => 'structure',
-                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index2'),
+                                'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
                                 'order'        => 80,
                                 'border-color' => '#BBCF55',
                             ],
@@ -102,7 +91,7 @@ return [
             PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Structure',
-                    'action'     => ['index2'],
+                    'action'     => ['index'],
                     'privileges' => Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
                 ],
                 [
@@ -137,7 +126,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\Structure\StructureSaisieForm::class                 => Form\Structure\StructureSaisieForm::class,
+            Form\Structure\StructureSaisieForm::class => Form\Structure\StructureSaisieForm::class,
         ],
     ],
 ];

@@ -99,6 +99,7 @@ return [
         'CODE'           => 'export_services',
         'LIBELLE'        => 'Export des services',
         'PDF_TRAITEMENT' => '/data/Etats de sortie/export_services.php',
+        'CSV_TRAITEMENT' => '/data/Etats de sortie/export_services_csv.php',
         'AUTO_BREAK'     => true,
         'REQUETE'        => 'SELECT 
     *

@@ -23959,21 +23959,21 @@ END FORMULE_ULHN;',
       END IF;
 
 
-    -- l82=SOMME(L22:L81)
-    WHEN c = \'l82\' AND v >= 1 THEN
+    -- l522=SOMME(L22:L81)
+    WHEN c = \'l522\' AND v >= 1 THEN
       RETURN calcFnc(\'total\',\'l\');
 
     -- n=SI($L$82>0;L22/$L$82;0)
     WHEN c = \'n\' AND v >= 1 THEN
-      IF cell(\'l82\') > 0 THEN
-        RETURN cell(\'l\',l) / cell(\'l82\');
+      IF cell(\'l522\') > 0 THEN
+        RETURN cell(\'l\',l) / cell(\'l522\');
       ELSE
         RETURN 0;
       END IF;
 
     -- o=MIN(service_du;$L$82)*N22
     WHEN c = \'o\' AND v >= 1 THEN
-      RETURN LEAST(ose_formule.intervenant.service_du, cell(\'l82\')) * cell(\'n\',l);
+      RETURN LEAST(ose_formule.intervenant.service_du, cell(\'l522\')) * cell(\'n\',l);
 
     -- p=SI(L22<>0;O22/L22;0)
     WHEN c = \'p\' AND v >= 1 THEN
@@ -23985,7 +23985,7 @@ END FORMULE_ULHN;',
 
     -- q=SI($L$82>service_du;1-P22;0)
     WHEN c = \'q\' AND v >= 1 THEN
-      IF cell(\'l82\') > ose_formule.intervenant.service_du THEN
+      IF cell(\'l522\') > ose_formule.intervenant.service_du THEN
         RETURN 1 - cell(\'p\',l);
       ELSE
         RETURN 0;
@@ -24014,88 +24014,88 @@ END FORMULE_ULHN;',
 
 
 
-    -- u=SI(J22>0;                                                                                  SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0)
-    -- u=SI(J22>0;SI(service_du=0;SI(L22<0;L22;SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22));SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22));0)
+    -- u=SI(service_du=0;0;SI(T21+L22>service_du;service_du-T21;L22))
     WHEN c = \'u\' AND v >= 1 THEN
-      IF cell(\'j\',l) > 0 THEN
-        -- SI(service_du=0;SI(L22<0;L22;SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22));SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22))
-        IF i.service_du = 0 THEN
-          -- SI(L22<0;L22;SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22))
-          IF cell(\'l\',l) < 0 THEN
-            --RETURN cell(\'l\',l); -- pas bon
-            RETURN cell(\'l\',l) / cell(\'j\',l); -- modif du 17/06/2019
-          ELSE
-            -- SI(T22+L22<service_du;0;((T22+L22)-service_du)/J22)
-            IF cell(\'t\',l) + cell(\'l\',l) < i.service_du THEN
-              RETURN 0;
-            ELSE
-              RETURN ((cell(\'t\',l) + cell(\'l\',l)) - i.service_du) / cell(\'j\',l);
-            END IF;
-          END IF;
-        ELSE
-          -- SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22)
-          IF (cell(\'t\',l-1) + cell(\'l\',l)) < ose_formule.intervenant.service_du THEN
-            RETURN 0;
-          ELSE
-            RETURN (cell(\'t\',l-1) + cell(\'l\',l) - ose_formule.intervenant.service_du) / cell(\'j\',l);
-          END IF;
-        END IF;
-      ELSE
+      IF i.service_du = 0 THEN
         RETURN 0;
+      ELSE
+        --SI(T21+L22>service_du;service_du-T21;L22)
+        IF cell(\'t\',l-1) + cell(\'l\',l) > i.service_du THEN
+          RETURN i.service_du - cell(\'t\',l-1);
+        ELSE
+          RETURN cell(\'l\',l);
+        END IF;
       END IF;
 
-
-
-    -- v=SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(U22+SI(H22<>"Oui";I22;0))*K22)
+    -- v=SI(service_du=0;I22;SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0))
     WHEN c = \'v\' AND v >= 1 THEN
+    IF i.service_du = 0 THEN
+        RETURN cell(vh.heures,l);
+      ELSE
+        --SI(J22>0;SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22);0)
+        IF cell(\'j\',l) > 0 THEN
+          --SI(T21+L22<service_du;0;((T21+L22)-service_du)/J22)
+          IF cell(\'t\',l-1) + cell(\'l\',l) < i.service_du THEN
+            RETURN 0;
+          ELSE
+            --((T21+L22)-service_du)/J22
+            RETURN ((cell(\'t\',l-1) + cell(\'l\',l)) - i.service_du) / cell(\'j\',l);
+          END IF;
+        ELSE
+          RETURN 0;
+        END IF;
+      END IF;
+
+    -- w=SI(OU(service_realise<service_du;HC_autorisees<>"Oui");0;(V22+SI(H22<>"Oui";I22;0))*K22)
+    WHEN c = \'w\' AND v >= 1 THEN
       IF cell(\'service_realise\') < ose_formule.intervenant.service_du OR ose_formule.intervenant.depassement_service_du_sans_hc THEN
         RETURN 0;
       ELSE
-        --(U22+SI(H22<>"Oui";I22;0))*K22
-        RETURN (cell(\'u\',l) + CASE WHEN NOT vh.service_statutaire THEN cell(\'i\',l) ELSE 0 END ) * cell(\'k\',l);
+        --(V22+SI(H22<>"Oui";I22;0))*K22
+        RETURN (cell(\'v\',l) + CASE WHEN NOT vh.service_statutaire THEN cell(\'i\',l) ELSE 0 END ) * cell(\'k\',l);
       END IF;
 
-    -- x=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";($L22-$U22)*D22;$O22*D22))
-    WHEN c = \'x\' AND v >= 1 THEN
-      IF vh.service_referentiel_id IS NOT NULL THEN
-        RETURN 0;
-      ELSE
-        IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN (cell(\'l\',l) - cell(\'u\',l)) * vh.taux_fi;
-        ELSE
-          RETURN cell(\'o\',l) * vh.taux_fi;
-        END IF;
-      END IF;
-
-    -- y=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";($L22-$U22)*E22;$O22*E22))
+    -- y=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$U22*D22;$O22*D22))
     WHEN c = \'y\' AND v >= 1 THEN
       IF vh.service_referentiel_id IS NOT NULL THEN
         RETURN 0;
       ELSE
         IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN (cell(\'l\',l) - cell(\'u\',l)) * vh.taux_fa;
+          RETURN cell(\'u\',l) * vh.taux_fi;
         ELSE
-          RETURN cell(\'o\',l) * vh.taux_fa;
+          RETURN cell(\'o\',l) * vh.taux_fi;
         END IF;
       END IF;
 
-    -- z=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";($L22-$U22)*F22;$O22*F22))
+    -- z=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$U22*E22;$O22*E22))
     WHEN c = \'z\' AND v >= 1 THEN
       IF vh.service_referentiel_id IS NOT NULL THEN
         RETURN 0;
       ELSE
         IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN (cell(\'l\',l) - cell(\'u\',l)) * vh.taux_fc;
+          RETURN cell(\'u\',l) * vh.taux_fa;
+        ELSE
+          RETURN cell(\'o\',l) * vh.taux_fa;
+        END IF;
+      END IF;
+
+    -- aa=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$U22*F22;$O22*F22))
+    WHEN c = \'aa\' AND v >= 1 THEN
+      IF vh.service_referentiel_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
+          RETURN cell(\'u\',l) * vh.taux_fc;
         ELSE
           RETURN cell(\'o\',l) * vh.taux_fc;
         END IF;
       END IF;
 
-    -- aa=SI($C22="Référentiel";SI(contexte_calcul="Réalisé";$L22-$U22;$R22);0)
-    WHEN c = \'aa\' AND v >= 1 THEN
+    -- ab=SI($C22="Référentiel";SI(contexte_calcul="Réalisé";$U22;$R22);0)
+    WHEN c = \'ab\' AND v >= 1 THEN
       IF vh.service_referentiel_id IS NOT NULL THEN
         IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN cell(\'l\',l) - cell(\'u\',l);
+          RETURN cell(\'u\',l);
         ELSE
           RETURN cell(\'r\',l);
         END IF;
@@ -24103,51 +24103,51 @@ END FORMULE_ULHN;',
         RETURN 0;
       END IF;
 
-    -- ab=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$V22*D22;$R22*D22))
-    WHEN c = \'ab\' AND v >= 1 THEN
-      IF vh.service_referentiel_id IS NOT NULL THEN
-        RETURN 0;
-      ELSE
-        IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN cell(\'v\',l) * vh.taux_fi;
-        ELSE
-          RETURN cell(\'r\',l) * vh.taux_fi;
-        END IF;
-      END IF;
-
-    -- ac=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$V22*E22;$R22*E22))
+    -- ac=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$V22*D22;$R22*D22))
     WHEN c = \'ac\' AND v >= 1 THEN
       IF vh.service_referentiel_id IS NOT NULL THEN
         RETURN 0;
       ELSE
         IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN cell(\'v\',l) * vh.taux_fa;
+          RETURN cell(\'w\',l) * vh.taux_fi;
         ELSE
-          RETURN cell(\'r\',l) * vh.taux_fa;
+          RETURN cell(\'r\',l) * vh.taux_fi;
         END IF;
       END IF;
 
-    -- ad=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$V22*F22;$R22*F22))
+    -- ad=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$V22*E22;$R22*E22))
     WHEN c = \'ad\' AND v >= 1 THEN
       IF vh.service_referentiel_id IS NOT NULL THEN
         RETURN 0;
       ELSE
         IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN cell(\'v\',l) * vh.taux_fc;
+          RETURN cell(\'w\',l) * vh.taux_fa;
+        ELSE
+          RETURN cell(\'r\',l) * vh.taux_fa;
+        END IF;
+      END IF;
+
+    -- ae=SI(OU(ESTVIDE($C22);$C22="Référentiel");0;SI(contexte_calcul="Réalisé";$V22*F22;$R22*F22))
+    WHEN c = \'ae\' AND v >= 1 THEN
+      IF vh.service_referentiel_id IS NOT NULL THEN
+        RETURN 0;
+      ELSE
+        IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
+          RETURN cell(\'w\',l) * vh.taux_fc;
         ELSE
           RETURN cell(\'r\',l) * vh.taux_fc;
         END IF;
       END IF;
 
-    -- ae=0
-    WHEN c = \'ae\' AND v >= 1 THEN
+    -- af=0
+    WHEN c = \'af\' AND v >= 1 THEN
       RETURN 0;
 
-    -- af=SI($C22="Référentiel";SI(contexte_calcul="Réalisé";$V22;$R22);0)
-    WHEN c = \'af\' AND v >= 1 THEN
+    -- ag=SI($C22="Référentiel";SI(contexte_calcul="Réalisé";$V22;$R22);0)
+    WHEN c = \'ag\' AND v >= 1 THEN
       IF vh.service_referentiel_id IS NOT NULL THEN
         IF ose_formule.intervenant.type_volume_horaire_id = 2 THEN
-          RETURN cell(\'v\',l);
+          RETURN cell(\'w\',l);
         ELSE
           RETURN cell(\'r\',l);
         END IF;
@@ -24175,15 +24175,15 @@ END FORMULE_ULHN;',
 
     -- transmission des résultats aux volumes horaires et volumes horaires référentiel
     FOR l IN 1 .. ose_formule.volumes_horaires.length LOOP
-      ose_formule.volumes_horaires.items(l).service_fi               := mainCell(\'Service FI\', \'x\',l);
-      ose_formule.volumes_horaires.items(l).service_fa               := mainCell(\'Service FA\', \'y\',l);
-      ose_formule.volumes_horaires.items(l).service_fc               := mainCell(\'Service FC\', \'z\',l);
-      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell(\'Service référentiel\', \'aa\',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell(\'Heures compl. FI\', \'ab\',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell(\'Heures compl. FA\', \'ac\',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell(\'Heures compl. FC\', \'ad\',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell(\'Heures compl. FC Maj.\', \'ae\',l);
-      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell(\'Heures compl. référentiel\', \'af\',l);
+      ose_formule.volumes_horaires.items(l).service_fi               := mainCell(\'Service FI\', \'y\',l);
+      ose_formule.volumes_horaires.items(l).service_fa               := mainCell(\'Service FA\', \'z\',l);
+      ose_formule.volumes_horaires.items(l).service_fc               := mainCell(\'Service FC\', \'aa\',l);
+      ose_formule.volumes_horaires.items(l).service_referentiel      := mainCell(\'Service référentiel\', \'ab\',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fi          := mainCell(\'Heures compl. FI\', \'ac\',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fa          := mainCell(\'Heures compl. FA\', \'ad\',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc          := mainCell(\'Heures compl. FC\', \'ae\',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_fc_majorees := mainCell(\'Heures compl. FC Maj.\', \'af\',l);
+      ose_formule.volumes_horaires.items(l).heures_compl_referentiel := mainCell(\'Heures compl. référentiel\', \'ag\',l);
     END LOOP;
   END;
 

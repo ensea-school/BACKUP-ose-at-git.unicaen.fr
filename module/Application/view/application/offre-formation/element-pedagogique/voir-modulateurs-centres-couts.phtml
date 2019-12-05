@@ -1,0 +1,27 @@
+<div>
+    <?= $this->form()->openTag($form); ?>
+
+    <table class="table table-bordered table-extra-condensed">
+        <thead>
+            <tr>
+                <th>Type(s) Modulateur(s)</th>
+                <th>Modulateur(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <?php foreach($typesModulateurs as $typeModulateur): ?>
+                    <td> <?= $typeModulateur->getLibelle(); ?> </td>
+                    <td>valeeur</td>
+                <?php endforeach; ?>
+            </tr>
+        </tbody>
+    </table>
+    <?= $this->formRow($form->get('modulateur')); ?>
+
+    <?= $this->formRow($form->get('submit')); ?>
+
+    <?= $this->form()->closeTag($form); ?>
+
+
+</div>

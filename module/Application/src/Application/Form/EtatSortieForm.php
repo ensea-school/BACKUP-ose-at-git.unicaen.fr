@@ -52,7 +52,7 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'TextArea',
+            'type'       => 'Textarea',
             'name'       => 'csv-params',
             'options'    => [
                 'label' => "Paramètres d'export CSV (format JSON)",

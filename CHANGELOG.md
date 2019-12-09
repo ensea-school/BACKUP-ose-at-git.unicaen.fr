@@ -3,6 +3,13 @@ title: "Changements intervenus sur OSE"
 author: Laurent Lécluse - DSI - Unicaen
 ---
 
+# OSE 11
+
+## Correction de bugs
+
+* L'interface d'administration des motifs de modification de service est de nouveau pleinement fonctionelle.
+
+
 # OSE 10-zf2 et 10-zf3
 
 ## Nouveautés

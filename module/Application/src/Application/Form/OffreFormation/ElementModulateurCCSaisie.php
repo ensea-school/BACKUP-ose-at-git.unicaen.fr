@@ -11,20 +11,20 @@ use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Zend\Form\Element\Select;
 
 /**
- * Description of ElementModulateursSaisie
+ * Description of ElementModulateurSaisie
  *
  * @author Antony Le Courtes <antony.lecourtes@unicaen.fr>
  */
-class ElementModulateursSaisie extends AbstractForm
+class ElementModulateurCCSaisie extends AbstractForm
 {
     use TypeModulateurServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use ElementModulateursFieldsetAwareTrait;
 
     /**
-     * Etape
+     * Element
      *
-     * @var Etape
+     * @var Element
      */
     protected $element;
 
@@ -32,7 +32,7 @@ class ElementModulateursSaisie extends AbstractForm
 
     public function __construct($name = null, $options = [])
     {
-        if (!$name) $name = "element-modulateurs-saisie";
+        if (!$name) $name = "element-modulateur-cc-saisie";
         parent::__construct($name, $options);
     }
 
@@ -41,7 +41,7 @@ class ElementModulateursSaisie extends AbstractForm
     public function init()
     {
 
-        $this->setAttribute('class', 'element-modulateurs');
+        $this->setAttribute('class', 'element-modulateur-cc');
         $this->setAttribute('action', $this->getCurrentUrl());
 
         $this->add([
@@ -70,14 +70,26 @@ class ElementModulateursSaisie extends AbstractForm
             $typeModulateur = $elementModulateur->getModulateur()->getTypeModulateur();
             $modulateurs    = $typeModulateur->getModulateur();
             foreach ($modulateurs as $m) {
-                $modulateursValues[$typeModulateur->getCode()][] = $m->getLibelle();
+                $modulateursValues[$typeModulateur->getCode()][$m->getId()] = $m->getLibelle();
             }
         }
 
+        $elementCentresCouts = $element->getCentreCoutEp();
+        $typesHeures         = $element->getTypeHeures();
+        foreach ($typesHeures as $type) {
+            $libelle[] = $type->getLibelleCourt();
+        }
+        //Récupération des centres de coût pour chaque type d'heure
+        
+
+        //Select pour le modulateur de l'élément pédagogique
         $select = new Select('modulateur');
+        $select->setLabel($typeModulateur->getLibelle() . " : ");
         $select->setValueOptions($modulateursValues[$typeModulateur->getCode()]);
-        $select->setValue(3);
+        $select->setValue(1);
         $this->add($select);
+
+        //Select pour le centre de cout de l'élément pédagogique
 
 
         $this->add([
@@ -138,6 +150,13 @@ class ElementModulateursSaisie extends AbstractForm
         $this->element = $element;
 
         return $this;
+    }
+
+
+
+    public function getInputFilterSpecification()
+    {
+
     }
 
 }

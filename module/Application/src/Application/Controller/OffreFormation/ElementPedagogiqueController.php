@@ -5,7 +5,7 @@ namespace Application\Controller\OffreFormation;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Filter\FloatFromString;
-use Application\Form\OffreFormation\Traits\ElementModulateursSaisieAwareTrait;
+use Application\Form\OffreFormation\Traits\ElementModulateurCCSaisieAwareTrait;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
 use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
@@ -25,7 +25,7 @@ class ElementPedagogiqueController extends AbstractController
     use ContextServiceAwareTrait;
     use VolumeHoraireEnsFormAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
-    use ElementModulateursSaisieAwareTrait;
+    use ElementModulateurCCSaisieAwareTrait;
 
 
 
@@ -260,12 +260,12 @@ class ElementPedagogiqueController extends AbstractController
 
 
 
-    public function voirModulateursCentresCoutsAction()
+    public function modulateursCentresCoutsAction()
     {
         $element     = $this->getEvent()->getParam('elementPedagogique');
         $modulateurs = $element->getElementModulateur();
-   
-        $form = $this->getFormOffreFormationElementModulateurSaisie();
+
+        $form = $this->getFormOffreFormationElementModulateurCCSaisie();
         $form->setElement($element);
         $form->setAttribute('action', $this->url()->fromRoute('of/element/volume-horaire', ['elementPedagogique' => $element->getId()]));
         $form->build();
@@ -278,18 +278,4 @@ class ElementPedagogiqueController extends AbstractController
         ];
     }
 
-
-
-    public function modifierModulateurAction()
-    {
-        $this->em()->getFilters()->enable('historique')->init([
-            \Application\Entity\Db\Modulateur::class,
-            \Application\Entity\Db\CentreCoutEp::class,
-        ]);
-
-        $element = $this->getEvent()->getParam('elementPedagogique');
-
-
-        return [];
-    }
 }

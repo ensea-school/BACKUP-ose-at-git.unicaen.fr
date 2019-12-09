@@ -10,16 +10,13 @@
         </thead>
         <tbody>
             <tr>
-                <?php foreach($typesModulateurs as $typeModulateur): ?>
-                    <td> <?= $typeModulateur->getLibelle(); ?> </td>
-                    <td>valeeur</td>
-                <?php endforeach; ?>
+
+                    <td><?= $form->get('modulateur')->getLabel(); ?></td>
+                    <td><?= $this->formSelect($form->get('modulateur')); ?></td>
+
             </tr>
         </tbody>
     </table>
-    <?= $this->formRow($form->get('modulateur')); ?>
-
-    <?= $this->formRow($form->get('submit')); ?>
 
     <?= $this->form()->closeTag($form); ?>
 

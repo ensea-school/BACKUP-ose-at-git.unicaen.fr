@@ -2,9 +2,11 @@
 
 namespace Application;
 
+use Application\Form\OffreFormation\ElementModulateurCCSaisie;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
+use Zend\Form\Form;
 
 return [
     'router'          => [
@@ -103,19 +105,19 @@ return [
                                 ],
                             ],
 
-                            'voir-modulateurs-centres-couts' => [
+                            'modulateurs-centres-couts' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/voir-modulateurs-centres-couts/:elementPedagogique',
+                                    'route'       => '/modulateurs-centres-couts/:elementPedagogique',
                                     'constraints' => [
                                         'elementPedagogique' => '[0-9]*',
                                     ],
                                     'defaults'    => [
-                                        'action' => 'voir-modulateurs-centres-couts',
+                                        'action' => 'modulateurs-centres-couts',
                                     ],
                                 ],
                             ],
-                            'modifier-modulateurs'           => [
+                            'modifier-modulateurs'      => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/modulateurs/modifier/:elementPedagogique',
@@ -278,11 +280,10 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action'     => ['voir-modulateurs-centres-couts'],
+                    'action'     => ['modulateurs-centres-couts'],
                     'privileges' => [
-                        Privileges::ODF_ELEMENT_CC_EDITION,
-                        Privileges::ODF_ELEMENT_MODULATEUR_EDITION,
-                        Privileges::ODF_ELEMENT_MODULATEUR_CC_VISUALISATION,
+                        Privileges::ODF_CENTRES_COUT_EDITION,
+                        Privileges::ODF_MODULATEURS_EDITION,
                     ],
 
                 ],
@@ -353,11 +354,6 @@ return [
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'VolumeHoraireEns', 'TypeIntervention'],
                         'assertion'  => Assertion\OffreDeFormationAssertion::class,
                     ],
-                    [
-                        'privileges' => Privileges::ODF_ELEMENT_MODULATEUR_CC_VISUALISATION,
-                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp', 'ElementModulateur'],
-                        'assertion'  => Assertion\OffreDeFormationAssertion::class,
-                    ],
                 ],
             ],
         ],
@@ -397,6 +393,7 @@ return [
             Form\OffreFormation\EtapeSaisie::class                               => Form\OffreFormation\EtapeSaisie::class,
             Form\OffreFormation\ElementPedagogiqueSaisie::class                  => Form\OffreFormation\ElementPedagogiqueSaisie::class,
             Form\OffreFormation\EtapeModulateursSaisie::class                    => Form\OffreFormation\EtapeModulateursSaisie::class,
+            Form\OffreFormation\ElementModulateurCCSaisie::class                 => Form\OffreFormation\ElementModulateurCCSaisie::class,
             Form\OffreFormation\ElementModulateursFieldset::class                => Form\OffreFormation\ElementModulateursFieldset::class,
             Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class       => Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm::class,
             Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class => Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset::class,

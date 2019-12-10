@@ -17,8 +17,30 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-bordered table-extra-condensed">
+        <thead>
+            <tr>
+                <th colspan="2">Centre de coûts de l'élément pédagogique</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><abbr title="Formation initiale"><?= $form->get('fi')->getLabel(); ?></abbr></td>
+                <td><?= $this->formSelect($form->get('fi')); ?></td>
+            </tr>
+            <tr>
+                <td><abbr title="Formation apprentissage"><?= $form->get('fa')->getLabel(); ?></abbr></td>
+                <td><?= $this->formSelect($form->get('fa')); ?></td>
+            </tr>
+            <tr>
+                <td><abbr title="Formation continue"><?= $form->get('fc')->getLabel(); ?></abbr></td>
+                <td><?= $this->formSelect($form->get('fc')); ?></td>
+            </tr>
+        </tbody>
+    </table>
 
     <?= $this->form()->closeTag($form); ?>
 
 
 </div>
+

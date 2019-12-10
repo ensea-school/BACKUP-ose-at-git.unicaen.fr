@@ -23,6 +23,7 @@ class ElementPedagogiqueController extends AbstractController
 {
     use ElementPedagogiqueServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use ElementPedagogiqueSaisieAwareTrait;
     use VolumeHoraireEnsFormAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
     use ElementModulateurCCSaisieAwareTrait;

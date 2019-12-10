@@ -4,7 +4,9 @@ namespace Application\Form\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractForm;
+use Application\Form\OffreFormation\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
+use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Entity\Db\Etape;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
@@ -20,6 +22,7 @@ class ElementModulateurCCSaisie extends AbstractForm
     use TypeModulateurServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
     use ElementModulateursFieldsetAwareTrait;
+    use CentreCoutServiceAwareTrait;
 
     /**
      * Element
@@ -73,14 +76,19 @@ class ElementModulateurCCSaisie extends AbstractForm
                 $modulateursValues[$typeModulateur->getCode()][$m->getId()] = $m->getLibelle();
             }
         }
-
-        $elementCentresCouts = $element->getCentreCoutEp();
-        $typesHeures         = $element->getTypeHeures();
-        foreach ($typesHeures as $type) {
-            $libelle[] = $type->getLibelleCourt();
+        //TODO Prévoir le cas où il n'y a pas de modulateur et de centre de cout sur un EP
+        $centresCoutsEp     = $element->getCentreCoutEp();
+        $centresCoutsValues = [];
+        foreach ($centresCoutsEp as $centreCoutEp) {
+            $libelleTypeHeures                      = $centreCoutEp->getTypeHeures()->getLibelleCourt();
+            $centreCout                             = $centreCoutEp->getCentreCout();
+            $centresCoutsValues[$libelleTypeHeures] = $centreCout->getCode();
         }
-        //Récupération des centres de coût pour chaque type d'heure
-        
+        $typeHeuresEp = $element->getTypeHeures()->getValues();
+        foreach ($typeHeuresEp as $typeHeures) {
+            $select = $this->createSelectElement($typeHeures);
+            $this->add($select);
+        }
 
         //Select pour le modulateur de l'élément pédagogique
         $select = new Select('modulateur');
@@ -89,13 +97,32 @@ class ElementModulateurCCSaisie extends AbstractForm
         $select->setValue(1);
         $this->add($select);
 
-        //Select pour le centre de cout de l'élément pédagogique
-
-
+        
         $this->add([
             'name' => 'id',
             'type' => 'Hidden',
         ]);
+    }
+
+
+
+    private function createSelectElement(\Application\Entity\Db\TypeHeures $th)
+    {
+        //retrieve centre cout by types heures
+        $qb           = $this->getServiceCentreCout()->finderByTypeHeures($th);
+        $centresCouts = $qb->getQuery()->execute();
+        $valueOptions = [];
+        foreach ($centresCouts as $centreCout) {
+            $valueOptions[$centreCout->getCode()] = $centreCout->getCode() . ' - ' . $centreCout->getLibelle();
+        }
+        $element = new Select($th->getCode());
+        $element
+            ->setLabel($th->getLibelleCourt())
+            ->setValueOptions(['' => '(Aucun)'] + $valueOptions)
+            ->setAttribute('class', 'type-heures selectpicker')
+            ->setAttribute('data-live-search', 'true');
+
+        return $element;
     }
 
 

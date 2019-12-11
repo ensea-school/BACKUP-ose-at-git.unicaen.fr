@@ -4,11 +4,9 @@ namespace Application\Form\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique;
 use Application\Form\AbstractForm;
-use Application\Form\OffreFormation\EtapeCentreCout\Traits\EtapeCentreCoutFormAwareTrait;
 use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
 use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
-use Application\Entity\Db\Etape;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Zend\Form\Element\Select;
 
@@ -17,11 +15,13 @@ use Zend\Form\Element\Select;
  *
  * @author Antony Le Courtes <antony.lecourtes@unicaen.fr>
  */
-class ElementModulateurCCSaisie extends AbstractForm
+class ElementModulateurCentreCoutForm extends AbstractForm
 {
     use TypeModulateurServiceAwareTrait;
     use ElementPedagogiqueServiceAwareTrait;
+    use TypeModulateurServiceAwareTrait;
     use ElementModulateursFieldsetAwareTrait;
+
     use CentreCoutServiceAwareTrait;
 
     /**
@@ -29,7 +29,7 @@ class ElementModulateurCCSaisie extends AbstractForm
      *
      * @var Element
      */
-    protected $element;
+    protected $elementPedagogiquePeddagogique;
 
 
 
@@ -61,43 +61,45 @@ class ElementModulateurCCSaisie extends AbstractForm
 
     public function build()
     {
-        $element = $this->getElement();
-        if (!$element) {
+        $elementPedagogique = $this->getElementPedagogique();
+        if (!$elementPedagogique) {
             throw new \RuntimeException('Element non spécifiée : construction du formulaire impossible');
         }
-
-
-        $elementsModulateurs = $element->getElementModulateur();
-
+        //Formulaire partie Modulateur de l'élément pédagogique en cours
+        $typeModulateur = $this->getServiceTypeModulateur()->finderByElementPedagogique($elementPedagogique)->getQuery()->getOneOrNullResult();
+        $values         = $typeModulateur->getModulateur();
+        foreach ($values as $value) {
+            $modulateursValues[$typeModulateur->getCode()][$value->getCode()] = $value->getLibelle();
+        }
+        $selectModulateur = new Select('modulateur');
+        $selectModulateur->setLabel($typeModulateur->getLibelle() . " : ");
+        $selectModulateur->setValueOptions(['' => '(Aucun)'] + $modulateursValues[$typeModulateur->getCode()]);
+        $elementsModulateurs = $elementPedagogique->getElementModulateur();
         foreach ($elementsModulateurs as $elementModulateur) {
             $typeModulateur = $elementModulateur->getModulateur()->getTypeModulateur();
-            $modulateurs    = $typeModulateur->getModulateur();
-            foreach ($modulateurs as $m) {
-                $modulateursValues[$typeModulateur->getCode()][$m->getId()] = $m->getLibelle();
-            }
+            $modulateur     = $elementModulateur->getModulateur();
+            $selectModulateur->setValue($modulateur->getCode());
         }
-        //TODO Prévoir le cas où il n'y a pas de modulateur et de centre de cout sur un EP
-        $centresCoutsEp     = $element->getCentreCoutEp();
+        $this->add($selectModulateur);
+
+        //Formulaire partie Centres de coût de l'élément pédagogique en cours
+        $centresCoutsEp     = $elementPedagogique->getCentreCoutEp();
         $centresCoutsValues = [];
         foreach ($centresCoutsEp as $centreCoutEp) {
-            $libelleTypeHeures                      = $centreCoutEp->getTypeHeures()->getLibelleCourt();
-            $centreCout                             = $centreCoutEp->getCentreCout();
-            $centresCoutsValues[$libelleTypeHeures] = $centreCout->getCode();
+            $codeTypeHeures                      = $centreCoutEp->getTypeHeures()->getCode();
+            $centreCout                          = $centreCoutEp->getCentreCout();
+            $centresCoutsValues[$codeTypeHeures] = $centreCout->getCode();
         }
-        $typeHeuresEp = $element->getTypeHeures()->getValues();
+        $typeHeuresEp = $elementPedagogique->getTypeHeures()->getValues();
         foreach ($typeHeuresEp as $typeHeures) {
-            $select = $this->createSelectElement($typeHeures);
-            $this->add($select);
+            $selectCentreCout = $this->createSelectElementCentreCout($typeHeures);
+            if (array_key_exists($typeHeures->getCode(), $centresCoutsValues)) {
+                $selectCentreCout->setValue($centresCoutsValues[$typeHeures->getCode()]);
+            }
+            $this->add($selectCentreCout);
         }
 
-        //Select pour le modulateur de l'élément pédagogique
-        $select = new Select('modulateur');
-        $select->setLabel($typeModulateur->getLibelle() . " : ");
-        $select->setValueOptions($modulateursValues[$typeModulateur->getCode()]);
-        $select->setValue(1);
-        $this->add($select);
 
-        
         $this->add([
             'name' => 'id',
             'type' => 'Hidden',
@@ -106,7 +108,7 @@ class ElementModulateurCCSaisie extends AbstractForm
 
 
 
-    private function createSelectElement(\Application\Entity\Db\TypeHeures $th)
+    private function createSelectElementCentreCout(\Application\Entity\Db\TypeHeures $th)
     {
         //retrieve centre cout by types heures
         $qb           = $this->getServiceCentreCout()->finderByTypeHeures($th);
@@ -135,46 +137,25 @@ class ElementModulateurCCSaisie extends AbstractForm
     public function getTypesModulateurs()
     {
 
-        if (!$this->element) {
+        if (!$this->elementPedagogique) {
             throw new \RuntimeException('Element non spécifié');
         }
 
-        return $this->getServiceTypeModulateur()->getList($this->getServiceTypeModulateur()->finderByElementPedagogique($this->element));
+        return $this->getServiceTypeModulateur()->getList($this->getServiceTypeModulateur()->finderByElementPedagogique($this->elementPedagogique));
     }
 
 
 
-    /**
-     * Retourne le nombre total de modulateurs que l'on peut renseigner
-     *
-     * @param string $typeCode
-     *
-     * @return integer
-     */
-    public function countModulateurs($typeCode = null)
+    public function getElementPedagogique()
     {
-        $count = 0;
-        foreach ($this->getFieldsets() as $fieldset) {
-            if ($fieldset instanceof ElementModulateursFieldset) {
-                $count += $fieldset->countModulateurs($typeCode);
-            }
-        }
-
-        return $count;
+        return $this->elementPedagogique;
     }
 
 
 
-    public function getElement()
+    public function setElementPedagogique(ElementPedagogique $elementPedagogique)
     {
-        return $this->element;
-    }
-
-
-
-    public function setElement(ElementPedagogique $element)
-    {
-        $this->element = $element;
+        $this->elementPedagogique = $elementPedagogique;
 
         return $this;
     }

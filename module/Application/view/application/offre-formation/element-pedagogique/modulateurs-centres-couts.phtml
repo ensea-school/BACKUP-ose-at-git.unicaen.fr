@@ -1,4 +1,4 @@
-<div>
+<div style="margin-top:10px;">
     <?= $this->form()->openTag($form); ?>
 
     <table class="table table-bordered table-extra-condensed">
@@ -10,10 +10,12 @@
         </thead>
         <tbody>
             <tr>
-
+                <?php if($form->has('modulateur')): ?>
                     <td><?= $form->get('modulateur')->getLabel(); ?></td>
                     <td><?= $this->formSelect($form->get('modulateur')); ?></td>
-
+                <?php else: ?>
+                    <td colspan="2">Aucun modulateur disponible pour cet élément pédagogique.</td>
+                <?php endif; ?>
             </tr>
         </tbody>
     </table>
@@ -24,20 +26,28 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><abbr title="Formation initiale"><?= $form->get('fi')->getLabel(); ?></abbr></td>
-                <td><?= $this->formSelect($form->get('fi')); ?></td>
-            </tr>
-            <tr>
-                <td><abbr title="Formation apprentissage"><?= $form->get('fa')->getLabel(); ?></abbr></td>
-                <td><?= $this->formSelect($form->get('fa')); ?></td>
-            </tr>
-            <tr>
-                <td><abbr title="Formation continue"><?= $form->get('fc')->getLabel(); ?></abbr></td>
-                <td><?= $this->formSelect($form->get('fc')); ?></td>
-            </tr>
+            <?php if($form->has('fi')): ?>
+                <tr>
+                    <td><abbr title="Formation initiale"><?= $form->get('fi')->getLabel(); ?></abbr></td>
+                    <td><?= $this->formSelect($form->get('fi')); ?></td>
+                </tr>
+            <?php endif; ?>
+            <?php if($form->has('fa')): ?>
+                <tr>
+                    <td><abbr title="Formation apprentissage"><?= $form->get('fa')->getLabel(); ?></abbr></td>
+                    <td><?= $this->formSelect($form->get('fa')); ?></td>
+                </tr>
+            <?php endif; ?>
+            <?php if($form->has('fc')): ?>
+                <tr>
+                    <td><abbr title="Formation continue"><?= $form->get('fc')->getLabel(); ?></abbr></td>
+                    <td><?= $this->formSelect($form->get('fc')); ?></td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
+
+    <?= $this->formSubmit($form->get('submit')); ?>
 
     <?= $this->form()->closeTag($form); ?>
 

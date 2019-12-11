@@ -3,8 +3,11 @@
 namespace Application\Service;
 
 use Application\Entity\Db\CentreCoutEp;
+use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
+use Application\Service\Traits\TypeHeuresServiceAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 
 /**
@@ -15,6 +18,10 @@ use BjyAuthorize\Exception\UnAuthorizedException;
 class CentreCoutEpService extends AbstractEntityService
 {
     use SourceServiceAwareTrait;
+    use CentreCoutServiceAwareTrait;
+    use TypeHeuresServiceAwareTrait;
+
+
 
     /**
      * retourne la classe des entités
@@ -25,6 +32,8 @@ class CentreCoutEpService extends AbstractEntityService
     {
         return CentreCoutEp::class;
     }
+
+
 
     /**
      * Retourne l'alias d'entité courante
@@ -46,7 +55,8 @@ class CentreCoutEpService extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $entity->setSource( $this->getServiceSource()->getOse() );
+        $entity->setSource($this->getServiceSource()->getOse());
+
         return $entity;
     }
 
@@ -56,22 +66,65 @@ class CentreCoutEpService extends AbstractEntityService
      * Sauvegarde un centre de coûts
      *
      * @param CentreCoutEp $entity
-     * @throws \RuntimeException
+     *
      * @return CentreCoutEp
+     * @throws \RuntimeException
      */
     public function save($entity)
     {
-        if (! $this->getAuthorize()->isAllowed($entity,Privileges::ODF_CENTRES_COUT_EDITION)){
+        if (!$this->getAuthorize()->isAllowed($entity, Privileges::ODF_CENTRES_COUT_EDITION)) {
             throw new UnAuthorizedException('Vous n\'avez pas les droits requis pour associer/dissocier un centre de coûts de cet enseignement');
         }
 
-        if ( ! $entity->getSourceCode()
+        if (!$entity->getSourceCode()
             && ($cc = $entity->getCentreCout())
             && ($th = $entity->getTypeHeures())
             && ($ep = $entity->getElementPedagogique())
-        ){
-            $entity->setSourceCode( uniqid($cc->getId().'_'.$th->getId().'_'.$ep->getId()) );
+        ) {
+            $entity->setSourceCode(uniqid($cc->getId() . '_' . $th->getId() . '_' . $ep->getId()));
         }
+
         return parent::save($entity);
+    }
+
+
+
+    public function addElementCentreCout(ElementPedagogique $element, $centreCouts)
+    {
+        $centreCoutEpCollection = $element->getCentreCoutEp()->toArray();
+        $mergeCentreCoutEp      = [];
+
+        foreach ($centreCoutEpCollection as $centreCoutEp) {
+            $mergeCentreCoutEp[$centreCoutEp->getTypeHeures()->getCode()] = $centreCoutEp;
+        }
+
+        foreach ($centreCouts as $th => $cc) {
+            //Mise à jour ou delete
+            if (array_key_exists($th, $mergeCentreCoutEp)) {
+                $centreCoutEp = $mergeCentreCoutEp[$th];
+                if (empty($cc)) {
+                    $this->delete($centreCoutEp);
+                } else {
+                    $centreCoutEntity = $this->getServiceCentreCout()->getRepo()->findOneByCode($cc);
+                    $centreCoutEp->setCentreCout($centreCoutEntity);
+                    $this->save($centreCoutEp);
+                }
+            } else {
+                if (!empty($cc)) {
+                    //Creation
+                    $centreCoutEntity = $this->getServiceCentreCout()->getRepo()->findOneByCode($cc);
+                    $typeHeuresEntity = $this->getServiceTypeHeures()->getRepo()->findOneByCode($th);
+                    //TODO : Faire un try catch sur la récupération centre cout et types heures
+                    $newCentreCoutEp = $this->newEntity();
+                    $newCentreCoutEp->setCentreCout($centreCoutEntity);
+                    $newCentreCoutEp->setElementPedagogique($element);
+                    $newCentreCoutEp->setTypeHeures($typeHeuresEntity);
+                    $this->save($newCentreCoutEp);
+                }
+            }
+        }
+        $this->entityManager->refresh($element);
+
+        return $element;
     }
 }

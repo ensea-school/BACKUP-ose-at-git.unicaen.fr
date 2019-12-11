@@ -5,10 +5,12 @@ namespace Application\Controller\OffreFormation;
 use Application\Controller\AbstractController;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Filter\FloatFromString;
-use Application\Form\OffreFormation\Traits\ElementModulateurCCSaisieAwareTrait;
+use Application\Form\OffreFormation\Traits\ElementModulateurCentreCoutFormAwareTrait;
 use Application\Form\OffreFormation\Traits\ElementPedagogiqueSaisieAwareTrait;
 use Application\Form\OffreFormation\Traits\VolumeHoraireEnsFormAwareTrait;
 use Application\Provider\Privilege\Privileges;
+use Application\Service\Traits\CentreCoutEpServiceAwareTrait;
+use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
@@ -25,7 +27,9 @@ class ElementPedagogiqueController extends AbstractController
     use ElementPedagogiqueSaisieAwareTrait;
     use VolumeHoraireEnsFormAwareTrait;
     use VolumeHoraireEnsServiceAwareTrait;
-    use ElementModulateurCCSaisieAwareTrait;
+    use ElementModulateurCentreCoutFormAwareTrait;
+    use ElementModulateurServiceAwareTrait;
+    use CentreCoutEpServiceAwareTrait;
 
 
 
@@ -262,20 +266,35 @@ class ElementPedagogiqueController extends AbstractController
 
     public function modulateursCentresCoutsAction()
     {
-        $element     = $this->getEvent()->getParam('elementPedagogique');
-        $modulateurs = $element->getElementModulateur();
+        $this->em()->getFilters()->enable('historique')->init([
+            \Application\Entity\Db\ElementModulateur::class,
+            \Application\Entity\Db\CentreCout::class,
+            \Application\Entity\Db\CentreCoutEp::class,
+        ]);
 
-        $form = $this->getFormOffreFormationElementModulateurCCSaisie();
-        $form->setElement($element);
-        $form->setAttribute('action', $this->url()->fromRoute('of/element/volume-horaire', ['elementPedagogique' => $element->getId()]));
+        $element = $this->getEvent()->getParam('elementPedagogique');
+        $form    = $this->getElementModulateurCentreCoutForm();
+        //Traitement retour formulaire
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $datasPost = $request->getPost();
+            //Modulateur
+            $element = $this->getServiceElementModulateur()->addElementModulateur($element, $datasPost['modulateur']);
+            //Centres de coûts
+            $centreCouts = [
+                'fi' => $datasPost['fi'],
+                'fa' => $datasPost['fa'],
+                'fc' => $datasPost['fc'],
+            ];
+            $element     = $this->getServiceCentreCoutEp()->addElementCentreCout($element, $centreCouts);
+        }
+
+        $form->setElementPedagogique($element);
+        $form->setAttribute('action', $this->url()->fromRoute('of/element/modulateurs-centres-couts', ['elementPedagogique' => $element->getId()]));
         $form->build();
-        $typesModulateurs = $form->getTypesModulateurs();
 
         return [
-            'form'             => $form,
-            'typesModulateurs' => $typesModulateurs,
-            'element'          => $element,
+            'form' => $form,
         ];
     }
-
 }

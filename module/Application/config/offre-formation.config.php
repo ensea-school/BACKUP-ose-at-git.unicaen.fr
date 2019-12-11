@@ -2,11 +2,9 @@
 
 namespace Application;
 
-use Application\Form\OffreFormation\ElementModulateurCCSaisie;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
-use Zend\Form\Form;
 
 return [
     'router'          => [

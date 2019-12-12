@@ -21,7 +21,6 @@ class ElementModulateurCentreCoutForm extends AbstractForm
     use ElementPedagogiqueServiceAwareTrait;
     use TypeModulateurServiceAwareTrait;
     use ElementModulateursFieldsetAwareTrait;
-
     use CentreCoutServiceAwareTrait;
 
     /**
@@ -29,7 +28,7 @@ class ElementModulateurCentreCoutForm extends AbstractForm
      *
      * @var Element
      */
-    protected $elementPedagogiquePeddagogique;
+    protected $elementPedagogiquePedagogique;
 
 
 
@@ -67,20 +66,22 @@ class ElementModulateurCentreCoutForm extends AbstractForm
         }
         //Formulaire partie Modulateur de l'élément pédagogique en cours
         $typeModulateur = $this->getServiceTypeModulateur()->finderByElementPedagogique($elementPedagogique)->getQuery()->getOneOrNullResult();
-        $values         = $typeModulateur->getModulateur();
-        foreach ($values as $value) {
-            $modulateursValues[$typeModulateur->getCode()][$value->getCode()] = $value->getLibelle();
+        if (!is_null($typeModulateur)) {
+            $values = $typeModulateur->getModulateur();
+            foreach ($values as $value) {
+                $modulateursValues[$typeModulateur->getCode()][$value->getCode()] = $value->getLibelle();
+            }
+            $selectModulateur = new Select('modulateur');
+            $selectModulateur->setLabel($typeModulateur->getLibelle() . " : ");
+            $selectModulateur->setValueOptions(['' => '(Aucun)'] + $modulateursValues[$typeModulateur->getCode()]);
+            $elementsModulateurs = $elementPedagogique->getElementModulateur();
+            foreach ($elementsModulateurs as $elementModulateur) {
+                $typeModulateur = $elementModulateur->getModulateur()->getTypeModulateur();
+                $modulateur     = $elementModulateur->getModulateur();
+                $selectModulateur->setValue($modulateur->getCode());
+            }
+            $this->add($selectModulateur);
         }
-        $selectModulateur = new Select('modulateur');
-        $selectModulateur->setLabel($typeModulateur->getLibelle() . " : ");
-        $selectModulateur->setValueOptions(['' => '(Aucun)'] + $modulateursValues[$typeModulateur->getCode()]);
-        $elementsModulateurs = $elementPedagogique->getElementModulateur();
-        foreach ($elementsModulateurs as $elementModulateur) {
-            $typeModulateur = $elementModulateur->getModulateur()->getTypeModulateur();
-            $modulateur     = $elementModulateur->getModulateur();
-            $selectModulateur->setValue($modulateur->getCode());
-        }
-        $this->add($selectModulateur);
 
         //Formulaire partie Centres de coût de l'élément pédagogique en cours
         $centresCoutsEp     = $elementPedagogique->getCentreCoutEp();

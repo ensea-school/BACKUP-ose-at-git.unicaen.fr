@@ -66,17 +66,41 @@ class ElementModulateurService extends AbstractEntityService
 
 
 
+    /**
+     * Ajoute un élément modulateur à un élément pédagogique
+     *
+     * @param ElementPedagogique $element
+     * @param String             $codeModulateur Code du modulateur
+     *
+     * @return ElementPedagogique
+     */
+
+
     public function addElementModulateur(ElementPedagogique $element, $codeModulateur)
     {
+
         $elementModulateurCollection = $element->getElementModulateur();
-        foreach ($elementModulateurCollection as $elementModulateur) {
-            $this->delete($elementModulateur);
+        if ($elementModulateurCollection->count() != 0) {
+            foreach ($elementModulateurCollection as $elementModulateur) {
+                if (empty($codeModulateur)) {
+                    $this->delete($elementModulateur);
+                } else {
+                    $modulateur = $this->getServiceModulateur()->getRepo()->findOneByCode($codeModulateur);
+                    $elementModulateur->setModulateur($modulateur);
+                    $this->save($elementModulateur);
+                }
+            }
+        } else {
+            //Uniquement si le code modulateur n'est pas vide.
+            if (!empty($codeModulateur)) {
+                $modulateur           = $this->getServiceModulateur()->getRepo()->findOneByCode($codeModulateur);
+                $newElementModulateur = $this->newEntity();
+                $newElementModulateur->setElement($element);
+                $newElementModulateur->setModulateur($modulateur);
+                $this->save($newElementModulateur);
+            }
         }
-        $modulateur           = $this->getServiceModulateur()->getRepo()->findOneByCode($codeModulateur);
-        $newElementModulateur = $this->newEntity();
-        $newElementModulateur->setElement($element);
-        $newElementModulateur->setModulateur($modulateur);
-        $this->save($newElementModulateur);
+        //refresh l'entité pour l'affichage utilisateur post traitement
         $this->entityManager->refresh($element);
 
         return $element;

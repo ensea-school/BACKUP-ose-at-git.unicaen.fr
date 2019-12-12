@@ -89,6 +89,14 @@ class CentreCoutEpService extends AbstractEntityService
 
 
 
+    /**
+     * Ajoute des centres de coût par types d'heures sur élement pédagogique
+     *
+     * @param ElementPedagogique $element
+     * @param Array              $centreCouts tableau type heures => centre de coût
+     *
+     * @return ElementPedagogique
+     */
     public function addElementCentreCout(ElementPedagogique $element, $centreCouts)
     {
         $centreCoutEpCollection = $element->getCentreCoutEp()->toArray();
@@ -114,7 +122,12 @@ class CentreCoutEpService extends AbstractEntityService
                     //Creation
                     $centreCoutEntity = $this->getServiceCentreCout()->getRepo()->findOneByCode($cc);
                     $typeHeuresEntity = $this->getServiceTypeHeures()->getRepo()->findOneByCode($th);
-                    //TODO : Faire un try catch sur la récupération centre cout et types heures
+                    try {
+                        $centreCoutEntity = $this->getServiceCentreCout()->getRepo()->findOneByCode($cc);
+                        $typeHeuresEntity = $this->getServiceTypeHeures()->getRepo()->findOneByCode($th);
+                    } catch (\Exception $e) {
+                        $this->flashMessenger()->addErrorMessage("Centre de coût ou Modulateur inexistant");
+                    }
                     $newCentreCoutEp = $this->newEntity();
                     $newCentreCoutEp->setCentreCout($centreCoutEntity);
                     $newCentreCoutEp->setElementPedagogique($element);
@@ -123,6 +136,7 @@ class CentreCoutEpService extends AbstractEntityService
                 }
             }
         }
+        //refresh l'entité pour l'affichage utilisateur post traitement
         $this->entityManager->refresh($element);
 
         return $element;

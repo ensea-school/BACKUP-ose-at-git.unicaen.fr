@@ -14,7 +14,7 @@
                     <td><?= $form->get('modulateur')->getLabel(); ?></td>
                     <td><?= $this->formSelect($form->get('modulateur')); ?></td>
                 <?php else: ?>
-                    <td colspan="2">Aucun modulateur disponible pour cet élément pédagogique.</td>
+                    <td colspan="2" class="text-center" >Aucun modulateur ne correspond aux enseignements de cette formation.</td>
                 <?php endif; ?>
             </tr>
         </tbody>
@@ -28,19 +28,19 @@
         <tbody>
             <?php if($form->has('fi')): ?>
                 <tr>
-                    <td><abbr title="Formation initiale"><?= $form->get('fi')->getLabel(); ?></abbr></td>
+                    <td class="text-center"><abbr title="Formation initiale"><?= $form->get('fi')->getLabel(); ?></abbr></td>
                     <td><?= $this->formSelect($form->get('fi')); ?></td>
                 </tr>
             <?php endif; ?>
             <?php if($form->has('fa')): ?>
                 <tr>
-                    <td><abbr title="Formation apprentissage"><?= $form->get('fa')->getLabel(); ?></abbr></td>
+                    <td class="text-center"><abbr title="Formation apprentissage"><?= $form->get('fa')->getLabel(); ?></abbr></td>
                     <td><?= $this->formSelect($form->get('fa')); ?></td>
                 </tr>
             <?php endif; ?>
             <?php if($form->has('fc')): ?>
                 <tr>
-                    <td><abbr title="Formation continue"><?= $form->get('fc')->getLabel(); ?></abbr></td>
+                    <td class="text-center"><abbr title="Formation continue"><?= $form->get('fc')->getLabel(); ?></abbr></td>
                     <td><?= $this->formSelect($form->get('fc')); ?></td>
                 </tr>
             <?php endif; ?>

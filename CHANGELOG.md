@@ -1,8 +1,3 @@
----
-title: "Changements intervenus sur OSE"
-author: Laurent Lécluse - DSI - Unicaen
----
-
 # OSE 11
 
 ## Correction de bugs

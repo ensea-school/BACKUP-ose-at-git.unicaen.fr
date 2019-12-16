@@ -20,7 +20,7 @@ class StructureController extends AbstractController
     use StructureSaisieFormAwareTrait;
 
 
-    public function index2Action()
+    public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
             Structure::class,

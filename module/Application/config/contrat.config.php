@@ -93,6 +93,18 @@ return [
                             ],
                         ],
                     ],
+                    'envoyer-mail'        => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:contrat/mail',
+                            'constraints' => [
+                                'contrat' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'envoyer-mail',
+                            ],
+                        ],
+                    ],
                     'deposer-fichier'     => [
                         'type'    => 'Segment',
                         'options' => [
@@ -153,7 +165,7 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'editer'    => [
+                            'editer'      => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/editer[/:modeleContrat]',
@@ -165,7 +177,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'telecharger'    => [
+                            'telecharger' => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/telecharger[/:modeleContrat]',
@@ -177,7 +189,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'supprimer' => [
+                            'supprimer'   => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/supprimer/:modeleContrat',
@@ -211,7 +223,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['exporter'],
+                    'action'     => ['exporter', 'envoyer-mail'],
                     'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
                     'assertion'  => Assertion\ContratAssertion::class,
                 ],
@@ -338,7 +350,7 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
+        'factories'  => [
             Form\Contrat\ModeleForm::class => Form\Contrat\Factory\ModeleFormFactory::class,
         ],
         'invokables' => [

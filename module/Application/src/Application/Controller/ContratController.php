@@ -326,12 +326,35 @@ class ContratController extends AbstractController
 
 
 
+    public function envoyerMailAction()
+    {
+        $contrat = $this->getEvent()->getParam('contrat');
+
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIV_EXPORT)) {
+            throw new UnAuthorizedException("Interdiction d'envoyer le contrat par email");
+        }
+
+        if (!empty($contrat->getIntervenant()->getEmail())) {
+            $phpRenderer = $this->getServiceLocator()->get('view_manager')->getRenderer();
+            $html        = $phpRenderer->render('application/contrat/mail/contrat', [
+                'contrat' => $contrat,
+            ]);
+            $message     = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
+            $this->mail()->send($message);
+        }
+
+        return $this->getResponse();
+    }
+
+
+
     /**
      * Dépôt du contrat signé.
      *
      * @return Response
      */
-    public function deposerFichierAction()
+    public
+    function deposerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
@@ -360,7 +383,8 @@ class ContratController extends AbstractController
      *
      * @return aarray
      */
-    public function listerFichierAction()
+    public
+    function listerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
@@ -381,7 +405,8 @@ class ContratController extends AbstractController
      *
      * @throws UnAuthorizedException
      */
-    public function telechargerFichierAction()
+    public
+    function telechargerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
@@ -403,7 +428,8 @@ class ContratController extends AbstractController
      * @return Response
      * @throws UnAuthorizedException
      */
-    public function supprimerFichierAction()
+    public
+    function supprimerFichierAction()
     {
         $this->initFilters();
 
@@ -429,7 +455,8 @@ class ContratController extends AbstractController
 
 
 
-    private function updateTableauxBord(Intervenant $intervenant)
+    private
+    function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
@@ -439,7 +466,8 @@ class ContratController extends AbstractController
 
 
 
-    public function modelesListeAction()
+    public
+    function modelesListeAction()
     {
         $modeles = $this->getServiceModeleContrat()->getList();
 
@@ -448,7 +476,8 @@ class ContratController extends AbstractController
 
 
 
-    public function modelesEditerAction()
+    public
+    function modelesEditerAction()
     {
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
@@ -476,7 +505,8 @@ class ContratController extends AbstractController
 
 
 
-    public function modelesSupprimerAction()
+    public
+    function modelesSupprimerAction()
     {
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
@@ -493,7 +523,8 @@ class ContratController extends AbstractController
 
 
 
-    public function modelesTelechargerAction()
+    public
+    function modelesTelechargerAction()
     {
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
@@ -502,7 +533,7 @@ class ContratController extends AbstractController
         $fichier->setNom(Util::reduce($modeleContrat->getLibelle()) . '.odt');
         $fichier->setTypeMime('application/vnd.oasis.opendocument.text');
         if ($modeleContrat->hasFichier()) {
-            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(),-1,0));
+            $fichier->setContenu(stream_get_contents($modeleContrat->getFichier(), -1, 0));
         } else {
             $fichier->setContenu(file_get_contents($this->getServiceModeleContrat()->getModeleGeneriqueFile()));
         }

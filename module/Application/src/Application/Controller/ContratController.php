@@ -353,8 +353,7 @@ class ContratController extends AbstractController
      *
      * @return Response
      */
-    public
-    function deposerFichierAction()
+    public function deposerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
@@ -383,8 +382,7 @@ class ContratController extends AbstractController
      *
      * @return aarray
      */
-    public
-    function listerFichierAction()
+    public function listerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
@@ -405,8 +403,7 @@ class ContratController extends AbstractController
      *
      * @throws UnAuthorizedException
      */
-    public
-    function telechargerFichierAction()
+    public function telechargerFichierAction()
     {
         $contrat = $this->getEvent()->getParam('contrat');
         /* @var $contrat Contrat */
@@ -428,8 +425,7 @@ class ContratController extends AbstractController
      * @return Response
      * @throws UnAuthorizedException
      */
-    public
-    function supprimerFichierAction()
+    public function supprimerFichierAction()
     {
         $this->initFilters();
 
@@ -455,8 +451,7 @@ class ContratController extends AbstractController
 
 
 
-    private
-    function updateTableauxBord(Intervenant $intervenant)
+    private function updateTableauxBord(Intervenant $intervenant)
     {
         $this->getServiceWorkflow()->calculerTableauxBord([
             'formule',
@@ -466,8 +461,7 @@ class ContratController extends AbstractController
 
 
 
-    public
-    function modelesListeAction()
+    public function modelesListeAction()
     {
         $modeles = $this->getServiceModeleContrat()->getList();
 
@@ -476,8 +470,7 @@ class ContratController extends AbstractController
 
 
 
-    public
-    function modelesEditerAction()
+    public function modelesEditerAction()
     {
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
@@ -505,8 +498,7 @@ class ContratController extends AbstractController
 
 
 
-    public
-    function modelesSupprimerAction()
+    public function modelesSupprimerAction()
     {
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');
@@ -523,8 +515,7 @@ class ContratController extends AbstractController
 
 
 
-    public
-    function modelesTelechargerAction()
+    public function modelesTelechargerAction()
     {
         /* @var $modeleContrat ModeleContrat */
         $modeleContrat = $this->getEvent()->getParam('modeleContrat');

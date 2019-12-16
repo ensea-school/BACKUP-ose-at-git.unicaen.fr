@@ -38,7 +38,6 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-
     /**
      * @param Intervenant    $intervenant
      * @param Contrat|null   $contrat
@@ -46,7 +45,7 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return Service[]
      */
-    public function getServices(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, $detach=true)
+    public function getServices(Intervenant $intervenant, Contrat $contrat = null, Structure $structure = null, $detach = true)
     {
         $services = [];
 
@@ -90,7 +89,7 @@ class ContratProcessus extends AbstractProcessus
 
         foreach ($query->execute() as $service) {
             /* @var $service \Application\Entity\Db\Service */
-            if ($detach){
+            if ($detach) {
                 $this->getEntityManager()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
             }
             $services[$service->getId()] = $service;
@@ -101,7 +100,7 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    public function getServicesRecaps( Contrat $contrat )
+    public function getServicesRecaps(Contrat $contrat)
     {
         $this->getEntityManager()->clear(\Application\Entity\Db\Service::class);
         // indispensable si on requête N fois la même entité avec des critères différents
@@ -122,9 +121,9 @@ class ContratProcessus extends AbstractProcessus
           AND str = :structure
         ";
         $res = $this->getEntityManager()->createQuery($dql)->setParameters([
-            "date"          => $contrat->getHistoModification(),
-            "intervenant"   => $contrat->getIntervenant(),
-            "structure"     => $contrat->getStructure()
+            "date"        => $contrat->getHistoModification(),
+            "intervenant" => $contrat->getIntervenant(),
+            "structure"   => $contrat->getStructure(),
         ])->getResult();
 
         $services = [];
@@ -150,12 +149,12 @@ class ContratProcessus extends AbstractProcessus
      */
     public function creer(Intervenant $intervenant, Structure $structure)
     {
-        $contrat    = $this->getServiceContrat()->newEntity();
-        /* @var $contrat Contrat  */
+        $contrat = $this->getServiceContrat()->newEntity();
+        /* @var $contrat Contrat */
 
         $contrat->setIntervenant($intervenant);
         $contrat->setStructure($structure);
-        $contrat->setTotalHetd( $this->getIntervenantTotalHetd( $intervenant ));
+        $contrat->setTotalHetd($this->getIntervenantTotalHetd($intervenant));
         $this->qualification($contrat); // init contrat/avenant
 
         return $contrat;
@@ -211,7 +210,7 @@ class ContratProcessus extends AbstractProcessus
         $sVH = $this->getServiceVolumeHoraire();
 
         // recherche des VH liés au contrat
-        $vhs = $sVH->getList( $sVH->finderByContrat($contrat) );
+        $vhs = $sVH->getList($sVH->finderByContrat($contrat));
 
         // détachement du contrat et des VH
         foreach ($vhs as $vh) {
@@ -242,9 +241,9 @@ class ContratProcessus extends AbstractProcessus
         $this->requalification($contrat); // requalifie le contrat en avenant si nécessaire!!
         $contrat->setValidation($validation);
 
-        if ($contrat->estUnAvenant()){
+        if ($contrat->estUnAvenant()) {
             // on recalcule l'index car il peut avoir changé... ? ? ?
-            $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant(), false));
+            $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
         }
 
         $this->getServiceValidation()->save($validation);
@@ -278,12 +277,12 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return bool
      */
-    public function doitEtreRequalifie( Contrat $contrat )
+    public function doitEtreRequalifie(Contrat $contrat)
     {
         if (!$contrat->getTypeContrat()) return true; // pas de type alors oui, on qualifie!!
 
         $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat == $contratInitial){
+        if (($contratInitial && !$contratInitial->getValidation()) || $contrat == $contratInitial) {
             $contratInitial = null; //projet ou lui-même seulement donc on oublie
         }
 
@@ -301,18 +300,18 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return $this
      */
-    public function qualification( Contrat $contrat )
+    public function qualification(Contrat $contrat)
     {
         if (null !== $contrat->getTypeContrat()) return $this;
 
         $contratInitial = $contrat->getIntervenant()->getContratInitial();
-        if (($contratInitial && !$contratInitial->getValidation()) || $contrat == $contratInitial){
+        if (($contratInitial && !$contratInitial->getValidation()) || $contrat == $contratInitial) {
             $contratInitial = null; //projet ou lui-même seulement donc on oublie
         }
 
-        if ($contratInitial){
+        if ($contratInitial) {
             $this->qualificationEnAvenant($contrat);
-        }else{
+        } else {
             $this->qualificationEnContrat($contrat);
         }
 
@@ -328,13 +327,13 @@ class ContratProcessus extends AbstractProcessus
      *
      * @return $this
      */
-    public function requalification( Contrat $contrat )
+    public function requalification(Contrat $contrat)
     {
-        if (! $this->doitEtreRequalifie($contrat)) return $this; // pas besoin
+        if (!$this->doitEtreRequalifie($contrat)) return $this; // pas besoin
 
-        if ($contrat->estUnAvenant()){
+        if ($contrat->estUnAvenant()) {
             $this->qualificationEnContrat($contrat);
-        }else{
+        } else {
             $this->qualificationEnAvenant($contrat);
         }
 
@@ -343,23 +342,23 @@ class ContratProcessus extends AbstractProcessus
 
 
 
-    protected function qualificationEnAvenant( Contrat $contrat )
+    protected function qualificationEnAvenant(Contrat $contrat)
     {
         $contratInitial = $contrat->getIntervenant()->getContratInitial();
 
         $contrat->setContrat($contratInitial);
-        $contrat->setTypeContrat( $this->getServiceTypeContrat()->getAvenant() );
-        $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant(), false));
+        $contrat->setTypeContrat($this->getServiceTypeContrat()->getAvenant());
+        $contrat->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($contrat->getIntervenant()));
 
         return $this;
     }
 
 
 
-    protected function qualificationEnContrat( Contrat $contrat)
+    protected function qualificationEnContrat(Contrat $contrat)
     {
         $contrat->setContrat(null);
-        $contrat->setTypeContrat( $this->getServiceTypeContrat()->getContrat() );
+        $contrat->setTypeContrat($this->getServiceTypeContrat()->getContrat());
         $contrat->setNumeroAvenant(0);
 
         return $this;
@@ -370,7 +369,7 @@ class ContratProcessus extends AbstractProcessus
     /**
      * @return float
      */
-    public function getIntervenantTotalHetd( Intervenant $intervenant)
+    public function getIntervenantTotalHetd(Intervenant $intervenant)
     {
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();

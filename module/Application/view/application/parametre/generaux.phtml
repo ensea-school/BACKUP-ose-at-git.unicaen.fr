@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @var $this \Application\View\Renderer\PhpRenderer
- * @var $form \Application\Form\ParametresForm
+ * @var $this    \Application\View\Renderer\PhpRenderer
+ * @var $form    \Application\Form\ParametresForm
  * @var $canEdit boolean
  */
 
@@ -11,155 +11,155 @@
 
 <?= $this->form()->openTag($form); ?>
 
-<div class="well">
+    <div class="well">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Années universitaires en cours</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('annee')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('annee_import')); ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Années universitaires en cours</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('annee')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('annee_import')); ?>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Services et référentiel</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modalite_services_prev_ens')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modalite_services_prev_ref')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modalite_services_real_ens')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('modalite_services_real_ref')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">États de sortie</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_services_pdf')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_services_csv')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_etat_paiement')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('es_winpaie')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Gestion des disciplines</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_1_libelle')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_2_libelle')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_3_libelle')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('discipline_codes_corresp_4_libelle')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Formule de calcul des HETD</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $this->formControlGroup($form->get('formule')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liens vers les documentations</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('doc-intervenant-vacataires')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('doc-intervenant-permanents')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Divers</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('oseuser')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('structure_univ')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('etablissement')); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('scenario_charges_services')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $this->formControlGroup($form->get('domaine_fonctionnel_ens_ext')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Services et référentiel</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('modalite_services_prev_ens')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('modalite_services_prev_ref')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('modalite_services_real_ens')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('modalite_services_real_ref')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">États de sortie</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('es_services_pdf')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('es_etat_paiement')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('es_winpaie')); ?>
-                </div>
-                <div class="col-md-6">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Gestion des disciplines</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_1_libelle')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_2_libelle')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_3_libelle')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('discipline_codes_corresp_4_libelle')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Formule de calcul des HETD</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <?= $this->formControlGroup($form->get('formule')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Liens vers les documentations</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('doc-intervenant-vacataires')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('doc-intervenant-permanents')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Divers</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('oseuser')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('structure_univ')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('etablissement')); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('scenario_charges_services')); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $this->formControlGroup($form->get('domaine_fonctionnel_ens_ext')); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
 <?php
-    if ($canEdit) echo $this->formsubmit( $form->get('submit') );
-    echo $this->form()->closeTag();
+if ($canEdit) echo $this->formsubmit($form->get('submit'));
+echo $this->form()->closeTag();

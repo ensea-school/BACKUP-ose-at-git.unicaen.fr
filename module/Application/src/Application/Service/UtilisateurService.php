@@ -85,10 +85,10 @@ class UtilisateurService extends AbstractEntityService
         $ldapUsers = @$this->getConnecteurLdap()->rechercheUtilisateurs($critere);
         $locaUsers = $this->rechercheUtilisateursLocaux($critere);
 
-        $result = array_merge($locaUsers, $ldapUsers );
+        $result = array_merge($locaUsers, $ldapUsers);
 
-        uasort($result, function($a,$b){
-           return $a['label'] > $b['label'];
+        uasort($result, function ($a, $b) {
+            return $a['label'] > $b['label'];
         });
 
         return $result;
@@ -105,9 +105,9 @@ class UtilisateurService extends AbstractEntityService
         $res = $this->getEntityManager()->getConnection()->fetchAll($sql);
 
         $ul = [];
-        foreach( $res as $r ){
+        foreach ($res as $r) {
             $ul[$r['USERNAME']] = [
-                'id' => $r['USERNAME'],
+                'id'    => $r['USERNAME'],
                 'label' => $r['DISPLAY_NAME'],
             ];
         }
@@ -117,17 +117,34 @@ class UtilisateurService extends AbstractEntityService
 
 
 
-    public function creerUtilisateur( string $nom, string $prenom, \DateTime $dateNaissance, string $login, string $motDePasse, bool $creerFicheIntervenant = true): Utilisateur
+    /**
+     * @param string    $nom
+     * @param string    $prenom
+     * @param \DateTime $dateNaissance
+     * @param string    $login
+     * @param string    $motDePasse
+     * @param array     $params
+     *
+     * Params :
+     *   creer-intervenant : bool
+     *   code   : null | string                     => généré si non fourni
+     *   annee  : null | int | Annee                => Année en cours si non fournie
+     *   statut : null | string | StatutIntervenant => AUTRES si non fourni, si string alors c'est le code du statut
+     *
+     * @return Utilisateur
+     */
+    public function creerUtilisateur(string $nom, string $prenom, \DateTime $dateNaissance, string $login, string $motDePasse, array $params = []): Utilisateur
     {
-        if ($creerFicheIntervenant){
-            $intervenant = $this->getServiceIntervenant()->creerIntervenant($nom, $prenom, $dateNaissance);
+        if (!isset($params['creer-intervenant']) || empty($params['creer-intervenant'])) {
+            $params['creer-intervenant'] = false;
         }
 
         $utilisateur = new Utilisateur();
         $utilisateur->setUsername($login);
-        $utilisateur->setDisplayName($prenom.' '.$nom);
+        $utilisateur->setDisplayName($prenom . ' ' . $nom);
         $utilisateur->setState(1);
-        if ($creerFicheIntervenant){
+        if ($params['creer-intervenant']) {
+            $intervenant = $this->getServiceIntervenant()->creerIntervenant($nom, $prenom, $dateNaissance, $params);
             $utilisateur->setCode($intervenant->getCode());
             $intervenant->setUtilisateurCode($intervenant->getCode());
             $this->getServiceIntervenant()->save($intervenant);
@@ -141,13 +158,13 @@ class UtilisateurService extends AbstractEntityService
 
 
 
-    public function changerMotDePasse( Utilisateur $utilisateur, string $motDePasse)
+    public function changerMotDePasse(Utilisateur $utilisateur, string $motDePasse)
     {
-        if (strlen($motDePasse) < 6){
+        if (strlen($motDePasse) < 6) {
             throw new \Exception("Mot de passe trop court : il doit faire au moint 6 caractères");
         }
 
-        $this->userService->updateUserPassword( $utilisateur, $motDePasse);
+        $this->userService->updateUserPassword($utilisateur, $motDePasse);
     }
 
 }

@@ -94,7 +94,7 @@ class DdlTable extends DdlAbstract
 
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('t.table_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('t.table_name', $includes, $excludes);
         $data = [];
 
         $withColumns = !$this->hasOption(self::OPT_NO_COLUMNS);
@@ -120,7 +120,7 @@ class DdlTable extends DdlAbstract
             LEFT JOIN user_mviews          m ON m.mview_name = t.table_name
             LEFT JOIN user_tab_comments comm ON comm.table_name = t.table_name
             LEFT JOIN user_sequences       s ON s.sequence_name = SUBSTR(t.table_name,1,23) || '_ID_SEQ'
-            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name AND c.hidden_column <> 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
+            " . ($withColumns ? "JOIN user_tab_cols c ON c.table_name = t.table_name AND c.hidden_column = 'NO' LEFT JOIN user_col_comments ccomm ON ccomm.table_name = c.table_name AND ccomm.column_name = c.column_name" : '') . "
           WHERE
             m.mview_name IS NULL 
             " . ($this->hasOption(self::OPT_NO_TEMPORARY) ? "AND t.temporary <> 'Y'" : '') . "
@@ -239,8 +239,10 @@ class DdlTable extends DdlAbstract
 
     public function create(array $data)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         /* Création de la table */
-        $this->addQuery($this->makeCreate($data), 'Ajout de la table '.$data['name']);
+        $this->addQuery($this->makeCreate($data), 'Ajout de la table ' . $data['name']);
 
         /* Création du commentaire éventuel de la table */
         if ($comm = $this->makeCreateComm($data)) {
@@ -248,7 +250,7 @@ class DdlTable extends DdlAbstract
         }
 
         /* Création des commentaires éventuels de colonnes */
-        foreach($data['columns'] as $column){
+        foreach ($data['columns'] as $column) {
             $this->alterColumnComment($data['name'], ['commentaire' => null], $column);
         }
     }
@@ -257,7 +259,9 @@ class DdlTable extends DdlAbstract
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP TABLE $name", 'Suppression de la table '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("DROP TABLE $name", 'Suppression de la table ' . $name);
     }
 
 
@@ -267,13 +271,15 @@ class DdlTable extends DdlAbstract
         if (!isset($data['sequence'])) return;
         if (!isset($data['columns']['ID'])) return;
 
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql = 'DECLARE seqId NUMERIC;
 BEGIN
   SELECT COALESCE(MAX(id+1),1) INTO seqId FROM ' . $data['name'] . ';
   EXECUTE IMMEDIATE \'DROP SEQUENCE ' . $data['sequence'] . '\';
   EXECUTE IMMEDIATE \'CREATE SEQUENCE ' . $data['sequence'] . ' INCREMENT BY 1 MINVALUE \' || seqId || \' NOCACHE\';
 END;';
-        $this->addQuery($sql, 'Mise à jour de la séquence '.$data['sequence']);
+        $this->addQuery($sql, 'Mise à jour de la séquence ' . $data['sequence']);
     }
 
 
@@ -349,9 +355,11 @@ END;';
         if ($this->isDiff($old, $new)) {
             $name = $new['name'];
 
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             if ($old['logging'] !== $new['logging']) {
                 $log = $new['logging'] ? 'LOGGING' : 'NOLOGGING';
-                $this->addQuery("ALTER TABLE \"$name\" $log", 'Modification du logging de la table '.$new['name']);
+                $this->addQuery("ALTER TABLE \"$name\" $log", 'Modification du logging de la table ' . $new['name']);
             }
 
             $newCols = array_diff(array_keys($new['columns']), array_keys($old['columns']));
@@ -378,7 +386,7 @@ END;';
             }
 
             if ($old['commentaire'] !== $new['commentaire']) {
-                $this->addQuery($this->makeCreateComm($new), 'Modification du commentaire de la table '.$new['name']);
+                $this->addQuery($this->makeCreateComm($new), 'Modification du commentaire de la table ' . $new['name']);
             }
         }
     }
@@ -387,6 +395,8 @@ END;';
 
     private function addColumn(string $table, array $column, $noNotNull = false)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];
         if ($column['default'] !== null) {
             $cp[] = 'DEFAULT ' . $column['default'];
@@ -397,7 +407,7 @@ END;';
         }
 
         $sql = "ALTER TABLE \"$table\" ADD (" . implode(" ", $cp) . ")";
-        $this->addQuery($sql, 'Ajout de la colonne '.$column['name'].' sur la table '.$table);
+        $this->addQuery($sql, 'Ajout de la colonne ' . $column['name'] . ' sur la table ' . $table);
 
         /* Ajout du commentaire éventuel de la conne */
         $this->alterColumnComment($table, ['commentaire' => null], $column);
@@ -407,10 +417,12 @@ END;';
 
     private function dropColumn(string $table, array $column)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $column = $column['name'];
         $this->addQuery(
             "ALTER TABLE \"$table\" DROP COLUMN \"$column\"",
-            'Suppression de la colonne '.$column.' sur la table '.$table
+            'Suppression de la colonne ' . $column . ' sur la table ' . $table
         );
     }
 
@@ -418,10 +430,12 @@ END;';
 
     private function alterColumnType(string $table, array $old, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $column = $new['name'];
         if ($this->isColDiffType($old, $new)) {
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" " . $this->makeColumnType($new) . ")";
-            $this->addQuery($sql,'Changement du type de la colonne '.$column.' de la table '.$table);
+            $this->addQuery($sql, 'Changement du type de la colonne ' . $column . ' de la table ' . $table);
         }
     }
 
@@ -431,8 +445,10 @@ END;';
     {
         $column = $new['name'];
         if ($this->isColDiffNullable($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" " . ($new['nullable'] ? '' : 'NOT ') . "NULL)";
-            $this->addQuery($sql,'Changement d\'état de la colonne '.$column.' de la table '.$table);
+            $this->addQuery($sql, 'Changement d\'état de la colonne ' . $column . ' de la table ' . $table);
         }
     }
 
@@ -442,10 +458,12 @@ END;';
     {
         $column = $new['name'];
         if ($this->isColDiffDefault($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $default = $new['default'];
             if (null === $default) $default = 'NULL';
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" DEFAULT $default )";
-            $this->addQuery($sql,'Changement de valeur par défaut de la colonne '.$column.' de la table '.$table);
+            $this->addQuery($sql, 'Changement de valeur par défaut de la colonne ' . $column . ' de la table ' . $table);
         }
     }
 
@@ -455,14 +473,16 @@ END;';
     {
         $column = $new['name'];
         if ($this->isColDiffComment($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $commentaire = $new['commentaire'];
-            if ($commentaire){
+            if ($commentaire) {
                 $commentaire = "'" . str_replace("'", "''", $commentaire) . "'";
-                $sql = "COMMENT ON COLUMN \"$table\".\"$column\" IS $commentaire";
-                $this->addQuery($sql,'Modification du commentaire de la colonne '.$column.' de la table '.$table);
-            }else{
+                $sql         = "COMMENT ON COLUMN \"$table\".\"$column\" IS $commentaire";
+                $this->addQuery($sql, 'Modification du commentaire de la colonne ' . $column . ' de la table ' . $table);
+            } else {
                 $sql = "COMMENT ON COLUMN \"$table\".\"$column\" IS ''";
-                $this->addQuery($sql,'Suppression du commentaire de la colonne '.$column.' de la table '.$table);
+                $this->addQuery($sql, 'Suppression du commentaire de la colonne ' . $column . ' de la table ' . $table);
             }
         }
     }
@@ -473,7 +493,9 @@ END;';
     {
         $newName = $new['name'];
 
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql = "ALTER TABLE \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de la table '.$oldName.' en '.$newName);
+        $this->addQuery($sql, 'Renommage de la table ' . $oldName . ' en ' . $newName);
     }
 }

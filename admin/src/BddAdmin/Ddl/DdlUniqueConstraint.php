@@ -3,14 +3,15 @@
 namespace BddAdmin\Ddl;
 
 
-
 class DdlUniqueConstraint extends DdlAbstract
 {
     const ALIAS = 'unique-constraint';
 
+
+
     public function get($includes = null, $excludes = null): array
     {
-        list($f,$p) = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
         $data = [];
 
         $sql = "SELECT
@@ -88,19 +89,23 @@ class DdlUniqueConstraint extends DdlAbstract
 
     public function create(array $data)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql = $this->makeCreate($data);
-        $this->addQuery($sql, 'Ajout de la contrainte d\'unicité '.$data['name']);
+        $this->addQuery($sql, 'Ajout de la contrainte d\'unicité ' . $data['name']);
     }
 
 
 
     public function drop(string $name)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql       = "SELECT table_name FROM all_constraints WHERE constraint_name = :name";
         $d         = $this->bdd->select($sql, compact('name'));
         $tableName = $d[0]['TABLE_NAME'];
 
-        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la contrainte d\'unicité '.$name);
+        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la contrainte d\'unicité ' . $name);
     }
 
 
@@ -108,6 +113,8 @@ class DdlUniqueConstraint extends DdlAbstract
     public function alter(array $old, array $new)
     {
         if ($this->isDiff($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $this->drop($old['name']);
             $this->create($new);
         }
@@ -117,10 +124,12 @@ class DdlUniqueConstraint extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $tableName = $new['table'];
-        $newName = $new['name'];
+        $newName   = $new['name'];
 
         $sql = "ALTER TABLE \"$tableName\" RENAME CONSTRAINT \"$oldName\" TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de la contrainte d\'unicité '.$oldName.' en '.$newName);
+        $this->addQuery($sql, 'Renommage de la contrainte d\'unicité ' . $oldName . ' en ' . $newName);
     }
 }

@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**
@@ -98,7 +98,7 @@ class ModeleForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'TextArea',
+            'type'       => 'Textarea',
             'name'       => 'requete',
             'options'    => [
                 'label' => "Requête SQL",
@@ -122,7 +122,7 @@ class ModeleForm extends AbstractForm
             ]);
 
             $this->add([
-                'type'       => 'TextArea',
+                'type'       => 'Textarea',
                 'name'       => "bloc-$i-requete",
                 'options'    => [
                     'label' => "Requête SQL",

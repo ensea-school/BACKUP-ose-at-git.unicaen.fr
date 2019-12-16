@@ -258,13 +258,15 @@ return [
             Service\TypeHeuresService::class                         => Service\TypeHeuresService::class,
             Service\CentreCoutService::class                         => Service\CentreCoutService::class,
             Service\CentreCoutEpService::class                       => Service\CentreCoutEpService::class,
-            Assertion\PaiementAssertion::class                       => Assertion\PaiementAssertion::class,
+        ],
+        'factories'  => [
+            Assertion\PaiementAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
-            'DemandeMiseEnPaiement' => View\Helper\Paiement\DemandeMiseEnPaiementViewHelper::class,
-            'TypeHeures'            => View\Helper\Paiement\TypeHeuresViewHelper::class,
+            'demandeMiseEnPaiement' => View\Helper\Paiement\DemandeMiseEnPaiementViewHelper::class,
+            'typeHeures'            => View\Helper\Paiement\TypeHeuresViewHelper::class,
         ],
     ],
     'form_elements'   => [

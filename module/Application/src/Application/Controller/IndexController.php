@@ -63,7 +63,7 @@ class IndexController extends AbstractController
             if ($role instanceof Role && $role->getIntervenant()) {
                 $intervenant = $this->getServiceIntervenant()->getBySourceCode($role->getIntervenant()->getSourceCode());
                 if ($intervenant) {
-                    $this->getServiceUserContext()->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
+                    $this->serviceUserContext->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
                 }
             }
         }

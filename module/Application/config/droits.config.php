@@ -218,8 +218,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Droits' => Controller\DroitsController::class,
+        'factories' => [
+            'Application\Controller\Droits' => Controller\Factory\DroitsControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -228,8 +228,10 @@ return [
         ],
     ],
     'form_elements'   => [
+        'factories' => [
+            'UnicaenAuth\Form\Droits\Role' => Form\Droits\RoleFormFactory::class,
+        ],
         'invokables' => [
-            Form\Droits\RoleForm::class        => Form\Droits\RoleForm::class,
             Form\Droits\AffectationForm::class => Form\Droits\AffectationForm::class,
         ],
     ],

@@ -1,7 +1,7 @@
 <?php
 
 $this->headTitle()->append($title = 'An error occurred');
-$details = isset($this->display_exceptions) && $this->display_exceptions && isset($this->exception) && ($this->exception instanceof Exception);
+$details = AppConfig::get('global', 'affichageErreurs') && isset($this->exception) && ($this->exception instanceof Error || $this->exception instanceof Exception);
 
 ?>
 <div class="alert alert-danger exception" role="alert">

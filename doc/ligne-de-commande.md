@@ -1,4 +1,4 @@
-# Documentation de la ligne de comande
+# Documentation de la ligne de commande
 
 ## Lancer la ligne de commande OSE
 
@@ -27,7 +27,7 @@ Pas de paramètre pour cette commande.
 
 Pas de paramètre pour cette commande.
 
-### ```calcul-tableaux-bord``` : Recalcule tous les tableaux de bord de calculs itermédiaires
+### ```calcul-tableaux-bord``` : Recalcule tous les tableaux de bord de calculs intermédiaires
 
 Pas de paramètre pour cette commande.
 Attention : le temps de traitement peut être long!
@@ -41,7 +41,7 @@ Attention : le temps de traitement peut être long!
 
 Utile pour créer un utilisateur (personnel ou intervenant) non présent dans le LDAP
 Vous pourrez également créer une fiche intervenant dans la foulée pour ce nouvel utilisateur.
-une fois l'utilisateur créé, vous pourrez aller dans OSE, Administration, Affectations pour lui donner une nouvelle affectation.
+Une fois l'utilisateur créé, vous pourrez aller dans OSE, Administration, Affectations pour lui donner une nouvelle affectation.
 Attention : l'**utilisateur** ne pourra se **connecter** directement à OSE **que si** l'application n'est **pas cassifiée**.
 
 Paramètres possibles :

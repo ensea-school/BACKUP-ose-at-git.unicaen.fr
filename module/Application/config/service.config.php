@@ -474,9 +474,11 @@ return [
             Service\MotifNonPaiementService::class       => Service\MotifNonPaiementService::class,
             Service\ModificationServiceDuService::class  => Service\ModificationServiceDuService::class,
             Service\CampagneSaisieService::class         => Service\CampagneSaisieService::class,
-            Assertion\ServiceAssertion::class            => Assertion\ServiceAssertion::class,
             Processus\ServiceProcessus::class            => Processus\ServiceProcessus::class,
             Processus\ServiceReferentielProcessus::class => Processus\ServiceReferentielProcessus::class,
+        ],
+        'factories'  => [
+            Assertion\ServiceAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'hydrators'       => [
@@ -487,12 +489,12 @@ return [
     'form_elements'   => [
         'factories'  => [
             Form\Service\SaisieFieldset::class => Form\Service\Factory\SaisieFieldsetFactory::class,
+            Form\Service\RechercheForm::class  => Form\Service\Factory\RechercheFormFactory::class,
         ],
         'invokables' => [
             Form\Service\Saisie::class                    => Form\Service\Saisie::class,
             Form\ServiceReferentiel\Saisie::class         => Form\ServiceReferentiel\Saisie::class,
             Form\ServiceReferentiel\SaisieFieldset::class => Form\ServiceReferentiel\SaisieFieldset::class,
-            Form\Service\RechercheForm::class             => Form\Service\RechercheForm::class,
         ],
     ],
     'view_helpers'    => [
@@ -500,7 +502,7 @@ return [
             'serviceSaisieForm'            => View\Helper\Service\SaisieForm::class,
             'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,
             'serviceResume'                => View\Helper\Service\Resume::class,
-            'FonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
+            'fonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
         ],
         'factories'  => [
             'serviceListe'            => View\Helper\Service\ListeFactory::class,

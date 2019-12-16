@@ -2,13 +2,14 @@
 
 namespace Application\Entity\Db;
 
+use UnicaenApp\Entity\UserInterface;
 use UnicaenAuth\Entity\Db\AbstractUser;
 
 
 /**
  * Utilisateur
  */
-class Utilisateur extends AbstractUser
+class Utilisateur extends AbstractUser implements UserInterface
 {
     const APP_UTILISATEUR_ID = 1;
 

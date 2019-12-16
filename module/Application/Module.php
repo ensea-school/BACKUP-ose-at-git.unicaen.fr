@@ -10,9 +10,9 @@
 namespace Application;
 
 use Application\Service\ContextService;
+use Interop\Container\ContainerInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
@@ -24,21 +24,25 @@ include_once(__DIR__ . '/src/Application/functions.php');
 
 
 
-
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
 
     public function onBootstrap(MvcEvent $e)
     {
+        if (empty(\Application::$container)){
+            \Application::$container = $e->getApplication()->getServiceManager();
+        }
+
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
         $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch',
-            function (\Zend\Mvc\MvcEvent $e) {
-                if ($e->getRequest() instanceof \Zend\Http\Request && $e->getRequest()->isXmlHttpRequest()) {
-                    $e->getTarget()->layout('application/ajax-layout.phtml');
+            function (MvcEvent $e) {
+                $request = $e->getRequest();
+                if ($request instanceof \Zend\Http\Request && $request->isXmlHttpRequest()) {
+                    $e->getTarget()->layout('layout/ajax.phtml');
                 }
             }
         );
@@ -88,15 +92,15 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
 
 
 
-    private function getEntityService(ServiceLocatorInterface $serviceLocator, $paramName)
+    private function getEntityService(ContainerInterface $container, $paramName)
     {
         if ('typeAgrementCode' === $paramName) {
             $paramName = 'typeAgrement';
         }
 
         $serviceName = 'Application\\Service\\' . ucfirst($paramName) . 'Service';
-        if ($serviceLocator->has($serviceName)) {
-            return $serviceLocator->get($serviceName);
+        if ($container->has($serviceName)) {
+            return $container->get($serviceName);
         }
 
         return null;

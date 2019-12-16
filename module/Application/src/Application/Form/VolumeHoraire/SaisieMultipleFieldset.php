@@ -8,7 +8,7 @@ use Application\Form\AbstractFieldset;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Zend\Form\Element\Hidden;
 use Application\Filter\StringFromFloat;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
 use Application\Entity\Db\Service;

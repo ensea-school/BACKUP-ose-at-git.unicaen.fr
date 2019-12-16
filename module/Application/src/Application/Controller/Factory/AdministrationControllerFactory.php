@@ -3,18 +3,18 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\AdministrationController;
-use Zend\Mvc\Controller\ControllerManager;
+use Interop\Container\ContainerInterface;
 
 class AdministrationControllerFactory
 {
     /**
      * Create controller
      *
-     * @param ControllerManager $controllerManager
+     * @param ContainerInterface $container
      *
      * @return AdministrationController
      */
-    public function __invoke(ControllerManager $controllerManager)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $controller = new AdministrationController();
 

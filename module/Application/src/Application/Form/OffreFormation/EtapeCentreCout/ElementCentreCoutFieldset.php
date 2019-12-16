@@ -11,7 +11,7 @@ use Application\Entity\Db\TypeHeures;
 use RuntimeException;
 use Zend\Form\Element\Select;
 use Application\Entity\Db\CentreCoutEp;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles

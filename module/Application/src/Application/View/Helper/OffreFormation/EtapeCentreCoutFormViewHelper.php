@@ -8,7 +8,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 /**
  * Dessine le formulaire de type EtapeCentreCoutFormViewHelper.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see    EtapeCentreCoutSaisieForm
  */
 class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
@@ -83,7 +82,7 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
             $res         .= '<tr>';
             $res         .= '<th class="element-pedagogique">' . $element . '</th>';
             $formElement = $form->get('EL' . $element->getId());
-            $res         .= $this->getView()->ElementCentreCoutFieldset()->render($formElement, $typesHeures, true);
+            $res         .= $this->getView()->elementCentreCoutFieldset()->render($formElement, $typesHeures, true);
             $res         .= '</tr>';
         }
 

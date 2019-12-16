@@ -8,7 +8,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 /**
  * Dessine un fieldset de type ElementCentreCoutFieldsetViewHelper.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see    ElementCentreCoutFieldset
  */
 class ElementCentreCoutFieldsetViewHelper extends AbstractHtmlElement

@@ -8,7 +8,7 @@ use Application\Service\Traits\DomaineFonctionnelServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeFormationServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of EtapeSaisie
@@ -128,7 +128,7 @@ class EtapeSaisie extends AbstractForm
 
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByEnseignement();
-        if ($structure = $role->getStructure()) {
+        if ($structure = ($role ? $role->getStructure() : null)) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }
         $this->get('structure')

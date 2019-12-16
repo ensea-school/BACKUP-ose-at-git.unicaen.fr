@@ -2,33 +2,28 @@
 
 namespace Application\Service\Factory;
 
-use Application\Service\ContextService;
 use Application\Service\WorkflowService;
+use Interop\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\Console\Console;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
-class WorkflowServiceFactory implements FactoryInterface
+class WorkflowServiceFactory
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $service = new WorkflowService();
 
         $service->setServiceTableauBord(
-            $serviceLocator->get(TableauBordService::class)
-        );
-
-        $service->setServiceContext(
-            $serviceLocator->get(ContextService::class)
+            $container->get(TableauBordService::class)
         );
 
         if (!Console::isConsole()) {
             $service->setServiceAuthorize(
-                $serviceLocator->get('BjyAuthorize\Service\Authorize')
+                $container->get('BjyAuthorize\Service\Authorize')
             );
         }
 
         return $service;
     }
+
 }

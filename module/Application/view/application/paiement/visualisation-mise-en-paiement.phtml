@@ -42,7 +42,7 @@ foreach ($paiements as $paiement) {
             if ($service->getElementPedagogique()) {
                 $d['structure'] = (string)$this->structure($service->getElementPedagogique()->getStructure())->renderLink();
                 $d['etape']     = (string)$this->etape($service->getElementPedagogique()->getEtape())->renderLink();
-                $d['element']   = (string)$this->elementpedagogique($service->getElementPedagogique())->renderLink();
+                $d['element']   = (string)$this->elementPedagogique($service->getElementPedagogique())->renderLink();
             } else {
                 $d['structure'] = (string)$this->structure($service->getIntervenant()->getStructure())->renderLink();
                 $d['etablissement'] = $this->etablissement($service->getEtablissement())->renderLink();

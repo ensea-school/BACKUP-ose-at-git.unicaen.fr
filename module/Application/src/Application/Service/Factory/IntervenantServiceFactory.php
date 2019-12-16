@@ -3,7 +3,7 @@
 namespace Application\Service\Factory;
 
 use UnicaenImport\Processus\ImportProcessus;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Service\IntervenantService;
 
 

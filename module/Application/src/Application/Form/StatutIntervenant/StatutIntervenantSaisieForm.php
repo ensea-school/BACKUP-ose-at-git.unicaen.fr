@@ -8,7 +8,7 @@ use Zend\Form\Element\Csrf;
 use Zend\Form\Element\Number;
 use Zend\Form\Element\Select;
 use Zend\Form\Element\Text;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;

@@ -3,18 +3,11 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\EtatSortieController;
-use Zend\Mvc\Controller\ControllerManager;
+use Interop\Container\ContainerInterface;
 
 class EtatSortieControllerFactory
 {
-    /**
-     * Create controller
-     *
-     * @param ControllerManager $controllerManager
-     *
-     * @return EtatSortieController
-     */
-    public function __invoke(ControllerManager $controllerManager)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $controller = new EtatSortieController();
 

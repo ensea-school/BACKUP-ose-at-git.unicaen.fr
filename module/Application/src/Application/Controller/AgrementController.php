@@ -257,7 +257,7 @@ class AgrementController extends AbstractController
                 $checkbox = null;
             }
             if ($wie->getStructure()) $needStructure = true;
-            $data[] = compact('wie', 'actionUrl', 'checkbox');
+            $data[] = compact('wie', 'checkbox');
         }
 
 

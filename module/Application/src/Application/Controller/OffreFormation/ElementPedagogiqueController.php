@@ -16,7 +16,6 @@ use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 /**
  * Description of ElementPedagogiqueController
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ElementPedagogiqueController extends AbstractController
 {

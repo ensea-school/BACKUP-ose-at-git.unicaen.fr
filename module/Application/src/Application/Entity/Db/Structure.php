@@ -64,6 +64,21 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
      */
     protected $enseignement;
 
+    /**
+     * @var float
+     */
+    protected $plafondReferentiel;
+
+    /**
+     * @var boolean
+     */
+    protected $affAdresseContrat;
+
+    /**
+     * @var string
+     */
+    protected $sourceCode;
+
 
 
     function __construct()
@@ -165,6 +180,28 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
         return $this->id;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
+
+
+
+    /**
+     * @param string $sourceCode
+     *
+     * @return Structure
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
 
 
     /**
@@ -284,6 +321,58 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
 
 
     /**
+     * Set plafondReferentiel
+     *
+     * @param string $plafondReferentiel
+     *
+     * @return Structure
+     */
+    public function setPlafondReferentiel($plafondReferentiel)
+    {
+        $this->plafondReferentiel = $plafondReferentiel;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get plafondReferentiel
+     *
+     * @return float
+     */
+    public function getPlafondReferentiel()
+    {
+        return $this->plafondReferentiel;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isAffAdresseContrat()
+    {
+        return $this->affAdresseContrat;
+    }
+
+
+
+    /**
+     * @param bool $affAdresseContrat
+     *
+     * @return Structure
+     */
+    public function setAffAdresseContrat($affAdresseContrat)
+    {
+        $this->affAdresseContrat = $affAdresseContrat;
+
+        return $this;
+    }
+
+
+
+    /**
      * Retourne la représentation littérale de cet objet.
      *
      * @return string
@@ -341,6 +430,8 @@ class Structure implements HistoriqueAwareInterface, ResourceInterface, ImportAw
     {
         $this->setEntityManager($objectManager);
     }
+
+
 
     function __sleep()
     {

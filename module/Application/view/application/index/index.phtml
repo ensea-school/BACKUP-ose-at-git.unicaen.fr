@@ -33,7 +33,7 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
                     ?><p>
                     <div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div></p><?php
                 } else {
-                    echo $this->tag('div')->html($this->feuillederoute($intervenant)->renderCurrentBtn());
+                    echo $this->tag('div')->html($this->feuilleDeRoute($intervenant)->renderCurrentBtn());
 
 
                     /* Guide à télécharger... */
@@ -94,5 +94,5 @@ $onlyIntervenant = $intervenant && (null == $context->getSelectedIdentityRole()-
     <!----------------------------- Feuille de route --------------------------->
 <?php
 if ($onlyIntervenant) {
-    echo $this->feuillederoute($intervenant);
+    echo $this->feuilleDeRoute($intervenant);
 }

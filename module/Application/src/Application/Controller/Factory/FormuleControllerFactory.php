@@ -2,9 +2,8 @@
 
 namespace Application\Controller\Factory;
 
-use Zend\Mvc\Controller\ControllerManager as ContainerInterface;
 use Application\Controller\FormuleController;
-
+use Interop\Container\ContainerInterface;
 
 
 /**
@@ -24,8 +23,6 @@ class FormuleControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        /* On quitte le ControllerManager */
-        $container = $container->getServiceLocator();
 
         $controller = new FormuleController;
         /* Injectez vos dépendances ICI */

@@ -11,7 +11,7 @@ class DdlPackage extends DdlAbstract
 
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('name', $includes, $excludes);
         $data = [];
 
         $q = "SELECT 
@@ -40,9 +40,9 @@ class DdlPackage extends DdlAbstract
             $definition = $this->purger($d['definition'], false);
             $body       = $this->purger($d['body'], false);
 
-            if ($this->hasOption('clearAutogen')){
+            if ($this->hasOption('clearAutogen')) {
                 $definition = $this->clearAutogen($definition);
-                $body = $this->clearAutogen($body);
+                $body       = $this->clearAutogen($body);
             }
 
             $data[$name]['definition'] = $definition;
@@ -64,13 +64,15 @@ class DdlPackage extends DdlAbstract
 
     public function create(array $data)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         if ($this->hasOption('definition')) {
-            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package '.$data['name']);
+            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package ' . $data['name']);
         } elseif ($this->hasOption('body')) {
-            $this->addQuery($data['body'], 'Ajout/modification du corps du package '.$data['name']);
+            $this->addQuery($data['body'], 'Ajout/modification du corps du package ' . $data['name']);
         } else {
-            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package '.$data['name']);
-            $this->addQuery($data['body'], 'Ajout/modification du corps du package '.$data['name']);
+            $this->addQuery($data['definition'], 'Ajout/modification de la définition du package ' . $data['name']);
+            $this->addQuery($data['body'], 'Ajout/modification du corps du package ' . $data['name']);
         }
     }
 
@@ -78,7 +80,9 @@ class DdlPackage extends DdlAbstract
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP PACKAGE $name", 'Suppression du package '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("DROP PACKAGE $name", 'Suppression du package ' . $name);
     }
 
 
@@ -86,6 +90,8 @@ class DdlPackage extends DdlAbstract
     public function alter(array $old, array $new)
     {
         if ($old != $new) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $this->create($new);
         }
     }
@@ -94,6 +100,8 @@ class DdlPackage extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $this->drop($oldName);
         $this->create($new);
     }

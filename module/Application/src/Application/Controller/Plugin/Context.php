@@ -17,7 +17,6 @@ use RuntimeException;
  * @method *FromSources($name = null, $default = null, array $sources = null) Description
  * @method *FromQueryPost($name = null, $default = null) Description
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see Params
  */
 class Context extends Params

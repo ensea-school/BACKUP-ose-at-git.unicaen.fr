@@ -6,7 +6,7 @@
 #
 ###########################################################################################
 
-FROM unicaen-dev-php7.0-apache
+FROM unicaen-dev-php7.4-apache
 LABEL maintainer="Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>"
 
 ENV APACHE_CONF_DIR=/etc/apache2 \
@@ -30,6 +30,7 @@ RUN ln -sf /app/bin/ose /usr/local/bin/ose
 
 # Config PHP.
 ADD docker/${APPLICATION_ENV}/php.conf ${PHP_CONF_DIR}/fpm/conf.d/app.ini
+ADD docker/${APPLICATION_ENV}/php.conf ${PHP_CONF_DIR}/cli/conf.d/app.ini
 
 # Configuration Apache et FPM
 ADD docker/${APPLICATION_ENV}/apache-ports.conf    ${APACHE_CONF_DIR}/ports.conf

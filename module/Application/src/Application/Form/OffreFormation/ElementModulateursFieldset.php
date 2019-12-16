@@ -9,7 +9,7 @@ use Application\Service\Traits\ModulateurServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Zend\Form\Element\Select;
 use Application\Entity\Db\ElementPedagogique;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementModulateursFieldset

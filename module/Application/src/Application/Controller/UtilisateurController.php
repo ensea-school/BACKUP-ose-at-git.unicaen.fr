@@ -10,6 +10,7 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
 
 
+
 class UtilisateurController extends BaseController
 {
     use ContextServiceAwareTrait;
@@ -21,13 +22,13 @@ class UtilisateurController extends BaseController
 
     /**
      * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
-     * La sélection est mémorisé en session par le service AuthUserContext.
+     * La sélection est mémorisé en session par le service UserContext.
      */
     public function selectionnerProfilAction($addFlashMessage = true)
     {
         parent::selectionnerProfilAction($addFlashMessage = false);
 
-        $role = $this->getAuthUserContextService()->getSelectedIdentityRole();
+        $role        = $this->serviceUserContext->getSelectedIdentityRole();
         /* @var $role Role */
         $structureId = $this->getRequest()->getPost('structure-' . $role->getRoleId());
 

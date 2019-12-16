@@ -9,7 +9,7 @@ use Application\Entity\Db\TypeHeures;
 use Application\Form\AbstractForm;
 use Application\Form\OffreFormation\TauxMixite\Traits\TauxMixiteFieldsetAwareTrait;
 use Zend\Form\Element\Text;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 

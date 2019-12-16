@@ -11,7 +11,7 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

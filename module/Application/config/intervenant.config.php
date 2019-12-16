@@ -471,20 +471,20 @@ return [
         'factories'  => [
             Service\IntervenantService::class     => Service\Factory\IntervenantServiceFactory::class,
             Processus\IntervenantProcessus::class => Processus\Factory\IntervenantProcessusFactory::class,
+            Assertion\ModificationServiceDuAssertion::class  => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\IntervenantAssertion::class            => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\MotifModificationServiceDuService::class => Service\MotifModificationServiceDuService::class,
             Service\CiviliteService::class                   => Service\CiviliteService::class,
             Service\StatutIntervenantService::class          => Service\StatutIntervenantService::class,
             Service\TypeIntervenantService::class            => Service\TypeIntervenantService::class,
-            Assertion\IntervenantAssertion::class            => Assertion\IntervenantAssertion::class,
-            Assertion\ModificationServiceDuAssertion::class  => Assertion\ModificationServiceDuAssertion::class,
         ],
     ],
     'view_helpers'    => [
         'invokables' => [
             'formuleTotauxHetd'          => View\Helper\Intervenant\TotauxHetdViewHelper::class,
-            'Intervenant'                => View\Helper\Intervenant\IntervenantViewHelper::class,
+            'intervenant'                => View\Helper\Intervenant\IntervenantViewHelper::class,
             'intervenantSuppressionData' => View\Helper\Intervenant\IntervenantSuppressionDataViewHelper::class,
         ],
     ],

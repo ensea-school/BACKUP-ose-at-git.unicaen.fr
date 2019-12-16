@@ -3,15 +3,16 @@
 namespace BddAdmin\Ddl;
 
 
-
 class DdlView extends DdlAbstract
 {
     const ALIAS = 'view';
     const LABEL = 'Vues';
 
+
+
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('view_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('view_name', $includes, $excludes);
         $data = [];
 
         $q = "SELECT
@@ -38,16 +39,20 @@ class DdlView extends DdlAbstract
 
 
 
-    public function create(array $data)
+    public function create(array $data, $test = null)
     {
-        $this->addQuery($data['definition'], 'Ajout/modification de la vue '.$data['name']);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery($data['definition'], 'Ajout/modification de la vue ' . $data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("DROP VIEW " . $name, 'Suppression de la vue ' . $name);
     }
 
 
@@ -55,6 +60,8 @@ class DdlView extends DdlAbstract
     public function alter(array $old, array $new)
     {
         if ($old != $new) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $this->create($new);
         }
     }
@@ -63,6 +70,8 @@ class DdlView extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $this->drop($oldName);
         $this->create($new);
     }

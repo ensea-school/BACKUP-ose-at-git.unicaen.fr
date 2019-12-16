@@ -5,7 +5,7 @@ namespace Application\Form\modulateur;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\TypeModulateurStructureServiceAwareTrait;
@@ -96,7 +96,7 @@ class typeModulateurStructureSaisieForm extends AbstractForm
         $role             = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceStructure = $this->getServiceStructure();
         $qb               = $serviceStructure->finderByEnseignement();
-        if ($role->getStructure()) {
+        if ($role && $role->getStructure()) {
             $serviceStructure->finderById($role->getStructure()->getId(), $qb); // Filtre
         }
         $this->get('structure')

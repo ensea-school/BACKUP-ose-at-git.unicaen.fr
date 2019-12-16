@@ -5,7 +5,7 @@ namespace Application\Form\Intervenant;
  *
  *
  */
-class DossierFieldsetHydrator extends \Zend\Stdlib\Hydrator\ClassMethods
+class DossierFieldsetHydrator extends \Zend\Hydrator\ClassMethods
 {
     /**
      * Hydrate $object with the provided $data.

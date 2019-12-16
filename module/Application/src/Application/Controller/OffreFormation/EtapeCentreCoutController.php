@@ -12,7 +12,6 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 /**
  *
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class EtapeCentreCoutController extends AbstractController
 {

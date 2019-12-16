@@ -153,7 +153,7 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'editer'    => [
+                            'editer'      => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/editer[/:modeleContrat]',
@@ -165,7 +165,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'telecharger'    => [
+                            'telecharger' => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/telecharger[/:modeleContrat]',
@@ -177,7 +177,7 @@ return [
                                     ],
                                 ],
                             ],
-                            'supprimer' => [
+                            'supprimer'   => [
                                 'type'    => 'Segment',
                                 'options' => [
                                     'route'       => '/supprimer/:modeleContrat',
@@ -325,11 +325,11 @@ return [
     'service_manager' => [
         'factories'  => [
             Service\ModeleContratService::class => Service\Factory\ModeleContratServiceFactory::class,
+            Assertion\ContratAssertion::class   => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
         'invokables' => [
             Service\ContratService::class     => Service\ContratService::class,
             Service\TypeContratService::class => Service\TypeContratService::class,
-            Assertion\ContratAssertion::class => Assertion\ContratAssertion::class,
             Processus\ContratProcessus::class => Processus\ContratProcessus::class,
         ],
     ],
@@ -338,7 +338,7 @@ return [
         ],
     ],
     'form_elements'   => [
-        'factories' => [
+        'factories'  => [
             Form\Contrat\ModeleForm::class => Form\Contrat\Factory\ModeleFormFactory::class,
         ],
         'invokables' => [

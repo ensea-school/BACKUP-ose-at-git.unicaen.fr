@@ -18,7 +18,6 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Description of Validation
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ValidationService extends AbstractEntityService
 {

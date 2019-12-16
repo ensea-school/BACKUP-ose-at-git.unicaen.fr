@@ -15,7 +15,6 @@ use Application\Form\ServiceReferentiel\Saisie as SaisieForm;
 /**
  * Description of SaisieForm
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class FormSaisie extends AbstractViewHelper
 {

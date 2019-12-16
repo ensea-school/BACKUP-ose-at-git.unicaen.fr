@@ -1,4 +1,11 @@
-<?= $this->doctype(); ?>
+<?php
+
+use Zend\View\Helper\Navigation as NavigationHelper;
+
+/** @var NavigationHelper $navigationHelper */
+$navigationHelper = $this->navigation('navigation');
+
+echo $this->doctype(); ?>
 <html lang="fr">
 <head>
     <!-- Meta -->
@@ -42,7 +49,7 @@
             <?= $this->appLink($this->appInfos()->nom) ?>
         </div>
         <div class="navbar-collapse bs-navbar-collapse collapse">
-            <?= $this->navigation()->menuPrincipal('navigation'); ?>
+            <?= $navigationHelper->menuPrincipal(); ?>
             <p class="navbar-text navbar-right">
                 <?= $this->appConnection(); ?>
             </p>
@@ -51,7 +58,7 @@
 </div>
 
 <div id="contenu-principal" class="container">
-    <?php if (($menuSecondaire = $this->navigation()->menuSecondaire('navigation')->render())): ?>
+    <?php if (($menuSecondaire = $navigationHelper->menuSecondaire()->render())): ?>
         <div class="row">
             <div id="sidebar" class="col-xs-6 col-md-2" role="navigation">
                 <?= $menuSecondaire; ?>
@@ -66,7 +73,7 @@
 </div>
 
 <div id="footer" class="container">
-    <?= $this->navigation()->menuPiedDePage('navigation'); ?>
+    <?= $navigationHelper->menuPiedDePage(); ?>
 </div>
 
 <a href="#" class="scrollup" title="Remonter en haut de cette page">

@@ -1,7 +1,7 @@
 <?php
 namespace Application\Hydrator\Chargens;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Entity\Chargens\Noeud;
 
 

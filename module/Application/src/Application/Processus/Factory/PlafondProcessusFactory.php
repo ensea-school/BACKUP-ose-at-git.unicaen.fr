@@ -2,7 +2,7 @@
 
 namespace Application\Processus\Factory;
 
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Processus\PlafondProcessus;
 
 

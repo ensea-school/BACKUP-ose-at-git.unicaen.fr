@@ -4,7 +4,7 @@ namespace Application\Form\Contrat\Factory;
 
 use Application\Service\StatutIntervenantService;
 use Application\Service\StructureService;
-use Zend\Form\FormElementManager as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Form\Contrat\ModeleForm;
 
 
@@ -26,9 +26,6 @@ class ModeleFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        /* On quitte le FormElementManager */
-        $container = $container->getServiceLocator();
-
         $form = new ModeleForm;
         $form->setServiceStatutIntervenant($container->get(StatutIntervenantService::class));
         $form->setServiceStructure($container->get(StructureService::class));

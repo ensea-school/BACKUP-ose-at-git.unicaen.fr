@@ -1,7 +1,7 @@
 <?php
 
 
-
+include_once dirname(__DIR__).'/module/Application/Application.php';
 
 
 class AppConfig
@@ -69,8 +69,31 @@ class AppConfig
         $env = self::getEnv();
 
         $modules = [
-            'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM',
-            'UnicaenApp', 'UnicaenAuth', 'UnicaenImport', 'UnicaenTbl',
+            'Zend\Cache',
+            'Zend\Filter',
+            'Zend\Form',
+            'Zend\Hydrator',
+            'Zend\I18n',
+            'Zend\InputFilter',
+            'Zend\Log',
+            'Zend\Mail',
+            'Zend\Mvc\Console',
+            'Zend\Mvc\I18n',
+            'Zend\Mvc\Plugin\FlashMessenger',
+            'Zend\Mvc\Plugin\Prg',
+            'Zend\Navigation',
+            'Zend\Paginator',
+            'Zend\Router',
+            'Zend\Session',
+            'Zend\Validator',
+
+            'DoctrineModule',
+            'DoctrineORMModule',
+            'ZfcUser',
+            'UnicaenApp',
+            'UnicaenAuth',
+            'UnicaenImport',
+            'UnicaenTbl',
             'Application',
         ];
 
@@ -110,11 +133,7 @@ class AppConfig
 
     private static function inConsole()
     {
-        if (class_exists('Zend\Console\Console')){
-            return \Zend\Console\Console::isConsole();
-        }else{
-            return true;
-        }
+        return PHP_SAPI == 'cli';
     }
 
 

@@ -1,13 +1,14 @@
 <?php
 
-use UnicaenCode\Form\ElementMaker;
+use UnicaenCode\Form\ElementMakerForm;
 use UnicaenCode\Util;
 
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 ?>
@@ -17,11 +18,11 @@ use UnicaenCode\Util;
 <?php
 
 $form = new \Zend\Form\Form();
-$form->add(ElementMaker::selectEntity(
+$form->add(ElementMakerForm::selectEntity(
     'entity', 'Entité correspondante', 'Application\Entity\Db'
 ));
-$form->add(ElementMaker::text('alias', 'Alias d\'entité'));
-$form->add(ElementMaker::submit('generate', 'Générer le service'));
+$form->add(ElementMakerForm::text('alias', 'Alias d\'entité'));
+$form->add(ElementMakerForm::submit('generate', 'Générer le service'));
 $form->setData($controller->getRequest()->getPost());
 
 Util::displayForm($form);
@@ -30,7 +31,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
 
     $entity = $form->get('entity')->getValue();
 
-    $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
+    $sCodeGenerator = Util::codeGenerator();
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
     $params = $sCodeGenerator->generateServiceParams([

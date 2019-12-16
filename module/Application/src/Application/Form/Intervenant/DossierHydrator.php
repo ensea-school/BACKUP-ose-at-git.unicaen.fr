@@ -5,7 +5,7 @@ use Application\Entity\Db\Dossier as Dossier;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Service\Traits\DossierServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  *

@@ -8,7 +8,6 @@ use Application\Form\Intervenant\Traits\ModificationServiceDuFieldsetAwareTrait;
 /**
  * Formulaire de modification de service dû d'un intervenant.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ModificationServiceDuForm extends AbstractForm {
     use ModificationServiceDuFieldsetAwareTrait;
@@ -21,7 +20,7 @@ class ModificationServiceDuForm extends AbstractForm {
     {
         $this   ->setAttribute('method', 'post')
             ->setAttribute('class', 'modification-service-du')
-            ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
+            ->setHydrator(new \Zend\Hydrator\ClassMethods(false))
             ->setInputFilter(new \Zend\InputFilter\InputFilter())
         ;
 

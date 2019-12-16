@@ -14,7 +14,6 @@ use Zend\Form\Element\Csrf;
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class Dossier extends AbstractForm
 {

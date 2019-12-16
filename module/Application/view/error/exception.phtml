@@ -7,11 +7,10 @@
     <h3><?= $previous->getMessage() ?></h3>
 <?php endif ?>
 
+<?php if (AppConfig::get('global', 'affichageErreurs')): ?>
 
-<?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
+<?php if (isset($this->exception) && ($this->exception instanceof \Exception || $this->exception instanceof \Error)): ?>
 
-<?php if (isset($this->exception) && $this->exception instanceof \Exception): ?>
-    
 <?php if (!$this->exception instanceof \UnicaenApp\Exception\MessageException): ?>
 <hr/>
 <h3><?= $this->translate('Additional information') ?>:</h3>

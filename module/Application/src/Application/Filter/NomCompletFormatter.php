@@ -11,7 +11,6 @@ use Application\Entity\Db\Personnel;
 /**
  * Formatte le nom complet d'un individu (nom usuel, patronymique, etc.)
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class NomCompletFormatter extends AbstractFilter
 {

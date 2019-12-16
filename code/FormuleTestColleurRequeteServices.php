@@ -3,8 +3,9 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 $data = "2018	Le Bars	Thierry	Université de Caen	Intervenant permanent	192	0	0	0	Prévisionnel	Validé	1	0	1	0	CM	1,5	1,5	1	0	0	1	1	20						22,88	0	0		7,12	0	0	0	
@@ -83,9 +84,9 @@ $data = explode("\n", $data);
     <?php
 
     /** @var \Doctrine\ORM\EntityManager $bdd */
-    $bdd = $sl->get(\Application\Constants::BDD);
+    $bdd = $container->get(\Application\Constants::BDD);
     /** @var \Application\Service\FormuleTestIntervenantService $ftiService */
-    $ftiService = $sl->get(\Application\Service\FormuleTestIntervenantService::class);
+    $ftiService = $container->get(\Application\Service\FormuleTestIntervenantService::class);
 
     $fti = null;
     foreach ($data as $l) {
@@ -151,7 +152,7 @@ $data = explode("\n", $data);
             $heuresComplReferentiel = isset($c[37]) ? stringToFloat($c[37]) : null;
 
             // Traitement et affichage
-            $composante = $sl->get(\Application\Constants::BDD)->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find($composante);
+            $composante = $container->get(\Application\Constants::BDD)->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find($composante);
             if ($debug) {
                 $c = '<pre>' . var_export($c, true) . '</pre>';
             } else {

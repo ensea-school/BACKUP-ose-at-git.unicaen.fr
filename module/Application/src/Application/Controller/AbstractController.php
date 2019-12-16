@@ -48,5 +48,4 @@ abstract class AbstractController extends AbstractActionController
     {
         return \Application::$container->get(\Application\Constants::BDD);
     }
-
 }

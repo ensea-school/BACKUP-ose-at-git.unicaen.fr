@@ -11,7 +11,7 @@ class DdlPrimaryConstraint extends DdlAbstract
 
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('c.constraint_name', $includes, $excludes);
         $data = [];
 
         $sql = "SELECT
@@ -79,19 +79,23 @@ class DdlPrimaryConstraint extends DdlAbstract
 
     public function create(array $data)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql = $this->makeCreate($data);
-        $this->addQuery($sql, 'Création de la clé primaine '.$data['name']);
+        $this->addQuery($sql, 'Création de la clé primaine ' . $data['name']);
     }
 
 
 
     public function drop(string $name)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql       = "SELECT table_name FROM all_constraints WHERE constraint_name = :name";
         $d         = $this->bdd->select($sql, compact('name'));
         $tableName = $d[0]['TABLE_NAME'];
 
-        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la clé primaire '.$name);
+        $this->addQuery("ALTER TABLE $tableName DROP CONSTRAINT $name", 'Suppression de la clé primaire ' . $name);
     }
 
 
@@ -109,6 +113,8 @@ class DdlPrimaryConstraint extends DdlAbstract
     public function alter(array $old, array $new)
     {
         if ($this->isDiff($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $this->drop($old['name']);
             $this->create($new);
         }
@@ -118,11 +124,13 @@ class DdlPrimaryConstraint extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $tableName = $new['table'];
-        $newName = $new['name'];
+        $newName   = $new['name'];
 
         $sql = "ALTER TABLE \"$tableName\" RENAME CONSTRAINT \"$oldName\" TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de la clé primaire '.$oldName.' en '.$newName);
+        $this->addQuery($sql, 'Renommage de la clé primaire ' . $oldName . ' en ' . $newName);
     }
 
 }

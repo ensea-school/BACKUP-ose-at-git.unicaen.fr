@@ -153,11 +153,10 @@ $config = [
             Service\DepartementService::class             => Service\DepartementService::class,
             Service\FichierService::class                 => Service\FichierService::class,
             Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
-            Assertion\InformationAssertion::class         => Assertion\InformationAssertion::class,
             ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [
-            'navigation'                              => Service\NavigationFactoryFactory::class,
+            \Zend\Navigation\Navigation::class        => Navigation\NavigationFactory::class,
             Provider\Role\RoleProvider::class         => Provider\Role\RoleProviderFactory::class,
             Provider\Identity\IdentityProvider::class => Provider\Identity\IdentityProviderFactory::class,
             Service\ContextService::class             => Service\Factory\ContextServiceFactory::class,
@@ -166,13 +165,14 @@ $config = [
             Connecteur\LdapConnecteur::class          => Connecteur\Factory\LdapConnecteurFactory::class,
             Cache\CacheService::class                 => Cache\Factory\CacheServiceFactory::class,
             Service\UtilisateurService::class         => Service\Factory\UtilisateurServiceFactory::class,
+            Assertion\InformationAssertion::class     => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'       => [
         'factories'  => [
-            'userProfileSelectRadioItem' => View\Helper\UserProfileSelectRadioItemFactory::class,
-            'appLink'                    => View\Helper\AppLinkFactory::class,
-            'userCurrent'                => View\Helper\UserCurrentFactory::class,
+            \UnicaenAuth\View\Helper\UserProfileSelectRadioItem::class => View\Helper\UserProfileSelectRadioItemFactory::class,
+            \UnicaenApp\View\Helper\AppLink::class                     => View\Helper\AppLinkFactory::class,
+            \UnicaenAuth\View\Helper\UserCurrent::class                => View\Helper\UserCurrentFactory::class,
         ],
         'invokables' => [
             'utilisateur'     => View\Helper\UtilisateurViewHelper::class,
@@ -182,8 +182,8 @@ $config = [
         ],
     ],
     'controllers'        => [
-        'invokables' => [
-            'Application\Controller\Index' => Controller\IndexController::class,
+        'factories' => [
+            'Application\Controller\Index' => Controller\Factory\IndexControllerFactory::class,
         ],
     ],
     'controller_plugins' => [
@@ -209,8 +209,8 @@ $config = [
         ],
         'inline_scripts' => [
             '010_bootstrap'   => 'vendor/bootstrap-3.3.5/js/bootstrap.min.js',
-            '030_util'        => 'vendor/unicaen/app/js/util.js',
-            '040_unicaen'     => 'vendor/unicaen/app/js/unicaen.js',
+            '030_util'        => 'vendor/unicaen/app/unicaen/app/js/util.js',
+            '040_unicaen'     => 'vendor/unicaen/app/unicaen/app/js/unicaen.js',
             '050_jquery_form' => 'vendor/jquery.form-3.51.js', // pour l'uploader Unicaen uniquement!!,
 
             '001_' => 'js/datepicker-fr.js',

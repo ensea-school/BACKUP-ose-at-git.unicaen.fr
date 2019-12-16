@@ -3,8 +3,9 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 $formuleTestIntervenantId = 106;
@@ -58,9 +59,9 @@ $data = explode("\n", $data);
     <?php
 
     /** @var \Doctrine\ORM\EntityManager $bdd */
-    $bdd = $sl->get(\Application\Constants::BDD);
+    $bdd = $container->get(\Application\Constants::BDD);
     /** @var \Application\Service\FormuleTestIntervenantService $ftiService */
-    $ftiService = $sl->get(\Application\Service\FormuleTestIntervenantService::class);
+    $ftiService = $container->get(\Application\Service\FormuleTestIntervenantService::class);
     $fti        = $ftiService->get($formuleTestIntervenantId);
 
     $bdd->getConnection()->exec('DELETE FROM formule_test_volume_horaire WHERE intervenant_test_id = ' . $formuleTestIntervenantId);
@@ -118,7 +119,7 @@ $data = explode("\n", $data);
 //            $debug = true;
 
             // Traitement et affichage
-            $composante = $sl->get(\Application\Constants::BDD)->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find($composante);
+            $composante = $container->get(\Application\Constants::BDD)->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find($composante);
             if ($debug) {
                 $c = '<pre>' . var_export($c, true) . '</pre>';
             } else {

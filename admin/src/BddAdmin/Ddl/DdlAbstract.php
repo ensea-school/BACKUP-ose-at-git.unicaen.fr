@@ -3,8 +3,8 @@
 namespace BddAdmin\Ddl;
 
 use BddAdmin\Bdd;
+use BddAdmin\Event\EventManagerAwareTrait;
 use BddAdmin\Exception\BddCompileException;
-use BddAdmin\SchemaConsoleLogger;
 use BddAdmin\SchemaLoggerInterface;
 use Exception;
 
@@ -12,6 +12,8 @@ use Exception;
 abstract class DdlAbstract
 {
     const ALIAS = 'no-alias';
+
+    use EventManagerAwareTrait;
 
     /**
      * @var Bdd
@@ -156,7 +158,7 @@ abstract class DdlAbstract
                 $this->bdd->exec($sql);
             } catch (Exception $e) {
                 if (!$e instanceof BddCompileException) {
-                    if ($logger){
+                    if ($logger) {
                         $logger->log($e->getMessage());
                     }
                     $errors[] = $e;

@@ -1,13 +1,14 @@
 <?php
 
-use UnicaenCode\Form\ElementMaker;
+use UnicaenCode\Form\ElementMakerForm;
 use UnicaenCode\Util;
 
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 
@@ -18,31 +19,31 @@ use UnicaenCode\Util;
 <?php
 
 $form = new \Zend\Form\Form();
-$form->add(ElementMaker::selectModule(
+$form->add(ElementMakerForm::selectModule(
     'module', 'Module dans lequel sera placé votre formulaire'
 ));
-$form->add(ElementMaker::select(
+$form->add(ElementMakerForm::select(
     'type', 'Type de formulaire (Form ou Fieldset)', ['Form' => 'Form', 'Fieldset' => 'Fieldset'], 'Form'
 ));
-$form->add(ElementMaker::text(
+$form->add(ElementMakerForm::text(
     'classname', 'Nom de classe du formulaire (en CamelCase, avec éventuellement un namespace avant : MonNamespace\Exemple)', 'Exemple'
 ));
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'useHydrator', 'Implémenter un hydrateur spécifique'
 ));
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'generateTrait', 'Générer un trait', true
 ));
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'generateInterface', 'Générer une interface', false
 ));
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'useGetter', 'Générer des getters dans les traits et les interfaces', true
 ));
-$form->add(ElementMaker::checkbox(
+$form->add(ElementMakerForm::checkbox(
     'generateFactory', 'Générer une factory', true
 ));
-$form->add(ElementMaker::submit('generate', 'Générer le formulaire'));
+$form->add(ElementMakerForm::submit('generate', 'Générer le formulaire'));
 $form->setData($controller->getRequest()->getPost());
 
 Util::displayForm($form);
@@ -52,7 +53,7 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
     $type              = $form->get('type')->getValue();
     $classname         = $form->get('classname')->getValue();
 
-    $sCodeGenerator = $sl->get('UnicaenCode\CodeGenerator');
+    $sCodeGenerator = Util::codeGenerator()
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */
 
     $params = $sCodeGenerator->generateFormParams([

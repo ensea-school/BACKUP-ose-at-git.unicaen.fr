@@ -10,7 +10,7 @@ use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\UtilisateurServiceAwareTrait;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of AffectationForm
@@ -28,7 +28,9 @@ class AffectationForm extends AbstractForm
 
     public function init()
     {
-        $structure = $this->getServiceContext()->getSelectedIdentityRole()->getStructure();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $structure = $role ? $role->getStructure() : null;
 
         $this->setAttribute('action', $this->getCurrentUrl());
         $hydrator = new AffectationFormHydrator;

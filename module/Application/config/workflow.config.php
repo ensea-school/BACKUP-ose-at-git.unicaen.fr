@@ -187,10 +187,10 @@ return [
         'invokables' => [
             Service\WfEtapeDepService::class   => Service\WfEtapeDepService::class,
             Service\WfEtapeService::class      => Service\WfEtapeService::class,
-            Assertion\WorkflowAssertion::class => Assertion\WorkflowAssertion::class,
         ],
         'factories'  => [
             Service\WorkflowService::class => Service\Factory\WorkflowServiceFactory::class,
+            Assertion\WorkflowAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'form_elements'   => [

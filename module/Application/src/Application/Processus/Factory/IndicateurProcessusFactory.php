@@ -3,31 +3,23 @@
 namespace Application\Processus\Factory;
 
 use Application\Processus\IndicateurProcessus;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class IndicateurProcessusFactory implements FactoryInterface
+class IndicateurProcessusFactory
 {
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IndicateurProcessus
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $renderer = $serviceLocator->get('view_manager')->getRenderer();
-        $mail     = $serviceLocator->get('ControllerPluginManager')->get('mail');
+        $renderer = $container->get('ViewHelperManager')->getRenderer();
+        $mail     = $container->get('ControllerPluginManager')->get('mail');
 
         $processus = new IndicateurProcessus($renderer, $mail);
 
         return $processus;
     }
+
 }

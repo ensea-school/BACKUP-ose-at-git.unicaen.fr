@@ -33,7 +33,7 @@ class FormuleController extends AbstractController
     {
         $fti = $this->getServiceFormuleTestIntervenant()->getList();
 
-        return compact('fti', 'title');
+        return compact('fti');
     }
 
 

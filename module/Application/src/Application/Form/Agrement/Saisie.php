@@ -4,13 +4,12 @@ namespace Application\Form\Agrement;
 
 use Application\Form\AbstractForm;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Hydrator\ClassMethods;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 
 /**
  * Formulaire de saisie d'un agrément.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class Saisie extends AbstractForm
 {

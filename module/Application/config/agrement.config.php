@@ -15,8 +15,8 @@ return [
                     'agrement' => [
                         'type'          => 'Segment',
                         'options'       => [
-                            'route'       => '/:intervenant/agrement',
-                            'defaults'    => [
+                            'route'    => '/:intervenant/agrement',
+                            'defaults' => [
                                 'controller' => 'Application\Controller\Agrement',
                                 'action'     => 'index',
                             ],
@@ -159,7 +159,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
-                                'visible'      => Assertion\InformationAssertion::class,
+                                'visible'      => Assertion\AgrementAssertion::class,
                                 'order'        => 10,
                             ],
                             'agrement-conseil-academique' => [
@@ -171,7 +171,7 @@ return [
                                 ],
                                 'withtarget'   => true,
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'lister'),
-                                'visible'      => Assertion\InformationAssertion::class,
+                                'visible'      => Assertion\AgrementAssertion::class,
                                 'order'        => 11,
                             ],
                         ],
@@ -184,7 +184,7 @@ return [
                                 'icon'         => 'fa fa-tags',
                                 'route'        => 'gestion/agrement',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Agrement', 'index'),
-                                'visible'      => Assertion\InformationAssertion::class,
+                                'visible'      => Assertion\AgrementAssertion::class,
                                 'order'        => 50,
                                 'border-color' => '#E1AC5A',
                                 'pages'        => [
@@ -194,7 +194,7 @@ return [
                                         'title'       => 'Conseil restreint',
                                         'route'       => 'gestion/agrement/conseil-restreint',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
-                                        'visible'     => Assertion\InformationAssertion::class,
+                                        'visible'     => Assertion\AgrementAssertion::class,
                                     ],
                                     'conseil-academique' => [
                                         'label'       => 'Conseil académique',
@@ -202,7 +202,7 @@ return [
                                         'title'       => 'Conseil académique',
                                         'route'       => 'gestion/agrement/conseil-academique',
                                         'resource'    => PrivilegeController::getResourceId('Application\Controller\Agrement', 'saisir-lot'),
-                                        'visible'     => Assertion\InformationAssertion::class,
+                                        'visible'     => Assertion\AgrementAssertion::class,
                                     ],
                                     'export-csv'         => [
                                         'label'       => 'Export CSV',
@@ -229,7 +229,7 @@ return [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_VISUALISATION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_VISUALISATION,
                     ],
-                    'assertion'  => Assertion\InformationAssertion::class,
+                    'assertion'  => Assertion\AgrementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',
@@ -240,7 +240,7 @@ return [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_EDITION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_EDITION,
                     ],
-                    'assertion'  => Assertion\InformationAssertion::class,
+                    'assertion'  => Assertion\AgrementAssertion::class,
                 ],
                 [
                     'controller' => 'Application\Controller\Agrement',
@@ -256,7 +256,7 @@ return [
                         Privileges::AGREMENT_CONSEIL_ACADEMIQUE_SUPPRESSION,
                         Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
                     ],
-                    'assertion'  => Assertion\InformationAssertion::class,
+                    'assertion'  => Assertion\AgrementAssertion::class,
                 ],
             ],
         ],
@@ -277,7 +277,7 @@ return [
                             Privileges::AGREMENT_CONSEIL_RESTREINT_SUPPRESSION,
                         ],
                         'resources'  => ['TblAgrement', 'Agrement', 'Structure'],
-                        'assertion'  => Assertion\InformationAssertion::class,
+                        'assertion'  => Assertion\AgrementAssertion::class,
                     ],
                 ],
             ],
@@ -294,7 +294,10 @@ return [
             Service\TblAgrementService::class        => Service\TblAgrementService::class,
             Service\TypeAgrementService::class       => Service\TypeAgrementService::class,
             Service\TypeAgrementStatutService::class => Service\TypeAgrementStatutService::class,
-            Assertion\InformationAssertion::class                      => Assertion\AgrementAssertion::class,
+        ],
+        'factories'  => [
+            Assertion\InformationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Assertion\AgrementAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
     'view_helpers'    => [

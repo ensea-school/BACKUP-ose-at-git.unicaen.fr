@@ -2,8 +2,8 @@
 
 namespace Application\Controller\OffreFormation\Factory;
 
-use Zend\Mvc\Controller\ControllerManager as ContainerInterface;
 use Application\Controller\OffreFormation\ElementPedagogiqueController;
+use Interop\Container\ContainerInterface;
 
 
 /**
@@ -14,17 +14,8 @@ use Application\Controller\OffreFormation\ElementPedagogiqueController;
 class ElementPedagogiqueControllerFactory
 {
 
-    /**
-     * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
-     *
-     * @return ElementPedagogiqueController
-     */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $container = $container->getServiceLocator();
-
         $controller = new ElementPedagogiqueController;
 
         return $controller;

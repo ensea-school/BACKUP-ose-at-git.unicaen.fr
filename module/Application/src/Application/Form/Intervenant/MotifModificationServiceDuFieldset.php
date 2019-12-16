@@ -12,7 +12,6 @@ use Application\Entity\Db\MotifModificationService;
 /**
  * Description of MotifModificationServiceDu
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class MotifModificationServiceDuFieldset extends AbstractFieldset
 {

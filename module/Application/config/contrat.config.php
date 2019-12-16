@@ -93,6 +93,18 @@ return [
                             ],
                         ],
                     ],
+                    'envoyer-mail'        => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'       => '/:contrat/mail',
+                            'constraints' => [
+                                'contrat' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'envoyer-mail',
+                            ],
+                        ],
+                    ],
                     'deposer-fichier'     => [
                         'type'    => 'Segment',
                         'options' => [
@@ -211,7 +223,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => ['exporter'],
+                    'action'     => ['exporter', 'envoyer-mail'],
                     'privileges' => [Privileges::CONTRAT_CONTRAT_GENERATION, Privileges::CONTRAT_PROJET_GENERATION],
                     'assertion'  => Assertion\ContratAssertion::class,
                 ],

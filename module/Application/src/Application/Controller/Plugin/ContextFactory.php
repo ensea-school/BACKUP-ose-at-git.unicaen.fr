@@ -2,33 +2,22 @@
 
 namespace Application\Controller\Plugin;
 
-use Application\Service\IntervenantService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  * Description of ContextFactory
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ContextFactory implements FactoryInterface
+class ContextFactory
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $sl = $serviceLocator->getServiceLocator();
 
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
         $context = new Context();
 
-        $context->setEntityManager( $sl->get(\Application\Constants::BDD) );
+        $context->setEntityManager($container->get(\Application\Constants::BDD));
 
         return $context;
     }
-
 }

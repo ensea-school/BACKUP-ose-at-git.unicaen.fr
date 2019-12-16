@@ -6,12 +6,11 @@ use Application\Entity\Db\Traits\ContratAwareTrait;
 use Application\Form\AbstractForm;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Hydrator\ClassMethods;
 
 /**
  * Formulaire de saisie de la date de retour du contrat/avenant signé.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratRetour extends AbstractForm
 {

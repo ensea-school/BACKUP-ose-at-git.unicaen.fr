@@ -2,23 +2,16 @@
 
 namespace Application\View\Helper\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Interop\Container\ContainerInterface;
 
 /**
  * Description of LigneFactory
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class LigneFactory implements FactoryInterface
+class LigneFactory
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $helper = new Ligne();
         return $helper;

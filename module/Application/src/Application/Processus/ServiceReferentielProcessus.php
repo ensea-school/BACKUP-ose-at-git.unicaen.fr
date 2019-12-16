@@ -46,7 +46,7 @@ class ServiceReferentielProcessus extends AbstractProcessus
         $volumeHoraireReferentielService->leftJoin(EtatVolumeHoraireService::class, $qb, 'etatVolumeHoraireReferentiel', ['id', 'code', 'libelle', 'ordre']);
 
         $serviceReferentiel->finderByContext($qb);
-        $serviceReferentiel->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
+        $serviceReferentiel->finderByFilterObject($recherche, new \Zend\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire', 'etatVolumeHoraire']);
 
         if ($intervenant) {
             $serviceReferentiel->finderByIntervenant($intervenant, $qb);

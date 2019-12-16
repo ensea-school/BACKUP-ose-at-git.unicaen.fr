@@ -4,7 +4,7 @@ namespace Application\Form\TypeIntervention;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
 use Application\Service\Traits\AnneeServiceAwareTrait;

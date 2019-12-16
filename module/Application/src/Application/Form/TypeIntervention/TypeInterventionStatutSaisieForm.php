@@ -7,7 +7,7 @@ use Application\Service\Traits\TypeInterventionStatutServiceAwareTrait;
 use Application\Service\Traits\TypeInterventionServiceAwareTrait;
 use Application\Service\Traits\StatutIntervenantServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;

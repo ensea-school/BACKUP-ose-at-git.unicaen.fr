@@ -7,7 +7,7 @@ use Application\Form\AbstractForm;
 use Application\Service\Traits\TypeIntervenantServiceAwareTrait;
 use Application\Service\Traits\WfEtapeServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

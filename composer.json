@@ -8,17 +8,22 @@
         }
     ],
     "require"     : {
-        "php"                       : "^7.0",
-        "unicaen/app"               : "1.3.27",
-        "unicaen/auth"              : "1.3.6",
-        "zendframework/zend-code"   : "^2.4",
-        "zendframework/zend-text"   : "^2.4",
-        "bjyoungblood/bjy-authorize": "dev-master",
-        "zf-commons/zfc-user"       : "0.1.3",
-        "zendframework/zend-file"   : "^2.4",
-        "unicaen/code"              : "1.1.8",
-        "unicaen/import"            : "1.1.6",
-        "unicaen/tbl"               : "1.0.3",
-        "unicaen/open-document"     : "3.0.1"
+        "php"                    : ">=7.3 || >=7.4",
+        "mpdf/mpdf"              : "8.0.4 as 7.1.7",
+        "unicaen/app"            : "3.0.4",
+        "unicaen/auth"           : "3.0.8",
+        "zendframework/zend-code": "3.3.2",
+        "unicaen/bjy-authorize"  : "3.0.4",
+        "zendframework/zend-file": "2.8.3",
+        "unicaen/code"           : "3.0.0",
+        "unicaen/import"         : "3.0.0",
+        "unicaen/tbl"            : "3.0.0",
+        "unicaen/open-document"  : "3.0.1",
+        "ocramius/proxy-manager" : "2.2.3"
+    },
+    "require-dev": {
+        "zendframework/zend-test":              "3.3.0",
+        "zendframework/zend-developer-tools":   "1.2.3",
+        "unicaen/php-compat":                   "dev-master"
     }
 }

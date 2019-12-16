@@ -40,7 +40,7 @@ abstract class AbstractForm extends Form implements InputFilterProviderInterface
      */
     protected function getUrl($name = null, $params = [], $options = [], $reuseMatchedParams = false)
     {
-        $url = \Application::$container->get('viewhelpermanager')->get('url');
+        $url = \Application::$container->get('ViewHelperManager')->get('url');
 
         /* @var $url \Zend\View\Helper\Url */
         return $url->__invoke($name, $params, $options, $reuseMatchedParams);

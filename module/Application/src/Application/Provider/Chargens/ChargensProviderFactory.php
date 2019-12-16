@@ -4,28 +4,20 @@ namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Service\TypeHeuresService;
+use Interop\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\Console\Console;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ChargensProviderFactory implements FactoryInterface
+class ChargensProviderFactory
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ChargensProvider
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $em = $serviceLocator->get(\Application\Constants::BDD);
+        $em = $container->get(\Application\Constants::BDD);
         /* @var $em \Doctrine\ORM\EntityManager */
 
         $bdd = new BddConnecteur();
@@ -35,15 +27,15 @@ class ChargensProviderFactory implements FactoryInterface
         $chargensProvider->setBdd($bdd);
 
         if (!Console::isConsole()) {
-            $serviceAuthorize = $serviceLocator->get('BjyAuthorize\Service\Authorize');
+            $serviceAuthorize = $container->get('BjyAuthorize\Service\Authorize');
             $chargensProvider->setServiceAuthorize($serviceAuthorize);
         }
 
         $chargensProvider->setServiceTypeHeures(
-            $serviceLocator->get(TypeHeuresService::class)
+            $container->get(TypeHeuresService::class)
         );
 
-        $chargensProvider->setServiceTableauBord($serviceLocator->get(TableauBordService::class));
+        $chargensProvider->setServiceTableauBord($container->get(TableauBordService::class));
 
         return $chargensProvider;
     }

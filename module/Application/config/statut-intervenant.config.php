@@ -116,7 +116,7 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationStatutIntervenant' => Service\StatutIntervenant::class,
+            'ApplicationStatutIntervenant' => Service\StatutIntervenantService::class,
         ],
     ],
     'controllers'     => [

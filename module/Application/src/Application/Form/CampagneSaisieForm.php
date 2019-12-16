@@ -4,7 +4,7 @@ namespace Application\Form;
 
 use Application\Constants;
 use Application\Entity\Db\CampagneSaisie;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

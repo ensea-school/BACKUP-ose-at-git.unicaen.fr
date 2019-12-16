@@ -2,7 +2,7 @@
 
 namespace Application\Form\OffreFormation\Factory;
 
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Form\OffreFormation\VolumeHoraireEnsForm;
 
 

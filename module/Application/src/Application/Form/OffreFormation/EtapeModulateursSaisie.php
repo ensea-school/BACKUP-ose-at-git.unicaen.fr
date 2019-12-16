@@ -7,7 +7,7 @@ use Application\Form\OffreFormation\Traits\ElementModulateursFieldsetAwareTrait;
 use Application\Service\Traits\TypeModulateurServiceAwareTrait;
 use Application\Entity\Db\Etape;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementModulateursSaisie

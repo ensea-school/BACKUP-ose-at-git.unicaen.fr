@@ -3,8 +3,9 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 use Application\Entity\Db\Fichier;
@@ -24,11 +25,11 @@ $typeMime   = 'application/msword';
 $dirs = scandir($repertoire);
 //$dirs = ['139755.doc'];
 /** @var IntervenantService $si */
-$si = $sl->get(IntervenantService::class);
+$si = $container->get(IntervenantService::class);
 
-$typePieceJointe = $sl->get(TypePieceJointeService::class)->get(1);
-$tvPJ            = $sl->get(TypeValidationService::class)->get(4);
-$tvFichier       = $sl->get(TypeValidationService::class)->get(5);
+$typePieceJointe = $container->get(TypePieceJointeService::class)->get(1);
+$tvPJ            = $container->get(TypeValidationService::class)->get(4);
+$tvFichier       = $container->get(TypeValidationService::class)->get(5);
 
 foreach ($dirs as $i => $dir) {
     if (0 <= $i && $i < 9999999) {
@@ -69,17 +70,17 @@ foreach ($dirs as $i => $dir) {
                     $valFichier->setIntervenant($intervenant);
                     $valFichier->setTypeValidation($tvFichier);
                     $valFichier->setStructure($intervenant->getStructure());
-                    $sl->get(ValidationService::class)->save($valFichier);
+                    $container->get(ValidationService::class)->save($valFichier);
                     $fichier->setValidation($valFichier);
 
-                    $pj = $sl->get(PieceJointeService::class)->getByType($intervenant, $typePieceJointe);
+                    $pj = $container->get(PieceJointeService::class)->getByType($intervenant, $typePieceJointe);
                     if (!$pj || !$pj->estNonHistorise()) {
                         $pj = new PieceJointe();
                         $pj->setIntervenant($intervenant);
                         $pj->setType($typePieceJointe);
-                        $sl->get(PieceJointeService::class)->save($pj);
+                        $container->get(PieceJointeService::class)->save($pj);
                     }
-                    $sl->get(FichierService::class)->save($fichier);
+                    $container->get(FichierService::class)->save($fichier);
 
                     $sql = "INSERT INTO piece_jointe_fichier(piece_jointe_id,fichier_id) values (" . $pj->getId() . "," . $fichier->getId() . ")";
                     $si->getEntityManager()->getConnection()->exec($sql);
@@ -90,12 +91,12 @@ foreach ($dirs as $i => $dir) {
                         $validation->setIntervenant($intervenant);
                         $validation->setTypeValidation($tvPJ);
                         $validation->setStructure($intervenant->getStructure());
-                        $sl->get(ValidationService::class)->save($validation);
+                        $container->get(ValidationService::class)->save($validation);
                         $pj->setValidation($validation);
-                        $sl->get(PieceJointeService::class)->save($pj);
+                        $container->get(PieceJointeService::class)->save($pj);
                     }
 
-                    $sl->get(WorkflowService::class)->calculerTableauxBord([], $intervenant);
+                    $container->get(WorkflowService::class)->calculerTableauxBord([], $intervenant);
                     echo 'CV Inséré';
                 }
             } catch (\Exception $e) {

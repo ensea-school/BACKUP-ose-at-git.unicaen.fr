@@ -1,10 +1,9 @@
 <?php
 namespace Application\Service;
 
-use Application\Entity\Db\Utilisateur;
 use Doctrine\ORM\EntityRepository;
-use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\Stdlib\Hydrator\ObjectProperty;
+use Zend\Hydrator\HydratorInterface;
+use Zend\Hydrator\ObjectProperty;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Exception\RuntimeException;
 use Doctrine\ORM\Query\Expr;
@@ -472,7 +471,7 @@ abstract class AbstractEntityService extends AbstractService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         if (null === $object) return $qb;
-        if (!$hydrator && $object instanceof \Zend\Stdlib\Hydrator\HydratorAwareInterface) {
+        if (!$hydrator && $object instanceof \Zend\Hydrator\HydratorAwareInterface) {
             $hydrator = $object->getHydrator();
         }
         if (!$hydrator) {

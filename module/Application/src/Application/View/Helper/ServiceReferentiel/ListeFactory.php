@@ -2,23 +2,16 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Interop\Container\ContainerInterface;
 
 /**
  * Description of ListeFactory
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ListeFactory implements FactoryInterface
+class ListeFactory
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $helper = new Liste();
 

@@ -3,8 +3,9 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 
@@ -175,7 +176,7 @@ END;
 
 
 $lcv = new Lcv;
-$lcv->setEntityManager($sl->get('Doctrine\ORM\EntityManager'));
+$lcv->setEntityManager($container->get('Doctrine\ORM\EntityManager'));
 $lcv->setView($view);
 
 echo '<pre>' . $lcv->generateTblTriggers($tblKey) . '</pre>';

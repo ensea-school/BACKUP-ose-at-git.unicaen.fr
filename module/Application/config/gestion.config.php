@@ -63,8 +63,8 @@ return [
         ],
     ],
     'service_manager' => [
-        'invokables' => [
-            Assertion\GestionAssertion::class => Assertion\GestionAssertion::class,
+        'factories' => [
+            Assertion\GestionAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
         ],
     ],
 ];

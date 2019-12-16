@@ -10,7 +10,7 @@ use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementPedagogiqueSaisie

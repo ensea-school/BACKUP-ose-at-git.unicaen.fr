@@ -7,7 +7,7 @@ use Application\Service\Traits\CentreCoutServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\CentreCoutStructureServiceAwareTrait;
 
 /**

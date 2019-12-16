@@ -3,7 +3,7 @@
 namespace Application\Form;
 
 use Application\Service\Traits\ParametresServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of DisciplineForm

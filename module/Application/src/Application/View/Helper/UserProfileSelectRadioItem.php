@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\View\Helper;
 
 use UnicaenApp\Traits\SessionContainerTrait;
@@ -10,7 +11,6 @@ use Application\Entity\Db\Traits\StructureAwareTrait;
  * Aide de vue dessinant un item de sélection d'un profil utilisateur.
  * Utilisé par l'aide de vue UserProfileSelect.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier@unicaen.fr>
  * @see UserProfileSelect
  */
 class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
@@ -18,6 +18,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     use StructureServiceAwareTrait;
     use StructureAwareTrait;
     use SessionContainerTrait;
+
 
 
     /**
@@ -29,18 +30,18 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     {
         $html = parent::render();
 
-        $perimetre = $this->role->getPerimetre();
+        $perimetre = $this->role ? $this->role->getPerimetre() : null;
 
         if ($this->role->getPeutChangerStructure() && $perimetre && $perimetre->isEtablissement()) {
             $selectClass = 'user-profile-select-input-structure';
 
-            $select = new \Zend\Form\Element\Select('structure-'.$this->role->getRoleId());
+            $select = new \Zend\Form\Element\Select('structure-' . $this->role->getRoleId());
             $select
-                    ->setEmptyOption("(Aucune)")
-                    ->setValueOptions($this->getStructures())
-                    ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
-                    ->setAttribute('class', $selectClass)
-                    ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
+                ->setEmptyOption("(Aucune)")
+                ->setValueOptions($this->getStructures())
+                ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
+                ->setAttribute('class', $selectClass)
+                ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
 
             $html .= ' ' . $this->getView()->formSelect($select);
 
@@ -48,11 +49,12 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
 <script>
     $(function() {
         $("select.$selectClass").tooltip({ delay: 500, placement: 'right' }).change(function() {
-            var roleSelect = $("input.user-profile-select-input");
-            if (! roleSelect.attr("checked")) {
-                roleSelect.attr("checked", true);
+            var roleInput = $(this).parent().find('input.user-profile-select-input');
+            if (roleInput.attr("checked")) {
+                submitProfile();
+            }else{
+                roleInput.attr("checked", "checked");
             }
-            submitProfile();
         });
     });
 </script>
@@ -61,6 +63,8 @@ EOS;
 
         return $html;
     }
+
+
 
     /**
      * Surcharge pour ne pas faire figurer la structure associée au rôle Administrateur
@@ -82,6 +86,8 @@ EOS;
         return $radio;
     }
 
+
+
     /**
      * Retourne la liste des structures associées à des rôles.
      *
@@ -90,11 +96,11 @@ EOS;
     private function getStructures()
     {
         $session = $this->getSessionContainer();
-        if (! isset($session->structures)){
-            $qb = $this->getServiceStructure()->finderByEnseignement();
-            $s = $this->getServiceStructure()->getList($qb);
+        if (!isset($session->structures)) {
+            $qb                  = $this->getServiceStructure()->finderByEnseignement();
+            $s                   = $this->getServiceStructure()->getList($qb);
             $session->structures = [];
-            foreach( $s as $structure ){
+            foreach ($s as $structure) {
                 $session->structures[$structure->getId()] = (string)$structure;
             }
         }

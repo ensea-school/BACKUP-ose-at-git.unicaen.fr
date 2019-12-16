@@ -5,7 +5,7 @@ namespace Application\Service\Factory;
 use Application\Constants;
 use Application\Service\PrivilegeService;
 use UnicaenAuth\Entity\Db\Privilege;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 
 
 
@@ -33,7 +33,6 @@ class PrivilegeServiceFactory
         $config = $container->get('Config');
 
         if (! isset($config['unicaen-auth']['privilege_entity_class'])) {
-//            throw new InvalidArgumentException("La classe de l'entité privilège n'a pas été trouvée dans la config");
             $config['unicaen-auth']['privilege_entity_class'] = Privilege::class;
         }
         $service->setPrivilegeEntityClass($config['unicaen-auth']['privilege_entity_class']);

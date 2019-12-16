@@ -31,11 +31,11 @@ class MotifModificationServiceController extends AbstractController
     {
         /* @var $motifModificationService MotifModificationServiceDu */
 
-        $motifModificationServiceDu = $this->getEvent()->getParam('motif-modification-service');
+        $motifModificationServiceDu = $this->getEvent()->getParam('motifModificationServiceDu');
 
         $form = $this->getFormMotifModificationServiceSaisie();
         if (empty($motifModificationServiceDu)) {
-            $title                    = 'Création d\'un nouveau motif de modification de service dû';
+            $title                      = 'Création d\'un nouveau motif de modification de service dû';
             $motifModificationServiceDu = $this->getServiceMotifModificationService()->newEntity();
         } else {
             $title = 'Édition d\'un motif de modification de service dû';
@@ -57,7 +57,7 @@ class MotifModificationServiceController extends AbstractController
 
     public function deleteAction()
     {
-        $motifModificationServiceDu = $this->getEvent()->getParam('motif-modification-service');
+        $motifModificationServiceDu = $this->getEvent()->getParam('motifModificationServiceDu');
 
         try {
             $this->getServiceMotifModificationService()->delete($motifModificationServiceDu);
@@ -66,6 +66,6 @@ class MotifModificationServiceController extends AbstractController
             $this->flashMessenger()->addErrorMessage(DbException::translate($e)->getMessage());
         }
 
-        return new MessengerViewModel(compact('motifModificationService'));
+        return new MessengerViewModel();
     }
 }

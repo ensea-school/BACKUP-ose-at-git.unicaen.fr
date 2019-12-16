@@ -43,6 +43,6 @@ trait RoleFormAwareTrait
             return $this->formDroitsRole;
         }
 
-        return \Application::$container->get('FormElementManager')->get(RoleForm::class);
+        return \Application::$container->get('FormElementManager')->get('UnicaenAuth\Form\Droits\Role');
     }
 }

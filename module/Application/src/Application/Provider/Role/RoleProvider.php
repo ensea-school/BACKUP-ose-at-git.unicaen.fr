@@ -107,6 +107,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
         $intervenant = $this->getServiceContext()->getIntervenant();
         $utilisateur = $this->getServiceContext()->getUtilisateur();
+        $structure   = $this->getServiceContext()->getStructure(false);
 
         // chargement des rôles métiers
 
@@ -122,7 +123,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             r.histoDestruction IS NULL'
         )->setParameter('utilisateur', $utilisateur);
         $query->useResultCache(true);
-        $query->setResultCacheId(__CLASS__.'/affectations');
+        $query->setResultCacheId(__CLASS__ . '/affectations');
 
 
         $result          = $query->getResult();
@@ -144,8 +145,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $role->setPerimetre($dbRole->getPerimetre());
 
             // Si le rôle est de périmètre établissement, alors il se peut que l'on veuille zoomer sur une composante en particulier...
-            if ($this->structureSelectionnee && $dbRole->getPerimetre()->isEtablissement()) {
-                $role->setStructure($this->structureSelectionnee);
+            if ($dbRole->getPerimetre()->isEtablissement() && $structure) {
+                $role->setStructure($structure);
             }
 
             $roles[$roleId] = $role;
@@ -153,17 +154,17 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $affectations = $dbRole->getAffectation();
             foreach ($affectations as $affectation) {
                 /* @var $affectation Affectation */
-                if ($structure = $affectation->getStructure()) {
-                    $affRoleId = $roleId . '-' . $structure->getSourceCode();
+                if ($affStructure = $affectation->getStructure()) {
+                    $affRoleId = $roleId . '-' . $affStructure->getSourceCode();
                     if (!isset($roles[$affRoleId]) && $dbRole->estNonHistorise()) {
-                        $affRoleLibelle = $dbRole->getLibelle() . ' (' . $structure->getLibelleCourt() . ')';
+                        $affRoleLibelle = $dbRole->getLibelle() . ' (' . $affStructure->getLibelleCourt() . ')';
                         $affRole        = new \Application\Acl\Role($affRoleId, $roleId, $affRoleLibelle);
                         if (isset($rolesPrivileges[$roleId])) {
                             $affRole->initPrivileges($rolesPrivileges[$roleId]);
                         }
                         $affRole->setDbRole($dbRole);
                         $affRole->setPerimetre($dbRole->getPerimetre());
-                        $affRole->setStructure($structure);
+                        $affRole->setStructure($affStructure);
                         $roles[$affRoleId] = $affRole;
                     }
                 }

@@ -10,7 +10,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PlafondApplicationServiceAwareTrait;
 use Application\Service\Traits\PlafondEtatServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

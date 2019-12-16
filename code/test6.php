@@ -3,8 +3,9 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 use Application\Service\ModeleContratService;
@@ -15,7 +16,7 @@ $fichier = '/home/laurent/Téléchargements/testfill.odt';
 //$fichier = '/home/laurent/tt.odt';
 //$fichier = '/home/laurent/Téléchargements/Contrat.odt';
 
-$modeleContrat = $sl->get(ModeleContratService::class)->get(13);
+$modeleContrat = $container->get(ModeleContratService::class)->get(13);
 
 $document = new Document();
 $document->setTmpDir('/home/laurent/UnicaenCode');

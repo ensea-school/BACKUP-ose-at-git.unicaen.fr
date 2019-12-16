@@ -23,10 +23,8 @@ use Application\Service\Traits\ServiceServiceAwareTrait;
 use Application\Service\Traits\TauxHoraireHETDServiceAwareTrait;
 use Application\Service\Traits\TypeVolumeHoraireServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Application\Constants;
 use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenApp\Controller\Plugin\Upload\UploaderPlugin;
-use UnicaenApp\Exporter\Pdf;
 use UnicaenApp\Util;
 use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Entity\Db\Contrat;
@@ -38,7 +36,6 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  *
  * @method UploaderPlugin uploader()
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratController extends AbstractController
 {

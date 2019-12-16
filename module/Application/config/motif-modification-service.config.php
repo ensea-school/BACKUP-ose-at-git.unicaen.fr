@@ -13,16 +13,16 @@ return [
                 'options'       => [
                     'route'    => '/motif-modification-service',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\MotifModificationService',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\MotifModificationService',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'delete'  => [
+                    'delete' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/delete/:motif-modification-service',
+                            'route'       => '/delete/:motifModificationServiceDu',
                             'constraints' => [
                                 'motif-modification-service' => '[0-9]*',
                             ],
@@ -34,7 +34,7 @@ return [
                     'saisie' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/saisie/[:motif-modification-service]',
+                            'route'       => '/saisie/[:motifModificationServiceDu]',
                             'constraints' => [
                                 'motif-modification-service' => '[0-9]*',
                             ],
@@ -47,7 +47,7 @@ return [
             ],
         ],
     ],
-    'navigation'    => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -66,7 +66,7 @@ return [
                 ],
             ],
         ],
-	],
+    ],
     'bjyauthorize'    => [
         'guards' => [
             PrivilegeController::class => [
@@ -77,7 +77,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\MotifModificationService',
-                    'action'     => ['saisie','delete'],
+                    'action'     => ['saisie', 'delete'],
                     'privileges' => Privileges::MOTIFS_MODIFICATION_SERVICE_DU_EDITION,
                 ],
             ],
@@ -90,14 +90,14 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\MotifModificationServiceService::class            => Service\MotifModificationServiceService::class,
+            Service\MotifModificationServiceService::class => Service\MotifModificationServiceService::class,
         ],
     ],
     'view_helpers'    => [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\MotifModificationService\MotifModificationServiceSaisieForm::class                 => Form\MotifModificationService\MotifModificationServiceSaisieForm::class,
+            Form\MotifModificationService\MotifModificationServiceSaisieForm::class => Form\MotifModificationService\MotifModificationServiceSaisieForm::class,
         ],
     ],
 ];

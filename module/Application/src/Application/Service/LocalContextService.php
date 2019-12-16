@@ -18,7 +18,6 @@ use Application\Entity\Db\ElementPedagogique;
 /**
  * Classe regroupant des données locales (filtres, etc.)
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class LocalContextService extends AbstractService
 {

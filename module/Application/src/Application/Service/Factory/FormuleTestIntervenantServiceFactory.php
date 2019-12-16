@@ -3,7 +3,7 @@
 namespace Application\Service\Factory;
 
 use Application\Constants;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Service\FormuleTestIntervenantService;
 
 

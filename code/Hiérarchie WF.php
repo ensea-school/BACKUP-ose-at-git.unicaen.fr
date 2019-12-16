@@ -3,13 +3,14 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 use Application\Constants;
 
-$em = $sl->get(Constants::BDD);
+$em = $container->get(Constants::BDD);
 /* @var $em \Doctrine\ORM\EntityManager */
 
 

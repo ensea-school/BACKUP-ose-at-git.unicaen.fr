@@ -3,18 +3,18 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\ChargensController;
-use Zend\Mvc\Controller\ControllerManager;
+use Interop\Container\ContainerInterface;
 
 class ChargensControllerFactory
 {
     /**
      * Create controller
      *
-     * @param ControllerManager $controllerManager
+     * @param ContainerInterface $container
      *
      * @return ChargensController
      */
-    public function __invoke(ControllerManager $controllerManager)
+    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $controller = new ChargensController();
 

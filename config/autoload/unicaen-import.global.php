@@ -12,13 +12,17 @@ return [
             'INTERVENANT'         => View\Helper\Import\IntervenantViewHelper::class,
             'ETAPE'               => View\Helper\Import\EtapeViewHelper::class,
         ],
+        'entity_source_injector'    => [
+            // Code unique de la source à injecter (null pour désactiver le mécanisme).
+            'source_code' => null,
+        ],
     ],
 
     'navigation' => [
         'default' => [
             'home' => [
                 'pages' => [
-                    'import'  => ['visible' => false],
+                    'import'         => ['visible' => false],
                     'administration' => [
                         'pages' => [
                             'import' => [
@@ -27,24 +31,24 @@ return [
                                 'route'    => 'import',
                                 'resource' => PrivilegeController::getResourceId('Import\Controller\Import', 'index'),
                                 'pages'    => [
-                                    'sources'                   => [
+                                    'sources'            => [
                                         'label'       => "Sources de données",
                                         'description' => "Liste des sources de données",
                                         'route'       => 'import/sources',
                                         'resource'    => PrivilegeController::getResourceId('Import\Controller\Source', 'index'),
                                     ],
-                                    'tables'                    => [
+                                    'tables'             => [
                                         'label'    => 'Tables',
                                         'route'    => 'import/tables',
                                         'resource' => PrivilegeController::getResourceId('Import\Controller\Table', 'index'),
                                     ],
-                                    'tableau-bord'              => [
+                                    'tableau-bord'       => [
                                         'label'       => "Tableau de bord principal",
                                         'description' => "Liste, table par table, les colonnes dont les données sont importables ou non, leur caractéristiques et l'état de l'import à leur niveau.",
                                         'route'       => 'import/tableau-bord',
                                         'resource'    => PrivilegeController::getResourceId('Import\Controller\Import', 'tableau-bord'),
                                     ],
-                                    'differentiel'              => [
+                                    'differentiel'       => [
                                         'label'       => "Écarts entre les données de l'application et ses sources",
                                         'description' => "Affiche, table par table, la liste des données différentes entre l'application et ses sources de données",
                                         'route'       => 'import/differentiel',

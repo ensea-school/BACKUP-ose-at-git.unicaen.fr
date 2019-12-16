@@ -97,7 +97,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\MotifNonPaiement\Saisie::class => Form\MotifNonPaiement\Saisie::class,
+            Form\MotifNonPaiement\Saisie::class => Form\MotifNonPaiement\MotifNonPaiementSaisieForm::class,
         ],
     ],
 ];

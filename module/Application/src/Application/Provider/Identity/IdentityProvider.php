@@ -52,18 +52,19 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
                 Affectation::class,
             ]);
 
-            $this->identityRoles = [];
+            $this->identityRoles = ['guest' => 'guest'];
 
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */
             if ($utilisateur = $this->getServiceContext()->getUtilisateur()) {
+                $this->identityRoles = ['user' => 'user'];
                 foreach ($utilisateur->getAffectation() as $affectation) {
                     /* @var $affectation Affectation */
                     $role = $affectation->getRole();
                     try {
-                        $roleId = $role->getCode();
                         if ($role->estNonHistorise()) {
+                            $roleId = $role->getCode();
                             if ($structure = $affectation->getStructure()) {
                                 $roleId .= '-' . $structure->getSourceCode();
                             }
@@ -79,7 +80,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
              * Rôle lié au statut de l'intervenant
              */
             if ($intervenant = $this->getServiceContext()->getIntervenant()) {
-                $this->identityRoles[] = $intervenant->getStatut()->getRoleId();
+                $this->identityRoles[$intervenant->getStatut()->getRoleId()] = $intervenant->getStatut()->getRoleId();
             }
 
         }

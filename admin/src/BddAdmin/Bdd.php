@@ -2,6 +2,7 @@
 
 namespace BddAdmin;
 
+use BddAdmin\Event\EventManagerAwareTrait;
 use BddAdmin\Exception\BddCompileException;
 use BddAdmin\Exception\BddException;
 use BddAdmin\Exception\BddIndexExistsException;
@@ -9,6 +10,8 @@ use \Exception;
 
 class Bdd
 {
+    use EventManagerAwareTrait;
+
     const FETCH_ALL  = 32;
     const FETCH_EACH = 16;
     const FETCH_ONE  = 8;
@@ -160,6 +163,8 @@ class Bdd
      */
     public function beginTransaction(): self
     {
+        $this->sendEvent();
+
         $this->commitMode = OCI_NO_AUTO_COMMIT;
 
         return $this;
@@ -175,6 +180,8 @@ class Bdd
      */
     public function commitTransaction(): self
     {
+        $this->sendEvent();
+
         $this->commitMode = OCI_COMMIT_ON_SUCCESS;
         if (!oci_commit($this->connexion)) {
             $error = oci_error($this->connexion);
@@ -191,6 +198,8 @@ class Bdd
      */
     public function rollbackTransaction(): self
     {
+        $this->sendEvent();
+
         oci_rollback($this->connexion);
         $this->commitMode = OCI_COMMIT_ON_SUCCESS;
 
@@ -224,12 +233,14 @@ class Bdd
      */
     public function exec(string $sql, array $params = [])
     {
-        list($s, $p) = $this->prepareQuery($sql, $params);
+        if ($this->sendEvent()->getReturn('no-exec')) return true;
 
-        if ($this->debug){
+        [$s, $p] = $this->prepareQuery($sql, $params);
+
+        if ($this->debug) {
             echo $s;
             var_dump($p);
-        }else{
+        } else {
             $statement = $this->execStatement($s, $p);
             oci_free_statement($statement);
         }
@@ -286,7 +297,9 @@ class Bdd
      */
     public function select(string $sql, array $params = [], $fetchMode = self::FETCH_ALL)
     {
-        list($s, $p) = $this->prepareQuery($sql, $params);
+        if ($this->sendEvent()->getReturn('no-exec')) return [];
+
+        [$s, $p] = $this->prepareQuery($sql, $params);
 
         $statement = $this->execStatement($s, $p);
 
@@ -332,9 +345,9 @@ class Bdd
             if ($val instanceof \DateTime) {
                 $p[$name] = $val->format('Y-m-d H:i:s');
                 $s        = str_replace(":$name", "to_date(:$name, 'YYYY-MM-DD HH24:MI:SS')", $s);
-            } elseif(is_bool($val)) {
+            } elseif (is_bool($val)) {
                 $p[$name] = $val ? 1 : 0;
-            }else{
+            } else {
                 $p[$name] = $val;
             }
         }

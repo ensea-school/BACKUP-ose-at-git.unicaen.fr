@@ -5,7 +5,7 @@ namespace Application\Form\Droits;
 use Application\Form\AbstractForm;
 use Application\Service\Traits\PerimetreServiceAwareTrait;
 use UnicaenApp\Util;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 /**
  * Description of RoleForm

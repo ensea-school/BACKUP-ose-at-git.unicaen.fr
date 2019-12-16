@@ -4,29 +4,20 @@ namespace Application\Processus\Factory;
 
 
 use Application\Processus\IntervenantProcessus;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class IntervenantProcessusFactory implements FactoryInterface
+class IntervenantProcessusFactory
 {
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IntervenantProcessus
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $processus = new IntervenantProcessus;
 
-        $processus->setEntityManager($serviceLocator->get(\Application\Constants::BDD));
+        $processus->setEntityManager($container->get(\Application\Constants::BDD));
 
         return $processus;
     }

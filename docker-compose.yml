@@ -7,6 +7,10 @@ services:
   ose-dev:
     container_name: ose-dev
 
+    environment:
+      XDEBUG_CONFIG: remote_host=172.17.0.1
+      PHP_IDE_CONFIG: serverName=ose-dev.localhost
+
     build:
       context: .
       dockerfile: Dockerfile

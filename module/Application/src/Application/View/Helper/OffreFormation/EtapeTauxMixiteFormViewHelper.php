@@ -81,7 +81,7 @@ class EtapeTauxMixiteFormViewHelper extends AbstractHtmlElement
             $res .= '<tr>';
             $res .= '<th class="element-pedagogique">' . $element . '</th>';
             $formElement = $form->get('EL' . $element->getId());
-            $res .= $this->getView()->ElementTauxMixiteFieldset()->render($formElement, $typesHeures, true);
+            $res .= $this->getView()->elementTauxMixiteFieldset()->render($formElement, $typesHeures, true);
             $res .= '</tr>';
         }
 

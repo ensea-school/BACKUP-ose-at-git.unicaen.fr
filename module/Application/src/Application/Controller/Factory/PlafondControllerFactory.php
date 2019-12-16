@@ -2,11 +2,8 @@
 
 namespace Application\Controller\Factory;
 
-use Application\Form\Plafond\PlafondApplicationForm;
-use Application\Service\PlafondApplicationService;
-use Zend\Mvc\Controller\ControllerManager as ContainerInterface;
 use Application\Controller\PlafondController;
-
+use Interop\Container\ContainerInterface;
 
 
 /**
@@ -26,8 +23,6 @@ class PlafondControllerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $container = $container->getServiceLocator();
-
         $controller = new PlafondController;
 
         return $controller;

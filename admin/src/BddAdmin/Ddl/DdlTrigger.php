@@ -3,14 +3,15 @@
 namespace BddAdmin\Ddl;
 
 
-
 class DdlTrigger extends DdlAbstract
 {
     const ALIAS = 'trigger';
 
+
+
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('name', $includes, $excludes);
         $data = [];
 
         $q = "SELECT 
@@ -25,7 +26,7 @@ class DdlTrigger extends DdlAbstract
         ";
         $p = $this->bdd->select($q, $p);
         foreach ($p as $r) {
-            if (!isset($data[$r['name']])){
+            if (!isset($data[$r['name']])) {
                 $data[$r['name']] = [
                     'name'       => $r['name'],
                     'definition' => 'CREATE OR REPLACE ',
@@ -44,14 +45,18 @@ class DdlTrigger extends DdlAbstract
 
     public function create(array $data)
     {
-        $this->addQuery($data['definition'], 'Ajout/modification du trigger '.$data['name']);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery($data['definition'], 'Ajout/modification du trigger ' . $data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP TRIGGER $name", 'Suppression du trigger '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("DROP TRIGGER $name", 'Suppression du trigger ' . $name);
     }
 
 
@@ -61,7 +66,9 @@ class DdlTrigger extends DdlAbstract
      */
     public function enable(string $name)
     {
-        $this->addQuery("alter trigger $name enable", 'Activation du trigger '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("alter trigger $name enable", 'Activation du trigger ' . $name);
     }
 
 
@@ -71,7 +78,9 @@ class DdlTrigger extends DdlAbstract
      */
     public function disable(string $name)
     {
-        $this->addQuery("alter trigger $name disable", 'Désactivation du trigger '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("alter trigger $name disable", 'Désactivation du trigger ' . $name);
     }
 
 
@@ -79,6 +88,7 @@ class DdlTrigger extends DdlAbstract
     public function alter(array $old, array $new)
     {
         if ($old != $new) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
 
             $this->create($new);
         }
@@ -88,10 +98,12 @@ class DdlTrigger extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $newName = $new['name'];
 
         $sql = "ALTER TRIGGER \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage du trigger '.$oldName.' en '.$newName);
+        $this->addQuery($sql, 'Renommage du trigger ' . $oldName . ' en ' . $newName);
     }
 
 }

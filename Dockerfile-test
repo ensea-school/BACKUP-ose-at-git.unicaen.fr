@@ -6,7 +6,7 @@
 #
 ###########################################################################################
 
-FROM unicaen-dev-php7.0-apache
+FROM unicaen-dev-php7.3-apache
 LABEL maintainer="Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>"
 
 ENV APACHE_CONF_DIR=/etc/apache2 \

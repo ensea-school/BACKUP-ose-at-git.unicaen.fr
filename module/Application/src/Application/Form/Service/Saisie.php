@@ -12,7 +12,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\PeriodeServiceAwareTrait;
 use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

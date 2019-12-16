@@ -201,120 +201,45 @@ class OseAdmin
 
 
 
-    public function purgerVersion(string $version): string
+    protected function runMigrationAction(string $contexte, string $action)
     {
-        $version = strtolower($version);
-        if (false !== ($p = strpos($version, 'alpha'))) {
-            $version = substr($version, 0, $p);
-        }
-        if (false !== ($p = strpos($version, 'beta'))) {
-            $version = substr($version, 0, $p);
-        }
+        $file = $this->getMigrationDir() . $action . '.php';
+        require_once $file;
 
-        return trim($version);
-    }
+        /**
+         * @var $migration AbstractMigration
+         */
+        $migration = new $action($this);
 
+        if ($contexte == $migration->getContexte() && $migration->utile()) {
+            $this->console->print('[MIGRATION] ' . $migration->description() . ' ... ');
 
-
-    protected function getMigrationFilesToExecute(string $oldVersion, string $newVersion, string $prePost = 'pre'): array
-    {
-        $tags = $this->getTags(1);
-        foreach ($tags as $i => $tag) {
-            $tags[$i] = $this->purgerVersion($tag);
-        }
-        $tags = array_unique($tags);
-
-        $oldIndex = array_search($this->purgerVersion($oldVersion), $tags);
-        $newIndex = array_search($this->purgerVersion($newVersion), $tags);
-
-        $scripts = [];
-
-        if ($oldIndex !== false && $newIndex !== false && $oldIndex < $newIndex) {
-            for ($i = $oldIndex + 1; $i <= $newIndex; $i++) {
-
-                $phpMigr = $this->getOseDir() . 'admin/migration/' . $tags[$i] . '-' . $prePost . '.php';
-                $sqlMigr = $this->getOseDir() . 'admin/migration/' . $tags[$i] . '-' . $prePost . '.sql';
-
-                if (file_exists($sqlMigr)) {
-                    $scripts[] = $sqlMigr;
-                }
-
-                if (file_exists($phpMigr)) {
-                    $scripts[] = $phpMigr;
-                }
-            }
-
-            return $scripts;
-        } else {
-            return [];
-        }
-    }
-
-
-
-    protected function runMigrationPhpScript(string $filename)
-    {
-        $this->console->println('Exécution du script de migration ' . basename($filename), $this->console::COLOR_YELLOW);
-        try {
-            $oa = $this;
-            $c  = $this->console;
-
-            require_once $filename;
-        } catch (\Exception $e) {
-            $this->console->println($e->getMessage(), $this->console::COLOR_RED);
-        }
-    }
-
-
-
-    protected function runMigrationSqlScript(string $filename)
-    {
-        $this->console->println('Exécution du script de migration ' . basename($filename), $this->console::COLOR_YELLOW);
-        $errors = $this->getBdd()->execFile($filename);
-        if (!empty($errors)) {
-            $this->console->println('Des erreurs ont été rencontrées durant l\'exécution du script de migration :', $this->console::BG_RED);
-            foreach ($errors as $e) {
-                $this->console->println($e->getMessage(), $this->console::COLOR_RED);
+            try {
+                $migration->action();
+                $this->console->println('OK', $this->console::COLOR_GREEN);
+            } catch (\Throwable $e) {
+                $this->console->println('Erreur : ' . $e->getMessage(), $this->console::COLOR_RED);
             }
         }
     }
 
 
 
-    /**
-     * Lancement des scripts éventuels liés à des migrations pour des versions spécifiques
-     *
-     * @param string $prePost
-     *
-     * @return bool
-     * @throws \BddAdmin\Exception\BddCompileException
-     * @throws \BddAdmin\Exception\BddException
-     * @throws \BddAdmin\Exception\BddIndexExistsException
-     */
-    public function migration(string $prePost = 'pre'): bool
+    public function migration(string $context = 'pre', string $action = null)
     {
-        $scripts = $this->getMigrationFilesToExecute($this->oldVersion, $this->version, $prePost);
-        if (count($scripts) > 0) {
-            $this->console->println('Exécution des scripts de ' . $prePost . '-migration', $this->console::COLOR_LIGHT_PURPLE);
-        }
+        $files = scandir($this->getMigrationDir());
 
-        foreach ($scripts as $script) {
-            $ext = substr($script, -3);
-            switch ($ext) {
-                case 'php':
-                    $this->runMigrationPhpScript($script);
-                break;
-                case 'sql':
-                    $this->runMigrationSqlScript($script);
-                break;
+        foreach ($files as $i => $file) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+            $fileAction = substr($file, 0, -4); // on supprime l'extension PHP
+            if ($action === null || $fileAction === $action) {
+
+
+                $this->runMigrationAction($context, $fileAction);
             }
         }
-
-        if (count($scripts) > 0) {
-            $this->console->println("Scripts de $prePost-migration exécutés");
-        }
-
-        return true;
     }
 
 
@@ -329,6 +254,13 @@ class OseAdmin
     public function getOseDir(): string
     {
         return dirname(dirname(__DIR__)) . '/';
+    }
+
+
+
+    public function getMigrationDir()
+    {
+        return $this->getOseDir() . 'admin/migration/';
     }
 
 

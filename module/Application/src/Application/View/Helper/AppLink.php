@@ -1,12 +1,10 @@
 <?php
 namespace Application\View\Helper;
 
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
-use UnicaenApp\Util;
 use Zend\I18n\View\Helper\AbstractTranslatorHelper;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\RouteStackInterface;
+use Zend\Router\RouteMatch;
+use Zend\Router\RouteStackInterface;
 use UnicaenApp\Exception\LogicException;
 use Zend\Form\Element\Select;
 

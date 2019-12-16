@@ -3,7 +3,7 @@
 namespace Application\Cache\Factory;
 
 use Application\Cache\CacheService;
-use Zend\ServiceManager\ServiceLocatorInterface as ContainerInterface;
+use Interop\Container\ContainerInterface;
 
 
 
@@ -24,7 +24,7 @@ class CacheServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $appConfig = $container->get('application_config');
+        $appConfig = \AppConfig::getGlobal();
         $cacheDir = getcwd().'/'.$appConfig['module_listener_options']['cache_dir'];
 
         if (!is_dir($cacheDir)){

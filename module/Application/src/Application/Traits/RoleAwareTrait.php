@@ -7,7 +7,6 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 /**
  * Description of RoleAwareTrait
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 trait RoleAwareTrait
 {

@@ -89,15 +89,13 @@ class ContextService extends AbstractService
 
     /**
      *
-     * @return RoleService
+     * @return Role
      */
     public function getSelectedIdentityRole()
     {
         if (null === $this->selectedIdentityRole) {
-            $authUserContext = $this->getServiceUserContext();
-
-            if ($authUserContext->getIdentity()) {
-                $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
+            if ($this->serviceUserContext->getIdentity()) {
+                $this->selectedIdentityRole = $this->serviceUserContext->getSelectedIdentityRole();
                 if (!$this->selectedIdentityRole instanceof Role) $this->selectedIdentityRole = new Role();
             }
         }
@@ -122,7 +120,7 @@ class ContextService extends AbstractService
      */
     public function getIntervenant()
     {
-        if (false === $this->intervenant || $this->getServiceUserContext()->getNextSelectedIdentityRole()) {
+        if (false === $this->intervenant || $this->serviceUserContext->getNextSelectedIdentityRole()) {
             $utilisateurCode   = $this->getConnecteurLdap()->getUtilisateurCourantCode();
             $this->intervenant = $this->getServiceIntervenant()->getByUtilisateurCode($utilisateurCode);
         }
@@ -400,23 +398,21 @@ class ContextService extends AbstractService
      *
      * @return Structure
      */
-    public function getStructure($initializing = false)
+    public function getStructure($checkInRole = true)
     {
-        if (!$this->structure) {
-            $sc = $this->getSessionContainer();
-            if (!$sc->offsetExists('structure')) {
-                if ($initializing) {
-                    $sc->structure = null;
-                } else {
-                    $role = $this->getSelectedIdentityRole();
-                    if ($role && $role->getStructure()) {
-                        $sc->structure = $role->getStructure()->getId();
-                    } else {
-                        $sc->structure = null;
-                    }
-                }
+        if ($checkInRole) {
+            $role = $this->getSelectedIdentityRole();
+            if ($role && $role->getStructure()) {
+                return $role->getStructure();
             }
-            $this->structure = $this->getServiceStructure()->get($sc->structure);
+        }
+
+        if (!$this->structure) {
+            $sc          = $this->getSessionContainer();
+            $structureId = $sc->structure;
+            if ($structureId) {
+                $this->structure = $this->getServiceStructure()->get($structureId);
+            }
         }
 
         return $this->structure;

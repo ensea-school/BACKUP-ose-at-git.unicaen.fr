@@ -7,7 +7,7 @@ $settings = [
     'namespaces'           => [
         'services'  => [
             'Application',
-            'Import',
+            'UnicaenImport',
         ],
         'forms'     => [
             'Application\Form',

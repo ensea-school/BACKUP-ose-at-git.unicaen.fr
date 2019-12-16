@@ -10,7 +10,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenApp\Traits\SessionContainerTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 

@@ -19,7 +19,7 @@ use UnicaenAuth\Service\Traits\AuthorizeServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtablissementServiceAwareTrait;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 
 /**

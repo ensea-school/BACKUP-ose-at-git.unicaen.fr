@@ -2,7 +2,7 @@
 
 namespace Application\Form\Factory;
 
-use Zend\Form\FormElementManager as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Form\EtatSortieForm;
 
 
@@ -24,9 +24,6 @@ class EtatSortieFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        /* On quitte le FormElementManager */
-        $container = $container->getServiceLocator();
-
         $form = new EtatSortieForm;
 
         return $form;

@@ -2,15 +2,15 @@
 
 namespace Application\View\Helper;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
+use UnicaenAuth\Service\UserContext;
 
 /**
  *
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
 {
@@ -18,21 +18,19 @@ class UserProfileSelectRadioItemFactory extends UserProfileSelectFactory
     use StructureServiceAwareTrait;
 
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $helperPluginManager
-     * @return UserProfile
-     */
-    public function createService(ServiceLocatorInterface $helperPluginManager)
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $container = $helperPluginManager->getServiceLocator();
-        $userContextService = $container->get('AuthUserContext');
+        $userContextService = $container->get(UserContext::class);
 
         $service = new UserProfileSelectRadioItem($userContextService);
-        $service
-                ->setServiceStructure($this->getServiceStructure())
-                ->setStructure($this->getServiceContext()->getStructure());
+        $service->setServiceStructure($this->getServiceStructure());
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        if ($role && $role->getPerimetre() && $role->getPerimetre()->isEtablissement()) {
+            $service->setStructure($this->getServiceContext()->getStructure(false));
+        }
 
         return $service;
     }

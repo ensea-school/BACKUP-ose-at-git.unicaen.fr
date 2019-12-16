@@ -2,7 +2,7 @@
 
 namespace Application\Form\Plafond\Factory;
 
-use Zend\Form\FormElementManager as ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Application\Form\Plafond\PlafondApplicationForm;
 
 
@@ -23,8 +23,6 @@ class PlafondApplicationFormFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
-        $container = $container->getServiceLocator();
-
         $form = new PlafondApplicationForm;
 
         return $form;

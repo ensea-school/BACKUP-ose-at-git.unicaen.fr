@@ -3,13 +3,14 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
 
 
 $bdd = new \Application\Connecteur\Bdd\BddConnecteur();
-$bdd->setEntityManager($sl->get(\Application\Constants::BDD));
+$bdd->setEntityManager($container->get(\Application\Constants::BDD));
 
 
 $sql = "

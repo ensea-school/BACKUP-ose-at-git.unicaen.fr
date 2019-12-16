@@ -11,7 +11,6 @@ use UnicaenAuth\View\Helper\UserAbstract;
  *  - profil de l'utilisateur connecté
  *  - infos administratives sur l'utilisateur
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier@unicaen.fr>
  */
 class UserCurrent extends UserAbstract
 {

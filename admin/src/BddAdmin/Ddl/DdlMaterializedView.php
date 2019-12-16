@@ -3,14 +3,15 @@
 namespace BddAdmin\Ddl;
 
 
-
 class DdlMaterializedView extends DdlAbstract
 {
     const ALIAS = 'materialized-view';
 
+
+
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('mview_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('mview_name', $includes, $excludes);
         $data = [];
 
         $q = "SELECT
@@ -38,22 +39,28 @@ class DdlMaterializedView extends DdlAbstract
 
     public function create(array $data)
     {
-        $sql = 'CREATE MATERIALIZED VIEW '.$data['name']." AS\n";
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $sql = 'CREATE MATERIALIZED VIEW ' . $data['name'] . " AS\n";
         $sql .= $data['definition'];
-        $this->addQuery($sql, 'Ajout de la vue matérialisée '.$data['name']);
+        $this->addQuery($sql, 'Ajout de la vue matérialisée ' . $data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("DROP MATERIALIZED VIEW " . $name, 'Suppression de la vue matérialisée ' . $name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         if ($old != $new) {
             $this->drop($old['name']);
             $this->create($new);
@@ -64,6 +71,8 @@ class DdlMaterializedView extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $this->drop($oldName);
         $this->create($new);
     }

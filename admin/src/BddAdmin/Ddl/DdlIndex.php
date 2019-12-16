@@ -3,14 +3,15 @@
 namespace BddAdmin\Ddl;
 
 
-
 class DdlIndex extends DdlAbstract
 {
     const ALIAS = 'index';
 
+
+
     public function get($includes = null, $excludes = null): array
     {
-        list($f,$p) = $this->makeFilterParams('index_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('index_name', $includes, $excludes);
 
         $data = [];
 
@@ -42,8 +43,8 @@ class DdlIndex extends DdlAbstract
         FROM user_ind_columns 
         WHERE index_name NOT LIKE 'BIN$%' $f 
         ORDER BY column_position";
-        $rs = $this->bdd->select($sql, $p);
-        foreach( $rs as $r ){
+        $rs  = $this->bdd->select($sql, $p);
+        foreach ($rs as $r) {
             $data[$r['name']]['columns'][] = $r['column'];
         }
 
@@ -56,7 +57,7 @@ class DdlIndex extends DdlAbstract
     {
         $sql = "CREATE ";
         if ($data['unique']) $sql .= "UNIQUE ";
-        $sql .= "INDEX ".$data['name']." ON ".$data['table'].' ('.implode( ', ',$data['columns']).')';
+        $sql .= "INDEX " . $data['name'] . " ON " . $data['table'] . ' (' . implode(', ', $data['columns']) . ')';
 
         return $sql;
     }
@@ -65,22 +66,28 @@ class DdlIndex extends DdlAbstract
 
     public function create(array $data)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $sql = $this->makeCreate($data);
-        $this->addQuery($sql, 'Ajout de l\'index '.$data['name']);
+        $this->addQuery($sql, 'Ajout de l\'index ' . $data['name']);
     }
 
 
 
     public function drop(string $name)
     {
-        $this->addQuery("DROP INDEX $name", 'Suppression de l\'index '.$name);
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        $this->addQuery("DROP INDEX $name", 'Suppression de l\'index ' . $name);
     }
 
 
 
     public function alter(array $old, array $new)
     {
-        if ($old != $new){
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
+        if ($old != $new) {
             $this->drop($old['name']);
             $this->create($new);
         }
@@ -90,10 +97,12 @@ class DdlIndex extends DdlAbstract
 
     public function rename(string $oldName, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $newName = $new['name'];
 
         $sql = "ALTER INDEX \"$oldName\" RENAME TO \"$newName\"";
-        $this->addQuery($sql, 'Renommage de l\'index '.$oldName.' en '.$newName);
+        $this->addQuery($sql, 'Renommage de l\'index ' . $oldName . ' en ' . $newName);
     }
 
 }

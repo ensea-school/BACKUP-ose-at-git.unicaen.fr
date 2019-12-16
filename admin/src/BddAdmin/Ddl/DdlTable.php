@@ -94,7 +94,7 @@ class DdlTable extends DdlAbstract
 
     public function get($includes = null, $excludes = null): array
     {
-        list($f, $p) = $this->makeFilterParams('t.table_name', $includes, $excludes);
+        [$f, $p] = $this->makeFilterParams('t.table_name', $includes, $excludes);
         $data = [];
 
         $withColumns = !$this->hasOption(self::OPT_NO_COLUMNS);
@@ -239,6 +239,8 @@ class DdlTable extends DdlAbstract
 
     public function create(array $data)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         /* Création de la table */
         $this->addQuery($this->makeCreate($data), 'Ajout de la table ' . $data['name']);
 
@@ -257,6 +259,8 @@ class DdlTable extends DdlAbstract
 
     public function drop(string $name)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $this->addQuery("DROP TABLE $name", 'Suppression de la table ' . $name);
     }
 
@@ -266,6 +270,8 @@ class DdlTable extends DdlAbstract
     {
         if (!isset($data['sequence'])) return;
         if (!isset($data['columns']['ID'])) return;
+
+        if ($this->sendEvent()->getReturn('no-exec')) return;
 
         $sql = 'DECLARE seqId NUMERIC;
 BEGIN
@@ -349,6 +355,8 @@ END;';
         if ($this->isDiff($old, $new)) {
             $name = $new['name'];
 
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             if ($old['logging'] !== $new['logging']) {
                 $log = $new['logging'] ? 'LOGGING' : 'NOLOGGING';
                 $this->addQuery("ALTER TABLE \"$name\" $log", 'Modification du logging de la table ' . $new['name']);
@@ -387,6 +395,8 @@ END;';
 
     private function addColumn(string $table, array $column, $noNotNull = false)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $cp = ['"' . $column['name'] . '"', $this->makeColumnType($column)];
         if ($column['default'] !== null) {
             $cp[] = 'DEFAULT ' . $column['default'];
@@ -407,6 +417,8 @@ END;';
 
     private function dropColumn(string $table, array $column)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $column = $column['name'];
         $this->addQuery(
             "ALTER TABLE \"$table\" DROP COLUMN \"$column\"",
@@ -418,6 +430,8 @@ END;';
 
     private function alterColumnType(string $table, array $old, array $new)
     {
+        if ($this->sendEvent()->getReturn('no-exec')) return;
+
         $column = $new['name'];
         if ($this->isColDiffType($old, $new)) {
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" " . $this->makeColumnType($new) . ")";
@@ -431,6 +445,8 @@ END;';
     {
         $column = $new['name'];
         if ($this->isColDiffNullable($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" " . ($new['nullable'] ? '' : 'NOT ') . "NULL)";
             $this->addQuery($sql, 'Changement d\'état de la colonne ' . $column . ' de la table ' . $table);
         }
@@ -442,6 +458,8 @@ END;';
     {
         $column = $new['name'];
         if ($this->isColDiffDefault($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $default = $new['default'];
             if (null === $default) $default = 'NULL';
             $sql = "ALTER TABLE \"$table\" MODIFY (\"$column\" DEFAULT $default )";
@@ -455,6 +473,8 @@ END;';
     {
         $column = $new['name'];
         if ($this->isColDiffComment($old, $new)) {
+            if ($this->sendEvent()->getReturn('no-exec')) return;
+
             $commentaire = $new['commentaire'];
             if ($commentaire) {
                 $commentaire = "'" . str_replace("'", "''", $commentaire) . "'";
@@ -472,6 +492,8 @@ END;';
     public function rename(string $oldName, array $new)
     {
         $newName = $new['name'];
+
+        if ($this->sendEvent()->getReturn('no-exec')) return;
 
         $sql = "ALTER TABLE \"$oldName\" RENAME TO \"$newName\"";
         $this->addQuery($sql, 'Renommage de la table ' . $oldName . ' en ' . $newName);

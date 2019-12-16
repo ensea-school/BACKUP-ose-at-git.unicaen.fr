@@ -13,78 +13,91 @@ use BddAdmin\Ddl\DdlTable;
 use BddAdmin\Ddl\DdlTrigger;
 use BddAdmin\Ddl\DdlUniqueConstraint;
 use BddAdmin\Ddl\DdlView;
+use BddAdmin\Event\EventManagerAwareTrait;
 use BddAdmin\Exception\BddCompileException;
 
 
 class Schema
 {
+    const DDL_TABLE              = DdlTable::class;
+    const DDL_VIEW               = DdlView::class;
+    const DDL_SEQUENCE           = DdlSequence::class;
+    const DDL_MATERIALIZED_VIEW  = DdlMaterializedView::class;
+    const DDL_PRIMARY_CONSTRAINT = DdlPrimaryConstraint::class;
+    const DDL_PACKAGE            = DdlPackage::class;
+    const DDL_REF_CONSTRAINT     = DdlRefConstraint::class;
+    const DDL_INDEX              = DdlIndex::class;
+    const DDL_UNIQUE_CONSTRAINT  = DdlUniqueConstraint::class;
+    const DDL_TRIGGER            = DdlTrigger::class;
+
     use BddAwareTrait;
+    use EventManagerAwareTrait;
 
     /**
      * @var array
      */
     private $ddlClasses  = [
-        DdlSequence::class,
-        DdlTable::class,
-        DdlPrimaryConstraint::class,
-        DdlPackage::class,
-        DdlView::class,
-        DdlMaterializedView::class,
-        DdlRefConstraint::class,
-        DdlUniqueConstraint::class,
-        DdlTrigger::class,
-        DdlIndex::class,
+        self::DDL_SEQUENCE,
+        self::DDL_TABLE,
+        self::DDL_PRIMARY_CONSTRAINT,
+        self::DDL_PACKAGE,
+        self::DDL_VIEW,
+        self::DDL_MATERIALIZED_VIEW,
+        self::DDL_REF_CONSTRAINT,
+        self::DDL_UNIQUE_CONSTRAINT,
+        self::DDL_TRIGGER,
+        self::DDL_INDEX,
     ];
 
     private $changements = [
-        DdlSequence::class . '.rename.'          => ['label' => 'Renomage des séquences'],
-        DdlTable::class . '.rename.'             => ['label' => 'Renomage des tables'],
-        DdlView::class . '.rename.'              => ['label' => 'Renomage des vues'],
-        DdlMaterializedView::class . '.rename.'  => ['label' => 'Renomage des vues matérialisées'],
-        DdlPackage::class . '.rename.'           => ['label' => 'Renomage des packages'],
-        DdlIndex::class . '.rename.'             => ['label' => 'Renomage des indexes'],
-        DdlTrigger::class . '.rename.'           => ['label' => 'Renomage des triggers'],
-        DdlPrimaryConstraint::class . '.rename.' => ['label' => 'Renomage des clés primaires'],
-        DdlRefConstraint::class . '.rename.'     => ['label' => 'Renomage des clés étrangères'],
-        DdlUniqueConstraint::class . '.rename.'  => ['label' => 'Renomage des contraintes d\'unicité'],
+        self::DDL_SEQUENCE . '.rename.'           => ['label' => 'Renomage des séquences'],
+        self::DDL_TABLE . '.rename.'              => ['label' => 'Renomage des tables'],
+        self::DDL_VIEW . '.rename.'               => ['label' => 'Renomage des vues'],
+        self::DDL_MATERIALIZED_VIEW . '.rename.'  => ['label' => 'Renomage des vues matérialisées'],
+        self::DDL_PACKAGE . '.rename.'            => ['label' => 'Renomage des packages'],
+        self::DDL_INDEX . '.rename.'              => ['label' => 'Renomage des indexes'],
+        self::DDL_TRIGGER . '.rename.'            => ['label' => 'Renomage des triggers'],
+        self::DDL_PRIMARY_CONSTRAINT . '.rename.' => ['label' => 'Renomage des clés primaires'],
+        self::DDL_REF_CONSTRAINT . '.rename.'     => ['label' => 'Renomage des clés étrangères'],
+        self::DDL_UNIQUE_CONSTRAINT . '.rename.'  => ['label' => 'Renomage des contraintes d\'unicité'],
 
-        DdlTrigger::class . '.drop.'           => ['label' => 'Suppression des triggers'],
-        DdlSequence::class . '.drop.'          => ['label' => 'Suppression des séquences'],
-        DdlView::class . '.drop.'              => ['label' => 'Suppression des vues'],
-        DdlMaterializedView::class . '.drop.'  => ['label' => 'Suppression des vues matérialisées'],
-        DdlPackage::class . '.drop.'           => ['label' => 'Suppression des packages'],
-        DdlRefConstraint::class . '.drop.'     => ['label' => 'Suppression des clés étrangères'],
-        DdlPrimaryConstraint::class . '.drop.' => ['label' => 'Suppression des clés primaires'],
-        DdlUniqueConstraint::class . '.drop.'  => ['label' => 'Suppression des contraintes d\'unicité'],
-        DdlIndex::class . '.drop.'             => ['label' => 'Suppression des indexes'],
+        self::DDL_TRIGGER . '.drop.'            => ['label' => 'Suppression des triggers'],
+        self::DDL_SEQUENCE . '.drop.'           => ['label' => 'Suppression des séquences'],
+        self::DDL_VIEW . '.drop.'               => ['label' => 'Suppression des vues'],
+        self::DDL_MATERIALIZED_VIEW . '.drop.'  => ['label' => 'Suppression des vues matérialisées'],
+        self::DDL_PACKAGE . '.drop.'            => ['label' => 'Suppression des packages'],
+        self::DDL_REF_CONSTRAINT . '.drop.'     => ['label' => 'Suppression des clés étrangères'],
+        self::DDL_PRIMARY_CONSTRAINT . '.drop.' => ['label' => 'Suppression des clés primaires'],
+        self::DDL_UNIQUE_CONSTRAINT . '.drop.'  => ['label' => 'Suppression des contraintes d\'unicité'],
+        self::DDL_INDEX . '.drop.'              => ['label' => 'Suppression des indexes'],
 
-        DdlSequence::class . '.create.'          => ['label' => 'Création des séquences'],
-        DdlTable::class . '.create.'             => ['label' => 'Création des tables'],
-        DdlView::class . '.create.'              => ['label' => 'Création des vues'],
-        DdlPackage::class . '.create.definition' => ['label' => 'Création des définitions de packages'],
-        DdlPackage::class . '.create.body'       => ['label' => 'Création des corps de packages'],
+        self::DDL_SEQUENCE . '.create.'          => ['label' => 'Création des séquences'],
+        self::DDL_TABLE . '.create.'             => ['label' => 'Création des tables'],
+        self::DDL_VIEW . '.create.'              => ['label' => 'Création des vues'],
+        self::DDL_PACKAGE . '.create.definition' => ['label' => 'Création des définitions de packages'],
+        self::DDL_PACKAGE . '.create.body'       => ['label' => 'Création des corps de packages'],
 
-        DdlSequence::class . '.alter.'                     => ['label' => 'Modification des séquences'],
-        DdlTable::class . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
+        self::DDL_SEQUENCE . '.alter.'                     => ['label' => 'Modification des séquences'],
+        self::DDL_TABLE . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
 
-        DdlPackage::class . '.alter.'                      => ['label' => 'Modification des packages'],
-        DdlView::class . '.alter.'                         => ['label' => 'Modification des vues'],
-        DdlMaterializedView::class . '.create.'            => ['label' => 'Création des vues matérialisées'],
-        DdlMaterializedView::class . '.alter.'             => ['label' => 'Modification des vues matérialisées'],
-        DdlPrimaryConstraint::class . '.alter.'            => ['label' => 'Modification des clés primaires'],
-        DdlRefConstraint::class . '.alter.'                => ['label' => 'Modification des clés étrangères'],
-        DdlUniqueConstraint::class . '.alter.'             => ['label' => 'Modification des contraintes d\'unicité'],
-        DdlTrigger::class . '.alter.'                      => ['label' => 'Modification des triggers'],
-        DdlIndex::class . '.alter.'                        => ['label' => 'Modification des indexes'],
-        DdlTable::class . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
+        self::DDL_PACKAGE . '.alter.'                      => ['label' => 'Modification des packages'],
+        self::DDL_VIEW . '.alter.'                         => ['label' => 'Modification des vues'],
+        self::DDL_MATERIALIZED_VIEW . '.create.'           => ['label' => 'Création des vues matérialisées'],
+        self::DDL_MATERIALIZED_VIEW . '.alter.'            => ['label' => 'Modification des vues matérialisées'],
+        self::DDL_PRIMARY_CONSTRAINT . '.alter.'           => ['label' => 'Modification des clés primaires'],
+        self::DDL_REF_CONSTRAINT . '.alter.'               => ['label' => 'Modification des clés étrangères'],
+        self::DDL_UNIQUE_CONSTRAINT . '.alter.'            => ['label' => 'Modification des contraintes d\'unicité'],
+        self::DDL_TRIGGER . '.alter.'                      => ['label' => 'Modification des triggers'],
+        self::DDL_INDEX . '.alter.'                        => ['label' => 'Modification des indexes'],
+        self::DDL_TABLE . '.alter.noNotNull|noDropColumns' => ['label' => 'Modification des tables'],
 
-        DdlIndex::class . '.create.'             => ['label' => 'Création des indexes'],
-        DdlPrimaryConstraint::class . '.create.' => ['label' => 'Création des clés primaires'],
-        DdlRefConstraint::class . '.create.'     => ['label' => 'Création des clés étrangères'],
-        DdlUniqueConstraint::class . '.create.'  => ['label' => 'Création des contraintes d\'unicité'],
-        DdlTrigger::class . '.create.'           => ['label' => 'Création des triggers'],
+        self::DDL_INDEX . '.create.'              => ['label' => 'Création des indexes'],
+        self::DDL_PRIMARY_CONSTRAINT . '.create.' => ['label' => 'Création des clés primaires'],
+        self::DDL_REF_CONSTRAINT . '.create.'     => ['label' => 'Création des clés étrangères'],
+        self::DDL_UNIQUE_CONSTRAINT . '.create.'  => ['label' => 'Création des contraintes d\'unicité'],
+        self::DDL_TRIGGER . '.create.'            => ['label' => 'Création des triggers'],
 
-        DdlTable::class . '.drop.' => ['label' => 'Suppression des tables'],
+        self::DDL_TABLE . '.drop.' => ['label' => 'Suppression des tables'],
     ];
 
     /**
@@ -363,27 +376,27 @@ class Schema
 
 
 
-    public function diff( array $ddl, bool $inverse=false, array $ddlConfig = []): array
+    public function diff(array $ddl, bool $inverse = false, array $ddlConfig = []): array
     {
         $ddl = $this->ddlFilter($ddl, $ddlConfig);
         $bdd = $this->getDdl($ddlConfig);
 
-        if (!$inverse){
+        if (!$inverse) {
             $old = $bdd;
             $new = $ddl;
-        }else{
+        } else {
             $old = $ddl;
             $new = $bdd;
         }
 
         $res = [];
         foreach ($this->changements as $changement => $params) {
-            list($class, $action, $precision) = explode('.', $changement);
+            [$class, $action, $precision] = explode('.', $changement);
             $noGet = isset($ddlConfig[$class]) ? ($ddlConfig[$class] === false) : false;
             if (!$noGet) {
                 $ddlObject = $this->getDdlObject($class, true);
 
-                $options  = $this->ddlConfigGet($ddlConfig, $class, 'options');
+                $options = $this->ddlConfigGet($ddlConfig, $class, 'options');
                 if ($options) {
                     $ddlObject->addOptions((array)$options);
                 }
@@ -440,6 +453,7 @@ class Schema
                 }
             }
         }
+
         return $res;
     }
 
@@ -460,7 +474,7 @@ class Schema
         }
         $res = [];
         foreach ($this->changements as $changement => $params) {
-            list($class, $action, $precision) = explode('.', $changement);
+            [$class, $action, $precision] = explode('.', $changement);
             $noGet = isset($ddlConfig[$class]) ? ($ddlConfig[$class] === false) : false;
             if (!$noGet) {
                 $ddlObject = $this->getDdlObject($class, true);
@@ -571,7 +585,7 @@ class Schema
             DdlRefConstraint::class,
         ];
 
-        foreach( $classes as $class ) {
+        foreach ($classes as $class) {
             if (!isset($ddlConfig[$class]['includes'])) {
                 $ddlConfig[$class]['includes'] = [];
             }
@@ -670,7 +684,7 @@ class Schema
                     $sql .= '-- ' . $label . "\n";
                     $sql .= '--------------------------------------------------' . "\n\n";
                     foreach ($qs as $qr => $description) {
-                        $qr = str_replace( "\t", "  ", $qr);
+                        $qr = str_replace("\t", "  ", $qr);
                         if ($onlyFirstLine && false !== strpos($qr, "\n")) {
                             $qr = substr($qr, 0, strpos($qr, "\n"));
                         }
@@ -743,11 +757,13 @@ class Schema
                         $bdd->exec("ALTER TRIGGER $name COMPILE");
                     break;
                 }
+                $this->sendEvent('compile', ['type' => $type, 'name' => $name, 'error' => false]);
             } catch (BddCompileException $e) {
                 $errors[$type][$name] = $e->getMessage();
                 if ($this->logger) {
                     $this->logger->log($type . ' ' . $name . ' : Erreur de compilation');
                 }
+                $this->sendEvent('compile', ['type' => $type, 'name' => $name, 'error' => true]);
             }
         }
 

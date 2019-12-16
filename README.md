@@ -1,12 +1,10 @@
-# Application OSE
-
 ![Logo OSE](doc/logo.png)
 
 Organisation des Services d'Enseignement
 
 ## Nouveautés
 
-La [`Liste des changements`](CHANGELOG.md) vous permettra de savoir
+La [`Liste des changements`](CHANGELOG.md) vous permettra de savoir :
 - si une version est sortie ;
 - quelles en sont les nouveautés ;
 - quelles sont les éventuels bugs corrigés ;
@@ -20,4 +18,4 @@ La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à ni
 
 ## Documentation
 
-[`Modèle de données`](doc/Mod%C3%A8le%20de%20donn%C3%A9es).
+[`Documentation`](doc).

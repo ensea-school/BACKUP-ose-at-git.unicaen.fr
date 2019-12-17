@@ -19,3 +19,8 @@ La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à ni
 ## Documentation
 
 [`Documentation`](doc).
+
+## Nous contacter
+
+Pour une première prise de contact, vous pouvez nous joindre au moyen de l'adresse
+<deploiement-ose@unicaen.fr>

@@ -153,7 +153,7 @@ Un script a été conçu pour automatiser cette opération.
 
 Exécutez la commande suivante sur votre serveur :
 ```bash
-wget https://ose.unicaen.fr/deploiement/ose-deploy && php ose-deploy
+wget https://git.unicaen.fr/open-source/OSE/raw/master/bin/install && php install
 ```
 
 ### Configuration d'Apache

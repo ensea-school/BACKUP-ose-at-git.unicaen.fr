@@ -4,6 +4,9 @@
 
 * L'interface d'administration des motifs de modification de service est de nouveau pleinement fonctionelle.
 
+## Nouveautés
+
+* Formule de calcul de Lyon2
 
 # OSE 10-zf2 et 10-zf3
 

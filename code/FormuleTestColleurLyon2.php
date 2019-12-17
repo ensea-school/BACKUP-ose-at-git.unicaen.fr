@@ -3,10 +3,10 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $container  \Interop\Container\ContainerInterface
  * @var $viewName   string
- * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
+ * @var $viewFile   string
  */
-
 $formuleTestIntervenantId = 132;
 
 $data = "901	Oui	CM	50,00 %	0,00 %	50,00 %	20 h	1,5 HETD	30 HETD		30 HETD	66,67 %	30 HETD	0 HETD		0 HETD	0,00 %	0 HETD	0 HETD		0 HETD	0,00 %	0 HETD	0 HETD		0 HETD	0,00 %	0 HETD	0 HETD		0 HETD	0,00 %	0 HETD	0 HETD		0 HETD	0,00 %	0 HETD	0 HETD		15 HETD	0 HETD	15 HETD	0 HETD	0 HETD	0 HETD	0 HETD	0 HETD	0 HETD
@@ -52,43 +52,59 @@ $correspStructs = [
 
 $correspChamps = [
     'structureTest'           => 0,
-    'referentiel'             => null,
+    'referentiel'             => 2,
     'serviceStatutaire'       => null,
-    'typeInterventionCode'    => null,
-    'tauxFi'                  => null,
-    'tauxFa'                  => null,
-    'tauxFc'                  => null,
+    'typeInterventionCode'    => 2,
+    'tauxFi'                  => 3,
+    'tauxFa'                  => 4,
+    'tauxFc'                  => 5,
     'ponderationServiceDu'    => null,
     'ponderationServiceCompl' => null,
-    'param1'                  => null,
-    'param2'                  => null,
+    'param1'                  => 0,
+    'param2'                  => 1,
     'param3'                  => null,
     'param4'                  => null,
     'param5'                  => null,
-    'heures'                  => null,
-    'aServiceFi'              => null,
-    'aServiceFa'              => null,
-    'aServiceFc'              => null,
-    'aServiceReferentiel'     => null,
-    'aHeuresComplFi'          => null,
-    'aHeuresComplFa'          => null,
-    'aHeuresComplFc'          => null,
-    'aHeuresComplFcMajorees'  => null,
-    'aHeuresComplReferentiel' => null,
+    'heures'                  => 6,
+    'aServiceFi'              => 40,
+    'aServiceFa'              => 41,
+    'aServiceFc'              => 42,
+    'aServiceReferentiel'     => 43,
+    'aHeuresComplFi'          => 44,
+    'aHeuresComplFa'          => 45,
+    'aHeuresComplFc'          => 46,
+    'aHeuresComplFcMajorees'  => 47,
+    'aHeuresComplReferentiel' => 48,
 ];
 
 function transfo(array $c)
 {
+    if ($c['typeInterventionCode'] == 'Référentiel') {
+        $c['typeInterventionCode'] = null;
+        $c['referentiel']          = true;
+    } else {
+        $c['referentiel'] = false;
+    }
 
     return $c;
 }
 
 $debug = false;
-$debug = true;
+//$debug = true;
 
+
+$defaults = [
+    'referentiel'             => false,
+    'serviceStatutaire'       => true,
+    'tauxFi'                  => 100,
+    'tauxFa'                  => 0,
+    'tauxFc'                  => 0,
+    'ponderationServiceDu'    => 1,
+    'ponderationServiceCompl' => 1,
+];
 
 /** @var \Doctrine\ORM\EntityManager $bdd */
-$bdd = $sl->get(\Application\Constants::BDD);
+$bdd = $container->get(\Application\Constants::BDD);
 
 $data   = explode("\n", $data);
 $vhHead = [];
@@ -97,12 +113,24 @@ foreach ($data as $l) {
     if (trim($l)) {
         $cOri = explode("\t", trim($l));
 
-        $cTranf = transfo($cOri);
         $values = [];
         foreach ($correspChamps as $col => $index) {
             if ($index !== null) {
                 $vhHead[$col] = $col;
-                $values[$col] = $cTranf[$index];
+                $values[$col] = $cOri[$index];
+                if ('' === $values[$col] && isset($defaults[$col])) {
+                    $values[$col] = $defaults[$col];
+                }
+            }
+        }
+
+        $values = transfo($values);
+
+        foreach ($correspChamps as $col => $index) {
+            if ($index !== null) {
+                if ((null === $values[$col] || '' === $values[$col]) && isset($defaults[$col])) {
+                    $values[$col] = $defaults[$col];
+                }
             }
         }
 
@@ -148,7 +176,7 @@ foreach ($data as $l) {
 
 if (!$debug) {
     /** @var \Application\Service\FormuleTestIntervenantService $ftiService */
-    $ftiService = $sl->get(\Application\Service\FormuleTestIntervenantService::class);
+    $ftiService = $container->get(\Application\Service\FormuleTestIntervenantService::class);
     $fti        = $ftiService->get($formuleTestIntervenantId);
     $bdd->getConnection()->exec('DELETE FROM formule_test_volume_horaire WHERE intervenant_test_id = ' . $fti->getId());
     foreach ($vhData as $i => $values) {

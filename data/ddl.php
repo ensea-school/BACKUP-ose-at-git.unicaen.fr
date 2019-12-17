@@ -21452,9 +21452,13 @@ END FORMULE_LYON2;',
 
 
 
-    -- O=L$53*M22
+    -- O=SI(ET(L$54=0;HC_autorisees="Oui");L22-N22;0)
     WHEN c = \'O\' AND v >= 1 THEN
-      RETURN cell(\'L53\') * cell(\'M\', l);
+      IF cell(\'L54\') = 0 AND NOT i.depassement_service_du_sans_hc THEN
+        RETURN cell(\'L53\') * cell(\'M\', l);
+      ELSE
+        RETURN 0;
+      END IF;
 
 
 

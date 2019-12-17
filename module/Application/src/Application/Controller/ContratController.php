@@ -30,6 +30,7 @@ use UnicaenApp\View\Model\MessengerViewModel;
 use Application\Entity\Db\Contrat;
 use Zend\View\Model\JsonModel;
 use BjyAuthorize\Exception\UnAuthorizedException;
+use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Description of ContratController
@@ -52,6 +53,16 @@ class ContratController extends AbstractController
     use WorkflowServiceAwareTrait;
     use ModeleContratServiceAwareTrait;
     use ModeleFormAwareTrait;
+
+    private $viewRenderer;
+
+
+
+    public function __construct(PhpRenderer $viewRenderer)
+    {
+
+        $this->viewRenderer = $viewRenderer;
+    }
 
 
 
@@ -332,11 +343,10 @@ class ContratController extends AbstractController
         }
 
         if (!empty($contrat->getIntervenant()->getEmail())) {
-            $phpRenderer = $this->getServiceLocator()->get('view_manager')->getRenderer();
-            $html        = $phpRenderer->render('application/contrat/mail/contrat', [
+            $html    = $this->viewRenderer->render('application/contrat/mail/contrat', [
                 'contrat' => $contrat,
             ]);
-            $message     = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
+            $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
             $this->mail()->send($message);
         }
 

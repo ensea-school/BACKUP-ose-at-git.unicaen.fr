@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Assertion\ContratAssertion;
+use Application\Controller\Factory\ContratControllerFactory;
 use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
@@ -330,8 +331,8 @@ return [
         ],
     ],
     'controllers'     => [
-        'invokables' => [
-            'Application\Controller\Contrat' => Controller\ContratController::class,
+        'factories' => [
+            'Application\Controller\Contrat' => ContratControllerFactory::class,
         ],
     ],
     'service_manager' => [

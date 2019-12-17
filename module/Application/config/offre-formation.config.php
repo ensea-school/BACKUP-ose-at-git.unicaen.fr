@@ -33,15 +33,6 @@ return [
                             ],
                         ],
                     ],
-                    'reconduction' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'       => '/reconduction',
-                            'defaults' => [
-                                'action' => 'reconduction',
-                            ],
-                        ],
-                    ],
                     'element' => [
                         'type'          => 'Literal',
                         'options'       => [

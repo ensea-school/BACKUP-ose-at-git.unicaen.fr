@@ -7,22 +7,7 @@
  * @var $sl         \Zend\ServiceManager\ServiceLocatorInterface
  */
 
-spl_autoload_register(function ($class) {
-    if (0 === strpos($class, 'BddAdmin')) {
-        $dir   = dirname(__DIR__) . '/admin/src/';
-        $class = $dir . str_replace('\\', '/', $class) . '.php';
-
-        require_once $class;
-    }
-});
-
-$bdd    = new \BddAdmin\Bdd([
-    'host'     => AppConfig::get('bdd', 'host'),
-    'port'     => AppConfig::get('bdd', 'port'),
-    'dbname'   => AppConfig::get('bdd', 'dbname'),
-    'username' => AppConfig::get('bdd', 'username'),
-    'password' => AppConfig::get('bdd', 'password'),
-]);
+$bdd    = adminBdd();
 $schema = new \BddAdmin\Schema($bdd);
 
 /*$tables = [
@@ -48,8 +33,8 @@ $schema = new \BddAdmin\Schema($bdd);
 ];*/
 
 $list = [
-'ANNEE', 'INTERVENANT', 'CORPS', 'GRADE', 'GROUPE_TYPE_FORMATION', 'TYPE_FORMATION', 'ETAPE', 'ELEMENT_PEDAGOGIQUE',
-'CHEMIN_PEDAGOGIQUE', 'VOLUME_HORAIRE_ENS', 'TYPE_INTERVENTION'
+    'ANNEE', 'INTERVENANT', 'CORPS', 'GRADE', 'GROUPE_TYPE_FORMATION', 'TYPE_FORMATION', 'ETAPE', 'ELEMENT_PEDAGOGIQUE',
+    'CHEMIN_PEDAGOGIQUE', 'VOLUME_HORAIRE_ENS', 'TYPE_INTERVENTION',
 ];
 
 $tables = [];
@@ -80,9 +65,9 @@ $cls  = $schema->getDdlObject(\BddAdmin\Ddl\DdlRefConstraint::class)->get();
 foreach ($cls as $cl) {
     foreach ($cl['columns'] as $col => $rcol) {
         $cle    = [
-            'from'     => $cl['table'],
+            'from'    => $cl['table'],
             'fromCol' => $col,
-            'to'       => $cl['rtable'],
+            'to'      => $cl['rtable'],
             'toCol'   => $rcol,
         ];
         $cles[] = $cle;
@@ -115,7 +100,7 @@ foreach ($cls as $cl) {
         myDiagram =
             $(go.Diagram, "myDiagramDiv",
                 {
-                    layout: $(go.LayeredDigraphLayout, { direction: 0 }),
+                    layout: $(go.LayeredDigraphLayout, {direction: 0}),
 
                     validCycle: go.Diagram.CycleNotDirected,  // don't allow loops
                     // For this sample, automatically show the state of the diagram's model on the page
@@ -144,7 +129,13 @@ foreach ($cls as $cl) {
                     },
                     new go.Binding("text", "name")),
                 $(go.TextBlock,
-                    {margin: new go.Margin(0, 5), column: 2,stroke: "#ef9b0b",font: "normal 9px sans-serif", alignment: go.Spot.Left},
+                    {
+                        margin: new go.Margin(0, 5),
+                        column: 2,
+                        stroke: "#ef9b0b",
+                        font: "normal 9px sans-serif",
+                        alignment: go.Spot.Left
+                    },
                     new go.Binding("text", "type"))
             );
 
@@ -156,7 +147,7 @@ foreach ($cls as $cl) {
                 //new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
                 // this rectangular shape surrounds the content of the node
                 $(go.Shape,
-                    { stroke: "#efd47e", strokeWidth: 2, fill: "#fff4eb" }),
+                    {stroke: "#efd47e", strokeWidth: 2, fill: "#fff4eb"}),
                 // the content consists of a header and a list of items
                 $(go.Panel, "Vertical",
                     // this is the header for the whole node
@@ -189,7 +180,7 @@ foreach ($cls as $cl) {
 
         myDiagram.linkTemplate =
             $(go.Link,  // the whole link panel
-                { relinkableFrom: false, relinkableTo: false, reshapable: true, resegmentable: true },
+                {relinkableFrom: false, relinkableTo: false, reshapable: true, resegmentable: true},
                 {
                     //routing: go.Link.AvoidsNodes,  // but this is changed to go.Link.Orthgonal when the Link is reshaped
                     adjusting: go.Link.End,
@@ -202,9 +193,9 @@ foreach ($cls as $cl) {
                 new go.Binding("routing", "routing", go.Binding.parseEnum(go.Link, go.Link.AvoidsNodes))
                     .makeTwoWay(go.Binding.toString),
                 $(go.Shape,  // the link path shape
-                    { isPanelMain: true, strokeWidth: 1 }),
+                    {isPanelMain: true, strokeWidth: 1}),
                 $(go.Shape,  // the arrowhead
-                    { toArrow: "Standard", stroke: null })
+                    {toArrow: "Standard", stroke: null})
             );
 
         myDiagram.model =

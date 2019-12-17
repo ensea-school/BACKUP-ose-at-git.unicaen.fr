@@ -1,12 +1,15 @@
 <?php
 
 
-include_once dirname(__DIR__).'/module/Application/Application.php';
+include_once dirname(__DIR__) . '/module/Application/Application.php';
+
+
+
 
 
 class AppConfig
 {
-    const LOCAL_APPLICATION_CONFIG_FILE = __DIR__.'/../config.local.php';
+    const LOCAL_APPLICATION_CONFIG_FILE = __DIR__ . '/../config.local.php';
 
     /**
      * Configuration locale de l'application
@@ -49,6 +52,12 @@ class AppConfig
                 return self::$config[$section][$key];
             } else {
                 return $default;
+            }
+        }
+
+        if (self::$config && $section) {
+            if (isset(self::$config[$section])) {
+                return self::$config[$section];
             }
         }
 
@@ -105,7 +114,7 @@ class AppConfig
             $modules[] = 'ZendDeveloperTools';
         }
 
-        if (self::inConsole() || 'dev' == $env){
+        if (self::inConsole() || 'dev' == $env) {
             $modules[] = 'UnicaenCode';
         }
 
@@ -116,7 +125,7 @@ class AppConfig
             'modules'                 => $modules,
             'module_listener_options' => [
                 'config_glob_paths'        => [
-                    'config/autoload/{,*.}{global,local'.('dev' == $env ? ',dev' : '').'}.php',
+                    'config/autoload/{,*.}{global,local' . ('dev' == $env ? ',dev' : '') . '}.php',
                 ],
                 'module_paths'             => [
                     './module',
@@ -140,9 +149,10 @@ class AppConfig
 
     public static function getGlobal()
     {
-        if (!self::$global){
+        if (!self::$global) {
             self::$global = self::makeGlobal();
         }
+
         return self::$global;
     }
 }
@@ -152,4 +162,5 @@ class AppConfig
 
 
 AppConfig::init();
+
 return AppConfig::getGlobal();

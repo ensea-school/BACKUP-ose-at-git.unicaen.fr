@@ -1,0 +1,619 @@
+#!/usr/bin/env php
+<?php
+
+$c  = new Console();
+$c->setInputOptions([
+    'version:',
+    'config-file:',
+    'ose-dir:',
+]);
+
+$od = new OseDeploy($c);
+
+$c->printMainTitle("Installation de OSE", 13);
+$c->check([
+    'git'        => 'Gestionnaire de versions',
+    'php'        => 'Langage PHP',
+    'wget'       => 'Téléchargement en ligne de commande',
+    'unoconv'    => ['description' =>'Convertisseur OpenDocument vers PDF', 'facultatif' => false],
+]);
+
+if (!$od->checkPhpModules([
+    'curl'         => 'Curl',
+    'intl'         => 'Intl',
+    'json'         => 'Json',
+    'ldap'         => 'Ldap',
+    'mbstring'     => 'MbString',
+  //  'mcrypt'       => 'MCrypt',
+    'Zend OPcache' => 'Zend OPcache',
+    'xml'          => 'XML',
+    'zip'          => 'ZIP',
+    'bcmath'       => 'BCMath',
+    'gd'           => 'GD',
+    'oci8'         => 'OCI8 (Pilote Oracle)',
+])){
+    $c->printDie('Un ou plusieurs modules PHP sont manquants. Merci de les installer pour poursuivre l\'installation de OSE');
+};
+
+// Mise en place de la clé SSH
+$c->println("\nTest de connexion au serveur GitLab hébergeant OSE", $c::COLOR_LIGHT_CYAN);
+if (!$od->gitlabIsReachable()) {
+    $c->printDie($od::OSE_ORIGIN." est inaccessible.");
+}else{
+    $c->println("URL Gitlab (".$od::OSE_ORIGIN.") accessible", $c::COLOR_LIGHT_GREEN);
+}
+
+
+// Création du dossier
+$c->println("\nCréation du dossier et initialisation de GIT", $c::COLOR_LIGHT_CYAN);
+$c->print("Veuillez indiquer un nouveau répertoire où implanter OSE: ");
+$osedir = $c->getInput('ose-dir');
+
+if (file_exists($osedir)) {
+    $c->printDie("Le répertoire $osedir existe déjà. Merci d'en spécifier un nouveau.");
+}
+
+$c->exec([
+    "mkdir $osedir",
+    "cd $osedir",
+    "git init",
+    "git remote add origin " . $od::OSE_ORIGIN,
+    "git fetch --all --tags --prune",
+]);
+
+
+// Choix de la version
+$c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+$c->println("Voici la liste des versions de OSE disponibles:");
+$tags = $od->getTags();
+foreach ($tags as $tag) {
+    $c->println($tag);
+}
+$ok = false;
+while (!$ok) {
+    $c->print("Veuillez choisir une version à déployer: ");
+    $version = $c->getInput('version');
+    if ($od->tagIsValid($version)) {
+        $ok = true;
+    } else {
+        $c->println("$version n'est pas dans la liste des versions disponibles.");
+    }
+}
+
+
+// Récupération des sources
+$c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
+$c->exec([
+    "cd $osedir",
+    "git checkout tags/$version",
+    "mkdir cache",
+    "mkdir cache/Doctrine",
+    "chmod 777 cache/Doctrine",
+    "chmod 777 cache",
+    "mkdir log",
+    "chmod 777 log",
+    "chmod +7 bin/ose",
+]);
+$od->writeVersion($osedir, $version);
+
+
+// Récupération de Composer
+$c->println("\nRécupération de l'outil de gestion des dépendances Composer", $c::COLOR_LIGHT_CYAN);
+$c->passthru("cd $osedir;wget https://getcomposer.org/composer.phar");
+
+// Récupération des dépendances
+$c->println("\nChargement des dépendances à l'aide de Composer", $c::COLOR_LIGHT_CYAN);
+$c->passthru("cd $osedir;php composer.phar install");
+
+
+// Mise à jour des liens vers les répertoires publics des dépendances
+$c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
+$od->majUnicaenSymLinks($osedir);
+$c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
+
+// Configuration locale
+//$c->println("\nMise en place de la base de données", $c::COLOR_LIGHT_CYAN);
+//$c->println("\nUne base de données Oracle doit préalablement avoir été créée. Merci de fournir dès à présent ses"
+//." paramètres d'accès pour que OSE initialialise la base de données :");
+
+$configFile = $c->getOption('config-file');
+if ($configFile && !file_exists($configFile)){
+    $configFile = getcwd().'/'.$configFile;
+}
+if ($configFile && !file_exists($configFile)){
+    $c->println("Le fichier de configuration $configFile est introuvable. A sa place, un nouveau fichier de configuration ser créé sur la base de celui par défaut.");
+    $configFile = null;
+}
+if ($configFile){
+    $configFile = realpath($configFile);
+}else{
+    $configFile = $osedir.'/config.local.php.default';
+}
+copy($configFile, $osedir.'/config.local.php');
+
+
+// Génération des proxies pour l'ORM Doctrine
+$c->println("\nGénération des proxies pour l'ORM Doctrine", $c::COLOR_LIGHT_CYAN);
+$c->exec([
+    "cd $osedir",
+    "php vendor/bin/doctrine-module orm:generate-proxies",
+    "chmod -R 777 cache/DoctrineProxy",
+]);
+
+// Mise en place des tâches CRON ??
+
+// Conclusion
+$c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
+$c->println("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
+$c->println(" 1 - Configurez votre serveur Apache");
+$c->println(" 2 - Initialisez la base de données de OSE à l'aide du script prévu à cet effet");
+$c->println(" 3 - Mettez en place la configuration locale de l'application, si ce n'est déjà le cas");
+$c->println(" 4 - Une fois bien connecté, configurez vos connecteurs en vous appuyant\n     le cas échéant sur ceux qui vous sont fournis");
+$c->println(" 5 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+$c->println(" 6 - Paramétrez l'application pour l'adapter à vos besoins");
+$c->println('');
+$c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
+$c->println('');
+/*
+$c->println(" 1 - Configurez le cas échéant votre serveur Apache");
+$c->println(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
+$c->println(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd");
+$c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
+*/
+
+
+/************************************************************
+ *                      Classes utiles                      *
+ ************************************************************/
+class OseDeploy
+{
+    const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE';
+
+    /**
+     * @var Console
+     */
+    protected $console;
+
+    /**
+     * @var array
+     */
+    private $tags = false;
+
+
+
+    /**
+     * OseDeploy constructor.
+     *
+     * @param Console $console
+     */
+    public function __construct(Console $console)
+    {
+        $this->console = $console;
+    }
+
+
+
+    public function majUnicaenSymLinks($oseDir): bool
+    {
+        if (substr($oseDir, -1) !== '/') {
+            $oseDir .= '/';
+        }
+
+        $oldLibs = [];
+        $od      = array_filter(glob($oseDir . 'public/vendor/unicaen/*'), 'is_dir');
+        foreach ($od as $dir) {
+            $oldLibs[] = basename($dir);
+        }
+
+        $newLibs = [];
+        $nd      = array_filter(glob($oseDir . 'vendor/unicaen/*'), 'is_dir');
+        foreach ($nd as $dir) {
+            if (is_dir($dir . '/public')) {
+                $newLibs[] = basename($dir);
+            }
+        }
+
+        $deleteLibs = array_diff($oldLibs, $newLibs);
+        $createLibs = array_diff($newLibs, $oldLibs);
+
+        foreach ($deleteLibs as $lib) {
+            $command = "rm $oseDir"."public/vendor/unicaen/$lib";
+            $this->console->print($command);
+            $this->console->exec($command);
+        }
+
+        foreach ($createLibs as $lib) {
+            $command = "cd $oseDir"."public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            $this->console->print($command);
+            $this->console->exec($command);
+        }
+
+        return !(empty($deleteLibs) && empty($createLibs));
+    }
+
+
+
+
+    public function checkPhpModules(array $modules)
+    {
+        $len = 60;
+        $result = true;
+
+        $this->console->println("Contrôle d'existance des modules PHP nécessaires", $this->console::COLOR_LIGHT_CYAN);
+        $this->console->println($this->console->strPad('Module PHP', $len) . "Résultat");
+        $this->console->println($this->console->strPad('----------', $len) . "--------");
+        foreach ($modules as $module => $description) {
+            $return = null;
+            $passed = in_array($module, get_loaded_extensions());
+
+            $this->console->print($this->console->strPad($description, $len));
+            if ($passed) {
+                $this->console->println('Module trouvé', $this->console::COLOR_LIGHT_GREEN);
+            } else {
+                $this->console->println('Module manquant', $this->console::COLOR_LIGHT_RED);
+            }
+
+            if (!$passed) $result = false;
+        }
+
+        return $result;
+    }
+
+
+
+    public function gitlabIsReachable(): bool
+    {
+        exec("git ls-remote --heads " . self::OSE_ORIGIN, $gitCheck );
+
+        return (false !== strpos(implode(' ', $gitCheck), 'heads/master'));
+    }
+
+
+
+    public function getTags(): array
+    {
+        if (false === $this->tags) {
+            $this->tags = [];
+
+            $ts = $this->console->exec("git ls-remote --tags --refs " . self::OSE_ORIGIN, false);
+            foreach ($ts as $tag) {
+                $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
+            }
+        }
+
+        $minVersion = 8;
+        foreach ($this->tags as $i => $tag) {
+            $version = (int)substr($tag, 0, strpos($tag, '.'));
+            if ($version < $minVersion) unset($this->tags[$i]);
+        }
+
+        return $this->tags;
+    }
+
+
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function tagIsValid(string $tag): bool
+    {
+        return in_array($tag, $this->getTags());
+    }
+
+
+
+    public function currentVersion(string $osedir): string
+    {
+        $vf = $this->getVersionFile($osedir);
+        if (!file_exists($vf)) {
+            return 'inconnue';
+        }
+
+        return file_get_contents($vf);
+    }
+
+
+
+    public function writeVersion(string $osedir, string $version)
+    {
+        $vf = $this->getVersionFile($osedir);
+        file_put_contents($vf, $version);
+    }
+
+
+
+    private function getVersionFile(string $osedir): string
+    {
+        if ('/' == substr($osedir, -1)) {
+            return $osedir . 'VERSION';
+        } else {
+            return $osedir . '/VERSION';
+        }
+    }
+}
+
+
+
+
+
+class Console
+{
+    const COLOR_BLACK        = '0;30';
+    const COLOR_DARK_GRAY    = '1;30';
+    const COLOR_BLUE         = '0;34';
+    const COLOR_LIGHT_BLUE   = '1;34';
+    const COLOR_GREEN        = '0;32';
+    const COLOR_LIGHT_GREEN  = '1;32';
+    const COLOR_CYAN         = '0;36';
+    const COLOR_LIGHT_CYAN   = '1;36';
+    const COLOR_RED          = '0;31';
+    const COLOR_LIGHT_RED    = '1;31';
+    const COLOR_PURPLE       = '0;35';
+    const COLOR_LIGHT_PURPLE = '1;35';
+    const COLOR_BROWN        = '0;33';
+    const COLOR_YELLOW       = '1;33';
+    const COLOR_LIGHT_GRAY   = '0;37';
+    const COLOR_WHITE        = '1;37';
+
+    const BG_BLACK      = '40';
+    const BG_RED        = '41';
+    const BG_GREEN      = '42';
+    const BG_YELLOW     = '43';
+    const BG_BLUE       = '44';
+    const BG_MAGENTA    = '45';
+    const BG_CYAN       = '46';
+    const BG_LIGHT_GRAY = '47';
+
+    /**
+     * @var array
+     */
+    protected $inputOptions = false;
+
+    /**
+     * @var array
+     */
+    protected $options=false;
+
+
+
+    public function check(array $prerequis)
+    {
+        $len = 60;
+        $res = true;
+
+        $this->println("Contrôle des prérequis à l'exécution du script", self::COLOR_LIGHT_CYAN);
+        $this->println($this->strPad('Commande (description éventuelle)', $len) . "Résultat");
+        $this->println($this->strPad('----------------------', $len) . "--------");
+        foreach ($prerequis as $command => $desc) {
+            if (is_array($desc)) {
+                extract($desc);
+            } else {
+                $description = $desc;
+                $facultatif  = false;
+            }
+
+            $return = null;
+            exec('command -v ' . $command, $null, $result);
+            $passed = ($result == 0);
+
+            $this->print($this->strPad($command . ($description ? " ($description)" : ''), $len));
+            if ($passed) {
+                $this->println('Commande trouvée', self::COLOR_LIGHT_GREEN);
+            } elseif ($facultatif) {
+                $this->println('Manquante, facultative', self::COLOR_LIGHT_PURPLE);
+            } else {
+                $this->println('Commande manquante', self::COLOR_LIGHT_RED);
+                $res = false;
+            }
+        }
+
+        if (!$res) {
+            $this->printDie('Un ou plusieurs prérequis nécessaires ne sont pas présents sur cette machine. Merci de les installer avant de poursuivre l\'installation.');
+        }
+
+        return $res;
+    }
+
+
+
+    public function printMainTitle($title, $spaces = 1)
+    {
+        $pstr = str_repeat(' ', $spaces);
+        $t    = $pstr . $title . $pstr;
+
+        $len = mb_strlen($t);
+
+        echo '╔' . str_repeat('═', $len) . "╗\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo "║" . $t . "║\n";
+        echo '║' . str_repeat(' ', $len) . "║\n";
+        echo '╚' . str_repeat('═', $len) . "╝\n\n";
+    }
+
+
+
+    public function print($text, $color = null, $bgColor = null)
+    {
+        if ($bgColor) $bgColor = ';' . $bgColor;
+
+        if (!$color && !$bgColor) {
+            echo $text;
+        } else {
+            echo "\e[$color$bgColor" . "m$text\e[0m";
+        }
+    }
+
+
+
+    public function println($text, $color = null, $bgColor = null)
+    {
+        $this->print($text, $color, $bgColor);
+        echo "\n";
+    }
+
+
+
+    public function gestExitCode($code)
+    {
+        if (0 == $code) return;
+
+        $this->printDie("Une erreur ($code) est survenue. Le script est stoppé");
+    }
+
+
+
+    public function printDie($text)
+    {
+        $this->println($text, self::COLOR_LIGHT_RED);
+        $this->println(' -- FIN Prématurée de l\'exécution du script -- ', null, self::BG_RED);
+        die("\n");
+    }
+
+
+
+    public function getArg($index = null)
+    {
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : [];
+
+        if (null === $index) return $args;
+
+        if (isset($args[$index])) {
+            return $args[$index];
+        } else {
+            return null;
+        }
+    }
+
+
+
+    /**
+     * @return array
+     */
+    public function getInputOptions(): array
+    {
+        return $this->inputOptions;
+    }
+
+
+
+    /**
+     * @param array $inputOptions
+     */
+    public function setInputOptions(array $inputOptions)
+    {
+        $this->inputOptions = $inputOptions;
+    }
+
+
+
+    public function getOption(string $option)
+    {
+        if (!is_array($this->options)){
+            if (is_array($this->inputOptions)){
+                $this->options = getopt('', $this->inputOptions);
+            }else{
+                return null;
+            }
+        }
+
+        if (isset($this->options[$option])){
+            return $this->options[$option];
+        }else{
+            return null;
+        }
+    }
+
+
+
+    public function getInput($option=null)
+    {
+        if ($option){
+            $optionParam = $this->getOption($option);
+            if (null !== $optionParam){
+                $this->println($optionParam);
+                return $optionParam;
+            }
+        }
+
+        return trim(fgets(STDIN));
+    }
+
+
+
+    public function getSilentInput($option=null)
+    {
+        if ($option){
+            $optionParam = $this->getOption($option);
+            if (null !== $optionParam){
+                return $optionParam;
+            }
+        }
+
+        if (preg_match('/^win/i', PHP_OS)) {
+            $vbscript = sys_get_temp_dir() . 'prompt_password.vbs';
+            file_put_contents(
+                $vbscript, 'wscript.echo(InputBox("'
+                . addslashes('')
+                . '", "", "password here"))');
+            $command  = "cscript //nologo " . escapeshellarg($vbscript);
+            $password = rtrim(shell_exec($command));
+            unlink($vbscript);
+
+            return $password;
+        } else {
+            $command = "/usr/bin/env bash -c 'echo OK'";
+            if (rtrim(shell_exec($command)) !== 'OK') {
+                trigger_error("Can't invoke bash");
+
+                return;
+            }
+            $command  = "/usr/bin/env bash -c 'read -s -p \""
+                . addslashes('')
+                . "\" mypassword && echo \$mypassword'";
+            $password = rtrim(shell_exec($command));
+            echo "\n";
+
+            return $password;
+        }
+    }
+
+
+
+    public function exec($command, $autoDisplay = true)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        exec($command, $output, $return);
+        if ($autoDisplay) {
+            echo implode("\n", $output) . "\n";
+        }
+        $this->gestExitCode($return);
+
+        return $output;
+    }
+
+
+
+    public function passthru($command)
+    {
+        if (is_array($command)) {
+            $command = implode(';', $command);
+        }
+
+        passthru($command, $returnVar);
+        $this->gestExitCode($returnVar);
+
+        return $returnVar;
+    }
+
+
+
+    public function strPad($input, $padLength = null, $padString = ' ')
+    {
+        return utf8_encode(str_pad(utf8_decode($input), $padLength, $padString));
+    }
+}

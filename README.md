@@ -1,21 +1,26 @@
-# Application OSE
-
 ![Logo OSE](doc/logo.png)
 
 Organisation des Services d'Enseignement
 
-## Liste des changements
+## Nouveautés
 
-Cf. [`CHANGELOG.md`](CHANGELOG.md).
+La [`Liste des changements`](CHANGELOG.md) vous permettra de savoir :
+- si une version est sortie ;
+- quelles en sont les nouveautés ;
+- quelles sont les éventuels bugs corrigés ;
+- s'il y a des notes de mise à jour à prendre en compte pour installer cette nouvelle version.
 
-## Installation
+## Installation et mise à jour
 
-Cf. [`INSTALL.md`](INSTALL.md).
+Une [`procédure d'installation`](INSTALL.md) est à votre disposition pour mettre en place une nouvelle instance de OSE, que se soit en test ou en production.
 
-## Procédure de mise à jour
+La [`procédure de mise à jour`](UPDATE.md) vous indiquera comment mettre à niveau votre instance.
 
-Cf. [`UPDATE.md`](UPDATE.md).
+## Documentation
 
-## Modèle de données de l'application
+[`Documentation`](doc).
 
-Cf. [`doc/Modèle de données`](https://git.unicaen.fr/open-source/OSE/tree/master/doc/Mod%C3%A8le%20de%20donn%C3%A9es).
+## Nous contacter
+
+Pour une première prise de contact, vous pouvez nous joindre au moyen de l'adresse
+<deploiement-ose@unicaen.fr>

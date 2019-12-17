@@ -1,13 +1,3 @@
----
-title: "Procédure de mise à jour de OSE"
-author: Laurent Lécluse - DSI - Unicaen
-titlepage: true
-titlepage-color: 06386e
-titlepage-text-color: ffffff
-titlepage-rule-color: ffffff
-titlepage-rule-height: 1
----
-
 # Procédure de mise à jour
 
 ## Avant de débuter

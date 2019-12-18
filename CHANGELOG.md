@@ -3,10 +3,17 @@
 ## Correction de bugs
 
 * L'interface d'administration des motifs de modification de service est de nouveau pleinement fonctionelle.
+* La suppression d'un élément pédagogique de l'ODF complémentaire refonctionne.
+* Correction d'un bug dans le cache : si un fichier n'était pas déjà en cache il y avait plantage.
 
 ## Nouveautés
 
 * Formule de calcul de Lyon2
+* L'administrateur se voit attibuer systématiquement l'accès à toutes les nouvelles fonctionnalités
+
+## Notes de mise à jour
+
+Les versions 7.3 ou 7.4 de PHP sont maintenant nécessaires.
 
 # OSE 10-zf2 et 10-zf3
 

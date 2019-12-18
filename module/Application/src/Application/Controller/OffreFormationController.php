@@ -184,12 +184,6 @@ class OffreFormationController extends AbstractController
         }
 
 
-        //Chargement JS nécessaire uniquement sur cette page
-        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
-        $headScript        = $viewHelperManager->get('headScript');
-        $headScript->offsetSetFile(100, '/js/reconduction-offre.js');
-
-
         return [
             'fromPost'              => $fromPost,
             'offresComplementaires' => $offresComplementaires,

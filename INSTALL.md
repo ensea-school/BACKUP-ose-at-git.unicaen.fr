@@ -89,7 +89,6 @@ Dépendances requises :
     * ldap
     * bcmath
     * mbstring
-    * mcrypt
     * opcache
     * xml
     * zip

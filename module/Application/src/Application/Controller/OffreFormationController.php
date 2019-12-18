@@ -265,11 +265,6 @@ class OffreFormationController extends AbstractController
             $fromPost = true;
         }
 
-        //Chargement JS nécessaire uniquement sur cette page
-        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
-        $headScript        = $viewHelperManager->get('headScript');
-        $headScript->offsetSetFile(100, '/js/reconduction-centre-cout.js');
-
 
         return [
             'anneeN'            => $anneeN,
@@ -339,11 +334,6 @@ class OffreFormationController extends AbstractController
             }
             $fromPost = true;
         }
-
-        //Chargement JS nécessaire uniquement sur cette page
-        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
-        $headScript        = $viewHelperManager->get('headScript');
-        $headScript->offsetSetFile(100, '/js/reconduction-modulateur.js');
 
         return [
             'anneeN'            => $anneeN,

@@ -171,6 +171,8 @@ class OffreFormationController extends AbstractController
             $datas['mappingEtape'] = $mappingEtape;
             $reconductionProcessus = $this->getProcessusReconduction();
             try {
+                //Disable filter historique pour regarder si étape ou element avec date de desctruction
+                $this->disableFilters('historique');
                 if ($reconductionProcessus->reconduction($datas)) {
                     $this->flashMessenger()->addSuccessMessage("Les éléments ont bien été reconduits pour l'année universitaire prochaine.");
                 } else {

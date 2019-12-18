@@ -1,4 +1,5 @@
 <?php
+
 namespace Application\Service;
 
 use Doctrine\ORM\EntityRepository;
@@ -305,7 +306,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function orderBy(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         /* ne fait rien ici!! */
 
@@ -327,7 +328,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $this->orderBy($qb);
         $entities    = $qb->getQuery()->execute();
         $result      = [];
@@ -353,7 +354,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function count(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         $entities = $qb->getQuery()->execute();
 
         return count($entities);
@@ -369,13 +370,13 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @return mixed|null
      */
-    public function get($id, $autoClear=false)
+    public function get($id, $autoClear = false)
     {
-        if ($autoClear){
+        if ($autoClear) {
             $this->getRepo()->clear();
         }
         if (is_array($id)) {
-            list($qb, $alias) = $this->initQuery();
+            [$qb, $alias] = $this->initQuery();
             foreach ($id as $idi) {
                 $qb->orWhere($alias . '.id = ' . (int)$idi);
             }
@@ -406,7 +407,7 @@ abstract class AbstractEntityService extends AbstractService
             throw new \RuntimeException('L\'entité transmise n\'est pas de la classe ' . $serviceEntityClass . '.');
         }
         if ($softDelete && $entity instanceof HistoriqueAwareInterface) {
-            $entity->setHistoDestruction(new \DateTime);
+            $entity->historiser($this->getServiceContext()->getUtilisateur());
         } else {
             $this->getEntityManager()->remove($entity);
         }
@@ -422,8 +423,8 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @param mixed $entity
      *
-     * @throws \RuntimeException
      * @return mixed
+     * @throws \RuntimeException
      */
     public function save($entity)
     {
@@ -469,7 +470,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function finderByFilterObject($object, HydratorInterface $hydrator = null, QueryBuilder $qb = null, $alias = null, $exclude = [])
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         if (null === $object) return $qb;
         if (!$hydrator && $object instanceof \Zend\Hydrator\HydratorAwareInterface) {
             $hydrator = $object->getHydrator();
@@ -495,7 +496,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function finderByFilterArray(array $properties, QueryBuilder $qb = null, $alias = null, $exclude = [])
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
         foreach ($properties as $property => $value) {
             if (null != $value && !in_array($property, $exclude)) {
                 if (method_exists($this, 'finderBy' . ucfirst($property))) {
@@ -521,7 +522,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function finderByHistorique(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        [$qb, $alias] = $this->initQuery($qb, $alias);
 
         $hasHistorique = is_subclass_of($this->getEntityClass(), 'UnicaenApp\Entity\HistoriqueAwareInterface');
         if ($hasHistorique) {
@@ -550,10 +551,10 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function finderByProperty($property, $value, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        if ($value === null){
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        if ($value === null) {
             $qb->andWhere("$alias.$property IS NULL");
-        }elseif (is_array($value) or $value instanceof \Doctrine\Common\Collections\Collection) {
+        } elseif (is_array($value) or $value instanceof \Doctrine\Common\Collections\Collection) {
             if ($value instanceof \Doctrine\Common\Collections\Collection) {
                 $value = $value->toArray();
             }

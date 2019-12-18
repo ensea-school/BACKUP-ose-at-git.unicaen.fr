@@ -437,6 +437,7 @@ return [
             Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
             Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
+            Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
         ],
         'factories'  => [
             Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,

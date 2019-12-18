@@ -153,7 +153,7 @@ $config = [
             Service\DepartementService::class             => Service\DepartementService::class,
             Service\FichierService::class                 => Service\FichierService::class,
             Service\TauxHoraireHETDService::class         => Service\TauxHoraireHETDService::class,
-            Service\OffreFormationService::class          => Service\OffreFormationService::class,
+            Assertion\InformationAssertion::class         => Assertion\InformationAssertion::class,
             ORM\Event\Listeners\HistoriqueListener::class => ORM\Event\Listeners\HistoriqueListener::class,
         ],
         'factories'  => [

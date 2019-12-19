@@ -10,6 +10,7 @@
 
 * Formule de calcul de Lyon2
 * L'administrateur se voit attibuer systématiquement l'accès à toutes les nouvelles fonctionnalités
+* L'interface d'administration des structures est maintenant opérationelle
 
 ## Notes de mise à jour
 

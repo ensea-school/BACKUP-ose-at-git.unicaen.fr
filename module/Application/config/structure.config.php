@@ -67,7 +67,7 @@ return [
                     'administration' => [
                         'pages' => [
                             'structure' => [
-                                'label'        => 'Structure',
+                                'label'        => 'Structures',
                                 'icon'         => 'fa fa-graduation-cap',
                                 'route'        => 'structure',
                                 'resource'     => PrivilegeController::getResourceId('Application\Controller\Structure', 'index'),
@@ -125,8 +125,8 @@ return [
         ],
     ],
     'form_elements'   => [
-        'invokables' => [
-            Form\Structure\StructureSaisieForm::class => Form\Structure\StructureSaisieForm::class,
+        'factories' => [
+            Form\Structure\StructureSaisieForm::class => Form\Structure\StructureSaisieFormFactory::class,
         ],
     ],
 ];

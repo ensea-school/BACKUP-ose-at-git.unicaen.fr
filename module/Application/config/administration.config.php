@@ -6,15 +6,15 @@ use Application\Provider\Privilege\Privileges;
 use UnicaenAuth\Guard\PrivilegeController;
 
 return [
-    'router'          => [
+    'router' => [
         'routes' => [
-            'administration'    => [
+            'administration' => [
                 'type'          => 'Literal',
                 'options'       => [
                     'route'    => '/administration',
                     'defaults' => [
-                        'controller'    => 'Application\Controller\Administration',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Administration',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -22,7 +22,7 @@ return [
         ],
     ],
 
-    'navigation'      => [
+    'navigation'   => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -38,7 +38,7 @@ return [
             ],
         ],
     ],
-    'bjyauthorize'    => [
+    'bjyauthorize' => [
         'guards' => [
             PrivilegeController::class => [
                 [
@@ -68,15 +68,16 @@ return [
                         Privileges::DOMAINES_FONCTIONNELS_ADMINISTRATION_VISUALISATION,
                         Privileges::MOTIFS_MODIFICATION_SERVICE_DU_VISUALISATION,
                         Privileges::MOTIF_NON_PAIEMENT_VISUALISATION,
+                        Privileges::STRUCTURES_ADMINISTRATION_VISUALISATION,
                     ],
                     'assertion'  => Assertion\GestionAssertion::class,
                 ],
             ],
         ],
     ],
-    'controllers'     => [
+    'controllers'  => [
         'factories' => [
-            'Application\Controller\Administration'    => Controller\Factory\AdministrationControllerFactory::class,
+            'Application\Controller\Administration' => Controller\Factory\AdministrationControllerFactory::class,
         ],
     ],
 ];

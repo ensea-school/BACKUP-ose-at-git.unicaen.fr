@@ -12,31 +12,25 @@ echo $this->form()->openTag($form); ?>
         <?= $this->formControlGroup($form->get('code')) ?>
     </div>
     <div class="col-md-9">
-        <?= $this->formControlGroup($form->get('libelle-court')) ?>
+        <?= $this->formControlGroup($form->get('libelleCourt')) ?>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-9">
-        <?= $this->formControlGroup($form->get('libelle-long')) ?>
+    <div class="col-md-12">
+        <?= $this->formControlGroup($form->get('libelleLong')) ?>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-6">
         <?= $this->formControlGroup($form->get('enseignement')) ?>
     </div>
     <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('source')) ?>
-    </div>
-    <div class="col-md-3">
-        <?= $this->formControlGroup($form->get('source-code')); ?>
+        <?= $this->formControlGroup($form->get('affAdresseContrat')) ?>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('aff-adresse-contrat')) ?>
-    </div>
-    <div class="col-md-6">
-        <?= $this->formControlGroup($form->get('plafond-referentiel')) ?>
+        <?= $this->formControlGroup($form->get('plafondReferentiel')) ?>
     </div>
 </div>
 

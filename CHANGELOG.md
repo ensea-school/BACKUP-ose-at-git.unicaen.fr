@@ -5,6 +5,7 @@
 * L'interface d'administration des motifs de modification de service est de nouveau pleinement fonctionelle.
 * La suppression d'un élément pédagogique de l'ODF complémentaire refonctionne.
 * Correction d'un bug dans le cache : si un fichier n'était pas déjà en cache il y avait plantage.
+* La saisie de service calendaire est de nouveau possible (un bug empêchait de saisir des dates).
 
 ## Nouveautés
 

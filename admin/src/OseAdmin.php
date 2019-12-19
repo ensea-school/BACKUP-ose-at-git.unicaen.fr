@@ -79,6 +79,11 @@ class OseAdmin
     {
         $oseDir = $this->getOseDir();
 
+        /** @todo à supprimer mi-2020 */
+        if (file_exists($oseDir . "public/vendor/unicaen/app/unicaen")) {
+            $this->console->exec("rm $oseDir" . "public/vendor/unicaen/app");
+        }
+
         $oldLibs = [];
         $od      = array_filter(glob($oseDir . 'public/vendor/unicaen/*'), 'is_dir');
         foreach ($od as $dir) {
@@ -103,7 +108,11 @@ class OseAdmin
         }
 
         foreach ($createLibs as $lib) {
-            $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            if (is_dir($oseDir . "/vendor/unicaen/$lib/public/unicaen/$lib")) {
+                $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public/unicaen/$lib $lib";
+            } else {
+                $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            }
             $this->console->print($command);
             $this->console->exec($command);
         }

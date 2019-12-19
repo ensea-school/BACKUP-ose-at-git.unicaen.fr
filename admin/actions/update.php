@@ -51,10 +51,7 @@ $c->passthru([
 
 
 // Mise à jour des liens vers les répertoires publics des dépendances
-$c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
-$res = $oa->majUnicaenSymLinks($osedir);
-$c->println($res ? 'Liens mis à jour' : 'Liens déjà à jour', $c::COLOR_GREEN);
-
+$oa->run('maj-public-links', true);
 
 // Conclusion
 $oa->writeVersion($version);

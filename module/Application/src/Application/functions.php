@@ -108,3 +108,22 @@ function vhlDump(\Application\Entity\VolumeHoraireListe $volumeHoraireListe): \O
 
     return $dumper;
 }
+
+
+function adminBdd(): \BddAdmin\Bdd
+{
+    if (!class_exists('BddAdmin\Bdd')) {
+        spl_autoload_register(function ($class) {
+            if (0 === strpos($class, 'BddAdmin')) {
+                $dir   = getcwd() . '/admin/src/';
+                $class = $dir . str_replace('\\', '/', $class) . '.php';
+
+                require_once $class;
+            }
+        });
+    }
+
+    $bdd = new BddAdmin\Bdd(AppConfig::get('bdd'));
+
+    return $bdd;
+}

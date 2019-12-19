@@ -236,6 +236,7 @@ class OseAdmin
 
     public function migration(string $context = 'pre', string $action = null)
     {
+        if (!is_dir($this->getMigrationDir())) return;
         $files = scandir($this->getMigrationDir());
 
         foreach ($files as $i => $file) {
@@ -244,8 +245,6 @@ class OseAdmin
             }
             $fileAction = substr($file, 0, -4); // on supprime l'extension PHP
             if ($action === null || $fileAction === $action) {
-
-
                 $this->runMigrationAction($context, $fileAction);
             }
         }

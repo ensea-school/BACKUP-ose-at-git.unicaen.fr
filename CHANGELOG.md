@@ -1,3 +1,9 @@
+# OSE 11.2
+
+## Correction de bug
+
+* La saisie en mode calendaire rafraichit de nouveau la liste des services en cas d'ajout d'heures. 
+
 # OSE 11.1
 
 ## Correction de bug

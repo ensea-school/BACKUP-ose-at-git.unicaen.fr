@@ -49,6 +49,9 @@ $c->passthru([
     "php composer.phar install",
 ]);
 
+unset($oa);
+$oa = new OseAdmin($c);
+$oa->init();
 
 // Mise à jour des liens vers les répertoires publics des dépendances
 $oa->run('maj-public-links', true);

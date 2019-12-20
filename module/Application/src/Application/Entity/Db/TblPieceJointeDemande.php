@@ -27,14 +27,18 @@ class TblPieceJointeDemande
      * @var float
      */
     private $heuresPourSeuil;
-    
+
     /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
 
-    
- 
+    /**
+     * @var integer
+     */
+    private $obligatoire;
+
+
 
     /**
      * Get id
@@ -47,6 +51,7 @@ class TblPieceJointeDemande
     }
 
 
+
     /**
      * Get typePieceJointe
      *
@@ -56,6 +61,7 @@ class TblPieceJointeDemande
     {
         return $this->typePieceJointe;
     }
+
 
 
     /**
@@ -78,7 +84,7 @@ class TblPieceJointeDemande
         return $this->heuresPourSeuil;
     }
 
-    
+
 
     /**
      * Get annee
@@ -88,5 +94,21 @@ class TblPieceJointeDemande
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+
+
+    /**
+     * Piece jointe obligatoire
+     *
+     * @return boolean true|false
+     */
+    public function isObligatoire()
+    {
+        if ($this->obligatoire) {
+            return true;
+        }
+
+        return false;
     }
 }

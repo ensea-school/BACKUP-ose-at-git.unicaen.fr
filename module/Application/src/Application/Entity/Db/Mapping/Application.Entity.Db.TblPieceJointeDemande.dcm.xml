@@ -29,5 +29,10 @@
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <field name="obligatoire" type="integer" column="OBLIGATOIRE" nullable="false" >
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
   </entity>
 </doctrine-mapping>

@@ -14713,6 +14713,17 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
+        'OBLIGATOIRE' => 
+        array (
+          'name' => 'OBLIGATOIRE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '1',
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'TBL_PIECE_JOINTE_DEMANDE' => 
@@ -14788,6 +14799,17 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'OBLIGATOIRE' => 
+        array (
+          'name' => 'OBLIGATOIRE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
           'commentaire' => NULL,
         ),
       ),
@@ -30259,7 +30281,8 @@ END UNICAEN_TBL;',
           CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END demandee,
           CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
           CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
-          NVL(pjd.heures_pour_seuil,0) heures_pour_seuil
+          NVL(pjd.heures_pour_seuil,0) heures_pour_seuil,
+          pjd.obligatoire obligatoire
         FROM
           tbl_piece_jointe_demande pjd
           FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id) tv
@@ -30277,6 +30300,7 @@ END UNICAEN_TBL;',
       FOURNIE              = v.FOURNIE,
       VALIDEE              = v.VALIDEE,
       HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
+      OBLIGATOIRE          = v.OBLIGATOIRE,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30289,6 +30313,7 @@ END UNICAEN_TBL;',
       FOURNIE,
       VALIDEE,
       HEURES_POUR_SEUIL,
+      OBLIGATOIRE,
       TO_DELETE
 
     ) VALUES (
@@ -30301,6 +30326,7 @@ END UNICAEN_TBL;',
       v.FOURNIE,
       v.VALIDEE,
       v.HEURES_POUR_SEUIL,
+      v.OBLIGATOIRE,
       0
 
     );
@@ -30351,7 +30377,8 @@ END UNICAEN_TBL;',
           i.annee_id                      annee_id,
           i.id                            intervenant_id,
           tpj.id                          type_piece_jointe_id,
-          MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil
+          MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
+          tpjs.obligatoire obligatoire
         FROM
                     intervenant                 i
 
@@ -30387,7 +30414,8 @@ END UNICAEN_TBL;',
         GROUP BY
           i.annee_id,
           i.id,
-          tpj.id) tv
+          tpj.id,
+          tpjs.obligatoire) tv
       WHERE
         \' || conds || \'
 
@@ -30399,6 +30427,7 @@ END UNICAEN_TBL;',
 
       ANNEE_ID             = v.ANNEE_ID,
       HEURES_POUR_SEUIL    = v.HEURES_POUR_SEUIL,
+      OBLIGATOIRE          = v.OBLIGATOIRE,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30408,6 +30437,7 @@ END UNICAEN_TBL;',
       TYPE_PIECE_JOINTE_ID,
       INTERVENANT_ID,
       HEURES_POUR_SEUIL,
+      OBLIGATOIRE,
       TO_DELETE
 
     ) VALUES (
@@ -30417,6 +30447,7 @@ END UNICAEN_TBL;',
       v.TYPE_PIECE_JOINTE_ID,
       v.INTERVENANT_ID,
       v.HEURES_POUR_SEUIL,
+      v.OBLIGATOIRE,
       0
 
     );
@@ -35918,7 +35949,8 @@ SELECT
   CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END demandee,
   CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
   CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
-  NVL(pjd.heures_pour_seuil,0) heures_pour_seuil
+  NVL(pjd.heures_pour_seuil,0) heures_pour_seuil,
+  pjd.obligatoire obligatoire
 FROM
   tbl_piece_jointe_demande pjd
   FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id',
@@ -35949,7 +35981,8 @@ SELECT
   i.annee_id                      annee_id,
   i.id                            intervenant_id,
   tpj.id                          type_piece_jointe_id,
-  MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil
+  MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
+  tpjs.obligatoire obligatoire
 FROM
             intervenant                 i
 
@@ -35985,7 +36018,8 @@ WHERE
 GROUP BY
   i.annee_id,
   i.id,
-  tpj.id',
+  tpj.id,
+  tpjs.obligatoire',
     ),
     'V_TBL_PIECE_JOINTE_FOURNIE' => 
     array (
@@ -36317,6 +36351,7 @@ WITH pj AS (
   WHERE
     1 = OSE_WORKFLOW.match_intervenant(intervenant_id)
     AND demandee > 0
+    AND obligatoire != 0
   GROUP BY
     annee_id,
     intervenant_id

@@ -1,3 +1,9 @@
+# OSE 11.1
+
+## Correction de bug
+
+* Le formulaire d'édition des enveloppes budgétaires est de nouveau fonctionnel.
+
 # OSE 11
 
 ## Correction de bugs

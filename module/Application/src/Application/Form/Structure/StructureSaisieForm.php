@@ -2,9 +2,14 @@
 
 namespace Application\Form\Structure;
 
+use Application\Entity\Db\Structure;
 use Application\Form\AbstractForm;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenImport\Service\Traits\SchemaServiceAwareTrait;
 use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Form\FormInterface;
+use Zend\Hydrator\HydratorInterface;
 use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Filter\FloatFromString;
 use Application\Filter\StringFromFloat;
@@ -14,9 +19,11 @@ use Application\Filter\StringFromFloat;
  *
  * @author ZVENIGOROSKY Alexandre <alexandre.zvenigorosky@unicaen.fr>
  */
-class StructureSaisieForm extends AbstractForm
+class StructureSaisieForm extends AbstractForm implements EntityManagerAwareInterface
 {
+    use EntityManagerAwareTrait;
     use SourceServiceAwareTrait;
+    use SchemaServiceAwareTrait;
 
 
 
@@ -34,60 +41,40 @@ class StructureSaisieForm extends AbstractForm
             'type'    => 'Text',
         ]);
         $this->add([
-            'name'    => 'libelle-court',
+            'name'    => 'libelleCourt',
             'options' => [
-                'label' => "Libelle Court",
+                'label' => "Libellé Court",
             ],
             'type'    => 'Text',
         ]);
         $this->add([
-            'name'    => 'libelle-long',
+            'name'    => 'libelleLong',
             'options' => [
-                'label' => "Libelle Long",
+                'label' => "Libellé Long",
             ],
             'type'    => 'Text',
         ]);
         $this->add([
             'name'    => 'enseignement',
             'options' => [
-                'label' => "Enseignement",
+                'label' => "Peut porter des enseignements",
             ],
             'type'    => 'Checkbox',
         ]);
         $this->add([
-            'name'    => 'source-code',
+            'name'    => 'plafondReferentiel',
             'options' => [
-                'label' => "Source Code",
+                'label' => "Plafond d'heures pour le référentiel",
             ],
             'type'    => 'Text',
         ]);
         $this->add([
-            'name'    => 'plafond-referentiel',
+            'name'    => 'affAdresseContrat',
             'options' => [
-                'label' => "Plafond Referentiel",
-            ],
-            'type'    => 'Text',
-        ]);
-        $this->add([
-            'name'    => 'aff-adresse-contrat',
-            'options' => [
-                'label' => "Aff Adresse Contrat",
+                'label' => "Affichage de l'adresse sur le contrat de travail",
             ],
             'type'    => 'Checkbox',
         ]);
-        $this->add([
-            'name'       => 'source',
-            'options'    => [
-                'label' => 'Source',
-            ],
-            'attributes' => [
-                'class'            => 'selectpicker',
-                'data-live-search' => 'true',
-            ],
-            'type'       => 'Select',
-        ]);
-        $this->get('source')
-            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceSource()->getList()));
 
         $this->add(new Csrf('security'));
         $this->add([
@@ -98,6 +85,24 @@ class StructureSaisieForm extends AbstractForm
                 'class' => 'btn btn-primary',
             ],
         ]);
+
+        return $this;
+    }
+
+
+
+    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
+    {
+        /* @var $object Structure */
+        parent::bind($object, $flags);
+
+        if ($object->getSource() && $object->getSource()->getImportable()) {
+            foreach ($this->getElements() as $element) {
+                if ($this->getServiceSchema()->isImportedProperty($object, $element->getName())) {
+                    $element->setAttribute('readonly', true);
+                }
+            }
+        }
 
         return $this;
     }
@@ -117,27 +122,22 @@ class StructureSaisieForm extends AbstractForm
                 'required' => true,
             ],
 
-            'libelle-court' => [
+            'libelleCourt' => [
                 'required' => true,
             ],
 
-            'libelle-long' => [
+            'libelleLong' => [
                 'required' => true,
             ],
 
-            'enseignement' => [
+            'enseignement'       => [
                 'required' => true,
             ],
-
-            'source' => [
+            'affAdresseContrat'  => [
                 'required' => true,
             ],
-
-            'aff-adresse-contrat' => [
-                'required' => true,
-            ],
-            'plafond-referentiel' => [
-                'required'   => true,
+            'plafondReferentiel' => [
+                'required'   => false,
                 'validators' => [
                     new \Zend\Validator\Callback([
                         'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
@@ -167,23 +167,19 @@ class StructureHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                            $data
-     * @param  \Application\Entity\Db\Structure $object
+     * @param array                            $data
+     * @param \Application\Entity\Db\Structure $object
      *
      * @return object
      */
     public function hydrate(array $data, $object)
     {
         $object->setCode($data['code']);
-        $object->setLibelleCourt($data['libelle-court']);
-        $object->setLibelleLong($data['libelle-long']);
+        $object->setLibelleCourt($data['libelleCourt']);
+        $object->setLibelleLong($data['libelleLong']);
         $object->setEnseignement($data['enseignement']);
-        $object->setSourceCode($data['source-code']);
-        $object->setPlafondReferentiel(FloatFromString::run($data['plafond-referentiel']));
-        $object->setAffAdresseContrat($data['aff-adresse-contrat']);
-        if (array_key_exists('source', $data)) {
-            $object->setSource($this->getServiceSource()->get($data['source']));
-        }
+        $object->setPlafondReferentiel(FloatFromString::run($data['plafondReferentiel']));
+        $object->setAffAdresseContrat($data['affAdresseContrat']);
 
         return $object;
     }
@@ -193,23 +189,20 @@ class StructureHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\Structure $object
+     * @param \Application\Entity\Db\Structure $object
      *
      * @return array
      */
     public function extract($object)
     {
         $data = [
-            'id'                    => $object->getId()
-            , 'code'                => $object->getCode()
-            , 'libelle-court'       => $object->getLibelleCourt()
-            , 'libelle-long'        => $object->getLibelleLong()
-            , 'enseignement'        => $object->isEnseignement()
-            , 'source-code'         => $object->getSourceCode()
-            , 'plafond-referentiel' => StringFromFloat::run($object->getPlafondReferentiel())
-            , 'aff-adresse-contrat' => $object->isAffAdresseContrat()
-            , 'source'              => ($s = $object->getSource()) ? $s->getId() : null,
-
+            'id'                 => $object->getId(),
+            'code'               => $object->getCode(),
+            'libelleCourt'       => $object->getLibelleCourt(),
+            'libelleLong'        => $object->getLibelleLong(),
+            'enseignement'       => $object->isEnseignement(),
+            'plafondReferentiel' => StringFromFloat::run($object->getPlafondReferentiel()),
+            'affAdresseContrat'  => $object->isAffAdresseContrat(),
         ];
 
         return $data;

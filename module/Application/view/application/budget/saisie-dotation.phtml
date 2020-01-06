@@ -8,12 +8,12 @@
  * @var $structure     \Application\Entity\Db\Structure
  */
 
-if ($form){
+if ($form) {
     $fid = uniqid('form-saisie-dotation-');
     $form->setAttribute('id', $fid);
 }
 
-echo '<h1 class="page-header">'.$title.'</h1>';
+echo '<h1 class="page-header">' . $title . '</h1>';
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 
 ?>
@@ -21,28 +21,28 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     <?= $this->form()->openTag($form->prepare()); ?>
     <div class="row">
         <div class="col-md-12">
-            <?= $this->formcontrolgroup($form->get('libelle')); ?>
+            <?= $this->formControlGroup($form->get('libelle')); ?>
         </div>
     </div>
 
     <div class="alert alert-info">
         Veuillez saisir le nombre d'HETD relatives à l'année civile en les répartissant pour chacune des deux années
         universitaires.
-        <br />
+        <br/>
         NB. N'oubliez pas de réserver une partie de votre budget pour le paiement des charges patronales.
     </div>
 
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            <?= $this->formcontrolgroup($form->get('anneeCivile')); ?>
+            <?= $this->formControlGroup($form->get('anneeCivile')); ?>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <?= $this->formcontrolgroup($form->get('annee1')); ?>
+            <?= $this->formControlGroup($form->get('annee1')); ?>
         </div>
         <div class="col-md-6">
-            <?= $this->formcontrolgroup($form->get('annee2')); ?>
+            <?= $this->formControlGroup($form->get('annee2')); ?>
         </div>
     </div>
     <?= $this->formRow($form->get('submit')); ?>

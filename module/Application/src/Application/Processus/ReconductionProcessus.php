@@ -11,6 +11,7 @@ use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementModulateurServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
+use Application\Service\Traits\SourceServiceAwareTrait;
 use Application\Service\Traits\VolumeHoraireEnsServiceAwareTrait;
 
 /**
@@ -29,6 +30,7 @@ class ReconductionProcessus extends AbstractProcessus
     use ContextServiceAwareTrait;
     use CentreCoutEpServiceAwareTrait;
     use ElementModulateurServiceAwareTrait;
+    use SourceServiceAwareTrait;
 
     protected $etapeService;
 
@@ -86,40 +88,64 @@ class ReconductionProcessus extends AbstractProcessus
                     $idEtapeN1      = $datas['mappingEtape'][$idEtape];
                     $etapeReconduit = $this->etapeService->get($idEtapeN1);
                 } else {
-
+                    //Check si l'étape reconduite n'a pas déjà été supprimé
                     $etapeEnCours   = $this->etapeService->get($idEtape);
-                    $etapeReconduit = $this->etapeService->newEntity();
-                    $etapeReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
-                    $etapeReconduit->setSpecifiqueEchanges(0);
-                    $etapeReconduit->setLibelle($etapeEnCours->getLibelle());
-                    $etapeReconduit->setCode($etapeEnCours->getCode());
-                    $etapeReconduit->setTypeFormation(($etapeEnCours->getTypeFormation()));
-                    $etapeReconduit->setStructure($etapeEnCours->getStructure());
-                    $etapeReconduit->setDomaineFonctionnel($etapeEnCours->getDomaineFonctionnel());
-                    $etapeReconduit->setSourceCode($etapeEnCours->getSourceCode());
+                    $etapeReconduit = $this->getServiceEtape()->getBySourceCode(
+                        $etapeEnCours->getSourceCode(),
+                        $this->contextService->getAnneeSuivante()
+                    );
+                    if (!$etapeReconduit) {
+                        $etapeReconduit = $this->etapeService->newEntity();
+                        $etapeReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
+                        $etapeReconduit->setSpecifiqueEchanges(0);
+                        $etapeReconduit->setLibelle($etapeEnCours->getLibelle());
+                        $etapeReconduit->setCode($etapeEnCours->getCode());
+                        $etapeReconduit->setTypeFormation(($etapeEnCours->getTypeFormation()));
+                        $etapeReconduit->setStructure($etapeEnCours->getStructure());
+                        $etapeReconduit->setDomaineFonctionnel($etapeEnCours->getDomaineFonctionnel());
+                        $etapeReconduit->setSourceCode($etapeEnCours->getSourceCode());
+                    } else {
+                        //sinon dehistoriser l'ancienne étape détruite
+                        $etapeReconduit->dehistoriser();
+                        //Force source ose
+                        $etapeReconduit->setSource($this->getServiceSource()->getOse());
+                    }
+
 
                     $em->persist($etapeReconduit);
                 }
                 //Reconduction des éléments pédagogiques pour cette étape
                 if (array_key_exists($idEtape, $datas['element'])) {
                     foreach ($datas['element'][$idEtape] as $idElement) {
-                        $elementEnCours   = $this->elementPedagogiqueService->get($idElement);
-                        $elementReconduit = $this->elementPedagogiqueService->newEntity();
-                        $elementReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
-                        $elementReconduit->setEtape($etapeReconduit);
-                        $elementReconduit->setLibelle($elementEnCours->getLibelle());
-                        $elementReconduit->setSourceCode($elementEnCours->getSourceCode());
-                        $elementReconduit->setCode($elementEnCours->getCode());
-                        $elementReconduit->setStructure($etapeReconduit->getStructure());
-                        $elementReconduit->setFa($elementEnCours->getFa());
-                        $elementReconduit->setFc($elementEnCours->getFc());
-                        $elementReconduit->setFi($elementEnCours->getFi());
-                        $elementReconduit->setTauxFa($elementEnCours->getTauxFa());
-                        $elementReconduit->setTauxFi($elementEnCours->getTauxFi());
-                        $elementReconduit->setTauxFc($elementEnCours->getTauxFc());
-                        $elementReconduit->setTauxFoad($elementEnCours->getTauxFoad());
-                        $elementReconduit->setDiscipline($elementEnCours->getDiscipline());
-                        $elementReconduit->setPeriode($elementEnCours->getPeriode());
+                        $elementEnCours = $this->elementPedagogiqueService->get($idElement);
+                        //Check si element reconduit n'a pas était déjà supprimmé
+                        $elementReconduit = $this->elementPedagogiqueService->getBySourceCode(
+                            $elementEnCours->getSourceCode(),
+                            $this->contextService->getAnneeSuivante());
+                        //Si élément n'a jamais existé en base création d'un nouvelle entité.
+                        if (!$elementReconduit) {
+                            $elementReconduit = $this->elementPedagogiqueService->newEntity();
+                            $elementReconduit->setAnnee($this->anneeService->getSuivante($anneeEnCours));
+                            $elementReconduit->setEtape($etapeReconduit);
+                            $elementReconduit->setLibelle($elementEnCours->getLibelle());
+                            $elementReconduit->setSourceCode($elementEnCours->getSourceCode());
+                            $elementReconduit->setCode($elementEnCours->getCode());
+                            $elementReconduit->setStructure($etapeReconduit->getStructure());
+                            $elementReconduit->setFa($elementEnCours->getFa());
+                            $elementReconduit->setFc($elementEnCours->getFc());
+                            $elementReconduit->setFi($elementEnCours->getFi());
+                            $elementReconduit->setTauxFa($elementEnCours->getTauxFa());
+                            $elementReconduit->setTauxFi($elementEnCours->getTauxFi());
+                            $elementReconduit->setTauxFc($elementEnCours->getTauxFc());
+                            $elementReconduit->setTauxFoad($elementEnCours->getTauxFoad());
+                            $elementReconduit->setDiscipline($elementEnCours->getDiscipline());
+                            $elementReconduit->setPeriode($elementEnCours->getPeriode());
+                        } else {
+                            //sinon dehistoriser l'ancienne élément détruit
+                            $elementReconduit->dehistoriser();
+                            //Force source ose
+                            $elementReconduit->setSource($this->getServiceSource()->getOse());
+                        }
                         //ajout de l'élément à l'étape
                         $etapeReconduit->addElementPedagogique($elementReconduit);
                         $em->persist($elementReconduit);

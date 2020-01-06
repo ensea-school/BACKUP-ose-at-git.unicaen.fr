@@ -9,6 +9,7 @@ use Application\Service\ContextService;
 use Application\Service\ElementPedagogiqueService;
 use Application\Service\EtapeService;
 use Application\Service\VolumeHoraireEnsService;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -29,12 +30,12 @@ class ReconductionProcessusFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $etapeService              = \Application::$container->get(EtapeService::class);
-        $elementPedagogiqueService = \Application::$container->get(ElementPedagogiqueService::class);
-        $cheminPedagogiqueService  = \Application::$container->get(CheminPedagogiqueService::class);
-        $volumeHoraireEnsService   = \Application::$container->get(VolumeHoraireEnsService::class);
-        $anneeService              = \Application::$container->get(AnneeService::class);
-        $contextService            = \Application::$container->get(ContextService::class);
+        $etapeService              = $serviceLocator->get(EtapeService::class);
+        $elementPedagogiqueService = $serviceLocator->get(ElementPedagogiqueService::class);
+        $cheminPedagogiqueService  = $serviceLocator->get(CheminPedagogiqueService::class);
+        $volumeHoraireEnsService   = $serviceLocator->get(VolumeHoraireEnsService::class);
+        $anneeService              = $serviceLocator->get(AnneeService::class);
+        $contextService            = $serviceLocator->get(ContextService::class);
 
         $processus = new ReconductionProcessus($etapeService,
             $elementPedagogiqueService,
@@ -44,5 +45,12 @@ class ReconductionProcessusFactory implements FactoryInterface
             $contextService);
 
         return $processus;
+    }
+
+
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+     
     }
 }

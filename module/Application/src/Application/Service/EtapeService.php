@@ -5,6 +5,8 @@ namespace Application\Service;
 use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
@@ -186,6 +188,26 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
+     * @param string $sourceCode
+     * @param Annee  $annee
+     *
+     * @return Etape
+     */
+    public function getBySourceCode($sourceCode, Annee $annee = null)
+    {
+        if (null == $sourceCode) return null;
+
+        if (!$annee) {
+            $annee = $this->getServiceContext()->getAnnee();
+        }
+
+        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
+    }
+
+
+
+    /**
+     *
      * @param Etape $entity
      *
      * @return Etape
@@ -259,4 +281,5 @@ class EtapeService extends AbstractEntityService
 
         return $entity;
     }
+
 }

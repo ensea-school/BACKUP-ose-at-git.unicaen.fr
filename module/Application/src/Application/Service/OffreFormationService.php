@@ -72,7 +72,7 @@ class OffreFormationService extends AbstractEntityService
         $sql .= 'ORDER BY
               gtf.ordre, e.niveau';
 
-        $query = $this->em()->createQuery($sql);
+        $query = $this->getEntityManager()->createQuery($sql);
 
         $query->setParameter('structure', $structure);
         $query->setParameter('annee', $annee);
@@ -131,7 +131,7 @@ class OffreFormationService extends AbstractEntityService
         $offresComplementaires = [];
         $anneeEnCours          = $this->getServiceContext()->getAnnee();
         $anneeSuivante         = $this->getServiceAnnee()->getSuivante($anneeEnCours);
-        $source                = $this->getServiceSource()->get('1');
+        $source                = $this->getServiceSource()->getOse();
 
         $this->getServiceLocalContext()
             ->setStructure($structure)
@@ -220,10 +220,4 @@ class OffreFormationService extends AbstractEntityService
         return $mappingEtape;
     }
 
-
-
-    protected function em()
-    {
-        return \Application::$container->get(\Application\Constants::BDD);
-    }
 }

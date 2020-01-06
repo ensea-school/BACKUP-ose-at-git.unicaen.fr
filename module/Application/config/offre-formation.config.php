@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Provider\Privilege\Privileges;
+use Application\Service\OffreFormationService;
 use UnicaenAuth\Guard\PrivilegeController;
 use UnicaenAuth\Provider\Rule\PrivilegeRuleProvider;
 
@@ -61,6 +62,7 @@ return [
                 'may_terminate' => true,
                 'child_routes'  => [
                     'default'                  => [
+                    'default'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:id]',
@@ -145,7 +147,7 @@ return [
                             ],
                         ],
                     ],
-                    'etape'                    => [
+                    'etape'        => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/etape',
@@ -436,6 +438,7 @@ return [
             Service\ElementModulateurService::class    => Service\ElementModulateurService::class,
             Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
             Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
+            Service\OffreFormationService::class       => Service\OffreFormationService::class,
             Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
             Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
         ],
@@ -461,14 +464,14 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'EtapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
-            'ElementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
-            'ElementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
-            'Etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
-            'EtapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
-            'ElementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
-            'EtapeTauxMixiteForm'                 => View\Helper\OffreFormation\EtapeTauxMixiteFormViewHelper::class,
-            'ElementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
+            'etapeModulateursSaisieForm'          => View\Helper\OffreFormation\EtapeModulateursSaisieForm::class,
+            'elementModulateursSaisieFieldset'    => View\Helper\OffreFormation\ElementModulateursSaisieFieldset::class,
+            'elementPedagogique'                  => View\Helper\OffreFormation\ElementPedagogiqueViewHelper::class,
+            'etape'                               => View\Helper\OffreFormation\EtapeViewHelper::class,
+            'etapeCentreCoutForm'                 => View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper::class,
+            'elementCentreCoutFieldset'           => View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper::class,
+            'etapeTauxMixiteForm'                 => View\Helper\OffreFormation\EtapeTauxMixiteFormViewHelper::class,
+            'elementTauxMixiteFieldset'           => View\Helper\OffreFormation\ElementTauxMixiteFieldsetViewHelper::class,
             'fieldsetElementPedagogiqueRecherche' => View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche::class,
         ],
     ],

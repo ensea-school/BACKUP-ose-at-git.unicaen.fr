@@ -9,14 +9,14 @@ use Application\Entity\VolumeHoraireListe;
  * @var $semestriel         bool
  */
 
-if ($semestriel){
+if ($semestriel) {
     echo $this
         ->volumeHoraireListe($volumeHoraireListe)
         ->setReadOnly($readOnly)
         ->render();
-}else{
+} else {
     echo $this
-        ->volumehorairelisteCalendaire($volumeHoraireListe)
+        ->volumeHoraireListeCalendaire($volumeHoraireListe)
         ->setReadOnly($readOnly)
         ->render();
 }

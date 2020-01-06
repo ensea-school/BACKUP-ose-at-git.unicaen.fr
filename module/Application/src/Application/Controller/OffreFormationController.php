@@ -49,7 +49,7 @@ class OffreFormationController extends AbstractController
         $this->initFilters();
 
 
-        list($structure, $niveau, $etape) = $this->getParams();
+        [$structure, $niveau, $etape] = $this->getParams();
 
         // persiste les filtres dans le contexte local
         $this->getServiceLocalContext()
@@ -58,7 +58,7 @@ class OffreFormationController extends AbstractController
             ->setEtape($etape);
 
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
-        list($niveaux, $etapes, $elements) = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape);
+        [$niveaux, $etapes, $elements] = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape);
 
         $params = [];
         if ($structure) $params['structure'] = $structure->getId();
@@ -90,7 +90,7 @@ class OffreFormationController extends AbstractController
     {
         $this->initFilters();
 
-        list($structure, $niveau, $etape) = $this->getParams();
+        [$structure, $niveau, $etape] = $this->getParams();
 
         $elements = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape)[2];
         /* @var $elements ElementPedagogique[] */
@@ -145,7 +145,7 @@ class OffreFormationController extends AbstractController
     public function reconductionAction()
     {
         $this->initFilterHistorique();
-        list($structure, $niveau, $etape) = $this->getParams();
+        [$structure, $niveau, $etape] = $this->getParams();
         //Get role of user
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -155,7 +155,7 @@ class OffreFormationController extends AbstractController
         $structures = $this->getServiceStructure()->getList($qb);
 
         $anneeEnCours = $this->getServiceContext()->getAnnee();
-        list($offresComplementaires, $mappingEtape, $reconductionTotale) = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
+        [$offresComplementaires, $mappingEtape, $reconductionTotale] = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
 
         $reconductionStep = '';
         $messageStep      = '';
@@ -181,7 +181,7 @@ class OffreFormationController extends AbstractController
             } catch (\Exception $e) {
                 $reconductionStep = false;
                 $messageStep      = $e->getMessage();
-                echo $e->getMessage();
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
         }
 

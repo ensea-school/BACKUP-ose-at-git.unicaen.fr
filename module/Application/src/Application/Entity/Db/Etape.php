@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;

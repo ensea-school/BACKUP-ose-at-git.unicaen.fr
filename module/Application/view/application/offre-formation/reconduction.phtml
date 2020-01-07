@@ -68,7 +68,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
                     <div class="well well-sm">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
                         universitaire.
                     </div>
-                    <form action="<?php echo $this->url(null, [], [], true) ?>" method="POST" id="form-reconduction">
+                    <form action="<?= $this->url('of/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
 
                         <?php foreach ($offresComplementaires
 

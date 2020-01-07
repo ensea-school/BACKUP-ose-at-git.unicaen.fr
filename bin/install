@@ -217,13 +217,17 @@ class OseDeploy
         $createLibs = array_diff($newLibs, $oldLibs);
 
         foreach ($deleteLibs as $lib) {
-            $command = "rm $oseDir"."public/vendor/unicaen/$lib";
+            $command = "rm $oseDir" . "public/vendor/unicaen/$lib";
             $this->console->print($command);
             $this->console->exec($command);
         }
 
         foreach ($createLibs as $lib) {
-            $command = "cd $oseDir"."public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            if (is_dir($oseDir . "/vendor/unicaen/$lib/public/unicaen/$lib")) {
+                $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public/unicaen/$lib $lib";
+            } else {
+                $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
+            }
             $this->console->print($command);
             $this->console->exec($command);
         }

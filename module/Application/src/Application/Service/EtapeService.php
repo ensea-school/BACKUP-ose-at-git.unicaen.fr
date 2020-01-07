@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Annee;
+use Application\Entity\Db\ElementPedagogique;
 use Application\Provider\Privilege\Privileges;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\GroupeTypeFormationServiceAwareTrait;
@@ -68,8 +70,8 @@ class EtapeService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $typeFormationAlias   = $this->getServiceTypeFormation()->getAlias();
-        $groupeTypeFormationAlias   = $this->getServiceGroupeTypeFormation()->getAlias();
+        $typeFormationAlias       = $this->getServiceTypeFormation()->getAlias();
+        $groupeTypeFormationAlias = $this->getServiceGroupeTypeFormation()->getAlias();
 
         $qb
             ->innerJoin("$alias.typeFormation", $typeFormationAlias)
@@ -109,8 +111,8 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
-     * @param \Doctrine\ORM\QueryBuilder       $qb
-     * @param string                           $alias
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string                     $alias
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -118,9 +120,9 @@ class EtapeService extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb, $alias );
-        if ($cStructure = $this->getServiceContext()->getStructure()){
-            $this->finderByStructure( $cStructure, $qb, $alias );
+        $this->finderByAnnee($this->getServiceContext()->getAnnee(), $qb, $alias);
+        if ($cStructure = $this->getServiceContext()->getStructure()) {
+            $this->finderByStructure($cStructure, $qb, $alias);
         }
 
         return $qb;
@@ -141,13 +143,33 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
+     * @param string $sourceCode
+     * @param Annee  $annee
+     *
+     * @return Etape
+     */
+    public function getBySourceCode($sourceCode, Annee $annee = null)
+    {
+        if (null == $sourceCode) return null;
+
+        if (!$annee) {
+            $annee = $this->getServiceContext()->getAnnee();
+        }
+
+        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
+    }
+
+
+
+    /**
+     *
      * @param Etape $entity
      *
      * @return Etape
      */
     public function save($entity)
     {
-        if (!$entity->getAnnee()){
+        if (!$entity->getAnnee()) {
             $entity->setAnnee($this->getServiceContext()->getAnnee());
         }
 
@@ -185,8 +207,8 @@ class EtapeService extends AbstractEntityService
 
     /**
      *
-     * @param Etape $entity
-     * @param boolean     $softDelete Simple historisation ou bien destruction pure et simple
+     * @param Etape   $entity
+     * @param boolean $softDelete Simple historisation ou bien destruction pure et simple
      *
      * @return self
      */

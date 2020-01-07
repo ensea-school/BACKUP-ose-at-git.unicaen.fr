@@ -75,44 +75,6 @@ class OseAdmin
 
 
 
-    public function majUnicaenSymLinks(): bool
-    {
-        $oseDir = $this->getOseDir();
-
-        $oldLibs = [];
-        $od      = array_filter(glob($oseDir . 'public/vendor/unicaen/*'), 'is_dir');
-        foreach ($od as $dir) {
-            $oldLibs[] = basename($dir);
-        }
-
-        $newLibs = [];
-        $nd      = array_filter(glob($oseDir . 'vendor/unicaen/*'), 'is_dir');
-        foreach ($nd as $dir) {
-            if (is_dir($dir . '/public')) {
-                $newLibs[] = basename($dir);
-            }
-        }
-
-        $deleteLibs = array_diff($oldLibs, $newLibs);
-        $createLibs = array_diff($newLibs, $oldLibs);
-
-        foreach ($deleteLibs as $lib) {
-            $command = "rm $oseDir" . "public/vendor/unicaen/$lib";
-            $this->console->print($command);
-            $this->console->exec($command);
-        }
-
-        foreach ($createLibs as $lib) {
-            $command = "cd $oseDir" . "public/vendor/unicaen;ln -sf ../../../vendor/unicaen/$lib/public $lib";
-            $this->console->print($command);
-            $this->console->exec($command);
-        }
-
-        return !(empty($deleteLibs) && empty($createLibs));
-    }
-
-
-
     public function gitlabIsReachable(): bool
     {
         $gitCheck = $this->console->exec("git ls-remote --heads " . self::OSE_ORIGIN, false);
@@ -227,6 +189,7 @@ class OseAdmin
 
     public function migration(string $context = 'pre', string $action = null)
     {
+        if (!is_dir($this->getMigrationDir())) return;
         $files = scandir($this->getMigrationDir());
 
         foreach ($files as $i => $file) {
@@ -235,8 +198,6 @@ class OseAdmin
             }
             $fileAction = substr($file, 0, -4); // on supprime l'extension PHP
             if ($action === null || $fileAction === $action) {
-
-
                 $this->runMigrationAction($context, $fileAction);
             }
         }

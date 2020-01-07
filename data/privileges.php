@@ -19,6 +19,7 @@ return [
             'grands-types-diplome-edition'       => 'Grands types de diplômes (édition)',
             'types-diplome-visualisation'        => 'Types de diplômes (visualisation)',
             'types-diplome-edition'              => 'Types de diplômes (édition)',
+            'reconduction-offre'                 => 'Prolongation de l\'offre l\'année suivante',
         ],
     ],
 

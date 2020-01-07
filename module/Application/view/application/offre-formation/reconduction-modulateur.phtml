@@ -55,9 +55,9 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </table>
 <?php else: ?>
     <?php if($fromPost): ?>
-        <p> <a href="<?= $this->url('aof/reconduction-modulateur') . "?structure=" . $structure->getId(); ?>" >< Retour à la liste des formations.</a></p>
+        <p> <a href="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>" >< Retour à la liste des formations.</a></p>
     <?php else: ?>
-        <form action="<?= $_SERVER['REQUEST_URI']; ?>" method="POST" id="form-reconduction">
+        <form action="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
 
             <table class="reconduction-offre table table-bordered table-condensed table-hover" >
                 <thead>

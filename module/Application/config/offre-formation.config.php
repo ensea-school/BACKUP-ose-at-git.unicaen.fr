@@ -61,8 +61,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'default'                  => [
-                    'default'      => [
+                    'default' => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:id]',
@@ -147,7 +146,7 @@ return [
                             ],
                         ],
                     ],
-                    'etape'        => [
+                    'etape'   => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/etape',

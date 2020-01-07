@@ -66,7 +66,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
             </table>
         <?php else: ?>
             <?php if ($fromPost): ?>
-                <p><a href="<?= $this->url('of/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"><
+                <p><a href="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>"><
                         Retour à la liste
                         des formations.</a></p>
             <?php else: ?>
@@ -74,7 +74,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-offre.js');
                     <div class="well well-sm">Les lignes avec le fond gris ont déjà été reconduites pour la prochaine année
                         universitaire.
                     </div>
-                    <form action="<?php echo $this->url(null, [], [], true) ?>" method="POST" id="form-reconduction">
+                    <form action="<?= $this->url('aof/reconduction', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
 
                         <?php foreach ($offresComplementaires
 

@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\CentreCout;
-use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\ElementPedagogique;

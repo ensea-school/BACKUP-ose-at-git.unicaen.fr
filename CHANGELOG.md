@@ -1,3 +1,9 @@
+# OSE 12 alpha
+
+## Nouveautés
+
+* Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
+
 # OSE 11.2
 
 ## Correction de bug

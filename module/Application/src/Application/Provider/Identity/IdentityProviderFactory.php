@@ -26,6 +26,7 @@ class IdentityProviderFactory
 
         $identityProvider->setEntityManager($container->get(\Application\Constants::BDD));
         $identityProvider->setServiceContext($container->get(ContextService::class));
+        $identityProvider->setHostLocalization($container->get('HostLocalization'));
 
         return $identityProvider;
     }

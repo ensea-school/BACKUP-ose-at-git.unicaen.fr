@@ -3,7 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\DroitsController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class DroitsControllerFactory
 {

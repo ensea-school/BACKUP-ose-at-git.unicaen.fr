@@ -2,7 +2,7 @@
 
 namespace Application\Processus\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Application\Processus\PlafondProcessus;
 
 

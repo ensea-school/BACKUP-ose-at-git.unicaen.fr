@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -36,7 +36,7 @@ foreach ($dirs as $i => $dir) {
         if ($dir == '.' || $dir == '..') continue;
         $code = explode('.', $dir)[0];
 
-        echo ($i+1).'/'.(count($dirs)-2).' ... '.$code.' - ';
+        echo ($i + 1) . '/' . (count($dirs) - 2) . ' ... ' . $code . ' - ';
 
         $intervenant = $si->getBySourceCode($code);
 

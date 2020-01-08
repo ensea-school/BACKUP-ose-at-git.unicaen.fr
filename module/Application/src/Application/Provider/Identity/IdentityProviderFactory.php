@@ -3,7 +3,7 @@
 namespace Application\Provider\Identity;
 
 use Application\Service\ContextService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  *
@@ -14,9 +14,9 @@ class IdentityProviderFactory
     /**
      * Create an object
      *
-     * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param null|array         $options
      *
      * @return object
      */
@@ -24,7 +24,7 @@ class IdentityProviderFactory
     {
         $identityProvider = new IdentityProvider;
 
-        $identityProvider->setEntityManager( $container->get(\Application\Constants::BDD) );
+        $identityProvider->setEntityManager($container->get(\Application\Constants::BDD));
         $identityProvider->setServiceContext($container->get(ContextService::class));
 
         return $identityProvider;

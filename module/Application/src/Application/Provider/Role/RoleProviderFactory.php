@@ -5,7 +5,7 @@ namespace Application\Provider\Role;
 use Application\Service\ContextService;
 use Application\Service\StatutIntervenantService;
 use Application\Service\Traits\ContextServiceAwareTrait;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use InvalidArgumentException;
 
 /**

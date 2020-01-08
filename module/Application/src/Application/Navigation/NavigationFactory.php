@@ -2,7 +2,7 @@
 
 namespace Application\Navigation;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Zend\Http\Request;
 use Zend\Router\RouteStackInterface as Router;
 use Zend\Router\RouteMatch;

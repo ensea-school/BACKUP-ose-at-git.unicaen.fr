@@ -3,8 +3,7 @@
 namespace Application\Cache\Factory;
 
 use Application\Cache\CacheService;
-use Interop\Container\ContainerInterface;
-
+use Psr\Container\ContainerInterface;
 
 
 /**
@@ -25,9 +24,9 @@ class CacheServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $appConfig = \AppConfig::getGlobal();
-        $cacheDir = getcwd().'/'.$appConfig['module_listener_options']['cache_dir'];
+        $cacheDir  = getcwd() . '/' . $appConfig['module_listener_options']['cache_dir'];
 
-        if (!is_dir($cacheDir)){
+        if (!is_dir($cacheDir)) {
             throw new \Exception('Le dossier de cache de OSE est mal renseigné ou inexistant');
         }
 

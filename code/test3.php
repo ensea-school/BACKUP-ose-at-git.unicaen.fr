@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -14,10 +14,10 @@ use Unicaen\OpenDocument\Document;
 
 $d = [
     [
-        'nom'    => 'Lécluse',
-        'prenom' => 'Laurent',
+        'nom'     => 'Lécluse',
+        'prenom'  => 'Laurent',
         'varFoot' => 'test footer ok!!!',
-        'sec1'   => false,
+        'sec1'    => false,
 
         'dpl_libelle@table:table-row' => [
             [
@@ -54,7 +54,7 @@ $d = [
     [
         'nom'                         => 'Fery',
         'prenom'                      => 'Karin',
-        'varFoot' => 'test footer 2 bizarre!!!',
+        'varFoot'                     => 'test footer 2 bizarre!!!',
         'sec1@text:section'           => [
             ['secvar' => 'Varsec1',],
             ['secvar' => 'Varsec2',],

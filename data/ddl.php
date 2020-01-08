@@ -11314,6 +11314,17 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
+        'ACCESSIBLE_EXTERIEUR' =>
+        array (
+          'name' => 'ACCESSIBLE_EXTERIEUR',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '1',
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'ROLE_PRIVILEGE' => 

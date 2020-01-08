@@ -4,6 +4,11 @@
 
 * Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
 
+## Notes de mise à jour
+
+Le paramètre global.inEtablissement devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
+si l'application est utilisée depuis l'établissement ou non.
+
 # OSE 11.2
 
 ## Correction de bug

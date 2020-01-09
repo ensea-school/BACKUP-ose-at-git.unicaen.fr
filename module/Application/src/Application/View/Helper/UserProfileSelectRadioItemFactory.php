@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper;
 
-use Psr\Container\ContainerInterface;
+use Interop\Container\ContainerInterface;
 use UnicaenApp\View\Helper\UserProfileSelectFactory;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;

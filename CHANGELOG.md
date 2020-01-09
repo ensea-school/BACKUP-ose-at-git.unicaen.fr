@@ -4,6 +4,10 @@
 
 * Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
 
+## Correction de bugs
+
+* Rétablissement du fonctionnement du formulaire d'édition des états de sortie
+
 ## Notes de mise à jour
 
 Le paramètre global.inEtablissement devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir

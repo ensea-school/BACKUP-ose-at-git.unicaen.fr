@@ -152,7 +152,7 @@ Un script a été conçu pour automatiser cette opération.
 
 Exécutez la commande suivante sur votre serveur :
 ```bash
-wget https://git.unicaen.fr/open-source/OSE/raw/master/bin/install && php install
+wget https://ose.unicaen.fr/install && php install
 ```
 
 ### Configuration d'Apache

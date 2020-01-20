@@ -7,6 +7,7 @@
 ## Correction de bugs
 
 * Rétablissement du fonctionnement du formulaire d'édition des états de sortie
+* La purge de l'indicateur différentiel des données personnel fonctionne de nouveau 
 
 ## Notes de mise à jour
 

@@ -6639,7 +6639,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HEURES_DECHARGE' =>
+        'HEURES_DECHARGE' => 
         array (
           'name' => 'HEURES_DECHARGE',
           'type' => 'FLOAT',
@@ -6650,7 +6650,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'HEURES_SERVICE_STATUTAIRE' =>
+        'HEURES_SERVICE_STATUTAIRE' => 
         array (
           'name' => 'HEURES_SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -11314,7 +11314,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACCESSIBLE_EXTERIEUR' =>
+        'ACCESSIBLE_EXTERIEUR' => 
         array (
           'name' => 'ACCESSIBLE_EXTERIEUR',
           'type' => 'NUMBER',
@@ -14724,6 +14724,17 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'TBL_PIECE_JOINTE_DEMANDE' => 
@@ -14799,6 +14810,28 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '0',
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'CODE_INTERVENANT' => 
+        array (
+          'name' => 'CODE_INTERVENANT',
+          'type' => 'VARCHAR2',
+          'length' => 255,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
           'commentaire' => NULL,
         ),
       ),
@@ -14897,6 +14930,28 @@
           'scale' => '0',
           'precision' => NULL,
           'nullable' => false,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'CODE_INTERVENANT' => 
+        array (
+          'name' => 'CODE_INTERVENANT',
+          'type' => 'VARCHAR2',
+          'length' => 255,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -17913,6 +17968,17 @@
           'nullable' => false,
           'default' => '0',
           'commentaire' => NULL,
+        ),
+        'DUREE_VIE' => 
+        array (
+          'name' => 'DUREE_VIE',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => 'Durée de vie de la pièce jointe',
         ),
       ),
     ),
@@ -35958,9 +36024,11 @@ WITH i_h AS (
 )
 SELECT
   i.annee_id                      annee_id,
+  i.code code_intervenant,
   i.id                            intervenant_id,
   tpj.id                          type_piece_jointe_id,
-  MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil
+  MAX(COALESCE(i_h.heures, 0))    heures_pour_seuil,
+  COALESCE(tpjs.duree_vie,1) duree_vie
 FROM
             intervenant                 i
 
@@ -35995,8 +36063,10 @@ WHERE
   AND (tpjs.fc = 0 OR i_h.fc > 0)
 GROUP BY
   i.annee_id,
+  i.code,
   i.id,
-  tpj.id',
+  tpj.id,
+  tpjs.duree_vie',
     ),
     'V_TBL_PIECE_JOINTE_FOURNIE' => 
     array (
@@ -36004,16 +36074,17 @@ GROUP BY
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_PIECE_JOINTE_FOURNIE AS
 SELECT
   i.annee_id,
+  i.code code_intervenant,
   pj.type_piece_jointe_id,
   pj.intervenant_id,
   pj.id piece_jointe_id,
   v.id validation_id,
-  f.id fichier_id
+  f.id fichier_id,
+  (SELECT COALESCE(duree_vie,1) FROM type_piece_jointe_statut WHERE statut_intervenant_id = i.statut_id AND type_piece_jointe_id = pj.type_piece_jointe_id) as duree_vie
 FROM
             piece_jointe          pj
        JOIN intervenant            i ON i.id = pj.intervenant_id
                                     AND i.histo_destruction IS NULL
-
        JOIN piece_jointe_fichier pjf ON pjf.piece_jointe_id = pj.id
        JOIN fichier                f ON f.id = pjf.fichier_id
                                     AND f.histo_destruction IS NULL
@@ -38913,19 +38984,19 @@ WHERE
         'INTERVENANT_TEST_ID' => 'ID',
       ),
     ),
-    'FTVH_FORMULE_TEST_STRUCTURE_FK' =>
+    'FTVH_FORMULE_TEST_STRUCTURE_FK' => 
     array (
       'name' => 'FTVH_FORMULE_TEST_STRUCTURE_FK',
       'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
       'rtable' => 'FORMULE_TEST_STRUCTURE',
       'delete_rule' => 'CASCADE',
       'index' => NULL,
-      'columns' =>
+      'columns' => 
       array (
         'STRUCTURE_TEST_ID' => 'ID',
       ),
     ),
-    'GRADE_CORPS_FK' =>
+    'GRADE_CORPS_FK' => 
     array (
       'name' => 'GRADE_CORPS_FK',
       'table' => 'GRADE',

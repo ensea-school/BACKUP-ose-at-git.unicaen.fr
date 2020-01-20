@@ -60,7 +60,7 @@ class PieceJointeController extends AbstractController
      */
     public function indexAction()
     {
-        $this->initFilters();
+        //$this->initFilters();
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -304,9 +304,9 @@ class PieceJointeController extends AbstractController
         $typesPiecesJointesStatuts = [];
         foreach ($tpjss as $tpjs) {
             $tpjID = $tpjs->getTypePieceJointe()->getId();
-            $siId = $tpjs->getStatutIntervenant()->getId();
+            $siId  = $tpjs->getStatutIntervenant()->getId();
 
-            if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])){
+            if (!isset($typesPiecesJointesStatuts[$tpjID][$siId])) {
                 $typesPiecesJointesStatuts[$tpjID][$siId] = [];
             }
             $typesPiecesJointesStatuts[$tpjID][$siId][] = $tpjs;
@@ -340,13 +340,13 @@ class PieceJointeController extends AbstractController
 
         $form = $this->getFormTypePieceJointeSaisie();
         if (empty($typePieceJointe)) {
-            $title = 'Création d\'un nouveau type de pièce jointe';
+            $title           = 'Création d\'un nouveau type de pièce jointe';
             $typePieceJointe = $this->getServiceTypePieceJointe()->newEntity();
             $typePieceJointe->setOrdre(9999);
         } else {
             $title = 'Édition du type de pièce jointe';
         }
-        $form->bindRequestSave($typePieceJointe, $this->getRequest(),$this->getServiceTypePieceJointe() );
+        $form->bindRequestSave($typePieceJointe, $this->getRequest(), $this->getServiceTypePieceJointe());
 
         return compact('form', 'title');
     }
@@ -368,7 +368,7 @@ class PieceJointeController extends AbstractController
             $tpjs->setStatutIntervenant($statutIntervenant);
             $tpjs->setObligatoire(true);
         } else {
-            $title = 'Édition du paramètre de gestion de pièce justificative';
+            $title             = 'Édition du paramètre de gestion de pièce justificative';
             $typePieceJointe   = $tpjs->getTypePieceJointe();
             $statutIntervenant = $tpjs->getStatutIntervenant();
         }

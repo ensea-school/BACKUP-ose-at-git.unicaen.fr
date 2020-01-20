@@ -51,6 +51,11 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
             <?= $this->formControlGroup($form->get('annee-fin')); ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $this->formControlGroup($form->get('duree-vie')); ?>
+        </div>
+    </div>
 
 <?= $this->formSubmit($form->get('submit')); ?>
 

@@ -42,6 +42,16 @@ class TblPieceJointeFournie
      */
     private $annee;
 
+    /**
+     * @var integer
+     */
+    private $dureeVie;
+
+    /**
+     * @var varchar
+     */
+    private $codeIntervenant;
+
 
 
     /**
@@ -124,6 +134,30 @@ class TblPieceJointeFournie
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+
+
+    /**
+     * Get dureeVie
+     *
+     * @return integer
+     */
+    public function getDureeVie()
+    {
+        return $this->dureeVie;
+    }
+
+
+
+    /**
+     * Get codeIntervenant
+     *
+     * @return string
+     */
+    public function getCodeIntervenant()
+    {
+        return $this->codeIntervenant;
     }
 }
 

@@ -134,7 +134,7 @@ class PieceJointeService extends AbstractEntityService
      */
     public function getPiecesFournies(Intervenant $intervenant)
     {
-        $dql = "
+        $dql  = "
         SELECT
           pjf, pj, tpj, v, f        
         FROM
@@ -146,6 +146,7 @@ class PieceJointeService extends AbstractEntityService
         WHERE
           pjf.intervenant = :intervenant
         ";
+        $sql  = $this->getEntityManager()->createQuery($dql)->getSQL();
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
             'intervenant' => $intervenant,
         ])->getResult();
@@ -154,7 +155,7 @@ class PieceJointeService extends AbstractEntityService
 
         $result = [];
         foreach ($lpjf as $pjf) {
-            $pj = $pjf->getPieceJointe();
+            $pj                              = $pjf->getPieceJointe();
             $result[$pj->getType()->getId()] = $pj;
         }
 

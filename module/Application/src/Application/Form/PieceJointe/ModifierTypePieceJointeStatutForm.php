@@ -102,6 +102,18 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             ],
         ]);
 
+        $this->add([
+            'type'       => 'Number',
+            'name'       => 'duree-vie',
+            'options'    => [
+                'label' => "Durée de vie de la pièce jointe (en année)",
+            ],
+            'attributes' => [
+                'min'   => '1',
+                'value' => '1',
+            ],
+        ]);
+
         $this->add(new Csrf('security'));
 
         $this->add([
@@ -216,6 +228,9 @@ class ModifierTypePieceJointeStatutForm extends AbstractForm
             'annee-fin'           => [
                 'required' => false,
             ],
+            'duree-vie'           => [
+                'required' => true,
+            ],
         ];
     }
 
@@ -234,8 +249,8 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                        $data
-     * @param  \Application\Entity\Db\TypePieceJointeStatut $object
+     * @param array                                        $data
+     * @param \Application\Entity\Db\TypePieceJointeStatut $object
      *
      * @return object
      */
@@ -252,6 +267,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
             $object->setAnneeFin($this->getServiceAnnee()->get($data['annee-fin']));
         }
         $object->setFC($data['fc']);
+        $object->setDureeVie($data['duree-vie']);
 
         return $object;
     }
@@ -261,7 +277,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\TypePieceJointeStatut $object
+     * @param \Application\Entity\Db\TypePieceJointeStatut $object
      *
      * @return array
      */
@@ -275,6 +291,7 @@ class TypePieceJointeStatutHydrator implements HydratorInterface
             'premier-recrutement' => $object->getPremierRecrutement(),
             'changement-rib'      => $object->getChangementRIB(),
             'fc'                  => $object->getFC(),
+            'duree-vie'           => $object->getDureeVie(),
             'annee-debut'         => $object->getAnneeDebut() ? $object->getAnneeDebut()->getId() : null,
             'annee-fin'           => $object->getAnneeFin() ? $object->getAnneeFin()->getId() : null,
         ];

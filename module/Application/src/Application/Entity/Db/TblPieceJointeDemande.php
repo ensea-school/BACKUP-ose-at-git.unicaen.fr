@@ -27,14 +27,23 @@ class TblPieceJointeDemande
      * @var float
      */
     private $heuresPourSeuil;
-    
+
     /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
 
-    
- 
+    /**
+     * @var integer
+     */
+    private $dureeVie;
+
+    /**
+     * @var varchar
+     */
+    private $codeIntervenant;
+
+
 
     /**
      * Get id
@@ -47,6 +56,7 @@ class TblPieceJointeDemande
     }
 
 
+
     /**
      * Get typePieceJointe
      *
@@ -56,6 +66,7 @@ class TblPieceJointeDemande
     {
         return $this->typePieceJointe;
     }
+
 
 
     /**
@@ -78,7 +89,7 @@ class TblPieceJointeDemande
         return $this->heuresPourSeuil;
     }
 
-    
+
 
     /**
      * Get annee
@@ -88,5 +99,31 @@ class TblPieceJointeDemande
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+
+
+    /**
+     * Get dureeVie
+     *
+     * @return integer
+     */
+
+    public function getDureeVie()
+    {
+        return $this->dureeVie;
+    }
+
+
+
+    /**
+     * Get codeIntervenant
+     *
+     * @return string
+     */
+
+    public function getCodeIntervenant()
+    {
+        return $this->codeIntervenant;
     }
 }

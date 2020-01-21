@@ -251,6 +251,7 @@ docker build \
 --rm \
 --build-arg PHP_VERSION=${PHP_VERSION} \
 --build-arg HTTP_PROXY=${HTTP_PROXY} \
+--build-arg OCI8_PACKAGE="oci8" \
 -f Dockerfile \
 -t unicaen-dev-php${PHP_VERSION}-apache \
 .

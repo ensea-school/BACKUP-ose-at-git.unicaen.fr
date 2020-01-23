@@ -134,6 +134,7 @@ class PieceJointeService extends AbstractEntityService
      */
     public function getPiecesFournies(Intervenant $intervenant)
     {
+
         $dql  = "
         SELECT
           pjf, pj, tpj, v, f        
@@ -144,11 +145,12 @@ class PieceJointeService extends AbstractEntityService
           LEFT JOIN pjf.validation v
           LEFT JOIN pjf.fichier f
         WHERE
-          pjf.intervenant = :intervenant
+          pjf.codeIntervenant = :intervenant
         ";
-        $sql  = $this->getEntityManager()->createQuery($dql)->getSQL();
+        //TODO modifier ici la requette pour qu'elle prenne en compte la validité de la PJ
         $lpjf = $this->getEntityManager()->createQuery($dql)->setParameters([
-            'intervenant' => $intervenant,
+            'intervenant' => $intervenant->getCode(),
+            //'annee'       => $intervenant->getAnnee()->getId(),
         ])->getResult();
 
         /* @var $lpjf \Application\Entity\Db\TblPieceJointeFournie[] */
@@ -156,6 +158,7 @@ class PieceJointeService extends AbstractEntityService
         $result = [];
         foreach ($lpjf as $pjf) {
             $pj                              = $pjf->getPieceJointe();
+            $fichier = $pjf->getFichier();
             $result[$pj->getType()->getId()] = $pj;
         }
 

@@ -50,6 +50,8 @@
         <option name="default">1</option>
       </options>
     </field>
+    <field name="dateValidite" type="integer" column="DATE_VALIDITE" nullable="true" >
+    </field>
     <field name="codeIntervenant" type="string" column="CODE_INTERVENANT" nullable="true" >
     </field>
   </entity>

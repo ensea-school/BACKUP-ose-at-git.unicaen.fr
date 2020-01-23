@@ -52,6 +52,11 @@ class TblPieceJointeFournie
      */
     private $codeIntervenant;
 
+    /**
+     * @var integer
+     */
+    private $dateValidite;
+
 
 
     /**
@@ -151,7 +156,7 @@ class TblPieceJointeFournie
 
 
     /**
-     * Get codeIntervenant
+     * Get
      *
      * @return string
      */
@@ -159,5 +164,19 @@ class TblPieceJointeFournie
     {
         return $this->codeIntervenant;
     }
+
+
+
+    /**
+     * Get dateValidite
+     *
+     * @return integer
+     */
+    public function getDateValidite()
+    {
+        return $this->dateValidite;
+    }
+
+
 }
 

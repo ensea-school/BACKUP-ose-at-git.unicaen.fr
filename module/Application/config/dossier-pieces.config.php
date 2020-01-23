@@ -153,9 +153,11 @@ return [
                                         // lister les fichiers d'une PJ
                                         'type'    => 'Segment',
                                         'options' => [
-                                            'route'       => '/lister/:typePieceJointe',
+                                            'route'       => '/lister/:typePieceJointe/:pieceJointe',
                                             'constraints' => [
                                                 'typePieceJointe' => '[0-9]*',
+                                                'pieceJointe' => '[0-9]*',
+
                                             ],
                                             'defaults'    => [
                                                 'action' => 'lister',

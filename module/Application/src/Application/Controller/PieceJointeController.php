@@ -61,6 +61,8 @@ class PieceJointeController extends AbstractController
     public function indexAction()
     {
         //$this->initFilters();
+        //Todo : rendre impossible de supprimer un fichier fournis en ANNEE N-1 si le contexte est en ANNEE N
+        //Todo : Si param PJ passé à la vue lister regarder le comportement si PJ est null (Call to a member function getId() on null /app/module/Application/view/application/piece-jointe/partial/piece-jointe.phtml                    :71)
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -75,6 +77,7 @@ class PieceJointeController extends AbstractController
         $demandees       = $this->getServicePieceJointe()->getTypesPiecesDemandees($intervenant);
         $heuresPourSeuil = $this->getServicePieceJointe()->getHeuresPourSeuil($intervenant);
         $fournies        = $this->getServicePieceJointe()->getPiecesFournies($intervenant);
+        //$archives        = $this->getServicePieceJointe()->getPiecesFourniesArchives($intervenant);
 
         $messages = $this->makeMessages($demandees, $fournies);
 
@@ -160,8 +163,6 @@ class PieceJointeController extends AbstractController
         return compact('pj');
     }
 
-
-
     public function validerAction()
     {
         $this->initFilters();
@@ -201,10 +202,8 @@ class PieceJointeController extends AbstractController
     public function listerAction()
     {
         $this->initFilters();
-
         $intervenant     = $this->getEvent()->getParam('intervenant');
-        $typePieceJointe = $this->getEvent()->getParam('typePieceJointe');
-        $pj              = $this->getServicePieceJointe()->getByType($intervenant, $typePieceJointe);
+        $pj = $this->getEvent()->getParam('pieceJointe');
 
         return compact('pj');
     }

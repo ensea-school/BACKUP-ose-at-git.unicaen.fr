@@ -6613,7 +6613,7 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
-          'nullable' => false,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -6824,6 +6824,17 @@
           'precision' => 126,
           'nullable' => false,
           'default' => '2/3',
+          'commentaire' => NULL,
+        ),
+        'STRUCTURE_CODE' => 
+        array (
+          'name' => 'STRUCTURE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
           'commentaire' => NULL,
         ),
       ),
@@ -11314,7 +11325,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACCESSIBLE_EXTERIEUR' =>
+        'ACCESSIBLE_EXTERIEUR' => 
         array (
           'name' => 'ACCESSIBLE_EXTERIEUR',
           'type' => 'NUMBER',
@@ -21439,7 +21450,7 @@ END FORMULE_LYON2;',
     -- L=SI($H22="";0;SI(ET($B22=composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'L\' AND v >= 1 THEN
       --SI(ET($B22=composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF vh.structure_is_affectation AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.param_1)) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF vh.structure_is_affectation AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.structure_code)) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21476,7 +21487,7 @@ END FORMULE_LYON2;',
     -- Q=SI($H22="";0;SI(ET($B22<>composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'Q\' AND v >= 1 THEN
       --SI(ET($B22<>composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF (NOT vh.structure_is_affectation) AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.param_1)) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF (NOT vh.structure_is_affectation) AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.structure_code)) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21513,7 +21524,7 @@ END FORMULE_LYON2;',
     -- V=SI($H22="";0;SI(ET($G22=1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'V\' AND v >= 1 THEN
       --SI(ET($G22=1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF vh.taux_fc = 1 AND (NOT isD4DAC10000(vh.param_1)) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF vh.taux_fc = 1 AND (NOT isD4DAC10000(vh.structure_code)) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21550,7 +21561,7 @@ END FORMULE_LYON2;',
     -- AA=SI($H22="";0;SI(ET($B22="D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'AA\' AND v >= 1 THEN
       --SI(ET($B22="D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF isD4DAC10000(vh.param_1) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF isD4DAC10000(vh.structure_code) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21622,7 +21633,7 @@ END FORMULE_LYON2;',
 
     -- AK=SI($H22="";0;SI(ET($D22<>"Référentiel";$C22<>"Oui");$J22;0))
     WHEN c = \'AK\' AND v >= 1 THEN
-      IF vh.volume_horaire_ref_id IS NULL AND (NOT isOui(vh.param_2)) THEN
+      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21866,15 +21877,13 @@ FUNCTION INTERVENANT_QUERY RETURN CLOB IS
     RETURN \'
     SELECT
       fvh.*,
-      str.code param_1,
-      CASE WHEN fvh.structure_id IS NULL THEN \'\'non\'\' ELSE \'\'oui\'\' END param_2,
+      NULL param_1,
+      NULL param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       v_formule_volume_horaire fvh
-      JOIN intervenant i ON i.id = fvh.intervenant_id
-      LEFT JOIN structure str ON str.id = COALESCE(fvh.structure_id,i.structure_id)
     ORDER BY
       ordre\';
   END;
@@ -22743,7 +22752,7 @@ END FORMULE_NANTERRE;',
     -- L=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0))
     WHEN c = \'L\' AND v >= 1 THEN
       -- ET($C22<>"Référentiel";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10")
-      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l) * vh.taux_fi;
       ELSE
         RETURN 0;
@@ -22780,7 +22789,7 @@ END FORMULE_NANTERRE;',
     -- Q=SI($H22="";0;SI(ET($C22="Référentiel";$G22="Oui";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22;0))
     WHEN c = \'Q\' AND v >= 1 THEN
       -- ET($C22="Référentiel";$G22="Oui";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10")
-      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l);
       ELSE
         RETURN 0;
@@ -22817,7 +22826,7 @@ END FORMULE_NANTERRE;',
     -- V=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0))
     WHEN c = \'V\' AND v >= 1 THEN
       --ET($C22<>"Référentiel";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0)
-      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l) * vh.taux_fi;
       ELSE
         RETURN 0;
@@ -22854,7 +22863,7 @@ END FORMULE_NANTERRE;',
     -- AA=SI($H22="";0;SI(ET($C22="Référentiel";$G22="Oui";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22;0))
     WHEN c = \'AA\' AND v >= 1 THEN
       --ET($C22="Référentiel";$G22="Oui";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10")
-      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND NOT vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND NOT vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l);
       ELSE
         RETURN 0;
@@ -22890,7 +22899,7 @@ END FORMULE_NANTERRE;',
 
     -- AF=SI($H22="";0;SI(OU($B22="KE8";$B22="UP10");SI($C22="Référentiel";SI($G22="Oui";$J22;0);$J22*$D22);0))
     WHEN c = \'AF\' AND v >= 1 THEN
-      IF vh.param_1 IN (\'KE8\',\'UP10\') THEN
+      IF NOT notInStructs(vh.structure_code) THEN
         --SI($C22="Référentiel";SI($G22="Oui";$J22;0);$J22*$D22)
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           --SI($G22="Oui";$J22;0)
@@ -23408,15 +23417,13 @@ END FORMULE_NANTERRE;',
     RETURN \'
     SELECT
       fvh.*,
-      str.code param_1,
+      NULL param_1,
       NULL param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       v_formule_volume_horaire fvh
-      JOIN intervenant i ON i.id = fvh.intervenant_id
-      LEFT JOIN structure str ON str.id = COALESCE(fvh.structure_id,i.structure_id)
     ORDER BY
       ordre\';
   END;
@@ -24966,7 +24973,6 @@ END FORMULE_UNICAEN;',
         ose_test.echo(\'taux_fc                   = \' || vh.taux_fc);
         ose_test.echo(\'ponderation_service_du    = \' || vh.ponderation_service_du);
         ose_test.echo(\'ponderation_service_compl = \' || vh.ponderation_service_compl);
-        ose_test.echo(\'structure_id              = \' || vh.structure_id);
         ose_test.echo(\'structure_is_affectation  = \' || CASE WHEN vh.structure_is_affectation THEN \'OUI\' ELSE \'NON\' END);
         ose_test.echo(\'structure_is_univ         = \' || CASE WHEN vh.structure_is_univ THEN \'OUI\' ELSE \'NON\' END);
         ose_test.echo(\'service_statutaire        = \' || CASE WHEN vh.service_statutaire THEN \'OUI\' ELSE \'NON\' END);
@@ -26958,7 +26964,6 @@ END OSE_EVENT;',
     -- identifiants
     id                             NUMERIC,
     annee_id                       NUMERIC,
-    structure_id                   NUMERIC,
     type_volume_horaire_id         NUMERIC,
     etat_volume_horaire_id         NUMERIC,
 
@@ -26990,7 +26995,6 @@ END OSE_EVENT;',
     volume_horaire_ref_id      NUMERIC,
     service_id                 NUMERIC,
     service_referentiel_id     NUMERIC,
-    structure_id               NUMERIC,
 
     -- paramètres globaux
     type_volume_horaire_code   VARCHAR(15),
@@ -27125,9 +27129,25 @@ END OSE_FORMULE;',
 
 
   PROCEDURE LOAD_INTERVENANT_FROM_BDD IS
+    TYPE t_formule_intervenant IS RECORD (
+      intervenant_id                  NUMERIC,
+      annee_id                        NUMERIC,
+      type_intervenant_code           VARCHAR2(1),
+      structure_code                  VARCHAR2(50),
+      heures_service_statutaire       FLOAT,
+      depassement_service_du_sans_hc  NUMERIC(1),
+      heures_service_modifie          FLOAT,
+      param_1                         VARCHAR2(100),
+      param_2                         VARCHAR2(100),
+      param_3                         VARCHAR2(100),
+      param_4                         VARCHAR2(100),
+      param_5                         VARCHAR2(100)
+    );
+    formule_intervenant t_formule_intervenant;
     cur SYS_REFCURSOR;
     query CLOB;
     i_dep_service_du_sans_hc NUMERIC DEFAULT 0;
+
   BEGIN
     intervenant.service_du := 0;
     intervenant.total      := NULL;
@@ -27137,23 +27157,20 @@ END OSE_FORMULE;',
     OPEN cur FOR query;
 
     LOOP
-      FETCH cur INTO
-        intervenant.id,
-        intervenant.annee_id,
-        intervenant.structure_id,
-        intervenant.type_intervenant_code,
-        intervenant.heures_service_statutaire,
-        i_dep_service_du_sans_hc,
-        intervenant.heures_service_modifie,
-        intervenant.param_1,
-        intervenant.param_2,
-        intervenant.param_3,
-        intervenant.param_4,
-        intervenant.param_5
-      ;
-      EXIT WHEN cur%NOTFOUND;
+      FETCH cur INTO formule_intervenant; EXIT WHEN cur%NOTFOUND;
+      intervenant.id                             := formule_intervenant.intervenant_id;
+      intervenant.annee_id                       := formule_intervenant.annee_id;
+      intervenant.structure_code                 := formule_intervenant.structure_code;
+      intervenant.type_intervenant_code          := formule_intervenant.type_intervenant_code;
+      intervenant.heures_service_statutaire      := formule_intervenant.heures_service_statutaire;
+      intervenant.depassement_service_du_sans_hc := (formule_intervenant.depassement_service_du_sans_hc = 1);
+      intervenant.heures_service_modifie         := formule_intervenant.heures_service_modifie;
+      intervenant.param_1                        := formule_intervenant.param_1;
+      intervenant.param_2                        := formule_intervenant.param_2;
+      intervenant.param_3                        := formule_intervenant.param_3;
+      intervenant.param_4                        := formule_intervenant.param_4;
+      intervenant.param_5                        := formule_intervenant.param_5;
 
-      intervenant.depassement_service_du_sans_hc := (i_dep_service_du_sans_hc = 1);
       intervenant.service_du := CASE
         WHEN intervenant.depassement_service_du_sans_hc
         THEN 9999
@@ -27165,7 +27182,7 @@ END OSE_FORMULE;',
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
       intervenant.annee_id                       := null;
-      intervenant.structure_id                   := null;
+      intervenant.structure_code                 := null;
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
@@ -27189,7 +27206,7 @@ END OSE_FORMULE;',
     SELECT
       fti.id,
       fti.annee_id,
-      fti.structure_test_id,
+      fti.structure_code,
       fti.type_volume_horaire_id,
       fti.etat_volume_horaire_id,
       fti.heures_service_statutaire,
@@ -27205,7 +27222,7 @@ END OSE_FORMULE;',
     INTO
       intervenant.id,
       intervenant.annee_id,
-      intervenant.structure_id,
+      intervenant.structure_code,
       intervenant.type_volume_horaire_id,
       intervenant.etat_volume_horaire_id,
       intervenant.heures_service_statutaire,
@@ -27234,7 +27251,7 @@ END OSE_FORMULE;',
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
       intervenant.annee_id                       := null;
-      intervenant.structure_id                   := null;
+      intervenant.structure_code                 := null;
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
@@ -27287,7 +27304,7 @@ END OSE_FORMULE;',
         vh.taux_fi,
         vh.taux_fa,
         vh.taux_fc,
-        vh.structure_id,
+        length, -- on ignore ensuite
         vh.structure_code,
         vh_structure_is_affectation,
         vh_structure_is_univ,
@@ -27330,13 +27347,10 @@ END OSE_FORMULE;',
   PROCEDURE LOAD_VH_FROM_TEST IS
     vh t_volume_horaire;
     etat_volume_horaire_id NUMERIC DEFAULT 1;
-    structure_univ NUMERIC;
     length NUMERIC;
   BEGIN
     volumes_horaires.items.delete;
     length := 0;
-
-    SELECT id INTO structure_univ FROM formule_test_structure WHERE universite = 1;
 
     FOR d IN (
       SELECT
@@ -27374,12 +27388,12 @@ END OSE_FORMULE;',
       volumes_horaires.items(length).taux_fc                   := d.taux_fc;
       volumes_horaires.items(length).ponderation_service_du    := d.ponderation_service_du;
       volumes_horaires.items(length).ponderation_service_compl := d.ponderation_service_compl;
-      volumes_horaires.items(length).structure_id              := d.structure_test_id;
-      volumes_horaires.items(length).structure_is_affectation  := NVL(d.structure_test_id,0) = NVL(intervenant.structure_id,-1);
-      volumes_horaires.items(length).structure_is_univ         := NVL(d.structure_test_id,0) = NVL(structure_univ,-1);
+      volumes_horaires.items(length).structure_is_affectation  := d.structure_code = intervenant.structure_code;
+      volumes_horaires.items(length).structure_is_univ         := d.structure_code = \'__UNIV__\';
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;
       volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
+      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code = \'__EXTERIEUR__\' THEN NULL ELSE d.structure_code END;
       volumes_horaires.items(length).taux_service_du           := d.taux_service_du;
       volumes_horaires.items(length).taux_service_compl        := d.taux_service_compl;
       volumes_horaires.items(length).param_1                   := d.param_1;
@@ -27903,7 +27917,6 @@ END OSE_FORMULE;',
     ose_test.echo(\'OSE Formule DEBUG Intervenant\');
     ose_test.echo(\'id                             = \' || intervenant.id);
     ose_test.echo(\'annee_id                       = \' || intervenant.annee_id);
-    ose_test.echo(\'structure_id                   = \' || intervenant.structure_id);
     ose_test.echo(\'type_volume_horaire_id         = \' || intervenant.type_volume_horaire_id);
     ose_test.echo(\'heures_service_statutaire      = \' || intervenant.heures_service_statutaire);
     ose_test.echo(\'heures_service_modifie         = \' || intervenant.heures_service_modifie);
@@ -27935,7 +27948,6 @@ END OSE_FORMULE;',
             ose_test.echo(\'taux_fc                   = \' || vh.taux_fc);
             ose_test.echo(\'ponderation_service_du    = \' || vh.ponderation_service_du);
             ose_test.echo(\'ponderation_service_compl = \' || vh.ponderation_service_compl);
-            ose_test.echo(\'structure_id              = \' || vh.structure_id);
             ose_test.echo(\'structure_is_affectation  = \' || CASE WHEN vh.structure_is_affectation THEN \'OUI\' ELSE \'NON\' END);
             ose_test.echo(\'structure_is_univ         = \' || CASE WHEN vh.structure_is_univ THEN \'OUI\' ELSE \'NON\' END);
             ose_test.echo(\'service_statutaire        = \' || CASE WHEN vh.service_statutaire THEN \'OUI\' ELSE \'NON\' END);
@@ -33166,9 +33178,8 @@ GROUP BY
 SELECT
   i.id                                                                 intervenant_id,
   i.annee_id                                                           annee_id,
-  CASE WHEN ti.code = \'P\' THEN i.structure_id ELSE NULL END            structure_id,
   ti.code                                                              type_intervenant_code,
-  s.code                                                               structure_code,
+  CASE WHEN ti.code = \'P\' THEN s.code ELSE NULL END                    structure_code,
   si.service_statutaire                                                heures_service_statutaire,
   CASE WHEN
     si.depassement_service_du_sans_hc = 1
@@ -33207,7 +33218,7 @@ SELECT
   t.TAUX_FI,
   t.TAUX_FA,
   t.TAUX_FC,
-  t.STRUCTURE_ID,
+  t.structure_id,
   t.structure_code,
   t.structure_is_affectation,
   t.structure_is_univ,
@@ -36705,7 +36716,7 @@ union all
     WHERE vvh.volume_horaire_ref_id = vh.id AND v.histo_destruction IS NULL
   )',
     ),
-    'V_WORKFLOW_ETAPE_PERTINENTE' => 
+    'V_WORKFLOW_ETAPE_PERTINENTE' =>
     array (
       'name' => 'V_WORKFLOW_ETAPE_PERTINENTE',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_WORKFLOW_ETAPE_PERTINENTE AS

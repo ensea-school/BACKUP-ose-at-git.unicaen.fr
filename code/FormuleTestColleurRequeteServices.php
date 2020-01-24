@@ -104,7 +104,6 @@ $data = explode("\n", $data);
                     'heuresServiceStatutaire'    => stringToFloat($c[5]),
                     'depassementServiceDuSansHC' => stringToFloat($c[6]),
                     'heuresServiceModifie'       => stringToFloat($c[7]),
-                    'heuresDecharge'             => stringToFloat($c[8]),
                     'typeVolumeHoraire'          => $c[9],
                     'etatVolumeHoraire'          => $c[10],
                 ];
@@ -118,7 +117,6 @@ $data = explode("\n", $data);
                     $fti->setStructureTest($bdd->getRepository(\Application\Entity\Db\FormuleTestStructure::class)->find(1));
                     $fti->setTypeVolumeHoraire($bdd->getRepository(\Application\Entity\Db\TypeVolumeHoraire::class)->findOneBy(['libelle' => $fi['typeVolumeHoraire']]));
                     $fti->setEtatVolumeHoraire($bdd->getRepository(\Application\Entity\Db\EtatVolumeHoraire::class)->findOneBy(['libelle' => $fi['etatVolumeHoraire']]));
-                    $fti->setHeuresDecharge($fi['heuresDecharge']);
                     $fti->setHeuresServiceStatutaire($fi['heuresServiceStatutaire']);
                     $fti->setHeuresServiceModifie($fi['heuresServiceModifie']);
                     $fti->setDepassementServiceDuSansHC($fi['depassementServiceDuSansHC'] == '1');

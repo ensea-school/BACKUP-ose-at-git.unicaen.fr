@@ -6639,18 +6639,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HEURES_DECHARGE' =>
-        array (
-          'name' => 'HEURES_DECHARGE',
-          'type' => 'FLOAT',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => 126,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HEURES_SERVICE_STATUTAIRE' =>
+        'HEURES_SERVICE_STATUTAIRE' => 
         array (
           'name' => 'HEURES_SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -6921,7 +6910,7 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
-          'nullable' => false,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -7282,6 +7271,17 @@
           'name' => 'TYPE_INTERVENTION_CODE',
           'type' => 'VARCHAR2',
           'length' => 15,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'STRUCTURE_CODE' => 
+        array (
+          'name' => 'STRUCTURE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => true,
@@ -26963,10 +26963,11 @@ END OSE_EVENT;',
     etat_volume_horaire_id         NUMERIC,
 
     -- paramètres globaux
-    heures_decharge                FLOAT DEFAULT 0,
+    type_volume_horaire_code       VARCHAR(15),
     heures_service_statutaire      FLOAT DEFAULT 0,
     heures_service_modifie         FLOAT DEFAULT 0,
     depassement_service_du_sans_hc BOOLEAN DEFAULT FALSE,
+    structure_code                 VARCHAR(100),
     type_intervenant_code          VARCHAR(2),
 
     -- paramètres spacifiques
@@ -26992,6 +26993,8 @@ END OSE_EVENT;',
     structure_id               NUMERIC,
 
     -- paramètres globaux
+    type_volume_horaire_code   VARCHAR(15),
+    structure_code             VARCHAR(100),
     structure_is_affectation   BOOLEAN DEFAULT TRUE,
     structure_is_univ          BOOLEAN DEFAULT FALSE,
     service_statutaire         BOOLEAN DEFAULT TRUE,
@@ -27142,7 +27145,6 @@ END OSE_FORMULE;',
         intervenant.heures_service_statutaire,
         i_dep_service_du_sans_hc,
         intervenant.heures_service_modifie,
-        intervenant.heures_decharge,
         intervenant.param_1,
         intervenant.param_2,
         intervenant.param_3,
@@ -27153,9 +27155,7 @@ END OSE_FORMULE;',
 
       intervenant.depassement_service_du_sans_hc := (i_dep_service_du_sans_hc = 1);
       intervenant.service_du := CASE
-        WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-          OR intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
-
+        WHEN intervenant.depassement_service_du_sans_hc
         THEN 9999
         ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
       END;
@@ -27169,7 +27169,6 @@ END OSE_FORMULE;',
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
-      intervenant.heures_decharge                := 0;
       intervenant.type_intervenant_code          := \'E\';
       intervenant.service_du                     := 0;
       intervenant.param_1                        := NULL;
@@ -27193,7 +27192,6 @@ END OSE_FORMULE;',
       fti.structure_test_id,
       fti.type_volume_horaire_id,
       fti.etat_volume_horaire_id,
-      fti.heures_decharge,
       fti.heures_service_statutaire,
       fti.heures_service_modifie,
       fti.depassement_service_du_sans_hc,
@@ -27210,7 +27208,6 @@ END OSE_FORMULE;',
       intervenant.structure_id,
       intervenant.type_volume_horaire_id,
       intervenant.etat_volume_horaire_id,
-      intervenant.heures_decharge,
       intervenant.heures_service_statutaire,
       intervenant.heures_service_modifie,
       dsdushc,
@@ -27229,9 +27226,7 @@ END OSE_FORMULE;',
 
     intervenant.depassement_service_du_sans_hc := (dsdushc = 1);
     intervenant.service_du := CASE
-      WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-        OR intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
-
+      WHEN intervenant.depassement_service_du_sans_hc
       THEN 9999
       ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
     END;
@@ -27243,7 +27238,6 @@ END OSE_FORMULE;',
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
-      intervenant.heures_decharge                := 0;
       intervenant.type_intervenant_code          := \'E\';
       intervenant.service_du                     := 0;
       intervenant.param_1                        := null;
@@ -27289,10 +27283,12 @@ END OSE_FORMULE;',
         vh_type_intervention_id,
         vh_type_volume_horaire_id,
         vh_etat_volume_horaire_id,
+        vh.type_volume_horaire_code,
         vh.taux_fi,
         vh.taux_fa,
         vh.taux_fc,
         vh.structure_id,
+        vh.structure_code,
         vh_structure_is_affectation,
         vh_structure_is_univ,
         vh.ponderation_service_du,
@@ -27648,7 +27644,7 @@ END OSE_FORMULE;',
         );
 
         fr.service_du := ROUND(CASE
-          WHEN intervenant.depassement_service_du_sans_hc OR intervenant.heures_decharge < 0
+          WHEN intervenant.depassement_service_du_sans_hc
           THEN GREATEST(fr.total, intervenant.heures_service_statutaire + intervenant.heures_service_modifie)
           ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
         END,2);
@@ -27909,7 +27905,6 @@ END OSE_FORMULE;',
     ose_test.echo(\'annee_id                       = \' || intervenant.annee_id);
     ose_test.echo(\'structure_id                   = \' || intervenant.structure_id);
     ose_test.echo(\'type_volume_horaire_id         = \' || intervenant.type_volume_horaire_id);
-    ose_test.echo(\'heures_decharge                = \' || intervenant.heures_decharge);
     ose_test.echo(\'heures_service_statutaire      = \' || intervenant.heures_service_statutaire);
     ose_test.echo(\'heures_service_modifie         = \' || intervenant.heures_service_modifie);
     ose_test.echo(\'depassement_service_du_sans_hc = \' || CASE WHEN intervenant.depassement_service_du_sans_hc THEN \'OUI\' ELSE \'NON\' END);
@@ -33171,14 +33166,18 @@ GROUP BY
 SELECT
   i.id                                                                 intervenant_id,
   i.annee_id                                                           annee_id,
-  CASE WHEN ti.code = \'P\' THEN i.structure_id ELSE NULL END           structure_id,
+  CASE WHEN ti.code = \'P\' THEN i.structure_id ELSE NULL END            structure_id,
   ti.code                                                              type_intervenant_code,
+  s.code                                                               structure_code,
   si.service_statutaire                                                heures_service_statutaire,
-  si.depassement_service_du_sans_hc                                    depassement_service_du_sans_hc,
-  COALESCE( SUM( msd.heures * mms.multiplicateur ), 0 )                heures_service_modifie,
-  COALESCE( SUM( msd.heures * mms.multiplicateur * mms.decharge ), 0 ) heures_decharge
+  CASE WHEN
+    si.depassement_service_du_sans_hc = 1
+    OR COALESCE( SUM( msd.heures * mms.multiplicateur * mms.decharge ), 0 ) <> 0
+  THEN 1 ELSE 0 END                                                    depassement_service_du_sans_hc,
+  COALESCE( SUM( msd.heures * mms.multiplicateur ), 0 )                heures_service_modifie
 FROM
             intervenant                  i
+  LEFT JOIN structure                    s ON s.id = i.structure_id
   LEFT JOIN modification_service_du    msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
   LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
        JOIN statut_intervenant          si ON si.id = i.statut_id
@@ -33187,7 +33186,7 @@ WHERE
   i.histo_destruction IS NULL
   AND i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
 GROUP BY
-  i.id, i.annee_id, i.structure_id, ti.code, si.service_statutaire, si.depassement_service_du_sans_hc',
+  i.id, i.annee_id, i.structure_id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc',
     ),
     'V_FORMULE_VOLUME_HORAIRE' => 
     array (
@@ -33204,10 +33203,12 @@ SELECT
   t.TYPE_INTERVENTION_ID,
   t.TYPE_VOLUME_HORAIRE_ID,
   t.ETAT_VOLUME_HORAIRE_ID,
+  t.type_volume_horaire_code,
   t.TAUX_FI,
   t.TAUX_FA,
   t.TAUX_FC,
   t.STRUCTURE_ID,
+  t.structure_code,
   t.structure_is_affectation,
   t.structure_is_univ,
   t.PONDERATION_SERVICE_DU,
@@ -33231,12 +33232,14 @@ SELECT
   vh.type_volume_horaire_id                                            type_volume_horaire_id,
   vhe.etat_volume_horaire_id                                           etat_volume_horaire_id,
 
+  tvh.code                                                             type_volume_horaire_code,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
-  ep.structure_id                                                      structure_id,
-  CASE WHEN COALESCE(ep.structure_id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
-  CASE WHEN COALESCE(ep.structure_id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
+  s.id                                                                 structure_id,
+  s.code                                                               structure_code,
+  CASE WHEN COALESCE(s.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
+  CASE WHEN COALESCE(s.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
   MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
@@ -33254,8 +33257,10 @@ FROM
        JOIN intervenant                i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
        JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
        JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
+       JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
 
   LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN structure                  s ON s.id = ep.structure_id
   LEFT JOIN etape                      e ON e.id = ep.etape_id
   LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
   LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
@@ -33269,8 +33274,8 @@ WHERE
   AND vh.motif_non_paiement_id IS NULL
   AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
 GROUP BY
-  vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, ep.id,
-  ep.taux_fi, ep.taux_fa, ep.taux_fc, ep.structure_id, tf.service_statutaire, vh.heures,
+  vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, tvh.code,
+  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, s.id, s.code, tf.service_statutaire, vh.heures,
   vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
   ti.code, ti.taux_hetd_service, ti.taux_hetd_complementaire, i.structure_id, p.valeur
 
@@ -33287,10 +33292,12 @@ SELECT
   vhr.type_volume_horaire_id        type_volume_horaire_id,
   evh.id                            etat_volume_horaire_id,
 
+  tvh.code                          type_volume_horaire_code,
   0                                 taux_fi,
   0                                 taux_fa,
   0                                 taux_fc,
-  sr.structure_id                   structure_id,
+  s.id                              structure_id,
+  s.code                            structure_code,
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   1                                 ponderation_service_du,
@@ -33304,13 +33311,15 @@ SELECT
   1                                 taux_service_du,
   1                                 taux_service_compl
 FROM
-       volume_horaire_ref          vhr
-  JOIN parametre                     p ON p.nom = \'structure_univ\'
-  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-  JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
-  JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
-  JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
-  JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
+            volume_horaire_ref          vhr
+       JOIN parametre                     p ON p.nom = \'structure_univ\'
+       JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
+       JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
+       JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
+       JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
+       JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
+       JOIN type_volume_horaire         tvh ON tvh.id = vhr.type_volume_horaire_id
+  LEFT JOIN structure                     s ON s.id = sr.structure_id
 WHERE
   vhr.histo_destruction IS NULL
   AND sr.histo_destruction IS NULL
@@ -38913,19 +38922,7 @@ WHERE
         'INTERVENANT_TEST_ID' => 'ID',
       ),
     ),
-    'FTVH_FORMULE_TEST_STRUCTURE_FK' =>
-    array (
-      'name' => 'FTVH_FORMULE_TEST_STRUCTURE_FK',
-      'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
-      'rtable' => 'FORMULE_TEST_STRUCTURE',
-      'delete_rule' => 'CASCADE',
-      'index' => NULL,
-      'columns' =>
-      array (
-        'STRUCTURE_TEST_ID' => 'ID',
-      ),
-    ),
-    'GRADE_CORPS_FK' =>
+    'GRADE_CORPS_FK' => 
     array (
       'name' => 'GRADE_CORPS_FK',
       'table' => 'GRADE',

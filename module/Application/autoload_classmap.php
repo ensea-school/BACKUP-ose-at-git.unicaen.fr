@@ -601,7 +601,6 @@ return [
     'Application\Provider\Privilege\Privileges'                                                          => __DIR__ . '/src/Application/Provider/Privilege/Privileges.php',
     'Application\Provider\Identity\IdentityProviderFactory'                                              => __DIR__ . '/src/Application/Provider/Identity/IdentityProviderFactory.php',
     'Application\Provider\Identity\IdentityProvider'                                                     => __DIR__ . '/src/Application/Provider/Identity/IdentityProvider.php',
-    'Application\Form\Interfaces\DisciplineFormAwareInterface'                                           => __DIR__ . '/src/Application/Form/Interfaces/DisciplineFormAwareInterface.php',
     'Application\Form\Intervenant\Interfaces\ModificationServiceDuFieldsetAwareInterface'                => __DIR__ . '/src/Application/Form/Intervenant/Interfaces/ModificationServiceDuFieldsetAwareInterface.php',
     'Application\Form\Intervenant\Interfaces\EditionFormAwareInterface'                                  => __DIR__ . '/src/Application/Form/Intervenant/Interfaces/EditionFormAwareInterface.php',
     'Application\Form\Intervenant\Interfaces\ModificationServiceDuFormAwareInterface'                    => __DIR__ . '/src/Application/Form/Intervenant/Interfaces/ModificationServiceDuFormAwareInterface.php',

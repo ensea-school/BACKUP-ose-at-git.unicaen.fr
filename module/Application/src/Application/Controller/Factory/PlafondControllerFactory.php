@@ -3,7 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\PlafondController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**

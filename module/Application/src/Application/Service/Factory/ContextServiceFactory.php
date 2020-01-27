@@ -3,7 +3,7 @@
 namespace Application\Service\Factory;
 
 use Application\Service\ContextService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**

@@ -49,6 +49,11 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     protected $peutChangerStructure;
 
     /**
+     * @var bool
+     */
+    private $accessibleExterieur = true;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $affectation;
@@ -221,6 +226,30 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     public function setPeutChangerStructure($peutChangerStructure)
     {
         $this->peutChangerStructure = $peutChangerStructure;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getAccessibleExterieur(): bool
+    {
+        return $this->accessibleExterieur;
+    }
+
+
+
+    /**
+     * @param bool $accessibleExterieur
+     *
+     * @return Role
+     */
+    public function setAccessibleExterieur(bool $accessibleExterieur): Role
+    {
+        $this->accessibleExterieur = $accessibleExterieur;
 
         return $this;
     }

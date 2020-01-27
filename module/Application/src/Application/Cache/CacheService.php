@@ -24,7 +24,10 @@ class CacheService
 
     public function remove($class, string $key): CacheService
     {
-        unlink($this->keyToFile($class, $key));
+        $file = $this->keyToFile($class, $key);
+        if (file_exists($file)) {
+            unlink($file);
+        }
 
         return $this;
     }
@@ -42,7 +45,7 @@ class CacheService
 
     public function set($class, $key, $value): CacheService
     {
-        $content = "<?php\n\nRETURN ".var_export($value, true).';';
+        $content = "<?php\n\nRETURN " . var_export($value, true) . ';';
 
         $filename = $this->keyToFile($class, $key);
         if (!is_dir(dirname($filename))) {
@@ -69,6 +72,6 @@ class CacheService
     {
         if (is_object($class)) $class = get_class($class);
 
-        return $this->cacheDir.str_replace('\\', '/', $class ).'/'.$key;
+        return $this->cacheDir . str_replace('\\', '/', $class) . '/' . $key;
     }
 }

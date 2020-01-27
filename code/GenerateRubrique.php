@@ -6,7 +6,7 @@ use UnicaenCode\Util;
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -50,11 +50,11 @@ $form->add([
 ]);
 
 $form->add([
-        'type' => 'Zend\Form\Element\Text',
-        'name' => 'Origine',
-        'options' => [
-                'label' => 'Rep Web',
-        ]
+    'type'    => 'Zend\Form\Element\Text',
+    'name'    => 'Origine',
+    'options' => [
+        'label' => 'Rep Web',
+    ],
 ]);
 $form->get('Origine')->setValue('/var/www/OSE/');
 
@@ -135,8 +135,8 @@ if (($controller->getRequest()->isPost()) && ($form->isValid())) {
     if (file_exists('/var/www/Web')) {
         exec("rm -rf /var/www/Web/*", $stdout, $err);
     } else {
-    	mkdir('/var/www/Web',0770) or die('Vous devez créer un sous répertoire /var/www/Web avec les droits d\'écriture! pour l\'utilisateur www-data<BR>');
-    	}
+        mkdir('/var/www/Web', 0770) or die('Vous devez créer un sous répertoire /var/www/Web avec les droits d\'écriture! pour l\'utilisateur www-data<BR>');
+    }
 //    $res = shell_exec("Web/module/Application");
 //echo "res:$res<BR>";
 
@@ -144,14 +144,14 @@ if (($controller->getRequest()->isPost()) && ($form->isValid())) {
     $txt0 = $txt01 = $txt4 = $txt41 = $txt42 = $txt43 = $txt44 = $txt45 = $txt5 = $txt53 = $txt6 = $txt7 = '';
 
 // chargement des pseudos fichiers
-    $tblInclude=array(
-            'champInput','champListe','config_php','controller_php','idx1','idx3','idx20','saisie_phtml',
-            'saisieFormAwareTrait_php','service_php','serviceTrait_php'
-                      );
+    $tblInclude = [
+        'champInput', 'champListe', 'config_php', 'controller_php', 'idx1', 'idx3', 'idx20', 'saisie_phtml',
+        'saisieFormAwareTrait_php', 'service_php', 'serviceTrait_php',
+    ];
 
-        $i=0;
-    foreach ($tblInclude as $ci){
-        ${$ci}=file_get_contents(__DIR__.'/template/GenerateRubrique/'.$ci);
+    $i = 0;
+    foreach ($tblInclude as $ci) {
+        ${$ci} = file_get_contents(__DIR__ . '/template/GenerateRubrique/' . $ci);
     }
 
     $extractInput = '\'champtiret\'       => $object->getchampmaj()
@@ -310,18 +310,18 @@ class nommajHydrator implements HydratorInterface
             $txt  = str_replace('champtiret', $champtiret, $inputFilter);
             $txt6 .= $txt;
         }
-	if ($champtiret != 'id'){
-        	$txt52 = str_replace('champphrase', $champphrase, $idx21);
-        	$txt53 .= $txt52;
-	}
+        if ($champtiret != 'id') {
+            $txt52 = str_replace('champphrase', $champphrase, $idx21);
+            $txt53 .= $txt52;
+        }
         if (!$listeChamps[$i]) {
             $champType = 'Text';
             if ($typeChamps[$i] == 'String') $champType = 'Text';
             if ($typeChamps[$i] == 'boolean') $champType = 'Checkbox';
-	    if ($champtiret != 'id'){
-            	$txt51 = str_replace('champmaj', $champmaj, $idx2);
-            	$txt5  .= $txt51;
-	    }
+            if ($champtiret != 'id') {
+                $txt51 = str_replace('champmaj', $champmaj, $idx2);
+                $txt5  .= $txt51;
+            }
             if ($champtiret != 'id') {
                 $txt  = str_replace(['champtiret', 'champphrase', $champType], [$champtiret, $champphrase, $champType], $champInput);
                 $txt4 .= $txt;
@@ -344,8 +344,8 @@ class nommajHydrator implements HydratorInterface
             $txt   = str_replace('champmaj', $champmaj, $service11);
             $txt01 .= $txt;
             $txt   = str_replace(['champtiret', 'champphrase', 'champmaj'], [$champtiret, $champphrase, $champmaj], $champListe);
-            if ($notnullChamps[$i]){
-            	$txt=str_replace('            ->setEmptyOption("(Aucun)")','',$txt);
+            if ($notnullChamps[$i]) {
+                $txt = str_replace('            ->setEmptyOption("(Aucun)")', '', $txt);
             }
             $txt43 .= $txt;
             $txt   = str_replace(['champtiret', 'champmaj'], [$champtiret, $champmaj], $hydrateListe);

@@ -20,6 +20,7 @@ class StructureController extends AbstractController
     use StructureSaisieFormAwareTrait;
 
 
+
     public function indexAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
@@ -41,15 +42,18 @@ class StructureController extends AbstractController
 
         $form = $this->getFormStructureSaisie();
         if (empty($structure)) {
-            $title = 'Création d\'une nouvelle Structure';
+            $title     = 'Création d\'une nouvelle Structure';
             $structure = $this->getServiceStructure()->newEntity();
         } else {
             $title = 'Édition d\'une Structure';
         }
 
-        $form->bindRequestSave($structure, $this->getRequest(), function (Structure $fr) {
+        $form->bindRequestSave($structure, $this->getRequest(), function (Structure $structure) {
             try {
-                $this->getServiceStructure()->save($fr);
+                if (empty($structure->getSourceCode()) || !$structure->getSource()->getImportable()) {
+                    $structure->setSourceCode($structure->getCode());
+                }
+                $this->getServiceStructure()->save($structure);
                 $this->flashMessenger()->addSuccessMessage('Enregistrement effectué');
             } catch (\Exception $e) {
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
@@ -59,9 +63,16 @@ class StructureController extends AbstractController
         return compact('form', 'title');
     }
 
+
+
     public function deleteAction()
     {
+        /** @var Structure $structure */
         $structure = $this->getEvent()->getParam('structure');
+
+        if ($structure->getSource()->getImportable()) {
+            throw new \LogicException('Une structure importée ne peut pas être supprimée dans l\'application');
+        }
 
         try {
             $this->getServiceStructure()->delete($structure);
@@ -69,8 +80,11 @@ class StructureController extends AbstractController
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($this->translate($e));
         }
+
         return new MessengerViewModel(compact('structure'));
     }
+
+
 
     public function voirAction()
     {
@@ -81,6 +95,7 @@ class StructureController extends AbstractController
         }
 
         $title = (string)$structure;
+
         return compact('structure', 'title');
     }
 

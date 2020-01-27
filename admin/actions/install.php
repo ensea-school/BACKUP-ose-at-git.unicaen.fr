@@ -66,11 +66,9 @@ if ($composerExists) {
 }
 
 // Mise à jour des liens vers les répertoires publics des dépendances
-$c->println("\nMise à jour des liens vers les répertoires publics des dépendances", $c::COLOR_LIGHT_CYAN);
-$oa->majUnicaenSymLinks($osedir);
-$c->println('Liens mis en place', $c::COLOR_LIGHT_GREEN);
+$oa->run('maj-public-links', false);
 
-if (!file_exists($osedir.'config.local.php')) {
+if (!file_exists($osedir . 'config.local.php')) {
     $c->exec([
         "cd $osedir",
         "cp config.local.php.default config.local.php",

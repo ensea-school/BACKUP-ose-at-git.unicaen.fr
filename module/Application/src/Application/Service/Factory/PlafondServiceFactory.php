@@ -3,9 +3,8 @@
 namespace Application\Service\Factory;
 
 use Application\Constants;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Application\Service\PlafondService;
-
 
 
 /**

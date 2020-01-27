@@ -1,10 +1,12 @@
 <?php
 
-namespace <namespace>;
+namespace <
+
+namespace>;
 
 use Application\Constants;
-use Interop\Container\ContainerInterface;
-use <targetFullClass>;
+use Psr\Container\ContainerInterface;
+use <targetFullClass >;
 
 
 
@@ -23,7 +25,8 @@ class <class>
      *
      * @return <targetClass>
      */
-    public function __invoke(ContainerInterface $container, $requestedName, $options = null)
+    public
+    function __invoke(ContainerInterface $container, $requestedName, $options = null)
     {
         $<variable> = new <targetClass>;
         $<variable>->setEntityManager($container->get(Constants::BDD));

@@ -144,6 +144,7 @@ class Privileges extends \UnicaenAuth\Provider\Privilege\Privileges {
     const ODF_TYPES_DIPLOME_EDITION                           = 'odf-types-diplome-edition';
     const ODF_TYPES_DIPLOME_VISUALISATION                     = 'odf-types-diplome-visualisation';
     const ODF_VISUALISATION                                   = 'odf-visualisation';
+    const ODF_RECONDUCTION_OFFRE                              = 'odf-reconduction-offre';
     const PARAMETRES_ANNEES_EDITION                           = 'parametres-annees-edition';
     const PARAMETRES_ANNEES_VISUALISATION                     = 'parametres-annees-visualisation';
     const PARAMETRES_CAMPAGNES_SAISIE_EDITION                 = 'parametres-campagnes-saisie-edition';

@@ -4,7 +4,7 @@ namespace Application\Provider\Chargens;
 
 use Application\Connecteur\Bdd\BddConnecteur;
 use Application\Service\TypeHeuresService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\Console\Console;
 

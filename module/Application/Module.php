@@ -10,7 +10,7 @@
 namespace Application;
 
 use Application\Service\ContextService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
@@ -24,12 +24,13 @@ include_once(__DIR__ . '/src/Application/functions.php');
 
 
 
+
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
 
     public function onBootstrap(MvcEvent $e)
     {
-        if (empty(\Application::$container)){
+        if (empty(\Application::$container)) {
             \Application::$container = $e->getApplication()->getServiceManager();
         }
 
@@ -73,7 +74,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
                         $role = $sm->get(ContextService::class)->getSelectedIdentityRole();
                         if ($role && $role->getIntervenant()) {
                             $e->setParam($name, $role->getIntervenant());
-                        }else{
+                        } else {
                             $entity = $entityService->getBySourceCode($value);
                             $e->setParam($name, $entity);
                         }
@@ -140,14 +141,14 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
             'notifier indicateurs [--force]' => "Notification par mail des personnes abonnées à des indicateurs",
             ['--force', "Facultatif", "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
             "Charges d'enseignement",
-            'chargens-calc-effectifs' => "Calcul des effectifs du module Charges",
+            'chargens-calc-effectifs'        => "Calcul des effectifs du module Charges",
             "Tableaux de bord",
-            'calcul-tableaux-bord' => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
+            'calcul-tableaux-bord'           => "Calcul de tous les tableaux de bord (sauf la formule qui est à part)",
             "Formule de calcul",
-            'formule-calcul' => "Calcul de toutes les heures complémentaires à l'aide de la formule",
+            'formule-calcul'                 => "Calcul de toutes les heures complémentaires à l'aide de la formule",
 
             "Administration : Changement de mot de passe",
-            'changement-mot-de-passe' => "Paramètres : --utilisateur, --mot-de-passe",
+            'changement-mot-de-passe'        => "Paramètres : --utilisateur, --mot-de-passe",
         ];
     }
 

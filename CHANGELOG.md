@@ -1,14 +1,49 @@
----
-title: "Changements intervenus sur OSE"
-author: Laurent Lécluse - DSI - Unicaen
----
+# OSE 12 alpha
+
+## Nouveautés
+
+* Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
+
+## Correction de bugs
+
+* Rétablissement du fonctionnement du formulaire d'édition des états de sortie
+* La purge de l'indicateur différentiel des données personnel fonctionne de nouveau 
+
+## Notes de mise à jour
+
+Le paramètre global.inEtablissement devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
+si l'application est utilisée depuis l'établissement ou non.
+
+# OSE 11.2
+
+## Correction de bug
+
+* La saisie en mode calendaire rafraichit de nouveau la liste des services en cas d'ajout d'heures. 
+
+# OSE 11.1
+
+## Correction de bug
+
+* Le formulaire d'édition des enveloppes budgétaires est de nouveau fonctionnel.
 
 # OSE 11
 
 ## Correction de bugs
 
 * L'interface d'administration des motifs de modification de service est de nouveau pleinement fonctionelle.
+* La suppression d'un élément pédagogique de l'ODF complémentaire refonctionne.
+* Correction d'un bug dans le cache : si un fichier n'était pas déjà en cache il y avait plantage.
+* La saisie de service calendaire est de nouveau possible (un bug empêchait de saisir des dates).
 
+## Nouveautés
+
+* Formule de calcul de Lyon2
+* L'administrateur se voit attibuer systématiquement l'accès à toutes les nouvelles fonctionnalités
+* L'interface d'administration des structures est maintenant opérationelle
+
+## Notes de mise à jour
+
+Les versions 7.3 ou 7.4 de PHP sont maintenant nécessaires.
 
 # OSE 10-zf2 et 10-zf3
 

@@ -49,4 +49,4 @@ $c->println("\n" . 'Mise à jour du point d\'indice pour les HETD', $c::COLOR_LI
 $bdd->exec('BEGIN OSE_FORMULE.UPDATE_ANNEE_TAUX_HETD; END;');
 
 // Néttoyage des caches
-$oa->run('clear-cache', true);
+$oa->run('clear-cache', false);

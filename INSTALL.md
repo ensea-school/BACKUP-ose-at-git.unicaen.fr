@@ -1,13 +1,3 @@
----
-title: "Procédure d'installation de OSE"
-author: Laurent Lécluse - DSI - Unicaen
-titlepage: true
-titlepage-color: 06386e
-titlepage-text-color: ffffff
-titlepage-rule-color: ffffff
-titlepage-rule-height: 1
----
-
 # Généralités
 
 OSE est une application web qui exploite une base de données Oracle.
@@ -99,7 +89,6 @@ Dépendances requises :
     * ldap
     * bcmath
     * mbstring
-    * mcrypt
     * opcache
     * xml
     * zip
@@ -163,7 +152,7 @@ Un script a été conçu pour automatiser cette opération.
 
 Exécutez la commande suivante sur votre serveur :
 ```bash
-wget https://ose.unicaen.fr/deploiement/ose-deploy && php ose-deploy
+wget https://ose.unicaen.fr/install && php install
 ```
 
 ### Configuration d'Apache
@@ -262,6 +251,7 @@ docker build \
 --rm \
 --build-arg PHP_VERSION=${PHP_VERSION} \
 --build-arg HTTP_PROXY=${HTTP_PROXY} \
+--build-arg OCI8_PACKAGE="oci8" \
 -f Dockerfile \
 -t unicaen-dev-php${PHP_VERSION}-apache \
 .

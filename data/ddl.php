@@ -6639,7 +6639,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HEURES_SERVICE_STATUTAIRE' =>
+        'HEURES_SERVICE_STATUTAIRE' => 
         array (
           'name' => 'HEURES_SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -6826,7 +6826,7 @@
           'default' => '2/3',
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' =>
+        'STRUCTURE_CODE' => 
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -7288,7 +7288,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'STRUCTURE_CODE' =>
+        'STRUCTURE_CODE' => 
         array (
           'name' => 'STRUCTURE_CODE',
           'type' => 'VARCHAR2',
@@ -11325,7 +11325,7 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'ACCESSIBLE_EXTERIEUR' =>
+        'ACCESSIBLE_EXTERIEUR' => 
         array (
           'name' => 'ACCESSIBLE_EXTERIEUR',
           'type' => 'NUMBER',
@@ -14735,7 +14735,7 @@
           'default' => '0',
           'commentaire' => 'NB d\'heures de seuil pour la demande',
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -14823,7 +14823,7 @@
           'default' => '0',
           'commentaire' => NULL,
         ),
-        'OBLIGATOIRE' =>
+        'OBLIGATOIRE' => 
         array (
           'name' => 'OBLIGATOIRE',
           'type' => 'NUMBER',
@@ -30211,8 +30211,8 @@ END UNICAEN_TBL;',
       HEURES_A_PAYER_POND        = v.HEURES_A_PAYER_POND,
       HEURES_DEMANDEES           = v.HEURES_DEMANDEES,
       HEURES_PAYEES              = v.HEURES_PAYEES,
-      SERVICE_REFERENTIEL_ID     = v.SERVICE_REFERENTIEL_ID,
       SERVICE_ID                 = v.SERVICE_ID,
+      SERVICE_REFERENTIEL_ID     = v.SERVICE_REFERENTIEL_ID,
       to_delete = 0
 
     WHEN NOT MATCHED THEN INSERT (
@@ -30229,8 +30229,8 @@ END UNICAEN_TBL;',
       HEURES_PAYEES,
       FORMULE_RES_SERVICE_ID,
       FORMULE_RES_SERVICE_REF_ID,
-      SERVICE_REFERENTIEL_ID,
       SERVICE_ID,
+      SERVICE_REFERENTIEL_ID,
       TO_DELETE
 
     ) VALUES (
@@ -30247,8 +30247,8 @@ END UNICAEN_TBL;',
       v.HEURES_PAYEES,
       v.FORMULE_RES_SERVICE_ID,
       v.FORMULE_RES_SERVICE_REF_ID,
-      v.SERVICE_REFERENTIEL_ID,
       v.SERVICE_ID,
+      v.SERVICE_REFERENTIEL_ID,
       0
 
     );
@@ -36444,7 +36444,7 @@ FROM
         tbl_piece_jointe
       WHERE
         demandee > 0
-        AND onligatoire = 1
+        AND obligatoire = 1
       GROUP BY
         annee_id,
         intervenant_id
@@ -38918,7 +38918,7 @@ WHERE
         'INTERVENANT_TEST_ID' => 'ID',
       ),
     ),
-    'GRADE_CORPS_FK' =>
+    'GRADE_CORPS_FK' => 
     array (
       'name' => 'GRADE_CORPS_FK',
       'table' => 'GRADE',

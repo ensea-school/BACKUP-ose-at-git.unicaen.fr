@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -30,8 +30,8 @@ $noeuds = [
 
 $totalPoids = array_sum($noeuds);
 $nbChoix    = count($noeuds);
-$maxPoids = 0;
-foreach( $noeuds as $poids){
+$maxPoids   = 0;
+foreach ($noeuds as $poids) {
     if ($poids > $maxPoids) $maxPoids = $poids;
 }
 
@@ -45,27 +45,29 @@ function calc($choixMin, $choixMax, $poids, $maxPoids, $totalPoids, $nbChoix)
     $maxCoefPoids = $maxPoids / $totalPoids;
 
     $resMax = $coefChoix * $maxCoefPoids * $nbChoix;
-    if (($resMax) <= 1){
+    if (($resMax) <= 1) {
         return 0;
+
         return $coefChoix * $coefPoids * $nbChoix;
-    }else{
+    } else {
 //        $res = $coefChoix * $nbChoix * ($coefPoids+(((1/$nbChoix)-$coefPoids)*0));
 //        $resMax = $coefChoix * $nbChoix * $maxCoefPoids;
 
         $delta = $resMax;
+
         return $delta;
         $res = $coefChoix;
 
         //$res = 1 / (($coefChoix * $nbChoix * $coefPoids) - 1);
 //return $res;
         $correcteur = $res;
-        $res = $coefChoix * $nbChoix * ($coefPoids+(((1/$nbChoix)-$coefPoids)*$correcteur));
-
+        $res        = $coefChoix * $nbChoix * ($coefPoids + (((1 / $nbChoix) - $coefPoids) * $correcteur));
 
 
         return $res;
     }
 }
+
 //var_dump(calc(3,3,3,3,5,3));
 
 echo "Effectifs = " . $effectifs . '<br />';
@@ -101,7 +103,7 @@ echo "Nombre de noeuds = " . $nbChoix . '<br />';
                 <?php foreach ($noeuds as $poids):
 
                     $coef = calc($choixMin, $choixMax, $poids, $maxPoids, $totalPoids, $nbChoix);
-                    $eff  = $coef * $effectifs;
+                    $eff = $coef * $effectifs;
                     $totEff += $eff;
                     ?>
                     <td><?= $coef ?></td>

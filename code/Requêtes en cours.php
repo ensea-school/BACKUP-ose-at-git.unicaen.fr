@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -30,16 +30,16 @@ $sql = "
 
 $res = $bdd->fetch($sql);
 
-echo '<div style="font-weight:bold">'.count($res).' requête(s) en cours</div>';
+echo '<div style="font-weight:bold">' . count($res) . ' requête(s) en cours</div>';
 
-foreach( $res as $s ){
-    echo 'SID='.$s['SID'].', USERNAME='.$s['USERNAME'].', CPU_TIME='.$s['CPU_TIME'].', ELAPSED_TIME='.$s['ELAPSED_TIME'];
+foreach ($res as $s) {
+    echo 'SID=' . $s['SID'] . ', USERNAME=' . $s['USERNAME'] . ', CPU_TIME=' . $s['CPU_TIME'] . ', ELAPSED_TIME=' . $s['ELAPSED_TIME'];
     sqlDump($s['SQL_TEXT']);
 }
 
 ?>
 <script>
 
-    setTimeout(function(){ window.location.reload(); }, 10000);
+    setTimeout(function () { window.location.reload(); }, 10000);
 
 </script>

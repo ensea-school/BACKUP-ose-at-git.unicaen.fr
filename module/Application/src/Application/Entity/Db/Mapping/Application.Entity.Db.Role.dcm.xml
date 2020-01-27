@@ -20,6 +20,7 @@
         <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
         <field name="libelle" type="string" column="LIBELLE" length="50" nullable="false"/>
         <field name="peutChangerStructure" type="boolean" column="PEUT_CHANGER_STRUCTURE" nullable="false" />
+        <field name="accessibleExterieur" type="boolean" column="ACCESSIBLE_EXTERIEUR" nullable="false" />
         <many-to-one field="perimetre" target-entity="Application\Entity\Db\Perimetre">
             <join-columns>
                 <join-column name="PERIMETRE_ID" referenced-column-name="ID"/>

@@ -1,20 +1,15 @@
 <?php
 
-namespace Application\View\Helper\Service;
-
+namespace Application\HostLocalization;
 
 use Psr\Container\ContainerInterface;
 
-/**
- * Description of LigneFactory
- *
- */
-class LigneFactory
+class HostLocalizationOseFactory
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $helper = new Ligne();
+        $hl = new HostLocalizationOse();
 
-        return $helper;
+        return $hl;
     }
 }

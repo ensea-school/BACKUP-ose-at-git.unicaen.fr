@@ -3,9 +3,8 @@
 namespace Application\Service\Factory;
 
 use Application\Constants;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Application\Service\ModeleContratService;
-
 
 
 /**
@@ -30,7 +29,7 @@ class ModeleContratServiceFactory
 
         $config = $container->get('Config');
 
-        if (isset($config['application']['etats-sortie'])){
+        if (isset($config['application']['etats-sortie'])) {
             $service->setConfig($config['application']['etats-sortie']);
         }
 

@@ -151,6 +151,18 @@ class StatutIntervenantSaisieForm extends AbstractForm
         ]);
 
         $this->add([
+            'name'       => 'charges-patronales',
+            'options'    => [
+                'label'  => "Taux de charges patronales",
+                'suffix' => '%',
+            ],
+            'attributes' => [
+                'title' => "Taux de charges patronales exprimé en pourcentage",
+            ],
+            'type'       => 'Text',
+        ]);
+
+        $this->add([
             'name'       => 'plafond-referentiel',
             'options'    => [
                 'label'  => "Plafond du référentiel",
@@ -285,6 +297,16 @@ class StatutIntervenantSaisieForm extends AbstractForm
                         }]),
                 ],
             ],
+            'charges-patronales'     => [
+                'required'   => true,
+                'validators' => [
+                    new \Zend\Validator\Callback([
+                        'messages' => [\Zend\Validator\Callback::INVALID_VALUE => '%value% doit être >= 0'],
+                        'callback' => function ($value) {
+                            return (FloatFromString::run($value) >= 0.0 ? true : false);
+                        }]),
+                ],
+            ],
             'plafond-hc-fi-hors-ead' => [
                 'required'   => true,
                 'validators' => [
@@ -332,8 +354,8 @@ class StatutIntervenantHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array                                    $data
-     * @param  \Application\Entity\Db\StatutIntervenant $object
+     * @param array                                    $data
+     * @param \Application\Entity\Db\StatutIntervenant $object
      *
      * @return object
      */
@@ -363,6 +385,7 @@ class StatutIntervenantHydrator implements HydratorInterface
         $object->setPeutChoisirDansDossier($data['peut-choisir-dans-dossier']);
         $object->setMaximumHETD(FloatFromString::run($data['maximum-HETD']));
         $object->setDepassementSDSHC($data['depassement-sdshc']);
+        $object->setChargesPatronales(FloatFromString::run($data['charges-patronales']) / 100);
 
         return $object;
     }
@@ -372,7 +395,7 @@ class StatutIntervenantHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\StatutIntervenant $object
+     * @param \Application\Entity\Db\StatutIntervenant $object
      *
      * @return array
      */
@@ -401,6 +424,7 @@ class StatutIntervenantHydrator implements HydratorInterface
             'plafond-h-c'                    => StringFromFloat::run($object->getPlafondHcRemuFc()),
             'plafond-hc-fi-hors-ead'         => StringFromFloat::run($object->getPlafondHcFiHorsEad()),
             'maximum-HETD'                   => StringFromFloat::run($object->getMaximumHETD()),
+            'charges-patronales'             => StringFromFloat::run($object->getChargesPatronales() * 100),
             'depassement-sdshc'              => $object->getDepassementSDSHC(),
         ];
 

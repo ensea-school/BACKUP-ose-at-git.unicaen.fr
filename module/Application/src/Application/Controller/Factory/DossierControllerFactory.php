@@ -3,7 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\DossierController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use UnicaenAuth\Service\UserContext;
 
 class DossierControllerFactory

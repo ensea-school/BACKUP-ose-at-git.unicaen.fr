@@ -3,7 +3,7 @@
 namespace Application\View\Helper\ServiceReferentiel;
 
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Description of LigneFactory

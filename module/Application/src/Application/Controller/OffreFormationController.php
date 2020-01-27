@@ -249,11 +249,11 @@ class OffreFormationController extends AbstractController
             //Reconduire les centres de coût des EP de l'étape.
             try {
                 $etapesReconduitesCc = [];
-
-                foreach (current($datas) as $code) {
-
-                    if (array_key_exists($code, $etapesReconduites)) {
-                        $etapesReconduitesCc[$code] = $etapesReconduites[$code];
+                if (isset($datas['etapes'])) {
+                    foreach ($datas['etapes'] as $code) {
+                        if (array_key_exists($code, $etapesReconduites)) {
+                            $etapesReconduitesCc[$code] = $etapesReconduites[$code];
+                        }
                     }
                 }
                 $result = $this->getProcessusReconduction()->reconduireCCFormation($etapesReconduitesCc);

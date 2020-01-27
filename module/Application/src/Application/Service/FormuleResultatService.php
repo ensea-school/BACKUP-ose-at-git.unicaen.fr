@@ -74,7 +74,7 @@ class FormuleResultatService extends AbstractEntityService
             'annee'     => (integer)$this->getServiceContext()->getAnnee()->getId(),
         ];
 
-        $sql = 'SELECT heures FROM V_HETD_PREV_VAL_STRUCT WHERE structure_id = :structure AND annee_id = :annee';
+        $sql = 'SELECT HEURES FROM V_HETD_PREV_VAL_STRUCT WHERE STRUCTURE_ID = :structure AND ANNEE_ID = :annee';
         $sr  = $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
 
         if (isset($sr['HEURES'])) {
@@ -92,7 +92,7 @@ class FormuleResultatService extends AbstractEntityService
             'annee' => (integer)$this->getServiceContext()->getAnnee()->getId(),
         ];
 
-        $sql  = 'SELECT structure_id, heures FROM V_HETD_PREV_VAL_STRUCT WHERE annee_id = :annee';
+        $sql  = 'SELECT STRUCTURE_ID, HEURES FROM V_HETD_PREV_VAL_STRUCT WHERE ANNEE_ID = :annee';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
 
         $res = ['total' => 0];
@@ -134,7 +134,6 @@ class FormuleResultatService extends AbstractEntityService
             'etatVolumeHoraire'              => $etatVolumeHoraire,
             'HEURES_SERVICE_STATUTAIRE'      => $intervenant->getStatut()->getServiceStatutaire(),
             'HEURES_SERVICE_MODIFIE'         => 0,
-            'HEURES_DECHARGE'                => 0,
             'DEPASSEMENT_SERVICE_DU_SANS_HC' => false,
             's'                              => [],
             'r'                              => [],
@@ -143,21 +142,20 @@ class FormuleResultatService extends AbstractEntityService
             'has-calcul'                     => false,
         ];
 
-        $sql = "SELECT * FROM v_formule_intervenant WHERE intervenant_id = :intervenant";
+        $sql = "SELECT * FROM V_FORMULE_INTERVENANT WHERE INTERVENANT_ID = :intervenant";
         $id  = $conn->fetchAssoc($sql, $params);
         if ($id) {
             $data['HEURES_SERVICE_STATUTAIRE']      = $id['HEURES_SERVICE_STATUTAIRE'];
             $data['HEURES_SERVICE_MODIFIE']         = $id['HEURES_SERVICE_MODIFIE'];
-            $data['HEURES_DECHARGE']                = $id['HEURES_DECHARGE'];
             $data['DEPASSEMENT_SERVICE_DU_SANS_HC'] = $id['DEPASSEMENT_SERVICE_DU_SANS_HC'] == '1';
         }
 
         /* Volumes horaires */
         $sql  = "
-        SELECT fvh.* FROM v_formule_volume_horaire fvh WHERE 
-          fvh.intervenant_id = :intervenant
-          AND fvh.type_volume_horaire_id = :typeVolumeHoraire
-          AND fvh.etat_volume_horaire_id >= :etatVolumeHoraire
+        SELECT FVH.* FROM V_FORMULE_VOLUME_HORAIRE FVH WHERE 
+          FVH.INTERVENANT_ID = :intervenant
+          AND FVH.TYPE_VOLUME_HORAIRE_ID = :typeVolumeHoraire
+          AND FVH.ETAT_VOLUME_HORAIRE_ID >= :etatVolumeHoraire
         ";
         $vhds = $conn->fetchAll($sql, $params);
         foreach ($vhds as $vhd) {
@@ -204,9 +202,9 @@ class FormuleResultatService extends AbstractEntityService
         }
 
         /* Résultats de formule */
-        $sql = "SELECT * FROM formule_resultat WHERE intervenant_id = :intervenant
-            AND type_volume_horaire_id = :typeVolumeHoraire
-            AND etat_volume_horaire_id = :etatVolumeHoraire";
+        $sql = "SELECT * FROM FORMULE_RESULTAT WHERE INTERVENANT_ID = :intervenant
+            AND TYPE_VOLUME_HORAIRE_ID = :typeVolumeHoraire
+            AND ETAT_VOLUME_HORAIRE_ID = :etatVolumeHoraire";
         $fr  = $conn->fetchAssoc($sql, $params);
         if ($fr) {
             $data['has-calcul'] = true;
@@ -215,7 +213,7 @@ class FormuleResultatService extends AbstractEntityService
             foreach ($fr as $k => $v) {
                 $data[$k] = $v;
             }
-            $data['SERVICE_TOTAL'] = $data['SERVICE_FI']
+            $data['SERVICE_TOTAL']      = $data['SERVICE_FI']
                 + $data['SERVICE_FA']
                 + $data['SERVICE_FC']
                 + $data['SERVICE_REFERENTIEL'];
@@ -224,8 +222,8 @@ class FormuleResultatService extends AbstractEntityService
                 + $data['HEURES_COMPL_FC']
                 + $data['HEURES_COMPL_FC_MAJOREES']
                 + $data['HEURES_COMPL_REFERENTIEL'];
-            $sql  = "SELECT * FROM formule_resultat_service WHERE formule_resultat_id = :frId";
-            $frss = $conn->fetchAll($sql, compact('frId'));
+            $sql                        = "SELECT * FROM FORMULE_RESULTAT_SERVICE WHERE FORMULE_RESULTAT_ID = :frId";
+            $frss                       = $conn->fetchAll($sql, compact('frId'));
             foreach ($frss as $frs) {
                 $dsId = $frs['SERVICE_ID'];
                 if (isset($data['s'][$dsId])) {
@@ -237,7 +235,7 @@ class FormuleResultatService extends AbstractEntityService
                 }
             }
 
-            $sql  = "SELECT * FROM formule_resultat_service_ref WHERE formule_resultat_id = :frId";
+            $sql  = "SELECT * FROM FORMULE_RESULTAT_SERVICE_REF WHERE FORMULE_RESULTAT_ID = :frId";
             $frss = $conn->fetchAll($sql, compact('frId'));
             foreach ($frss as $frs) {
                 $drId = $frs['SERVICE_REFERENTIEL_ID'];
@@ -257,15 +255,15 @@ class FormuleResultatService extends AbstractEntityService
         });
 
         usort($data['s'], function ($ee1, $ee2) {
-            if ($ee1['element-etablissement'] instanceof ElementPedagogique){
+            if ($ee1['element-etablissement'] instanceof ElementPedagogique) {
                 $ee1Code = $ee1['element-etablissement']->getCode();
-            }elseif($ee1['element-etablissement'] instanceof Etablissement){
+            } elseif ($ee1['element-etablissement'] instanceof Etablissement) {
                 $ee1Code = $ee1['element-etablissement']->getLibelle();
             }
 
-            if ($ee2['element-etablissement'] instanceof ElementPedagogique){
+            if ($ee2['element-etablissement'] instanceof ElementPedagogique) {
                 $ee2Code = $ee2['element-etablissement']->getCode();
-            }elseif($ee2['element-etablissement'] instanceof Etablissement){
+            } elseif ($ee2['element-etablissement'] instanceof Etablissement) {
                 $ee2Code = $ee2['element-etablissement']->getLibelle();
             }
 

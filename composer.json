@@ -10,14 +10,14 @@
     "require"     : {
         "php"                    : ">=7.3 || >=7.4",
         "mpdf/mpdf"              : "8.0.4 as 7.1.7",
-        "unicaen/app"            : "3.0.6",
-        "unicaen/auth"           : "3.0.8",
+        "unicaen/app"            : "3.0.8",
+        "unicaen/auth"           : "3.0.9",
         "zendframework/zend-code": "3.3.2",
         "unicaen/bjy-authorize"  : "3.0.4",
         "zendframework/zend-file": "2.8.3",
         "unicaen/code"           : "3.0.0",
         "unicaen/import"         : "3.0.1",
-        "unicaen/tbl"            : "3.0.0",
+        "unicaen/tbl"            : "3.0.2",
         "unicaen/open-document"  : "3.0.1",
         "ocramius/proxy-manager" : "2.2.3"
     },

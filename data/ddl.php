@@ -6613,7 +6613,7 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
-          'nullable' => false,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -6639,18 +6639,7 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'HEURES_DECHARGE' =>
-        array (
-          'name' => 'HEURES_DECHARGE',
-          'type' => 'FLOAT',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => 126,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HEURES_SERVICE_STATUTAIRE' =>
+        'HEURES_SERVICE_STATUTAIRE' => 
         array (
           'name' => 'HEURES_SERVICE_STATUTAIRE',
           'type' => 'FLOAT',
@@ -6837,6 +6826,17 @@
           'default' => '2/3',
           'commentaire' => NULL,
         ),
+        'STRUCTURE_CODE' => 
+        array (
+          'name' => 'STRUCTURE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
       ),
     ),
     'FORMULE_TEST_STRUCTURE' => 
@@ -6921,7 +6921,7 @@
           'length' => 0,
           'scale' => '0',
           'precision' => NULL,
-          'nullable' => false,
+          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -7282,6 +7282,17 @@
           'name' => 'TYPE_INTERVENTION_CODE',
           'type' => 'VARCHAR2',
           'length' => 15,
+          'scale' => NULL,
+          'precision' => NULL,
+          'nullable' => true,
+          'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'STRUCTURE_CODE' => 
+        array (
+          'name' => 'STRUCTURE_CODE',
+          'type' => 'VARCHAR2',
+          'length' => 100,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => true,
@@ -11312,6 +11323,17 @@
           'precision' => NULL,
           'nullable' => true,
           'default' => NULL,
+          'commentaire' => NULL,
+        ),
+        'ACCESSIBLE_EXTERIEUR' => 
+        array (
+          'name' => 'ACCESSIBLE_EXTERIEUR',
+          'type' => 'NUMBER',
+          'length' => 0,
+          'scale' => '0',
+          'precision' => 1,
+          'nullable' => false,
+          'default' => '1',
           'commentaire' => NULL,
         ),
       ),
@@ -21428,7 +21450,7 @@ END FORMULE_LYON2;',
     -- L=SI($H22="";0;SI(ET($B22=composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'L\' AND v >= 1 THEN
       --SI(ET($B22=composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF vh.structure_is_affectation AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.param_1)) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF vh.structure_is_affectation AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.structure_code)) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21465,7 +21487,7 @@ END FORMULE_LYON2;',
     -- Q=SI($H22="";0;SI(ET($B22<>composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'Q\' AND v >= 1 THEN
       --SI(ET($B22<>composante_affectation;$G22<>1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF (NOT vh.structure_is_affectation) AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.param_1)) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF (NOT vh.structure_is_affectation) AND vh.taux_fc <> 1 AND (NOT isD4DAC10000(vh.structure_code)) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21502,7 +21524,7 @@ END FORMULE_LYON2;',
     -- V=SI($H22="";0;SI(ET($G22=1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'V\' AND v >= 1 THEN
       --SI(ET($G22=1;$B22<>"D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF vh.taux_fc = 1 AND (NOT isD4DAC10000(vh.param_1)) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF vh.taux_fc = 1 AND (NOT isD4DAC10000(vh.structure_code)) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21539,7 +21561,7 @@ END FORMULE_LYON2;',
     -- AA=SI($H22="";0;SI(ET($B22="D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0))
     WHEN c = \'AA\' AND v >= 1 THEN
       --SI(ET($B22="D4DAC10000";$D22<>"Référentiel";$C22="Oui");$J22;0)
-      IF isD4DAC10000(vh.param_1) AND vh.volume_horaire_ref_id IS NULL AND isOui(vh.param_2) THEN
+      IF isD4DAC10000(vh.structure_code) AND vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NOT NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21611,7 +21633,7 @@ END FORMULE_LYON2;',
 
     -- AK=SI($H22="";0;SI(ET($D22<>"Référentiel";$C22<>"Oui");$J22;0))
     WHEN c = \'AK\' AND v >= 1 THEN
-      IF vh.volume_horaire_ref_id IS NULL AND (NOT isOui(vh.param_2)) THEN
+      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_code IS NULL THEN
         RETURN cell(\'J\', l);
       ELSE
         RETURN 0;
@@ -21855,15 +21877,13 @@ FUNCTION INTERVENANT_QUERY RETURN CLOB IS
     RETURN \'
     SELECT
       fvh.*,
-      str.code param_1,
-      CASE WHEN fvh.structure_id IS NULL THEN \'\'non\'\' ELSE \'\'oui\'\' END param_2,
+      NULL param_1,
+      NULL param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       v_formule_volume_horaire fvh
-      JOIN intervenant i ON i.id = fvh.intervenant_id
-      LEFT JOIN structure str ON str.id = COALESCE(fvh.structure_id,i.structure_id)
     ORDER BY
       ordre\';
   END;
@@ -22732,7 +22752,7 @@ END FORMULE_NANTERRE;',
     -- L=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0))
     WHEN c = \'L\' AND v >= 1 THEN
       -- ET($C22<>"Référentiel";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10")
-      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NULL AND vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l) * vh.taux_fi;
       ELSE
         RETURN 0;
@@ -22769,7 +22789,7 @@ END FORMULE_NANTERRE;',
     -- Q=SI($H22="";0;SI(ET($C22="Référentiel";$G22="Oui";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22;0))
     WHEN c = \'Q\' AND v >= 1 THEN
       -- ET($C22="Référentiel";$G22="Oui";$B22=composante_affectation;$B22<>"KE8";$B22<>"UP10")
-      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l);
       ELSE
         RETURN 0;
@@ -22806,7 +22826,7 @@ END FORMULE_NANTERRE;',
     -- V=SI($H22="";0;SI(ET($C22<>"Référentiel";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0))
     WHEN c = \'V\' AND v >= 1 THEN
       --ET($C22<>"Référentiel";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22*$D22;0)
-      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NULL AND NOT vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l) * vh.taux_fi;
       ELSE
         RETURN 0;
@@ -22843,7 +22863,7 @@ END FORMULE_NANTERRE;',
     -- AA=SI($H22="";0;SI(ET($C22="Référentiel";$G22="Oui";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10");$J22;0))
     WHEN c = \'AA\' AND v >= 1 THEN
       --ET($C22="Référentiel";$G22="Oui";$B22<>composante_affectation;$B22<>"KE8";$B22<>"UP10")
-      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND NOT vh.structure_is_affectation AND notInStructs(vh.param_1) THEN
+      IF vh.volume_horaire_ref_id IS NOT NULL AND vh.service_statutaire AND NOT vh.structure_is_affectation AND notInStructs(vh.structure_code) THEN
         RETURN cell(\'J\',l);
       ELSE
         RETURN 0;
@@ -22879,7 +22899,7 @@ END FORMULE_NANTERRE;',
 
     -- AF=SI($H22="";0;SI(OU($B22="KE8";$B22="UP10");SI($C22="Référentiel";SI($G22="Oui";$J22;0);$J22*$D22);0))
     WHEN c = \'AF\' AND v >= 1 THEN
-      IF vh.param_1 IN (\'KE8\',\'UP10\') THEN
+      IF NOT notInStructs(vh.structure_code) THEN
         --SI($C22="Référentiel";SI($G22="Oui";$J22;0);$J22*$D22)
         IF vh.volume_horaire_ref_id IS NOT NULL THEN
           --SI($G22="Oui";$J22;0)
@@ -23397,15 +23417,13 @@ END FORMULE_NANTERRE;',
     RETURN \'
     SELECT
       fvh.*,
-      str.code param_1,
+      NULL param_1,
       NULL param_2,
       NULL param_3,
       NULL param_4,
       NULL param_5
     FROM
       v_formule_volume_horaire fvh
-      JOIN intervenant i ON i.id = fvh.intervenant_id
-      LEFT JOIN structure str ON str.id = COALESCE(fvh.structure_id,i.structure_id)
     ORDER BY
       ordre\';
   END;
@@ -24955,7 +24973,6 @@ END FORMULE_UNICAEN;',
         ose_test.echo(\'taux_fc                   = \' || vh.taux_fc);
         ose_test.echo(\'ponderation_service_du    = \' || vh.ponderation_service_du);
         ose_test.echo(\'ponderation_service_compl = \' || vh.ponderation_service_compl);
-        ose_test.echo(\'structure_id              = \' || vh.structure_id);
         ose_test.echo(\'structure_is_affectation  = \' || CASE WHEN vh.structure_is_affectation THEN \'OUI\' ELSE \'NON\' END);
         ose_test.echo(\'structure_is_univ         = \' || CASE WHEN vh.structure_is_univ THEN \'OUI\' ELSE \'NON\' END);
         ose_test.echo(\'service_statutaire        = \' || CASE WHEN vh.service_statutaire THEN \'OUI\' ELSE \'NON\' END);
@@ -26947,15 +26964,15 @@ END OSE_EVENT;',
     -- identifiants
     id                             NUMERIC,
     annee_id                       NUMERIC,
-    structure_id                   NUMERIC,
     type_volume_horaire_id         NUMERIC,
     etat_volume_horaire_id         NUMERIC,
 
     -- paramètres globaux
-    heures_decharge                FLOAT DEFAULT 0,
+    type_volume_horaire_code       VARCHAR(15),
     heures_service_statutaire      FLOAT DEFAULT 0,
     heures_service_modifie         FLOAT DEFAULT 0,
     depassement_service_du_sans_hc BOOLEAN DEFAULT FALSE,
+    structure_code                 VARCHAR(100),
     type_intervenant_code          VARCHAR(2),
 
     -- paramètres spacifiques
@@ -26978,9 +26995,10 @@ END OSE_EVENT;',
     volume_horaire_ref_id      NUMERIC,
     service_id                 NUMERIC,
     service_referentiel_id     NUMERIC,
-    structure_id               NUMERIC,
 
     -- paramètres globaux
+    type_volume_horaire_code   VARCHAR(15),
+    structure_code             VARCHAR(100),
     structure_is_affectation   BOOLEAN DEFAULT TRUE,
     structure_is_univ          BOOLEAN DEFAULT FALSE,
     service_statutaire         BOOLEAN DEFAULT TRUE,
@@ -27111,9 +27129,25 @@ END OSE_FORMULE;',
 
 
   PROCEDURE LOAD_INTERVENANT_FROM_BDD IS
+    TYPE t_formule_intervenant IS RECORD (
+      intervenant_id                  NUMERIC,
+      annee_id                        NUMERIC,
+      type_intervenant_code           VARCHAR2(1),
+      structure_code                  VARCHAR2(50),
+      heures_service_statutaire       FLOAT,
+      depassement_service_du_sans_hc  NUMERIC(1),
+      heures_service_modifie          FLOAT,
+      param_1                         VARCHAR2(100),
+      param_2                         VARCHAR2(100),
+      param_3                         VARCHAR2(100),
+      param_4                         VARCHAR2(100),
+      param_5                         VARCHAR2(100)
+    );
+    formule_intervenant t_formule_intervenant;
     cur SYS_REFCURSOR;
     query CLOB;
     i_dep_service_du_sans_hc NUMERIC DEFAULT 0;
+
   BEGIN
     intervenant.service_du := 0;
     intervenant.total      := NULL;
@@ -27123,28 +27157,22 @@ END OSE_FORMULE;',
     OPEN cur FOR query;
 
     LOOP
-      FETCH cur INTO
-        intervenant.id,
-        intervenant.annee_id,
-        intervenant.structure_id,
-        intervenant.type_intervenant_code,
-        intervenant.heures_service_statutaire,
-        i_dep_service_du_sans_hc,
-        intervenant.heures_service_modifie,
-        intervenant.heures_decharge,
-        intervenant.param_1,
-        intervenant.param_2,
-        intervenant.param_3,
-        intervenant.param_4,
-        intervenant.param_5
-      ;
-      EXIT WHEN cur%NOTFOUND;
+      FETCH cur INTO formule_intervenant; EXIT WHEN cur%NOTFOUND;
+      intervenant.id                             := formule_intervenant.intervenant_id;
+      intervenant.annee_id                       := formule_intervenant.annee_id;
+      intervenant.structure_code                 := formule_intervenant.structure_code;
+      intervenant.type_intervenant_code          := formule_intervenant.type_intervenant_code;
+      intervenant.heures_service_statutaire      := formule_intervenant.heures_service_statutaire;
+      intervenant.depassement_service_du_sans_hc := (formule_intervenant.depassement_service_du_sans_hc = 1);
+      intervenant.heures_service_modifie         := formule_intervenant.heures_service_modifie;
+      intervenant.param_1                        := formule_intervenant.param_1;
+      intervenant.param_2                        := formule_intervenant.param_2;
+      intervenant.param_3                        := formule_intervenant.param_3;
+      intervenant.param_4                        := formule_intervenant.param_4;
+      intervenant.param_5                        := formule_intervenant.param_5;
 
-      intervenant.depassement_service_du_sans_hc := (i_dep_service_du_sans_hc = 1);
       intervenant.service_du := CASE
-        WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-          OR intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
-
+        WHEN intervenant.depassement_service_du_sans_hc
         THEN 9999
         ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
       END;
@@ -27154,11 +27182,10 @@ END OSE_FORMULE;',
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
       intervenant.annee_id                       := null;
-      intervenant.structure_id                   := null;
+      intervenant.structure_code                 := null;
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
-      intervenant.heures_decharge                := 0;
       intervenant.type_intervenant_code          := \'E\';
       intervenant.service_du                     := 0;
       intervenant.param_1                        := NULL;
@@ -27179,10 +27206,9 @@ END OSE_FORMULE;',
     SELECT
       fti.id,
       fti.annee_id,
-      fti.structure_test_id,
+      fti.structure_code,
       fti.type_volume_horaire_id,
       fti.etat_volume_horaire_id,
-      fti.heures_decharge,
       fti.heures_service_statutaire,
       fti.heures_service_modifie,
       fti.depassement_service_du_sans_hc,
@@ -27196,10 +27222,9 @@ END OSE_FORMULE;',
     INTO
       intervenant.id,
       intervenant.annee_id,
-      intervenant.structure_id,
+      intervenant.structure_code,
       intervenant.type_volume_horaire_id,
       intervenant.etat_volume_horaire_id,
-      intervenant.heures_decharge,
       intervenant.heures_service_statutaire,
       intervenant.heures_service_modifie,
       dsdushc,
@@ -27218,9 +27243,7 @@ END OSE_FORMULE;',
 
     intervenant.depassement_service_du_sans_hc := (dsdushc = 1);
     intervenant.service_du := CASE
-      WHEN intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-        OR intervenant.heures_decharge < 0 -- s\'il y a une décharge => aucune HC
-
+      WHEN intervenant.depassement_service_du_sans_hc
       THEN 9999
       ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
     END;
@@ -27228,11 +27251,10 @@ END OSE_FORMULE;',
     EXCEPTION WHEN NO_DATA_FOUND THEN
       intervenant.id                             := NULL;
       intervenant.annee_id                       := null;
-      intervenant.structure_id                   := null;
+      intervenant.structure_code                 := null;
       intervenant.heures_service_statutaire      := 0;
       intervenant.depassement_service_du_sans_hc := FALSE;
       intervenant.heures_service_modifie         := 0;
-      intervenant.heures_decharge                := 0;
       intervenant.type_intervenant_code          := \'E\';
       intervenant.service_du                     := 0;
       intervenant.param_1                        := null;
@@ -27278,10 +27300,12 @@ END OSE_FORMULE;',
         vh_type_intervention_id,
         vh_type_volume_horaire_id,
         vh_etat_volume_horaire_id,
+        vh.type_volume_horaire_code,
         vh.taux_fi,
         vh.taux_fa,
         vh.taux_fc,
-        vh.structure_id,
+        length, -- on ignore ensuite
+        vh.structure_code,
         vh_structure_is_affectation,
         vh_structure_is_univ,
         vh.ponderation_service_du,
@@ -27323,13 +27347,10 @@ END OSE_FORMULE;',
   PROCEDURE LOAD_VH_FROM_TEST IS
     vh t_volume_horaire;
     etat_volume_horaire_id NUMERIC DEFAULT 1;
-    structure_univ NUMERIC;
     length NUMERIC;
   BEGIN
     volumes_horaires.items.delete;
     length := 0;
-
-    SELECT id INTO structure_univ FROM formule_test_structure WHERE universite = 1;
 
     FOR d IN (
       SELECT
@@ -27367,12 +27388,12 @@ END OSE_FORMULE;',
       volumes_horaires.items(length).taux_fc                   := d.taux_fc;
       volumes_horaires.items(length).ponderation_service_du    := d.ponderation_service_du;
       volumes_horaires.items(length).ponderation_service_compl := d.ponderation_service_compl;
-      volumes_horaires.items(length).structure_id              := d.structure_test_id;
-      volumes_horaires.items(length).structure_is_affectation  := NVL(d.structure_test_id,0) = NVL(intervenant.structure_id,-1);
-      volumes_horaires.items(length).structure_is_univ         := NVL(d.structure_test_id,0) = NVL(structure_univ,-1);
+      volumes_horaires.items(length).structure_is_affectation  := d.structure_code = intervenant.structure_code;
+      volumes_horaires.items(length).structure_is_univ         := d.structure_code = \'__UNIV__\';
       volumes_horaires.items(length).service_statutaire        := d.service_statutaire = 1;
       volumes_horaires.items(length).heures                    := d.heures;
       volumes_horaires.items(length).type_intervention_code    := CASE WHEN d.referentiel = 1 THEN NULL ELSE d.type_intervention_code END;
+      volumes_horaires.items(length).structure_code            := CASE WHEN d.structure_code = \'__EXTERIEUR__\' THEN NULL ELSE d.structure_code END;
       volumes_horaires.items(length).taux_service_du           := d.taux_service_du;
       volumes_horaires.items(length).taux_service_compl        := d.taux_service_compl;
       volumes_horaires.items(length).param_1                   := d.param_1;
@@ -27637,7 +27658,7 @@ END OSE_FORMULE;',
         );
 
         fr.service_du := ROUND(CASE
-          WHEN intervenant.depassement_service_du_sans_hc OR intervenant.heures_decharge < 0
+          WHEN intervenant.depassement_service_du_sans_hc
           THEN GREATEST(fr.total, intervenant.heures_service_statutaire + intervenant.heures_service_modifie)
           ELSE intervenant.heures_service_statutaire + intervenant.heures_service_modifie
         END,2);
@@ -27896,9 +27917,7 @@ END OSE_FORMULE;',
     ose_test.echo(\'OSE Formule DEBUG Intervenant\');
     ose_test.echo(\'id                             = \' || intervenant.id);
     ose_test.echo(\'annee_id                       = \' || intervenant.annee_id);
-    ose_test.echo(\'structure_id                   = \' || intervenant.structure_id);
     ose_test.echo(\'type_volume_horaire_id         = \' || intervenant.type_volume_horaire_id);
-    ose_test.echo(\'heures_decharge                = \' || intervenant.heures_decharge);
     ose_test.echo(\'heures_service_statutaire      = \' || intervenant.heures_service_statutaire);
     ose_test.echo(\'heures_service_modifie         = \' || intervenant.heures_service_modifie);
     ose_test.echo(\'depassement_service_du_sans_hc = \' || CASE WHEN intervenant.depassement_service_du_sans_hc THEN \'OUI\' ELSE \'NON\' END);
@@ -27929,7 +27948,6 @@ END OSE_FORMULE;',
             ose_test.echo(\'taux_fc                   = \' || vh.taux_fc);
             ose_test.echo(\'ponderation_service_du    = \' || vh.ponderation_service_du);
             ose_test.echo(\'ponderation_service_compl = \' || vh.ponderation_service_compl);
-            ose_test.echo(\'structure_id              = \' || vh.structure_id);
             ose_test.echo(\'structure_is_affectation  = \' || CASE WHEN vh.structure_is_affectation THEN \'OUI\' ELSE \'NON\' END);
             ose_test.echo(\'structure_is_univ         = \' || CASE WHEN vh.structure_is_univ THEN \'OUI\' ELSE \'NON\' END);
             ose_test.echo(\'service_statutaire        = \' || CASE WHEN vh.service_statutaire THEN \'OUI\' ELSE \'NON\' END);
@@ -28304,31 +28322,196 @@ END OSE_VALIDATION;',
   PROCEDURE CALCULER_TBL( PARAMS UNICAEN_TBL.T_PARAMS );
 
   PROCEDURE DEP_CHECK( etape_suiv_id NUMERIC, etape_prec_id NUMERIC );
-
-  PROCEDURE SET_INTERVENANT(INTERVENANT_ID NUMERIC DEFAULT NULL);
-  FUNCTION GET_INTERVENANT RETURN NUMERIC;
-  FUNCTION MATCH_INTERVENANT(INTERVENANT_ID NUMERIC DEFAULT NULL) RETURN NUMERIC;
 END OSE_WORKFLOW;',
-      'body' => 'CREATE OR REPLACE PACKAGE BODY "OSE_WORKFLOW" AS
-  INTERVENANT_ID NUMERIC DEFAULT NULL;
-
-  TYPE t_workflow IS TABLE OF tbl_workflow%rowtype INDEX BY PLS_INTEGER;
+      'body' => 'CREATE OR REPLACE PACKAGE BODY OSE_WORKFLOW AS
+  TYPE t_dep_bloquante IS RECORD (
+    id NUMERIC,
+    to_delete BOOLEAN DEFAULT TRUE
+  );
+  TYPE t_deps_bloquantes IS TABLE OF t_dep_bloquante INDEX BY PLS_INTEGER;
+  TYPE t_workflow_etape IS RECORD ( -- une étape d\'un workflow
+      id NUMERIC,
+      to_delete BOOLEAN,
+      to_update BOOLEAN,
+      etape_id NUMERIC,
+      structure_id NUMERIC,
+      old_atteignable NUMERIC(1),
+      atteignable NUMERIC(1),
+      old_objectif FLOAT,
+      objectif FLOAT,
+      old_realisation FLOAT,
+      realisation FLOAT,
+      deps_bloquantes t_deps_bloquantes
+  );
+  TYPE t_workflow IS TABLE OF t_workflow_etape INDEX BY VARCHAR2(20); -- une feuille de route
+  TYPE t_intervenant IS RECORD (
+    annee_id NUMERIC,
+    intervenant_id NUMERIC,
+    statut_intervenant_id NUMERIC,
+    type_intervenant_id NUMERIC,
+    type_intervenant_code VARCHAR2(1),
+    feuille_de_route t_workflow
+  );
+  TYPE t_intervenants IS TABLE OF t_intervenant INDEX BY PLS_INTEGER;      -- feuilles de routes de tous les intervenants concernés
+  TYPE t_etapes IS TABLE OF wf_etape%rowtype INDEX BY PLS_INTEGER;
 
   TYPE t_dep IS TABLE OF wf_etape_dep%rowtype INDEX BY PLS_INTEGER;
   TYPE t_deps IS TABLE OF t_dep INDEX BY PLS_INTEGER;
-  TYPE t_deps_bloquantes IS TABLE OF wf_dep_bloquante%rowtype INDEX BY PLS_INTEGER;
+
 
   -- propre au calcul courant ! !
-  etapes          t_workflow;
+  etapes          t_etapes;
   deps            t_deps;
-  deps_initialized boolean default false;
-  deps_bloquantes t_deps_bloquantes;
-  deps_bloquantes_index PLS_INTEGER DEFAULT 1;
+  intervenants    t_intervenants;
+  intervenant     t_intervenant;
 
 
 
+  PROCEDURE DEP_CHECK( etape_suiv_id NUMERIC, etape_prec_id NUMERIC ) IS
+    eso NUMERIC;
+    epo NUMERIC;
+  BEGIN
+    SELECT ordre INTO eso FROM wf_etape WHERE id = etape_suiv_id;
+    SELECT ordre INTO epo FROM wf_etape WHERE id = etape_prec_id;
 
-  FUNCTION ETAPE_FRANCHIE( etape tbl_workflow%rowtype, need_done boolean default false ) RETURN FLOAT IS
+    IF eso < epo THEN
+      raise_application_error(-20101, \'Une étape de Workflow ne peut dépendre d\'\'une étape située en aval\');
+    END IF;
+    IF eso = epo THEN
+      raise_application_error(-20101, \'Une étape de Workflow ne peut dépendre d\'\'elle-même\');
+    END IF;
+  END;
+
+
+
+  PROCEDURE DUMP_DEBUG IS
+    e VARCHAR2(20);
+    b NUMERIC;
+    dep_blo VARCHAR2(100);
+    i NUMERIC;
+  BEGIN
+
+    ose_test.echo(\'-- TBL_WORKFLOW DUMP ETAPES --\');
+    i := etapes.FIRST;
+    LOOP EXIT WHEN i IS NULL;
+      ose_test.echo(\'id    = \' || etapes(i).id );
+      ose_test.echo(\'code  = \' || etapes(i).code );
+      ose_test.echo(\'ordre = \' || etapes(i).ordre );
+      ose_test.echo(\'\');
+      i := etapes.NEXT(i);
+    END LOOP;
+    ose_test.echo(\'\');
+
+    ose_test.echo(\'annee_id              = \' || intervenant.annee_id );
+    ose_test.echo(\'statut_intervenant_id = \' || intervenant.statut_intervenant_id );
+    ose_test.echo(\'type_intervenant_id   = \' || intervenant.type_intervenant_id );
+    ose_test.echo(\'type_intervenant_code = \' || intervenant.type_intervenant_code );
+    ose_test.echo(\'feuille_de_route      = [\');
+
+    e := intervenant.feuille_de_route.FIRST;
+    LOOP EXIT WHEN e IS NULL;
+      ose_test.echo(\'  index = \' || e );
+      ose_test.echo(\'    id              = \' || intervenant.feuille_de_route(e).id );
+      ose_test.echo(\'    etape_id        = \' || intervenant.feuille_de_route(e).etape_id || \' (\' || etapes(intervenant.feuille_de_route(e).etape_id).code || \')\' );
+      ose_test.echo(\'    structure_id    = \' || intervenant.feuille_de_route(e).structure_id );
+      ose_test.echo(\'    atteignable     = \' || intervenant.feuille_de_route(e).atteignable || \' (old=\' || intervenant.feuille_de_route(e).old_atteignable || \')\' );
+      ose_test.echo(\'    objectif        = \' || intervenant.feuille_de_route(e).objectif || \' (old=\' || intervenant.feuille_de_route(e).old_objectif || \')\'  );
+      ose_test.echo(\'    realisation     = \' || intervenant.feuille_de_route(e).realisation || \' (old=\' || intervenant.feuille_de_route(e).old_realisation || \')\'  );
+      ose_test.echo(\'    to_delete       = \' || CASE WHEN intervenant.feuille_de_route(e).to_delete THEN \'1\' ELSE \'0\' END );
+      ose_test.echo(\'    to_update       = \' || CASE WHEN intervenant.feuille_de_route(e).to_update THEN \'1\' ELSE \'0\' END );
+
+      IF intervenant.feuille_de_route(e).deps_bloquantes.COUNT > 0 THEN
+        ose_test.echo(\'    dépendances bloquantes = [\');
+        b := intervenant.feuille_de_route(e).deps_bloquantes.FIRST;
+        LOOP EXIT WHEN b IS NULL;
+          ose_test.echo(\'        \' || b || \' => \');
+          ose_test.echo(\'            id        = \' || intervenant.feuille_de_route(e).deps_bloquantes(b).id        );
+          ose_test.echo(\'            to_delete = \' || CASE WHEN intervenant.feuille_de_route(e).deps_bloquantes(b).to_delete THEN \'1\' ELSE \'0\' END );
+          ose_test.echo(\'\');
+
+          b := intervenant.feuille_de_route(e).deps_bloquantes.NEXT(b);
+        END LOOP;
+        ose_test.echo(\'    ]\');
+      END IF;
+      ose_test.echo(\'\');
+
+      e := intervenant.feuille_de_route.NEXT(e);
+    END LOOP;
+
+    ose_test.echo(\']\');
+  END;
+
+
+
+  FUNCTION MAKE_FR_ETAPE_INDEX( etape_id NUMERIC, structure_id NUMERIC DEFAULT NULL) RETURN VARCHAR2 IS
+  BEGIN
+    RETURN lpad(etapes(etape_id).ordre, 4, \'0\') || \'-\' || COALESCE(structure_id,0);
+  END;
+
+
+
+  PROCEDURE ENREGISTRER( e IN OUT NOCOPY t_workflow_etape ) IS
+    w tbl_workflow%rowtype;
+    wed wf_dep_bloquante%rowtype;
+    b NUMERIC;
+  BEGIN
+    IF e.to_delete THEN
+      DELETE FROM tbl_workflow WHERE id = e.id;
+    ELSE
+      w.annee_id              := intervenant.annee_id;
+      w.intervenant_id        := intervenant.intervenant_id;
+      w.statut_intervenant_id := intervenant.statut_intervenant_id;
+      w.type_intervenant_id   := intervenant.type_intervenant_id;
+      w.type_intervenant_code := intervenant.type_intervenant_code;
+      w.etape_id              := e.etape_id;
+      w.etape_code            := etapes(e.etape_id).code;
+      w.structure_id          := e.structure_id;
+      w.atteignable           := e.atteignable;
+      w.realisation           := e.realisation;
+      w.objectif              := e.objectif;
+      w.to_delete             := 0;
+      IF e.id IS NULL THEN
+        w.id := tbl_workflow_id_seq.NEXTVAL;
+        INSERT INTO tbl_workflow values w;
+      ELSE
+        w.id := e.id;
+        IF e.old_atteignable <> e.atteignable
+          OR e.old_realisation <> e.realisation
+          OR e.old_objectif <> e.objectif
+        THEN
+          e.to_update := TRUE;
+        END IF;
+        IF e.to_update THEN
+          UPDATE tbl_workflow SET row = w WHERE id = w.id;
+        END IF;
+      END IF;
+    END IF;
+
+    b := e.deps_bloquantes.FIRST;
+    LOOP EXIT WHEN b IS NULL;
+      IF e.deps_bloquantes(b).to_delete THEN
+        DELETE FROM wf_dep_bloquante WHERE id = e.deps_bloquantes(b).id;
+      ELSIF e.deps_bloquantes(b).id IS NULL THEN
+        INSERT INTO wf_dep_bloquante (
+          id,
+          wf_etape_dep_id,
+          tbl_workflow_id,
+          to_delete
+        ) VALUES (
+          WF_DEP_BLOQUANTE_ID_SEQ.NEXTVAL,
+          b,
+          w.id,
+          0
+        );
+      END IF;
+
+      b := e.deps_bloquantes.next(b);
+    END LOOP;
+  END;
+
+
+
+  FUNCTION ETAPE_FRANCHIE( etape IN t_workflow_etape, need_done boolean default false ) RETURN FLOAT IS
     res FLOAT DEFAULT 0;
   BEGIN
     IF etape.objectif = 0 THEN
@@ -28350,106 +28533,30 @@ END OSE_WORKFLOW;',
 
 
 
-  PROCEDURE POPULATE_ETAPES( INTERVENANT_ID NUMERIC ) IS
-    i NUMERIC DEFAULT 0;
-  BEGIN
-    etapes.delete; -- initialisation
-
-    FOR wie IN (
-      SELECT
-        wep.annee_id                                          annee_id,
-        e.id                                                  etape_id,
-        w.structure_id                                        structure_id,
-        ROUND(COALESCE(w.objectif,0),2)                       objectif,
-        CASE WHEN w.intervenant_id IS NULL THEN 0 ELSE 1 END  atteignable,
-        ROUND(COALESCE(w.realisation,0),2)                    realisation,
-        wep.etape_code                                        etape_code,
-        si.id                                                 statut_intervenant_id,
-        ti.id                                                 type_intervenant_id,
-        ti.code                                               type_intervenant_code
-      FROM
-        v_workflow_etape_pertinente wep
-        JOIN wf_etape                 e ON e.code = wep.etape_code
-        JOIN intervenant              i ON i.id = wep.intervenant_id
-        JOIN statut_intervenant      si ON si.id = i.statut_id
-        JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
-        LEFT JOIN v_tbl_workflow      w ON w.intervenant_id = wep.intervenant_id AND w.etape_code = wep.etape_code
-      WHERE
-        wep.intervenant_id = POPULATE_ETAPES.INTERVENANT_ID
-        AND (e.obligatoire = 1 OR w.intervenant_id IS NOT NULL)
-      ORDER BY
-        e.ordre
-    ) LOOP
-      etapes( i ).annee_id              := wie.annee_id;
-      etapes( i ).intervenant_id        := intervenant_id;
-      etapes( i ).etape_id              := wie.etape_id;
-      etapes( i ).structure_id          := wie.structure_id;
-      etapes( i ).atteignable           := wie.atteignable;
-      etapes( i ).objectif              := wie.objectif;
-      etapes( i ).realisation           := wie.realisation;
-      etapes( i ).etape_code            := wie.etape_code;
-      etapes( i ).statut_intervenant_id := wie.statut_intervenant_id;
-      etapes( i ).type_intervenant_id   := wie.type_intervenant_id;
-      etapes( i ).type_intervenant_code := wie.type_intervenant_code;
-      i := i + 1;
-    END LOOP;
-  END;
-
-
-
-  -- peuple l\'arbre des dépendances entre étapes de workflow
-  PROCEDURE POPULATE_DEPS( INTERVENANT_ID NUMERIC ) IS
-    s PLS_INTEGER; -- index de l\'étape suivante
-    p PLS_INTEGER; -- index de l\'étape précédente
-  BEGIN
-    IF deps_initialized THEN RETURN; END IF;
-
-    FOR d IN (
-      SELECT
-        wed.*
-      FROM
-        wf_etape_dep wed
-        JOIN intervenant i ON i.id = POPULATE_DEPS.INTERVENANT_ID
-        JOIN statut_intervenant si ON si.id = i.statut_id
-      WHERE
-        active = 1
-        AND wed.type_intervenant_id IS NULL OR wed.type_intervenant_id = si.type_intervenant_id
-    ) LOOP
-      deps(d.etape_suiv_id)(d.etape_prec_id) := d;
-    END LOOP;
-
-    deps_initialized := true;
-  END;
-
-
-
-  PROCEDURE ADD_DEP_BLOQUANTE( wf_etape_dep_id NUMERIC, tbl_workflow_id NUMERIC ) IS
-  BEGIN
-    deps_bloquantes_index := deps_bloquantes_index + 1;
-    deps_bloquantes(deps_bloquantes_index).wf_etape_dep_id := wf_etape_dep_id;
-    deps_bloquantes(deps_bloquantes_index).tbl_workflow_id := tbl_workflow_id;
-  END;
-
-
-
-  PROCEDURE CALCUL_ATTEIGNABLE( s PLS_INTEGER, d wf_etape_dep%rowtype ) IS
+  PROCEDURE CALCUL_ATTEIGNABLE( wf_etape IN OUT NOCOPY t_workflow_etape, d wf_etape_dep%rowtype ) IS
+    workflow t_workflow;
     count_tested PLS_INTEGER DEFAULT 0;
     count_na     PLS_INTEGER DEFAULT 0;
-    p PLS_INTEGER; -- index de l\'étape précédente
+    p VARCHAR2(20); -- index de l\'étape précédente
   BEGIN
+    IF d.type_intervenant_id IS NOT NULL AND d.type_intervenant_id <> intervenant.type_intervenant_id THEN
+      RETURN; -- cette dépendance ne concerne pas notre intervenant
+    END IF;
 
-    p := etapes.FIRST;
+    workflow := intervenant.feuille_de_route;
+
+    p := workflow.FIRST;
     LOOP EXIT WHEN p IS NULL;
-      IF etapes(p).etape_id = d.etape_prec_id THEN
+      IF workflow(p).etape_id = d.etape_prec_id THEN
         -- on restreint en fonction du périmètre visé :
         --  - si la dépendance n\'est pas locale alors on teste
         --  - si les structures aussi bien de l\'étape testée que de l\'étape dépendante sont nulles alors on teste aussi car elles sont "universelles"
         --  - si les structures sont équivalentes alors on teste, sinon elles ne sont pas dans le périmètre local
         IF
           (d.locale = 0)
-          OR etapes(s).structure_id IS NULL
-          OR etapes(p).structure_id IS NULL
-          OR etapes(s).structure_id = etapes(p).structure_id
+          OR wf_etape.structure_id IS NULL
+          OR workflow(p).structure_id IS NULL
+          OR wf_etape.structure_id = workflow(p).structure_id
         THEN
           count_tested := count_tested + 1;
 
@@ -28457,19 +28564,19 @@ END OSE_WORKFLOW;',
 
           --  - idem si on a besoin d\'une dépendance partiellement franchie est qu\'elle ne l\'est pas
           IF d.partielle = 1 THEN
-            IF ETAPE_FRANCHIE(etapes(p), d.obligatoire=1) = 0 THEN -- si le franchissement est totalement inexistant
+            IF ETAPE_FRANCHIE(workflow(p), d.obligatoire=1) = 0 THEN -- si le franchissement est totalement inexistant
               count_na := count_na + 1;
             END IF;
           --  - si on a besoin d\'une dépendance complètement franchie est qu\'elle ne l\'est pas alors ce n\'est pas atteignable
           ELSE
-            IF ETAPE_FRANCHIE(etapes(p), d.obligatoire=1) < 1 THEN
+            IF ETAPE_FRANCHIE(workflow(p), d.obligatoire=1) < 1 THEN
               count_na := count_na + 1;
             END IF;
           END IF;
         END IF;
 
       END IF;
-      p := etapes.next(p);
+      p := workflow.next(p);
     END LOOP;
 
     -- on applique le résultat uniquement si des étapes dépendantes ont été trouvées
@@ -28479,16 +28586,16 @@ END OSE_WORKFLOW;',
       IF d.integrale = 1 THEN
         -- si l\'intégralité des étapes est atteignable = NON si au moins une ne l\'est pas
         IF count_na > 0 THEN
-          etapes(s).atteignable := 0;
-          ADD_DEP_BLOQUANTE( d.id, s );
+          wf_etape.atteignable := 0;
+          wf_etape.deps_bloquantes(d.id).to_delete := FALSE;
         END IF;
 
       -- sinon...
       ELSE
         -- si au moins une étape est atteignable = NON si toutes ne sont pas atteignables
         IF count_tested = count_na THEN
-          etapes(s).atteignable := 0;
-          ADD_DEP_BLOQUANTE( d.id, s );
+          wf_etape.atteignable := 0;
+          wf_etape.deps_bloquantes(d.id).to_delete := FALSE;
         END IF;
       END IF;
     END IF;
@@ -28497,282 +28604,187 @@ END OSE_WORKFLOW;',
 
 
   -- calcule si les étapes sont atteignables ou non
-  PROCEDURE CALCUL_ATTEIGNABLES IS
-    e PLS_INTEGER; -- index de l\'étape courante
+  PROCEDURE TRAITEMENT IS
+    workflow_etape t_workflow_etape;
+    e VARCHAR2(20); -- index de l\'étape courante
     d PLS_INTEGER; -- ID de l\'étape précédante
   BEGIN
-    deps_bloquantes.delete;
-    e := etapes.FIRST;
+    e := intervenant.feuille_de_route.FIRST;
     LOOP EXIT WHEN e IS NULL;
-      IF deps.exists(etapes(e).etape_id) THEN -- s\'il n\'y a aucune dépendance alors pas de test!!
-        d := deps(etapes(e).etape_id).FIRST;
+      workflow_etape := intervenant.feuille_de_route(e);
+
+      IF (NOT workflow_etape.to_delete) AND deps.exists(workflow_etape.etape_id) THEN -- s\'il n\'y a aucune dépendance alors pas de test!!
+        d := deps(workflow_etape.etape_id).FIRST;
         LOOP EXIT WHEN d IS NULL;
 
-          CALCUL_ATTEIGNABLE(e, deps(etapes(e).etape_id)(d));
+          CALCUL_ATTEIGNABLE(intervenant.feuille_de_route(e), deps(workflow_etape.etape_id)(d));
 
-          d := deps(etapes(e).etape_id).next(d);
+          d := deps(workflow_etape.etape_id).NEXT(d);
         END LOOP;
       END IF;
-      e := etapes.next(e);
+      ENREGISTRER(intervenant.feuille_de_route(e));
+      e := intervenant.feuille_de_route.NEXT(e);
     END LOOP;
   END;
 
 
 
-  FUNCTION ENREGISTRER_ETAPE( e tbl_workflow%rowtype ) RETURN NUMERIC IS
-    n_etape_id NUMERIC;
+  PROCEDURE INITIALISATION IS
   BEGIN
-
-    MERGE INTO tbl_workflow w USING dual ON (
-
-          w.intervenant_id      = e.intervenant_id
-      AND w.etape_id            = e.etape_id
-      AND NVL(w.structure_id,0) = NVL(e.structure_id,0)
-
-    ) WHEN MATCHED THEN UPDATE SET
-
-      atteignable                  = e.atteignable,
-      objectif                     = e.objectif,
-      realisation                  = e.realisation,
-      etape_code                   = e.etape_code,
-      statut_intervenant_id        = e.statut_intervenant_id,
-      type_intervenant_id          = e.type_intervenant_id,
-      type_intervenant_code        = e.type_intervenant_code,
-      to_delete                    = 0
-
-    WHEN NOT MATCHED THEN INSERT (
-
-      id,
-      annee_id,
-      intervenant_id,
-      etape_id,
-      structure_id,
-      atteignable,
-      objectif,
-      realisation,
-      etape_code,
-      statut_intervenant_id,
-      type_intervenant_id,
-      type_intervenant_code,
-      to_delete
-
-    ) VALUES (
-
-      TBL_WORKFLOW_ID_SEQ.NEXTVAL,
-      e.annee_id,
-      e.intervenant_id,
-      e.etape_id,
-      e.structure_id,
-      e.atteignable,
-      e.objectif,
-      e.realisation,
-      e.etape_code,
-      e.statut_intervenant_id,
-      e.type_intervenant_id,
-      e.type_intervenant_code,
-      0
-
-    );
-
-    SELECT w.id INTO n_etape_id FROM tbl_workflow w WHERE
-      w.intervenant_id          = e.intervenant_id
-      AND w.etape_id            = e.etape_id
-      AND NVL(w.structure_id,0) = NVL(e.structure_id,0)
-    ;
-
-    RETURN n_etape_id;
-  END;
-
-
-
-  PROCEDURE ENREGISTRER_DEP_BLOQUANTE( db wf_dep_bloquante%rowtype ) IS
-  BEGIN
-    MERGE INTO wf_dep_bloquante wdb USING dual ON (
-
-          wdb.wf_etape_dep_id   = db.wf_etape_dep_id
-      AND wdb.tbl_workflow_id   = db.tbl_workflow_id
-
-    ) WHEN MATCHED THEN UPDATE SET
-
-      to_delete                 = 0
-
-    WHEN NOT MATCHED THEN INSERT (
-
-      id,
-      wf_etape_dep_id,
-      tbl_workflow_id,
-      to_delete
-
-    ) VALUES (
-
-      WF_DEP_BLOQUANTE_ID_SEQ.NEXTVAL,
-      db.wf_etape_dep_id,
-      db.tbl_workflow_id,
-      0
-
-    );
-  END;
-
-
-
-  PROCEDURE ENREGISTRER( INTERVENANT_ID NUMERIC ) IS
-    i PLS_INTEGER;
-  BEGIN
-
-    UPDATE tbl_workflow SET to_delete = 1 WHERE intervenant_id = ENREGISTRER.INTERVENANT_ID;
-    UPDATE wf_dep_bloquante SET to_delete = 1 WHERE tbl_workflow_id IN (SELECT id FROM tbl_workflow WHERE intervenant_id = ENREGISTRER.INTERVENANT_ID);
-
-    i := etapes.FIRST;
-    LOOP EXIT WHEN i IS NULL;
-      etapes(i).id := ENREGISTRER_ETAPE( etapes(i) );
-      i := etapes.NEXT(i);
+    etapes.delete;
+    FOR d IN (
+      SELECT * FROM wf_etape
+    ) LOOP
+      etapes(d.id) := d;
     END LOOP;
 
-    i := deps_bloquantes.FIRST;
-    LOOP EXIT WHEN i IS NULL;
-      deps_bloquantes(i).tbl_workflow_id := etapes(deps_bloquantes(i).tbl_workflow_id).id;
-      ENREGISTRER_DEP_BLOQUANTE( deps_bloquantes(i) );
-      i := deps_bloquantes.NEXT(i);
+    deps.delete;
+    FOR d IN (
+      SELECT * FROM wf_etape_dep WHERE active = 1
+    ) LOOP
+      deps(d.etape_suiv_id)(d.etape_prec_id) := d;
     END LOOP;
 
-    DELETE FROM tbl_workflow WHERE TO_DELETE = 1 AND intervenant_id = ENREGISTRER.INTERVENANT_ID;
-    DELETE FROM wf_dep_bloquante WHERE TO_DELETE = 1;
+    intervenants.delete;
   END;
 
 
 
-  PROCEDURE DEP_CHECK( etape_suiv_id NUMERIC, etape_prec_id NUMERIC ) IS
-    eso NUMERIC;
-    epo NUMERIC;
-  BEGIN
-    SELECT ordre INTO eso FROM wf_etape WHERE id = etape_suiv_id;
-    SELECT ordre INTO epo FROM wf_etape WHERE id = etape_prec_id;
-
-    IF eso < epo THEN
-      raise_application_error(-20101, \'Une étape de Workflow ne peut dépendre d\'\'une étape située en aval\');
-    END IF;
-    IF eso = epo THEN
-      raise_application_error(-20101, \'Une étape de Workflow ne peut dépendre d\'\'elle-même\');
-    END IF;
-  END;
-
-
-
-  PROCEDURE DEBUG_CALCUL( INTERVENANT_ID NUMERIC ) IS
-    i PLS_INTEGER;
-    d PLS_INTEGER;
-    dep_desc VARCHAR2(200);
-  BEGIN
-    ose_test.echo(\'\');
-    ose_test.echo(\'-- DEBUG WORKFLOW ETAPE INTERVENANT_ID=\'|| INTERVENANT_ID ||\' --\');
-    i := etapes.FIRST;
-    LOOP EXIT WHEN i IS NULL;
-      /*ose_test.echo(
-               \'etape=\'       || RPAD( ose_test.get_wf_etape_by_id(etapes(i).etape_id).code, 30, \' \' )
-          || \', structure=\'   || RPAD( NVL(ose_test.get_structure_by_id(etapes(i).structure_id).libelle_court,\' \'), 20, \' \' )
-          || \', \' || CASE WHEN etapes(i).atteignable=1 THEN \'atteignable\' ELSE \'na\' END
-          || \', objectif= \' || ROUND(etapes(i).objectif)
-          || \', realisation= \' || ROUND(etapes(i).realisation)
-      );*/
-
-      d := deps_bloquantes.FIRST;
-      LOOP EXIT WHEN d IS NULL;
-        IF deps_bloquantes(d).tbl_workflow_id = i THEN
-
-          SELECT
-            we.desc_non_franchie INTO dep_desc
-          FROM
-            wf_etape_dep wed
-            JOIN wf_etape we ON we.id = wed.etape_prec_id
-          WHERE
-            wed.id = deps_bloquantes(d).wf_etape_dep_id;
-
-          ose_test.echo(\'    CAUSE =\' || dep_desc);
-        END IF;
-        d := deps_bloquantes.NEXT(d);
-      END LOOP;
-
-      i := etapes.NEXT(i);
-    END LOOP;
-    ose_test.echo(\'\');
-  END;
-
-
-
-  -- calcul du workflow pour un intervenant
   PROCEDURE CALCULER( INTERVENANT_ID NUMERIC ) IS
   BEGIN
-    set_intervenant(intervenant_id);
-    POPULATE_ETAPES( INTERVENANT_ID );
-    POPULATE_DEPS( INTERVENANT_ID );
-    CALCUL_ATTEIGNABLES;
-    IF OSE_TEST.DEBUG_ENABLED THEN
-      DEBUG_CALCUL( INTERVENANT_ID );
-    END IF;
-    ENREGISTRER( INTERVENANT_ID );
-    set_intervenant();
+    CALCULER_TBL(unicaen_tbl.make_params(\'intervenant_id\', INTERVENANT_ID));
   END;
 
 
 
   PROCEDURE CALCULER_TOUT( ANNEE_ID NUMERIC DEFAULT NULL ) IS
   BEGIN
-    FOR mp IN (
-      SELECT
-        id intervenant_id
-      FROM
-        intervenant i
-      WHERE
-        i.histo_destruction IS NULL
-        AND (CALCULER_TOUT.ANNEE_ID IS NULL OR i.annee_id = CALCULER_TOUT.ANNEE_ID)
-    )
-    LOOP
-      CALCULER( mp.intervenant_id );
-      COMMIT;
-    END LOOP;
+    IF ANNEE_ID IS NULL THEN
+      CALCULER_TBL(unicaen_tbl.make_params());
+    ELSE
+      CALCULER_TBL(unicaen_tbl.make_params(\'annee_id\', ANNEE_ID));
+    END IF;
   END;
 
 
 
   PROCEDURE CALCULER_TBL( PARAMS UNICAEN_TBL.T_PARAMS ) IS
-    intervenant_id NUMERIC;
+    TYPE t_tbl IS RECORD (
+      id                    NUMERIC,
+      to_delete             NUMERIC(1),
+      to_update             NUMERIC(1),
+      intervenant_id        NUMERIC,
+      etape_id              NUMERIC,
+      structure_id          NUMERIC,
+      old_atteignable       NUMERIC(1),
+      atteignable           NUMERIC,
+      old_objectif          FLOAT,
+      objectif              FLOAT,
+      old_realisation       FLOAT,
+      realisation           FLOAT,
+      annee_id              NUMERIC,
+      type_intervenant_id   NUMERIC,
+      type_intervenant_code VARCHAR2(50),
+      statut_intervenant_id NUMERIC
+    );
+    TYPE t_wdb IS RECORD (
+      id              NUMERIC,
+      tbl_workflow_id NUMERIC,
+      wf_etape_dep_id NUMERIC,
+      intervenant_id  NUMERIC,
+      etape_id        NUMERIC,
+      structure_id    NUMERIC
+    );
+    wdb t_wdb;
+    we_ec VARCHAR(20);
+
     TYPE r_cursor IS REF CURSOR;
-    diff_cur r_cursor;
+    c r_cursor;
+
+    tbl t_tbl;
+    we t_workflow_etape;
+
+    i NUMERIC;
   BEGIN
-    OPEN diff_cur FOR \'WITH interv AS (SELECT id intervenant_id, intervenant.* FROM intervenant)
-    SELECT intervenant_id FROM interv WHERE \' || unicaen_tbl.PARAMS_TO_CONDS( params );
+    INITIALISATION;
+
+    OPEN c FOR \'
+    SELECT
+      t.id                                                      id,
+      CASE WHEN v.intervenant_id IS NULL THEN 1 ELSE 0 END      to_delete,
+      CASE WHEN
+           t.annee_id              <> v.annee_id
+        OR t.type_intervenant_id   <> v.type_intervenant_id
+        OR t.type_intervenant_code <> v.type_intervenant_code
+        OR t.statut_intervenant_id <> v.statut_intervenant_id
+      THEN 1 ELSE 0 END                                         to_update,
+      COALESCE(t.intervenant_id,v.intervenant_id)               intervenant_id,
+      COALESCE(t.etape_id,v.etape_id)                           etape_id,
+      COALESCE(t.structure_id,v.structure_id)                   structure_id,
+      t.atteignable                                             old_atteignable,
+      v.atteignable                                             atteignable,
+      t.objectif                                                old_objectif,
+      v.objectif                                                objectif,
+      t.realisation                                             old_realisation,
+      v.realisation                                             realisation,
+      COALESCE(v.annee_id,t.annee_id)                           annee_id,
+      COALESCE(v.type_intervenant_id,t.type_intervenant_id)     type_intervenant_id,
+      COALESCE(v.type_intervenant_code,t.type_intervenant_code) type_intervenant_code,
+      COALESCE(v.statut_intervenant_id,t.statut_intervenant_id) statut_intervenant_id
+    FROM
+      v_tbl_workflow v
+      FULL JOIN tbl_workflow t ON
+        t.intervenant_id = v.intervenant_id
+        AND t.etape_id = v.etape_id
+        AND coalesce(t.structure_id,0) = coalesce(v.structure_id,0)
+    WHERE
+      \' || unicaen_tbl.PARAMS_TO_CONDS( params, \'v\' ) ||
+      \' AND \' || unicaen_tbl.PARAMS_TO_CONDS( params, \'t\' );
     LOOP
-      FETCH diff_cur INTO intervenant_id; EXIT WHEN diff_cur%NOTFOUND;
-      CALCULER( intervenant_id );
-      COMMIT;
+      FETCH c INTO tbl; EXIT WHEN c%NOTFOUND;
+      intervenants(tbl.intervenant_id).annee_id              := tbl.annee_id;
+      intervenants(tbl.intervenant_id).intervenant_id        := tbl.intervenant_id;
+      intervenants(tbl.intervenant_id).statut_intervenant_id := tbl.statut_intervenant_id;
+      intervenants(tbl.intervenant_id).type_intervenant_id   := tbl.type_intervenant_id;
+      intervenants(tbl.intervenant_id).type_intervenant_code := tbl.type_intervenant_code;
+      we_ec := MAKE_FR_ETAPE_INDEX( tbl.etape_id, tbl.structure_id );
+      we.id              := tbl.id;
+      we.to_delete       := tbl.to_delete = 1;
+      we.to_update       := tbl.to_update = 1;
+      we.etape_id        := tbl.etape_id;
+      we.structure_id    := tbl.structure_id;
+      we.old_atteignable := tbl.old_atteignable;
+      we.atteignable     := tbl.atteignable;
+      we.old_objectif    := tbl.old_objectif;
+      we.objectif        := tbl.objectif;
+      we.old_realisation := tbl.old_realisation;
+      we.realisation     := tbl.realisation;
+      intervenants(tbl.intervenant_id).feuille_de_route(we_ec) := we;
     END LOOP;
-    CLOSE diff_cur;
+    CLOSE c;
+
+    OPEN c FOR \'
+    SELECT
+      wdb.id, wdb.tbl_workflow_id, wdb.wf_etape_dep_id, v.intervenant_id, v.etape_id, v.structure_id
+    FROM
+      wf_dep_bloquante wdb
+      JOIN tbl_workflow v ON v.id= wdb.tbl_workflow_id
+    WHERE \' || unicaen_tbl.PARAMS_TO_CONDS( params, \'v\' );
+    LOOP
+      FETCH c INTO wdb; EXIT WHEN c%NOTFOUND;
+      we_ec := MAKE_FR_ETAPE_INDEX( wdb.etape_id, wdb.structure_id );
+      intervenants(wdb.intervenant_id).feuille_de_route(we_ec).deps_bloquantes(wdb.wf_etape_dep_id).id := wdb.id;
+    END LOOP;
+    CLOSE c;
+
+    i := intervenants.FIRST;
+    LOOP EXIT WHEN i IS NULL;
+      intervenant := intervenants(i);
+      TRAITEMENT();
+      i := intervenants.NEXT(i);
+    END LOOP;
   END;
 
-
-
-  FUNCTION GET_INTERVENANT RETURN NUMERIC IS
-  BEGIN
-    RETURN OSE_WORKFLOW.INTERVENANT_ID;
-  END;
-
-  PROCEDURE SET_INTERVENANT( INTERVENANT_ID NUMERIC DEFAULT NULL) IS
-  BEGIN
-    IF SET_INTERVENANT.INTERVENANT_ID = -1 THEN
-      OSE_WORKFLOW.INTERVENANT_ID := NULL;
-    ELSE
-      OSE_WORKFLOW.INTERVENANT_ID := SET_INTERVENANT.INTERVENANT_ID;
-    END IF;
-  END;
-
-  FUNCTION MATCH_INTERVENANT(INTERVENANT_ID NUMERIC DEFAULT NULL) RETURN NUMERIC IS
-  BEGIN
-    IF OSE_WORKFLOW.INTERVENANT_ID IS NULL OR OSE_WORKFLOW.INTERVENANT_ID = MATCH_INTERVENANT.INTERVENANT_ID THEN
-      RETURN 1;
-    ELSE
-      RETURN 0;
-    END IF;
-  END;
 END OSE_WORKFLOW;',
     ),
     'UNICAEN_IMPORT' => 
@@ -28908,7 +28920,7 @@ END UNICAEN_IMPORT;',
   ) RETURN t_params;
 
   FUNCTION PARAMS_FROM_DEMS( TBL_NAME VARCHAR2 ) RETURN t_params;
-  FUNCTION PARAMS_TO_CONDS ( PARAMS UNICAEN_TBL.T_PARAMS ) RETURN CLOB;
+  FUNCTION PARAMS_TO_CONDS ( PARAMS UNICAEN_TBL.T_PARAMS, alias VARCHAR2 DEFAULT NULL ) RETURN CLOB;
 
   PROCEDURE DEMANDE_CALCUL( TBL_NAME VARCHAR2 );
   PROCEDURE DEMANDE_CALCUL( TBL_NAME VARCHAR2, CONDS CLOB );
@@ -29102,61 +29114,67 @@ END UNICAEN_TBL;',
 
 
 
-  FUNCTION PARAMS_TO_CONDS ( PARAMS UNICAEN_TBL.T_PARAMS ) RETURN CLOB IS
+  FUNCTION PARAMS_TO_CONDS ( PARAMS UNICAEN_TBL.T_PARAMS, alias VARCHAR2 DEFAULT NULL ) RETURN CLOB IS
     cond CLOB;
+    a VARCHAR2(30);
   BEGIN
+    IF alias IS NULL THEN
+      a := \'\';
+    ELSE
+      a := alias || \'.\';
+    END IF;
     IF params.c1 IS NOT NULL THEN
-        IF params.v1 IS NULL THEN
-          cond := cond || params.c1 || \' IS NULL\';
-        ELSE
-          cond := cond || params.c1 || \'=\' || params.v1;
-        END IF;
+      IF params.v1 IS NULL THEN
+        cond := cond || a || params.c1 || \' IS NULL\';
+      ELSE
+        cond := cond || a || params.c1 || \'=\' || params.v1;
       END IF;
+    END IF;
 
-      IF params.c2 IS NOT NULL THEN
-        IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
-        IF params.v2 IS NULL THEN
-          cond := cond || params.c2 || \' IS NULL\';
-        ELSE
-          cond := cond || params.c2 || \'=\' || params.v2;
-        END IF;
+    IF params.c2 IS NOT NULL THEN
+      IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
+      IF params.v2 IS NULL THEN
+        cond := cond || a || params.c2 || \' IS NULL\';
+      ELSE
+        cond := cond || a || params.c2 || \'=\' || params.v2;
       END IF;
+    END IF;
 
-      IF params.c3 IS NOT NULL THEN
-        IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
-        IF params.v3 IS NULL THEN
-          cond := cond || params.c3 || \' IS NULL\';
-        ELSE
-          cond := cond || params.c3 || \'=\' || params.v3;
-        END IF;
+    IF params.c3 IS NOT NULL THEN
+      IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
+      IF params.v3 IS NULL THEN
+        cond := cond || a || params.c3 || \' IS NULL\';
+      ELSE
+        cond := cond || a || params.c3 || \'=\' || params.v3;
       END IF;
+    END IF;
 
-      IF params.c4 IS NOT NULL THEN
-        IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
-        IF params.v4 IS NULL THEN
-          cond := cond || params.c4 || \' IS NULL\';
-        ELSE
-          cond := cond || params.c4 || \'=\' || params.v4;
-        END IF;
+    IF params.c4 IS NOT NULL THEN
+      IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
+      IF params.v4 IS NULL THEN
+        cond := cond || a || params.c4 || \' IS NULL\';
+      ELSE
+        cond := cond || a || params.c4 || \'=\' || params.v4;
       END IF;
+    END IF;
 
-      IF params.c5 IS NOT NULL THEN
-        IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
-        IF params.v5 IS NULL THEN
-          cond := cond || params.c5 || \' IS NULL\';
-        ELSE
-          cond := cond || params.c5 || \'=\' || params.v5;
-        END IF;
+    IF params.c5 IS NOT NULL THEN
+      IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
+      IF params.v5 IS NULL THEN
+        cond := cond || a || params.c5 || \' IS NULL\';
+      ELSE
+        cond := cond || a || params.c5 || \'=\' || params.v5;
       END IF;
+    END IF;
 
-      IF params.sqlcond IS NOT NULL THEN
-        IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
-        cond := cond || \'(\' || params.sqlcond || \')\';
-      END IF;
+    IF params.sqlcond IS NOT NULL THEN
+      IF cond IS NOT NULL THEN cond := cond || \' AND \'; END IF;
+      cond := cond || \'(\' || params.sqlcond || \')\';
+    END IF;
 
-      IF cond IS NULL THEN cond := \'1=1\'; END IF;
+    IF cond IS NULL THEN cond := \'1=1\'; END IF;
 
-      RETURN cond;
+    RETURN cond;
   END;
 
 
@@ -33160,14 +33178,17 @@ GROUP BY
 SELECT
   i.id                                                                 intervenant_id,
   i.annee_id                                                           annee_id,
-  CASE WHEN ti.code = \'P\' THEN i.structure_id ELSE NULL END           structure_id,
   ti.code                                                              type_intervenant_code,
+  CASE WHEN ti.code = \'P\' THEN s.code ELSE NULL END                    structure_code,
   si.service_statutaire                                                heures_service_statutaire,
-  si.depassement_service_du_sans_hc                                    depassement_service_du_sans_hc,
-  COALESCE( SUM( msd.heures * mms.multiplicateur ), 0 )                heures_service_modifie,
-  COALESCE( SUM( msd.heures * mms.multiplicateur * mms.decharge ), 0 ) heures_decharge
+  CASE WHEN
+    si.depassement_service_du_sans_hc = 1
+    OR COALESCE( SUM( msd.heures * mms.multiplicateur * mms.decharge ), 0 ) <> 0
+  THEN 1 ELSE 0 END                                                    depassement_service_du_sans_hc,
+  COALESCE( SUM( msd.heures * mms.multiplicateur ), 0 )                heures_service_modifie
 FROM
             intervenant                  i
+  LEFT JOIN structure                    s ON s.id = i.structure_id
   LEFT JOIN modification_service_du    msd ON msd.intervenant_id = i.id AND msd.histo_destruction IS NULL
   LEFT JOIN motif_modification_service mms ON mms.id = msd.motif_id
        JOIN statut_intervenant          si ON si.id = i.statut_id
@@ -33176,7 +33197,7 @@ WHERE
   i.histo_destruction IS NULL
   AND i.id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, i.id )
 GROUP BY
-  i.id, i.annee_id, i.structure_id, ti.code, si.service_statutaire, si.depassement_service_du_sans_hc',
+  i.id, i.annee_id, i.structure_id, ti.code, s.code, si.service_statutaire, si.depassement_service_du_sans_hc',
     ),
     'V_FORMULE_VOLUME_HORAIRE' => 
     array (
@@ -33193,10 +33214,12 @@ SELECT
   t.TYPE_INTERVENTION_ID,
   t.TYPE_VOLUME_HORAIRE_ID,
   t.ETAT_VOLUME_HORAIRE_ID,
+  t.type_volume_horaire_code,
   t.TAUX_FI,
   t.TAUX_FA,
   t.TAUX_FC,
-  t.STRUCTURE_ID,
+  t.structure_id,
+  t.structure_code,
   t.structure_is_affectation,
   t.structure_is_univ,
   t.PONDERATION_SERVICE_DU,
@@ -33220,12 +33243,14 @@ SELECT
   vh.type_volume_horaire_id                                            type_volume_horaire_id,
   vhe.etat_volume_horaire_id                                           etat_volume_horaire_id,
 
+  tvh.code                                                             type_volume_horaire_code,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fi ELSE 1 END               taux_fi,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fa ELSE 0 END               taux_fa,
   CASE WHEN ep.id IS NOT NULL THEN ep.taux_fc ELSE 0 END               taux_fc,
-  ep.structure_id                                                      structure_id,
-  CASE WHEN COALESCE(ep.structure_id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
-  CASE WHEN COALESCE(ep.structure_id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
+  s.id                                                                 structure_id,
+  s.code                                                               structure_code,
+  CASE WHEN COALESCE(s.id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
+  CASE WHEN COALESCE(s.id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   MAX(COALESCE( m.ponderation_service_du, 1))                          ponderation_service_du,
   MAX(COALESCE( m.ponderation_service_compl, 1))                       ponderation_service_compl,
   COALESCE(tf.service_statutaire,1)                                    service_statutaire,
@@ -33243,8 +33268,10 @@ FROM
        JOIN intervenant                i ON i.id = s.intervenant_id AND i.histo_destruction IS NULL
        JOIN type_intervention         ti ON ti.id = vh.type_intervention_id
        JOIN v_volume_horaire_etat    vhe ON vhe.volume_horaire_id = vh.id
+       JOIN type_volume_horaire      tvh ON tvh.id = vh.type_volume_horaire_id
 
   LEFT JOIN element_pedagogique       ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN structure                  s ON s.id = ep.structure_id
   LEFT JOIN etape                      e ON e.id = ep.etape_id
   LEFT JOIN type_formation            tf ON tf.id = e.type_formation_id
   LEFT JOIN element_modulateur        em ON em.element_id = s.element_pedagogique_id
@@ -33258,8 +33285,8 @@ WHERE
   AND vh.motif_non_paiement_id IS NULL
   AND s.intervenant_id = COALESCE( OSE_FORMULE.GET_INTERVENANT_ID, s.intervenant_id )
 GROUP BY
-  vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, ep.id,
-  ep.taux_fi, ep.taux_fa, ep.taux_fc, ep.structure_id, tf.service_statutaire, vh.heures,
+  vh.id, s.id, s.intervenant_id, ti.id, vh.type_volume_horaire_id, vhe.etat_volume_horaire_id, tvh.code,
+  ep.id, ep.taux_fi, ep.taux_fa, ep.taux_fc, s.id, s.code, tf.service_statutaire, vh.heures,
   vh.horaire_debut, vh.horaire_fin, tis.taux_hetd_service, tis.taux_hetd_complementaire,
   ti.code, ti.taux_hetd_service, ti.taux_hetd_complementaire, i.structure_id, p.valeur
 
@@ -33276,10 +33303,12 @@ SELECT
   vhr.type_volume_horaire_id        type_volume_horaire_id,
   evh.id                            etat_volume_horaire_id,
 
+  tvh.code                          type_volume_horaire_code,
   0                                 taux_fi,
   0                                 taux_fa,
   0                                 taux_fc,
-  sr.structure_id                   structure_id,
+  s.id                              structure_id,
+  s.code                            structure_code,
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(i.structure_id,0)      THEN 1 ELSE 0 END structure_is_affectation,
   CASE WHEN COALESCE(sr.structure_id,0) = COALESCE(to_number(p.valeur),0) THEN 1 ELSE 0 END structure_is_univ,
   1                                 ponderation_service_du,
@@ -33293,13 +33322,15 @@ SELECT
   1                                 taux_service_du,
   1                                 taux_service_compl
 FROM
-       volume_horaire_ref          vhr
-  JOIN parametre                     p ON p.nom = \'structure_univ\'
-  JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
-  JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
-  JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
-  JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
-  JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
+            volume_horaire_ref          vhr
+       JOIN parametre                     p ON p.nom = \'structure_univ\'
+       JOIN service_referentiel          sr ON sr.id = vhr.service_referentiel_id
+       JOIN intervenant                   i ON i.id = sr.intervenant_id AND i.histo_destruction IS NULL
+       JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
+       JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
+       JOIN fonction_referentiel         fr ON fr.id = sr.fonction_id
+       JOIN type_volume_horaire         tvh ON tvh.id = vhr.type_volume_horaire_id
+  LEFT JOIN structure                     s ON s.id = sr.structure_id
 WHERE
   vhr.histo_destruction IS NULL
   AND sr.histo_destruction IS NULL
@@ -36305,236 +36336,275 @@ WHERE
     array (
       'name' => 'V_TBL_WORKFLOW',
       'definition' => 'CREATE OR REPLACE FORCE VIEW V_TBL_WORKFLOW AS
-WITH pj AS (
-  SELECT
-    annee_id,
-    intervenant_id,
-    SUM(demandee) demandees,
-    SUM(fournie)  fournies,
-    SUM(validee)  validees
-  FROM
-    tbl_piece_jointe
-  WHERE
-    1 = OSE_WORKFLOW.match_intervenant(intervenant_id)
-    AND demandee > 0
-  GROUP BY
-    annee_id,
-    intervenant_id
-),
-mep AS (
-  SELECT
-    annee_id,
-    intervenant_id,
-    structure_id,
-    SUM(heures_a_payer / heures_a_payer_pond) sap,
-    SUM(heures_demandees) dmep,
-    SUM(heures_payees) mep
-    --COUNT(*)  sap,
-    --SUM(CASE WHEN mise_en_paiement_id IS NULL THEN 0 ELSE 1 END) dmep,
-    --SUM(CASE WHEN periode_paiement_id IS NULL THEN 0 ELSE 1 END) mep
-  FROM
-    tbl_paiement
-  WHERE
-    1 = OSE_WORKFLOW.match_intervenant(intervenant_id)
-  GROUP BY
-    annee_id,
-    intervenant_id,
-    structure_id
-)
 SELECT
-  e.code                                                    etape_code,
-  d.annee_id                                                annee_id,
-  d.intervenant_id                                          intervenant_id,
-  null                                                      structure_id,
-  1                                                         objectif,
-  CASE
-    WHEN e.code = \'DONNEES_PERSO_SAISIE\' THEN
-      CASE WHEN d.dossier_id IS NULL THEN 0 ELSE 1 END
-
-    WHEN e.code = \'DONNEES_PERSO_VALIDATION\' THEN
-      CASE WHEN d.validation_id IS NULL THEN 0 ELSE 1 END
-
-  END                                                       realisation
+  i.annee_id                                           annee_id,
+  i.id                                                 intervenant_id,
+  e.id                                                 etape_id,
+  w.structure_id                                       structure_id,
+  ROUND(COALESCE(w.objectif,0),2)                      objectif,
+  CASE WHEN w.intervenant_id IS NULL THEN 0 ELSE 1 END atteignable,
+  ROUND(COALESCE(w.realisation,0),2)                   realisation,
+  e.code                                               etape_code,
+  si.id                                                statut_intervenant_id,
+  ti.id                                                type_intervenant_id,
+  ti.code                                              type_intervenant_code
 FROM
-  tbl_dossier d
-  JOIN (
-          SELECT \'DONNEES_PERSO_SAISIE\'     code FROM dual
-    UNION SELECT \'DONNEES_PERSO_VALIDATION\' code FROM dual
-  ) e ON 1=1
-WHERE
-  d. peut_saisir_dossier = 1
-  AND 1 = OSE_WORKFLOW.match_intervenant(d.intervenant_id)
+       intervenant              i
+  JOIN statut_intervenant      si ON si.id = i.statut_id
+  JOIN type_intervenant        ti ON ti.id = si.type_intervenant_id
+  JOIN wf_etape                 e ON 1 = CASE
 
-UNION ALL
+    WHEN e.code = \'DONNEES_PERSO_SAISIE\' OR e.code = \'DONNEES_PERSO_VALIDATION\' THEN
+      si.peut_saisir_dossier
 
-SELECT
-  e.code                                                    etape_code,
-  tss.annee_id                                              annee_id,
-  tss.intervenant_id                                        intervenant_id,
-  NULL                                                      structure_id,
-  1                                                         objectif,
-  CASE
     WHEN e.code = \'SERVICE_SAISIE\' THEN
-      CASE WHEN tss.heures_service_prev + tss.heures_referentiel_prev > 0 THEN 1 ELSE 0 END
+      CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
 
-    WHEN e.code = \'SERVICE_SAISIE_REALISE\' THEN
-      CASE WHEN tss.heures_service_real + tss.heures_referentiel_real > 0 THEN 1 ELSE 0 END
+    WHEN e.code = \'PJ_SAISIE\' OR e.code = \'PJ_VALIDATION\' THEN
+      CASE WHEN EXISTS(
+        SELECT statut_intervenant_id FROM type_piece_jointe_statut tpjs WHERE tpjs.histo_destruction IS NULL AND tpjs.statut_intervenant_id = si.id
+        --SELECT intervenant_id FROM tbl_piece_jointe_demande WHERE intervenant_id = i.id
+      ) THEN 1 ELSE 0 END
 
-  END                                                       realisation
-FROM
-  TBL_SERVICE_SAISIE tss
-  JOIN (
-          SELECT \'SERVICE_SAISIE\'                 code FROM dual
-    UNION SELECT \'SERVICE_SAISIE_REALISE\'         code FROM dual
-  ) e ON 1=1
+    WHEN e.code = \'SERVICE_VALIDATION\' THEN
+      si.peut_saisir_service
+
+    WHEN e.code = \'REFERENTIEL_VALIDATION\' THEN
+      si.peut_saisir_referentiel
+
+    WHEN e.code = \'CONSEIL_ACADEMIQUE\' OR e.code = \'CONSEIL_RESTREINT\' THEN
+      CASE WHEN EXISTS(
+        SELECT statut_intervenant_id
+        FROM type_agrement_statut tas JOIN type_agrement ta ON ta.id = tas.type_agrement_id
+        WHERE tas.histo_destruction IS NULL
+          AND ta.code = e.code
+          AND tas.statut_intervenant_id = si.id
+          AND (tas.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = tas.premier_recrutement)
+      ) THEN 1 ELSE 0 END
+
+    WHEN e.code = \'CONTRAT\' THEN
+      si.peut_avoir_contrat
+
+    WHEN e.code = \'SERVICE_SAISIE_REALISE\' OR e.code = \'DEMANDE_MEP\' OR e.code = \'SAISIE_MEP\' THEN
+      CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
+
+    WHEN e.code = \'CLOTURE_REALISE\' THEN
+      si.peut_cloturer_saisie
+
+    WHEN e.code = \'SERVICE_VALIDATION_REALISE\' THEN
+      si.peut_saisir_service
+
+    WHEN e.code = \'REFERENTIEL_VALIDATION_REALISE\' THEN
+      si.peut_saisir_referentiel
+
+  END
+
+  LEFT JOIN (
+    WITH pj AS (
+      SELECT
+        intervenant_id,
+        SUM(demandee) demandees,
+        SUM(fournie)  fournies,
+        SUM(validee)  validees
+      FROM
+        tbl_piece_jointe
+      WHERE
+        demandee > 0
+      GROUP BY
+        annee_id,
+        intervenant_id
+    ),
+    mep AS (
+      SELECT
+        intervenant_id,
+        structure_id,
+        SUM(heures_a_payer / heures_a_payer_pond) sap,
+        SUM(heures_demandees) dmep,
+        SUM(heures_payees) mep
+      FROM
+        tbl_paiement
+      GROUP BY
+        annee_id,
+        intervenant_id,
+        structure_id
+    )
+    SELECT
+      e.code                                                    etape_code,
+      d.intervenant_id                                          intervenant_id,
+      null                                                      structure_id,
+      1                                                         objectif,
+      CASE
+        WHEN e.code = \'DONNEES_PERSO_SAISIE\' THEN
+          CASE WHEN d.dossier_id IS NULL THEN 0 ELSE 1 END
+
+        WHEN e.code = \'DONNEES_PERSO_VALIDATION\' THEN
+          CASE WHEN d.validation_id IS NULL THEN 0 ELSE 1 END
+
+      END                                                       realisation
+    FROM
+      tbl_dossier d
+      JOIN (
+              SELECT \'DONNEES_PERSO_SAISIE\'     code FROM dual
+        UNION SELECT \'DONNEES_PERSO_VALIDATION\' code FROM dual
+      ) e ON 1=1
+    WHERE
+      d. peut_saisir_dossier = 1
+
+    UNION ALL
+
+    SELECT
+      e.code                                                    etape_code,
+      tss.intervenant_id                                        intervenant_id,
+      NULL                                                      structure_id,
+      1                                                         objectif,
+      CASE
+        WHEN e.code = \'SERVICE_SAISIE\' THEN
+          CASE WHEN tss.heures_service_prev + tss.heures_referentiel_prev > 0 THEN 1 ELSE 0 END
+
+        WHEN e.code = \'SERVICE_SAISIE_REALISE\' THEN
+          CASE WHEN tss.heures_service_real + tss.heures_referentiel_real > 0 THEN 1 ELSE 0 END
+
+      END                                                       realisation
+    FROM
+      TBL_SERVICE_SAISIE tss
+      JOIN (
+              SELECT \'SERVICE_SAISIE\'                 code FROM dual
+        UNION SELECT \'SERVICE_SAISIE_REALISE\'         code FROM dual
+      ) e ON 1=1
+    WHERE
+      (tss.peut_saisir_service = 1 OR tss.peut_saisir_referentiel = 1)
+
+    UNION ALL
+
+    SELECT
+      CASE
+        WHEN tvh.code = \'PREVU\'   THEN \'SERVICE_VALIDATION\'
+        WHEN tvh.code = \'REALISE\' THEN \'SERVICE_VALIDATION_REALISE\'
+      END                                                        etape_code,
+      tve.intervenant_id                                         intervenant_id,
+      tve.structure_id                                           structure_id,
+      COUNT(*)                                                   objectif,
+      SUM(CASE WHEN tve.validation_id IS NOT NULL THEN 1 ELSE 0 END) realisation
+    FROM
+      tbl_validation_enseignement tve
+      JOIN type_volume_horaire tvh ON tvh.id = tve.type_volume_horaire_id
+    WHERE
+      tve.auto_validation = 0
+    GROUP BY
+      tve.intervenant_id,
+      tve.structure_id,
+      tvh.code
+
+    UNION ALL
+
+    SELECT
+      CASE
+        WHEN tvh.code = \'PREVU\'   THEN \'REFERENTIEL_VALIDATION\'
+        WHEN tvh.code = \'REALISE\' THEN \'REFERENTIEL_VALIDATION_REALISE\'
+      END                                                        etape_code,
+      tvr.intervenant_id                                         intervenant_id,
+      tvr.structure_id                                           structure_id,
+      count(*)                                                   objectif,
+      SUM(CASE WHEN tvr.validation_id IS NOT NULL THEN 1 ELSE 0 END) realisation
+    FROM
+      tbl_validation_referentiel tvr
+      JOIN type_volume_horaire tvh ON tvh.id = tvr.type_volume_horaire_id
+    WHERE
+      tvr.auto_validation = 0
+    GROUP BY
+      tvr.intervenant_id,
+      tvr.structure_id,
+      tvh.code
+
+    UNION ALL
+
+    SELECT
+      e.code                                                    etape_code,
+      pj.intervenant_id                                         intervenant_id,
+      null                                                      structure_id,
+      CASE
+        WHEN e.code = \'PJ_SAISIE\' THEN pj.demandees
+        WHEN e.code = \'PJ_VALIDATION\' THEN pj.demandees
+      END                                                       objectif,
+      CASE
+        WHEN e.code = \'PJ_SAISIE\' THEN pj.fournies
+        WHEN e.code = \'PJ_VALIDATION\' THEN pj.validees
+      END                                                       realisation
+    FROM
+      pj
+      JOIN (
+              SELECT \'PJ_SAISIE\'      code FROM dual
+        UNION SELECT \'PJ_VALIDATION\'  code FROM dual
+      ) e ON (
+           (e.code = \'PJ_SAISIE\'     AND pj.demandees > 0)
+        OR (e.code = \'PJ_VALIDATION\' AND pj.fournies  > 0)
+      )
+
+    UNION ALL
+
+    SELECT
+      ta.code                                                   etape_code,
+      a.intervenant_id                                          intervenant_id,
+      a.structure_id                                            structure_id,
+      1                                                         objectif,
+      CASE WHEN a.agrement_id IS NULL THEN 0 ELSE 1 END         realisation
+    FROM
+      tbl_agrement a
+      JOIN type_agrement ta ON ta.id = a.type_agrement_id
+
+    UNION ALL
+
+    SELECT
+      \'CLOTURE_REALISE\'                                         etape_code,
+      c.intervenant_id                                          intervenant_id,
+      null                                                      structure_id,
+      1                                                         objectif,
+      c.cloture                                                 realisation
+    FROM
+      tbl_cloture_realise c
+    WHERE
+      c.peut_cloturer_saisie = 1
+
+    UNION ALL
+
+    SELECT
+      e.code                                                    etape_code,
+      mep.intervenant_id                                        intervenant_id,
+      mep.structure_id                                          structure_id,
+      CASE
+        WHEN e.code = \'DEMANDE_MEP\' THEN mep.sap
+        WHEN e.code = \'SAISIE_MEP\' THEN mep.dmep
+      END                                                       objectif,
+      CASE
+        WHEN e.code = \'DEMANDE_MEP\' THEN mep.dmep
+        WHEN e.code = \'SAISIE_MEP\' THEN mep.mep
+      END                                                       realisation
+    FROM
+      mep
+      JOIN (
+              SELECT \'DEMANDE_MEP\'  code FROM dual
+        UNION SELECT \'SAISIE_MEP\'   code FROM dual
+      ) e ON (
+           (e.code = \'DEMANDE_MEP\' AND mep.sap > 0)
+        OR (e.code = \'SAISIE_MEP\'  AND mep.dmep > 0)
+      )
+
+    UNION ALL
+
+    SELECT
+      \'CONTRAT\'                                                 etape_code,
+      intervenant_id                                            intervenant_id,
+      structure_id                                              structure_id,
+      nbvh                                                      objectif,
+      edite                                                     realisation
+    FROM
+      tbl_contrat c
+    WHERE
+      peut_avoir_contrat = 1
+      AND nbvh > 0
+  ) w ON w.intervenant_id = i.id AND w.etape_code = e.code
 WHERE
-  (tss.peut_saisir_service = 1 OR tss.peut_saisir_referentiel = 1)
-  AND 1 = OSE_WORKFLOW.match_intervenant(tss.intervenant_id)
-
-UNION ALL
-
-SELECT
-  CASE
-    WHEN tvh.code = \'PREVU\'   THEN \'SERVICE_VALIDATION\'
-    WHEN tvh.code = \'REALISE\' THEN \'SERVICE_VALIDATION_REALISE\'
-  END                                                        etape_code,
-  tve.annee_id                                               annee_id,
-  tve.intervenant_id                                         intervenant_id,
-  tve.structure_id                                           structure_id,
-  COUNT(*)                                                   objectif,
-  SUM(CASE WHEN tve.validation_id IS NOT NULL THEN 1 ELSE 0 END) realisation
-FROM
-  tbl_validation_enseignement tve
-  JOIN type_volume_horaire tvh ON tvh.id = tve.type_volume_horaire_id
-WHERE
-  1 = OSE_WORKFLOW.match_intervenant(tve.intervenant_id)
-  AND tve.auto_validation = 0
-GROUP BY
-  tve.annee_id,
-  tve.intervenant_id,
-  tve.structure_id,
-  tvh.code
-
-UNION ALL
-
-SELECT
-  CASE
-    WHEN tvh.code = \'PREVU\'   THEN \'REFERENTIEL_VALIDATION\'
-    WHEN tvh.code = \'REALISE\' THEN \'REFERENTIEL_VALIDATION_REALISE\'
-  END                                                        etape_code,
-  tvr.annee_id                                               annee_id,
-  tvr.intervenant_id                                         intervenant_id,
-  tvr.structure_id                                           structure_id,
-  count(*)                                                   objectif,
-  SUM(CASE WHEN tvr.validation_id IS NOT NULL THEN 1 ELSE 0 END) realisation
-FROM
-  tbl_validation_referentiel tvr
-  JOIN type_volume_horaire tvh ON tvh.id = tvr.type_volume_horaire_id
-WHERE
-  1 = OSE_WORKFLOW.match_intervenant(tvr.intervenant_id)
-  AND tvr.auto_validation = 0
-GROUP BY
-  tvr.annee_id,
-  tvr.intervenant_id,
-  tvr.structure_id,
-  tvh.code
-
-UNION ALL
-
-SELECT
-  e.code                                                    etape_code,
-  pj.annee_id                                               annee_id,
-  pj.intervenant_id                                         intervenant_id,
-  null                                                      structure_id,
-  CASE
-    WHEN e.code = \'PJ_SAISIE\' THEN pj.demandees
-    WHEN e.code = \'PJ_VALIDATION\' THEN pj.demandees
-  END                                                       objectif,
-  CASE
-    WHEN e.code = \'PJ_SAISIE\' THEN pj.fournies
-    WHEN e.code = \'PJ_VALIDATION\' THEN pj.validees
-  END                                                       realisation
-FROM
-  pj
-  JOIN (
-          SELECT \'PJ_SAISIE\'      code FROM dual
-    UNION SELECT \'PJ_VALIDATION\'  code FROM dual
-  ) e ON (
-       (e.code = \'PJ_SAISIE\'     AND pj.demandees > 0)
-    OR (e.code = \'PJ_VALIDATION\' AND pj.fournies  > 0)
-  )
-
-UNION ALL
-
-SELECT
-  ta.code                                                   etape_code,
-  a.annee_id                                                annee_id,
-  a.intervenant_id                                          intervenant_id,
-  a.structure_id                                            structure_id,
-  1                                                         objectif,
-  CASE WHEN a.agrement_id IS NULL THEN 0 ELSE 1 END         realisation
-FROM
-  tbl_agrement a
-  JOIN type_agrement ta ON ta.id = a.type_agrement_id
-WHERE
-  1 = OSE_WORKFLOW.match_intervenant(a.intervenant_id)
-
-UNION ALL
-
-SELECT
-  \'CLOTURE_REALISE\'                                         etape_code,
-  c.annee_id                                                annee_id,
-  c.intervenant_id                                          intervenant_id,
-  null                                                      structure_id,
-  1                                                         objectif,
-  c.cloture                                                 realisation
-FROM
-  tbl_cloture_realise c
-WHERE
-  c.peut_cloturer_saisie = 1
-  AND 1 = OSE_WORKFLOW.match_intervenant(c.intervenant_id)
-
-UNION ALL
-
-SELECT
-  e.code                                                    etape_code,
-  mep.annee_id                                              annee_id,
-  mep.intervenant_id                                        intervenant_id,
-  mep.structure_id                                          structure_id,
-  CASE
-    WHEN e.code = \'DEMANDE_MEP\' THEN mep.sap
-    WHEN e.code = \'SAISIE_MEP\' THEN mep.dmep
-  END                                                       objectif,
-  CASE
-    WHEN e.code = \'DEMANDE_MEP\' THEN mep.dmep
-    WHEN e.code = \'SAISIE_MEP\' THEN mep.mep
-  END                                                       realisation
-FROM
-  mep
-  JOIN (
-          SELECT \'DEMANDE_MEP\'  code FROM dual
-    UNION SELECT \'SAISIE_MEP\'   code FROM dual
-  ) e ON (
-       (e.code = \'DEMANDE_MEP\' AND mep.sap > 0)
-    OR (e.code = \'SAISIE_MEP\'  AND mep.dmep > 0)
-  )
-
-
-UNION ALL
-
-SELECT
-  \'CONTRAT\'                                                 etape_code,
-  annee_id                                                  annee_id,
-  intervenant_id                                            intervenant_id,
-  structure_id                                              structure_id,
-  nbvh                                                      objectif,
-  edite                                                     realisation
-FROM
-  tbl_contrat c
-WHERE
-  peut_avoir_contrat = 1
-  AND nbvh > 0
-  AND 1 = OSE_WORKFLOW.match_intervenant(c.intervenant_id)',
+  e.obligatoire = 1 OR w.intervenant_id IS NOT NULL',
     ),
     'V_TOTAL_DEMANDE_MEP_STRUCTURE' => 
     array (
@@ -36684,95 +36754,6 @@ union all
     SELECT * FROM validation v JOIN validation_vol_horaire_ref vvh ON vvh.validation_id = v.id
     WHERE vvh.volume_horaire_ref_id = vh.id AND v.histo_destruction IS NULL
   )',
-    ),
-    'V_WORKFLOW_ETAPE_PERTINENTE' => 
-    array (
-      'name' => 'V_WORKFLOW_ETAPE_PERTINENTE',
-      'definition' => 'CREATE OR REPLACE FORCE VIEW V_WORKFLOW_ETAPE_PERTINENTE AS
-WITH peut_pj AS (
-  SELECT DISTINCT
-    statut_intervenant_id,
-    1 tem
-  FROM
-    type_piece_jointe_statut tpjs
-  WHERE
-    tpjs.histo_destruction IS NULL
-),
-peut_agr AS (
-  SELECT
-    tas.statut_intervenant_id,
-    ta.code,
-    tas.premier_recrutement
-  FROM
-    type_agrement_statut tas
-    JOIN type_agrement ta ON ta.id = tas.type_agrement_id
-  WHERE
-    tas.histo_destruction IS NULL
-)
-SELECT
-  i.annee_id annee_id,
-  i.id intervenant_id,
-  e.code etape_code
-FROM
-            intervenant i
-       JOIN statut_intervenant si ON si.id = i.statut_id
-  LEFT JOIN peut_pj ON peut_pj.statut_intervenant_id = si.id
-  LEFT JOIN peut_agr peut_cr ON peut_cr.code = \'CONSEIL_RESTREINT\'  AND peut_cr.statut_intervenant_id = si.id AND (peut_cr.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = peut_cr.premier_recrutement)
-  LEFT JOIN peut_agr peut_ca ON peut_ca.code = \'CONSEIL_ACADEMIQUE\' AND peut_ca.statut_intervenant_id = si.id AND (peut_ca.premier_recrutement IS NULL OR NVL(i.premier_recrutement,0) = peut_ca.premier_recrutement)
-       JOIN wf_etape e ON 1 = CASE e.code
-
-    WHEN \'DONNEES_PERSO_SAISIE\' THEN
-      si.peut_saisir_dossier
-
-    WHEN \'SERVICE_SAISIE\' THEN
-      CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
-
-    WHEN \'PJ_SAISIE\' THEN
-      peut_pj.tem
-
-    WHEN \'PJ_VALIDATION\' THEN
-      peut_pj.tem
-
-    WHEN \'DONNEES_PERSO_VALIDATION\' THEN
-      si.peut_saisir_dossier
-
-    WHEN \'SERVICE_VALIDATION\' THEN
-      si.peut_saisir_service
-
-    WHEN \'REFERENTIEL_VALIDATION\' THEN
-      si.peut_saisir_referentiel
-
-    WHEN \'CONSEIL_RESTREINT\' THEN
-      CASE WHEN peut_cr.code IS NULL THEN 0 ELSE 1 END
-
-    WHEN \'CONSEIL_ACADEMIQUE\' THEN
-      CASE WHEN peut_ca.code IS NULL THEN 0 ELSE 1 END
-
-    WHEN \'CONTRAT\' THEN
-      si.peut_avoir_contrat
-
-    WHEN \'SERVICE_SAISIE_REALISE\' THEN
-      CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
-
-    WHEN \'CLOTURE_REALISE\' THEN
-      si.peut_cloturer_saisie
-
-    WHEN \'SERVICE_VALIDATION_REALISE\' THEN
-      si.peut_saisir_service
-
-    WHEN \'REFERENTIEL_VALIDATION_REALISE\' THEN
-      si.peut_saisir_referentiel
-
-    WHEN \'DEMANDE_MEP\' THEN
-      CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
-
-    WHEN \'SAISIE_MEP\' THEN
-      CASE WHEN si.peut_saisir_service + si.peut_saisir_referentiel = 0 THEN 0 ELSE 1 END
-
-  END
-WHERE
-  i.histo_destruction IS NULL
-  AND 1 = OSE_WORKFLOW.match_intervenant(i.id)',
     ),
   ),
   'BddAdmin\\Ddl\\DdlMaterializedView' => 
@@ -38902,19 +38883,7 @@ WHERE
         'INTERVENANT_TEST_ID' => 'ID',
       ),
     ),
-    'FTVH_FORMULE_TEST_STRUCTURE_FK' =>
-    array (
-      'name' => 'FTVH_FORMULE_TEST_STRUCTURE_FK',
-      'table' => 'FORMULE_TEST_VOLUME_HORAIRE',
-      'rtable' => 'FORMULE_TEST_STRUCTURE',
-      'delete_rule' => 'CASCADE',
-      'index' => NULL,
-      'columns' =>
-      array (
-        'STRUCTURE_TEST_ID' => 'ID',
-      ),
-    ),
-    'GRADE_CORPS_FK' =>
+    'GRADE_CORPS_FK' => 
     array (
       'name' => 'GRADE_CORPS_FK',
       'table' => 'GRADE',

@@ -80,6 +80,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
     protected $maximumHETD;
 
     /**
+     * @var float
+     */
+    protected $chargesPatronales = 1.0;
+
+    /**
      * @var integer
      */
     protected $id;
@@ -635,6 +640,30 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
 
 
     /**
+     * @return float
+     */
+    public function getChargesPatronales(): float
+    {
+        return $this->chargesPatronales;
+    }
+
+
+
+    /**
+     * @param float $chargesPatronales
+     *
+     * @return StatutIntervenant
+     */
+    public function setChargesPatronales(float $chargesPatronales): StatutIntervenant
+    {
+        $this->chargesPatronales = $chargesPatronales;
+
+        return $this;
+    }
+
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -924,18 +953,18 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface, Impo
 
     public function dupliquer()
     {
-        $new = new StatutIntervenant();
+        $new     = new StatutIntervenant();
         $methods = get_class_methods($this);
-        foreach( $methods as $method ){
-            $setMethod = 'set'.substr($method, 3);
-            if (0 === strpos($method, 'get') && in_array($setMethod, $methods)){
+        foreach ($methods as $method) {
+            $setMethod = 'set' . substr($method, 3);
+            if (0 === strpos($method, 'get') && in_array($setMethod, $methods)) {
                 $new->$setMethod($this->$method());
             }
         }
         $new->setId(null);
         $uid = uniqid();
-        $new->setSourceCode( $this->getSourceCode().'_'.$uid);
-        $new->setLibelle($this->getLibelle().' (Copie '.$uid.')');
+        $new->setSourceCode($this->getSourceCode() . '_' . $uid);
+        $new->setLibelle($this->getLibelle() . ' (Copie ' . $uid . ')');
 
         return $new;
     }

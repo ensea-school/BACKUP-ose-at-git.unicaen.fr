@@ -6,6 +6,7 @@ use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Role;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
+use UnicaenApp\HostLocalization\HostLocalizationAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
@@ -22,6 +23,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
     use SessionContainerTrait;
     use IntervenantServiceAwareTrait;
     use ContextServiceAwareTrait;
+    use HostLocalizationAwareTrait;
 
     /**
      * @var array
@@ -45,7 +47,7 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
      */
     public function getIdentityRoles()
     {
-        if (!$this->identityRoles){
+        if (!$this->identityRoles) {
             $filter = $this->getEntityManager()->getFilters()->enable('historique');
             $filter->init([
                 Role::class,
@@ -53,6 +55,8 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
             ]);
 
             $this->identityRoles = ['guest' => 'guest'];
+
+            $inEtablissement = $this->getHostLocalization()->inEtablissement();
 
             /**
              * Rôles que possède l'utilisateur dans la base de données.
@@ -63,14 +67,14 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
                     /* @var $affectation Affectation */
                     $role = $affectation->getRole();
                     try {
-                        if ($role->estNonHistorise()) {
+                        if ($role->estNonHistorise() && ($inEtablissement || $role->getAccessibleExterieur())) {
                             $roleId = $role->getCode();
                             if ($structure = $affectation->getStructure()) {
                                 $roleId .= '-' . $structure->getSourceCode();
                             }
                             $this->identityRoles[] = $roleId;
                         }
-                    }catch(\Exception $e){
+                    } catch (\Exception $e) {
                         // on ignore les affectations dont les rôles ont été supprimés
                     }
                 }
@@ -82,7 +86,6 @@ class IdentityProvider implements ChainableProvider, IdentityProviderInterface
             if ($intervenant = $this->getServiceContext()->getIntervenant()) {
                 $this->identityRoles[$intervenant->getStatut()->getRoleId()] = $intervenant->getStatut()->getRoleId();
             }
-
         }
 
         return $this->identityRoles;

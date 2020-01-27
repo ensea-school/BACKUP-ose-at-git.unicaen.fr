@@ -3,7 +3,7 @@
 namespace Application\Service\Factory;
 
 use Application\Service\WorkflowService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 use Zend\Console\Console;
 

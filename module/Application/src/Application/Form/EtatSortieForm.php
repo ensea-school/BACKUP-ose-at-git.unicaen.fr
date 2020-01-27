@@ -76,7 +76,7 @@ class EtatSortieForm extends AbstractForm
         ]);
 
         $this->add([
-            'type'       => 'TextArea',
+            'type'       => 'Textarea',
             'name'       => 'csv-traitement',
             'options'    => [
                 'label' => "Traitement des données",
@@ -209,7 +209,7 @@ class EtatSortieHydrator implements HydratorInterface
 
 
     /**
-     * @param  array     $data
+     * @param array      $data
      * @param EtatSortie $object
      *
      * @return object

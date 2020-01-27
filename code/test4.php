@@ -3,9 +3,12 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
+ 
 
+$utilisateur = $controller->dentity()['db'];
 
+var_dump($utilisateur);

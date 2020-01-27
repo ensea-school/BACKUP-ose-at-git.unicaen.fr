@@ -5,8 +5,7 @@ namespace Application\Service\Factory;
 use Application\Constants;
 use Application\Service\PrivilegeService;
 use UnicaenAuth\Entity\Db\Privilege;
-use Interop\Container\ContainerInterface;
-
+use Psr\Container\ContainerInterface;
 
 
 /**
@@ -32,7 +31,7 @@ class PrivilegeServiceFactory
 
         $config = $container->get('Config');
 
-        if (! isset($config['unicaen-auth']['privilege_entity_class'])) {
+        if (!isset($config['unicaen-auth']['privilege_entity_class'])) {
             $config['unicaen-auth']['privilege_entity_class'] = Privilege::class;
         }
         $service->setPrivilegeEntityClass($config['unicaen-auth']['privilege_entity_class']);

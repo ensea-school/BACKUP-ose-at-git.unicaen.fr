@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -120,16 +120,16 @@ $data = explode("\n", $data);
             if ($typeIntervention == 'Référentiel') $typeIntervention = 'REFERENTIEL';
 
             $referentiel = $typeIntervention == 'REFERENTIEL';
-            $tauxFi = stringToFloat(substr($tauxFi,0,-1)) / 100;
-            $tauxFa = stringToFloat(substr($tauxFa,0,-1)) / 100;
-            $tauxFc = stringToFloat(substr($tauxFc,0,-1)) / 100;
+            $tauxFi      = stringToFloat(substr($tauxFi, 0, -1)) / 100;
+            $tauxFa      = stringToFloat(substr($tauxFa, 0, -1)) / 100;
+            $tauxFc      = stringToFloat(substr($tauxFc, 0, -1)) / 100;
 
             if ('' == $modulateurHC) $modulateurHC = 1;
 
             $heures = substr($heures, 0, -2);
             $heures = stringToFloat($heures);
 
-            if ($c[0] == 'KE8' || $c[0] == 'UP10'){
+            if ($c[0] == 'KE8' || $c[0] == 'UP10') {
                 $param1 = $c[0];
             }
 

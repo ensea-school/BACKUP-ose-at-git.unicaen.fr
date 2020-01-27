@@ -2,7 +2,7 @@
 
 namespace Application\Form\Structure;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use UnicaenImport\Service\SchemaService;
 
 /**

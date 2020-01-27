@@ -3,12 +3,10 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Traits\FormuleTestIntervenantAwareTrait;
-use Application\Entity\Db\Traits\FormuleTestStructureAwareTrait;
 
 class FormuleTestVolumeHoraire
 {
     use FormuleTestIntervenantAwareTrait;
-    use FormuleTestStructureAwareTrait;
 
     /**
      * @var integer
@@ -29,6 +27,11 @@ class FormuleTestVolumeHoraire
      * @var string
      */
     private $typeInterventionCode;
+
+    /**
+     * @var string|null
+     */
+    private $structureCode;
 
     /**
      * @var float
@@ -258,6 +261,30 @@ class FormuleTestVolumeHoraire
     public function setTypeInterventionCode($typeInterventionCode): FormuleTestVolumeHoraire
     {
         $this->typeInterventionCode = $typeInterventionCode;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return string|null
+     */
+    public function getStructureCode(): ?string
+    {
+        return $this->structureCode;
+    }
+
+
+
+    /**
+     * @param string|null $structureCode
+     *
+     * @return FormuleTestVolumeHoraire
+     */
+    public function setStructureCode(?string $structureCode): FormuleTestVolumeHoraire
+    {
+        $this->structureCode = $structureCode;
 
         return $this;
     }

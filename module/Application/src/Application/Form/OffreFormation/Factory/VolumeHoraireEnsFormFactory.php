@@ -2,9 +2,8 @@
 
 namespace Application\Form\OffreFormation\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Application\Form\OffreFormation\VolumeHoraireEnsForm;
-
 
 
 /**
@@ -25,6 +24,7 @@ class VolumeHoraireEnsFormFactory
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $formOffreFormationVolumeHoraireEns = new VolumeHoraireEnsForm;
+
         /* Injectez vos dépendances ICI */
 
         return $formOffreFormationVolumeHoraireEns;

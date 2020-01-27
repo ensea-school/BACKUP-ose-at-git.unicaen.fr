@@ -3,7 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\FormuleController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**
@@ -25,6 +25,7 @@ class FormuleControllerFactory
     {
 
         $controller = new FormuleController;
+
         /* Injectez vos dépendances ICI */
 
         return $controller;

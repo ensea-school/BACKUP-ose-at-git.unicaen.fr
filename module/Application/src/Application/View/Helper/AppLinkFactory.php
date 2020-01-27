@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Zend\Console\Console;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\AnneeServiceAwareTrait;

@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -324,15 +324,15 @@ $scenarios = [
         ],
     ],
     14 => [
-        'input' => [
+        'input'   => [
             30320 => ['heures' => 20.9],
             30325 => ['heures' => 1.1, 'motifNonPaiement' => 'HC payées par ENSCCF'],
         ],
-        'output' => [
+        'output'  => [
 
         ],
         'actions' => [
-            ['changeAll',null,null,'CM','S2', false]
+            ['changeAll', null, null, 'CM', 'S2', false],
         ],
     ],
     15 => [

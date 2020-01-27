@@ -377,6 +377,20 @@ class DataGen
                 $this->syncTable($tbl, $params);
             }
         }
+
+        /* L'administrateur doit avoir tous les droits obligatoirement! */
+        $this->oseAdmin->getBdd()->exec("
+        INSERT INTO
+          role_privilege(privilege_id, role_id)
+        SELECT
+          p.id privilege_id, r.id role_id
+        FROM
+          privilege p
+          JOIN role r ON r.code = 'administrateur'
+          LEFT JOIN role_privilege rp on rp.privilege_id = p.id AND rp.role_id = r.id
+        WHERE
+          rp.role_id IS NULL
+        ");
     }
 
 

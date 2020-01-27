@@ -1,9 +1,57 @@
+# OSE 12 alpha
+
+## Nouveautés
+
+* Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
+* Amélioration des performances (x20 environ) pour le calcul en masse des workflows 
+* Modifications sur l'infrastructure des formules de calcul : 
+  * le code de la structure est fourni en natif et n'est plus un paramètre supplémentaire.
+  * les formules des établissements concernés ont été modifiées pour tenir compte de cette nouveauté.
+  * les heures de décharge ne sont plus gérées en tant que telles, mais impactent le paramètre "Dépassement de service dû sans HC"
+  * il est maintenant possible de personnaliser les structures gérées dans l'interface de test.
+* Possibilité de saisir le taux de charges patronales directement dans l'IHM d'administration des statuts des intervenants
+
+## Correction de bugs
+
+* Rétablissement du fonctionnement du formulaire d'édition des états de sortie
+* La purge de l'indicateur différentiel des données personnel fonctionne de nouveau
+* Correction d'un bug au niveau des feuilles de route qui rendait accessible certaines étapes à tort 
+
+## Notes de mise à jour
+
+Le paramètre "global" => "inEtablissement" devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
+si l'application est utilisée depuis l'établissement ou non. Le fichier config.local.php.default comporte un exemple d'usage de ce paramètre, pour vous aider à l'exploiter.
+
+# OSE 11.2
+
+## Correction de bug
+
+* La saisie en mode calendaire rafraichit de nouveau la liste des services en cas d'ajout d'heures. 
+
+# OSE 11.1
+
+## Correction de bug
+
+* Le formulaire d'édition des enveloppes budgétaires est de nouveau fonctionnel.
+
 # OSE 11
 
 ## Correction de bugs
 
 * L'interface d'administration des motifs de modification de service est de nouveau pleinement fonctionelle.
+* La suppression d'un élément pédagogique de l'ODF complémentaire refonctionne.
+* Correction d'un bug dans le cache : si un fichier n'était pas déjà en cache il y avait plantage.
+* La saisie de service calendaire est de nouveau possible (un bug empêchait de saisir des dates).
 
+## Nouveautés
+
+* Formule de calcul de Lyon2
+* L'administrateur se voit attibuer systématiquement l'accès à toutes les nouvelles fonctionnalités
+* L'interface d'administration des structures est maintenant opérationelle
+
+## Notes de mise à jour
+
+Les versions 7.3 ou 7.4 de PHP sont maintenant nécessaires.
 
 # OSE 10-zf2 et 10-zf3
 

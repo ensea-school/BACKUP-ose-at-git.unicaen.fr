@@ -7,7 +7,7 @@
 class Application
 {
     /**
-     * @var Interop\Container\ContainerInterface
+     * @var Psr\Container\ContainerInterface
      */
     public static $container;
 

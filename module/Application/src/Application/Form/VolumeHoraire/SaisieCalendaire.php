@@ -285,7 +285,7 @@ class SaisieCalendaire extends AbstractForm implements EntityManagerAwareInterfa
             'periode'                   => [
                 'required' => false,
             ],
-            'new'                   => [
+            'new'                       => [
                 'required' => false,
             ],
             'heures'                    => [
@@ -332,8 +332,8 @@ class SaisieCalendaireHydrator implements HydratorInterface
     /**
      * Hydrate $object with the provided $data.
      *
-     * @param  array              $data
-     * @param  VolumeHoraireListe $object
+     * @param array              $data
+     * @param VolumeHoraireListe $object
      *
      * @return object
      */
@@ -383,7 +383,7 @@ class SaisieCalendaireHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  VolumeHoraireListe $object
+     * @param VolumeHoraireListe $object
      *
      * @return array
      */

@@ -98,9 +98,8 @@ return [
             'PACKAGE_NAME' => 'FORMULE_ULHN',
         ],
         4 => [
-            'LIBELLE'            => 'Université de Nanterre',
-            'PACKAGE_NAME'       => 'FORMULE_NANTERRE',
-            'VH_PARAM_1_LIBELLE' => 'Code composante',
+            'LIBELLE'      => 'Université de Nanterre',
+            'PACKAGE_NAME' => 'FORMULE_NANTERRE',
         ],
         5 => [
             'LIBELLE'           => 'Université de Bretagne Occidentale',
@@ -111,6 +110,10 @@ return [
         6 => [
             'LIBELLE'      => 'Ensicaen',
             'PACKAGE_NAME' => 'FORMULE_ENSICAEN',
+        ],
+        7 => [
+            'LIBELLE'      => 'Université Lumière Lyon 2',
+            'PACKAGE_NAME' => 'FORMULE_LYON2',
         ],
     ],
 

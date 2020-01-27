@@ -3,7 +3,7 @@
 namespace Application\View\Helper;
 
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Description of UserCurrentFactory

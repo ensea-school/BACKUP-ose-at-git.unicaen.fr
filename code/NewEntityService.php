@@ -6,7 +6,7 @@ use UnicaenCode\Util;
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -39,13 +39,13 @@ if ($controller->getRequest()->isPost() && $form->isValid()) {
         'generateTrait'     => true,
         'generateInterface' => false,
     ], [
-        'Class' => [
+        'Class'   => [
             'template' => 'EntityService',
             'entity'   => $entity,
             'alias'    => $form->get('alias')->getValue(),
         ],
         'Factory' => [
-            'template' => 'EntityServiceFactory'
+            'template' => 'EntityServiceFactory',
         ],
     ]);
 

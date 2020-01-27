@@ -11,12 +11,11 @@
         <many-to-one field="intervenantTest" target-entity="Application\Entity\Db\FormuleTestIntervenant">
             <join-column name="INTERVENANT_TEST_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="structureTest" target-entity="Application\Entity\Db\FormuleTestStructure">
-            <join-column name="STRUCTURE_TEST_ID" referenced-column-name="ID"/>
-        </many-to-one>
+
         <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>
         <field name="serviceStatutaire" type="boolean" column="SERVICE_STATUTAIRE" nullable="false"/>
         <field name="typeInterventionCode" type="string" column="TYPE_INTERVENTION_CODE" length="15" nullable="true"/>
+        <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
         <field name="tauxFi" type="float" column="TAUX_FI" precision="126" scale="0" nullable="false"/>
         <field name="tauxFa" type="float" column="TAUX_FA" precision="126" scale="0" nullable="false"/>
         <field name="tauxFc" type="float" column="TAUX_FC" precision="126" scale="0" nullable="false"/>

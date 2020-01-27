@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper\Service;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Description of ListeFactory

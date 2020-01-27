@@ -149,7 +149,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 </tr>
                 <tr>
                     <th>Structure</th>
-                    <td class="saisie"><?= $lf->select('structureTest', [], $structures) ?></td>
+                    <td class="saisie"><?= $lf->select('structureCode', ['data-type' => 'string'], $structures) ?></td>
                 </tr>
                 <tr>
                     <th>Type de volume horaire</th>
@@ -158,10 +158,6 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 <tr>
                     <th>État de volume horaire</th>
                     <td class="saisie"><?= $lf->select('etatVolumeHoraire', ['data-default' => 1], $etatsVh) ?></td>
-                </tr>
-                <tr>
-                    <th>Heures de décharge</th>
-                    <td class="saisie"><?= $lf->input('heuresDecharge') ?></td>
                 </tr>
                 <tr>
                     <th>Heures de service statutaire</th>
@@ -327,7 +323,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         <?php for ($i = 0; $i < $maxLignes; $i++): $lf->index = $i; ?>
             <tr>
                 <th><?= $i + 1 ?></th>
-                <td class="saisie"><?= $lf->select('structureTest', [], $structures) ?></td>
+                <td class="saisie"><?= $lf->select('structureCode', ['data-type' => 'string'], $structures) ?></td>
                 <td class="saisie"><?= $lf->select('serviceStatutaire', ['data-type' => 'bool', 'data-default' => true]) ?></td>
                 <td class="saisie"><?= $lf->select('typeInterventionCode', ['data-type' => 'string'], $typesInterventions) ?></td>
                 <td><?= $lf->input('tauxFi', [
@@ -463,7 +459,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
     }
 
     .debug-info-table {
-        overflow:auto;
+        overflow: auto;
     }
 
     .debug-table {
@@ -492,6 +488,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
         $.widget("ose.formuleTestIntervenant", {
             id: null,
             saving: false,
+            structures: [],
 
             valueToVariable: function (value, type)
             {
@@ -653,7 +650,7 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     if ('typeInterventionCode' == name) {
                         that.changementTypeIntervention($(this));
                     }
-                    if ('structureTest' == name) {
+                    if ('structureCode' == name) {
                         that.changementStructure($(this));
                     }
                 });
@@ -768,10 +765,22 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
 
 
 
+            initStructures: function ()
+            {
+                this.structures = [];
+            },
+
+
+
             changementStructure: function (select)
             {
                 var tr = select.parent().parent();
                 var value = select.val();
+
+                if (value === '__new_structure__') {
+                    this.ajoutStructure(select);
+                }
+
                 if (!value) {
                     tr.find('.dinput[data-name=serviceStatutaire]').parent().css('visibility', 'hidden');
                     tr.find('.dinput[data-name=typeInterventionCode]').parent().css('visibility', 'hidden');
@@ -781,6 +790,25 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                 }
                 this.changementTypeIntervention(tr.find('.dinput[data-name=typeInterventionCode]'));
                 this.affLignes();
+            },
+
+
+
+            ajoutStructure: function (element)
+            {
+                var structure = prompt("Ajout d'une nouvelle structure");
+
+                if (structure && -1 === this.structures.indexOf(structure)) {
+                    this.structures.push(structure);
+                    this.element.find(".dinput[data-name=structureCode]").each(function () {
+                        var option = $('<option>');
+                        option.val(structure);
+                        option.text(structure);
+                        $(this).find("[value='__new_structure__']").before(option);
+                    });
+                }
+
+                element.val(structure);
             },
 
 
@@ -878,15 +906,9 @@ echo $this->tag('h1', ['class' => 'page-header'])->html($title);
                     that.changementTypeIntervention($(this));
                 });
 
-                this.element.find(".dinput[data-name='structureTest']").change(function () {
+                this.element.find(".dinput[data-name='structureCode']").change(function () {
                     that.changementStructure($(this));
                 });
-
-
-                // Désactivé, car si on saisit une deuxième valeur, elle est remplacée par le rés de l'AJAX précédant...
-                // this.element.find(".dinput").change(function () {
-                //     that.autoSave();
-                // });
 
                 this.element.find(".enregistrer").click(function () {
                     that.save(true);

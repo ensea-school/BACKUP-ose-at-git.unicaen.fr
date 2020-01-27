@@ -173,9 +173,9 @@ class DossierController extends AbstractController
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
         $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
-        $validation = $this->getServiceDossier()->getValidation($intervenant);
-        if ($validation){
-            throw new \Exception('Ce dossier a déjà été validé par '.$validation->getHistoCreateur().' le '.$validation->getHistoCreation()->format(Constants::DATE_FORMAT));
+        $validation  = $this->getServiceDossier()->getValidation($intervenant);
+        if ($validation) {
+            throw new \Exception('Ce dossier a déjà été validé par ' . $validation->getHistoCreateur() . ' le ' . $validation->getHistoCreation()->format(Constants::DATE_FORMAT));
         }
         try {
             $this->getServiceValidation()->validerDossier($dossier);
@@ -216,7 +216,7 @@ class DossierController extends AbstractController
 
         $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $role->getIntervenant() ?: $this->getEvent()->getParam('intervenant');
-        $dossier = $this->getServiceDossier()->getByIntervenant($intervenant);
+        $dossier     = $this->getServiceDossier()->getByIntervenant($intervenant);
 
         try {
             $this->getServiceDossier()->delete($dossier);
@@ -267,7 +267,7 @@ class DossierController extends AbstractController
 
         if ($this->getRequest()->isPost()) {
             try {
-                $utilisateur = $this->identity()['db'];
+                $utilisateur = $this->getServiceContext()->getUtilisateur();
                 $this->getServiceDossier()->purgerDonneesPersoModif($intervenant, $utilisateur);
 
                 $this->flashMessenger()->addSuccessMessage(sprintf(

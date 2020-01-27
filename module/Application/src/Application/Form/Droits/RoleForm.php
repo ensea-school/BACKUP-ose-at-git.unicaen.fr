@@ -23,7 +23,7 @@ class RoleForm extends AbstractForm
         $hydrator = new RoleFormHydrator;
         $hydrator->setServicePerimetre($this->getServicePerimetre());
         $this->setHydrator($hydrator);
-        $this->setAttribute('action',$this->getCurrentUrl());
+        $this->setAttribute('action', $this->getCurrentUrl());
         $this->add([
             'type'    => 'Text',
             'name'    => 'code',
@@ -59,6 +59,14 @@ class RoleForm extends AbstractForm
                 'title' => "Détermine si l'utilisateur peut changer de structure",
             ],
             'type'       => 'Checkbox',
+        ]);
+
+        $this->add([
+            'name'    => 'accessible-exterieur',
+            'options' => [
+                'label' => 'Utilisable hors du réseau informatique de l\'établissement',
+            ],
+            'type'    => 'Checkbox',
         ]);
 
         $this->add([
@@ -99,6 +107,9 @@ class RoleForm extends AbstractForm
             'peut-changer-structure' => [
                 'required' => true,
             ],
+            'accessible-exterieur'   => [
+                'required' => true,
+            ],
         ];
     }
 }
@@ -114,8 +125,8 @@ class RoleFormHydrator implements HydratorInterface
 
 
     /**
-     * @param  array                       $data
-     * @param  \Application\Entity\Db\Role $object
+     * @param array                       $data
+     * @param \Application\Entity\Db\Role $object
      *
      * @return object
      */
@@ -125,6 +136,7 @@ class RoleFormHydrator implements HydratorInterface
         $object->setLibelle($data['libelle']);
         $object->setPerimetre($this->getServicePerimetre()->get($data['perimetre']));
         $object->setPeutChangerStructure($data['peut-changer-structure']);
+        $object->setAccessibleExterieur($data['accessible-exterieur']);
 
         return $object;
     }
@@ -132,7 +144,7 @@ class RoleFormHydrator implements HydratorInterface
 
 
     /**
-     * @param  \Application\Entity\Db\Role $object
+     * @param \Application\Entity\Db\Role $object
      *
      * @return array
      */
@@ -144,6 +156,7 @@ class RoleFormHydrator implements HydratorInterface
             'libelle'                => $object->getLibelle(),
             'perimetre'              => $object->getPerimetre() ? $object->getPerimetre()->getId() : null,
             'peut-changer-structure' => $object->getPeutChangerStructure(),
+            'accessible-exterieur'   => $object->getAccessibleExterieur(),
         ];
 
         return $data;

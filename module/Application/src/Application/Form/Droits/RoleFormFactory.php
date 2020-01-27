@@ -2,8 +2,7 @@
 
 namespace Application\Form\Droits;
 
-use Interop\Container\ContainerInterface;
-
+use Psr\Container\ContainerInterface;
 
 
 /**

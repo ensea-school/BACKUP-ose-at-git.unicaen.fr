@@ -3,16 +3,23 @@
 ## Nouveautés
 
 * Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
+* Amélioration des performances (x20 environ) pour le calcul en masse des workflows 
+* Modifications sur l'infrastructure des formules de calcul : 
+  * le code de la structure est fourni en natif et n'est plus un paramètre supplémentaire.
+  * les formules des établissements concernés ont été modifiées pour tenir compte de cette nouveauté.
+  * les heures de décharge ne sont plus gérées en tant que telles, mais impactent le paramètre "Dépassement de service dû sans HC"
+  * il est maintenant possible de personnaliser les structures gérées dans l'interface de test.
 
 ## Correction de bugs
 
 * Rétablissement du fonctionnement du formulaire d'édition des états de sortie
-* La purge de l'indicateur différentiel des données personnel fonctionne de nouveau 
+* La purge de l'indicateur différentiel des données personnel fonctionne de nouveau
+* Correction d'un bug au niveau des feuilles de route qui rendait accessible certaines étapes à tort 
 
 ## Notes de mise à jour
 
-Le paramètre global.inEtablissement devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
-si l'application est utilisée depuis l'établissement ou non.
+Le paramètre "global" => "inEtablissement" devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
+si l'application est utilisée depuis l'établissement ou non. Le fichier config.local.php.default comporte un exemple d'usage de ce paramètre, pour vous aider à l'exploiter.
 
 # OSE 11.2
 

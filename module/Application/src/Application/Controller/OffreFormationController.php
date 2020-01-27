@@ -215,11 +215,15 @@ class OffreFormationController extends AbstractController
         $anneeN1           = $this->getServiceContext()->getAnneeSuivante();
         $fromPost          = false;
         $etapesReconduites = [];
-        list($structure, $niveau, $etape) = $this->getParams();
+        [$structure, $niveau, $etape] = $this->getParams();
 
         //Get role of user
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
-        $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->getServiceStructure()->finderByRole($role, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
 
 
         //Récupération de toutes les étapes éligibles à la reconduction des coûts
@@ -285,11 +289,15 @@ class OffreFormationController extends AbstractController
         $anneeN  = $this->getServiceContext()->getAnnee();
         $anneeN1 = $this->getServiceContext()->getAnneeSuivante();
 
-        list($structure, $niveau, $etape) = $this->getParams();
+        [$structure, $niveau, $etape] = $this->getParams();
         $etapesReconduites = [];
         $fromPost          = 0;
         $role              = $this->getServiceContext()->getSelectedIdentityRole();
-        $structures        = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByRole($role));
+
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->getServiceStructure()->finderByRole($role, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
 
         //Récupération de toutes les étapes éligibles à la reconduction des coûts
         if (!empty($structure)) {

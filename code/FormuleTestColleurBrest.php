@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -172,15 +172,14 @@ $data = explode("\n", $data);
             if ($typeIntervention == 'Référentiel') $typeIntervention = 'REFERENTIEL';
 
             $referentiel = $typeIntervention == 'REFERENTIEL';
-            $tauxFi = (float)str_replace(',','.',substr($tauxFi,0,-1)) / 100;
-            $tauxFa = (float)str_replace(',','.',substr($tauxFa,0,-1)) / 100;
-            $tauxFc = (float)str_replace(',','.',substr($tauxFc,0,-1)) / 100;
+            $tauxFi      = (float)str_replace(',', '.', substr($tauxFi, 0, -1)) / 100;
+            $tauxFa      = (float)str_replace(',', '.', substr($tauxFa, 0, -1)) / 100;
+            $tauxFc      = (float)str_replace(',', '.', substr($tauxFc, 0, -1)) / 100;
 
             if ('' == $modulateurHC) $modulateurHC = 1;
 
             $heures = substr($heures, 0, -2);
             $heures = stringToFloat($heures);
-
 
 
             $debug = false;

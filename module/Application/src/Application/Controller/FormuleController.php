@@ -7,7 +7,6 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
 use Application\Entity\Db\FormuleTestIntervenant;
-use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Traits\ContextServiceAwareTrait;
@@ -43,7 +42,6 @@ class FormuleController extends AbstractController
         /* @var $formuleTestIntervenant FormuleTestIntervenant */
         $formuleTestIntervenant = $this->getEvent()->getParam('formuleTestIntervenant');
 
-        $structures        = $this->em()->createQuery("SELECT s FROM " . FormuleTestStructure::class . " s ORDER BY s.libelle")->execute();
         $formules          = $this->em()->createQuery("SELECT f FROM " . Formule::class . " f ORDER BY f.id")->execute();
         $annees            = $this->em()->createQuery("SELECT a FROM " . Annee::class . " a WHERE a.id BETWEEN 2013 AND 2030 ORDER BY a.id")->execute();
         $typesIntervenants = $this->em()->createQuery("SELECT ti FROM " . TypeIntervenant::class . " ti ORDER BY ti.id")->execute();
@@ -63,6 +61,11 @@ class FormuleController extends AbstractController
                 $this->flashMessenger()->addErrorMessage($this->translate($e));
             }
         }
+
+        $structures                      = $formuleTestIntervenant->getStructures();
+        $structures['__UNIV__']          = 'Université (établissement))'; // Établissement
+        $structures['__EXTERIEUR__']     = 'Extérieur (autre établissement))'; // Autre établissement
+        $structures['__new_structure__'] = '- Ajout d\'une nouvelle structure -'; // Pour pouvoir ajouter une structure
 
         return compact('formuleTestIntervenant', 'title', 'annee', 'formuleId', 'structures', 'formules', 'annees', 'typesIntervenants', 'typesVh', 'etatsVh');
     }
@@ -94,7 +97,7 @@ class FormuleController extends AbstractController
             $formuleTestIntervenant = new FormuleTestIntervenant();
         }
 
-        $result = ['errors' => '', 'data' => []];
+        $result = ['errors' => [], 'data' => []];
         $data   = json_decode($this->params()->fromPost('data'), true);
         $formuleTestIntervenant->fromArray($data);
 
@@ -116,7 +119,7 @@ class FormuleController extends AbstractController
             $passed             = false;
         }
         if ($formuleTestIntervenant->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT
-            && !$formuleTestIntervenant->getStructureTest()
+            && !$formuleTestIntervenant->getStructureCode()
         ) {
             $result['errors'][] = 'La structure doit être renseignée';
             $passed             = false;

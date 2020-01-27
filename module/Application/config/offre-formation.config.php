@@ -20,7 +20,7 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'default' => [
+                    'default'      => [
                         'type'    => 'Segment',
                         'options' => [
                             'route'       => '/:action[/:id]',
@@ -33,7 +33,16 @@ return [
                             ],
                         ],
                     ],
-                    'element' => [
+                    'reconduction' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/reconduction',
+                            'defaults' => [
+                                'action' => 'reconduction',
+                            ],
+                        ],
+                    ],
+                    'element'      => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/element',
@@ -129,7 +138,7 @@ return [
                             ],
                         ],
                     ],
-                    'etape'   => [
+                    'etape'        => [
                         'type'          => 'Literal',
                         'options'       => [
                             'route'    => '/etape',
@@ -218,11 +227,21 @@ return [
         'default' => [
             'home' => [
                 'pages' => [
-                    'of' => [
+                    'of'             => [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
                         'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'index'),
+                    ],
+                    'administration' => [
+                        'pages' => [
+                            'reconduction-offre' => [
+                                'label'    => 'Reconduction de l\'offre de formation',
+                                'icon'     => 'glyphicon glyphicon-list-alt',
+                                'route'    => 'of/reconduction',
+                                'resource' => PrivilegeController::getResourceId('Application\Controller\OffreFormation', 'reconduction'),
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -241,6 +260,11 @@ return [
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => ['export'],
                     'privileges' => Privileges::ODF_EXPORT_CSV,
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['reconduction'],
+                    'privileges' => Privileges::ODF_RECONDUCTION_OFFRE,
                 ],
                 /* Etapes */
                 [
@@ -369,20 +393,23 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            Service\ElementPedagogiqueService::class  => Service\ElementPedagogiqueService::class,
-            Service\CheminPedagogiqueService::class   => Service\CheminPedagogiqueService::class,
-            Service\EtapeService::class               => Service\EtapeService::class,
-            Service\TypeFormationService::class       => Service\TypeFormationService::class,
-            Service\GroupeTypeFormationService::class => Service\GroupeTypeFormationService::class,
-            Service\NiveauEtapeService::class         => Service\NiveauEtapeService::class,
-            Service\NiveauFormationService::class     => Service\NiveauFormationService::class,
-            Service\ModulateurService::class          => Service\ModulateurService::class,
-            Service\ElementModulateurService::class   => Service\ElementModulateurService::class,
-            Service\TypeModulateurService::class      => Service\TypeModulateurService::class,
-            Service\DomaineFonctionnelService::class  => Service\DomaineFonctionnelService::class,
+            Service\ElementPedagogiqueService::class   => Service\ElementPedagogiqueService::class,
+            Service\CheminPedagogiqueService::class    => Service\CheminPedagogiqueService::class,
+            Service\EtapeService::class                => Service\EtapeService::class,
+            Service\TypeFormationService::class        => Service\TypeFormationService::class,
+            Service\GroupeTypeFormationService::class  => Service\GroupeTypeFormationService::class,
+            Service\NiveauEtapeService::class          => Service\NiveauEtapeService::class,
+            Service\NiveauFormationService::class      => Service\NiveauFormationService::class,
+            Service\ModulateurService::class           => Service\ModulateurService::class,
+            Service\ElementModulateurService::class    => Service\ElementModulateurService::class,
+            Service\TypeModulateurService::class       => Service\TypeModulateurService::class,
+            Service\DomaineFonctionnelService::class   => Service\DomaineFonctionnelService::class,
+            Assertion\OffreDeFormationAssertion::class => Assertion\OffreDeFormationAssertion::class,
+            Service\OffreFormationService::class       => Service\OffreFormationService::class,
+            Processus\ReconductionProcessus::class     => Processus\ReconductionProcessus::class,
         ],
         'factories'  => [
-            Assertion\OffreDeFormationAssertion::class => \UnicaenAuth\Assertion\AssertionFactory::class,
+            Processus\ReconductionProcessus::class => Processus\Factory\ReconductionProcessusFactory::class,
         ],
     ],
     'form_elements'   => [

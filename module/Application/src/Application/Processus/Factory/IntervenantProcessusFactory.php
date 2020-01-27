@@ -4,7 +4,7 @@ namespace Application\Processus\Factory;
 
 
 use Application\Processus\IntervenantProcessus;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  *

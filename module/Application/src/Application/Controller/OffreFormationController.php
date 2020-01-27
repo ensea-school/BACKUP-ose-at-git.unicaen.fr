@@ -7,12 +7,14 @@ use Application\Entity\Db\Etape;
 use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\TypeModulateur;
-use Application\Entity\NiveauEtape;
+use Application\Processus\Traits\ReconductionProcessusAwareTrait;
+use Application\Service\Traits\AnneeServiceAwareTrait;
 use Application\Service\Traits\ContextServiceAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueServiceAwareTrait;
 use Application\Service\Traits\EtapeServiceAwareTrait;
 use Application\Service\Traits\LocalContextServiceAwareTrait;
 use Application\Service\Traits\NiveauEtapeServiceAwareTrait;
+use Application\Service\Traits\OffreFormationServiceAwareTrait;
 use Application\Service\Traits\StructureServiceAwareTrait;
 use UnicaenApp\View\Model\CsvModel;
 use Zend\Session\Container;
@@ -31,6 +33,9 @@ class OffreFormationController extends AbstractController
     use ElementPedagogiqueServiceAwareTrait;
     use EtapeServiceAwareTrait;
     use NiveauEtapeServiceAwareTrait;
+    use AnneeServiceAwareTrait;
+    use ReconductionProcessusAwareTrait;
+    use OffreFormationServiceAwareTrait;
 
     /**
      * @var Container
@@ -39,106 +44,12 @@ class OffreFormationController extends AbstractController
 
 
 
-    protected function initFilters()
-    {
-        /* Mise en place des filtres */
-        $this->em()->getFilters()->enable('historique')->init([
-            ElementPedagogique::class,
-            TypeFormation::class,
-            GroupeTypeFormation::class,
-            TypeModulateur::class,
-        ]);
-        $this->em()->getFilters()->enable('annee')->init([
-            ElementPedagogique::class,
-            Etape::class,
-        ]);
-    }
-
-
-
-    protected function getParams()
-    {
-        $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
-        $niveau    = $this->context()->niveauFromQuery();
-        $etape     = $this->context()->etapeFromQuery();
-        if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
-        return [$structure, $niveau, $etape];
-    }
-
-
-
-    protected function getNeep($structure, $niveau, $etape)
-    {
-        if (!$structure) return [[], [], []];
-
-        $niveaux  = [];
-        $etapes   = [];
-        $elements = [];
-
-        $query = $this->em()->createQuery('SELECT
-                partial e.{id,code,libelle,sourceCode,niveau,histoDestruction},
-                partial tf.{id},
-                partial gtf.{id, libelleCourt, ordre},
-                partial ep.{id,code,libelle,sourceCode,etape,periode,tauxFoad,fi,fc,fa,tauxFi,tauxFc,tauxFa}
-            FROM
-              Application\Entity\Db\Etape e
-              JOIN e.structure s
-              JOIN e.typeFormation tf
-              JOIN tf.groupe gtf
-              LEFT JOIN e.elementPedagogique ep
-            WHERE
-              s = :structure OR ep.structure = :structure
-            ORDER BY
-              gtf.ordre, e.niveau
-            ');
-        $query->setParameter('structure', $structure);
-        $result = $query->getResult();
-
-        foreach ($result as $object) {
-            if ($object instanceof Etape) {
-                $n                    = NiveauEtape::getInstanceFromEtape($object);
-                if ($object->estNonHistorise()) {
-                    $niveaux[$n->getId()] = $n;
-                }
-                if (!$niveau || $niveau->getId() == $n->getId()) {
-                    if ($object->estNonHistorise() || $object->getElementPedagogique()->count() > 0){
-                        $etapes[] = $object;
-                    }
-                    if (!$etape || $etape === $object) {
-                        foreach ($object->getElementPedagogique() as $ep) {
-                            $elements[$ep->getId()] = $ep;
-                        }
-                    }
-                }
-            }
-        }
-
-        /* Tris */
-        uasort($etapes, function (Etape $e1, Etape $e2) {
-            $e1Lib = ($e1->getElementPedagogique()->isEmpty() ? 'a_' : 'z_') . strtolower(trim($e1->getLibelle()));
-            $e2Lib = ($e2->getElementPedagogique()->isEmpty() ? 'a_' : 'z_') . strtolower(trim($e2->getLibelle()));
-
-            return $e1Lib > $e2Lib;
-        });
-
-        uasort($elements, function (ElementPedagogique $e1, ElementPedagogique $e2) {
-            $e1Lib = strtolower(trim($e1->getEtape()->getLibelle() . ' ' . $e1->getLibelle()));
-            $e2Lib = strtolower(trim($e2->getEtape()->getLibelle() . ' ' . $e2->getLibelle()));
-
-            return $e1Lib > $e2Lib;
-        });
-
-        return [$niveaux, $etapes, $elements];
-    }
-
-
-
     public function indexAction()
     {
         $this->initFilters();
 
-        list($structure, $niveau, $etape) = $this->getParams();
 
+        [$structure, $niveau, $etape] = $this->getParams();
 
         // persiste les filtres dans le contexte local
         $this->getServiceLocalContext()
@@ -147,7 +58,7 @@ class OffreFormationController extends AbstractController
             ->setEtape($etape);
 
         $structures = $this->getServiceStructure()->getList($this->getServiceStructure()->finderByEnseignement());
-        list($niveaux, $etapes, $elements) = $this->getNeep($structure, $niveau, $etape);
+        [$niveaux, $etapes, $elements] = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape);
 
         $params = [];
         if ($structure) $params['structure'] = $structure->getId();
@@ -179,9 +90,9 @@ class OffreFormationController extends AbstractController
     {
         $this->initFilters();
 
-        list($structure, $niveau, $etape) = $this->getParams();
+        [$structure, $niveau, $etape] = $this->getParams();
 
-        $elements = $this->getNeep($structure, $niveau, $etape)[2];
+        $elements = $this->getServiceOffreFormation()->getNeep($structure, $niveau, $etape)[2];
         /* @var $elements ElementPedagogique[] */
 
         $csvModel = new CsvModel();
@@ -227,6 +138,114 @@ class OffreFormationController extends AbstractController
         $csvModel->setFilename('offre-de-formation.csv');
 
         return $csvModel;
+    }
+
+
+
+    public function reconductionAction()
+    {
+        $this->initFilterHistorique();
+        [$structure, $niveau, $etape] = $this->getParams();
+        //Get role of user
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $this->getServiceStructure()->finderByEnseignement($qb);
+        $this->getServiceStructure()->finderByRole($role, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+
+        $anneeEnCours = $this->getServiceContext()->getAnnee();
+        [$offresComplementaires, $mappingEtape, $reconductionTotale] = $this->getServiceOffreFormation()->getOffreComplementaire($structure, $niveau, $etape);
+
+        $reconductionStep = '';
+        $messageStep      = '';
+        $fromPost         = false;
+
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $datas    = $request->getPost();
+            $fromPost = true;
+
+            //Ajout du mapping des EtapesN et EtapesN1 pour pouvoir reconduire un element pédagogique sur une etape déjà reconduite.
+            $datas['mappingEtape'] = $mappingEtape;
+            $reconductionProcessus = $this->getProcessusReconduction();
+            try {
+                //Disable filter historique pour regarder si étape ou element avec date de desctruction
+                $this->disableFilters('historique');
+                if ($reconductionProcessus->reconduction($datas)) {
+                    $this->flashMessenger()->addSuccessMessage("Les éléments ont bien été reconduits pour l'année universitaire prochaine.");
+                } else {
+                    $this->flashMessenger()->addErrorMessage("Les éléments n'ont pas pu être reconduits. Merci de contacter le support.");
+                }
+            } catch (\Exception $e) {
+                $reconductionStep = false;
+                $messageStep      = $e->getMessage();
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
+            }
+        }
+
+
+        return [
+            'fromPost'              => $fromPost,
+            'offresComplementaires' => $offresComplementaires,
+            'reconductionTotale'    => $reconductionTotale,
+            'structure'             => $structure,
+            'structures'            => $structures,
+            'anneeEnCours'          => $anneeEnCours,
+            'reconductionStep'      => $reconductionStep,
+            'messageStep'           => $messageStep,
+        ];
+    }
+
+
+
+    protected function initFilters()
+    {
+        $this->initFilterAnnee();
+        $this->initFilterHistorique();
+    }
+
+
+
+    protected function initFilterAnnee()
+    {
+        $this->em()->getFilters()->enable('annee')->init([
+            ElementPedagogique::class,
+            Etape::class,
+        ]);
+    }
+
+
+
+    protected function initFilterHistorique()
+    {
+        /* Mise en place des filtres */
+        $this->em()->getFilters()->enable('historique')->init([
+            ElementPedagogique::class,
+            TypeFormation::class,
+            GroupeTypeFormation::class,
+            TypeModulateur::class,
+        ]);
+    }
+
+
+
+    protected function disableFilters($name)
+    {
+        $this->em()->getFilters()->disable($name);
+    }
+
+
+
+    protected function getParams()
+    {
+        $structure = $this->context()->structureFromQuery() ?: $this->getServiceContext()->getStructure();
+        $niveau    = $this->context()->niveauFromQuery();
+        $etape     = $this->context()->etapeFromQuery();
+        if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
+
+        return [$structure, $niveau, $etape];
     }
 
 }

@@ -6,7 +6,7 @@ use UnicaenCode\Util;
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -50,8 +50,8 @@ Util::displayForm($form);
 
 if ($controller->getRequest()->isPost() && $form->isValid()) {
 
-    $type              = $form->get('type')->getValue();
-    $classname         = $form->get('classname')->getValue();
+    $type      = $form->get('type')->getValue();
+    $classname = $form->get('classname')->getValue();
 
     $sCodeGenerator = Util::codeGenerator()
     /* @var $sCodeGenerator \UnicaenCode\Service\CodeGenerator */

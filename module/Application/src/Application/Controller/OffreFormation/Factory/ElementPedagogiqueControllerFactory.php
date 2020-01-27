@@ -3,7 +3,7 @@
 namespace Application\Controller\OffreFormation\Factory;
 
 use Application\Controller\OffreFormation\ElementPedagogiqueController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**

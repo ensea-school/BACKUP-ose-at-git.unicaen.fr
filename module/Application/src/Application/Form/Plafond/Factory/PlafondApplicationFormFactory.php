@@ -2,7 +2,7 @@
 
 namespace Application\Form\Plafond\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Application\Form\Plafond\PlafondApplicationForm;
 
 

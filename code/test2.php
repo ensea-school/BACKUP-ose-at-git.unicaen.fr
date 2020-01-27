@@ -3,7 +3,7 @@
 /**
  * @var $this       \Application\View\Renderer\PhpRenderer
  * @var $controller \Zend\Mvc\Controller\AbstractController
- * @var $container  \Interop\Container\ContainerInterface
+ * @var $container  \Psr\Container\ContainerInterface
  * @var $viewName   string
  * @var $viewFile   string
  */
@@ -32,10 +32,10 @@ ORDER BY
 /** @var $em \Doctrine\ORM\EntityManager */
 $em = $container->get(\Application\Constants::BDD);
 
-$ids = $em->getConnection()->query($sql);
+$ids      = $em->getConnection()->query($sql);
 $feuilles = [];
 
-foreach( $ids as $id ){
+foreach ($ids as $id) {
     $intervenant = (int)$id['INTERVENANT_ID'];
     unset($id['INTERVENANT_ID']);
     $feuilles[$intervenant][] = $id;

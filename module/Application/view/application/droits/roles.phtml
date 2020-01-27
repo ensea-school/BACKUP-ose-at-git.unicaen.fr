@@ -5,8 +5,8 @@ use Application\Provider\Privilege\Privileges;
 
 /* @var $roles Application\Entity\Db\Role[] */
 
-$canEdit = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_ROLE_EDITION));
-$ajoutUrl = $this->url( 'droits/roles/edition' );
+$canEdit  = $this->isAllowed(Privileges::getResourceId(Privileges::DROIT_ROLE_EDITION));
+$ajoutUrl = $this->url('droits/roles/edition');
 
 ?>
 <table class="table table-condensed table-bordered">
@@ -15,37 +15,42 @@ $ajoutUrl = $this->url( 'droits/roles/edition' );
         <th>Libellé</th>
         <th>Périmètre</th>
         <th>Struct. modifiable</th>
-        <?php if ($canEdit): ?><th>Action</th><?php endif; ?>
-    </tr>
-<?php foreach( $roles as $role ):
-    $editionUrl     = $this->url( 'droits/roles/edition',     ['role' => $role->getId()] );
-    $suppressionUrl = $this->url( 'droits/roles/suppression', ['role' => $role->getId()] );
-?>
-    <tr>
-        <td><?= $role->getCode(); ?></td>
-        <td><?= $role->getLibelle(); ?></td>
-        <td><?= $role->getPerimetre(); ?></td>
-        <td style="text-align: center;"><?= $role->getPeutChangerStructure() ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>'; ?></td>
+        <th>Accessible hors établissement</th>
         <?php if ($canEdit): ?>
-        <td style="width:1%;white-space: nowrap;text-align: center">
-            <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><span class="glyphicon glyphicon-edit"></span></a>
-            <a href="<?= $suppressionUrl; ?>" class="ajax-modal" data-event="role-suppression"><span class="glyphicon glyphicon-remove"></span></a>
-        </td>
-        <?php endif; ?>
+            <th>Action</th><?php endif; ?>
     </tr>
-<?php endforeach; ?>
+    <?php foreach ($roles as $role):
+        $editionUrl = $this->url('droits/roles/edition', ['role' => $role->getId()]);
+        $suppressionUrl = $this->url('droits/roles/suppression', ['role' => $role->getId()]);
+        ?>
+        <tr>
+            <td><?= $role->getCode(); ?></td>
+            <td><?= $role->getLibelle(); ?></td>
+            <td><?= $role->getPerimetre(); ?></td>
+            <td style="text-align: center;"><?= $role->getPeutChangerStructure() ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>'; ?></td>
+            <td style="text-align: center;"><?= $role->getAccessibleExterieur() ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger refuse"></span>'; ?></td>
+            <?php if ($canEdit): ?>
+                <td style="width:1%;white-space: nowrap;text-align: center">
+                    <a href="<?= $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><span
+                                class="glyphicon glyphicon-edit"></span></a>
+                    <a href="<?= $suppressionUrl; ?>" class="ajax-modal" data-event="role-suppression"><span
+                                class="glyphicon glyphicon-remove"></span></a>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
 </table>
 <?php if ($canEdit): // droits ?>
-<a href="<?= $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="role-edition">Création d'un nouveau rôle</a>
+    <a href="<?= $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="role-edition">Création d'un nouveau rôle</a>
 <?php endif; ?>
 <?= $this->modalAjaxDialog('roles-edition-suppression'); ?>
 <script type="text/javascript">
-    $(function() {
-        $("body").on("role-edition", function(event, data) {
+    $(function () {
+        $("body").on("role-edition", function (event, data) {
             window.location.reload();
         });
 
-        $("body").on("role-suppression", function(event, data) {
+        $("body").on("role-suppression", function (event, data) {
             window.location.reload();
         });
     });

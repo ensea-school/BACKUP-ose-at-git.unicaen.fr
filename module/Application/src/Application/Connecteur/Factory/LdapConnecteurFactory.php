@@ -3,7 +3,7 @@
 namespace Application\Connecteur\Factory;
 
 use Application\Connecteur\LdapConnecteur;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 
 /**
@@ -36,26 +36,26 @@ class LdapConnecteurFactory
         );
 
         $config = $container->get('Config');
-        if (isset($config['unicaen-app']['ldap']['utilisateur'])){
+        if (isset($config['unicaen-app']['ldap']['utilisateur'])) {
             $configLdapUtilisateur = $config['unicaen-app']['ldap']['utilisateur'];
-        }else{
+        } else {
             $configLdapUtilisateur = [];
         }
 
-        if (isset($configLdapUtilisateur['LOGIN'])){
-            $service->setUtilisateurLogin( $configLdapUtilisateur['LOGIN'] );
+        if (isset($configLdapUtilisateur['LOGIN'])) {
+            $service->setUtilisateurLogin($configLdapUtilisateur['LOGIN']);
         }
 
-        if (isset($configLdapUtilisateur['FILTER'])){
-            $service->setUtilisateurFiltre( $configLdapUtilisateur['FILTER'] );
+        if (isset($configLdapUtilisateur['FILTER'])) {
+            $service->setUtilisateurFiltre($configLdapUtilisateur['FILTER']);
         }
 
-        if (isset($configLdapUtilisateur['CODE'])){
-            $service->setUtilisateurCode( $configLdapUtilisateur['CODE'] );
+        if (isset($configLdapUtilisateur['CODE'])) {
+            $service->setUtilisateurCode($configLdapUtilisateur['CODE']);
         }
 
-        if (isset($configLdapUtilisateur['CODEFILTER'])){
-            $service->setUtilisateurCodeFiltre( $configLdapUtilisateur['CODEFILTER'] );
+        if (isset($configLdapUtilisateur['CODEFILTER'])) {
+            $service->setUtilisateurCodeFiltre($configLdapUtilisateur['CODEFILTER']);
         }
 
         $service->setUtilisateurExtraMasque(\AppConfig::get('ldap', 'utilisateurExtraMasque', ''));

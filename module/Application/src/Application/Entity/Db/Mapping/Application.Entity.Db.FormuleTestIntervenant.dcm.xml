@@ -18,9 +18,6 @@
         <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
             <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
         </many-to-one>
-        <many-to-one field="structureTest" target-entity="Application\Entity\Db\FormuleTestStructure">
-            <join-column name="STRUCTURE_TEST_ID" referenced-column-name="ID"/>
-        </many-to-one>
         <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
             <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
@@ -28,7 +25,7 @@
             <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
         </many-to-one>
 
-        <field name="heuresDecharge" type="float" column="HEURES_DECHARGE" precision="126" scale="0"/>
+        <field name="structureCode" type="string" column="STRUCTURE_CODE" length="100" nullable="true"/>
         <field name="heuresServiceStatutaire" type="float" column="HEURES_SERVICE_STATUTAIRE" precision="126" scale="0"/>
         <field name="heuresServiceModifie" type="float" column="HEURES_SERVICE_MODIFIE" precision="126" scale="0"/>
         <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC"/>

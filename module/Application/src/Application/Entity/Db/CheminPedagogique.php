@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
@@ -34,7 +35,7 @@ class CheminPedagogique implements HistoriqueAwareInterface, ImportAwareInterfac
      */
     protected $etape;
 
-
+    
 
     /**
      * Set ordre

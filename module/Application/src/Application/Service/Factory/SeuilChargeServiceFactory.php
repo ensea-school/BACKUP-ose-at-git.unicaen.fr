@@ -3,7 +3,7 @@
 namespace Application\Service\Factory;
 
 use Application\Service\SeuilChargeService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use UnicaenTbl\Service\TableauBordService;
 
 class SeuilChargeServiceFactory

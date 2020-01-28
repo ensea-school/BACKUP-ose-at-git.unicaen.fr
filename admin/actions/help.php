@@ -1,6 +1,9 @@
 <?php
 
 $actions    = [
+    "install"                   => "Installation d'une nouvelle instance"
+        . "\n\t--version=<version cible> : Met à jour directement vers la version indiquée"
+    ,
     "update"                    => "Mise à jour de l'application"
         . "\n\t--maintenance=no : pas de prompt pour être averti du mode maintenance"
         . "\n\t--version=<version cible> : Met à jour directement vers la version indiquée"

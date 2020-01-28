@@ -7,15 +7,17 @@ $osedir = $oa->getOseDir();
 $c->println("Installation de OSE");
 
 if (!$fromMaster) {
-    // Choix de la version
-    $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-    $c->println("Voici la liste des versions de OSE disponibles:");
-    $tags = $oa->getTags();
-    foreach ($tags as $tag) {
-        $c->println($tag);
+    if (!$c->hasOption('version')) {
+        // Choix de la version
+        $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+        $c->println("Voici la liste des versions de OSE disponibles:");
+        $tags = $oa->getTags();
+        foreach ($tags as $tag) {
+            $c->println($tag);
+        }
+        $c->print("Veuillez choisir une version à déployer: ");
     }
-    $c->print("Veuillez choisir une version à déployer: ");
-    $version = $c->getInput();
+    $version = $c->getInput('version');
     if (!($oa->tagIsValid($version) || $oa->brancheIsValid($version))) {
         $c->printDie("$version n'est pas dans la liste des versions disponibles.");
     }

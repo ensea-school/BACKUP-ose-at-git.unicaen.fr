@@ -6,7 +6,7 @@
 
 class OseAdmin
 {
-    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE';
+    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
     const MIN_VERSION = 10; // version minimum installable
 
     /**

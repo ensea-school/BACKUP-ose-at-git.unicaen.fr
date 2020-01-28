@@ -24384,9 +24384,7 @@ END FORMULE_UBO;',
   BEGIN
     feuille.delete;
 
-    IF ose_formule.intervenant.depassement_service_du_sans_hc -- HC traitées comme du service
-      OR ose_formule.intervenant.heures_decharge > 0 -- s\'il y a une décharge => aucune HC
-    THEN
+    IF ose_formule.intervenant.depassement_service_du_sans_hc THEN -- HC traitées comme du service
       ose_formule.intervenant.service_du := ose_formule.intervenant.heures_service_statutaire;
     END IF;
 

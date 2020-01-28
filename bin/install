@@ -63,7 +63,8 @@ $c->exec([
 
 
 // Choix de la version
-if (!($version = $c->getOption('version'))) {
+$version = $c->getOption('version');
+if (!$version) {
     $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
     $c->println("Voici la liste des versions de OSE disponibles:");
     $tags = $od->getTags();

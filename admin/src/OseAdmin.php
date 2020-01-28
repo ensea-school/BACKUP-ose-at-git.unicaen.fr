@@ -7,7 +7,7 @@
 class OseAdmin
 {
     const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE';
-    const MIN_VERSION = 8; // version minimum installable
+    const MIN_VERSION = 10; // version minimum installable
 
     /**
      * @var Console
@@ -23,6 +23,11 @@ class OseAdmin
      * @var array
      */
     private $tags = false;
+
+    /**
+     * @var array
+     */
+    private $branches = false;
 
     /**
      * @var int
@@ -77,9 +82,7 @@ class OseAdmin
 
     public function gitlabIsReachable(): bool
     {
-        $gitCheck = $this->console->exec("git ls-remote --heads " . self::OSE_ORIGIN, false);
-
-        return (false !== strpos(implode(' ', $gitCheck), 'heads/master'));
+        return $this->brancheIsValid('master');
     }
 
 
@@ -93,14 +96,42 @@ class OseAdmin
             foreach ($ts as $tag) {
                 $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
             }
+
+            usort($this->tags, function ($a, $b) {
+                $va = (int)substr($a, 0, strpos($a, '.'));
+                $vb = (int)substr($b, 0, strpos($b, '.'));
+
+                if ($va == $vb) return $a > $b;
+
+                return $va > $vb;
+            });
         }
 
-        foreach ($this->tags as $i => $tag) {
+        $tags = $this->tags;
+        foreach ($tags as $i => $tag) {
             $version = (int)substr($tag, 0, strpos($tag, '.'));
-            if ($version < $minVersion) unset($this->tags[$i]);
+            if ($version < $minVersion) unset($tags[$i]);
         }
 
-        return $this->tags;
+        return $tags;
+    }
+
+
+
+    public function getBranches(): array
+    {
+        if (false === $this->branches) {
+            $this->branches = [];
+
+            $bs = $this->console->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
+            foreach ($bs as $branche) {
+                $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
+            }
+
+            sort($this->branches);
+        }
+
+        return $this->branches;
     }
 
 
@@ -113,6 +144,18 @@ class OseAdmin
     public function tagIsValid(string $tag): bool
     {
         return in_array($tag, $this->getTags());
+    }
+
+
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function brancheIsValid(string $branche): bool
+    {
+        return in_array($branche, $this->getBranches());
     }
 
 
@@ -229,7 +272,7 @@ class OseAdmin
     public function getOseAppliId(): int
     {
         if (!$this->oseAppliId) {
-            $u = $this->getBdd()->select("SELECT id FROM UTILISATEUR WHERE USERNAME='oseappli'");
+            $u = $this->getBdd()->select("SELECT ID FROM UTILISATEUR WHERE USERNAME='oseappli'");
             if (isset($u[0]['ID'])) {
                 $this->oseAppliId = (int)$u[0]['ID'];
             } else {
@@ -245,7 +288,7 @@ class OseAdmin
     public function getSourceOseId(): int
     {
         if (!$this->sourceOseId) {
-            $src = $this->getBdd()->select("SELECT id FROM SOURCE WHERE CODE='OSE'");
+            $src = $this->getBdd()->select("SELECT ID FROM SOURCE WHERE CODE='OSE'");
             if (isset($src[0]['ID'])) {
                 $this->sourceOseId = (int)$src[0]['ID'];
             } else {

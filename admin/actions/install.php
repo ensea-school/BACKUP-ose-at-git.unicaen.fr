@@ -14,24 +14,23 @@ if (!$fromMaster) {
     foreach ($tags as $tag) {
         $c->println($tag);
     }
-    $ok = false;
-    while (!$ok) {
-        $c->print("Veuillez choisir une version à déployer: ");
-        $version = $c->getInput('version');
-        if ($oa->tagIsValid($version)) {
-            $ok = true;
-        } else {
-            $c->println("$version n'est pas dans la liste des versions disponibles.");
-        }
+    $c->print("Veuillez choisir une version à déployer: ");
+    $version = $c->getInput();
+    if (!($oa->tagIsValid($version) || $oa->brancheIsValid($version))) {
+        $c->printDie("$version n'est pas dans la liste des versions disponibles.");
     }
+
 
     // Récupération des sources
     $c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
+    $tbr = $oa->tagIsValid($version) ? 'tags/' : '';
     $c->exec([
         "cd $osedir",
-        "git checkout tags/$version",
+        "git checkout $tbr$version",
         "mkdir cache",
         "chmod 777 cache",
+        "mkdir log",
+        "chmod 777 log",
         "chmod +7 bin/ose",
     ]);
     $oa->writeVersion($version);
@@ -40,6 +39,8 @@ if (!$fromMaster) {
         "cd $osedir",
         "mkdir cache",
         "chmod 777 cache",
+        "mkdir log",
+        "chmod 777 log",
         "chmod +7 bin/ose",
     ]);
 }

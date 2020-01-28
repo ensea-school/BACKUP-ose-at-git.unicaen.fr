@@ -1,7 +1,10 @@
 <?php
 
 $actions    = [
-    "update"                    => "Mise à jour de l'application",
+    "update"                    => "Mise à jour de l'application"
+        . "\n\t--maintenance=no : pas de prompt pour être averti du mode maintenance"
+        . "\n\t--version=<version cible> : Met à jour directement vers la version indiquée"
+    ,
     "notifier-indicateurs"      => "Envoi des mails relatifs aux indicateurs",
     "synchronisation"           => "<job> : Effectue la synchronisation des données pour le <job> transmis",
     "chargens-calcul-effectifs" => "Calcul des effectifs du module Charges",
@@ -12,6 +15,9 @@ $actions    = [
     "maj-public-links"          => "Mise à jour des liens vers les répertoires publics des dépendances",
     "clear-cache"               => "Vidage du cache de l'application",
     "test-bdd"                  => "Test d'accès à la base de données",
+    "install-bdd"               => "Installe la base de données"
+        . "\n\t--oseappli-pwd=<votre mdp> : mot de passe de l'utilisateur oseappli"
+    ,
     "update-bdd"                => "Mise à jour de la base de données de l'application (sans les fichiers)",
 ];
 $actionsDev = [

@@ -9,8 +9,10 @@
   * les formules des établissements concernés ont été modifiées pour tenir compte de cette nouveauté.
   * les heures de décharge ne sont plus gérées en tant que telles, mais impactent le paramètre "Dépassement de service dû sans HC"
   * il est maintenant possible de personnaliser les structures gérées dans l'interface de test.
-* Possibilité de saisir le taux de charges patronales directement dans l'IHM d'administration des statuts des intervenants
-* Lorsqu'on utilise la commande ./bin/ose creer-utilisateur et que l'on demande à créer un intervenant, la feuille de route s'initialisera dans la foulée
+* Possibilité de saisir le taux de charges patronales directement dans l'IHM d'administration des statuts des intervenants.
+* Lorsqu'on utilise la commande ./bin/ose creer-utilisateur et que l'on demande à créer un intervenant, la feuille de route s'initialisera dans la foulée.
+* Possibilité de définir des paramètres (version, etc.) avant les mises à jour de l'application afin de pouvoir automatiser à 100% les processue d'installation et de mise à jour.
+* Possibilité de mettre à jour OSE vers une branche et plus uniquement vers un TAG de version (utile pour les développeurs ou en test)
 
 ## Correction de bugs
 

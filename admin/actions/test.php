@@ -3,6 +3,14 @@
 //$bdd    = new \BddAdmin\Bdd(Config::get('bdds', 'dev-local'));
 //$schema = new \BddAdmin\Schema($bdd);
 
-$t = $oa->getTags();
+$ts = $c->exec("git branch", false);
 
-var_dump($t);
+$branch = null;
+foreach ($ts as $t) {
+    if (0 === strpos($t, '*')) {
+        $branch = trim(substr($t, 1));
+        break;
+    }
+}
+
+var_dump($branch);

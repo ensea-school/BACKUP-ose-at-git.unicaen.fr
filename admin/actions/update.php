@@ -39,9 +39,14 @@ if (!($oa->tagIsValid($version) || $oa->brancheIsValid($version))) {
 // Récupération des sources
 $c->println("\nMise à jour des fichiers à partir de GIT", $c::COLOR_LIGHT_CYAN);
 $tbr = $oa->tagIsValid($version) ? 'tags/' : '';
+if ($version == $oa->getCurrentBranche()) {
+    $updcmd = 'git pull';
+} else {
+    $updcmd = "git checkout $tbr$version";
+}
 $c->passthru([
     "cd $osedir",
-    "git checkout $tbr$version",
+    $updcmd,
 ]);
 
 

@@ -136,6 +136,20 @@ class OseAdmin
 
 
 
+    public function getCurrentBranche(): ?string
+    {
+        $ts = $this->console->exec("git branch", false);
+        foreach ($ts as $t) {
+            if (0 === strpos($t, '*')) {
+                return trim(substr($t, 1));
+            }
+        }
+
+        return null;
+    }
+
+
+
     /**
      * @param string $tag
      *

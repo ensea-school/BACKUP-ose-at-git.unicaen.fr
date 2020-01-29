@@ -20,6 +20,7 @@ return [
         'V_FORMULE_SERVICE_MODIFIE',
         'V_FORMULE_SERVICE_REF',
         'V_FORMULE_VOLUME_HORAIRE_REF',
+        'V_WORKFLOW_ETAPE_PERTINENTE',
     ]],
     \BddAdmin\Ddl\DdlPackage::class          => ['includes' => [
         'OSE_IMPORT',

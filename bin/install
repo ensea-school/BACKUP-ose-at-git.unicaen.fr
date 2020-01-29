@@ -160,7 +160,7 @@ $c->println('');
 class OseDeploy
 {
     const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE.git';
-    const MIN_VERSION = 10; // version minimum installable
+    const MIN_VERSION = 8; // version minimum installable
 
     /**
      * @var Console

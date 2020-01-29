@@ -3,7 +3,8 @@
 ## Nouveautés
 
 * Possibilité de bloquer l'usage de certains rôles si l'on se trouve hors du réseau de l'établissement
-* Amélioration des performances (x20 environ) pour le calcul en masse des workflows 
+* Amélioration des performances (x20 environ) pour le calcul en masse des workflows
+* Correction d'un bug portant sur le calcul des feuilles de routes qui ne prenait pas en compte certaines règles dans certains cas
 * Modifications sur l'infrastructure des formules de calcul : 
   * le code de la structure est fourni en natif et n'est plus un paramètre supplémentaire.
   * les formules des établissements concernés ont été modifiées pour tenir compte de cette nouveauté.
@@ -11,7 +12,7 @@
   * il est maintenant possible de personnaliser les structures gérées dans l'interface de test.
 * Possibilité de saisir le taux de charges patronales directement dans l'IHM d'administration des statuts des intervenants.
 * Lorsqu'on utilise la commande ./bin/ose creer-utilisateur et que l'on demande à créer un intervenant, la feuille de route s'initialisera dans la foulée.
-* Possibilité de définir des paramètres (version, etc.) avant les mises à jour de l'application afin de pouvoir automatiser à 100% les processue d'installation et de mise à jour.
+* Possibilité de définir des paramètres (version, etc.) avant les mises à jour de l'application afin de pouvoir automatiser à 100% les processus d'installation et de mise à jour.
 * Possibilité de mettre à jour OSE vers une branche et plus uniquement vers un TAG de version (utile pour les développeurs ou en test)
 
 ## Correction de bugs

@@ -6,7 +6,6 @@ use Application\Constants;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Formule;
-use Application\Entity\Db\FormuleTestStructure;
 use Application\Entity\Db\FormuleTestVolumeHoraire;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -71,7 +70,7 @@ class FormuleTestIntervenantHydrator implements HydratorInterface
                 }
             }
         }
-        
+
         for ($p = 1; $p < 6; $p++) {
             if (!$object->getFormule()->{'getIParam' . $p . 'Libelle'}()) {
                 $object->{'setParam' . $p}(null);

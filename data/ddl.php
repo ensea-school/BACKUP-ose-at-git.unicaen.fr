@@ -6606,17 +6606,6 @@
           'default' => '1',
           'commentaire' => NULL,
         ),
-        'STRUCTURE_TEST_ID' => 
-        array (
-          'name' => 'STRUCTURE_TEST_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
         'TYPE_VOLUME_HORAIRE_ID' => 
         array (
           'name' => 'TYPE_VOLUME_HORAIRE_ID',
@@ -6839,50 +6828,6 @@
         ),
       ),
     ),
-    'FORMULE_TEST_STRUCTURE' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE',
-      'temporary' => false,
-      'logging' => true,
-      'commentaire' => 'sequence=FTEST_STRUCTURE_ID_SEQ;',
-      'sequence' => 'FTEST_STRUCTURE_ID_SEQ',
-      'columns' => 
-      array (
-        'ID' => 
-        array (
-          'name' => 'ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'LIBELLE' => 
-        array (
-          'name' => 'LIBELLE',
-          'type' => 'VARCHAR2',
-          'length' => 80,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'UNIVERSITE' => 
-        array (
-          'name' => 'UNIVERSITE',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => 1,
-          'nullable' => false,
-          'default' => '0',
-          'commentaire' => NULL,
-        ),
-      ),
-    ),
     'FORMULE_TEST_VOLUME_HORAIRE' => 
     array (
       'name' => 'FORMULE_TEST_VOLUME_HORAIRE',
@@ -6911,17 +6856,6 @@
           'scale' => '0',
           'precision' => NULL,
           'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'STRUCTURE_TEST_ID' => 
-        array (
-          'name' => 'STRUCTURE_TEST_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => true,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -19879,16 +19813,6 @@
       'name' => 'FORMULE_TEST_INTERVENANT_PK',
       'table' => 'FORMULE_TEST_INTERVENANT',
       'index' => 'FORMULE_TEST_INTERVENANT_PK',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_STRUCTURE_PK' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE_PK',
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'index' => 'FORMULE_TEST_STRUCTURE_PK',
       'columns' => 
       array (
         0 => 'ID',
@@ -38948,18 +38872,6 @@ WHERE
         'FORMULE_ID' => 'ID',
       ),
     ),
-    'FTI_FORMULE_TEST_STRUCTURE_FK' => 
-    array (
-      'name' => 'FTI_FORMULE_TEST_STRUCTURE_FK',
-      'table' => 'FORMULE_TEST_INTERVENANT',
-      'rtable' => 'FORMULE_TEST_STRUCTURE',
-      'delete_rule' => 'CASCADE',
-      'index' => NULL,
-      'columns' => 
-      array (
-        'STRUCTURE_TEST_ID' => 'ID',
-      ),
-    ),
     'FTI_TYPE_INTERVENANT_FK' => 
     array (
       'name' => 'FTI_TYPE_INTERVENANT_FK',
@@ -43954,16 +43866,6 @@ WHERE
         2 => 'ETAT_VOLUME_HORAIRE_ID',
       ),
     ),
-    'FORMULE_TEST_STRUCTURE__UN' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE__UN',
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'index' => 'FORMULE_TEST_STRUCTURE__UN',
-      'columns' => 
-      array (
-        0 => 'LIBELLE',
-      ),
-    ),
     'FORMULE__UN' => 
     array (
       'name' => 'FORMULE__UN',
@@ -48500,26 +48402,6 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_STRUCTURE_PK' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE_PK',
-      'unique' => true,
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'columns' => 
-      array (
-        0 => 'ID',
-      ),
-    ),
-    'FORMULE_TEST_STRUCTURE__UN' => 
-    array (
-      'name' => 'FORMULE_TEST_STRUCTURE__UN',
-      'unique' => true,
-      'table' => 'FORMULE_TEST_STRUCTURE',
-      'columns' => 
-      array (
-        0 => 'LIBELLE',
       ),
     ),
     'FORMULE_TEST_VOLUME_HORAIRE_PK' => 

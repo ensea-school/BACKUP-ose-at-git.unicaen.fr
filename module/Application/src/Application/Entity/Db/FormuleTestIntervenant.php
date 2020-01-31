@@ -5,7 +5,6 @@ namespace Application\Entity\Db;
 use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Application\Entity\Db\Traits\EtatVolumeHoraireAwareTrait;
 use Application\Entity\Db\Traits\FormuleAwareTrait;
-use Application\Entity\Db\Traits\FormuleTestStructureAwareTrait;
 use Application\Entity\Db\Traits\TypeIntervenantAwareTrait;
 use Application\Entity\Db\Traits\TypeVolumeHoraireAwareTrait;
 use Application\Hydrator\FormuleTestIntervenantHydrator;

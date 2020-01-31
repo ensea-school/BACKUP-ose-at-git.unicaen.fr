@@ -22,8 +22,8 @@ class FormuleMigrationVolumeHoraireStructuresTestVersCode extends AbstractMigrat
     public function utile(): bool
     {
         return
-            //$this->manager->hasOldColumn('FORMULE_TEST_VOLUME_HORAIRE', 'STRUCTURE_TEST_ID')
-            //&&
+            $this->manager->hasOldColumn('FORMULE_TEST_VOLUME_HORAIRE', 'STRUCTURE_TEST_ID')
+            &&
             (
                 $this->manager->hasNewColumn('FORMULE_TEST_VOLUME_HORAIRE', 'STRUCTURE_CODE')
                 ||

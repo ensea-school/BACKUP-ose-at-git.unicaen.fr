@@ -57,7 +57,7 @@ class FormuleMigrationVolumeHoraireStructuresTestVersCode extends AbstractMigrat
 
     public function apres()
     {
-        $bdd = $this->manager->getOseAdmin()->getBdd();
+        $bdd = $this->manager->getSchema()->getBdd();
 
         $sql  = "
         SELECT 

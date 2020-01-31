@@ -21,7 +21,7 @@ class DepartementsInitCodes extends AbstractMigration
     {
         $oa = $this->manager->getOseAdmin();
 
-        $bdd = $oa->getBdd();
+        $bdd = $this->manager->getSchema()->getBdd();
 
         $sql     = "
         SELECT 
@@ -44,7 +44,7 @@ class DepartementsInitCodes extends AbstractMigration
         $oa = $this->manager->getOseAdmin();
 
         $sql = "UPDATE DEPARTEMENT SET CODE = SOURCE_CODE WHERE CODE IS NULL AND SOURCE_ID= :source";
-        $oa->getBdd()->exec($sql, ['source' => $oa->getSourceOseId()]);
+        $this->manager->getSchema()->getBdd()->exec($sql, ['source' => $oa->getSourceOseId()]);
     }
 
 }

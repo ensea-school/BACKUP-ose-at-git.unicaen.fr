@@ -64,15 +64,15 @@ class MigrationManager
         $ddlConfig                        = [$tablesKey => $ddlConfig[$tablesKey]];
         $ddlConfig['explicit']            = true;
         $ddlConfig['include-tables-deps'] = false;
-        $newRef                           = $this->schema->getDdl($ddlConfig);
+        $oldRef                           = $this->schema->getDdl($ddlConfig);
         $this->tablesDiff                 = [];
-        if (isset($ref[$tablesKey]) && is_array($ref[$tablesKey])) {
-            foreach ($ref[$tablesKey] as $table => $ddl) {
+        if (isset($oldRef[$tablesKey]) && is_array($oldRef[$tablesKey])) {
+            foreach ($oldRef[$tablesKey] as $table => $ddl) {
                 $this->tablesDiff[$table]['old'] = $ddl;
             }
         }
-        if (isset($newRef[$tablesKey]) && is_array($newRef[$tablesKey])) {
-            foreach ($newRef[$tablesKey] as $table => $ddl) {
+        if (isset($ref[$tablesKey]) && is_array($ref[$tablesKey])) {
+            foreach ($ref[$tablesKey] as $table => $ddl) {
                 $this->tablesDiff[$table]['new'] = $ddl;
             }
         }
@@ -196,7 +196,7 @@ class MigrationManager
     protected function tableRealExists($tableName): bool
     {
         $sql = "SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME = :tableName";
-        $tn  = $this->oseAdmin->getBdd()->select($sql, compact('tableName'), \BddAdmin\Bdd::FETCH_ONE);
+        $tn  = $this->getSchema()->getBdd()->select($sql, compact('tableName'), \BddAdmin\Bdd::FETCH_ONE);
 
         return isset($tn['TABLE_NAME']) && $tn['TABLE_NAME'] == $tableName;
     }
@@ -206,7 +206,7 @@ class MigrationManager
     public function sauvegarderTable(string $tableName, string $name)
     {
         if ($this->tableRealExists($tableName) && !$this->tableRealExists($name)) {
-            $this->oseAdmin->getBdd()->exec("CREATE TABLE $name AS SELECT * FROM $tableName");
+            $this->getSchema()->getBdd()->exec("CREATE TABLE $name AS SELECT * FROM $tableName");
         }
     }
 
@@ -215,7 +215,7 @@ class MigrationManager
     public function supprimerSauvegarde(string $name)
     {
         if ($this->tableRealExists($name)) {
-            $this->oseAdmin->getBdd()->exec("DROP TABLE $name");
+            $this->getSchema()->getBdd()->exec("DROP TABLE $name");
         }
     }
 
@@ -268,6 +268,15 @@ class MigrationManager
                 $console->println('Erreur : ' . $e->getMessage(), $console::COLOR_RED);
             }
         }
+    }
+
+
+
+    public function testUtile($action): bool
+    {
+        $migration = $this->getMigrationObject($action);
+
+        return $migration instanceof AbstractMigration;
     }
 
 

@@ -64,10 +64,11 @@ class FormuleMigrationIntervenantStructuresTestVersCode extends AbstractMigratio
           I.ID ID,
           S.LIBELLE STRUCTURE_CODE
         FROM 
-          FORMULE_TEST_INTERVENANT__MIGR I 
+          FORMULE_TEST_INTERVENANT__MIGR I
           JOIN FORMULE_TEST_STRUCTURE__MIGR_I S ON S.ID = I.STRUCTURE_TEST_ID
+          JOIN FORMULE_TEST_INTERVENANT NI ON NI.ID = I.ID 
         WHERE 
-          I.STRUCTURE_CODE IS NULL
+          NI.STRUCTURE_CODE IS NULL
         ";
         $data = $bdd->select($sql);
         foreach ($data as $d) {

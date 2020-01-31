@@ -69,10 +69,11 @@ class FormuleMigrationVolumeHoraireStructuresTestVersCode extends AbstractMigrat
         FROM 
           FORMULE_TEST_VH__MIGR V 
           JOIN FORMULE_TEST_STRUCTURE__MIGR_V S ON S.ID = V.STRUCTURE_TEST_ID
+          JOIN FORMULE_TEST_VOLUME_HORAIRE NV ON NV.ID = V.ID
           JOIN FORMULE_TEST_INTERVENANT FTI ON FTI.ID = V.INTERVENANT_TEST_ID
           JOIN FORMULE F ON F.ID = FTI.FORMULE_ID
         WHERE 
-          V.STRUCTURE_CODE IS NULL
+          NV.STRUCTURE_CODE IS NULL
         ";
         $data = $bdd->select($sql);
         foreach ($data as $d) {

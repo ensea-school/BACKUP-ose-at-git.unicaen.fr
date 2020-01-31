@@ -220,48 +220,6 @@ class OseAdmin
 
 
 
-    protected function runMigrationAction(string $contexte, string $action)
-    {
-        $file = $this->getMigrationDir() . $action . '.php';
-        require_once $file;
-
-        /**
-         * @var $migration AbstractMigration
-         */
-        $migration = new $action($this);
-
-        if ($contexte == $migration->getContexte() && $migration->utile()) {
-            $this->console->print('[MIGRATION] ' . $migration->description() . ' ... ');
-
-            try {
-                $migration->action();
-                $this->console->println('OK', $this->console::COLOR_GREEN);
-            } catch (\Throwable $e) {
-                $this->console->println('Erreur : ' . $e->getMessage(), $this->console::COLOR_RED);
-            }
-        }
-    }
-
-
-
-    public function migration(string $context = 'pre', string $action = null)
-    {
-        if (!is_dir($this->getMigrationDir())) return;
-        $files = scandir($this->getMigrationDir());
-
-        foreach ($files as $i => $file) {
-            if ($file == '.' || $file == '..') {
-                continue;
-            }
-            $fileAction = substr($file, 0, -4); // on supprime l'extension PHP
-            if ($action === null || $fileAction === $action) {
-                $this->runMigrationAction($context, $fileAction);
-            }
-        }
-    }
-
-
-
     public function exec($args)
     {
         $this->console->passthru("php " . $this->getOseDir() . "/public/index.php " . $args);
@@ -272,13 +230,6 @@ class OseAdmin
     public function getOseDir(): string
     {
         return dirname(dirname(__DIR__)) . '/';
-    }
-
-
-
-    public function getMigrationDir()
-    {
-        return $this->getOseDir() . 'admin/migration/';
     }
 
 

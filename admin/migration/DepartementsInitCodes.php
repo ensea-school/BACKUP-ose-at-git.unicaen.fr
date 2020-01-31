@@ -19,17 +19,19 @@ class DepartementsInitCodes extends AbstractMigration
 
     public function utile(): bool
     {
-        $bdd = $this->oseAdmin->getBdd();
+        $oa = $this->manager->getOseAdmin();
+
+        $bdd = $oa->getBdd();
 
         $sql     = "
         SELECT 
-            count(*) nbvides 
+            count(*) NBVIDES 
         FROM 
-            departement 
+            DEPARTEMENT 
         WHERE 
-            code IS NULL AND source_code IS NOT NULL
-            AND source_id=:source";
-        $res     = $bdd->select($sql, ['source' => $this->oseAdmin->getSourceOseId()], \BddAdmin\Bdd::FETCH_ONE);
+            CODE IS NULL AND SOURCE_CODE IS NOT NULL
+            AND SOURCE_ID=:source";
+        $res     = $bdd->select($sql, ['source' => $oa->getSourceOseId()], \BddAdmin\Bdd::FETCH_ONE);
         $nbvides = (int)$res['NBVIDES'];
 
         return $nbvides > 0;
@@ -37,10 +39,12 @@ class DepartementsInitCodes extends AbstractMigration
 
 
 
-    public function action()
+    public function action(string $contexte)
     {
-        $sql = "UPDATE departement SET code = source_code WHERE code IS NULL AND source_id= :source";
-        $this->oseAdmin->getBdd()->exec($sql, ['source' => $this->oseAdmin->getSourceOseId()]);
+        $oa = $this->manager->getOseAdmin();
+
+        $sql = "UPDATE DEPARTEMENT SET CODE = SOURCE_CODE WHERE CODE IS NULL AND SOURCE_ID= :source";
+        $oa->getBdd()->exec($sql, ['source' => $oa->getSourceOseId()]);
     }
 
 }

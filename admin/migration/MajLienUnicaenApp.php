@@ -19,16 +19,16 @@ class MajLienUnicaenApp extends AbstractMigration
 
     public function utile(): bool
     {
-        $oseDir = $this->oseAdmin->getOseDir();
+        $oseDir = $this->manager->getOseAdmin()->getOseDir();
 
         return file_exists($oseDir . "public/vendor/unicaen/app/unicaen");
     }
 
 
 
-    public function action()
+    public function action(string $contexte)
     {
-        $this->oseAdmin->run('maj-public-links', true);
+        $this->manager->getOseAdmin()->run('maj-public-links', true);
     }
 
 }

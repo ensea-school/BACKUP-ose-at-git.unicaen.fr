@@ -28,12 +28,11 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-modulateur.js');
     Seules les formations reconduites pour la prochaine année universitaire peuvent bénéficier de la reconduction des modulateurs d'une année sur l'autre.
     Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.
 </div>
-<h3>Offre de formation disponible pour la prochaine année universitaire :</h3>
-<br/>
+
+<h3>Offre de formation disponible (possédants des modulateurs définis) pour la prochaine année universitaire :</h3>
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 ?>
-
 <?php if(empty($etapesReconduites)): ?>
     <table class="reconduction-modulateur table table-bordered table-condensed table-hover">
         <thead>
@@ -55,7 +54,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
     </table>
 <?php else: ?>
     <?php if($fromPost): ?>
-        <p> <a href="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>" >< Retour à la liste des formations.</a></p>
+        <p> <a href="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>" >< Retour à la liste des formations éligibles à la reconduction des modulateurs.</a></p>
     <?php else: ?>
         <form action="<?= $this->url('aof/reconduction-modulateur', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
 

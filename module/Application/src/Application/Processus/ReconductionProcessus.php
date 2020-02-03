@@ -201,14 +201,28 @@ class ReconductionProcessus extends AbstractProcessus
             $etapeN                     = $etape['N']['etape'];
             $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
             $elementsPedagogiqueNByCode = [];
+            $codesEpWithoutCc = [];
             foreach ($elementsPedagogiqueN as $ep) {
-                $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+                //Check si ep a un élément pédagoggique
+                $ccep = $ep->getCentreCoutEp();
+                if(count($ccep) > 0)
+                {
+                    //Si il a des centres de couts alors je le stocke
+                    $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+                }
+                else{
+                    $codesEpWithoutCc[] = $ep->getCode();
+                }
             }
             $etapeN1                     = $etape['N1']['etape'];
             $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
             $elementsPedagogiqueN1ByCode = [];
             foreach ($elementsPedagogiqueN1 as $epN1) {
-                $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+                //Si l'epN possède des CC alors je continuer
+                if(!in_array($epN1->getCode(), $codesEpWithoutCc))
+                {
+                    $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+                }
             }
 
             foreach ($elementsPedagogiqueN as $ep) {
@@ -260,14 +274,26 @@ class ReconductionProcessus extends AbstractProcessus
             $etapeN                     = $etape['N']['etape'];
             $elementsPedagogiqueN       = $etapeN->getElementPedagogique();
             $elementsPedagogiqueNByCode = [];
+            $codesEpWithoutModulateur = [];
             foreach ($elementsPedagogiqueN as $ep) {
-                $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+                $mep = $ep->getElementModulateur();
+                if(count($mep) > 0)
+                {
+                    //Si il a des modulateurs alors je le stocke
+                    $elementsPedagogiqueNByCode[$ep->getCode()] = $ep;
+                }
+                else{
+                    $codesEpWithoutModulateur[] = $ep->getCode();
+                }
             }
             $etapeN1                     = $etape['N1']['etape'];
             $elementsPedagogiqueN1       = $etapeN1->getElementPedagogique();
             $elementsPedagogiqueN1ByCode = [];
             foreach ($elementsPedagogiqueN1 as $epN1) {
-                $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+                if(!in_array($epN1->getCode(), $codesEpWithoutModulateur))
+                {
+                    $elementsPedagogiqueN1ByCode[$epN1->getCode()] = $epN1;
+                }
             }
 
             foreach ($elementsPedagogiqueN as $ep) {

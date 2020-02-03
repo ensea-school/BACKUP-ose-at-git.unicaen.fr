@@ -30,7 +30,7 @@ $this->headScript()->offsetSetFile(100, '/js/reconduction-centre-cout.js');
     Si la formation n'est pas disponible dans la liste ci-dessous, veuillez vérifier qu'elle a bien été reconduit pour la prochaine année universitaire.
 </div>
 
-<h3>Offre de formation disponible pour la prochaine année universitaire :</h3>
+<h3>Offre de formation disponible (possédants des centres de coûts définis) pour la prochaine année universitaire :</h3>
 <br/>
 <?php
 echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
@@ -57,7 +57,7 @@ echo $this->messenger()->addCurrentMessagesFromFlashMessenger();
 </table>
 <?php else: ?>
     <?php if($fromPost): ?>
-        <p> <a href="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>" >< Retour à la liste des formations.</a></p>
+        <p> <a href="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>" >< Retour à la liste des formations éligibles à la reconduction des centres de coûts.</a></p>
     <?php else: ?>
         <form action="<?= $this->url('aof/reconduction-centre-cout', [], ['query' => ['structure' => $structure->getId()]]) ?>" method="POST" id="form-reconduction">
 

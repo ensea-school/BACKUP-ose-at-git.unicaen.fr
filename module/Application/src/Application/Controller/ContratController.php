@@ -54,14 +54,14 @@ class ContratController extends AbstractController
     use ModeleContratServiceAwareTrait;
     use ModeleFormAwareTrait;
 
-    private $viewRenderer;
+    private $renderer;
 
 
 
-    public function __construct(PhpRenderer $viewRenderer)
+    public function __construct(PhpRenderer $renderer)
     {
 
-        $this->viewRenderer = $viewRenderer;
+        $this->renderer = $renderer;
     }
 
 
@@ -343,11 +343,12 @@ class ContratController extends AbstractController
         }
 
         if (!empty($contrat->getIntervenant()->getEmail())) {
-            $html    = $this->viewRenderer->render('application/contrat/mail/contrat', [
+            $html    = $this->renderer->render('application/contrat/mail/contrat', [
                 'contrat' => $contrat,
             ]);
             $message = $this->getServiceModeleContrat()->prepareMail($contrat, $html);
-            $this->mail()->send($message);
+            $mail = $this->mail()->send($message);
+            $here="";
         }
 
         return $this->getResponse();

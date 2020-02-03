@@ -332,7 +332,7 @@ return [
     ],
     'controllers'     => [
         'factories' => [
-            'Application\Controller\Contrat' => ContratControllerFactory::class,
+            'Application\Controller\Contrat' => Controller\Factory\ContratControllerFactory::class,
         ],
     ],
     'service_manager' => [

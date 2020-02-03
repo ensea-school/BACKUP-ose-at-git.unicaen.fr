@@ -25,4 +25,4 @@ var_dump($r);
 
 $t = $oa->getTags();
 
-var_dump($t);
+var_dump($oa->tagIsValid(12));

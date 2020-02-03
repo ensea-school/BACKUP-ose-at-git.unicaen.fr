@@ -69747,15 +69747,6 @@ return [
             "SERVICE_STATUTAIRE" => TRUE
         ],
         [
-            "CODE" => "DIRRECH_ENSI",
-            "LIBELLE_LONG" => "Direction Recherche ENSI Caen",
-            "LIBELLE_COURT" => "Direction Recherche ENSI Caen",
-            "PLAFOND" => 96.0,
-            "DOMAINE_FONCTIONNEL_ID" => NULL,
-            "ETAPE_REQUISE" => FALSE,
-            "SERVICE_STATUTAIRE" => TRUE
-        ],
-        [
             "CODE" => "PORTAGE.PROJ.RECH.",
             "LIBELLE_LONG" => "Portage de projet de recherche",
             "LIBELLE_COURT" => "Portage de projet de recherche",

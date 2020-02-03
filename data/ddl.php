@@ -30570,14 +30570,14 @@ END UNICAEN_TBL;',
             pjf.intervenant_id
         )
         SELECT
-          NVL( pjd.annee_id, pjf.annee_id ) annee_id,
-          NVL( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
-          NVL( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
+          COALESCE( pjd.annee_id, pjf.annee_id ) annee_id,
+          COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
+          COALESCE( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
           CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END demandee,
           CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
           CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
-          NVL(pjd.heures_pour_seuil,0) heures_pour_seuil,
-          pjd.obligatoire obligatoire
+          COALESCE(pjd.heures_pour_seuil,0) heures_pour_seuil,
+          COALESCE(pjd.obligatoire,1) obligatoire
         FROM
           tbl_piece_jointe_demande pjd
           FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id) tv
@@ -36251,14 +36251,14 @@ WITH pjf AS (
     pjf.intervenant_id
 )
 SELECT
-  NVL( pjd.annee_id, pjf.annee_id ) annee_id,
-  NVL( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
-  NVL( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
+  COALESCE( pjd.annee_id, pjf.annee_id ) annee_id,
+  COALESCE( pjd.type_piece_jointe_id, pjf.type_piece_jointe_id ) type_piece_jointe_id,
+  COALESCE( pjd.intervenant_id, pjf.intervenant_id ) intervenant_id,
   CASE WHEN pjd.intervenant_id IS NULL THEN 0 ELSE 1 END demandee,
   CASE WHEN pjf.fichier = pjf.count THEN 1 ELSE 0 END fournie,
   CASE WHEN pjf.validation = pjf.count THEN 1 ELSE 0 END validee,
-  NVL(pjd.heures_pour_seuil,0) heures_pour_seuil,
-  pjd.obligatoire obligatoire
+  COALESCE(pjd.heures_pour_seuil,0) heures_pour_seuil,
+  COALESCE(pjd.obligatoire,1) obligatoire
 FROM
   tbl_piece_jointe_demande pjd
   FULL JOIN pjf ON pjf.type_piece_jointe_id = pjd.type_piece_jointe_id AND pjf.intervenant_id = pjd.intervenant_id',

@@ -1,7 +1,7 @@
 <?php
-
+/*
 $bdd = new \BddAdmin\Bdd(Config::get('bdds', 'deploy-local'));
-$oa->setBdd($bdd);
+$oa->setBdd($bdd);*/
 /*
 $schema = new \BddAdmin\Schema($bdd);
 
@@ -25,4 +25,4 @@ var_dump($r);
 
 $t = $oa->getTags();
 
-var_dump($oa->tagIsValid(12));
+var_dump($t);

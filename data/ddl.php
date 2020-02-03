@@ -28691,7 +28691,7 @@ END OSE_WORKFLOW;',
           ) e ON 1=1
         WHERE
           \' || p || \'
-          AND d. peut_saisir_dossier = 1
+          AND d.peut_saisir_dossier = 1
     \';
 
 

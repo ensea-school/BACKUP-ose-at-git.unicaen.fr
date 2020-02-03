@@ -14,6 +14,7 @@
 * Lorsqu'on utilise la commande ./bin/ose creer-utilisateur et que l'on demande à créer un intervenant, la feuille de route s'initialisera dans la foulée.
 * Possibilité de définir des paramètres (version, etc.) avant les mises à jour de l'application afin de pouvoir automatiser à 100% les processus d'installation et de mise à jour.
 * Possibilité de mettre à jour OSE vers une branche et plus uniquement vers un TAG de version (utile pour les développeurs ou en test)
+* Les pièces justificatives configurées comme facultatives ne sont maintenant plus considérées comme obligatoires
 
 ## Correction de bugs
 

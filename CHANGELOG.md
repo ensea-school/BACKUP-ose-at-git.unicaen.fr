@@ -27,6 +27,10 @@
 Le paramètre "global" => "inEtablissement" devra être renseigné pour que vous puissiez créer votre propre règle permettant de savoir
 si l'application est utilisée depuis l'établissement ou non. Le fichier config.local.php.default comporte un exemple d'usage de ce paramètre, pour vous aider à l'exploiter.
 
+Si vous mettez à jour à partir d'une version antérieure à la 11, il vous faut également prendre en compte les notes de mise à jour des versions intermédiaires.
+
+ATTENTION également : Si vous migrez d'une édition zf2 vers cette nouvelle version (<9 ou *-zf2, il vous faudra également supprimer manuellement le répertoire /vendor de OSE AVANT de démarrer la mise à jour, sans quoi Composer, le gestionnaire de dépendances de PHP, ne parviendra pas à tout actualiser.
+
 # OSE 11.2
 
 ## Correction de bug

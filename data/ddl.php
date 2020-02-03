@@ -28659,12 +28659,19 @@ END OSE_WORKFLOW;',
 
     intervenant := \'
       SELECT
-        id                  intervenant_id,
-        annee_id            annee_id,
-        statut_id           statut_intervenant_id,
-        premier_recrutement premier_recrutement
+        *
       FROM
-        intervenant
+        (
+        SELECT
+          id                  intervenant_id,
+          annee_id            annee_id,
+          statut_id           statut_intervenant_id,
+          premier_recrutement premier_recrutement
+        FROM
+          intervenant
+        )
+      WHERE
+        \' || p || \'
     \';
 
 
@@ -28931,8 +28938,7 @@ END OSE_WORKFLOW;',
         UNION ALL \' || contrat || \'
       ) w ON w.intervenant_id = i.intervenant_id AND w.etape_code = e.code
     WHERE
-      \' || unicaen_tbl.params_to_conds(params,\'i\') || \'
-      AND (e.obligatoire = 1 OR w.intervenant_id IS NOT NULL)
+      e.obligatoire = 1 OR w.intervenant_id IS NOT NULL
     \';
   END;
 

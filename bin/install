@@ -24,7 +24,7 @@ if (!$od->checkPhpModules([
     'json'         => 'Json',
     'ldap'         => 'Ldap',
     'mbstring'     => 'MbString',
-  //  'mcrypt'       => 'MCrypt',
+    //  'mcrypt'       => 'MCrypt',
     'Zend OPcache' => 'Zend OPcache',
     'xml'          => 'XML',
     'zip'          => 'ZIP',
@@ -63,29 +63,29 @@ $c->exec([
 
 
 // Choix de la version
-$c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
-$c->println("Voici la liste des versions de OSE disponibles:");
-$tags = $od->getTags();
-foreach ($tags as $tag) {
-    $c->println($tag);
-}
-$ok = false;
-while (!$ok) {
+$version = $c->getOption('version');
+if (!$version) {
+    $c->println("\nSélection de la version à déployer", $c::COLOR_LIGHT_CYAN);
+    $c->println("Voici la liste des versions de OSE disponibles:");
+    $tags = $od->getTags();
+    foreach ($tags as $tag) {
+        $c->println($tag);
+    }
     $c->print("Veuillez choisir une version à déployer: ");
     $version = $c->getInput('version');
-    if ($od->tagIsValid($version)) {
-        $ok = true;
-    } else {
-        $c->println("$version n'est pas dans la liste des versions disponibles.");
-    }
+}
+
+if (!($od->tagIsValid($version) || $od->brancheIsValid($version))) {
+    $c->printDie("$version n'est pas dans la liste des versions disponibles.");
 }
 
 
 // Récupération des sources
 $c->println("\nDéploiement à partir des sources GIT", $c::COLOR_LIGHT_CYAN);
+$tbr = $od->tagIsValid($version) ? 'tags/' : '';
 $c->exec([
     "cd $osedir",
-    "git checkout tags/$version",
+    "git checkout $tbr$version",
     "mkdir cache",
     "mkdir cache/Doctrine",
     "chmod 777 cache/Doctrine",
@@ -145,21 +145,13 @@ $c->exec([
 // Conclusion
 $c->println("\nFin du script d'installation des fichiers", $c::COLOR_LIGHT_GREEN);
 $c->println("Il reste encore plusieurs étapes à réaliser pour que OSE soit pleinement fonctionnel :");
-$c->println(" 1 - Configurez votre serveur Apache");
-$c->println(" 2 - Initialisez la base de données de OSE à l'aide du script prévu à cet effet");
-$c->println(" 3 - Mettez en place la configuration locale de l'application, si ce n'est déjà le cas");
-$c->println(" 4 - Une fois bien connecté, configurez vos connecteurs en vous appuyant\n     le cas échéant sur ceux qui vous sont fournis");
-$c->println(" 5 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
-$c->println(" 6 - Paramétrez l'application pour l'adapter à vos besoins");
+$c->println(" 1 - Configurez votre serveur Apache si ce n'est déjà fait");
+$c->println(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
+$c->println(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd. Si votre base était déjà initialisée, alors la commande ./bin/ose update-bdd sera privilégiée");
+$c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
 $c->println('');
 $c->println("Pour la suite, merci de vous reporter au guide de l'administrateur pour vous aider à configurer l'application");
 $c->println('');
-/*
-$c->println(" 1 - Configurez le cas échéant votre serveur Apache");
-$c->println(" 2 - Veuillez personnaliser le fichier de configuration de OSE config.local.php, si ce n'est déjà le cas");
-$c->println(" 3 - La base de données devra au besoin être initialisée à l'aide de la commande ./bin/ose install-bdd");
-$c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails pour les indicateurs, Synchronisation automatique, etc.");
-*/
 
 
 /************************************************************
@@ -167,7 +159,8 @@ $c->println(" 4 - Mettez en place les tâches CRON nécessaires (envoi de mails 
  ************************************************************/
 class OseDeploy
 {
-    const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE';
+    const OSE_ORIGIN = 'https://git.unicaen.fr/open-source/OSE.git';
+    const MIN_VERSION = 9; // version minimum installable
 
     /**
      * @var Console
@@ -178,6 +171,11 @@ class OseDeploy
      * @var array
      */
     private $tags = false;
+
+    /**
+     * @var array
+     */
+    private $branches = false;
 
 
 
@@ -267,14 +265,12 @@ class OseDeploy
 
     public function gitlabIsReachable(): bool
     {
-        exec("git ls-remote --heads " . self::OSE_ORIGIN, $gitCheck );
-
-        return (false !== strpos(implode(' ', $gitCheck), 'heads/master'));
+        return $this->brancheIsValid('master');
     }
 
 
 
-    public function getTags(): array
+    public function getTags($minVersion = self::MIN_VERSION): array
     {
         if (false === $this->tags) {
             $this->tags = [];
@@ -283,15 +279,54 @@ class OseDeploy
             foreach ($ts as $tag) {
                 $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
             }
+
+            usort($this->tags, function ($a, $b) {
+                if ((string)(int)$a !== $a) {
+                    $va = (int)substr($a, 0, strpos($a, '.'));
+                } else {
+                    $va = (int)$a;
+                }
+                if ((string)(int)$b !== $b) {
+                    $vb = (int)substr($b, 0, strpos($b, '.'));
+                } else {
+                    $vb = (int)$b;
+                }
+
+                if ($va == $vb) return $a > $b;
+
+                return $va > $vb;
+            });
         }
 
-        $minVersion = 8;
-        foreach ($this->tags as $i => $tag) {
-            $version = (int)substr($tag, 0, strpos($tag, '.'));
-            if ($version < $minVersion) unset($this->tags[$i]);
+        $tags = $this->tags;
+        foreach ($tags as $i => $tag) {
+            if ((string)(int)$tag !== $tag) {
+                $version = (int)substr($tag, 0, strpos($tag, '.'));
+            } else {
+                $version = (int)$tag;
+            }
+            if ($version < $minVersion) unset($tags[$i]);
         }
 
-        return $this->tags;
+        return $tags;
+    }
+
+
+
+    public function getBranches(): array
+    {
+        if (false === $this->branches) {
+            $this->branches = [];
+
+            $bs = $this->console->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
+            foreach ($bs as $branche) {
+                $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
+            }
+
+            sort($this->branches);
+        }
+
+        return $this->branches;
     }
 
 
@@ -304,6 +339,18 @@ class OseDeploy
     public function tagIsValid(string $tag): bool
     {
         return in_array($tag, $this->getTags());
+    }
+
+
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function brancheIsValid(string $branche): bool
+    {
+        return in_array($branche, $this->getBranches());
     }
 
 

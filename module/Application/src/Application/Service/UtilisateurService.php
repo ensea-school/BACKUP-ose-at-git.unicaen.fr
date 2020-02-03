@@ -6,6 +6,7 @@ use Application\Connecteur\Traits\LdapConnecteurAwareTrait;
 use Application\Entity\Db\Utilisateur;
 use Application\Service\Traits\IntervenantServiceAwareTrait;
 use Application\Service\Traits\ParametresServiceAwareTrait;
+use Application\Service\Traits\WorkflowServiceAwareTrait;
 use UnicaenAuth\Service\Traits\UserServiceAwareTrait;
 use UnicaenApp\Util;
 
@@ -20,6 +21,7 @@ class UtilisateurService extends AbstractEntityService
     use LdapConnecteurAwareTrait;
     use UserServiceAwareTrait;
     use IntervenantServiceAwareTrait;
+    use WorkflowServiceAwareTrait;
 
 
 
@@ -148,6 +150,7 @@ class UtilisateurService extends AbstractEntityService
             $utilisateur->setCode($intervenant->getCode());
             $intervenant->setUtilisateurCode($intervenant->getCode());
             $this->getServiceIntervenant()->save($intervenant);
+            $this->getServiceWorkflow()->calculerTableauxBord([], $intervenant);
         }
         $utilisateur->setPassword($motDePasse);
         $this->save($utilisateur);

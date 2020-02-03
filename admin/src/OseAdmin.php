@@ -6,8 +6,8 @@
 
 class OseAdmin
 {
-    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE';
-    const MIN_VERSION = 8; // version minimum installable
+    const OSE_ORIGIN  = 'https://git.unicaen.fr/open-source/OSE.git';
+    const MIN_VERSION = 10; // version minimum installable
 
     /**
      * @var Console
@@ -23,6 +23,11 @@ class OseAdmin
      * @var array
      */
     private $tags = false;
+
+    /**
+     * @var array
+     */
+    private $branches = false;
 
     /**
      * @var int
@@ -77,9 +82,7 @@ class OseAdmin
 
     public function gitlabIsReachable(): bool
     {
-        $gitCheck = $this->console->exec("git ls-remote --heads " . self::OSE_ORIGIN, false);
-
-        return (false !== strpos(implode(' ', $gitCheck), 'heads/master'));
+        return $this->brancheIsValid('master');
     }
 
 
@@ -93,14 +96,68 @@ class OseAdmin
             foreach ($ts as $tag) {
                 $this->tags[] = substr($tag, strpos($tag, 'refs/tags/') + 10);
             }
+
+            usort($this->tags, function ($a, $b) {
+                if ((string)(int)$a !== $a) {
+                    $va = (int)substr($a, 0, strpos($a, '.'));
+                } else {
+                    $va = (int)$a;
+                }
+                if ((string)(int)$b !== $b) {
+                    $vb = (int)substr($b, 0, strpos($b, '.'));
+                } else {
+                    $vb = (int)$b;
+                }
+
+                if ($va == $vb) return $a > $b;
+
+                return $va > $vb;
+            });
         }
 
-        foreach ($this->tags as $i => $tag) {
-            $version = (int)substr($tag, 0, strpos($tag, '.'));
-            if ($version < $minVersion) unset($this->tags[$i]);
+        $tags = $this->tags;
+        foreach ($tags as $i => $tag) {
+            if ((string)(int)$tag !== $tag) {
+                $version = (int)substr($tag, 0, strpos($tag, '.'));
+            } else {
+                $version = (int)$tag;
+            }
+            if ($version < $minVersion) unset($tags[$i]);
         }
 
-        return $this->tags;
+        return $tags;
+    }
+
+
+
+    public function getBranches(): array
+    {
+        if (false === $this->branches) {
+            $this->branches = [];
+
+            $bs = $this->console->exec("git ls-remote --heads --refs " . self::OSE_ORIGIN, false);
+            foreach ($bs as $branche) {
+                $this->branches[] = substr($branche, strpos($branche, 'refs/heads/') + 11);
+            }
+
+            sort($this->branches);
+        }
+
+        return $this->branches;
+    }
+
+
+
+    public function getCurrentBranche(): ?string
+    {
+        $ts = $this->console->exec("git branch", false);
+        foreach ($ts as $t) {
+            if (0 === strpos($t, '*')) {
+                return trim(substr($t, 1));
+            }
+        }
+
+        return null;
     }
 
 
@@ -113,6 +170,18 @@ class OseAdmin
     public function tagIsValid(string $tag): bool
     {
         return in_array($tag, $this->getTags());
+    }
+
+
+
+    /**
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function brancheIsValid(string $branche): bool
+    {
+        return in_array($branche, $this->getBranches());
     }
 
 
@@ -163,48 +232,6 @@ class OseAdmin
 
 
 
-    protected function runMigrationAction(string $contexte, string $action)
-    {
-        $file = $this->getMigrationDir() . $action . '.php';
-        require_once $file;
-
-        /**
-         * @var $migration AbstractMigration
-         */
-        $migration = new $action($this);
-
-        if ($contexte == $migration->getContexte() && $migration->utile()) {
-            $this->console->print('[MIGRATION] ' . $migration->description() . ' ... ');
-
-            try {
-                $migration->action();
-                $this->console->println('OK', $this->console::COLOR_GREEN);
-            } catch (\Throwable $e) {
-                $this->console->println('Erreur : ' . $e->getMessage(), $this->console::COLOR_RED);
-            }
-        }
-    }
-
-
-
-    public function migration(string $context = 'pre', string $action = null)
-    {
-        if (!is_dir($this->getMigrationDir())) return;
-        $files = scandir($this->getMigrationDir());
-
-        foreach ($files as $i => $file) {
-            if ($file == '.' || $file == '..') {
-                continue;
-            }
-            $fileAction = substr($file, 0, -4); // on supprime l'extension PHP
-            if ($action === null || $fileAction === $action) {
-                $this->runMigrationAction($context, $fileAction);
-            }
-        }
-    }
-
-
-
     public function exec($args)
     {
         $this->console->passthru("php " . $this->getOseDir() . "/public/index.php " . $args);
@@ -219,17 +246,10 @@ class OseAdmin
 
 
 
-    public function getMigrationDir()
-    {
-        return $this->getOseDir() . 'admin/migration/';
-    }
-
-
-
     public function getOseAppliId(): int
     {
         if (!$this->oseAppliId) {
-            $u = $this->getBdd()->select("SELECT id FROM UTILISATEUR WHERE USERNAME='oseappli'");
+            $u = $this->getBdd()->select("SELECT ID FROM UTILISATEUR WHERE USERNAME='oseappli'");
             if (isset($u[0]['ID'])) {
                 $this->oseAppliId = (int)$u[0]['ID'];
             } else {
@@ -245,7 +265,7 @@ class OseAdmin
     public function getSourceOseId(): int
     {
         if (!$this->sourceOseId) {
-            $src = $this->getBdd()->select("SELECT id FROM SOURCE WHERE CODE='OSE'");
+            $src = $this->getBdd()->select("SELECT ID FROM SOURCE WHERE CODE='OSE'");
             if (isset($src[0]['ID'])) {
                 $this->sourceOseId = (int)$src[0]['ID'];
             } else {

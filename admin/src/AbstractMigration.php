@@ -8,6 +8,7 @@ abstract class AbstractMigration
 {
     CONST CONTEXTE_PRE  = 'pre';
     CONST CONTEXTE_POST = 'post';
+    CONST CONTEXTE_ALL  = 'all';
 
     /**
      * @var string
@@ -15,15 +16,15 @@ abstract class AbstractMigration
     protected $contexte = self::CONTEXTE_POST;
 
     /**
-     * @var OseAdmin
+     * @var MigrationManager
      */
-    protected $oseAdmin;
+    protected $manager;
 
 
 
-    public function __construct(OseAdmin $oseAdmin)
+    public function __construct(MigrationManager $manager)
     {
-        $this->oseAdmin = $oseAdmin;
+        $this->manager = $manager;
     }
 
 
@@ -43,5 +44,5 @@ abstract class AbstractMigration
 
 
 
-    abstract public function action();
+    abstract public function action(string $contexte);
 }

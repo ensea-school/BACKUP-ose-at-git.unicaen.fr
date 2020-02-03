@@ -1,4 +1,4 @@
-# OSE 12 alpha
+# OSE 12
 
 ## Nouveautés
 

@@ -98,8 +98,16 @@ class OseAdmin
             }
 
             usort($this->tags, function ($a, $b) {
-                $va = (int)substr($a, 0, strpos($a, '.'));
-                $vb = (int)substr($b, 0, strpos($b, '.'));
+                if ((string)(int)$a !== $a) {
+                    $va = (int)substr($a, 0, strpos($a, '.'));
+                } else {
+                    $va = (int)$a;
+                }
+                if ((string)(int)$b !== $b) {
+                    $vb = (int)substr($b, 0, strpos($b, '.'));
+                } else {
+                    $vb = (int)$b;
+                }
 
                 if ($va == $vb) return $a > $b;
 
@@ -109,7 +117,11 @@ class OseAdmin
 
         $tags = $this->tags;
         foreach ($tags as $i => $tag) {
-            $version = (int)substr($tag, 0, strpos($tag, '.'));
+            if ((string)(int)$tag !== $tag) {
+                $version = (int)substr($tag, 0, strpos($tag, '.'));
+            } else {
+                $version = (int)$tag;
+            }
             if ($version < $minVersion) unset($tags[$i]);
         }
 

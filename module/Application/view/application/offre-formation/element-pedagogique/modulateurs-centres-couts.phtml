@@ -9,14 +9,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <?php if($form->has('modulateur')): ?>
-                    <td><?= $form->get('modulateur')->getLabel(); ?></td>
-                    <td><?= $this->formSelect($form->get('modulateur')); ?></td>
-                <?php else: ?>
+                <?php $hasModulateur = 0; ?>
+                <?php foreach($form->getElements() as $element): ?>
+                <tr>
+                    <?php if(!empty(strstr($element->getName(), 'modulateur'))): ?>
+                        <td><?= $element->getLabel(); ?></td>
+                        <td><?= $this->formSelect($form->get($element->getName())); ?></td>
+                        <?php $hasModulateur = 0; ?>
+                    <?php endif; ?>
+                </tr>
+                <?php endforeach; ?>
+                <?php if($hasModulateur): ?>
                     <td colspan="2" class="text-center" >Aucun modulateur ne correspond aux enseignements de cette formation.</td>
                 <?php endif; ?>
-            </tr>
         </tbody>
     </table>
     <table class="table table-bordered table-extra-condensed">

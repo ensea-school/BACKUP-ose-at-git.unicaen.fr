@@ -279,7 +279,13 @@ class ElementPedagogiqueController extends AbstractController
         if ($request->isPost()) {
             $datasPost = $request->getPost();
             //Modulateur
-            $element = $this->getServiceElementModulateur()->addElementModulateur($element, $datasPost['modulateur']);
+            foreach($datasPost as $name => $value)
+            {
+                if(strstr($name, 'modulateur'))
+                {
+                    $element = $this->getServiceElementModulateur()->addElementModulateur($element, $datasPost[$name]);
+                }
+            }
             //Centres de coûts
             $centreCouts = [
                 'fi' => $datasPost['fi'],

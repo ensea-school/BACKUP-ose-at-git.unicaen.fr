@@ -1,3 +1,11 @@
+# OSE 12.1
+
+## Correction de bugs
+
+* L'interface d'administration des centres de coûts est de nouveau opérationnelle
+* L'interface d'administration des domaines fonctionnels est de nouveau opérationnelle
+
+
 # OSE 12
 
 ## Nouveautés

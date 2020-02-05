@@ -19,24 +19,24 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'delete' => [
+                    'delete'           => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/delete/:centre-cout',
+                            'route'       => '/delete/:centreCout',
                             'constraints' => [
-                                'centre-cout' => '[0-9]*',
+                                'centreCout' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'delete',
                             ],
                         ],
                     ],
-                    'saisie' => [
+                    'saisie'           => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/saisie/[:centre-cout]',
+                            'route'       => '/saisie/[:centreCout]',
                             'constraints' => [
-                                'centre-cout' => '[0-9]*',
+                                'centreCout' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'saisie',
@@ -46,9 +46,9 @@ return [
                     'delete-structure' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/delete-structure/:centre-cout-structure',
+                            'route'       => '/delete-structure/:centreCoutStructure',
                             'constraints' => [
-                                'centre-cout-structure' => '[0-9]*',
+                                'centreCoutStructure' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'delete-structure',
@@ -58,10 +58,10 @@ return [
                     'saisie-structure' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'       => '/saisie-structure/:centre-cout/[:centre-cout-structure]',
+                            'route'       => '/saisie-structure/:centreCout/[:centreCoutStructure]',
                             'constraints' => [
-                                'centre-cout' => '[0-9]*',
-                                'saisie-sructure' => '[0-9]*',
+                                'centreCout'          => '[0-9]*',
+                                'centreCoutStructure' => '[0-9]*',
                             ],
                             'defaults'    => [
                                 'action' => 'saisie-structure',
@@ -102,7 +102,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\CentreCout',
-                    'action'     => ['saisie', 'delete','saisie-structure','delete-structure'],
+                    'action'     => ['saisie', 'delete', 'saisie-structure', 'delete-structure'],
                     'privileges' => Privileges::CENTRES_COUTS_ADMINISTRATION_EDITION,
                 ],
             ],
@@ -124,7 +124,7 @@ return [
     ],
     'form_elements'   => [
         'invokables' => [
-            Form\CentreCout\CentreCoutSaisieForm::class => Form\CentreCout\CentreCoutSaisieForm::class,
+            Form\CentreCout\CentreCoutSaisieForm::class          => Form\CentreCout\CentreCoutSaisieForm::class,
             Form\CentreCout\CentreCoutStructureSaisieForm::class => Form\CentreCout\CentreCoutStructureSaisieForm::class,
         ],
     ],

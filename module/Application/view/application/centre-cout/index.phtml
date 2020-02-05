@@ -56,13 +56,13 @@ while ($i < $nTblListe) {
         <td><?= $fr->getActivite()->getLibelle() . '<br>' ?></td>
         <td><?= $fr->getTypeRessource() . '<br>' ?></td>
         <td><?= $fr->getUniteBudgetaire() . '<br>' ?></td>
-        <td style=" text-align: center;"><?php if (($fr->getSource()->getLibelle() == 'OSE') && ($canEdit)) { ?>
+        <td style=" text-align: center;"><?php if ((!$fr->getSource()->getImportable()) && ($canEdit)) { ?>
                 <a class="ajax-modal" data-event="centre-cout-saisie"
-                   href="<?= $this->url('centre-cout/saisie', ['centre-cout' => $fr->getId()]) ?>"
+                   href="<?= $this->url('centre-cout/saisie', ['centreCout' => $fr->getId()]) ?>"
                    title="Modifier la Centre de Coûts">
                     <span class="glyphicon glyphicon-edit"></span></a>
                 <a class="pop-ajax"
-                   href="<?= $this->url('centre-cout/delete', ['centre-cout' => $fr->getId()]) ?>"
+                   href="<?= $this->url('centre-cout/delete', ['centreCout' => $fr->getId()]) ?>"
                    title="Supprimer la Centre de Coûts"
                    data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                    data-confirm="true"
@@ -80,20 +80,16 @@ while ($i < $nTblListe) {
             foreach ($centreCoutStructures as $ccs) {
                 if ($ccs->getCentreCout()->getId() == $fr->getId()) {
                     $tblOk = true;
-                    if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) $okActions = true;
+                    if ((!$ccs->getSource()->getImportable()) && $canEdit) $okActions = true;
                 }
             }
             if ($tblOk) { ?>
                 <?php foreach ($centreCoutStructures as $ccs) {
                     if ($ccs->getCentreCout()->getId() == $fr->getId()) { ?>
                         <?= $ccs->getStructure() ?>
-                        <?php if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) { ?>
-                            <a class="ajax-modal" data-event="centre-cout-saisie"
-                               href="<?= $this->url('centre-cout/saisie-structure', ['centre-cout' => $fr->getId(), 'centre-cout-structure' => $ccs->getId()]) ?>"
-                               title="Modifier la structure">
-                                <span class="glyphicon glyphicon-edit"></span></a>
+                        <?php if ((!$ccs->getSource()->getImportable()) && $canEdit) { ?>
                             <a class="pop-ajax"
-                               href="<?= $this->url('centre-cout/delete-structure', ['centre-cout-structure' => $ccs->getId()]) ?>"
+                               href="<?= $this->url('centre-cout/delete-structure', ['centreCoutStructure' => $ccs->getId()]) ?>"
                                title="Supprimer la sructure du Centre de Coûts"
                                data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                data-confirm="true"
@@ -110,7 +106,7 @@ while ($i < $nTblListe) {
             <?php } ?>
             <?php if ($canEdit) { ?>
                 <a class="ajax-modal" data-event="centre-cout-saisie"
-                   href="<?= $this->url('centre-cout/saisie-structure', ['centre-cout' => $fr->getId()]) ?>"
+                   href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $fr->getId()]) ?>"
                    title="Ajouter une structure">
                     <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
                 </a>
@@ -129,14 +125,14 @@ while ($i < $nTblListe) {
                 <td style="word-wrap: break-word ; "><?= $frf->getActivite()->getLibelle() ?></td>
                 <td style="word-wrap: break-word ; "><?= $frf->getTypeRessource() ?></td>
                 <td style="word-wrap: break-word ; "><?= $frf->getUniteBudgetaire() ?></td>
-                <?php if (($frf->getSource()->getLibelle() == 'OSE') && $canEdit) { ?>
+                <?php if ((!$frf->getSource()->getImportable()) && $canEdit) { ?>
                     <td style="text-align:center;width:1px;white-space: nowrap">
                         <a class="ajax-modal" data-event="centre-cout-saisie"
-                           href="<?= $this->url('centre-cout/saisie', ['centre-cout' => $frf->getId()]) ?>"
+                           href="<?= $this->url('centre-cout/saisie', ['centreCout' => $frf->getId()]) ?>"
                            title="Modifier la Centre de Coûts">
                             <span class="glyphicon glyphicon-edit"></span></a>
                         <a class="pop-ajax"
-                           href="<?= $this->url('centre-cout/delete', ['centre-cout' => $frf->getId()]) ?>"
+                           href="<?= $this->url('centre-cout/delete', ['centreCout' => $frf->getId()]) ?>"
                            title="Supprimer le Centre de Coûts"
                            data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                            data-confirm="true"
@@ -154,20 +150,20 @@ while ($i < $nTblListe) {
                     foreach ($centreCoutStructures as $ccs) {
                         if ($ccs->getCentreCout()->getId() == $frf->getId()) {
                             $tblOk = true;
-                            if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) $okActions = true;
+                            if ((!$ccs->getSource()->getImportable()) && $canEdit) $okActions = true;
                         }
                     }
                     if ($tblOk) {
                         foreach ($centreCoutStructures as $ccs) {
                             if ($ccs->getCentreCout()->getId() == $frf->getId()) { ?>
                                 <?= $ccs->getStructure() ?>
-                                <?php if (($ccs->getSource()->getLibelle() == 'OSE') && $canEdit) { ?>
+                                <?php if ((!$ccs->getSource()->getImportable()) && $canEdit) { ?>
                                     <a class="ajax-modal" data-event="centre-cout-saisie"
-                                       href="<?= $this->url('centre-cout/saisie-structure', ['centre-cout' => $fr->getId(), 'centre-cout-structure' => $ccs->getId()]) ?>"
+                                       href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $fr->getId(), 'centreCoutStructure' => $ccs->getId()]) ?>"
                                        title="Modifier la structure">
                                         <span class="glyphicon glyphicon-edit"></span></a>
                                     <a class="pop-ajax"
-                                       href="<?= $this->url('centre-cout/delete-structure', ['centre-cout-structure' => $ccs->getId()]) ?>"
+                                       href="<?= $this->url('centre-cout/delete-structure', ['centreCoutStructure' => $ccs->getId()]) ?>"
                                        title="Supprimer la sructure du Centre de Coûts"
                                        data-content="<p class='lead text-danger'><strong>Attention!</strong> Confirmez-vous cette suppression ?</p>"
                                        data-confirm="true"
@@ -184,7 +180,7 @@ while ($i < $nTblListe) {
                     <?php } ?>
                     <?php if ($canEdit) { ?>
                         <a class="ajax-modal" data-event="centre-cout-saisie"
-                           href="<?= $this->url('centre-cout/saisie-structure', ['centre-cout' => $frf->getId()]) ?>"
+                           href="<?= $this->url('centre-cout/saisie-structure', ['centreCout' => $frf->getId()]) ?>"
                            title="Ajouter une structure">
                             <button type="button" class="btn btn-xs btn-primary">Ajouter une structure</button>
                         </a>

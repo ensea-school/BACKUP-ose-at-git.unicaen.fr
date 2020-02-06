@@ -2,18 +2,16 @@
 
 namespace Application\Entity\Db;
 
-use UnicaenApp\Entity\HistoriqueAwareInterface;
-use UnicaenApp\Entity\HistoriqueAwareTrait;
-use UnicaenImport\Entity\Db\Interfaces\ImportAwareInterface;
-use UnicaenImport\Entity\Db\Traits\ImportAwareTrait;
 
 /**
  * Departement
  */
-class Departement implements HistoriqueAwareInterface, ImportAwareInterface
+class Departement
 {
-    use HistoriqueAwareTrait;
-    use ImportAwareTrait;
+    /**
+     * @var integer
+     */
+    protected $id;
 
     /**
      * @var string
@@ -23,17 +21,7 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @var string
      */
-    protected $libelleCourt;
-
-    /**
-     * @var string
-     */
-    protected $libelleLong;
-
-    /**
-     * @var integer
-     */
-    protected $id;
+    protected $libelle;
 
 
 
@@ -44,7 +32,31 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
      */
     public function __toString()
     {
-        return $this->getCode() . " - " . $this->getLibelleLong();
+        return $this->getCode() . " - " . $this->getLibelle();
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
+
+    /**
+     * @param int $id
+     *
+     * @return Departement
+     */
+    public function setId(int $id): Departement
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
 
@@ -52,7 +64,7 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     /**
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -64,7 +76,7 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
      *
      * @return Departement
      */
-    public function setCode($code)
+    public function setCode(string $code): Departement
     {
         $this->code = $code;
 
@@ -74,69 +86,25 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
 
 
     /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     *
-     * @return Structure
-     */
-    public function setLibelleCourt($libelleCourt)
-    {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get libelleCourt
-     *
      * @return string
      */
-    public function getLibelleCourt()
+    public function getLibelle(): string
     {
-        return $this->libelleCourt;
+        return $this->libelle;
     }
 
 
 
     /**
-     * Set libelleLong
+     * @param string $libelle
      *
-     * @param string $libelleLong
-     *
-     * @return Structure
+     * @return Departement
      */
-    public function setLibelleLong($libelleLong)
+    public function setLibelle(string $libelle): Departement
     {
-        $this->libelleLong = $libelleLong;
+        $this->libelle = $libelle;
 
         return $this;
-    }
-
-
-
-    /**
-     * Get libelleLong
-     *
-     * @return string
-     */
-    public function getLibelleLong()
-    {
-        return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
 
@@ -148,7 +116,7 @@ class Departement implements HistoriqueAwareInterface, ImportAwareInterface
     {
         $intCode = (int)$this->getCode();
 
-        return in_array($intCode, [78,91,92,93,94,95]);
+        return in_array($intCode, [78, 91, 92, 93, 94, 95]);
     }
 
 }

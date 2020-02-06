@@ -2822,113 +2822,14 @@
           'default' => NULL,
           'commentaire' => NULL,
         ),
-        'LIBELLE_LONG' => 
+        'LIBELLE' => 
         array (
-          'name' => 'LIBELLE_LONG',
+          'name' => 'LIBELLE',
           'type' => 'VARCHAR2',
           'length' => 120,
           'scale' => NULL,
           'precision' => NULL,
           'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'LIBELLE_COURT' => 
-        array (
-          'name' => 'LIBELLE_COURT',
-          'type' => 'VARCHAR2',
-          'length' => 60,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'SOURCE_ID' => 
-        array (
-          'name' => 'SOURCE_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'SOURCE_CODE' => 
-        array (
-          'name' => 'SOURCE_CODE',
-          'type' => 'VARCHAR2',
-          'length' => 100,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATION' => 
-        array (
-          'name' => 'HISTO_CREATION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => 'SYSDATE',
-          'commentaire' => NULL,
-        ),
-        'HISTO_MODIFICATION' => 
-        array (
-          'name' => 'HISTO_MODIFICATION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => 'SYSDATE',
-          'commentaire' => NULL,
-        ),
-        'HISTO_DESTRUCTION' => 
-        array (
-          'name' => 'HISTO_DESTRUCTION',
-          'type' => 'DATE',
-          'length' => 0,
-          'scale' => NULL,
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_DESTRUCTEUR_ID' => 
-        array (
-          'name' => 'HISTO_DESTRUCTEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => true,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_MODIFICATEUR_ID' => 
-        array (
-          'name' => 'HISTO_MODIFICATEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
-          'default' => NULL,
-          'commentaire' => NULL,
-        ),
-        'HISTO_CREATEUR_ID' => 
-        array (
-          'name' => 'HISTO_CREATEUR_ID',
-          'type' => 'NUMBER',
-          'length' => 0,
-          'scale' => '0',
-          'precision' => NULL,
-          'nullable' => false,
           'default' => NULL,
           'commentaire' => NULL,
         ),
@@ -37786,54 +37687,6 @@ WHERE
         'TYPE_VOLUME_HORAIRE_ID' => 'ID',
       ),
     ),
-    'DEPARTEMENT_HCFK' => 
-    array (
-      'name' => 'DEPARTEMENT_HCFK',
-      'table' => 'DEPARTEMENT',
-      'rtable' => 'UTILISATEUR',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'HISTO_CREATEUR_ID' => 'ID',
-      ),
-    ),
-    'DEPARTEMENT_HDFK' => 
-    array (
-      'name' => 'DEPARTEMENT_HDFK',
-      'table' => 'DEPARTEMENT',
-      'rtable' => 'UTILISATEUR',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'HISTO_DESTRUCTEUR_ID' => 'ID',
-      ),
-    ),
-    'DEPARTEMENT_HMFK' => 
-    array (
-      'name' => 'DEPARTEMENT_HMFK',
-      'table' => 'DEPARTEMENT',
-      'rtable' => 'UTILISATEUR',
-      'delete_rule' => NULL,
-      'index' => NULL,
-      'columns' => 
-      array (
-        'HISTO_MODIFICATEUR_ID' => 'ID',
-      ),
-    ),
-    'DEPARTEMENT_SOURCE_FK' => 
-    array (
-      'name' => 'DEPARTEMENT_SOURCE_FK',
-      'table' => 'DEPARTEMENT',
-      'rtable' => 'SOURCE',
-      'delete_rule' => 'CASCADE',
-      'index' => NULL,
-      'columns' => 
-      array (
-        'SOURCE_ID' => 'ID',
-      ),
-    ),
     'DISCIPLINE_HCFK' => 
     array (
       'name' => 'DISCIPLINE_HCFK',
@@ -43669,17 +43522,6 @@ WHERE
         1 => 'HISTO_DESTRUCTION',
       ),
     ),
-    'DEPARTEMENT_SRC_UN' => 
-    array (
-      'name' => 'DEPARTEMENT_SRC_UN',
-      'table' => 'DEPARTEMENT',
-      'index' => 'DEPARTEMENT_SRC_UN',
-      'columns' => 
-      array (
-        0 => 'SOURCE_CODE',
-        1 => 'HISTO_DESTRUCTION',
-      ),
-    ),
     'DISCIPLINE_SOURCE_UN' => 
     array (
       'name' => 'DISCIPLINE_SOURCE_UN',
@@ -47206,36 +47048,6 @@ END;',
         0 => 'TYPE_VOLUME_HORAIRE_ID',
       ),
     ),
-    'DEPARTEMENT_HCFK_IDX' => 
-    array (
-      'name' => 'DEPARTEMENT_HCFK_IDX',
-      'unique' => false,
-      'table' => 'DEPARTEMENT',
-      'columns' => 
-      array (
-        0 => 'HISTO_CREATEUR_ID',
-      ),
-    ),
-    'DEPARTEMENT_HDFK_IDX' => 
-    array (
-      'name' => 'DEPARTEMENT_HDFK_IDX',
-      'unique' => false,
-      'table' => 'DEPARTEMENT',
-      'columns' => 
-      array (
-        0 => 'HISTO_DESTRUCTEUR_ID',
-      ),
-    ),
-    'DEPARTEMENT_HMFK_IDX' => 
-    array (
-      'name' => 'DEPARTEMENT_HMFK_IDX',
-      'unique' => false,
-      'table' => 'DEPARTEMENT',
-      'columns' => 
-      array (
-        0 => 'HISTO_MODIFICATEUR_ID',
-      ),
-    ),
     'DEPARTEMENT_PK' => 
     array (
       'name' => 'DEPARTEMENT_PK',
@@ -47244,27 +47056,6 @@ END;',
       'columns' => 
       array (
         0 => 'ID',
-      ),
-    ),
-    'DEPARTEMENT_SOURCE_FK_IDX' => 
-    array (
-      'name' => 'DEPARTEMENT_SOURCE_FK_IDX',
-      'unique' => false,
-      'table' => 'DEPARTEMENT',
-      'columns' => 
-      array (
-        0 => 'SOURCE_ID',
-      ),
-    ),
-    'DEPARTEMENT_SRC_UN' => 
-    array (
-      'name' => 'DEPARTEMENT_SRC_UN',
-      'unique' => true,
-      'table' => 'DEPARTEMENT',
-      'columns' => 
-      array (
-        0 => 'SOURCE_CODE',
-        1 => 'HISTO_DESTRUCTION',
       ),
     ),
     'DISCIPLINE_HCFK_IDX' => 

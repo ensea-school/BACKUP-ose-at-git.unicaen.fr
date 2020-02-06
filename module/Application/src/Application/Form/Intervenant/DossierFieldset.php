@@ -156,7 +156,7 @@ class DossierFieldset extends AbstractFieldset
             'empty_option' => "(Sélectionnez un département...)",
         ]);
         $departementSelect->getProxy()
-            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['sourceCode' => 'ASC']]])
+            ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['code' => 'ASC']]])
             ->setObjectManager($this->getServiceContext()->getEntityManager())
             ->setTargetClass(\Application\Entity\Db\Departement::class);
         $this->add($departementSelect);

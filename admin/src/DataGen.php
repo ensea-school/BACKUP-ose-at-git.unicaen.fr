@@ -229,8 +229,8 @@ class DataGen
         ],
         [
             'table'   => 'DEPARTEMENT',
-            'context' => ['install'],
-            'key'     => 'SOURCE_CODE',
+            'context' => ['install', 'update'],
+            'key'     => 'CODE',
         ],
         [
             'table'   => 'ETABLISSEMENT',
@@ -473,6 +473,23 @@ class DataGen
         }
 
         return $annees;
+    }
+
+
+
+    public function DEPARTEMENT()
+    {
+        $data = require $this->oseAdmin->getOseDir() . 'data/departements.php';
+
+        $departements = [];
+        foreach ($data as $code => $libelle) {
+            $departements[] = [
+                'CODE'    => (string)$code,
+                'LIBELLE' => $libelle,
+            ];
+        }
+
+        return $departements;
     }
 
 

@@ -3488,638 +3488,6 @@ return [
             "SOURCE_CODE" => "310"
         ]
     ],
-    "DEPARTEMENT" => [
-        [
-            "LIBELLE_LONG" => "AIN",
-            "LIBELLE_COURT" => "AIN",
-            "SOURCE_CODE" => "001",
-            "CODE" => "001"
-        ],
-        [
-            "LIBELLE_LONG" => "AISNE",
-            "LIBELLE_COURT" => "AISNE",
-            "SOURCE_CODE" => "002",
-            "CODE" => "002"
-        ],
-        [
-            "LIBELLE_LONG" => "ALLIER",
-            "LIBELLE_COURT" => "ALLIER",
-            "SOURCE_CODE" => "003",
-            "CODE" => "003"
-        ],
-        [
-            "LIBELLE_LONG" => "ALPES-DE-HTE-PROVENCE",
-            "LIBELLE_COURT" => "AL.HTE.PR.",
-            "SOURCE_CODE" => "004",
-            "CODE" => "004"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTES-ALPES",
-            "LIBELLE_COURT" => "HTES-ALPES",
-            "SOURCE_CODE" => "005",
-            "CODE" => "005"
-        ],
-        [
-            "LIBELLE_LONG" => "ALPES-MARITIMES",
-            "LIBELLE_COURT" => "ALPES-MAR.",
-            "SOURCE_CODE" => "006",
-            "CODE" => "006"
-        ],
-        [
-            "LIBELLE_LONG" => "ARDECHE",
-            "LIBELLE_COURT" => "ARDECHE",
-            "SOURCE_CODE" => "007",
-            "CODE" => "007"
-        ],
-        [
-            "LIBELLE_LONG" => "ARDENNES",
-            "LIBELLE_COURT" => "ARDENNES",
-            "SOURCE_CODE" => "008",
-            "CODE" => "008"
-        ],
-        [
-            "LIBELLE_LONG" => "ARIEGE",
-            "LIBELLE_COURT" => "ARIEGE",
-            "SOURCE_CODE" => "009",
-            "CODE" => "009"
-        ],
-        [
-            "LIBELLE_LONG" => "AUBE",
-            "LIBELLE_COURT" => "AUBE",
-            "SOURCE_CODE" => "010",
-            "CODE" => "010"
-        ],
-        [
-            "LIBELLE_LONG" => "AUDE",
-            "LIBELLE_COURT" => "AUDE",
-            "SOURCE_CODE" => "011",
-            "CODE" => "011"
-        ],
-        [
-            "LIBELLE_LONG" => "AVEYRON",
-            "LIBELLE_COURT" => "AVEYRON",
-            "SOURCE_CODE" => "012",
-            "CODE" => "012"
-        ],
-        [
-            "LIBELLE_LONG" => "BOUCHES-DU-RHONE",
-            "LIBELLE_COURT" => "BCHES-RHO.",
-            "SOURCE_CODE" => "013",
-            "CODE" => "013"
-        ],
-        [
-            "LIBELLE_LONG" => "CALVADOS",
-            "LIBELLE_COURT" => "CALVADOS",
-            "SOURCE_CODE" => "014",
-            "CODE" => "014"
-        ],
-        [
-            "LIBELLE_LONG" => "CANTAL",
-            "LIBELLE_COURT" => "CANTAL",
-            "SOURCE_CODE" => "015",
-            "CODE" => "015"
-        ],
-        [
-            "LIBELLE_LONG" => "CHARENTE",
-            "LIBELLE_COURT" => "CHARENTE",
-            "SOURCE_CODE" => "016",
-            "CODE" => "016"
-        ],
-        [
-            "LIBELLE_LONG" => "CHARENTE-MARITIME",
-            "LIBELLE_COURT" => "CHAR.-MAR.",
-            "SOURCE_CODE" => "017",
-            "CODE" => "017"
-        ],
-        [
-            "LIBELLE_LONG" => "CHER",
-            "LIBELLE_COURT" => "CHER",
-            "SOURCE_CODE" => "018",
-            "CODE" => "018"
-        ],
-        [
-            "LIBELLE_LONG" => "CORREZE",
-            "LIBELLE_COURT" => "CORREZE",
-            "SOURCE_CODE" => "019",
-            "CODE" => "019"
-        ],
-        [
-            "LIBELLE_LONG" => "COTE D'OR",
-            "LIBELLE_COURT" => "COTE D'OR",
-            "SOURCE_CODE" => "021",
-            "CODE" => "021"
-        ],
-        [
-            "LIBELLE_LONG" => "COTES D'ARMOR",
-            "LIBELLE_COURT" => "COTES ARM.",
-            "SOURCE_CODE" => "022",
-            "CODE" => "022"
-        ],
-        [
-            "LIBELLE_LONG" => "CREUSE",
-            "LIBELLE_COURT" => "CREUSE",
-            "SOURCE_CODE" => "023",
-            "CODE" => "023"
-        ],
-        [
-            "LIBELLE_LONG" => "DORDOGNE",
-            "LIBELLE_COURT" => "DORDOGNE",
-            "SOURCE_CODE" => "024",
-            "CODE" => "024"
-        ],
-        [
-            "LIBELLE_LONG" => "DOUBS",
-            "LIBELLE_COURT" => "DOUBS",
-            "SOURCE_CODE" => "025",
-            "CODE" => "025"
-        ],
-        [
-            "LIBELLE_LONG" => "DROME",
-            "LIBELLE_COURT" => "DROME",
-            "SOURCE_CODE" => "026",
-            "CODE" => "026"
-        ],
-        [
-            "LIBELLE_LONG" => "EURE",
-            "LIBELLE_COURT" => "EURE",
-            "SOURCE_CODE" => "027",
-            "CODE" => "027"
-        ],
-        [
-            "LIBELLE_LONG" => "EURE-ET-LOIR",
-            "LIBELLE_COURT" => "EURE-LOIR",
-            "SOURCE_CODE" => "028",
-            "CODE" => "028"
-        ],
-        [
-            "LIBELLE_LONG" => "FINISTERE",
-            "LIBELLE_COURT" => "FINISTERE",
-            "SOURCE_CODE" => "029",
-            "CODE" => "029"
-        ],
-        [
-            "LIBELLE_LONG" => "CORSE-DU-SUD",
-            "LIBELLE_COURT" => "CORSE-SUD",
-            "SOURCE_CODE" => "02A",
-            "CODE" => "02A"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE CORSE",
-            "LIBELLE_COURT" => "HAUTE CORSE",
-            "SOURCE_CODE" => "02B",
-            "CODE" => "02B"
-        ],
-        [
-            "LIBELLE_LONG" => "GARD",
-            "LIBELLE_COURT" => "GARD",
-            "SOURCE_CODE" => "030",
-            "CODE" => "030"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE-GARONNE",
-            "LIBELLE_COURT" => "HTE-GARON.",
-            "SOURCE_CODE" => "031",
-            "CODE" => "031"
-        ],
-        [
-            "LIBELLE_LONG" => "GERS",
-            "LIBELLE_COURT" => "GERS",
-            "SOURCE_CODE" => "032",
-            "CODE" => "032"
-        ],
-        [
-            "LIBELLE_LONG" => "GIRONDE",
-            "LIBELLE_COURT" => "GIRONDE",
-            "SOURCE_CODE" => "033",
-            "CODE" => "033"
-        ],
-        [
-            "LIBELLE_LONG" => "HERAULT",
-            "LIBELLE_COURT" => "HERAULT",
-            "SOURCE_CODE" => "034",
-            "CODE" => "034"
-        ],
-        [
-            "LIBELLE_LONG" => "ILLE-ET-VILAINE",
-            "LIBELLE_COURT" => "ILLE-VIL.",
-            "SOURCE_CODE" => "035",
-            "CODE" => "035"
-        ],
-        [
-            "LIBELLE_LONG" => "INDRE",
-            "LIBELLE_COURT" => "INDRE",
-            "SOURCE_CODE" => "036",
-            "CODE" => "036"
-        ],
-        [
-            "LIBELLE_LONG" => "INDRE-ET-LOIRE",
-            "LIBELLE_COURT" => "INDRE-LOI.",
-            "SOURCE_CODE" => "037",
-            "CODE" => "037"
-        ],
-        [
-            "LIBELLE_LONG" => "ISERE",
-            "LIBELLE_COURT" => "ISERE",
-            "SOURCE_CODE" => "038",
-            "CODE" => "038"
-        ],
-        [
-            "LIBELLE_LONG" => "JURA",
-            "LIBELLE_COURT" => "JURA",
-            "SOURCE_CODE" => "039",
-            "CODE" => "039"
-        ],
-        [
-            "LIBELLE_LONG" => "LANDES",
-            "LIBELLE_COURT" => "LANDES",
-            "SOURCE_CODE" => "040",
-            "CODE" => "040"
-        ],
-        [
-            "LIBELLE_LONG" => "LOIR-ET-CHER",
-            "LIBELLE_COURT" => "LOIR-CHER",
-            "SOURCE_CODE" => "041",
-            "CODE" => "041"
-        ],
-        [
-            "LIBELLE_LONG" => "LOIRE",
-            "LIBELLE_COURT" => "LOIRE",
-            "SOURCE_CODE" => "042",
-            "CODE" => "042"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE-LOIRE",
-            "LIBELLE_COURT" => "HTE-LOIRE",
-            "SOURCE_CODE" => "043",
-            "CODE" => "043"
-        ],
-        [
-            "LIBELLE_LONG" => "LOIRE-ATLANTIQUE",
-            "LIBELLE_COURT" => "LOIRE-ATL.",
-            "SOURCE_CODE" => "044",
-            "CODE" => "044"
-        ],
-        [
-            "LIBELLE_LONG" => "LOIRET",
-            "LIBELLE_COURT" => "LOIRET",
-            "SOURCE_CODE" => "045",
-            "CODE" => "045"
-        ],
-        [
-            "LIBELLE_LONG" => "LOT",
-            "LIBELLE_COURT" => "LOT",
-            "SOURCE_CODE" => "046",
-            "CODE" => "046"
-        ],
-        [
-            "LIBELLE_LONG" => "LOT-ET-GARONNE",
-            "LIBELLE_COURT" => "LOT-ET-GA.",
-            "SOURCE_CODE" => "047",
-            "CODE" => "047"
-        ],
-        [
-            "LIBELLE_LONG" => "LOZERE",
-            "LIBELLE_COURT" => "LOZERE",
-            "SOURCE_CODE" => "048",
-            "CODE" => "048"
-        ],
-        [
-            "LIBELLE_LONG" => "MAINE-ET-LOIRE",
-            "LIBELLE_COURT" => "MAINE-LOI.",
-            "SOURCE_CODE" => "049",
-            "CODE" => "049"
-        ],
-        [
-            "LIBELLE_LONG" => "MANCHE",
-            "LIBELLE_COURT" => "MANCHE",
-            "SOURCE_CODE" => "050",
-            "CODE" => "050"
-        ],
-        [
-            "LIBELLE_LONG" => "MARNE",
-            "LIBELLE_COURT" => "MARNE",
-            "SOURCE_CODE" => "051",
-            "CODE" => "051"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE-MARNE",
-            "LIBELLE_COURT" => "HTE-MARNE",
-            "SOURCE_CODE" => "052",
-            "CODE" => "052"
-        ],
-        [
-            "LIBELLE_LONG" => "MAYENNE",
-            "LIBELLE_COURT" => "MAYENNE",
-            "SOURCE_CODE" => "053",
-            "CODE" => "053"
-        ],
-        [
-            "LIBELLE_LONG" => "MEURTHE-ET-MOSELLE",
-            "LIBELLE_COURT" => "MEUR.MOSE.",
-            "SOURCE_CODE" => "054",
-            "CODE" => "054"
-        ],
-        [
-            "LIBELLE_LONG" => "MEUSE",
-            "LIBELLE_COURT" => "MEUSE",
-            "SOURCE_CODE" => "055",
-            "CODE" => "055"
-        ],
-        [
-            "LIBELLE_LONG" => "MORBIHAN",
-            "LIBELLE_COURT" => "MORBIHAN",
-            "SOURCE_CODE" => "056",
-            "CODE" => "056"
-        ],
-        [
-            "LIBELLE_LONG" => "MOSELLE",
-            "LIBELLE_COURT" => "MOSELLE",
-            "SOURCE_CODE" => "057",
-            "CODE" => "057"
-        ],
-        [
-            "LIBELLE_LONG" => "NIEVRE",
-            "LIBELLE_COURT" => "NIEVRE",
-            "SOURCE_CODE" => "058",
-            "CODE" => "058"
-        ],
-        [
-            "LIBELLE_LONG" => "NORD",
-            "LIBELLE_COURT" => "NORD",
-            "SOURCE_CODE" => "059",
-            "CODE" => "059"
-        ],
-        [
-            "LIBELLE_LONG" => "OISE",
-            "LIBELLE_COURT" => "OISE",
-            "SOURCE_CODE" => "060",
-            "CODE" => "060"
-        ],
-        [
-            "LIBELLE_LONG" => "ORNE",
-            "LIBELLE_COURT" => "ORNE",
-            "SOURCE_CODE" => "061",
-            "CODE" => "061"
-        ],
-        [
-            "LIBELLE_LONG" => "PAS-DE-CALAIS",
-            "LIBELLE_COURT" => "PAS-CALAIS",
-            "SOURCE_CODE" => "062",
-            "CODE" => "062"
-        ],
-        [
-            "LIBELLE_LONG" => "PUY-DE-DOME",
-            "LIBELLE_COURT" => "PUY-DOME",
-            "SOURCE_CODE" => "063",
-            "CODE" => "063"
-        ],
-        [
-            "LIBELLE_LONG" => "PYRENEES-ATLANTIQUES",
-            "LIBELLE_COURT" => "PY._ATL.",
-            "SOURCE_CODE" => "064",
-            "CODE" => "064"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTES-PYRENEES",
-            "LIBELLE_COURT" => "HTES-PYR.",
-            "SOURCE_CODE" => "065",
-            "CODE" => "065"
-        ],
-        [
-            "LIBELLE_LONG" => "PYRENEES-ORIENTALES",
-            "LIBELLE_COURT" => "PYR.ORIEN.",
-            "SOURCE_CODE" => "066",
-            "CODE" => "066"
-        ],
-        [
-            "LIBELLE_LONG" => "BAS-RHIN",
-            "LIBELLE_COURT" => "BAS-RHIN",
-            "SOURCE_CODE" => "067",
-            "CODE" => "067"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUT-RHIN",
-            "LIBELLE_COURT" => "HAUT-RHIN",
-            "SOURCE_CODE" => "068",
-            "CODE" => "068"
-        ],
-        [
-            "LIBELLE_LONG" => "RHONE",
-            "LIBELLE_COURT" => "RHONE",
-            "SOURCE_CODE" => "069",
-            "CODE" => "069"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE-SAONE",
-            "LIBELLE_COURT" => "HTE-SAONE",
-            "SOURCE_CODE" => "070",
-            "CODE" => "070"
-        ],
-        [
-            "LIBELLE_LONG" => "SAONE-ET-LOIRE",
-            "LIBELLE_COURT" => "SAONE-LRE.",
-            "SOURCE_CODE" => "071",
-            "CODE" => "071"
-        ],
-        [
-            "LIBELLE_LONG" => "SARTHE",
-            "LIBELLE_COURT" => "SARTHE",
-            "SOURCE_CODE" => "072",
-            "CODE" => "072"
-        ],
-        [
-            "LIBELLE_LONG" => "SAVOIE",
-            "LIBELLE_COURT" => "SAVOIE",
-            "SOURCE_CODE" => "073",
-            "CODE" => "073"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE SAVOIE",
-            "LIBELLE_COURT" => "HTE SAVOIE",
-            "SOURCE_CODE" => "074",
-            "CODE" => "074"
-        ],
-        [
-            "LIBELLE_LONG" => "PARIS",
-            "LIBELLE_COURT" => "PARIS",
-            "SOURCE_CODE" => "075",
-            "CODE" => "075"
-        ],
-        [
-            "LIBELLE_LONG" => "SEINE MARITIME",
-            "LIBELLE_COURT" => "SEINE MAR.",
-            "SOURCE_CODE" => "076",
-            "CODE" => "076"
-        ],
-        [
-            "LIBELLE_LONG" => "SEINE-ET-MARNE",
-            "LIBELLE_COURT" => "SEINE-MAR.",
-            "SOURCE_CODE" => "077",
-            "CODE" => "077"
-        ],
-        [
-            "LIBELLE_LONG" => "YVELINES",
-            "LIBELLE_COURT" => "YVELINES",
-            "SOURCE_CODE" => "078",
-            "CODE" => "078"
-        ],
-        [
-            "LIBELLE_LONG" => "DEUX-SEVRES",
-            "LIBELLE_COURT" => "DEUX-SEV.",
-            "SOURCE_CODE" => "079",
-            "CODE" => "079"
-        ],
-        [
-            "LIBELLE_LONG" => "SOMME",
-            "LIBELLE_COURT" => "SOMME",
-            "SOURCE_CODE" => "080",
-            "CODE" => "080"
-        ],
-        [
-            "LIBELLE_LONG" => "TARN",
-            "LIBELLE_COURT" => "TARN",
-            "SOURCE_CODE" => "081",
-            "CODE" => "081"
-        ],
-        [
-            "LIBELLE_LONG" => "TARN-ET-GARONNE",
-            "LIBELLE_COURT" => "TARN-GARO.",
-            "SOURCE_CODE" => "082",
-            "CODE" => "082"
-        ],
-        [
-            "LIBELLE_LONG" => "VAR",
-            "LIBELLE_COURT" => "VAR",
-            "SOURCE_CODE" => "083",
-            "CODE" => "083"
-        ],
-        [
-            "LIBELLE_LONG" => "VAUCLUSE",
-            "LIBELLE_COURT" => "VAUCLUSE",
-            "SOURCE_CODE" => "084",
-            "CODE" => "084"
-        ],
-        [
-            "LIBELLE_LONG" => "VENDEE",
-            "LIBELLE_COURT" => "VENDEE",
-            "SOURCE_CODE" => "085",
-            "CODE" => "085"
-        ],
-        [
-            "LIBELLE_LONG" => "VIENNE",
-            "LIBELLE_COURT" => "VIENNE",
-            "SOURCE_CODE" => "086",
-            "CODE" => "086"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTE-VIENNE",
-            "LIBELLE_COURT" => "HTE-VIENNE",
-            "SOURCE_CODE" => "087",
-            "CODE" => "087"
-        ],
-        [
-            "LIBELLE_LONG" => "VOSGES",
-            "LIBELLE_COURT" => "VOSGES",
-            "SOURCE_CODE" => "088",
-            "CODE" => "088"
-        ],
-        [
-            "LIBELLE_LONG" => "YONNE",
-            "LIBELLE_COURT" => "YONNE",
-            "SOURCE_CODE" => "089",
-            "CODE" => "089"
-        ],
-        [
-            "LIBELLE_LONG" => "TERRITOIRE DE BELFORT",
-            "LIBELLE_COURT" => "TERR. BEL.",
-            "SOURCE_CODE" => "090",
-            "CODE" => "090"
-        ],
-        [
-            "LIBELLE_LONG" => "ESSONNE",
-            "LIBELLE_COURT" => "ESSONNE",
-            "SOURCE_CODE" => "091",
-            "CODE" => "091"
-        ],
-        [
-            "LIBELLE_LONG" => "HAUTS-DE-SEINE",
-            "LIBELLE_COURT" => "HTS-SEINE",
-            "SOURCE_CODE" => "092",
-            "CODE" => "092"
-        ],
-        [
-            "LIBELLE_LONG" => "SEINE-SAINT-DENIS",
-            "LIBELLE_COURT" => "SNE-ST-DE.",
-            "SOURCE_CODE" => "093",
-            "CODE" => "093"
-        ],
-        [
-            "LIBELLE_LONG" => "VAL-DE-MARNE",
-            "LIBELLE_COURT" => "VAL-MARNE",
-            "SOURCE_CODE" => "094",
-            "CODE" => "094"
-        ],
-        [
-            "LIBELLE_LONG" => "VAL-D'OISE",
-            "LIBELLE_COURT" => "VAL-D'OISE",
-            "SOURCE_CODE" => "095",
-            "CODE" => "095"
-        ],
-        [
-            "LIBELLE_LONG" => "GUADELOUPE",
-            "LIBELLE_COURT" => "GUADELOUPE",
-            "SOURCE_CODE" => "971",
-            "CODE" => "971"
-        ],
-        [
-            "LIBELLE_LONG" => "MARTINIQUE",
-            "LIBELLE_COURT" => "MARTINIQUE",
-            "SOURCE_CODE" => "972",
-            "CODE" => "972"
-        ],
-        [
-            "LIBELLE_LONG" => "GUYANE",
-            "LIBELLE_COURT" => "GUYANE",
-            "SOURCE_CODE" => "973",
-            "CODE" => "973"
-        ],
-        [
-            "LIBELLE_LONG" => "LA REUNION",
-            "LIBELLE_COURT" => "LA REUNION",
-            "SOURCE_CODE" => "974",
-            "CODE" => "974"
-        ],
-        [
-            "LIBELLE_LONG" => "ST PIERRE ET MIQUELON",
-            "LIBELLE_COURT" => "ST PIERRE ET MIQU.",
-            "SOURCE_CODE" => "975",
-            "CODE" => "975"
-        ],
-        [
-            "LIBELLE_LONG" => "MAYOTTE",
-            "LIBELLE_COURT" => "MAYOTTE",
-            "SOURCE_CODE" => "985",
-            "CODE" => "985"
-        ],
-        [
-            "LIBELLE_LONG" => "WALLIS ET FUTUNA",
-            "LIBELLE_COURT" => "WALLIS ET FUTUNA",
-            "SOURCE_CODE" => "986",
-            "CODE" => "986"
-        ],
-        [
-            "LIBELLE_LONG" => "POLYNESIE FRANCAISE",
-            "LIBELLE_COURT" => "POLYN. FRANCAISE",
-            "SOURCE_CODE" => "987",
-            "CODE" => "987"
-        ],
-        [
-            "LIBELLE_LONG" => "NOUVELLE CALEDONIE",
-            "LIBELLE_COURT" => "NVLLE CALEDONIE",
-            "SOURCE_CODE" => "988",
-            "CODE" => "988"
-        ]
-    ],
     "DISCIPLINE" => [
         [
             "LIBELLE_COURT" => "Anth Ethno",
@@ -6604,7 +5972,7 @@ return [
             "SOURCE_CODE" => "0596389Z"
         ],
         [
-            "LIBELLE" => "ATRON Metrology",
+            "LIBELLE" => "ATRON Metrology Cherbourg-en-Cotentin",
             "LOCALISATION" => "Centre",
             "DEPARTEMENT" => "050",
             "SOURCE_CODE" => "ATRON"
@@ -6970,8 +6338,8 @@ return [
             "SOURCE_CODE" => "CEA"
         ],
         [
-            "LIBELLE" => "CEA Saclay de Gif-sur-Yvette",
-            "LOCALISATION" => "CEA-SACLAY",
+            "LIBELLE" => "CEA Saclay",
+            "LOCALISATION" => "centre",
             "DEPARTEMENT" => "091",
             "SOURCE_CODE" => "SACLAY"
         ],
@@ -20466,6 +19834,12 @@ return [
             "SOURCE_CODE" => "IRISA-R"
         ],
         [
+            "LIBELLE" => "IRSN Fontenay-aux-Roses",
+            "LOCALISATION" => "Institut",
+            "DEPARTEMENT" => "092",
+            "SOURCE_CODE" => "IRSN"
+        ],
+        [
             "LIBELLE" => "IRSN,LRC Cherbourg-Octeville",
             "LOCALISATION" => "IRSN, LRC",
             "DEPARTEMENT" => "050",
@@ -24001,15 +23375,15 @@ return [
         ],
         [
             "LIBELLE" => "Institut de Formation en Ergothérapie",
-            "LOCALISATION" => "IFE Alenço",
-            "DEPARTEMENT" => "014",
-            "SOURCE_CODE" => "0611269Y"
-        ],
-        [
-            "LIBELLE" => "Institut de Formation en Ergothérapie",
             "LOCALISATION" => "IFE ALENC",
             "DEPARTEMENT" => "061",
             "SOURCE_CODE" => "061129W"
+        ],
+        [
+            "LIBELLE" => "Institut de Formation en Ergothérapie",
+            "LOCALISATION" => "IFE Alenço",
+            "DEPARTEMENT" => "014",
+            "SOURCE_CODE" => "0611269Y"
         ],
         [
             "LIBELLE" => "Institut de Gestion de Rennes",
@@ -24040,12 +23414,6 @@ return [
             "LOCALISATION" => "ASCR",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR1089"
-        ],
-        [
-            "LIBELLE" => "Institut de Radioprotection et de Sûreté Nucléaire",
-            "LOCALISATION" => "Institut",
-            "DEPARTEMENT" => "092",
-            "SOURCE_CODE" => "IRSN"
         ],
         [
             "LIBELLE" => "Institut de Recherche biomédicale des Armées",
@@ -24166,6 +23534,12 @@ return [
             "LOCALISATION" => "IFSY",
             "DEPARTEMENT" => "074",
             "SOURCE_CODE" => "0780492L"
+        ],
+        [
+            "LIBELLE" => "Institut de formations professionnelles aux métiers des industries pharmaceutiques et cosmétiques",
+            "LOCALISATION" => "IMT Tours",
+            "DEPARTEMENT" => "037",
+            "SOURCE_CODE" => "0371514V"
         ],
         [
             "LIBELLE" => "Institut de management et de communication interculturel (ISIT)",
@@ -58303,15 +57677,15 @@ return [
         ],
         [
             "LIBELLE" => "UFR SCIENCES SC INGENIEUR UNIVERSITE BRETAGNE SUD",
-            "LOCALISATION" => "LORIENT",
-            "DEPARTEMENT" => "056",
-            "SOURCE_CODE" => "0561738K"
-        ],
-        [
-            "LIBELLE" => "UFR SCIENCES SC INGENIEUR UNIVERSITE BRETAGNE SUD",
             "LOCALISATION" => "VANNES",
             "DEPARTEMENT" => "056",
             "SOURCE_CODE" => "0561739L"
+        ],
+        [
+            "LIBELLE" => "UFR SCIENCES SC INGENIEUR UNIVERSITE BRETAGNE SUD",
+            "LOCALISATION" => "LORIENT",
+            "DEPARTEMENT" => "056",
+            "SOURCE_CODE" => "0561738K"
         ],
         [
             "LIBELLE" => "UFR SCIENCES SOCIALES UNIVERSITE PARIS 7",
@@ -60180,22 +59554,16 @@ return [
             "SOURCE_CODE" => "0720916E"
         ],
         [
-            "LIBELLE" => "Université Libanaise",
-            "LOCALISATION" => "Université",
+            "LIBELLE" => "Université Libre de Bruxelles - Belgique",
+            "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR997"
+            "SOURCE_CODE" => "ETR0373"
         ],
         [
             "LIBELLE" => "Université Libre de Bruxelles - Belgique",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0025"
-        ],
-        [
-            "LIBELLE" => "Université Libre de Bruxelles - Belgique",
-            "LOCALISATION" => "UNIVERSITE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0373"
         ],
         [
             "LIBELLE" => "Université Lietuvos Teises Lituanie",
@@ -60447,13 +59815,13 @@ return [
             "LIBELLE" => "Université Moulay Ismail",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR1004"
+            "SOURCE_CODE" => "TER1004"
         ],
         [
             "LIBELLE" => "Université Moulay Ismail",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "TER1004"
+            "SOURCE_CODE" => "ETR1004"
         ],
         [
             "LIBELLE" => "Université Mouloud Mammeri - Algérie",
@@ -61203,13 +60571,13 @@ return [
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR168"
+            "SOURCE_CODE" => "ETR0168"
         ],
         [
             "LIBELLE" => "Université Syddansk - Danemark",
             "LOCALISATION" => "SYDDANSK",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0168"
+            "SOURCE_CODE" => "ETR168"
         ],
         [
             "LIBELLE" => "Université Tampereen  Yliopisto Finlande",
@@ -61713,13 +61081,13 @@ return [
             "LIBELLE" => "Université d'Iowa - USA",
             "LOCALISATION" => "IOWA",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0268"
+            "SOURCE_CODE" => "ETR268"
         ],
         [
             "LIBELLE" => "Université d'Iowa - USA",
             "LOCALISATION" => "IOWA",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR268"
+            "SOURCE_CODE" => "ETR0268"
         ],
         [
             "LIBELLE" => "Université d'Istanbul - Turquie",
@@ -61941,13 +61309,13 @@ return [
             "LIBELLE" => "Université de Bologne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0020"
+            "SOURCE_CODE" => "ETR0363"
         ],
         [
             "LIBELLE" => "Université de Bologne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0363"
+            "SOURCE_CODE" => "ETR0020"
         ],
         [
             "LIBELLE" => "Université de Bonn - Allemagne",
@@ -61971,13 +61339,13 @@ return [
             "LIBELLE" => "Université de Bremen - Allemagne",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0022"
+            "SOURCE_CODE" => "ETR00409"
         ],
         [
             "LIBELLE" => "Université de Bremen - Allemagne",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR00409"
+            "SOURCE_CODE" => "ETR0022"
         ],
         [
             "LIBELLE" => "Université de Bretagne Sud",
@@ -62301,13 +61669,13 @@ return [
             "LIBELLE" => "Université de Geneve - Suisse",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0057"
+            "SOURCE_CODE" => "ETR0356"
         ],
         [
             "LIBELLE" => "Université de Geneve - Suisse",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0356"
+            "SOURCE_CODE" => "ETR0057"
         ],
         [
             "LIBELLE" => "Université de Genova - Italie",
@@ -62325,13 +61693,13 @@ return [
             "LIBELLE" => "Université de Glasgow - Royaume Uni",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR350"
+            "SOURCE_CODE" => "ETR0058"
         ],
         [
             "LIBELLE" => "Université de Glasgow - Royaume Uni",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0058"
+            "SOURCE_CODE" => "ETR350"
         ],
         [
             "LIBELLE" => "Université de Goteborg - Suede",
@@ -62374,12 +61742,6 @@ return [
             "LOCALISATION" => "HELSINKI",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0067"
-        ],
-        [
-            "LIBELLE" => "Université de Hubei",
-            "LOCALISATION" => "Université",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR1029"
         ],
         [
             "LIBELLE" => "Université de Huddersfield",
@@ -62479,15 +61841,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Lecce - Italie",
-            "LOCALISATION" => "LECCE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0076"
-        ],
-        [
-            "LIBELLE" => "Université de Lecce - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETRLECCE"
+        ],
+        [
+            "LIBELLE" => "Université de Lecce - Italie",
+            "LOCALISATION" => "LECCE",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0076"
         ],
         [
             "LIBELLE" => "Université de Leicester",
@@ -62613,13 +61975,13 @@ return [
             "LIBELLE" => "Université de Miami Ohio USA",
             "LOCALISATION" => "OHIO",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR317"
+            "SOURCE_CODE" => "ETR0317"
         ],
         [
             "LIBELLE" => "Université de Miami Ohio USA",
             "LOCALISATION" => "OHIO",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0317"
+            "SOURCE_CODE" => "ETR317"
         ],
         [
             "LIBELLE" => "Université de Milan - Italie",
@@ -62676,22 +62038,16 @@ return [
             "SOURCE_CODE" => "0342321N"
         ],
         [
-            "LIBELLE" => "Université de Montréal - Canada",
-            "LOCALISATION" => "MONTREAL",
+            "LIBELLE" => "Université de Moscou - Russie",
+            "LOCALISATION" => "Russie",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0224"
+            "SOURCE_CODE" => "ET352"
         ],
         [
             "LIBELLE" => "Université de Moscou - Russie",
             "LOCALISATION" => "MOSCOU",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0097"
-        ],
-        [
-            "LIBELLE" => "Université de Moscou - Russie",
-            "LOCALISATION" => "Russie",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ET352"
         ],
         [
             "LIBELLE" => "Université de Munich - Allemagne",
@@ -62791,15 +62147,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Ouagadougou",
-            "LOCALISATION" => "université",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR205"
-        ],
-        [
-            "LIBELLE" => "Université de Ouagadougou",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR601"
+        ],
+        [
+            "LIBELLE" => "Université de Ouagadougou",
+            "LOCALISATION" => "université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR205"
         ],
         [
             "LIBELLE" => "Université de Oviedo - Espagne",
@@ -63025,27 +62381,27 @@ return [
         ],
         [
             "LIBELLE" => "Université de Saragosse - Espagne",
-            "LOCALISATION" => "SARAGOSSE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0127"
-        ],
-        [
-            "LIBELLE" => "Université de Saragosse - Espagne",
             "LOCALISATION" => "esp",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR584"
         ],
         [
-            "LIBELLE" => "Université de Sciences Iowa - USA",
-            "LOCALISATION" => "IOWA",
+            "LIBELLE" => "Université de Saragosse - Espagne",
+            "LOCALISATION" => "SARAGOSSE",
             "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR269"
+            "SOURCE_CODE" => "ETR0127"
         ],
         [
             "LIBELLE" => "Université de Sciences Iowa - USA",
             "LOCALISATION" => "IOWA",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0269"
+        ],
+        [
+            "LIBELLE" => "Université de Sciences Iowa - USA",
+            "LOCALISATION" => "IOWA",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR269"
         ],
         [
             "LIBELLE" => "Université de Sheffield - UK",
@@ -63073,15 +62429,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Sienne - Italie",
-            "LOCALISATION" => "SIENE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0131"
-        ],
-        [
-            "LIBELLE" => "Université de Sienne - Italie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR00407"
+        ],
+        [
+            "LIBELLE" => "Université de Sienne - Italie",
+            "LOCALISATION" => "SIENE",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0131"
         ],
         [
             "LIBELLE" => "Université de Sofia - Bulgarie",
@@ -63385,15 +62741,15 @@ return [
         ],
         [
             "LIBELLE" => "Université de Zulia - Venezuela",
-            "LOCALISATION" => "UNIVERSITE",
-            "DEPARTEMENT" => "099",
-            "SOURCE_CODE" => "ETR0371"
-        ],
-        [
-            "LIBELLE" => "Université de Zulia - Venezuela",
             "LOCALISATION" => "ZULIA",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR0158"
+        ],
+        [
+            "LIBELLE" => "Université de Zulia - Venezuela",
+            "LOCALISATION" => "UNIVERSITE",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0371"
         ],
         [
             "LIBELLE" => "Université de la Laguna",
@@ -63810,6 +63166,12 @@ return [
             "SOURCE_CODE" => "ETR1005"
         ],
         [
+            "LIBELLE" => "l'Université Libanaise",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR997"
+        ],
+        [
             "LIBELLE" => "l'Université Yaounde 1",
             "LOCALISATION" => "Université",
             "DEPARTEMENT" => "099",
@@ -63840,6 +63202,12 @@ return [
             "SOURCE_CODE" => "ETR0014"
         ],
         [
+            "LIBELLE" => "l'Université de Hubei",
+            "LOCALISATION" => "Université",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR1029"
+        ],
+        [
             "LIBELLE" => "l'Université de Krakowie",
             "LOCALISATION" => "UNIVERSITE",
             "DEPARTEMENT" => "099",
@@ -63850,6 +63218,12 @@ return [
             "LOCALISATION" => "MONTREAL",
             "DEPARTEMENT" => "099",
             "SOURCE_CODE" => "ETR224"
+        ],
+        [
+            "LIBELLE" => "l'Université de Montréal",
+            "LOCALISATION" => "MONTREAL",
+            "DEPARTEMENT" => "099",
+            "SOURCE_CODE" => "ETR0224"
         ],
         [
             "LIBELLE" => "l'Université de Sfax",
@@ -68495,19 +67869,22 @@ return [
             "CODE" => "administrateur",
             "LIBELLE" => "Administrateur",
             "PERIMETRE_ID" => 3,
-            "PEUT_CHANGER_STRUCTURE" => TRUE
+            "PEUT_CHANGER_STRUCTURE" => TRUE,
+            "ACCESSIBLE_EXTERIEUR" => FALSE
         ],
         [
             "CODE" => "gestionnaire-composante",
             "LIBELLE" => "Gestionnaire polyvalent",
             "PERIMETRE_ID" => 1,
-            "PEUT_CHANGER_STRUCTURE" => FALSE
+            "PEUT_CHANGER_STRUCTURE" => FALSE,
+            "ACCESSIBLE_EXTERIEUR" => TRUE
         ],
         [
             "CODE" => "superviseur-etablissement",
             "LIBELLE" => "Superviseur (Pilotage et direction)",
             "PERIMETRE_ID" => 3,
-            "PEUT_CHANGER_STRUCTURE" => FALSE
+            "PEUT_CHANGER_STRUCTURE" => FALSE,
+            "ACCESSIBLE_EXTERIEUR" => TRUE
         ]
     ],
     "ROLE_PRIVILEGE" => [
@@ -69265,6 +68642,10 @@ return [
         ],
         [
             "ROLE_ID" => "administrateur",
+            "PRIVILEGE_ID" => "chargens-scenario-etablissement-edition"
+        ],
+        [
+            "ROLE_ID" => "administrateur",
             "PRIVILEGE_ID" => "chargens-scenario-visualisation"
         ],
         [
@@ -69393,6 +68774,14 @@ return [
         ],
         [
             "ROLE_ID" => "administrateur",
+            "PRIVILEGE_ID" => "enseignement-import-intervenant-previsionnel-agenda"
+        ],
+        [
+            "ROLE_ID" => "administrateur",
+            "PRIVILEGE_ID" => "enseignement-import-intervenant-realise-agenda"
+        ],
+        [
+            "ROLE_ID" => "administrateur",
             "PRIVILEGE_ID" => "contrat-modeles-visualisation"
         ],
         [
@@ -69486,6 +68875,10 @@ return [
         [
             "ROLE_ID" => "administrateur",
             "PRIVILEGE_ID" => "cloture-edition-services-avec-mep"
+        ],
+        [
+            "ROLE_ID" => "administrateur",
+            "PRIVILEGE_ID" => "odf-reconduction-offre"
         ],
         [
             "ROLE_ID" => "superviseur-etablissement",

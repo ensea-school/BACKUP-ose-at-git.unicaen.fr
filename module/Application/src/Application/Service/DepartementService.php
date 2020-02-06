@@ -20,6 +20,8 @@ class DepartementService extends AbstractEntityService
         return \Application\Entity\Db\Departement::class;
     }
 
+
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -30,16 +32,19 @@ class DepartementService extends AbstractEntityService
         return 'd';
     }
 
+
+
     /**
      * Retourne la liste des pays, triés par libellé long.
      *
      * @param QueryBuilder|null $queryBuilder
+     *
      * @return PaysService[]
      */
     public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.sourceCode");
+        [$qb, $alias] = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.code");
 
         return parent::getList($qb, $alias);
     }
